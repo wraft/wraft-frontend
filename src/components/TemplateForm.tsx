@@ -237,7 +237,7 @@ const Form = () => {
         setValue('serialized', insert);
         const mm = JSON.parse(insert);
         console.log('mm', mm);
-        // setInsertable(mm);
+        setInsertable(mm);
       }
       //
       setBody(d.data);
@@ -248,8 +248,8 @@ const Form = () => {
     console.log('errors', errors);
   }, [errors]);
 
-  // const [tokens, setToken] = useState<any>();
-  // const [insertable, setInsertable] = useState<any>();
+  const [tokens, setToken] = useState<any>();
+  const [insertable, setInsertable] = useState<any>();
 
   const insertToken = (token: any) => {
     const test = {
@@ -265,9 +265,9 @@ const Form = () => {
   //   console.log('insertable', insertable);
   // }, [insertable]);
 
-  // useEffect(() => {
-  //   // console.log('value', 'x')
-  // }, []);
+  useEffect(() => {
+    setToken('')
+  }, []);
 
   const insertBlock = (b: any) => {
     console.log('inerting now...', b);
@@ -315,10 +315,10 @@ const Form = () => {
               onUpdate={doUpdate}
               initialValue={EMPTY_MARKDOWN_NODE}
               editor="wysiwyg"
-              // value={body}
-              // token={tokens}
+              value={body}
+              token={tokens}
               editable={true}
-              // insertable={insertable}
+              insertable={insertable}
               />
             </Box>
             <Label htmlFor="parent" mb={1}>

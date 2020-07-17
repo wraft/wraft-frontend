@@ -356,10 +356,10 @@ const Form = (props: IContentForm) => {
     //   setValue('body', state.content);
     // }
 
-    // if (state.serialized) {
-    //   setRaw(state.serialized);
+    if (state.serialized) {
+      setRaw(state.serialized);
     //   setValue('serialized', state.serialized);
-    // }
+    }
 
     if (state.md) {
       setValue('body', state.md);
@@ -484,7 +484,7 @@ const Form = (props: IContentForm) => {
               fields={fields}
               setFieldMap={setFieldMap}
               templates={templates}
-              // setActive={setActive}
+              setActive={setActive}
               showForm={showForm}
               setShowForm={setShowForm}
               setValue={setValue}
