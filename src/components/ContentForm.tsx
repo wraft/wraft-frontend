@@ -130,16 +130,15 @@ const Form = (props: IContentForm) => {
   const [templates, setTemplates] = useState<Array<Template>>([]);
   const [activeTemplate, setActiveTemplate] = useState('');
   const [fields, setField] = useState<Array<FieldT>>([]);
-  // const [active, setActive] = useState('');
+  const [active, setActive] = useState('');
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [def, setDef] = useState<any>();
-  // const [insertable, setInsertable] = useState<any>();
-  // const [ cleanInsert, setCleanInsert] = useState<Boolean>(false);
-
-  // const [raw, setRaw] = useState<any>();
+  const [insertable, setInsertable] = useState<any>();
+  const [ cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  const [raw, setRaw] = useState<any>();
 
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
 
@@ -268,17 +267,17 @@ const Form = (props: IContentForm) => {
     content && loadFields();
   }, [content]);
 
-  // useEffect(() => {
-  //   if(raw) {
-  //     setCleanInsert(true);
-  //     const xr: ContentState = JSON.parse(raw);
-  //     const inst = updateVars(xr, maps);
+  useEffect(() => {
+    if(raw) {
+      setCleanInsert(true);
+      const xr: ContentState = JSON.parse(raw);
+      const inst = updateVars(xr, maps);
       
-  //     setInsertable(inst);
+      setInsertable(inst);
 
-  //     // set
-  //   }    
-  // }, [raw, maps]);
+      // set
+    }    
+  }, [raw, maps]);
 
   useEffect(() => {
     const f: any = mapFields(fields);
@@ -296,9 +295,9 @@ const Form = (props: IContentForm) => {
   //   // // setFieldMap(f);
   // }, [maps]);
 
-  // useEffect(() => {
-  //   console.log('errors', errors);
-  // }, [errors]);
+  useEffect(() => {
+    console.log('errors', errors);
+  }, [errors]);
 
   // useEffect(() => {
   //   if (maps.length > 0) {
@@ -331,12 +330,12 @@ const Form = (props: IContentForm) => {
     setShowForm(!showForm);
     // if its serialized
     if (x.serialized && x.serialized.data) {
-      // setCleanInsert(true);
+      setCleanInsert(true);
       const xr: ContentState = JSON.parse(x.serialized.data);
       const inst = updateVars(xr, field_maps);
       console.log('inst', inst);
       
-      // setInsertable(inst);
+      setInsertable(inst);
     }
     
     setActiveTemplate(x.id);
@@ -347,28 +346,30 @@ const Form = (props: IContentForm) => {
     console.log('field_Maps', newTitle);
   };
 
-  // const doUpdate = (state: any) => {
-  //   // turn OFF appending blocks 
-  //   setCleanInsert(false);
+  const doUpdate = (state: any) => {
+    // turn OFF appending blocks 
+    setCleanInsert(false);
+
+    console.log('doUpdate', state);
     
-  //   if (state && state.content) {
-  //     setValue('body', state.content);
-  //   }
+    // if (state && state.content) {
+    //   setValue('body', state.content);
+    // }
 
-  //   if (state.serialized) {
-  //     setRaw(state.serialized);
-  //     setValue('serialized', state.serialized);
-  //   }
+    if (state.serialized) {
+      setRaw(state.serialized);
+    //   setValue('serialized', state.serialized);
+    }
 
-  //   if (state.md) {
-  //     setValue('body', state.md);
-  //     // setValue('serialized', state.serialized);
-  //   }
+    if (state.md) {
+      setValue('body', state.md);
+      setValue('serialized', state.serialized);
+    }
 
-  //   if (state && isString(state)) {
-  //     setValue('body', state);
-  //   }    
-  // };
+    // if (state && isString(state)) {
+    //   setValue('body', state);
+    // }    
+  };
 
   return (
     <Box width={1}>
@@ -424,13 +425,13 @@ const Form = (props: IContentForm) => {
             </Box>
             {def && (
               <EditorWraft
-                // value={active}
-                // editable={true}
-                // onUpdate={doUpdate}
-                // initialValue={def}
-                // editor="wysiwyg"
-                // cleanInsert={cleanInsert}
-                // insertable={insertable}
+                value={active}
+                editable={true}
+                onUpdate={doUpdate}
+                initialValue={def}
+                editor="wysiwyg"
+                cleanInsert={cleanInsert}
+                insertable={insertable}
               />
             )}
             <Box sx={{ display: 'none' }}>
@@ -483,7 +484,7 @@ const Form = (props: IContentForm) => {
               fields={fields}
               setFieldMap={setFieldMap}
               templates={templates}
-              // setActive={setActive}
+              setActive={setActive}
               showForm={showForm}
               setShowForm={setShowForm}
               setValue={setValue}
