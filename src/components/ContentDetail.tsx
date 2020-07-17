@@ -179,9 +179,9 @@ const Form = () => {
     }
   }, [contents]);
 
-  // const doUpdate = () => {
-  //   //
-  // };
+  const doUpdate = () => {
+    //
+  };
 
   return (
     <Box py={3} width={1} mt={4}>
@@ -210,9 +210,9 @@ const Form = () => {
                   <MarkdownEditor
                     editable={false}
                     value={contentBody}
-                    // onUpdate={doUpdate}
+                    onUpdate={doUpdate}
                     initialValue={contentBody}
-                    // cleanInsert={true}
+                    cleanInsert={true}
                     editor="wysiwyg"
                   />
                 )}

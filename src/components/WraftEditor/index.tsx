@@ -416,7 +416,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     }
   }, [insertable]);
 
-  const [activateLink] = useState<any>(false);
+  // const [activateLink] = useState<any>(false);
 
   // const activateImage = () => {
 
