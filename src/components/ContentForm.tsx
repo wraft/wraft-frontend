@@ -15,7 +15,7 @@ import EditorWraft from './EditorWraft';
 import { Template, ContentState } from '../../src/utils/types';
 import { replaceTitles, getInits, updateVars } from '../../src/utils';
 
-// import { useToasts } from 'react-toast-notifications';
+import { useToasts } from 'react-toast-notifications';
 
 const Block = styled(Box)`
   padding-bottom: 8px;
@@ -139,11 +139,11 @@ const Form = (props: IContentForm) => {
   const cId: string = router.query.id as string;
   const [def, setDef] = useState<any>();
   const [insertable, setInsertable] = useState<any>();
-  const [ cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
   const [raw, setRaw] = useState<any>();
 
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
-  // const { addToast } = useToasts();
+  const { addToast } = useToasts();
   const { id, edit } = props;
 
   const mapFields = (fields: any) => {
@@ -164,21 +164,35 @@ const Form = (props: IContentForm) => {
     return obj;
   };
 
+  /**
+   * Post Submit
+   * @param data 
+   */
   const onCreate = (data: any) => {
-    if(data?.content?.id){
-      // addToast('Saved Successfully', { appearance: 'success' });
-      Router.push(`/content/${data.content.id}`)
+    if(data?.info) {
+      console.log('Failed Build', data.info);
     }
-  }
+
+    if (data?.content?.id) {      
+      addToast('Saved Successfully', { appearance: 'success' });
+      Router.push(`/content/${data.content.id}`);
+    }
+  };
+
+  /**
+   * On Submit
+   * @param data 
+   */
 
   const onSubmit = (data: any) => {
     console.log('Creating Content', data, '');
 
     let obj: any = {};
-    
-    maps && maps.forEach((f: any) => {      
-      obj[f.name] = f.value;
-    });
+
+    maps &&
+      maps.forEach((f: any) => {
+        obj[f.name] = f.value;
+      });
 
     let serials: any = {
       ...obj,
@@ -194,13 +208,21 @@ const Form = (props: IContentForm) => {
     };
 
     if (edit) {
-      // console.log('updating edit etails', id);
-      updateEntity(`contents/${id}`, template, token);
+      updateEntity(`contents/${id}`, template, token, onCreate);
     } else {
-      createEntity(template, `content_types/${data.ttype}/contents`, token, onCreate);
+      createEntity(
+        template,
+        `content_types/${data.ttype}/contents`,
+        token,
+        onCreate,
+      );
     }
   };
 
+  /**
+   * Load Data
+   * @param id 
+   */
   const loadData = (id: string) => {
     if (edit) {
       loadEntity(token, `contents/${id}`, onLoadContent);
@@ -219,10 +241,13 @@ const Form = (props: IContentForm) => {
     if (data && data.content && data.content.serialized) {
       setValue('title', data.content.serialized.title);
       const rawraw = data.content.serialized.serialized;
-      // console.log('xxx', rawraw);
-      const df = JSON.parse(rawraw);
-      if (df) {
-        setDef(df);
+      if (rawraw) {
+        const df = JSON.parse(rawraw);
+        if (df) {
+          setDef(df);
+        }
+      } else {
+        setDef(EMPTY_MARKDOWN_NODE);
       }
     } else {
       setDef(EMPTY_MARKDOWN_NODE);
@@ -270,15 +295,13 @@ const Form = (props: IContentForm) => {
   }, [content]);
 
   useEffect(() => {
-    if(raw) {
+    if (raw) {
       // setCleanInsert(true);
       // const xr: ContentState = JSON.parse(raw);
       // const inst = updateVars(xr, maps);
-      
       // setInsertable(inst);
-
       // set
-    }    
+    }
   }, [raw, maps]);
 
   useEffect(() => {
@@ -286,7 +309,6 @@ const Form = (props: IContentForm) => {
     // console.log('f', f, fields);
     setFieldMap(f);
   }, [fields]);
-
 
   // useEffect(() => {
   //   // get active serialized
@@ -336,10 +358,10 @@ const Form = (props: IContentForm) => {
       const xr: ContentState = JSON.parse(x.serialized.data);
       const inst = updateVars(xr, field_maps);
       console.log('inst', inst);
-      
+
       setInsertable(inst);
     }
-    
+
     setActiveTemplate(x.id);
 
     console.log('field_Maps', field_maps);
@@ -349,18 +371,18 @@ const Form = (props: IContentForm) => {
   };
 
   const doUpdate = (state: any) => {
-    // turn OFF appending blocks 
+    // turn OFF appending blocks
     setCleanInsert(false);
 
     console.log('doUpdate', state);
-    
+
     // if (state && state.content) {
     //   setValue('body', state.content);
     // }
 
     if (state.serialized) {
       setRaw(state.serialized);
-    //   setValue('serialized', state.serialized);
+      //   setValue('serialized', state.serialized);
     }
 
     if (state.md) {
@@ -370,7 +392,7 @@ const Form = (props: IContentForm) => {
 
     // if (state && isString(state)) {
     //   setValue('body', state);
-    // }    
+    // }
   };
 
   return (
