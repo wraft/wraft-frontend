@@ -24,6 +24,8 @@ import {
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
+import WraftEditor from './WraftEditor'
+
 const Tag = styled(Box)`
   padding: 5px;
   color: #444;
@@ -116,7 +118,7 @@ const Form = () => {
     const formed: ContentTypes = data;
     setVarias(formed.content_type);
     dataFiller(formed.content_type.fields || {});
-    console.log('Created Content Type:', formed);
+    console.log('Loaded Content Type:', formed);
   };
 
   /**
@@ -308,15 +310,17 @@ const Form = () => {
                 register={register}
               />
             </Box>
-            <EditorWraft
-              // onUpdate={doUpdate}
-              // initialValue={EMPTY_MARKDOWN_NODE}
-              // editor="wysiwyg"
-              // value={body}
-              // token={tokens}
-              // editable={true}
-              // insertable={insertable}
-            />
+            <Box py={4}>
+              <EditorWraft
+                // onUpdate={doUpdate}
+                // initialValue={EMPTY_MARKDOWN_NODE}
+                // editor="wysiwyg"
+                // value={body}
+                // token={tokens}
+                // editable={true}
+                // insertable={insertable}
+              />
+            </Box>
             <Label htmlFor="parent" mb={1}>
               Content Type
             </Label>
@@ -366,6 +370,8 @@ const Form = () => {
           {body}
         </Flex>
       </Box>
+
+      {/* <WraftEditor/> */}
       <Button ml={2}>{cId ? 'Update' : 'Create'}</Button>
     </Box>
   );

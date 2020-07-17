@@ -116,7 +116,7 @@ export const FieldIcon = () => (
 
 export const Logo = () => (
   <IconBox>
-    <Image className="y" src={logo} width="200px" height="100px"/>
+    <Image className="y" src={logo} width="50px" ml={2}/>
   </IconBox>
 );
 
