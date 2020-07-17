@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Button } from 'rebass';
-import cookie from 'js-cookie';
 import { useRouter } from 'next/router';
-
-import { env } from './vars';
 import styled from 'styled-components';
 
 import { File } from './Icons';

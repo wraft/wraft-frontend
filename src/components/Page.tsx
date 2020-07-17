@@ -6,7 +6,7 @@ import { useStoreState } from 'easy-peasy';
 import Container from './Container';
 import Sidebar from './Sidebar';
 import Nav from './Nav';
-import { Alert, Close } from 'theme-ui';
+// import { Close } from 'theme-ui';
 
 import { ToastProvider } from 'react-toast-notifications';
 
@@ -21,15 +21,15 @@ export interface IAlert {
   children: any;
 }
 
-const AlertBlock = (props: IAlert) => {
-  console.log('props AlertBlock', props);
-  return (
-    <Box bg="primary">
-      X{props.children}
-      <Close ml="auto" mr={-2} />
-    </Box>
-  );
-};
+// const AlertBlock = (props: IAlert) => {
+//   console.log('props AlertBlock', props);
+//   return (
+//     <Box bg="primary">
+//       X{props.children}
+//       <Close ml="auto" mr={-2} />
+//     </Box>
+//   );
+// };
 
 export const Page = (props: IPage) => {
   const showFull: boolean = props && props.showFull ? true : false;
