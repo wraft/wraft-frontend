@@ -12,7 +12,7 @@ import CommentForm from './CommentForm';
 import MenuItem from './MenuItem';
 
 import { Pulse } from 'styled-spinkit';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { createEntity, loadEntity, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 
@@ -144,35 +144,25 @@ const Form = () => {
   };
 
   /**
+   * On Build success
+   * @param data 
+   */
+  const onBuild = (data: any) => {
+    setLoading(false);
+    setBuild(data);
+  }
+
+  /**
    * Pass for build
    */
   const doBuild = () => {
     setLoading(true);
-    fetch(`${env.api_dev}/api/v1/contents/${cId}/build`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        setLoading(false);
-        console.log('data', data);
-        setBuild(data);
-      });
+    createEntity([], `contents/${cId}/build`, token, onBuild);
   };
 
   useEffect(() => {
-    // check if token is there
-    const tokenInline = cookie.get('token') || false;
-    //
-    if (tokenInline) {
-      // dispatch({ type: 'LOGIN_SUCCESS', payload: tokenInline });
-      loadData(tokenInline, cId);
+    if (token) {
+      loadData(token, cId);
     }
   }, [token]);
 

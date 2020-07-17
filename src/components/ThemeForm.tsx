@@ -6,9 +6,22 @@ import Field from './Field';
 import { createEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
+import { useToasts } from 'react-toast-notifications';
+import Router from 'next/router';
+
 const ThemeForm = () => {
   const { register, handleSubmit, errors } = useForm();
+  const { addToast } = useToasts();
+  
   const token = useStoreState(state => state.auth.token);
+
+  /**
+   * On Theme Created
+   */
+  const onDone = (_d:any) => {
+    addToast('Saved Successfully', { appearance: 'success' });
+    Router.push(`/themes`);
+  }
   
   const onSubmit = (data: any) => {
     const submitter = {
@@ -16,8 +29,10 @@ const ThemeForm = () => {
       font: data.font,
       typescale:  { h1: 21, h2: 22},
     }
-    createEntity(submitter, 'themes', token)
+    createEntity(submitter, 'themes', token, onDone)    
   };
+
+  
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>
