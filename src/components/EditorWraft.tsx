@@ -1,12 +1,12 @@
 import React from 'react';
 import { Box } from 'rebass';
 // import { WysiwygEditor } from '@remirror/react-wysiwyg';
-import WraftEditor from './WraftEditor'
+import { MarkdownEditor } from './WraftEditor'
 
-const EditorWraft = () => {
+const EditorWraft = (props: any) => {
   return (
     <Box p={0} width={1} mt={4}>
-      <WraftEditor/>
+      <MarkdownEditor {...props}/>
     </Box>
   );
 };
