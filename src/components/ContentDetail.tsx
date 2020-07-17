@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { File } from './Icons';
-import EditorWraft from './EditorWraft';
+import { MarkdownEditor } from './WraftEditor';
 import CommentForm from './CommentForm';
 import MenuItem from './MenuItem';
 
@@ -207,13 +207,13 @@ const Form = () => {
               </Box>
               <PreTag pt={4}>
                 {contentBody && (
-                  <EditorWraft
-                    // editable={false}
-                    // value={contentBody}
+                  <MarkdownEditor
+                    editable={false}
+                    value={contentBody}
                     // onUpdate={doUpdate}
-                    // initialValue={contentBody}
+                    initialValue={contentBody}
                     // cleanInsert={true}
-                    // editor="wysiwyg"
+                    editor="wysiwyg"
                   />
                 )}
                 {/* <Text fontSize={1}>{contents.content.raw}</Text> */}

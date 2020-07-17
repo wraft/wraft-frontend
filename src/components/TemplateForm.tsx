@@ -14,7 +14,7 @@ import {
 
 import { Label, Select } from '@rebass/forms';
 import styled from 'styled-components';
-import EditorWraft from './EditorWraft';
+// import {EditorWraft} from './EditorWraft';
 import {
   loadEntity,
   loadEntityDetail,
@@ -24,7 +24,7 @@ import {
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
-// import WraftEditor from './WraftEditor'
+import { MarkdownEditor } from './WraftEditor';
 
 const Tag = styled(Box)`
   padding: 5px;
@@ -62,20 +62,20 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  // const EMPTY_MARKDOWN_NODE = {
-  //   type: 'doc',
-  //   content: [
-  //     {
-  //       type: 'paragraph',
-  //       content: [
-  //         {
-  //           type: 'text',
-  //           text: 'Write here',
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // };
+  const EMPTY_MARKDOWN_NODE = {
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [
+          {
+            type: 'text',
+            text: 'Write here',
+          },
+        ],
+      },
+    ],
+  };
 
   /**
    * Form Submit
@@ -182,30 +182,30 @@ const Form = () => {
     loadContentType(safeSearchTypeValue);
   };
 
-  // const doUpdate = (data: any) => {
-  //   // console.log('data', data)
+  const doUpdate = (data: any) => {
+    // console.log('data', data)
 
-  //   if (data.md) {
-  //     setValue('body', data.md);
-  //     setValue('data', data.md);
-  //   }
+    if (data.md) {
+      setValue('body', data.md);
+      setValue('data', data.md);
+    }
 
-  //   if (data.serialized) {
-  //     setValue('serialized', data.serialized);
-  //   }
-  //   // console.log('data', data);
-  //   // setValue('body', data);
-  //   if (data && data.content) {
-  //     setValue('data', data.content);
-  //   }
-  // };
+    if (data.serialized) {
+      setValue('serialized', data.serialized);
+    }
+    // console.log('data', data);
+    // setValue('body', data);
+    if (data && data.content) {
+      setValue('data', data.content);
+    }
+  };
 
   useEffect(() => {
     setBody('Loading ...');
-    if(token) {
+    if (token) {
       loadTypes();
       loadBlocks();
-    }    
+    }
   }, [token]);
 
   useEffect(() => {
@@ -236,7 +236,7 @@ const Form = () => {
       if (insert) {
         setValue('serialized', insert);
         const mm = JSON.parse(insert);
-        console.log('mm',mm)
+        console.log('mm', mm);
         // setInsertable(mm);
       }
       //
@@ -258,7 +258,7 @@ const Form = () => {
         name: token.name,
       },
     };
-    console.log('tes',test)
+    console.log('tes', test);
   };
 
   // useEffect(() => {
@@ -270,7 +270,7 @@ const Form = () => {
   // }, []);
 
   const insertBlock = (b: any) => {
-    console.log('inerting now...', b)
+    console.log('inerting now...', b);
     // setInsertable(JSON.parse(b.serialised));
   };
 
@@ -311,14 +311,14 @@ const Form = () => {
               />
             </Box>
             <Box py={4}>
-              <EditorWraft
-                // onUpdate={doUpdate}
-                // initialValue={EMPTY_MARKDOWN_NODE}
-                // editor="wysiwyg"
-                // value={body}
-                // token={tokens}
-                // editable={true}
-                // insertable={insertable}
+              <MarkdownEditor
+              onUpdate={doUpdate}
+              initialValue={EMPTY_MARKDOWN_NODE}
+              editor="wysiwyg"
+              // value={body}
+              // token={tokens}
+              editable={true}
+              // insertable={insertable}
               />
             </Box>
             <Label htmlFor="parent" mb={1}>
@@ -367,7 +367,6 @@ const Form = () => {
             </Box>
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}
-          {body}
         </Flex>
       </Box>
 
