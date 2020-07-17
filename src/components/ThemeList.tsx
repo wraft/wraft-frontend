@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'rebass';
 import Link from './NavLink';
 import { Plus } from './Icons';
-import { loadEntity } from '../utils/models';
+import { loadEntity, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
+import { Button } from 'theme-ui';
+
+import { useToasts } from 'react-toast-notifications';
 
 export interface Theme {
   total_pages:   number;
@@ -36,6 +39,7 @@ const ItemField = (props: any) => {
       <Text fontSize={0} pt={1} color="grey">
         Sample Field Description
       </Text>
+      <Button onClick={() => props.onDelete(props.id)}>Delete</Button>
     </Box>
   );
 };
@@ -43,6 +47,7 @@ const ItemField = (props: any) => {
 const Form = () => {
   const token = useStoreState(state => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
+  const { addToast } = useToasts();
 
   const loadDataSuccess = (data: any) => {
     const res: ThemeElement[] = data.themes;
@@ -52,6 +57,11 @@ const Form = () => {
   const loadData = (t: string) => {
     loadEntity(t, 'themes', loadDataSuccess);
   };
+
+  const onDelete = (id: string) => {
+    deleteEntity(`themes/${id}`, token)
+    addToast('Deleted Theme', { appearance: 'success' });
+  }
 
   useEffect(() => {
     if (token) {
@@ -70,11 +80,11 @@ const Form = () => {
         All Themes
       </Text>
       <Box mx={0} mb={3} width={1}>
-        <Flex>
+        <Box>
           {contents &&
             contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} />)}
-        </Flex>
+            contents.map((m: any) => <ItemField key={m.id} {...m} onDelete={onDelete}/>)}
+        </Box>
       </Box>
     </Box>
   );

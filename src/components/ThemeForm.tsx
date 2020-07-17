@@ -30,9 +30,7 @@ const ThemeForm = () => {
       typescale:  { h1: 21, h2: 22},
     }
     createEntity(submitter, 'themes', token, onDone)    
-  };
-
-  
+  };  
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>

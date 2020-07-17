@@ -15,6 +15,8 @@ import EditorWraft from './EditorWraft';
 import { Template, ContentState } from '../../src/utils/types';
 import { replaceTitles, getInits, updateVars } from '../../src/utils';
 
+// import { useToasts } from 'react-toast-notifications';
+
 const Block = styled(Box)`
   padding-bottom: 8px;
   border: solid 1px #ddd;
@@ -141,7 +143,7 @@ const Form = (props: IContentForm) => {
   const [raw, setRaw] = useState<any>();
 
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
-
+  // const { addToast } = useToasts();
   const { id, edit } = props;
 
   const mapFields = (fields: any) => {
@@ -163,10 +165,10 @@ const Form = (props: IContentForm) => {
   };
 
   const onCreate = (data: any) => {
-    if(data == "x"){
+    if(data?.content?.id){
+      // addToast('Saved Successfully', { appearance: 'success' });
       Router.push(`/content/${data.content.id}`)
-    }    
-    console.log('reached onCreate', data)
+    }
   }
 
   const onSubmit = (data: any) => {
@@ -269,11 +271,11 @@ const Form = (props: IContentForm) => {
 
   useEffect(() => {
     if(raw) {
-      setCleanInsert(true);
-      const xr: ContentState = JSON.parse(raw);
-      const inst = updateVars(xr, maps);
+      // setCleanInsert(true);
+      // const xr: ContentState = JSON.parse(raw);
+      // const inst = updateVars(xr, maps);
       
-      setInsertable(inst);
+      // setInsertable(inst);
 
       // set
     }    
