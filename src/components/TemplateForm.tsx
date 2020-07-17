@@ -182,9 +182,11 @@ const Form = () => {
     loadContentType(safeSearchTypeValue);
   };
 
+  /**
+   * When Editor is updated
+   * @param data 
+   */
   const doUpdate = (data: any) => {
-    // console.log('data', data)
-
     if (data.md) {
       setValue('body', data.md);
       setValue('data', data.md);
@@ -221,6 +223,9 @@ const Form = () => {
     }
   }, [token, cId]);
 
+  /**
+   * On Template Load
+   */
   useEffect(() => {
     if (dataTemplate && dataTemplate.data_template) {
       const d: DataTemplate = dataTemplate.data_template;
@@ -258,16 +263,16 @@ const Form = () => {
         name: token.name,
       },
     };
-    console.log('tes', test);
+    setToken(test);
   };
 
-  // useEffect(() => {
-  //   console.log('insertable', insertable);
-  // }, [insertable]);
-
   useEffect(() => {
-    setToken('')
-  }, []);
+    console.log('insertable', insertable);
+  }, [insertable]);
+
+  // useEffect(() => {
+  //   setToken('')
+  // }, []);
 
   const insertBlock = (b: any) => {
     console.log('inerting now...', b);

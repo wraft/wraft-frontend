@@ -10,7 +10,7 @@ import { createGlobalStyle } from 'styled-components';
 import 'react-day-picker/lib/style.css';
 import 'react-phone-number-input/style.css';
 import 'react-multi-carousel/lib/styles.css';
-// import { ToastProvider } from 'react-toast-notifications';
+import { ToastProvider } from 'react-toast-notifications';
 
 const GlobalStyle = createGlobalStyle` 
 
@@ -83,9 +83,9 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         {/* <CSSReset /> */}
-        {/* <ToastProvider> */}
-        <Component {...pageProps} />
-        {/* </ToastProvider> */}
+        <ToastProvider>
+          <Component {...pageProps} />
+        </ToastProvider>
       </ThemeProvider>
     </StoreProvider>
   );
