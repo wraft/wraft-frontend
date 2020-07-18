@@ -207,6 +207,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     if (tr && tr.docChanged) {
       // temporary state
       const md: any = toMarkdown(newState.doc);
+      console.debug('md', md);
       const contentBody = { md, serialized: JSON.stringify(newState.doc) };
       onUpdate(contentBody);
       return;

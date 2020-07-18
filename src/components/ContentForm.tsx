@@ -11,11 +11,8 @@ import FieldForm from './FieldForm';
 
 import EditorWraft from './EditorWraft';
 
-// import { replaceVars } from '../../src/utils';
 import { Template, ContentState } from '../../src/utils/types';
-import { replaceTitles, getInits, updateVars } from '../../src/utils';
-
-import { useToasts } from 'react-toast-notifications';
+import { updateVars } from '../../src/utils';
 
 const Block = styled(Box)`
   padding-bottom: 8px;
@@ -117,6 +114,8 @@ import { createEntity, loadEntity, updateEntity } from '../utils/models';
 // import { isString } from 'util';
 import { Input } from '@rebass/forms';
 import { useStoreState } from 'easy-peasy';
+import { Spinner } from 'theme-ui';
+// import RichEditorWraft from './EditWraft';
 
 export interface IContentForm {
   id: any;
@@ -133,7 +132,9 @@ const Form = (props: IContentForm) => {
   const [activeTemplate, setActiveTemplate] = useState('');
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [active, setActive] = useState('');
+  const [body, setBody] = useState<any>();
   const [showForm, setShowForm] = useState<Boolean>(false);
+  const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -143,8 +144,40 @@ const Form = (props: IContentForm) => {
   const [raw, setRaw] = useState<any>();
 
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
   const { id, edit } = props;
+
+  /**
+   * 
+   * @param data 
+   */
+  const updateMaps = (map: any) => {
+
+    console.debug('Map Updates', map, raw)
+
+    setStatus(1)
+    setMaps(map)
+
+    if(raw && raw.length > 0) {      
+      setCleanInsert(true);
+      const xr: ContentState = JSON.parse(raw);
+      updateStuff(xr, maps)
+    }
+  }
+  
+
+  /**
+   * Insertion Handler
+   * @param data 
+   */
+  const makeInsert = (data: any) => {        
+    setShowForm(data);
+    if(raw && raw.length > 0) {      
+      setCleanInsert(true);
+      const xr: ContentState = JSON.parse(raw);
+      updateStuff(xr, maps)
+    }
+  }
 
   const mapFields = (fields: any) => {
     // console.log('mapFields', fields)
@@ -166,22 +199,22 @@ const Form = (props: IContentForm) => {
 
   /**
    * Post Submit
-   * @param data 
+   * @param data
    */
   const onCreate = (data: any) => {
-    if(data?.info) {
+    if (data?.info) {
       console.log('Failed Build', data.info);
     }
 
-    if (data?.content?.id) {      
-      addToast('Saved Successfully', { appearance: 'success' });
+    if (data?.content?.id) {
+      // addToast('Saved Successfully', { appearance: 'success' });
       Router.push(`/content/${data.content.id}`);
     }
   };
 
   /**
    * On Submit
-   * @param data 
+   * @param data
    */
 
   const onSubmit = (data: any) => {
@@ -221,7 +254,7 @@ const Form = (props: IContentForm) => {
 
   /**
    * Load Data
-   * @param id 
+   * @param id
    */
   const loadData = (id: string) => {
     if (edit) {
@@ -295,14 +328,20 @@ const Form = (props: IContentForm) => {
   }, [content]);
 
   useEffect(() => {
-    if (raw) {
-      // setCleanInsert(true);
-      // const xr: ContentState = JSON.parse(raw);
-      // const inst = updateVars(xr, maps);
-      // setInsertable(inst);
-      // set
-    }
-  }, [raw, maps]);
+    console.log('body', body);
+  }, [body])
+
+  // useEffect(() => {
+  //   console.log('maps', maps, insertable)
+  //   // if (raw && maps) {     
+  //   //   if(status > 0) {
+  //   //     setCleanInsert(true);
+  //   //     const xr: ContentState = JSON.parse(raw);
+  //   //     console.log('shud hav updatd', xr);
+  //   //     updateStuff(xr, maps)
+  //   //   }      
+  //   // }
+  // }, [maps]);
 
   useEffect(() => {
     const f: any = mapFields(fields);
@@ -310,22 +349,33 @@ const Form = (props: IContentForm) => {
     setFieldMap(f);
   }, [fields]);
 
-  // useEffect(() => {
-  //   // get active serialized
+  useEffect(() => {
+    console.log('insertable, status, maps', insertable, status, maps);
+    if(insertable) {
+      if(maps.length > 0) {
+        console.log('Doing a clean insert now', insertable, maps)
+        updateStuff(insertable, maps, 'insertable, status, maps')
+      }
+    }
+  }, [insertable, status, maps]);
 
-  //   // console.log('Vars updated', maps)
-  //   // // const f: any = mapFields(fields);
-  //   // // // console.log('f', f, fields);
-  //   // // setFieldMap(f);
-  // }, [maps]);
+  // useEffect(() => {    
+  //   if(maps && status === 1 && raw?.length > 0 ) {
+  //     setCleanInsert(true);      
+  //     const xr: ContentState = JSON.parse(raw);
+  //     updateStuff(xr, maps)
+  //   }
+  // }, [maps, status, body]);
 
   useEffect(() => {
-    console.log('errors', errors);
+    if(errors) {
+      console.log('errors', errors);
+    }    
   }, [errors]);
 
   // useEffect(() => {
   //   if (maps.length > 0) {
-  //     const m = replaceVars(active, maps, true);
+  //     const m = updateVars(active, maps, true);
   //     console.log('m', m);
   //   }
   // }, [maps]);
@@ -352,52 +402,57 @@ const Form = (props: IContentForm) => {
 
   const changeText = (x: any) => {
     setShowForm(!showForm);
-    // if its serialized
-    if (x.serialized && x.serialized.data) {
+    setActiveTemplate(x.id);
+    updateStuff(x, maps);
+  };
+
+  const updateStuff = (x:any, mapx: any, key?: any) => {    
+    console.debug('x', x)
+    if (x.serialized?.data && mapx) {
+      console.debug('key', key)
       setCleanInsert(true);
       const xr: ContentState = JSON.parse(x.serialized.data);
-      const inst = updateVars(xr, field_maps);
-      console.log('inst', inst);
-
+      const inst = updateVars(xr, mapx);
       setInsertable(inst);
+      setStatus(1);
     }
 
-    setActiveTemplate(x.id);
-
-    console.log('field_Maps', field_maps);
-    const newerTitle = getInits(field_maps);
-    const newTitle = replaceTitles(x.title_template, newerTitle);
-    console.log('field_Maps', newTitle);
-  };
+    if(x?.type === 'doc') {
+      console.debug('key', key)
+      setCleanInsert(true);
+      const xr: ContentState = x;
+      const inst = updateVars(xr, mapx);
+      setInsertable(inst);
+      setStatus(1);
+    }
+  }
 
   const doUpdate = (state: any) => {
     // turn OFF appending blocks
     setCleanInsert(false);
 
-    console.log('doUpdate', state);
+    setBody(state);
 
-    // if (state && state.content) {
-    //   setValue('body', state.content);
-    // }
-
-    if (state.serialized) {
-      setRaw(state.serialized);
-      //   setValue('serialized', state.serialized);
+    if (state.serialized) {      
+      setStatus(1)
+      setRaw(state.serialized);      
     }
 
     if (state.md) {
       setValue('body', state.md);
       setValue('serialized', state.serialized);
     }
-
-    // if (state && isString(state)) {
-    //   setValue('body', state);
-    // }
   };
 
   return (
     <Box width={1}>
       {edit && <Text>Edit {id}</Text>}
+      { status < 1 &&
+        <Box>
+          {status}
+          <Spinner width={24} height={24}/>
+        </Box>
+      }
       <Box>
         <Text mb={3} fontSize={2} fontWeight={500}>
           <Box>
@@ -447,6 +502,9 @@ const Form = (props: IContentForm) => {
                 register={register}
               />
             </Box>
+            {/* <Box width={8/12} p={0}>
+              <RichEditorWraft/>
+            </Box> */}
             {def && (
               <EditorWraft
                 value={active}
@@ -504,17 +562,20 @@ const Form = (props: IContentForm) => {
               activeTemplate={activeTemplate}
               maps={maps}
               field_maps={field_maps}
-              setMaps={setMaps}
+              setMaps={updateMaps}
               fields={fields}
               setFieldMap={setFieldMap}
               templates={templates}
               setActive={setActive}
               showForm={showForm}
-              setShowForm={setShowForm}
+              setShowForm={makeInsert}
               setValue={setValue}
             />
           </Sidebar>
         </Flex>
+        <pre>
+          {raw}
+        </pre>
       </Box>
     </Box>
   );
