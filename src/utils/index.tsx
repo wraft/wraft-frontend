@@ -33,7 +33,7 @@ export const findDefault = (needle: string, stack: any) => {
  * @todo - Limited to 2 level deep arrays
  */
 export const updateVars = (data: ContentState, fields: any) => {
-  // cut it short if it map has no values
+  // cut it short if it map has no values  
   if (fields && fields[0] && fields[0].value) {
     console.log('UPDATED_BODY', fields);
     const result = produce(data, draft => {
@@ -45,7 +45,7 @@ export const updateVars = (data: ContentState, fields: any) => {
                 attrs: { name },
               } = c;
               const ff = fields.find((e: any) => e.name === name);
-              console.log('c', ff);
+              // console.log('c', ff);
               draft['content'][k]['content'][y]['attrs']['named'] =
                 ff && ff.value;
             }

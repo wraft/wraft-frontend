@@ -60,7 +60,7 @@ const ThemeForm = () => {
               defaultValue="1.25"
               register={register}
             />
-          </Box>
+          </Box>          
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>
       </Box>
