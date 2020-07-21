@@ -148,36 +148,34 @@ const Form = (props: IContentForm) => {
   const { id, edit } = props;
 
   /**
-   * 
-   * @param data 
+   *
+   * @param data
    */
   const updateMaps = (map: any) => {
+    console.debug('Map Updates', map, raw);
 
-    console.debug('Map Updates', map, raw)
+    setStatus(1);
+    setMaps(map);
 
-    setStatus(1)
-    setMaps(map)
-
-    if(raw && raw.length > 0) {      
+    if (raw && raw.length > 0) {
       setCleanInsert(true);
       const xr: ContentState = JSON.parse(raw);
-      updateStuff(xr, maps)
+      updateStuff(xr, maps);
     }
-  }
-  
+  };
 
   /**
    * Insertion Handler
-   * @param data 
+   * @param data
    */
-  const makeInsert = (data: any) => {        
+  const makeInsert = (data: any) => {
     setShowForm(data);
-    if(raw && raw.length > 0) {      
+    if (raw && raw.length > 0) {
       setCleanInsert(true);
       const xr: ContentState = JSON.parse(raw);
-      updateStuff(xr, maps)
+      updateStuff(xr, maps);
     }
-  }
+  };
 
   const mapFields = (fields: any) => {
     // console.log('mapFields', fields)
@@ -329,17 +327,17 @@ const Form = (props: IContentForm) => {
 
   useEffect(() => {
     console.log('body', body);
-  }, [body])
+  }, [body]);
 
   // useEffect(() => {
   //   console.log('maps', maps, insertable)
-  //   // if (raw && maps) {     
+  //   // if (raw && maps) {
   //   //   if(status > 0) {
   //   //     setCleanInsert(true);
   //   //     const xr: ContentState = JSON.parse(raw);
   //   //     console.log('shud hav updatd', xr);
   //   //     updateStuff(xr, maps)
-  //   //   }      
+  //   //   }
   //   // }
   // }, [maps]);
 
@@ -351,26 +349,26 @@ const Form = (props: IContentForm) => {
 
   useEffect(() => {
     console.log('insertable, status, maps', insertable, status, maps);
-    if(insertable) {
-      if(maps.length > 0) {
-        console.log('Doing a clean insert now', insertable, maps)
-        updateStuff(insertable, maps, 'insertable, status, maps')
+    if (insertable) {
+      if (maps.length > 0) {
+        console.log('Doing a clean insert now', insertable, maps);
+        updateStuff(insertable, maps, 'insertable, status, maps');
       }
     }
   }, [insertable, status, maps]);
 
-  // useEffect(() => {    
+  // useEffect(() => {
   //   if(maps && status === 1 && raw?.length > 0 ) {
-  //     setCleanInsert(true);      
+  //     setCleanInsert(true);
   //     const xr: ContentState = JSON.parse(raw);
   //     updateStuff(xr, maps)
   //   }
   // }, [maps, status, body]);
 
   useEffect(() => {
-    if(errors) {
+    if (errors) {
       console.log('errors', errors);
-    }    
+    }
   }, [errors]);
 
   // useEffect(() => {
@@ -406,26 +404,29 @@ const Form = (props: IContentForm) => {
     updateStuff(x, maps);
   };
 
-  const updateStuff = (x:any, mapx: any, key?: any) => {    
-    console.debug('x', x)
-    if (x.serialized?.data && mapx) {
-      console.debug('key', key)
+  /**
+   *
+   * @param data
+   * @param mapx
+   * @param key
+   */
+  const updateStuff = (data: any, mapx: any, _key?: any) => {
+    if (data.serialized?.data && mapx) {
       setCleanInsert(true);
-      const xr: ContentState = JSON.parse(x.serialized.data);
+      const xr: ContentState = JSON.parse(data.serialized.data);
       const inst = updateVars(xr, mapx);
       setInsertable(inst);
       setStatus(1);
     }
 
-    if(x?.type === 'doc') {
-      console.debug('key', key)
+    if (data?.type === 'doc') {
       setCleanInsert(true);
-      const xr: ContentState = x;
+      const xr: ContentState = data;
       const inst = updateVars(xr, mapx);
       setInsertable(inst);
       setStatus(1);
     }
-  }
+  };
 
   const doUpdate = (state: any) => {
     // turn OFF appending blocks
@@ -433,9 +434,9 @@ const Form = (props: IContentForm) => {
 
     setBody(state);
 
-    if (state.serialized) {      
-      setStatus(1)
-      setRaw(state.serialized);      
+    if (state.serialized) {
+      setStatus(1);
+      setRaw(state.serialized);
     }
 
     if (state.md) {
@@ -447,12 +448,12 @@ const Form = (props: IContentForm) => {
   return (
     <Box width={1}>
       {edit && <Text>Edit {id}</Text>}
-      { status < 1 &&
+      {status < 1 && (
         <Box>
           {status}
-          <Spinner width={24} height={24}/>
+          <Spinner width={24} height={24} />
         </Box>
-      }
+      )}
       <Box>
         <Text mb={3} fontSize={2} fontWeight={500}>
           <Box>
@@ -573,9 +574,7 @@ const Form = (props: IContentForm) => {
             />
           </Sidebar>
         </Flex>
-        <pre>
-          {raw}
-        </pre>
+        <pre>{raw}</pre>
       </Box>
     </Box>
   );

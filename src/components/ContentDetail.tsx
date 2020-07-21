@@ -240,7 +240,7 @@ const Form = () => {
                         {contents.content.instance_id}
                       </Text>
                       <a
-                        href={`http://localhost:4000/${contents.content.build}`}
+                        href={`https://wraft.x.aurut.com/${contents.content.build}`}
                         target="_blank">
                         <Text pt={0} fontWeight={500}>
                           Download
