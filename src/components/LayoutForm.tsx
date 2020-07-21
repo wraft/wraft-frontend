@@ -3,11 +3,10 @@ import { Box, Flex, Button, Text, Image } from 'rebass';
 import { Label, Input, Select } from '@rebass/forms';
 
 import { useForm } from 'react-hook-form';
-import { env } from './vars';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { loadEntity, deleteEntity, updateEntityFile } from '../utils/models';
 import Field from './Field';
 import FieldText from './FieldText';
 import { useRouter } from 'next/router';
@@ -66,6 +65,10 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
+  const onUpdate = (data: any) => {
+    console.log('updated', data);
+  };
+
   /**
    * Form Submit
    * @param data
@@ -94,39 +97,24 @@ const Form = () => {
     formData.append('engine_uuid', data.engine_uuid);
     formData.append('assets', assetsPath);
     formData.append('screenshot', data.screenshot[0]);
-    
 
     if (isEdit) {
-      const lId = layout && layout.id || 0
-      fetch(`${env.api_dev}/api/v1/layouts/${lId}`, {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
-          console.log('Created Layout:', data);
-        });
+      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);      
     } else {
-      fetch(`${env.api_dev}/api/v1/layouts`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(data) {
-          console.log('Created Layout:', data);
-        });
+      // fetch(`${env.api_dev}/api/v1/layouts`, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      //   body: formData,
+      // })
+      //   .then(function(response) {
+      //     return response.json();
+      //   })
+      //   .then(function(data) {
+      //     console.log('Created Layout:', data);
+      //   });
     }
   };
 
@@ -203,11 +191,11 @@ const Form = () => {
   const addUploads = (data: Asset) => {
     setAssets(prevArray => [...prevArray, data]);
   };
-  
-  const deleteAsset = (lid:string, id:string) => {
-    console.log('deleting', lid, id)
-    deleteEntity(`/layouts/${lid}/assets/${id}`, token)
-  }
+
+  const deleteAsset = (lid: string, id: string) => {
+    console.log('deleting', lid, id);
+    deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+  };
 
   return (
     <Flex>
@@ -268,7 +256,11 @@ const Form = () => {
               ref={register({ required: true })}>
               {engines &&
                 engines.length > 0 &&
-                engines.map((m: any) => <option key={m.id} value={m.id}>{m.name}</option>)}
+                engines.map((m: any) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name}
+                  </option>
+                ))}
             </Select>
           </Box>
           <Box width={1} mt={3}>

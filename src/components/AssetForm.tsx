@@ -3,42 +3,52 @@ import { Box, Flex, Button, Text } from 'rebass';
 // import { Label, Input } from '@rebass/forms';
 
 import { useForm } from 'react-hook-form';
-
-import { env } from './vars';
-
 import { Asset } from '../utils/types';
 import { Label, Input } from '@rebass/forms';
 import { useStoreState } from 'easy-peasy';
+import { createEntityFile } from '../utils/models';
 
 const Form = (props: any) => {
   const { register, handleSubmit } = useForm();
   const token = useStoreState(state => state.auth.token);
   const [contents, setContents] = useState<Asset>();
 
+  const onImageUploaded = (data: any) => {
+    const mData: Asset = data;
+    props.onUpload(mData);
+    setContents(data);
+    console.log('data', data);
+  };
+
   const onSubmit = (data: any) => {
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('name', data.name);
 
-    fetch(`${env.api_dev}/api/v1/assets`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        // 'Content-Type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-      // headers: {'Content-Type':'multipart/form-data'},
-      body: formData,
-    })
-      .then(function(response) {
-        return response.json();
-      })
-      .then(function(data) {
-        const mData: Asset = data;
-        console.log('Created Asset', mData);
-        props.onUpload(mData);
-        setContents(mData);
-      });
+    // const formData = new FormData();
+    // formData.append('image', data.file[0]);
+    // formData.append('tag', 'file');
+    createEntityFile(formData, token, 'assets', onImageUploaded);
+
+    // fetch(`${env.api_dev}/api/v1/assets`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     // 'Content-Type': 'multipart/form-data',
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    //   // headers: {'Content-Type':'multipart/form-data'},
+    //   body: formData,
+    // })
+    //   .then(function(response) {
+    //     return response.json();
+    //   })
+    //   .then(function(data) {
+    //     const mData: Asset = data;
+    //     console.log('Created Asset', mData);
+    //     props.onUpload(mData);
+    //     setContents(mData);
+    //   });
   };
 
   return (
@@ -71,12 +81,7 @@ const Form = (props: any) => {
         <Label htmlFor="name" mb={1}>
           File
         </Label>
-        <Input
-          id="file"
-          name="file"
-          type="file"
-          ref={register}
-        />
+        <Input id="file" name="file" type="file" ref={register} />
       </Box>
       <Flex mx={-2} flexWrap="wrap" mt={2}>
         <Button type="submit" ml={2}>
