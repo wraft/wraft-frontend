@@ -9,7 +9,7 @@ export const Contents = () => {
   return (
     <>
       <Head>
-        <title>Contens | Dieture</title>
+        <title>Contens | Wraft</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>

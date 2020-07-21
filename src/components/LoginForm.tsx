@@ -49,7 +49,7 @@ const Form = () => {
       py={3}
       width={4 / 12}
       mt={4}>
-      <Text variant="pagetitle">Sign-in to Dieture</Text>
+      <Text variant="pagetitle">Sign-in to Wraft</Text>
       <Box mx={-2} mb={3}>
         <Box width={1} px={2} pb={3}>
           <Label htmlFor="email" mb={1}>

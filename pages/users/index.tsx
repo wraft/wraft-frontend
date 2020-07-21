@@ -9,7 +9,7 @@ export const Index = () => {
   return (
     <>
       <Head>
-        <title>Customers | Dieture Admin</title>
+        <title>Customers | Wraft Admin</title>
       </Head>
       <Page>
           <UserList/>
