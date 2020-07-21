@@ -9,7 +9,7 @@ export const Index = () => {
   return (
     <>
       <Head>
-        <title>Login - Dieture</title>
+        <title>Login - Wraft</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Box>

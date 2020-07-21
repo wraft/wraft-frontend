@@ -13,10 +13,10 @@ export const Index = () => {
   return (
     <>
       <Head>
-        <title>Dieture - The Best Diet Center Qatar, Weight Loss Clinic, Dietician in Doha</title>
+        <title>Wraft - The Document Automation Platform</title>
         <meta
           name="description"
-          content="Dieture – Best diet center in Qatar helps you lose weight healthily with balanced diet plan; the healthy diet menu includes classic menu, keto menu, athlete menu, ramadan menu catered by W hotel."
+          content="Wraft is a document automation and pipelining tools for businesses"
         />
       </Head>
       {!token && (
