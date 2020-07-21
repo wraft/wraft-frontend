@@ -226,6 +226,10 @@ const Form = () => {
     return fieldsMap;
   };
 
+  const onSuccess = (d:any) => {
+    console.log('d',d);
+  }
+
   const onSubmit = (data: any) => {
     const sampleD = {
       name: data.name,
@@ -241,7 +245,7 @@ const Form = () => {
     if (isUpdate) {
       updateEntity(`content_types/${data.edit}`, sampleD, token);
     } else {
-      createEntity(sampleD, 'content_types', token);
+      createEntity(sampleD, 'content_types', token, onSuccess);
     }
   };
 

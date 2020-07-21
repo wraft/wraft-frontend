@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
-import { loadEntity, deleteEntity, updateEntityFile } from '../utils/models';
+import { loadEntity, deleteEntity, updateEntityFile, createEntityFile } from '../utils/models';
 import Field from './Field';
 import FieldText from './FieldText';
 import { useRouter } from 'next/router';
@@ -64,7 +64,10 @@ const Form = () => {
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
-
+  
+  const onImageUploaded = (data: any) => {
+    console.log('data', data);
+  }
   const onUpdate = (data: any) => {
     console.log('updated', data);
   };
@@ -99,22 +102,9 @@ const Form = () => {
     formData.append('screenshot', data.screenshot[0]);
 
     if (isEdit) {
-      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);      
+      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);  
     } else {
-      // fetch(`${env.api_dev}/api/v1/layouts`, {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: formData,
-      // })
-      //   .then(function(response) {
-      //     return response.json();
-      //   })
-      //   .then(function(data) {
-      //     console.log('Created Layout:', data);
-      //   });
+      createEntityFile(formData, token, 'layouts', onImageUploaded);
     }
   };
 
