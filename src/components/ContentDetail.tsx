@@ -9,7 +9,7 @@ import CommentForm from './CommentForm';
 import MenuItem from './MenuItem';
 
 import { Pulse } from 'styled-spinkit';
-import { createEntity, loadEntity, deleteEntity } from '../utils/models';
+import { createEntity, loadEntity, deleteEntity, API_HOST } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 
@@ -240,7 +240,7 @@ const Form = () => {
                         {contents.content.instance_id}
                       </Text>
                       <a
-                        href={`https://wraft.x.aurut.com/${contents.content.build}`}
+                        href={`${API_HOST}/${contents.content.build}`}
                         target="_blank">
                         <Text pt={0} fontWeight={500}>
                           Download
