@@ -14,6 +14,8 @@ import EditorWraft from './EditorWraft';
 import { Template, ContentState } from '../../src/utils/types';
 import { updateVars } from '../../src/utils';
 
+import { useToasts } from 'react-toast-notifications';
+
 const Block = styled(Box)`
   padding-bottom: 8px;
   border: solid 1px #ddd;
@@ -28,10 +30,20 @@ const Sidebar = styled(Box)`
   position: absolute;
   top: 69px;
   right: 0;
-  width: 340px;
+  width: 25%;
   min-height: 100vh;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
   padding-right: 24px;
+
+  position: fixed;
+  width: 26%;
+  height: 60%;
+  bottom: 0;
+  border: solid 1px #ddd;
+  border-radius: 4px;
+  right: 2.5%;
+  top: 20%;
+  bottom: 20%;
 `;
 
 export const EMPTY_MARKDOWN_NODE = {
@@ -114,7 +126,7 @@ import { createEntity, loadEntity, updateEntity } from '../utils/models';
 // import { isString } from 'util';
 import { Input } from '@rebass/forms';
 import { useStoreState } from 'easy-peasy';
-import { Spinner } from 'theme-ui';
+// import { Spinner } from 'theme-ui';
 // import RichEditorWraft from './EditWraft';
 
 export interface IContentForm {
@@ -144,7 +156,7 @@ const Form = (props: IContentForm) => {
   const [raw, setRaw] = useState<any>();
 
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
-  // const { addToast } = useToasts();
+  const { addToast } = useToasts();
   const { id, edit } = props;
 
   /**
@@ -205,7 +217,7 @@ const Form = (props: IContentForm) => {
     }
 
     if (data?.content?.id) {
-      // addToast('Saved Successfully', { appearance: 'success' });
+      addToast('Saved Successfully', { appearance: 'success' });
       Router.push(`/content/${data.content.id}`);
     }
   };
@@ -270,6 +282,12 @@ const Form = (props: IContentForm) => {
     setValue('state', defaultState);
 
     if (data && data.content && data.content.serialized) {
+      const ctypeId = data.content_type?.id;
+
+      // fields and templates
+      loadEntity(token, `content_types/${ctypeId}`, onLoadData);
+      loadTemplates(ctypeId);
+
       setValue('title', data.content.serialized.title);
       const rawraw = data.content.serialized.serialized;
       if (rawraw) {
@@ -432,6 +450,8 @@ const Form = (props: IContentForm) => {
     // turn OFF appending blocks
     setCleanInsert(false);
 
+    console.log('state', state);
+
     setBody(state);
 
     if (state.serialized) {
@@ -448,12 +468,12 @@ const Form = (props: IContentForm) => {
   return (
     <Box width={1}>
       {edit && <Text>Edit {id}</Text>}
-      {status < 1 && (
+      {/* {status < 1 && (
         <Box>
           {status}
           <Spinner width={24} height={24} />
         </Box>
-      )}
+      )} */}
       <Box>
         <Text mb={3} fontSize={2} fontWeight={500}>
           <Box>
@@ -574,7 +594,12 @@ const Form = (props: IContentForm) => {
             />
           </Sidebar>
         </Flex>
-        <pre>{raw}</pre>
+
+        {body && body?.md && raw && (
+          <Box>
+            <Text color="green">Good</Text>
+          </Box>
+        )}
       </Box>
     </Box>
   );

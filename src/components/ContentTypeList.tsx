@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useStoreState } from 'easy-peasy';
 
 import Link from './NavLink';
-import { Abstract } from './Icons';
+// import { Abstract } from './Icons';
 
 import {
   TrashAlt,
@@ -35,10 +35,10 @@ const ButtonLink = styled(Link)`
 `;
 
 const ColorPill = styled(Box)`
-  width: 10px;
-  height: 10px;
+  width: 16px;
+  height: 16px;
   display: inline-block;
-  border-radius: 3px;
+  border-radius: 11rem;
 `
 
 export interface ILayout {
@@ -68,12 +68,14 @@ export interface IFieldItem {
 const ItemField = (props: any) => {
   return (
     <Block p={4} mr={3} bg="#fff" sx={{ borderBottom: 'solid 1px #eee' }} width={1 / 4}>
-      <Abstract/>
+      {/* <Abstract/> */}
       <Link href={`/content-types/[id]`} path={`/content-types/${props.id}`}>
-        <ColorPill bg={props.color}/>
-        <Text fontSize={2} fontWeight={600}>
-          {props.name}
-        </Text>
+        <Flex>
+          <ColorPill bg={props.color}/>
+          <Text ml={3} fontSize={2} fontWeight={600}>
+            {props.name}
+          </Text>
+        </Flex>
       </Link>
       <Text py={1} fontSize={0} color="#666">
         {props.decription}

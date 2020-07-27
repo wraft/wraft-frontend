@@ -8,7 +8,7 @@ import { MarkdownEditor } from './WraftEditor';
 import CommentForm from './CommentForm';
 import MenuItem from './MenuItem';
 
-import { Pulse } from 'styled-spinkit';
+// import { Pulse } from 'styled-spinkit';
 import { createEntity, loadEntity, deleteEntity, API_HOST } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
@@ -22,12 +22,13 @@ const PreTag = styled(Box)`
 `;
 
 const RightBar = styled(Box)`
-  position: absolute;
-  right: 0;
-  width: 320px;
-  border-left: solid 1px #eee;
-  top: 69px;
-  bottom: 0;
+  position: fixed;
+  right: 2.5%;
+  margin-left: 2.5%;
+  width: 23% !important;
+  border: solid 1px #ddd;
+  top: 17%;
+  bottom: 5%;
   background: #fff;
 `;
 
@@ -116,15 +117,15 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
 
   const [build, setBuild] = useState<IBuild>();
 
   const loadDataSucces = (data: any) => {
-    setLoading(true);
+    setLoading(false);
     const res: ContentInstance = data;
-    setContents(res);
+    setContents(res);    
   };
 
   const loadData = (t: string, id: string) => {
@@ -153,6 +154,7 @@ const Form = () => {
    * Pass for build
    */
   const doBuild = () => {
+    console.log('Building');
     setLoading(true);
     createEntity([], `contents/${cId}/build`, token, onBuild);
   };
@@ -185,22 +187,28 @@ const Form = () => {
 
   return (
     <Box py={3} width={1} mt={4}>
-      <Box mx={0} mb={3} width={1}>
-        {!loading && (
-          <Box>
+      <Box mx={0} mb={3} width={1} sx={{ position: 'relative'}}>
+        <Box>
+
+        </Box>
+        {loading && (
+          <Box sx={{ position: 'absolute', right: '-50%', left: '50%', top: '80px'}}>
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
         {contents && contents.content && (
           <Flex>
             {/* { console.log('contents.content', contents.content.serialized.serialized)} */}
-            <Box width={7 / 12}>
-              <Box pb={3}>
-                <Text mb={2} fontSize={2}>
+            <Box width={8 / 12}>
+              <Box bg="white" sx={{ border: 'solid 1px #ddd'}}>
+                <Text py={3}
+                  px={4} mb={2} fontSize={2} sx={{ borderBottom: 'solid 1px #ddd'}}>
                   {contents.content.serialized.title}
                 </Text>
                 <Text
-                  pt={2}
+                  py={3}
+                  px={4}
+                  // pt={2}
                   fontSize={
                     0
                   }>{`Created at ${contents.content.inserted_at}`}</Text>
@@ -220,7 +228,6 @@ const Form = () => {
               </PreTag>
             </Box>
             <RightBar width={3 / 12} p={4}>
-              {/* {loading && <Pulse size={12} color="#000"/>}               */}
               <Box variant="bordered">
                 {build && (
                   <Box>
@@ -252,16 +259,16 @@ const Form = () => {
               </Box>
               <Flex>
                 <Button
-                  variant={loading ? 'primary' : 'secondary'}
-                  onClick={doBuild}>
+                  variant='primary'
+                  onClick={() => doBuild()}>
                   <Flex>
-                    {loading && <Pulse size={8} color="#000" />}
-                    Build Now
+                    {loading && <Spinner color="white" size={24} />}
+                    {!loading && <Text>Build Now</Text>}
                   </Flex>
                 </Button>
                 <Button
                   sx={{ ml: 2 }}
-                  variant={loading ? 'primary' : 'secondary'}
+                  variant='secondary'
                   onClick={() => delData(contents.content.id)}>
                   Delete
                 </Button>
