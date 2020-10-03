@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+import { Box, Flex, Text, Link, Button } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { File } from './Icons';
 import { MarkdownEditor } from './WraftEditor';
 import CommentForm from './CommentForm';
-import MenuItem from './MenuItem';
 
 // import { Pulse } from 'styled-spinkit';
+
+// import Link from './NavLink';
+
 import {
   createEntity,
   loadEntity,
@@ -17,6 +19,7 @@ import {
 } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
+import MenuItem from './MenuItem';
 
 const PreTag = styled(Box)`
   white-space: pre-wrap; /* css-3 */
@@ -24,17 +27,6 @@ const PreTag = styled(Box)`
   white-space: -pre-wrap; /* Opera 4-6 */
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
-`;
-
-const RightBar = styled(Box)`
-  position: fixed;
-  right: 2.5%;
-  margin-left: 2.5%;
-  width: 23% !important;
-  border: solid 1px #ddd;
-  top: 17%;
-  bottom: 5%;
-  background: #fff;
 `;
 
 // const BgGif = styled(Box)`
@@ -209,20 +201,28 @@ const Form = () => {
           <Flex>
             {/* { console.log('contents.content', contents.content.serialized.serialized)} */}
             <Box sx={{ width: '65%' }}>
-              <Box bg="white" sx={{ px: 4, py: 4, border: 'solid 1px', borderColor:'gray.3' }}>
+              <Box
+                bg="white"
+                sx={{
+                  px: 4,
+                  py: 4,
+                  border: 'solid 1px',
+                  borderColor: 'gray.3',
+                }}>
                 <Text
-                  sx={{ fontSize: 2}}
-                // py={3}
-                // px={4}
-                // mb={2}
-                // fontSize={2}
-                // sx={{ borderBottom: 'solid 1px #ddd' }}
+                  sx={{ fontSize: 2 }}
+                  // py={3}
+                  // px={4}
+                  // mb={2}
+                  // fontSize={2}
+                  // sx={{ borderBottom: 'solid 1px #ddd' }}
                 >
                   {contents.content.serialized.title}
                 </Text>
                 <Text
-                sx={{ fontSize: 0}}
-                >{`Updated ${contents.content.inserted_at}`}</Text>
+                  sx={{
+                    fontSize: 0,
+                  }}>{`Updated ${contents.content.inserted_at}`}</Text>
               </Box>
               <PreTag pt={0}>
                 {contentBody && (
@@ -238,26 +238,38 @@ const Form = () => {
                 {/* <Text fontSize={1}>{contents.content.raw}</Text> */}
               </PreTag>
             </Box>
-            <Box variant="plateSide">
-              <Box variant="bordered">
+            <Box variant="plateSide" sx={{ pl: 4 }}>
+              <Box>
                 {build && (
                   <Box>
-                    <Text fontSize={0}>Updated At</Text>
+                    <Text>Updated At</Text>
                     <Text>{build.inserted_at}</Text>
                   </Box>
                 )}
-                <Text mb={2}>{contents.content.instance_id}</Text>
-                <Text>{contents.content.id}</Text>
+                <Box sx={{ pb: 2 }}></Box>
                 {contents.content.build && (
                   <Flex pt={3}>
                     <File />
                     <Box>
-                      <Text pt={0}>{contents.content.instance_id}</Text>
-                      <a
+                      <Flex>
+                        <Text sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
+                          {contents.content.instance_id}
+                        </Text>
+                        <Text
+                          sx={{ fontSize: 0, ml: 1, mt: 1, color: 'gray.6' }}
+                          pt={0}>
+                          v1.3
+                        </Text>
+                      </Flex>
+                      <Text sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                        {contents.content.id}
+                      </Text>
+                      <Link
+                        variant="download"
                         href={`${API_HOST}/${contents.content.build}`}
                         target="_blank">
                         <Text pt={0}>Download</Text>
-                      </a>
+                      </Link>
                     </Box>
                   </Flex>
                 )}

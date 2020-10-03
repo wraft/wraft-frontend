@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'rebass';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import { TrashAlt } from '@styled-icons/boxicons-regular';
 import { loadEntity, deleteEntity } from '../utils/models';
 
 import Link from './NavLink';
 import { useStoreState } from 'easy-peasy';
+import LayoutCard from './Card';
 
 export interface ILayout {
   width: number;
@@ -83,13 +84,11 @@ const Form = () => {
   return (
     <Box py={3} width={1} mt={4}>
       <Text variant="pagetitle">Layouts</Text>
-      <Box mx={0} mb={3} width={1}>
-        <Box>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} />)}
-        </Box>
-      </Box>
+      <Flex mx={0} mb={3} width={1}>
+        {contents &&
+          contents.length > 0 &&
+          contents.map((m: any) => <LayoutCard model='layouts' key={m.id} {...m} />)}
+      </Flex>
     </Box>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Flex, Text } from 'theme-ui';
 
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
@@ -14,7 +14,7 @@ export const IconStyleWrapper = styled.div`
 `;
 
 const MenuWrapper = styled(Flex)`
-opacity: 1;
+  opacity: 1;
 `;
 const MenuWrapperInactive = styled(Flex)`
   opacity: 0.7;
@@ -38,25 +38,25 @@ export const IconWrapper = styled(Layout)`
   color: '#999';
 `;
 
-const Sidebar = styled(Box)`
-  border-bottom: solid 1px #eee;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  padding-left: 8px;
-  a {
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-    padding-left: 8px;
-  }
+// const Sidebar = styled(Box)`
+//   border-bottom: solid 1px #eee;
+//   padding-bottom: 8px;
+//   padding-top: 12px;
+//   padding-left: 8px;
+//   a {
+//     text-decoration: none;
+//     color: #000;
+//     font-weight: bold;
+//     padding-left: 8px;
+//   }
 
-  a:hover {
-    text-decoration: none;
-    color: #092682;
-    font-weight: bold;
-    padding-left: 8px;
-  }
-`;
+//   a:hover {
+//     text-decoration: none;
+//     color: #092682;
+//     font-weight: bold;
+//     padding-left: 8px;
+//   }
+// `;
 
 const listMenu = [
   {
@@ -65,9 +65,14 @@ const listMenu = [
     path: '/contents',
   },
   {
-    name: 'Content Types',
+    name: 'Folders',
     logo: <BookOpen width={20} />,
     path: '/content-types',
+  },  
+  {
+    name: 'Templates',
+    logo: <Carousel width={20} />,
+    path: '/templates',
   },
   {
     name: 'Layouts',
@@ -75,35 +80,30 @@ const listMenu = [
     path: '/layouts',
   },
   {
-    name: 'Templates',
-    logo: <Carousel width={20} />,
-    path: '/templates',
+    name: 'Blocks',
+    logo: <Water width={20} />,
+    path: '/block_templates',
   },
-  // {
-  //   name: 'Blocks',
-  //   logo: <Water width={20} />,
-  //   path: '/block_templates',
-  // },
-  // {
-  //   name: 'Flows',
-  //   logo: <GitMerge width={20} />,
-  //   path: '/flows',
-  // },
-  // {
-  //   name: 'Fields',
-  //   logo: <Spreadsheet width={20} />,
-  //   path: '/fields',
-  // },
-  // {
-  //   name: 'Pipelines',
-  //   logo: <Collection width={20} />,
-  //   path: '/pipelines',
-  // },
-  // {
-  //   name: 'Themes',
-  //   logo: <ColorFill width={20} />,
-  //   path: '/themes',
-  // },
+  {
+    name: 'Flows',
+    logo: <GitMerge width={20} />,
+    path: '/flows',
+  },
+  {
+    name: 'Fields',
+    logo: <Spreadsheet width={20} />,
+    path: '/fields',
+  },
+  {
+    name: 'Pipelines',
+    logo: <Collection width={20} />,
+    path: '/pipelines',
+  },
+  {
+    name: 'Themes',
+    logo: <ColorFill width={20} />,
+    path: '/themes',
+  },
   {
     name: 'My Account',
     logo: <Cog width={20} />,
@@ -117,35 +117,45 @@ export interface INav {
 
 const Nav = (props: INav) => {
   const showFull = props && props.showFull ? false : true;
-  const sidebarW = props && props.showFull ? '90px' : 2 / 12;
+  const sidebarW = props && props.showFull ? '90px' : '16%';
   const router = useRouter();
   const pathname: string = router.pathname as any;
 
   return (
-    <Sidebar width={sidebarW} sx={{ borderRight: 'solid 1px #eee' }}>
-      <Box pl={2} pb={3} pt={2}>
-        <Logo/>
+    <Box sx={{ width: sidebarW, borderRight: 'solid 1px', borderColor: 'gray.1' }}>
+      <Box
+        pl={3}
+        pb={3}
+        pt={3}
+        sx={{ mb: 3, borderBottom: 'solid 1px', borderColor: 'gray.1' }}>
+        <Logo />
       </Box>
-      {listMenu.map(m => (
-        <MenuItem href={m.path} key={m.path}>          
-          <Box>            
-            {pathname === m.path && (
-              <MenuWrapper>
-                <IconStyleWrapper>{m.logo}</IconStyleWrapper>
-                {showFull && <Text fontSize={1} color="grays.0">{m.name}</Text>}
-              </MenuWrapper>
-            )}
+      <Box
+        sx={{
+          pr: 3,
+          pl: 2,
+        }}>
+        {listMenu.map(m => (
+          <MenuItem href={m.path} key={m.path}>
+            <Box>
+              {pathname === m.path && (
+                <MenuWrapper>
+                  <IconStyleWrapper>{m.logo}</IconStyleWrapper>
+                  {showFull && <Text variant="menulink">{m.name}</Text>}
+                </MenuWrapper>
+              )}
 
-            {pathname != m.path && (
-              <MenuWrapperInactive>
-                <IconStyleWrapper>{m.logo}</IconStyleWrapper>
-                {showFull && <Text fontSize={1}>{m.name}</Text>}
-              </MenuWrapperInactive>
-            )}
-          </Box>
-        </MenuItem>
-      ))}
-    </Sidebar>
+              {pathname != m.path && (
+                <MenuWrapperInactive>
+                  <IconStyleWrapper>{m.logo}</IconStyleWrapper>
+                  {showFull && <Text variant="menulink">{m.name}</Text>}
+                </MenuWrapperInactive>
+              )}
+            </Box>
+          </MenuItem>
+        ))}
+      </Box>
+    </Box>
   );
 };
 

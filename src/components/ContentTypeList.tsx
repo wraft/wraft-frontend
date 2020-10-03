@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'easy-peasy';
-import { Box, Text, Button, Flex, Spinner } from 'theme-ui';
-import { TrashAlt, Edit, Plus } from '@styled-icons/boxicons-regular';
+import { Box, Text, Flex, Spinner } from 'theme-ui';
+import { Plus } from '@styled-icons/boxicons-regular';
 
 import Link from './NavLink';
 import { deleteEntity, loadEntity } from '../utils/models';
+import LayoutCard from './Card';
 
 export interface ILayout {
   width: number;
@@ -29,45 +30,6 @@ export interface IFieldItem {
   name: string;
   type: string;
 }
-
-interface IItemField {
-  id?: string;
-  name?: string;
-  color?: string;
-  decription?: string;
-  onDelete?: any;
-}
-
-const ItemField = ({ id, name, color, decription, onDelete }: IItemField) => {
-  return (
-    <Box variant="plateBlock">
-      <Flex>
-        <Box
-          sx={{
-            bg: color,
-            width: '16px',
-            minHeight: '100%',
-            display: 'inline-block',
-            borderRadius: '11rem',
-          }}></Box>
-      </Flex>
-      <Link href={`/content-types/[id]`} path={`/content-types/${id}`}>
-        <Text sx={{ fontWeight: 'heading' }}>{name}</Text>
-      </Link>
-      <Text py={1}>{decription}</Text>
-      <Flex mt={2}>
-        <Link
-          href={`/content-types/edit/[id]`}
-          path={`/content-types/edit/${id}`}>
-          <Edit width={20} />
-        </Link>
-        <Button sx={{ bg: '#fff', p: 0 }} onClick={() => onDelete(id)}>
-          <TrashAlt width={20} height={20} color="red" />
-        </Button>
-      </Flex>
-    </Box>
-  );
-};
 
 const ContentTypeList = () => {
   const token = useStoreState(state => state.auth.token);
@@ -99,8 +61,8 @@ const ContentTypeList = () => {
   }, [token]);
 
   return (
-    <Box py={3}>
-      <Flex>
+    <Box py={3} sx={{ width: '100%'}}>
+      <Flex sx={{ width: '100%'}}>
         <Text variant="pagetitle">All Contents</Text>
 
         {!loading && (
@@ -117,15 +79,18 @@ const ContentTypeList = () => {
           </Link>
         </Box>
       </Flex>
-      <Box mx={0} mb={3}>
-        <Flex>
+      <Flex bg='gray.0' sx={{ width: '100%'}}>
+        <Flex sx={{ width:'100%'}}>
           {contents &&
             contents.length > 0 &&
             contents.map((m: any) => (
-              <ItemField key={m.id} {...m} onDelete={delData} />
+              <LayoutCard key={m.id} {...m} onDelete={delData} />
             ))}
         </Flex>
-      </Box>
+        <Box bg='white' ml="auto" sx={{ width: '30%', p: 4, border: 'solid 1px', borderColor: 'gray.1', borderRadius: 2}}>
+          <Text>Heading 1</Text>
+        </Box>
+      </Flex>
     </Box>
   );
 };

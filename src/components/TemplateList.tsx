@@ -147,7 +147,7 @@ const Title = (props: any) => {
   );
 };
 
-const Form = () => {
+const TemplateList = () => {
   const token = useStoreState(state => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
@@ -207,4 +207,4 @@ const Form = () => {
     </Box>
   );
 };
-export default Form;
+export default TemplateList;
