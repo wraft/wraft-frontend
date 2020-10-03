@@ -11,6 +11,11 @@
     "start": "next start",
     "test": "jest --watchAll"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run build"
+    }
+  },
   "dependencies": {
     "@datepicker-react/styled": "^2.6.0",
     "@emotion/core": "^10.0.28",

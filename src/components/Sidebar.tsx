@@ -60,7 +60,7 @@ const Sidebar = styled(Box)`
 
 const listMenu = [
   {
-    name: 'Contents',
+    name: 'Documents',
     logo: <Note width={20} />,
     path: '/contents',
   },
@@ -79,31 +79,31 @@ const listMenu = [
     logo: <Carousel width={20} />,
     path: '/templates',
   },
-  {
-    name: 'Blocks',
-    logo: <Water width={20} />,
-    path: '/block_templates',
-  },
-  {
-    name: 'Flows',
-    logo: <GitMerge width={20} />,
-    path: '/flows',
-  },
-  {
-    name: 'Fields',
-    logo: <Spreadsheet width={20} />,
-    path: '/fields',
-  },
-  {
-    name: 'Pipelines',
-    logo: <Collection width={20} />,
-    path: '/pipelines',
-  },
-  {
-    name: 'Themes',
-    logo: <ColorFill width={20} />,
-    path: '/themes',
-  },
+  // {
+  //   name: 'Blocks',
+  //   logo: <Water width={20} />,
+  //   path: '/block_templates',
+  // },
+  // {
+  //   name: 'Flows',
+  //   logo: <GitMerge width={20} />,
+  //   path: '/flows',
+  // },
+  // {
+  //   name: 'Fields',
+  //   logo: <Spreadsheet width={20} />,
+  //   path: '/fields',
+  // },
+  // {
+  //   name: 'Pipelines',
+  //   logo: <Collection width={20} />,
+  //   path: '/pipelines',
+  // },
+  // {
+  //   name: 'Themes',
+  //   logo: <ColorFill width={20} />,
+  //   path: '/themes',
+  // },
   {
     name: 'My Account',
     logo: <Cog width={20} />,

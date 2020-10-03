@@ -32,7 +32,7 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    width: '60%',
+    minWidth: '55ch',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
@@ -148,7 +148,7 @@ const Form = (props: any) => {
             </Tag>
           ))}
       </Box>
-      <Button onClick={props.setShowForm}>Fill Form</Button>
+      <Button sx={{ pt: 2, pb: 2, bg: 'white', color: 'gray',fontFamily: 'heading', border: 'solid 1px', fontSize: 0 }} onClick={props.setShowForm}>Fill Form</Button>
       <Modal
         isOpen={props.showForm}
         onRequestClose={closeModal}

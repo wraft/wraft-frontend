@@ -185,7 +185,7 @@ const ContentList = () => {
   }, [token]);
 
   return (
-    <Box py={3} width={7 / 12} mt={4} pl={3}>
+    <Box py={3} sx={{ width: '60%', float: 'left'}}>
       <Text variant="pagetitle">All Contents</Text>
       {!loading && (
         <Box>

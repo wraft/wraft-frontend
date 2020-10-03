@@ -2,7 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import ContentListAll from '../src/components/ContentList';
 import Page from '../src/components/Page';
-import { Flex } from 'theme-ui';
 
 export const Contents = () => {
   return (
@@ -12,9 +11,7 @@ export const Contents = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>          
-          <ContentListAll />
-        </Flex>
+        <ContentListAll />
       </Page>
     </>
   );

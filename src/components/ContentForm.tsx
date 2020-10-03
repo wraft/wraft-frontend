@@ -1,50 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
-
-import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
 import Router, { useRouter } from 'next/router';
+
+import { Box, Flex, Button, Text } from 'theme-ui';
+import { useToasts } from 'react-toast-notifications';
+import { useForm } from 'react-hook-form';
 
 import Field from './Field';
 import FieldText from './FieldText';
 import FieldForm from './FieldForm';
-
 import EditorWraft from './EditorWraft';
-
 import { Template, ContentState } from '../../src/utils/types';
 import { updateVars } from '../../src/utils';
-
-import { useToasts } from 'react-toast-notifications';
-
-const Block = styled(Box)`
-  padding-bottom: 8px;
-  border: solid 1px #ddd;
-  margin-bottom: 8px;
-  padding-left: 16px;
-  padding-top: 12px;
-`;
-
-const Sidebar = styled(Box)`
-  background-color: #fff;
-  border-left: solid 1px #dddddd59;
-  position: absolute;
-  top: 69px;
-  right: 0;
-  width: 25%;
-  min-height: 100vh;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
-  padding-right: 24px;
-
-  position: fixed;
-  width: 26%;
-  height: 60%;
-  bottom: 0;
-  border: solid 1px #ddd;
-  border-radius: 4px;
-  right: 2.5%;
-  top: 20%;
-  bottom: 20%;
-`;
 
 export const EMPTY_MARKDOWN_NODE = {
   type: 'doc',
@@ -294,6 +260,7 @@ const Form = (props: IContentForm) => {
         const df = JSON.parse(rawraw);
         if (df) {
           setDef(df);
+          setInsertable([]);
         }
       } else {
         setDef(EMPTY_MARKDOWN_NODE);
@@ -466,7 +433,7 @@ const Form = (props: IContentForm) => {
   };
 
   return (
-    <Box width={1}>
+    <Box>
       {edit && <Text>Edit {id}</Text>}
       {/* {status < 1 && (
         <Box>
@@ -475,38 +442,42 @@ const Form = (props: IContentForm) => {
         </Box>
       )} */}
       <Box>
-        <Text mb={3} fontSize={2} fontWeight={500}>
+        <Text>
           <Box>
             {content && content.content_type && (
-              <Box>
-                <Text fontSize={2}>
-                  {'Create ' + content.content_type.name}
-                </Text>
-                <Text
-                  pt={2}
-                  fontSize={0}
-                  sx={{ color: '#777', textTransform: 'uppercase' }}>
-                  {content.content_type.layout.name}
-                </Text>
+              <Box sx={{ mb: 3, mt: 3}}>
+                <Text>{'Create ' + content.content_type.name}</Text>                
               </Box>
             )}
           </Box>
         </Text>
       </Box>
-      <Box mx={0} mb={3} width={8 / 12}>
+      <Box>
         <Flex>
           <Box
             as="form"
             onSubmit={handleSubmit(onSubmit)}
-            py={3}
-            mt={4}
-            width={1}>
-            <Field
-              name="title"
-              label="Title"
-              defaultValue=""
-              register={register}
-            />
+            sx={{ minWidth: '75ch' }}>
+            <Flex>
+              {/* <Box variant="w34"> */}
+                <Field
+                  name="title"
+                  label=""
+                  defaultValue=""
+                  placeholder="Document Name"
+                  register={register}
+                />
+                 <Button variant="secondary" sx={{ ml: 3, mt:2, mb: 3, pl: 4, pr: 4}} type="submit">
+                  Save
+                </Button>
+              {/* </Box>
+              <Box variant="w14" sx={{ pt: 4, textAlign: 'right', ml: 'auto'}}>
+                <Button variant="secondary" sx={{ }} type="submit">
+                  Save
+                </Button>
+              </Box> */}
+            </Flex>
+
             <Box sx={{ display: 'none' }}>
               <FieldText
                 name="body"
@@ -560,22 +531,20 @@ const Form = (props: IContentForm) => {
                 register={register}
               />
             </Box>
-            <Button type="submit" ml={2}>
-              Create
-            </Button>
           </Box>
-          <Sidebar width={4 / 12} pl={5}>
-            <Text mb={4} mt={0} variant="caps">
+          <Box variant="plateBox" sx={{ ml: 4 }}>
+            <Text sx={{ fontSize: 1, pb: 3 }}>
               Select a template for quick start
             </Text>
-            <Box width={7 / 12}>
+            <Box>
               {templates &&
                 templates.map((n: any) => (
-                  <Block key={n.id} onClick={() => changeText(n)}>
-                    <Text fontSize={0} fontWeight={600} mb={1}>
-                      {n.title}
+                  <Box key={n.id} sx={{ pl: 3}} onClick={() => changeText(n)}>
+                    <Text sx={{ fontSize: 0, fontWeight: 600 }}>{n.title}</Text>
+                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 1 }}>
+                      A Sample description
                     </Text>
-                  </Block>
+                  </Box>
                 ))}
               {errors.exampleRequired && <Text>This field is required</Text>}
             </Box>
@@ -592,12 +561,13 @@ const Form = (props: IContentForm) => {
               setShowForm={makeInsert}
               setValue={setValue}
             />
-          </Sidebar>
+          </Box>
         </Flex>
 
         {body && body?.md && raw && (
           <Box>
             <Text color="green">Good</Text>
+            <img src="https://instagram.fblr2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/80094765_551595732349479_3103076122892435456_n.jpg?_nc_ht=instagram.fblr2-1.fna.fbcdn.net&_nc_ohc=3KNqJmGFoNIAX-r7aTl&oh=2c4b40e29c9ae86131d0c22294646e4e&oe=5FA04174"/>
           </Box>
         )}
       </Box>

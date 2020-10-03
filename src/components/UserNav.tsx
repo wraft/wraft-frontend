@@ -73,6 +73,7 @@ const UserNav = () => {
           <Box width={4 / 12}>
             <Link href={token ? '/user-profile' : '/'}>
               <Logo />
+              un { token }
             </Link>
           </Box>
 
