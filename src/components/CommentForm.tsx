@@ -65,7 +65,7 @@ const CommentForm = (props: CommentFormProps) => {
       {comments && comments.length > 0 && (
         <Box>
           {comments.map((comment: Comment) => (
-            <Box pb={2} pt={2} mb={1} sx={{ borderBottom: 'solid 1px #eee' }}>
+            <Box pb={2} pt={2} mb={1}>
               <Text fontSize={0}>{comment.comment}</Text>
               <Text mt={1} color="#555" fontSize={0}>{comment.inserted_at}</Text>
             </Box>

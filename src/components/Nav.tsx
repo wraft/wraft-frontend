@@ -7,7 +7,8 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 
 // relative
 import Link from './NavLink';
-import { UserIcon } from './Icons';
+// import { UserIcon } from './Icons';
+import { Image } from 'theme-ui';
 import { checkUser } from '../utils/models';
 
 const Header = styled(Box)`
@@ -23,7 +24,11 @@ export interface IUser {
   name: string;
 }
 
-const Nav = () => {
+interface INav {
+  navtitle?:string;
+}
+
+const Nav = ({ navtitle = 'Page Title' }: INav) => {
   // const [user, setUser] = useState<IUser>();
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const setProfile = useStoreActions(
@@ -35,22 +40,17 @@ const Nav = () => {
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
-    
-    if(data === 'x') {
-      setProfile(data);
-      // setUser(data);
-    }    
   };
 
   useEffect(() => {
     // check if token is there
     const t = cookie.get('token') || false;
     // login to check
-    if (t){
+    if (t) {
       // if(t === '') {
-      //   checkUser(t, onProfileLoad)        
+      //   checkUser(t, onProfileLoad)
       // }
-      checkUser(t, onProfileLoad)
+      checkUser(t, onProfileLoad);
       setToken(t);
     }
     // check if cooke token is present
@@ -60,12 +60,11 @@ const Nav = () => {
   return (
     <Header>
       <Flex py={2} px={1} pl={0} pr={3}>
-        
-        <Link href="/">
-          {/* <Logo /> */}
-        </Link>
-        
+        {/* <Link href="/"><Logo /></Link> */}
+        { navtitle && <Text variant="navtitle">{navtitle}</Text>}
+
         <Box ml="auto" mr={3}>
+
           <Flex>
             {!token && (
               <Link href="/login">
@@ -73,14 +72,22 @@ const Nav = () => {
               </Link>
             )}
             {token && token !== '' && (
-              <Flex ml={2}>                
+              <Flex ml={2}>
                 {profile && (
-                  <Text fontSize={1} ml={2} pt={2} mr={3} fontWeight="bold">
-                    {profile.name}
-                  </Text>
-                )}                
-                <UserIcon/>
-                <Text onClick={userLogout}>Logout</Text>
+                  <Flex sx={{ alignContent: 'top', verticalAlign: 'top' }}>
+                    {profile.profile_pic && (
+                      <Image
+                        src={'http://localhost:4000' + profile?.profile_pic}
+                        sx={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '4px',
+                          border: 'solid 1px #eee',
+                        }}
+                      />
+                    )}
+                  </Flex>
+                )}
               </Flex>
             )}
           </Flex>

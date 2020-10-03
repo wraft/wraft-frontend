@@ -9,7 +9,6 @@ import UserHome from '../src/components/UserHome';
 
 export const Index = () => {
   const token = useStoreState(state => state.auth.token);
-  console.log(token);
   return (
     <>
       <Head>

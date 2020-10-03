@@ -65,15 +65,13 @@ const Form = () => {
   const onSubmit = (data: any) => {
     // const id: string = me && me.id;
 
-    // console.log('data.profile_pic', data)
+    console.log('data.profile_pic', data)
 
     const formData = new FormData();
-    formData.append('[profile][name]', data.name);
-    formData.append('[profile][dob]', data.dob);
-    formData.append('[profile][code]', data.code);
-    formData.append('[profile][profile_pic]', data.profile_pic[0]);
-    formData.append('[profile][gender]', data.gender);
-    formData.append('[profile][calory_range_id]', data.calory_range_id);
+    formData.append('name', data.name);
+    formData.append('dob', data.dob);
+    formData.append('profile_pic', data.profile_pic && data.profile_pic[0]);
+    formData.append('gender', data.gender);
 
     updateEntityFile(`profiles`, formData, token, onUpdate);
   };
@@ -182,11 +180,11 @@ const Form = () => {
                 <option value="Female">Female</option>
               </Select>
 
-              <Label>Calorie Range</Label>
+              {/* <Label>Calorie Range</Label>
               <Select name="calory_range_id" ref={register({ required: true })}>
                 <option value="006bce5a-ec1a-4210-890c-bf4817addaa1">1000-1200</option>
                 <option value="64d5fd8d-6726-4b9b-81ff-f367b249307d">1200-1400</option>
-              </Select>
+              </Select> */}
 
               {/* <Box py={4}>
                 <Text variant="pagetitle">My Profile</Text>

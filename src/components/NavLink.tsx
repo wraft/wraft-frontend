@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { Box } from 'rebass';
-import { Link as RebassLink } from 'theme-ui'
+import { Link } from 'theme-ui'
 import NextLink from 'next/link';
 
 interface Props {
@@ -11,15 +11,15 @@ interface Props {
   path?:string,
 }
 
-const Link: React.FC<Props> = ({ href, children, icon, variant, path }) => {
+const NavLink: React.FC<Props> = ({ href, children, icon, variant, path }) => {
   return (
     <NextLink href={href} as={path || ""}>
-      <RebassLink variant={variant || "primary"}>
+      <Link variant={variant || "primary"}>
         { icon &&
-          <Box pl={2} pr={2} mb={0} pb={1}>{icon}</Box>
+          <Box>{icon}</Box>
         }
         {children}
-      </RebassLink>
+      </Link>
     </NextLink>
   );
 };
@@ -34,4 +34,4 @@ const Link: React.FC<Props> = ({ href, children, icon, variant, path }) => {
 //   </RebassLink>
 // )}
 
-export default Link
+export default NavLink

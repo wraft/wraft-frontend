@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { Box, Flex } from 'rebass';
+import { Box, Flex } from 'theme-ui';
 
 import { useStoreState } from 'easy-peasy';
 import Container from './Container';
@@ -31,7 +31,7 @@ export interface IAlert {
 //   );
 // };
 
-export const Page = (props: IPage) => {
+export const Page = (props: any) => {
   const showFull: boolean = props && props.showFull ? true : false;
   const token = useStoreState(state => state.auth.token);
   return (
@@ -48,32 +48,25 @@ export const Page = (props: IPage) => {
         />
       </Head>
       {/* <ToastProvider> */}
-        <Container width={100} bg={''}>
-          {!token && (
-            <Box>
+      <Container width={100} bg={'white'}>
+        {!token && (
+          <Box>
+            <Nav />
+            <Box>{props.children}</Box>
+          </Box>
+        )}
+        {token && (
+          <Flex>
+            <Sidebar showFull={showFull} />
+            <Box sx={{ width: '100%'}}>
               <Nav />
-              <Box color="#333">{props.children}</Box>
-            </Box>
-          )}
-          {token && (
-            <Flex>
-              <Sidebar showFull={showFull} />
-              <Box width={1}>
-                <Nav />
-                <Box
-                  sx={{ minHeight: '100vh' }}
-                  bg="quaternary"
-                  color="#333"
-                  width={1}
-                  p={4}
-                  pt={3}
-                  pl={8}>
-                  {props.children}
-                </Box>
+              <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
+                {props.children}
               </Box>
-            </Flex>
-          )}
-        </Container>
+            </Box>
+          </Flex>
+        )}
+      </Container>
       {/* </ToastProvider> */}
     </>
   );

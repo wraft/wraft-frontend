@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Button } from 'rebass';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
@@ -9,7 +9,12 @@ import CommentForm from './CommentForm';
 import MenuItem from './MenuItem';
 
 // import { Pulse } from 'styled-spinkit';
-import { createEntity, loadEntity, deleteEntity, API_HOST } from '../utils/models';
+import {
+  createEntity,
+  loadEntity,
+  deleteEntity,
+  API_HOST,
+} from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 
@@ -125,7 +130,7 @@ const Form = () => {
   const loadDataSucces = (data: any) => {
     setLoading(false);
     const res: ContentInstance = data;
-    setContents(res);    
+    setContents(res);
   };
 
   const loadData = (t: string, id: string) => {
@@ -143,12 +148,12 @@ const Form = () => {
 
   /**
    * On Build success
-   * @param data 
+   * @param data
    */
   const onBuild = (data: any) => {
     setLoading(false);
     setBuild(data);
-  }
+  };
 
   /**
    * Pass for build
@@ -186,34 +191,40 @@ const Form = () => {
   };
 
   return (
-    <Box py={3} width={1} mt={4}>
-      <Box mx={0} mb={3} width={1} sx={{ position: 'relative'}}>
-        <Box>
-
-        </Box>
+    <Box py={3}>
+      <Box sx={{ position: 'relative' }}>
+        <Box></Box>
         {loading && (
-          <Box sx={{ position: 'absolute', right: '-50%', left: '50%', top: '80px'}}>
+          <Box
+            sx={{
+              position: 'absolute',
+              right: '-50%',
+              left: '50%',
+              top: '80px',
+            }}>
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
         {contents && contents.content && (
           <Flex>
             {/* { console.log('contents.content', contents.content.serialized.serialized)} */}
-            <Box width={8 / 12}>
-              <Box bg="white" sx={{ border: 'solid 1px #ddd'}}>
-                <Text py={3}
-                  px={4} mb={2} fontSize={2} sx={{ borderBottom: 'solid 1px #ddd'}}>
+            <Box sx={{ width: '65%' }}>
+              <Box bg="white" sx={{ px: 4, py: 4, border: 'solid 1px', borderColor:'gray.3' }}>
+                <Text
+                  sx={{ fontSize: 2}}
+                // py={3}
+                // px={4}
+                // mb={2}
+                // fontSize={2}
+                // sx={{ borderBottom: 'solid 1px #ddd' }}
+                >
                   {contents.content.serialized.title}
                 </Text>
                 <Text
-                  py={3}
-                  px={4}
-                  // pt={2}
-                  fontSize={
-                    0
-                  }>{`Created at ${contents.content.inserted_at}`}</Text>
+                sx={{ fontSize: 0}}
+                >{`Updated ${contents.content.inserted_at}`}</Text>
               </Box>
-              <PreTag pt={4}>
+              <PreTag pt={0}>
                 {contentBody && (
                   <MarkdownEditor
                     editable={false}
@@ -227,7 +238,7 @@ const Form = () => {
                 {/* <Text fontSize={1}>{contents.content.raw}</Text> */}
               </PreTag>
             </Box>
-            <RightBar width={3 / 12} p={4}>
+            <Box variant="plateSide">
               <Box variant="bordered">
                 {build && (
                   <Box>
@@ -236,31 +247,23 @@ const Form = () => {
                   </Box>
                 )}
                 <Text mb={2}>{contents.content.instance_id}</Text>
-                <Text fontSize={0} fontWeight={400}>
-                  {contents.content.id}
-                </Text>
+                <Text>{contents.content.id}</Text>
                 {contents.content.build && (
                   <Flex pt={3}>
                     <File />
                     <Box>
-                      <Text pt={0} fontSize={0} pb={1}>
-                        {contents.content.instance_id}
-                      </Text>
+                      <Text pt={0}>{contents.content.instance_id}</Text>
                       <a
                         href={`${API_HOST}/${contents.content.build}`}
                         target="_blank">
-                        <Text pt={0} fontWeight={500}>
-                          Download
-                        </Text>
+                        <Text pt={0}>Download</Text>
                       </a>
                     </Box>
                   </Flex>
                 )}
               </Box>
               <Flex>
-                <Button
-                  variant='primary'
-                  onClick={() => doBuild()}>
+                <Button variant="primary" onClick={() => doBuild()}>
                   <Flex>
                     {loading && <Spinner color="white" size={24} />}
                     {!loading && <Text>Build Now</Text>}
@@ -268,7 +271,7 @@ const Form = () => {
                 </Button>
                 <Button
                   sx={{ ml: 2 }}
-                  variant='secondary'
+                  variant="secondary"
                   onClick={() => delData(contents.content.id)}>
                   Delete
                 </Button>
@@ -281,16 +284,14 @@ const Form = () => {
 
               {contents && contents.content && (
                 <Box mt={3}>
-                  <Text fontSize={1} fontWeight={500}>
-                    Comments
-                  </Text>
+                  <Text>Comments</Text>
                   <CommentForm
                     master={contents.content_type.id}
                     master_id={contents.content.id}
                   />
                 </Box>
               )}
-            </RightBar>
+            </Box>
           </Flex>
         )}
       </Box>
