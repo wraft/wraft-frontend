@@ -58,7 +58,7 @@ export const Page = (props: any) => {
         {token && (
           <Flex>
             <Sidebar showFull={showFull} />
-            <Box sx={{ width: '100%'}}>
+            <Box bg="gray.0" sx={{ width: '100%'}}>
               <Nav />
               <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
                 {props.children}

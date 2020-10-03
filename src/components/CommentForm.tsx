@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text, Image } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './FieldText';
@@ -24,11 +24,29 @@ export interface Comment {
   inserted_at: string;
   id: string;
   comment: string;
+  profile: Profile;
 }
 
 interface CommentFormProps {
   master: string;
   master_id: string;
+}
+
+export interface Profile {
+  uuid: string;
+  profile_pic: string;
+  name: string;
+  gender: string;
+  dob: Date;
+}
+
+export interface User {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
+  email_verify: boolean;
+  email: string;
 }
 
 const CommentForm = (props: CommentFormProps) => {
@@ -46,9 +64,8 @@ const CommentForm = (props: CommentFormProps) => {
       is_parent: true,
       comment: data.body,
     };
-    console.log('creating comment');
     createEntity(commentExample, 'comments', token);
-    loadEntity(token, `comments?master_id=${master_id}&page=1`, onLoadComments);
+    loadEntity(token, `comments?master_id=${master_id}&page=0`, onLoadComments);
   };
   const onLoadComments = (data: any) => {
     if (data.comments) {
@@ -61,25 +78,52 @@ const CommentForm = (props: CommentFormProps) => {
   }, [master_id, token]);
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       {comments && comments.length > 0 && (
         <Box>
           {comments.map((comment: Comment) => (
-            <Box pb={2} pt={2} mb={1}>
-              <Text fontSize={0}>{comment.comment}</Text>
-              <Text mt={1} color="#555" fontSize={0}>{comment.inserted_at}</Text>
+            <Box
+              pb={2}
+              pt={2}
+              mb={1}
+              sx={{
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.2',
+                pb: 3,
+                mb: 2,
+              }}>
+              <Flex sx={{ display: 'inline-flex' }}>
+                <Box>
+                  <Image
+                    width={32}
+                    sx={{ borderRadius: 99 }}
+                    src={`http://localhost:4000${comment?.profile?.profile_pic}`}
+                  />
+                </Box>
+                <Box sx={{ pl: 3 }}>
+                  <Text sx={{ pl: 0, fontSize: 1, fontWeight: 600 }}>
+                    {comment?.profile?.name}
+                  </Text>
+                  <Box>
+                    <Text sx={{ fontSize: 1 }}>{comment.comment}</Text>
+                    <Text mt={1} color="#555" sx={{ fontSize: 0, mt: 2 }}>
+                      {comment.inserted_at}
+                    </Text>
+                  </Box>
+                </Box>
+              </Flex>
             </Box>
           ))}
         </Box>
       )}
       <Box>
-        <Text mb={3} mt={3} fontSize={1} fontWeight={500}>
+        <Text mb={3} mt={3}>
           Add Comment
         </Text>
       </Box>
-      <Box mx={0} mb={3} width={1}>
+      <Box mx={0} mb={3} >
         <Flex>
-          <Box width={7 / 12}>
+          <Box>
             <Field
               name="body"
               label="Your comment"

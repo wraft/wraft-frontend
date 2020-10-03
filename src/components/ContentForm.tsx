@@ -433,7 +433,7 @@ const Form = (props: IContentForm) => {
   };
 
   return (
-    <Box>
+    <Box bg="gray.0">
       {edit && <Text>Edit {id}</Text>}
       {/* {status < 1 && (
         <Box>

@@ -8,8 +8,9 @@ import theme from '../src/utils/theme';
 
 import { createGlobalStyle } from 'styled-components';
 import 'react-day-picker/lib/style.css';
-import 'react-phone-number-input/style.css';
-import 'react-multi-carousel/lib/styles.css';
+// import 'react-phone-number-input/style.css';
+// import 'react-multi-carousel/lib/styles.css';
+import "react-dropzone-uploader/dist/styles.css";
 import { ToastProvider } from 'react-toast-notifications';
 
 const GlobalStyle = createGlobalStyle` 

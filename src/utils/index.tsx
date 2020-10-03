@@ -1,6 +1,5 @@
 import produce from 'immer';
 import { ContentState } from './types';
-
 // import { Flat } from "lodash";
 
 // util fns here!
@@ -33,7 +32,7 @@ export const findDefault = (needle: string, stack: any) => {
  * @todo - Limited to 2 level deep arrays
  */
 export const updateVars = (data: ContentState, fields: any) => {
-  // cut it short if it map has no values  
+  // cut it short if it map has no values
   if (fields && fields[0] && fields[0].value) {
     console.log('UPDATED_BODY', fields);
     const result = produce(data, draft => {
@@ -203,7 +202,6 @@ export const getInits = (field_maps: any) => {
   return initials;
 };
 
-
 export const modalStyle = {
   content: {
     top: '50%',
@@ -215,7 +213,7 @@ export const modalStyle = {
     transform: 'translate(-50%, -50%)',
     overflow: 'scroll',
     height: '60%', // <-- This sets the height
-    overlfow: 'scroll' // <-- This tells the modal to scrol
+    overlfow: 'scroll', // <-- This tells the modal to scrol
   },
 };
 
@@ -230,7 +228,7 @@ export const modalStyle2 = {
     transform: 'translate(-50%, -50%)',
     overflow: 'scroll',
     height: '60%', // <-- This sets the height
-    overlfow: 'scroll' // <-- This tells the modal to scrol
+    overlfow: 'scroll', // <-- This tells the modal to scrol
   },
 };
 
@@ -244,6 +242,6 @@ export const modalStyle3 = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     height: '70%', // <-- This sets the height
-    overlfow: 'scroll' // <-- This tells the modal to scrol
+    overlfow: 'scroll', // <-- This tells the modal to scrol
   },
 };

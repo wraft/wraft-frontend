@@ -35,7 +35,7 @@ const IconBox = styled.div`
   }
   img.y {
     width: auto;
-    height 38px;
+    height 24px;
   }
   img.clean{
     padding:0;

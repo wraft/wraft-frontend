@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Flex, Text } from 'rebass';
-import styled from 'styled-components';
+import { Box, Flex, Text } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -11,24 +10,15 @@ import Link from './NavLink';
 import { Image } from 'theme-ui';
 import { checkUser } from '../utils/models';
 
-const Header = styled(Box)`
-  border-bottom: solid 1px #eee;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  padding-left: 12px;
-  padding-left: 24px;
-  border-bottom: solid 1px #eee;
-`;
-
 export interface IUser {
   name: string;
 }
 
 interface INav {
-  navtitle?:string;
+  navtitle?: string;
 }
 
-const Nav = ({ navtitle = 'Page Title' }: INav) => {
+const Nav = ({ navtitle = '' }: INav) => {
   // const [user, setUser] = useState<IUser>();
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const setProfile = useStoreActions(
@@ -58,13 +48,11 @@ const Nav = ({ navtitle = 'Page Title' }: INav) => {
   }, []);
 
   return (
-    <Header>
+    <Box variant="header">
       <Flex py={2} px={1} pl={0} pr={3}>
         {/* <Link href="/"><Logo /></Link> */}
-        { navtitle && <Text variant="navtitle">{navtitle}</Text>}
-
+        {navtitle && <Text variant="navtitle">{navtitle}</Text>}
         <Box ml="auto" mr={3}>
-
           <Flex>
             {!token && (
               <Link href="/login">
@@ -93,7 +81,7 @@ const Nav = ({ navtitle = 'Page Title' }: INav) => {
           </Flex>
         </Box>
       </Flex>
-    </Header>
+    </Box>
   );
 };
 export default Nav;

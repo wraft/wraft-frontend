@@ -189,29 +189,36 @@ const theme = {
   },
   forms: {
     label: {
-      color: '#8b8796',
-      fontSize: 0,
+      color: 'gray.7',
+      fontSize: 1,
       pb: 1,
     },
     input: {
-      color: '#444',
+      color: 'gray.8',
       fontWeight: 500,
-      border: 'solid 1px gray.2',
+      border: 'solid 1px',
+      borderColor: 'gray.4',
       bg: 'white',
       mb: 2,
+      borderRadius: 2,
     },
     select: {
-      color: '#444',
+      color: 'gray.8',
       fontWeight: 500,
-      border: 'solid 1px gray.2',
+      border: 'solid 1px',
+      borderColor: 'gray.4',
       bg: 'white',
+      mb: 2,
+      borderRadius: 2,
     },
     textarea: {
-      color: '#444',
-      fontWeight: 600,
-      border: 'solid 1px gray.2',
+      color: 'gray.8',
+      fontWeight: 500,
+      border: 'solid 1px',
+      borderColor: 'gray.4',
       bg: 'white',
-      mb: 1,
+      mb: 2,
+      borderRadius: 2,
     },
   },
   styles: {
@@ -299,30 +306,67 @@ const theme = {
       maxWidth: '100%',
     },
   },
-  variants: {    
+  variants: {
+    download: {
+      bg: 'red',
+      color: 'blue',
+    },
     plateBox: {
       border: 'solid 1px',
       borderColor: 'grey',
+      bg: 'white',
       px: 3,
       py: 3,
     },
     plateBlock: {
       base: 'plateBox',
+      bg: 'white',
+      mr: 4,
+      p: 4,
+      width: '25%',
+      border: 'solid 1px',
+      borderColor: 'gray.2',
+      borderLeft: 'solid 0.5rem',
     },
     plateSide: {
       base: 'plateBox',
     },
     button: {
-      bg: 'red'
+      bg: 'red',
+    },
+    header: {
+      borderBottom: 'solid 1px',
+      borderColor: 'gray.1',
+      paddingBottom: 2,
+      bg: 'white',
+      paddingTop: 2,
+      paddingLeft: 2,
+      // padding-left: 12px;
+      // padding-left: 24px;
+      // border-bottom: solid 1px #eee;
     }
   },
   text: {
+    download: {
+      color: 'red.9'
+    },
+    menulink: {
+      fontSize: 1,
+    },
     pagetitle: {
       fontSize: 3,
       mb: 3,
     },
   },
   buttons: {
+    secondary: {
+      color: 'primary',
+      bg: 'blue.0',
+      border: 'solid 1px',
+      borderColor: 'blue.1',
+      mb: 3,
+      mt: 3,
+    },
     primary: {
       color: 'white',
       bg: 'primary',
