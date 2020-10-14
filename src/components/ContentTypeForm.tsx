@@ -19,6 +19,7 @@ import {
   deleteEntity,
 } from '../utils/models';
 import Field from './Field';
+import FieldColor from './FieldColor';
 import FieldText from './FieldText';
 import FieldEditor from './FieldEditor';
 
@@ -288,6 +289,16 @@ const Form = () => {
     });
   };
 
+  const onChangeFields = (_e: any, _name: string) => {
+    console.log("updating ", _name, _e);
+    setValue(_name, _e);
+    // const sampleTheme: themeObject = {
+    //   ...theme,
+    //   [_name]: _e,
+    // };
+    // // setTheme(sampleTheme);
+  };
+
   useEffect(() => {
     // if token
     if (token) {
@@ -338,11 +349,12 @@ const Form = () => {
                 />
               </Box>
               <Box width={1}>
-                <Field
+                <FieldColor
                   register={register}
                   label="Color"
                   name="color"
                   defaultValue="#000"
+                  onChangeColor={onChangeFields}
                 />
               </Box>
               <Box width={1} px={0} pb={3}>

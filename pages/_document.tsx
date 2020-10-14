@@ -1,4 +1,5 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+
 const structuredData: any = {
   '@context': 'https://schema.org',
   '@type': 'Organization',

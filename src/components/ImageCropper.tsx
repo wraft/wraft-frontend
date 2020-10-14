@@ -1,15 +1,26 @@
-import React, { useState } from "react";
-import Dropzone from "react-dropzone-uploader";
+import React, { useContext, useEffect, useState } from 'react';
+import Dropzone from 'react-dropzone-uploader';
 
-import { Box, Button, Flex, Image } from "theme-ui";
+import { Box, Text, Button, Flex, Input, Image, Label } from 'theme-ui';
 
-import ImageEdit from "./ImageEdit";
+import { getDroppedOrSelectedFiles } from 'html5-file-selector';
 
-const UploaderContext = React.createContext({
-  image: null,
-  attachImage: (_e: any) => {
-    console.log("x", _e);
-  },
+import ImageEdit from './ImageEdit';
+
+// const UploaderContext = React.createContext({
+//   state: "start",
+//   attachImage: (_e: any) => {
+//     console.log('x', _e);
+//   },
+//   setState: (_e: any) => {
+
+//   }
+// });
+
+export const UploaderContext = React.createContext({
+  statex: 'start',
+  attachImage: (_p: any) => {},
+  setState: (_state: string) => {},
 });
 
 interface LayoutProps {
@@ -32,20 +43,24 @@ const Layout = ({
   return (
     <Box
       sx={{
-        p: 2,
-        border: "dotted 1px",
-        borderColor: "pink.8",
-        fontFamily: "body",
-        bg: "pink.0",
-      }}
-    >
-      <Flex sx={{ flexWrap: "wrap" }}>{previews}</Flex>
+        // mt: 3,
+        // ml: 3,
+        p: 3,
+        border: 0,
+        boxShadow: 'none',
+        // border: "solid 1px",
+        // borderRadius: 3,
+        // borderColor: "gray.3",
+        // fontFamily: "body",
+        // bg: "green",
+      }}>
+      <Flex sx={{ flexWrap: 'wrap', border: 0 }}>{previews}</Flex>
 
       <Box {...dropzoneProps} sx={{ p: 0, m: 0 }}>
         {files.length < extra.maxFiles && input}
       </Box>
 
-      {files.length > 0 && submitButton}
+      {/* {files.length > 0 && submitButton} */}
     </Box>
   );
 };
@@ -66,7 +81,7 @@ const getBase64 = (file: any) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
-    reader.onerror = (error) => reject(error);
+    reader.onerror = error => reject(error);
   });
 };
 
@@ -79,12 +94,19 @@ const Preview = ({ meta }: IPreviewProps) => {
   const { previewUrl }: IMetaModel = meta;
 
   const [prevImage, setPrevImage] = useState<any>(null);
-  const [prevImageFile, setPrevImageFile] = useState<File | boolean>(false);
+  const [prevImageFile, setPrevImageFile] = useState<File>();
   const [hideUpload, sethHideUpload] = useState<boolean>(false);
+
+  // 1. cropped
+  const [crop, setCrop] = useState<string>('start');
+
+  const { statex, attachImage, setState } = useContext(UploaderContext);
 
   const imageUpdate = (_x: any) => {
     setPrevImageFile(_x);
     getBase64(_x).then((_f: any) => {
+      setCrop('preview');
+      setState('preview');
       setPrevImage(_f);
       sethHideUpload(true);
     });
@@ -95,35 +117,94 @@ const Preview = ({ meta }: IPreviewProps) => {
     prevImage && attachImage({ prevImage, prevImageFile });
   };
 
+  useEffect(() => {
+    console.log('crop', crop);
+    if (crop === 'preview' && prevImage) {
+      setState('cropped');
+      console.log(
+        'prevImage_prevImageFile',
+        prevImage.length,
+        prevImage,
+        prevImageFile,
+      );
+      prevImage && attachImage({ prevImage, prevImageFile });
+    }
+  }, [crop, prevImage]);
+
+  useEffect(() => {
+    console.log('crop action', prevImage);
+    if (crop === 'preview' && prevImage) {
+      setState('three');
+      console.log('[3] three', prevImage, prevImageFile);
+      if (prevImage && prevImageFile) {
+        attachImage({ prevImage, prevImageFile });
+      }
+    }
+  }, [prevImage, hideUpload]);
+
   return (
-    <Box>
+    <>
       <UploaderContext.Consumer>
         {(_props: any) => (
           <Box
-          // onClick={toggleTheme}
-          // style={{ backgroundColor: theme.background }}
+            sx={
+              {
+                // bg: 'red',
+                // p: 4,
+              }
+            }
+            // onClick={toggleTheme}
+            // style={{ backgroundColor: theme.background }}
           >
             {prevImage && hideUpload && (
-              <Image sx={{ maxWidth: "100%" }} src={prevImage} />
+              <>
+                <Image sx={{ maxWidth: '100%' }} src={prevImage} />
+                <Button onClick={() => toggleUpload(_props)}>Save</Button>
+              </>
             )}
 
             {previewUrl && !hideUpload && (
-              <ImageEdit image={previewUrl} onUpdate={imageUpdate} />
+              <>
+                <ImageEdit image={previewUrl} onUpdate={imageUpdate} />
+              </>
             )}
+
             {/* <Image sx={{ maxWidth: "100%" }} src={previewUrl} /> */}
-            <Button
-              variant="small"
-              type="button"
-              onClick={() => toggleUpload(_props)}
-              sx={{ mt: 3 }}
-            >
-              Save
-              {/* {hideUpload ? "Save" : "Change Image"} */}
-            </Button>
           </Box>
         )}
       </UploaderContext.Consumer>
-    </Box>
+    </>
+  );
+};
+
+export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }) => {
+  const text = files.length > 0 ? 'Add more files' : 'Choose files';
+
+  return (
+    <Label
+      sx={{
+        bg: 'white',
+        color: 'primary',
+        cursor: 'pointer',
+        border: 'solid 1px',
+        borderColor: 'primary',
+        p: 3,
+        width: '30%',
+        borderRadius: 3,
+      }}>
+      {text}
+      <Input
+        style={{ display: 'none' }}
+        type="file"
+        accept={accept}
+        multiple
+        onChange={e => {
+          getFilesFromEvent(e).then(chosenFiles => {
+            onFiles(chosenFiles);
+          });
+        }}
+      />
+    </Label>
   );
 };
 
@@ -143,52 +224,76 @@ interface IattachImage {
   prevImage?: string;
   prevImageFile?: File;
 }
-const ImageCropper = ({ onFileSubmit }: MyUploaderProps) => {
+const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
   const [image, setImage] = useState<File | boolean>(false);
-  const [imagePrev, setImagePrev] = useState<string|boolean>(false);
+  const [imagePrev, setImagePrev] = useState<string | boolean>(false);
+
+  const [state, setState] = useState<string>('one');
 
   const attachImage = ({ prevImage, prevImageFile }: IattachImage) => {
+    // console.log('XXX', prevImage)
+
     prevImage && setImagePrev(prevImage);
     prevImageFile && setImage(prevImageFile);
     onFileSubmit({ prevImage, prevImageFile });
   };
 
+  // doHide
+
+  useEffect(() => {
+    if (state == 'three') {
+      onComplete(imagePrev);
+    }
+  }, [state]);
+
   const handleChangeStatus = ({ meta, remove, status }: handleChangeStatus) => {
-    if (status === "headers_received") {
-      console.log(`${meta.name} uploaded!`);
+    setState('two');
+    if (status === 'headers_received') {
+      // console.log(`${meta.name} uploaded!`);
       remove();
-    } else if (status === "aborted") {
-      console.log(`${meta.name}, upload failed...`);
+    } else if (status === 'aborted') {
+      // console.log(`${meta.name}, upload failed...`);
     }
   };
+
   const handleSubmit = (_files: any) => {
     // onFileSubmit(parent, files);
   };
 
+  const getFilesFromEvent = e => {
+    return new Promise(resolve => {
+      getDroppedOrSelectedFiles(e).then(chosenFiles => {
+        resolve(chosenFiles.map(f => f.fileObject));
+      });
+    });
+  };
+
   return (
     <React.Fragment>
-      <UploaderContext.Provider value={{ image, attachImage }}>
+      <UploaderContext.Provider
+        value={{ attachImage, statex: state, setState }}>
         <Box>
-          {imagePrev && <Image src={imagePrev} />}
           {!image && (
             <Dropzone
               // getUploadParams={getUploadParams}
               PreviewComponent={Preview}
               LayoutComponent={Layout}
+              InputComponent={InputBox}
               onChangeStatus={handleChangeStatus}
               onSubmit={handleSubmit}
+              getFilesFromEvent={getFilesFromEvent}
               maxFiles={1}
               multiple={false}
               canCancel={true}
               inputContent="Drop A Image"
               styles={{
                 dropzone: {
-                  width: "100%",
-                  height: "auto",
+                  width: '100%',
+                  height: 'auto',
                   border: 0,
-                  overflow: "auto",
+                  overflow: 'auto',
                 },
-                dropzoneActive: { borderColor: "green" },
+                dropzoneActive: { border: 0 },
               }}
               accept="image/*"
             />

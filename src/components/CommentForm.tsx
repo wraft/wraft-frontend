@@ -83,8 +83,8 @@ const CommentForm = (props: CommentFormProps) => {
         <Box>
           {comments.map((comment: Comment) => (
             <Box
-              pb={2}
-              pt={2}
+              // pb={2}
+              // pt={2}
               mb={1}
               sx={{
                 borderBottom: 'solid 1px',
@@ -95,21 +95,24 @@ const CommentForm = (props: CommentFormProps) => {
               <Flex sx={{ display: 'inline-flex' }}>
                 <Box>
                   <Image
-                    width={32}
+                    width={30}
+                    height={30}
                     sx={{ borderRadius: 99 }}
                     src={`http://localhost:4000${comment?.profile?.profile_pic}`}
                   />
                 </Box>
                 <Box sx={{ pl: 3 }}>
-                  <Text sx={{ pl: 0, fontSize: 1, fontWeight: 600 }}>
-                    {comment?.profile?.name}
-                  </Text>
-                  <Box>
-                    <Text sx={{ fontSize: 1 }}>{comment.comment}</Text>
-                    <Text mt={1} color="#555" sx={{ fontSize: 0, mt: 2 }}>
-                      {comment.inserted_at}
+                  <Flex>
+                    <Text sx={{ pl: 0, fontSize: 0, pb: 0, fontWeight: 600, pt: 0 }}>
+                      {comment?.profile?.name}
                     </Text>
-                  </Box>
+                    <Text mt={1} color="#555" sx={{ fontSize: 0, ml: 2 }}>
+                      8:30 PM
+                      {/* {comment.inserted_at} */}
+                    </Text>
+                  </Flex>
+
+                    <Text as="p" sx={{ mt: 0, fontSize: 0, m:0 }}>{comment.comment}</Text>
                 </Box>
               </Flex>
             </Box>
@@ -121,20 +124,15 @@ const CommentForm = (props: CommentFormProps) => {
           Add Comment
         </Text>
       </Box>
-      <Box mx={0} mb={3} >
+      <Box mx={0} mb={0}>
         <Flex>
           <Box>
-            <Field
-              name="body"
-              label="Your comment"
-              defaultValue=""
-              register={register}
-            />
+            <Field name="body" label="" defaultValue="" register={register} />
           </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
+          {errors.body && <Text>This field is required</Text>}
         </Flex>
       </Box>
-      <Button ml={2}>Add Comment</Button>
+      <Button ml={0}>Add Comment</Button>
     </Box>
   );
 };

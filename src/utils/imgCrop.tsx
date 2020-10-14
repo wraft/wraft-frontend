@@ -15,7 +15,7 @@ const getRadianAngle = (degreeValue: number): number =>
 
 export const getCroppedImg = async (
   imageSrc: string,
-  pixelCrop: Area,
+  pixelCrop?: Area,
   rotation = 0,
 ) => {
   const image = await createImage(imageSrc);
@@ -44,20 +44,23 @@ export const getCroppedImg = async (
 
   const data = ctx.getImageData(0, 0, safeArea, safeArea);
 
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
+  canvas.width = pixelCrop?.width || 0;
+  canvas.height = pixelCrop?.height || 0;
 
 //   ctx.putImageData(
 //     data,
 //     0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x,
 //     0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y,
 //   );
-
-    ctx.putImageData(
+  
+if(pixelCrop?.x) {
+  ctx.putImageData(
     data,
     Math.round(0 - safeArea / 2 + image.width * 0.5 - pixelCrop.x),
     Math.round(0 - safeArea / 2 + image.height * 0.5 - pixelCrop.y)
   )
+}
+  
 
   return new Promise<File>((resolve, reject) => {
     const rand = Math.random().toString(36).substr(2); // remove `0.`

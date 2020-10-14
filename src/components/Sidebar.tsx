@@ -65,7 +65,7 @@ const listMenu = [
     path: '/contents',
   },
   {
-    name: 'Folders',
+    name: 'Variants',
     logo: <BookOpen width={20} />,
     path: '/content-types',
   },  

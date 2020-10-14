@@ -10,7 +10,7 @@ import { createGlobalStyle } from 'styled-components';
 import 'react-day-picker/lib/style.css';
 // import 'react-phone-number-input/style.css';
 // import 'react-multi-carousel/lib/styles.css';
-import "react-dropzone-uploader/dist/styles.css";
+// import "react-dropzone-uploader/dist/styles.css";
 import { ToastProvider } from 'react-toast-notifications';
 
 const GlobalStyle = createGlobalStyle` 
@@ -21,9 +21,8 @@ const GlobalStyle = createGlobalStyle`
   padding-left: 24px;
   border: solid 1px #ddd;
   border-radius: 2px;
-  padding: 8rem;
   line-height: 1.58;
-
+  white-space: pre-wrap;
   h1 {
     font-size: 20px;
     font-weight: 400;

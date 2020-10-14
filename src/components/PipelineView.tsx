@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'rebass';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import { loadEntity, deleteEntity } from '../utils/models';
 
 import styled from 'styled-components';
@@ -14,23 +14,6 @@ export interface IStage {
   data_template_id: string;
   content_type_id: string;
 }
-
-const ListGroup = styled(Box)`
-  box-sizing: border-box;
-  margin: 0;
-  min-width: 0;
-  margin-top: 24px;
-  margin-bottom: 24px;
-  border-radius: 4px;
-  overflow: hidden;
-  border: solid 1px #ddd;
-  background: #fff;
-`;
-
-const Relative = styled(Box)`
-  position: relative;
-  height: 100%;
-`;
 
 const Dot = styled.div`
   width: 12px;
@@ -129,31 +112,31 @@ const PipelineView = () => {
   };
 
   return (
-    <Box py={3} width={1} mt={4}>
+    <Box py={3} px={3} mt={4}>
       {!activePipeline && <Text>Loading...</Text>}
       {activePipeline && (
         <Flex>
-          <Box width={8 / 12}>
+          <Box sx={{ width: '70%'}}>
             <Box>
-              <Text mb={3} fontSize={0} fontWeight={500}>
+              <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2}}>
                 Pipelines › {activePipeline.name}
               </Text>
-              <Text mb={3} fontSize={2} fontWeight={500}>
+              <Text sx={{ fontSize: 2}}>
                 {activePipeline.name}
               </Text>
-              <Flex py={2}>
-                <Button mr={3}>Run Pipeline</Button>
+              <Flex py={3}>
+                <Button >Run Pipeline</Button>
               </Flex>
               <hr />
             </Box>
 
-            <Box mx={0} mb={3} width={1}>
+            <Box mx={0} mb={3}>
               <Box>
-                <Text mb={1} fontWeight={300}>
+                <Text>
                   Stages {activePipeline.stages.length}
                 </Text>
-                <Flex flexDirection="column">
-                  <ListGroup my={4} mt={2} bg="#fff" width={1}>
+                <Flex>
+                  <Box sx={{ borderRadius: 3, borderColor: 'red', border: 'solid 1px' }} my={4} mt={2} bg="gray.0">
                     {activePipeline &&
                       activePipeline.stages.length > 0 &&
                       activePipeline.stages.map((props: any) => (
@@ -161,32 +144,34 @@ const PipelineView = () => {
                           key={props.name}
                           sx={{
                             p: 0,
-                            borderBottom: 'solid 1px #eee',
+                            borderBottom: 'solid 1px',
+                            borderColor: 'gray.1',
                             background: '#fff',
                             borderLeft: 0,
                           }}>
-                          <Box width={1 / 12}>
-                            <Relative>
+                          <Box sx={{ pl: 4}}>
+                            <Box sx={{ position: 'relative'}}>
                               <Dot />
                               <Line />
-                            </Relative>
+                            </Box>
                           </Box>
-                          <Box p={3} width={8 / 12}>
+                          <Box sx={{ paddingLeft: 3, p: 4 }}>
                             <Text
                               mt={0}
-                              color="#111"
-                              fontSize={1}
-                              fontWeight={600}>
+                              // color="#111"
+                              // fontSize={1}
+                              // fontWeight={600}
+                              >
                               {props.content_type.name}
                             </Text>
-                            <Text mt={1} color="#444" fontSize={0}>
+                            <Text mt={1} color="#444">
                               {props.content_type.id}
                             </Text>
                           </Box>
-                          <Box ml="auto" mr={3} width={2 / 12}>
+                          <Box ml="auto" mr={3}>
                             <Text
                               variant="caps"
-                              sx={{ color: 'secondary', marginLeft: 'auto' }}>
+                              sx={{ color: 'secondary', marginLeft: 'auto', mt: 3 }}>
                               Edit
                             </Text>
                           </Box>
@@ -199,12 +184,12 @@ const PipelineView = () => {
                         borderBottom: 'solid 1px #eee',
                         borderLeft: 0,
                       }}></Box>
-                  </ListGroup>
+                  </Box>
                 </Flex>
               </Box>
             </Box>
           </Box>
-          <Box width={4 / 12}>
+          <Box>
             <Text mr={3} onClick={() => deletePipeline(cId)}>
               Delete
             </Text>

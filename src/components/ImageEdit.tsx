@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import Cropper from "react-easy-crop";
 import { Area } from "react-easy-crop/types";
-import { Box, Slider, Flex, Image, Button } from "theme-ui";
+import { Box, Slider, Flex, Button, Image } from "theme-ui";
 import { getCroppedImg } from "../utils/imgCrop";
 
 interface IImageCopperProps {
@@ -9,15 +9,17 @@ interface IImageCopperProps {
   onUpdate: any;
 }
 
-const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
+// const EmptyArea:Area = {}
+
+const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
   const [crop, setCrop] = useState<any>({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
   const [zoom, setZoom] = useState<any>(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
-  const [croppedImage, setCroppedImage] = useState<File>();
+  const [croppedImg, setCroppedImg] = useState<File>();
 
   const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
+    console.log('croppedArea', croppedArea);
   }, []);
 
   const showCroppedImage = useCallback(async () => {
@@ -25,19 +27,19 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
       const croppedImage = await getCroppedImg(
         image,
         croppedAreaPixels,
-        rotation
+        0
       );
       console.log("donee", { croppedImage });
-      setCroppedImage(croppedImage);
+      setCroppedImg(croppedImage);
       onUpdate(croppedImage);
     } catch (e) {
       console.error(e);
     }
-  }, [croppedAreaPixels, rotation]);
+  }, [croppedAreaPixels, 0]);
 
-  const onClose = useCallback(() => {
-    setCroppedImage(null);
-  }, []);
+  // const onClose = useCallback(() => {
+  //   setCroppedImage(undefined);
+  // }, []);
 
   const changeZoom = (_e: any) => {
     console.log("__e", _e);
@@ -53,13 +55,14 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
         }
       }
     >
+      { croppedImg && <Image src={String(croppedImg)}/> }
       <Box
         sx={{
           position: "relative",
           zIndex: 5000,
           // minWidth: "100%",
           height: "100%",
-          // bg: "red",
+          // bg: "black",
           // p: 4,
         }}
       >
@@ -77,8 +80,8 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
             <Box
               sx={{
                 bg: "white",
-                width: "300px",
-                height: "300px",
+                width: "200px",
+                height: "200px",
                 minHeight: "100%",
                 top: "0%",
                 position: "relative",
@@ -104,8 +107,9 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
             // left: 0,
             // right: 0,
             // bottom: 0,
-            p: 4,
-            bg: "black",
+            p: 0,
+            width: '100%',
+            bg: "gray.1",
           }}
         >
           <Slider
@@ -116,7 +120,7 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
             aria-labelledby="Zoom"
             onChange={(zoom: any) => changeZoom(zoom)}
           />
-          <Box>
+          <Box sx={{ ml: 1}}>
             <Button type="button" onClick={showCroppedImage}>
               Save
             </Button>
@@ -127,4 +131,4 @@ const ImageCopper = ({ image, onUpdate }: IImageCopperProps) => {
   );
 };
 
-export default ImageCopper;
+export default ImageEdit;

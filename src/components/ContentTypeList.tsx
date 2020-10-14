@@ -70,7 +70,7 @@ const ContentTypeList = () => {
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
-        <Box sx={{ ml: 'auto' }}>
+        <Box sx={{ ml: 'auto', display: 'inline-flex' }}>
           <Link
             variant="button"
             href="/content-types/new"
@@ -87,9 +87,9 @@ const ContentTypeList = () => {
               <LayoutCard key={m.id} {...m} onDelete={delData} />
             ))}
         </Flex>
-        <Box bg='white' ml="auto" sx={{ width: '30%', p: 4, border: 'solid 1px', borderColor: 'gray.1', borderRadius: 2}}>
+        {/* <Box bg='white' ml="auto" sx={{ width: '30%', p: 4, border: 'solid 1px', borderColor: 'gray.1', borderRadius: 2}}>
           <Text>Heading 1</Text>
-        </Box>
+        </Box> */}
       </Flex>
     </Box>
   );

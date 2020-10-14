@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import React, { useEffect, useState } from 'react';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -9,6 +9,9 @@ import Link from './NavLink';
 // import { UserIcon } from './Icons';
 import { Image } from 'theme-ui';
 import { checkUser } from '../utils/models';
+import { Exit } from '@styled-icons/boxicons-solid';
+
+import { usePopper } from 'react-popper';
 
 export interface IUser {
   name: string;
@@ -28,8 +31,25 @@ const Nav = ({ navtitle = '' }: INav) => {
   const token = useStoreState(state => state.auth.token);
   const profile = useStoreState(state => state.profile.profile);
 
+  // popper
+  const [toggleDrop, setToggleDrop] = useState<boolean>(false);
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const [arrowElement, setArrowElement] = useState(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+  });
+
   const onProfileLoad = (data: any) => {
     setProfile(data);
+  };
+
+  /**
+   * Toggle Dropdown
+   */
+
+  const toggleDropDown = () => {
+    setToggleDrop(!toggleDrop);
   };
 
   useEffect(() => {
@@ -62,17 +82,58 @@ const Nav = ({ navtitle = '' }: INav) => {
             {token && token !== '' && (
               <Flex ml={2}>
                 {profile && (
-                  <Flex sx={{ alignContent: 'top', verticalAlign: 'top' }}>
+                  <Flex
+                    sx={{
+                      alignContent: 'top',
+                      verticalAlign: 'top',
+                      bg: 'gray.2',
+                    }}>
                     {profile.profile_pic && (
-                      <Image
-                        src={'http://localhost:4000' + profile?.profile_pic}
+                      <>
+                        <Image
+                          ref={setReferenceElement}
+                          onClick={toggleDropDown}
+                          src={'http://localhost:4000' + profile?.profile_pic}
+                          sx={{
+                            ml: 'auto',
+                            width: '100%',
+                            maxWidth: '40px',
+                            height: 'auto',
+                            borderRadius: '33rem',
+                            // border: 'solid 1px #eee',
+                          }}
+                        />
+                        <div ref={setArrowElement} style={styles.arrow} />
+                      </>
+                    )}
+                    {/* <Button type="button" sx={{ bg: 'transparent'}} >
+                      <DownArrow width={12} height={12} color="#000" />
+                    </Button> */}
+                    {toggleDrop && (
+                      <Box
                         sx={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '4px',
-                          border: 'solid 1px #eee',
+                          color: 'gray.8',
+                          pl: 3,
+                          pt: 2,
+                          pb: 2,
+                          pr: 3,
+                          right: 3,
+                          bg: 'gray.1',
+                          borderRadius: 3,
+                          border: 'solid 1px',
+                          borderColor: 'gray.3',
+                          boxShadow: '0 0 4rem #00000042',
+                          ':hover': { bg: 'gray.2', color: 'gray.8' },
                         }}
-                      />
+                        ref={setPopperElement}
+                        style={styles.popper}
+                        {...attributes.popper}>
+                        <>
+                          <Text sx={{ fontWeight: 500, pb: 1}}>{profile?.name}</Text>
+                          <Text sx={{ pt: 1, pb: 2}}>Settings</Text>
+                          <Text onClick={() => userLogout}>Sign out <Exit width={16} /></Text>
+                        </>
+                      </Box>
                     )}
                   </Flex>
                 )}

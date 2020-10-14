@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex, Badge, Image } from 'theme-ui';
 import MenuItem from './NavLink';
-import styled from 'styled-components';
 
 import { parseISO, formatDistanceToNow } from 'date-fns';
 
@@ -10,7 +9,10 @@ import ReactPaginate from 'react-paginate';
 import {
   BoltCircle as Check,
   InfoCircle,
+  Phone,
+  MailSend,
 } from '@styled-icons/boxicons-regular';
+
 import { useStoreState } from 'easy-peasy';
 import { loadEntity, deleteEntity } from '../utils/models';
 import { Spinner } from 'theme-ui';
@@ -19,40 +21,40 @@ const TimeAgo = (time: any) => {
   const timetime = parseISO(time.time);
   const timed = formatDistanceToNow(timetime);
   return (
-    <Text pl={2} pt={1} fontSize={0} mt={0} color="#777">
+    <Text pl={2} pt={1} sx={{ fontSize: 0 }} color="gray.6">
       \ {timed}
     </Text>
   );
 };
 
-const ColorPill = styled(Box)`
-  width: 2px;
-  position: absolute;
-  top: 8;
-  left: 0;
-  height: 40px;
-  display: inline-block;
-  border-radius: 0px;
-`;
+// const ColorPill = styled(Box)`
+//   width: 2px;
+//   position: absolute;
+//   top: 8;
+//   left: 0;
+//   height: 40px;
+//   display: inline-block;
+//   border-radius: 0px;
+// `;
 
-const Pill = styled(Box)`
-  border-radius: 1rem;
-  font-size: 7px !important;
-  opacity: 0.7;
-  padding: 4px;
-  display: inline-block;
-  margin-top: 2px;
-`;
+// const Pill = styled(Box)`
+//   border-radius: 1rem;
+//   font-size: 7px !important;
+//   opacity: 0.7;
+//   padding: 4px;
+//   display: inline-block;
+//   margin-top: 2px;
+// `;
 
-const Block = styled(Box)`
-  border-radius: 3px;
-  padding: 4px;
-  margin-top: 13px !important;
-  border-bottom: solid 1px #ddd;
-  padding-left: 40px;
-  padding-bottom: 24px;
-  position: relative;
-`;
+// const Block = styled(Box)`
+//   border-radius: 3px;
+//   padding: 4px;
+//   margin-top: 13px !important;
+//   border-bottom: solid 1px #ddd;
+//   padding-left: 40px;
+//   padding-bottom: 24px;
+//   position: relative;
+// `;
 
 export interface ILayout {
   width: number;
@@ -100,45 +102,48 @@ export interface IFieldItem {
 }
 
 const Tablet = (props: any) => (
-  <Pill pt={1} sx={{ p: 1, width: 'auto' }} {...props} rel={props.type}>
-    <Text fontSize={0}>{props.type}</Text>
-  </Pill>
+  <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
+    <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
+  </Badge>
 );
 
 const ItemField = (props: IField) => {
   return (
-    <Block key={props.content.instance_id} pb={3} pt={3}>
-      <MenuItem href={`/content/[id]`} path={`content/${props.content.id}`}>
-        <Flex>
-          <Text fontSize={1} mb={1} fontWeight={500}>
-            {props.content.serialized.title}
+    <Box variant="listWide" key={props.content.instance_id} pb={3} pt={3}>
+      <Flex sx={{ position: 'relative' }}>
+        <Box variant="cTyeMark" bg={props.content_type.color} />
+        <MenuItem
+          variant="rel"
+          href={`/content/[id]`}
+          path={`content/${props.content.id}`}>
+          <Text>{props.content.serialized.title}</Text>
+        </MenuItem>
+        <Box ml="auto" mr={3}>
+          {props.state.state === 'Published' && (
+            <Check width={16} color="#2b8a3e" />
+          )}
+
+          {props.state.state === 'Draft' && (
+            <InfoCircle width={16} color="#5c7cfa" />
+          )}
+          <Text
+            pt={1}
+            sx={{
+              pl: 1,
+              fontSize: 0,
+              color: 'gray.7',
+              display: 'inline-block',
+            }}>
+            {props.state.state}
           </Text>
-          <Box ml="auto">
-            {props.state.state === 'Published' && (
-              <Check width={16} color="#2b8a3e" />
-            )}
-
-            {props.state.state === 'Draft' && (
-              <InfoCircle width={16} color="#5c7cfa" />
-            )}
-            <Text fontSize={0} pt={1} sx={{ display: 'inline-block' }}>
-              {props.state.state}
-            </Text>
-            <ColorPill bg={props.content_type.color} />
-            <Flex>{/* props.content_type.name */}</Flex>
-          </Box>
-        </Flex>
-        <Box>
-          <Flex>
-            <Box pr={1}>
-              <Tablet type={props.content.instance_id} pr={2} />
-            </Box>
-
-            <TimeAgo time={props.content.updated_at} />
-          </Flex>
+          <Flex>{/* props.content_type.name */}</Flex>
         </Box>
-      </MenuItem>
-    </Block>
+      </Flex>
+      <Flex>
+        <Tablet type={props.content.instance_id} pr={2} />
+        <TimeAgo time={props.content.updated_at} />
+      </Flex>
+    </Box>
   );
 };
 
@@ -155,6 +160,8 @@ const ContentList = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const profile = useStoreState(state => state.profile.profile);
 
   const loadDataSuccess = (data: IPageMeta) => {
     setLoading(true);
@@ -185,39 +192,74 @@ const ContentList = () => {
   }, [token]);
 
   return (
-    <Box py={3} sx={{ width: '60%', float: 'left'}}>
-      <Text variant="pagetitle">All Contents</Text>
-      {!loading && (
-        <Box>
-          <Spinner width={40} height={40} color="primary" />
+    <Flex>
+      <Box py={3} sx={{ width: '60%', float: 'left' }}>
+        <Text variant="pageheading">Documents</Text>
+        <Text variant="pagedesc">Documents</Text>
+        {!loading && (
+          <Box>
+            <Spinner width={40} height={40} color="primary" />
+          </Box>
+        )}
+        <Text sx={{ display: 'none' }}>{token}</Text>
+        <Box mx={0} mb={3} variant="w100">
+          <Box
+            sx={{
+              border: 'solid 1px #ddd',
+              paddingLeft: '0',
+              borderRadius: '4px',
+              backgroundColor: '#fff',
+            }}>
+            {contents &&
+              contents.length > 0 &&
+              contents.map((m: any) => (
+                <ItemField key={m.content.id} doDelete={doDelete} {...m} />
+              ))}
+          </Box>
         </Box>
-      )}
-      <Text sx={{ display: 'none' }}>{token}</Text>
-      <Box mx={0} mb={3} width={1}>
-        <Box
-          sx={{
-            border: 'solid 1px #ddd',
-            paddingLeft: '0',
-            borderRadius: '4px',
-            backgroundColor: '#fff',
-          }}>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => (
-              <ItemField key={m.content.id} doDelete={doDelete} {...m} />
-            ))}
-        </Box>
+        {pageMeta && (
+          <ReactPaginate
+            pageCount={pageMeta.page_number}
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={6}
+            onPageChange={() => console.log('x')}
+            activeClassName={'active'}
+          />
+        )}
       </Box>
-      {pageMeta && (
-        <ReactPaginate
-          pageCount={pageMeta.page_number}
-          pageRangeDisplayed={2}
-          marginPagesDisplayed={6}
-          onPageChange={() => console.log('x')}
-          activeClassName={'active'}
-        />
-      )}
-    </Box>
+      <Flex
+        variant="boxCard"
+        sx={{ width: '33%', height: 'auto', ml: 3, mr: 3, mt: 5, p: 4, pb: 5 }}>
+        <Box>
+          <Image
+            sx={{ borderRadius: 99 }}
+            src={`http://localhost:4000/${profile.profile_pic}`}
+            width={80}
+            height={80}
+          />
+        </Box>
+        <Box sx={{ pl: 3, pt: 2  }}>
+          <Text variant="personName">{profile?.name}</Text>
+          <Text variant="personBio">Director, Content</Text>
+          <Text variant="personPlace">Amsterdam</Text>
+
+          <Flex variant="boxCard1" sx={{ bg: 'white', pt: 2, pb: 0, borderTop: 'solid 1px #eee', mt: 3}}>
+            <Phone width={24} height={24} />
+            <Text ml={2} mt={1} variant="personBlock">
+              +91 7950473500
+            </Text>
+          </Flex>
+          <Flex variant="boxCard1" sx={{ bg: 'white', pt: 2, pb: 0, borderTop: 'solid 1px #eee', mt: 2}}>
+            <Flex>
+              <MailSend width={24} height={24} mr={2} />
+              <Text ml={2} mt={1} variant="personBlock">
+                {profile?.email}
+              </Text>
+            </Flex>
+          </Flex>
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 export default ContentList;

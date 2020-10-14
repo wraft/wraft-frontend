@@ -7,6 +7,7 @@ import { loadEntity } from '../utils/models';
 import { useTable } from 'react-table';
 import styled from 'styled-components';
 import { useStoreState } from 'easy-peasy';
+import { Plus } from '@styled-icons/boxicons-regular';
 
 const Styles = styled.div`
   table {
@@ -188,9 +189,20 @@ const TemplateList = () => {
 
   return (
     <Box py={3} width={1} mt={4}>
-      <Text fontSize={1} mb={3}>
-        All Templates
-      </Text>
+      <Box variant="plateLite">
+        <Text variant="pagetitle">
+          Templates
+        </Text>
+        <Text fontSize={1} mb={4}>
+          All Templates
+        </Text>
+        <Link
+          variant="button"
+          href="/templates/new"
+          icon={<Plus width={20} />}>
+          <Text sx={{ ml: 2}}>New Template</Text>
+        </Link>
+      </Box>
       <Box mx={0} mb={3} width={1}>
         <Styles>
           {contents && contents.length > 0 && (
