@@ -253,19 +253,21 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
       console.log('[insertable]', insertable)
 
-      const wview = wysiwygManager.view;
-      const wstate = wview.state;
-      const node = wstate.schema.nodeFromJSON(insertable);
-      const { selection } = wstate;
-      const position = hasCursor(selection)
-        ? selection.$cursor.pos
-        : selection.$to.pos;
+      if(insertable.length > 0) {
+        const wview = wysiwygManager.view;
+        const wstate = wview.state;
+        const node = wstate?.schema?.nodeFromJSON(insertable);
+        const { selection } = wstate;
+        const position = hasCursor(selection)
+          ? selection.$cursor.pos
+          : selection.$to.pos;
 
-      if (cleanInsert) {
-        updateBody(insertable);
-      } else {
-        if (wview.dispatch) {
-          wview.dispatch(wstate.tr.insert(position, node));
+        if (cleanInsert) {
+          updateBody(insertable);
+        } else {
+          if (wview.dispatch) {
+            wview.dispatch(wstate.tr.insert(position, node));
+          }
         }
       }
     }

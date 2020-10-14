@@ -227,29 +227,50 @@ const ContentList = () => {
           />
         )}
       </Box>
-      <Flex
-        variant="boxCard"
+      <Box
+        variant="boxCard1"
         sx={{ width: '33%', height: 'auto', ml: 3, mr: 3, mt: 5, p: 4, pb: 5 }}>
-        <Box>
-          <Image
-            sx={{ borderRadius: 99 }}
-            src={`http://localhost:4000/${profile.profile_pic}`}
-            width={80}
-            height={80}
-          />
-        </Box>
-        <Box sx={{ pl: 3, pt: 2  }}>
-          <Text variant="personName">{profile?.name}</Text>
-          <Text variant="personBio">Director, Content</Text>
-          <Text variant="personPlace">Amsterdam</Text>
-
-          <Flex variant="boxCard1" sx={{ bg: 'white', pt: 2, pb: 0, borderTop: 'solid 1px #eee', mt: 3}}>
+        <Flex>
+          <Box>
+            <Image
+              sx={{ borderRadius: 99 }}
+              src={`http://localhost:4000/${profile.profile_pic}`}
+              width={80}
+              height={80}
+            />
+          </Box>
+          <Box>
+            <Box sx={{ pl: 3, pt: 2 }}>
+              <Text variant="personName">{profile?.name}</Text>
+              <Text variant="personBio">CEO</Text>
+              <Text variant="personPlace">Functionary Labs, Amsterdam</Text>
+            </Box>
+          </Box>
+        </Flex>
+        <Box sx={{ pl: 3, pt: 2}}>
+          <Flex
+            variant="boxCard1"
+            sx={{
+              // bg: 'white',
+              pt: 2,
+              pb: 0,
+              borderTop: 'solid 1px #eee',
+              mt: 3,
+            }}>
             <Phone width={24} height={24} />
             <Text ml={2} mt={1} variant="personBlock">
               +91 7950473500
             </Text>
           </Flex>
-          <Flex variant="boxCard1" sx={{ bg: 'white', pt: 2, pb: 0, borderTop: 'solid 1px #eee', mt: 2}}>
+          <Flex
+            variant="boxCard1"
+            sx={{
+              // bg: 'white',
+              pt: 2,
+              pb: 0,
+              borderTop: 'solid 1px #eee',
+              mt: 2,
+            }}>
             <Flex>
               <MailSend width={24} height={24} mr={2} />
               <Text ml={2} mt={1} variant="personBlock">
@@ -257,8 +278,91 @@ const ContentList = () => {
               </Text>
             </Flex>
           </Flex>
+          <Box>
+            <Text
+              ml={2}
+              mt={3}
+              sx={{
+                textTransform: 'uppercase',
+                mb: 2,
+                fontSize: 0,
+                pt: 3,
+                pb: 2,
+              }}>
+              Recent Documents
+            </Text>
+            <Flex
+              sx={{
+                pl: 0,
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.3',
+                alignItems: 'flex-start',
+                bg: 'white',
+                p: 3,
+              }}>
+              <Image
+                width={40}
+                sx={{ borderRadius: 3 }}
+                height="auto"
+                src="https://logo.clearbit.com/dropbox.com"
+              />
+              <Box pl={3} pr={3}>
+                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
+                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
+                  Storage Partner Contract
+                </Text>
+                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
+              </Box>
+            </Flex>
+            <Flex
+              sx={{
+                pl: 0,
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.3',
+                alignItems: 'flex-start',
+                bg: 'white',
+                p: 3,
+              }}>
+              <Image
+                width={40}
+                sx={{ borderRadius: 0 }}
+                height="auto"
+                src="https://logo.clearbit.com/dieture.com"
+              />
+              <Box pl={3} pr={3}>
+                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Proposal</Text>
+                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
+                  Proposal for Dieture
+                </Text>
+                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
+              </Box>
+            </Flex>
+            <Flex
+              sx={{
+                pl: 0,
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.3',
+                alignItems: 'flex-start',
+                bg: 'white',
+                p: 3,
+              }}>
+              <Image
+                width={40}
+                sx={{ borderRadius: 3 }}
+                height="auto"
+                src="https://logo.clearbit.com/tridz.com"
+              />
+              <Box pl={3} pr={3}>
+                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
+                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
+                  Proposal for Drupal Contract Engineer
+                </Text>
+                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
+              </Box>
+            </Flex>
+          </Box>
         </Box>
-      </Flex>
+      </Box>
     </Flex>
   );
 };

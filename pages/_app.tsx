@@ -17,12 +17,16 @@ const GlobalStyle = createGlobalStyle`
 
 .ProseMirror.remirror-editor {
   background: #fff;
-  padding: 8px;
-  padding-left: 24px;
+  padding: 0;
   border: solid 1px #ddd;
-  border-radius: 2px;
+  border-radius: 4px;
   line-height: 1.58;
   white-space: pre-wrap;
+  padding-left: 7rem;
+    padding-right: 7rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+
   h1 {
     font-size: 20px;
     font-weight: 400;

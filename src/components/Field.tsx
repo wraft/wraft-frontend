@@ -12,11 +12,12 @@ interface Props {
   mr?: number,
   placeholder? :string,
   sub? :string,
+  variant?: string,
 }
 
-const Field: React.FC<Props> = ({ name, label, placeholder, register, defaultValue, mr, sub }) => {
+const Field: React.FC<Props> = ({ name, label, placeholder, register, defaultValue, mr, sub, variant = 'baseForm' }) => {
   return (
-    <Box mr={mr} sx={{ position: 'relative'}}>
+    <Box mr={mr} variant={variant} sx={{ position: 'relative'}}>
       { sub && <Text sx={{ position: 'absolute', right: 16, top: 32}}>{sub}</Text>}
       <Label htmlFor="description" mb={1}>
         {label}

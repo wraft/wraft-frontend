@@ -332,6 +332,10 @@ const theme = {
     }
   },
   variants: {
+    baseForm: {
+      width: '100%',
+      // bg: 'purple'
+    },
     w100: {
       width: '100%',
     },
@@ -396,6 +400,7 @@ const theme = {
       p: 3,
       position: 'fixed',
       right: 0,
+      width: '25%',
       minHeight: '100vh',
       top: '72px',
     },

@@ -455,9 +455,10 @@ const Form = (props: IContentForm) => {
           <Box
             as="form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '75ch' }}>
-            <Flex>
+            sx={{ maxWidth: '85ch', my: 'auto' }}>
+            <Flex >
               {/* <Box variant="w34"> */}
+              <Box variant="w100">
                 <Field
                   name="title"
                   label=""
@@ -465,7 +466,8 @@ const Form = (props: IContentForm) => {
                   placeholder="Document Name"
                   register={register}
                 />
-                 <Button variant="secondary" sx={{ ml: 3, mt:2, mb: 3, pl: 4, pr: 4}} type="submit">
+                </Box>
+                 <Button variant="primary" sx={{ ml: 3, mt:2, mb: 3, pl: 4, pr: 4}} type="submit">
                   Save
                 </Button>
               {/* </Box>
@@ -496,6 +498,7 @@ const Form = (props: IContentForm) => {
               <RichEditorWraft/>
             </Box> */}
             {def && (
+              <Box sx={{ pl: 0}}>
               <EditorWraft
                 value={active}
                 editable={true}
@@ -505,6 +508,7 @@ const Form = (props: IContentForm) => {
                 cleanInsert={cleanInsert}
                 insertable={insertable}
               />
+              </Box>
             )}
             <Box sx={{ display: 'none' }}>
               <Field
@@ -531,15 +535,15 @@ const Form = (props: IContentForm) => {
             </Box>
           </Box>
           <Box variant="plateRightBar" sx={{ ml: 4 }}>
-            <Text sx={{ fontSize: 0, color: 'gray.7', pb: 3 }}>
+            <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3 }}>
               Select a template for quick start
             </Text>
             <Box>
               {templates &&
                 templates.map((n: any) => (
-                  <Box key={n.id} sx={{ pl: 3}} onClick={() => changeText(n)}>
-                    <Text sx={{ fontSize: 0, fontWeight: 600 }}>{n.title}</Text>
-                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 1 }}>
+                  <Box key={n.id} sx={{ pl: 3, border: 'solid 0.5px', borderColor: 'gray.2', bg: 'gray.1', mb: 1, pt: 2, pb: 3}} onClick={() => changeText(n)}>
+                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>{n.title}</Text>
+                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
                       A Sample description
                     </Text>
                   </Box>
