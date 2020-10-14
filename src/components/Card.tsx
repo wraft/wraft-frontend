@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { TrashAlt, Edit } from '@styled-icons/boxicons-regular';
 
-import Link from './NavLink'
+import Link from './NavLink';
 
 interface IItemField {
   id?: string;
@@ -10,24 +10,42 @@ interface IItemField {
   color?: string;
   decription?: string;
   onDelete?: any;
-  model?:string;
+  model?: string;
+  screenshot?: string;
 }
 
-const LayoutCard = ({ id, name, model = 'content-types', color, decription, onDelete }: IItemField) => {
+const LayoutCard = ({
+  id,
+  name,
+  model = 'content-types',
+  color,
+  // decription,
+  screenshot,
+  onDelete,
+}: IItemField) => {
+  const imgP = 'http://localhost:4000';
   return (
-    <Box variant="plateBlock" sx={{ borderLeftColor: `${color}`}}>      
+    <Box variant="m" sx={{ borderLeftColor: `${color}` }}>
+      <Box
+        variant="boxCard"
+        sx={{
+          mb: 2,
+          mr: 4,
+          backgroundSize: 'cover',
+          backgroundImage: `url(${imgP}${screenshot ? screenshot : ''}`,
+        }}></Box>
       <Link href={`/${model}/[id]`} path={`/${model}/${id}`}>
-        <Text sx={{ color, fontSize: 2, fontWeight: 'body' }}>{name}</Text>
+        <Text sx={{ fontSize: 1, fontWeight: 400 }}>{name}</Text>
       </Link>
-      <Text py={1} color="gray.6">{decription}</Text>
-      <Flex mt={2}>
-        <Link
-          href={`/${model}/edit/[id]`}
-          path={`/${model}/edit/${id}`}>
+      {/* <Text sx={{ fontSize: 0}} color="gray.6">
+        {decription}
+      </Text> */}
+      <Flex mt={2} sx={{ opacity: 1 }}>
+        <Link href={`/${model}/edit/[id]`} path={`/${model}/edit/${id}`}>
           <Edit width={20} />
         </Link>
-        <Button sx={{ bg: '#fff', p: 0 }} onClick={() => onDelete(id)}>
-          <Box as={TrashAlt} color="red.6" ml={1}/>
+        <Button sx={{ bg: 'white', p: 0 }} onClick={() => onDelete(id)}>
+          <Box as={TrashAlt} color="red.4" ml={1} sx={{ width: '20px' }} />
         </Button>
       </Flex>
     </Box>

@@ -306,14 +306,61 @@ const theme = {
       maxWidth: '100%',
     },
   },
+  links: {
+    rel: {
+      position: 'relative',
+      display: 'block',
+      // bg: 'red'
+    },
+    bold: {
+      fontWeight: 'bold',
+    },
+    button: {
+      fontWeight: 500,
+      color: 'inherit',
+      border: 'solid 1px',
+      fontFamily: 'heading',
+      fontSize: 0,
+      px: 2,
+      py: 2,
+      borderRadius: 2,
+      bg: 'gray.1',
+      borderColor: 'gray.3',
+      letterSpacing: -0.2,
+      textDecoration: 'none',
+      display: 'inline-flex',
+    }
+  },
   variants: {
+    w100: {
+      width: '100%',
+    },
+    w50: {
+      width: '50%',
+    },
+    w20: {
+      width: '25%',
+    },
+    w33: {
+      width: '33%',
+    },
+    hidden: {
+      display: 'none'
+    },
     download: {
       bg: 'red',
       color: 'blue',
     },
+    plateLite: {
+      p: 0,
+      mb: 4,
+      pb: 4,
+      borderBottom: 'solid 1px',
+      borderColor: 'gray.4'
+    },
     plateBox: {
       border: 'solid 1px',
-      borderColor: 'grey',
+      borderColor: 'gray.0',
       bg: 'white',
       px: 3,
       py: 3,
@@ -326,7 +373,7 @@ const theme = {
       width: '25%',
       border: 'solid 1px',
       borderColor: 'gray.2',
-      borderLeft: 'solid 0.5rem',
+      borderLeft: 'solid 3px',
     },
     plateSide: {
       base: 'plateBox',
@@ -336,17 +383,62 @@ const theme = {
     },
     header: {
       borderBottom: 'solid 1px',
-      borderColor: 'gray.1',
+      borderColor: 'gray.2',
       paddingBottom: 2,
       bg: 'white',
       paddingTop: 2,
       paddingLeft: 2,
-      // padding-left: 12px;
-      // padding-left: 24px;
-      // border-bottom: solid 1px #eee;
+    },
+    plateRightBar: {
+      bg:'white',
+      border: 'solid 1px',
+      borderColor: 'gray.2',
+      p: 3,
+      position: 'fixed',
+      right: 0,
+      minHeight: '100vh',
+      top: '72px',
+    },
+    boxCard: {
+      width: '123px',
+      height: '123px',
+      background: 'white',
+      border: '1px solid #E0E0E0',
+      borderRadius: '5px',
+    },
+    listWide: {
+      // borderRadius: 2,
+      // padding: 2,
+      // marginTop: 2,
+      p: 0,
+      borderBottom: 'solid 1px',
+      borderColor:'gray.1',
+      pl: 4,
+      pt: 3,
+      pb: 3,
+      ':hover': {
+        bg: 'gray.0',
+      },
+      // paddingBottom: '24px',
+      // bg: 'blue',
+      // position: 'relative',
+    },
+    cTyeMark: { 
+      width: '2px',
+      position: 'absolute',
+      top: 0,
+      left: -4,
+      height: '40px',
+      display: 'inline-block',
+      borderRadius: '0px'
     }
   },
   text: {
+    caps: {
+      pt: 2,
+      fontSize: 0,
+      textTransform:'uppercase'
+    },
     download: {
       color: 'red.9'
     },
@@ -355,17 +447,52 @@ const theme = {
     },
     pagetitle: {
       fontSize: 3,
-      mb: 3,
+      mb: 2,
+      fontWeight: 'heading'
     },
+    pageinfo: {
+      color: 'gray.6'
+    },
+    pagedesc: {
+      fontSize: 1,
+      mb: 4,
+      color: 'gray.6'
+    },
+    pageheading: {
+      fontSize: 3,
+      mb: 1,
+    },
+    personName: {
+      fontSize: 1,
+      fontWeight: 'heading',
+      mb: 1,
+    },
+    personBio: {
+      fontSize: 0,
+      mb: 0,
+    },
+    personBlock: {
+      color: 'gray.6',
+      fontSize: 0,
+      fontWeight: 'heading'
+    },
+    personPlace: {
+      fontSize: 0,
+      mt: 0,
+      color: 'gray.5'
+    }
   },
   buttons: {
     secondary: {
-      color: 'primary',
-      bg: 'blue.0',
+      color: 'gray.8',
+      bg: 'gray.1',
       border: 'solid 1px',
-      borderColor: 'blue.1',
+      borderColor: 'gray.2',
       mb: 3,
       mt: 3,
+      display: 'inline-flex',
+      pt: 1,
+      pb: 1,
     },
     primary: {
       color: 'white',

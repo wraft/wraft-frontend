@@ -207,7 +207,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     if (tr && tr.docChanged) {
       // temporary state
       const md: any = toMarkdown(newState.doc);
-      console.debug('md', newState.doc);
+      console.debug('md', md);
       const contentBody = { md, serialized: JSON.stringify(newState.doc) };
       onUpdate(contentBody);
       return;
@@ -250,9 +250,6 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   useEffect(() => {
     if (insertable) {
-
-      console.log('[insertable]', insertable)
-
       const wview = wysiwygManager.view;
       const wstate = wview.state;
       const node = wstate.schema.nodeFromJSON(insertable);
@@ -273,7 +270,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
 
   return (
     <Fragment>
-      <>
+      <div>
         <WysiwygEditor
           manager={wysiwygManager}
           initialContent={initialContent.wysiwyg}
@@ -282,7 +279,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
           onStateChange={onWysiwygStateChange}>
           {children}
         </WysiwygEditor>
-      </>
+      </div>
     </Fragment>
   );
 };

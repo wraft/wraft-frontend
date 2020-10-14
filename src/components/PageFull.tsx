@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import { useStoreState } from 'easy-peasy';
 import Container from './Container';
-import Sidebar from './Sidebar';
+// import Sidebar from './Sidebar';
 import NavEdit from './NavEdit';
 import Nav from './Nav';
 import { Box, Flex } from 'theme-ui';
@@ -23,7 +23,7 @@ export interface IAlert {
 }
 
 export const PageFull = (props: any) => {
-  const showFull: boolean = props && props.showFull ? true : false;
+  // const showFull: boolean = props && props.showFull ? true : false;
   const token = useStoreState(state => state.auth.token);
   return (
     <>
@@ -52,7 +52,7 @@ export const PageFull = (props: any) => {
               <NavEdit navtitle="Create"/>
               <Box
                 sx={{ minHeight: '100vh'}}
-                // bg="#F7F6F3"
+                bg="gray.0"
                 // p={4}
                 // pt={3}
                 pl={4}

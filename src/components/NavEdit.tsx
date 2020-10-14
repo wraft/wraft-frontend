@@ -87,6 +87,7 @@ const NavEdit = ({ navtitle = 'Page Title' }: INav) => {
                         }}
                       />
                     )}
+                    <Text onClick={() => userLogout}>Logout</Text>
                   </Flex>
                 )}
               </Flex>

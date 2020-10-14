@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { Flex } from 'rebass';
+import { Flex, Box, Text } from 'theme-ui';
 import Link from 'next/link';
 
 import ContentTypeList from '../../src/components/ContentTypeList'
@@ -19,6 +19,9 @@ export const Index = () => {
             <a>New Content Type</a>
           </Link>
           <ContentTypeList />
+          <Box>
+            <Text>Dashboard</Text>
+          </Box>
         </Flex>
       </Page>
     </>

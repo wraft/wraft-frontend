@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 import { Box } from 'rebass';
-import Link from 'next/link';
+// import Link from 'next/link';
+import Link from '../../src/components/NavLink';
 
 import LayoutList from '../../src/components/LayoutList';
 import Page from '../../src/components/Page';
@@ -15,9 +16,11 @@ export const Index = () => {
       </Head>
       <Page>
         <Box>
-          <Link href="/layouts/new">
-            <a>Create New Layout</a>
-          </Link>
+          <Box sx={{ ml: 'auto' }}>
+            <Link variant="button" href="/layouts/new">
+              <a>Add Layout</a>
+            </Link>
+          </Box>
         </Box>
         <Box>
           <LayoutList />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'theme-ui';
 
 import Link from './NavLink';
 import { loadEntity } from '../utils/models';
@@ -7,12 +7,12 @@ import { loadEntity } from '../utils/models';
 import { useTable } from 'react-table';
 import styled from 'styled-components';
 import { useStoreState } from 'easy-peasy';
-// import ReactTable from 'react-table'
+import { Plus } from '@styled-icons/boxicons-regular';
 
 const Styles = styled.div`
   table {
     border-spacing: 0;
-    border: 1px solid #ddd;
+    border: 0px solid #ddd;
     tr {
       :last-child {
         td {
@@ -24,8 +24,9 @@ const Styles = styled.div`
       th {
         padding-top: 16px;
         padding-bottom: 16px;
-        background: #efefef;
-        border-right: 1px solid #ddd;
+        background: transparent;
+        border-right: 0;
+        border-bottom: solid 1px #eee;
       }
     }
     th,
@@ -33,8 +34,8 @@ const Styles = styled.div`
       margin: 0;
       padding: 24px 16px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
-      border-right: 1px solid #eee;
+      border-bottom: 0;
+      border-right: 0;
       :last-child {
         border-right: 0;
       }
@@ -57,7 +58,7 @@ export interface IField {
   id: string;
   title: string;
   body: string;
-  serialized: string;  
+  serialized: string;
 }
 
 export interface IFieldItem {
@@ -91,7 +92,7 @@ function Table({ columns, data }: { columns: any; data: any }) {
   // return (<h1>Table</h1>)
   // Render the UI for your table
   return (
-    <div>      
+    <div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -104,7 +105,6 @@ function Table({ columns, data }: { columns: any; data: any }) {
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map(row => {
-            console.log('row', row);
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -139,7 +139,9 @@ const Title = (props: any) => {
     <Box>
       {org && (
         <Link href={`/block_templates/edit/${org.id}`}>
-          <Text fontSize={1} fontWeight={500}>{props.row.value}</Text>
+          <Text fontSize={1} fontWeight={500}>
+            {props.row.value}
+          </Text>
         </Link>
       )}
     </Box>
@@ -178,17 +180,27 @@ const Form = () => {
   useEffect(() => {
     if (token) {
       loadData();
-    }    
+    }
   }, [token]);
 
   return (
-    <Box py={3} width={1} mt={4} ml={4} bg="#eee">
-      <Text fontSize={3} mb={2}>Blocks</Text>
-      <Text fontSize={1} mb={4}>
-        All Block Templates
-      </Text>
+    <Box py={3} variant="w100" mt={4} ml={4}>
+      <Flex variant="plateLite">
+        <Box>
+          <Text variant="pageheading">Blocks</Text>
+          <Text variant="pageinfo">All Block Templates</Text>
+        </Box>
+        <Box sx={{ ml: 'auto' }}>
+          <Link
+            variant="button"
+            href="/block_templates/new"
+            icon={<Plus width={20} />}>
+            <Text>New Block</Text>
+          </Link>
+        </Box>
+      </Flex>
       <Flex>
-        <Box mx={0} mb={3} width={1}>
+        <Box mx={0} mb={3} variant="w100">
           <Styles>
             {contents && contents.length > 0 && (
               <Table columns={columns} data={contents} />
@@ -201,9 +213,6 @@ const Form = () => {
               contents.map((m: any) => <ItemField key={m.id} {...m} />)}
           </Box> */}
         </Box>
-        <Link href="/block_templates/new" variant="primary">
-          <a>New Block Templates</a>
-        </Link>
       </Flex>
     </Box>
   );

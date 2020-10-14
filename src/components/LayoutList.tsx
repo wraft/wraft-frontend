@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import { TrashAlt } from '@styled-icons/boxicons-regular';
-import { loadEntity, deleteEntity } from '../utils/models';
-
-import Link from './NavLink';
+import { Box, Flex, Text } from 'theme-ui';
+// import { TrashAlt } from '@styled-icons/boxicons-regular';
+import { loadEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import LayoutCard from './Card';
 
@@ -31,27 +29,7 @@ export interface IFieldItem {
   type: string;
 }
 
-const ItemField = (props: any) => {
-  const token = useStoreState(state => state.auth.token);
-  const delData = (id: string) => {
-    deleteEntity(`layouts/${id}`, token);
-  };
-
-  return (
-    <Flex pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }} ml="auto">
-      <Link href={`/layouts/edit/[id]`} path={`/layouts/edit/${props.id}`}>
-        <Text fontSize={2}>{props.name}</Text>
-      </Link>
-      <Button
-        sx={{ bg: '#fff', p: 1, ml: 2, border: 'solid 1px #eee' }}
-        onClick={() => delData(props.id)}>
-        <TrashAlt width={20} height={20} color="#555" />
-      </Button>
-    </Flex>
-  );
-};
-
-const Form = () => {
+const LayoutList = () => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
   const token = useStoreState(state => state.auth.token);
@@ -82,9 +60,9 @@ const Form = () => {
   }, [token]);
 
   return (
-    <Box py={3} width={1} mt={4}>
+    <Box py={3} mt={4}>
       <Text variant="pagetitle">Layouts</Text>
-      <Flex mx={0} mb={3} width={1}>
+      <Flex mx={0} mb={3}>
         {contents &&
           contents.length > 0 &&
           contents.map((m: any) => <LayoutCard model='layouts' key={m.id} {...m} />)}
@@ -92,4 +70,4 @@ const Form = () => {
     </Box>
   );
 };
-export default Form;
+export default LayoutList;

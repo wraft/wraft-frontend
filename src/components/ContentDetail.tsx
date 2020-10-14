@@ -108,6 +108,14 @@ export interface Serialized {
   body: string;
 }
 
+// interface IBuildData {
+//   build_id?:string;
+//   instance_id?: string;
+//   inserted_at?: string;
+//   id?: string;
+//   build?: string;
+// }
+
 const Form = () => {
   const token = useStoreState(state => state.auth.token);
 
@@ -116,7 +124,6 @@ const Form = () => {
   const [contents, setContents] = useState<ContentInstance>();
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
-
   const [build, setBuild] = useState<IBuild>();
 
   const loadDataSucces = (data: any) => {
@@ -145,6 +152,9 @@ const Form = () => {
   const onBuild = (data: any) => {
     setLoading(false);
     setBuild(data);
+    if (token) {
+      loadData(token, cId);
+    }
   };
 
   /**
@@ -274,7 +284,7 @@ const Form = () => {
                   </Flex>
                 )}
               </Box>
-              <Flex>
+              <Box sx={{ pt: 2}}>
                 <Button variant="primary" onClick={() => doBuild()}>
                   <Flex>
                     {loading && <Spinner color="white" size={24} />}
@@ -292,7 +302,7 @@ const Form = () => {
                   path={`/content/edit/${contents.content.id}`}>
                   Edit
                 </MenuItem>
-              </Flex>
+              </Box>
 
               {contents && contents.content && (
                 <Box mt={3}>

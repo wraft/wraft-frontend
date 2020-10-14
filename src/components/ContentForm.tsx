@@ -284,9 +284,7 @@ const Form = (props: IContentForm) => {
    */
   const loadTemplates = (id: string) => {
     setActiveTemplate(id);
-
-    const tok = token ? token : false;
-    loadEntity(tok, `content_types/${id}/data_templates`, onLoadTemplate);
+    token &&  loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
   };
 
   const onLoadTemplate = (data: any) => {
@@ -532,8 +530,8 @@ const Form = (props: IContentForm) => {
               />
             </Box>
           </Box>
-          <Box variant="plateBox" sx={{ ml: 4 }}>
-            <Text sx={{ fontSize: 1, pb: 3 }}>
+          <Box variant="plateRightBar" sx={{ ml: 4 }}>
+            <Text sx={{ fontSize: 0, color: 'gray.7', pb: 3 }}>
               Select a template for quick start
             </Text>
             <Box>
