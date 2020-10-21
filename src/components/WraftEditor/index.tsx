@@ -215,6 +215,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   };
 
   const updateBody = (body: any) => {
+    // console.log('biody', body)
     const state = wysiwygManager.createState({
       content: body,
     });
@@ -249,11 +250,12 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
    */
 
   useEffect(() => {
+    // console.log('[insertable]')
     if (insertable) {
 
-      console.log('[insertable]', insertable)
+      console.log('[insertable]', insertable, cleanInsert, insertable.length)
 
-      if(insertable.length > 0) {
+      if(insertable) {
         const wview = wysiwygManager.view;
         const wstate = wview.state;
         const node = wstate?.schema?.nodeFromJSON(insertable);
@@ -262,7 +264,11 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
           ? selection.$cursor.pos
           : selection.$to.pos;
 
+
+          console.log('[cleanInsert]', cleanInsert)
+
         if (cleanInsert) {
+          console.log('[insertable]', insertable)
           updateBody(insertable);
         } else {
           if (wview.dispatch) {

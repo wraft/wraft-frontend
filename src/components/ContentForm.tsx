@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Flex, Button, Text, Avatar } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
 
@@ -17,12 +17,7 @@ export const EMPTY_MARKDOWN_NODE = {
   content: [
     {
       type: 'paragraph',
-      content: [
-        {
-          type: 'text',
-          text: 'Write here',
-        },
-      ],
+      content: [],
     },
   ],
 };
@@ -242,7 +237,7 @@ const Form = (props: IContentForm) => {
   };
 
   const onLoadContent = (data: any) => {
-    // console.log('its details eidt', data);
+    console.log('its details eidt', data);
 
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -260,7 +255,7 @@ const Form = (props: IContentForm) => {
         const df = JSON.parse(rawraw);
         if (df) {
           setDef(df);
-          setInsertable([]);
+          // setInsertable([]);
         }
       } else {
         setDef(EMPTY_MARKDOWN_NODE);
@@ -335,7 +330,7 @@ const Form = (props: IContentForm) => {
     if (insertable) {
       if (maps.length > 0) {
         console.log('Doing a clean insert now', insertable, maps);
-        updateStuff(insertable, maps, 'insertable, status, maps');
+        updateStuff(insertable, maps, `insertable, status, maps, ${status}`);
       }
     }
   }, [insertable, status, maps]);
@@ -377,6 +372,18 @@ const Form = (props: IContentForm) => {
   };
 
   /**
+   * @param x 
+   */
+  const aloyk = (piece: any) => {
+    const _dat = piece?.serialized?.data;
+
+    const df = JSON.parse(_dat);
+    if (df) {
+      setInsertable(df);
+    }
+  }
+
+  /**
    * on select template
    * @param x
    */
@@ -384,7 +391,11 @@ const Form = (props: IContentForm) => {
   const changeText = (x: any) => {
     setShowForm(!showForm);
     setActiveTemplate(x.id);
-    updateStuff(x, maps);
+
+    aloyk(x);
+
+    // updateStuff(x, maps);
+    
   };
 
   /**
@@ -394,15 +405,20 @@ const Form = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any, _key?: any) => {
+
+    console.log('[updateStuff]', data, mapx);
+
     if (data.serialized?.data && mapx) {
       setCleanInsert(true);
       const xr: ContentState = JSON.parse(data.serialized.data);
       const inst = updateVars(xr, mapx);
+      console.log('insta',inst);
       setInsertable(inst);
       setStatus(1);
     }
 
     if (data?.type === 'doc') {
+      console.log('insta vidm?');
       setCleanInsert(true);
       const xr: ContentState = data;
       const inst = updateVars(xr, mapx);
@@ -455,7 +471,7 @@ const Form = (props: IContentForm) => {
           <Box
             as="form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ maxWidth: '85ch', my: 'auto' }}>
+            sx={{ minWidth: '70%', maxWidth: '85ch', my: 'auto' }}>
             <Flex >
               {/* <Box variant="w34"> */}
               <Box variant="w100">
@@ -544,7 +560,7 @@ const Form = (props: IContentForm) => {
                   <Box key={n.id} sx={{ pl: 3, border: 'solid 0.5px', borderColor: 'gray.2', bg: 'gray.1', mb: 1, pt: 2, pb: 3}} onClick={() => changeText(n)}>
                     <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>{n.title}</Text>
                     <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                      A Sample description
+                      Template Bio
                     </Text>
                   </Box>
                 ))}
@@ -568,8 +584,7 @@ const Form = (props: IContentForm) => {
 
         {body && body?.md && raw && (
           <Box>
-            <Text color="green">Good</Text>
-            <img src="https://instagram.fblr2-1.fna.fbcdn.net/v/t51.2885-19/s320x320/80094765_551595732349479_3103076122892435456_n.jpg?_nc_ht=instagram.fblr2-1.fna.fbcdn.net&_nc_ohc=3KNqJmGFoNIAX-r7aTl&oh=2c4b40e29c9ae86131d0c22294646e4e&oe=5FA04174"/>
+            <Text color="green">👍</Text>
           </Box>
         )}
       </Box>

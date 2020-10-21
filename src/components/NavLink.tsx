@@ -24,14 +24,4 @@ const NavLink: React.FC<Props> = ({ href, children, icon, variant, path }) => {
   );
 };
 
-// export default Link;
-
-// // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// const Link = (props: { href: string, children: ReactElement }) => {
-//   return(
-//   <RebassLink as={NextLink} href={props.href}>
-//     {props.children}
-//   </RebassLink>
-// )}
-
 export default NavLink

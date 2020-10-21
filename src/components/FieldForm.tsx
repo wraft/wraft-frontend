@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text, Badge } from 'theme-ui';
 // import { Label, Input } from '@rebass/forms';
 
 import { useForm } from 'react-hook-form';
 
 import Modal from 'react-modal';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import Field from './Field';
 // import { replaceTitles } from '../utils';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 
 // import { find } from 'lodash';
 
-const Tag = styled(Box)`
-  border: solid 1px #ddd;
-  padding: 5px;
-  color: #444;
-  border-radius: 7px;
-  margin-bottom: 8px;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background-color: #ebffe8;
-`;
+// const Tag = styled(Box)`
+//   border: solid 1px #ddd;
+//   padding: 5px;
+//   color: #444;
+//   border-radius: 7px;
+//   margin-bottom: 8px;
+//   padding-left: 16px;
+//   padding-top: 8px;
+//   padding-bottom: 8px;
+//   background-color: #ebffe8;
+// `;
 
 // import
 
@@ -134,18 +134,18 @@ const Form = (props: any) => {
   }
 
   return (
-    <Box width={1}>
+    <Box>
       <Text mb={4} mt={0} variant="caps">
         Fields
       </Text>
-      <Box pb={2} pt={3}>
+      <Box p={3} bg="gray.0">
         {field_maps &&
           field_maps.map((x: any) => (
-            <Tag key={x.id}>
-              {x.name}
-              <Text fontSize={0}>{x.type}</Text>
-              <Text fontSize={0}>{x.value}</Text>
-            </Tag>
+            <Box key={x.id} sx={{ pb: 2, borderBottom: 'solid 0.5px', borderColor:'gray.2', mb: 2}}>
+              <Text sx={{ color: 'red.7', fontSize: 0, fontFamily: 'Menlo, monospace'}}>{x.name}</Text>
+              <Text sx={{ fontSize: 0, fontWeight: 'heading', fontFamily: 'Menlo, monospace'}}>{x.value}</Text>
+              <Text>{x.type}</Text>
+            </Box>
           ))}
       </Box>
       <Button sx={{ pt: 2, pb: 2, bg: 'white', color: 'gray',fontFamily: 'heading', border: 'solid 1px', fontSize: 0 }} onClick={props.setShowForm}>Fill Form</Button>
@@ -159,9 +159,8 @@ const Form = (props: any) => {
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           py={2}
-          mt={2}
-          width={1}>
-          <Text fontSize={2} mb={4}>
+          mt={2}>
+          <Text>
             Add Content
           </Text>
           {fields && fields.length > 0 && (

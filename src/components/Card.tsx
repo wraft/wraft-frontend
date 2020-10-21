@@ -31,9 +31,13 @@ const LayoutCard = ({
         sx={{
           mb: 2,
           mr: 4,
+          bg: color || 'red',
           backgroundSize: 'cover',
           backgroundImage: `url(${imgP}${screenshot ? screenshot : ''}`,
-        }}></Box>
+        }}>
+
+          {name}
+        </Box>
       <Link href={`/${model}/[id]`} path={`/${model}/${id}`}>
         <Text sx={{ fontSize: 1, fontWeight: 400 }}>{name}</Text>
       </Link>

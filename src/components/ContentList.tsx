@@ -16,6 +16,7 @@ import {
 import { useStoreState } from 'easy-peasy';
 import { loadEntity, deleteEntity } from '../utils/models';
 import { Spinner } from 'theme-ui';
+import ProfileCard from './ProfileCard';
 
 const TimeAgo = (time: any) => {
   const timetime = parseISO(time.time);
@@ -230,7 +231,8 @@ const ContentList = () => {
       <Box
         variant="boxCard1"
         sx={{ width: '33%', height: 'auto', ml: 3, mr: 3, mt: 5, p: 4, pb: 5 }}>
-        <Flex>
+          <ProfileCard {...profile}/>
+        {/* <Flex>
           <Box>
             <Image
               sx={{ borderRadius: 99 }}
@@ -246,38 +248,8 @@ const ContentList = () => {
               <Text variant="personPlace">Functionary Labs, Amsterdam</Text>
             </Box>
           </Box>
-        </Flex>
-        <Box sx={{ pl: 3, pt: 2}}>
-          <Flex
-            variant="boxCard1"
-            sx={{
-              // bg: 'white',
-              pt: 2,
-              pb: 0,
-              borderTop: 'solid 1px #eee',
-              mt: 3,
-            }}>
-            <Phone width={24} height={24} />
-            <Text ml={2} mt={1} variant="personBlock">
-              +91 7950473500
-            </Text>
-          </Flex>
-          <Flex
-            variant="boxCard1"
-            sx={{
-              // bg: 'white',
-              pt: 2,
-              pb: 0,
-              borderTop: 'solid 1px #eee',
-              mt: 2,
-            }}>
-            <Flex>
-              <MailSend width={24} height={24} mr={2} />
-              <Text ml={2} mt={1} variant="personBlock">
-                {profile?.email}
-              </Text>
-            </Flex>
-          </Flex>
+        </Flex> */}
+        <Box sx={{ pl: 3, pt: 2}}>          
           <Box>
             <Text
               ml={2}
