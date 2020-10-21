@@ -90,7 +90,7 @@ const UserNav = () => {
                 </Fragment>
               )}
               {token && token !== '' && (
-                <Flex ml={2}>
+                <Flex ml={2} sx={{ alignContent: 'flex-start'}}>
                   {console.log('profile_pic', profile && profile.profile_pic)}
                   {profile && (
                     <Text fontSize={1} ml={2} pt={2} mr={3} fontWeight="bold">
@@ -98,7 +98,7 @@ const UserNav = () => {
                     </Text>
                   )}
                   {profile && profile.profile_pic?.length > 0 && (
-                    <Avatar onClick={onUserLogout} src={profile.profile_pic} />
+                    <Avatar sx={{ height: '100px', width: '100px'}} onClick={onUserLogout} src={profile.profile_pic} />
                   )}
                   {profile && profile.profile_pic === null && <UserIcon />}
                 </Flex>

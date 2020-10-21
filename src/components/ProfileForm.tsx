@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
-import { Label, Select } from '@rebass/forms';
+import { Label, Select } from 'theme-ui';
 
 import Field from './Field';
 import FieldDate from './FieldDate';
@@ -12,6 +12,8 @@ import { useStoreState } from 'easy-peasy';
 import ImageCropper from './ImageCropper';
 
 import Modal from 'react-modal';
+import NavLink from './NavLink';
+import RichEditorWraft from './EditWraft';
 
 // import dateFnsFormat from 'date-fns/format';
 // import DayPicker, { DateUtils } from 'react-day-picker';
@@ -222,6 +224,12 @@ const Form = () => {
         <Flex variant="w100">
           <Box variant="w33">
             <Text sx={{ fontWeight: 'heading', mb: 1}}>My Profile</Text>
+            <NavLink href={'/account/company'}>
+              <Text sx={{ fontWeight: 'body', mb: 1}}>Manage Company</Text>
+            </NavLink>
+            <NavLink href={'/account/members'}>
+              <Text sx={{ fontWeight: 'body', mb: 1}}>Members</Text>
+            </NavLink>
             <Text sx={{ fontWeight: 'body', mb: 1}}>Notifications</Text>
             <Text sx={{ fontWeight: 'body', mb: 1}}>Settings</Text>
           </Box>
@@ -235,7 +243,7 @@ const Form = () => {
               />
               <Box>
                 <Flex>
-                  {profile && profile.profile_pic && (
+                  {profile && (
                     <Flex sx={{ flexWrap: 'wrap' }} pr={4} pb={4}>
                       <Box>
                         {/* {!isEdit && imageSaved && (
@@ -304,6 +312,7 @@ const Form = () => {
               </Button>
             </Box>
           </Box>
+          <RichEditorWraft/>
 
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>

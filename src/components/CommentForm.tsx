@@ -75,7 +75,7 @@ const CommentForm = (props: CommentFormProps) => {
 
   useEffect(() => {
     loadEntity(token, `comments?master_id=${master_id}&page=1`, onLoadComments);
-  }, [master_id, token]);
+  }, [master_id, token, comments]);
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
@@ -93,26 +93,45 @@ const CommentForm = (props: CommentFormProps) => {
                 mb: 2,
               }}>
               <Flex sx={{ display: 'inline-flex' }}>
-                <Box>
-                  <Image
-                    width={30}
-                    height={30}
-                    sx={{ borderRadius: 99 }}
-                    src={`http://localhost:4000${comment?.profile?.profile_pic}`}
-                  />
-                </Box>
                 <Box sx={{ pl: 3 }}>
-                  <Flex>
-                    <Text sx={{ pl: 0, fontSize: 0, pb: 0, fontWeight: 600, pt: 0 }}>
+                  <Flex
+                    sx={{
+                      // ml: -4,
+                      pt: 0,
+                      width: 'auto',
+                      // bg: 'red.1',
+                      // border: 'solid 1px',
+                      // borderColor: 'red.3',
+                      borderRadius: 99,
+                      pr: 2,
+                      alignItems: 'flex-start'
+                    }}>
+                    <Image
+                      sx={{
+                        border: 'solid 2px',
+                        borderColor: 'red.5',
+                        borderRadius: 99,
+                        mr: 2,
+                        width: '24px',
+                        height: '24px',
+                      }}
+                      src={`http://localhost:4000${comment?.profile?.profile_pic}`}
+                    />
+                    <Text
+                      sx={{
+                        pl: 0,
+                        // fontSize: '15px',
+                        pb: 0,
+                        fontWeight: 600,
+                        pt: '1px',
+                      }}>
                       {comment?.profile?.name}
-                    </Text>
-                    <Text mt={1} color="#555" sx={{ fontSize: 0, ml: 2 }}>
-                      8:30 PM
-                      {/* {comment.inserted_at} */}
                     </Text>
                   </Flex>
 
-                    <Text as="p" sx={{ mt: 0, fontSize: 0, m:0 }}>{comment.comment}</Text>
+                  <Text as="p" sx={{ mt: 0, fontSize: '15px', pt: 1, m: 0 }}>
+                    {comment.comment}
+                  </Text>
                 </Box>
               </Flex>
             </Box>

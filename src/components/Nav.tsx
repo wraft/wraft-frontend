@@ -98,7 +98,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                             ml: 'auto',
                             width: '100%',
                             maxWidth: '40px',
-                            height: 'auto',
+                            height: '100%',
                             borderRadius: '33rem',
                             // border: 'solid 1px #eee',
                           }}
@@ -118,7 +118,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                           pb: 2,
                           pr: 3,
                           right: 3,
-                          bg: 'gray.1',
+                          // bg: 'gray.1',
                           borderRadius: 3,
                           border: 'solid 1px',
                           borderColor: 'gray.3',

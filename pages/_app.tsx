@@ -49,7 +49,8 @@ const GlobalStyle = createGlobalStyle`
 
   em.holder {
     font-size: 90%;
-    background: #c5ccf9;
+    background: #c5ccf994;
+    -webkit-text-decoration: none;
     -webkit-text-decoration: none;
     text-decoration: none;
     font-style: normal;
@@ -61,7 +62,9 @@ const GlobalStyle = createGlobalStyle`
     padding-right: 8px;
     padding-top: 6px;
     padding-bottom: 4px;
-    border-radius: 2px;
+    border-radius: 4px;
+    border: solid 1px #99a6f491;
+    color: hsl(232deg 81% 21% / 78%);
   }
 
   em.no-holder {
