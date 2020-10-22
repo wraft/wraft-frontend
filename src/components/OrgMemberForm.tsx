@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { useStoreState } from 'easy-peasy';
 
-import { Button, Alert, Close, Spinner, Box, Text, Flex } from 'theme-ui';
+import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 // import { Label, Select, Textarea } from '@rebass/forms';
 
 import Field from './Field';
@@ -27,63 +27,6 @@ export interface ProfileClass {
   profile_id: string;
   weight: number;
 }
-
-const formList = [
-  {
-    id: 'name',
-    label: 'Company Name',
-    ftype: 'text',
-    defaultValue: 'Functionary Films',
-  },
-  {
-    id: 'legal_name',
-    label: 'Legal Name',
-    ftype: 'text',
-    defaultValue: 'Functionary Films Pvt Ltd',
-  },
-  {
-    id: 'addres',
-    label: 'Address',
-    ftype: 'text',
-    defaultValue: '#21, HM Green Oak Apartments, Bengaluru, IN',
-  },
-  {
-    id: 'corporate_id',
-    label: 'Corporate ID',
-    ftype: 'text',
-    defaultValue: 'AHEPH-XXXX',
-  },
-  {
-    id: 'name_of_ceo',
-    label: 'CEO Full Name',
-    ftype: 'text',
-    defaultValue: 'Muneef Hameed',
-  },
-  {
-    id: 'name_of_cto',
-    label: 'CTO Full Name',
-    ftype: 'text',
-    defaultValue: 'Salsabeel Jamal',
-  },
-  {
-    id: 'phone',
-    label: 'Phone Number',
-    ftype: 'text',
-    defaultValue: '8050473500',
-  },
-  {
-    id: 'gstin',
-    label: 'GST Number',
-    ftype: 'text',
-    defaultValue: 'GST-IN-XXX',
-  },
-  {
-    id: 'email',
-    label: 'Email Address',
-    ftype: 'text',
-    defaultValue: 'info@aurut.com',
-  },
-];
 
 const OrgMemberForm = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -111,11 +54,11 @@ const OrgMemberForm = () => {
   /** Update Form */
 
   
-  const onSubmit = (data: any) => {
-    console.log('data', data);
-    createEntity(data, 'organisations', token, onCreate);
-    // updateEntity('organisations', data, token, onCreate);
-  };
+  // const onSubmit = (data: any) => {
+  //   console.log('data', data);
+  //   createEntity(data, 'organisations', token, onCreate);
+  //   // updateEntity('organisations', data, token, onCreate);
+  // };
 
   useEffect(() => {
     console.log('errors', errors);
@@ -192,9 +135,9 @@ const OrgMemberForm = () => {
   /**
    * Watch Form Change
    */
-  const checkChange = (_a: any) => {
-    console.log('__args', _a);
-  };
+  // const checkChange = (_a: any) => {
+  //   console.log('__args', _a);
+  // };
 
   return (
     <Box py={3} px={6} variant="w70" mt={4}>

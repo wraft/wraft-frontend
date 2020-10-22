@@ -139,7 +139,7 @@ const Title = (props: any) => {
     <Box>
       {org && (
         <Link href={`/block_templates/edit/${org.id}`}>
-          <Text fontSize={1} fontWeight={500}>
+          <Text>
             {props.row.value}
           </Text>
         </Link>

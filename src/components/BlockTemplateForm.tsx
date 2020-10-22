@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Label, Spinner } from 'theme-ui';
+import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
 import FieldText from './FieldText';
-import { BlockTemplates } from '../utils/types';
+// import { BlockTemplates } from '../utils/types';
 // import styled from 'styled-components';
 import EditorWraft from './EditorWraft';
-import { loadEntityDetail, createEntity, updateEntity } from '../utils/models';
+import { createEntity, updateEntity } from '../utils/models';
 import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
@@ -27,12 +27,12 @@ import { useStoreState } from 'easy-peasy';
 //   color: #3d5039;
 // `;
 
-interface IFormTemplate {
-  name?: string;
-  serialized?: any;
-}
+// interface IFormTemplate {
+//   name?: string;
+//   serialized?: any;
+// }
 
-const dummyFormTemplate: IFormTemplate = {};
+// const dummyFormTemplate: IFormTemplate = {};
 
 const EMPTY_MARKDOWN_NODE = {
   type: 'doc',
@@ -54,15 +54,15 @@ const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
   // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   // const [varias, setVarias] = useState<IContentType>();
-  const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
-  const [body, setBody] = useState('');
-  const [formData, setFormData] = useState<IFormTemplate>(dummyFormTemplate);
+  // const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
+  // const [body, setBody] = useState('');
+  // const [formData, setFormData] = useState<IFormTemplate>(dummyFormTemplate);
   // const [keys, setKeys] = useState<Array<string>>();
-  const [raw, setRaw] = useState<any>();
+  // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
-  const [insertable, setInsertable] = useState<any>();
-  const [status, setStatus] = useState<number>(0);
-  const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  // const [insertable, setInsertable] = useState<any>();
+  // const [status, setStatus] = useState<number>(0);
+  // const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -107,13 +107,13 @@ const Form = () => {
    * Load Content Type Details
    * @param id
    */
-  const loadTemplate = (id: string, token: string) => {
-    loadEntityDetail(token, 'block_templates', id, loadTemplateSuccess);
-  };
+  // const loadTemplate = (id: string, token: string) => {
+  //   loadEntityDetail(token, 'block_templates', id, loadTemplateSuccess);
+  // };
 
-  const loadTemplateSuccess = (data: BlockTemplates) => {
-    setDataTemplate(data);
-  };
+  // const loadTemplateSuccess = (data: BlockTemplates) => {
+  //   setDataTemplate(data);
+  // };
 
   const doUpdate = (state: any) => {
     console.log('state', state);
@@ -207,15 +207,15 @@ const Form = () => {
               />
             </Box>
             {/* <EditorWraft autoFocus defaultValue="Heading"/> */}
-            {/* <EditorWraft
+            <EditorWraft
               onUpdate={doUpdate}
-              // initialValue={EMPTY_MARKDOWN_NODE}
+              initialValue={def}
               // editor="wysiwyg"
               mt={4}
               // value={body}
               editable={true}
-            /> */}
-            <Box pt={2} mb={3}>
+            />
+            {/* <Box pt={2} mb={3}>
               <Label sx={{ mb: 0, pb: 1 }}>Block Content</Label>
               <EditorWraft
                 editable={true}
@@ -224,10 +224,9 @@ const Form = () => {
                 editor="wysiwyg"
                 mt={1}
                 initialValue={EMPTY_MARKDOWN_NODE}
-                cleanInsert={cleanInsert}
-                insertable={insertable}
+                insertable={false}
               />
-            </Box>
+            </Box> */}
             {/* {body} */}
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}

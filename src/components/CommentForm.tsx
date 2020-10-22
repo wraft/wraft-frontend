@@ -108,8 +108,8 @@ const CommentForm = (props: CommentFormProps) => {
                     }}>
                     <Image
                       sx={{
-                        border: 'solid 2px',
-                        borderColor: 'red.5',
+                        // border: 'solid 2px',
+                        // borderColor: 'red.5',
                         borderRadius: 99,
                         mr: 2,
                         width: '24px',

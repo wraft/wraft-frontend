@@ -25,13 +25,13 @@ interface Props {
 const Field: React.FC<Props> = ({
   name,
   label,
-  placeholder,
+  // placeholder,
   register,
   defaultValue,
-  onClick,
+  // onClick,
   value,
-  onChange,
-  required = false,
+  // onChange,
+  // required = false,
   mr,
   sub,
 }) => {
@@ -93,13 +93,14 @@ const Field: React.FC<Props> = ({
       )}
       <Label htmlFor="description" mb={0}>
         {label}
+        {selected}
       </Label>
         <DayPickerInput
           formatDate={formatDate}
           parseDate={parseDate}
           format={FORMAT}
           onDayChange={onChangeDate}
-          selectedDay={selected}
+          // selectedDay={selected}
           component={(_props: any) => (
             <>
               <Input

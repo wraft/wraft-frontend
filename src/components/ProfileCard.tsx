@@ -40,7 +40,7 @@ interface IItemField {
 }
 
 const ProfileCard = ({
-  _id,
+  // _id,
   name,
   profile_pic,
   email,
@@ -54,7 +54,7 @@ const ProfileCard = ({
         <Box>
           <Image
             sx={{ borderRadius: 99 }}
-            src={`http://localhost:4000/${profile_pic}`}
+            src={`${imgP}/${profile_pic}`}
             width={80}
             height={80}
           />

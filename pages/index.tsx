@@ -26,7 +26,7 @@ export const Index = () => {
       )}
       {token && (
         <Page>
-          <Box pb={5} pt={5}>
+          <Box pb={5} pt={5} sx={{ pl: 5}}>
             <Text variant="pagetitle" pb={0} mb={2}>Welcome to Wraft Docs</Text>
             <Text fontSize={2} sx={{ color: '#999', pt: 0 }}>
               Select a template to begin with

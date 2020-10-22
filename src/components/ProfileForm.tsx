@@ -11,14 +11,11 @@ import { useStoreState } from 'easy-peasy';
 
 import ImageCropper from './ImageCropper';
 
-import Modal from 'react-modal';
+import Modal, { Styles } from 'react-modal';
 import NavLink from './NavLink';
-import RichEditorWraft from './EditWraft';
 
-// import dateFnsFormat from 'date-fns/format';
-// import DayPicker, { DateUtils } from 'react-day-picker';
 
-const customStyles = {
+const _customStyles: Styles = {
   overlay: {
     position: 'fixed',
     top: 0,
@@ -62,7 +59,7 @@ export interface User {
 export interface IAccount {
   updated_at: string;
   role: string;
-  profile_pic: null;
+  profile_pic: string;
   dob?: string;
   name: string;
   inserted_at: string;
@@ -95,6 +92,18 @@ const Form = () => {
 
   function toggleModal() {
     setModal(!showModal);
+    const m: IAccount = {
+      updated_at: "",
+      role: "",
+      profile_pic: "",
+      dob: "",
+      name: "",
+      inserted_at: "",
+      id: "",
+      email_verify: false,
+      email: "",
+    }
+    setMe(m);
   }
 
   const [cropImage, setCroppedImage] = useState<File>(); // for file submit
@@ -177,6 +186,8 @@ const Form = () => {
     if (data) {
       setValue('name', data.name);
 
+      toggleModal();
+
       if(data.dob) {
         setValue('dob', data.dob);
       }      
@@ -242,10 +253,10 @@ const Form = () => {
                 register={register}
               />
               <Box>
-                <Flex>
+                <Flex >
                   {profile && (
-                    <Flex sx={{ flexWrap: 'wrap' }} pr={4} pb={4}>
-                      <Box>
+                    <Flex sx={{ borderRadius: 99, flexWrap: 'wrap', 'button': { display: 'block', ':hover': { display: 'block', zIndex: 9000}} }} pr={4} pb={4}>
+                      <Box sx={{ position: 'relative'}}>
                         {/* {!isEdit && imageSaved && (
                           <Image
                             sx={{ width: '80px', height: '80px' }}
@@ -255,14 +266,15 @@ const Form = () => {
                         {!isEdit && !imageSaved && (
                           <>
                             <Image
-                              sx={{ width: '80px', mr: 3, mt: 2, height: '80px', borderRadius: 99, border: 'solid 1px', borderColor: 'gray.3' }}
+                              onClick={() => toggleEdit()}
+                              sx={{ width: '80px', maxWidth: 'auto', height: '80px', borderRadius: 99, border: 'solid 1px', borderColor: 'gray.3' }}
                               src={`http://localhost:4000${profile?.profile_pic}`}
                             />
                           </>
                         )}
                         {isEdit && (
                           <Modal
-                            style={customStyles}
+                            style={_customStyles}
                             isOpen={true}
                             onRequestClose={closeModal}
                             ariaHideApp={false}
@@ -275,9 +287,7 @@ const Form = () => {
                             </Box>
                           </Modal>
                         )}
-                      </Box>
-
-                      {imagePreview && imageSaved && (
+                        {imagePreview && imageSaved && (
                         <>
                           <Image
                             src={imagePreview}
@@ -285,9 +295,11 @@ const Form = () => {
                           />
                         </>
                       )}
-                      <Button variant="secondary" onClick={() => toggleEdit()}>
+                      </Box>
+                      
+                      {/* <Button variant="secondary" sx={{ position: 'absolute', top: 0, left:'50%', b: 0, }} onClick={() => toggleEdit()}>
                         Edit
-                      </Button>
+                      </Button> */}
                     </Flex>
                   )}
                 </Flex>
@@ -312,7 +324,6 @@ const Form = () => {
               </Button>
             </Box>
           </Box>
-          <RichEditorWraft/>
 
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>

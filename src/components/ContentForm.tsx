@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
-import { Box, Flex, Button, Text, Avatar } from 'theme-ui';
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
 
@@ -10,7 +10,7 @@ import FieldText from './FieldText';
 import FieldForm from './FieldForm';
 import EditorWraft from './EditorWraft';
 import { Template, ContentState } from '../../src/utils/types';
-import { updateVars } from '../../src/utils';
+import { cleanName, updateVars } from '../../src/utils';
 
 export const EMPTY_MARKDOWN_NODE = {
   type: 'doc',
@@ -279,7 +279,8 @@ const Form = (props: IContentForm) => {
    */
   const loadTemplates = (id: string) => {
     setActiveTemplate(id);
-    token &&  loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
+    token &&
+      loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
   };
 
   const onLoadTemplate = (data: any) => {
@@ -351,7 +352,7 @@ const Form = (props: IContentForm) => {
 
   // useEffect(() => {
   //   if (maps.length > 0) {
-  //     const m = updateVars(active, maps, true);
+  //     const m = updateVars(active, maps);
   //     console.log('m', m);
   //   }
   // }, [maps]);
@@ -371,8 +372,34 @@ const Form = (props: IContentForm) => {
     }
   };
 
+  const findVarSex = (body: string, escaped: boolean): string[] => {
+    // find vars in this form
+    let regexp = /\[\w+\]/gm;
+    if (escaped) {
+      regexp = /\\\[\w+\\\]/gm;
+    }
+  
+    let m;
+    let results: string[] = [];
+  
+    while ((m = regexp.exec(body)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === regexp.lastIndex) {
+        regexp.lastIndex++;
+      }
+  
+      // The result can be accessed through the `m`-variable.
+      m.forEach(match => {
+        results.push(match);
+      });
+    }
+    // console.log('results', results);
+    return results;
+  };
+
+  
   /**
-   * @param x 
+   * @param x
    */
   const aloyk = (piece: any) => {
     const _dat = piece?.serialized?.data;
@@ -381,7 +408,35 @@ const Form = (props: IContentForm) => {
     if (df) {
       setInsertable(df);
     }
-  }
+
+    /** Now get title template ready */
+    // console.log('BOOB', field_maps, piece.title_template);
+
+    if (maps) {
+      // lazy matching
+      const tempTitle = piece.title_template
+      const m = findVarSex(tempTitle, false);
+      console.log('[SEXY]', m, maps);
+      let latexpussy = []
+      m.map((x: any)=> {
+        const cName = cleanName(x);
+        console.log('[SEXY] 🍅', cName);
+        latexpussy.push(x)
+
+        // find match
+
+        const mx = maps.find((x: any) => x.name === cName);
+        if(mx) {
+          const newTitle = tempTitle.replace(`[${cName}]`, mx.value || 'Fida')
+          setValue('title', newTitle || 'Untitled');
+        }        
+      })
+      
+      // const m = replaceVars(piece.title_template, maps, false);
+      // console.log('dick', maps, m);
+      // setValue('title', piece.title_template || 'Untitled');
+    }    
+  };
 
   /**
    * on select template
@@ -395,7 +450,6 @@ const Form = (props: IContentForm) => {
     aloyk(x);
 
     // updateStuff(x, maps);
-    
   };
 
   /**
@@ -405,14 +459,13 @@ const Form = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any, _key?: any) => {
-
     console.log('[updateStuff]', data, mapx);
 
     if (data.serialized?.data && mapx) {
       setCleanInsert(true);
       const xr: ContentState = JSON.parse(data.serialized.data);
       const inst = updateVars(xr, mapx);
-      console.log('insta',inst);
+      console.log('insta', inst);
       setInsertable(inst);
       setStatus(1);
     }
@@ -459,8 +512,8 @@ const Form = (props: IContentForm) => {
         <Text>
           <Box>
             {content && content.content_type && (
-              <Box sx={{ mb: 3, mt: 3}}>
-                <Text>{'Create ' + content.content_type.name}</Text>                
+              <Box sx={{ mb: 3, mt: 3 }}>
+                <Text>{'Create ' + content.content_type.name}</Text>
               </Box>
             )}
           </Box>
@@ -472,7 +525,7 @@ const Form = (props: IContentForm) => {
             as="form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{ minWidth: '70%', maxWidth: '85ch', my: 'auto' }}>
-            <Flex >
+            <Flex>
               {/* <Box variant="w34"> */}
               <Box variant="w100">
                 <Field
@@ -482,10 +535,13 @@ const Form = (props: IContentForm) => {
                   placeholder="Document Name"
                   register={register}
                 />
-                </Box>
-                 <Button variant="primary" sx={{ ml: 3, mt:2, mb: 3, pl: 4, pr: 4}} type="submit">
-                  Save
-                </Button>
+              </Box>
+              <Button
+                variant="primary"
+                sx={{ ml: 3, mt: 2, mb: 3, pl: 4, pr: 4 }}
+                type="submit">
+                Save
+              </Button>
               {/* </Box>
               <Box variant="w14" sx={{ pt: 4, textAlign: 'right', ml: 'auto'}}>
                 <Button variant="secondary" sx={{ }} type="submit">
@@ -514,16 +570,16 @@ const Form = (props: IContentForm) => {
               <RichEditorWraft/>
             </Box> */}
             {def && (
-              <Box sx={{ pl: 0}}>
-              <EditorWraft
-                value={active}
-                editable={true}
-                onUpdate={doUpdate}
-                initialValue={def}
-                editor="wysiwyg"
-                cleanInsert={cleanInsert}
-                insertable={insertable}
-              />
+              <Box sx={{ pl: 0 }}>
+                <EditorWraft
+                  value={active}
+                  editable={true}
+                  onUpdate={doUpdate}
+                  initialValue={def}
+                  editor="wysiwyg"
+                  cleanInsert={cleanInsert}
+                  insertable={insertable}
+                />
               </Box>
             )}
             <Box sx={{ display: 'none' }}>
@@ -557,8 +613,21 @@ const Form = (props: IContentForm) => {
             <Box>
               {templates &&
                 templates.map((n: any) => (
-                  <Box key={n.id} sx={{ pl: 3, border: 'solid 0.5px', borderColor: 'gray.2', bg: 'gray.1', mb: 1, pt: 2, pb: 3}} onClick={() => changeText(n)}>
-                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>{n.title}</Text>
+                  <Box
+                    key={n.id}
+                    sx={{
+                      pl: 3,
+                      border: 'solid 0.5px',
+                      borderColor: 'gray.2',
+                      bg: 'gray.1',
+                      mb: 1,
+                      pt: 2,
+                      pb: 3,
+                    }}
+                    onClick={() => changeText(n)}>
+                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                      {n.title}
+                    </Text>
                     <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
                       Template Bio
                     </Text>
