@@ -75,7 +75,7 @@ const CommentForm = (props: CommentFormProps) => {
 
   useEffect(() => {
     loadEntity(token, `comments?master_id=${master_id}&page=1`, onLoadComments);
-  }, [master_id, token, comments]);
+  }, [master_id, token]);
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
