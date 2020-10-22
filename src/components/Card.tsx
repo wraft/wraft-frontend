@@ -13,6 +13,7 @@ interface IItemField {
   onDelete?: any;
   model?: string;
   screenshot?: string;
+  prefix?: string;
 }
 
 const LayoutCard = ({
@@ -20,26 +21,31 @@ const LayoutCard = ({
   name,
   model = 'content-types',
   color,
+  prefix,
   // decription,
   screenshot,
   onDelete,
 }: IItemField) => {
   return (
-    <Box variant="m" sx={{ borderLeftColor: `${color}` }}>
+    <Box variant="m" sx={{ borderLeftColor: `${color}`, mb: 4 }}>
       <Box
         variant="boxCard"
         sx={{
-          mb: 2,
+          mb: 1,
           mr: 4,
           bg: color || 'red',
           backgroundSize: 'cover',
+          alignContent: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          height: '80px',
           backgroundImage: `url(${API_HOST}${screenshot ? screenshot : ''}`,
         }}>
 
-          {name}
+          <Text sx={{ pt: 3, fontSize: 4, fontWeight: 100}}>{prefix}</Text>
         </Box>
       <Link href={`/${model}/[id]`} path={`/${model}/${id}`}>
-        <Text sx={{ fontSize: 1, fontWeight: 400 }}>{name}</Text>
+        <Text sx={{ fontSize: 1, fontWeight: 700 }}>{name}</Text>
       </Link>
       {/* <Text sx={{ fontSize: 0}} color="gray.6">
         {decription}

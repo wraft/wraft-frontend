@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'rebass';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
 
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input } from '@rebass/forms';
+import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';
@@ -47,11 +47,10 @@ const Form = () => {
       as="form"
       onSubmit={handleSubmit(onSubmit)}
       py={3}
-      width={4 / 12}
       mt={4}>
       <Text variant="pagetitle">Sign-in to Wraft Docs</Text>
       <Box mx={-2} mb={3}>
-        <Box width={1} px={2} pb={3}>
+        <Box px={2} pb={3}>
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -62,7 +61,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2}>
+        <Box px={2}>
           <Label htmlFor="location" mb={1}>
             Password
           </Label>
@@ -76,7 +75,7 @@ const Form = () => {
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
       </Box>
-      <Flex mx={-2} flexWrap="wrap" mt={2}>
+      <Flex sx={{ flexWrap: "wrap", mt: 2, mx: -2 }}>
         <Button ml={2}>
           {ready && <Spinner color="white" width={24} />}
           {!ready && <Text>Login</Text>}

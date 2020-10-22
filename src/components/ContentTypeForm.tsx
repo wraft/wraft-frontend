@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text } from 'theme-ui';
 
-import { Label, Input, Select } from '@rebass/forms';
+import { Label, Input, Select } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -315,15 +315,15 @@ const Form = () => {
         as="form"
         onSubmit={handleSubmit(onSubmit)}
         py={3}
-        width={1}
+         
         mt={4}
         pr={4}>
         <Box>
           <Text variant="pagetitle">New Content Types</Text>
         </Box>
-        <Box mx={0} mb={3} width={1}>
+        <Box mx={0} mb={3}  >
           <Flex>
-            <Box width={7 / 12}>
+            <Box>
               <Box>
                 <Field
                   register={register}
@@ -332,7 +332,7 @@ const Form = () => {
                   defaultValue="Layout Name"
                 />
               </Box>
-              <Box width={1}>
+              <Box  >
                 <FieldText
                   register={register}
                   label="Description"
@@ -340,7 +340,7 @@ const Form = () => {
                   defaultValue="Something to guide the user here"
                 />
               </Box>
-              <Box width={1}>
+              <Box  >
                 <Field
                   register={register}
                   label="Prefix"
@@ -348,7 +348,7 @@ const Form = () => {
                   defaultValue=""
                 />
               </Box>
-              <Box width={1}>
+              <Box  >
                 <FieldColor
                   register={register}
                   label="Color"
@@ -357,7 +357,7 @@ const Form = () => {
                   onChangeColor={onChangeFields}
                 />
               </Box>
-              <Box width={1} px={0} pb={3}>
+              <Box   px={0} pb={3}>
                 <Label htmlFor="layout_uuid" mb={1}>
                   Layout
                 </Label>
@@ -375,7 +375,7 @@ const Form = () => {
                     ))}
                 </Select>
               </Box>
-              <Box width={1} px={0} pb={3}>
+              <Box   px={0} pb={3}>
                 <Label htmlFor="flow_uuid" mb={1}>
                   Flow
                 </Label>
@@ -408,7 +408,7 @@ const Form = () => {
         </Box>
         <Button>Save</Button>
       </Box>
-      <Box pt={4} pl={3} width={4 / 12}>
+      <Box pt={4} pl={3}>
         <FieldEditor
           fields={fields}
           fieldtypes={fieldtypes}

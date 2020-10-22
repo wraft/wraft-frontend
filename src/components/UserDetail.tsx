@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'theme-ui';
 
 import { useStoreState } from 'easy-peasy';
 import { loadEntityDetail } from '../utils/models';
@@ -35,7 +35,7 @@ const Form = () => {
   // }, [sachet]);
 
   return (
-    <Box py={3} width={1} mt={2} pr={4}>
+    <Box py={3}>
       {sachet && (
         <Box>
           <Text variant="pagetitle">{sachet.name}</Text>
