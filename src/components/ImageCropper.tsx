@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext, useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone-uploader';
 
-import { Box, Text, Button, Flex, Input, Image, Label } from 'theme-ui';
+import { Box, Button, Flex, Input, Image, Label } from 'theme-ui';
 
-import { getDroppedOrSelectedFiles } from 'html5-file-selector';
+// import { getDroppedOrSelectedFiles } from 'html5-file-selector';
+import { fromEvent } from 'file-selector';
 
 import ImageEdit from './ImageEdit';
 
@@ -35,7 +37,7 @@ interface LayoutProps {
 const Layout = ({
   input,
   previews,
-  submitButton,
+  // submitButton,
   dropzoneProps,
   files,
   extra,
@@ -100,7 +102,7 @@ const Preview = ({ meta }: IPreviewProps) => {
   // 1. cropped
   const [crop, setCrop] = useState<string>('start');
 
-  const { statex, attachImage, setState } = useContext(UploaderContext);
+  const { attachImage, setState } = useContext(UploaderContext);
 
   const imageUpdate = (_x: any) => {
     setPrevImageFile(_x);
@@ -177,7 +179,14 @@ const Preview = ({ meta }: IPreviewProps) => {
   );
 };
 
-export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }) => {
+interface IInputBox {
+  accept?: any;
+  onFiles?: any;
+  files?: any;
+  getFilesFromEvent?: any;
+}
+
+export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }:IInputBox) => {
   const text = files.length > 0 ? 'Add more files' : 'Choose files';
 
   return (
@@ -199,7 +208,7 @@ export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }) => {
         accept={accept}
         multiple
         onChange={e => {
-          getFilesFromEvent(e).then(chosenFiles => {
+          getFilesFromEvent(e).then((chosenFiles: any) => {
             onFiles(chosenFiles);
           });
         }}
@@ -249,10 +258,10 @@ const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
   const handleChangeStatus = ({ meta, remove, status }: handleChangeStatus) => {
     setState('two');
     if (status === 'headers_received') {
-      // console.log(`${meta.name} uploaded!`);
+      console.log(`${meta.name} uploaded!`);
       remove();
     } else if (status === 'aborted') {
-      // console.log(`${meta.name}, upload failed...`);
+      console.log(`${meta.name}, upload failed...`);
     }
   };
 
@@ -260,10 +269,19 @@ const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
     // onFileSubmit(parent, files);
   };
 
-  const getFilesFromEvent = e => {
-    return new Promise(resolve => {
-      getDroppedOrSelectedFiles(e).then(chosenFiles => {
-        resolve(chosenFiles.map(f => f.fileObject));
+  // const getFilesFromEvent = e => {
+  //   return new Promise(resolve => {
+  //     getDroppedOrSelectedFiles(e).then(chosenFiles => {
+  //       resolve(chosenFiles.map(f => f.fileObject));
+  //     });
+  //   });
+  // };
+
+  const getFilesFromEvent = (e: any) => {
+    return new Promise<any>((resolve: any) => {
+      fromEvent(e).then((chosenFiles: any) => {
+        console.log('chosenFiles', chosenFiles);
+        resolve(chosenFiles.map((f: any) => f));
       });
     });
   };

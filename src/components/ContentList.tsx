@@ -9,8 +9,6 @@ import ReactPaginate from 'react-paginate';
 import {
   BoltCircle as Check,
   InfoCircle,
-  Phone,
-  MailSend,
 } from '@styled-icons/boxicons-regular';
 
 import { useStoreState } from 'easy-peasy';

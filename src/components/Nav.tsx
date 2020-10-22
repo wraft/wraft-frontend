@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -11,7 +11,7 @@ import { Image } from 'theme-ui';
 import { checkUser } from '../utils/models';
 import { Exit } from '@styled-icons/boxicons-solid';
 
-import { usePopper } from 'react-popper';
+// import { usePopper } from 'react-popper';
 
 export interface IUser {
   name: string;
@@ -33,12 +33,12 @@ const Nav = ({ navtitle = '' }: INav) => {
 
   // popper
   const [toggleDrop, setToggleDrop] = useState<boolean>(false);
-  const [referenceElement, setReferenceElement] = useState(null);
-  const [popperElement, setPopperElement] = useState(null);
-  const [arrowElement, setArrowElement] = useState(null);
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-  });
+  // const [referenceElement, setReferenceElement] = useState(null);
+  // const [popperElement, setPopperElement] = useState(null);
+  // const [arrowElement, setArrowElement] = useState(null);
+  // const { styles, attributes } = usePopper(referenceElement, popperElement, {
+  //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+  // });
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
@@ -91,7 +91,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                     {profile.profile_pic && (
                       <>
                         <Image
-                          ref={setReferenceElement}
+                          // ref={setReferenceElement}
                           onClick={toggleDropDown}
                           src={'http://localhost:4000' + profile?.profile_pic}
                           sx={{
@@ -103,7 +103,8 @@ const Nav = ({ navtitle = '' }: INav) => {
                             // border: 'solid 1px #eee',
                           }}
                         />
-                        <div ref={setArrowElement} style={styles.arrow} />
+                        {/* <div ref={setArrowElement} style={styles.arrow} /> */}
+                        {/* <div style={styles.arrow} /> */}
                       </>
                     )}
                     {/* <Button type="button" sx={{ bg: 'transparent'}} >
@@ -125,9 +126,10 @@ const Nav = ({ navtitle = '' }: INav) => {
                           boxShadow: '0 0 4rem #00000042',
                           ':hover': { bg: 'gray.2', color: 'gray.8' },
                         }}
-                        ref={setPopperElement}
-                        style={styles.popper}
-                        {...attributes.popper}>
+                        // ref={setPopperElement}
+                        // style={styles.popper}
+                        // {...attributes.popper}
+                        >
                         <>
                           <Text sx={{ fontWeight: 500, pb: 1}}>{profile?.name}</Text>
                           <Text sx={{ pt: 1, pb: 2}}>Settings</Text>

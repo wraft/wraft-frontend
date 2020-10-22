@@ -1,9 +1,9 @@
-const colors = {
-  blue: '#3354E1',
-  greys: ['#e1e0e4', '#b4b2bb', '#8b8796', '#413d4e'],
-  white: '#FFF',
-  black: '#333',
-};
+// const colors = {
+//   blue: '#3354E1',
+//   greys: ['#e1e0e4', '#b4b2bb', '#8b8796', '#413d4e'],
+//   white: '#FFF',
+//   black: '#333',
+// };
 
 const theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
@@ -463,12 +463,13 @@ const theme = {
       fontSize: 1,
     },
     pagetitle: {
-      fontSize: 3,
+      fontSize: 4,
       mb: 2,
-      fontWeight: 'heading'
+      fontWeight: 300
     },
     pageinfo: {
-      color: 'gray.6'
+      color: 'gray.7',
+      fontWeight: 300
     },
     pagedesc: {
       fontSize: 1,

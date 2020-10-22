@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { useStoreState } from 'easy-peasy';
 
-import { Button, Alert, Close, Spinner, Box, Text, Flex } from 'theme-ui';
+import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 // import { Label, Select, Textarea } from '@rebass/forms';
 
 import Field from './Field';
@@ -192,9 +192,9 @@ const OrgForm = () => {
   /**
    * Watch Form Change
    */
-  const checkChange = (_a: any) => {
-    console.log('__args', _a);
-  };
+  // const checkChange = (_a: any) => {
+  //   console.log('__args', _a);
+  // };
 
   return (
     <Box py={3} px={6} variant="w70" mt={4}>

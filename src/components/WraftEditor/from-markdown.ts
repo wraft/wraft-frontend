@@ -1,3 +1,4 @@
+// @ts-nocheck
 import md from 'markdown-it';
 import { MarkdownParser } from 'prosemirror-markdown';
 
