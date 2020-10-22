@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
 import { Plus } from './Icons';
 import { loadEntity, deleteEntity } from '../utils/models';
@@ -29,14 +29,13 @@ const ItemField = (props: any) => {
   return (
     <Box
       variant="boxy"
-      width={1 / 4}
       key={props.id}
       p={3}
       sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
-      <Text fontSize={1} fontWeight="bold">
+      <Text>
         {props.name}
       </Text>
-      <Text fontSize={0} pt={1} color="grey">
+      <Text pt={1} color="grey">
         Sample Field Description
       </Text>
       <Button onClick={() => props.onDelete(props.id)}>Delete</Button>
@@ -70,16 +69,16 @@ const Form = () => {
   }, [token]);
 
   return (
-    <Box py={3} width={1} mt={4}>
+    <Box py={3} mt={4}>
       <Flex>
         <Link href="/themes/new" icon={<Plus />}>
           <Text>New</Text>
         </Link>
       </Flex>
-      <Text fontSize={2} mb={3}>
+      <Text mb={3}>
         All Themes
       </Text>
-      <Box mx={0} mb={3} width={1}>
+      <Box mx={0} mb={3}>
         <Box>
           {contents &&
             contents.length > 0 &&

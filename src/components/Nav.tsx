@@ -93,7 +93,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                         <Image
                           // ref={setReferenceElement}
                           onClick={toggleDropDown}
-                          src={API_HOST + profile?.profile_pic}
+                          src={API_HOST + '/' + profile?.profile_pic?.file_name}
                           sx={{
                             ml: 'auto',
                             width: '100%',

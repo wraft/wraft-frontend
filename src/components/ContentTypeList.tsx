@@ -80,7 +80,7 @@ const ContentTypeList = () => {
         </Box>
       </Flex>
       <Flex bg='gray.0' sx={{ width: '100%'}}>
-        <Flex sx={{ width:'100%'}}>
+        <Flex sx={{ width:'100%',mt: 2, flexWrap:'wrap'}}>
           {contents &&
             contents.length > 0 &&
             contents.map((m: any) => (

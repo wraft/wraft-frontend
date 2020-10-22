@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Button } from 'rebass';
+import { Box, Text, Flex, Button } from 'theme-ui';
 import Link from './NavLink';
 
 import { useStoreState } from 'easy-peasy';
 // import CombinationCard from './CombinationCard';
 import PageHeader from './PageHeader';
 import { loadEntity } from '../utils/models';
-import { Input } from '@rebass/forms';
+import { Input } from 'theme-ui';
 
 export interface Theme {
   total_pages: number;
@@ -64,12 +64,12 @@ const Form = () => {
   };
 
   return (
-    <Box py={3} width={9/12} mt={4}>
+    <Box py={3} mt={4}>
       <PageHeader title="Customers" />
-      <Box width={4/12} ml="auto">
+      <Box ml="auto">
         <Input onChange={doSearch} placeholder="Search for Users" mb={4}/>
       </Box>
-      <Box mx={0} mb={3} width={1} variant="table">
+      <Box mx={0} mb={3} variant="table">
         <Box mb={2} sx={{ position: 'relative' }}>          
           {search && search !== '' && (
             <Text
@@ -86,7 +86,7 @@ const Form = () => {
             <Flex variant="tableItem">
               <Box p={2}>
                 <Link href={`/users/${_m.profile?.id}`}>
-                  <Text fontWeight={900} pb={2}>
+                  <Text pb={2}>
                     {_m.name}
                   </Text>
                   <Box>{_m.email}</Box>
