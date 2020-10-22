@@ -8,7 +8,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 import Link from './NavLink';
 // import { UserIcon } from './Icons';
 import { Image } from 'theme-ui';
-import { checkUser } from '../utils/models';
+import { API_HOST, checkUser } from '../utils/models';
 import { Exit } from '@styled-icons/boxicons-solid';
 
 // import { usePopper } from 'react-popper';
@@ -93,7 +93,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                         <Image
                           // ref={setReferenceElement}
                           onClick={toggleDropDown}
-                          src={'http://localhost:4000' + profile?.profile_pic}
+                          src={API_HOST + profile?.profile_pic}
                           sx={{
                             ml: 'auto',
                             width: '100%',

@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
-import { loadEntity, deleteEntity, updateEntityFile, createEntityFile } from '../utils/models';
+import { loadEntity, deleteEntity, updateEntityFile, createEntityFile, API_HOST } from '../utils/models';
 import Field from './Field';
 import FieldText from './FieldText';
 import { useRouter } from 'next/router';
@@ -222,7 +222,7 @@ const Form = () => {
           <Box width={1} pb={3}>
             {layout && layout.screenshot && (
               <div>
-                <Image src={'http://localhost:4000' + layout.screenshot} />
+                <Image src={API_HOST + layout.screenshot} />
               </div>
             )}
             <Label htmlFor="screenshot" mb={1}>

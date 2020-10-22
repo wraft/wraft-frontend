@@ -3,6 +3,7 @@ import { Box, Flex, Text, Button } from 'theme-ui';
 import { TrashAlt, Edit } from '@styled-icons/boxicons-regular';
 
 import Link from './NavLink';
+import { API_HOST } from '../utils/models';
 
 interface IItemField {
   id?: string;
@@ -23,7 +24,6 @@ const LayoutCard = ({
   screenshot,
   onDelete,
 }: IItemField) => {
-  const imgP = 'http://localhost:4000';
   return (
     <Box variant="m" sx={{ borderLeftColor: `${color}` }}>
       <Box
@@ -33,7 +33,7 @@ const LayoutCard = ({
           mr: 4,
           bg: color || 'red',
           backgroundSize: 'cover',
-          backgroundImage: `url(${imgP}${screenshot ? screenshot : ''}`,
+          backgroundImage: `url(${API_HOST}${screenshot ? screenshot : ''}`,
         }}>
 
           {name}

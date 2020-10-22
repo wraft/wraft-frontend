@@ -6,7 +6,7 @@ import { Label, Select } from 'theme-ui';
 
 import Field from './Field';
 import FieldDate from './FieldDate';
-import { loadEntity, updateEntityFile } from '../utils/models';
+import { API_HOST, loadEntity, updateEntityFile } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import ImageCropper from './ImageCropper';
@@ -192,7 +192,7 @@ const Form = () => {
         setValue('dob', data.dob);
       }      
       setValue('gender', data.gender);
-      const img = 'http://localhost:4000' + data?.profile_pic;
+      const img = API_HOST + data?.profile_pic;
       setImage(img);
     }
   };
@@ -268,7 +268,7 @@ const Form = () => {
                             <Image
                               onClick={() => toggleEdit()}
                               sx={{ width: '80px', maxWidth: 'auto', height: '80px', borderRadius: 99, border: 'solid 1px', borderColor: 'gray.3' }}
-                              src={`http://localhost:4000${profile?.profile_pic}`}
+                              src={`${API_HOST}${profile?.profile_pic}`}
                             />
                           </>
                         )}

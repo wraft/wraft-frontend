@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Flex, Text, Image } from 'theme-ui';
 
 import { Phone, MailSend } from '@styled-icons/boxicons-regular';
+import { API_HOST } from '../utils/models';
 
 /**
  * Icon Block
@@ -47,14 +48,13 @@ const ProfileCard = ({
   phone = '+91 8050473500',
   organisation_id,
 }: IItemField) => {
-  const imgP = 'http://localhost:4000';
   return (
     <Box>
       <Flex>
         <Box>
           <Image
             sx={{ borderRadius: 99 }}
-            src={`${imgP}/${profile_pic}`}
+            src={`${API_HOST}/` + profile_pic}
             width={80}
             height={80}
           />
