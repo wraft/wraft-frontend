@@ -119,10 +119,10 @@ const OrgMemberForm = () => {
       console.log('profile', profile);
       // setValue('')
       // checkUser(token, onProfileLoad);
-      loadEntity(token, `organisations/${profile.organisation_id}`, onOrgLoad);
+      loadEntity(token, `organisations/${profile?.organisation_id}`, onOrgLoad);
       loadEntity(
         token,
-        `organisations/${profile.organisation_id}/memberships`,
+        `organisations/${profile?.organisation_id}/memberships`,
         onOrgMembLoad,
       );
     }
