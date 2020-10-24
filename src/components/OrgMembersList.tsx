@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
-import Link from './NavLink';
-import { Plus } from './Icons';
-import { deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
-
-import { useToasts } from 'react-toast-notifications';
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -49,20 +43,20 @@ interface OrgMembersListProps {
 }
 
 const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
-  const token = useStoreState(state => state.auth.token);
+  // const token = useStoreState(state => state.auth.token);
   // const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [parent, setParent] = useState<any | undefined>();
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
 
   // const loadDataSuccess = (data: any) => {
   //   const res: ThemeElement[] = data;
   //   setContents(res);
   // };
 
-  const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token);
-    addToast('Deleted Theme', { appearance: 'success' });
-  };
+  // const onDelete = (id: string) => {
+  //   deleteEntity(`themes/${id}`, token);
+  //   addToast('Deleted Theme', { appearance: 'success' });
+  // };
 
   useEffect(() => {
     if (id) {
