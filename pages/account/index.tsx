@@ -15,7 +15,7 @@ export const Contents = () => {
       <Page>
         <Flex>
           <OrgSidebar/>
-          <ProfileForm />
+          <ProfileForm />          
         </Flex>
       </Page>
     </>

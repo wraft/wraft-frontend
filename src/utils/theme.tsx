@@ -466,6 +466,20 @@ const theme = {
       borderRadius: '0px'
     }
   },
+  alerts: {
+    primary: {
+      color: 'green.8',
+      bg: 'green.1',
+    },
+    alert: {
+      color: 'red.8',
+      bg: 'red.1',
+    },
+    muted: {
+      color: 'text',
+      bg: 'muted',
+    },
+  },
   text: {
     caps: {
       pt: 2,
@@ -532,6 +546,11 @@ const theme = {
     primary: {
       color: 'white',
       bg: 'primary',
+    },
+    delete: {
+      color: 'white',
+      bg: 'red.6',
+      ml: 2,
     },
     tertiary: {
       color: 'blue.9',

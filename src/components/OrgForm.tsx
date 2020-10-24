@@ -105,7 +105,6 @@ const OrgForm = () => {
 
   
   const onSubmit = (data: any) => {
-    console.log('data', data);
     createEntity(data, 'organisations', token, onCreate);
     // updateEntity('organisations', data, token, onCreate);
   };
@@ -201,8 +200,6 @@ const OrgForm = () => {
 
       <Box>
         <Text variant="pagetitle">Create Organization</Text>
-        {profile?.name}
-        {organ && organ?.name}
         {ready && (
           <Box
             mx={0}

@@ -225,7 +225,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   /** if value is changed */
   useEffect(() => {
     if (token) {
-      console.log('TOKEN', token);
+      // console.log('TOKEN', token);
       const attrs = { class: 'x', data: token };
 
       //
@@ -253,7 +253,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     // console.log('[insertable]')
     if (insertable) {
 
-      console.log('[insertable]', insertable, cleanInsert, insertable.length)
+      // console.log('[insertable]', insertable, cleanInsert, insertable.length)
 
       if(insertable) {
         const wview = wysiwygManager.view;
@@ -265,10 +265,10 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
           : selection.$to.pos;
 
 
-          console.log('[cleanInsert]', cleanInsert)
+          // console.log('[cleanInsert]', cleanInsert)
 
         if (cleanInsert) {
-          console.log('[insertable]', insertable)
+          // console.log('[insertable]', insertable)
           updateBody(insertable);
         } else {
           if (wview.dispatch) {

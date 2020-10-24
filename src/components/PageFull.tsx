@@ -9,8 +9,6 @@ import NavEdit from './NavEdit';
 import Nav from './Nav';
 import { Box, Flex } from 'theme-ui';
 
-// import { ToastProvider } from 'react-toast-notifications';
-
 export interface IPage {
   showFull?: boolean;
   children: any;

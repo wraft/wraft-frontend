@@ -6,8 +6,28 @@ import { useStoreState } from 'easy-peasy';
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 // import { Label, Select, Textarea } from '@rebass/forms';
 
+import OrgMembersList from './OrgMembersList';
 import Field from './Field';
 import { checkUser, createEntity, loadEntity } from '../utils/models';
+
+export interface Members {
+  total_pages: number;
+  total_entries: number;
+  page_number: number;
+  members: Member[];
+}
+
+export interface Member {
+  updated_at: Date;
+  role: string;
+  profile_pic: string;
+  organisation_id: string;
+  name: string;
+  inserted_at: Date;
+  id: string;
+  email_verify: boolean;
+  email: string;
+}
 
 export interface Profile {
   allergies?: string[];
@@ -34,6 +54,7 @@ const OrgMemberForm = () => {
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
+  const [members, setMembers] = useState<Member|undefined>();
   const [organ, setOrgan] = useState<any>();
 
   const onCreate = (d: any) => {
@@ -91,55 +112,30 @@ const OrgMemberForm = () => {
       console.log('key', key, index, `${key}`, _o[`${key}`]);
       setValue(`${key}`, _o[`${key}`]);
     });
-
-    // set sample
   };
 
-  const onOrgMembLoad = (_o: any) => {
-    setReady(true);
-    console.log('onOrgMembLoad', _o);
-    // setOrgan(_o);
-
-    // Object.keys(_o).map(function(key, index) {
-    //   console.log('key', key, index, `${key}`, _o[`${key}`]);
-    //   setValue(`${key}`, _o[`${key}`]);
-    // });
+  const loadDataSuccess = (data: any) => {
+    const res: any = data.members;
+    setMembers(res);
   };
 
   /**
    * Set Profile Context
    */
 
-  useEffect(() => {
-    // check if token is there
-    // const tokenInline = cookie.get('token') || false;
-    //
+  useEffect(() => {    
     if (profile) {
-      console.log('profile', profile);
-      // setValue('')
-      // checkUser(token, onProfileLoad);
       loadEntity(token, `organisations/${profile?.organisation_id}`, onOrgLoad);
       loadEntity(
         token,
-        `organisations/${profile?.organisation_id}/memberships`,
-        onOrgMembLoad,
+        `organisations/${profile?.organisation_id}/members`,
+        loadDataSuccess,
       );
     }
-
-    // if(organ) {
-    //   console.log('got organ', organ);
-    // }
   }, [profile]);
 
-  /**
-   * Watch Form Change
-   */
-  // const checkChange = (_a: any) => {
-  //   console.log('__args', _a);
-  // };
-
   return (
-    <Box py={3} px={6} variant="w70" mt={4}>
+    <Box px={0} variant="w70" mt={4}>
       {!ready && <Spinner />}
       {success && (
         <Alert>
@@ -149,39 +145,44 @@ const OrgMemberForm = () => {
       )}
 
       <Box>
-        <Box>
-          <Text variant="pagetitle">Invite Members</Text>
-          <Box
-            mx={0}
-            mb={3}
-            variant="w100"
-            as="form"
-            onSubmit={handleSubmit(onInviteSubmit)}>
-            <Field
-              name="organisation_id"
-              label="Org ID"
-              defaultValue={organ?.id}
-              register={register}
-            />            
-            <Text variant="pagetitle">{organ?.name}</Text>
+          {organ && (
+            <Box>
+              <OrgMembersList id={organ?.id} members={members} />
+              <Box>
+                <Text variant="pagetitle">Invite Members</Text>
+                <Box
+                  mx={0}
+                  mb={3}
+                  variant="w100"
+                  as="form"
+                  onSubmit={handleSubmit(onInviteSubmit)}>
+                  <Field
+                    name="organisation_id"
+                    label="Org ID"
+                    defaultValue={organ?.id}
+                    register={register}
+                  />
+                  <Text variant="pagetitle">{organ?.name}</Text>
 
-            {/* <Field
-              name="name"
-              label="Name"
-              defaultValue="Anand Ash"
-              register={register}
-            /> */}
-            <Field
-              name="email"
-              label="Email Address"
-              defaultValue="anand@aurut.com"
-              register={register}
-            />
-            <Button type="submit" ml={2} mt={3}>
-              Update Profile
-            </Button>
-          </Box>
-        </Box>
+                  {/* <Field
+                  name="name"
+                  label="Name"
+                  defaultValue="Anand Ash"
+                  register={register}
+                /> */}
+                  <Field
+                    name="email"
+                    label="Email Address"
+                    defaultValue="anand@aurut.com"
+                    register={register}
+                  />
+                  <Button type="submit" ml={2} mt={3}>
+                    Update Profile
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          )}
       </Box>
     </Box>
   );
