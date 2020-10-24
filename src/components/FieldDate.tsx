@@ -29,13 +29,15 @@ const Field: React.FC<Props> = ({
   register,
   defaultValue,
   // onClick,
-  value,
   // onChange,
-  // required = false,
+  // value,
+  required = false,
   mr,
   sub,
 }) => {
-  const [selected, setSelect] = useState<any>();
+  const [selected, setSelect] = useState<Date|undefined>();
+  const [status, setstatus] = useState<number>(0);
+
 
   const onChangeDate = (
     _selectedDay: any,
@@ -49,20 +51,26 @@ const Field: React.FC<Props> = ({
     //   isValidDay: typeof selectedDay !== 'undefined',
     //   isDisabled: modifiers.disabled === true,
     // });
-    console.log('date', _selectedDay, _modifiers, dayPickerInput);
+    console.log('date', _selectedDay, _modifiers, dayPickerInput, input);
     if (input) {
-      setSelect(!input.value.trim());
+      const inptfrm = !input.value.trim();
+      if(inptfrm) {
+        console.log('inptfrm muneef x10', inptfrm);
+        // setstatus(2);
+        // const result:any = parseDate(inptfrm, '', 'en');
+        // setSelect(result);
+      }
     }
     // // onChange(date);
   };
 
   const formatDate = (date: any, format: string, locale: any) => {
-    console.log('frm', date);
+    // console.log('frm', date);
     return dateFnsFormat(date, format, { locale });
   };
 
   const parseDate = (str: string, format: string, locale: any) => {
-    console.log('str', str);
+    // console.log('str', str);
     const parsed = dateFnsParse(str, format, new Date(), { locale });
     if (DateUtils.isDate(parsed)) {
       return parsed;
@@ -72,47 +80,58 @@ const Field: React.FC<Props> = ({
 
   const FORMAT = 'yyyy-MM-dd';
 
-  useEffect(() => {    
+  useEffect(() => {
     if (defaultValue) {
-
-      console.log('defaultValue', defaultValue, value);
+      setstatus(2);
+      // console.log('defaultValue', defaultValue, value);
 
       const dx = parseDate(defaultValue, FORMAT, 'en');
-      console.log('parseDate', dx);
+      console.log('parseDate', 'fida vs muneef', dx);
       // const dd:any = parseDate(defaultValue, FORMAT, 'en')
       setSelect(dx);
+    } else {
+      const dx = parseDate("1989-01-02", FORMAT, 'en');
+      setSelect(dx);
+      console.log('parseDate', 'fida vs muneef', dx);
+      setstatus(2);
     }
   }, [defaultValue]);
 
   return (
-    <Box pb={2} mr={mr} sx={{ position: 'relative' }}>
+    <Box pb={2} mr={mr} sx={{ position: 'relative', width: '100%' }}>
+      {/* {value} */}
       {sub && (
-        <Text color="#444" sx={{ position: 'absolute', right: 16, top: 40 }}>
+        <Text color="#444" sx={{ position: 'absolute', right: 1, top: 40 }}>
           <Calendar width="20" />
         </Text>
       )}
       <Label htmlFor="description" mb={0}>
         {label}
-        {selected}
+        {/* {selected} */}
       </Label>
+      { status > 1 &&  selected &&
         <DayPickerInput
           formatDate={formatDate}
           parseDate={parseDate}
           format={FORMAT}
           onDayChange={onChangeDate}
+          value={selected}
+          hideOnDayClick={true}
           // selectedDay={selected}
           component={(_props: any) => (
             <>
               <Input
                 name={name}
+                sx={{ bg: 'white' }}
                 // placeholder={placeholder ? placeholder: ''}
-                ref={register()}
+                ref={register({ required })}
                 {..._props}
-                // value={value || defaultValue}
+                // value={value || selected}
               />
             </>
           )}
         />
+          }
     </Box>
   );
 };

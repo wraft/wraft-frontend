@@ -12,8 +12,8 @@ import { useStoreState } from 'easy-peasy';
 import ImageCropper from './ImageCropper';
 
 import Modal, { Styles } from 'react-modal';
-import NavLink from './NavLink';
-
+// import NavLink from './NavLink';
+import { useToasts } from 'react-toast-notifications';
 
 const _customStyles: Styles = {
   overlay: {
@@ -85,6 +85,8 @@ const Form = () => {
   const [isEdit, setEdit] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
 
+  const { addToast } = useToasts();
+
   const [showModal, setModal] = useState<boolean>(false);
   function closeModal() {
     setModal(false);
@@ -93,16 +95,16 @@ const Form = () => {
   function toggleModal() {
     setModal(!showModal);
     const m: IAccount = {
-      updated_at: "",
-      role: "",
-      profile_pic: "",
-      dob: "",
-      name: "",
-      inserted_at: "",
-      id: "",
+      updated_at: '',
+      role: '',
+      profile_pic: '',
+      dob: '',
+      name: '',
+      inserted_at: '',
+      id: '',
       email_verify: false,
-      email: "",
-    }
+      email: '',
+    };
     setMe(m);
   }
 
@@ -136,6 +138,8 @@ const Form = () => {
     setSaving(false);
     console.log('Updated', d);
     console.log('me', me);
+
+    addToast('Saved Successfully', { appearance: 'success' })
   };
 
   // const toggleDate = () => {
@@ -188,9 +192,9 @@ const Form = () => {
 
       toggleModal();
 
-      if(data.dob) {
+      if (data.dob) {
         setValue('dob', data.dob);
-      }      
+      }
       setValue('gender', data.gender);
       const img = API_HOST + data?.profile_pic;
       setImage(img);
@@ -227,47 +231,43 @@ const Form = () => {
 
   return (
     <Box py={3} mt={4} pl={4} variant="w50">
-      <Box sx={{ pb: 5}}>
-        <Text variant="pagetitle" sx={{ mb: 0}}>My Account</Text>
-        <Text sx={{ fontSize: 1}}>Your account settings</Text>
+      <Box sx={{ pb: 5 }}>
+        <Text variant="pagetitle" sx={{ mb: 0 }}>
+          My Account
+        </Text>
+        <Text sx={{ fontSize: 1 }}>Your account settings</Text>
       </Box>
       <Box variant="w100">
-        <Flex variant="w100">
-          <Box variant="w33">
-            <Text sx={{ fontWeight: 'heading', mb: 1}}>My Profile</Text>
-            <NavLink href={'/account/company'}>
-              <Text sx={{ fontWeight: 'body', mb: 1}}>Manage Company</Text>
-            </NavLink>
-            <NavLink href={'/account/members'}>
-              <Text sx={{ fontWeight: 'body', mb: 1}}>Members</Text>
-            </NavLink>
-            <Text sx={{ fontWeight: 'body', mb: 1}}>Notifications</Text>
-            <Text sx={{ fontWeight: 'body', mb: 1}}>Settings</Text>
-          </Box>
+        <Flex variant="w100">          
           <Box variant="w100">
-            <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Field
-                name="name"
-                label="Name"
-                defaultValue="Your Full Name"
-                register={register}
-              />
-              <Box>
-                <Flex >
+            <Flex>
+              <Box sx={{ pl: 4 }}>
+                <Flex>
                   {profile && (
-                    <Flex sx={{ borderRadius: 99, flexWrap: 'wrap', 'button': { display: 'block', ':hover': { display: 'block', zIndex: 9000}} }} pr={4} pb={4}>
-                      <Box sx={{ position: 'relative'}}>
-                        {/* {!isEdit && imageSaved && (
-                          <Image
-                            sx={{ width: '80px', height: '80px' }}
-                            src={`http://localhost:4000${profile?.profile_pic}`}
-                          />
-                        )} */}
+                    <Flex
+                      sx={{
+                        borderRadius: 99,
+                        flexWrap: 'wrap',
+                        button: {
+                          display: 'block',
+                          ':hover': { display: 'block', zIndex: 9000 },
+                        },
+                      }}
+                      pr={4}
+                      pb={4}>
+                      <Box sx={{ position: 'relative' }}>                        
                         {!isEdit && !imageSaved && (
                           <>
                             <Image
                               onClick={() => toggleEdit()}
-                              sx={{ width: '80px', maxWidth: 'auto', height: '80px', borderRadius: 99, border: 'solid 1px', borderColor: 'gray.3' }}
+                              sx={{
+                                width: '80px',
+                                maxWidth: 'auto',
+                                height: '80px',
+                                borderRadius: 99,
+                                border: 'solid 1px',
+                                borderColor: 'gray.3',
+                              }}
                               src={`${API_HOST}${profile?.profile_pic}`}
                             />
                           </>
@@ -288,44 +288,63 @@ const Form = () => {
                           </Modal>
                         )}
                         {imagePreview && imageSaved && (
-                        <>
-                          <Image
-                            src={imagePreview}
-                            sx={{ width: '80px', mr: 3, mt: 2, height: '80px', borderRadius: 3, border: 'solid 1px', borderColor: 'gray.3' }}
-                          />
-                        </>
-                      )}
+                          <>
+                            <Image
+                              src={imagePreview}
+                              sx={{
+                                width: '80px',
+                                mr: 3,
+                                mt: 2,
+                                height: '80px',
+                                borderRadius: 3,
+                                border: 'solid 1px',
+                                borderColor: 'gray.3',
+                              }}
+                            />
+                          </>
+                        )}
                       </Box>
-                      
-                      {/* <Button variant="secondary" sx={{ position: 'absolute', top: 0, left:'50%', b: 0, }} onClick={() => toggleEdit()}>
-                        Edit
-                      </Button> */}
                     </Flex>
                   )}
                 </Flex>
               </Box>
-              <FieldDate
-                name="dob"
-                label="Birthday"
-                register={register}
-                sub="Date"
-                // defaultValue="1988-01-15"
-                // onClick={toggleDate}
-                onChange={dateChange}
-              />
-              <Label>Gender</Label>
-              <Select name="gender" ref={register({ required: true })}>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Select>
-              <Button type="submit" ml={0} mt={3}>
-                {saving && <Spinner width={16} height={16} color="white"/>}
-                {!saving && <Text>Save</Text>}
-              </Button>
-            </Box>
+              <Box>
+                <Box
+                  mx={0}
+                  mb={3}
+                  
+                  as="form"
+                  onSubmit={handleSubmit(onSubmit)}>
+                  <Field
+                    name="name"
+                    label="Name"
+                    defaultValue="Your Full Name"
+                    register={register}
+                  />
+                  <Box></Box>
+                  <FieldDate
+                    name="dob"
+                    label="Birthday"
+                    register={register}
+                    sub="Date"
+                    // defaultValue={profile?.dob}
+                    onChange={dateChange}
+                  />
+                  {errors.dob && <Text>This field is required</Text>}
+                  <Label>Gender</Label>
+                  <Select name="gender" ref={register({ required: true })}>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </Select>
+                  {errors.gender && <Text>This field is required</Text>}
+                  <Button type="submit" ml={0} mt={3}>
+                    {saving && <Spinner width={16} height={16} color="white" />}
+                    {!saving && <Text>Save</Text>}
+                  </Button>
+                </Box>
+              </Box>
+            </Flex>
           </Box>
-
-          {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>
       </Box>
     </Box>

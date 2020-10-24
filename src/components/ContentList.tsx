@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Badge, Image } from 'theme-ui';
+import { Box, Text, Flex, Badge, Image, Button } from 'theme-ui';
 import MenuItem from './NavLink';
 
 import { parseISO, formatDistanceToNow } from 'date-fns';
@@ -184,6 +184,10 @@ const ContentList = () => {
     delData(id);
   };
 
+  const changePage = (_e: any) => {
+    console.log('changing', _e)
+  }
+
   useEffect(() => {
     if (token) {
       loadData(token);
@@ -221,7 +225,7 @@ const ContentList = () => {
             pageCount={pageMeta.page_number}
             pageRangeDisplayed={2}
             marginPagesDisplayed={6}
-            onPageChange={() => console.log('x')}
+            onPageChange={changePage}
             activeClassName={'active'}
           />
         )}
@@ -229,7 +233,7 @@ const ContentList = () => {
       <Box
         variant="boxCard1"
         sx={{ width: '33%', height: 'auto', ml: 3, mr: 3, mt: 5, p: 4, pb: 5 }}>
-          <ProfileCard {...profile}/>
+        <ProfileCard {...profile} />
         {/* <Flex>
           <Box>
             <Image
@@ -247,10 +251,10 @@ const ContentList = () => {
             </Box>
           </Box>
         </Flex> */}
-        <Box sx={{ pl: 3, pt: 2}}>          
+        <Box sx={{ pl: 0, pt: 2 }}>
           <Box>
             <Text
-              ml={2}
+              // ml={2}
               mt={3}
               sx={{
                 textTransform: 'uppercase',
@@ -259,77 +263,46 @@ const ContentList = () => {
                 pt: 3,
                 pb: 2,
               }}>
-              Recent Documents
+              Actionables
             </Text>
             <Flex
               sx={{
                 pl: 0,
-                borderBottom: 'solid 1px',
+                // borderBottom: 'solid 1px',
                 borderColor: 'gray.3',
                 alignItems: 'flex-start',
-                bg: 'white',
-                p: 3,
+                // bg: 'gray.1',
+                py: 3,
+                // p: 3,
               }}>
-              <Image
-                width={40}
-                sx={{ borderRadius: 3 }}
-                height="auto"
-                src="https://logo.clearbit.com/dropbox.com"
-              />
-              <Box pl={3} pr={3}>
-                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
-                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
-                  Storage Partner Contract
-                </Text>
-                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
-              </Box>
+              <Flex
+                sx={{
+                  pl: 0,
+                  // borderBottom: 'solid 1px',
+                  // borderColor: 'gray.3',
+                  alignItems: 'flex-start',
+                  // bg: 'red.0',
+                  flexGrow: 1,
+                }}>
+                <Image
+                  width={40}
+                  sx={{ borderRadius: 3 }}
+                  height="auto"
+                  src="https://logo.clearbit.com/dropbox.com"
+                />
+                <Box pl={3} pr={3}>
+                  <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
+                  <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
+                    Storage Partner Contract
+                  </Text>
+                  <Text sx={{ fontSize: 0 }}>Jan 24</Text>
+                </Box>
+              </Flex>
             </Flex>
-            <Flex
-              sx={{
-                pl: 0,
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.3',
-                alignItems: 'flex-start',
-                bg: 'white',
-                p: 3,
-              }}>
-              <Image
-                width={40}
-                sx={{ borderRadius: 0 }}
-                height="auto"
-                src="https://logo.clearbit.com/dieture.com"
-              />
-              <Box pl={3} pr={3}>
-                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Proposal</Text>
-                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
-                  Proposal for Dieture
-                </Text>
-                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
-              </Box>
-            </Flex>
-            <Flex
-              sx={{
-                pl: 0,
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.3',
-                alignItems: 'flex-start',
-                bg: 'white',
-                p: 3,
-              }}>
-              <Image
-                width={40}
-                sx={{ borderRadius: 3 }}
-                height="auto"
-                src="https://logo.clearbit.com/tridz.com"
-              />
-              <Box pl={3} pr={3}>
-                <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
-                <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
-                  Proposal for Drupal Contract Engineer
-                </Text>
-                <Text sx={{ fontSize: 0 }}>Jan 24</Text>
-              </Box>
-            </Flex>
+            <Box sx={{ py: 2 }} variant="w100">
+              <Button variant="small" mr={2}>Review</Button>
+              {/* <Button variant="tertiary">Review</Button> */}
+            </Box>
           </Box>
         </Box>
       </Box>

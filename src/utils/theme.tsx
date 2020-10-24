@@ -312,6 +312,14 @@ const theme = {
       display: 'block',
       // bg: 'red'
     },
+    download: {
+      color: 'green.9',
+      fontSize: 0,
+      textTransform: 'uppercase',
+      textDecoration: 'none',
+      mt: 2,
+      display: 'block',
+    },
     bold: {
       fontWeight: 'bold',
     },
@@ -395,7 +403,15 @@ const theme = {
       base: 'plateBox',
     },
     button: {
-      bg: 'red',
+      // bg: 'red.1',
+      // display: 'inline-flex',
+    },
+    button2: {
+      mt: 3,
+      borderRadius: 3,
+      bg: 'red.2',
+      color: 'white',
+      display: 'block',
     },
     header: {
       borderBottom: 'solid 1px',
@@ -455,10 +471,7 @@ const theme = {
       pt: 2,
       fontSize: 0,
       textTransform:'uppercase'
-    },
-    download: {
-      color: 'red.9'
-    },
+    },    
     menulink: {
       fontSize: 1,
     },
@@ -483,11 +496,13 @@ const theme = {
     personName: {
       fontSize: 1,
       fontWeight: 'heading',
-      mb: 1,
+      mb: 0,
     },
     personBio: {
-      fontSize: 0,
+      fontSize: 1,
       mb: 0,
+      fontWeight: 'body',
+      color: 'gray.6'
     },
     personBlock: {
       color: 'gray.6',
@@ -502,20 +517,32 @@ const theme = {
   },
   buttons: {
     secondary: {
-      color: 'gray.8',
-      bg: 'gray.1',
-      border: 'solid 1px',
-      borderColor: 'gray.2',
-      mb: 3,
-      mt: 3,
-      display: 'inline-flex',
-      pt: 1,
-      pb: 1,
+      color: 'blue.9',
+      bg: 'blue.2',
+      // color: 'gray.2',
+      // bg: 'gray.7',
+      // border: 'solid 1px',
+      // borderColor: 'gray.2',
+      // mb: 3,
+      // mt: 3,
+      // display: 'inline-flex',
+      // pt: 1,
+      // pb: 1,
     },
     primary: {
       color: 'white',
       bg: 'primary',
     },
+    tertiary: {
+      color: 'blue.9',
+      bg: 'blue.2',
+    },
+    small: {
+      bg: 'blue.5',
+      px: 3,
+      py: 1,
+      fontSize: 0,
+    }
   },
 };
 

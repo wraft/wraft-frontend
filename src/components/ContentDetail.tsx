@@ -7,9 +7,9 @@ import { File } from './Icons';
 import { MarkdownEditor } from './WraftEditor';
 import CommentForm from './CommentForm';
 
-// import { Pulse } from 'styled-spinkit';
+import { parseISO, formatDistanceToNow, format } from 'date-fns';
 
-// import Link from './NavLink';
+import { Trash, Download } from '@styled-icons/boxicons-regular';
 
 import {
   createEntity,
@@ -116,6 +116,28 @@ export interface Serialized {
 //   build?: string;
 // }
 
+export const TimeAgo = (time: any) => {
+  const timetime = parseISO(time.time);
+  const timed = formatDistanceToNow(timetime, { addSuffix: true });
+  const timedAgo = format(timetime, 'PPpp');
+  return (
+    <Text
+      pl={0}
+      pt={1}
+      sx={{
+        fontSize: 0,
+        '.hov': { opacity: 0 },
+        ':hover': { '.hov': { opacity: 1 } },
+      }}
+      color="gray.6">
+      {timed} -{' '}
+      <Box as="span" className="hov">
+        {timedAgo}
+      </Box>
+    </Text>
+  );
+};
+
 const Form = () => {
   const token = useStoreState(state => state.auth.token);
 
@@ -211,7 +233,7 @@ const Form = () => {
           <Flex>
             {/* { console.log('contents.content', contents.content.serialized.serialized)} */}
             <Box sx={{ width: '65%' }}>
-              <Box
+              <Flex
                 bg="white"
                 sx={{
                   px: 4,
@@ -219,21 +241,41 @@ const Form = () => {
                   border: 'solid 1px',
                   borderColor: 'gray.3',
                 }}>
-                <Text
-                  sx={{ fontSize: 2 }}
-                  // py={3}
-                  // px={4}
-                  // mb={2}
-                  // fontSize={2}
-                  // sx={{ borderBottom: 'solid 1px #ddd' }}
-                >
+                  <Box>
+                <Text sx={{ fontSize: 3 }}>
                   {contents.content.serialized.title}
                 </Text>
-                <Text
+                {/* <Text
                   sx={{
                     fontSize: 0,
-                  }}>{`Updated ${contents.content.inserted_at}`}</Text>
-              </Box>
+                    color: 'gray.6',
+                  }}>{`Updated ${contents.content.inserted_at}`}</Text> */}
+                <Box
+                  sx={{
+                    // pt: 1,
+                    // pl: 2,
+                    fontSize: 0,
+                    color: 'gray.6',
+                  }}>
+                  <TimeAgo time={contents.content.inserted_at} />
+                </Box>
+                </Box>
+                <Box
+                  sx={{
+                    pt: 1,
+                    pl: 2,
+                    fontSize: 0,
+                    ml: 'auto',
+                    color: 'gray.6',
+                  }}>
+                  <MenuItem
+                    variant="rel"
+                    href={`/content/edit/[id]`}
+                    path={`content/edit/${contents.content.id}`}>
+                    EDIT
+                  </MenuItem>
+                </Box>
+              </Flex>
               <PreTag pt={0}>
                 {contentBody && (
                   <MarkdownEditor
@@ -261,30 +303,45 @@ const Form = () => {
                   <Flex pt={3}>
                     <File />
                     <Box>
-                      <Flex>
+                      <Box>
+                        <Text sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                          {contents.state?.state}
+                        </Text>
                         <Text sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
                           {contents.content.instance_id}
                         </Text>
-                        <Text
+                        {/* <Text
                           sx={{ fontSize: 0, ml: 1, mt: 1, color: 'gray.6' }}
                           pt={0}>
                           v1.3
-                        </Text>
-                      </Flex>
-                      <Text sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
-                        {contents.content.id}
-                      </Text>
-                      <Link
-                        variant="download"
-                        href={`${API_HOST}/${contents.content.build}`}
-                        target="_blank">
-                        <Text pt={0}>Download</Text>
-                      </Link>
+                        </Text> */}
+                      </Box>
                     </Box>
+                    <Link
+                      variant="download"
+                      href={`${API_HOST}/${contents.content.build}`}
+                      target="_blank">
+                      <Box
+                        sx={{
+                          p: 2,
+                          pt: 1,
+                          bg: 'green.8',
+                          borderRadius: 4,
+                          ml: 4,
+                        }}>
+                        <Download size={20} color="white" />
+                      </Box>
+                    </Link>
                   </Flex>
                 )}
               </Box>
-              <Box sx={{ pt: 2}}>
+              <Flex
+                sx={{
+                  pt: 4,
+                  alignItems: 'flex-start',
+                  alignContent: 'flex-start',
+                  flexDirection: 'row',
+                }}>
                 <Button variant="primary" onClick={() => doBuild()}>
                   <Flex>
                     {loading && <Spinner color="white" size={24} />}
@@ -295,14 +352,9 @@ const Form = () => {
                   sx={{ ml: 2 }}
                   variant="secondary"
                   onClick={() => delData(contents.content.id)}>
-                  Delete
+                  <Trash size={20} />
                 </Button>
-                <MenuItem
-                  href={`/content/edit/[id]`}
-                  path={`/content/edit/${contents.content.id}`}>
-                  Edit
-                </MenuItem>
-              </Box>
+              </Flex>
 
               {contents && contents.content && (
                 <Box mt={3}>

@@ -2,8 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import ProfileForm from '../../src/components/ProfileForm';
 import Page from '../../src/components/Page';
-import { Flex } from 'rebass';
-// import Link from 'next/link';
+import { Flex } from 'theme-ui';
+import OrgSidebar from '../../src/components/OrgSidebar';
 
 export const Contents = () => {
   return (
@@ -14,6 +14,7 @@ export const Contents = () => {
       </Head>
       <Page>
         <Flex>
+          <OrgSidebar/>
           <ProfileForm />
         </Flex>
       </Page>

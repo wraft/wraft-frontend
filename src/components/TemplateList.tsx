@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'rebass';
+import { Box, Text } from 'theme-ui';
 
 import Link from './NavLink';
 import { loadEntity } from '../utils/models';
@@ -12,8 +12,13 @@ import { Plus } from '@styled-icons/boxicons-regular';
 const Styles = styled.div`
   table {
     border-spacing: 0;
-    border: 1px solid #ddd;
+    border: 0px solid #ddd;
     tr {
+      background: #fff;
+      opacity: 0.9;
+      :hover {
+        background: #efefef; 
+      }
       :last-child {
         td {
           border-bottom: 0;
@@ -24,8 +29,9 @@ const Styles = styled.div`
       th {
         padding-top: 16px;
         padding-bottom: 16px;
-        background: #efefef;
-        border-right: 1px solid #ddd;
+        background: #F8F9FA;
+        border-right: 0;
+        border-bottom: solid 1px #eee;
       }
     }
     th,
@@ -33,8 +39,8 @@ const Styles = styled.div`
       margin: 0;
       padding: 24px 16px;
       text-align: left;
-      border-bottom: 1px solid #ddd;
-      border-right: 1px solid #eee;
+      border-bottom: 0;
+      border-right: 0;
       :last-child {
         border-right: 0;
       }
@@ -106,7 +112,6 @@ function Table({ columns, data }: { columns: any; data: any }) {
         </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map(row => {
-            console.log('row', row);
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
@@ -141,7 +146,7 @@ const Title = (props: any) => {
     <Box>
       {org && (
         <Link href={`/templates/edit/[id]`} path={`/templates/edit/${org.id}`}>
-          <Text fontSize={1} fontWeight={500}>{props.row.value}</Text>
+          <Text sx={{ fontSize: 1, fontWeight: 'heading' }}>{props.row.value}</Text>
         </Link>
       )}
     </Box>
@@ -188,12 +193,9 @@ const TemplateList = () => {
   }, [token]);
 
   return (
-    <Box py={3} width={1} mt={4}>
+    <Box py={3} variant="w100" mt={4}>
       <Box variant="plateLite">
-        <Text variant="pagetitle">
-          Templates
-        </Text>
-        <Text fontSize={1} mb={4}>
+        <Text variant="pagetitle" mb={4}>
           All Templates
         </Text>
         <Link
@@ -203,7 +205,7 @@ const TemplateList = () => {
           <Text sx={{ ml: 2}}>New Template</Text>
         </Link>
       </Box>
-      <Box mx={0} mb={3} width={1}>
+      <Box mx={0} mb={3}>
         <Styles>
           {contents && contents.length > 0 && (
             <Table columns={columns} data={contents} />
