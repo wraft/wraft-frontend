@@ -36,17 +36,19 @@ interface IItemField {
   profile_pic?: string;
   onDelete?: any;
   organisation_id?: string;
-  email?:string,
-  phone?:string,
+  email?: string;
+  phone?: string;
+  bio?: string;
 }
 
 const ProfileCard = ({
   // _id,
   name,
   profile_pic,
-  email,
-  phone = '+91 8050473500',
-  organisation_id,
+  // email,
+  // phone = '+91 8050473500',
+  // organisation_id,
+  bio = 'Producer, Product',
 }: IItemField) => {
   return (
     <Box>
@@ -55,20 +57,23 @@ const ProfileCard = ({
           <Image
             sx={{ borderRadius: 99 }}
             src={`${API_HOST}/` + profile_pic}
-            width={80}
-            height={80}
+            width={60}
+            height={60}
           />
         </Box>
         <Box>
           <Box sx={{ pl: 3, pt: 2 }}>
             <Text variant="personName">{name}</Text>
-            <Text variant="personBio">{'Director, Marketing'}</Text>
-            <Text variant="personPlace">{organisation_id}</Text>
+            <Text variant="personBio">{bio || 'Director, Marketing'}</Text>            
+            {/* <Text variant="personPlace">{organisation_id}</Text> */}
           </Box>
+          <Flex pl={3}>
+              <IconBlock val={""} icon={<MailSend width={24} height={24} />} />
+              <IconBlock val={""} icon={<Phone width={24} height={24} />} />
+            </Flex>
         </Box>
       </Flex>
-      <IconBlock val={email} icon={<MailSend width={24} height={24} />} />
-      <IconBlock val={phone} icon={<Phone width={24} height={24} />} />      
+      
     </Box>
   );
 };

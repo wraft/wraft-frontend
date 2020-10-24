@@ -8,7 +8,7 @@ import Sidebar from './Sidebar';
 import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
-// import { ToastProvider } from 'react-toast-notifications';
+import { ToastProvider } from 'react-toast-notifications';
 
 export interface IPage {
   showFull?: boolean;
@@ -47,27 +47,27 @@ export const Page = (props: any) => {
           content="Wraft Docs help busines move steady and fast with Document Automation System"
         />
       </Head>
-      {/* <ToastProvider> */}
-      <Container width={100} bg={'white'}>
-        {!token && (
-          <Box>
-            <Nav />
-            <Box>{props.children}</Box>
-          </Box>
-        )}
-        {token && (
-          <Flex>
-            <Sidebar showFull={showFull} />
-            <Box bg="gray.0" sx={{ width: '100%'}}>
+      <ToastProvider>
+        <Container width={100} bg={'white'}>
+          {!token && (
+            <Box>
               <Nav />
-              <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
-                {props.children}
-              </Box>
+              <Box>{props.children}</Box>
             </Box>
-          </Flex>
-        )}
-      </Container>
-      {/* </ToastProvider> */}
+          )}
+          {token && (
+            <Flex>
+              <Sidebar showFull={showFull} />
+              <Box bg="gray.0" sx={{ width: '100%' }}>
+                <Nav />
+                <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
+                  {props.children}
+                </Box>
+              </Box>
+            </Flex>
+          )}
+        </Container>
+      </ToastProvider>
     </>
   );
 };

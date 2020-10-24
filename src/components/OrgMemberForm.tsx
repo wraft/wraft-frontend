@@ -49,11 +49,10 @@ const OrgMemberForm = () => {
   const onInviteSubmit = (data: any) => {
     console.log('data', data);
     createEntity(data, `organisations/${organ?.id}/invite`, token, onCreate);
-  }
+  };
 
   /** Update Form */
 
-  
   // const onSubmit = (data: any) => {
   //   console.log('data', data);
   //   createEntity(data, 'organisations', token, onCreate);
@@ -163,8 +162,9 @@ const OrgMemberForm = () => {
               label="Org ID"
               defaultValue={organ?.id}
               register={register}
-            />
-            
+            />            
+            <Text variant="pagetitle">{organ?.name}</Text>
+
             {/* <Field
               name="name"
               label="Name"

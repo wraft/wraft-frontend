@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text, Divider } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
@@ -12,7 +12,7 @@ import {
   DataTemplates,
 } from '../utils/types';
 
-import { Label, Select } from '@rebass/forms';
+import { Label, Select } from 'theme-ui';
 import styled from 'styled-components';
 // import {EditorWraft} from './EditorWraft';
 import {
@@ -184,7 +184,7 @@ const Form = () => {
 
   /**
    * When Editor is updated
-   * @param data 
+   * @param data
    */
   const doUpdate = (data: any) => {
     if (data.md) {
@@ -274,27 +274,52 @@ const Form = () => {
   //   setToken('')
   // }, []);
 
-  const insertBlock = (b: any) => {
-    console.log('inerting now...', b);
-    // setInsertable(JSON.parse(b.serialised));
+  const insertBlock = (b: any) => {    
+    const n = JSON.parse(b.serialized)  
+    if(n && n.content) {
+      setInsertable(n);
+    }
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>
+    <Box
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+      py={3}
+      mt={4}
+      variant="w80">
       <Box pl={4}>
-        <Text mb={3} fontSize={2} fontWeight={500}>
-          Create Template
-        </Text>
+        <Text mb={3}>Create Template</Text>
       </Box>
-      <Box mx={4} mb={3} width={1}>
+      <Box mx={4} mb={3} variant="w100">
         <Flex>
-          <Box width={7 / 12} mr={2}>
+          <Box mr={2} variant="w70">
             <Field
               name="title"
               label="Name"
               defaultValue=""
               register={register}
-            />
+            />            
+            <Box>
+              <Label htmlFor="parent" mb={1}>
+                Content Type
+              </Label>
+              <Select
+                id="parent"
+                name="parent"
+                defaultValue="Parent ID"
+                onChange={e => ctypeChange(e)}
+                ref={register({ required: true })}>
+                {ctypes &&
+                  ctypes.length > 0 &&
+                  ctypes.map((m: any) => (
+                    <option value={m.id} key={m.id}>
+                      {m.name}
+                    </option>
+                  ))}
+              </Select>
+            </Box>
+            <Divider color='gray.2' sx={{ mt: 3, mb: 4 }}/>
             <Field
               name="title_template"
               label="Title Template"
@@ -317,39 +342,21 @@ const Form = () => {
             </Box>
             <Box py={4}>
               <MarkdownEditor
-              onUpdate={doUpdate}
-              initialValue={EMPTY_MARKDOWN_NODE}
-              editor="wysiwyg"
-              value={body}
-              token={tokens}
-              editable={true}
-              insertable={insertable}
+                onUpdate={doUpdate}
+                initialValue={EMPTY_MARKDOWN_NODE}
+                editor="wysiwyg"
+                value={body}
+                token={tokens}
+                editable={true}
+                insertable={insertable}
               />
             </Box>
-            <Label htmlFor="parent" mb={1}>
-              Content Type
-            </Label>
-            <Select
-              id="parent"
-              name="parent"
-              defaultValue="Parent ID"
-              onChange={e => ctypeChange(e)}
-              ref={register({ required: true })}>
-              {ctypes &&
-                ctypes.length > 0 &&
-                ctypes.map((m: any) => (
-                  <option value={m.id} key={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-            </Select>
           </Box>
-          <Box width={5 / 12} px={4} mr={3}>
+          {/* <Box mr={2} variant="w70"></Box> */}
+          <Box px={4} mr={3} variant="w40">
             {varias && varias.fields && (
               <Box>
-                <Text fontSize={1} mb={2}>
-                  Tokens
-                </Text>
+                <Text mb={2}>Tokens</Text>
                 {varias.fields &&
                   varias.fields.map((k: FieldT) => (
                     <Tag key={k.id} onClick={() => insertToken(k)}>
@@ -360,14 +367,28 @@ const Form = () => {
             )}
 
             <Box>
-              <Text fontSize={1} mb={2}>
-                Blocks
-              </Text>
+              <Text mb={2}>Insert Blocks</Text>
               {blocks &&
                 blocks.map((k: BlockTemplate) => (
-                  <Tag key={k.id} onClick={() => insertBlock(k)}>
-                    {k.title}
-                  </Tag>
+                  <Box
+                    key={k.id}
+                    onClick={() => insertBlock(k)}
+                    sx={{
+                      pl: 3,
+                      border: 'solid 0.5px',
+                      borderColor: 'gray.2',
+                      bg: 'gray.1',
+                      mb: 1,
+                      pt: 2,
+                      pb: 3,
+                    }}>
+                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                      {k.title}
+                    </Text>
+                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                      Template Bio
+                    </Text>
+                  </Box>
                 ))}
             </Box>
           </Box>

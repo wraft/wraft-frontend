@@ -101,13 +101,6 @@ const OrgForm = () => {
     // }
   };
 
-  /** Send Invite Form */
-
-  const onInviteSubmit = (data: any) => {
-    console.log('data', data);
-    createEntity(data, `organisations/${data?.id}`, token, onCreate);
-  }
-
   /** Update Form */
 
   
@@ -197,7 +190,7 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box py={3} px={6} variant="w70" mt={4}>
+    <Box py={3} px={6} variant="w100" mt={4}>
       {!ready && <Spinner />}
       {success && (
         <Alert>
@@ -209,7 +202,7 @@ const OrgForm = () => {
       <Box>
         <Text variant="pagetitle">Create Organization</Text>
         {profile?.name}
-
+        {organ && organ?.name}
         {ready && (
           <Box
             mx={0}
@@ -227,52 +220,11 @@ const OrgForm = () => {
                 />
               </Box>
             ))}
-
-            {/* <Field
-              name="dob"
-              label="Birthday"
-              defaultValue="1992-09-24"
-              register={register}
-            />
-            <Label>
-              <Select name="gender" ref={register({ required: true })}>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </Select>
-            </Label> */}
             <Button type="submit" ml={2} mt={3}>
               Update Profile
             </Button>
           </Box>
         )}
-      </Box>
-
-      <Box>
-        <Box>
-          <Text variant="pagetitle">Invite Members</Text>
-          <Box
-            mx={0}
-            mb={3}
-            variant="w100"
-            as="form"
-            onSubmit={handleSubmit(onInviteSubmit)}>
-            <Field
-              name="organisation_id"
-              label="Org ID"
-              defaultValue={organ?.id}
-              register={register}
-            />
-            <Field
-              name="email"
-              label="Email Address"
-              defaultValue="anan@aurut.com"
-              register={register}
-            />
-            <Button type="submit" ml={2} mt={3}>
-              Update Profile
-            </Button>
-          </Box>
-        </Box>
       </Box>
     </Box>
   );
