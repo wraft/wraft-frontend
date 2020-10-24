@@ -3,6 +3,6 @@
 const withImages = require('next-images');
 module.exports = withImages({
   env: {
-    api: 'https://dieture.x.aurut.com',
+    api: process.env.NEXT_PUBLIC_API_HOST,
   },
 });
