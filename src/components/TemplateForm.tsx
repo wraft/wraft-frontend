@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Divider } from 'theme-ui';
+import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
@@ -25,6 +25,7 @@ import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
 import { MarkdownEditor } from './WraftEditor';
+import { useToasts } from 'react-toast-notifications';
 
 const Tag = styled(Box)`
   padding: 5px;
@@ -56,7 +57,10 @@ const Form = () => {
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
   const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
   const [body, setBody] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
   // const [keys, setKeys] = useState<Array<string>>();
+
+  const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -83,6 +87,7 @@ const Form = () => {
    */
   const onSubmit = (data: any) => {
     console.log('data', data);
+    setLoading(true);
 
     const formValues = {
       title_template: data.title_template,
@@ -96,12 +101,16 @@ const Form = () => {
     // if edit is live
     if (cId) {
       updateEntity(`data_templates/${cId}`, formValues, token);
+      addToast('Updated Successfully', { appearance: 'success' });
+      setLoading(false);
     } else {
       createEntity(
         formValues,
         `content_types/${data.parent}/data_templates`,
         token,
       );
+      addToast('Created Successfully', { appearance: 'success' });
+      setLoading(false);
     }
   };
 
@@ -274,9 +283,9 @@ const Form = () => {
   //   setToken('')
   // }, []);
 
-  const insertBlock = (b: any) => {    
-    const n = JSON.parse(b.serialized)  
-    if(n && n.content) {
+  const insertBlock = (b: any) => {
+    const n = JSON.parse(b.serialized);
+    if (n && n.content) {
       setInsertable(n);
     }
   };
@@ -299,7 +308,7 @@ const Form = () => {
               label="Name"
               defaultValue=""
               register={register}
-            />            
+            />
             <Box>
               <Label htmlFor="parent" mb={1}>
                 Content Type
@@ -319,7 +328,7 @@ const Form = () => {
                   ))}
               </Select>
             </Box>
-            <Divider color='gray.2' sx={{ mt: 3, mb: 4 }}/>
+            <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
             <Field
               name="title_template"
               label="Title Template"
@@ -397,7 +406,12 @@ const Form = () => {
       </Box>
 
       {/* <WraftEditor/> */}
-      <Button ml={2}>{cId ? 'Update' : 'Create'}</Button>
+      <Button variant="primary">
+        <Flex>
+          {loading && <Spinner color="white" size={24} />}
+          {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
+        </Flex>
+      </Button>
     </Box>
   );
 };
