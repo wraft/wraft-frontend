@@ -3,5 +3,3 @@ build
 .next
 .DS_Store
 out
-.env.local
-.env.production
