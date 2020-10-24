@@ -121,6 +121,10 @@
     "redux-mock-store": "^1.5.4",
     "typescript": "^3.9.5"
   },
+  "cacheDirectories": [
+    "node_modules/",
+    ".next/cache/"
+  ],
   "engines": {
     "node": "^12.9.1",
     "npm": ">= 6.10.2"

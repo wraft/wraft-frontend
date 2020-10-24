@@ -7,7 +7,7 @@
 // const mx = 'http://localhost:4000' 'https://dieture.x.aurut.com'
 // const API_HOST = process.env.API_HOST || 'http://localhost:4000' // 'https://api.o.dieture.com';
 // export const API_HOST = process.env.API_HOST || 'http://localhost:4000' //'https://wraft.x.aurut.com'
-export const API_HOST = process.env.API_HOST || ' https://wraft.x.aurut.com' // 'https://api.o.dieture.com';
+export const API_HOST = process.env.NEXT_PUBLIC_API_HOST || '' // 'https://api.o.dieture.com';
 import cookie from 'js-cookie';
 /**
  * Load Entity
