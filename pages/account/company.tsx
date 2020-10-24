@@ -1,9 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
-import ProfileForm from '../../src/components/OrgForm';
+import OrgForm from '../../src/components/OrgForm';
 import Page from '../../src/components/Page';
-import { Box, Flex } from 'theme-ui';
-import Link from 'next/link';
+import { Flex } from 'theme-ui';
 import OrgSidebar from '../../src/components/OrgSidebar';
 
 export const CompanyForm = () => {
@@ -15,13 +14,8 @@ export const CompanyForm = () => {
       </Head>
       <Page>
         <Flex>
-          <Box sx={{ width: '25%', px: 4, py: 5}}>
-            <OrgSidebar />
-            <Link href="/account/members">
-              <a>Members</a>
-            </Link>
-          </Box>
-          <ProfileForm />
+          <OrgSidebar/>
+          <OrgForm />          
         </Flex>
       </Page>
     </>

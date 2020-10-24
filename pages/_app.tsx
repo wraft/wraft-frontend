@@ -2,7 +2,7 @@ import withReduxStore from '../lib/with-redux-store';
 import { StoreProvider } from 'easy-peasy';
 import { AppProps } from 'next/app';
 
-import { ThemeProvider } from 'theme-ui';
+import { ThemeProvider, Alert, Close } from 'theme-ui';
 import theme from '../src/utils/theme';
 // import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 
@@ -88,10 +88,10 @@ interface MyCustomToastProps {
   children?: any;
 }
 const MyCustomToast = ({ appearance, children }:MyCustomToastProps) => (
-  <div style={{ background: appearance === 'error' ? 'red' : 'green' }}>
-    {children}
-    <p>test</p>
-  </div>
+  <Alert variant={appearance === 'error' ? 'alert' : 'primary'}>
+  {children}
+  <Close ml='auto' mr={-2} />
+</Alert>
 );
 
 function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
@@ -100,8 +100,13 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         {/* <CSSReset /> */}
-        <ToastProvider>
-          <Component components={{ Toast: MyCustomToast }} {...pageProps} />
+        <ToastProvider
+         autoDismiss
+         autoDismissTimeout={1000}
+         components={{ Toast: MyCustomToast }}
+         placement="top-center"
+        >
+          <Component  {...pageProps} />
         </ToastProvider>
       </ThemeProvider>
     </StoreProvider>

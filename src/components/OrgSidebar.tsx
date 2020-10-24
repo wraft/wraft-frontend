@@ -119,16 +119,18 @@ export interface INav {
 
 const OrgSidebar = (_props: INav) => {
   return (
-    <Box variant="w33">
-      <Text sx={{ fontWeight: 'heading', mb: 1 }}>My Profile</Text>
+    <Box sx={{ width: '22%', pt: 5, pl: 3}}>
+      <NavLink href={'/account'}>
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>My Profile</Text>
+      </NavLink>
       <NavLink href={'/account/company'}>
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
       </NavLink>
       <NavLink href={'/account/members'}>
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>
       </NavLink>
-      <Text sx={{ fontWeight: 'body', mb: 1 }}>Notifications</Text>
-      <Text sx={{ fontWeight: 'body', mb: 1 }}>Settings</Text>
+      {/* <Text sx={{ fontWeight: 'body', mb: 1 }}>Notifications</Text>
+      <Text sx={{ fontWeight: 'body', mb: 1 }}>Settings</Text> */}
     </Box>
   );
 };

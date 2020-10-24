@@ -8,7 +8,7 @@ import FieldText from './FieldText';
 import { BlockTemplates } from '../utils/types';
 // import styled from 'styled-components';
 import EditorWraft from './EditorWraft';
-import { createEntity, loadEntityDetail, updateEntity } from '../utils/models';
+import { createEntity, deleteEntity, loadEntityDetail, updateEntity } from '../utils/models';
 import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
@@ -63,7 +63,7 @@ const Form = () => {
   const [def, setDef] = useState<any>();
   // const [insertable, setInsertable] = useState<any>();
   const [status, setStatus] = useState<number>(0);
-  // const [loaded, setLoaded] = useState<boolean>(false);  
+  // const [loaded, setLoaded] = useState<boolean>(false);
   // const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const Form = () => {
    */
 
   const onSuccess = (_data: any) => {
-    addToast('Saved Successfully', { appearance: 'success' })
+    addToast('Saved Successfully', { appearance: 'success' });
     setLoading(false);
     setSaved(true);
   };
@@ -137,10 +137,8 @@ const Form = () => {
     }
   }, [saved]);
 
-  
-
   useEffect(() => {
-    if(!cId) {
+    if (!cId) {
       setStatus(3);
       setDef(EMPTY_MARKDOWN_NODE);
     }
@@ -154,6 +152,17 @@ const Form = () => {
       setValue('title', dataTemplate.title);
     }
   }, [dataTemplate]);
+
+  /**
+   * Delete a block
+   */
+  const deleteBlock = () => {
+    if(cId && token) {
+      deleteEntity(`block_templates/${cId}`, token);
+      Router.push(`/block_templates`);
+      addToast('Deleted Block Successfully', { appearance: 'error' });
+    }
+  }
 
   return (
     <Box
@@ -222,13 +231,17 @@ const Form = () => {
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>
       </Box>
-      { saved && <Text>Saved</Text>}
-      <Button variant="primary">
-        <Flex>
-          {loading && <Spinner color="white" size={24} />}
-          {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
-        </Flex>
-      </Button>
+      {saved && <Text>Saved</Text>}
+      <Box mt={3}>
+        <Button variant="primary">
+          <Flex m={0}>
+            {loading && <Spinner color="white" size={24} />}
+            {!loading && <Text>{cId ? 'Update' : 'Create'}</Text>}
+          </Flex>
+        </Button>
+
+        {cId && <Button type="button" onClick={deleteBlock}variant="delete">Delete</Button>}
+      </Box>
     </Box>
   );
 };
