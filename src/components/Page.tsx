@@ -8,8 +8,6 @@ import Sidebar from './Sidebar';
 import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
-import { ToastProvider } from 'react-toast-notifications';
-
 export interface IPage {
   showFull?: boolean;
   children: any;
@@ -47,7 +45,6 @@ export const Page = (props: any) => {
           content="Wraft Docs help busines move steady and fast with Document Automation System"
         />
       </Head>
-      <ToastProvider>
         <Container width={100} bg={'white'}>
           {!token && (
             <Box>
@@ -67,7 +64,6 @@ export const Page = (props: any) => {
             </Flex>
           )}
         </Container>
-      </ToastProvider>
     </>
   );
 };
