@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 // import { TrashAlt } from '@styled-icons/boxicons-regular';
-import { loadEntity } from '../utils/models';
+import { deleteEntity, loadEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import LayoutCard from './Card';
+import { useToasts } from 'react-toast-notifications';
 
 export interface ILayout {
   width: number;
@@ -35,6 +36,7 @@ const LayoutList = () => {
   const token = useStoreState(state => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
+  const { addToast } = useToasts();
 
   /**
    * on Engine Load Success
@@ -44,6 +46,16 @@ const LayoutList = () => {
     const res: IField[] = data.layouts;
     setContents(res);
   };
+
+  /**
+   * Delete a Layout
+   * @param _id  layout_id
+   */
+  const onDelete = (_id:string) => {
+    deleteEntity(`layouts/${_id}`, token)
+    addToast('Deleted Theme', { appearance: 'error' });
+    loadEntity(token, 'layouts', loadLayoutSuccess);
+  }
 
   /**
    * Load all Engines
@@ -65,7 +77,7 @@ const LayoutList = () => {
       <Flex mx={0} mb={3}>
         {contents &&
           contents.length > 0 &&
-          contents.map((m: any) => <LayoutCard model='layouts' key={m.id} {...m} />)}
+          contents.map((m: any) => <LayoutCard model='layouts' key={m.id} {...m}  onDelete={onDelete}/>)}
       </Flex>
     </Box>
   );
