@@ -176,9 +176,9 @@ const OrgForm = () => {
       );
     }
 
-    // if(organ) {
-    //   console.log('got organ', organ);
-    // }
+    if(organ) {
+      console.log('got organ', organ);
+    }
   }, [profile]);
 
   /**
