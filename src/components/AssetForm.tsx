@@ -8,16 +8,19 @@ import { Label, Input } from '@rebass/forms';
 import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 
-const Form = (props: any) => {
+interface AssetFormProps {
+  onUpload?: any; 
+}
+
+const AssetForm = ({ onUpload }: AssetFormProps) => {
   const { register, handleSubmit } = useForm();
   const token = useStoreState(state => state.auth.token);
   const [contents, setContents] = useState<Asset>();
 
   const onImageUploaded = (data: any) => {
     const mData: Asset = data;
-    props.onUpload(mData);
+    onUpload(mData);
     setContents(data);
-    console.log('data', data);
   };
 
   const onSubmit = (data: any) => {
@@ -91,4 +94,4 @@ const Form = (props: any) => {
     </Box>
   );
 };
-export default Form;
+export default AssetForm;

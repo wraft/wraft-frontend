@@ -71,7 +71,7 @@
     "redux-saga": "^1.1.3",
     "redux-thunk": "^2.3.0",
     "refractor": "^2.10.1",
-    "remirror": "^0.11.0",
+    "remirror": "^0.13.1",
     "rich-markdown-editor": "^11.0.2",
     "styled-components": "^4.1.3",
     "styled-icons": "^10.2.1",

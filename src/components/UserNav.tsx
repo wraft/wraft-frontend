@@ -73,7 +73,7 @@ const UserNav = () => {
           <Box width={4 / 12}>
             <Link href={token ? '/user-profile' : '/'}>
               <Logo />
-              un { token }
+              { token }
             </Link>
           </Box>
 
@@ -82,10 +82,10 @@ const UserNav = () => {
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text fontWeight="bold">Join Wraft</Text>
+                    <Text fontWeight="bold" sx={{ px: 4, py: 2 }}>Join Wraft</Text>
                   </Link>
                   <Link href="/login">
-                    <Text fontWeight="bold">Login</Text>
+                    <Text fontWeight="bold" sx={{ px: 4, py: 2 , bg: 'gray.4', ml: 4 }}>Login</Text>
                   </Link>
                 </Fragment>
               )}

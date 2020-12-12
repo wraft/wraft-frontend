@@ -271,7 +271,7 @@ const Form = () => {
                   <MenuItem
                     variant="rel"
                     href={`/content/edit/[id]`}
-                    path={`content/edit/${contents.content.id}`}>
+                    path={`/content/edit/${contents.content.id}`}>
                     EDIT
                   </MenuItem>
                 </Box>
