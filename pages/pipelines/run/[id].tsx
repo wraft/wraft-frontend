@@ -3,6 +3,7 @@ import Head from 'next/head';
 import PipelineView from '../../../src/components/PipelineView';
 import Page from '../../../src/components/Page';
 import { Box } from 'rebass';
+// import BulkBuild from '../../../src/components/BulkBuild';
 
 export const Index = () => {
   return (
@@ -14,6 +15,7 @@ export const Index = () => {
       <Page>
         <Box>
           <PipelineView />
+          {/* <BulkBuild master="" master_id=""/> */}
         </Box>
       </Page>        
     </>

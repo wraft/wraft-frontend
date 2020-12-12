@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'easy-peasy';
-import { Box, Text, Flex, Spinner } from 'theme-ui';
+import { Box, Text, Flex, Spinner, Grid } from 'theme-ui';
 import { Plus } from '@styled-icons/boxicons-regular';
 
 import Link from './NavLink';
@@ -79,14 +79,14 @@ const ContentTypeList = () => {
           </Link>
         </Box>
       </Flex>
-      <Flex bg='gray.0' sx={{ width: '100%'}}>
-        <Flex sx={{ width:'100%',mt: 2, flexWrap:'wrap'}}>
+      <Flex bg='gray.0' sx={{ width: '100%', pt: 4}}>
+        <Grid columns={3}>
           {contents &&
             contents.length > 0 &&
             contents.map((m: any) => (
               <LayoutCard key={m.id} {...m} onDelete={delData} />
             ))}
-        </Flex>
+        </Grid>
         {/* <Box bg='white' ml="auto" sx={{ width: '30%', p: 4, border: 'solid 1px', borderColor: 'gray.1', borderRadius: 2}}>
           <Text>Heading 1</Text>
         </Box> */}

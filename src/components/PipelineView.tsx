@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+import { Box, Flex, Text, Button, Badge } from 'theme-ui';
 import { loadEntity, deleteEntity } from '../utils/models';
 
 import styled from 'styled-components';
@@ -7,6 +7,33 @@ import { useRouter } from 'next/router';
 import { Pipeline } from './PipelineList';
 import Link from './NavLink';
 import { useStoreState } from 'easy-peasy';
+
+import Modal, { Styles } from 'react-modal';
+
+const _customStyles: Styles = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  },
+  content: {
+    position: 'absolute',
+    top: '20%',
+    left: '20%',
+    right: '20%',
+    bottom: '20%',
+    border: '1px solid #ccc',
+    background: '#fff',
+    overflow: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    borderRadius: '4px',
+    outline: 'none',
+    padding: '20px',
+  },
+};
 
 export interface IStage {
   name: string;
@@ -42,6 +69,7 @@ const PipelineView = () => {
   const token = useStoreState(state => state.auth.token);
 
   const [stages, addStage] = useState<Array<IStage>>([]);
+  const [state, setState] = useState<string>('nostart');
 
   const [activePipeline, setActivePipeline] = useState<Pipeline>();
 
@@ -105,6 +133,27 @@ const PipelineView = () => {
   };
 
   /**
+   * RUn a pipeline
+   * @param id pipline_id
+   */
+  const runPipeline = (id:string) => {
+    console.info('starting to run pipleine', id);
+    setState("running");
+  }
+
+  /**
+   * Build a pipeline with Data
+   * @param pipe 
+   */
+  const buildPipelineNow = (pipe: any) => {
+
+    const sampleData = {
+      //1.  /content_types/{c_type_id}/data_templates/bulk_import
+      // 2. 
+    }
+  }
+
+  /**
    * Delete this pipeline
    */
   const deletePipeline = (id: any) => {
@@ -124,11 +173,29 @@ const PipelineView = () => {
               <Text sx={{ fontSize: 2}}>
                 {activePipeline.name}
               </Text>
-              <Flex py={3}>
-                <Button >Run Pipeline</Button>
+              <Flex py={3}>                
+                <Button onClick={()=> runPipeline(activePipeline.id)}>Run Pipeline</Button>
               </Flex>
+              <Badge bg="red.7">{ state}</Badge>
               <hr />
             </Box>
+
+            {state && state ==="running" && (
+                <Modal
+                  style={_customStyles}
+                  isOpen={true}
+                  // onRequestClose={closeModal}
+                  ariaHideApp={false}
+                  contentLabel="Example Modal">
+                  <Box>
+                    <Text>I'm going to ask you to enter data</Text>
+                    <Box sx={{ p: 3, bg: 'gray.0', borderLeft: 'solid 1px #eee', my: 3}}>
+                      <Text>DATA IS AUTO-FILLED FOR NOW</Text>
+                    </Box>
+                    <Button onClick={() => buildPipelineNow(activePipeline)}>Run Now</Button>
+                  </Box>
+                </Modal>
+              )}
 
             <Box mx={0} mb={3}>
               <Box>

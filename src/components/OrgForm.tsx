@@ -156,6 +156,10 @@ const OrgForm = () => {
     // });
   };
 
+  const onOrgLoadAll = (_x: any) => {
+    console.log('x', _x)
+  }
+
   /**
    * Set Profile Context
    */
@@ -169,6 +173,7 @@ const OrgForm = () => {
       // setValue('')
       // checkUser(token, onProfileLoad);
       loadEntity(token, `organisations/${profile.organisation_id}`, onOrgLoad);
+      loadEntity(token, `organisations`, onOrgLoadAll);
       loadEntity(
         token,
         `organisations/${profile.organisation_id}/memberships`,

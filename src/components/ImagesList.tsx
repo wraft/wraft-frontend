@@ -14,7 +14,7 @@ import { modalStyle } from '../utils';
 
 // import CategoryForm from './NutriLabelForm';
 
-import ImagesForm from './ImageForm';
+import ImagesForm from './AssetForm';
 
 const CategoryCard = (props: any) => (
   <Flex variant="tableItem" width={1}>
@@ -63,7 +63,7 @@ const Form = (props: IImageList) => {
   };
 
   const loadData = (t: string) => {
-    loadEntity(t, 'images', loadDataSuccess);
+    loadEntity(t, 'assets', loadDataSuccess);
   };
 
   useEffect(() => {
@@ -75,10 +75,10 @@ const Form = (props: IImageList) => {
 
   useEffect(() => {}, [allCats]);
 
-  const onDelete = (data: any) => {
-    delCats(data.id);
-    deleteEntity(`/images/${data.id}`, token);
-  };
+  // const onDelete = (data: any) => {
+  //   delCats(data.id);
+  //   deleteEntity(`/assets/${data.id}`, token);
+  // };
 
   const onDone = (data: any) => {
     toggleModal();
@@ -93,7 +93,7 @@ const Form = (props: IImageList) => {
         style={modalStyle}
         ariaHideApp={false}
         contentLabel="FileUploader">
-        <ImagesForm onSuccess={onDone} />
+        <ImagesForm onUpload={(_m: any) => onDone(_m)} />
       </Modal>
       {}
       {/* <PageHeader title="All Images">
@@ -107,7 +107,7 @@ const Form = (props: IImageList) => {
         <Plus width={20} />
         New Image
       </Button>
-      <Box mx={0} mb={3} width={1}>
+      {/* <Box mx={0} mb={3} width={1}>
         {props.hideList && (
           <Box>
             <Flex variant="tableItem" width={1}>
@@ -128,7 +128,7 @@ const Form = (props: IImageList) => {
               ))}
           </Box>
         )}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

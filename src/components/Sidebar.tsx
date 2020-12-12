@@ -75,7 +75,7 @@ const listMenu = [
     path: '/templates',
   },
   {
-    name: 'Layouts',
+    name: 'Frames',
     logo: <Layout width={20} />,
     path: '/layouts',
   },

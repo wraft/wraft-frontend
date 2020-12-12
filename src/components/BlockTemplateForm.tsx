@@ -8,10 +8,17 @@ import FieldText from './FieldText';
 import { BlockTemplates } from '../utils/types';
 // import styled from 'styled-components';
 import EditorWraft from './EditorWraft';
-import { createEntity, deleteEntity, loadEntityDetail, updateEntity } from '../utils/models';
+import {
+  createEntity,
+  deleteEntity,
+  loadEntityDetail,
+  updateEntity,
+} from '../utils/models';
 import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
+
+import ImagesList from './ImagesList';
 
 // const Tag = styled(Box)`
 //   padding: 5px;
@@ -50,6 +57,17 @@ const EMPTY_MARKDOWN_NODE = {
   ],
 };
 
+// const imageNode = {
+//   type: 'doc',
+//   content: [
+//     {
+//       type: 'image',
+//       src: `http://localhost:4000/${_p?.file}`,
+//       class: 'uploaded-image'
+//     },
+//   ],
+// };
+
 const Form = () => {
   const token = useStoreState(state => state.auth.token);
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -61,10 +79,11 @@ const Form = () => {
   // const [keys, setKeys] = useState<Array<string>>();
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
-  // const [insertable, setInsertable] = useState<any>();
+
+  const [insertable, setInsertable] = useState<any>();  
   const [status, setStatus] = useState<number>(0);
-  // const [loaded, setLoaded] = useState<boolean>(false);
-  // const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -76,6 +95,44 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
+  // toggle image uploader
+  const [addAsset, setAddAsset] = useState<boolean>(false);
+  const [asset, setAsset] = useState<any>();
+
+  const toggleAssetForm = () => {
+    setAddAsset(!addAsset);
+  };
+
+  const formatImageNode = (src:string) => {
+    // image object
+    const imageNode = {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          attrs: {},
+          content: [{
+            type:"image",
+            attrs: {
+              src: `http://localhost:4000/${src}`,
+            },
+          }],
+        },
+      ],
+    };
+    return imageNode;
+  }
+
+  /**
+   *
+   * @param _data
+   */
+  const imageAdded = (_m: any) => {
+    console.log('imaged', _m);
+    const imageNode = formatImageNode(_m?.file);
+    setInsertable(imageNode);
+  };
+
   /**
    * Form Submit
    * @param data
@@ -86,6 +143,8 @@ const Form = () => {
     setLoading(false);
     setSaved(true);
   };
+
+  /** Editor Submit */
 
   const onSubmit = (data: any) => {
     setLoading(true);
@@ -126,6 +185,7 @@ const Form = () => {
   useEffect(() => {
     if (dataTemplate) {
       const contentBody = JSON.parse(dataTemplate.serialized);
+      console.log('contentBody', contentBody);
       setDef(contentBody);
       setStatus(3);
     }
@@ -157,12 +217,12 @@ const Form = () => {
    * Delete a block
    */
   const deleteBlock = () => {
-    if(cId && token) {
+    if (cId && token) {
       deleteEntity(`block_templates/${cId}`, token);
       Router.push(`/block_templates`);
       addToast('Deleted Block Successfully', { appearance: 'error' });
     }
-  }
+  };
 
   return (
     <Box
@@ -178,6 +238,9 @@ const Form = () => {
           Create Block
         </Text>
       </Box>
+
+      <Button onClick={() => toggleAssetForm()}>+ Image</Button>
+      {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />}
       <Box variant="w50">
         <Flex>
           <Box variant="w100">
@@ -208,10 +271,14 @@ const Form = () => {
               <EditorWraft
                 onUpdate={doUpdate}
                 initialValue={def}
-                // editor="wysiwyg"
+                editor="wysiwyg"
                 mt={4}
                 // value={body}
+                // cleanInsert={true}
                 editable={true}
+                // insertable={true}
+                cleanInsert={cleanInsert}
+                insertable={insertable}
               />
             )}
             {/* <Box pt={2} mb={3}>
@@ -240,7 +307,11 @@ const Form = () => {
           </Flex>
         </Button>
 
-        {cId && <Button type="button" onClick={deleteBlock}variant="delete">Delete</Button>}
+        {cId && (
+          <Button type="button" onClick={deleteBlock} variant="delete">
+            Delete
+          </Button>
+        )}
       </Box>
     </Box>
   );

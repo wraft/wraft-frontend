@@ -2,10 +2,15 @@
 
 import { jsx } from '@emotion/core';
 import { FC, Fragment, useEffect, useMemo, useState } from 'react';
+
+import { Box, Image } from 'theme-ui';
 import bash from 'refractor/lang/bash';
+
 import markdown from 'refractor/lang/markdown';
 import tsx from 'refractor/lang/tsx';
 import typescript from 'refractor/lang/typescript';
+
+import { MenuBar } from './menu';
 
 import {
   EditorState,
@@ -59,6 +64,9 @@ import { HolderExtension } from './holder';
 import { BlockrExtension } from './blockr';
 
 import { ResolvedPos } from 'prosemirror-model';
+import { Button } from 'theme-ui';
+// import AssetForm from '../AssetForm';
+import ImagesList from '../ImagesList';
 
 /**
  * The props which are passed to the internal RemirrorProvider
@@ -108,9 +116,26 @@ const useWysiwygManager = () => {
 };
 
 const WysiwygEditor: FC<InternalEditorProps> = ({ children, ...props }) => {
+
+  const activateLink = () => {
+    setLinkActivated(true);
+  };
+
+  const deactivateLink = (_m: any) => {
+    setLinkActivated(false);
+  };
+
+  const activateImage = (_e: any) => {
+    // const tr = addImage()
+    // f.dispatch(tr)
+  };
+
   return (
     <RemirrorProvider {...props} childAsRoot={true}>
-      <div>{children}</div>
+      <Box>
+        <MenuBar activateLink={activateLink}/>
+        <div>{children}</div>
+      </Box>
     </RemirrorProvider>
   );
 };
@@ -186,6 +211,23 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
 }) => {
   const wysiwygManager = useWysiwygManager();
 
+  const [addAsset, setAddAsset] = useState<boolean>(false);
+  const [asset, setAsset] = useState<any>();
+
+  const [linkActivated, setLinkActivated] = useState(false);
+
+  /**
+   * Toolbar
+   */
+  // const runAction = (action: () => void): MouseEventHandler<HTMLElement> => e => {
+  //   e.preventDefault();
+  //   action();
+  // };
+
+  const toggleAssetForm = () => {
+    setAddAsset(!addAsset);
+  };
+
   type WysiwygExtensions = ExtensionsFromManager<typeof wysiwygManager>;
   type WysiwygSchema = SchemaFromExtensions<WysiwygExtensions>;
 
@@ -207,7 +249,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     if (tr && tr.docChanged) {
       // temporary state
       const md: any = toMarkdown(newState.doc);
-      console.debug('md', newState.doc);
+      // console.debug('md', newState.doc);
       const contentBody = { md, serialized: JSON.stringify(newState.doc) };
       onUpdate(contentBody);
       return;
@@ -246,16 +288,47 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   }, [token]);
 
   /**
+   * Once Image is uploaded
+   * @param _p
+   */
+
+  const onDoneImage = (_p: any) => {
+    setAsset(_p);
+
+    // logs
+    console.log('log', _p);
+
+    // image object
+    const imageNode = {
+      type: 'doc',
+      content: [
+        {
+          type: 'paragraph',
+          attrs: {},
+          content: [
+            {
+              type: 'image',
+              attrs: {
+                src: `http://localhost:4000/${_p?.file}`,
+              },
+            },
+          ],
+        },
+      ],
+    };
+    return imageNode;
+  };
+
+  /**
    * Insert to a position or end of Doc
    */
 
   useEffect(() => {
     // console.log('[insertable]')
     if (insertable) {
-
       // console.log('[insertable]', insertable, cleanInsert, insertable.length)
 
-      if(insertable) {
+      if (insertable) {
         const wview = wysiwygManager.view;
         const wstate = wview.state;
         const node = wstate?.schema?.nodeFromJSON(insertable);
@@ -264,8 +337,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
           ? selection.$cursor.pos
           : selection.$to.pos;
 
-
-          // console.log('[cleanInsert]', cleanInsert)
+        // console.log('[cleanInsert]', cleanInsert)
 
         if (cleanInsert) {
           // console.log('[insertable]', insertable)
