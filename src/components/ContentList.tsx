@@ -185,8 +185,8 @@ const ContentList = () => {
   };
 
   const changePage = (_e: any) => {
-    console.log('changing', _e)
-  }
+    console.log('changing', _e);
+  };
 
   useEffect(() => {
     if (token) {
@@ -300,7 +300,9 @@ const ContentList = () => {
               </Flex>
             </Flex>
             <Box sx={{ py: 2 }} variant="w100">
-              <Button variant="small" mr={2}>Review</Button>
+              <Button variant="small" mr={2}>
+                Review
+              </Button>
               {/* <Button variant="tertiary">Review</Button> */}
             </Box>
           </Box>

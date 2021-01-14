@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Text } from 'rebass';
 import Container from './Container';
-import { Button, Flex, Grid } from 'theme-ui';
+import { Button, Grid } from 'theme-ui';
 
 // import styled from 'styled-components';
 // import Page from '../components/Page';
@@ -54,8 +54,6 @@ const UserHome = () => {
             <TextBlock title="Approval System" body="Verify documents across Organisations"/>
             <TextBlock title="Smart Templates" body="Easily replicate or bring your your own workflow!"/>
             <TextBlock title="Self-hosted" body="Open source software that’s ready to meet your needs!"/>
-
-
           </Grid>
         </Container>
       </Box>

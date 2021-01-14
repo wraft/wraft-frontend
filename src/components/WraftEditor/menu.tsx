@@ -25,7 +25,7 @@ import { bubblePositioner, useRemirrorContext } from '@remirror/react';
 import { useRemirrorTheme } from '@remirror/ui';
 import {
   BoldIcon,
-  CodeIcon,
+  // CodeIcon,
   H1Icon,
   H2Icon,
   H3Icon,
@@ -43,6 +43,8 @@ import {
   UndoAltIcon,
   ImagesRegularIcon,
 } from '@remirror/ui-icons';
+
+// import { TypeH1 } from '@styled-icons/bootstrap'
 
 import { ButtonState, WysiwygExtensions } from './wysiwyg-types';
 
@@ -129,6 +131,7 @@ export const MenuBar: FC<MenuBarProps> = ({ inverse, activateLink }) => {
               actions[name].isActive(attrs),
               inverse,
             );
+            console.log('buttonState', buttonState);
             return (
               <MenuItem
                 index={index}
@@ -139,8 +142,8 @@ export const MenuBar: FC<MenuBarProps> = ({ inverse, activateLink }) => {
                 name={name}
                 // disabled={!actions[name].isEnabled()}
                 // onClick={name => console.log('x', name, actions)}
-                onClick={runAction(actions[name], attrs)}
-                // onClick={() => actionNow(actions, name)}
+                // onClick={runAction(actions[name], attrs)}
+                onClick={() => actionNow(actions, name)}
               />
             );
           } catch (err) {
@@ -185,6 +188,7 @@ const MenuItem: FC<MenuItemProps> = ({
       onClick={onClick}
       state={state}
       disabled={disabled}
+      data-rel={name}
       index={index}>
       <Icon
         variant={variant}
@@ -200,15 +204,15 @@ export interface BubbleMenuProps {
   activateLink(): void;
 }
 
-const bubbleMenuItems: Array<[
-  ActionNames<WysiwygExtensions>,
-  [ComponentType<IconProps>, string?],
-  Attrs?,
-]> = [
-  ['bold', [BoldIcon]],
-  ['italic', [ItalicIcon]],
-  ['underline', [UnderlineIcon]],
-];
+// const bubbleMenuItems: Array<[
+//   ActionNames<WysiwygExtensions>,
+//   [ComponentType<IconProps>, string?],
+//   Attrs?,
+// ]> = [
+//   ['bold', [BoldIcon]],
+//   ['italic', [ItalicIcon]],
+//   ['underline', [UnderlineIcon]],
+// ];
 
 export const BubbleMenu: FC<BubbleMenuProps> = ({
   linkActivated = false,

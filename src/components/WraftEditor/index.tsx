@@ -3,7 +3,7 @@
 import { jsx } from '@emotion/core';
 import { FC, Fragment, useEffect, useMemo, useState } from 'react';
 
-import { Box, Image } from 'theme-ui';
+import { Box } from 'theme-ui';
 import bash from 'refractor/lang/bash';
 
 import markdown from 'refractor/lang/markdown';
@@ -64,9 +64,9 @@ import { HolderExtension } from './holder';
 import { BlockrExtension } from './blockr';
 
 import { ResolvedPos } from 'prosemirror-model';
-import { Button } from 'theme-ui';
+// import { Button } from 'theme-ui';
 // import AssetForm from '../AssetForm';
-import ImagesList from '../ImagesList';
+// import ImagesList from '../ImagesList';
 
 /**
  * The props which are passed to the internal RemirrorProvider
@@ -118,17 +118,17 @@ const useWysiwygManager = () => {
 const WysiwygEditor: FC<InternalEditorProps> = ({ children, ...props }) => {
 
   const activateLink = () => {
-    setLinkActivated(true);
+    // setLinkActivated(true);
   };
 
-  const deactivateLink = (_m: any) => {
-    setLinkActivated(false);
-  };
+  // const deactivateLink = (_m: any) => {
+  //   setLinkActivated(false);
+  // };
 
-  const activateImage = (_e: any) => {
-    // const tr = addImage()
-    // f.dispatch(tr)
-  };
+  // const activateImage = (_e: any) => {
+  //   // const tr = addImage()
+  //   // f.dispatch(tr)
+  // };
 
   return (
     <RemirrorProvider {...props} childAsRoot={true}>
@@ -211,10 +211,10 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
 }) => {
   const wysiwygManager = useWysiwygManager();
 
-  const [addAsset, setAddAsset] = useState<boolean>(false);
-  const [asset, setAsset] = useState<any>();
+  // const [addAsset, setAddAsset] = useState<boolean>(false);
+  // const [asset, setAsset] = useState<any>();
 
-  const [linkActivated, setLinkActivated] = useState(false);
+  // const [linkActivated, setLinkActivated] = useState(false);
 
   /**
    * Toolbar
@@ -224,9 +224,9 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   //   action();
   // };
 
-  const toggleAssetForm = () => {
-    setAddAsset(!addAsset);
-  };
+  // const toggleAssetForm = () => {
+  //   setAddAsset(!addAsset);
+  // };
 
   type WysiwygExtensions = ExtensionsFromManager<typeof wysiwygManager>;
   type WysiwygSchema = SchemaFromExtensions<WysiwygExtensions>;
@@ -292,32 +292,32 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
    * @param _p
    */
 
-  const onDoneImage = (_p: any) => {
-    setAsset(_p);
+  // const onDoneImage = (_p: any) => {
+  //   setAsset(_p);
 
-    // logs
-    console.log('log', _p);
+  //   // logs
+  //   console.log('log', _p);
 
-    // image object
-    const imageNode = {
-      type: 'doc',
-      content: [
-        {
-          type: 'paragraph',
-          attrs: {},
-          content: [
-            {
-              type: 'image',
-              attrs: {
-                src: `http://localhost:4000/${_p?.file}`,
-              },
-            },
-          ],
-        },
-      ],
-    };
-    return imageNode;
-  };
+  //   // image object
+  //   const imageNode = {
+  //     type: 'doc',
+  //     content: [
+  //       {
+  //         type: 'paragraph',
+  //         attrs: {},
+  //         content: [
+  //           {
+  //             type: 'image',
+  //             attrs: {
+  //               src: `http://localhost:4000/${_p?.file}`,
+  //             },
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   };
+  //   return imageNode;
+  // };
 
   /**
    * Insert to a position or end of Doc
