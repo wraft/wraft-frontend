@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Button } from 'rebass';
+import { Box, Button } from 'rebass';
 // import Link from './NavLink';
-import { Circle, Trash, Plus } from '@styled-icons/boxicons-regular';
+import { Plus } from '@styled-icons/boxicons-regular';
 
 import Modal from 'react-modal';
 
-import { Spinner, IconButton } from 'theme-ui';
+// import { Spinner, IconButton } from 'theme-ui';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 
-import { loadEntity, deleteEntity } from '../utils/models';
+import { loadEntity } from '../utils/models';
 // import PageHeader from './PageHeader';
 import { modalStyle } from '../utils';
 
@@ -16,21 +16,21 @@ import { modalStyle } from '../utils';
 
 import ImagesForm from './AssetForm';
 
-const CategoryCard = (props: any) => (
-  <Flex variant="tableItem" width={1}>
-    <Text fontWeight={900}>{props.tag}</Text>
-    <Flex ml="auto">
-      <Flex mr={3} pb={2}>
-        <IconButton>
-          <Circle size={20} />
-        </IconButton>
-      </Flex>
-      <IconButton onClick={() => props.onDelete(props)}>
-        <Trash size={20} />
-      </IconButton>
-    </Flex>
-  </Flex>
-);
+// const CategoryCard = (props: any) => (
+//   <Flex variant="tableItem" width={1}>
+//     <Text fontWeight={900}>{props.tag}</Text>
+//     <Flex ml="auto">
+//       <Flex mr={3} pb={2}>
+//         <IconButton>
+//           <Circle size={20} />
+//         </IconButton>
+//       </Flex>
+//       <IconButton onClick={() => props.onDelete(props)}>
+//         <Trash size={20} />
+//       </IconButton>
+//     </Flex>
+//   </Flex>
+// );
 
 interface IImageList {
   onSuccess: any;
@@ -43,7 +43,7 @@ const Form = (props: IImageList) => {
   // const getThemes = useStoreActions((actions: any) => actions.themes.fetch);
   const setCats = useStoreActions((actions: any) => actions.images.set);
   // const addCats = useStoreActions((actions: any) => actions.images.add);
-  const delCats = useStoreActions((actions: any) => actions.images.remove);
+  // const delCats = useStoreActions((actions: any) => actions.images.remove);
   const allCats = useStoreState(state => state.images.items);
 
   const [showModal, setShowModal] = useState<boolean>(false);

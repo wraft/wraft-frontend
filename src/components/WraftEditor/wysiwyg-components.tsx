@@ -2,9 +2,9 @@
 import { jsx } from '@emotion/core';
 import { FC, forwardRef } from 'react';
 
-import { RemirrorInterpolation } from '@remirror/core';
+// import { RemirrorInterpolation } from '@remirror/core';
 import { useRemirrorTheme } from '@remirror/ui';
-import { ResetButton } from '@remirror/ui-buttons';
+// import { ResetButton } from '@remirror/ui-buttons';
 
 import { ButtonProps } from './wysiwyg-types';
 
@@ -64,13 +64,13 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props,
         type="button"
       {...props}
       ref={ref}
-      sx={{  mr: 0, bg: 'white', border: 'solid 1px #eee'}}
-    //   css={sx(
-    //     {
-    //       marginLeft: props.index !== 0 ? 3 : 0,
-    //     },
-    //     props.css as RemirrorInterpolation,
-    //   )}
+      // sx={{  mr: 0, bg: 'white', border: 'solid 1px #eee'}}
+      css={sx(
+        {
+          marginLeft: props.index !== 0 ? 3 : 0,
+        },
+        // props.css as RemirrorInterpolation,
+      )}
     />
   );
 });

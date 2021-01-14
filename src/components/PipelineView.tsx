@@ -1,14 +1,61 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button, Badge } from 'theme-ui';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { Box, Flex, Text, Button } from 'theme-ui';
+import { loadEntity, deleteEntity, createEntity } from '../utils/models';
 
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { Pipeline } from './PipelineList';
 import Link from './NavLink';
 import { useStoreState } from 'easy-peasy';
 
+import { PlayCircle } from '@styled-icons/boxicons-regular';
+
 import Modal, { Styles } from 'react-modal';
+import Field from './Field';
+
+import { useForm } from 'react-hook-form';
+// import { Form } from '@theme-ui/form';
+
+export interface ITriggers {
+  triggers: Trigger[];
+  total_pages: number;
+  total_entries: number;
+  page_number: number;
+}
+
+export interface Trigger {
+  zip_file: null;
+  updated_at: Date;
+  state: string;
+  start_time: Date;
+  inserted_at: Date;
+  id: string;
+  error: { [key: string]: Error };
+  end_time: Date;
+  duration: number;
+  data: Data;
+  creator: Creator;
+}
+
+export interface Creator {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
+  email_verify: boolean;
+  email: string;
+}
+
+export interface Data {
+  title?: string;
+  position: string;
+  name: string;
+}
+
+export interface Error {
+  stage: string;
+  info: string;
+}
 
 const _customStyles: Styles = {
   overlay: {
@@ -42,28 +89,50 @@ export interface IStage {
   content_type_id: string;
 }
 
-const Dot = styled.div`
-  width: 12px;
-  height: 12px;
-  display: block;
-  border-radius: 11rem;
-  margin-top: 6px;
-  background-color: #589444;
-  position: absolute;
-  left: 41%;
-  top: 16px;
-  z-index: 200;
-`;
+// const Dot = styled.div`
+//   width: 12px;
+//   height: 12px;
+//   display: block;
+//   border-radius: 11rem;
+//   margin-top: 6px;
+//   background-color: #589444;
+//   position: absolute;
+//   left: 41%;
+//   top: 16px;
+//   z-index: 200;
+// `;
 
-const Line = styled.div`
-  width: 1px;
-  height: 100%;
-  border-right: solid 1px #58944461;
-  position: absolute;
-  left: 50%;
-  z-index: 3000;
-  display: block;
-`;
+// const Line = styled.div`
+//   width: 1px;
+//   height: 100%;
+//   border-right: solid 1px #58944461;
+//   position: absolute;
+//   left: 50%;
+//   z-index: 3000;
+//   display: block;
+// `;
+
+// {fields &&
+//   fields.map((_p: any) => (
+//     <Box>
+//       <Text sx={{ fontSize: 1, mb:2 , mt: 1, fontWeight: 600}}>Form</Text>
+//       { _p.map((pp: any) => (
+//         <Text as="code">{pp.name}</Text>
+//       ))}
+//     </Box>
+//   ))}
+
+const PipelineForm = (fields: any) => {
+  // console.log('fields', fields.fields.length);
+  return (
+    <Box>
+      <Text>Pipeline Form 2 ({fields?.fields?.length})</Text>
+      {fields.fields.map((f: any) => (
+        <h1>{f.id}</h1>
+      ))}
+    </Box>
+  );
+};
 
 const PipelineView = () => {
   const token = useStoreState(state => state.auth.token);
@@ -72,6 +141,11 @@ const PipelineView = () => {
   const [state, setState] = useState<string>('nostart');
 
   const [activePipeline, setActivePipeline] = useState<Pipeline>();
+  const [triggers, setTriggers] = useState<ITriggers>();
+
+  const [fields, setFields] = useState<any>();
+
+  const { register, handleSubmit } = useForm();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -88,14 +162,38 @@ const PipelineView = () => {
   const loadPipelineSuccess = (data: any) => {
     const res: Pipeline = data;
     setActivePipeline(res);
+
+    // setFields(res.stages)
+
+    if (res.stages) {
+      const mx: any = [];
+      res.stages.map((s: any) => {
+        // s.map((s: any) => {
+        // const fs:any = s?.content_type?.fields;
+        // console.log('fields', fs);
+        mx.push(s?.content_type?.fields);
+      });
+
+      setFields(mx);
+    }
   };
 
   // if we have a route param, load pipeline
   useEffect(() => {
     if (cId && token) {
       loadPipeline(cId, token);
+      loadTriggers(cId);
     }
   }, [token, cId]);
+
+  // if we have a route param, load pipeline
+  useEffect(() => {
+    if (cId === 'dummy') {
+      buildPipelineNow({name: 'remove_me'})
+    }
+  }, [cId]);
+
+  
 
   // When pipe line is ready
   useEffect(() => {
@@ -136,22 +234,85 @@ const PipelineView = () => {
    * RUn a pipeline
    * @param id pipline_id
    */
-  const runPipeline = (id:string) => {
+  const runPipeline = (id: string) => {
     console.info('starting to run pipleine', id);
-    setState("running");
-  }
+    setState('running');
+  };
+
+  /**
+   * Set Trigger log list
+   * @param data
+   */
+  const loadTriggerSuccess = (data: any) => {
+    const res: ITriggers = data;
+    setTriggers(res);
+  };
+
+  /**
+   * Load trigger history
+   * @param id pipline_id
+   */
+  const loadTriggers = (id: string) => {
+    console.log('loading triggers for ', id);
+    // setState('running');
+
+    loadEntity(token, `/pipelines/${id}/triggers`, loadTriggerSuccess);
+  };
+
+  const closeRunning = () => {
+    setState('nostart');
+  };
 
   /**
    * Build a pipeline with Data
-   * @param pipe 
+   * @param pipe
    */
   const buildPipelineNow = (pipe: any) => {
+    console.log('pipe', pipe);
+    // const sampleData = {
+    //   //1.  /content_types/{c_type_id}/data_templates/bulk_import
+    //   // 2.
+    // };
 
-    const sampleData = {
-      //1.  /content_types/{c_type_id}/data_templates/bulk_import
-      // 2. 
-    }
-  }
+    triggerPipeline(pipe?.id);
+  };
+
+  const triggerPipeline = (id: string) => {
+    const path = `/pipelines/${id}/triggers`;
+
+    // const data = {
+    //   title: 'Title Test',
+    //   desc: 'Description Test',
+    // };
+
+    const dataPost = {
+      data: {
+        position: 'HR Manager',
+        name: 'John Doe',
+        title: 'Title',
+      },
+    };
+
+    createEntity(dataPost, path, token);
+    // create(token, `pipelines/${cid}`, loadPipelineSuccess);
+  };
+
+  const pipelineCollect = () => {
+    setState('collect');
+  };
+
+  const onSubmit = (data: any) => {
+    // createEntity(data, 'organisations', token, onCreate);
+    console.log('data', data);
+    // return false;
+
+    const dataPost = {
+      data
+    };
+    const path = `/pipelines/${cId}/triggers`;
+    createEntity(dataPost, path, token);
+    // updateEntity('organisations', data, token, onCreate);
+  };
 
   /**
    * Delete this pipeline
@@ -165,98 +326,262 @@ const PipelineView = () => {
       {!activePipeline && <Text>Loading...</Text>}
       {activePipeline && (
         <Flex>
-          <Box sx={{ width: '70%'}}>
+          <Box sx={{ width: '70%' }}>
+            <Flex>
+              <Box>
+                <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2 }}>
+                  Pipelines › {activePipeline.name}
+                </Text>
+                <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
+              </Box>
+              <Box sx={{ ml: 'auto' }}>
+                <Flex py={3}>
+                  <Button
+                    onClick={() => runPipeline(activePipeline.id)}
+                    sx={{
+                      bg: 'green.7',
+                      border: 'solid 1px',
+                      borderColor: 'green.8',
+                      ':hover': {
+                        bg: 'green.8',
+                      },
+                    }}>
+                    <Flex>
+                      <Box sx={{ mr: 2 }}>
+                        <PlayCircle width={16} sx={{ mr: 2, bg: 'green.3' }} />
+                      </Box>
+                      <Text>Run</Text>
+                    </Flex>
+                  </Button>
+                  <Button
+                    sx={{
+                      ml: 2,
+                      bg: 'gray.0',
+                      border: 'solid 1px',
+                      borderColor: 'gray.3',
+                      color: 'gray.8',
+                    }}
+                    onClick={() => pipelineCollect()}>
+                    <Flex>
+                      <Box sx={{ mr: 2 }}>
+                        <PlayCircle width={16} sx={{ mr: 2 }} />
+                      </Box>
+                      <Text>Collect</Text>
+                    </Flex>
+                  </Button>
+                </Flex>
+              </Box>
+            </Flex>
             <Box>
-              <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2}}>
-                Pipelines › {activePipeline.name}
+              <Text
+                sx={{
+                  // p: 2,
+                  fontSize: 0,
+                  color: 'gray.7',
+                  letterSpacing: '-0.2',
+                  fontWeight: 100,
+                  // bg: 'white',
+                  borderRadius: 0,
+                  // border: 'solid 1px',
+                  // borderColor: 'gray.3',
+                }}>
+                {state === 'running' ? `Running` : ''}
               </Text>
-              <Text sx={{ fontSize: 2}}>
-                {activePipeline.name}
-              </Text>
-              <Flex py={3}>                
-                <Button onClick={()=> runPipeline(activePipeline.id)}>Run Pipeline</Button>
-              </Flex>
-              <Badge bg="red.7">{ state}</Badge>
-              <hr />
             </Box>
-
-            {state && state ==="running" && (
-                <Modal
-                  style={_customStyles}
-                  isOpen={true}
-                  // onRequestClose={closeModal}
-                  ariaHideApp={false}
-                  contentLabel="Example Modal">
-                  <Box>
-                    <Text>I'm going to ask you to enter data</Text>
-                    <Box sx={{ p: 3, bg: 'gray.0', borderLeft: 'solid 1px #eee', my: 3}}>
-                      <Text>DATA IS AUTO-FILLED FOR NOW</Text>
+            {state}
+            {state && (state === 'running' || state === 'collect') && (
+              <Modal
+                style={_customStyles}
+                isOpen={true}
+                onRequestClose={closeRunning}
+                ariaHideApp={false}
+                contentLabel="Example Modal">
+                <Box>
+                  <Text as="h2">Enter Fields</Text>
+                  <Box
+                    sx={{
+                      p: 3,
+                      bg: 'gray.0',
+                      borderLeft: 'solid 1px #eee',
+                      my: 3,
+                    }}>
+                    <Box
+                      mx={0}
+                      mb={3}
+                      as="form"
+                      onSubmit={handleSubmit(onSubmit)}>
+                      {fields &&
+                        fields.length > 0 &&
+                        fields.map((fd: any, index: any) => (
+                          <Box>
+                            Group {index}
+                            {fd.map((fx: any) => (
+                              <Box>
+                                <Field
+                                  name={`${fx.name}`}
+                                  label={fx.name}
+                                  defaultValue=""
+                                  register={register}
+                                />
+                              </Box>
+                            ))}
+                          </Box>
+                        ))}
+                      <Button>
+                        {/* onClick={() => buildPipelineNow(activePipeline)} */}
+                        Send
+                      </Button>
                     </Box>
-                    <Button onClick={() => buildPipelineNow(activePipeline)}>Run Now</Button>
+                    {/* <Text>DATA IS AUTO-FILLED FOR NOW</Text> */}
                   </Box>
-                </Modal>
-              )}
+                </Box>
+              </Modal>
+            )}
 
             <Box mx={0} mb={3}>
               <Box>
-                <Text>
+                {state === 'collect' && fields && fields.length > 0 && (
+                  <PipelineForm fields={fields} />
+                )}
+              </Box>
+              <Box>
+                <Text sx={{ fontSize: 3, pt: 3, pb: 2 }}>
                   Stages {activePipeline.stages.length}
                 </Text>
                 <Flex>
-                  <Box sx={{ borderRadius: 3, borderColor: 'red', border: 'solid 1px' }} my={4} mt={2} bg="gray.0">
+                  <Box
+                    sx={{
+                      borderRadius: 3,
+                      // borderColor: 'red',
+                      bg: 'gray.1',
+                      border: 'solid 1px',
+                      borderColor: 'gray.4',
+                      width: '100%',
+                    }}
+                    my={4}
+                    mt={2}
+                    bg="gray.0">
                     {activePipeline &&
                       activePipeline.stages.length > 0 &&
                       activePipeline.stages.map((props: any) => (
                         <Flex
-                          key={props.name}
+                          key={props.id}
                           sx={{
                             p: 0,
+                            mt: 3,
+                            pt: 3,
+                            pb: 3,
+
+                            // bg: 'blue',
                             borderBottom: 'solid 1px',
-                            borderColor: 'gray.1',
-                            background: '#fff',
+                            borderColor: 'gray.4',
+                            // background: '#fff',
                             borderLeft: 0,
                           }}>
-                          <Box sx={{ pl: 4}}>
-                            <Box sx={{ position: 'relative'}}>
-                              <Dot />
-                              <Line />
+                          <Box sx={{ pl: 4 }}>
+                            <Box
+                              sx={{
+                                bg: props.content_type.color,
+                                border: 0,
+                                borderRadius: 3,
+                                color: 'white',
+                                p: 3,
+                                position: 'relative',
+                              }}>
+                              {props.content_type.prefix}
+                              {/* <Dot /> */}
+                              {/* <Line /> */}
                             </Box>
                           </Box>
-                          <Box sx={{ paddingLeft: 3, p: 4 }}>
+                          <Box sx={{ paddingLeft: 3, pl: 4, pb: 4, pt: 0 }}>
                             <Text
+                              sx={{
+                                fontSize: 2,
+                                fontWeight: 600,
+                                color: 'gray.8',
+                              }}
                               mt={0}
                               // color="#111"
                               // fontSize={1}
                               // fontWeight={600}
-                              >
+                            >
                               {props.content_type.name}
                             </Text>
-                            <Text mt={1} color="#444">
-                              {props.content_type.id}
+                            <Text mt={0} color="gray.6">
+                              {props.content_type?.fields?.length} field
                             </Text>
                           </Box>
                           <Box ml="auto" mr={3}>
                             <Text
                               variant="caps"
-                              sx={{ color: 'secondary', marginLeft: 'auto', mt: 3 }}>
+                              sx={{
+                                color: 'secondary',
+                                marginLeft: 'auto',
+                                mt: 3,
+                              }}>
                               Edit
                             </Text>
                           </Box>
                         </Flex>
                       ))}
-                    <Box
-                      sx={{
-                        p: 3,
-                        color: 'blue',
-                        borderBottom: 'solid 1px #eee',
-                        borderLeft: 0,
-                      }}></Box>
+
+                    <Box sx={{ py: 3, mt: 4 }}>
+                      {triggers &&
+                        triggers?.triggers?.map((m: any) => (
+                          <Flex
+                            sx={{
+                              p: 4,
+                              bg: 'gray.1',
+                              borderBottom: 'solid 1px #ddd',
+                            }}>
+                            <Box
+                              sx={{
+                                p: 0,
+                                fontFamily: 'monospace',
+                                fontSize: 0,
+                                color:
+                                  m.state === 'success' ? 'green' : 'orange',
+                                borderRadius: 0,
+                                mr: 4,
+                              }}>
+                              {m.state}
+                            </Box>
+                            <Box
+                              as="pre"
+                              sx={{
+                                bg: 'gray.2',
+                                p: 0,
+                                color: 'gray.7',
+                                height: '30px',
+                                overflow: 'hidden',
+                                width: '60%',
+                                borderRadius: 0,
+                                mr: 4,
+                              }}>
+                              {JSON.stringify(m.error)}
+                            </Box>
+                            {/* {m.id} */}
+                            <Button
+                              sx={{
+                                // ml: 4,
+                                ml: 'auto',
+                                bg: 'gray.0',
+                                color: 'gray.8',
+                                border: 'solid 1px',
+                                borderColor: 'gray.5',
+                              }}>
+                              Re-run
+                            </Button>
+                          </Flex>
+                        ))}
+                    </Box>
                   </Box>
                 </Flex>
               </Box>
             </Box>
           </Box>
-          <Box>
+
+          <Box sx={{ pl: 4 }}>
             <Text mr={3} onClick={() => deletePipeline(cId)}>
               Delete
             </Text>

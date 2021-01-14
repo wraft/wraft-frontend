@@ -82,7 +82,7 @@ const Form = () => {
 
   const [insertable, setInsertable] = useState<any>();  
   const [status, setStatus] = useState<number>(0);
-  const [loaded, setLoaded] = useState<boolean>(false);
+  // const [loaded, setLoaded] = useState<boolean>(false);
   const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,7 +97,7 @@ const Form = () => {
 
   // toggle image uploader
   const [addAsset, setAddAsset] = useState<boolean>(false);
-  const [asset, setAsset] = useState<any>();
+  // const [asset, setAsset] = useState<any>();
 
   const toggleAssetForm = () => {
     setAddAsset(!addAsset);
@@ -201,6 +201,12 @@ const Form = () => {
     if (!cId) {
       setStatus(3);
       setDef(EMPTY_MARKDOWN_NODE);
+    }
+
+    // dummy
+
+    if(cId === 'xd') {
+      setCleanInsert(false);
     }
     if (token && cId) {
       loadTemplate(cId, token);

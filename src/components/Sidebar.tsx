@@ -80,6 +80,11 @@ const listMenu = [
     path: '/layouts',
   },
   {
+    name: 'Approvals',
+    logo: <Layout width={20} />,
+    path: '/approvals',
+  },
+  {
     name: 'Blocks',
     logo: <Water width={20} />,
     path: '/block_templates',
