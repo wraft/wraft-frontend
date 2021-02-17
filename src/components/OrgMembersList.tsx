@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'theme-ui';
+import { Box, Text, Flex, Image } from 'theme-ui';
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -85,9 +85,12 @@ const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
               {members &&
                 members.length > 0 &&
                 members.map((_m: Member) => (
-                  <Flex variant="plateBox">
+                  <Flex variant="plateBox" sx={{ border: 'solid 1px', pl: 4, borderColor: '#ddd', borderRadius: 3 }}>
                     <Box>
-                      <Text>{_m.name}</Text>
+                      <Image src={`http://localhost:4000/` + _m.profile_pic} sx={{ width: '40px', height: '40px',mr: 3}}/>
+                    </Box>
+                    <Box>
+                      <Text sx={{ fontWeight: 600}}>{_m.name}</Text>
                       <Text sx={{ fontSize: 0,  color: 'gray.8' }}>
                         {_m.email}
                       </Text>

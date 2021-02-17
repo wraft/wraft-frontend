@@ -252,60 +252,7 @@ const ContentList = () => {
           </Box>
         </Flex> */}
         <Box sx={{ pl: 0, pt: 2 }}>
-          <Box>
-            <Text
-              // ml={2}
-              mt={3}
-              sx={{
-                textTransform: 'uppercase',
-                mb: 2,
-                fontSize: 0,
-                pt: 3,
-                pb: 2,
-              }}>
-              Actionables
-            </Text>
-            <Flex
-              sx={{
-                pl: 0,
-                // borderBottom: 'solid 1px',
-                borderColor: 'gray.3',
-                alignItems: 'flex-start',
-                // bg: 'gray.1',
-                py: 3,
-                // p: 3,
-              }}>
-              <Flex
-                sx={{
-                  pl: 0,
-                  // borderBottom: 'solid 1px',
-                  // borderColor: 'gray.3',
-                  alignItems: 'flex-start',
-                  // bg: 'red.0',
-                  flexGrow: 1,
-                }}>
-                <Image
-                  width={40}
-                  sx={{ borderRadius: 3 }}
-                  height="auto"
-                  src="https://logo.clearbit.com/dropbox.com"
-                />
-                <Box pl={3} pr={3}>
-                  <Text sx={{ fontSize: 0, color: 'gray.6' }}>Contract</Text>
-                  <Text sx={{ fontSize: 1, fontWeight: 400, color: 'gray.8' }}>
-                    Storage Partner Contract
-                  </Text>
-                  <Text sx={{ fontSize: 0 }}>Jan 24</Text>
-                </Box>
-              </Flex>
-            </Flex>
-            <Box sx={{ py: 2 }} variant="w100">
-              <Button variant="small" mr={2}>
-                Review
-              </Button>
-              {/* <Button variant="tertiary">Review</Button> */}
-            </Box>
-          </Box>
+          
         </Box>
       </Box>
     </Flex>

@@ -325,18 +325,21 @@ const theme = {
     },
     button: {
       fontWeight: 500,
-      color: 'inherit',
+      color: 'white',
       border: 'solid 1px',
       fontFamily: 'heading',
       fontSize: 0,
-      px: 2,
+      px: 3,
       py: 2,
-      borderRadius: 2,
-      bg: 'gray.1',
+      borderRadius: 4,
+      bg: 'primary',
       borderColor: 'gray.3',
       letterSpacing: -0.2,
       textDecoration: 'none',
       display: 'inline-flex',
+      ':hover': {
+        bg: 'secondary'
+      }
     }
   },
   variants: {

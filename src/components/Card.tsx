@@ -28,7 +28,14 @@ const LayoutCard = ({
 }: IItemField) => {
   return (
     <Box variant="m" sx={{ borderLeftColor: `${color}`, mb: 4 }}>
-      <Flex bg="white">
+      <Flex
+        bg="white"
+        sx={{
+          border: 'solid 1px #dadada',
+          borderRadius: 4,
+          maxHeight: '120px',
+          overflow: 'hidden',          
+        }}>
         <Box
           variant="boxCard"
           sx={{
@@ -41,13 +48,16 @@ const LayoutCard = ({
             alignContent: 'center',
             justifyContent: 'center',
             textAlign: 'center',
-            // height: '80px',
             backgroundImage: `url(${API_HOST}${screenshot ? screenshot : ''}`,
           }}>
-          <Text sx={{ pt: 4, color: 'white', fontSize: 4, fontWeight: 600 }}>{prefix}</Text>
-          <Text sx={{ pt: 0, color: 'white', fontSize: 0, fontWeight: 100 }}>25k docs</Text>
+          <Text sx={{ pt: 4, color: 'white', fontSize: 4, fontWeight: 600 }}>
+            {prefix}
+          </Text>
+          {/* <Text sx={{ pt: 0, color: 'white', fontSize: 0, fontWeight: 100 }}>
+            25k docs
+          </Text> */}
         </Box>
-        <Box sx={{ pt: 4, pr: 4}}>
+        <Box sx={{ pt: 4, pr: 4 }}>
           <Link href={`/${model}/[id]`} path={`/${model}/${id}`}>
             <Text sx={{ fontSize: 1, fontWeight: 500 }}>{name}</Text>
           </Link>

@@ -86,7 +86,7 @@ const Nav = ({ navtitle = '' }: INav) => {
                     sx={{
                       alignContent: 'top',
                       verticalAlign: 'top',
-                      bg: 'gray.2',
+                      // bg: 'gray.2',
                     }}>
                     {profile.profile_pic && (
                       <>
@@ -100,7 +100,9 @@ const Nav = ({ navtitle = '' }: INav) => {
                             maxWidth: '40px',
                             height: '100%',
                             borderRadius: '33rem',
-                            // border: 'solid 1px #eee',
+                            // bg: 'red'
+                            border: 'solid 1px',
+                            borderColor: 'gray.6',
                           }}
                         />
                         {/* <div ref={setArrowElement} style={styles.arrow} /> */}
