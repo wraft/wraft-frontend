@@ -35,11 +35,12 @@ export const Toolbar: FC = props => {
     <Menu
       {...props}
       css={sx({
+        bg: 'white',
         position: 'relative',
-        padding: '1px 28px 17px',
-        margin: '0 -20px',
-        borderBottom: '2px solid #eee',
-        marginBottom: '20px',
+        // padding: '1px 28px 17px',
+        ml: -3,
+        mt: 3,
+        mb: 1,
       })}
     />
   );
@@ -64,7 +65,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props,
         type="button"
       {...props}
       ref={ref}
-      // sx={{  mr: 0, bg: 'white', border: 'solid 1px #eee'}}
+      sx={{  mr: 0, bg: 'white', border: 'solid 1px #eee'}}
       css={sx(
         {
           marginLeft: props.index !== 0 ? 3 : 0,

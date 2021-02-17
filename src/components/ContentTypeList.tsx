@@ -74,8 +74,8 @@ const ContentTypeList = () => {
           <Link
             variant="button"
             href="/content-types/new"
-            icon={<Plus width={20} />}>
-            <Text>New Content Type</Text>
+            icon={<Plus width={20} sx={{ mt: 1}} />}>
+            <Text sx={{ml: 1, pt: 1, fontSize: 0, fontWeight: 300}}>New Content Type</Text>
           </Link>
         </Box>
       </Flex>

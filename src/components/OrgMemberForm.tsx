@@ -54,7 +54,7 @@ const OrgMemberForm = () => {
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
-  const [members, setMembers] = useState<Member|undefined>();
+  const [members, setMembers] = useState<Member | undefined>();
   const [organ, setOrgan] = useState<any>();
 
   const onCreate = (d: any) => {
@@ -123,7 +123,7 @@ const OrgMemberForm = () => {
    * Set Profile Context
    */
 
-  useEffect(() => {    
+  useEffect(() => {
     if (profile) {
       loadEntity(token, `organisations/${profile?.organisation_id}`, onOrgLoad);
       loadEntity(
@@ -145,44 +145,60 @@ const OrgMemberForm = () => {
       )}
 
       <Box>
-          {organ && (
+        {organ && (
+          <Box>
+            <OrgMembersList id={organ?.id} members={members} />
             <Box>
-              <OrgMembersList id={organ?.id} members={members} />
-              <Box>
-                <Text variant="pagetitle">Invite Members</Text>
-                <Box
-                  mx={0}
-                  mb={3}
-                  variant="w100"
-                  as="form"
-                  onSubmit={handleSubmit(onInviteSubmit)}>
-                  <Field
-                    name="organisation_id"
-                    label="Org ID"
-                    defaultValue={organ?.id}
-                    register={register}
-                  />
-                  <Text variant="pagetitle">{organ?.name}</Text>
+              <Text variant="pagetitle">Invite Members</Text>
+              <Box
+                mx={0}
+                mb={3}
+                variant="w100"
+                as="form"
+                
+                // sx={{ bg: 'red.0'}}
+                onSubmit={handleSubmit(onInviteSubmit)}>
+                  <Box
+                  sx={{ display: 'none'}}
+                  >
+                <Field
+                  name="organisation_id"
+                  label="Org ID"
+                  defaultValue={organ?.id}
+                  register={register}
+                />
+                <Text
+                  variant="blocktitle"
+                  sx={{
+                    fontSize: 1,
+                    // pl: 3,
+                    py: 2,
+                    color: 'primary',
+                    textTransform: 'uppercase',
+                  }}>
+                  {organ?.name}
+                </Text>
+                </Box>
 
-                  {/* <Field
+                {/* <Field
                   name="name"
                   label="Name"
                   defaultValue="Anand Ash"
                   register={register}
                 /> */}
-                  <Field
-                    name="email"
-                    label="Email Address"
-                    defaultValue="anand@aurut.com"
-                    register={register}
-                  />
-                  <Button type="submit" ml={2} mt={3}>
-                    Update Profile
-                  </Button>
-                </Box>
+                <Field
+                  name="email"
+                  label="Email Address"
+                  defaultValue="anand@aurut.com"
+                  register={register}
+                />
+                <Button variant="secondary" type="submit" ml={0} mt={3}>
+                  Invite
+                </Button>
               </Box>
             </Box>
-          )}
+          </Box>
+        )}
       </Box>
     </Box>
   );

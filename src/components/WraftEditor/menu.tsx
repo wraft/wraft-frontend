@@ -188,11 +188,11 @@ const MenuItem: FC<MenuItemProps> = ({
       onClick={onClick}
       state={state}
       disabled={disabled}
-      data-rel={name}
+      data-rel={name}      
       index={index}>
       <Icon
         variant={variant}
-        styles={{ color: disabled ? 'gray' : undefined }}
+        styles={{ color: disabled ? 'gray' : 'primary' }}
       />
     </IconButton>
   );

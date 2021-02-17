@@ -123,17 +123,17 @@ export const TimeAgo = (time: any) => {
   return (
     <Text
       pl={0}
-      pt={1}
+      pt='3px'
       sx={{
         fontSize: 0,
         '.hov': { opacity: 0 },
         ':hover': { '.hov': { opacity: 1 } },
       }}
       color="gray.6">
-      {timed} -{' '}
-      <Box as="span" className="hov">
+      {timed}
+      {/* <Box as="span" className="hov">
         {timedAgo}
-      </Box>
+      </Box> */}
     </Text>
   );
 };

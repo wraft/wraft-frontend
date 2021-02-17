@@ -16,7 +16,7 @@ const NavLink: React.FC<Props> = ({ href, children, icon, variant, path }) => {
     <NextLink href={href} as={path || ""}>
       <Link variant={variant || "primary"}>
         { icon &&
-          <Box>{icon}</Box>
+          <Box sx={{ pt: 1}}>{icon}</Box>
         }
         {children}
       </Link>

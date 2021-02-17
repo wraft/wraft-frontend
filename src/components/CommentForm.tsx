@@ -81,20 +81,21 @@ const CommentForm = (props: CommentFormProps) => {
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       {comments && comments.length > 0 && (
-        <Box>
+        <Box sx={{ maxWidth: '40vh' }}>
           {comments.map((comment: Comment) => (
             <Box
               // pb={2}
               // pt={2}
-              mb={1}
+              // mb={1}
               sx={{
+                // bg: 'blue.0',
                 borderBottom: 'solid 1px',
-                borderColor: 'gray.2',
+                borderColor: 'gray.3',
                 pb: 3,
                 mb: 2,
               }}>
               <Flex sx={{ display: 'inline-flex' }}>
-                <Box sx={{ pl: 3 }}>
+                <Box sx={{ pl: 0 }}>
                   <Flex
                     sx={{
                       // ml: -4,
@@ -103,50 +104,73 @@ const CommentForm = (props: CommentFormProps) => {
                       // bg: 'red.1',
                       // border: 'solid 1px',
                       // borderColor: 'red.3',
-                      borderRadius: 99,
+                      // borderRadius: 99,
                       pr: 2,
-                      alignItems: 'flex-start'
+                      alignItems: 'flex-start',
                     }}>
                     <Image
                       sx={{
                         // border: 'solid 2px',
                         // borderColor: 'red.5',
                         borderRadius: 99,
-                        mr: 2,
-                        width: '24px',
-                        height: '24px',
+                        mr: 1,
+                        width: '28px',
+                        height: '28px',
                       }}
                       src={`${API_HOST}${comment?.profile?.profile_pic}`}
                     />
                     <Text
                       sx={{
                         pl: 0,
-                        fontSize: '15px',
+                        fontSize: 1,
                         pb: 0,
                         fontWeight: 600,
-                        pt: '1px',
+                        minWidth: '120px',
+                        pt: 0,
+                        ml: 2,
+                        color: 'blue.9',
                       }}>
                       {comment?.profile?.name}
                     </Text>
-                    <Box as="span" pl={1}>
+
+                    <Box as="span" pl={2}>
                       <TimeAgo time={comment?.updated_at} />
                     </Box>
                   </Flex>
-
-                  <Text as="p" sx={{ mt: 0, fontSize: '15px', pt: 1, m: 0 }}>
-                    {comment.comment}
-                  </Text>
+                  {/* <Box sx={{ bg: 'white' }}>
+                    <Text
+                      as="p"
+                      sx={{ mt: 0, color: 'primary', fontSize: 1, pt: 0, pl: 4, m: 0 }}>
+                      {comment.comment}
+                    </Text>
+                  </Box> */}
                 </Box>
               </Flex>
+              <Box sx={{ pl: 4 }}>
+                <Text
+                  as="p"
+                  sx={{
+                    mt: 0,
+                    color: 'gray.7',
+                    fontSize: 1,
+                    pt: 0,
+                    lineHeight: 1.35,
+                    // pl: '24px',
+                    pl: 2,
+                    m: 0,
+                  }}>
+                  {comment.comment}
+                </Text>
+              </Box>
             </Box>
           ))}
         </Box>
       )}
-      <Box>
+      {/* <Box>
         <Text mb={3} mt={3}>
           Add Comment
         </Text>
-      </Box>
+      </Box> */}
       <Box mx={0} mb={0}>
         <Flex>
           <Box>
