@@ -1,7 +1,8 @@
 import React from 'react';
 import Head from 'next/head';
 import Page from '../../src/components/Page';
-import { Flex, Text } from 'theme-ui';
+import { Flex } from 'theme-ui';
+import OrgPermissionList from '../../src/components/OrgPermissionList';
 import OrgSidebar from '../../src/components/OrgSidebar';
 
 export const CompanyForm = () => {
@@ -14,7 +15,7 @@ export const CompanyForm = () => {
       <Page>
         <Flex>
           <OrgSidebar/>
-          <Text variant="pagetitle">Permission</Text>
+          <OrgPermissionList/>          
         </Flex>
       </Page>
     </>
