@@ -12,7 +12,7 @@ import {
 } from '@styled-icons/boxicons-regular';
 
 import { useStoreState } from 'easy-peasy';
-import { loadEntity, deleteEntity, fetchAPI } from '../utils/models';
+import { deleteEntity, fetchAPI } from '../utils/models';
 import { Spinner } from 'theme-ui';
 import ProfileCard from './ProfileCard';
 
@@ -162,12 +162,9 @@ const ContentList = () => {
 
   const profile = useStoreState(state => state.profile.profile);
 
-  const loadDataSuccess = (data: IPageMeta) => {
-    setLoading(true);
-    const res: IField[] = data.contents;
-    setContents(res);
-    setPageMeta(data);
-  };
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const loadData = () => {
     fetchAPI(`contents`)
@@ -180,7 +177,6 @@ const ContentList = () => {
         .catch(() => {
           setLoading(true);
         });
-    // loadEntity(token, 'contents', loadDataSuccess);
   };
 
   /** DELETE content
@@ -198,11 +194,7 @@ const ContentList = () => {
     console.log('changing', _e);
   };
 
-  useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+  
 
   return (
     <Flex>
