@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { FC, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Image } from 'rebass';
 
@@ -8,8 +8,6 @@ const DropDownBoxBlock = styled(Box)`
   position: relative;
   display: flex;
   align-items: center;
-  // width: 48px;
-  // height: 48px;
   text-transform: capitalize;
 `;
 
@@ -27,7 +25,12 @@ const DropDownList = styled(Box)`
   }
 `;
 
-export default function Dropdown({imageUrl, children}) {
+interface Props {
+    children?: any;
+    imageUrl: string;
+}
+
+const Dropdown: FC<Props> = ({imageUrl, children}) => {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
 
@@ -84,3 +87,5 @@ export default function Dropdown({imageUrl, children}) {
     </DropDownBoxBlock>
   );
 }
+
+export default Dropdown;
