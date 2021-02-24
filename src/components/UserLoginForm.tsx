@@ -47,10 +47,17 @@ const Form = () => {
       as="form"
       onSubmit={handleSubmit(onSubmit)}
       py={3}
-      mt={4}>
-      <Text variant="pagetitle">Sign-in to Wraft Docs</Text>
-      <Box mx={-2} mb={3}>
-        <Box px={2} pb={3}>
+      mt={4}
+      sx={{
+        // bg: 'gray.1',
+        mt: 5,
+        mb: 6,
+      }}>
+      <Text variant="pagetitle" sx={{ fontWeight: 500, mb: 3 }}>
+        Sign-in to Wraft Docs
+      </Text>
+      <Box mx={-2} mb={3} sx={{ maxWidth: '40ch', mb: 4 }}>
+        <Box px={2} pb={3} sx={{}}>
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -75,18 +82,18 @@ const Form = () => {
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
       </Box>
-      <Flex sx={{ flexWrap: "wrap", mt: 2, mx: -2 }}>
-        <Button ml={2}>
+      <Flex sx={{ flexWrap: 'wrap', mt: 1, mx: -2 }}>
+        <Button ml={2} sx={{ mt: 0, mr: 3, ':hover': { bg: `blue.9` } }}>
           {ready && <Spinner color="white" width={24} />}
-          {!ready && <Text>Login</Text>}
+          {!ready && <Text sx={{ fontWeight: 800 }}>Login</Text>}
         </Button>
-        <Text pl={3} pt={2}>
-          Not a user ?{' '}
-          <Link href="signup">
-            <Text>Login</Text>
-          </Link>
-        </Text>
       </Flex>
+      <Text pl={0} pt={2}>
+        Not a user yet ?{' '}
+        <Link href="signup">
+          <Text sx={{ fontWeight: 800 }}>Join us now!</Text>
+        </Link>
+      </Text>
     </Box>
   );
 };
