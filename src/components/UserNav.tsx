@@ -73,7 +73,7 @@ const UserNav = () => {
           <Box width={4 / 12}>
             <Link href={token ? '/user-profile' : '/'}>
               <Logo />
-              { token }
+              {token}
             </Link>
           </Box>
 
@@ -82,15 +82,28 @@ const UserNav = () => {
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text fontWeight="bold" sx={{ px: 4, py: 2 }}>Join Wraft</Text>
+                    <Text fontWeight="bold" sx={{ px: 4, py: 2 }}>
+                      Join Wraft
+                    </Text>
                   </Link>
                   <Link href="/login">
-                    <Text fontWeight="bold" sx={{ px: 4, py: 2 , bg: 'gray.4', ml: 4 }}>Login</Text>
+                    <Text
+                      sx={{
+                        bg: 'blue',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        borderRadius: `8px`,
+                        px: 4,
+                        py: 2,
+                        ml: 4,
+                      }}>
+                      Login
+                    </Text>
                   </Link>
                 </Fragment>
               )}
               {token && token !== '' && (
-                <Flex ml={2} sx={{ alignContent: 'flex-start'}}>
+                <Flex ml={2} sx={{ alignContent: 'flex-start' }}>
                   {console.log('profile_pic', profile && profile.profile_pic)}
                   {profile && (
                     <Text fontSize={1} ml={2} pt={2} mr={3} fontWeight="bold">
@@ -98,7 +111,11 @@ const UserNav = () => {
                     </Text>
                   )}
                   {profile && profile.profile_pic?.length > 0 && (
-                    <Avatar sx={{ height: '100px', width: '100px'}} onClick={onUserLogout} src={profile.profile_pic} />
+                    <Avatar
+                      sx={{ height: '100px', width: '100px' }}
+                      onClick={onUserLogout}
+                      src={profile.profile_pic}
+                    />
                   )}
                   {profile && profile.profile_pic === null && <UserIcon />}
                 </Flex>
