@@ -12,7 +12,7 @@ import {
 } from '@styled-icons/boxicons-regular';
 
 import { useStoreState } from 'easy-peasy';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { loadEntity, deleteEntity, fetchAPI } from '../utils/models';
 import { Spinner } from 'theme-ui';
 import ProfileCard from './ProfileCard';
 
@@ -169,8 +169,18 @@ const ContentList = () => {
     setPageMeta(data);
   };
 
-  const loadData = (token: string) => {
-    loadEntity(token, 'contents', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI(`contents`)
+        .then((data: any) => {
+          setLoading(true);
+          const res: IField[] = data.contents;
+          setContents(res);
+          setPageMeta(data);
+        })
+        .catch(() => {
+          setLoading(true);
+        });
+    // loadEntity(token, 'contents', loadDataSuccess);
   };
 
   /** DELETE content
