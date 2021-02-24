@@ -60,6 +60,25 @@ export const fetchAPI = (path: any, query = '') =>
       });
   });
 
+/**
+ * delete API
+ */
+export const deleteAPI = (path: any) =>
+  new Promise((resolve, reject) => {
+    httpClient
+      .delete(`/${path}`)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        const res = err.response.data;
+        if (err.response.status === 400) {
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
 
 
 
