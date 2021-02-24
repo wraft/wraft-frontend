@@ -26,9 +26,9 @@ const UserHome = () => {
       <Box variant="hero" pb={4} bg="gray.2" sx={{ pb: 6}}>
         <Container width={70} bg='' sx={{ mb: 6}}>
           <Box p={4} pl={0} pt={6} pb={3}>
-            <Text variant="pagetitle" sx={{ fontSize: 5, color: 'gray.9' }}>
+            <Text variant="pagetitle" sx={{ fontSize: 5, fontWeight: 600, color: 'gray.9' }}>
               Professional Document Pipelines
-            <Text sx={{ fontSize: 4, color: 'gray.6' }} >Automate your document creation process</Text>
+            <Text sx={{ fontWeight: 300, fontSize: 4, color: 'gray.6' }} >Automate your document creation process</Text>
             </Text>
           </Box>
           <Button sx={{ mb: 5}}>Get Started</Button>
