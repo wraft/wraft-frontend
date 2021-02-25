@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button } from 'rebass';
-// import Link from './NavLink';
 import { Plus } from '@styled-icons/boxicons-regular';
-
 import Modal from 'react-modal';
-
-// import { Spinner, IconButton } from 'theme-ui';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-
 import { loadEntity } from '../utils/models';
-// import PageHeader from './PageHeader';
 import { modalStyle } from '../utils';
-
-// import CategoryForm from './NutriLabelForm';
-
 import ImagesForm from './AssetForm';
 
 // const CategoryCard = (props: any) => (
