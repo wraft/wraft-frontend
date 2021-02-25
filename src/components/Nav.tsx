@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import cookie from 'js-cookie';
 
@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // relative
 import Link from './NavLink';
 // import { UserIcon } from './Icons';
-import { Image } from 'theme-ui';
+// import { Image } from 'theme-ui';
 import { API_HOST, checkUser } from '../utils/models';
 import { Exit } from '@styled-icons/boxicons-solid';
 import Dropdown  from './common/Dropdown';
@@ -34,7 +34,7 @@ const Nav = ({ navtitle = '' }: INav) => {
 
 
   // popper
-  const [toggleDrop, setToggleDrop] = useState<boolean>(false);
+  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
   // const [referenceElement, setReferenceElement] = useState(null);
   // const [popperElement, setPopperElement] = useState(null);
   // const [arrowElement, setArrowElement] = useState(null);
@@ -46,13 +46,6 @@ const Nav = ({ navtitle = '' }: INav) => {
     setProfile(data);
   };
 
-  /**
-   * Toggle Dropdown
-   */
-
-  const toggleDropDown = () => {
-    setToggleDrop(!toggleDrop);
-  };
 
   useEffect(() => {
     // check if token is there

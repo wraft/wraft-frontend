@@ -32,7 +32,7 @@ interface Props {
 
 const Dropdown: FC<Props> = ({imageUrl, children}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef(null);
+  const wrapperRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: any) {
