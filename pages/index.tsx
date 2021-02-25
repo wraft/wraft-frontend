@@ -1,14 +1,14 @@
-import React from 'react';
-import Head from 'next/head';
-import { Text, Box } from 'rebass';
-import Page from '../src/components/Page';
-import { useStoreState } from 'easy-peasy';
+import React from 'react'
+import Head from 'next/head'
+import { Text, Box } from 'rebass'
+import Page from '../src/components/Page'
+import { useStoreState } from 'easy-peasy'
 
-import UserNav from '../src/components/UserNav';
-import UserHome from '../src/components/UserHome';
+import UserNav from '../src/components/UserNav'
+import UserHome from '../src/components/UserHome'
 
 export const Index = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token)
   return (
     <>
       <Head>
@@ -26,8 +26,10 @@ export const Index = () => {
       )}
       {token && (
         <Page>
-          <Box pb={5} pt={5} sx={{ pl: 5}}>
-            <Text variant="pagetitle" pb={0} mb={2}>Welcome to Wraft Docs</Text>
+          <Box pb={5} pt={5} sx={{ pl: 5 }}>
+            <Text variant="pagetitle" pb={0} mb={2}>
+              Welcome to Wraft Docs
+            </Text>
             <Text fontSize={2} sx={{ color: '#999', pt: 0 }}>
               Select a template to begin with
             </Text>
@@ -35,7 +37,7 @@ export const Index = () => {
         </Page>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index

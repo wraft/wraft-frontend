@@ -38,13 +38,13 @@ interface IImageList {
 }
 
 const Form = (props: IImageList) => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   // const getThemes = useStoreActions((actions: any) => actions.themes.fetch);
   const setCats = useStoreActions((actions: any) => actions.images.set);
   // const addCats = useStoreActions((actions: any) => actions.images.add);
   // const delCats = useStoreActions((actions: any) => actions.images.remove);
-  const allCats = useStoreState(state => state.images.items);
+  const allCats = useStoreState((state) => state.images.items);
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -64,6 +64,7 @@ const Form = (props: IImageList) => {
 
   const loadData = (t: string) => {
     loadEntity(t, 'assets', loadDataSuccess);
+    return;
   };
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const Form = (props: IImageList) => {
     }
   }, [token]);
 
-  useEffect(() => {}, [allCats]);
+  // useEffect(() => {}, [allCats])
 
   // const onDelete = (data: any) => {
   //   delCats(data.id);
@@ -83,7 +84,7 @@ const Form = (props: IImageList) => {
   const onDone = (data: any) => {
     toggleModal();
     props.onSuccess(data);
-  }
+  };
 
   return (
     <Box py={3} width={10 / 12} mt={4}>

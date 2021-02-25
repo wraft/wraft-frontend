@@ -9,20 +9,20 @@ import { Button } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 
 export interface Theme {
-  total_pages:   number;
+  total_pages: number;
   total_entries: number;
-  themes:        ThemeElement[];
-  page_number:   number;
+  themes: ThemeElement[];
+  page_number: number;
 }
 
 export interface ThemeElement {
-  updated_at:  string;
-  typescale:   any;
-  name:        string;
+  updated_at: string;
+  typescale: any;
+  name: string;
   inserted_at: string;
-  id:          string;
-  font:        string;
-  file:        null;
+  id: string;
+  font: string;
+  file: null;
 }
 
 const ItemField = (props: any) => {
@@ -32,9 +32,7 @@ const ItemField = (props: any) => {
       key={props.id}
       p={3}
       sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
-      <Text>
-        {props.name}
-      </Text>
+      <Text>{props.name}</Text>
       <Text pt={1} color="grey">
         Sample Field Description
       </Text>
@@ -44,7 +42,7 @@ const ItemField = (props: any) => {
 };
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const { addToast } = useToasts();
 
@@ -58,9 +56,9 @@ const Form = () => {
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token)
+    deleteEntity(`themes/${id}`, token);
     addToast('Deleted Theme', { appearance: 'success' });
-  }
+  };
 
   useEffect(() => {
     if (token) {
@@ -75,14 +73,14 @@ const Form = () => {
           <Text>New</Text>
         </Link>
       </Flex>
-      <Text mb={3}>
-        All Themes
-      </Text>
+      <Text mb={3}>All Themes</Text>
       <Box mx={0} mb={3}>
         <Box>
           {contents &&
             contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} onDelete={onDelete}/>)}
+            contents.map((m: any) => (
+              <ItemField key={m.id} {...m} onDelete={onDelete} />
+            ))}
         </Box>
       </Box>
     </Box>
