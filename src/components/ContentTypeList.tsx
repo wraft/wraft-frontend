@@ -45,7 +45,7 @@ const ContentTypeList = () => {
     deleteEntity(`content_types/${id}`, token);
   };
 
-  const loadData = (t: string) => {
+  const loadData = () => {
     fetchAPI('content_types')
         .then((data: any) => {
           setLoading(true);
@@ -58,10 +58,8 @@ const ContentTypeList = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+    loadData()
+  }, []);
 
   return (
     <Box py={3} sx={{ width: '100%'}}>

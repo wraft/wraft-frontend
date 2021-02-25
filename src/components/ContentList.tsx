@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Badge, Image, Button } from 'theme-ui';
+import { Box, Text, Flex, Badge } from 'theme-ui';
 import MenuItem from './NavLink';
 
 import { parseISO, formatDistanceToNow } from 'date-fns';
