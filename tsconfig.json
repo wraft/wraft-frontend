@@ -20,6 +20,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "__tests__"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server.js", "src/components/WraftEditor"]
 }

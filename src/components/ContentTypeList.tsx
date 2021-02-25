@@ -47,14 +47,14 @@ const ContentTypeList = () => {
 
   const loadData = () => {
     fetchAPI('content_types')
-        .then((data: any) => {
-          setLoading(true);
-          const res: IField[] = data.content_types;
-          setContents(res);
-        })
-        .catch(() => {
-          setLoading(true);
-        });
+      .then((data: any) => {
+        setLoading(true);
+        const res: IField[] = data.content_types;
+        setContents(res);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
   };
 
   useEffect(() => {
