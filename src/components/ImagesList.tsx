@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Button } from 'rebass';
 import { Plus } from '@styled-icons/boxicons-regular';
 import Modal from 'react-modal';
@@ -28,14 +28,14 @@ interface IImageList {
   hideList: boolean;
 }
 
-const Form = (props: IImageList) => {
+const Form: FC<IImageList> = ({ onSuccess }) => {
   const token = useStoreState((state) => state.auth.token);
 
   // const getThemes = useStoreActions((actions: any) => actions.themes.fetch);
   const setCats = useStoreActions((actions: any) => actions.images.set);
   // const addCats = useStoreActions((actions: any) => actions.images.add);
   // const delCats = useStoreActions((actions: any) => actions.images.remove);
-  const allCats = useStoreState((state) => state.images.items);
+  // const allCats = useStoreState((state) => state.images.items);
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -74,7 +74,7 @@ const Form = (props: IImageList) => {
 
   const onDone = (data: any) => {
     toggleModal();
-    props.onSuccess(data);
+    onSuccess(data);
   };
 
   return (
