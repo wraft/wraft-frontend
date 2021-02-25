@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from 'rebass';
 
@@ -6,7 +6,7 @@ import { Flex } from 'rebass';
 import Page from '../../src/components/Page';
 import PageHeader from '../../src/components/PageHeader';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>

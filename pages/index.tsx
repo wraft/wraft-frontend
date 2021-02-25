@@ -1,14 +1,13 @@
-import React from 'react'
-import Head from 'next/head'
-import { Text, Box } from 'rebass'
-import Page from '../src/components/Page'
-import { useStoreState } from 'easy-peasy'
+import { FC } from 'react';
+import Head from 'next/head';
+import { Text, Box } from 'rebass';
+import Page from '../src/components/Page';
+import { useStoreState } from 'easy-peasy';
+import UserNav from '../src/components/UserNav';
+import UserHome from '../src/components/UserHome';
 
-import UserNav from '../src/components/UserNav'
-import UserHome from '../src/components/UserHome'
-
-export const Index = () => {
-  const token = useStoreState((state) => state.auth.token)
+const Index: FC = () => {
+  const token = useStoreState((state) => state.auth.token);
   return (
     <>
       <Head>
@@ -37,7 +36,7 @@ export const Index = () => {
         </Page>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Index
+export default Index;

@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import ProfileForm from '../../src/components/ProfileForm';
 import Page from '../../src/components/Page';
 import { Flex } from 'theme-ui';
 import OrgSidebar from '../../src/components/OrgSidebar';
 
-export const Contents = () => {
+const Contents: FC = () => {
   return (
     <>
       <Head>
@@ -14,8 +14,8 @@ export const Contents = () => {
       </Head>
       <Page>
         <Flex>
-          <OrgSidebar/>
-          <ProfileForm />          
+          <OrgSidebar />
+          <ProfileForm />
         </Flex>
       </Page>
     </>

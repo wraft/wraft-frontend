@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
 import { Plus } from './Icons';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { fetchAPI, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';
 
@@ -14,7 +14,6 @@ export interface Theme {
   themes: ThemeElement[];
   page_number: number;
 }
-
 export interface ThemeElement {
   updated_at: string;
   typescale: any;
@@ -41,18 +40,18 @@ const ItemField = (props: any) => {
   );
 };
 
-const Form = () => {
+const Form: FC = () => {
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const { addToast } = useToasts();
 
-  const loadDataSuccess = (data: any) => {
-    const res: ThemeElement[] = data.themes;
-    setContents(res);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, 'themes', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('themes')
+      .then((data: any) => {
+        const res: ThemeElement[] = data.themes;
+        setContents(res);
+      })
+      .catch();
   };
 
   const onDelete = (id: string) => {
@@ -61,10 +60,8 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+    loadData();
+  }, []);
 
   return (
     <Box py={3} mt={4}>
