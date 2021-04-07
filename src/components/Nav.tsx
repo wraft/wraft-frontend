@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import cookie from 'js-cookie';
 
@@ -7,9 +7,10 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // relative
 import Link from './NavLink';
 // import { UserIcon } from './Icons';
-import { Image } from 'theme-ui';
+// import { Image } from 'theme-ui';
 import { API_HOST, checkUser } from '../utils/models';
 import { Exit } from '@styled-icons/boxicons-solid';
+import Dropdown  from './common/Dropdown';
 
 // import { usePopper } from 'react-popper';
 
@@ -31,8 +32,9 @@ const Nav = ({ navtitle = '' }: INav) => {
   const token = useStoreState(state => state.auth.token);
   const profile = useStoreState(state => state.profile.profile);
 
+
   // popper
-  const [toggleDrop, setToggleDrop] = useState<boolean>(false);
+  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
   // const [referenceElement, setReferenceElement] = useState(null);
   // const [popperElement, setPopperElement] = useState(null);
   // const [arrowElement, setArrowElement] = useState(null);
@@ -44,13 +46,6 @@ const Nav = ({ navtitle = '' }: INav) => {
     setProfile(data);
   };
 
-  /**
-   * Toggle Dropdown
-   */
-
-  const toggleDropDown = () => {
-    setToggleDrop(!toggleDrop);
-  };
 
   useEffect(() => {
     // check if token is there
@@ -88,31 +83,12 @@ const Nav = ({ navtitle = '' }: INav) => {
                       verticalAlign: 'top',
                       // bg: 'gray.2',
                     }}>
-                    {profile.profile_pic && (
-                      <>
-                        <Image
-                          // ref={setReferenceElement}
-                          onClick={toggleDropDown}
-                          src={API_HOST + '/' + profile?.profile_pic}
-                          sx={{
-                            ml: 'auto',
-                            width: '100%',
-                            maxWidth: '40px',
-                            height: '100%',
-                            borderRadius: '33rem',
-                            // bg: 'red'
-                            border: 'solid 1px',
-                            borderColor: 'gray.6',
-                          }}
-                        />
-                        {/* <div ref={setArrowElement} style={styles.arrow} /> */}
-                        {/* <div style={styles.arrow} /> */}
-                      </>
-                    )}
+                    
                     {/* <Button type="button" sx={{ bg: 'transparent'}} >
                       <DownArrow width={12} height={12} color="#000" />
                     </Button> */}
-                    {toggleDrop && (
+                    {/* {toggleDrop && ( */}
+                    <Dropdown imageUrl={API_HOST + '/' + profile?.profile_pic}>
                       <Box
                         sx={{
                           color: 'gray.8',
@@ -135,10 +111,11 @@ const Nav = ({ navtitle = '' }: INav) => {
                         <>
                           <Text sx={{ fontWeight: 500, pb: 1}}>{profile?.name}</Text>
                           <Text sx={{ pt: 1, pb: 2}}>Settings</Text>
-                          <Text onClick={() => userLogout}>Sign out <Exit width={16} /></Text>
+                          <Text onClick={userLogout}>Sign out <Exit width={16} /></Text>
                         </>
                       </Box>
-                    )}
+                    </Dropdown>
+                    {/* )} */}
                   </Flex>
                 )}
               </Flex>
