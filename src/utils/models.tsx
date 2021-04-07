@@ -1,6 +1,6 @@
 // const API_HOST = process.env.API_HOST || 'http://localhost:4000' // 'https://api.o.dieture.com';
-// export const API_HOST = process.env.API_HOST || 'https://wraft.x.aurut.com'
-export const API_HOST = 'http://localhost:4000'; // 'l';
+export const API_HOST = process.env.API_HOST || 'https://wraft.x.aurut.com';
+// export const API_HOST = 'http://localhost:4000'; // 'l';
 import cookie from 'js-cookie';
 import axios from 'axios';
 
@@ -12,10 +12,10 @@ const httpClient = axios.create({
 // Request interceptor for API calls
 httpClient.interceptors.request.use(
   async config => {
-    const token = await cookie.get('token') || false;
+    const token = (await cookie.get('token')) || false;
     // eslint-disable-next-line no-param-reassign
     config.headers = {
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     };
     return config;
   },
@@ -24,20 +24,20 @@ httpClient.interceptors.request.use(
   },
 );
 
-httpClient.interceptors.response.use(response => response, async function(
-  error,
-  ) {
-  const originalRequest = error.config;
-  // eslint-disable-next-line no-underscore-dangle
-  if (error.response.status === 401 && !originalRequest._retry) {
+httpClient.interceptors.response.use(
+  response => response,
+  async function(error) {
+    const originalRequest = error.config;
+    // eslint-disable-next-line no-underscore-dangle
+    if (error.response.status === 401 && !originalRequest._retry) {
       // eslint-disable-next-line no-underscore-dangle
       originalRequest._retry = true;
       await cookie.remove('token');
-      window.location.pathname = '/login'
-  }
-  return Promise.reject(error);
-});
-
+      window.location.pathname = '/login';
+    }
+    return Promise.reject(error);
+  },
+);
 
 /**
  * Load fetchAPI
@@ -79,8 +79,6 @@ export const deleteAPI = (path: any) =>
         reject(err);
       });
   });
-
-
 
 /**
  * Load Entity ----temp---
