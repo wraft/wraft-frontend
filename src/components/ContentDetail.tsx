@@ -345,7 +345,7 @@ const Form = () => {
                 <Button variant="primary" onClick={() => doBuild()}>
                   <Flex>
                     {loading && <Spinner color="white" size={24} />}
-                    {!loading && <Text>Build Now</Text>}
+                    {!loading && <Text>Publish</Text>}
                   </Flex>
                 </Button>
                 <Button

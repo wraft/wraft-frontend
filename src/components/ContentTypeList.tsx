@@ -62,9 +62,9 @@ const ContentTypeList = () => {
   }, []);
 
   return (
-    <Box py={3} sx={{ width: '100%'}}>
+    <Box py={3} sx={{ width: '100%', pl: 3}}>
       <Flex sx={{ width: '100%'}}>
-        <Text variant="pagetitle">All Contents</Text>
+        <Text variant="pagetitle">Variants</Text>
 
         {!loading && (
           <Box>
@@ -76,7 +76,7 @@ const ContentTypeList = () => {
             variant="button"
             href="/content-types/new"
             icon={<Plus width={20} sx={{ mt: 1}} />}>
-            <Text sx={{ml: 1, pt: 1, fontSize: 0, fontWeight: 300}}>New Content Type</Text>
+            <Text sx={{ml: 1, pt: 0, fontSize: 1, fontWeight: 600}}>Create Variant</Text>
           </Link>
         </Box>
       </Flex>

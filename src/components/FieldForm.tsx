@@ -9,6 +9,8 @@ import Modal from 'react-modal';
 import Field from './Field';
 // import { replaceTitles } from '../utils';
 import { Field as FieldT, FieldInstance } from '../utils/types';
+import FieldDate from './FieldDate';
+import { findAll, replaceTitles } from '../utils';
 
 // import { find } from 'lodash';
 
@@ -53,7 +55,7 @@ const Form = (props: any) => {
   const { fields } = props;
   const { register, handleSubmit, getValues } = useForm();
   //   const token = useSelector(({ login }: any) => login.token);
-  const [field_maps, setFieldMap] = useState<Array<IFieldType>>();  
+  const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
 
   /**
    * Map form values to fields
@@ -96,33 +98,30 @@ const Form = (props: any) => {
     const m: string = props.activeTemplate as string;
 
     if (m && m.length > 0) {
-      // const selection = findAll(props.templates, m);
+      const selection = findAll(props.templates, m);
       // // const body: string = selection && (selection.data as string);
-
       // // srlz
-      // const serialized: any = selection && (selection.serialized as string);
+      const serialized: any = selection && (selection.serialized as string);
 
+      console.log('serialized', serialized);
       // //
-      // if (serialized && serialized.data) {
-      //   // console.log('ser', serialized);
-      //   const bodyValue = JSON.parse(serialized.data);
-      //   console.log('(serialized', bodyValue);
-
-      //   const bodyUpd: ContentState = bodyValue;
-      //   const valsAttached = updateVars(bodyUpd, vax);
-      //   props.setActive(valsAttached);
-      // }
-
+      if (serialized && serialized.data) {
+        // console.log('ser', serialized);
+        const bodyValue = JSON.parse(serialized.data);
+        console.log('(serialized', bodyValue);
+        // const bodyUpd: ContentState = bodyValue;
+        // const valsAttached = updateVars(bodyUpd, vax);
+        // props.setActive(valsAttached);
+      }
       // // const bodyUpdated: string = replaceVars(body, vax, true);
       // // console.log('bod', data, serialized, bodyUpdated);
       // // props.setActive(data.serialized.data);
       // if (data && data.serialized) {
       //   console.log('x', data.serialized);
       // }
-
       // Apply title template
-      // const newTitle = replaceTitles(selection.title_template, vax);
-      // props.setValue('title', newTitle);
+      const newTitle = replaceTitles(selection.title_template, vax);
+      props.setValue('title', newTitle);
     }
 
     closeModal();
@@ -141,14 +140,47 @@ const Form = (props: any) => {
       <Box p={3} bg="gray.0">
         {field_maps &&
           field_maps.map((x: any) => (
-            <Box key={x.id} sx={{ pb: 2, borderBottom: 'solid 0.5px', borderColor:'gray.2', mb: 2}}>
-              <Text sx={{ color: 'red.7', fontSize: 0, fontFamily: 'Menlo, monospace'}}>{x.name}</Text>
-              <Text sx={{ fontSize: 0, fontWeight: 'heading', fontFamily: 'Menlo, monospace'}}>{x.value}</Text>
+            <Box
+              key={x.id}
+              sx={{
+                pb: 2,
+                borderBottom: 'solid 0.5px',
+                borderColor: 'gray.2',
+                mb: 2,
+              }}>
+              <Text
+                sx={{
+                  color: 'red.7',
+                  fontSize: 0,
+                  fontFamily: 'Menlo, monospace',
+                }}>
+                {x.name}
+              </Text>
+              <Text
+                sx={{
+                  fontSize: 0,
+                  fontWeight: 'heading',
+                  fontFamily: 'Menlo, monospace',
+                }}>
+                {x.value}
+              </Text>
               <Text>{x.type}</Text>
             </Box>
           ))}
       </Box>
-      <Button sx={{ pt: 2, pb: 2, bg: 'white', color: 'gray',fontFamily: 'heading', border: 'solid 1px', fontSize: 0 }} onClick={props.setShowForm}>Fill Form</Button>
+      <Button
+        sx={{
+          pt: 2,
+          pb: 2,
+          bg: 'white',
+          color: 'gray',
+          fontFamily: 'heading',
+          border: 'solid 1px',
+          fontSize: 0,
+        }}
+        onClick={props.setShowForm}>
+        Fill Form
+      </Button>
       <Modal
         isOpen={props.showForm}
         onRequestClose={closeModal}
@@ -159,26 +191,38 @@ const Form = (props: any) => {
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           py={2}
+          sx={{ p: 5 }}
           mt={2}>
-          <Text>
-            Add Content
-          </Text>
+          <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (
-            <Box>
+            <Box sx={{ pt: 4 }}>
               {fields.map((f: FieldT) => (
-                <Box key={f.id}>
-                  <Field
-                    name={f.name}
-                    label={f.name}
-                    defaultValue=""
-                    register={register}
-                  />
+                <Box key={f.id} sx={{ pb: 2 }}>
+                  {f.field_type.name === 'date' && (
+                    <FieldDate
+                      name={f.name}
+                      label={f.name}
+                      register={register}
+                      sub="Date"
+                      // defaultValue={profile?.dob}
+                      onChange={() => console.log('x')}
+                    />
+                  )}
+
+                  {f.field_type.name !== 'date' && (
+                    <Field
+                      name={f.name}
+                      label={f.name}
+                      defaultValue=""
+                      register={register}
+                    />
+                  )}
                 </Box>
               ))}
             </Box>
           )}
-          <Flex>
-            <Button type="submit">Submit</Button>
+          <Flex sx={{ pt: 3 }}>
+            <Button type="submit">Save</Button>
             <Text onClick={closeModal} pl={2} pt={1}>
               Close
             </Text>

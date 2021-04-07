@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Badge } from 'theme-ui';
 import MenuItem from './NavLink';
 
-import { parseISO, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 import ReactPaginate from 'react-paginate';
 
@@ -15,10 +15,15 @@ import { useStoreState } from 'easy-peasy';
 import { deleteEntity, fetchAPI } from '../utils/models';
 import { Spinner } from 'theme-ui';
 import ProfileCard from './ProfileCard';
+// import { shortDate } from '../utils';
+
+
 
 const TimeAgo = (time: any) => {
   const timetime = parseISO(time.time);
   const timed = formatDistanceToNow(timetime);
+
+  // const timed = shortDate(timetime);
   return (
     <Text pl={2} pt={1} sx={{ fontSize: 0 }} color="gray.6">
       \ {timed}

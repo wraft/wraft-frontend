@@ -1,25 +1,30 @@
 Arguments: 
-  /Users/apple/.asdf/installs/nodejs/12.9.1/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js run --silent husky-run pre-push dokku dokku@x.aurut.com:wraftfe
+  /Users/apple/.asdf/installs/nodejs/12.18.3/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add @types/dayjs-twitter
 
 PATH: 
-  /Users/apple/.asdf/installs/nodejs/12.9.1/bin:/Users/apple/.asdf/installs/nodejs/12.9.1/.npm/bin:/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core:/Users/apple/.asdf/shims:/usr/local/opt/asdf/bin:/Applications/Postgres.app/Contents/Versions/11/bin:/Users/apple/.deno/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/apple/dev/flutter/bin
+  /Users/apple/.asdf/installs/nodejs/12.18.3/bin:/Users/apple/.asdf/installs/nodejs/12.18.3/.npm/bin:/Users/apple/.asdf/shims:/usr/local/opt/asdf/bin:/Applications/Postgres.app/Contents/Versions/latest/bin:/Users/apple/.deno/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/apple/dev/flutter/bin
 
 Yarn version: 
   1.22.10
 
 Node version: 
-  12.9.1
+  12.18.3
 
 Platform: 
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/apple/Sites/products/wraft-docs/wraft-v3/package.json: Unexpected token / in JSON at position 316
-      at JSON.parse (<anonymous>)
-      at /usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:310:30)
-      at /usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:321:13
+  Error: https://registry.yarnpkg.com/@types%2fdayjs-twitter: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:66988:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:140749:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:141721:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.10/libexec/lib/cli.js:141643:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (_stream_readable.js:1220:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
   {
@@ -34,11 +39,6 @@ npm manifest:
       "export": "next export",
       "start": "next start",
       "test": "jest --watchAll"
-    },
-    "husky": {
-      "hooks": {
-        // "pre-push": "next build"
-      }
     },
     "dependencies": {
       "@datepicker-react/styled": "^2.6.0",

@@ -189,7 +189,7 @@ const Form = (props: IContentForm) => {
    */
 
   const onSubmit = (data: any) => {
-    console.log('Creating Content', data, '');
+    // console.log('Creating Content', data, '');
 
     let obj: any = {};
 
@@ -372,7 +372,7 @@ const Form = (props: IContentForm) => {
     }
   };
 
-  const findVarSex = (body: string, escaped: boolean): string[] => {
+  const findVarEx = (body: string, escaped: boolean): string[] => {
     // find vars in this form
     let regexp = /\[\w+\]/gm;
     if (escaped) {
@@ -415,12 +415,10 @@ const Form = (props: IContentForm) => {
     if (maps) {
       // lazy matching
       const tempTitle = piece.title_template
-      const m = findVarSex(tempTitle, false);
-      console.log('[SEXY]', m, maps);
+      const m = findVarEx(tempTitle, false);
       let latexpussy = []
       m.map((x: any)=> {
         const cName = cleanName(x);
-        console.log('[SEXY] 🍅', cName);
         latexpussy.push(x)
 
         // find match
@@ -431,10 +429,6 @@ const Form = (props: IContentForm) => {
           setValue('title', newTitle || 'Untitled');
         }        
       })
-      
-      // const m = replaceVars(piece.title_template, maps, false);
-      // console.log('dick', maps, m);
-      // setValue('title', piece.title_template || 'Untitled');
     }    
   };
 
@@ -536,6 +530,7 @@ const Form = (props: IContentForm) => {
                   register={register}
                 />
               </Box>
+              {/* <Button variant="link">Sync</Button> */}
               <Button
                 variant="primary"
                 sx={{ ml: 3, mt: 2, mb: 3, pl: 4, pr: 4 }}

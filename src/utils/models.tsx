@@ -1,6 +1,6 @@
 // const API_HOST = process.env.API_HOST || 'http://localhost:4000' // 'https://api.o.dieture.com';
 // export const API_HOST = process.env.API_HOST || 'https://wraft.x.aurut.com'
-export const API_HOST = process.env.API_HOST || 'http://localhost:4000'; // 'l';
+export const API_HOST = 'http://localhost:4000'; // 'l';
 import cookie from 'js-cookie';
 import axios from 'axios';
 
