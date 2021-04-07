@@ -104,7 +104,6 @@ const UserNav = () => {
               )}
               {token && token !== '' && (
                 <Flex ml={2} sx={{ alignContent: 'flex-start' }}>
-                  {console.log('profile_pic', profile && profile.profile_pic)}
                   {profile && (
                     <Text fontSize={1} ml={2} pt={2} mr={3} fontWeight="bold">
                       {profile.name}
@@ -112,7 +111,7 @@ const UserNav = () => {
                   )}
                   {profile && profile.profile_pic?.length > 0 && (
                     <Avatar
-                      sx={{ height: '100px', width: '100px' }}
+                      sx={{ height: '64px', width: '64px' }}
                       onClick={onUserLogout}
                       src={profile.profile_pic}
                     />

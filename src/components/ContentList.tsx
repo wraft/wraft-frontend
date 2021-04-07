@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Badge, Image, Button } from 'theme-ui';
+import { Box, Text, Flex, Badge } from 'theme-ui';
 import MenuItem from './NavLink';
 
-import { parseISO, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, parseISO } from 'date-fns';
 
 import ReactPaginate from 'react-paginate';
 
@@ -12,13 +12,18 @@ import {
 } from '@styled-icons/boxicons-regular';
 
 import { useStoreState } from 'easy-peasy';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { deleteEntity, fetchAPI } from '../utils/models';
 import { Spinner } from 'theme-ui';
 import ProfileCard from './ProfileCard';
+// import { shortDate } from '../utils';
+
+
 
 const TimeAgo = (time: any) => {
   const timetime = parseISO(time.time);
   const timed = formatDistanceToNow(timetime);
+
+  // const timed = shortDate(timetime);
   return (
     <Text pl={2} pt={1} sx={{ fontSize: 0 }} color="gray.6">
       \ {timed}
@@ -162,15 +167,21 @@ const ContentList = () => {
 
   const profile = useStoreState(state => state.profile.profile);
 
-  const loadDataSuccess = (data: IPageMeta) => {
-    setLoading(true);
-    const res: IField[] = data.contents;
-    setContents(res);
-    setPageMeta(data);
-  };
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const loadData = (token: string) => {
-    loadEntity(token, 'contents', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI(`contents`)
+        .then((data: any) => {
+          setLoading(true);
+          const res: IField[] = data.contents;
+          setContents(res);
+          setPageMeta(data);
+        })
+        .catch(() => {
+          setLoading(true);
+        });
   };
 
   /** DELETE content
@@ -188,11 +199,7 @@ const ContentList = () => {
     console.log('changing', _e);
   };
 
-  useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+  
 
   return (
     <Flex>

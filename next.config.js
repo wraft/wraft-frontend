@@ -4,5 +4,6 @@ const withImages = require('next-images');
 module.exports = withImages({
   env: {
     api: process.env.NEXT_PUBLIC_API_HOST,
+    API_HOST: process.env.API_HOST,
   },
 });
