@@ -1,5 +1,5 @@
 
-const defHost = 'http://localhost:4000' //'https://wraft.x.aurut.com/' 
+const defHost = 'https://wraft.x.aurut.com/' 
 
 export const config = {
     app:  defHost,
