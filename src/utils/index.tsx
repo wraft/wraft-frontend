@@ -1,6 +1,15 @@
+// import dayjs from 'dayjs';
+// import dayjsTwitter from 'dayjs-twitter';
 import produce from 'immer';
 import { ContentState } from './types';
 // import { Flat } from "lodash";
+
+
+// dayjs.extend(dayjsTwitter)
+
+// export function shortDate(date:any) {
+//   return dayjs(date)?.twitter();
+// }
 
 // util fns here!
 export interface IField {

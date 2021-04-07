@@ -27,7 +27,13 @@ const FieldTypeForm = () => {
             <Field
               name="name"
               label="Name"
-              defaultValue="Sample Name"
+              defaultValue="name"
+              register={register}
+            />
+            <Field
+              name="description"
+              label="Description"
+              defaultValue="desc"
               register={register}
             />
           </Box>

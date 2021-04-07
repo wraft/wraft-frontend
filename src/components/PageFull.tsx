@@ -47,7 +47,7 @@ export const PageFull = (props: any) => {
           <Flex>
             {/* <Sidebar showFull={showFull} /> */}
             <Box sx={{ width: '100%'}}>
-              <NavEdit navtitle="Create"/>
+              <NavEdit navtitle=""/>
               <Box
                 sx={{ minHeight: '100vh'}}
                 bg="gray.0"
