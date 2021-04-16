@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Badge, Image, Button } from 'theme-ui';
+import { Box, Text, Flex, Badge } from 'theme-ui';
 import MenuItem from './NavLink';
 
 import { parseISO, formatDistanceToNow } from 'date-fns';
@@ -12,7 +12,7 @@ import {
 } from '@styled-icons/boxicons-regular';
 
 import { useStoreState } from 'easy-peasy';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { deleteEntity, fetchAPI } from '../utils/models';
 import { Spinner } from 'theme-ui';
 import ProfileCard from './ProfileCard';
 
@@ -154,23 +154,29 @@ export interface IPageMeta {
 }
 
 const ContentList = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const profile = useStoreState(state => state.profile.profile);
+  const profile = useStoreState((state) => state.profile.profile);
 
-  const loadDataSuccess = (data: IPageMeta) => {
-    setLoading(true);
-    const res: IField[] = data.contents;
-    setContents(res);
-    setPageMeta(data);
-  };
+  useEffect(() => {
+    loadData();
+  }, []);
 
-  const loadData = (token: string) => {
-    loadEntity(token, 'contents', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI(`contents`)
+      .then((data: any) => {
+        setLoading(true);
+        const res: IField[] = data.contents;
+        setContents(res);
+        setPageMeta(data);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
   };
 
   /** DELETE content
@@ -187,12 +193,6 @@ const ContentList = () => {
   const changePage = (_e: any) => {
     console.log('changing', _e);
   };
-
-  useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
 
   return (
     <Flex>
@@ -251,9 +251,7 @@ const ContentList = () => {
             </Box>
           </Box>
         </Flex> */}
-        <Box sx={{ pl: 0, pt: 2 }}>
-          
-        </Box>
+        <Box sx={{ pl: 0, pt: 2 }}></Box>
       </Box>
     </Flex>
   );

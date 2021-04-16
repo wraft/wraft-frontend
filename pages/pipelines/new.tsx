@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import Theme from '../../src/components/PipelineForm';
 
@@ -6,7 +6,7 @@ import Page from '../../src/components/Page';
 import { Flex } from 'rebass';
 import Link from 'next/link';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>

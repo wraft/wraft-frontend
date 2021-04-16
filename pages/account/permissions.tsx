@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import Page from '../../src/components/Page';
 import { Flex } from 'theme-ui';
 import OrgPermissionList from '../../src/components/OrgPermissionList';
 import OrgSidebar from '../../src/components/OrgSidebar';
 
-export const CompanyForm = () => {
+const CompanyForm: FC = () => {
   return (
     <>
       <Head>
@@ -14,8 +14,8 @@ export const CompanyForm = () => {
       </Head>
       <Page>
         <Flex>
-          <OrgSidebar/>
-          <OrgPermissionList/>          
+          <OrgSidebar />
+          <OrgPermissionList />
         </Flex>
       </Page>
     </>

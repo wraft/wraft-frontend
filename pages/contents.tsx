@@ -1,9 +1,9 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import ContentListAll from '../src/components/ContentList';
 import Page from '../src/components/Page';
 
-export const Contents = () => {
+const Contents: FC = () => {
   return (
     <>
       <Head>

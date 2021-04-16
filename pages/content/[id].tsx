@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import ContentDetail from '../../src/components/ContentDetail';
 
 import Page from '../../src/components/Page';
 import { Flex } from 'rebass';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
