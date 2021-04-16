@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import LayoutForm from '../../src/components/LayoutForm';
 import Page from '../../src/components/Page';
 import { Box } from 'rebass';
 import Link from 'next/link';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>

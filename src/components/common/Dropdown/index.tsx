@@ -26,11 +26,11 @@ const DropDownList = styled(Box)`
 `;
 
 interface Props {
-    children?: any;
-    imageUrl: string;
+  children?: any;
+  imageUrl: string;
 }
 
-const Dropdown: FC<Props> = ({imageUrl, children}) => {
+const Dropdown: FC<Props> = ({ imageUrl, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLInputElement>(null);
 
@@ -53,39 +53,30 @@ const Dropdown: FC<Props> = ({imageUrl, children}) => {
     setIsOpen(!isOpen);
   };
 
-
   return (
     <DropDownBoxBlock
       ml="14px"
       ref={wrapperRef}
-      onClick={() => toggleDropdown()}
-    >
-      <Box 
-        sx={{ 
-            width: '45px',
-            height: '45px',
-            objectFit: 'cover',
-            cursor: 'pointer',
-          }}
-        >
+      onClick={() => toggleDropdown()}>
+      <Box
+        sx={{
+          width: '45px',
+          height: '45px',
+          objectFit: 'cover',
+          cursor: 'pointer',
+        }}>
         <Image
-          src={(imageUrl) || ''}
+          src={imageUrl || ''}
           sx={{
-            
             width: '100%',
             borderRadius: '50%',
             border: '1px solid black',
-           
           }}
         />
       </Box>
-      {isOpen && (
-        <DropDownList>
-          {children}
-        </DropDownList>
-      )}
+      {isOpen && <DropDownList>{children}</DropDownList>}
     </DropDownBoxBlock>
   );
-}
+};
 
 export default Dropdown;

@@ -1,18 +1,16 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
-
-import UserList from '../../src/components/UserList'
+import UserList from '../../src/components/UserList';
 import Page from '../../src/components/Page';
 
-export const Index = () => {
-  
+const Index: FC = () => {
   return (
     <>
       <Head>
         <title>Customers | Wraft Admin</title>
       </Head>
       <Page>
-          <UserList/>
+        <UserList />
       </Page>
     </>
   );
