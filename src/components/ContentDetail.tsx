@@ -7,7 +7,7 @@ import { File } from './Icons';
 import { MarkdownEditor } from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { parseISO, formatDistanceToNow, format } from 'date-fns';
+import { parseISO, formatDistanceToNow } from 'date-fns';
 
 import { Trash, Download } from '@styled-icons/boxicons-regular';
 
@@ -119,7 +119,7 @@ export interface Serialized {
 export const TimeAgo = (time: any) => {
   const timetime = parseISO(time.time);
   const timed = formatDistanceToNow(timetime, { addSuffix: true });
-  const timedAgo = format(timetime, 'PPpp');
+  // const timedAgo = format(timetime, 'PPpp');
   return (
     <Text
       pl={0}

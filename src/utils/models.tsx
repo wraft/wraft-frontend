@@ -1,16 +1,89 @@
-/**
- * Load Content Types List
- * @param id
- */
-
-// import { env } from '../components/vars';
-// const mx = 'http://localhost:4000' 'https://dieture.x.aurut.com'
 // const API_HOST = process.env.API_HOST || 'http://localhost:4000' // 'https://api.o.dieture.com';
 // export const API_HOST = process.env.API_HOST || 'https://wraft.x.aurut.com'
 export const API_HOST = process.env.API_HOST || 'http://localhost:4000'; // 'l';
 import cookie from 'js-cookie';
+import axios from 'axios';
+
+//Base URL config
+const httpClient = axios.create({
+  baseURL: `${API_HOST}/api/v1`, // ---temp hard code ---
+});
+
+// Request interceptor for API calls
+httpClient.interceptors.request.use(
+  async config => {
+    const token = await cookie.get('token') || false;
+    // eslint-disable-next-line no-param-reassign
+    config.headers = {
+      'Authorization': `Bearer ${token}`,
+    };
+    return config;
+  },
+  error => {
+    Promise.reject(error);
+  },
+);
+
+httpClient.interceptors.response.use(response => response, async function(
+  error,
+  ) {
+  const originalRequest = error.config;
+  // eslint-disable-next-line no-underscore-dangle
+  if (error.response.status === 401 && !originalRequest._retry) {
+      // eslint-disable-next-line no-underscore-dangle
+      originalRequest._retry = true;
+      await cookie.remove('token');
+      window.location.pathname = '/login'
+  }
+  return Promise.reject(error);
+});
+
+
 /**
- * Load Entity
+ * Load fetchAPI
+ * @param token
+ */
+export const fetchAPI = (path: any, query = '') =>
+  new Promise((resolve, reject) => {
+    httpClient
+      .get(`/${path}${query}`)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        const res = err.response.data;
+        if (err.response.status === 400) {
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+/**
+ * delete API
+ */
+export const deleteAPI = (path: any) =>
+  new Promise((resolve, reject) => {
+    httpClient
+      .delete(`/${path}`)
+      .then(response => {
+        resolve(response.data);
+      })
+      .catch(err => {
+        const res = err.response.data;
+        if (err.response.status === 400) {
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+
+
+/**
+ * Load Entity ----temp---
  * @param token
  */
 
