@@ -88,14 +88,14 @@ interface AppPropsWithRedux extends AppProps {
 }
 
 interface MyCustomToastProps {
-  appearance?:string;
+  appearance?: string;
   children?: any;
 }
-const MyCustomToast = ({ appearance, children }:MyCustomToastProps) => (
+const MyCustomToast = ({ appearance, children }: MyCustomToastProps) => (
   <Alert variant={appearance === 'error' ? 'alert' : 'primary'}>
-  {children}
-  <Close ml='auto' mr={-2} />
-</Alert>
+    {children}
+    <Close ml="auto" mr={-2} />
+  </Alert>
 );
 
 function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
@@ -105,12 +105,11 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
         <GlobalStyle />
         {/* <CSSReset /> */}
         <ToastProvider
-         autoDismiss
-         autoDismissTimeout={1000}
-         components={{ Toast: MyCustomToast }}
-         placement="top-center"
-        >
-          <Component  {...pageProps} />
+          autoDismiss
+          autoDismissTimeout={1000}
+          components={{ Toast: MyCustomToast }}
+          placement="top-center">
+          <Component {...pageProps} />
         </ToastProvider>
       </ThemeProvider>
     </StoreProvider>

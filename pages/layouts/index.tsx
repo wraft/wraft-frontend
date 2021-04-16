@@ -1,13 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Box } from 'rebass';
-// import Link from 'next/link';
 import Link from '../../src/components/NavLink';
-
 import LayoutList from '../../src/components/LayoutList';
 import Page from '../../src/components/Page';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
