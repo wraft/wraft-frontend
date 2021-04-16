@@ -1,28 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
 import { Plus } from './Icons';
-import { loadEntity, deleteEntity } from '../utils/models';
+import { fetchAPI, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';
 
 import { useToasts } from 'react-toast-notifications';
 
 export interface Theme {
-  total_pages:   number;
+  total_pages: number;
   total_entries: number;
-  themes:        ThemeElement[];
-  page_number:   number;
+  themes: ThemeElement[];
+  page_number: number;
 }
-
 export interface ThemeElement {
-  updated_at:  string;
-  typescale:   any;
-  name:        string;
+  updated_at: string;
+  typescale: any;
+  name: string;
   inserted_at: string;
-  id:          string;
-  font:        string;
-  file:        null;
+  id: string;
+  font: string;
+  file: null;
 }
 
 const ItemField = (props: any) => {
@@ -32,9 +31,7 @@ const ItemField = (props: any) => {
       key={props.id}
       p={3}
       sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
-      <Text>
-        {props.name}
-      </Text>
+      <Text>{props.name}</Text>
       <Text pt={1} color="grey">
         Sample Field Description
       </Text>
@@ -43,30 +40,28 @@ const ItemField = (props: any) => {
   );
 };
 
-const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+const Form: FC = () => {
+  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const { addToast } = useToasts();
 
-  const loadDataSuccess = (data: any) => {
-    const res: ThemeElement[] = data.themes;
-    setContents(res);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, 'themes', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('themes')
+      .then((data: any) => {
+        const res: ThemeElement[] = data.themes;
+        setContents(res);
+      })
+      .catch();
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token)
+    deleteEntity(`themes/${id}`, token);
     addToast('Deleted Theme', { appearance: 'success' });
-  }
+  };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+    loadData();
+  }, []);
 
   return (
     <Box py={3} mt={4}>
@@ -75,14 +70,14 @@ const Form = () => {
           <Text>New</Text>
         </Link>
       </Flex>
-      <Text mb={3}>
-        All Themes
-      </Text>
+      <Text mb={3}>All Themes</Text>
       <Box mx={0} mb={3}>
         <Box>
           {contents &&
             contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} onDelete={onDelete}/>)}
+            contents.map((m: any) => (
+              <ItemField key={m.id} {...m} onDelete={onDelete} />
+            ))}
         </Box>
       </Box>
     </Box>

@@ -1,12 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from 'rebass';
 import Link from 'next/link';
-
-import FlowList from '../../src/components/FlowList'
+import FlowList from '../../src/components/FlowList';
 import Page from '../../src/components/Page';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>

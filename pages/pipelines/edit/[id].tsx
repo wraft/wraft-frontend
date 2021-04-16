@@ -1,10 +1,10 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import PipelineForm from '../../../src/components/PipelineForm';
 import Page from '../../../src/components/Page';
 import { Box } from 'rebass';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
@@ -15,7 +15,7 @@ export const Index = () => {
         <Box>
           <PipelineForm />
         </Box>
-      </Page>        
+      </Page>
     </>
   );
 };
