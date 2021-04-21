@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 // import { TrashAlt } from '@styled-icons/boxicons-regular';
-import { deleteEntity, loadEntity } from '../utils/models';
+import { deleteEntity, fetchAPI } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import LayoutCard from './Card';
 import { useToasts } from 'react-toast-notifications';
@@ -30,46 +30,39 @@ export interface IFieldItem {
   type: string;
 }
 
-const LayoutList = () => {
+const LayoutList: FC = () => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
   const { addToast } = useToasts();
 
   /**
-   * on Engine Load Success
-   * @param data
-   */
-  const loadLayoutSuccess = (data: any) => {
-    const res: IField[] = data.layouts;
-    setContents(res);
-  };
-
-  /**
    * Delete a Layout
    * @param _id  layout_id
    */
-  const onDelete = (_id:string) => {
-    deleteEntity(`layouts/${_id}`, token)
+  const onDelete = (_id: string) => {
+    deleteEntity(`layouts/${_id}`, token);
     addToast('Deleted Theme', { appearance: 'error' });
-    loadEntity(token, 'layouts', loadLayoutSuccess);
-  }
+    loadLayout();
+  };
 
   /**
    * Load all Engines
-   * @param token
    */
-  const loadLayout = (token: string) => {
-    loadEntity(token, 'layouts', loadLayoutSuccess);
+  const loadLayout = () => {
+    fetchAPI('layouts')
+      .then((data: any) => {
+        const res: IField[] = data.layouts;
+        setContents(res);
+      })
+      .catch();
   };
 
   useEffect(() => {
-    if (token) {
-      loadLayout(token);
-    }
-  }, [token]);
+    loadLayout();
+  }, []);
 
   return (
     <Box py={3} mt={4}>
@@ -77,7 +70,9 @@ const LayoutList = () => {
       <Flex mx={0} mb={3}>
         {contents &&
           contents.length > 0 &&
-          contents.map((m: any) => <LayoutCard model='layouts' key={m.id} {...m}  onDelete={onDelete}/>)}
+          contents.map((m: any) => (
+            <LayoutCard model="layouts" key={m.id} {...m} onDelete={onDelete} />
+          ))}
       </Flex>
     </Box>
   );

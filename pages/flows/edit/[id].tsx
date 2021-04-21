@@ -1,10 +1,10 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import FlowForm from '../../../src/components/FlowForm';
 import Page from '../../../src/components/Page';
 import { Box } from 'rebass';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
@@ -15,7 +15,7 @@ export const Index = () => {
         <Box>
           <FlowForm />
         </Box>
-      </Page>        
+      </Page>
     </>
   );
 };

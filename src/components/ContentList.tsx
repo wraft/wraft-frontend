@@ -159,13 +159,13 @@ export interface IPageMeta {
 }
 
 const ContentList = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const profile = useStoreState(state => state.profile.profile);
+  const profile = useStoreState((state) => state.profile.profile);
 
   useEffect(() => {
     loadData();
@@ -173,15 +173,15 @@ const ContentList = () => {
 
   const loadData = () => {
     fetchAPI(`contents`)
-        .then((data: any) => {
-          setLoading(true);
-          const res: IField[] = data.contents;
-          setContents(res);
-          setPageMeta(data);
-        })
-        .catch(() => {
-          setLoading(true);
-        });
+      .then((data: any) => {
+        setLoading(true);
+        const res: IField[] = data.contents;
+        setContents(res);
+        setPageMeta(data);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
   };
 
   /** DELETE content
@@ -198,8 +198,6 @@ const ContentList = () => {
   const changePage = (_e: any) => {
     console.log('changing', _e);
   };
-
-  
 
   return (
     <Flex>
@@ -258,9 +256,7 @@ const ContentList = () => {
             </Box>
           </Box>
         </Flex> */}
-        <Box sx={{ pl: 0, pt: 2 }}>
-          
-        </Box>
+        <Box sx={{ pl: 0, pt: 2 }}></Box>
       </Box>
     </Flex>
   );

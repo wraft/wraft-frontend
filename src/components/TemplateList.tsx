@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
-
 import Link from './NavLink';
-import { loadEntity } from '../utils/models';
-
+import { fetchAPI } from '../utils/models';
 import { useTable } from 'react-table';
 import styled from 'styled-components';
-import { useStoreState } from 'easy-peasy';
+// import { useStoreState } from 'easy-peasy';
 import { Plus } from '@styled-icons/boxicons-regular';
 
 const Styles = styled.div`
@@ -17,7 +15,7 @@ const Styles = styled.div`
       background: #fff;
       opacity: 0.9;
       :hover {
-        background: #efefef; 
+        background: #efefef;
       }
       :last-child {
         td {
@@ -29,7 +27,7 @@ const Styles = styled.div`
       th {
         padding-top: 16px;
         padding-bottom: 16px;
-        background: #F8F9FA;
+        background: #f8f9fa;
         border-right: 0;
         border-bottom: solid 1px #eee;
       }
@@ -102,20 +100,20 @@ function Table({ columns, data }: { columns: any; data: any }) {
     <div>
       <table {...getTableProps()}>
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
+              {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()}>{column.render('Header')}</th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
+                {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   );
@@ -146,7 +144,9 @@ const Title = (props: any) => {
     <Box>
       {org && (
         <Link href={`/templates/edit/[id]`} path={`/templates/edit/${org.id}`}>
-          <Text sx={{ fontSize: 1, fontWeight: 'heading' }}>{props.row.value}</Text>
+          <Text sx={{ fontSize: 1, fontWeight: 'heading' }}>
+            {props.row.value}
+          </Text>
         </Link>
       )}
     </Box>
@@ -154,8 +154,6 @@ const Title = (props: any) => {
 };
 
 const TemplateList = () => {
-  const token = useStoreState(state => state.auth.token);
-
   const [contents, setContents] = useState<Array<IField>>([]);
 
   const columns = React.useMemo(
@@ -177,20 +175,18 @@ const TemplateList = () => {
     [],
   );
 
-  const loadDataSuccess = (data: any) => {
-    const res: IField[] = data.data_templates;
-    setContents(res);
-  };
-
   const loadData = () => {
-    loadEntity(token, 'data_templates', loadDataSuccess);
+    fetchAPI('data_templates')
+      .then((data: any) => {
+        const res: IField[] = data.data_templates;
+        setContents(res);
+      })
+      .catch();
   };
 
   useEffect(() => {
-    if (token) {
-      loadData();
-    }    
-  }, [token]);
+    loadData();
+  }, []);
 
   return (
     <Box py={3} variant="w100" mt={4}>
@@ -198,11 +194,8 @@ const TemplateList = () => {
         <Text variant="pagetitle" mb={4}>
           All Templates
         </Text>
-        <Link
-          variant="button"
-          href="/templates/new"
-          icon={<Plus width={20} />}>
-          <Text sx={{ ml: 2}}>New Template</Text>
+        <Link variant="button" href="/templates/new" icon={<Plus width={20} />}>
+          <Text sx={{ ml: 2 }}>New Template</Text>
         </Link>
       </Box>
       <Box mx={0} mb={3}>

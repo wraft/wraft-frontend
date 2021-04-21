@@ -1,12 +1,12 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Box } from 'rebass';
 // import Router from 'next/router'
 import Container from '../../src/components/Container';
-import ProfileBasicForm from '../../src/components/ProfileBasicForm'
-
+import ProfileBasicForm from '../../src/components/ProfileBasicForm';
 import UserNav from '../../src/components/UserNav';
-export const Index = () => {
+
+const Index: FC = () => {
   return (
     <>
       <Head>
@@ -18,15 +18,11 @@ export const Index = () => {
           <UserNav />
           <Container width={70} bg={''}>
             <ProfileBasicForm />
-        </Container>
+          </Container>
         </Container>
       </Box>
-      
-      
-      
-     
+
       {/* <button onClick={() => Router.push('/meal-planner/review')}>Meal review</button> */}
-      
     </>
   );
 };

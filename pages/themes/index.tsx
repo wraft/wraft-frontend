@@ -1,11 +1,10 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from 'rebass';
-
-import ThemeList from '../../src/components/ThemeList'
+import ThemeList from '../../src/components/ThemeList';
 import Page from '../../src/components/Page';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
@@ -13,7 +12,7 @@ export const Index = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>          
+        <Flex>
           <ThemeList />
         </Flex>
       </Page>
