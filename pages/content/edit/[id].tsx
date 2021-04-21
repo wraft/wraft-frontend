@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
@@ -7,7 +7,7 @@ import { Flex } from 'rebass';
 import { useRouter } from 'next/router';
 import CreateForm from '../../../src/components/ContentForm';
 
-export const Index = () => {
+const Index: FC = () => {
   const router = useRouter();
   return (
     <>

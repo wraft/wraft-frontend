@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
-
 import Link from './NavLink';
-import { loadEntity } from '../utils/models';
-
+import { fetchAPI } from '../utils/models';
 import { useTable } from 'react-table';
 import styled from 'styled-components';
-import { useStoreState } from 'easy-peasy';
 import { Plus } from '@styled-icons/boxicons-regular';
 
 const Styles = styled.div`
@@ -139,18 +136,14 @@ const Title = (props: any) => {
     <Box>
       {org && (
         <Link href={`/block_templates/edit/${org.id}`}>
-          <Text>
-            {props.row.value}
-          </Text>
+          <Text>{props.row.value}</Text>
         </Link>
       )}
     </Box>
   );
 };
 
-const Form = () => {
-  const token = useStoreState(state => state.auth.token);
-
+const Form: FC = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
 
   const columns = React.useMemo(
@@ -168,20 +161,18 @@ const Form = () => {
     [],
   );
 
-  const loadDataSuccess = (data: any) => {
-    const res: IField[] = data.block_templates;
-    setContents(res);
-  };
-
   const loadData = () => {
-    loadEntity(token, 'block_templates', loadDataSuccess);
+    fetchAPI('block_templates')
+      .then((data: any) => {
+        const res: IField[] = data.block_templates;
+        setContents(res);
+      })
+      .catch();
   };
 
   useEffect(() => {
-    if (token) {
-      loadData();
-    }
-  }, [token]);
+    loadData();
+  }, []);
 
   return (
     <Box py={3} variant="w100" mt={4} ml={4}>

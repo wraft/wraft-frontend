@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Box, Text } from 'theme-ui';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 import ContentTypeList from '../../src/components/ContentTypeList'
 import Page from '../../src/components/Page';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>

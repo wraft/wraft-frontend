@@ -15,7 +15,7 @@ export interface IImageForm {
 
 const Form = (props: IImageForm) => {
   const { register, handleSubmit } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [loading, setLoading] = useState<boolean>(false);
   const onImageUploaded = (i: any) => {
     setLoading(false);
@@ -38,7 +38,7 @@ const Form = (props: IImageForm) => {
       py={3}
       width={4 / 12}
       mt={4}>
-        {loading && <Spinner width={32} color="primary"/>}
+      {loading && <Spinner width={32} color="primary" />}
       <Text mb={3} fontSize={2} fontWeight={500}>
         Upload Files
       </Text>
@@ -50,7 +50,7 @@ const Form = (props: IImageForm) => {
         <Input id="file" name="file" type="file" ref={register} />
       </Box>
       <Flex mx={-2} flexWrap="wrap" mt={2}>
-        <Button type="submit" ml={2}>          
+        <Button type="submit" ml={2}>
           Upload
         </Button>
       </Flex>

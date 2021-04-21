@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from 'theme-ui';
 
-import TemplateList from '../../src/components/TemplateList'
+import TemplateList from '../../src/components/TemplateList';
 import Page from '../../src/components/Page';
 
-export const Index = () => {
+const Index: FC = () => {
   return (
     <>
       <Head>
