@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 import Link from './NavLink';
 // import { Plus } from './Icons';
 import { fetchAPI } from '../utils/models';
@@ -42,7 +42,7 @@ const ItemField: FC<any> = ({ id, name }) => {
   );
 };
 
-const Form: FC = () => {
+const FieldList: FC = () => {
   const [contents, setContents] = useState<Array<FieldType>>([]);
   const [fields, setFields] = useState<Array<any>>([]);
 
@@ -107,4 +107,4 @@ const Form: FC = () => {
     </Box>
   );
 };
-export default Form;
+export default FieldList;

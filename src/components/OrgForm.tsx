@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { useStoreState } from 'easy-peasy';
 
-import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
+import { Button, Alert, Close, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
 import Field from './Field';
@@ -87,7 +87,7 @@ const formList = [
 
 const OrgForm = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
@@ -103,7 +103,6 @@ const OrgForm = () => {
 
   /** Update Form */
 
-  
   const onSubmit = (data: any) => {
     createEntity(data, 'organisations', token, onCreate);
     // updateEntity('organisations', data, token, onCreate);
@@ -137,7 +136,7 @@ const OrgForm = () => {
     console.log('profile.organisation_id', _o);
     setOrgan(_o);
 
-    Object.keys(_o).map(function(key, index) {
+    Object.keys(_o).map(function (key, index) {
       console.log('key', key, index, `${key}`, _o[`${key}`]);
       setValue(`${key}`, _o[`${key}`]);
     });
@@ -157,8 +156,8 @@ const OrgForm = () => {
   };
 
   const onOrgLoadAll = (_x: any) => {
-    console.log('x', _x)
-  }
+    console.log('x', _x);
+  };
 
   /**
    * Set Profile Context
@@ -181,7 +180,7 @@ const OrgForm = () => {
       );
     }
 
-    if(organ) {
+    if (organ) {
       console.log('got organ', organ);
     }
   }, [profile]);

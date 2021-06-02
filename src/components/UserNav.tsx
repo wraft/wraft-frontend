@@ -1,26 +1,15 @@
 import React, { useEffect, Fragment } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
-import styled from 'styled-components';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import Container from '../../src/components/Container';
+// import Container from '../../src/components/Container';
 // relative
 import Link from './NavLink';
 import { Logo, UserIcon } from './Icons';
 import { checkUser } from '../utils/models';
 import { useRouter } from 'next/router';
-
-const Header = styled(Box)`
-  border-bottom: solid 1px #eee;
-  padding-bottom: 12px;
-  padding-top: 12px;
-  padding-left: 12px;
-  padding-left: 24px;
-  border-bottom: solid 1px #eee;
-  background: #f8f8f9;
-`;
 
 export interface IUser {
   name: string;
@@ -34,8 +23,8 @@ const UserNav = () => {
     (actions: any) => actions.profile.updateProfile,
   );
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState(state => state.auth.token);
-  const profile = useStoreState(state => state.profile.profile);
+  const token = useStoreState((state) => state.auth.token);
+  const profile = useStoreState((state) => state.profile.profile);
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
@@ -67,24 +56,22 @@ const UserNav = () => {
   }, []);
 
   return (
-    <Header>
-      <Container width={70} bg={''}>
-        <Flex alignItems="center" py={2} px={1} pl={0} pr={3}>
-          <Box width={4 / 12}>
+    <Box>
+      <Container>
+        <Flex py={2} px={1} pl={0} pr={3}>
+          <Box>
             <Link href={token ? '/user-profile' : '/'}>
               <Logo />
               {token}
             </Link>
           </Box>
 
-          <Box width={8 / 12} ml="auto">
-            <Flex justifyContent="flex-end">
+          <Box>
+            <Flex>
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text fontWeight="bold" sx={{ px: 4, py: 2 }}>
-                      Join Wraft
-                    </Text>
+                    <Text sx={{ px: 4, py: 2 }}>Join Wraft</Text>
                   </Link>
                   <Link href="/login">
                     <Text
@@ -105,7 +92,7 @@ const UserNav = () => {
               {token && token !== '' && (
                 <Flex ml={2} sx={{ alignContent: 'flex-start' }}>
                   {profile && (
-                    <Text fontSize={1} ml={2} pt={2} mr={3} fontWeight="bold">
+                    <Text ml={2} pt={2} mr={3}>
                       {profile.name}
                     </Text>
                   )}
@@ -123,7 +110,7 @@ const UserNav = () => {
           </Box>
         </Flex>
       </Container>
-    </Header>
+    </Box>
   );
 };
 export default UserNav;

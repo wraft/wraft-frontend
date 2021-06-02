@@ -1,23 +1,20 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box } from 'theme-ui';
-import ThemeList from '../../../src/components/PipelineList';
+import PipelineList from '../../../src/components/PipelineList';
 import Page from '../../../src/components/PageFrame';
 
-const Index: FC = () => {
+const PipelineIndex: FC = () => {
   return (
     <>
       <Head>
-        <title>Pipeline - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Pipelines - Wraft Docs</title>
+        <meta name="description" content="Manage Pipelines" />
       </Head>
       <Page>
-        <Box>
-          <ThemeList />
-        </Box>
+        <PipelineList />
       </Page>
     </>
   );
 };
 
-export default Index;
+export default PipelineIndex;

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Flex, Button, Text, Link as LinkBase } from 'theme-ui';
-import Link from 'next/link';
+import { Box, Text } from 'theme-ui';
+// import Link from 'next/link';
 
 import { Label, Input } from 'theme-ui';
 
@@ -37,13 +37,12 @@ const Form = () => {
       as="form"
       onSubmit={handleSubmit(onSubmit)}
       py={3}
-      width={4 / 12}
       mt={4}>
-      <Text mb={3} fontSize={2} fontWeight={500}>
+      <Text mb={3}>
         Sign-in to Wraft
       </Text>
       <Box mx={-2} mb={3}>
-        <Box width={1} px={2} pb={3}>
+        <Box >
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -54,7 +53,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2}>
+        <Box >
           <Label htmlFor="location" mb={1}>
             Password
           </Label>
@@ -68,15 +67,7 @@ const Form = () => {
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
       </Box>
-      <Flex mx={-2} flexWrap="wrap" mt={2}>
-        <Button ml={2}>Login</Button>
-        <Text pl={3} pt={2}>
-          Not a user ?{' '}
-          <LinkBase href="signup" as={Link}>
-            Signup
-          </LinkBase>
-        </Text>
-      </Flex>
+      
     </Box>
   );
 };

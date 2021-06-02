@@ -9,9 +9,9 @@ interface Props {
   defaultValue: string,
 }
 
-const Field: React.FC<Props> = ({ name, label, register, defaultValue }) => {
+const FieldText: React.FC<Props> = ({ name, label, register, defaultValue }) => {
   return (
-    <Box width={1} pb={2}>
+    <Box pb={2}>
       <Label htmlFor="description" mb={1}>
         {label}
       </Label>
@@ -27,4 +27,4 @@ const Field: React.FC<Props> = ({ name, label, register, defaultValue }) => {
 };
 
 
-export default Field;
+export default FieldText;

@@ -19,6 +19,13 @@ const ModeToggle = (props: any) => {
   return (
     <Button      
       {...props}
+      sx={{
+        bg: 'gray.0',
+        borderColor: 'gray.1',
+        svg: {
+          fill: 'gray.4'
+        }
+      }}
       onClick={() => {
         const next = mode === "dark" ? "light" : "dark";
         setMode(next);

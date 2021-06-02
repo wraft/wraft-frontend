@@ -22,7 +22,7 @@ export interface INav {
   showFull?: boolean;
 }
 
-const ICON_COLOR = '#999';
+// const ICON_COLOR = '#999';
 
 const listMenu = [
   {

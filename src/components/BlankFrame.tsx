@@ -4,8 +4,8 @@ import { Box, Flex, Text } from 'theme-ui';
 
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
-import Sidebar from './Sidebar';
-import Nav from './Nav';
+// import Sidebar from './Sidebar';
+// import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
 export interface IPage {
@@ -13,6 +13,7 @@ export interface IPage {
   children: any;
   id?: string;
   noSide?: boolean;
+  inner?: any;
 }
 
 export interface IAlert {
@@ -23,11 +24,8 @@ export interface IAlert {
 
 export const Page = ({
   children,
-  showFull = true,
-  noSide = true,
   inner,
 }: IPage) => {
-  const shouldShow: boolean = showFull ? true : false;
 
   return (
     <>

@@ -18,7 +18,7 @@ export interface IField {
 
 const Form = () => {
   const { register, handleSubmit, errors } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const [ready, setReady] = useState<boolean>(false);
 
@@ -26,10 +26,6 @@ const Form = () => {
     setReady(true);
     userLogin(data, ProxyToken);
   };
-
-  // if(token) {
-  //   return (<h1>Logged in da</h1>)
-  // }
 
   const ProxyToken = (t: string) => {
     setToken(t);
@@ -43,15 +39,10 @@ const Form = () => {
   }, [token]);
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      width={4 / 12}
-      mt={4}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       <Text variant="pagetitle">Sign-in to Wraft</Text>
       <Box mx={-2} mb={3}>
-        <Box width={1} px={2} pb={3}>
+        <Box px={2} pb={3}>
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -62,7 +53,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2}>
+        <Box px={2}>
           <Label htmlFor="location" mb={1}>
             Password
           </Label>
@@ -76,7 +67,7 @@ const Form = () => {
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
       </Box>
-      <Flex mx={-2} flexWrap="wrap" mt={2}>
+      <Flex mx={-2} mt={2}>
         <Button ml={2}>
           {ready && <Spinner color="white" width={24} />}
           {!ready && <Text>Login</Text>}

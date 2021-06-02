@@ -192,8 +192,9 @@ const MenuItem: FC<MenuItemProps> = ({
       index={index}>
       <Icon
         variant={variant}
-        styles={{ color: disabled ? 'gray' : 'primary' }}
+        styles={{ color: disabled ? 'gray' : 'red' }}
       />
+      x
     </IconButton>
   );
 };
@@ -204,20 +205,20 @@ export interface BubbleMenuProps {
   activateLink(): void;
 }
 
-// const bubbleMenuItems: Array<[
-//   ActionNames<WysiwygExtensions>,
-//   [ComponentType<IconProps>, string?],
-//   Attrs?,
-// ]> = [
-//   ['bold', [BoldIcon]],
-//   ['italic', [ItalicIcon]],
-//   ['underline', [UnderlineIcon]],
-// ];
+const bubbleMenuItems: Array<[
+  ActionNames<WysiwygExtensions>,
+  [ComponentType<IconProps>, string?],
+  Attrs?,
+]> = [
+  ['bold', [BoldIcon]],
+  ['italic', [ItalicIcon]],
+  ['underline', [UnderlineIcon]],
+];
 
 export const BubbleMenu: FC<BubbleMenuProps> = ({
   linkActivated = false,
   deactivateLink,
-  activateLink,
+  // activateLink,
 }) => {
   const {
     actions,
@@ -259,7 +260,7 @@ export const BubbleMenu: FC<BubbleMenuProps> = ({
         />
       ) : (
         <BubbleContent>
-          {/* {bubbleMenuItems.map(([name, [Icon, subText], attrs], index) => {
+          {bubbleMenuItems.map(([name, [Icon, subText], attrs], index) => {
             const buttonState = getButtonState(actions[name].isActive(attrs), true);
 
             return (
@@ -274,13 +275,13 @@ export const BubbleMenu: FC<BubbleMenuProps> = ({
                 variant='inverse'
               />
             );
-          })} */}
-          <MenuItem
+          })}
+          {/* <MenuItem
             Icon={LinkIcon}
             state={getButtonState(actions.updateLink.isActive(), true)}
             onClick={activateLink}
             variant="inverse"
-          />
+          /> */}
         </BubbleContent>
       )}
     </BubbleMenuTooltip>

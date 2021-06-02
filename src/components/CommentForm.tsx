@@ -85,7 +85,7 @@ const CommentForm = (props: CommentFormProps) => {
       {comments && comments.length > 0 && (
         <Box sx={{ maxWidth: '40vh' }}>
           {comments.map((comment: Comment) => (
-            <CommentCard {...comment} />
+            <CommentCard key={comment.id} {...comment} />
           ))}
         </Box>
       )}

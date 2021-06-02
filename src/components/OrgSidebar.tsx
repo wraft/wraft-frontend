@@ -20,7 +20,7 @@ const OrgSidebar = (_props: INav) => {
         width: '22%',
         borderRight: 'solid 1px',
         borderColor: 'gray.3',
-        pt: 0,
+        pt: 3,
         pl: 3,
       }}>
       <NavLink href={'/account'}  variant="btnNavLink">

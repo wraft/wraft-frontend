@@ -5,7 +5,7 @@ import {
   Button,
   Avatar,
   Flex,
-  Badge,
+  // Badge,
   Container,
   Spinner,
 } from 'theme-ui';
@@ -13,16 +13,10 @@ import MenuItem from './NavLink';
 // import ContentCard from './ContentCard';
 import { Table } from './Table';
 
-import {
-  BoltCircle as Check,
-  InfoCircle,
-} from '@styled-icons/boxicons-regular';
-
-import { useStoreState } from 'easy-peasy';
-import { deleteEntity, fetchAPI } from '../utils/models';
+// import { useStoreState } from 'easy-peasy';
+import { fetchAPI } from '../utils/models';
 import { TimeAgo } from './ContentDetail';
 import Paginate from './Paginate';
-import { HeadingFrame } from './Card';
 import PageHeader from './PageHeader';
 
 export interface ILayout {
@@ -70,54 +64,54 @@ export interface IFieldItem {
   type: string;
 }
 
-const Tablet = (props: any) => (
-  <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
-    <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
-  </Badge>
-);
+// const Tablet = (props: any) => (
+//   <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
+//     <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
+//   </Badge>
+// );
 
-const ContentCardB = (props: IField) => {
-  return (
-    <Box key={props.content.instance_id} pb={3} pt={3}>
-      <Flex sx={{ position: 'relative' }}>
-        <Box variant="cTyeMark" bg={props.content_type.color} />
-        <MenuItem
-          variant="rel"
-          href={`/content/[id]`}
-          path={`content/${props.content.id}`}>
-          <Text>{props.content.serialized.title}</Text>
-        </MenuItem>
-        <Box ml="auto" mr={3}>
-          {props.state.state === 'Published' && (
-            <Check width={16} color="#2b8a3e" />
-          )}
+// const ContentCardB = (props: IField) => {
+//   return (
+//     <Box key={props.content.instance_id} pb={3} pt={3}>
+//       <Flex sx={{ position: 'relative' }}>
+//         <Box variant="cTyeMark" bg={props.content_type.color} />
+//         <MenuItem
+//           variant="rel"
+//           href={`/content/[id]`}
+//           path={`content/${props.content.id}`}>
+//           <Text>{props.content.serialized.title}</Text>
+//         </MenuItem>
+//         <Box ml="auto" mr={3}>
+//           {props.state.state === 'Published' && (
+//             <Check width={16} color="#2b8a3e" />
+//           )}
 
-          {props.state.state === 'Draft' && (
-            <InfoCircle width={16} color="#5c7cfa" />
-          )}
-          <Text
-            pt={1}
-            sx={{
-              pl: 1,
-              fontSize: 0,
-              color: 'gray.7',
-              display: 'inline-block',
-            }}>
-            {props.state.state}
-          </Text>
-          <Flex>{/* props.content_type.name */}</Flex>
-        </Box>
-      </Flex>
-      <Flex>
-        <Tablet type={props.content.instance_id} pr={2} />
-        <Text color="gray.6" sx={{ fontSize: '8px', pt: 2, pl: 1, pr: 1 }}>
-          •
-        </Text>
-        <TimeAgo time={props.content.updated_at} />
-      </Flex>
-    </Box>
-  );
-};
+//           {props.state.state === 'Draft' && (
+//             <InfoCircle width={16} color="#5c7cfa" />
+//           )}
+//           <Text
+//             pt={1}
+//             sx={{
+//               pl: 1,
+//               fontSize: 0,
+//               color: 'gray.7',
+//               display: 'inline-block',
+//             }}>
+//             {props.state.state}
+//           </Text>
+//           <Flex>{/* props.content_type.name */}</Flex>
+//         </Box>
+//       </Flex>
+//       <Flex>
+//         <Tablet type={props.content.instance_id} pr={2} />
+//         <Text color="gray.6" sx={{ fontSize: '8px', pt: 2, pl: 1, pr: 1 }}>
+//           •
+//         </Text>
+//         <TimeAgo time={props.content.updated_at} />
+//       </Flex>
+//     </Box>
+//   );
+// };
 
 export interface IPageMeta {
   page_number: number;
@@ -152,7 +146,7 @@ const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
  * @returns
  */
 const ContentList = () => {
-  const token = useStoreState((state) => state.auth.token);
+  // const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
@@ -189,13 +183,13 @@ const ContentList = () => {
   /** DELETE content
    * @TODO move to inner page [design]
    */
-  const delData = (id: string) => {
-    deleteEntity(`contents/${id}`, token);
-  };
+  // const delData = (id: string) => {
+  //   deleteEntity(`contents/${id}`, token);
+  // };
 
-  const doDelete = (id: string) => {
-    delData(id);
-  };
+  // const doDelete = (id: string) => {
+  //   delData(id);
+  // };
 
   const changePage = (_e: any) => {
     console.log('page', _e?.selected);
@@ -265,7 +259,7 @@ const ContentList = () => {
 
   return (
     <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Contents">
+      <PageHeader title="Documents">
         <Box sx={{ ml: 'auto', mr: 5 }}>
           <Button variant="btnPrimary">+ New Doc</Button>
         </Box>
@@ -330,6 +324,7 @@ const ContentList = () => {
             </Box> */}
             </Box>
             <Paginate changePage={changePage} {...pageMeta} />
+            {total}
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox">

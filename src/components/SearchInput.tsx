@@ -41,9 +41,6 @@ const SearchInput: React.FC<Props> = ({
     <Box>
       <Input
         placeholder={placeholder ? placeholder : ''}
-        size="lg"
-        id={name}
-        name={name}
         defaultValue={defaultValue || ''}
         onChange={(e) => onSearch(e.currentTarget.value)}
       />

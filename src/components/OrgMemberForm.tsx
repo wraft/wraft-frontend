@@ -10,7 +10,7 @@ import OrgMembersList from './OrgMembersList';
 import Field from './Field';
 import { checkUser, createEntity, loadEntity } from '../utils/models';
 
-import { defaultModalStyle } from '../utils';
+// import { defaultModalStyle } from '../utils';
 import Modal from 'react-modal';
 
 export interface Members {
@@ -163,12 +163,13 @@ const OrgMemberForm = () => {
       <Box>
         {organ && (
           <Box>
+            <Box onClick={toggleSearch}></Box>
             <OrgMembersList id={organ?.id} members={members} onInitInvite={onInvite}/>
             <Box>
               <Modal
                 isOpen={showSearch}
                 onRequestClose={closeSearch}
-                style={defaultModalStyle}
+                // style={defaultModalStyle}
                 ariaHideApp={false}
                 contentLabel="SearchWraft">
                 <Box p={4}>

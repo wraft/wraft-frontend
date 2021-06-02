@@ -5,7 +5,7 @@ import { fetchAPI } from '../utils/models';
 import Paginate, { IPageMeta } from './Paginate';
 
 import { Table } from './Table';
-// import { Table } from '@plateui/ui-react';
+import PageHeader from './PageHeader';
 
 export interface ILayout {
   width: number;
@@ -46,7 +46,7 @@ export interface IFieldItem {
 const ItemField: FC<any> = ({ flow }) => {
   return (
     <Box key={flow.id} pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }}>
-      <MenuItem href={`/flows/edit/[id]`} path={`/flows/edit/${flow.id}`}>
+      <MenuItem href={`/manage/flows/edit/[id]`} path={`/manage/flows/edit/${flow.id}`}>
         <Box>
           <Text as="h4">{flow.name}</Text>
           <Text sx={{ fontSize: 0}} color="gray.6">{flow.id}</Text>
@@ -106,7 +106,11 @@ const Form: FC = () => {
 
   return (
     <Box py={3} mt={4} variant="layout.pageFrame">
-      <Text variant="pagetitle">Flows</Text>
+      <PageHeader title="Variants">
+        <Box sx={{ ml: 'auto', mr: 5}}>
+          <MenuItem href="/content-types/new" variant="btnSecondary">+ New Variant</MenuItem>
+        </Box>
+      </PageHeader>
       <Box mx={0} mb={3}>
         {!loading && (
           <Box>
@@ -159,6 +163,7 @@ const Form: FC = () => {
           </Box>
         </Box>
         <Paginate changePage={changePage} {...pageMeta} />
+        {total}
       </Box>
     </Box>
   );

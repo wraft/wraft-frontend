@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import Theme from '../../../src/components/PipelineForm';
+import PipelineForm from '../../../src/components/PipelineForm';
 
 import Page from '../../../src/components/PageFrame';
-import { Flex } from 'theme-ui';
+import { Flex, Container } from 'theme-ui';
 import Link from 'next/link';
 
 const Index: FC = () => {
@@ -15,10 +15,12 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/pipelines">
+          <Link href="/manage/pipelines">
             <a>Back</a>
           </Link>
-          <Theme />
+          <Container sx={{ maxWidth: '60ch', mx: 'auto'}}>
+            <PipelineForm />
+          </Container>
         </Flex>
       </Page>
     </>

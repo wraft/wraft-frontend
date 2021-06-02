@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
 
@@ -59,7 +59,7 @@ const BlockTemplateListFrame: FC = () => {
     <Box>
       <PageHeader title="Blocks">
         <Box sx={{ ml: 'auto' }}>
-          <Link href="/block_templates/new" variant="btnSecondary">
+          <Link href="/blocks/new" variant="btnSecondary">
             + New Block
           </Link>
         </Box>
