@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { Box } from 'theme-ui';
-import Container from '../src/components/Container';
+// import Container from '../src/components/Container';
 import UserNav from '../src/components/UserNav';
 import UserLoginForm from '../src/components/UserLoginForm';
 
@@ -15,14 +15,15 @@ export const Index: FC = () => {
           content="Wraft - The Document Automation Platform"
         />
       </Head>
-      <Box>
-        <Container width={100} bg={''}>
+      <Box bg='gray.0'>
+        {/* <Container bg='red' width={100}> */}
           <UserNav />
-        </Container>
+          <UserLoginForm />
+        {/* </Container> */}
       </Box>
-      <Container width={60} bg={''}>
-        <UserLoginForm />
-      </Container>
+      {/* <Container bg='green' width={60}> */}
+        
+      {/* </Container> */}
     </>
   );
 };
