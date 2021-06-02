@@ -30,8 +30,8 @@ const styles = {
       border: '0',
     },
     '&:hover': {
-      bg: 'gray.1'
-    }
+      bg: 'gray.1',
+    },
   },
   th: { p: 2, textAlign: 'left', fontWeight: 'normal' },
   td: { p: 2 },
@@ -53,10 +53,21 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
     prepareRow,
   } = tableInstance;
 
+  // const { thead } = styles;
+
   return (
     <Box as="table" {...getTableProps()} sx={styles.table}>
-      <Box as="thead">
-      {/* sx={{...styles.thead}} */}
+      <Box
+        as="thead"
+        sx={{
+          bg: 'gray.0',
+          fontSize: 0,
+          textTransform: 'uppercase',
+          border: '1px solid',
+          borderColor: 'gray.3',
+          color: 'gray.6',
+        }}>
+        {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (
           <Box as="tr" {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => {

@@ -69,19 +69,40 @@ const Modal: React.FC<ModalProps> = ({
           {(disclosureProps) => React.cloneElement(disclosure, disclosureProps)}
         </DialogDisclosure>
       )}
-      <Box
+      <DialogBackdrop
         {...dialog}
         {...{ visible: isVisible }}
-        // visible={isVisible}
         onClick={onClose}
-        as={DialogBackdrop}
         aria-label="Dialog"
-        variant="layout.modalBackgroup">
-        <Box
-          as={Dialog}
+        sx={{
+          bg: 'rgba(30,30,30,0.85)',
+          position: 'fixed',
+          zIndex: 10000,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        // sx={{ variant: "layout.modalBackgroup", bg: 'gray.0'}}
+      >
+        <Dialog
           {...dialog}
           tabIndex={-1}
-          variant="layout.modalContent"
+          // variant="layout.modalContent"
+          sx={{
+            p: 0,
+            top: '10%',
+            position: 'relative',
+            right: 0,
+            zIndex: 300,
+            borderRadius: '8px',
+            width: ['80%', '70%', '60%'],
+            bg: 'gray.0',
+            mx: 'auto',
+            overflow: 'scroll', // <-- This tells the modal to scrol
+          }}
           {...{
             visible: isVisible,
             hideOnEsc: true,
@@ -92,8 +113,8 @@ const Modal: React.FC<ModalProps> = ({
           // className={className}
           aria-label={label}>
           {children}
-        </Box>
-      </Box>
+        </Dialog>
+      </DialogBackdrop>
     </Box>
   );
 };
