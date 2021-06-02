@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
-  Container,
   Button,
   Text,
   Input,
   Label,
-  Divider,
   Flex,
   Select,
 } from 'theme-ui';
@@ -14,12 +12,11 @@ import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
-import { useRouter } from 'next/router';
 // import styled from 'styled-components';
-import { createEntity, deleteEntity, loadEntity } from '../utils/models';
+import { createEntity, loadEntity } from '../utils/models';
 import { defaultModalStyle } from '../utils';
+
 import Modal from 'react-modal';
-import { useToasts } from 'react-toast-notifications';
 
 interface ApprovalFormBaseProps {
   states?: Array<any>;

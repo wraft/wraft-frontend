@@ -6,7 +6,6 @@ import ProfileForm from '../../src/components/ProfileForm';
 import Page from '../../src/components/PageFrame';
 import OrgSidebar from '../../src/components/OrgSidebar';
 import PageHeader from '../../src/components/PageHeader';
-import Link from '../../src/components/NavLink';
 
 const Contents: FC = () => {
   return (

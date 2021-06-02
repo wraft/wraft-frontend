@@ -3,7 +3,6 @@ import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
 import Page from '../../../src/components/BlankFrame';
-import { Box } from 'theme-ui';
 import { useRouter } from 'next/router';
 import CreateForm from '../../../src/components/ContentForm';
 
