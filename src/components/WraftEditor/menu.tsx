@@ -131,7 +131,7 @@ export const MenuBar: FC<MenuBarProps> = ({ inverse, activateLink }) => {
               actions[name].isActive(attrs),
               inverse,
             );
-            console.log('buttonState', buttonState);
+            // console.log('buttonState', buttonState);
             return (
               <MenuItem
                 index={index}
@@ -140,6 +140,7 @@ export const MenuBar: FC<MenuBarProps> = ({ inverse, activateLink }) => {
                 subText={subText}
                 state="inverse"
                 name={name}
+                {...{ tx: buttonState}}
                 // disabled={!actions[name].isEnabled()}
                 // onClick={name => console.log('x', name, actions)}
                 // onClick={runAction(actions[name], attrs)}
