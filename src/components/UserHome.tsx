@@ -14,28 +14,28 @@ export interface TextBlockProps {
 const TextBlock = ({ title, body }: TextBlockProps) => {
   return (
     <Box sx={{ p: 5}}>
-      <Text sx={{ fontSize: 3, fontWeight: 600, color: 'gray.8'}}>{title}</Text>
-      <Text sx={{ fontSize: 3, color: 'gray.6'}}>{body}</Text>
+      <Text as="h3" sx={{ fontSize: 3, fontWeight: 600, color: 'gray.9'}}>{title}</Text>
+      <Text as="p" sx={{ fontSize: 3, color: 'gray.6'}}>{body}</Text>
     </Box>
   );
 };
 
 const UserHome = () => {
   return (
-    <Box>
-      <Box variant="hero" pb={4} bg="gray.2" sx={{ pb: 6}}>
+    <Box bg="gray.0">
+      <Box variant="hero" pb={4} sx={{ pb: 6}}>
         <Container width={70} bg='' sx={{ mb: 6}}>
           <Box p={4} pl={0} pt={6} pb={3}>
-            <Text variant="pagetitle" sx={{ fontSize: 5, fontWeight: 600, color: 'gray.9' }}>
-              Professional Document Pipelines
-            <Text sx={{ fontWeight: 300, fontSize: 4, color: 'gray.6' }} >Automate your document creation process</Text>
+            <Text as="h1" variant="pagetitle" sx={{ fontSize: 5, fontWeight: 600, color: 'gray.9' }}>
+              Professional Document Pipelines            
             </Text>
+            <Text as="h2" sx={{ fontWeight: 300, fontSize: 4, color: 'gray.6' }} >Automate your document creation process</Text>
           </Box>
           <Button sx={{ mb: 5}}>Get Started</Button>
         </Container>        
       </Box>
-      <Box sx={{ pt: 5}}>
-        <Container width={70} bg="" sx={{ pt: 5}}>
+      <Box sx={{ pt: 5, bg: 'gray.0'}}>
+        <Container width={70} bg="" sx={{ pt: 5, bg: 'gray.0'}}>
           <Grid gap={2} columns={3}>
             <TextBlock title="Entities with UUID" body="Custom serializations for Documents with relationships"/>
             <TextBlock title="Automatable" body="Create custom pipelines for your Document flows"/>

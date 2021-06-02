@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // import Container from '../../src/components/Container';
 // relative
 import Link from './NavLink';
-import { Logo, UserIcon } from './Icons';
+import { UserIcon, BrandLogo } from './Icons';
 import { checkUser } from '../utils/models';
 import { useRouter } from 'next/router';
 
@@ -56,17 +56,31 @@ const UserNav = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ bg: 'gray.0' }}>
       <Container>
-        <Flex py={2} px={1} pl={0} pr={3}>
+        <Flex sx={{ py: 3, px: 4 }}>
           <Box>
-            <Link href={token ? '/user-profile' : '/'}>
-              <Logo />
-              {token}
+            <Link
+              href={token ? '/user-profile' : '/'}
+              sx={{
+                p: 0,
+                color: 'gray.0',
+                fill: 'red',
+                bg: 'red',
+                display: 'block',
+                svg: {
+
+                  color: 'green',
+                  display: 'block',
+                  path: { fill: 'yellow' },
+                  // fill: 'gray.9'
+                },
+              }}>
+              <BrandLogo width="6rem" height="1rem" />
             </Link>
           </Box>
 
-          <Box>
+          <Box sx={{ ml: 'auto' }}>
             <Flex>
               {!token && (
                 <Fragment>

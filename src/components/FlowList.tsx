@@ -105,12 +105,7 @@ const Form: FC = () => {
   }, [contents]);
 
   return (
-    <Box py={3} mt={4} variant="layout.pageFrame">
-      <PageHeader title="Variants">
-        <Box sx={{ ml: 'auto', mr: 5}}>
-          <MenuItem href="/content-types/new" variant="btnSecondary">+ New Variant</MenuItem>
-        </Box>
-      </PageHeader>
+    <Box py={3} mt={4} variant="layout.pageFrame">      
       <Box mx={0} mb={3}>
         {!loading && (
           <Box>
@@ -123,7 +118,7 @@ const Form: FC = () => {
             contents.map((m: any) => <ItemField key={m.flow.id} {...m} />)}
         </Box> */}
 
-        <Box variant="layout.pageFrame">
+        <Box variant="layout.contentFrame">
           <Box mx={0} mb={3}>
             {flows && (
               <Table

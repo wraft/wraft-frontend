@@ -55,7 +55,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
                   flexDirection: ['column', 'column'],
                 }}>
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>
-                  Support | Contact Us
+                  Support
                 </Text>
               </Box>
             </Flex>
