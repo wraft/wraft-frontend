@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
+import React, { useEffect, useState } from 'react';
+import { Box, Text, Flex, Avatar } from 'theme-ui';
 import { loadEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { TimeAgo } from './ContentDetail';

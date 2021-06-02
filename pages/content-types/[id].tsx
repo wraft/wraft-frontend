@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
@@ -10,9 +10,9 @@ const Index: FC = () => {
   const router = useRouter();
   // const [action, setAction] = useState<any>();
 
-  const onSave = () => {
-    console.log('saved');
-  }
+  // const onSave = () => {
+  //   console.log('saved');
+  // }
   
   return (
     <>
