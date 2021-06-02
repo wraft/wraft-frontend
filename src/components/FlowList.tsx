@@ -5,7 +5,7 @@ import { fetchAPI } from '../utils/models';
 import Paginate, { IPageMeta } from './Paginate';
 
 import { Table } from './Table';
-import PageHeader from './PageHeader';
+// import PageHeader from './PageHeader';
 
 export interface ILayout {
   width: number;
