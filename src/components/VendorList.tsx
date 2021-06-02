@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex, Container } from 'theme-ui';
+import { Box, Text, Container } from 'theme-ui';
 // import Link from './NavLink';
 import { Table } from './Table';
 // import { Plus } from './Icons';
-import { fetchAPI, deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI } from '../utils/models';
+// import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+// import { useToasts } from 'react-toast-notifications';
 import PageHeader from './PageHeader';
 
 export interface VendorTypes {
@@ -23,8 +23,12 @@ interface PersonCardProps {
 
 const PersonCard = ({ name, phone }: PersonCardProps) => (
   <Box>
-    <Text as="h5" sx={{ fontWeight: 500, color: 'gray.8' }}>{name}</Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.5' }}>{phone}</Text>
+    <Text as="h5" sx={{ fontWeight: 500, color: 'gray.8' }}>
+      {name}
+    </Text>
+    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.5' }}>
+      {phone}
+    </Text>
   </Box>
 );
 
@@ -41,10 +45,10 @@ export interface Vendor {
 }
 
 const VendorListBlock: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
+  // const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Vendor>>([]);
   const [vendors, setVendors] = useState<Array<Vendor>>([]);
-  const { addToast } = useToasts();
+  // const { addToast } = useToasts();
 
   const loadData = () => {
     fetchAPI('vendors')
@@ -53,11 +57,6 @@ const VendorListBlock: FC = () => {
         setContents(res);
       })
       .catch();
-  };
-
-  const onDelete = (id: string) => {
-    deleteEntity(`vendors/${id}`, token);
-    addToast('Deleted Vendor', { appearance: 'success' });
   };
 
   useEffect(() => {
@@ -69,14 +68,13 @@ const VendorListBlock: FC = () => {
       let row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col1: <Text>{r.id}</Text>,
           col2: (
             <Box>
               <Text as="h4">{r.name}</Text>
               <Text sx={{ color: 'gray.6' }}>{r.address}</Text>
             </Box>
           ),
-          col3: <PersonCard name={r.contact_person} phone={r.phone}/>,
+          col3: <PersonCard name={r.contact_person} phone={r.phone} />,
         };
 
         row.push(rFormated);
@@ -89,23 +87,18 @@ const VendorListBlock: FC = () => {
   return (
     <Box>
       <PageHeader title="Vendors">
-        <Box sx={{ ml: 'auto', mr: 5}}>          
+        <Box sx={{ ml: 'auto', mr: 5 }}>
           {/* <Button variant="btnSecondary" mr={2}>Secondary</Button> */}
           <Button variant="btnPrimary">+ New Vendor</Button>
         </Box>
       </PageHeader>
-      <Container sx={{ pl: 5, pr: 5 }}>
+      <Container sx={{ pl: 5, pr: 5, pt: 4 }}>
         <Box mx={0} mb={3}>
           <Box sx={{ maxWidth: '70ch' }}>
             {vendors && (
               <Table
                 options={{
                   columns: [
-                    {
-                      Header: 'Id',
-                      accessor: 'col1', // accessor is the "key" in the data
-                      width: '5%',
-                    },
                     {
                       Header: 'Name',
                       accessor: 'col2',

@@ -47,14 +47,20 @@ const listMenu = [
     logo: <PermLogo />,
     path: '/manage/fields',
   },
+  {
+    name: 'Pipelines',
+    logo: <PermLogo />,
+    path: '/manage/pipelines',
+  },
 ];
 
 const ManageHomePage = (_props: INav) => {
   return (
     <Flex sx={{ pt: 5, pl: 3, flexWrap: 'wrap' }}>
       {listMenu &&
-        listMenu.map((l: any) => (
+        listMenu.map((l: any, index: any) => (
           <Box
+            key={index}
             sx={{
               width: '33%',
               mr: 4,

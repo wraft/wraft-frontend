@@ -8,20 +8,25 @@ import {
   Label,
   Divider,
   Flex,
-  Select,
+  // Select,
 } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
-import Field from './Field';
 import { useRouter } from 'next/router';
-// import styled from 'styled-components';
-import { createEntity, deleteEntity, loadEntity } from '../utils/models';
-import { defaultModalStyle } from '../utils';
-import Modal from 'react-modal';
 import { useToasts } from 'react-toast-notifications';
 
+import { createEntity, deleteEntity, loadEntity } from '../utils/models';
+
 import ApprovalFormBase from './ApprovalCreate';
+
+import { useDialogState } from 'reakit/Dialog';
+
+import Field from './Field';
+import Modal from './Modal';
+
+import PageHeader from './PageHeader';
+import NavLink from './NavLink';
 
 // const Block = styled(Box)`
 //   border: solid 1px #ddd;
@@ -84,6 +89,8 @@ const StatesForm = (props: StateFormProps) => {
   const [showApproval, setShowApproval] = useState<boolean>(false);
   const { addToast } = useToasts();
 
+  const dialog = useDialogState();
+
   function closeModal() {
     setShowModal(false);
   }
@@ -122,7 +129,7 @@ const StatesForm = (props: StateFormProps) => {
   return (
     <Box p={2}>
       <Text as="h4" variant="sectiontitle" sx={{ mb: 2 }} pb={2}>
-        All States
+        All States {showApproval}
       </Text>
       {props.content && (
         <Box
@@ -170,30 +177,24 @@ const StatesForm = (props: StateFormProps) => {
         Add State
       </Button>
       {/* {toggled && ( */}
-      <>
-        <Modal
-          isOpen={showModal}
-          onRequestClose={closeModal}
-          style={defaultModalStyle}
-          ariaHideApp={false}
-          contentLabel="FileUploader">
+      <Modal
+        isVisible={showModal}
+        dialog={dialog}
+        label="ModalX"
+        aria-label="Player Card">
+        <Box p={4}>
           <Box>
-            <Box>
-              <Label>Add New State</Label>
-              <Input placeholder="New State Name" onChange={updateState} />
-            </Box>
-            <Button variant="secondary" onClick={AddState}>
-              Add State
-            </Button>
+            <Label>Add New State</Label>
+            <Input placeholder="New State Name" onChange={updateState} />
           </Box>
-        </Modal>
-      </>
-      {/* )} */}
+          <Button variant="secondary" onClick={AddState}>
+            Add State
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 };
-
-
 
 const FlowForm = () => {
   const { register, handleSubmit, setValue, errors } = useForm();
@@ -227,7 +228,7 @@ const FlowForm = () => {
   const loadFlowSuccess = (data: any) => {
     const res: Flow = data.flow;
     setFlow(res);
-    setValue('name', res?.flow?.name);
+    setValue('name', res?.name);
   };
 
   /**
@@ -293,14 +294,16 @@ const FlowForm = () => {
   }, [cId, token]);
 
   return (
-    <Box py={3} mt={4}>
+    <Box>
+      <PageHeader title= {cId ? 'Edit Flows' : 'Create Flows'}>
+        <Box sx={{ ml: 'auto', mr: 5}}>
+          <NavLink href="/content-types/new" variant="btnSecondary">+ New Variant</NavLink>
+        </Box>
+      </PageHeader>
+
       <Box>
+        {flow?.id}
         <Container variant="layout.pageFrame">
-          <Box sx={{ mb: 4 }}>
-            <Text as="h4" variant="sectiontitle">
-              {cId ? 'Edit' : 'Create'} Flows
-            </Text>
-          </Box>
           <Box>
             <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
               <Field
@@ -315,7 +318,12 @@ const FlowForm = () => {
             </Box>
             <Divider sx={{ color: 'gray.3', my: 4 }} />
             <Box mt={2}>
-              {approval && <ApprovalFormBase closeModal={() => setApproval(false)} isOpen={approval} states={content} />}
+                <ApprovalFormBase
+                  closeModal={() => setApproval(false)}
+                  isOpen={approval}
+                  states={content}
+                  parent={cId}
+                />
 
               {edit && content && (
                 <StatesForm

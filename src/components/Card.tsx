@@ -9,7 +9,7 @@ import {
   Menu,
   MenuItem,
   MenuButton,
-  MenuSeparator,
+  // MenuSeparator,
 } from 'reakit/Menu';
 
 interface IItemField {
@@ -29,7 +29,7 @@ const LayoutCard = ({
   id,
   name,
   model = 'content-types',
-  prefix,
+  // prefix,
   decription,
   screenshot,
   onDelete,

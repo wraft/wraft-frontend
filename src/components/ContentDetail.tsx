@@ -9,7 +9,7 @@ import CommentForm from './CommentForm';
 
 import { parseISO, formatDistanceStrict } from 'date-fns';
 
-import { Trash, Pencil, Download } from '@styled-icons/boxicons-regular';
+import { Pencil, Download } from '@styled-icons/boxicons-regular';
 
 import {
   createEntity,

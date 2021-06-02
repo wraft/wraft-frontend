@@ -321,7 +321,7 @@ const theme: Theme = {
       maxWidth: '100%',
     },
   },
-  links: {   
+  links: {
     btnNavLink: {
       // bg: 'gray.2',
       p: 2,
@@ -333,10 +333,10 @@ const theme: Theme = {
       px: 3,
       m: 0,
       bg: 'primary.1',
-      color: 'primary.9',      
+      color: 'primary.9',
       border: 'solid 1px',
       borderColor: 'gray.5',
-      borderRadius: 4,      
+      borderRadius: 4,
       fontWeight: 800,
       fontSize: 0,
       // textTransform: 'uppercase',
@@ -346,14 +346,14 @@ const theme: Theme = {
       px: 3,
       m: 0,
       bg: 'gray.1',
-      color: 'gray.9',      
+      color: 'gray.9',
       border: 'solid 1px',
       borderColor: 'gray.5',
-      borderRadius: 4,      
+      borderRadius: 4,
       fontWeight: 800,
       fontSize: 0,
       // textTransform: 'uppercase',
-    }, 
+    },
     btnPrimaryIcon: {
       bg: 'gray.0',
       border: 'solid 1px',
@@ -368,7 +368,7 @@ const theme: Theme = {
       '&:hover': {
         bg: 'gray.1',
         borderColor: 'gray.5',
-      }
+      },
       // mt: -1,
       // color: 'gray.0',
       // pb: 0,
@@ -413,8 +413,64 @@ const theme: Theme = {
     },
   },
   layout: {
+    modalContent: {
+      p:0,
+      top: '10%',
+      // m: 2,
+      position: 'relative',
+      // left: 0,
+      right: 0,
+      // top: 0,
+      // mt: ['50%', 0, 0],
+      zIndex: 300,
+      // ml: '-10%',
+      // right: 'auto',
+      // bottom: 'auto',
+      borderRadius: '8px',
+      // mr: '-50%',
+      // transform: 'translate(-30% -30%)',
+      // height: '10%', // <-- This sets the height
+      width: ['80%', '70%', '60%'],
+      bg: 'gray.0',
+      mx: 'auto',
+      // mt: '-30%',
+      overflow: 'scroll', // <-- This tells the modal to scrol
+    },
+    modalContentB: {
+      top: '10%',
+      m: 2,
+      position: 'relative',
+      // left: 0,
+      right: 0,
+      // top: 0,
+      mt: ['50%', 0, 0],
+      zIndex: 300,
+      // ml: '-10%',
+      // right: 'auto',
+      // bottom: 'auto',
+      borderRadius: '8px',
+      // mr: '-50%',
+      // transform: 'translate(-30% -30%)',
+      // height: '10%', // <-- This sets the height
+      width: ['80%', '70%', '60%'],
+      bg: 'gray.0',
+      mx: 'auto',
+      // mt: '-30%',
+      overflow: 'scroll', // <-- This tells the modal to scrol
+    },
+    modalBackgroup: {
+      bg: 'rgba(30,30,30,0.85)',
+      position: 'fixed',
+      zIndex: 10000,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
     frameHeading: {
-      bg: 'gray.1',
+      bg: 'gray.0',
       pb: 3,
       px: 4,
       pt: 3,
@@ -429,13 +485,13 @@ const theme: Theme = {
       mt: 3,
       lineHeight: 0,
       svg: { fill: 'text' },
-      bg: 'gray.1'
+      bg: 'gray.1',
     },
     linkBlock: {
       bg: 'gray.0',
     },
     pageFrame: {
-      px: 4
+      p: 4,
     },
     menuWrapper: {
       px: 2,
@@ -623,7 +679,7 @@ const theme: Theme = {
     pageheading: {
       fontSize: 1,
       mb: 2,
-      color:'gray.7',
+      color: 'gray.7',
       fontWeight: 400,
       mt: 2,
     },
@@ -664,7 +720,7 @@ const theme: Theme = {
       '&:hover': {
         bg: 'gray.1',
         borderColor: 'gray.5',
-      }
+      },
       // mt: -1,
       // color: 'gray.0',
       // pb: 0,
@@ -674,10 +730,10 @@ const theme: Theme = {
       px: 3,
       m: 0,
       bg: 'primary.1',
-      color: 'primary.9',      
+      color: 'primary.9',
       border: 'solid 1px',
       borderColor: 'gray.5',
-      borderRadius: 4,      
+      borderRadius: 4,
       fontWeight: 800,
       fontSize: 0,
       textTransform: 'uppercase',
@@ -687,16 +743,16 @@ const theme: Theme = {
       px: 3,
       m: 0,
       bg: 'gray.1',
-      color: 'gray.9',      
+      color: 'gray.9',
       border: 'solid 1px',
       borderColor: 'gray.5',
-      borderRadius: 4,      
+      borderRadius: 4,
       fontWeight: 800,
       fontSize: 0,
       // textTransform: 'uppercase',
     },
     btnMain: {
-      variant: 'button.btnSecondary',      
+      variant: 'button.btnSecondary',
     },
     base: {
       bg: 'transparent',
@@ -709,7 +765,7 @@ const theme: Theme = {
       mt: 3,
       lineHeight: 0,
       svg: { fill: 'text' },
-      bg: 'gray.1'
+      bg: 'gray.1',
     },
     secondary: {
       color: 'blue.9',
@@ -732,7 +788,7 @@ const theme: Theme = {
       fontWeight: 600,
       fontSize: 0,
       borderRadius: 2,
-      textTransform: 'uppercase'
+      textTransform: 'uppercase',
     },
     delete: {
       color: 'text',

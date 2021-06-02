@@ -108,7 +108,6 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                         fontSize: 0,
                         pl: 3,
                         pt: 3,
-                        ml: 2,
                         color: 'blue.5',
                         ml: 'auto',
                         textTransform: 'uppercase',

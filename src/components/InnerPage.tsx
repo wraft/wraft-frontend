@@ -1,13 +1,11 @@
 import React from 'react';
-import { Flex, Box, Text } from 'theme-ui';
+import { Flex, Box } from 'theme-ui';
 import styled from '@emotion/styled';
 
 export const IconStyleWrapper = styled.div`
   color: #444;
   margin-right: 12px;
 `;
-
-import { Layout } from '@styled-icons/boxicons-regular';
 
 import Page from './PageFrame';
 import { HeadingFrame } from './Card';

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Flex, Text, Button, Input } from 'theme-ui';
+import React from 'react';
+import { Box, Flex, Text } from 'theme-ui';
 
 import { useRouter } from 'next/router';
 
@@ -7,23 +7,7 @@ import MenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
 import { BrandLogo } from '../../src/components/Icons';
 
-import { defaultModalStyle } from '../utils';
-import Modal from 'react-modal';
-
-// import { Logo } from './Icons';
-
-// export const IconStyleWrapper = styled.div`
-//   color: #444;
-//   margin-right: 12px;
-// `;
-
-// const MenuWrapper = styled(Flex)`
-//   opacity: 1;
-// `;
-
-// const MenuWrapperInactive = styled(Flex)`
-//   color:
-// `;
+// import Modal from 'react-modal';
 
 import {
   Note,
@@ -34,7 +18,7 @@ import {
   Cog,
 } from '@styled-icons/boxicons-regular';
 import ModeToggle from './ModeToggle';
-import ContentTypeDashboard from './ContentTypeDashboard';
+// import ContentTypeDashboard from './ContentTypeDashboard';
 
 // export const IconWrapper = styled(Layout)`
 //   color: '#999';
@@ -86,7 +70,7 @@ const listMenu = [
   //   logo: <Layout width={20} />,
   //   path: '/layouts',
   // },
-  
+
   {
     name: 'Blocks',
     logo: <Water width={20} />,
@@ -139,7 +123,7 @@ const Nav = (props: any) => {
   const router = useRouter();
   const pathname: string = router.pathname as any;
 
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  // const [showSearch, setShowSearch] = useState<boolean>(false);
   // popper
   // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
   // const [referenceElement, setReferenceElement] = useState(null);
@@ -149,13 +133,13 @@ const Nav = (props: any) => {
   //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
   // });
 
-  const toggleSearch = () => {
-    setShowSearch(!showSearch);
-  };
+  // const toggleSearch = () => {
+  //   setShowSearch(!showSearch);
+  // };
 
-  const closeSearch = () => {
-    setShowSearch(false);
-  };
+  // const closeSearch = () => {
+  //   setShowSearch(false);
+  // };
 
   const checkActive = (pathname: string, m: any) => {
     if (pathname === '/content/[id]' && m.path === '/contents') {
@@ -168,10 +152,9 @@ const Nav = (props: any) => {
 
   return (
     <Box>
-      <Modal
+      {/* <Modal
         isOpen={showSearch}
         onRequestClose={closeSearch}
-        style={defaultModalStyle}
         ariaHideApp={false}
         contentLabel="SearchWraft">
         <Flex sx={{ p: 2 }}>
@@ -187,7 +170,7 @@ const Nav = (props: any) => {
               pt: 0,
               pb: 0,
             }}>
-            {/* <Search width="16px" height="16px"/> */}
+            <Search width="16px" height="16px"/>
           </Button>
         </Flex>
         <Box sx={{ p: 0 }}>
@@ -195,7 +178,7 @@ const Nav = (props: any) => {
             <ContentTypeDashboard />
           </Box>
         </Box>
-      </Modal>
+      </Modal> */}
       <Box
         sx={{
           pl: 3,
@@ -251,7 +234,12 @@ const Nav = (props: any) => {
         pl={3}
         pb={3}
         pt={3}
-        sx={{ mb: 3, borderBottom: 'solid 1px', borderColor: 'gray.1' }}>
+        sx={{
+          mb: 3,
+          borderBottom: 'solid 1px',
+          bg: 'gray.0',
+          borderColor: 'gray.1',
+        }}>
         <ModeToggle variant="button" />
       </Box>
     </Box>

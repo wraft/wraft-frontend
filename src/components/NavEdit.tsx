@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Flex, Input, Text } from 'theme-ui';
+import React, { useEffect } from 'react';
+import { Box, Flex, Text } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useHotkeys } from 'react-hotkeys-hook';
+// import { useHotkeys } from 'react-hotkeys-hook';
 // relative
 import Link from './NavLink';
 import { API_HOST, checkUser } from '../utils/models';
-import { Bell, Search, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
+import { Bell, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
 import Dropdown from './common/Dropdown';
 
 // import { usePopper } from 'react-popper';
@@ -31,11 +31,11 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
 
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  // const [showSearch, setShowSearch] = useState<boolean>(false);
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
-  }
+  };
 
   useEffect(() => {
     // check if token is there
@@ -73,15 +73,22 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               borderColor: 'gray.0',
               color: 'gray.8',
             }}>
-            <Flex>              
+            <Flex>
               <Link href="/contents" sx={{ mt: 3 }}>
                 <ArrowBack width="20px" />
-              </Link>              
-              {navtitle && <Text onClick={onToggleEdit} variant="navtitle" sx={{ p: 2, pt: 1, fontWeight: 'heading'}}>{navtitle}</Text>}
+              </Link>
+              {navtitle && (
+                <Text
+                  onClick={onToggleEdit}
+                  variant="navtitle"
+                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}>
+                  {navtitle}
+                </Text>
+              )}
             </Flex>
           </Box>
         </Box>
-        
+
         <Box ml="auto" mr={3}>
           <Flex>
             <Flex>
@@ -137,7 +144,6 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
           </Flex>
         </Box>
       </Flex>
-      <></>
     </Box>
   );
 };

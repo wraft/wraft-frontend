@@ -3,7 +3,12 @@ import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
-import { createEntity, loadEntity, loadEntityDetail, updateEntity } from '../utils/models';
+import {
+  createEntity,
+  loadEntity,
+  loadEntityDetail,
+  updateEntity,
+} from '../utils/models';
 
 import Modal from 'react-modal';
 
@@ -48,7 +53,7 @@ const ListGroup = styled(Box)`
 
 const PipelineForm = () => {
   const { register, handleSubmit, errors, getValues, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [templates, setTemplates] = useState<Array<Template>>([]);
   //
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
@@ -81,12 +86,12 @@ const PipelineForm = () => {
       api_route: data.api_route,
     };
 
-    if(isEdit) {
+    if (isEdit) {
       const aId = activePipeline && activePipeline.id;
       updateEntity(`/pipelines/${aId}`, submitt, token);
-    }else {
+    } else {
       createEntity(submitt, 'pipelines', token);
-    }    
+    }
   };
 
   const loadTypesSuccess = (data: any) => {
@@ -111,7 +116,7 @@ const PipelineForm = () => {
    * Load Templates for the particular content type
    * @param id
    */
-  const loadTemplates = (id: string) => {    
+  const loadTemplates = (id: string) => {
     loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
   };
 
@@ -145,9 +150,17 @@ const PipelineForm = () => {
       console.log('activePipeline', activePipeline);
       // const assetsList: Asset[] = layout.assets;
 
-      activePipeline && activePipeline.stages && activePipeline.stages.length > 0 && activePipeline.stages.forEach((a: any) => {
-        appendStagePars(a.state.id, a.data_template.id, a.content_type.id, a.content_type.name);
-      });
+      activePipeline &&
+        activePipeline.stages &&
+        activePipeline.stages.length > 0 &&
+        activePipeline.stages.forEach((a: any) => {
+          appendStagePars(
+            a.state.id,
+            a.data_template.id,
+            a.content_type.id,
+            a.content_type.name,
+          );
+        });
 
       setValue('name', activePipeline.name);
       setValue('api_route', activePipeline.api_route);
@@ -160,12 +173,10 @@ const PipelineForm = () => {
   }, [activePipeline]);
 
   useEffect(() => {
-
-    if(cId) {
+    if (cId) {
       loadPipeline(cId, token);
     }
-
-  }, [token, cId])
+  }, [token, cId]);
 
   // const LoadContentType = (props:any) => {
   //   console.log('x', props);
@@ -180,7 +191,12 @@ const PipelineForm = () => {
     }
   };
 
-  const appendStagePars = (state_id:string, data_template_id:string, content_type_id:string, name:string) => {
+  const appendStagePars = (
+    state_id: string,
+    data_template_id: string,
+    content_type_id: string,
+    name: string,
+  ) => {
     addStage([
       ...stages,
       {
@@ -210,15 +226,13 @@ const PipelineForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       <Box>
-        <Text mb={3} fontSize={2} fontWeight={500}>
-          { isEdit ? 'Update' : 'Create'} Pipeline
-        </Text>
+        <Text mb={3}>{isEdit ? 'Update' : 'Create'} Pipeline</Text>
       </Box>
-      <Box mx={0} mb={3} width={1}>
+      <Box mx={0} mb={3}>
         <Flex>
-          <Box width={7 / 12}>
+          <Box>
             <Field
               name="name"
               label="Name"
@@ -241,11 +255,9 @@ const PipelineForm = () => {
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>
         <Box>
-          <Text mb={1} fontWeight={600}>
-            Stages
-          </Text>
-          <Flex flexDirection="column">
-            <ListGroup my={4} bg="#fff" width={3 / 6}>
+          <Text mb={1}>Stages</Text>
+          <Flex>
+            <ListGroup my={4} bg="#fff">
               {stages &&
                 stages.map((props: any) => (
                   <Flex
@@ -254,10 +266,14 @@ const PipelineForm = () => {
                       p: 3,
                       borderBottom: 'solid 1px #eee',
                       borderLeft: 0,
-                    }}>                    
+                    }}>
                     <Box>
-                    <Text mt={0} color="#111" fontSize={1} fontWeight={600}>{props.name}</Text>
-                      <Text mt={1} color="#444" fontSize={0}>{props.content_type_id}</Text>
+                      <Text mt={0} color="#111">
+                        {props.name}
+                      </Text>
+                      <Text mt={1} color="#444">
+                        {props.content_type_id}
+                      </Text>
                     </Box>
                     <Text sx={{ color: 'blue', marginLeft: 'auto' }}>Edit</Text>
                   </Flex>
@@ -286,14 +302,12 @@ const PipelineForm = () => {
               ariaHideApp={false}
               contentLabel="Pipeline Form">
               <Box>
-                <Text mb={3} fontWeight={600}>
-                  Add Stages
-                </Text>
+                <Text mb={3}>Add Stages</Text>
                 <Label htmlFor="parent" mb={1}>
                   Content Type
                 </Label>
                 <Flex>
-                  <Box width={4 / 8}>
+                  <Box>
                     <Select
                       id="content_type_id"
                       name="content_type_id"
@@ -358,7 +372,7 @@ const PipelineForm = () => {
           </Flex>
         </Box>
       </Box>
-      <Button ml={2}>{ isEdit ? 'Update' : 'Create'}</Button>
+      <Button ml={2}>{isEdit ? 'Update' : 'Create'}</Button>
     </Box>
   );
 };

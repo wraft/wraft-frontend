@@ -78,7 +78,7 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
   };
 
   return (
-    <Box py={3} width={10 / 12} mt={4}>
+    <Box py={3} mt={4}>
       <Modal
         isOpen={showModal}
         onRequestClose={closeModal}

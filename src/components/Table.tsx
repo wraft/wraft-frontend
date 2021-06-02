@@ -55,7 +55,8 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
 
   return (
     <Box as="table" {...getTableProps()} sx={styles.table}>
-      <Box as="thead" sx={styles.thead}>
+      <Box as="thead">
+      {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (
           <Box as="tr" {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => {

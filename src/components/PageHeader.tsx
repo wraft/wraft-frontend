@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Box, Text, Button } from 'theme-ui';
+import { Flex, Box, Text } from 'theme-ui';
 
 interface PageHeaderProps {
   children?: any;
@@ -11,7 +11,7 @@ const PageHeader = ({ title, children }: PageHeaderProps) => {
     
     <Box variant="layout.frameHeading">
       <Flex>
-        <Text variant="pageheading">{title}</Text>
+        <Text variant="pageheading" sx={{ color: 'gray.7', fontWeight: 400 }}>{title}</Text>
         {children}
       </Flex>
     </Box>

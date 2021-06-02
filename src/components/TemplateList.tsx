@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Spinner, ThemeUIStyleObject, Button } from 'theme-ui';
+import { Box, Text, Spinner } from 'theme-ui';
 
-import { useTable } from 'react-table';
-import styled from 'styled-components';
+// import { useTable } from 'react-table';
+// import styled from 'styled-components';
 // import { useStoreState } from 'easy-peasy';
 // import { Plus } from '@styled-icons/boxicons-regular';
 import { fetchAPI } from '../utils/models';
@@ -10,7 +10,6 @@ import Paginate, { IPageMeta } from './Paginate';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
-
 
 export interface ILayout {
   width: number;
@@ -87,14 +86,24 @@ const TemplateList = () => {
       let row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col1: <Text>-</Text>,
           col2: (
-            <Box>
+            <Text sx={{ fontSize: 0, fontWeight: 'body', py: 2 }}>
+              {r.updated_at}
+            </Text>
+          ),
+          col3: (
+            <Box sx={{ px: 3, py: 2 }}>
+              <Link href={`/templates/edit/${r.id}`} variant="btnSecondary">
+                Edit
+              </Link>
+            </Box>
+          ),
+          col1: (
+            <Box sx={{ px: 3, py: 2 }}>
               <Text as="h4">{r.title}</Text>
               <Text sx={{ color: 'gray.6' }}></Text>
             </Box>
           ),
-          col3: <Text>{r.updated_at}</Text>
         };
 
         row.push(rFormated);
@@ -107,42 +116,43 @@ const TemplateList = () => {
   return (
     <Box>
       <PageHeader title="Templates">
-        <Box sx={{ ml: 'auto', pt: 2}}>
-          <Link href="/templates/new" variant="btnSecondary">+ New Template</Link>
+        <Box sx={{ ml: 'auto', pt: 2 }}>
+          <Link href="/templates/new" variant="btnSecondary">
+            + New Template
+          </Link>
         </Box>
       </PageHeader>
-      <Box variant="layout.pageFrame">
+      <Box variant="layout.pageFrame" sx={{ py: 4 }}>
         {!loading && (
           <Box>
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
         <Box mx={0} mb={3}>
-
           {templates && (
-              <Table
-                options={{
-                  columns: [
-                    {
-                      Header: 'Id',
-                      accessor: 'col1', // accessor is the "key" in the data
-                      width: '5%',
-                    },
-                    {
-                      Header: 'Name',
-                      accessor: 'col2',
-                      width: '65%',
-                    },
-                    {
-                      Header: 'Contact',
-                      accessor: 'col3',
-                      width: '30%',
-                    },
-                  ],
-                  data: templates,
-                }}
-              />
-            )}
+            <Table
+              options={{
+                columns: [
+                  {
+                    Header: 'Name',
+                    accessor: 'col1', // accessor is the "key" in the data
+                    width: '30%',
+                  },
+                  {
+                    Header: 'Updated',
+                    accessor: 'col2',
+                    width: '30%',
+                  },
+                  {
+                    Header: 'Action',
+                    accessor: 'col3',
+                    width: '10%',
+                  },
+                ],
+                data: templates,
+              }}
+            />
+          )}
 
           <Paginate changePage={changePage} {...pageMeta} />
 

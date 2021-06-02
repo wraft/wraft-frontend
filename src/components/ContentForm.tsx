@@ -11,7 +11,7 @@ import FieldForm from './FieldForm';
 import EditorWraft from './EditorWraft';
 import NavEdit from './NavEdit';
 import { Template, ContentState } from '../../src/utils/types';
-import { cleanName, updateVars } from '../../src/utils';
+import { updateVars } from '../../src/utils';
 
 import { ErrorIcon, TickIcon } from './Icons';
 
@@ -283,7 +283,7 @@ const Form = (props: IContentForm) => {
   const onLoadData = (data: any) => {
     const res: IField = data;
     setContent(res);
-    setDefaultState(res);
+    // setDefaultState(res);
 
     setDef(EMPTY_MARKDOWN_NODE);
   };
@@ -303,11 +303,11 @@ const Form = (props: IContentForm) => {
     setTemplates(res);
   };
 
-  const setDefaultState = (content: IField) => {
-    const defaultState =
-      content.content_type && content.content_type.flow.states[0].id;
-    setValue('state', defaultState);
-  };
+  // const setDefaultState = (content: IField) => {
+  //   const defaultState =
+  //     content.content_type && content.content_type.flow.states[0].id;
+  //   setValue('state', defaultState);
+  // };
 
   useEffect(() => {
     if (token && token.length > 0) {
@@ -387,61 +387,63 @@ const Form = (props: IContentForm) => {
     }
   };
 
-  const findVarEx = (body: string, escaped: boolean): string[] => {
-    // find vars in this form
-    let regexp = /\[\w+\]/gm;
-    if (escaped) {
-      regexp = /\\\[\w+\\\]/gm;
-    }
+  // const findVarEx = (body: string, escaped: boolean): string[] => {
+  //   // find vars in this form
+  //   let regexp = /\[\w+\]/gm;
+  //   if (escaped) {
+  //     regexp = /\\\[\w+\\\]/gm;
+  //   }
 
-    let m;
-    let results: string[] = [];
+  //   let m;
+  //   let results: string[] = [];
 
-    while ((m = regexp.exec(body)) !== null) {
-      // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === regexp.lastIndex) {
-        regexp.lastIndex++;
-      }
+  //   while ((m = regexp.exec(body)) !== null) {
+  //     // This is necessary to avoid infinite loops with zero-width matches
+  //     if (m.index === regexp.lastIndex) {
+  //       regexp.lastIndex++;
+  //     }
 
-      // The result can be accessed through the `m`-variable.
-      m.forEach((match) => {
-        results.push(match);
-      });
-    }
-    // console.log('results', results);
-    return results;
-  };
+  //     // The result can be accessed through the `m`-variable.
+  //     m.forEach((match) => {
+  //       results.push(match);
+  //     });
+  //   }
+  //   // console.log('results', results);
+  //   return results;
+  // };
 
   /**
    * @param x
    */
   const textOperation = (piece: any) => {
-    const _dat = piece?.serialized?.data;
+    const _dat = piece?.serialized;
 
-    const df = JSON.parse(_dat);
-    if (df) {
-      setInsertable(df);
+    console.log('_dat', _dat);
+
+    // const df = JSON.parse(_dat);
+    if (_dat) {
+      setInsertable(_dat);
     }
 
-    if (maps) {
-      // lazy matching
-      const tempTitle = piece.title_template;
-      const m = findVarEx(tempTitle, false);
-      let latexpussy = [];
-      m.map((x: any) => {
-        const cName = cleanName(x);
-        latexpussy.push(x);
+    // if (maps) {
+    //   // lazy matching
+    //   const tempTitle = piece.title_template;
+    //   const m = findVarEx(tempTitle, false);
+    //   let latexpussy = [];
+    //   m.map((x: any) => {
+    //     const cName = cleanName(x);
+    //     latexpussy.push(x);
 
-        // find match
+    //     // find match
 
-        const mx = maps.find((x: any) => x.name === cName);
-        if (mx) {
-          const newTitle = tempTitle.replace(`[${cName}]`, mx.value || 'Name');
-          setValue('title', newTitle || 'Untitled');
-          setTitle(newTitle);
-        }
-      });
-    }
+    //     const mx = maps.find((x: any) => x.name === cName);
+    //     if (mx) {
+    //       const newTitle = tempTitle.replace(`[${cName}]`, mx.value || 'Name');
+    //       setValue('title', newTitle || 'Untitled');
+    //       setTitle(newTitle);
+    //     }
+    //   });
+    // }
   };
 
   /**

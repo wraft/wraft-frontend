@@ -9,7 +9,7 @@ const Index: FC = () => {
       <Head>
         <title>Edit Flow - Wraft Docs</title>
       </Head>
-      <Page>
+      <Page>        
         <FlowForm />
       </Page>
     </>

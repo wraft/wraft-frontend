@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useStoreState } from 'easy-peasy';
-import { Box, Text, Flex, Spinner, Grid, Button } from 'theme-ui';
-import { Plus } from '@styled-icons/boxicons-regular';
+// import { useStoreState } from 'easy-peasy';
+import { Box, Flex, Spinner } from 'theme-ui';
+// import { Plus } from '@styled-icons/boxicons-regular';
 
 import Link from './NavLink';
-import { deleteEntity, fetchAPI } from '../utils/models';
-import LayoutCard from './Card';
+// import { deleteEntity, fetchAPI } from '../utils/models';
+// import LayoutCard from './Card';
 import ContentTypeDashboard from './ContentTypeDashboard';
 import PageHeader from './PageHeader';
 
@@ -38,32 +38,32 @@ interface ContentTypeList {
 }
 
 const ContentTypeList = ({ isEdit }: ContentTypeList) => {
-  const token = useStoreState((state) => state.auth.token);
+  // const token = useStoreState((state) => state.auth.token);
 
-  const [contents, setContents] = useState<Array<IField>>([]);
+  // const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   /** DELETE content
    * @TODO move to inner page [design]
    */
-  const delData = (id: string) => {
-    deleteEntity(`content_types/${id}`, token);
-  };
+  // const delData = (id: string) => {
+  //   deleteEntity(`content_types/${id}`, token);
+  // };
 
-  const loadData = () => {
-    fetchAPI('content_types')
-      .then((data: any) => {
-        setLoading(true);
-        const res: IField[] = data.content_types;
-        setContents(res);
-      })
-      .catch(() => {
-        setLoading(true);
-      });
-  };
+  // const loadData = () => {
+  //   fetchAPI('content_types')
+  //     .then((data: any) => {
+  //       setLoading(true);
+  //       const res: IField[] = data.content_types;
+  //       setContents(res);
+  //     })
+  //     .catch(() => {
+  //       setLoading(true);
+  //     });
+  // };
 
   useEffect(() => {
-    loadData();
+    setLoading(false);
   }, []);
 
   return (

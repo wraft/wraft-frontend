@@ -34,12 +34,12 @@ export interface ProfileClass {
 
 const ProfileBasicForm = () => {
   const { register, handleSubmit, errors } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
   const addMacros = useStoreActions((actions: any) => actions.mealtypes.add);
   const setMacros = useStoreActions((actions: any) => actions.mealtypes.set);
-  const allMacros = useStoreState(state => state.mealtypes.items);
+  const allMacros = useStoreState((state) => state.mealtypes.items);
 
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
@@ -80,12 +80,7 @@ const ProfileBasicForm = () => {
   }, [token]);
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      width={9 / 12}
-      mt={4}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       {!ready && <Spinner />}
       {success && (
         <Alert>
@@ -97,12 +92,7 @@ const ProfileBasicForm = () => {
       <Box>
         <Text variant="pagetitle">Add Meal Types</Text>
 
-        <Box
-          mx={0}
-          mb={3}
-          width={1}
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}>
+        <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
           <Field
             name="name"
             label="Name"

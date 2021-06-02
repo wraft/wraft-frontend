@@ -59,9 +59,8 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
       as="form"
       onSubmit={handleSubmit(onSubmit)}
       py={3}
-      width={4 / 12}
       mt={4}>
-      <Text mb={3} fontSize={2} fontWeight={500}>
+      <Text mb={3}>
         Upload Files
       </Text>
       {contents && (
@@ -86,7 +85,7 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
         </Label>
         <Input id="file" name="file" type="file" ref={register} />
       </Box>
-      <Flex mx={-2} flexWrap="wrap" mt={2}>
+      <Flex mx={-2} mt={2}>
         <Button type="submit" ml={2}>
           Upload
         </Button>

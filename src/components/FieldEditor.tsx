@@ -30,9 +30,9 @@ const FieldForm = (props: any) => {
       count: props.fields.size,
       values: vals,
       data: data,
-    }
+    };
 
-    props.onSave(results)
+    props.onSave(results);
   };
 
   function closeModal() {
@@ -44,11 +44,9 @@ const FieldForm = (props: any) => {
   }
 
   return (
-    <Box pl={4} width={1}>
+    <Box pl={4}>
       <Flex>
-        <Text fontSize={1} mb={3}>
-          Fields
-        </Text>
+        <Text mb={3}>Fields</Text>
         <Button variant="small2" onClick={toggleModal}>
           Edit
         </Button>
@@ -62,14 +60,9 @@ const FieldForm = (props: any) => {
           pt={2}
           pb={2}
           sx={{ border: 'solid 1px #eee', bg: 'white' }}>
-          <Text fontWeight={500}>{(f && f.value.name) || ''}</Text>
+          <Text>{(f && f.value.name) || ''}</Text>
           {console.log('f', f)}
-          <Text
-            variant="caps"
-            pt={1}
-            pb={1}
-            fontSize={0}
-            sx={{ opacity: '0.5' }}>
+          <Text variant="caps" pt={1} pb={1} sx={{ opacity: '0.5' }}>
             {(f && f.value.field_type.name) || 'X'}
           </Text>
         </Box>
@@ -80,20 +73,14 @@ const FieldForm = (props: any) => {
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal">
-        <Box
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
-          py={3}
-          width={1}
-          mt={4}
-          pr={4}>
-          <Text fontSize={2} fontWeight={600} mb={3}>
+        <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4} pr={4}>
+          <Text mb={3}>
             Edit Fields
           </Text>
           {props.fields.map((f: any, idx: number) => (
             <Box key={idx}>
               <Flex p={0} pl={0}>
-                <Box mr={2} width={7 / 12}>
+                <Box mr={2}>
                   <Label htmlFor="`fields[${idx}][name]`" mb={1}>
                     Name
                   </Label>
@@ -104,7 +91,7 @@ const FieldForm = (props: any) => {
                     name={`fields[${idx}][name]`}
                   />
                 </Box>
-                <Box width={4 / 12}>
+                <Box>
                   <Label htmlFor="`fields[${idx}][type]`" mb={1}>
                     Type
                   </Label>
@@ -127,7 +114,7 @@ const FieldForm = (props: any) => {
                       ))}
                   </Select>
                 </Box>
-                <Box pt={4} pl={4} width={3 / 12}>
+                <Box pt={4} pl={4}>
                   <Button
                     variant="small"
                     type="button"
@@ -138,7 +125,7 @@ const FieldForm = (props: any) => {
               </Flex>
             </Box>
           ))}
-          <Text variant="secondary" type="button" onClick={props.addField}>
+          <Text variant="secondary" onClick={props.addField}>
             + Add field
           </Text>
           <Button type="submit">Save</Button>
