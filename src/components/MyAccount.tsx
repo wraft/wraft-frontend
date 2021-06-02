@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Flex, Text } from 'theme-ui';
 
 // import { Phone } from '@styled-icons/boxicons-regular';
 import { useStoreState } from 'easy-peasy';

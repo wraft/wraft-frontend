@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import ContentTypeForm from '../../../src/components/ContentTypeForm';
-import Page from '../../../src/components/Page';
-import { Box } from 'rebass';
+import Page from '../../../src/components/PageFrame';
+import { Box } from 'theme-ui';
 
 const Index: FC = () => {
   return (
@@ -12,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page id="Modal" showFull={true}>
-        <Box>
+        <Box sx={{ pl: 4}}>
           <ContentTypeForm />
         </Box>
       </Page>

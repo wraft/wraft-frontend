@@ -8,7 +8,7 @@ import { useRemirrorTheme } from '@remirror/ui';
 
 import { ButtonProps } from './wysiwyg-types';
 
-import {  Button } from 'theme-ui'
+import { Button, Box } from 'theme-ui'
 
 export const Menu = forwardRef<HTMLDivElement, JSX.IntrinsicElements['div']>((props, ref) => {
   const { sx } = useRemirrorTheme();
@@ -35,12 +35,15 @@ export const Toolbar: FC = props => {
     <Menu
       {...props}
       css={sx({
-        bg: 'white',
+        width: '100%',
+        // bg: 'white',
+        border: 'solid 1px #ddd',
+        borderBottom: 0,
         position: 'relative',
         // padding: '1px 28px 17px',
-        ml: -3,
+        ml: 0,
         mt: 3,
-        mb: 1,
+        // mb: 1,
       })}
     />
   );
@@ -62,10 +65,11 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props,
 
   return (
     <Button
-        type="button"
+      type="button"
+      variant="base"
       {...props}
       ref={ref}
-      sx={{  mr: 0, bg: 'white', border: 'solid 1px #eee'}}
+      sx={{ mr: 0, bg: 'gray.2', 'svg': { fill: 'gray.8' }, color: 'gray.2', borderRadius: 0, borderRight: 'solid 1px #eee' }}
       css={sx(
         {
           marginLeft: props.index !== 0 ? 3 : 0,
@@ -84,7 +88,7 @@ IconButton.displayName = 'IconButton';
 export const EditorWrapper = forwardRef<HTMLDivElement, JSX.IntrinsicElements['div']>((props, ref) => {
   const { sx } = useRemirrorTheme();
 
-  return <div {...props} ref={ref} css={sx({ position: 'relative' })} />;
+  return <Box {...props} bg="red" ref={ref} css={sx({ position: 'relative' })} />;
 });
 
 EditorWrapper.displayName = 'EditorWrapper';

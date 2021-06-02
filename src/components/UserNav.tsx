@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
-import { Box, Flex, Text } from 'rebass';
+import { Box, Flex, Text } from 'theme-ui';
 import { Avatar } from 'theme-ui';
 import styled from 'styled-components';
 import cookie from 'js-cookie';

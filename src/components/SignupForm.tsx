@@ -1,9 +1,8 @@
 import React from 'react';
-import { Box, Flex, Button, Text, Link as LinkBase } from 'rebass';
+import { Box, Flex, Button, Text, Link as LinkBase, Label, Input } from 'theme-ui';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
-import { Label, Input } from '@rebass/forms';
 import { registerUser } from '../utils/models';
 
 export interface IField {
@@ -27,13 +26,12 @@ const Form = () => {
       as="form"
       onSubmit={handleSubmit(onSubmit)}
       py={3}
-      width={4 / 12}
       mt={4}>
       <Text variant="pagetitle">
         Join Wraft
       </Text>
       <Box mx={0} mb={3}>
-        <Box width={1} px={2} pb={3}>
+        <Box px={2} pb={3}>
           <Label htmlFor="email" mb={1}>
             Name
           </Label>
@@ -44,7 +42,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2} pb={3}>
+        <Box px={2} pb={3}>
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -55,7 +53,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2} pb={3}>
+        <Box px={2} pb={3}>
           <Label htmlFor="token" mb={1}>
             Token
           </Label>
@@ -66,7 +64,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box width={1} px={2}>
+        <Box px={2}>
           <Label htmlFor="password" mb={1}>
             Password
           </Label>
@@ -79,7 +77,7 @@ const Form = () => {
         </Box>
 
         {errors.exampleRequired && <Text>This field is required</Text>}
-        <Flex mx={-2} flexWrap="wrap" mt={2}>
+        <Flex mx={-2} mt={2}>
           <Button type="submit" ml={2}>
             Join Now
           </Button>

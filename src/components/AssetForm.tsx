@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
-// import { Label, Input } from '@rebass/forms';
+import { Box, Flex, Button, Text } from 'theme-ui';
+// import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
-import { Label, Input } from '@rebass/forms';
+import { Label, Input } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 

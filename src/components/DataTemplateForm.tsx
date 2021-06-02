@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Flex, Button, Text, Link as LinkBase } from 'rebass';
+import { Box, Flex, Button, Text, Link as LinkBase } from 'theme-ui';
 import Link from 'next/link';
 
-import { Label, Input } from '@rebass/forms';
+import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { env } from './vars'

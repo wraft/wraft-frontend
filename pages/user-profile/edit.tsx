@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box } from 'rebass';
+import { Box } from 'theme-ui';
 // import Router from 'next/router'
 import Container from '../../src/components/Container';
 import ProfileBasicForm from '../../src/components/ProfileBasicForm';

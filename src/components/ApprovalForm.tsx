@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Button, Text,  Divider, Flex } from 'theme-ui';
+import {
+  Box,
+  Container,
+  Button,
+  Text,
+  Divider,
+  Flex,
+  Select,
+  Input,
+} from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -54,7 +63,7 @@ export interface StateFormProps {
 
 const StatesForm = (props: StateFormProps) => {
   // const [stat, setStat] = useState('');
-// 
+  //
   const [showModal, setShowModal] = useState<boolean>(false);
   // const { addToast } = useToasts();
 
@@ -71,8 +80,8 @@ const StatesForm = (props: StateFormProps) => {
   // };
 
   const onDeleteFlow = (_id: any) => {
-    props.onDelete(_id); 
-  }
+    props.onDelete(_id);
+  };
 
   // const AddState = () => {
   //   const newState = {
@@ -91,7 +100,7 @@ const StatesForm = (props: StateFormProps) => {
 
   return (
     <Box p={2}>
-      <Text variant="caps" sx={{ color: 'gray.7'}} pb={3}>
+      <Text variant="caps" sx={{ color: 'gray.7' }} pb={3}>
         All States
       </Text>
       {props.content && (
@@ -110,26 +119,36 @@ const StatesForm = (props: StateFormProps) => {
                 borderBottom: 0,
                 borderColor: 'blue.2',
               }}>
-                <Text mr={2} sx={{ color: 'blue.6'}}>{index + 1}</Text>
-              <Text sx={{ fontWeight: 'heading', color: 'blue.9' }} key={c.state.id}>
+              <Text mr={2} sx={{ color: 'blue.6' }}>
+                {index + 1}
+              </Text>
+              <Text
+                sx={{ fontWeight: 'heading', color: 'blue.9' }}
+                key={c.state.id}>
                 {c.state.state}
               </Text>
-              <Text onClick={ () => onDeleteFlow(c.state.id)} sx={{ ml:'auto'}}>Delete</Text>
+              <Text
+                onClick={() => onDeleteFlow(c.state.id)}
+                sx={{ ml: 'auto' }}>
+                Delete
+              </Text>
             </Flex>
           ))}
         </Box>
       )}
-      <Button variant="tertiary" onClick={toggleModal}>Add New</Button>      
+      <Button variant="tertiary" onClick={toggleModal}>
+        Add New
+      </Button>
     </Box>
   );
 };
 
-const Form = () => {
+const ApprovalForm = () => {
   const { register, handleSubmit, errors } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
 
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const { addToast } = useToasts();
 
@@ -169,19 +188,16 @@ const Form = () => {
    * @param data Form Data
    */
   const deleteState = (fId: any) => {
-    deleteEntity(`states/${fId}`, token)
-
-    addToast("Deleted a flow", { appearance: 'error' })
-
+    deleteEntity(`states/${fId}`, token);
+    addToast('Deleted a flow', { appearance: 'error' });
     loadStates(cId, token);
-
   };
 
   const onCreateState = (_x: any) => {
-    if(cId && token ) {
+    if (cId && token) {
       loadStates(cId, token);
     }
-  }
+  };
 
   /**
    * Submit Form
@@ -189,6 +205,19 @@ const Form = () => {
    */
   const onSubmit = (data: any) => {
     createEntity(data, 'flows', token);
+  };
+
+  const loadSearchSuccess = (d: any) => {
+    console.log('d', d);
+  };
+
+  /**
+   * Search User
+   * @param data
+   */
+  const onChangeInput = (data: any) => {
+    console.log('data', data);
+    // loadEntity(token, `users/search?key=${data}`, loadSearchSuccess);
   };
 
   useEffect(() => {
@@ -213,16 +242,11 @@ const Form = () => {
                 defaultValue="Standard Approval Flow (Offer Letter)"
                 register={register}
               />
-              <Flex sx={{ p: 2, bg: 'gray.2', my: 4}}>
-                <Field
-                  name="name"
-                  label="Before"
-                  defaultValue="For Approval (F01)"
-                  register={register}
-                />
-                <Box sx={{ p: 2}}>
-                  
-                </Box>
+              <Flex sx={{ p: 2, bg: 'gray.2', my: 4 }}>
+                <Select>
+                  <option></option>
+                </Select>
+
                 <Field
                   name="name"
                   label="After"
@@ -236,7 +260,6 @@ const Form = () => {
                 defaultValue="Muneef Hameed (U01)"
                 register={register}
               />
-
               <Button type="submit" mt={3}>
                 Save
               </Button>
@@ -244,7 +267,11 @@ const Form = () => {
             <Divider sx={{ color: 'gray.3', my: 4 }} />
             <Box mt={2}>
               {edit && content && (
-                <StatesForm content={content} onSave={CreateState} onDelete={deleteState}/>
+                <StatesForm
+                  content={content}
+                  onSave={CreateState}
+                  onDelete={deleteState}
+                />
               )}
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
@@ -254,4 +281,4 @@ const Form = () => {
     </Box>
   );
 };
-export default Form;
+export default ApprovalForm;

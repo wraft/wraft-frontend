@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box } from 'rebass';
-import { Label, Textarea } from '@rebass/forms';
+import { Box } from 'theme-ui';
+import { Label, Textarea } from 'theme-ui';
 
 interface Props {
   register: any,

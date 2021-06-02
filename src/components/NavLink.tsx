@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Box } from 'rebass';
+import { Box } from 'theme-ui';
 import { Link } from 'theme-ui'
 import NextLink from 'next/link';
 

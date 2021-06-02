@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Badge } from 'theme-ui';
+import React, { FC, useEffect, useState } from 'react';
+import {
+  Box,
+  Text,
+  Button,
+  Avatar,
+  Flex,
+  Badge,
+  Container,
+  Spinner,
+} from 'theme-ui';
 import MenuItem from './NavLink';
-
-import { formatDistanceToNow, parseISO } from 'date-fns';
-
-import ReactPaginate from 'react-paginate';
+// import ContentCard from './ContentCard';
+import { Table } from './Table';
 
 import {
   BoltCircle as Check,
@@ -13,52 +20,10 @@ import {
 
 import { useStoreState } from 'easy-peasy';
 import { deleteEntity, fetchAPI } from '../utils/models';
-import { Spinner } from 'theme-ui';
-import ProfileCard from './ProfileCard';
-// import { shortDate } from '../utils';
-
-
-
-const TimeAgo = (time: any) => {
-  const timetime = parseISO(time.time);
-  const timed = formatDistanceToNow(timetime);
-
-  // const timed = shortDate(timetime);
-  return (
-    <Text pl={2} pt={1} sx={{ fontSize: 0 }} color="gray.6">
-      \ {timed}
-    </Text>
-  );
-};
-
-// const ColorPill = styled(Box)`
-//   width: 2px;
-//   position: absolute;
-//   top: 8;
-//   left: 0;
-//   height: 40px;
-//   display: inline-block;
-//   border-radius: 0px;
-// `;
-
-// const Pill = styled(Box)`
-//   border-radius: 1rem;
-//   font-size: 7px !important;
-//   opacity: 0.7;
-//   padding: 4px;
-//   display: inline-block;
-//   margin-top: 2px;
-// `;
-
-// const Block = styled(Box)`
-//   border-radius: 3px;
-//   padding: 4px;
-//   margin-top: 13px !important;
-//   border-bottom: solid 1px #ddd;
-//   padding-left: 40px;
-//   padding-bottom: 24px;
-//   position: relative;
-// `;
+import { TimeAgo } from './ContentDetail';
+import Paginate from './Paginate';
+import { HeadingFrame } from './Card';
+import PageHeader from './PageHeader';
 
 export interface ILayout {
   width: number;
@@ -111,9 +76,9 @@ const Tablet = (props: any) => (
   </Badge>
 );
 
-const ItemField = (props: IField) => {
+const ContentCardB = (props: IField) => {
   return (
-    <Box variant="listWide" key={props.content.instance_id} pb={3} pt={3}>
+    <Box key={props.content.instance_id} pb={3} pt={3}>
       <Flex sx={{ position: 'relative' }}>
         <Box variant="cTyeMark" bg={props.content_type.color} />
         <MenuItem
@@ -145,6 +110,9 @@ const ItemField = (props: IField) => {
       </Flex>
       <Flex>
         <Tablet type={props.content.instance_id} pr={2} />
+        <Text color="gray.6" sx={{ fontSize: '8px', pt: 2, pl: 1, pr: 1 }}>
+          •
+        </Text>
         <TimeAgo time={props.content.updated_at} />
       </Flex>
     </Box>
@@ -158,24 +126,58 @@ export interface IPageMeta {
   contents?: any;
 }
 
+interface BoxWrapProps {
+  id: string;
+  name: string;
+  xid: string;
+}
+
+const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
+  return (
+    <Box sx={{ pt: 1, pb: 2 }}>
+      <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
+        <Text sx={{ fontSize: 0, color: 'gray.6' }}>{id}</Text>
+        <Text as="h4" p={0} sx={{ m: 0, fontWeight: 500 }}>
+          {name}
+        </Text>
+      </MenuItem>
+    </Box>
+  );
+};
+
+/**
+ * Content List
+ * ============
+ *
+ * @returns
+ */
 const ContentList = () => {
   const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
-
-  const profile = useStoreState((state) => state.profile.profile);
+  const [page, setPage] = useState<number>();
+  const [total, setTotal] = useState<number>(1);
+  const [vendors, setVendors] = useState<Array<any>>([]);
 
   useEffect(() => {
-    loadData();
+    loadData(1);
   }, []);
 
-  const loadData = () => {
-    fetchAPI(`contents`)
+  useEffect(() => {
+    if (page) {
+      loadData(page);
+    }
+  }, [page]);
+
+  const loadData = (page: number) => {
+    const pageNo = page > 0 ? `?page=${page}` : '';
+    fetchAPI(`contents${pageNo}`)
       .then((data: any) => {
         setLoading(true);
         const res: IField[] = data.contents;
+        setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
@@ -196,69 +198,147 @@ const ContentList = () => {
   };
 
   const changePage = (_e: any) => {
-    console.log('changing', _e);
+    console.log('page', _e?.selected);
+    setPage(_e?.selected + 1);
   };
 
-  return (
-    <Flex>
-      <Box py={3} sx={{ width: '60%', float: 'left' }}>
-        <Text variant="pageheading">Documents</Text>
-        <Text variant="pagedesc">Documents</Text>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
-        <Text sx={{ display: 'none' }}>{token}</Text>
-        <Box mx={0} mb={3} variant="w100">
-          <Box
-            sx={{
-              border: 'solid 1px #ddd',
-              paddingLeft: '0',
-              borderRadius: '4px',
-              backgroundColor: '#fff',
-            }}>
-            {contents &&
-              contents.length > 0 &&
-              contents.map((m: any) => (
-                <ItemField key={m.content.id} doDelete={doDelete} {...m} />
-              ))}
-          </Box>
-        </Box>
-        {pageMeta && (
-          <ReactPaginate
-            pageCount={pageMeta.page_number}
-            pageRangeDisplayed={2}
-            marginPagesDisplayed={6}
-            onPageChange={changePage}
-            activeClassName={'active'}
-          />
-        )}
-      </Box>
-      <Box
-        variant="boxCard1"
-        sx={{ width: '33%', height: 'auto', ml: 3, mr: 3, mt: 5, p: 4, pb: 5 }}>
-        <ProfileCard {...profile} />
-        {/* <Flex>
-          <Box>
-            <Image
-              sx={{ borderRadius: 99 }}
-              src={`http://localhost:4000/${profile.profile_pic}`}
-              width={80}
-              height={80}
+  useEffect(() => {
+    if (contents && contents.length > 0) {
+      let row: any = [];
+      contents.map((r: any) => {
+        const rFormated = {
+          col1: (
+            <Box
+              sx={{
+                borderRadius: 99,
+                height: '32px',
+                width: '32px',
+                bg: r.content_type.color,
+                mr: 2,
+                ml: 2,
+                mt: 2,
+              }}
             />
+          ),
+          col2: (
+            <BoxWrap
+              id={r.content?.instance_id}
+              name={r.content?.serialized?.title}
+              xid={r.content?.id}
+            />
+          ),
+          col3: (
+            <Box pt={1}>
+              <TimeAgo time={r.content.updated_at} />
+            </Box>
+          ),
+          col4: (
+            <Avatar
+              mt={2}
+              width="20px"
+              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
+            />
+          ),
+          status: (
+            <Text
+              pt={2}
+              sx={{
+                pl: 1,
+                fontSize: 0,
+                color: 'gray.7',
+                display: 'inline-block',
+                textAlign: 'right',
+                width: 'auto',
+                textTransform: 'uppercase',
+              }}>
+              {r.state.state}
+            </Text>
+          ),
+        };
+
+        row.push(rFormated);
+      });
+
+      setVendors(row);
+    }
+  }, [contents]);
+
+  return (
+    <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
+      <PageHeader title="Contents">
+        <Box sx={{ ml: 'auto', mr: 5 }}>
+          <Button variant="btnPrimary">+ New Doc</Button>
+        </Box>
+      </PageHeader>
+      {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
+      <Container variant="layout.pageFrame">
+        <Flex>
+          <Box sx={{ flexGrow: 1 }}>
+            {!loading && (
+              <Box>
+                <Spinner width={40} height={40} color="primary" />
+              </Box>
+            )}
+            <Box mx={0} mb={3} sx={{  }}>
+              {vendors && (
+                <Table
+                  options={{
+                    columns: [
+                      {
+                        Header: '',
+                        accessor: 'col1', // accessor is the "key" in the data
+                        width: '10%',
+                      },
+                      {
+                        Header: 'Name',
+                        accessor: 'col2',
+                        width: '60%',
+                      },
+                      {
+                        Header: 'Time',
+                        accessor: 'col3',
+                        width: '15%',
+                      },
+                      {
+                        Header: 'Editors',
+                        accessor: 'col4',
+                        width: '15%',
+                      },
+                      {
+                        Header: 'Status',
+                        accessor: 'status',
+                        width: '15%',
+                      },
+                    ],
+                    data: vendors,
+                  }}
+                />
+              )}
+              {/* <Box
+              sx={{
+                border: 'solid 1px',
+                borderColor: 'gray.3',
+                paddingLeft: '0',
+                borderRadius: 4,
+                // pl: 3,
+              }}>
+              {contents &&
+                contents.length > 0 &&
+                contents.map((m: any) => (
+                  <ContentCard key={m.content.id} doDelete={doDelete} {...m} />
+                ))}
+            </Box> */}
+            </Box>
+            <Paginate changePage={changePage} {...pageMeta} />
           </Box>
-          <Box>
-            <Box sx={{ pl: 3, pt: 2 }}>
-              <Text variant="personName">{profile?.name}</Text>
-              <Text variant="personBio">CEO</Text>
-              <Text variant="personPlace">Functionary Labs, Amsterdam</Text>
+          <Box variant="layout.plateSidebar">
+            <Box variant="layout.plateBox">
+              <Text variant="blockTitle">Filter</Text>
             </Box>
           </Box>
-        </Flex> */}
-        <Box sx={{ pl: 0, pt: 2 }}></Box>
-      </Box>
-    </Flex>
+        </Flex>
+      </Container>
+    </Box>
   );
 };
 export default ContentList;

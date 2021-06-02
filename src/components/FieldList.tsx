@@ -1,8 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
-import { Plus } from './Icons';
+// import { Plus } from './Icons';
 import { fetchAPI } from '../utils/models';
+import PageHeader from './PageHeader';
+// import { Table } from '@plateui/ui-react';
+
+import Table from './Table';
+
 export interface FieldTypeList {
   total_pages: number;
   total_entries: number;
@@ -19,15 +24,18 @@ export interface FieldType {
 const ItemField: FC<any> = ({ id, name }) => {
   return (
     <Box
-      variant="boxy"
-      width={1 / 4}
       key={id}
       p={3}
-      sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
-      <Text fontSize={1} fontWeight="bold">
+      sx={{
+        flexGrow: 1,
+        bg: '#fff',
+        // borderBottom: 'solid 1px #eee',
+        // borderRadius: '3px',
+      }}>
+      <Text as="h4" color="gray.8">
         {name}
       </Text>
-      <Text fontSize={0} pt={1} color="grey">
+      <Text pt={1} color="gray.6" sx={{ fontSize: 0 , fontWeight: 300 }}>
         Sample Field Description
       </Text>
     </Box>
@@ -36,6 +44,7 @@ const ItemField: FC<any> = ({ id, name }) => {
 
 const Form: FC = () => {
   const [contents, setContents] = useState<Array<FieldType>>([]);
+  const [fields, setFields] = useState<Array<any>>([]);
 
   useEffect(() => {
     loadData();
@@ -50,22 +59,50 @@ const Form: FC = () => {
       .catch();
   };
 
+  useEffect(() => {
+    if (contents && contents.length > 0) {
+      let row: any = [];
+      contents.map((r: any) => {
+        const rFormated = {
+          col2: <ItemField {...r} />,
+          col3: <Box>{r.updated_at}</Box>,
+        };
+
+        row.push(rFormated);
+      });
+      setFields(row);
+    }
+  }, [contents]);
+
   return (
-    <Box py={3} width={1} mt={4}>
-      <Flex>
-        <Link href="/fields/new" icon={<Plus />}>
-          <Text>New</Text>
-        </Link>
-      </Flex>
-      <Text fontSize={2} mb={3}>
-        All Field Types
-      </Text>
-      <Box mx={0} mb={3} width={1}>
-        <Flex>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} />)}
-        </Flex>
+    <Box mt={0}>
+      <PageHeader title="Manage > Fields">
+        <Box sx={{ ml: 'auto', mr: 5 }}>
+          <Link href="/manage/fields/new" variant="btnSecondary">
+            + New Field
+          </Link>
+        </Box>
+      </PageHeader>
+      <Box variant="layout.pageFrame" mx={0} mb={3}>
+        {fields && (
+          <Table
+            options={{
+              columns: [
+                {
+                  Header: 'Name',
+                  accessor: 'col2',
+                  width: '45%',
+                },
+                {
+                  Header: 'Updated',
+                  accessor: 'col3',
+                  width: '40%',
+                },
+              ],
+              data: fields,
+            }}
+          />
+        )}        
       </Box>
     </Box>
   );

@@ -4,11 +4,14 @@ import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
 
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
-// import { Label, Select, Textarea } from '@rebass/forms';
+// import { Label, Select, Textarea } from 'theme-ui';
 
 import OrgMembersList from './OrgMembersList';
 import Field from './Field';
 import { checkUser, createEntity, loadEntity } from '../utils/models';
+
+import { defaultModalStyle } from '../utils';
+import Modal from 'react-modal';
 
 export interface Members {
   total_pages: number;
@@ -50,14 +53,23 @@ export interface ProfileClass {
 
 const OrgMemberForm = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
   const [members, setMembers] = useState<Member | undefined>();
   const [organ, setOrgan] = useState<any>();
+  const [showSearch, setShowSearch] = useState<boolean>(false);
 
-  const onCreate = (d: any) => {
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
+  const closeSearch = () => {
+    setShowSearch(false);
+  };
+
+  const onCreate = (d: any) => {    
     setSuccess(true);
     console.log('__d', d);
     // if (d && d.id) {
@@ -108,7 +120,7 @@ const OrgMemberForm = () => {
     console.log('profile.organisation_id', _o);
     setOrgan(_o);
 
-    Object.keys(_o).map(function(key, index) {
+    Object.keys(_o).map(function (key, index) {
       console.log('key', key, index, `${key}`, _o[`${key}`]);
       setValue(`${key}`, _o[`${key}`]);
     });
@@ -118,6 +130,10 @@ const OrgMemberForm = () => {
     const res: any = data.members;
     setMembers(res);
   };
+
+  const onInvite = () => {
+    setShowSearch(true);
+  }
 
   /**
    * Set Profile Context
@@ -147,55 +163,48 @@ const OrgMemberForm = () => {
       <Box>
         {organ && (
           <Box>
-            <OrgMembersList id={organ?.id} members={members} />
+            <OrgMembersList id={organ?.id} members={members} onInitInvite={onInvite}/>
             <Box>
-              <Text variant="pagetitle">Invite Members</Text>
-              <Box
-                mx={0}
-                mb={3}
-                variant="w100"
-                as="form"
-                
-                // sx={{ bg: 'red.0'}}
-                onSubmit={handleSubmit(onInviteSubmit)}>
-                  <Box
-                  sx={{ display: 'none'}}
-                  >
-                <Field
-                  name="organisation_id"
-                  label="Org ID"
-                  defaultValue={organ?.id}
-                  register={register}
-                />
-                <Text
-                  variant="blocktitle"
-                  sx={{
-                    fontSize: 1,
-                    // pl: 3,
-                    py: 2,
-                    color: 'primary',
-                    textTransform: 'uppercase',
-                  }}>
-                  {organ?.name}
-                </Text>
+              <Modal
+                isOpen={showSearch}
+                onRequestClose={closeSearch}
+                style={defaultModalStyle}
+                ariaHideApp={false}
+                contentLabel="SearchWraft">
+                <Box p={4}>
+                  <Text variant="blockTitle">Invite Members</Text>
+                  <Box as="form" onSubmit={handleSubmit(onInviteSubmit)}>
+                    <Box sx={{ display: 'none' }}>
+                      <Field
+                        name="organisation_id"
+                        label="Org ID"
+                        defaultValue={organ?.id}
+                        register={register}
+                      />
+                      <Text
+                        variant="blocktitle"
+                        sx={{
+                          fontSize: 1,
+                          // pl: 3,
+                          py: 2,
+                          color: 'primary',
+                          textTransform: 'uppercase',
+                        }}>
+                        {organ?.name}
+                      </Text>
+                    </Box>
+                    <Field
+                      name="email"
+                      label="Email Address"
+                      defaultValue="anand@aurut.com"
+                      register={register}
+                    />
+                    <Button variant="secondary" type="submit" ml={0} mt={3}>
+                      Invite
+                    </Button>
+                  </Box>
                 </Box>
-
-                {/* <Field
-                  name="name"
-                  label="Name"
-                  defaultValue="Anand Ash"
-                  register={register}
-                /> */}
-                <Field
-                  name="email"
-                  label="Email Address"
-                  defaultValue="anand@aurut.com"
-                  register={register}
-                />
-                <Button variant="secondary" type="submit" ml={0} mt={3}>
-                  Invite
-                </Button>
-              </Box>
+              </Modal>
             </Box>
           </Box>
         )}

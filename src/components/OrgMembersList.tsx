@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Image } from 'theme-ui';
+import { Button, Box, Text, Flex, Image } from 'theme-ui';
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -40,9 +40,10 @@ export interface ThemeElement {
 interface OrgMembersListProps {
   id: string;
   members?: any;
+  onInitInvite?: any;
 }
 
-const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
+const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
   // const token = useStoreState(state => state.auth.token);
   // const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [parent, setParent] = useState<any | undefined>();
@@ -71,7 +72,7 @@ const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
   // }, [token, parent]);
 
   return (
-    <Box py={3} mt={4}>
+    <Box>
       {/* <Flex>
         <Link href="/themes/new" icon={<Plus />}>
           <Text>New</Text>
@@ -80,18 +81,25 @@ const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
       {parent && (
         <>          
           <Box mx={0} mb={3}>
-            <Text mb={3}>All Members</Text>
+            <Flex mb={4}>
+              <Box>
+                <Text as="h2" sx={{ pt: 0, mb: 3, fontSize: 2, pb: 1}}>Members</Text>
+              </Box>
+              <Box sx={{ ml: 'auto'}}>
+                <Button variant="btnSecondary" onClick={() => onInitInvite()} sx={{ pt: 1, pb: 1}}>+ Invite</Button>
+              </Box>
+            </Flex>
             <Box>
               {members &&
                 members.length > 0 &&
                 members.map((_m: Member) => (
-                  <Flex variant="plateBox" sx={{ border: 'solid 1px', pl: 4, borderColor: '#ddd', borderRadius: 3 }}>
-                    <Box>
-                      <Image src={`http://localhost:4000/` + _m.profile_pic} sx={{ width: '40px', height: '40px',mr: 3}}/>
+                  <Flex variant="plateBox" sx={{ border: 'solid 1px', pl: 4, pr: 4, borderColor: '#ddd', borderRadius: 3 }}>
+                    <Box pt={3}>
+                      <Image src={`http://localhost:4000/` + _m.profile_pic} sx={{ borderRadius: "99rem", width: '40px', height: '40px',mr: 3}}/>
                     </Box>
-                    <Box>
-                      <Text sx={{ fontWeight: 600}}>{_m.name}</Text>
-                      <Text sx={{ fontSize: 0,  color: 'gray.8' }}>
+                    <Box sx={{ pt: 3, pb: 3 }}>
+                      <Text as="h4" sx={{ fontWeight: 600}}>{_m.name}</Text>
+                      <Text as="p" sx={{ fontSize: 1,  color: 'gray.6' }}>
                         {_m.email}
                       </Text>
                     </Box>
@@ -99,7 +107,8 @@ const OrgMembersList = ({ id, members }: OrgMembersListProps) => {
                       sx={{
                         fontSize: 0,
                         pl: 3,
-                        pt: 1,
+                        pt: 3,
+                        ml: 2,
                         color: 'blue.5',
                         ml: 'auto',
                         textTransform: 'uppercase',

@@ -50,42 +50,34 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
     <Box
       sx={
         {
-          // width: "400px",
-          // height: "100%",
+          p: 0,
+          width: "100%",
         }
       }
     >
-      { croppedImg && <Image src={String(croppedImg)}/> }
+      { croppedImg && <Image src={String(croppedImg)} />}
       <Box
         sx={{
           position: "relative",
           zIndex: 5000,
-          // minWidth: "100%",
-          height: "100%",
+          minWidth: "100%",
+          width: "100%",
           // bg: "black",
           // p: 4,
         }}
       >
-        <Box
-          sx={{
-            // position: "fixed",
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 2,
-            zIndex: 8000,
-          }}
-        >
+        <Box bg='gray.4'>
           {image && (
             <Box
               sx={{
-                bg: "white",
-                width: "200px",
-                height: "200px",
+                // bg: "gray.2",
+                width: '180px',
+                height: "180px",
                 minHeight: "100%",
                 top: "0%",
                 position: "relative",
                 margin: "auto",
+
               }}
             >
               <Cropper
@@ -102,31 +94,37 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
         </Box>
         <Flex
           sx={{
-            // zIndex: 10000,
             position: "relative",
-            // left: 0,
-            // right: 0,
-            // bottom: 0,
-            p: 0,
+            color: 'gray.3',
+            p: 3,
+            bg: 'gray.1',
             width: '100%',
-            bg: "gray.1",
+            borderTop: 'solid 1px',
+            borderBottom: 'solid 1px',
+            borderColor: 'gray.4',
           }}
         >
           <Slider
             value={zoom}
             min={1}
-            max={3}
-            step={0.1}
+            color="primary"
+            max={10}
+            step={1}
             aria-labelledby="Zoom"
             onChange={(zoom: any) => changeZoom(zoom)}
           />
-          <Box sx={{ ml: 1}}>
-            <Button type="button" onClick={showCroppedImage}>
-              Save
-            </Button>
-          </Box>
         </Flex>
       </Box>
+      <Flex sx={{ bg: 'gray.1', p: 3 }}>
+        <Box sx={{ ml: 'auto' }}>
+          <Button type="button" sx={{ border: 'solid 1px', borderColor: 'gray.4', bg: 'background', color: 'gray.7', mr: 1 }}>
+            Clear
+          </Button>
+          <Button type="button" onClick={showCroppedImage}>
+            Save
+          </Button>
+        </Box>
+      </Flex>
     </Box>
   );
 };

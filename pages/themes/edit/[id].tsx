@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import FieldTypeForm from '../../../src/components/FieldTypeForm';
 import Page from '../../../src/components/Page';
-import { Box } from 'rebass';
+import { Box } from 'theme-ui';
 
 const Index: FC = () => {
   return (

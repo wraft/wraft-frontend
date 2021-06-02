@@ -1,11 +1,6 @@
-// const colors = {
-//   blue: '#3354E1',
-//   greys: ['#e1e0e4', '#b4b2bb', '#8b8796', '#413d4e'],
-//   white: '#FFF',
-//   black: '#333',
-// };
+import { Theme } from 'theme-ui';
 
-const theme = {
+const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body:
@@ -13,7 +8,8 @@ const theme = {
     heading: 'inherit',
     monospace: 'Menlo, monospace',
   },
-  // fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
+  initialColorModeName: 'light',
+  useColorSchemeMediaQuery: true,
   fontSizes: [12.8, 16, 20, 20, 25, 31.25, 39.06, 48.83, 61.04],
   fontWeights: {
     body: 400,
@@ -26,7 +22,7 @@ const theme = {
   },
   colors: {
     text: '#000',
-    background: '#fff',
+    background: 'text',
     primary: '#07c',
     secondary: '#30c',
     muted: '#f6f6f6',
@@ -186,6 +182,24 @@ const theme = {
       '#e8590c',
       '#d9480f',
     ],
+    modes: {
+      dark: {
+        text: '#fff',
+        background: 'gray.8',
+        gray: [
+          '#212529',
+          '#343a40',
+          '#495057',
+          '#868e96',
+          '#adb5bd',
+          '#ced4da',
+          '#dee2e6',
+          '#e9ecef',
+          '#f1f3f5',
+          '#f8f9fa',
+        ],
+      },
+    },
   },
   forms: {
     label: {
@@ -197,8 +211,9 @@ const theme = {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.4',
-      bg: 'white',
+      borderColor: 'gray.3',
+      fontFamily: 'body',
+      bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
     },
@@ -207,7 +222,7 @@ const theme = {
       fontWeight: 500,
       border: 'solid 1px',
       borderColor: 'gray.4',
-      bg: 'white',
+      bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
     },
@@ -216,7 +231,7 @@ const theme = {
       fontWeight: 500,
       border: 'solid 1px',
       borderColor: 'gray.4',
-      bg: 'white',
+      bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
     },
@@ -306,7 +321,61 @@ const theme = {
       maxWidth: '100%',
     },
   },
-  links: {
+  links: {   
+    btnNavLink: {
+      // bg: 'gray.2',
+      p: 2,
+      px: 3,
+      display: 'block',
+    },
+    btnPrimary: {
+      p: 2,
+      px: 3,
+      m: 0,
+      bg: 'primary.1',
+      color: 'primary.9',      
+      border: 'solid 1px',
+      borderColor: 'gray.5',
+      borderRadius: 4,      
+      fontWeight: 800,
+      fontSize: 0,
+      // textTransform: 'uppercase',
+    },
+    btnSecondary: {
+      p: 2,
+      px: 3,
+      m: 0,
+      bg: 'gray.1',
+      color: 'gray.9',      
+      border: 'solid 1px',
+      borderColor: 'gray.5',
+      borderRadius: 4,      
+      fontWeight: 800,
+      fontSize: 0,
+      // textTransform: 'uppercase',
+    }, 
+    btnPrimaryIcon: {
+      bg: 'gray.0',
+      border: 'solid 1px',
+      borderColor: 'gray.4',
+      color: 'gray.8',
+      borderRadius: 4,
+      display: 'inline-flex',
+      alignItems: 'stretch',
+      pt: 2,
+      pr: 3,
+      pl: 2,
+      '&:hover': {
+        bg: 'gray.1',
+        borderColor: 'gray.5',
+      }
+      // mt: -1,
+      // color: 'gray.0',
+      // pb: 0,
+    },
+    base: {
+      color: 'red',
+    },
     rel: {
       position: 'relative',
       display: 'block',
@@ -325,27 +394,84 @@ const theme = {
     },
     button: {
       fontWeight: 500,
-      color: 'white',
+      color: 'primary',
       border: 'solid 1px',
-      fontFamily: 'heading',
+      fontFamily: 'body',
       fontSize: 0,
       px: 3,
       py: 2,
       borderRadius: 4,
-      bg: 'primary',
+      bg: 'text',
       borderColor: 'gray.3',
       letterSpacing: -0.2,
       textDecoration: 'none',
       display: 'inline-flex',
       ':hover': {
-        bg: 'secondary'
-      }
-    }
+        bg: 'primary',
+        color: 'white',
+      },
+    },
   },
-  variants: {
+  layout: {
+    frameHeading: {
+      bg: 'gray.1',
+      pb: 3,
+      px: 4,
+      pt: 3,
+      borderBottom: 'solid 1px',
+      borderColor: 'gray.3',
+      mb: 0,
+    },
+    button: {
+      border: 'solid 1px',
+      borderColor: 'gray.2',
+      p: 1,
+      mt: 3,
+      lineHeight: 0,
+      svg: { fill: 'text' },
+      bg: 'gray.1'
+    },
+    linkBlock: {
+      bg: 'gray.0',
+    },
+    pageFrame: {
+      px: 4
+    },
+    menuWrapper: {
+      px: 2,
+      color: 'gray.7',
+      py: 0,
+      ':hover': {
+        color: 'primary',
+      },
+    },
+    menuLink: {
+      bg: 'gray.0',
+      mb: 0,
+      p: 2,
+      borderRadius: 3,
+      width: '100%',
+      ':hover': {
+        bg: 'gray.2',
+      },
+    },
+
+    menuLinkActive: {
+      bg: 'gray.1',
+      mb: 0,
+      p: 2,
+      borderRadius: 3,
+      width: '100%',
+      color: 'primary',
+    },
     baseForm: {
       width: '100%',
-      // bg: 'purple'
+    },
+    avatar: {
+      width: '24px',
+      height: '24px',
+      borderRadius: 99,
+      mr: 1,
     },
     w100: {
       width: '100%',
@@ -372,60 +498,46 @@ const theme = {
       width: '33%',
     },
     hidden: {
-      display: 'none'
+      display: 'none',
     },
     download: {
       bg: 'red',
       color: 'blue',
+    },
+    plateSidebar: {
+      ml: 3,
+      width: '30%',
     },
     plateLite: {
       p: 0,
       mb: 4,
       pb: 4,
       borderBottom: 'solid 1px',
-      borderColor: 'gray.4'
+      borderColor: 'gray.4',
     },
     plateBox: {
       border: 'solid 1px',
-      borderColor: 'gray.0',
-      bg: 'white',
+      borderColor: 'gray.3',
+      bg: 'gray.0',
       px: 3,
       py: 3,
-    },
-    plateBlock: {
-      base: 'plateBox',
-      bg: 'white',
-      mr: 4,
-      p: 4,
-      width: '25%',
-      border: 'solid 1px',
-      borderColor: 'gray.2',
-      borderLeft: 'solid 3px',
-    },
-    plateSide: {
-      base: 'plateBox',
-    },
-    button: {
-      // bg: 'red.1',
-      // display: 'inline-flex',
     },
     button2: {
       mt: 3,
       borderRadius: 3,
       bg: 'red.2',
-      color: 'white',
+      color: 'text',
       display: 'block',
     },
     header: {
       borderBottom: 'solid 1px',
       borderColor: 'gray.2',
       paddingBottom: 2,
-      bg: 'white',
       paddingTop: 2,
       paddingLeft: 2,
     },
     plateRightBar: {
-      bg:'white',
+      bg: 'text',
       border: 'solid 1px',
       borderColor: 'gray.2',
       p: 3,
@@ -438,7 +550,7 @@ const theme = {
     boxCard: {
       width: '123px',
       height: '123px',
-      background: 'white',
+      background: 'text',
       border: '1px solid #E0E0E0',
       borderRadius: '5px',
     },
@@ -448,7 +560,7 @@ const theme = {
       // marginTop: 2,
       p: 0,
       borderBottom: 'solid 1px',
-      borderColor:'gray.1',
+      borderColor: 'gray.1',
       pl: 4,
       pt: 3,
       pb: 3,
@@ -459,15 +571,15 @@ const theme = {
       // bg: 'blue',
       // position: 'relative',
     },
-    cTyeMark: { 
+    cTyeMark: {
       width: '2px',
       position: 'absolute',
       top: 0,
       left: -4,
       height: '40px',
       display: 'inline-block',
-      borderRadius: '0px'
-    }
+      borderRadius: '0px',
+    },
   },
   alerts: {
     primary: {
@@ -487,28 +599,33 @@ const theme = {
     caps: {
       pt: 2,
       fontSize: 0,
-      textTransform:'uppercase'
-    },    
+      textTransform: 'uppercase',
+    },
     menulink: {
       fontSize: 1,
+      fontWeight: 500,
     },
     pagetitle: {
+      // color: 'red.6',
       fontSize: 4,
-      mb: 2,
-      fontWeight: 300
+      mb: 3,
+      fontWeight: 300,
     },
     pageinfo: {
       color: 'gray.7',
-      fontWeight: 300
+      fontWeight: 300,
     },
     pagedesc: {
       fontSize: 1,
       mb: 4,
-      color: 'gray.6'
+      color: 'gray.6',
     },
     pageheading: {
-      fontSize: 3,
-      mb: 1,
+      fontSize: 1,
+      mb: 2,
+      color:'gray.7',
+      fontWeight: 400,
+      mt: 2,
     },
     personName: {
       fontSize: 1,
@@ -519,23 +636,85 @@ const theme = {
       fontSize: 1,
       mb: 0,
       fontWeight: 'body',
-      color: 'gray.6'
+      color: 'gray.6',
     },
     personBlock: {
       color: 'gray.6',
       fontSize: 0,
-      fontWeight: 'heading'
+      fontWeight: 'heading',
     },
     personPlace: {
       fontSize: 0,
       mt: 0,
-      color: 'gray.5'
-    }
+      color: 'gray.5',
+    },
   },
   buttons: {
+    btnPrimaryIcon: {
+      bg: 'gray.0',
+      border: 'solid 1px',
+      borderColor: 'gray.4',
+      color: 'gray.8',
+      borderRadius: 4,
+      display: 'inline-flex',
+      alignItems: 'stretch',
+      pt: 2,
+      pr: 3,
+      pl: 2,
+      '&:hover': {
+        bg: 'gray.1',
+        borderColor: 'gray.5',
+      }
+      // mt: -1,
+      // color: 'gray.0',
+      // pb: 0,
+    },
+    btnPrimary: {
+      p: 2,
+      px: 3,
+      m: 0,
+      bg: 'primary.1',
+      color: 'primary.9',      
+      border: 'solid 1px',
+      borderColor: 'gray.5',
+      borderRadius: 4,      
+      fontWeight: 800,
+      fontSize: 0,
+      textTransform: 'uppercase',
+    },
+    btnSecondary: {
+      p: 2,
+      px: 3,
+      m: 0,
+      bg: 'gray.1',
+      color: 'gray.9',      
+      border: 'solid 1px',
+      borderColor: 'gray.5',
+      borderRadius: 4,      
+      fontWeight: 800,
+      fontSize: 0,
+      // textTransform: 'uppercase',
+    },
+    btnMain: {
+      variant: 'button.btnSecondary',      
+    },
+    base: {
+      bg: 'transparent',
+      color: 'gray.4',
+    },
+    button: {
+      border: 'solid 1px',
+      borderColor: 'gray.2',
+      p: 1,
+      mt: 3,
+      lineHeight: 0,
+      svg: { fill: 'text' },
+      bg: 'gray.1'
+    },
     secondary: {
       color: 'blue.9',
       bg: 'blue.2',
+      fontFamily: 'body',
       // color: 'gray.2',
       // bg: 'gray.7',
       // border: 'solid 1px',
@@ -549,9 +728,14 @@ const theme = {
     primary: {
       color: 'white',
       bg: 'primary',
+      fontFamily: 'body',
+      fontWeight: 600,
+      fontSize: 0,
+      borderRadius: 2,
+      textTransform: 'uppercase'
     },
     delete: {
-      color: 'white',
+      color: 'text',
       bg: 'red.6',
       ml: 2,
     },
@@ -564,7 +748,7 @@ const theme = {
       px: 3,
       py: 1,
       fontSize: 0,
-    }
+    },
   },
 };
 

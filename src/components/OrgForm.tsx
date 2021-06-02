@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
 
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
-// import { Label, Select, Textarea } from '@rebass/forms';
+// import { Label, Select, Textarea } from 'theme-ui';
 
 import Field from './Field';
 import { checkUser, createEntity, loadEntity } from '../utils/models';
@@ -194,7 +194,7 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box py={3} px={6} variant="w100" mt={4}>
+    <Box>
       {!ready && <Spinner />}
       {success && (
         <Alert>
@@ -204,7 +204,6 @@ const OrgForm = () => {
       )}
 
       <Box>
-        <Text variant="pagetitle">Create Organization</Text>
         {ready && (
           <Box
             mx={0}

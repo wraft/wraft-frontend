@@ -1,13 +1,12 @@
 import React from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
+import { useStoreState } from 'easy-peasy';
+import { useToasts } from 'react-toast-notifications';
+import Router from 'next/router';
 
 import Field from './Field';
 import { createEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
-
-import { useToasts } from 'react-toast-notifications';
-import Router from 'next/router';
 
 const ThemeForm = () => {
   const { register, handleSubmit, errors } = useForm();
@@ -33,15 +32,15 @@ const ThemeForm = () => {
   };  
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} width={1} mt={4}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       <Box>
-        <Text mb={3} fontSize={2} fontWeight={500}>
+        <Text mb={3}>
           Create Theme
         </Text>
       </Box>
-      <Box mx={0} mb={3} width={1}>
+      <Box mx={0} mb={3}>
         <Flex>
-          <Box width={7 / 12}>
+          <Box>
             <Field
               name="name"
               label="Name"

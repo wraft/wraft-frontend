@@ -1,21 +1,18 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Flex } from 'rebass';
 
 import ContentTypeList from '../../src/components/ContentTypeList';
-import Page from '../../src/components/Page';
+import Page from '../../src/components/PageFrame';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Login - Wraft Docs</title>
+        <title>Variants - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <ContentTypeList />
-        </Flex>
+        <ContentTypeList isEdit={true}/>
       </Page>
     </>
   );

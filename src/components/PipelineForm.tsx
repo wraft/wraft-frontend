@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'rebass';
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
@@ -21,7 +21,7 @@ const customStyles = {
 };
 
 import { IContentType, Template } from '../utils/types';
-import { Label, Select } from '@rebass/forms';
+import { Label, Select } from 'theme-ui';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { Pipeline } from './PipelineList';

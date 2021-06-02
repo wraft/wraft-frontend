@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Button } from 'rebass';
+import { Box, Button } from 'theme-ui';
 import { Plus } from '@styled-icons/boxicons-regular';
 import Modal from 'react-modal';
 import { useStoreState, useStoreActions } from 'easy-peasy';

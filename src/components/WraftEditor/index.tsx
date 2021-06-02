@@ -2,13 +2,64 @@
 
 import { jsx } from '@emotion/core';
 import { FC, Fragment, useEffect, useMemo, useState } from 'react';
-
-import { Box } from 'theme-ui';
+import styled from '@emotion/styled';
 import bash from 'refractor/lang/bash';
 
 import markdown from 'refractor/lang/markdown';
 import tsx from 'refractor/lang/tsx';
 import typescript from 'refractor/lang/typescript';
+
+import { EDITOR_CLASS_SELECTOR } from '@remirror/core';
+
+// Add styles to the editor instance
+
+// color: ${(props) => props.theme?.colors?.text};
+// background: ${(props) => props.theme?.colors?.background};
+//     color: ${(props) => props.theme?.colors?.text};
+export const InnerEditorWrapper = styled.div`
+  height: 100%;
+  & * {
+    box-sizing: border-box;
+  }
+  ${EDITOR_CLASS_SELECTOR}:focus {
+    outline: none;
+  }
+  ${EDITOR_CLASS_SELECTOR} p {
+    margin: 0;
+    letter-spacing: 0.6px;
+  }
+  p em {
+    letter-spacing: 1.2px;
+  }
+  ${EDITOR_CLASS_SELECTOR} {
+    box-sizing: border-box;
+    position: relative;
+    line-height: 1.6em;
+    width: 100%;
+    min-height: 30vh;
+    padding: 10px;
+    padding-right: 0;
+    padding: 0;
+    border: solid 1px #ddd;
+    border-radius: 0 0 4px 4px;
+    line-height: 1.58;
+    white-space: pre-wrap;
+    padding-left: 7rem;
+    padding-right: 7rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+  }
+  ${EDITOR_CLASS_SELECTOR} a {
+    text-decoration: none !important;
+  }
+  ${EDITOR_CLASS_SELECTOR} a.mention {
+    pointer-events: none;
+    cursor: default;
+  }
+  ${EDITOR_CLASS_SELECTOR} .ProseMirror-selectednode {
+    background-color: rgb(245, 248, 250);
+  }
+`;
 
 import { MenuBar } from './menu';
 
@@ -71,10 +122,15 @@ import { ResolvedPos } from 'prosemirror-model';
 /**
  * The props which are passed to the internal RemirrorProvider
  */
+
 export type InternalEditorProps = Omit<
   RemirrorProviderProps,
   'childAsRoot' | 'children'
 >;
+
+export interface InternalEditorPropsExt extends InternalEditorProps {
+  hideToolbar: Boolean;
+}
 
 const hasCursor = <T extends object>(
   arg: T,
@@ -115,8 +171,7 @@ const useWysiwygManager = () => {
   );
 };
 
-const WysiwygEditor: FC<InternalEditorProps> = ({ children, ...props }) => {
-
+const WysiwygEditor: FC<InternalEditorPropsExt> = ({ children, ...props }) => {
   const activateLink = () => {
     // setLinkActivated(true);
   };
@@ -132,10 +187,12 @@ const WysiwygEditor: FC<InternalEditorProps> = ({ children, ...props }) => {
 
   return (
     <RemirrorProvider {...props} childAsRoot={true}>
-      <Box>
-        <MenuBar activateLink={activateLink}/>
+      <InnerEditorWrapper>
+        { props?.hideToolbar &&
+          <MenuBar activateLink={activateLink} />
+        }
         <div>{children}</div>
-      </Box>
+      </InnerEditorWrapper>
     </RemirrorProvider>
   );
 };
@@ -191,6 +248,7 @@ interface MarkdownEditorProps {
   insertable?: any;
   editable?: boolean;
   cleanInsert?: Boolean;
+  hideToolbar?: boolean;
 }
 
 export type EditorDisplay = 'markdown' | 'wysiwyg';
@@ -208,6 +266,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   insertable,
   cleanInsert = false,
   editable = false,
+  hideToolbar = true
 }) => {
   const wysiwygManager = useWysiwygManager();
 
@@ -359,6 +418,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
           initialContent={initialContent.wysiwyg}
           value={wysiwygEditorState}
           editable={editable}
+          hideToolbar={hideToolbar}
           onStateChange={onWysiwygStateChange}>
           {children}
         </WysiwygEditor>

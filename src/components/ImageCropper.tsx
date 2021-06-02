@@ -47,7 +47,7 @@ const Layout = ({
       sx={{
         // mt: 3,
         // ml: 3,
-        p: 3,
+        p: 0,
         border: 0,
         boxShadow: 'none',
         // border: "solid 1px",
@@ -148,27 +148,22 @@ const Preview = ({ meta }: IPreviewProps) => {
     <>
       <UploaderContext.Consumer>
         {(_props: any) => (
-          <Box
-            sx={
-              {
-                // bg: 'red',
-                // p: 4,
-              }
-            }
+          <Box   
+          sx={{ width: '100%', p: 0 }}         
             // onClick={toggleTheme}
             // style={{ backgroundColor: theme.background }}
           >
             {prevImage && hideUpload && (
               <>
-                <Image sx={{ maxWidth: '100%' }} src={prevImage} />
+                <Image sx={{ maxWidth: '100%', p: 0 }} src={prevImage} />
                 <Button onClick={() => toggleUpload(_props)}>Save</Button>
               </>
             )}
 
             {previewUrl && !hideUpload && (
-              <>
+              <Box sx={{ width: '100%', p: 0 }}>
                 <ImageEdit image={previewUrl} onUpdate={imageUpdate} />
-              </>
+              </Box>
             )}
 
             {/* <Image sx={{ maxWidth: "100%" }} src={previewUrl} /> */}
@@ -187,7 +182,7 @@ interface IInputBox {
 }
 
 export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }:IInputBox) => {
-  const text = files.length > 0 ? 'Add more files' : 'Choose files';
+  const text = files.length > 0 ? 'Add more files' : 'Upload Profile Image';
 
   return (
     <Label
@@ -195,11 +190,11 @@ export const InputBox = ({ accept, onFiles, files, getFilesFromEvent }:IInputBox
         bg: 'white',
         color: 'primary',
         cursor: 'pointer',
-        border: 'solid 1px',
+        border: 'dotted 2px',
+        borderRadius: 4,
         borderColor: 'primary',
         p: 3,
-        width: '30%',
-        borderRadius: 3,
+        // width: '30%',
       }}>
       {text}
       <Input
@@ -233,6 +228,7 @@ interface IattachImage {
   prevImage?: string;
   prevImageFile?: File;
 }
+
 const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
   const [image, setImage] = useState<File | boolean>(false);
   const [imagePrev, setImagePrev] = useState<string | boolean>(false);
@@ -290,7 +286,7 @@ const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
     <React.Fragment>
       <UploaderContext.Provider
         value={{ attachImage, statex: state, setState }}>
-        <Box>
+        <Box sx={{ p: 0}}>
           {!image && (
             <Dropzone
               // getUploadParams={getUploadParams}
@@ -306,9 +302,8 @@ const ImageCropper = ({ onFileSubmit, onComplete }: MyUploaderProps) => {
               inputContent="Drop A Image"
               styles={{
                 dropzone: {
-                  width: '100%',
+                  width: 'auto',
                   height: 'auto',
-                  border: 0,
                   overflow: 'auto',
                 },
                 dropzoneActive: { border: 0 },

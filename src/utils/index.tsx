@@ -226,6 +226,33 @@ export const modalStyle = {
   },
 };
 
+export const defaultModalStyle = {
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgb(5 6 8 / 78%)',
+  },
+  content: {
+    position: 'relative',
+    transform: 'translateY(-50%, -50%)',
+    top: '15%',
+    width: '50%',
+    maxWidth: '910px',
+    margin: '0 auto',
+    backgroundColor: '#fff',
+    boxShadow: '0px 3px 6px #00000029',
+    borderRadius: '9px',
+    outline: 'none',    
+    overflow: 'auto',
+    padding: 0,
+    marginBottom: 0,
+    WebkitOverflowScrolling: 'touch',
+  },
+};
+
 export const modalStyle2 = {
   content: {
     top: '50%',
