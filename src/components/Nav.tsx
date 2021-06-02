@@ -87,7 +87,7 @@ const Nav = ({ navtitle }: INav) => {
   return (
     <Box
       variant="header"
-      onClick={closeSearch}
+      onClick={() =>closeSearch}
       sx={{
         p: 0,
         bg: 'gray.0',
