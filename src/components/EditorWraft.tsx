@@ -5,8 +5,8 @@ import { MarkdownEditor } from './WraftEditor'
 
 const EditorWraft = (props: any) => {
   return (
-    <Box p={0} variant="w100" mt={props?.mt ? props?.mt: 5}>
-      <MarkdownEditor {...props}/>
+    <Box p={0} variant="layout.w100" mt={props?.mt ? props?.mt : 2}>
+      <MarkdownEditor {...props} />
     </Box>
   );
 };

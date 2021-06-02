@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import ProfileForm from '../../src/components/ProfileForm';
-import Page from '../../src/components/Page';
-import { Flex } from 'rebass';
+import Page from '../../src/components/PageFrame';
+import { Flex } from 'theme-ui';
 import Link from 'next/link';
 
 const Contents: FC = () => {

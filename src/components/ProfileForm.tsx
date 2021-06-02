@@ -15,28 +15,29 @@ import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
 import { useToasts } from 'react-toast-notifications';
 
-const _customStyles: Styles = {
+export const defaultStyle:Styles = {
   overlay: {
-    position: 'fixed',
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backgroundColor: 'rgba(154, 160, 181, 0.5)',
   },
   content: {
-    position: 'absolute',
-    top: '20%',
-    left: '20%',
-    right: '20%',
-    bottom: '20%',
-    border: '1px solid #ccc',
-    background: '#fff',
+    position: 'relative',
+    transform: 'translateY(-50%)',
+    top: '50%',
+    width: '50%',
+    maxWidth: '300px',
+    margin: '0 auto',
+    backgroundColor: '#fff',
+    boxShadow: '0px 3px 6px #00000029',
+    borderRadius: '8px',
+    outline: 'none',
+    padding: 0,
     overflow: 'auto',
     WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    padding: '20px',
   },
 };
 
@@ -231,12 +232,12 @@ const Form = () => {
 
   return (
     <Box py={3} mt={4} pl={4} variant="w50">
-      <Box sx={{ pb: 5 }}>
+      {/* <Box sx={{ pb: 5 }}>
         <Text variant="pagetitle" sx={{ mb: 0 }}>
           My Account
         </Text>
         <Text sx={{ fontSize: 1 }}>Your account settings</Text>
-      </Box>
+      </Box> */}
       <Box variant="w100">
         <Flex variant="w100">          
           <Box variant="w100">
@@ -274,17 +275,15 @@ const Form = () => {
                         )}
                         {isEdit && (
                           <Modal
-                            style={_customStyles}
+                            style={defaultStyle}
                             isOpen={true}
                             onRequestClose={closeModal}
                             ariaHideApp={false}
-                            contentLabel="Example Modal">
-                            <Box>
+                            contentLabel="Profile Image">
                               <ImageCropper
                                 onFileSubmit={setPreviewImage}
                                 onComplete={onCropped}
                               />
-                            </Box>
                           </Modal>
                         )}
                         {imagePreview && imageSaved && (
@@ -318,10 +317,10 @@ const Form = () => {
                   <Field
                     name="name"
                     label="Name"
+                    variant="baseInput"
                     defaultValue="Your Full Name"
                     register={register}
                   />
-                  <Box></Box>
                   <FieldDate
                     name="dob"
                     label="Birthday"

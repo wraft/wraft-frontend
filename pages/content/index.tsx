@@ -4,7 +4,7 @@ import { Flex, Box, Text } from 'theme-ui';
 import Link from 'next/link';
 
 import ContentTypeList from '../../src/components/ContentTypeList'
-import Page from '../../src/components/Page';
+import Page from '../../src/components/PageFrame';
 
 const Index: FC = () => {
   return (
@@ -14,6 +14,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
+        x
         <Flex>
           <Link href="/content-types/new">
             <a>New Content Type</a>

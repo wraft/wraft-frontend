@@ -35,9 +35,8 @@ const Field: React.FC<Props> = ({
   mr,
   sub,
 }) => {
-  const [selected, setSelect] = useState<Date|undefined>();
+  const [selected, setSelect] = useState<Date | undefined>();
   const [status, setstatus] = useState<number>(0);
-
 
   const onChangeDate = (
     _selectedDay: any,
@@ -54,7 +53,7 @@ const Field: React.FC<Props> = ({
     console.log('date', _selectedDay, _modifiers, dayPickerInput, input);
     if (input) {
       const inptfrm = !input.value.trim();
-      if(inptfrm) {
+      if (inptfrm) {
         console.log('inptfrm muneef x10', inptfrm);
         // setstatus(2);
         // const result:any = parseDate(inptfrm, '', 'en');
@@ -90,7 +89,7 @@ const Field: React.FC<Props> = ({
       // const dd:any = parseDate(defaultValue, FORMAT, 'en')
       setSelect(dx);
     } else {
-      const dx = parseDate("1989-01-02", FORMAT, 'en');
+      const dx = parseDate('1989-01-02', FORMAT, 'en');
       setSelect(dx);
       console.log('parseDate', 'fida vs muneef', dx);
       setstatus(2);
@@ -100,16 +99,11 @@ const Field: React.FC<Props> = ({
   return (
     <Box pb={2} mr={mr} sx={{ position: 'relative', width: '100%' }}>
       {/* {value} */}
-      {sub && (
-        <Text color="#444" sx={{ position: 'absolute', right: 1, top: 40 }}>
-          <Calendar width="20" />
-        </Text>
-      )}
       <Label htmlFor="description" mb={0}>
         {label}
         {/* {selected} */}
       </Label>
-      { status > 1 &&  selected &&
+      {status > 1 && selected && (
         <DayPickerInput
           formatDate={formatDate}
           parseDate={parseDate}
@@ -119,19 +113,25 @@ const Field: React.FC<Props> = ({
           hideOnDayClick={true}
           // selectedDay={selected}
           component={(_props: any) => (
-            <>
+            <Box sx={{ position: 'relative'}}>
               <Input
                 name={name}
-                sx={{ bg: 'white' }}
                 // placeholder={placeholder ? placeholder: ''}
                 ref={register({ required })}
                 {..._props}
                 // value={value || selected}
               />
-            </>
+              {sub && (
+                <Text
+                  color="gray.4"
+                  sx={{ position: 'absolute', right: 2, top: 2,  }}>
+                  <Calendar width="20" />
+                </Text>
+              )}
+            </Box>
           )}
         />
-          }
+      )}
     </Box>
   );
 };

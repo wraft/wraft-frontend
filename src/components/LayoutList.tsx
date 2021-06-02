@@ -66,14 +66,16 @@ const LayoutList: FC = () => {
 
   return (
     <Box py={3} mt={4}>
-      <Text variant="pagetitle">Layouts</Text>
-      <Flex mx={0} mb={3}>
+      <Text as="h3" variant="pagetitle">Layouts</Text>
+      <Box mx={0} mb={3}>
+        <Flex>
         {contents &&
           contents.length > 0 &&
           contents.map((m: any) => (
             <LayoutCard model="layouts" key={m.id} {...m} onDelete={onDelete} />
           ))}
-      </Flex>
+          </Flex>
+      </Box>
     </Box>
   );
 };

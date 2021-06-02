@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
 
 import { Box, Flex, Button, Text } from 'theme-ui';
@@ -9,8 +9,11 @@ import Field from './Field';
 import FieldText from './FieldText';
 import FieldForm from './FieldForm';
 import EditorWraft from './EditorWraft';
+import NavEdit from './NavEdit';
 import { Template, ContentState } from '../../src/utils/types';
 import { cleanName, updateVars } from '../../src/utils';
+
+import { ErrorIcon, TickIcon } from './Icons';
 
 export const EMPTY_MARKDOWN_NODE = {
   type: 'doc',
@@ -85,7 +88,7 @@ export interface IFieldTypeValue {
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import { createEntity, loadEntity, updateEntity } from '../utils/models';
 // import { isString } from 'util';
-import { Input } from '@rebass/forms';
+import { Input } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 // import { Spinner } from 'theme-ui';
 // import RichEditorWraft from './EditWraft';
@@ -98,7 +101,7 @@ export interface IContentForm {
 const Form = (props: IContentForm) => {
   // var subtitle: any;
   const { register, getValues, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   // const dispatch = useDispatch();
   const [content, setContent] = useState<IField>();
   const [templates, setTemplates] = useState<Array<Template>>([]);
@@ -107,6 +110,7 @@ const Form = (props: IContentForm) => {
   const [active, setActive] = useState('');
   const [body, setBody] = useState<any>();
   const [showForm, setShowForm] = useState<Boolean>(false);
+  const [showTitleEdit, setTitleEdit] = useState<Boolean>(false);
   const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const router = useRouter();
@@ -119,7 +123,17 @@ const Form = (props: IContentForm) => {
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
   const { addToast } = useToasts();
   const { id, edit } = props;
+  const [title, setTitle] = useState<string>('New Title');
 
+  const refSubmitButtom = useRef<HTMLButtonElement>(null);
+
+  /**
+   * Toggle Title Edit
+   * @param map
+   */
+  const toggleEdit = () => {
+    setTitleEdit(!showTitleEdit);
+  };
   /**
    *
    * @param data
@@ -156,7 +170,7 @@ const Form = (props: IContentForm) => {
     // for all fields
     let obj: any = [];
     if (fields && fields.length > 0) {
-      fields.forEach(function(value: any) {
+      fields.forEach(function (value: any) {
         // console.log('field', value)
         const name = vals[`${value.name}`];
         let x: FieldInstance = { ...value, value: name };
@@ -250,6 +264,7 @@ const Form = (props: IContentForm) => {
       loadTemplates(ctypeId);
 
       setValue('title', data.content.serialized.title);
+      setTitle(data.content.serialized.title);
       const rawraw = data.content.serialized.serialized;
       if (rawraw) {
         const df = JSON.parse(rawraw);
@@ -378,18 +393,18 @@ const Form = (props: IContentForm) => {
     if (escaped) {
       regexp = /\\\[\w+\\\]/gm;
     }
-  
+
     let m;
     let results: string[] = [];
-  
+
     while ((m = regexp.exec(body)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
       if (m.index === regexp.lastIndex) {
         regexp.lastIndex++;
       }
-  
+
       // The result can be accessed through the `m`-variable.
-      m.forEach(match => {
+      m.forEach((match) => {
         results.push(match);
       });
     }
@@ -397,11 +412,10 @@ const Form = (props: IContentForm) => {
     return results;
   };
 
-  
   /**
    * @param x
    */
-  const aloyk = (piece: any) => {
+  const textOperation = (piece: any) => {
     const _dat = piece?.serialized?.data;
 
     const df = JSON.parse(_dat);
@@ -409,27 +423,25 @@ const Form = (props: IContentForm) => {
       setInsertable(df);
     }
 
-    /** Now get title template ready */
-    // console.log('BOOB', field_maps, piece.title_template);
-
     if (maps) {
       // lazy matching
-      const tempTitle = piece.title_template
+      const tempTitle = piece.title_template;
       const m = findVarEx(tempTitle, false);
-      let latexpussy = []
-      m.map((x: any)=> {
+      let latexpussy = [];
+      m.map((x: any) => {
         const cName = cleanName(x);
-        latexpussy.push(x)
+        latexpussy.push(x);
 
         // find match
 
         const mx = maps.find((x: any) => x.name === cName);
-        if(mx) {
-          const newTitle = tempTitle.replace(`[${cName}]`, mx.value || 'Fida')
+        if (mx) {
+          const newTitle = tempTitle.replace(`[${cName}]`, mx.value || 'Name');
           setValue('title', newTitle || 'Untitled');
-        }        
-      })
-    }    
+          setTitle(newTitle);
+        }
+      });
+    }
   };
 
   /**
@@ -441,7 +453,7 @@ const Form = (props: IContentForm) => {
     setShowForm(!showForm);
     setActiveTemplate(x.id);
 
-    aloyk(x);
+    textOperation(x);
 
     // updateStuff(x, maps);
   };
@@ -493,58 +505,27 @@ const Form = (props: IContentForm) => {
     }
   };
 
+  const onSave = () => {
+    refSubmitButtom?.current?.click();
+  }
+
   return (
-    <Box bg="gray.0">
-      {edit && <Text>Edit {id}</Text>}
+    <Box sx={{ p: 0 }}>
+      <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
+
+      {/* {edit && <Text>Edit {id}</Text>} */}
       {/* {status < 1 && (
         <Box>
           {status}
           <Spinner width={24} height={24} />
         </Box>
       )} */}
-      <Box>
-        <Text>
-          <Box>
-            {content && content.content_type && (
-              <Box sx={{ mb: 3, mt: 3 }}>
-                <Text>{'Create ' + content.content_type.name}</Text>
-              </Box>
-            )}
-          </Box>
-        </Text>
-      </Box>
-      <Box>
+      <Box sx={{ p: 4 }}>
         <Flex>
           <Box
             as="form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{ minWidth: '70%', maxWidth: '85ch', my: 'auto' }}>
-            <Flex>
-              {/* <Box variant="w34"> */}
-              <Box variant="w100">
-                <Field
-                  name="title"
-                  label=""
-                  defaultValue=""
-                  placeholder="Document Name"
-                  register={register}
-                />
-              </Box>
-              {/* <Button variant="link">Sync</Button> */}
-              <Button
-                variant="primary"
-                sx={{ ml: 3, mt: 2, mb: 3, pl: 4, pr: 4 }}
-                type="submit">
-                Save
-              </Button>
-              {/* </Box>
-              <Box variant="w14" sx={{ pt: 4, textAlign: 'right', ml: 'auto'}}>
-                <Button variant="secondary" sx={{ }} type="submit">
-                  Save
-                </Button>
-              </Box> */}
-            </Flex>
-
             <Box sx={{ display: 'none' }}>
               <FieldText
                 name="body"
@@ -561,11 +542,31 @@ const Form = (props: IContentForm) => {
                 register={register}
               />
             </Box>
+            
+              <Box
+                sx={{ display: showTitleEdit?  'block': 'none', flexGrow: 1, width: '100%', pl: 2, pt: 2 }}>
+                <Field
+                  name="title"
+                  label=""
+                  defaultValue={body?.title}
+                  register={register}
+                />
+                <Button ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button>
+              </Box>
+
+            {/* <Box sx={{ flexGrow: 1, width: '100%', pl: 2, pt: 2 }}> */}
+
             {/* <Box width={8/12} p={0}>
               <RichEditorWraft/>
             </Box> */}
             {def && (
-              <Box sx={{ pl: 0 }}>
+              <Box
+                sx={{
+                  pl: 0,
+                  bg: 'gray.0',
+                  position: 'relative',
+                  fontFamily: 'courier',
+                }}>
                 <EditorWraft
                   value={active}
                   editable={true}
@@ -574,7 +575,23 @@ const Form = (props: IContentForm) => {
                   editor="wysiwyg"
                   cleanInsert={cleanInsert}
                   insertable={insertable}
+                  mt={0}
                 />
+                <Box
+                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
+                  {body && body?.md && raw && (
+                    <Box sx={{ color: 'green.4' }}>
+                      <TickIcon />
+                    </Box>
+                  )}
+
+                  {!raw ||
+                    (!body?.md && (
+                      <Box sx={{ color: 'red.4' }}>
+                        <ErrorIcon />
+                      </Box>
+                    ))}
+                </Box>
               </Box>
             )}
             <Box sx={{ display: 'none' }}>
@@ -601,29 +618,34 @@ const Form = (props: IContentForm) => {
               />
             </Box>
           </Box>
-          <Box variant="plateRightBar" sx={{ ml: 4 }}>
-            <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3 }}>
-              Select a template for quick start
+          <Box variant="plateRightBar" sx={{ ml: 4, width: '30%' }}>
+            <Flex sx={{ mb: 4}}>
+              <Button onClick={onSave}>Publish</Button>
+            </Flex>
+            <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>
+              Choose a template
             </Text>
-            <Box>
+            <Box mt={2}>
               {templates &&
                 templates.map((n: any) => (
                   <Box
                     key={n.id}
                     sx={{
+                      bg: 'gray.0',
                       pl: 3,
                       border: 'solid 0.5px',
                       borderColor: 'gray.2',
-                      bg: 'gray.1',
                       mb: 1,
                       pt: 2,
                       pb: 3,
+                      pr: 3,
+                      width: '100%',
                     }}
                     onClick={() => changeText(n)}>
-                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                    <Text as="h6" sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
                       {n.title}
                     </Text>
-                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                    <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
                       Template Bio
                     </Text>
                   </Box>
@@ -645,12 +667,6 @@ const Form = (props: IContentForm) => {
             />
           </Box>
         </Flex>
-
-        {body && body?.md && raw && (
-          <Box>
-            <Text color="green">👍</Text>
-          </Box>
-        )}
       </Box>
     </Box>
   );

@@ -1,50 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
-import Link from './NavLink';
-import { fetchAPI } from '../utils/models';
+import { Box, Text, Spinner, ThemeUIStyleObject, Button } from 'theme-ui';
+
 import { useTable } from 'react-table';
 import styled from 'styled-components';
 // import { useStoreState } from 'easy-peasy';
-import { Plus } from '@styled-icons/boxicons-regular';
+// import { Plus } from '@styled-icons/boxicons-regular';
+import { fetchAPI } from '../utils/models';
+import Paginate, { IPageMeta } from './Paginate';
+import Link from './NavLink';
+import PageHeader from './PageHeader';
+import { Table } from './Table';
 
-const Styles = styled.div`
-  table {
-    border-spacing: 0;
-    border: 0px solid #ddd;
-    tr {
-      background: #fff;
-      opacity: 0.9;
-      :hover {
-        background: #efefef;
-      }
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-    thead {
-      th {
-        padding-top: 16px;
-        padding-bottom: 16px;
-        background: #f8f9fa;
-        border-right: 0;
-        border-bottom: solid 1px #eee;
-      }
-    }
-    th,
-    td {
-      margin: 0;
-      padding: 24px 16px;
-      text-align: left;
-      border-bottom: 0;
-      border-right: 0;
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`;
 
 export interface ILayout {
   width: number;
@@ -71,145 +37,121 @@ export interface IFieldItem {
   type: string;
 }
 
-// const ItemField = (props: any) => {
-//   return (
-//     <Box pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }}>
-//       <Link href={`/templates/edit/${props.id}`}>
-//         <Text fontSize={1}>{props.title}</Text>
-//       </Link>
-//     </Box>
-//   );
-// };
-
-function Table({ columns, data }: { columns: any; data: any }) {
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data,
-  });
-
-  // return (<h1>Table</h1>)
-  // Render the UI for your table
-  return (
-    <div>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-// interface Title  {
-//   title: string;
-// }
-
-interface cellPro {
-  title: string;
-}
-
-const Title = (props: any) => {
-  const {
-    row: { cell },
-  } = props;
-  const org = cell.row.original ? cell.row.original : false;
-  return (
-    <Box>
-      {org && (
-        <Link href={`/templates/edit/[id]`} path={`/templates/edit/${org.id}`}>
-          <Text sx={{ fontSize: 1, fontWeight: 'heading' }}>
-            {props.row.value}
-          </Text>
-        </Link>
-      )}
-    </Box>
-  );
-};
-
 const TemplateList = () => {
+  // const [contents, setContents] = useState<Array<IField>>([]);
+
   const [contents, setContents] = useState<Array<IField>>([]);
+  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>();
+  const [total, setTotal] = useState<number>(1);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Name',
-        accessor: 'title',
-        Cell: (row: cellPro) => <Title row={row} />,
-      },
-      {
-        Header: 'Id',
-        accessor: 'id',
-      },
-      {
-        Header: 'Action',
-        accessor: 'action',
-      },
-    ],
-    [],
-  );
+  const [templates, setTemplates] = useState<Array<any>>([]);
 
-  const loadData = () => {
-    fetchAPI('data_templates')
+  useEffect(() => {
+    loadData(1);
+  }, []);
+
+  useEffect(() => {
+    if (page) {
+      loadData(page);
+    }
+  }, [page]);
+
+  const loadData = (page: number) => {
+    const pageNo = page > 0 ? `?page=${page}` : '';
+    fetchAPI(`data_templates${pageNo}`)
       .then((data: any) => {
+        setLoading(true);
         const res: IField[] = data.data_templates;
+        setTotal(data.total_pages);
         setContents(res);
+        setPageMeta(data);
       })
-      .catch();
+      .catch(() => {
+        setLoading(true);
+      });
+  };
+
+  const changePage = (_e: any) => {
+    console.log('page', _e?.selected);
+    setPage(_e?.selected + 1);
   };
 
   useEffect(() => {
-    loadData();
+    loadData(total);
   }, []);
 
-  return (
-    <Box py={3} variant="w100" mt={4}>
-      <Box variant="plateLite">
-        <Text variant="pagetitle" mb={4}>
-          All Templates
-        </Text>
-        <Link variant="button" href="/templates/new" icon={<Plus width={20} />}>
-          <Text sx={{ ml: 2 }}>New Template</Text>
-        </Link>
-      </Box>
-      <Box mx={0} mb={3}>
-        <Styles>
-          {contents && contents.length > 0 && (
-            <Table columns={columns} data={contents} />
-          )}
-        </Styles>
+  useEffect(() => {
+    if (contents && contents.length > 0) {
+      let row: any = [];
+      contents.map((r: any) => {
+        const rFormated = {
+          col1: <Text>-</Text>,
+          col2: (
+            <Box>
+              <Text as="h4">{r.title}</Text>
+              <Text sx={{ color: 'gray.6' }}></Text>
+            </Box>
+          ),
+          col3: <Text>{r.updated_at}</Text>
+        };
 
-        {/* <Box>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.id} {...m} />)}
-        </Box> */}
+        row.push(rFormated);
+      });
+
+      setTemplates(row);
+    }
+  }, [contents]);
+
+  return (
+    <Box>
+      <PageHeader title="Templates">
+        <Box sx={{ ml: 'auto', pt: 2}}>
+          <Link href="/templates/new" variant="btnSecondary">+ New Template</Link>
+        </Box>
+      </PageHeader>
+      <Box variant="layout.pageFrame">
+        {!loading && (
+          <Box>
+            <Spinner width={40} height={40} color="primary" />
+          </Box>
+        )}
+        <Box mx={0} mb={3}>
+
+          {templates && (
+              <Table
+                options={{
+                  columns: [
+                    {
+                      Header: 'Id',
+                      accessor: 'col1', // accessor is the "key" in the data
+                      width: '5%',
+                    },
+                    {
+                      Header: 'Name',
+                      accessor: 'col2',
+                      width: '65%',
+                    },
+                    {
+                      Header: 'Contact',
+                      accessor: 'col3',
+                      width: '30%',
+                    },
+                  ],
+                  data: templates,
+                }}
+              />
+            )}
+
+          <Paginate changePage={changePage} {...pageMeta} />
+
+          {/* <Box>
+            {contents &&
+              contents.length > 0 &&
+              contents.map((m: any) => <ItemField key={m.id} {...m} />)}
+          </Box> */}
+        </Box>
       </Box>
     </Box>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
-// import { Label, Input } from '@rebass/forms';
+// import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 
@@ -38,6 +38,10 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
   },
+  overlay: {
+    backgroundColor: '#000000ba',
+    border: 0,
+  },
 };
 
 export interface IFieldField {
@@ -65,7 +69,7 @@ const Form = (props: any) => {
     const vals = getValues();
     let obj: any = [];
     if (fields && fields.length > 0) {
-      fields.forEach(function(value: any) {
+      fields.forEach(function (value: any) {
         const name = vals[`${value.name}`];
         let x: FieldInstance = { ...value, value: name };
         obj.push(x);
@@ -99,27 +103,12 @@ const Form = (props: any) => {
 
     if (m && m.length > 0) {
       const selection = findAll(props.templates, m);
-      // // const body: string = selection && (selection.data as string);
-      // // srlz
       const serialized: any = selection && (selection.serialized as string);
 
-      console.log('serialized', serialized);
-      // //
       if (serialized && serialized.data) {
-        // console.log('ser', serialized);
         const bodyValue = JSON.parse(serialized.data);
         console.log('(serialized', bodyValue);
-        // const bodyUpd: ContentState = bodyValue;
-        // const valsAttached = updateVars(bodyUpd, vax);
-        // props.setActive(valsAttached);
       }
-      // // const bodyUpdated: string = replaceVars(body, vax, true);
-      // // console.log('bod', data, serialized, bodyUpdated);
-      // // props.setActive(data.serialized.data);
-      // if (data && data.serialized) {
-      //   console.log('x', data.serialized);
-      // }
-      // Apply title template
       const newTitle = replaceTitles(selection.title_template, vax);
       props.setValue('title', newTitle);
     }
@@ -134,13 +123,14 @@ const Form = (props: any) => {
 
   return (
     <Box>
-      <Text mb={4} mt={0} variant="caps">
-        Fields
-      </Text>
-      <Box p={3} bg="gray.0">
+      <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
+      <Box
+        p={3}
+        bg="gray.0"
+        sx={{ mt: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
         {field_maps &&
           field_maps.map((x: any) => (
-            <Box
+            <Flex
               key={x.id}
               sx={{
                 pb: 2,
@@ -159,26 +149,17 @@ const Form = (props: any) => {
               <Text
                 sx={{
                   fontSize: 0,
+                  ml: 'auto',
                   fontWeight: 'heading',
                   fontFamily: 'Menlo, monospace',
                 }}>
                 {x.value}
               </Text>
               <Text>{x.type}</Text>
-            </Box>
+            </Flex>
           ))}
       </Box>
-      <Button
-        sx={{
-          pt: 2,
-          pb: 2,
-          bg: 'white',
-          color: 'gray',
-          fontFamily: 'heading',
-          border: 'solid 1px',
-          fontSize: 0,
-        }}
-        onClick={props.setShowForm}>
+      <Button variant="btnSecondary" onClick={props.setShowForm}>
         Fill Form
       </Button>
       <Modal

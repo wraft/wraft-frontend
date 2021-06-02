@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Box, Flex, Text } from 'rebass';
-import { Label, Input, Select } from '@rebass/forms';
+import { Button, Box, Flex, Text } from 'theme-ui';
+import { Label, Input, Select } from 'theme-ui';
 import Modal from 'react-modal';
 import { useForm } from 'react-hook-form';
 

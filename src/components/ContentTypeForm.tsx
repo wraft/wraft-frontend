@@ -244,7 +244,7 @@ const Form = () => {
 
     const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
-      updateEntity(`content_types/${data.edit}`, sampleD, token);
+      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
     } else {
       createEntity(sampleD, 'content_types', token, onSuccess);
     }

@@ -1,21 +1,20 @@
 import React from 'react';
-import { Flex, Box, Text } from 'rebass';
+import { Flex, Box, Text, Button } from 'theme-ui';
 
 interface PageHeaderProps {
   children?: any;
   title: string;
 }
 
-const PageHeader = (props: PageHeaderProps) => {
+const PageHeader = ({ title, children }: PageHeaderProps) => {
   return (
-    <Flex>
-      <Text variant="pagetitle">{props.title}</Text>
-      {props.children && (
-        <Box ml="auto" mr={6}>
-          {props.children}
-        </Box>
-      )}
-    </Flex>
+    
+    <Box variant="layout.frameHeading">
+      <Flex>
+        <Text variant="pageheading">{title}</Text>
+        {children}
+      </Flex>
+    </Box>
   );
 };
 

@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Button, Text, Input, Label, Divider, Flex } from 'theme-ui';
+import {
+  Box,
+  Container,
+  Button,
+  Text,
+  Input,
+  Label,
+  Divider,
+  Flex,
+  Select,
+} from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -7,9 +17,11 @@ import Field from './Field';
 import { useRouter } from 'next/router';
 // import styled from 'styled-components';
 import { createEntity, deleteEntity, loadEntity } from '../utils/models';
-import { modalStyle } from '../utils';
+import { defaultModalStyle } from '../utils';
 import Modal from 'react-modal';
 import { useToasts } from 'react-toast-notifications';
+
+import ApprovalFormBase from './ApprovalCreate';
 
 // const Block = styled(Box)`
 //   border: solid 1px #ddd;
@@ -62,12 +74,14 @@ export interface StateFormProps {
   onSave: any;
   onDelete: any;
   hidden?: boolean;
+  onAttachApproval?: any;
 }
 
 const StatesForm = (props: StateFormProps) => {
   const [stat, setStat] = useState('');
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showApproval, setShowApproval] = useState<boolean>(false);
   const { addToast } = useToasts();
 
   function closeModal() {
@@ -82,9 +96,14 @@ const StatesForm = (props: StateFormProps) => {
     setStat(e.target.value);
   };
 
+  const changeForm = (data: any) => {
+    props.onAttachApproval(data);
+    setShowApproval(true);
+  };
+
   const onDeleteFlow = (_id: any) => {
-    props.onDelete(_id); 
-  }
+    props.onDelete(_id);
+  };
 
   const AddState = () => {
     const newState = {
@@ -97,13 +116,12 @@ const StatesForm = (props: StateFormProps) => {
 
     closeModal();
 
-    addToast(`Added ${stat} to Flow`, { appearance: 'success' })
-
+    addToast(`Added ${stat} to Flow`, { appearance: 'success' });
   };
 
   return (
     <Box p={2}>
-      <Text variant="caps" sx={{ color: 'gray.7'}} pb={3}>
+      <Text as="h4" variant="sectiontitle" sx={{ mb: 2 }} pb={2}>
         All States
       </Text>
       {props.content && (
@@ -111,35 +129,55 @@ const StatesForm = (props: StateFormProps) => {
           mb={4}
           sx={{
             borderBottom: 'solid 1px',
-            borderColor: 'blue.2',
+            borderColor: 'gray.2',
           }}>
           {props.content.map((c: StateElement, index) => (
             <Flex
               sx={{
                 p: 3,
-                bg: 'blue.0',
+                bg: 'gray.0',
                 border: 'solid 1px',
                 borderBottom: 0,
-                borderColor: 'blue.2',
+                borderColor: 'gray.4',
               }}>
-                <Text mr={2} sx={{ color: 'blue.6'}}>{index + 1}</Text>
-              <Text sx={{ fontWeight: 'heading', color: 'blue.9' }} key={c.state.id}>
+              <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
+                {index + 1}
+              </Text>
+              <Text
+                sx={{ fontWeight: 'heading', color: 'gray.9' }}
+                key={c.state.id}>
                 {c.state.state}
               </Text>
-              <Text onClick={ () => onDeleteFlow(c.state.id)} sx={{ ml:'auto'}}>Delete</Text>
+              <Text onClick={() => changeForm(c.state)} as="h5" mx={5}>
+                Add Approval
+              </Text>
+              <Text
+                onClick={() => onDeleteFlow(c.state.id)}
+                sx={{
+                  ml: 'auto',
+                  fontSize: 0,
+                  fontWeight: 600,
+                  fontFamily: 'heading',
+                  textTransform: 'uppercase',
+                }}>
+                Delete
+              </Text>
             </Flex>
           ))}
         </Box>
       )}
-      <Button variant="tertiary" onClick={toggleModal}>Add New</Button>
+      <Button variant="btnSecondary" onClick={toggleModal}>
+        Add State
+      </Button>
       {/* {toggled && ( */}
-        <>
-          <Modal
-            isOpen={showModal}
-            onRequestClose={closeModal}
-            style={modalStyle}
-            ariaHideApp={false}
-            contentLabel="FileUploader">
+      <>
+        <Modal
+          isOpen={showModal}
+          onRequestClose={closeModal}
+          style={defaultModalStyle}
+          ariaHideApp={false}
+          contentLabel="FileUploader">
+          <Box>
             <Box>
               <Label>Add New State</Label>
               <Input placeholder="New State Name" onChange={updateState} />
@@ -147,25 +185,35 @@ const StatesForm = (props: StateFormProps) => {
             <Button variant="secondary" onClick={AddState}>
               Add State
             </Button>
-          </Modal>
-        </>
+          </Box>
+        </Modal>
+      </>
       {/* )} */}
     </Box>
   );
 };
 
-const Form = () => {
-  const { register, handleSubmit, errors } = useForm();
-  const [edit, setEdit] = useState<boolean>(false);
-  const [content, setContent] = useState<StateElement[]>();
 
-  const token = useStoreState(state => state.auth.token);
+
+const FlowForm = () => {
+  const { register, handleSubmit, setValue, errors } = useForm();
+  const [edit, setEdit] = useState<boolean>(false);
+  const [approval, setApproval] = useState<boolean>(false);
+  const [content, setContent] = useState<StateElement[]>();
+  const [flow, setFlow] = useState<Flow>();
+
+  const token = useStoreState((state) => state.auth.token);
 
   const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
+
+  const onAttachApproval = (_d: any) => {
+    setApproval(!approval);
+    console.log('onAttachApproval', _d);
+  };
 
   /**
    * Map states to types, and states
@@ -176,6 +224,12 @@ const Form = () => {
     setContent(res.states);
   };
 
+  const loadFlowSuccess = (data: any) => {
+    const res: Flow = data.flow;
+    setFlow(res);
+    setValue('name', res?.flow?.name);
+  };
+
   /**
    * Load all states for a particular Flow
    * @param id flow id
@@ -184,6 +238,16 @@ const Form = () => {
   const loadStates = (id: string, t: string) => {
     const tok = token ? token : t;
     loadEntity(tok, `flows/${id}/states`, loadStatesSuccess);
+  };
+
+  /**
+   * Load all states for a particular Flow
+   * @param id flow id
+   * @param t  token
+   */
+  const loadFlow = (fId: string, t: string) => {
+    const tok = token ? token : t;
+    loadEntity(tok, `flows/${fId}`, loadFlowSuccess);
   };
 
   /**
@@ -199,19 +263,18 @@ const Form = () => {
    * @param data Form Data
    */
   const deleteState = (fId: any) => {
-    deleteEntity(`states/${fId}`, token)
+    deleteEntity(`states/${fId}`, token);
 
-    addToast("Deleted a flow", { appearance: 'error' })
+    addToast('Deleted a flow', { appearance: 'error' });
 
     loadStates(cId, token);
-
   };
 
   const onCreateState = (_x: any) => {
-    if(cId && token ) {
+    if (cId && token) {
       loadStates(cId, token);
     }
-  }
+  };
 
   /**
    * Submit Form
@@ -225,32 +288,42 @@ const Form = () => {
     if (cId && cId.length > 0) {
       setEdit(true);
       loadStates(cId, token);
+      loadFlow(cId, token);
     }
   }, [cId, token]);
 
   return (
     <Box py={3} mt={4}>
       <Box>
-        <Container sx={{ maxWidth: '70ch', mx: 'auto' }}>
+        <Container variant="layout.pageFrame">
           <Box sx={{ mb: 4 }}>
-            <Text variant="pagetitle">Create Flows</Text>
+            <Text as="h4" variant="sectiontitle">
+              {cId ? 'Edit' : 'Create'} Flows
+            </Text>
           </Box>
           <Box>
             <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
               <Field
                 name="name"
                 label="Name"
-                defaultValue="Sample Name"
+                defaultValue=""
                 register={register}
               />
-              <Button type="submit" mt={3}>
+              <Button variant="btnPrimary" type="submit" mt={3}>
                 Save
               </Button>
             </Box>
             <Divider sx={{ color: 'gray.3', my: 4 }} />
             <Box mt={2}>
+              {approval && <ApprovalFormBase closeModal={() => setApproval(false)} isOpen={approval} states={content} />}
+
               {edit && content && (
-                <StatesForm content={content} onSave={CreateState} onDelete={deleteState}/>
+                <StatesForm
+                  onAttachApproval={onAttachApproval}
+                  content={content}
+                  onSave={CreateState}
+                  onDelete={deleteState}
+                />
               )}
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
@@ -260,4 +333,4 @@ const Form = () => {
     </Box>
   );
 };
-export default Form;
+export default FlowForm;

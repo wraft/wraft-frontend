@@ -1,42 +1,44 @@
-import React from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import React, { useState } from 'react';
+import { Box, Flex, Text, Button, Input } from 'theme-ui';
 
 import { useRouter } from 'next/router';
-import styled from '@emotion/styled';
 
 import MenuItem from '../../src/components/MenuItem';
+import Link from '../../src/components/NavLink';
+import { BrandLogo } from '../../src/components/Icons';
 
-import { Logo } from './Icons';
+import { defaultModalStyle } from '../utils';
+import Modal from 'react-modal';
 
-export const IconStyleWrapper = styled.div`
-  color: #444;
-  margin-right: 12px;
-`;
+// import { Logo } from './Icons';
 
-const MenuWrapper = styled(Flex)`
-  opacity: 1;
-`;
-const MenuWrapperInactive = styled(Flex)`
-  opacity: 0.7;
-`;
+// export const IconStyleWrapper = styled.div`
+//   color: #444;
+//   margin-right: 12px;
+// `;
+
+// const MenuWrapper = styled(Flex)`
+//   opacity: 1;
+// `;
+
+// const MenuWrapperInactive = styled(Flex)`
+//   color:
+// `;
 
 import {
   Note,
-  Brush as ColorFill,
   Layout,
-  GitMerge,
-  // NetworkChart,
-  Collection,
   Water,
   Cabinet as BookOpen,
   Carousel,
-  Rename as Spreadsheet,
   Cog,
 } from '@styled-icons/boxicons-regular';
+import ModeToggle from './ModeToggle';
+import ContentTypeDashboard from './ContentTypeDashboard';
 
-export const IconWrapper = styled(Layout)`
-  color: '#999';
-`;
+// export const IconWrapper = styled(Layout)`
+//   color: '#999';
+// `;
 
 // const Sidebar = styled(Box)`
 //   border-bottom: solid 1px #eee;
@@ -65,52 +67,63 @@ const listMenu = [
     path: '/contents',
   },
   {
-    name: 'Variants',
-    logo: <BookOpen width={20} />,
-    path: '/content-types',
-  },  
-  {
-    name: 'Templates',
-    logo: <Carousel width={20} />,
-    path: '/templates',
-  },
-  {
-    name: 'Frames',
-    logo: <Layout width={20} />,
-    path: '/layouts',
-  },
-  {
     name: 'Approvals',
     logo: <Layout width={20} />,
     path: '/approvals',
   },
   {
+    name: 'Variants',
+    logo: <BookOpen width={20} />,
+    path: '/content-types',
+  },
+  {
+    name: 'Templates',
+    logo: <Carousel width={20} />,
+    path: '/templates',
+  },
+  // {
+  //   name: 'Frames',
+  //   logo: <Layout width={20} />,
+  //   path: '/layouts',
+  // },
+  
+  {
     name: 'Blocks',
     logo: <Water width={20} />,
-    path: '/block_templates',
+    path: '/blocks',
+  },
+  // {
+  //   name: 'Flows',
+  //   logo: <GitMerge width={20} />,
+  //   path: '/flows',
+  // },
+  // {
+  //   name: 'Fields',
+  //   logo: <Spreadsheet width={20} />,
+  //   path: '/fields',
+  // },
+  // {
+  //   name: 'Pipelines',
+  //   logo: <Collection width={20} />,
+  //   path: '/pipelines',
+  // },
+  // {
+  //   name: 'Themes',
+  //   logo: <ColorFill width={20} />,
+  //   path: '/themes',
+  // },
+  {
+    name: 'Manage',
+    logo: <Cog width={20} />,
+    path: '/manage',
   },
   {
-    name: 'Flows',
-    logo: <GitMerge width={20} />,
-    path: '/flows',
+    name: 'Vendors',
+    logo: <Cog width={20} />,
+    path: '/vendors',
   },
   {
-    name: 'Fields',
-    logo: <Spreadsheet width={20} />,
-    path: '/fields',
-  },
-  {
-    name: 'Pipelines',
-    logo: <Collection width={20} />,
-    path: '/pipelines',
-  },
-  {
-    name: 'Themes',
-    logo: <ColorFill width={20} />,
-    path: '/themes',
-  },
-  {
-    name: 'My Account',
+    name: 'Settings',
     logo: <Cog width={20} />,
     path: '/account',
   },
@@ -120,45 +133,126 @@ export interface INav {
   showFull: boolean;
 }
 
-const Nav = (props: INav) => {
-  const showFull = props && props.showFull ? false : true;
-  const sidebarW = props && props.showFull ? '90px' : '16%';
+const Nav = (props: any) => {
+  const showFull = props && props.showFull ? true : true;
+  // const sidebarW = 'auto'; //props && props.showFull ? '90px' : '16%';
   const router = useRouter();
   const pathname: string = router.pathname as any;
 
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  // popper
+  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
+  // const [referenceElement, setReferenceElement] = useState(null);
+  // const [popperElement, setPopperElement] = useState(null);
+  // const [arrowElement, setArrowElement] = useState(null);
+  // const { styles, attributes } = usePopper(referenceElement, popperElement, {
+  //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
+  // });
+
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
+  };
+
+  const closeSearch = () => {
+    setShowSearch(false);
+  };
+
+  const checkActive = (pathname: string, m: any) => {
+    if (pathname === '/content/[id]' && m.path === '/contents') {
+      return true;
+    }
+
+    // console.log(pathname, m.path);
+    return pathname === m.path ? true : false;
+  };
+
   return (
-    <Box sx={{ width: sidebarW, borderRight: 'solid 1px', borderColor: 'gray.1' }}>
+    <Box>
+      <Modal
+        isOpen={showSearch}
+        onRequestClose={closeSearch}
+        style={defaultModalStyle}
+        ariaHideApp={false}
+        contentLabel="SearchWraft">
+        <Flex sx={{ p: 2 }}>
+          <Input placeholder="Search " sx={{ mb: 0 }} />
+          <Button
+            sx={{
+              ml: 2,
+              bg: 'gray.0',
+              pl: 3,
+              border: 'solid 1px',
+              borderColor: 'gray.4',
+              color: 'gray.7',
+              pt: 0,
+              pb: 0,
+            }}>
+            {/* <Search width="16px" height="16px"/> */}
+          </Button>
+        </Flex>
+        <Box sx={{ p: 0 }}>
+          <Box p={4}>
+            <ContentTypeDashboard />
+          </Box>
+        </Box>
+      </Modal>
+      <Box
+        sx={{
+          pl: 3,
+          pb: 3,
+          borderBottom: 'solid 1px',
+          borderColor: 'gray.2',
+          mb: 3,
+          pt: 1,
+        }}>
+        <Link href="/">
+          <Flex color="primary" sx={{ fill: 'text' }}>
+            <BrandLogo width="5rem" height="2rem" />
+          </Flex>
+        </Link>
+      </Box>
+      {/* <Box
+        sx={{
+          pl: 3,
+          pr: 3,
+          mb: 2,
+          pb: 3,
+          borderBottom: 'solid 1px',
+          borderColor: 'gray.2',
+        }}>
+        <Button onClick={toggleSearch} variant="btnMain">
+          New Doc
+        </Button>
+      </Box> */}
+      <Box>
+        {listMenu.map((m) => (
+          <MenuItem href={m.path} key={m.path} variant="layout.menuWrapper">
+            <Flex
+              variant={
+                checkActive(pathname, m)
+                  ? 'layout.menuLinkActive'
+                  : 'layout.menuLink'
+              }>
+              <Box
+                sx={{
+                  mr: 2,
+                  color: checkActive(pathname, m) ? 'blue.4' : 'gray.4',
+                  // opacity: 0.6,
+                }}>
+                {m.logo}
+              </Box>
+              {showFull && <Text sx={{ fontWeight: 500 }}>{m.name}</Text>}
+            </Flex>
+          </MenuItem>
+        ))}
+      </Box>
+
       <Box
         pl={3}
         pb={3}
         pt={3}
         sx={{ mb: 3, borderBottom: 'solid 1px', borderColor: 'gray.1' }}>
-        <Logo />
-      </Box>
-      <Box
-        sx={{
-          pr: 3,
-          pl: 2,
-        }}>
-        {listMenu.map(m => (
-          <MenuItem href={m.path} key={m.path}>
-            <Box>
-              {pathname === m.path && (
-                <MenuWrapper>
-                  <IconStyleWrapper>{m.logo}</IconStyleWrapper>
-                  {showFull && <Text variant="menulink">{m.name}</Text>}
-                </MenuWrapper>
-              )}
-
-              {pathname != m.path && (
-                <MenuWrapperInactive>
-                  <IconStyleWrapper>{m.logo}</IconStyleWrapper>
-                  {showFull && <Text variant="menulink">{m.name}</Text>}
-                </MenuWrapperInactive>
-              )}
-            </Box>
-          </MenuItem>
-        ))}
+        <ModeToggle variant="button" />
       </Box>
     </Box>
   );

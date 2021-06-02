@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, Box } from 'rebass';
-import { Input } from '@rebass/forms';
+import { Text, Box } from 'theme-ui';
+import { Input } from 'theme-ui';
 import styled from '@emotion/styled';
 // import { Input } from "@chakra-ui/core";
 
@@ -24,21 +24,28 @@ interface Props {
   suggetions?: any;
   onSearch: any;
   onSelection: any;
-  placeholder? :string,
-  defaultValue?: string,
-  label?: string,
-  name?: string,
+  placeholder?: string;
+  defaultValue?: string;
+  label?: string;
+  name?: string;
 }
 
-const SearchInput: React.FC<Props> = ({ suggetions, onSearch, placeholder, defaultValue, onSelection }) => {
+const SearchInput: React.FC<Props> = ({
+  suggetions,
+  onSearch,
+  placeholder,
+  defaultValue,
+  onSelection,
+}) => {
   return (
-    <Box width={1} >
+    <Box>
       <Input
-        placeholder={placeholder ? placeholder: ''} size="lg"
+        placeholder={placeholder ? placeholder : ''}
+        size="lg"
         id={name}
         name={name}
-        defaultValue={defaultValue ||  ''}
-        onChange={e => onSearch(e.currentTarget.value)}
+        defaultValue={defaultValue || ''}
+        onChange={(e) => onSearch(e.currentTarget.value)}
       />
       {suggetions && (
         <Box sx={{ position: 'relative' }}>
@@ -46,9 +53,7 @@ const SearchInput: React.FC<Props> = ({ suggetions, onSearch, placeholder, defau
             {suggetions &&
               suggetions.map((e: any) => (
                 <Box variant="searchList" key={e.id}>
-                  <Text onClick={() => onSelection(e)}>
-                    {e.name}
-                  </Text>
+                  <Text onClick={() => onSelection(e)}>{e.name}</Text>
                 </Box>
               ))}
           </SearchList>
@@ -57,6 +62,5 @@ const SearchInput: React.FC<Props> = ({ suggetions, onSearch, placeholder, defau
     </Box>
   );
 };
-
 
 export default SearchInput;

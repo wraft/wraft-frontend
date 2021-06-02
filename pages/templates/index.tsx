@@ -1,21 +1,17 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Flex } from 'theme-ui';
 
 import TemplateList from '../../src/components/TemplateList';
-import Page from '../../src/components/Page';
+import Page from '../../src/components/PageFrame';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Login - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Templates - Wraft Docs</title>
       </Head>
       <Page>
-        <Flex>
-          <TemplateList />
-        </Flex>
+        <TemplateList />
       </Page>
     </>
   );

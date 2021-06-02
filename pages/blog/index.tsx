@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Flex } from 'rebass';
+import { Flex } from 'theme-ui';
 
 // import CombinationList from '../../src/components/CombinationList'
-import Page from '../../src/components/Page';
+import Page from '../../src/components/PageFrame';
 import PageHeader from '../../src/components/PageHeader';
 
 const Index: FC = () => {

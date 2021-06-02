@@ -15,7 +15,7 @@ import { ToastProvider } from 'react-toast-notifications';
 
 const GlobalStyle = createGlobalStyle` 
 
-.ProseMirror.remirror-editor {
+.xProseMirror.remirror-editor {
   background: #fff;
   padding: 0;
   border: solid 1px #ddd;

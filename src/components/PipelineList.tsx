@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'rebass';
+import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
 import { Plus } from './Icons';
 import { loadEntity } from '../utils/models';

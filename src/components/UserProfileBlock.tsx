@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Box, Text } from 'rebass';
+import { Flex, Box, Text } from 'theme-ui';
 import Container from './Container';
 // import Field from './Field';
 // import { format } from 'date-fns';

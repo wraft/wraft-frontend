@@ -1,9 +1,10 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import OrgForm from '../../src/components/OrgForm';
-import Page from '../../src/components/Page';
-import { Flex } from 'theme-ui';
+import Page from '../../src/components/PageFrame';
+import { Box, Flex, Text } from 'theme-ui';
 import OrgSidebar from '../../src/components/OrgSidebar';
+import PageHeader from '../../src/components/PageHeader';
 
 const CompanyForm: FC = () => {
   return (
@@ -13,9 +14,15 @@ const CompanyForm: FC = () => {
         <meta name="description" content="Wraft Docs" />
       </Head>
       <Page>
+        <PageHeader title="Settings">
+          <Box sx={{ ml: 'auto' }}/>
+        </PageHeader>
         <Flex>
           <OrgSidebar />
-          <OrgForm />
+          <Box pl={4}>
+            <Text mb={4}>Change Company Details</Text>
+            <OrgForm />
+          </Box>
         </Flex>
       </Page>
     </>

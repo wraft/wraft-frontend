@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'rebass';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
 
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input } from '@rebass/forms';
+import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';

@@ -73,13 +73,14 @@ const OrgPermissionList = () => {
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
-        <Text mb={3}>All Permissions</Text>
+        <Text variant="pagetitle">All Permissions</Text>
         <Box>
           {contents &&
             contents?.permissions?.length > 0 &&
             contents?.permissions?.map((_m: Member) => <Text>Title</Text>)}
         </Box>
-
+          
+        <Text variant="pagetitle">All Resources</Text>
         <Box>
           {resources &&
             resources?.resources?.length > 0 &&

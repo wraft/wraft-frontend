@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-// import { Box, Flex } from 'rebass';
+// import { Box, Flex } from 'theme-ui';
 
 import { useStoreState } from 'easy-peasy';
 import Container from './Container';

@@ -2,8 +2,8 @@ import { FC } from 'react';
 import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
-import Page from '../../../src/components/Page';
-import { Flex } from 'rebass';
+import Page from '../../../src/components/BlankFrame';
+import { Box } from 'theme-ui';
 import { useRouter } from 'next/router';
 import CreateForm from '../../../src/components/ContentForm';
 
@@ -12,13 +12,10 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Instance - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Create Doc - Wraft Docs</title>
       </Head>
       <Page id="Modal" showFull={true}>
-        <Flex>
-          <CreateForm id={router.query.id} edit={true} />
-        </Flex>
+        <CreateForm id={router.query.id} edit={true} />
       </Page>
     </>
   );

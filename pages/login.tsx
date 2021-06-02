@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box } from 'rebass';
+import { Box } from 'theme-ui';
 import Container from '../src/components/Container';
 import UserNav from '../src/components/UserNav';
 import UserLoginForm from '../src/components/UserLoginForm';

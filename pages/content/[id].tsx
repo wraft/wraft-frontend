@@ -2,8 +2,8 @@ import { FC } from 'react';
 import Head from 'next/head';
 import ContentDetail from '../../src/components/ContentDetail';
 
-import Page from '../../src/components/Page';
-import { Flex } from 'rebass';
+import Page from '../../src/components/BlankFrame';
+import Nav from '../../src/components/NavEdit';
 
 const Index: FC = () => {
   return (
@@ -13,9 +13,8 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <ContentDetail />
-        </Flex>
+        <Nav/>
+        <ContentDetail />
       </Page>
     </>
   );

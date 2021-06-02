@@ -36,6 +36,7 @@ const FieldColor: React.FC<Props> = ({
 
     if (typeof onChangeColor.onChange === "undefined") { 
       onChangeColor(colr, name );
+      setShowPicker(false);
     }
   };
 
@@ -68,21 +69,19 @@ const FieldColor: React.FC<Props> = ({
         id={name}
         name={name}
         type={ftype}
-        sx={{ borderRadius: 0, borderColor: "#666", color: "black" }}
         defaultValue={valx || defaultValue || ""}
         ref={register({ required: required })}
       />
-      {defaultValue} - {valx}
       <Box
         onClick={() => togglePicker()}
         sx={{
           width: "16px",
           height: "16px",
           bg: valx,
-          border: "solid 1px #ddd",
+          // border: "solid 1px #ddd",
           position: "absolute",
-          top: "30%",
-          right: "4.5%",
+          top: "45%",
+          right: 3,
           padding: "5px",
           // background: "#fff",
           borderRadius: "1px",
@@ -91,7 +90,7 @@ const FieldColor: React.FC<Props> = ({
           cursor: "pointer",
         }}
       />
-      <Box sx={{ position: "fixed", top: 0, zIndex: 9900 }}>
+      <Box sx={{ position: "absolute", bottom: 0, zIndex: 9900 }}>
         {showPicker && (
           <ChromePicker
             color={valx}

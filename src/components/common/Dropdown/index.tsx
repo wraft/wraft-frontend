@@ -1,9 +1,9 @@
 import React, { FC, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Box, Image } from 'rebass';
+import { Box, Image } from 'theme-ui';
 
 const DropDownBoxBlock = styled(Box)`
-  border: 1px solid #616675;
+  border: 0;
   border-radius: 9999px;
   position: relative;
   display: flex;
@@ -14,8 +14,8 @@ const DropDownBoxBlock = styled(Box)`
 const DropDownList = styled(Box)`
   position: absolute;
   width: 163px;
+  border: 0;
   background: #fff;
-  border: 1px solid #616675;
   right: 0;
   top: 59px;
   z-index: 1;
@@ -60,8 +60,8 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
       onClick={() => toggleDropdown()}>
       <Box
         sx={{
-          width: '45px',
-          height: '45px',
+          width: '32px',
+          height: '32px',          
           objectFit: 'cover',
           cursor: 'pointer',
         }}>
@@ -70,7 +70,8 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
           sx={{
             width: '100%',
             borderRadius: '50%',
-            border: '1px solid black',
+            border: '1px solid',
+            borderColor: 'gray.4',
           }}
         />
       </Box>

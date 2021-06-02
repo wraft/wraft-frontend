@@ -1,12 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Image } from 'rebass';
-import { Label, Input, Select } from '@rebass/forms';
+import {
+  Container,
+  Label,
+  Input,
+  Select,
+  Box,
+  Flex,
+  Button,
+  Text,
+  Image,
+} from 'theme-ui';
+// import {  } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
-import { loadEntity, deleteEntity, updateEntityFile, createEntityFile, API_HOST } from '../utils/models';
+import {
+  loadEntity,
+  deleteEntity,
+  updateEntityFile,
+  createEntityFile,
+  API_HOST,
+} from '../utils/models';
 import Field from './Field';
 import FieldText from './FieldText';
 import { useRouter } from 'next/router';
@@ -55,7 +71,7 @@ export interface IEngine {
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
@@ -67,10 +83,10 @@ const Form = () => {
   const cId: string = router.query.id as string;
   // toats
   const { addToast } = useToasts();
-  
+
   const onImageUploaded = (data: any) => {
     console.log('data', data);
-  }
+  };
   const onUpdate = (data: any) => {
     console.log('updated', data);
   };
@@ -105,7 +121,7 @@ const Form = () => {
     formData.append('screenshot', data.screenshot[0]);
 
     if (isEdit) {
-      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);  
+      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);
       addToast(`Updated Layout ${data.name}`, { appearance: 'success' });
     } else {
       createEntityFile(formData, token, 'layouts', onImageUploaded);
@@ -185,7 +201,7 @@ const Form = () => {
    * @param data
    */
   const addUploads = (data: Asset) => {
-    setAssets(prevArray => [...prevArray, data]);
+    setAssets((prevArray) => [...prevArray, data]);
   };
 
   const deleteAsset = (lid: string, id: string) => {
@@ -194,122 +210,121 @@ const Form = () => {
   };
 
   return (
-    <Flex>
-      <Box py={3} width={6 / 12} mt={4}>
-        <Text variant="pagetitle">New Layout</Text>
-        <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Box width={1} pb={3}>
-            <Label htmlFor="name" mb={1}>
-              Name
-            </Label>
-            <Input
-              id="name"
-              name="name"
-              defaultValue="Layout X"
-              ref={register({ required: true })}
-            />
-          </Box>
-          <Box width={1}>
-            <FieldText
-              name="description"
-              label="Description"
-              defaultValue=""
-              register={register}
-            />
-          </Box>
-          <Box width={1}>
-            <Field
-              name="slug"
-              label="Slug"
-              defaultValue=""
-              register={register}
-            />
-          </Box>
-          <Box width={1} pb={3}>
-            {layout && layout.screenshot && (
-              <div>
-                <Image src={API_HOST + layout.screenshot} />
-              </div>
-            )}
-            <Label htmlFor="screenshot" mb={1}>
-              Screenshot
-            </Label>
-            <Input
-              id="screenshot"
-              name="screenshot"
-              type="file"
-              ref={register()}
-            />
-          </Box>
-          <Box width={1}>
-            <Label htmlFor="engine_uuid" mb={1}>
-              Engine ID
-            </Label>
-            <Select
-              id="engine_uuid"
-              name="engine_uuid"
-              defaultValue="NYC"
-              ref={register({ required: true })}>
-              {engines &&
-                engines.length > 0 &&
-                engines.map((m: any) => (
-                  <option key={m.id} value={m.id}>
-                    {m.name}
-                  </option>
-                ))}
-            </Select>
-          </Box>
-          <Box width={1} mt={3}>
-            <Flex>
-              <Field
-                name="width"
-                label="Width"
-                defaultValue="40"
-                register={register}
-                mr={2}
+    <Container sx={{ px: 6}}>
+      <Flex>
+        <Box py={3} mt={4}>
+          <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Box pb={3}>
+              <Label htmlFor="name" mb={1}>
+                Name
+              </Label>
+              <Input
+                id="name"
+                name="name"
+                defaultValue="Layout X"
+                ref={register({ required: true })}
               />
-              <Field
-                name="height"
-                label="Height"
-                defaultValue="40"
-                register={register}
-                mr={2}
-              />
-              <Field
-                name="unit"
-                label="Unit"
-                defaultValue="cm"
+            </Box>
+            <Box>
+              <FieldText
+                name="description"
+                label="Description"
+                defaultValue=""
                 register={register}
               />
+            </Box>
+            <Box>
+              <Field
+                name="slug"
+                label="Slug"
+                defaultValue=""
+                register={register}
+              />
+            </Box>
+            <Box pb={3}>
+              {layout && layout.screenshot && (
+                <div>
+                  <Image src={API_HOST + layout.screenshot} />
+                </div>
+              )}
+              <Label htmlFor="screenshot" mb={1}>
+                Screenshot
+              </Label>
+              <Input
+                id="screenshot"
+                name="screenshot"
+                type="file"
+                ref={register()}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="engine_uuid" mb={1}>
+                Engine ID
+              </Label>
+              <Select
+                id="engine_uuid"
+                name="engine_uuid"
+                defaultValue="NYC"
+                ref={register({ required: true })}>
+                {engines &&
+                  engines.length > 0 &&
+                  engines.map((m: any) => (
+                    <option key={m.id} value={m.id}>
+                      {m.name}
+                    </option>
+                  ))}
+              </Select>
+            </Box>
+            <Box mt={3}>
+              <Flex>
+                <Field
+                  name="width"
+                  label="Width"
+                  defaultValue="40"
+                  register={register}
+                  mr={2}
+                />
+                <Field
+                  name="height"
+                  label="Height"
+                  defaultValue="40"
+                  register={register}
+                  mr={2}
+                />
+                <Field
+                  name="unit"
+                  label="Unit"
+                  defaultValue="cm"
+                  register={register}
+                />
+              </Flex>
+            </Box>
+            {errors.exampleRequired && <Text>This field is required</Text>}
+
+            <Flex mx={-2} mt={2}>
+              <Button type="submit" ml={2}>
+                {isEdit ? 'Update' : 'Create'}
+              </Button>
             </Flex>
           </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
-
-          <Flex mx={-2} flexWrap="wrap" mt={2}>
-            <Button type="submit" ml={2}>
-              {isEdit ? 'Update' : 'Create'}
-            </Button>
-          </Flex>
         </Box>
-      </Box>
-      <Box width={5 / 12} pl={4}>
-        <Box pt={3}>
-          <Text pb={1} fontSize={2}>
-            Assets
-          </Text>
-          {assets &&
-            assets.length > 0 &&
-            assets.map((m: Asset) => (
-              <Box key={m.id}>
-                <Text>{m.name}</Text>
-                <Text fontSize={0}>{m.file}</Text>
-                <Button onClick={() => deleteAsset(cId, m.id)}>X</Button>
-              </Box>
-            ))}
+        <Box pl={4}>
+          <Box pt={3}>
+            <Text pb={1}>Assets</Text>
+            {assets &&
+              assets.length > 0 &&
+              assets.map((m: Asset) => (
+                <Box key={m.id}>
+                  <Text>{m.name}</Text>
+                  <Text>{m.file}</Text>
+                  <Button onClick={() => deleteAsset(cId, m.id)}>X</Button>
+                </Box>
+              ))}
+          </Box>
+          <AssetForm onUpload={addUploads} />
         </Box>
-        <AssetForm onUpload={addUploads} />
-      </Box>
-    </Flex>
+      </Flex>
+    </Container>
   );
 };
 export default Form;

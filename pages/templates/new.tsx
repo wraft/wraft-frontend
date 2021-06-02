@@ -2,9 +2,9 @@ import { FC } from 'react';
 import Head from 'next/head';
 import TemplateForm from '../../src/components/TemplateForm';
 
-import Page from '../../src/components/Page';
-import { Flex } from 'rebass';
-import Link from 'next/link';
+import Page from '../../src/components/PageFrame';
+// import { Flex } from 'theme-ui';
+// import Link from 'next/link';
 
 const Index: FC = () => {
   return (
@@ -14,12 +14,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <Link href="/templates">
-            <a>Back</a>
-          </Link>
-          <TemplateForm />
-        </Flex>
+        <TemplateForm/>
       </Page>
     </>
   );

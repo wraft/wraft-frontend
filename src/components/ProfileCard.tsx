@@ -42,13 +42,9 @@ interface IItemField {
 }
 
 const ProfileCard = ({
-  // _id,
   name,
-  profile_pic,
-  // email,
-  // phone = '+91 8050473500',
-  // organisation_id,
-  bio = 'Producer, Product',
+  profile_pic,  
+  bio = 'Content Producer, Wraft',
 }: IItemField) => {
   return (
     <Box>
@@ -64,16 +60,16 @@ const ProfileCard = ({
         <Box>
           <Box sx={{ pl: 3, pt: 2 }}>
             <Text variant="personName">{name}</Text>
-            <Text variant="personBio">{bio || 'Director, Marketing'}</Text>            
+            <Text variant="personBio">{bio || 'Director, Marketing'}</Text>
             {/* <Text variant="personPlace">{organisation_id}</Text> */}
           </Box>
           <Flex pl={3}>
-              <IconBlock val={""} icon={<MailSend width={24} height={24} />} />
-              <IconBlock val={""} icon={<Phone width={24} height={24} />} />
-            </Flex>
+            <IconBlock val={""} icon={<MailSend width={24} height={24} />} />
+            <IconBlock val={""} icon={<Phone width={24} height={24} />} />
+          </Flex>
         </Box>
       </Flex>
-      
+
     </Box>
   );
 };
