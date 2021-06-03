@@ -66,7 +66,7 @@ const Blok = () => {
   return (
     <Box bg="gray.0" sx={{ border: 'solid 1px', borderColor: 'gray.2' }}>
       <Box>
-        {loading && <Text>Loading...</Text>}
+        {loading && <></>}
       </Box>
       {/* <Flex>
         <Input placeholder="Search eg: Offer Letter" sx={{ fontSize: 0, mb: 0 }} />

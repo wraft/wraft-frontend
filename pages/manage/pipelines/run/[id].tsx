@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import PipelineView from '../../../../src/components/PipelineView';
-import Page from '../../../../src/components/Page';
-import { Box } from 'theme-ui';
-// import BulkBuild from '../../../src/components/BulkBuild';
+import Page from '../../../../src/components/PageFrame';
+// import { Box } from 'theme-ui';
+// import BulkBuild from '../../../src/components/Bu';
 
 const Index: FC = () => {
   return (
@@ -13,10 +13,10 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Box>
+        {/* <Box> */}
           <PipelineView />
           {/* <BulkBuild master="" master_id=""/> */}
-        </Box>
+        {/* </Box> */}
       </Page>
     </>
   );

@@ -21,6 +21,7 @@ import { createEntity, deleteEntity, loadEntity } from '../utils/models';
 import ApprovalFormBase from './ApprovalCreate';
 
 import { useDialogState } from 'reakit/Dialog';
+import { Portal } from 'reakit/Portal';
 
 import Field from './Field';
 import Modal from './Modal';
@@ -80,6 +81,7 @@ export interface StateFormProps {
   onDelete: any;
   hidden?: boolean;
   onAttachApproval?: any;
+  dialog?: any;
 }
 
 const StatesForm = (props: StateFormProps) => {
@@ -89,7 +91,7 @@ const StatesForm = (props: StateFormProps) => {
   const [showApproval, setShowApproval] = useState<boolean>(false);
   const { addToast } = useToasts();
 
-  const dialog = useDialogState();
+  // const dialog = useDialogState();
 
   function closeModal() {
     setShowModal(false);
@@ -106,6 +108,7 @@ const StatesForm = (props: StateFormProps) => {
   const changeForm = (data: any) => {
     props.onAttachApproval(data);
     setShowApproval(true);
+    toggleModal();
   };
 
   const onDeleteFlow = (_id: any) => {
@@ -173,25 +176,6 @@ const StatesForm = (props: StateFormProps) => {
           ))}
         </Box>
       )}
-      <Button variant="btnSecondary" onClick={toggleModal}>
-        Add State
-      </Button>
-      {/* {toggled && ( */}
-      <Modal
-        isVisible={showModal}
-        dialog={dialog}
-        label="ModalX"
-        aria-label="Player Card">
-        <Box p={4}>
-          <Box>
-            <Label>Add New State</Label>
-            <Input placeholder="New State Name" onChange={updateState} />
-          </Box>
-          <Button variant="secondary" onClick={AddState}>
-            Add State
-          </Button>
-        </Box>
-      </Modal>
     </Box>
   );
 };
@@ -200,10 +184,14 @@ const FlowForm = () => {
   const { register, handleSubmit, setValue, errors } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
+  const [addState, setAddState] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
 
   const token = useStoreState((state) => state.auth.token);
+
+  const dialog = useDialogState();
+  const dialog2 = useDialogState();
 
   const { addToast } = useToasts();
 
@@ -215,6 +203,10 @@ const FlowForm = () => {
     setApproval(!approval);
     console.log('onAttachApproval', _d);
   };
+
+  const closeAddState = () => {
+    dialog2.hide
+  }
 
   /**
    * Map states to types, and states
@@ -295,15 +287,16 @@ const FlowForm = () => {
 
   return (
     <Box>
-      <PageHeader title= {cId ? 'Edit Flows' : 'Create Flows'}>
-        <Box sx={{ ml: 'auto', mr: 5}}>
-          <NavLink href="/content-types/new" variant="btnSecondary">+ New Variant</NavLink>
+      <PageHeader title={cId ? 'Edit Flows' : 'Create Flows'}>
+        <Box sx={{ ml: 'auto', mr: 5 }}>
+          <NavLink href="/content-types/new" variant="btnSecondary">
+            + New Variant
+          </NavLink>
         </Box>
       </PageHeader>
 
       <Box>
-        {flow?.id}
-        <Container variant="layout.pageFrame">
+        <Container variant="layout.pageFrame" data-flow={flow?.id}>
           <Box>
             <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
               <Field
@@ -318,21 +311,51 @@ const FlowForm = () => {
             </Box>
             <Divider sx={{ color: 'gray.3', my: 4 }} />
             <Box mt={2}>
+              <Modal isVisible={approval} dialog={dialog}>
                 <ApprovalFormBase
                   closeModal={() => setApproval(false)}
                   isOpen={approval}
                   states={content}
                   parent={cId}
                 />
+              </Modal>
 
               {edit && content && (
                 <StatesForm
                   onAttachApproval={onAttachApproval}
                   content={content}
+                  // dialog={dialog2}
                   onSave={CreateState}
                   onDelete={deleteState}
                 />
               )}
+
+              <Button variant="btnSecondary" onClick={() => setAddState(true)}>
+                Add State
+              </Button>
+
+              <Modal
+                isVisible={addState}
+                dialog={dialog2}
+                label="ModalX"
+                onClose={closeAddState}
+                aria-label="Player Card">
+                <Box p={4}>
+                  <Box>
+                    <Label>Add New State</Label>
+                    <Input
+                      placeholder="New State Name"
+                      // onChange={updateState}
+                    />
+                  </Box>
+                  <Button variant="btnPrimary" sx={{ mr: 2 }}>
+                    Add State
+                  </Button>
+                  <Button type="button" variant="btnSecondary" onClick={() => closeAddState}>
+                    Cancel
+                  </Button>
+                </Box>
+              </Modal>
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
           </Box>

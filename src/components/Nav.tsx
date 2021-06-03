@@ -87,7 +87,7 @@ const Nav = ({ navtitle }: INav) => {
   return (
     <Box
       variant="header"
-      onClick={() =>closeSearch}
+      // onClick={() =>closeSearch}
       sx={{
         p: 0,
         bg: 'gray.0',
@@ -257,7 +257,7 @@ const Nav = ({ navtitle }: INav) => {
           </Flex>
         </Box>
       </Flex>
-      <Modal dialog={dialog} isVisible={showSearch}>
+      <Modal dialog={dialog} isVisible={showSearch} onClose={closeSearch}>
         <Blok />
       </Modal>
     </Box>
