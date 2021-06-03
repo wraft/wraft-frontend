@@ -69,12 +69,12 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
   return (
     <Box>
       <PageHeader title="Variants">
-        <Box sx={{ ml: 'auto', mr: 5}}>
+        <Box sx={{ ml: 'auto', mr: 0, pt: 1}}>
           <Link href="/content-types/new" variant="btnSecondary">+ New Variant</Link>
         </Box>
       </PageHeader>
       <Flex>
-        {!loading && (
+        {loading && (
           <Box>
             <Spinner width={40} height={40} color="primary" />
           </Box>

@@ -4,45 +4,16 @@ import { Box, Flex, Button, Text } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 
-import Modal from 'react-modal';
+// import Modal from 'react-modal';
 // import styled from 'styled-components';
 import Field from './Field';
 // import { replaceTitles } from '../utils';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
+import Modal from './Modal';
 import { findAll, replaceTitles } from '../utils';
 
-// import { find } from 'lodash';
-
-// const Tag = styled(Box)`
-//   border: solid 1px #ddd;
-//   padding: 5px;
-//   color: #444;
-//   border-radius: 7px;
-//   margin-bottom: 8px;
-//   padding-left: 16px;
-//   padding-top: 8px;
-//   padding-bottom: 8px;
-//   background-color: #ebffe8;
-// `;
-
-// import
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    minWidth: '55ch',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-  overlay: {
-    backgroundColor: '#000000ba',
-    border: 0,
-  },
-};
+import { useDialogState } from 'reakit/Dialog';
 
 export interface IFieldField {
   name: string;
@@ -60,6 +31,8 @@ const Form = (props: any) => {
   const { register, handleSubmit, getValues } = useForm();
   //   const token = useSelector(({ login }: any) => login.token);
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
+
+  const dialog = useDialogState();
 
   /**
    * Map form values to fields
@@ -122,7 +95,7 @@ const Form = (props: any) => {
   }
 
   return (
-    <Box>
+    <Box sx={{ bg: 'gray.0' }}>
       <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
       <Box
         p={3}
@@ -162,18 +135,14 @@ const Form = (props: any) => {
       <Button variant="btnSecondary" onClick={props.setShowForm}>
         Fill Form
       </Button>
-      <Modal
-        isOpen={props.showForm}
-        onRequestClose={closeModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Example Modal">
+      <Modal dialog={dialog} isVisible={props.showForm} onClose={closeModal}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          py={2}
-          sx={{ p: 5 }}
-          mt={2}>
+          // py={2}
+          sx={{ p: 0, bg: 'gray.0' }}
+          // mt={2}
+        >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (
             <Box sx={{ pt: 4 }}>

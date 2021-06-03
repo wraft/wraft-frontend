@@ -82,20 +82,15 @@ const ApprovalFormBase = ({
     );
   };
 
-  return (
-    <Modal
-      isVisible={isOpen}
-      dialog={dialog}
-      label="ModalX"
-      aria-label="Player Card">
-      {showSearch && <h1>Searching</h1>}
-      {user && <h1>User</h1>}
+  return (    
       <Box
         mx={0}
         mb={3}
         sx={{ p: 4, mt: 0 }}
         as="form"
         onSubmit={handleSubmit(onSubmit)}>
+        {showSearch && <h1>Searching</h1>}
+        {user && <h1>User</h1>}
         <Input
           name="flow_id"
           defaultValue={parent}
@@ -176,7 +171,6 @@ const ApprovalFormBase = ({
           </Button>
         </Flex>
       </Box>
-    </Modal>
   );
 };
 
