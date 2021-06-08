@@ -23,7 +23,7 @@ const theme: Theme = {
   colors: {
     text: '#000',
     background: 'text',
-    primary: '#07c',
+    primary: '#087f5b',
     secondary: '#30c',
     muted: '#f6f6f6',
     gray: [
@@ -203,9 +203,9 @@ const theme: Theme = {
   },
   forms: {
     label: {
-      color: 'gray.7',
+      color: 'gray.6',
       fontSize: 1,
-      pb: 1,
+      pb: 0,
     },
     input: {
       color: 'gray.8',
@@ -294,14 +294,14 @@ const theme: Theme = {
       color: 'primary',
     },
     pre: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       overflowX: 'auto',
       code: {
         color: 'inherit',
       },
     },
     code: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       fontSize: 'inherit',
     },
     table: {
@@ -329,29 +329,25 @@ const theme: Theme = {
       display: 'block',
     },
     btnPrimary: {
-      p: 2,
-      px: 3,
-      m: 0,
-      bg: 'primary.1',
-      color: 'primary.9',
-      border: 'solid 1px',
-      borderColor: 'gray.5',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
-      // textTransform: 'uppercase',
+      variant: 'buttons.btnPrimary',
     },
     btnSecondary: {
+      variant: 'buttons.btnSecondary',
+    },
+    btnSmall: {
+      variant: 'buttons.btnSmall',
+      p: 2,
       px: 3,
-      py: 2,
-      m: 0,
-      bg: 'gray.1',
-      color: 'gray.9',
-      border: 'solid 1px',
-      borderColor: 'gray.4',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
+    },
+    btnPrimarySmall: {
+      variant: 'buttons.btnPrimary',
+      // fontSize: 0,
+      p: 2,
+      px: 2,
+      color: 'gray.0',
+      '&:hover': {
+        bg: 'teal.8',
+      },
     },
     btnPrimaryIcon: {
       bg: 'gray.0',
@@ -413,7 +409,7 @@ const theme: Theme = {
   },
   layout: {
     modalContent: {
-      p:0,
+      p: 0,
       top: '10%',
       // m: 2,
       position: 'relative',
@@ -457,7 +453,7 @@ const theme: Theme = {
       // mt: '-30%',
       // p: 4,
       border: 'solid 1px',
-      borderColor: 'gray.2',      
+      borderColor: 'gray.2',
       overflow: 'scroll', // <-- This tells the modal to scrol
     },
     modalBackgroup: {
@@ -655,7 +651,9 @@ const theme: Theme = {
   },
   text: {
     caps: {
-      pt: 2,
+      pt: 0,
+      pb: 1,
+      color: 'gray.7',
       fontSize: 0,
       textTransform: 'uppercase',
     },
@@ -727,34 +725,53 @@ const theme: Theme = {
       // color: 'gray.0',
       // pb: 0,
     },
-    btnPrimary: {
-      p: 2,
-      px: 3,
+    btnBig: {
+      p: 1,
+      px: 2,
       m: 0,
-      bg: 'primary.1',
-      color: 'primary.9',
       border: 'solid 1px',
-      borderColor: 'gray.5',
       borderRadius: 4,
-      fontWeight: 800,
+      fontWeight: 'bold',
       fontSize: 0,
-      textTransform: 'uppercase',
+      fontFamily: 'inherit',
+    },
+    btnPrimary: {
+      variant: 'buttons.btnBig',
+      bg: 'teal.9',
+      color: 'primary.9',
+      borderColor: 'teal.8',
     },
     btnSecondary: {
-      p: 2,
-      px: 3,
-      m: 0,
+      variant: 'buttons.btnBig',
       bg: 'gray.1',
       color: 'gray.9',
-      border: 'solid 1px',
-      borderColor: 'gray.5',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
-      // textTransform: 'uppercase',
+      borderColor: 'gray.4',
+      '&:hover': {
+        bg: 'gray.0',
+        color: 'gray.8',
+      },
     },
     btnMain: {
-      variant: 'button.btnSecondary',
+      variant: 'buttons.btnSecondary',
+    },
+    btnSmall: {
+      variant: 'buttons.btnSecondary',
+      fontSize: 0,
+      p: 1,
+      px: 2,
+    },
+    btnPrimaryLarge: {
+      variant: 'buttons.btnBig',
+      fontSize: 1,
+      p: 2,
+      px: 3,
+      border: 0,
+    },
+    btnPrimarySmall: {
+      variant: 'buttons.btnPrimary',
+      fontSize: 0,
+      p: 1,
+      px: 2,
     },
     base: {
       bg: 'transparent',
@@ -773,24 +790,9 @@ const theme: Theme = {
       color: 'blue.9',
       bg: 'blue.2',
       fontFamily: 'body',
-      // color: 'gray.2',
-      // bg: 'gray.7',
-      // border: 'solid 1px',
-      // borderColor: 'gray.2',
-      // mb: 3,
-      // mt: 3,
-      // display: 'inline-flex',
-      // pt: 1,
-      // pb: 1,
     },
     primary: {
-      color: 'white',
-      bg: 'primary',
-      fontFamily: 'body',
-      fontWeight: 600,
-      fontSize: 0,
-      borderRadius: 2,
-      textTransform: 'uppercase',
+      variant: 'button.btnPrimary',
     },
     delete: {
       color: 'text',

@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import TemplateForm from '../../../src/components/TemplateForm';
-import Page from '../../../src/components/Page';
-import { Box } from 'theme-ui';
+import Page from '../../../src/components/PageFrame';
 
 const Index: FC = () => {
   return (
@@ -12,9 +11,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Box>
-          <TemplateForm />
-        </Box>
+        <TemplateForm />
       </Page>
     </>
   );

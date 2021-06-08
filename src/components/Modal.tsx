@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Box, Button as ButtonBase } from 'theme-ui';
+import { jsx, Box } from 'theme-ui';
 import React, {
   // FC,
   Ref,
@@ -7,18 +7,18 @@ import React, {
   useState,
   useLayoutEffect,
   // ReactElement,
-  // useEffect,
+  useEffect,
 } from 'react';
 
-import { ButtonProps } from 'reakit/Button';
-
 import {
-  DialogStateReturn,
   Dialog,
   DialogDisclosure,
   DialogProps,
   DialogBackdrop,
+  useDialogState,
 } from 'reakit/Dialog';
+
+import { Portal } from 'reakit/Portal';
 
 interface BackdropDivProps {
   // backdropWhite?: ModalBaseProps['backdropWhite']
@@ -50,64 +50,63 @@ export const DialogoBox = forwardRef(
   },
 );
 
-
 type ModalProps = {
-  isVisible?: boolean;
-  dialog: DialogStateReturn;
+  isOpen: boolean;
   hide?: any;
   label?: string;
-  className?: string;
   disclosure?: React.ReactElement;
   onClose?: () => void;
 };
 
 const Modal: React.FC<ModalProps> = ({
   hide,
-  isVisible,
+  isOpen,
   children,
-  label,
-  className,
+  label = 'Standard Modal',
+  // className,
   disclosure,
-  dialog,
   onClose,
   ...props
 }) => {
-  const onCloseHandler = () => {
-    // dialog.hide();
-    // console.log('dailog', dialog, onClose)
-    if (onClose) {
-      onClose();
+  const dialog = useDialogState();
+
+  useEffect(() => {
+    if (!dialog.visible) {
+      if (onClose) {
+        onClose();
+      }
     }
-  };
+  }, [dialog.visible]);
+
+  useEffect(() => {
+    if (isOpen) {
+      dialog.show();
+    } else {
+      dialog.hide();
+    }
+  }, [isOpen]);
 
   return (
     <>
       {disclosure && (
-        <DialogDisclosure
-          {...dialog}
-          {...disclosure.props}>
+        <DialogDisclosure {...dialog} {...disclosure.props}>
           {(disclosureProps) => React.cloneElement(disclosure, disclosureProps)}
         </DialogDisclosure>
       )}
-      <DialogBackdrop
-        {...dialog}
-        {...{ visible: isVisible }}
-        as={BackdropDiv}
-        onClick={onCloseHandler}
-        aria-label="Dialog">
-        <Dialog
-          {...dialog}
-          as={DialogoBox}
-          tabIndex={-1}
-          hideOnEsc
-          hideOnClickOutside
-          visible={isVisible}
-          {...props}
-          // className={className}
-          aria-label={label}>
-          <React.Fragment>{children}</React.Fragment>
-        </Dialog>
-      </DialogBackdrop>
+      <Portal>
+        <DialogBackdrop {...dialog} as={BackdropDiv} aria-label={label}>
+          <Dialog
+            {...dialog}
+            as={DialogoBox}
+            tabIndex={-1}
+            hideOnEsc
+            hideOnClickOutside
+            {...props}
+            aria-label={label}>
+            <React.Fragment>{children}</React.Fragment>
+          </Dialog>
+        </DialogBackdrop>
+      </Portal>
     </>
   );
 };

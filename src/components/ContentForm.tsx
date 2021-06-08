@@ -567,7 +567,8 @@ const Form = (props: IContentForm) => {
                   pl: 0,
                   bg: 'gray.0',
                   position: 'relative',
-                  fontFamily: 'courier',
+                  lineHeight: 1.5,
+                  // fontFamily: 'courier',
                 }}>
                 <EditorWraft
                   value={active}

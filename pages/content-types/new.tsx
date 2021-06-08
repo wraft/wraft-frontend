@@ -3,8 +3,6 @@ import Head from 'next/head';
 import ContentTypeForm from '../../src/components/ContentTypeForm';
 
 import Page from '../../src/components/PageFrame';
-import { Flex } from 'theme-ui';
-import Link from 'next/link';
 
 const Index: FC = () => {
   return (
@@ -14,12 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page id="Modal" showFull={true}>
-        <Flex>
-          <Link href="/content-types">
-            <a>Back</a>
-          </Link>
-          <ContentTypeForm />
-        </Flex>
+        <ContentTypeForm />
       </Page>
     </>
   );

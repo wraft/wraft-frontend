@@ -5,7 +5,7 @@ import Page from '../src/components/PageFrame';
 import { useStoreState } from 'easy-peasy';
 import UserNav from '../src/components/UserNav';
 import UserHome from '../src/components/UserHome';
-// import ActivityFeed from '../src/components/ActivityFeed';
+import ActivityFeed from '../src/components/ActivityFeed';
 // import ApprovalList from '../src/components/ApprovalList';
 import ContentTypeDashboard from '../src/components/ContentTypeDashboard';
 
@@ -156,7 +156,7 @@ const Index: FC = () => {
                 <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
                   <Text color="gray.7">Activities</Text>
                 </Box>
-                {/* <ActivityFeed /> */}
+                <ActivityFeed />
               </Box>
             </Flex>
           </Container>

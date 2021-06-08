@@ -3,6 +3,8 @@ import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
 import { loadEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
+import PageHeader from './PageHeader';
+
 export interface ApprovalList {
   pre_state: State;
   post_state: State;
@@ -89,7 +91,12 @@ const Approvals = () => {
   }, [token]);
 
   return (
-    <Box py={0} mt={4} >
+    <Box>
+      <PageHeader title="Approvals" desc="All Approvals across your feeds">
+        <Box sx={{ ml: 'auto' }}>
+        
+        </Box>
+      </PageHeader>      
       <Box mx={0} mb={3} variant="layout.pageFrame">
         {!contents && (
           <Box sx={{ p: 4, bg: 'gray.0', border: 'solid 1px', borderColor: 'gray.2'}}>

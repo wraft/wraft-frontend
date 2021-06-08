@@ -8,27 +8,29 @@ import { useRemirrorTheme } from '@remirror/ui';
 
 import { ButtonProps } from './wysiwyg-types';
 
-import { Button, Box } from 'theme-ui'
+import { Button, Box } from 'theme-ui';
 
-export const Menu = forwardRef<HTMLDivElement, JSX.IntrinsicElements['div']>((props, ref) => {
-  const { sx } = useRemirrorTheme();
+export const Menu = forwardRef<HTMLDivElement, JSX.IntrinsicElements['div']>(
+  (props, ref) => {
+    const { sx } = useRemirrorTheme();
 
-  return (
-    <div
-      {...props}
-      ref={ref}
-      css={sx({
-        '& > button': {
-          display: 'inline-block',
-        },
-      })}
-    />
-  );
-});
+    return (
+      <div
+        {...props}
+        ref={ref}
+        css={sx({
+          '& > button': {
+            display: 'inline-block',
+          },
+        })}
+      />
+    );
+  },
+);
 
 Menu.displayName = 'Menu';
 
-export const Toolbar: FC = props => {
+export const Toolbar: FC = (props) => {
   const { sx } = useRemirrorTheme();
 
   return (
@@ -60,42 +62,62 @@ interface IconButtonProps extends ButtonProps, Partial<WithPaddingProps> {
   index?: number;
 }
 
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>((props, ref) => {
-  const { sx } = useRemirrorTheme();
+export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
+  (props, ref) => {
+    const { sx } = useRemirrorTheme();
 
-  return (
-    <Button
-      type="button"
-      variant="base"
-      {...props}
-      ref={ref}
-      sx={{ mr: 0, bg: 'gray.2', 'svg': { fill: 'gray.8' }, color: 'gray.2', borderRadius: 0, borderRight: 'solid 1px #eee' }}
-      css={sx(
-        {
-          marginLeft: props.index !== 0 ? 3 : 0,
-        },
-        // props.css as RemirrorInterpolation,
-      )}
-    />
-  );
-});
+    return (
+      <Button
+        type="button"
+        variant="btnPrimary"
+        {...props}
+        ref={ref}
+        sx={{
+          mr: 0,
+          bg: 'gray.0',
+          fill: 'gray.4',
+          svg: { bg: 'gray.0', fill: 'gray.8', path: { fill: 'gray.8' } },
+          color: 'gray.4',
+          borderRadius: 0,
+          borderRight: 'solid 1px',
+          borderColor: 'gray.2',
+        }}
+        css={sx(
+          {
+            marginLeft: props.index !== 0 ? 3 : 0,
+          },
+          // props.css as RemirrorInterpolation,
+        )}
+      />
+    );
+  },
+);
 
 IconButton.displayName = 'IconButton';
 
 /**
  * Allows positioners to work.
  */
-export const EditorWrapper = forwardRef<HTMLDivElement, JSX.IntrinsicElements['div']>((props, ref) => {
+export const EditorWrapper = forwardRef<
+  HTMLDivElement,
+  JSX.IntrinsicElements['div']
+>((props, ref) => {
   const { sx } = useRemirrorTheme();
 
-  return <Box {...props} bg="red" ref={ref} css={sx({ position: 'relative' })} />;
+  return <Box {...props} ref={ref} css={sx({ position: 'relative' })} />;
 });
 
 EditorWrapper.displayName = 'EditorWrapper';
 
-type BubbleMenuTooltipProps = { bottom: number; left: number } & JSX.IntrinsicElements['span'];
+type BubbleMenuTooltipProps = {
+  bottom: number;
+  left: number;
+} & JSX.IntrinsicElements['span'];
 
-export const BubbleMenuTooltip = forwardRef<HTMLSpanElement, BubbleMenuTooltipProps>((props, ref) => {
+export const BubbleMenuTooltip = forwardRef<
+  HTMLSpanElement,
+  BubbleMenuTooltipProps
+>((props, ref) => {
   const { css } = useRemirrorTheme();
 
   return (
@@ -116,7 +138,10 @@ export const BubbleMenuTooltip = forwardRef<HTMLSpanElement, BubbleMenuTooltipPr
 
 BubbleMenuTooltip.displayName = 'BubbleMenuTooltip';
 
-export const BubbleContent = forwardRef<HTMLSpanElement, JSX.IntrinsicElements['span']>((props, ref) => {
+export const BubbleContent = forwardRef<
+  HTMLSpanElement,
+  JSX.IntrinsicElements['span']
+>((props, ref) => {
   const { css } = useRemirrorTheme();
 
   return (

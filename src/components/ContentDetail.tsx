@@ -221,13 +221,12 @@ const ContentDetail = () => {
               sx={{
                 width: '65%',
                 bg: 'gray.0',
-                fontFamily: 'courier',
+                // fontFamily: 'courier',
                 // border: 'solid 0.5px #ddd',
                 // borderRadius: 5,
                 overflow: 'hidden',
               }}>
               <Flex
-                bg="background"
                 sx={{
                   px: 4,
                   py: 4,
@@ -235,7 +234,7 @@ const ContentDetail = () => {
                   // border: 'solid 1px',
                   // borderColor: 'gray.3',
                 }}>
-                <Box bg="background">
+                <Box>
                   <Text sx={{ fontSize: 3 }}>
                     {contents.content.serialized.title}
                   </Text>

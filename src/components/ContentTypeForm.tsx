@@ -5,11 +5,11 @@ import { Label, Input, Select } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
+import { useStoreState } from 'easy-peasy';
 
 import { IFlow, ICreator } from './FlowList';
-
 import { ContentType } from '../utils/types';
-import { useStoreState } from 'easy-peasy';
+import PageHeader from './PageHeader';
 
 import {
   loadEntity,
@@ -18,6 +18,7 @@ import {
   updateEntity,
   deleteEntity,
 } from '../utils/models';
+
 import Field from './Field';
 import FieldColor from './FieldColor';
 import FieldText from './FieldText';
@@ -101,15 +102,16 @@ export interface IFieldItem {
 
 export interface FieldTypeItem {
   key: string;
+  name?: string;
   field_type_id: string;
 }
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
-  const [contents, setContents] = useState<Array<IField>>([]);
+  // const [contents, setContents] = useState<Array<IField>>([]);
   const [content, setContent] = useState<ContentType>();
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
@@ -118,16 +120,18 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  const addField = () =>
-    setFields(fields => {
+  const addField = () => {
+    console.log('[addField]', fields);
+    setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
       outputState.push('');
       return outputState;
     });
+  };
 
   const addFieldVal = (val: any) =>
-    setFields(fields => {
+    setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
       outputState.push({ name: val.name, value: val.value });
@@ -135,7 +139,7 @@ const Form = () => {
     });
 
   const removeField = (did: number) =>
-    setFields(fields => {
+    setFields((fields) => {
       const outputState = fields.slice(0);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
@@ -143,14 +147,14 @@ const Form = () => {
       return outputState;
     });
 
-  const onContentTypeSuccess = (data: any) => {
-    const res: IField[] = data.content_types;
-    setContents(res);
-  };
+  // const onContentTypeSuccess = (data: any) => {
+  //   const res: IField[] = data.content_types;
+  //   setContents(res);
+  // };
 
-  const loadData = (token: string) => {
-    loadEntity(token, 'content_types', onContentTypeSuccess);
-  };
+  // const loadData = (token: string) => {
+  //   loadEntity(token, 'content_types', onContentTypeSuccess);
+  // };
 
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
@@ -162,10 +166,12 @@ const Form = () => {
     const res: ContentType = data;
     setContent(res);
     if (res && res.content_type) {
+      console.log('content_type', res);
+
       setValue('name', res.content_type.name);
       setValue('desc', res.content_type.decription);
       setValue('prefix', res.content_type.prefix);
-      setValue('layout_uuid', res.content_type.layout.id);
+      setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
@@ -210,7 +216,7 @@ const Form = () => {
   };
 
   const formatFields = (fields: any) => {
-    console.log('fields', fields);
+    console.log('👙 fields', fields);
     let fieldsMap: any = [];
 
     fields &&
@@ -227,25 +233,27 @@ const Form = () => {
     return fieldsMap;
   };
 
-  const onSuccess = (d:any) => {
-    console.log('d',d);
-  }
+  const onSuccess = (d: any) => {
+    console.log('d', d);
+  };
 
   const onSubmit = (data: any) => {
     const sampleD = {
       name: data.name,
-      layout_uuid: data.layout_uuid,
+      layout_uuid: data.layout_id,
       fields: formatFields(fields),
       description: data.desc,
       prefix: data.prefix,
-      flow_uuid: data.flow_uuid,
+      flow__uuid: data.flow_id,
       color: data.color,
     };
 
     const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
+      console.log('[isUpdate]', isUpdate);
       updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
     } else {
+      console.log('[isUpdate]', sampleD);
       createEntity(sampleD, 'content_types', token, onSuccess);
     }
   };
@@ -271,6 +279,7 @@ const Form = () => {
 
   useEffect(() => {
     if (cId) {
+      setValue('edit', cId);
       loadDataDetalis(cId, token);
     }
   }, [cId, token]);
@@ -280,7 +289,7 @@ const Form = () => {
     setFields([]);
     // let newFields:any = []
     // format and replae existing fields
-    fds.data.fields.forEach((el: any) => {
+    fds?.data?.fields?.forEach((el: any) => {
       // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       const fff = { field_type: ff, name: el.name };
@@ -290,7 +299,7 @@ const Form = () => {
   };
 
   const onChangeFields = (_e: any, _name: string) => {
-    console.log("updating ", _name, _e);
+    console.log('updating ', _name, _e);
     setValue(_name, _e);
     // const sampleTheme: themeObject = {
     //   ...theme,
@@ -302,7 +311,7 @@ const Form = () => {
   useEffect(() => {
     // if token
     if (token) {
-      loadData(token);
+      // loadData(token);
       loadLayouts(token);
       loadFlows(token);
       loadFieldTypes(token);
@@ -310,116 +319,123 @@ const Form = () => {
   }, [token]);
 
   return (
-    <Flex>
-      <Box
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        py={3}
-         
-        mt={4}
-        pr={4}>
-        <Box>
-          <Text variant="pagetitle">New Content Types</Text>
-        </Box>
-        <Box mx={0} mb={3}  >
-          <Flex>
-            <Box>
-              <Box>
-                <Field
-                  register={register}
-                  label="Name"
-                  name="name"
-                  defaultValue="Layout Name"
-                />
+    <Box>
+      <PageHeader
+        title={`${cId ? 'Edit' : 'New '} Variant`}
+        desc="Manage Variants">
+        <Box />
+      </PageHeader>
+      <Flex>
+        <Box sx={{ minWidth: '60ch'}}>
+          <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex variant="layout.pageFrame">
+              <Box sx={{ flexGrow: 1 }}>
+                <Box>
+                  <Field
+                    register={register}
+                    label="Name"
+                    name="name"
+                    defaultValue=""
+                    placeholder="Variant Name"
+                  />
+                </Box>
+                <Box>
+                  <FieldText
+                    register={register}
+                    label="Description"
+                    name="desc"
+                    defaultValue="Something to guide the user here"
+                  />
+                </Box>
+                <Box>
+                  <Field
+                    register={register}
+                    label="Prefix"
+                    name="prefix"
+                    defaultValue=""
+                  />
+                </Box>
+                <Box>
+                  <FieldColor
+                    register={register}
+                    label="Color"
+                    name="color"
+                    defaultValue="#000"
+                    onChangeColor={onChangeFields}
+                  />
+                </Box>
+                <Box px={0} pb={3}>
+                  <Label htmlFor="layout_id" mb={1}>
+                    Layout
+                  </Label>
+                  <Select
+                    id="layout_id"
+                    name="layout_id"
+                    ref={register({ required: true })}>
+                    {layouts &&
+                      layouts.length > 0 &&
+                      layouts.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                  </Select>
+                </Box>
+                <Box px={0} pb={3}>
+                  <Label htmlFor="flow_id" mb={1}>
+                    Flow
+                  </Label>
+                  <Select
+                    id="flow_id"
+                    name="flow_id"
+                    defaultValue=""
+                    ref={register({ required: true })}>
+                    {flows &&
+                      flows.length > 0 &&
+                      flows.map((m: any) => (
+                        <option value={m.flow.id} key={m.flow.id}>
+                          {m.flow.name}
+                        </option>
+                      ))}
+                  </Select>
+                </Box>
+                <Box sx={{ display: 'none' }}>
+                  <Input
+                    id="edit"
+                    name="edit"
+                    defaultValue={0}
+                    hidden={true}
+                    ref={register({ required: true })}
+                  />
+                </Box>
               </Box>
-              <Box  >
-                <FieldText
-                  register={register}
-                  label="Description"
-                  name="desc"
-                  defaultValue="Something to guide the user here"
-                />
-              </Box>
-              <Box  >
-                <Field
-                  register={register}
-                  label="Prefix"
-                  name="prefix"
-                  defaultValue=""
-                />
-              </Box>
-              <Box  >
-                <FieldColor
-                  register={register}
-                  label="Color"
-                  name="color"
-                  defaultValue="#000"
-                  onChangeColor={onChangeFields}
-                />
-              </Box>
-              <Box   px={0} pb={3}>
-                <Label htmlFor="layout_uuid" mb={1}>
-                  Layout
-                </Label>
-                <Select
-                  id="layout_uuid"
-                  name="layout_uuid"
-                  defaultValue="Layout"
-                  ref={register({ required: true })}>
-                  {layouts &&
-                    layouts.length > 0 &&
-                    layouts.map((m: any) => (
-                      <option value={m.id} key={m.id}>
-                        {m.name}
-                      </option>
-                    ))}
-                </Select>
-              </Box>
-              <Box   px={0} pb={3}>
-                <Label htmlFor="flow_uuid" mb={1}>
-                  Flow
-                </Label>
-                <Select
-                  id="flow_uuid"
-                  name="flow_uuid"
-                  defaultValue=""
-                  ref={register({ required: true })}>
-                  {flows &&
-                    flows.length > 0 &&
-                    flows.map((m: any) => (
-                      <option value={m.flow.id} key={m.flow.id}>
-                        {m.flow.name}
-                      </option>
-                    ))}
-                </Select>
-              </Box>
-              <Box sx={{ display: 'none' }}>
-                <Input
-                  id="edit"
-                  name="edit"
-                  defaultValue={0}
-                  hidden={true}
-                  ref={register({ required: true })}
-                />
-              </Box>
+              {errors.exampleRequired && <Text>This field is required</Text>}
+            </Flex>
+
+            <Box sx={{ px: 4 }}>
+              <Button variant="btnPrimaryLarge">Save</Button>
             </Box>
-            {errors.exampleRequired && <Text>This field is required</Text>}
-          </Flex>
+          </Box>
         </Box>
-        <Button>Save</Button>
-      </Box>
-      <Box pt={4} pl={3}>
-        <FieldEditor
-          fields={fields}
-          fieldtypes={fieldtypes}
-          contents={contents}
-          removeField={removeField}
-          addField={addField}
-          onSave={onFieldsSave}
-          register={register}
-        />
-      </Box>
-    </Flex>
+        <Box sx={{ flexGrow: 1 }} variant="layout.pageFrame">
+          {cId && (
+            <Box mb={2}>
+              <Text as="h4" variant="sectionTitle">
+                Manage
+              </Text>
+            </Box>
+          )}
+
+          <FieldEditor
+            fields={fields}
+            fieldtypes={fieldtypes}
+            removeField={removeField}
+            addField={addField}
+            onSave={onFieldsSave}
+          />
+        </Box>
+      </Flex>
+    </Box>
   );
 };
 export default Form;

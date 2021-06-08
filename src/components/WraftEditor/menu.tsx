@@ -190,12 +190,13 @@ const MenuItem: FC<MenuItemProps> = ({
       state={state}
       disabled={disabled}
       data-rel={name}      
-      index={index}>
+      index={index}
+      sx={{ bg: 'gray.1'}}
+      >
       <Icon
         variant={variant}
-        styles={{ color: disabled ? 'gray' : 'red' }}
+        styles={{ color: disabled ? 'gray.1' : 'gray.2' }}
       />
-      x
     </IconButton>
   );
 };

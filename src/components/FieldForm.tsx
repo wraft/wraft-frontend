@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
-// import { Label, Input } from 'theme-ui';
-
 import { useForm } from 'react-hook-form';
 
-// import Modal from 'react-modal';
-// import styled from 'styled-components';
 import Field from './Field';
-// import { replaceTitles } from '../utils';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
 import Modal from './Modal';
 import { findAll, replaceTitles } from '../utils';
-
-import { useDialogState } from 'reakit/Dialog';
 
 export interface IFieldField {
   name: string;
@@ -29,10 +22,7 @@ export interface IFieldType {
 const Form = (props: any) => {
   const { fields } = props;
   const { register, handleSubmit, getValues } = useForm();
-  //   const token = useSelector(({ login }: any) => login.token);
   const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
-
-  const dialog = useDialogState();
 
   /**
    * Map form values to fields
@@ -87,7 +77,6 @@ const Form = (props: any) => {
     }
 
     closeModal();
-    // hide modal
   };
 
   function closeModal() {
@@ -135,7 +124,7 @@ const Form = (props: any) => {
       <Button variant="btnSecondary" onClick={props.setShowForm}>
         Fill Form
       </Button>
-      <Modal dialog={dialog} isVisible={props.showForm} onClose={closeModal}>
+      <Modal isOpen={props.showForm} onClose={closeModal}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}

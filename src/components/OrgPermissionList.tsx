@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { loadEntity } from '../utils/models';
-import { Member } from './OrgMemberForm';
-
 export interface PermissionGroupList {
   total_pages: number;
   total_entries: number;
@@ -94,17 +92,17 @@ const OrgPermissionList = () => {
         <Box>
           {contents &&
             contents?.permissions?.length > 0 &&
-            contents?.permissions?.map((v: any, k: any) => (
-              <Text key={k}>{}x</Text>
+            contents?.permissions?.map(() => (
+              <Text>Permissions</Text>
             ))}
         </Box>
 
         <Text variant="pagetitle">All Resources</Text>
-        {/* <Box>
+        <Box>
           {resources &&
             resources?.resources?.length > 0 &&
-            resources?.resources?.map((_n: any) => <Text>X {_n[0]}</Text>)}
-        </Box> */}
+            resources?.resources?.map(() => <Text>Resources</Text>)}
+        </Box>
       </Box>
     </Box>
   );
