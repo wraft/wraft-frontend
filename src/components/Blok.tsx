@@ -89,7 +89,7 @@ const Blok = () => {
           }}>
           <Text>Create New</Text>
         </Box>
-        {contents && contents.map((x: any) => <BlockItem {...x} />)}
+        {contents && contents.map((x: any) => <BlockItem key={x.id} {...x} />)}
       </Box>
     </Box>
   );

@@ -5,26 +5,16 @@ import cookie from 'js-cookie';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
 // relative
-import Link from './NavLink';
+
 import { API_HOST, checkUser } from '../utils/models';
-import { Bell, Plus } from '@styled-icons/boxicons-regular';
+import { Bell, Search } from '@styled-icons/boxicons-regular';
 
-// import Dropdown from './common/Dropdown';
-import Modal from './Modal';
-
-// import { usePopper } from 'react-popper';
-
-import {
-  useMenuState,
-  Menu,
-  MenuItem,
-  MenuButton,
-  // MenuSeparator,
-} from 'reakit/Menu';
-import { useDialogState } from 'reakit/Dialog';
+import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
 import { Clickable } from 'reakit/Clickable';
 
 import Blok from './Blok';
+import Link from './NavLink';
+import Modal from './Modal';
 
 export interface IUser {
   name: string;
@@ -47,16 +37,6 @@ const Nav = ({ navtitle }: INav) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
 
   const menu = useMenuState();
-  const dialog = useDialogState();
-
-  // popper
-  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
-  // const [referenceElement, setReferenceElement] = useState(null);
-  // const [popperElement, setPopperElement] = useState(null);
-  // const [arrowElement, setArrowElement] = useState(null);
-  // const { styles, attributes } = usePopper(referenceElement, popperElement, {
-  //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-  // });
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
@@ -124,11 +104,8 @@ const Nav = ({ navtitle }: INav) => {
                   verticleAlign: 'top',
                   borderColor: 'gray.3',
                   mr: 2,
-                  px: 1,
-                  py: 0,
-                  pb: 1,
-                  pt: 1,
-                  pr: 2,
+                  px: 2,
+                  py: 1,
                   '&:hover': {
                     bg: 'gray.1',
                     color: 'gray.9',
@@ -140,8 +117,10 @@ const Nav = ({ navtitle }: INav) => {
                   },
                   borderRadius: 4,
                 }}>
-                <Plus width="16px" />
-                <Text as="span">New</Text>
+                <Search width="16px" />
+                <Text as="span" sx={{ ml: 1, color: 'gray.5' }}>
+                  Search
+                </Text>
               </Clickable>
               {/* <Button variant="btnPrimaryIcon" sx={{ fontSize: 0, fontWeight: 600, pt: 1 }} onClick={() => toggleSearch()}>New</Button> */}
               {/* <Link href="/contents">
@@ -162,7 +141,9 @@ const Nav = ({ navtitle }: INav) => {
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
           <Flex sx={{ bg: 'gray.0' }}>
             <Flex sx={{ bg: 'gray.0', ':hover': { bg: 'gray.1' } }}>
-              <Box variant="button" sx={{ mt: 1, pt: 1, px: 3 }}>
+              <Box
+                variant="button"
+                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
                 <Bell width="20px" />
               </Box>
             </Flex>
@@ -257,7 +238,7 @@ const Nav = ({ navtitle }: INav) => {
           </Flex>
         </Box>
       </Flex>
-      <Modal dialog={dialog} isVisible={showSearch} onClose={closeSearch}>
+      <Modal isOpen={showSearch} onClose={closeSearch}>
         <Blok />
       </Modal>
     </Box>

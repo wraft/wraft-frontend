@@ -51,7 +51,7 @@ export interface BlockTemplate {
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
@@ -298,7 +298,7 @@ const Form = () => {
       mt={4}
       variant="w80">
       <Box pl={4}>
-        <Text mb={3}>Create Template</Text>
+        <Text mb={3}>{cId ? 'Edit' : 'New'} Template</Text>
       </Box>
       <Box mx={4} mb={3} variant="w100">
         <Flex>
@@ -317,7 +317,7 @@ const Form = () => {
                 id="parent"
                 name="parent"
                 defaultValue="Parent ID"
-                onChange={e => ctypeChange(e)}
+                onChange={(e) => ctypeChange(e)}
                 ref={register({ required: true })}>
                 {ctypes &&
                   ctypes.length > 0 &&

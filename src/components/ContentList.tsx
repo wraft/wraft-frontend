@@ -126,11 +126,81 @@ interface BoxWrapProps {
   xid: string;
 }
 
+interface FilterBlockProps {
+  title: string;
+  no: number;
+}
+
+/**
+ * Filter Atom
+ * @param param0
+ * @returns
+ */
+const FilterBlock: FC<FilterBlockProps> = ({ title, no }) => {
+  return (
+    <Flex
+      sx={{
+        bg: 'gray.0',
+        ':hover': {
+          bg: 'gray.1',
+        },
+        p: 2,
+        // borderRadius: '4px',
+        // borderTop: 'solid 1px',
+        borderBottom: 'solid 1px',        
+        borderColor: 'gray.3',
+        alignItems: 'flex-start',
+        pl: 2,
+      }}>
+      {/* <Box
+        sx={{
+          borderRadius: '1rem',
+          ml: 0,
+          mr: 2,
+          mt: 1,
+          width: '10px',
+          bg: 'red.3',
+          height: '10px',
+        }}
+      /> */}
+      <Text as="h4" sx={{ fontSize: 1, fontWeight: 600 }}>
+        {title}
+        <Text
+          as="span"
+          sx={{
+            ml: 1,
+            // pl: 2,
+            bg: 'gray.3',
+            fontSize: '11px',
+            fontWeight: 'heading',
+            color: 'gray.7',
+            // border: 'solid 0.5px',
+            borderColor: 'gray.5',
+            p: 1,
+            borderRadius: '3rem',
+            px: '4px',
+            py: '1px',
+          }}>
+          {no}
+        </Text>
+      </Text>
+    </Flex>
+  );
+};
+
 const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
   return (
     <Box sx={{ pt: 1, pb: 2 }}>
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
-        <Text sx={{ fontSize: 0, color: 'gray.6' }}>{id}</Text>
+        <Text
+          sx={{
+            fontSize: 0,
+            color: 'red.9',
+            fontFamily: 'courier',
+            fontWeight: 100,
+          }}>
+          {id}
+        </Text>
         <Text as="h4" p={0} sx={{ m: 0, fontWeight: 500 }}>
           {name}
         </Text>
@@ -259,8 +329,8 @@ const ContentList = () => {
 
   return (
     <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents">
-        <Box sx={{ ml: 'auto', mr: 5 }}>
+      <PageHeader title="Documents" desc="All Official Documents">
+        <Box sx={{ ml: 'auto', mr: 0, pt: 1, mb: 1, mt: 1 }}>
           <Button variant="btnPrimary">+ New Doc</Button>
         </Box>
       </PageHeader>
@@ -273,7 +343,7 @@ const ContentList = () => {
                 <Spinner width={40} height={40} color="primary" />
               </Box>
             )}
-            <Box mx={0} mb={3} sx={{  }}>
+            <Box mx={0} mb={3} sx={{}}>
               {vendors && (
                 <Table
                   options={{
@@ -327,8 +397,52 @@ const ContentList = () => {
             {total}
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox">
-              <Text variant="blockTitle">Filter</Text>
+            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+              <Text
+                as="h4"
+                variant="blockTitle"
+                sx={{ mb: 2, fontSize: 0, fontWeight: 'body', color: 'gray.6' }}>
+                Filter by Variant
+              </Text>
+              <Box
+                sx={{
+                  borderRight: 'solid 1px',
+                  borderLeft: 'solid 1px',
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                  '&:last-child': {
+                    borderBottom: 0,
+                  },
+                }}>
+                <FilterBlock title="Proposal" no={32} />
+                <FilterBlock title="Contracts" no={32} />
+                <FilterBlock title="Invoices" no={32} />
+                <FilterBlock title="Agreements" no={32} />
+                <FilterBlock title="Offer Letters" no={32} />
+              </Box>
+            </Box>
+            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+              <Text
+                as="h4"
+                variant="blockTitle"
+                sx={{ mb: 2, fontSize: 0, fontWeight: 'body', color: 'gray.6' }}>
+                Filter by State
+              </Text>
+              <Box
+                sx={{
+                  borderRight: 'solid 1px',
+                  borderLeft: 'solid 1px',
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                  '&:last-child': {
+                    borderBottom: 0,
+                  },
+                }}>
+                <FilterBlock title="Draft" no={32} />
+                <FilterBlock title="In Review" no={32} />
+                <FilterBlock title="Published" no={32} />
+                <FilterBlock title="Archived" no={32} />
+              </Box>
             </Box>
           </Box>
         </Flex>

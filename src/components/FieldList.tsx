@@ -28,14 +28,11 @@ const ItemField: FC<any> = ({ id, name }) => {
       p={3}
       sx={{
         flexGrow: 1,
-        bg: '#fff',
-        // borderBottom: 'solid 1px #eee',
-        // borderRadius: '3px',
       }}>
       <Text as="h4" color="gray.8">
         {name}
       </Text>
-      <Text pt={1} color="gray.6" sx={{ fontSize: 0 , fontWeight: 300 }}>
+      <Text pt={1} color="gray.5" sx={{ fontSize: 0 , fontWeight: 300 }}>
         Sample Field Description
       </Text>
     </Box>
@@ -65,7 +62,7 @@ const FieldList: FC = () => {
       contents.map((r: any) => {
         const rFormated = {
           col2: <ItemField {...r} />,
-          col3: <Box>{r.updated_at}</Box>,
+          col3: <Text as="h4" sx={{ pt: 3, fontSize: 0 }}>{r.updated_at}</Text>,
         };
 
         row.push(rFormated);
@@ -76,9 +73,9 @@ const FieldList: FC = () => {
 
   return (
     <Box mt={0}>
-      <PageHeader title="Manage > Fields">
+      <PageHeader title="Fields Types" desc="Manage System Level fields">        
         <Box sx={{ ml: 'auto', mr: 5 }}>
-          <Link href="/manage/fields/new" variant="btnSecondary">
+          <Link href="/manage/fields/new" variant="btnPrimary">
             + New Field
           </Link>
         </Box>
