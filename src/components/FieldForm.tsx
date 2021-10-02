@@ -84,16 +84,16 @@ const Form = (props: any) => {
   }
 
   return (
-    <Box sx={{ bg: 'gray.0' }}>
+    <Box sx={{ bg: 'green.0', p: 3 }}>
       <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
       <Box
-        p={3}
-        bg="gray.0"
-        sx={{ mt: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
+        p={3}        
+        sx={{ bg: 'white', mt: 2, mb: 3, border: 'solid 1px', borderColor: 'gray.3' }}>
         {field_maps &&
           field_maps.map((x: any) => (
             <Flex
               key={x.id}
+              
               sx={{
                 pb: 2,
                 borderBottom: 'solid 0.5px',
