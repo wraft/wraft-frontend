@@ -116,7 +116,7 @@ const Form = () => {
     formData.append('height', data.height);
     formData.append('unit', data.unit);
     formData.append('slug', data.slug);
-    formData.append('engine_uuid', data.engine_uuid);
+    formData.append('engine_id', data.engine_uuid);
     formData.append('assets', assetsPath);
     formData.append('screenshot', data.screenshot[0]);
 
@@ -173,9 +173,9 @@ const Form = () => {
       setValue('name', layout.name);
       setValue('slug', layout.slug);
       setValue('height', layout.height);
-      setValue('width', layout.width);
-      setValue('description', layout.description);
-      setValue('engine_uuid', layout.engine.id);
+      setValue('width', layout?.width);
+      setValue('description', layout?.description);
+      setValue('engine_uuid', layout?.engine?.id);
     }
   }, [layout]);
 
@@ -270,7 +270,7 @@ const Form = () => {
                   engines.length > 0 &&
                   engines.map((m: any) => (
                     <option key={m.id} value={m.id}>
-                      {m.name}
+                      {m.name} {m.id}
                     </option>
                   ))}
               </Select>

@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import { jsx, Box } from 'theme-ui';
 import React, {
   // FC,

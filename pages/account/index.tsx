@@ -15,7 +15,7 @@ const Contents: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="My Account">
+        <PageHeader title="My Account" desc="Manage your account">
           <Box sx={{ ml: 'auto' }}/>
         </PageHeader>
         <Flex>

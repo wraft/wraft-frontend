@@ -41,8 +41,8 @@ const ContentListCard: FC = () => {
         sx={{ width: '30px', height: '30px', bg: 'blue.3', borderRadius: 99 }}
       />
       <Box sx={{ pl: 3 }}>
-        <Box sx={{ fontSize: 0, color: '#828282' }}>MNA/IN/240A</Box>
-        <Box>Offer Letter for Nizam Khadiri</Box>
+        <Box sx={{ fontSize: 0, color: '#828282' }}>?</Box>
+        <Text>??</Text>
       </Box>
       <Box sx={{ ml: 'auto' }}>
         <Flex>
@@ -54,16 +54,9 @@ const ContentListCard: FC = () => {
               width="20px"
               src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
             />
-            <Avatar
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
-            <Avatar
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
           </Box>
-          <Button>Review</Button>
+          <Button sx={{ mr: 1 }}>Review</Button>
+          <Button>Approve</Button>
         </Flex>
       </Box>
     </Flex>
@@ -76,7 +69,7 @@ const Approvals = () => {
   // const { addToast } = useToasts();
 
   const loadDataSuccess = (data: any) => {
-    const res: ApprovalList[] = data.themes;
+    const res: ApprovalList[] = data.approval_systems;
     setContents(res);
   };
 
