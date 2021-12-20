@@ -43,7 +43,7 @@ export const findDefault = (needle: string, stack: any) => {
 export const updateVars = (data: ContentState, fields: any) => {
   // cut it short if it map has no values
   if (fields && fields[0] && fields[0].value) {
-    console.log('UPDATED_BODY', fields);
+    console.log('UPDATED_BODY updateStuff', fields);
     const result = produce(data, draft => {
       data.content.forEach((p: any, k: any) => {
         if (p && p.content && p.content.length > 0) {
@@ -53,7 +53,7 @@ export const updateVars = (data: ContentState, fields: any) => {
                 attrs: { name },
               } = c;
               const ff = fields.find((e: any) => e.name === name);
-              // console.log('c', ff);
+              // console.log('updateStuff ' + name, ff);
               draft['content'][k]['content'][y]['attrs']['named'] =
                 ff && ff.value;
             }

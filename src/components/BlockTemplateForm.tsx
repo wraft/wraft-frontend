@@ -176,9 +176,16 @@ const Form = () => {
   };
 
   const doUpdate = (state: any) => {
+    console.log('[block] [doUpdate]', state.body);
     if (state.md) {
       setValue('body', state.md);
       setValue('serialized', state.serialized);
+    }
+
+    if (state.body) {
+      const castBody = state.body
+      console.log('ASHT', JSON.stringify(castBody))
+      setValue('serialized', JSON.stringify(castBody));
     }
   };
 
@@ -188,12 +195,14 @@ const Form = () => {
       console.log('contentBody', contentBody);
       setDef(contentBody);
       setStatus(3);
+
+      setInsertable(contentBody);
     }
   }, [token, dataTemplate]);
 
   useEffect(() => {
     if (saved) {
-      Router.push(`/block_templates`);
+      Router.push(`/blocks`);
     }
   }, [saved]);
 
@@ -245,7 +254,7 @@ const Form = () => {
         </Text>
       </Box>
 
-      <Button onClick={() => toggleAssetForm()}>+ Image</Button>
+      <Button variant="secondary" onClick={() => toggleAssetForm()}>+ Image</Button>
       {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />}
       <Box variant="w50">
         <Flex>
@@ -256,7 +265,7 @@ const Form = () => {
               defaultValue=""
               register={register}
             />
-            <Box variant="hidden">
+            <Box variant="hidden" sx={{ display: 'none'}}>
               <Field
                 name="body"
                 label="Body"
@@ -264,7 +273,7 @@ const Form = () => {
                 register={register}
               />
             </Box>
-            <Box variant="hidden">
+            <Box variant="hidden" sx={{ display: 'none'}}>
               <FieldText
                 name="serialized"
                 label="Serialized"
@@ -276,13 +285,8 @@ const Form = () => {
             {def && status > 2 && (
               <EditorWraft
                 onUpdate={doUpdate}
-                initialValue={def}
-                editor="wysiwyg"
-                mt={4}
-                // value={body}
-                // cleanInsert={true}
+                document={def}
                 editable={true}
-                // insertable={true}
                 cleanInsert={cleanInsert}
                 insertable={insertable}
               />
@@ -301,7 +305,7 @@ const Form = () => {
             </Box> */}
             {/* {body} */}
           </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
+          {errors.serialized && <Text>This field is required</Text>}
         </Flex>
       </Box>
       {saved && <Text>Saved</Text>}

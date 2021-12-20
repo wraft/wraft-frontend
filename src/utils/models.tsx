@@ -1,7 +1,7 @@
 // const API_HOST = process.env.API_HOST || 'http://localhost:4000' // 'https://api.o.dieture.com';
 // export const API_HOST = process.env.API_HOST || 'https://wraft.x.aurut.com';
-// export const API_HOST = 'http://localhost:4000';
-export const API_HOST = 'https://wraft.x.aurut.com'
+export const API_HOST = 'http://localhost:4000';
+// export const API_HOST = 'https://wraft.x.aurut.com'
 import cookie from 'js-cookie';
 import axios from 'axios';
 
@@ -87,6 +87,9 @@ export const deleteAPI = (path: any) =>
  */
 
 export const loadEntity = (token: string, path: string, onSuccess: any) => {
+
+  console.log('API_HOST', API_HOST)
+
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'GET',
     headers: {
@@ -141,6 +144,9 @@ export const createEntity = (
   token: string,
   onSuccess?: any,
 ) => {
+
+  console.log('🧶🧶', API_HOST, data);
+
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'POST',
     headers: {

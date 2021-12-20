@@ -46,6 +46,13 @@ const BlockTemplateListFrame: FC = () => {
             </Box>
           ),
           col3: <Box>{r.updated_at}</Box>,
+          col4: (
+            <Box sx={{ px: 3, py: 2 }}>
+              <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary">
+                Edit
+              </Link>
+            </Box>
+          ),
         };
 
         row.push(rFormated);
@@ -93,7 +100,12 @@ const BlockTemplateListFrame: FC = () => {
                   {
                     Header: 'Updated',
                     accessor: 'col3',
-                    width: '40%',
+                    width: '30%',
+                  },
+                  {
+                    Header: 'Updated',
+                    accessor: 'col4',
+                    width: '10%',
                   },
                 ],
                 data: blocks,

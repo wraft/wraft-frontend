@@ -14,18 +14,23 @@ import {
 
 import { Label, Select } from 'theme-ui';
 import styled from 'styled-components';
-// import {EditorWraft} from './EditorWraft';
+
+// import { useHelpers, useKeymap } from '@remirror/react';
+
+import { useRouter } from 'next/router';
+import { useStoreState } from 'easy-peasy';
+
+
+import { useToasts } from 'react-toast-notifications';
+
+import MarkdownEditor from './WraftEditor';
+
 import {
   loadEntity,
   loadEntityDetail,
   createEntity,
   updateEntity,
 } from '../utils/models';
-import { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-
-import { MarkdownEditor } from './WraftEditor';
-import { useToasts } from 'react-toast-notifications';
 
 const Tag = styled(Box)`
   padding: 5px;
@@ -58,7 +63,10 @@ const Form = () => {
   const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
   const [body, setBody] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [editorReady, setEditorReady] = useState<boolean>(false);
   // const [keys, setKeys] = useState<Array<string>>();
+
+  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
 
   const { addToast } = useToasts();
 
@@ -66,20 +74,9 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  const EMPTY_MARKDOWN_NODE = {
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: [
-          {
-            type: 'text',
-            text: 'Write here',
-          },
-        ],
-      },
-    ],
-  };
+  const onCreated = () => {
+    console.log('[onCreated]')
+  }
 
   /**
    * Form Submit
@@ -98,9 +95,11 @@ const Form = () => {
       },
     };
 
+    console.log('Create/Update Template', formValues);
+
     // if edit is live
     if (cId) {
-      updateEntity(`data_templates/${cId}`, formValues, token);
+      updateEntity(`data_templates/${cId}`, formValues, token, onCreated);
       addToast('Updated Successfully', { appearance: 'success' });
       setLoading(false);
     } else {
@@ -108,6 +107,7 @@ const Form = () => {
         formValues,
         `content_types/${data.parent}/data_templates`,
         token,
+        onCreated
       );
       addToast('Created Successfully', { appearance: 'success' });
       setLoading(false);
@@ -127,7 +127,7 @@ const Form = () => {
     const formed: ContentTypes = data;
     setVarias(formed.content_type);
     dataFiller(formed.content_type.fields || {});
-    console.log('Loaded Content Type:', formed);
+    console.log('Loaded Content Type: 🎃', formed);
   };
 
   /**
@@ -156,10 +156,12 @@ const Form = () => {
    * @param id
    */
   const loadTemplate = (id: string, token: string) => {
+    setLoading(true);
     loadEntityDetail(token, 'data_templates', id, loadTemplateSuccess);
   };
 
   const loadTemplateSuccess = (data: DataTemplates) => {
+    setLoading(false);
     let insert =
       (data.data_template &&
         data.data_template.serialized &&
@@ -168,10 +170,14 @@ const Form = () => {
 
     if (insert) {
       const mm = JSON.parse(insert);
-      console.log('has serials', mm);
-      // setInsertable(mm);
+      if (mm) {
+        console.log('has serials', mm);
+        setCleanInsert(false);
+        setToken(mm);
+      }
     }
     setDataTemplate(data);
+    setCleanInsert(true);
   };
 
   const dataFiller = (entries: any) => {
@@ -196,19 +202,33 @@ const Form = () => {
    * @param data
    */
   const doUpdate = (data: any) => {
+    console.log('[When Editor is updated]', data)
+
     if (data.md) {
       setValue('body', data.md);
-      setValue('data', data.md);
     }
+
+    // body
+
+    if (data.body) {
+      const body = data.body;
+      setValue('serialized', JSON.stringify(body));
+      setValue('data', JSON.stringify(body));
+    }
+
+    // if (data.body) {
+    //   setValue('serialized', data.body);
+    // }
 
     if (data.serialized) {
       setValue('serialized', data.serialized);
     }
-    // console.log('data', data);
-    // setValue('body', data);
-    if (data && data.content) {
-      setValue('data', data.content);
-    }
+    // // console.log('data', data);
+    // // setValue('body', data);
+    // if (data.content) {
+    //   console.log('[When Editor is content]', data)
+    //   setValue('data', data.content);
+    // }
   };
 
   useEffect(() => {
@@ -253,7 +273,6 @@ const Form = () => {
         console.log('mm', mm);
         setInsertable(mm);
       }
-      //
       setBody(d.data);
     }
   }, [dataTemplate]);
@@ -264,6 +283,16 @@ const Form = () => {
 
   const [tokens, setToken] = useState<any>();
   const [insertable, setInsertable] = useState<any>();
+  const [cleanIns, setCleanIns] = useState<boolean>(false);
+
+
+const ALL_USERS = [
+  { id: 'joe', label: 'Joe' },
+  { id: 'sue', label: 'Sue' },
+  { id: 'pat', label: 'Pat' },
+  { id: 'tom', label: 'Tom' },
+  { id: 'jim', label: 'Jim' },
+];
 
   const insertToken = (token: any) => {
     const test = {
@@ -276,17 +305,17 @@ const Form = () => {
   };
 
   useEffect(() => {
-    console.log('insertable', insertable);
-  }, [insertable]);
+    setEditorReady(true);
+  }, []);
 
-  // useEffect(() => {
-  //   setToken('')
-  // }, []);
+  useEffect(() => {
+    console.log('body', body);
+  }, [body]);
 
   const insertBlock = (b: any) => {
     const n = JSON.parse(b.serialized);
     if (n && n.content) {
-      setInsertable(n);
+      setToken(n);
     }
   };
 
@@ -302,7 +331,7 @@ const Form = () => {
       </Box>
       <Box mx={4} mb={3} variant="w100">
         <Flex>
-          <Box mr={2} variant="w70">
+          <Box mr={2} variant="layout.w70">
             <Field
               name="title"
               label="Name"
@@ -350,22 +379,26 @@ const Form = () => {
               />
             </Box>
             <Box py={4}>
-              <MarkdownEditor
-                onUpdate={doUpdate}
-                initialValue={EMPTY_MARKDOWN_NODE}
-                editor="wysiwyg"
-                value={body}
-                token={tokens}
-                editable={true}
-                insertable={insertable}
-              />
+
+              {editorReady &&
+                <MarkdownEditor
+                  onUpdate={doUpdate}
+                  starter={tokens}
+                  cleanInsert={cleanInsert}
+                  token={tokens}
+                  editable={true}
+                  variables={varias}
+                  searchables={varias}
+                  showToolbar={true}
+                />
+              }
             </Box>
           </Box>
           {/* <Box mr={2} variant="w70"></Box> */}
           <Box px={4} mr={3} variant="w40">
             {varias && varias.fields && (
               <Box>
-                <Text mb={2}>Tokens</Text>
+                <Text mb={2}>Variables</Text>
                 {varias.fields &&
                   varias.fields.map((k: FieldT) => (
                     <Tag key={k.id} onClick={() => insertToken(k)}>
@@ -406,12 +439,14 @@ const Form = () => {
       </Box>
 
       {/* <WraftEditor/> */}
-      <Button variant="primary">
-        <Flex>
+      <Box variant="primary">
+        <Flex sx={{ px: 4, py: 1 }}>
           {loading && <Spinner color="white" size={24} />}
           {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
+
+          <Button type="button" variant="secondary" sx={{ mx: 3 }}>Try</Button>
         </Flex>
-      </Button>
+      </Box>
     </Box>
   );
 };

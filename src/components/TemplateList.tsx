@@ -43,7 +43,7 @@ const TemplateList = () => {
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
-  const [total, setTotal] = useState<number>(1);
+  const [total, setTotal] = useState<number>(0);
 
   const [templates, setTemplates] = useState<Array<any>>([]);
 
@@ -115,7 +115,7 @@ const TemplateList = () => {
 
   return (
     <Box>
-      <PageHeader title="Templates">
+      <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
           <Link href="/templates/new" variant="btnSecondary">
             + New Template

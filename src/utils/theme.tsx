@@ -4,15 +4,18 @@ const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body:
-      'Avenir, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+      'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
+    editor1: 'Inter, sans-serif',
+    editor2: "'IBM Plex Mono', monospace",
+    // font-family: 
     monospace: 'Menlo, monospace',
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
   fontSizes: [12.8, 16, 20, 20, 25, 31.25, 39.06, 48.83, 61.04],
   fontWeights: {
-    body: 400,
+    body: 200,
     heading: 700,
     bold: 700,
   },
@@ -185,7 +188,20 @@ const theme: Theme = {
     modes: {
       dark: {
         text: '#fff',
+        base: '#000',
         background: 'gray.8',
+        green: [
+          '#ebfbee',
+          '#d3f9d8',
+          '#b2f2bb',
+          '#8ce99a',
+          '#69db7c',
+          '#51cf66',
+          '#40c057',
+          '#37b24d',
+          '#2f9e44',
+          '#2b8a3e',
+        ],
         gray: [
           '#212529',
           '#343a40',
@@ -236,7 +252,7 @@ const theme: Theme = {
       borderRadius: 2,
     },
   },
-  styles: {
+  styles: {    
     root: {
       fontFamily: 'body',
       lineHeight: 'body',
@@ -319,6 +335,56 @@ const theme: Theme = {
     },
     img: {
       maxWidth: '100%',
+    },
+    editorBody: {
+      '.remirror-theme h1': {
+        
+      },
+      '.remirror-theme .ProseMirror': {
+        outline: 'none',
+        border: 'solid 1px #ddd',
+        // bg: 'red !important',
+        // color: #721515 !important;
+        pl: '4rem',
+        pr: '4rem',
+        pt: '4rem',
+        pb: '4rem',
+      },
+      p: { color: "gray.9", fontFamily: 'body', pt: 2, pb: 1, fontSize: 0 },
+      h1: { color: 'red.5', py: 3, fontFamily: 'body', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
+      h2: { color: "red.3", py: 3, fontFamily: 'body', lineHeight: 1.25, fontSize: 1 },
+      h3: { color: "red.3", py: 3, fontFamily: 'body', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
+      h4: { color: 'red.3', py: 3, fontFamily: 'body', lineHeight: 1.25, fontSize: 1 },
+    },
+    editorBody2: {
+      '.remirror-theme h1': {
+        fontFamily: 'editor2',
+      },
+      '.remirror-theme .ProseMirror': {
+        outline: 'none',
+        border: 'solid 1px',
+        borderColor: 'gray.4',
+        lineHeight: 1.65,
+        bg: 'gray.2',
+        // bg: 'gray.4',
+        // color: #721515 !important;
+        pl: '4rem',
+        pr: '4rem',
+        pt: '4rem',
+        pb: '4rem',
+        h1: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
+        h2: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
+        h3: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
+        '.holder': {
+          bg: 'green.1',
+          color: 'green.8',
+        }
+      },
+      p: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
+      h1: { color: 'red.5', py: 3, fontFamily: 'editor2', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
+      h2: { color: "red.3", py: 3, fontFamily: 'editor2', lineHeight: 1.25, fontSize: 1 },
+      h3: { color: "red.3", py: 3, fontFamily: 'editor2', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
+      h4: { color: 'red.3', py: 3, fontFamily: 'editor2', lineHeight: 1.25, fontSize: 1 },
     },
   },
   links: {
@@ -537,7 +603,7 @@ const theme: Theme = {
       width: '80%',
     },
     w70: {
-      width: '70%',
+      minWidth: '70%',
     },
     w60: {
       width: '60%',
