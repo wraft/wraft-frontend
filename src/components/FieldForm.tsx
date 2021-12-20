@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
@@ -11,6 +11,7 @@ import { findAll, replaceTitles } from '../utils';
 export interface IFieldField {
   name: string;
   value: string;
+  id?: string;
 }
 
 export interface IFieldType {
@@ -19,10 +20,20 @@ export interface IFieldType {
   type: string;
 }
 
-const Form = (props: any) => {
-  const { fields } = props;
+interface FieldFormProps {
+  fields: any;
+  onSaved: any;
+  setMaps?: any;
+  activeTemplate?: any;
+  templates?: any;
+  setShowForm?: any;
+  showForm?: any;
+  onRefresh: any;
+}
+
+const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setShowForm, templates, showForm }: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
-  const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
+  const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
 
   /**
    * Map form values to fields
@@ -45,55 +56,54 @@ const Form = (props: any) => {
     let initials: IFieldField[] = [];
     field_maps &&
       field_maps.forEach((i: any) => {
-        const item: IFieldField = { name: i.name, value: i.value };
+        const item: IFieldField = { name: i.name, value: i.value, id: i?.field_type?.id };
         initials.push(item);
       });
     return initials;
   };
 
+  /**
+   * Form Submit
+   * @param _data 
+   */
   const onSubmit = (_data: any) => {
     const f: any = mapFields(fields);
 
-    //
-    // console.log('Submitted', data);
+    console.log('🌿🎃🎃🌿 Submitted [1]', f);
 
     setFieldMap(f);
-    const vax = getInits(f);
-    console.log('Submitted', vax);
-    props.setMaps(f);
+    const simpleFieldMap = getInits(f);
+    console.log('🌿🎃🎃🌿 Submitted [2]', simpleFieldMap);
 
-    const m: string = props.activeTemplate as string;
-
-    if (m && m.length > 0) {
-      const selection = findAll(props.templates, m);
-      const serialized: any = selection && (selection.serialized as string);
-
-      if (serialized && serialized.data) {
-        const bodyValue = JSON.parse(serialized.data);
-        console.log('(serialized', bodyValue);
-      }
-      const newTitle = replaceTitles(selection.title_template, vax);
-      props.setValue('title', newTitle);
-    }
-
+    onSaved(simpleFieldMap);
     closeModal();
   };
 
+  useEffect(() => {
+    console.log('🌿🎃🎃🌿 fields [3.0]', fields)
+
+  }, [fields]);
+
+
   function closeModal() {
-    props.setShowForm(false);
+    setShowForm(false);
+  }
+
+  const yoFileTha = () => {
+    onRefresh(fieldMap);
   }
 
   return (
-    <Box sx={{ bg: 'green.0', p: 3 }}>
+    <Box sx={{ bg: 'gray.0', p: 3, borderColor: 'gray.1' }}>
       <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
       <Box
-        p={3}        
+        p={3}
         sx={{ bg: 'white', mt: 2, mb: 3, border: 'solid 1px', borderColor: 'gray.3' }}>
-        {field_maps &&
-          field_maps.map((x: any) => (
+        {fields &&
+          fields.map((x: any) => (
             <Flex
               key={x.id}
-              
+
               sx={{
                 pb: 2,
                 borderBottom: 'solid 0.5px',
@@ -102,8 +112,9 @@ const Form = (props: any) => {
               }}>
               <Text
                 sx={{
-                  color: 'red.7',
+                  color: 'green.9',
                   fontSize: 0,
+                  fontWeight: 'heading',
                   fontFamily: 'Menlo, monospace',
                 }}>
                 {x.name}
@@ -119,18 +130,21 @@ const Form = (props: any) => {
               </Text>
               <Text>{x.type}</Text>
             </Flex>
-          ))}
+          ))}          
       </Box>
-      <Button variant="btnSecondary" onClick={props.setShowForm}>
-        Fill Form
+      <Button variant="btnSecondary" onClick={setShowForm}>
+        Fill Form ({fields && fields.size || 0})
       </Button>
-      <Modal isOpen={props.showForm} onClose={closeModal}>
+      <Button type="button" variant="btnSecondary" onClick={yoFileTha}>
+        Yo
+      </Button>
+      <Modal isOpen={showForm} onClose={closeModal}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           // py={2}
-          sx={{ p: 0, bg: 'gray.0' }}
-          // mt={2}
+          sx={{ p: 4, bg: 'gray.0' }}
+        // mt={2}
         >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (
@@ -143,7 +157,6 @@ const Form = (props: any) => {
                       label={f.name}
                       register={register}
                       sub="Date"
-                      // defaultValue={profile?.dob}
                       onChange={() => console.log('x')}
                     />
                   )}
@@ -171,4 +184,4 @@ const Form = (props: any) => {
     </Box>
   );
 };
-export default Form;
+export default FieldForm;

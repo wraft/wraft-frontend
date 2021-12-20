@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { File } from './Icons';
-import { MarkdownEditor } from './WraftEditor';
+import WraftEditor  from './WraftEditor';
 import CommentForm from './CommentForm';
 
 import { parseISO, formatDistanceStrict } from 'date-fns';
@@ -188,6 +188,7 @@ const ContentDetail = () => {
   useEffect(() => {
     if (contents && contents.content && contents.content.serialized) {
       const contentBodyAct = contents.content.serialized;
+      console.log('🧶 [content]', contents.content)
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
@@ -220,7 +221,7 @@ const ContentDetail = () => {
             <Box
               sx={{
                 width: '65%',
-                bg: 'gray.0',
+                // bg: 'gray.0',
                 // fontFamily: 'courier',
                 // border: 'solid 0.5px #ddd',
                 // borderRadius: 5,
@@ -271,15 +272,16 @@ const ContentDetail = () => {
               </Flex>
               <PreTag pt={0}>
                 {contentBody && (
-                  <MarkdownEditor
-                    hideToolbar={false}
+                   <WraftEditor
+                    // value={active}
                     editable={false}
-                    value={contentBody}
                     onUpdate={doUpdate}
-                    initialValue={contentBody}
+                    starter={contentBody}
                     cleanInsert={true}
-                    editor="wysiwyg"
-                  />
+                    token={contentBody}
+                    // mt={0}
+                 />
+                  
                 )}
                 {/* <Text fontSize={1}>{contents.content.raw}</Text> */}
               </PreTag>
