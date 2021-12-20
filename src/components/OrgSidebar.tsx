@@ -29,8 +29,8 @@ const OrgSidebar = (_props: INav) => {
       <NavLink href={'/account/company'}  variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
       </NavLink>
-      <NavLink href={'/account/permissions'}  variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Permissions</Text>
+      <NavLink href={'/account/roles'}  variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Roles</Text>
       </NavLink>
       <NavLink href={'/account/members'} variant="btnNavLink" >
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>

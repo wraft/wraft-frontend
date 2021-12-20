@@ -1,4 +1,3 @@
-/** @jsx jsx */
 /* eslint react/jsx-key: 0 */
 import React from 'react';
 import { jsx, ThemeUIStyleObject, Box } from 'theme-ui';

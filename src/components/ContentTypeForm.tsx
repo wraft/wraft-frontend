@@ -240,11 +240,11 @@ const Form = () => {
   const onSubmit = (data: any) => {
     const sampleD = {
       name: data.name,
-      layout_uuid: data.layout_id,
+      layout_id: data.layout_id,
       fields: formatFields(fields),
       description: data.desc,
       prefix: data.prefix,
-      flow__uuid: data.flow_id,
+      flow_id: data.flow_id,
       color: data.color,
     };
 

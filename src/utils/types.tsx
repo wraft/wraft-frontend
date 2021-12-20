@@ -156,7 +156,7 @@ export interface Field {
 export interface FieldInstance {
   name: string;
   id: string;
-  field_type: FieldTypeClass;
+  field_type?: FieldTypeClass;
   value: string;
 }
 

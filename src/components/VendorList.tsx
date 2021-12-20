@@ -86,9 +86,8 @@ const VendorListBlock: FC = () => {
 
   return (
     <Box>
-      <PageHeader title="Vendors">
+      <PageHeader title="Vendors" desc="Manage your vendors">
         <Box sx={{ ml: 'auto', mr: 5 }}>
-          {/* <Button variant="btnSecondary" mr={2}>Secondary</Button> */}
           <Button variant="btnPrimary">+ New Vendor</Button>
         </Box>
       </PageHeader>

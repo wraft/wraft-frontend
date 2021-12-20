@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Flex, Box, Text } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { loadEntity } from '../utils/models';
 import { Member } from './OrgMemberForm';
@@ -41,11 +41,11 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadLayout = (token: string) => {
-    loadEntity(
-      token,
-      '/organisations/f4dc74cc-1cac-4215-be75-87850f1e23dc/roles',
-      loadDataSuccess,
-    );
+    // loadEntity(
+    //   token,
+    //   '/organisations/f4dc74cc-1cac-4215-be75-87850f1e23dc/roles',
+    //   loadDataSuccess,
+    // );
   };
 
   /**
@@ -62,7 +62,7 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadResources = (token: string) => {
-    loadEntity(token, 'resources', loadResourceDataSuccess);
+    loadEntity(token, 'role_groups', loadResourceDataSuccess);
   };
 
   /** Trigger Load on Init */
@@ -74,17 +74,42 @@ const OrgRolesList = () => {
     }
   }, [token]);
 
+  /**
+   * 
+   * @param r 
+   * @returns 
+   */
+   const ky = (r: any) => {
+    let pname = ''
+    Object.keys(r).map(function (key, index) {
+      // myObject[key] *= 2;
+      console.log('keys', key, index);
+      pname = key
+
+    });
+
+    // return pname;
+    if (pname) {
+      console.log('pname', r[`${pname}`]);
+    }
+    return pname;
+  }
+
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
         <Text as="h3" mb={3}>
           All Roles
         </Text>
-        <Box>
-          {contents &&
-            contents?.permissions?.length > 0 &&
-            contents?.permissions?.map((_m: Member) => <Text>Title</Text>)}
-        </Box>
+        <Flex>
+            {contents &&
+              contents?.permissions?.length > 0 &&
+              contents?.permissions?.map((r:any) => (
+                <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                  <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
+                </Box>
+              ))}
+          </Flex>
 
         {contents?.length < 1 && (
           <Box>

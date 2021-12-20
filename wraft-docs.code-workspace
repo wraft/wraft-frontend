@@ -7,7 +7,7 @@
 			"path": "../wraft-docs-api"
 		},
 		{
-			"path": "../wraft-editor-ts"
+			"path": "../editor-wraft"
 		}
 	],
 	"settings": {},
