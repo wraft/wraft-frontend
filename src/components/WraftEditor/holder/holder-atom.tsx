@@ -183,10 +183,14 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
                 const mentionClassName = matcher
                     ? matcher.mentionClassName ?? DEFAULT_MATCHER.mentionClassName
                     : DEFAULT_MATCHER.mentionClassName;
+                
+                    console.log('EMO', node.attrs, label)
+                
+                    const { named } = node.attrs
 
                 const attrs = {
                     ...extra.dom(node),
-                    class: name
+                    class: named?.length > 0
                         ? 'holder'
                         : 'no-holder',
                     [dataAttributeId]: id,
