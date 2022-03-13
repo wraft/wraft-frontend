@@ -145,7 +145,7 @@ export const createEntity = (
   onSuccess?: any,
 ) => {
 
-  console.log('🧶🧶', API_HOST, data);
+  console.log('🥷', API_HOST, data);
 
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'POST',

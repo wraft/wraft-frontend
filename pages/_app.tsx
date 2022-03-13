@@ -3,6 +3,11 @@ import { StoreProvider } from 'easy-peasy';
 import { AppProps } from 'next/app';
 
 import { ThemeProvider, Alert, Close } from 'theme-ui';
+
+import { AllStyledComponent } from '@remirror/styles/emotion';
+// import { AllStyledComponent } from '@remirror/styles/emotion';
+
+
 import theme from '../src/utils/theme';
 // import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 
@@ -12,6 +17,10 @@ import 'react-day-picker/lib/style.css';
 // import 'react-multi-carousel/lib/styles.css';
 // import "react-dropzone-uploader/dist/styles.css";
 import { ToastProvider } from 'react-toast-notifications';
+
+// import { pdfjs } from 'react-pdf';
+
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const GlobalStyle = createGlobalStyle` 
   .ProseMirror.remirror-editor {
@@ -47,14 +56,16 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
   return (
     <StoreProvider store={reduxStore}>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <ToastProvider
-          autoDismiss
-          autoDismissTimeout={1000}
-          components={{ Toast: MyCustomToast }}
-          placement="top-center">
-          <Component {...pageProps} />
-        </ToastProvider>
+        <AllStyledComponent>
+          <GlobalStyle />
+          <ToastProvider
+            autoDismiss
+            autoDismissTimeout={1000}
+            components={{ Toast: MyCustomToast }}
+            placement="top-center">
+            <Component {...pageProps} />
+          </ToastProvider>
+        </AllStyledComponent>
       </ThemeProvider>
     </StoreProvider>
   );

@@ -150,7 +150,8 @@ export const replaceVars = (body: string, maps: IField[], escaped: boolean) => {
  * @param body
  * @param maps
  */
-export const replaceTitles = (body: string, maps: IField[]) => {
+export const replaceTitles = (body: string, maps: any) => {
+  
   const resultVars = findVars(body, false);
   return replaceTitle(body, resultVars, maps);
 };
@@ -164,20 +165,28 @@ export const replaceTitles = (body: string, maps: IField[]) => {
 export const replaceTitle = (
   body: string,
   matches: string[],
-  maps: IField[],
+  maps: any,
 ): string => {
+
+  
+
   let localBody: string = body;
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 0) {
       matches.forEach(e => {
         let cleanNames = cleanName(e);
+        
         const m = findDefault(cleanNames, maps);
         if (m && m.value) {
+          console.log('🐴🐴  🧶  ');
           localBody = localBody.replace(`[${cleanNames}]`, m.value);
+        }else {
+          console.log('🐴🐴  🧶  ', m);
+
         }
       });
-    }
+    }    
     return localBody;
   } else {
     return body;

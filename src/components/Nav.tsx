@@ -99,16 +99,18 @@ const Nav = ({ navtitle }: INav) => {
                   // pt: 0,
                   // bg: 'gray.2',
                   fontSize: 0,
-                  color: 'gray.7',
+                  color: '#fff',
                   border: 'solid 1px',
                   verticleAlign: 'top',
-                  borderColor: 'gray.3',
+                  borderColor: 'green.9',
+                  bg: 'green.8',
                   mr: 2,
                   px: 2,
                   py: 1,
+                  mb: 2,
                   '&:hover': {
-                    bg: 'gray.1',
-                    color: 'gray.9',
+                    bg: 'green.4',
+                    color: 'green.9',
                     border: 'solid 1px',
                     borderColor: 'gray.2',
                   },
@@ -117,9 +119,10 @@ const Nav = ({ navtitle }: INav) => {
                   },
                   borderRadius: 4,
                 }}>
-                <Search width="16px" />
-                <Text as="span" sx={{ ml: 1, color: 'gray.5' }}>
-                  Search
+                {/* <Search width="16px" /> */}
+                
+                <Text as="span" sx={{ ml: 1, fontWeight: 500, color: 'white' }}>
+                  New Doc
                 </Text>
               </Clickable>
               {/* <Button variant="btnPrimaryIcon" sx={{ fontSize: 0, fontWeight: 600, pt: 1 }} onClick={() => toggleSearch()}>New</Button> */}

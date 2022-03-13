@@ -34,6 +34,7 @@ interface FieldFormProps {
 const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setShowForm, templates, showForm }: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
   const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
+  const [isReady, setIsReady] = useState<Boolean>(false);
 
   /**
    * Map form values to fields
@@ -73,71 +74,82 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
 
     setFieldMap(f);
     const simpleFieldMap = getInits(f);
-    console.log('🌿🎃🎃🌿 Submitted [2]', simpleFieldMap);
+    // console.log('🐴🐴 Submitted [2]', simpleFieldMap);
 
     onSaved(simpleFieldMap);
     closeModal();
   };
 
   useEffect(() => {
-    console.log('🌿🎃🎃🌿 fields [3.0]', fields)
+    // console.log('🐴  fields [3.0]', fields)
 
   }, [fields]);
 
+  useEffect(() => {    
+    if(fieldMap && fieldMap[0] && fieldMap[0]?.value){
+      console.log('🐴🐴  fields [4.0]', fieldMap)
+    }
+  }, [fieldMap]);
 
   function closeModal() {
     setShowForm(false);
   }
+  
 
   const yoFileTha = () => {
     onRefresh(fieldMap);
   }
 
   return (
-    <Box sx={{ bg: 'gray.0', p: 3, borderColor: 'gray.1' }}>
-      <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
+    <Box sx={{ p: 3, borderColor: 'gray.1', bg: '#F5F7FE' }}>
+      <Box>
+        <Text as="h6" variant='labelcaps'>Fields</Text>
+      </Box>
+
       <Box
-        p={3}
-        sx={{ bg: 'white', mt: 2, mb: 3, border: 'solid 1px', borderColor: 'gray.3' }}>
-        {fields &&
-          fields.map((x: any) => (
+        p={0}
+        sx={{ bg: 'white', mt: 1, mb: 3, border: 'solid 1px', borderColor: 'gray.3' }}>
+
+        {fieldMap &&
+          fieldMap.map((x: any) => (
             <Flex
               key={x.id}
 
               sx={{
-                pb: 2,
+                // bg: 'red.3',
+                py: 2,
+                px: 3,
                 borderBottom: 'solid 0.5px',
                 borderColor: 'gray.2',
-                mb: 2,
+                // mb: 2,
               }}>
               <Text
                 sx={{
-                  color: 'green.9',
-                  fontSize: 0,
-                  fontWeight: 'heading',
-                  fontFamily: 'Menlo, monospace',
+                  color: '#363e4980',
+                  fontSize: '16px',
+                  fontWeight: 300,
                 }}>
                 {x.name}
               </Text>
               <Text
                 sx={{
-                  fontSize: 0,
+                  fontSize: '16px',
+                  // color: 'green.9',
                   ml: 'auto',
-                  fontWeight: 'heading',
-                  fontFamily: 'Menlo, monospace',
+                  color: '#363E49',
+                  fontWeight: 300,
+                  // fontFamily: 'Menlo, monospace',
                 }}>
                 {x.value}
               </Text>
               <Text>{x.type}</Text>
             </Flex>
-          ))}          
+          ))}
       </Box>
-      <Button variant="btnSecondary" onClick={setShowForm}>
-        Fill Form ({fields && fields.size || 0})
-      </Button>
-      <Button type="button" variant="btnSecondary" onClick={yoFileTha}>
-        Yo
-      </Button>
+
+      {/* <Box sx={{ display: 'block' }}>
+        
+      </Box> */}
       <Modal isOpen={showForm} onClose={closeModal}>
         <Box
           as="form"

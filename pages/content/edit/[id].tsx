@@ -2,9 +2,18 @@ import { FC } from 'react';
 import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
-import Page from '../../../src/components/BlankFrame';
+
 import { useRouter } from 'next/router';
-import CreateForm from '../../../src/components/ContentForm';
+import dynamic from 'next/dynamic';
+
+import Page from '../../../src/components/BlankFrame';
+
+const CreateForm = dynamic(
+  () => import('../../../src/components/ContentForm'),
+  { ssr: false }
+);
+
+
 
 const Index: FC = () => {
   const router = useRouter();
