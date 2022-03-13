@@ -252,7 +252,7 @@ const theme: Theme = {
       borderRadius: 2,
     },
   },
-  styles: {    
+  styles: {
     root: {
       fontFamily: 'body',
       lineHeight: 'body',
@@ -338,12 +338,14 @@ const theme: Theme = {
     },
     editorBody: {
       '.remirror-theme h1': {
-        
+
       },
+
+      '.remirror-editor-wrapper': {},
       '.remirror-theme .ProseMirror': {
         outline: 'none',
         border: 'solid 1px #ddd',
-        // bg: 'red !important',
+        bg: 'red !important',
         // color: #721515 !important;
         pl: '4rem',
         pr: '4rem',
@@ -356,7 +358,12 @@ const theme: Theme = {
       h3: { color: "red.3", py: 3, fontFamily: 'body', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
       h4: { color: 'red.3', py: 3, fontFamily: 'body', lineHeight: 1.25, fontSize: 1 },
     },
-    editorBody2: {
+    editorBody2: {     
+      '.remirror-theme .remirror-editor': {
+        bg: 'red',
+        p: 5, 
+        
+      },
       '.remirror-theme h1': {
         fontFamily: 'editor2',
       },
@@ -365,13 +372,17 @@ const theme: Theme = {
         border: 'solid 1px',
         borderColor: 'gray.4',
         lineHeight: 1.65,
-        bg: 'gray.2',
+        bg: 'gray.0',
+        // p: 5,
+
+        // bg: 'red !important',
         // bg: 'gray.4',
         // color: #721515 !important;
-        pl: '4rem',
-        pr: '4rem',
-        pt: '4rem',
-        pb: '4rem',
+        // pl: '4rem',
+        // pr: '4rem',
+        // pt: '4rem',
+        // pb: '4rem',
+        // padding: '10rem',
         h1: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
         h2: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
         h3: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
@@ -474,6 +485,12 @@ const theme: Theme = {
     },
   },
   layout: {
+
+    boxHeading: {
+      pl: 3, pt: 2, 
+      width: '100%', borderTop: 'solid 1px', borderTopColor: 'gray.3', borderBottom: 'solid 1px', borderBottomColor: 'gray.3'
+    },
+
     modalContent: {
       p: 0,
       top: '10%',
@@ -716,6 +733,20 @@ const theme: Theme = {
     },
   },
   text: {
+
+    labelcaps: {
+      fontWeight: 300,
+      color: 'gray.6',
+      letterSpacing: '0.2px',
+      textTransform: 'uppercase',
+      fontSize: '10.24px',
+    },
+    sectionheading: {
+      fontWeight: 300,
+      fontSize: 1,
+      lineHeight: '24px',
+      pb: 2,
+    },
     caps: {
       pt: 0,
       pb: 1,

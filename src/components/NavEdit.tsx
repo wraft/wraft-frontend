@@ -10,6 +10,8 @@ import { API_HOST, checkUser } from '../utils/models';
 import { Bell, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
 import Dropdown from './common/Dropdown';
 
+import ModeToggle from './ModeToggle';
+
 // import { usePopper } from 'react-popper';
 
 export interface IUser {
@@ -73,8 +75,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               borderColor: 'gray.0',
               color: 'gray.8',
             }}>
-            <Flex>
-              <Link href="/contents" sx={{ mt: 3 }}>
+            <Flex >
+              <Link href="/contents" sx={{ pt: 4 }}>
                 <ArrowBack width="20px" />
               </Link>
               {navtitle && (
@@ -82,6 +84,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                   onClick={onToggleEdit}
                   variant="navtitle"
                   sx={{ p: 2, pt: 1, fontWeight: 'heading' }}>
+                    <Text as="span" sx={{ fontSize: '10.24px', textTransform: 'uppercase', fontWeight: 300, display: 'block' }}>Functionary Labs Pvt Ltd</Text>
                   {navtitle}
                 </Text>
               )}
@@ -95,6 +98,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               <Box variant="button" sx={{ mt: 1, pt: 2, ml: 3 }}>
                 <Bell width="20px" />
               </Box>
+              <ModeToggle variant="button" />
             </Flex>
             {!token && (
               <Link href="/login">

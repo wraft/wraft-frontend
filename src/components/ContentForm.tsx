@@ -11,9 +11,11 @@ import FieldForm from './FieldForm';
 import EditorWraft from './WraftEditor';
 import NavEdit from './NavEdit';
 import { Template, ContentState } from '../../src/utils/types';
-import { updateVars } from '../../src/utils';
+import { cleanName, findVars, replaceTitles, updateVars } from '../../src/utils';
 
 import { ErrorIcon, TickIcon } from './Icons';
+
+import Modal from './Modal';
 
 export interface ILayout {
   width: number;
@@ -111,6 +113,18 @@ export const EMPTY_MARKDOWN_NODE = {
   ],
 };
 
+interface FlowStateBlock {
+  state?: string
+  order?: number
+}
+
+const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
+  <Flex sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
+    <Box sx={{ mt: 2, fontSize: 0, width: '20px', height: '20px', borderRadius: '9rem', bg: 'green.1', textAlign: 'center', mr: 2 }}>{order}</Box>
+    <Text variant='labelcaps' sx={{ pt: 2 }}>{state}</Text>
+  </Flex>
+)
+
 const ALL_USERS = [
   { id: 'joe', label: 'Joe' },
   { id: 'sue', label: 'Sue' },
@@ -146,12 +160,17 @@ const Form = (props: IContentForm) => {
   const [body, setBody] = useState<any>();
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<Boolean>(false);
+
+  const [activeFlow, setActiveFlow] = useState<any>(null);
+
   const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
 
 
   const [insertable, setInsertable] = useState<any>();
   const [showDev, setShowDev] = useState<boolean>(false);
+  const [showTemplate, setTemplate] = useState<boolean>(true);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
   const [raw, setRaw] = useState<any>(null);
 
@@ -374,6 +393,19 @@ const Form = (props: IContentForm) => {
       setField(tFields);
       console.log('🧶🧶🧶 🌿🌿🌿 🎃 fields', tFields);
     }
+
+    const tFlow = res?.content_type?.flow;
+
+    // const [activeFlow, setActiveFlow] = useState<any>(null);
+
+    setActiveFlow(tFlow);
+
+    // if (tFields) {
+    //   setField(tFields);
+    //   console.log('🧶🧶🧶 🌿🌿🌿 🎃 fields', tFields);
+    // }
+
+
   };
 
   /**
@@ -412,13 +444,28 @@ const Form = (props: IContentForm) => {
     }
   }, [fields]);
 
+
+  const findTemplates = () => {
+
+  }
+
+  const updateTitle = (f: any) => {
+    // console.log('🐴  [updateTitle] tm', selectedTemplate);
+
+    setTitle(selectedTemplate?.title_template);
+    setValue('title', selectedTemplate?.title_template);
+  }
   /**
    * Field update eventbus
    * @param f 
    */
   const updateFields = (f: any) => {
-    console.log('🧶 [updateFields] fields', fields, f);
+    
     setFieldMap(f);
+
+    const newty = replaceTitles(selectedTemplate?.title_template, f);
+    console.log('🐴🐴  [updateFields] fields', newty);
+    updateTitle(f);
   }
 
   useEffect(() => {
@@ -433,6 +480,16 @@ const Form = (props: IContentForm) => {
       console.log('🎃🎃 ue [def]', def)
     }
   }, [def]);
+
+
+  useEffect(() => {
+    if (activeTemplate.length < 1) {
+      setTemplate(true);
+    } else {
+
+
+    }
+  }, [activeTemplate]);
 
   /**
    * Load Field data
@@ -456,6 +513,29 @@ const Form = (props: IContentForm) => {
     }
   };
 
+
+  /**
+   * Change Title on Fields change
+   * @param piece 
+   */
+  const changeTitle = (piece: any, maps: any) => {
+    console.log('🐴🐴  [maps] ', maps);
+    if (maps) {
+      // lazy matching
+      const tempTitle = piece.title_template;
+      const m = findVars(tempTitle, false);
+
+      // let namesList = [];
+      let newTitle = tempTitle;
+      m.map((x: any) => {
+        const cName = cleanName(x);
+        // localBody = localBody.replace(`[${cleanNames}]`, m.value);          
+        // newTitle = tempTitle.replace(`[${cName}]`, '')
+        console.log('🐴🐴  [changeTitle] ', cName, maps);
+      });
+    }
+  }
+
   /**
    * on select template
    * @param x
@@ -463,17 +543,22 @@ const Form = (props: IContentForm) => {
 
   const changeText = (x: any) => {
     setShowForm(!showForm);
+
+
     setActiveTemplate(x.id);
 
     textOperation(x);
 
+
+
+    // store template obj
+    setSelectedTemplate(x);
+
+    console.log('changeText', x);
+
+    changeTitle(x, maps);
     updateStuff(x, maps);
   };
-
-  
-  const updateTitle = () => {
-
-  }
 
   const passUpdates = (content, mappings, isClean) => {
     setStatus(0);
@@ -492,16 +577,11 @@ const Form = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any, _key?: any) => {
-    // 
-    // console.log('🎃🎃🎃 🧶 [content] [updateStuff] ', data, mapx);
-    // console.log('🎃🎃🎃 [updateStuff]', data);
-
     if (data?.data) {
 
       let respx = '';
 
       if (data?.serialized?.type === "doc") {
-        // console.log('🎃🎃🎃 [updateStuff] XoXo', data?.serialized);
         respx = data?.serialized;
       } else {
         const res = JSON.parse(data?.serialized?.data);
@@ -529,10 +609,10 @@ const Form = (props: IContentForm) => {
     // turn OFF appending blocks
     setCleanInsert(false);
 
-    console.log('🎃 doUpdate', state);
+    // console.log('🎃 doUpdate', state);
 
-    console.log('🔥', state);
-    setValue('state', '07f46fd5-8574-47bc-80d8-c4717c2a6ba7');
+    // console.log('🐴🐴🐴🐴', activeFlow?.states);
+    // setValue('state', activeFlow?.states[0].id);
 
     if (state.body) {
       // setDef(state.body)
@@ -547,7 +627,7 @@ const Form = (props: IContentForm) => {
 
     if (state.md) {
       setValue('body', state.md);
-      console.log('state 2', state.body)
+      // console.log('state 2', state.body)
       setValue('serialized', JSON.stringify(state.body));
     }
   };
@@ -562,6 +642,22 @@ const Form = (props: IContentForm) => {
     return initials;
   };
 
+  const updatePageTitle = (x: any) => {
+    const tempTitle = selectedTemplate?.title_template
+    console.log('🐴🐴 title upate', x, tempTitle);
+
+    const m = replaceTitles(tempTitle, x);
+
+    const actState = activeFlow?.states[0]?.id
+    console.log('🐴🐴  🧶 [updateFields] m', m, actState);
+
+    setValue('state', actState);
+
+    setValue('title', m);
+    
+    setTitle(m);
+  }
+
   /**
    * onSaved fields
    * @param defx 
@@ -569,18 +665,20 @@ const Form = (props: IContentForm) => {
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
     updateStuff(def, resx);
+    updatePageTitle(resx);
   }
 
   interface prepareMapProps {
     fields: any;
     defx: any;
   }
+
   /**
    * onSaved fields */
   const prepareMap = (fields, defx) => {
     // for all fields
     let obj: any = [];
-    
+
     if (fields && fields.length > 0) {
       fields.forEach(function (value: any) {
         const ff = defx.find((e: any) => e.name === value.name);
@@ -589,17 +687,22 @@ const Form = (props: IContentForm) => {
         obj.push(x);
       });
     }
-    
+
     setFieldMap(obj);
+  }
+
+  const closeModal = () => {
+    setTemplate(false);
   }
 
   return (
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
-      <Box sx={{ p: 4 }}>
+      <Box sx={{ p: 0 }}>
         <Flex>
           <Box
             as="form"
+            id="hook-form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
             <Box sx={{ display: showDev ? 'block' : 'none' }}>
@@ -620,15 +723,51 @@ const Form = (props: IContentForm) => {
             </Box>
 
             <Box
-              sx={{ display: showTitleEdit ? 'block' : 'none', flexGrow: 1, width: '100%', pl: 2, pt: 2 }}>
-              <Field
-                name="title"
-                label=""
-                defaultValue={body?.title}
-                register={register}
-              />
-              <Button type="button" ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button>
+              sx={{ bg: 'gray.0', borderBottom: 'solid 1px #ddd', p: 4, display: showTitleEdit ? 'block' : 'block', flexGrow: 1, width: '100%', pl: 2, pt: 2 }}>
+              <Flex>
+                <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
+                  <Field
+                    name="title"
+                    label=""
+                    placeholder='Document Name'
+                    sx={{
+                      '&': {
+                        width: '100%',
+                        display: 'block',
+                        bg: 'red',
+                      },
+                      'div': {
+                        width: '100%',
+                      },
+                      'button': {
+                        fontSize: 3,
+                      }
+                    }}
+                    defaultValue={body?.title}
+                    register={register}
+                  />
+                </Box>
+                <Box sx={{ width: '10%', pt: 2 }}>
+                  {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit" sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>Publish</Button> */}
+                </Box>
+              </Flex>
             </Box>
+
+            <Flex sx={{ pt: 3 }}>
+
+
+              <Box sx={{ mr: 4, ml: 'auto', textAlign: 'right' }}>
+                <Text as="h6" sx={{
+                  fontWeight: 100, letterSpacing: '0.2px', textTransform: 'uppercase', fontSize: '10.24px',
+                }}>Words</Text>
+                <Text as="h3" sx={{
+                  fontWeight: 300,
+                  fontSize: '16px',
+                  lineHeight: '24px',
+                  pb: 2,
+                }}>0</Text>
+              </Box>
+            </Flex>
 
             {!def && (
               <h1>Content Loading ..</h1>
@@ -636,13 +775,12 @@ const Form = (props: IContentForm) => {
             {def && (
               <Box
                 sx={{
-                  pl: 0,
-                  bg: 'gray.0',
+                  p: 0,
                   position: 'relative',
                   lineHeight: 1.5,
                   // fontFamily: 'courier',
                 }}>
-                <Button variant="secondary" type="button" onClick={() => setShowDev(!showDev)}>Dev</Button>
+                {/* <Button variant="secondary" type="button" onClick={() => setShowDev(!showDev)}>Dev</Button> */}
                 <EditorWraft
                   value={active}
                   editable={true}
@@ -670,7 +808,7 @@ const Form = (props: IContentForm) => {
               </Box>
             )}
 
-            <Button>Publish</Button>
+            {/* <Button>Publish</Button> */}
             <Box sx={{ display: 'none' }}>
               <Field
                 name="state"
@@ -696,40 +834,104 @@ const Form = (props: IContentForm) => {
 
             </Box>
           </Box>
-          <Box variant="plateRightBar" sx={{ ml: 4, width: '30%' }}>
-            <Flex sx={{ mb: 4 }}>
-              <Button type="submit">Publish</Button>
-            </Flex>
-            <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
-              Templates for <Text as="span" sx={{ borderBottom: 'solid 1px red', color: 'gray.9', display: 'block', fontSize: 1, fontWeight: 'body' }}>Changed</Text>
-            </Text>
-            <Box mt={2}>
-              {templates &&
-                templates.map((n: any) => (
-                  <Box
-                    key={n.id}
-                    sx={{
-                      bg: 'gray.0',
-                      pl: 3,
-                      border: 'solid 0.5px',
-                      borderColor: 'gray.2',
-                      mb: 1,
-                      pt: 2,
-                      pb: 3,
-                      pr: 3,
-                      width: '100%',
-                    }}
-                    onClick={() => changeText(n)}>
-                    <Text as="h6" sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
-                      {n.title}
-                    </Text>
-                    <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                      Description
-                    </Text>
-                  </Box>
-                ))}
-              {errors.exampleRequired && <Text>This field is required</Text>}
+
+          <Box variant="plateRightBar" sx={{ bg: '#FAFBFC', ml: 0, width: '30%', borderLeft: 'solid 1px #ddd', pt: 3 }}>
+
+            <Box sx={{ px: 3 }}>
+              <Flex sx={{ mb: 3 }}>
+                <Box sx={{ mr: 3 }}>
+                  <Text as="h6" variant='labelcaps'>Version</Text>
+                  <Flex>
+                    <Text as="h3" sx={{
+                      fontWeight: 'heading',
+                      fontSize: '16px',
+                      lineHeight: '24px'
+                    }}>v1.0</Text>
+                    <Text as="h6" sx={{
+                      fontWeight: 500, bg: 'green.1', ml: 2, color: 'green.9', px: 1, py: 1, borderRadius: '3px', letterSpacing: '0.2px', textTransform: 'uppercase', fontSize: '10.24px',
+                    }}>Draft</Text>
+                  </Flex>
+
+                </Box>
+                <Flex sx={{ ml: 'auto' }}>
+                  {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button> */}
+                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'green.0', color: 'green.8', borderColor: 'green.4', border: 'solid 1px' }} type="submit">Send</Button> */}
+                  {/* <Button ref={refSubmitButtom} sx={{ ml: 'auto', fontWeight: 600 }} type="submit">Publish</Button> */}
+                </Flex>
+              </Flex>
             </Box>
+
+            <Box>
+              <Box variant="layout.boxHeading">
+                <Text as="h3" variant='sectionheading'>Content</Text>
+              </Box>
+
+              {/* { console.log('templates', templates)} */}
+
+              <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+
+                {selectedTemplate?.id &&
+                  <Box>
+                    <Text as="h6" variant='labelcaps'>Template</Text>
+                    <Box sx={{ px: 0, py: 1 }}>
+                      <Box
+                        sx={{
+                          pl: 3, pt: 2, pb: 2,
+                          background: '#FFFFFF',
+                          border: '1px solid #E9ECEF',
+                        }}>
+                        <Text
+                          onClick={() => setTemplate(true)}
+                          as="h6" sx={{ fontSize: 1, mb: 0, fontWeight: 500, letterSpacing: '0.2px' }}>
+                          {selectedTemplate?.title}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                          {selectedTemplate?.content_type?.prefix}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Box>
+                }
+              </Box>
+            </Box>
+
+            <Modal isOpen={showTemplate} onClose={closeModal}>
+              <Box sx={{ p: 4 }}>
+                <Box sx={{ pb: 2 }}>
+                  <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
+                    Templates
+                  </Text>
+                </Box>
+                <Box mt={2}>
+                  {templates &&
+                    templates.map((n: any) => (
+                      <Box
+                        key={n.id}
+                        sx={{
+                          bg: 'gray.0',
+                          pl: 3,
+                          border: 'solid 0.5px',
+                          borderColor: 'gray.2',
+                          mb: 1,
+                          pt: 2,
+                          pb: 3,
+                          pr: 3,
+                          width: '100%',
+                        }}
+                        onClick={() => changeText(n)}>
+                        <Text as="h6" sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                          {n.title}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                          Description
+                        </Text>
+                      </Box>
+                    ))}
+                  {errors.exampleRequired && <Text>This field is required</Text>}
+                </Box>
+
+              </Box>
+            </Modal>
 
             <FieldForm
               activeTemplate={activeTemplate}
@@ -741,8 +943,48 @@ const Form = (props: IContentForm) => {
               onSaved={onSaved}
               onRefresh={onSaved}
             />
+
+            <Box>
+              <Box variant="layout.boxHeading">
+                <Text as="h3" variant='sectionheading'>Flow</Text>
+              </Box>
+
+              {/* { console.log('templates', templates)} */}
+
+              {activeFlow &&
+                <Box sx={{ position: 'relative' }}>
+                  <Box variant="layout.boxHeading" sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}>
+                    <Text as="span" sx={{ fontSize: 0, mr: 1 }}>{activeFlow?.flow?.name}</Text>
+                    <Text as="span" variant='labelcaps'>({activeFlow?.states.length})</Text>
+                  </Box>
+
+                  <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                    <Box>
+
+                      {console.log('rockrock', activeFlow)}
+
+
+                      <Box sx={{ px: 0, py: 1 }}>
+                        {activeFlow?.states.map((x: any) =>
+                          <>
+                            <FlowStateBlock state={x?.state} order={x?.order} />
+                          </>
+
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ bg: 'white', p: 3 }}>
+                    <Button form="hook-form" sx={{ fontWeight: 600, mr: 2, bg: 'primary', color: 'green.0', borderColor: 'green.9', border: 'solid 1px' }} type="submit">Publish</Button>
+                  </Box>
+                </Box>
+              }
+            </Box>
           </Box>
+
         </Flex>
+
       </Box>
     </Box>
   );

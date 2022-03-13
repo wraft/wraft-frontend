@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
+
 import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
 
@@ -83,6 +84,11 @@ const BlockTemplateListFrame: FC = () => {
       </Flex> */}
       <Box variant="layout.pageFrame">
         <Box mx={0} mb={3}>
+
+          {!blocks &&
+            <Text>You do not have any blok, click here to add</Text>
+          }
+
           {blocks && (
             <Table
               options={{
@@ -103,7 +109,7 @@ const BlockTemplateListFrame: FC = () => {
                     width: '30%',
                   },
                   {
-                    Header: 'Updated',
+                    Header: 'Action',
                     accessor: 'col4',
                     width: '10%',
                   },

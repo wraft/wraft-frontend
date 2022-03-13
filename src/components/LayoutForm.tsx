@@ -9,6 +9,7 @@ import {
   Button,
   Text,
   Image,
+  Link,
 } from 'theme-ui';
 // import {  } from 'theme-ui';
 
@@ -210,7 +211,7 @@ const Form = () => {
   };
 
   return (
-    <Container sx={{ px: 6}}>
+    <Container sx={{ px: 6 }}>
       <Flex>
         <Box py={3} mt={4}>
           <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -314,10 +315,13 @@ const Form = () => {
             {assets &&
               assets.length > 0 &&
               assets.map((m: Asset) => (
-                <Box key={m.id}>
-                  <Text>{m.name}</Text>
-                  <Text>{m.file}</Text>
-                  <Button onClick={() => deleteAsset(cId, m.id)}>X</Button>
+                <Box key={m.id} sx={{ p: 3, border: 'solid 1px', borderColor: 'gray.3', bg: 'white', mb: 1 }}>
+                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>{m.name}</Text>
+                  <Text as="p" sx={{ overflow: 'scroll', maxWidth: '50%' }}>http://localhost:4000{m.file}</Text>
+                  <Link target="_blank" href={`http://localhost:4000${m.file}`}>Download</Link>
+                  <Box>
+                    <Button sx={{ fontSize: 1, px: 1, py: 1, ml: 3, bg: 'white', color: 'red.4', border: 'solid 1px', borderColor: 'red.9' }} onClick={() => deleteAsset(cId, m.id)}>Delete</Button>
+                  </Box>
                 </Box>
               ))}
           </Box>

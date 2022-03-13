@@ -23,6 +23,7 @@ const UserLoginForm = () => {
   const [ready, setReady] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
+    console.log('funfun', data)
     setReady(true);
     userLogin(data, ProxyToken);
   };

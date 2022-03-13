@@ -252,14 +252,25 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
         mx: "auto",
         whiteSpace: "pre-wrap",
         boxShadow: 'none',
-        mt: 0,
-        lineHeight: 1.5, px: 0, fontSize: 2, m: 3,
+        mt: 0,        
+        lineHeight: 1.5, 
+        fontSize: 2,
+        m: 0,
+        px: 4,
         '.remirror-toolbar': {
           bg: 'gray.0'
         },
         '.remirror-role': {
           bg: 'gray.0',
           color: 'gray.9'
+        },
+        '&.remirror-editor': {
+          bg: 'blue',
+          p: 5,
+        },
+        '.remirror-editor': {
+          p: 5,
+          bg: 'blue'
         }
 
       }}
@@ -268,14 +279,22 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
         <ThemeProvider>
           <Remirror manager={manager} onChange={handleChange} editable={editable}
             classNames={[
-              css`                         
+              css`
+              .remirror-theme .ProseMirror {
+                background: red !important;
+              }
               &.ProseMirror { 
                 width: 100%;
-                background: red;
+                
+                padding: 100px;
                 box-shadow: none !important;
                 .remirror-role {
                   background: #000 !important;
                 } 
+
+                p:hover {
+                  color: #000;
+                }
 
                 .holder {
                   border-bottom:solid 2px #39bf3f;
@@ -310,8 +329,7 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
             ]}
           >
             {showToolbar ? <Toolbar items={toolbarItems} refocusEditor label='Top Toolbar' /> : ''}
-            <EditorComponent sx={{ bg: 'red.3' }} />
-            {/* <HolderSuggestComponent tokens={fieldtokens} /> */}
+            <EditorComponent />
             <HolderSuggestComponent tokens={fieldtokens}/>
           </Remirror>
         </ThemeProvider>
