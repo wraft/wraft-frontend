@@ -1,20 +1,24 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import ContentTypeForm from '../../../src/components/ContentTypeForm';
+import Theme from '../../../src/components/ThemeForm';
 import Page from '../../../src/components/PageFrame';
-import { Container } from 'theme-ui';
+import { Flex } from 'theme-ui';
+import Link from 'next/link';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit Layout - Wraft Docs</title>
+        <title>Create Theme - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <Page id="Modal" showFull={true}>
-        <Container>
-          <ContentTypeForm />
-        </Container>
+      <Page>
+        <Flex>
+          <Link href="/themes">
+            <a>Back</a>
+          </Link>
+          <Theme />
+        </Flex>
       </Page>
     </>
   );

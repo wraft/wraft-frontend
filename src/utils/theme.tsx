@@ -7,7 +7,7 @@ const theme: Theme = {
       'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
     editor1: 'Inter, sans-serif',
-    editor2: "'IBM Plex Mono', monospace",
+    editor2:  'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',//"'IBM Plex Mono', monospace",
     // font-family: 
     monospace: 'Menlo, monospace',
   },
@@ -125,18 +125,21 @@ const theme: Theme = {
       '#0c8599',
       '#0b7285',
     ],
-    teal: [
-      '#e6fcf5',
-      '#c3fae8',
-      '#96f2d7',
-      '#63e6be',
-      '#38d9a9',
-      '#20c997',
-      '#12b886',
-      '#0ca678',
-      '#099268',
-      '#087f5b',
-    ],
+    teal: ['#087f5b', '#3a8f6e', '#599f81', '#76ae95', '#91bea9', '#accebe', '#c8dfd3', '#e3efe9', '#ffffff'],
+    // teal: [
+    //   '#e6fcf5',
+    //   '#c3fae8',
+    //   '#96f2d7',
+    //   '#63e6be',
+    //   '#38d9a9',
+    //   '#20c997',
+    //   '#12b886',
+    //   '#0ca678',
+    //   '#099268',
+    //   '#087f5b',
+    // ],
+    
+    
     green: [
       '#ebfbee',
       '#d3f9d8',

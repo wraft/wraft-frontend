@@ -11,6 +11,10 @@ import { IFlow, ICreator } from './FlowList';
 import { ContentType } from '../utils/types';
 import PageHeader from './PageHeader';
 
+import { useToasts } from 'react-toast-notifications';
+
+import Router from 'next/router';
+
 import {
   loadEntity,
   createEntity,
@@ -115,8 +119,10 @@ const Form = () => {
   const [content, setContent] = useState<ContentType>();
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
+  const [themes, setThemes] = useState<Array<any>>([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
 
+  const { addToast } = useToasts();
   const router = useRouter();
   const cId: string = router.query.id as string;
 
@@ -162,6 +168,14 @@ const Form = () => {
     deleteEntity(`/content_type_fields/${deletableId}`, token);
   };
 
+
+  const deleteMe = (deletableId: string) => {
+    deleteEntity(`content_types/${deletableId}`, token);
+
+    addToast('Deleted Successfully', { appearance: 'success' });
+    Router.push(`/content-types`);
+  }
+
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
     setContent(res);
@@ -169,7 +183,7 @@ const Form = () => {
       console.log('content_type', res);
 
       setValue('name', res.content_type.name);
-      setValue('desc', res.content_type.decription);
+      setValue('desc', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('edit', res.content_type.id);
@@ -215,6 +229,23 @@ const Form = () => {
     loadEntity(token, 'flows', loadFlowsSuccess);
   };
 
+  // Themes
+
+  const loadThemeSuccess = (data: any) => {
+    const res: any = data.themes;
+    setThemes(res);
+  };
+
+  const loadThemes = (token: string) => {
+    loadEntity(token, 'themes', loadThemeSuccess);
+  };
+
+  const isNumeric = (str: any) => {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  }
+
   const formatFields = (fields: any) => {
     console.log('👙 fields', fields);
     let fieldsMap: any = [];
@@ -228,14 +259,29 @@ const Form = () => {
           key: item.name,
           field_type_id: fid,
         };
-        fieldsMap.push(it);
+
+        if (isNumeric(item.name)) {
+
+        } else {
+          fieldsMap.push(it);
+        }
       });
     return fieldsMap;
   };
 
   const onSuccess = (d: any) => {
-    console.log('d', d);
+    onDone(d);
   };
+
+
+  /**
+   * On Theme Created
+   */
+  const onDone = (_d: any) => {
+    addToast('Saved Successfully', { appearance: 'success' });
+    Router.push(`/content-types/edit/${_d?.id}`);
+  }
+
 
   const onSubmit = (data: any) => {
     const sampleD = {
@@ -246,6 +292,7 @@ const Form = () => {
       prefix: data.prefix,
       flow_id: data.flow_id,
       color: data.color,
+      theme_id: data.theme_id,
     };
 
     const isUpdate = data.edit != 0 ? true : false;
@@ -272,7 +319,7 @@ const Form = () => {
   };
 
   useEffect(() => {
-    loadFields();
+    loadFields();    
   }, [content]);
 
   // cId
@@ -281,6 +328,7 @@ const Form = () => {
     if (cId) {
       setValue('edit', cId);
       loadDataDetalis(cId, token);
+      loadThemes(token);
     }
   }, [cId, token]);
 
@@ -326,7 +374,7 @@ const Form = () => {
         <Box />
       </PageHeader>
       <Flex>
-        <Box sx={{ minWidth: '60ch'}}>
+        <Box sx={{ minWidth: '60ch' }}>
           <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
             <Flex variant="layout.pageFrame">
               <Box sx={{ flexGrow: 1 }}>
@@ -360,7 +408,7 @@ const Form = () => {
                     register={register}
                     label="Color"
                     name="color"
-                    defaultValue="#000"
+                    defaultValue=""
                     onChangeColor={onChangeFields}
                   />
                 </Box>
@@ -399,6 +447,7 @@ const Form = () => {
                       ))}
                   </Select>
                 </Box>
+
                 <Box sx={{ display: 'none' }}>
                   <Input
                     id="edit"
@@ -407,6 +456,25 @@ const Form = () => {
                     hidden={true}
                     ref={register({ required: true })}
                   />
+                </Box>
+
+                <Box px={0} pb={3}>
+                  <Label htmlFor="theme_id" mb={1}>
+                    Themes
+                  </Label>
+                  <Select
+                    id="theme_id"
+                    name="theme_id"
+                    defaultValue=""
+                    ref={register({ required: true })}>
+                    {themes &&
+                      themes.length > 0 &&
+                      themes.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                  </Select>
                 </Box>
               </Box>
               {errors.exampleRequired && <Text>This field is required</Text>}
@@ -426,6 +494,9 @@ const Form = () => {
             </Box>
           )}
 
+
+
+
           <FieldEditor
             fields={fields}
             fieldtypes={fieldtypes}
@@ -433,6 +504,11 @@ const Form = () => {
             addField={addField}
             onSave={onFieldsSave}
           />
+          <Box sx={{ m: 3 }}>
+            {cId &&
+              <Button type="button" variant="btnPrimaryLarge" onClick={() => deleteMe(cId)}>Delete</Button>
+            }
+          </Box>
         </Box>
       </Flex>
     </Box>

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
-import { loadEntity } from '../utils/models';
+import { loadEntity, updateEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import PageHeader from './PageHeader';
@@ -10,6 +10,15 @@ export interface ApprovalList {
   post_state: State;
   instance: Instance;
   approved: boolean;
+}
+
+export interface ApprovaSystemItem {
+  approval_system_id: string;
+  approved_at?: string;
+  flag: boolean;
+  id: string;
+  instance_id: string;
+  rejected_at?: string;
 }
 
 export interface Instance {
@@ -28,7 +37,9 @@ export interface State {
  * @returns
  */
 
-const ContentListCard: FC = () => {
+const ContentListCard: FC = (props: any) => {
+
+
   return (
     <Flex
       sx={{
@@ -41,13 +52,12 @@ const ContentListCard: FC = () => {
         sx={{ width: '30px', height: '30px', bg: 'blue.3', borderRadius: 99 }}
       />
       <Box sx={{ pl: 3 }}>
-        <Box sx={{ fontSize: 0, color: '#828282' }}>?</Box>
-        <Text>??</Text>
+        <Box sx={{ fontSize: 0, color: '#828282' }}>Doc { props.id}</Box>
+        <Text>{props?.instance_id}</Text>
       </Box>
       <Box sx={{ ml: 'auto' }}>
         <Flex>
-          <Box sx={{ pr: 4, pt: 1 }}>
-            <Text sx={{ fontSize: 0 }}>1h</Text>
+          <Box sx={{ pr: 4, pt: 1 }}>            
           </Box>
           <Box sx={{ pt: 2, mr: 4 }}>
             <Avatar
@@ -55,8 +65,8 @@ const ContentListCard: FC = () => {
               src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
             />
           </Box>
-          <Button sx={{ mr: 1 }}>Review</Button>
-          <Button>Approve</Button>
+          <Button variant="btnSecondary"  sx={{ mr: 1 }}>Review</Button>
+          <Button variant="btnPrimary" onClick={() => props.onApprove(props.instance_id)}>Approve</Button>
         </Flex>
       </Box>
     </Flex>
@@ -65,16 +75,16 @@ const ContentListCard: FC = () => {
 
 const Approvals = () => {
   const token = useStoreState((state) => state.auth.token);
-  const [contents, setContents] = useState<Array<ApprovalList>>([]);
+  const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   // const { addToast } = useToasts();
 
   const loadDataSuccess = (data: any) => {
-    const res: ApprovalList[] = data.approval_systems;
+    const res: ApprovaSystemItem[] = data.instances_to_approve;
     setContents(res);
   };
 
   const loadData = (t: string) => {
-    loadEntity(t, 'approval_systems', loadDataSuccess);
+    loadEntity(t, 'users/me', loadDataSuccess);
   };
 
   useEffect(() => {
@@ -82,6 +92,19 @@ const Approvals = () => {
       loadData(token);
     }
   }, [token]);
+
+
+  const onApproved = () => {  
+    console.log('onApproved')
+  }
+
+  /**
+   * Approve an Instance
+   */
+
+  const approveInstance = (id: string) => {
+    updateEntity(`/contents/${id}/approve`, {}, token, onApproved)
+  }
 
   return (
     <Box>
@@ -99,7 +122,7 @@ const Approvals = () => {
         <Box>
           {contents &&
             contents.length > 0 &&
-            contents.map((m: any) => <ContentListCard key={m.id} {...m} />)}
+            contents.map((m: any) => <ContentListCard key={m.id} {...m} onApprove={approveInstance}/>)}
         </Box>
       </Box>
     </Box>

@@ -15,7 +15,7 @@ import { Table } from './Table';
 
 // import { useStoreState } from 'easy-peasy';
 import { fetchAPI } from '../utils/models';
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo } from './Atoms';
 import Paginate from './Paginate';
 import PageHeader from './PageHeader';
 
@@ -64,55 +64,6 @@ export interface IFieldItem {
   type: string;
 }
 
-// const Tablet = (props: any) => (
-//   <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
-//     <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
-//   </Badge>
-// );
-
-// const ContentCardB = (props: IField) => {
-//   return (
-//     <Box key={props.content.instance_id} pb={3} pt={3}>
-//       <Flex sx={{ position: 'relative' }}>
-//         <Box variant="cTyeMark" bg={props.content_type.color} />
-//         <MenuItem
-//           variant="rel"
-//           href={`/content/[id]`}
-//           path={`content/${props.content.id}`}>
-//           <Text>{props.content.serialized.title}</Text>
-//         </MenuItem>
-//         <Box ml="auto" mr={3}>
-//           {props.state.state === 'Published' && (
-//             <Check width={16} color="#2b8a3e" />
-//           )}
-
-//           {props.state.state === 'Draft' && (
-//             <InfoCircle width={16} color="#5c7cfa" />
-//           )}
-//           <Text
-//             pt={1}
-//             sx={{
-//               pl: 1,
-//               fontSize: 0,
-//               color: 'gray.7',
-//               display: 'inline-block',
-//             }}>
-//             {props.state.state}
-//           </Text>
-//           <Flex>{/* props.content_type.name */}</Flex>
-//         </Box>
-//       </Flex>
-//       <Flex>
-//         <Tablet type={props.content.instance_id} pr={2} />
-//         <Text color="gray.6" sx={{ fontSize: '8px', pt: 2, pl: 1, pr: 1 }}>
-//           •
-//         </Text>
-//         <TimeAgo time={props.content.updated_at} />
-//       </Flex>
-//     </Box>
-//   );
-// };
-
 export interface IPageMeta {
   page_number: number;
   total_entries: number;
@@ -147,7 +98,7 @@ const FilterBlock: FC<FilterBlockProps> = ({ title, no }) => {
         p: 2,
         // borderRadius: '4px',
         // borderTop: 'solid 1px',
-        borderBottom: 'solid 1px',        
+        borderBottom: 'solid 1px',
         borderColor: 'gray.3',
         alignItems: 'flex-start',
         pl: 2,
@@ -194,14 +145,14 @@ const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
         <Text
           sx={{
-            fontSize: 0,
-            color: 'red.9',
-            fontFamily: 'courier',
-            fontWeight: 100,
+            fontSize: '12px',
+            color: 'gray.6',
+            // fontFamily: 'courier',
+            fontWeight: 300,
           }}>
           {id}
         </Text>
-        <Text as="h4" p={0} sx={{ m: 0, fontWeight: 500 }}>
+        <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500 }}>
           {name}
         </Text>
       </MenuItem>
@@ -274,12 +225,14 @@ const ContentList = () => {
           col1: (
             <Box
               sx={{
-                borderRadius: 99,
-                height: '32px',
-                width: '32px',
+                borderRadius: '4px',
+                height: '40px',
+                width: '5px',
+                border: 'solid 1px',
+                borderColor: 'gray.1',
                 bg: r.content_type.color,
-                mr: 2,
-                ml: 2,
+                mr: 0,
+                // ml: 2,
                 mt: 2,
               }}
             />
@@ -304,19 +257,33 @@ const ContentList = () => {
             />
           ),
           status: (
-            <Text
-              pt={2}
-              sx={{
-                pl: 1,
-                fontSize: 0,
-                color: 'gray.7',
-                display: 'inline-block',
-                textAlign: 'right',
-                width: 'auto',
-                textTransform: 'uppercase',
-              }}>
-              {r.state.state}
-            </Text>
+            <Flex sx={{ mr: 1, p: 2 }}>
+              <Box
+                sx={{
+                  width: '10px',
+                  height: '10px',
+                  bg: 'green.8',
+                  mt: 1,
+                  mr: 1,
+                  borderRadius: '3rem',
+                }}/>
+              <Text
+                pt={0}
+                sx={{
+                  pl: 1,
+                  pr: 2,
+                  mr: 3,
+                  fontSize: 0,
+                  fontWeight: 200,
+                  color: 'gray.8',
+                  display: 'inline-block',
+                  textAlign: 'right',
+                  width: 'auto',
+                  // textTransform: 'uppercase',
+                }}>
+                {r.state.state}
+              </Text>
+            </Flex>
           ),
         };
 
@@ -351,7 +318,7 @@ const ContentList = () => {
                       {
                         Header: '',
                         accessor: 'col1', // accessor is the "key" in the data
-                        width: '10%',
+                        width: 'auto',
                       },
                       {
                         Header: 'Name',
@@ -401,7 +368,12 @@ const ContentList = () => {
               <Text
                 as="h4"
                 variant="blockTitle"
-                sx={{ mb: 2, fontSize: 0, fontWeight: 'body', color: 'gray.6' }}>
+                sx={{
+                  mb: 2,
+                  fontSize: 0,
+                  fontWeight: 'body',
+                  color: 'gray.6',
+                }}>
                 Filter by Variant
               </Text>
               <Box
@@ -425,7 +397,12 @@ const ContentList = () => {
               <Text
                 as="h4"
                 variant="blockTitle"
-                sx={{ mb: 2, fontSize: 0, fontWeight: 'body', color: 'gray.6' }}>
+                sx={{
+                  mb: 2,
+                  fontSize: 0,
+                  fontWeight: 'body',
+                  color: 'gray.6',
+                }}>
                 Filter by State
               </Text>
               <Box
