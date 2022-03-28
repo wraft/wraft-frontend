@@ -70,7 +70,7 @@ const ManageSidebar = (_props: INav) => {
       }}>
       {listMenu &&
         listMenu.map((l: any) => (
-          <Box sx={{ mr: 4 }}>
+          <Box sx={{ mr: 4 }} key={l.name}>
             <NavLink href={l.path} variant="base1">
               <Flex
                 sx={{

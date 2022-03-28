@@ -156,7 +156,7 @@ const Index: FC = () => {
                 <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
                   <Text color="gray.7">Activities</Text>
                 </Box>
-                <ActivityFeed />
+                {/* <ActivityFeed /> */}
               </Box>
             </Flex>
           </Container>

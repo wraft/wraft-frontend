@@ -76,6 +76,12 @@ const listMenu = [
     logo: <Water width={20} />,
     path: '/blocks',
   },
+
+  {
+    name: 'Forms',
+    logo: <Water width={20} />,
+    path: '/forms',
+  },
   // {
   //   name: 'Flows',
   //   logo: <GitMerge width={20} />,

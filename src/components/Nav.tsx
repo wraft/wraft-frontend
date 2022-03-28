@@ -120,7 +120,7 @@ const Nav = ({ navtitle }: INav) => {
                   borderRadius: 4,
                 }}>
                 {/* <Search width="16px" /> */}
-                
+
                 <Text as="span" sx={{ ml: 1, fontWeight: 500, color: 'white' }}>
                   New Doc
                 </Text>
@@ -192,9 +192,14 @@ const Nav = ({ navtitle }: INav) => {
                           {...menu}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
-                            <Text as="p" sx={{ fontSize: 0, color: 'gray.6' }}>
-                              Manager
-                            </Text>
+
+                            {profile?.roles?.size > 0 && (
+                              <Text
+                                as="p"
+                                sx={{ fontSize: 0, color: 'gray.6' }}>
+                                {profile?.roles[0]?.name}
+                              </Text>
+                            )}
                           </Box>
                         </MenuItem>
                         <MenuItem

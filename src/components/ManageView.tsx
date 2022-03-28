@@ -33,7 +33,7 @@ const listMenu = [
   {
     name: 'Roles',
     logo: <PermLogo />,
-    path: '/manage/themes',
+    path: '/manage/roles',
   },
   {
     name: 'Fields',
