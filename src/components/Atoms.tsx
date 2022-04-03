@@ -17,28 +17,31 @@ export function convertUTCDateToLocalDate(date: Date) {
 
   return newDate;
 }
+interface TimeAgoProps {
+  time?: any;
+  ago?: boolean;
+}
 
-export const TimeAgo = (time: any) => {
+export const TimeAgo = (time: TimeAgoProps) => {
   const timetime = parseISO(time.time);
   const nw = Date.now();
   const timed = formatDistanceStrict(timetime, nw, { addSuffix: true });
 
-  let timed1 = timed.replace(' hours ago', 'h');
-  timed1 = timed1.replace(' days ago', 'd');
-  timed1 = timed1.replace(' years ago', 'y');
+  // let timed1 = timed.replace(' hours ago', 'hrs');
+  // timed1 = timed1.replace(' days ago', 'd');
+  // timed1 = timed1.replace(' years ago', 'y');
 
   return (
     <Text
       pl={0}
-      pt="3px"
       sx={{
-        fontSize: 0,
-        fontWeight: 400,
+        fontSize: '12px',
+        fontWeight: 500,
         '.hov': { opacity: 0 },
         ':hover': { '.hov': { opacity: 1 } },
       }}
       color="gray.6">
-      {timed1}
+      {timed}
     </Text>
   );
 };

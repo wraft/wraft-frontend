@@ -15,6 +15,7 @@ import {
 import { Label, Select } from 'theme-ui';
 import styled from 'styled-components';
 
+
 // import { useHelpers, useKeymap } from '@remirror/react';
 
 import { useRouter } from 'next/router';
@@ -22,7 +23,10 @@ import { useStoreState } from 'easy-peasy';
 
 import { useToasts } from 'react-toast-notifications';
 
+import { BracesVariable } from '@styled-icons/fluentui-system-regular/BracesVariable';
+
 import MarkdownEditor from './WraftEditor';
+
 
 import {
   loadEntity,
@@ -30,7 +34,8 @@ import {
   createEntity,
   updateEntity,
 } from '../utils/models';
-import PageHeader from './PageHeader';
+
+import NavEdit from './NavEdit';
 
 const Tag = styled(Box)`
   padding: 5px;
@@ -319,19 +324,15 @@ const Form = () => {
 
   return (
     <Box>
-      <PageHeader title={`${cId ? 'Edit' : 'New '} Template`} desc="Templates">
-        <Box />
-      </PageHeader>
-      <Box
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        py={3}
-        mt={4}
-        variant="w80">
-        <Box mx={4} mb={3} variant="w100">
+      <NavEdit/>
+      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
+        <Box>
           <Flex>
-            <Box mr={2} variant="layout.w70" sx={{ maxWidth: '85ch'}}>
-              <Box sx={{ px: 4}}>
+            <Box
+              // as="form"
+              // onSubmit={handleSubmit(onSubmit)}
+              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}>
+              <Box sx={{ px: 4 }}>
                 <Field
                   name="title"
                   label="Name"
@@ -375,10 +376,17 @@ const Form = () => {
                 )}
               </Box>
             </Box>
-            <Box px={4} mr={3} variant="w60">
+            <Box
+              px={4}
+              variant="plateRightBar"
+              sx={{
+                bg: '#FAFBFC',
+                width: '100%',
+                borderLeft: 'solid 1px #ddd',
+              }}>
               {varias && varias.fields && (
-                <Box sx={{ mb: 3 }}>
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3}}>
+                <Box sx={{ mb: 3, pt: 3 }}>
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
                     <Text as="h4" mb={2} sx={{ mb: 1 }}>
                       Content Type
                     </Text>
@@ -398,51 +406,52 @@ const Form = () => {
                     </Select>
                   </Box>
 
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3}}>
-
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
                     <Text as="h4" mb={2} sx={{ mb: 3 }}>
                       Variables
                     </Text>
                     {varias.fields &&
                       varias.fields.map((k: FieldT) => (
-                        <Box
+                        <Flex
                           sx={{
                             p: 1,
                             border: 'solid 1px',
                             borderBottom: 0,
-                            borderColor: 'teal.5',
+                            borderColor: 'gray.2',
                             bg: 'teal.8',
                             px: 3,
                             ':last-child': {
                               borderBottom: 'solid 1px',
-                              borderColor: 'teal.5',
+                              borderColor: 'gray.2',
                             },
                           }}
                           as="p"
                           key={k.id}
                           onClick={() => insertToken(k)}>
                           {k.name}
-                        </Box>
+                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7'}}}>
+                            <BracesVariable width={16} />
+                          </Box>
+                        </Flex>
                       ))}
                   </Box>
                 </Box>
               )}
 
-              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2}}>
+              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2 }}>
                 <Text as="h4" mb={2} sx={{ mb: 3 }}>
                   Blocks
                 </Text>
                 {blocks &&
                   blocks.map((k: BlockTemplate) => (
                     <Box
-                      
                       key={k.id}
                       onClick={() => insertBlock(k)}
                       sx={{
                         pl: 3,
                         border: 'solid 0.5px',
-                        borderColor: 'gray.2',
-                        bg: 'teal.6',
+                        borderColor: 'gray.3',
+                        bg: 'gray.1',
                         mb: 1,
                         pt: 2,
                         pb: 3,

@@ -957,7 +957,7 @@ const Form = (props: IContentForm) => {
               </Box>
             </Box>
 
-            <Modal isOpen={showTemplate} onClose={closeModal}>
+            <Modal isOpen={!cId && showTemplate} onClose={closeModal}>
               <Box sx={{ p: 4 }}>
                 <Box sx={{ pb: 2 }}>
                   <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>

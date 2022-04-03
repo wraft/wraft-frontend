@@ -272,7 +272,7 @@ const EditorWraft: FC<EditorProps> = ({
         lineHeight: 1.5,
         fontSize: 2,
         m: 0,
-        px: 4,
+        px: 0,
         '.remirror-toolbar': {
           bg: 'gray.0',
         },
