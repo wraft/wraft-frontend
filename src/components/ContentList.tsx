@@ -1,21 +1,17 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Text,
-  Button,
   Avatar,
   Flex,
-  // Badge,
   Container,
   Spinner,
 } from 'theme-ui';
-import MenuItem from './NavLink';
-// import ContentCard from './ContentCard';
+
 import { Table } from './Table';
 
-// import { useStoreState } from 'easy-peasy';
 import { fetchAPI } from '../utils/models';
-import { TimeAgo } from './Atoms';
+import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
 import Paginate from './Paginate';
 import PageHeader from './PageHeader';
 
@@ -71,95 +67,6 @@ export interface IPageMeta {
   contents?: any;
 }
 
-interface BoxWrapProps {
-  id: string;
-  name: string;
-  xid: string;
-}
-
-interface FilterBlockProps {
-  title: string;
-  no: number;
-}
-
-/**
- * Filter Atom
- * @param param0
- * @returns
- */
-const FilterBlock: FC<FilterBlockProps> = ({ title, no }) => {
-  return (
-    <Flex
-      sx={{
-        bg: 'gray.0',
-        ':hover': {
-          bg: 'gray.1',
-        },
-        p: 2,
-        // borderRadius: '4px',
-        // borderTop: 'solid 1px',
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
-        alignItems: 'flex-start',
-        pl: 2,
-      }}>
-      {/* <Box
-        sx={{
-          borderRadius: '1rem',
-          ml: 0,
-          mr: 2,
-          mt: 1,
-          width: '10px',
-          bg: 'red.3',
-          height: '10px',
-        }}
-      /> */}
-      <Text as="h4" sx={{ fontSize: 1, fontWeight: 600 }}>
-        {title}
-        <Text
-          as="span"
-          sx={{
-            ml: 1,
-            // pl: 2,
-            bg: 'gray.3',
-            fontSize: '11px',
-            fontWeight: 'heading',
-            color: 'gray.7',
-            // border: 'solid 0.5px',
-            borderColor: 'gray.5',
-            p: 1,
-            borderRadius: '3rem',
-            px: '4px',
-            py: '1px',
-          }}>
-          {no}
-        </Text>
-      </Text>
-    </Flex>
-  );
-};
-
-const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
-  return (
-    <Box sx={{ pt: 1, pb: 2 }}>
-      <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
-        <Text
-          sx={{
-            fontSize: '12px',
-            color: 'gray.6',
-            // fontFamily: 'courier',
-            fontWeight: 300,
-          }}>
-          {id}
-        </Text>
-        <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500 }}>
-          {name}
-        </Text>
-      </MenuItem>
-    </Box>
-  );
-};
-
 /**
  * Content List
  * ============
@@ -170,6 +77,7 @@ const ContentList = () => {
   // const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
+  const [variants, setVariants] = useState<Array<any>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
@@ -178,7 +86,23 @@ const ContentList = () => {
 
   useEffect(() => {
     loadData(1);
+    loadVariants();
   }, []);
+
+  /**
+   * Load Content Types
+   */
+  const loadVariants = () => {
+    fetchAPI('content_types')
+      .then((data: any) => {
+        setLoading(true);
+        const res: any = data.content_types;
+        setVariants(res);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
+  };
 
   useEffect(() => {
     if (page) {
@@ -186,6 +110,10 @@ const ContentList = () => {
     }
   }, [page]);
 
+  /**
+   * Load Contents with pagination
+   * @param page
+   */
   const loadData = (page: number) => {
     const pageNo = page > 0 ? `?page=${page}` : '';
     fetchAPI(`contents${pageNo}`)
@@ -200,17 +128,6 @@ const ContentList = () => {
         setLoading(true);
       });
   };
-
-  /** DELETE content
-   * @TODO move to inner page [design]
-   */
-  // const delData = (id: string) => {
-  //   deleteEntity(`contents/${id}`, token);
-  // };
-
-  // const doDelete = (id: string) => {
-  //   delData(id);
-  // };
 
   const changePage = (_e: any) => {
     console.log('page', _e?.selected);
@@ -253,37 +170,11 @@ const ContentList = () => {
             <Avatar
               mt={2}
               width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
+              src={r.creator?.profile_pic}
             />
           ),
           status: (
-            <Flex sx={{ mr: 1, p: 2 }}>
-              <Box
-                sx={{
-                  width: '10px',
-                  height: '10px',
-                  bg: 'green.8',
-                  mt: 1,
-                  mr: 1,
-                  borderRadius: '3rem',
-                }}/>
-              <Text
-                pt={0}
-                sx={{
-                  pl: 1,
-                  pr: 2,
-                  mr: 3,
-                  fontSize: 0,
-                  fontWeight: 200,
-                  color: 'gray.8',
-                  display: 'inline-block',
-                  textAlign: 'right',
-                  width: 'auto',
-                  // textTransform: 'uppercase',
-                }}>
-                {r.state.state}
-              </Text>
-            </Flex>
+            <StateBadge name={r.state.state} color="green.3"/>            
           ),
         };
 
@@ -296,11 +187,7 @@ const ContentList = () => {
 
   return (
     <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents" desc="All Official Documents">
-        <Box sx={{ ml: 'auto', mr: 0, pt: 1, mb: 1, mt: 1 }}>
-          <Button variant="btnPrimary">+ New Doc</Button>
-        </Box>
-      </PageHeader>
+      <PageHeader title="Documents" desc="All Official Documents"/>        
       {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
         <Flex>
@@ -345,20 +232,6 @@ const ContentList = () => {
                   }}
                 />
               )}
-              {/* <Box
-              sx={{
-                border: 'solid 1px',
-                borderColor: 'gray.3',
-                paddingLeft: '0',
-                borderRadius: 4,
-                // pl: 3,
-              }}>
-              {contents &&
-                contents.length > 0 &&
-                contents.map((m: any) => (
-                  <ContentCard key={m.content.id} doDelete={doDelete} {...m} />
-                ))}
-            </Box> */}
             </Box>
             <Paginate changePage={changePage} {...pageMeta} />
             {total}
@@ -386,11 +259,10 @@ const ContentList = () => {
                     borderBottom: 0,
                   },
                 }}>
-                <FilterBlock title="Proposal" no={32} />
-                <FilterBlock title="Contracts" no={32} />
-                <FilterBlock title="Invoices" no={32} />
-                <FilterBlock title="Agreements" no={32} />
-                <FilterBlock title="Offer Letters" no={32} />
+                {variants &&
+                  variants.map((v: any) => (
+                    <FilterBlock title={v?.name} no={32} {...v} />
+                  ))}
               </Box>
             </Box>
             <Box variant="layout.plateBox" sx={{ border: 0 }}>
@@ -415,10 +287,10 @@ const ContentList = () => {
                     borderBottom: 0,
                   },
                 }}>
-                <FilterBlock title="Draft" no={32} />
-                <FilterBlock title="In Review" no={32} />
-                <FilterBlock title="Published" no={32} />
-                <FilterBlock title="Archived" no={32} />
+                <FilterBlock title="Draft" no={32}  color="blue.3"/>
+                <FilterBlock title="In Review" no={32} color="orange.3"/>
+                <FilterBlock title="Published" no={32} color="green.3"/>
+                <FilterBlock title="Archived" no={32} color="purple"/>
               </Box>
             </Box>
           </Box>

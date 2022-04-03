@@ -56,7 +56,13 @@ const UserNav = () => {
   }, []);
 
   return (
-    <Box sx={{ bg: 'gray.0' }}>
+    <Box
+      sx={{
+        bg: 'gray.0',
+        borderBottom: 'solid 1px',
+        borderColor: 'gray.3',
+        py: 2,
+      }}>
       <Container>
         <Flex sx={{ py: 3, px: 4 }}>
           <Box>
@@ -69,14 +75,13 @@ const UserNav = () => {
                 bg: 'red',
                 display: 'block',
                 svg: {
-
                   color: 'green',
                   display: 'block',
                   path: { fill: 'yellow' },
                   // fill: 'gray.9'
                 },
               }}>
-              <BrandLogo width="6rem" height="1rem" />
+              <BrandLogo width="6rem" height="2rem" />
             </Link>
           </Box>
 
@@ -85,11 +90,25 @@ const UserNav = () => {
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2 }}>Join Wraft</Text>
+                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                      Join Wraft
+                    </Text>
+                  </Link>
+                  <Link href="/signup">
+                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                      Pricing
+                    </Text>
+                  </Link>
+
+                  <Link href="/signup">
+                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                      Features
+                    </Text>
                   </Link>
                   <Link href="/login">
                     <Text
                       sx={{
+                        fontSize: 2,
                         bg: 'blue',
                         color: 'white',
                         fontWeight: 'bold',

@@ -20,6 +20,8 @@ import CommentForm from './CommentForm';
 import { createEntity, loadEntity, deleteEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
+import Nav from './NavEdit';
+
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -242,8 +244,9 @@ const ContentDetail = () => {
   };
 
   return (
-    <Box py={3}>
-      <Box sx={{ position: 'relative', pl: 4, pt: 2 }}>
+    <Box py={0}>
+      <Nav navtitle={ contents?.content?.title } />
+      <Box sx={{ position: 'relative', pl: 4, pt: 0 }}>
         {loading && (
           <Box
             sx={{
@@ -263,45 +266,62 @@ const ContentDetail = () => {
               sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
               <Flex
                 sx={{
-                  px: 4,
-                  py: 4,
-                  pl: '115px',
-                  // border: 'solid 1px',
-                  // borderColor: 'gray.3',
+                  // px: 4,
+                  // py: 3,
+                  py: 3,
+                  pb: 3,
+                  // pl: '115px',
+                  borderBottom: 'solid 1px',
+                  borderColor: 'gray.3',
+                  mb: 3,
                 }}>
                 <Box>
-                  <Text sx={{ fontSize: 3 }}>
+                  <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
                     {contents.content.serialized.title}
                   </Text>
-                  {/* <Text
-                  sx={{
-                    fontSize: 0,
-                    color: 'gray.6',
-                  }}>{`Updated ${contents.content.inserted_at}`}</Text> */}
                   <Box
                     sx={{
-                      // pt: 1,
-                      // pl: 2,
                       fontSize: 0,
                       color: 'gray.6',
                     }}>
-                    <TimeAgo time={contents.content.inserted_at} />
+                    <TimeAgo time={contents.content.inserted_at} /> ago
                   </Box>
                 </Box>
-                <Box
-                  sx={{
-                    pt: 1,
-                    pl: 2,
-                    fontSize: 0,
-                    ml: 'auto',
-                    color: 'gray.6',
-                  }}>
-                  <MenuItem
-                    variant="btnPrimary"
-                    href={`/content/edit/[id]`}
-                    path={`/content/edit/${contents.content.id}`}>
-                    <Pencil size={20} color="primary" />
-                  </MenuItem>
+                <Box sx={{ ml: 'auto' }}>
+                  <Box
+                    sx={{
+                      pt: 1,
+                      pb: 0,
+                      mb: 0,
+                      borderRadius: 99,
+                      px: 2,
+                      fontSize: 0,
+                      ml: 'auto',
+                      color: 'gray.9',
+                      border: 'solid 1px #ddd',
+                      svg: {
+                        fill: 'gray.6',
+                      },
+                    }}>
+                    <MenuItem
+                      variant="btnPrimary"
+                      href={`/content/edit/[id]`}
+                      path={`/content/edit/${contents.content.id}`}>
+                      <Box>
+                        <Pencil size={22} height={22} />
+                        <Text
+                          // as="span"
+                          sx={{
+                            mx: 2,
+                            mt: 0,
+                            fontWeight: 'bold',
+                            fontSize: 1,
+                          }}>
+                          Edit
+                        </Text>
+                      </Box>
+                    </MenuItem>
+                  </Box>
                 </Box>
               </Flex>
               <Box sx={{ mb: 4 }}>
@@ -505,7 +525,7 @@ const ContentDetail = () => {
                 </Box>
               </Box>
 
-              <Box sx={{ pb: 3}}>
+              <Box sx={{ pb: 3 }}>
                 <Box variant="layout.boxHeading">
                   <Text as="h3" variant="sectionheading">
                     Discuss
@@ -523,7 +543,15 @@ const ContentDetail = () => {
                 </Box>
               </Box>
 
-              <Box variant="plateSide" sx={{ pl: 3, flexGrow: 1, mr: 4, borderTop: 'solid 1px', borderColor: 'gray.3' }}>
+              <Box
+                variant="plateSide"
+                sx={{
+                  pl: 3,
+                  flexGrow: 1,
+                  mr: 4,
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                }}>
                 <Flex
                   sx={{
                     pt: 3,

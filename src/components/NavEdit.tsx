@@ -76,8 +76,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               color: 'gray.8',
             }}>
             <Flex >
-              <Link href="/contents" sx={{ pt: 4 }}>
-                <ArrowBack width="20px" />
+              <Link href="/contents" sx={{ pt: 0 }}>
+                <ArrowBack width={22} />
               </Link>
               {navtitle && (
                 <Text
@@ -96,7 +96,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
           <Flex>
             <Flex>
               <Box variant="button" sx={{ mt: 1, pt: 2, ml: 3 }}>
-                <Bell width="20px" />
+                <Bell width={22} />
               </Box>
               <ModeToggle variant="button" />
             </Flex>

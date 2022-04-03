@@ -7,7 +7,6 @@ import { ThemeProvider, Alert, Close } from 'theme-ui';
 import { AllStyledComponent } from '@remirror/styles/emotion';
 // import { AllStyledComponent } from '@remirror/styles/emotion';
 
-
 import theme from '../src/utils/theme';
 // import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 

@@ -1,5 +1,7 @@
 import { Button, useColorMode } from "theme-ui";
 
+import { Moon, Sun } from '@styled-icons/boxicons-regular';
+
 const IconMode = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -20,10 +22,11 @@ const ModeToggle = (props: any) => {
     <Button      
       {...props}
       sx={{
+        p: 0,
         bg: 'gray.0',
-        borderColor: 'gray.1',
+        // borderColor: 'gray.1',
         svg: {
-          fill: 'gray.4'
+          fill: 'gray.8'
         }
       }}
       onClick={() => {
@@ -31,7 +34,10 @@ const ModeToggle = (props: any) => {
         setMode(next);
       }}
     >
-      <IconMode />
+
+{mode === "dark" ? <Sun width={22}/> : <Moon width={22}/> }
+      
+      {/* <IconMode /> */}
     </Button>
   );
 };

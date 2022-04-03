@@ -5,7 +5,6 @@ import Page from '../src/components/PageFrame';
 import { useStoreState } from 'easy-peasy';
 import UserNav from '../src/components/UserNav';
 import UserHome from '../src/components/UserHome';
-import ActivityFeed from '../src/components/ActivityFeed';
 // import ApprovalList from '../src/components/ApprovalList';
 import ContentTypeDashboard from '../src/components/ContentTypeDashboard';
 

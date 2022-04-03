@@ -110,7 +110,7 @@ const ApprovalFormBase = ({
             ref={register({ required: true })}>
             {states &&
               states.map((s: any) => (
-                <option value={s.state.id}>{s.state.state}</option>
+                <option key={s.state.id} value={s.state.id}>{s.state.state}</option>
               ))}
           </Select>
         </Box>
@@ -124,7 +124,7 @@ const ApprovalFormBase = ({
             ref={register({ required: true })}>
             {states &&
               states.map((s: any) => (
-                <option value={s.state.id}>{s.state.state}</option>
+                <option key={s.state.id} value={s.state.id}>{s.state.state}</option>
               ))}
           </Select>
         </Box>

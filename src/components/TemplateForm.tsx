@@ -20,7 +20,6 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
-
 import { useToasts } from 'react-toast-notifications';
 
 import MarkdownEditor from './WraftEditor';
@@ -31,6 +30,7 @@ import {
   createEntity,
   updateEntity,
 } from '../utils/models';
+import PageHeader from './PageHeader';
 
 const Tag = styled(Box)`
   padding: 5px;
@@ -41,7 +41,6 @@ const Tag = styled(Box)`
   padding-top: 8px;
   padding-bottom: 8px;
   background-color: #d7f7e2;
-  max-width: 60%;
   font-family: monospace;
   font-weight: bold;
   color: #3d5039;
@@ -75,8 +74,8 @@ const Form = () => {
   const cId: string = router.query.id as string;
 
   const onCreated = () => {
-    console.log('[onCreated]')
-  }
+    console.log('[onCreated]');
+  };
 
   /**
    * Form Submit
@@ -107,7 +106,7 @@ const Form = () => {
         formValues,
         `content_types/${data.parent}/data_templates`,
         token,
-        onCreated
+        onCreated,
       );
       addToast('Created Successfully', { appearance: 'success' });
       setLoading(false);
@@ -202,7 +201,7 @@ const Form = () => {
    * @param data
    */
   const doUpdate = (data: any) => {
-    console.log('[When Editor is updated]', data)
+    console.log('[When Editor is updated]', data);
 
     if (data.md) {
       setValue('body', data.md);
@@ -285,14 +284,13 @@ const Form = () => {
   const [insertable, setInsertable] = useState<any>();
   const [cleanIns, setCleanIns] = useState<boolean>(false);
 
-
-const ALL_USERS = [
-  { id: 'joe', label: 'Joe' },
-  { id: 'sue', label: 'Sue' },
-  { id: 'pat', label: 'Pat' },
-  { id: 'tom', label: 'Tom' },
-  { id: 'jim', label: 'Jim' },
-];
+  const ALL_USERS = [
+    { id: 'joe', label: 'Joe' },
+    { id: 'sue', label: 'Sue' },
+    { id: 'pat', label: 'Pat' },
+    { id: 'tom', label: 'Tom' },
+    { id: 'jim', label: 'Jim' },
+  ];
 
   const insertToken = (token: any) => {
     const test = {
@@ -320,132 +318,156 @@ const ALL_USERS = [
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}
-      variant="w80">
-      <Box pl={4}>
-        <Text mb={3}>{cId ? 'Edit' : 'New'} Template</Text>
-      </Box>
-      <Box mx={4} mb={3} variant="w100">
-        <Flex>
-          <Box mr={2} variant="layout.w70">
-            <Field
-              name="title"
-              label="Name"
-              defaultValue=""
-              register={register}
-            />
-            <Box>
-              <Label htmlFor="parent" mb={1}>
-                Content Type
-              </Label>
-              <Select
-                id="parent"
-                name="parent"
-                defaultValue="Parent ID"
-                onChange={(e) => ctypeChange(e)}
-                ref={register({ required: true })}>
-                {ctypes &&
-                  ctypes.length > 0 &&
-                  ctypes.map((m: any) => (
-                    <option value={m.id} key={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-              </Select>
-            </Box>
-            <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
-            <Field
-              name="title_template"
-              label="Title Template"
-              defaultValue=""
-              register={register}
-            />
-            <Box sx={{ display: 'none' }}>
-              <FieldText
-                name="data"
-                label="Text Template"
-                defaultValue={''}
-                register={register}
-              />
-              <FieldText
-                name="serialized"
-                label="Text Template"
-                defaultValue={''}
-                register={register}
-              />
-            </Box>
-            <Box py={4}>
-
-              {editorReady &&
-                <MarkdownEditor
-                  onUpdate={doUpdate}
-                  starter={tokens}
-                  cleanInsert={cleanInsert}
-                  token={tokens}
-                  editable={true}
-                  variables={varias}
-                  searchables={varias}
-                  showToolbar={true}
+    <Box>
+      <PageHeader title={`${cId ? 'Edit' : 'New '} Template`} desc="Templates">
+        <Box />
+      </PageHeader>
+      <Box
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        py={3}
+        mt={4}
+        variant="w80">
+        <Box mx={4} mb={3} variant="w100">
+          <Flex>
+            <Box mr={2} variant="layout.w70" sx={{ maxWidth: '85ch'}}>
+              <Box sx={{ px: 4}}>
+                <Field
+                  name="title"
+                  label="Name"
+                  defaultValue=""
+                  register={register}
                 />
-              }
+                <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
+                <Field
+                  name="title_template"
+                  label="Title Template"
+                  defaultValue=""
+                  register={register}
+                />
+              </Box>
+              <Box sx={{ display: 'none' }}>
+                <FieldText
+                  name="data"
+                  label="Text Template"
+                  defaultValue={''}
+                  register={register}
+                />
+                <FieldText
+                  name="serialized"
+                  label="Text Template"
+                  defaultValue={''}
+                  register={register}
+                />
+              </Box>
+              <Box py={4}>
+                {editorReady && (
+                  <MarkdownEditor
+                    onUpdate={doUpdate}
+                    starter={tokens}
+                    cleanInsert={cleanInsert}
+                    token={tokens}
+                    editable={true}
+                    variables={varias}
+                    searchables={varias}
+                    showToolbar={true}
+                  />
+                )}
+              </Box>
             </Box>
-          </Box>
-          {/* <Box mr={2} variant="w70"></Box> */}
-          <Box px={4} mr={3} variant="w40">
-            {varias && varias.fields && (
-              <Box>
-                <Text mb={2}>Variables</Text>
-                {varias.fields &&
-                  varias.fields.map((k: FieldT) => (
-                    <Tag key={k.id} onClick={() => insertToken(k)}>
-                      {k.name}
-                    </Tag>
+            <Box px={4} mr={3} variant="w60">
+              {varias && varias.fields && (
+                <Box sx={{ mb: 3 }}>
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3}}>
+                    <Text as="h4" mb={2} sx={{ mb: 1 }}>
+                      Content Type
+                    </Text>
+                    <Select
+                      id="parent"
+                      name="parent"
+                      defaultValue="Parent ID"
+                      onChange={(e) => ctypeChange(e)}
+                      ref={register({ required: true })}>
+                      {ctypes &&
+                        ctypes.length > 0 &&
+                        ctypes.map((m: any) => (
+                          <option value={m.id} key={m.id}>
+                            {m.name}
+                          </option>
+                        ))}
+                    </Select>
+                  </Box>
+
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3}}>
+
+                    <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                      Variables
+                    </Text>
+                    {varias.fields &&
+                      varias.fields.map((k: FieldT) => (
+                        <Box
+                          sx={{
+                            p: 1,
+                            border: 'solid 1px',
+                            borderBottom: 0,
+                            borderColor: 'teal.5',
+                            bg: 'teal.8',
+                            px: 3,
+                            ':last-child': {
+                              borderBottom: 'solid 1px',
+                              borderColor: 'teal.5',
+                            },
+                          }}
+                          as="p"
+                          key={k.id}
+                          onClick={() => insertToken(k)}>
+                          {k.name}
+                        </Box>
+                      ))}
+                  </Box>
+                </Box>
+              )}
+
+              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2}}>
+                <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                  Blocks
+                </Text>
+                {blocks &&
+                  blocks.map((k: BlockTemplate) => (
+                    <Box
+                      
+                      key={k.id}
+                      onClick={() => insertBlock(k)}
+                      sx={{
+                        pl: 3,
+                        border: 'solid 0.5px',
+                        borderColor: 'gray.2',
+                        bg: 'teal.6',
+                        mb: 1,
+                        pt: 2,
+                        pb: 3,
+                      }}>
+                      <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                        {k.title}
+                      </Text>
+                      <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                        Template Bio
+                      </Text>
+                    </Box>
                   ))}
               </Box>
-            )}
-
-            <Box>
-              <Text mb={2}>Insert Blocks</Text>
-              {blocks &&
-                blocks.map((k: BlockTemplate) => (
-                  <Box
-                    key={k.id}
-                    onClick={() => insertBlock(k)}
-                    sx={{
-                      pl: 3,
-                      border: 'solid 0.5px',
-                      borderColor: 'gray.2',
-                      bg: 'gray.1',
-                      mb: 1,
-                      pt: 2,
-                      pb: 3,
-                    }}>
-                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
-                      {k.title}
-                    </Text>
-                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                      Template Bio
-                    </Text>
-                  </Box>
-                ))}
             </Box>
-          </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
-        </Flex>
-      </Box>
+            {errors.exampleRequired && <Text>This field is required</Text>}
+          </Flex>
+        </Box>
 
-      {/* <WraftEditor/> */}
-      <Box variant="primary">
-        <Flex sx={{ px: 4, py: 1 }}>
-          {loading && <Spinner color="white" size={24} />}
-          {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
-
-          <Button type="button" variant="secondary" sx={{ mx: 3 }}>Try</Button>
-        </Flex>
+        {/* <WraftEditor/> */}
+        <Box variant="primary">
+          <Flex sx={{ px: 4, py: 1 }}>
+            {loading && <Spinner color="white" size={24} />}
+            {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
+          </Flex>
+        </Box>
       </Box>
     </Box>
   );

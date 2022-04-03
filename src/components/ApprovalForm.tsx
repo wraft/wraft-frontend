@@ -111,6 +111,7 @@ const StatesForm = (props: StateFormProps) => {
           }}>
           {props.content.map((c: StateElement, index) => (
             <Flex
+              key={index + 1}
               sx={{
                 p: 3,
                 bg: 'blue.0',
@@ -135,7 +136,7 @@ const StatesForm = (props: StateFormProps) => {
           ))}
         </Box>
       )}
-      <Button variant="tertiary" onClick={toggleModal}>
+      <Button variant="btnSecondary" onClick={toggleModal}>
         Add New
       </Button>
     </Box>
@@ -259,7 +260,7 @@ const ApprovalForm = () => {
                 defaultValue="Muneef Hameed (U01)"
                 register={register}
               />
-              <Button type="submit" mt={3}>
+              <Button variant="btnPrimary" type="submit" mt={3}>
                 Save
               </Button>
             </Box>

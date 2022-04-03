@@ -334,9 +334,10 @@ const PipelineView = () => {
       {activePipeline && (
         <Flex sx={{ px: 4 }}>
           <Box sx={{ width: '70%' }}>
-            
             <Flex>
-              <Text as="h1" sx={{ py: 3, fontSize: 3 }}>{activePipeline.name}</Text>
+              <Text as="h1" sx={{ py: 3, fontSize: 3 }}>
+                {activePipeline.name}
+              </Text>
               {/* <Box>
                 <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2 }}>
                   Pipelines › {activePipeline.name}

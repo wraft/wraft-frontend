@@ -6,7 +6,6 @@ import {
   Text,
   Input,
   Label,
-  Divider,
   Flex,
   // Select,
 } from 'theme-ui';
@@ -16,13 +15,20 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 
-import { createEntity, deleteEntity, loadEntity } from '../utils/models';
+import {
+  createEntity,
+  deleteEntity,
+  loadEntity,
+  updateEntity,
+} from '../utils/models';
 
 import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
 import PageHeader from './PageHeader';
 import NavLink from './NavLink';
+
+import { ReactSortable } from 'react-sortablejs';
 
 export interface States {
   total_pages: number;
@@ -68,74 +74,196 @@ export interface StateFormProps {
   hidden?: boolean;
   onAttachApproval?: any;
   dialog?: any;
+  onSorted?: any;
 }
 
-const StatesForm = (props: StateFormProps) => {
-  // const [stat, setStat] = useState('');
+/**
+ * Create State
+ * @param props
+ * @returns
+ */
 
+interface StateStateFormProps {
+  onSave: any;
+}
+
+const StateStateForm = ({ onSave }: StateStateFormProps) => {
+  const [newState, setNewState] = useState<string | any>(null);
+
+  const onChangeInput = (e: any) => {
+    setNewState(e.currentTarget.value);
+  };
+
+  return (
+    <Box p={4}>
+      <Box>
+        <Label>State Name</Label>
+        <Input
+          name="state_name"
+          placeholder="New State Name"
+          onChange={onChangeInput}
+        />
+      </Box>
+      <Button
+        type="button"
+        variant="btnPrimary"
+        sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
+        onClick={() => onSave(newState)}>
+        Add State
+      </Button>
+    </Box>
+  );
+};
+
+/**
+ * Big Form
+ * @param props
+ * @returns
+ */
+
+interface ItemType {
+  id: number;
+  name?: string;
+  meta?: any;
+}
+
+const StatesForm = ({
+  content,
+  onDelete,
+  onAttachApproval,
+  onSorted,
+}: StateFormProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showApproval, setShowApproval] = useState<boolean>(false);
-  // const { addToast } = useToasts();
+
+  const [state, setState] = useState<ItemType[]>([]);
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
   const changeForm = (data: any) => {
-    props.onAttachApproval(data);
+    onAttachApproval(data);
     setShowApproval(true);
     toggleModal();
   };
 
   const onDeleteFlow = (_id: any) => {
-    props.onDelete(_id);
+    onDelete(_id);
   };
 
+  const setOrder = (content: any) => {
+    console.log('e', content);
+
+    // new order
+
+    if (content.size > 0) {
+      let listItems: ItemType[] = [];
+
+      content.map((c: any) => {
+        let newItemx: ItemType = { id: c?.id, name: c?.name };
+        listItems.push(newItemx);
+      });
+
+      setState(listItems);
+
+      let dbitems: any = [];
+
+      listItems.map((dbi: any, index) => {
+        dbitems.push({ id: dbi.id, order: index });
+      });
+
+      // send updates to server
+      onSorted(dbitems);
+    }
+  };
+
+  useEffect(() => {
+    if (content) {
+      let listItems: ItemType[] = [];
+      content.map((c: any) => {
+        let newItemx: ItemType = {
+          id: c?.state.id,
+          name: c?.state.state,
+          meta: state,
+        };
+        listItems.push(newItemx);
+      });
+
+      setState(listItems);
+    }
+  }, [content]);
+
   return (
-    <Box p={2}>
-      <Text as="h4" variant="sectiontitle" sx={{ mb: 2 }} pb={2}>
-        All States {showApproval}
-      </Text>
-      {props.content && (
+    <Box p={0}>
+      <Box sx={{ pb: 3 }}>
+        <Text as="h4" variant="sectiontitle" sx={{ mb: 0, mt: 0 }}>
+          All States {showApproval}
+        </Text>
+        <Text
+          as="p"
+          variant="sectiontitle"
+          sx={{ color: 'gray.6', mb: 2, mt: 0 }}>
+          Manage your flows
+        </Text>
+      </Box>
+      {content && (
         <Box
-          mb={4}
+          mb={0}
           sx={{
             borderBottom: 'solid 1px',
             borderColor: 'gray.2',
           }}>
-          {props.content.map((c: StateElement, index) => (
-            <Flex
-              sx={{
-                p: 3,
-                bg: 'gray.0',
-                border: 'solid 1px',
-                borderBottom: 0,
-                borderColor: 'gray.4',
-              }}>
-              <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
-                {index + 1}
-              </Text>
-              <Text
-                sx={{ fontWeight: 'heading', color: 'gray.9' }}
-                key={c.state.id}>
-                {c.state.state}
-              </Text>
-              <Text onClick={() => changeForm(c.state)} as="h5" mx={5}>
-                Add Approval
-              </Text>
-              <Text
-                onClick={() => onDeleteFlow(c.state.id)}
+          <ReactSortable list={state} setList={setOrder}>
+            {state.map((c: ItemType, index) => (
+              <Flex
+                key={index}
                 sx={{
-                  ml: 'auto',
-                  fontSize: 0,
-                  fontWeight: 600,
-                  fontFamily: 'heading',
-                  textTransform: 'uppercase',
+                  p: 3,
+                  bg: 'gray.0',
+                  border: 'solid 1px',
+                  borderBottom: 0,
+                  borderColor: 'gray.4',
+                  h6: { opacity: 1 },
+                  ':hover': { h6: { opacity: 1 } },
                 }}>
-                Delete
-              </Text>
-            </Flex>
-          ))}
+                <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
+                  {index + 1}
+                </Text>
+                <Text
+                  sx={{ fontWeight: 'heading', color: 'gray.9' }}
+                  key={c.id}>
+                  {c.name}
+                </Text>
+                <Flex sx={{ ml: 'auto' }}>
+                  <Button
+                    sx={{
+                      mx: 3,
+                      fontSize: 0,
+                      fontWeight: 600,
+                      fontFamily: 'heading',
+                      textTransform: 'uppercase',
+                    }}
+                    variant="btnSecondary"
+                    onClick={() => changeForm(c)}>
+                    Add Approval
+                  </Button>
+                  <Button
+                    variant="btnSecondary"
+                    onClick={() => onDeleteFlow(c.id)}
+                    sx={{
+                      ml: 'auto',
+                      fontSize: 0,
+                      fontWeight: 600,
+                      fontFamily: 'heading',
+                      textTransform: 'uppercase',
+                    }}>
+                    Delete
+                  </Button>
+                </Flex>
+              </Flex>
+            ))}
+          </ReactSortable>
         </Box>
       )}
     </Box>
@@ -163,9 +291,6 @@ const FlowForm = () => {
     console.log('onAttachApproval', _d);
   };
 
-  const closeAddState = () => {
-    //
-  };
   /**
    * Map states to types, and states
    * @param data
@@ -243,79 +368,138 @@ const FlowForm = () => {
     }
   }, [cId, token]);
 
+  /**
+   *
+   */
+
+  const updateState = (e: any) => {
+    const newState = {
+      state: e,
+      order: 1,
+    };
+
+    CreateState(newState);
+  };
+
+  const onSortSuccess = () => {
+    addToast('Sorted flow state', { appearance: 'success' });
+  };
+
+  /**
+   * Update Flow Order
+   * @param data Form Data
+   */
+  const onSortDone = (data: any) => {
+    const formative = {
+      states: data,
+    };
+
+    token &&
+      updateEntity(
+        `/flows/${cId}/align-states`,
+        formative,
+        token,
+        onSortSuccess,
+      );
+  };
+
   return (
     <Box>
-      <PageHeader title={cId ? 'Edit Flows' : 'Create Flows'}>
-        <Box sx={{ ml: 'auto', mr: 5 }}>
-          <NavLink href="/content-types/new" variant="btnSecondary">
-            + New Variant
-          </NavLink>
-        </Box>
-      </PageHeader>
+      <PageHeader
+        title={cId ? 'Edit Flows' : 'Create Flows'}
+        desc="Flows > Flow 1"></PageHeader>
 
-      <Box>
-        <Container variant="layout.pageFrame" data-flow={flow?.id}>
-          <Box>
-            <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Field
-                name="name"
-                label="Name"
-                defaultValue=""
-                register={register}
-              />
-              <Button variant="btnPrimary" type="submit" mt={3}>
-                Save
-              </Button>
-            </Box>
-            <Divider sx={{ color: 'gray.3', my: 4 }} />
-            <Box mt={2}>
-              <Modal isOpen={approval} onClose={() => setAddState(false)}>
-                <ApprovalFormBase
-                  closeModal={() => setApproval(false)}
-                  isOpen={approval}
-                  states={content}
-                  parent={cId}
+      <Box
+        sx={{
+          mt: 4,
+          borderRadius: 5,
+          maxWidth: '80ch',
+          mx: 'auto',
+          border: 'solid 1px',
+          borderColor: 'gray.4',
+        }}>
+        <Container
+          variant="layout.pageFrame"
+          sx={{ p: 0 }}
+          data-flow={flow?.id}>
+          <Box
+            as="form"
+            sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
+            onSubmit={handleSubmit(onSubmit)}>
+            <Flex
+              variant="layout.pageFrame"
+              sx={{
+                flexWrap: 'wrap',
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.4',
+                flexGrow: 1,
+              }}>
+              {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
+              <Box sx={{ flexGrow: 1 }}>
+                <Field
+                  name="name"
+                  label="Name"
+                  defaultValue=""
+                  register={register}
                 />
-              </Modal>
+              </Box>
+              <Box sx={{ pt: '12px', ml: 3 }}>
+                <Button variant="btnPrimaryBig" type="submit" mt={3}>
+                  Save
+                </Button>
+              </Box>
+            </Flex>
+            <Box variant="layout.pageFrame" sx={{ pt: 3 }}>
+              <Box mt={0}>
+                <Modal isOpen={approval} onClose={() => setAddState(false)}>
+                  <ApprovalFormBase
+                    closeModal={() => setApproval(false)}
+                    isOpen={approval}
+                    states={content}
+                    parent={cId}
+                  />
+                </Modal>
 
-              {edit && content && (
-                <StatesForm
-                  onAttachApproval={onAttachApproval}
-                  content={content}
-                  // dialog={dialog2}
-                  onSave={CreateState}
-                  onDelete={deleteState}
-                />
-              )}
+                {edit && content && (
+                  <StatesForm
+                    onAttachApproval={onAttachApproval}
+                    content={content}
+                    // dialog={dialog2}
+                    onSave={CreateState}
+                    onDelete={deleteState}
+                    onSorted={onSortDone}
+                  />
+                )}
 
-              <Button variant="btnSecondary" onClick={() => setAddState(true)}>
-                Add State
-              </Button>
-
-              <Modal
-                isOpen={addState}
-                onClose={() => setAddState(false)}
-                label="ModalX"
-                aria-label="Add New State">
-                <Box p={4}>
-                  <Box>
-                    <Label>Add New State</Label>
-                    <Input
-                      placeholder="New State Name"
-                      // onChange={updateState}
-                    />
-                  </Box>
-                  <Button variant="btnPrimary" sx={{ mr: 2 }}>
+                <Flex
+                  sx={{
+                    px: 3,
+                    py: 3,
+                    bg: 'gray.2',
+                    borderBottom: 0,
+                    borderTop: 'solid 1px',
+                    borderLeft: 'solid 1px',
+                    borderBottom: 'solid 1px',
+                    borderColor: 'gray.4',
+                    h6: { opacity: 1 },
+                    ':hover': { h6: { opacity: 1 } },
+                  }}>
+                  <Button
+                    variant="btnPrimary"
+                    sx={{ fontSize: 1, p: 2, px: 3 }}
+                    onClick={() => setAddState(true)}>
                     Add State
                   </Button>
-                  <Button
-                    type="button"
-                    variant="btnSecondary"
-                    onClick={() => closeAddState}>
-                    Cancel
-                  </Button>
-                </Box>
-              </Modal>
+                </Flex>
+
+                <Modal
+                  isOpen={addState}
+                  onClose={() => setAddState(false)}
+                  label="ModalX"
+                  aria-label="Add New State">
+                  <StateStateForm onSave={updateState} />
+                </Modal>
+              </Box>
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
           </Box>

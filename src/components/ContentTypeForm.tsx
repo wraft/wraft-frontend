@@ -168,13 +168,12 @@ const Form = () => {
     deleteEntity(`/content_type_fields/${deletableId}`, token);
   };
 
-
   const deleteMe = (deletableId: string) => {
     deleteEntity(`content_types/${deletableId}`, token);
 
     addToast('Deleted Successfully', { appearance: 'success' });
     Router.push(`/content-types`);
-  }
+  };
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
@@ -241,13 +240,14 @@ const Form = () => {
   };
 
   const isNumeric = (str: any) => {
-    if (typeof str != "string") return false // we only process strings!  
-    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
-  }
+    if (typeof str != 'string') return false; // we only process strings!
+    return (
+      !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+      !isNaN(parseFloat(str))
+    ); // ...and ensure strings of whitespace fail
+  };
 
   const formatFields = (fields: any) => {
-    console.log('👙 fields', fields);
     let fieldsMap: any = [];
 
     fields &&
@@ -261,7 +261,6 @@ const Form = () => {
         };
 
         if (isNumeric(item.name)) {
-
         } else {
           fieldsMap.push(it);
         }
@@ -273,15 +272,13 @@ const Form = () => {
     onDone(d);
   };
 
-
   /**
    * On Theme Created
    */
   const onDone = (_d: any) => {
     addToast('Saved Successfully', { appearance: 'success' });
     Router.push(`/content-types/edit/${_d?.id}`);
-  }
-
+  };
 
   const onSubmit = (data: any) => {
     const sampleD = {
@@ -319,7 +316,7 @@ const Form = () => {
   };
 
   useEffect(() => {
-    loadFields();    
+    loadFields();
   }, [content]);
 
   // cId
@@ -331,6 +328,12 @@ const Form = () => {
       loadThemes(token);
     }
   }, [cId, token]);
+
+  useEffect(() => {
+    if (token) {
+      loadThemes(token);
+    }
+  }, [token]);
 
   const onFieldsSave = (fds: any) => {
     console.log('saved fields', fds, fields);
@@ -494,9 +497,6 @@ const Form = () => {
             </Box>
           )}
 
-
-
-
           <FieldEditor
             fields={fields}
             fieldtypes={fieldtypes}
@@ -505,9 +505,14 @@ const Form = () => {
             onSave={onFieldsSave}
           />
           <Box sx={{ m: 3 }}>
-            {cId &&
-              <Button type="button" variant="btnPrimaryLarge" onClick={() => deleteMe(cId)}>Delete</Button>
-            }
+            {cId && (
+              <Button
+                type="button"
+                variant="btnPrimaryLarge"
+                onClick={() => deleteMe(cId)}>
+                Delete
+              </Button>
+            )}
           </Box>
         </Box>
       </Flex>

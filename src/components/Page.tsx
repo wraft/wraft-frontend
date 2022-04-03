@@ -31,7 +31,7 @@ export interface IAlert {
 
 export const Page = (props: any) => {
   const showFull: boolean = props && props.showFull ? true : false;
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   return (
     <>
       <Head>
@@ -46,7 +46,10 @@ export const Page = (props: any) => {
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=Inter&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <Container width={100} bg={'white'}>
         {!token && (
@@ -60,7 +63,11 @@ export const Page = (props: any) => {
             <Sidebar showFull={showFull} />
             <Box bg="gray.0" sx={{ width: '100%', minHeight: '100vh' }}>
               <Nav />
-              <Box sx={{ minHeight: '100vh', bg: 'base' }} color="#333" p={4} pt={3}>
+              <Box
+                sx={{ minHeight: '100vh', bg: 'base' }}
+                color="#333"
+                p={4}
+                pt={3}>
                 {props.children}
               </Box>
             </Box>
