@@ -2,73 +2,94 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 import { loadEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo } from './Atoms';
 // import { Button } from 'theme-ui';
 
-// import { useToasts } from 'react-toast-notifications';
-
-export interface AcitivityFeeds {
-    total_pages:   number;
-    total_entries: number;
-    page_number:   number;
-    activities:    Activity[];
+export interface ActivityStream {
+  activities: Activity[];
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
 }
 
 export interface Activity {
-    object_details: ObjectDetails;
-    object:         string;
-    meta:           Meta;
-    inserted_at:    Date;
-    actor:          string;
-    action:         string;
+  action: Action;
+  actor: Actor;
+  actor_profile: ActorProfile;
+  inserted_at: Date;
+  meta: Meta;
+  object: string;
 }
 
-export interface Meta {
-    to?:   To;
-    from?: string;
+export enum Action {
+  Insert = 'insert',
+  Update = 'update',
 }
 
-export interface To {
-    name: string;
+export interface Actor {
+  email: Email;
+  email_verify: boolean;
+  id: string;
+  inserted_at: Date;
+  name: Name;
+  updated_at: Date;
 }
 
-export interface ObjectDetails {
-    name: string;
-    id?:  string;
+export enum Email {
+  AdminWraftdocsCOM = 'admin@wraftdocs.com',
 }
 
+export enum Name {
+  MuneefHameed = 'Muneef Hameed',
+}
+
+export interface ActorProfile {
+  dob: Date;
+  gender: Gender;
+  id: string;
+  name: Name;
+  profile_pic: string;
+}
+
+export enum Gender {
+  Male = 'Male',
+}
+
+export interface Meta {}
 
 /**
  *
  * @returns
  */
 
- const ActivityCard = (props: any) => (
-    <Flex sx={{ borderBottom: 'solid 1px', borderColor: 'gray.3', mb: 2 }}>
-      <Box as="span">
-        <Avatar
-          width="32px"
-          sx={{ mr: 2 }}
-          src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-        />
-      </Box>
-      <Box pt={1}>
-        <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
-          {props?.actor}
-        </Text>{' '}
-        <Text as="em" sx={{ fontSize: 0, display: 'inline-block', mr: 2 }}>{props?.action}d </Text>
-        <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
-          {props?.object_details?.name}
-        </Text>
-      </Box>
-      <Box sx={{ ml: 'auto'}}>
-        <TimeAgo time={props?.inserted_at} sx={{ mr: 2 }} />
-      </Box>
-    </Flex>
-  );
+const ActivityCard = (props: any) => (
+  <Flex sx={{ borderBottom: 'solid 1px', borderColor: 'gray.3', mb: 2, p: 2 }}>
+    <Box as="span">
+      <Avatar
+        width="32px"
+        sx={{ mr: 2 }}
+        src={`http://localhost:4000/${props?.actor_profile?.profile_pic}`}
+      />
+    </Box>
+    <Box pt={1}>
+      <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+        {props?.actor?.name}
+      </Text>{' '}
+      <Text as="em" sx={{ fontSize: 0, display: 'inline-block', mr: 2 }}>
+        {props?.action}d{' '}
+      </Text>
+      {/* <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+        {props?.object_details?.name}
+      </Text> */}
+    </Box>
+    <Box sx={{ ml: 'auto' }}>
+      <TimeAgo time={props?.inserted_at} sx={{ mr: 2 }} />
+    </Box>
+  </Flex>
+);
 
 const ActivityFeed = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Activity>>([]);
   // const { addToast } = useToasts();
 
@@ -89,14 +110,8 @@ const ActivityFeed = () => {
 
   return (
     <Box py={3} mt={4}>
-      <Text mb={3}>
-        Acitivity Feeds
-      </Text>
       <Box mx={0} mb={3}>
-
-        { !contents &&
-          <Text>Nothing to approve</Text>
-        }
+        {!contents && <Text>No activities yet</Text>}
         <Box>
           {contents &&
             contents.length > 0 &&

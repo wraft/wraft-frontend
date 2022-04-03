@@ -221,17 +221,17 @@ const Nav = (props: any) => {
                 checkActive(pathname, m)
                   ? 'layout.menuLinkActive'
                   : 'layout.menuLink'
-              }>
+              }
+              >
               <Box
                 sx={{
                   mr: 2,
-                  color: checkActive(pathname, m) ? 'gray.3' : 'gray.4',
-                  
+                  color: checkActive(pathname, m) ? 'teal.4' : 'gray.5',                  
                   // opacity: 0.6,
                 }}>
                 {m.logo}
               </Box>
-              {showFull && <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 400 }}>{m.name}</Text>}
+              {showFull && <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>{m.name}</Text>}
             </Flex>
           </MenuItem>
         ))}

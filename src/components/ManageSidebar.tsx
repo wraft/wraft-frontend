@@ -20,11 +20,17 @@ export const IconWrapper = styled(Layout)`
 
 export interface INav {
   showFull?: boolean;
+  items: menuLinksProps;
 }
 
 // const ICON_COLOR = '#999';
+interface menuLinksProps {
+  name: string;
+  path: string;
+  logo: any;
+}
 
-const listMenu = [
+const menuLinks: menuLinksProps[] = [
   {
     name: 'Layouts',
     logo: <Layout width="20px" />,
@@ -58,7 +64,7 @@ const listMenu = [
   },
 ];
 
-const ManageSidebar = (_props: INav) => {
+const ManageSidebar = ({ items, showFull }: INav) => {
   return (
     <Box
       sx={{
@@ -68,8 +74,8 @@ const ManageSidebar = (_props: INav) => {
         borderRight: 'solid 1px',
         borderColor: 'gray.3',
       }}>
-      {listMenu &&
-        listMenu.map((l: any) => (
+      {items &&
+        items.map((l: any) => (
           <Box sx={{ mr: 4 }} key={l.name}>
             <NavLink href={l.path} variant="base1">
               <Flex

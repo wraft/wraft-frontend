@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import CollectionForm from '../../src/components/CollectionForm';
+import VendorForm from '../../src/components/VendorForm';
 import Page from '../../src/components/PageFrame';
 import { Flex } from 'theme-ui';
 import Link from 'next/link';
@@ -9,11 +9,15 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Collection Form - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Create Vendor - Wraft Docs</title>
       </Head>
-      <Page id="Modal" showFull={true}>
-        <CollectionForm />
+      <Page>
+        <Flex>
+          <Link href="/vendors">
+            <a>Back</a>
+          </Link>
+          <VendorForm />
+        </Flex>
       </Page>
     </>
   );

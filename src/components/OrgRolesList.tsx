@@ -24,6 +24,7 @@ export interface ResourceGroupList {
 
 const OrgRolesList = () => {
   const token = useStoreState((state) => state.auth.token);
+  const profile = useStoreState((state) => state.profile?.profile);
   const [contents, setContents] = useState<any>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
@@ -33,7 +34,7 @@ const OrgRolesList = () => {
    */
   const loadDataSuccess = (data: any) => {
     console.log('roles', data);
-    setContents(data.role);
+    setContents(data.role_groups);
   };
 
   /**
@@ -41,11 +42,13 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadLayout = (token: string) => {
-    // loadEntity(
-    //   token,
-    //   '/organisations/f4dc74cc-1cac-4215-be75-87850f1e23dc/roles',
-    //   loadDataSuccess,
-    // );
+    // console.log(profile)
+    // const org_id = profile?.organisation_id
+    loadEntity(
+      token,
+      `role_groups`,
+      loadDataSuccess,
+    );
   };
 
   /**

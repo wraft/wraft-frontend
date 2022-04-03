@@ -1,57 +1,62 @@
-import React, { FC, useRef, useCallback, useState, useEffect, useMemo } from "react";
-import { RemirrorJSON, getTheme } from "remirror";
-import { BlockquoteExtension } from "@remirror/extension-blockquote";
-import { BoldExtension } from "@remirror/extension-bold";
-import { ItalicExtension } from "@remirror/extension-italic";
-import { ParagraphExtension } from "@remirror/extension-paragraph";
-import { StrikeExtension } from "@remirror/extension-strike";
-import { UnderlineExtension } from "@remirror/extension-underline";
-import { HeadingExtension } from "@remirror/extension-heading";
-import { HardBreakExtension } from "@remirror/extension-hard-break";
-import { TableExtension } from "@remirror/extension-tables";
-import { ImageExtension } from "@remirror/extension-image";
-import { MarkdownExtension } from "@remirror/extension-markdown"
+import React, {
+  FC,
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react';
+import { RemirrorJSON, getTheme } from 'remirror';
+import { BlockquoteExtension } from '@remirror/extension-blockquote';
+import { BoldExtension } from '@remirror/extension-bold';
+import { ItalicExtension } from '@remirror/extension-italic';
+import { ParagraphExtension } from '@remirror/extension-paragraph';
+import { StrikeExtension } from '@remirror/extension-strike';
+import { UnderlineExtension } from '@remirror/extension-underline';
+import { HeadingExtension } from '@remirror/extension-heading';
+import { HardBreakExtension } from '@remirror/extension-hard-break';
+import { TableExtension } from '@remirror/extension-tables';
+import { ImageExtension } from '@remirror/extension-image';
+import { MarkdownExtension } from '@remirror/extension-markdown';
 
 import { css } from '@emotion/css';
 
-
-import {
-  isBoolean,
-  Cast,
-} from '@remirror/core';
+import { isBoolean, Cast } from '@remirror/core';
 
 import { ResolvedPos } from 'prosemirror-model';
 
-import { BulletListExtension, ListItemExtension, OrderedListExtension } from "@remirror/extension-list";
+import {
+  BulletListExtension,
+  ListItemExtension,
+  OrderedListExtension,
+} from '@remirror/extension-list';
 import 'remirror/styles/all.css';
 import { AllStyledComponent } from '@remirror/styles/emotion';
-import { HolderAtomExtension } from "./holder/holder-atom";
+import { HolderAtomExtension } from './holder/holder-atom';
 
 // import { IdentifierSchemaAttributes } from 'remirror';
 
 import {
   // MentionAtomPopupComponent,
-  Toolbar, useCommands,
-} from '@remirror/react'
+  Toolbar,
+  useCommands,
+} from '@remirror/react';
 
-import {
-  HolderAtomPopupComponent
-} from './holder/holder-popover'
-
+import { HolderAtomPopupComponent } from './holder/holder-popover';
 
 import {
   EditorComponent,
   Remirror,
   ThemeProvider,
   useRemirror,
-} from "@remirror/react";
+} from '@remirror/react';
 
-import { Box } from "theme-ui";
+import { Box } from 'theme-ui';
 
 // import { HolderExtension } from "./holder";
 
-import toolbarItems from "./toolbar";
-import { MentionAtomExtension } from "remirror/extensions";
+import toolbarItems from './toolbar';
+import { MentionAtomExtension } from 'remirror/extensions';
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 
 const hasCursor = <T extends object>(
@@ -77,13 +82,13 @@ interface EditorProps {
 }
 
 /**
- * 
+ *
  * @param tokens All insertable tokens listed
- * @returns 
+ * @returns
  */
 function HolderSuggestComponent({ tokens }: any) {
-  const [mentionState, setMentionState] = useState<any>();  
-  const commands = useCommands();  
+  const [mentionState, setMentionState] = useState<any>();
+  const commands = useCommands();
 
   const items = useMemo(() => {
     const allItems = tokens;
@@ -93,20 +98,32 @@ function HolderSuggestComponent({ tokens }: any) {
     }
 
     const query = mentionState?.query?.full.toLowerCase() ?? '';
-    return allItems.filter((item:any) => item.label.toLowerCase().includes(query)).sort();
+    return allItems
+      .filter((item: any) => item.label.toLowerCase().includes(query))
+      .sort();
   }, [mentionState, tokens]);
 
-  return <HolderAtomPopupComponent onChange={setMentionState} items={items}/>;
+  return <HolderAtomPopupComponent onChange={setMentionState} items={items} />;
 }
 
 /**
  * Generic Editor built for Wraft
- * @param param0 
- * @returns 
+ * @param param0
+ * @returns
  */
 
-const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, insertable, token, onUpdate, editable, ready, showToolbar = false, searchables },) => {
-
+const EditorWraft: FC<EditorProps> = ({
+  cleanInsert,
+  variables,
+  starter,
+  insertable,
+  token,
+  onUpdate,
+  editable,
+  ready,
+  showToolbar = false,
+  searchables,
+}) => {
   const [docState, setDocState] = useState<RemirrorJSON>();
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -116,7 +133,6 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
    * Document variables
    */
   useEffect(() => {
-
     if (searchables?.fields) {
       // console.log('🎃🎃 searchables', searchables);
       const { fields } = searchables;
@@ -127,8 +143,8 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
             id: `${sr.id}`,
             label: `${sr.name}`,
             name: `${sr.name}`,
-          }
-        })
+          };
+        });
         setFieldtokens(results);
       }
     }
@@ -157,9 +173,11 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
           name: '',
           mentionTag: 'holder',
         },
-        matchers: [{  name: "holder", char: '@', appendText: ' ', matchOffset: 0 }],
+        matchers: [
+          { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
+        ],
       }),
-      new MentionAtomExtension({ extraAttributes: {}}),
+      new MentionAtomExtension({ extraAttributes: null }),
     ];
   }, []);
 
@@ -169,27 +187,24 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
 
   const handleChange = useCallback(
     ({ state, tr }) => {
-      console.log('🧶 [content] Handling Editor Change', state);
-
       const ctx = getContext();
-      const md = ctx?.helpers.getMarkdown()
+      const md = ctx?.helpers.getMarkdown();
       const obj = {
         md,
-        body: state.toJSON().doc
-      }
+        body: state.toJSON().doc,
+      };
 
       onUpdate(obj);
     },
-    [setDocState]
+    [setDocState],
   );
 
   /**
    * Document variables
    */
   useEffect(() => {
-
     if (!loaded && starter) {
-      console.log('🎃🎃', starter, starter?.content?.length)
+      console.log('🎃🎃', starter, starter?.content?.length);
       //   console.log('🧶 🧶 [content] A', starter)
 
       //   getContext()?.setContent(starter);
@@ -204,65 +219,66 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
     setLoaded(false);
 
     if (token && cleanInsert) {
-      console.log('🧶 [content] [useEff] TOKEN', token)
+      console.log('🧶 [content] [useEff] TOKEN', token);
 
       let mxt;
       if (!token?.type) {
         mxt = JSON.parse(token.data) || token.data;
       } else {
-        mxt = token
+        mxt = token;
       }
       const wview = manager.view;
       const wstate = wview.state;
 
-      if(mxt) {
-        console.log('mxt', mxt)
+      if (mxt) {
+        console.log('mxt', mxt);
         const node = wstate?.schema?.nodeFromJSON(mxt);
-      const { selection } = wstate;
-      const position = hasCursor(selection)
-        ? selection.$cursor.pos
-        : selection.$to.pos;
+        const { selection } = wstate;
+        const position = hasCursor(selection)
+          ? selection.$cursor.pos
+          : selection.$to.pos;
 
-      if (wview.dispatch) {
-        wview.dispatch(wstate.tr.insert(position, node));
+        if (wview.dispatch) {
+          wview.dispatch(wstate.tr.insert(position, node));
+        }
+        setLoaded(true);
       }
-      setLoaded(true);
-
-      }
-      
     }
 
     if (!cleanInsert && token) {
-      console.log('🧶 🧶 [content] C', token)
+      console.log('🧶 🧶 [content] C', token);
       getContext()?.setContent(token);
-      setLoaded(true)
+      setLoaded(true);
     }
   }, [token]);
 
-  const items = [{ id: 'x', label: 'XX' }, { id: 'y', label: 'YY' }]
+  const items = [
+    { id: 'x', label: 'XX' },
+    { id: 'y', label: 'YY' },
+  ];
 
   const setMentionState = (x) => {
-    console.log('x', x)
-  }
+    console.log('x', x);
+  };
 
   return (
     <Box
       variant="styles.editorBody2"
       sx={{
-        mx: "auto",
-        whiteSpace: "pre-wrap",
+        mx: 'auto',
+        whiteSpace: 'pre-wrap',
         boxShadow: 'none',
-        mt: 0,        
-        lineHeight: 1.5, 
+        mt: 0,
+        lineHeight: 1.5,
         fontSize: 2,
         m: 0,
         px: 4,
         '.remirror-toolbar': {
-          bg: 'gray.0'
+          bg: 'gray.0',
         },
         '.remirror-role': {
           bg: 'gray.0',
-          color: 'gray.9'
+          color: 'gray.9',
         },
         '&.remirror-editor': {
           bg: 'blue',
@@ -270,14 +286,15 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
         },
         '.remirror-editor': {
           p: 5,
-          bg: 'blue'
-        }
-
-      }}
-    >
+          bg: 'blue',
+        },
+      }}>
       <AllStyledComponent>
         <ThemeProvider>
-          <Remirror manager={manager} onChange={handleChange} editable={editable}
+          <Remirror
+            manager={manager}
+            onChange={handleChange}
+            editable={editable}
             classNames={[
               css`
               .remirror-theme .ProseMirror {
@@ -326,16 +343,18 @@ const EditorWraft: FC<EditorProps> = ({ cleanInsert, variables, starter, inserta
                 }
               }
             `,
-            ]}
-          >
-            {showToolbar ? <Toolbar items={toolbarItems} refocusEditor label='Top Toolbar' /> : ''}
+            ]}>
+            {showToolbar ? (
+              <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
+            ) : (
+              ''
+            )}
             <EditorComponent />
-            <HolderSuggestComponent tokens={fieldtokens}/>
+            <HolderSuggestComponent tokens={fieldtokens} />
           </Remirror>
         </ThemeProvider>
       </AllStyledComponent>
     </Box>
-
   );
 };
 

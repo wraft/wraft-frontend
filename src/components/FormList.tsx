@@ -58,12 +58,12 @@ const FormList: FC = () => {
   const { addToast } = useToasts();
 
   const loadData = () => {
-    // fetchAPI('collection_forms')
-    //   .then((data: any) => {
-    //     const res: FormElement[] = data.collection_forms;
-    //     setContents(res);
-    //   })
-    //   .catch();
+    fetchAPI('collection_forms')
+      .then((data: any) => {
+        const res: FormElement[] = data.collection_forms;
+        setContents(res);
+      })
+      .catch();
   };
 
   const onDelete = (id: string) => {

@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
-import Page from '../../../src/components/BlankFrame';
+import Page from '../../../src/components/PageFrameInner';
 
 const CreateForm = dynamic(
   () => import('../../../src/components/ContentForm'),
@@ -22,7 +22,7 @@ const Index: FC = () => {
       <Head>
         <title>Create Doc - Wraft Docs</title>
       </Head>
-      <Page id="Modal" showFull={true}>
+      <Page id="Modal" showFull={false}>
         <CreateForm id={router.query.id} edit={true} />
       </Page>
     </>

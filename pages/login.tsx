@@ -15,15 +15,10 @@ export const Index: FC = () => {
           content="Wraft - The Document Automation Platform"
         />
       </Head>
-      <Box bg='gray.0'>
-        {/* <Container bg='red' width={100}> */}
-          <UserNav />
-          <UserLoginForm />
-        {/* </Container> */}
+      <Box bg="gray.0">
+        <UserNav />
+        <UserLoginForm />
       </Box>
-      {/* <Container bg='green' width={60}> */}
-        
-      {/* </Container> */}
     </>
   );
 };

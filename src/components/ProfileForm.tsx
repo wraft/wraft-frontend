@@ -15,7 +15,7 @@ import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
 import { useToasts } from 'react-toast-notifications';
 
-export const defaultStyle:Styles = {
+export const defaultStyle: Styles = {
   overlay: {
     position: 'absolute',
     top: 0,
@@ -76,7 +76,7 @@ interface IPreviewImage {
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
   const [image, setImage] = useState<any>();
@@ -140,7 +140,7 @@ const Form = () => {
     console.log('Updated', d);
     console.log('me', me);
 
-    addToast('Saved Successfully', { appearance: 'success' })
+    addToast('Saved Successfully', { appearance: 'success' });
   };
 
   // const toggleDate = () => {
@@ -213,7 +213,7 @@ const Form = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
+      reader.onerror = (error) => reject(error);
     });
   };
 
@@ -239,7 +239,7 @@ const Form = () => {
         <Text sx={{ fontSize: 1 }}>Your account settings</Text>
       </Box> */}
       <Box variant="w100">
-        <Flex variant="w100">          
+        <Flex variant="w100">
           <Box variant="w100">
             <Flex>
               <Box sx={{ pl: 4 }}>
@@ -256,7 +256,7 @@ const Form = () => {
                       }}
                       pr={4}
                       pb={4}>
-                      <Box sx={{ position: 'relative' }}>                        
+                      <Box sx={{ position: 'relative' }}>
                         {!isEdit && !imageSaved && (
                           <>
                             <Image
@@ -280,10 +280,10 @@ const Form = () => {
                             onRequestClose={closeModal}
                             ariaHideApp={false}
                             contentLabel="Profile Image">
-                              <ImageCropper
-                                onFileSubmit={setPreviewImage}
-                                onComplete={onCropped}
-                              />
+                            <ImageCropper
+                              onFileSubmit={setPreviewImage}
+                              onComplete={onCropped}
+                            />
                           </Modal>
                         )}
                         {imagePreview && imageSaved && (
@@ -308,12 +308,7 @@ const Form = () => {
                 </Flex>
               </Box>
               <Box>
-                <Box
-                  mx={0}
-                  mb={3}
-                  
-                  as="form"
-                  onSubmit={handleSubmit(onSubmit)}>
+                <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
                   <Field
                     name="name"
                     label="Name"

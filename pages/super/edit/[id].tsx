@@ -1,20 +1,20 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import TemplateForm from '../../src/components/TemplateForm';
-
-import Page from '../../src/components/PageFrame';
-// import { Flex } from 'theme-ui';
-// import Link from 'next/link';
+import FieldTypeForm from '../../../src/components/FieldTypeForm';
+import Page from '../../../src/components/Page';
+import { Box } from 'theme-ui';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>New Template - Wraft Docs</title>
+        <title>Edit Layout - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <TemplateForm/>
+        <Box>
+          <FieldTypeForm />
+        </Box>
       </Page>
     </>
   );

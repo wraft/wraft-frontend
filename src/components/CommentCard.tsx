@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text, Image } from 'theme-ui'; import { API_HOST } from '../utils/models';
 ;
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo } from './Atoms';
 
 export interface Comment {
   updated_at: string;

@@ -4,20 +4,20 @@ const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body:
-      'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+      '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
-    editor1: 'Inter, sans-serif',
-    editor2:  'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',//"'IBM Plex Mono', monospace",
+    editor1: '\'Satoshi\', sans-serif',
+    editor2:  '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',//"'IBM Plex Mono', monospace",
     // font-family: 
     monospace: 'Menlo, monospace',
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [12.8, 16, 20, 20, 25, 31.25, 39.06, 48.83, 61.04],
+  fontSizes: [12, 16, 20, 22, 25, 31.25, 39.06, 48.83, 61.04],
   fontWeights: {
-    body: 200,
-    heading: 700,
-    bold: 700,
+    body: 400,
+    heading: 600,
+    bold: 800,
   },
   lineHeights: {
     body: 1.5,
@@ -223,7 +223,7 @@ const theme: Theme = {
   forms: {
     label: {
       color: 'gray.6',
-      fontSize: 1,
+      fontSize: 2,
       pb: 0,
     },
     input: {
@@ -235,6 +235,16 @@ const theme: Theme = {
       bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
+    },
+    
+    small: {
+      bg: 'gray.0',
+      fontSize: 0,
+      p: 0,
+      px: 3,
+      fontFamily: 'body',
+      fontWeight: 500,
+      borderColor: 'gray.2'
     },
     select: {
       color: 'gray.8',
@@ -373,19 +383,10 @@ const theme: Theme = {
       '.remirror-theme .ProseMirror': {
         outline: 'none',
         border: 'solid 1px',
+        fontFamily: 'editor2',
         borderColor: 'gray.4',
         lineHeight: 1.65,
         bg: 'gray.0',
-        // p: 5,
-
-        // bg: 'red !important',
-        // bg: 'gray.4',
-        // color: #721515 !important;
-        // pl: '4rem',
-        // pr: '4rem',
-        // pt: '4rem',
-        // pb: '4rem',
-        // padding: '10rem',
         h1: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
         h2: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
         h3: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
@@ -403,10 +404,10 @@ const theme: Theme = {
   },
   links: {
     btnNavLink: {
-      // bg: 'gray.2',
       p: 2,
       px: 3,
       display: 'block',
+      letterSpacing: '-0.15px',
     },
     btnPrimary: {
       variant: 'buttons.btnPrimary',
@@ -468,10 +469,10 @@ const theme: Theme = {
       fontWeight: 'bold',
     },
     button: {
+      fontFamily: 'body',
       fontWeight: 500,
       color: 'primary',
       border: 'solid 1px',
-      fontFamily: 'body',
       fontSize: 0,
       px: 3,
       py: 2,
@@ -590,7 +591,11 @@ const theme: Theme = {
       mb: 0,
       p: 2,
       borderRadius: 3,
+      fontWeight: 600,
       width: '100%',
+      a: {
+        fontWeight: 600
+      },
       ':hover': {
         bg: 'gray.2',
       },
@@ -602,7 +607,8 @@ const theme: Theme = {
       p: 2,
       borderRadius: 3,
       width: '100%',
-      color: 'primary',
+      color: '#0d1c17',
+      fontWeight: 900,
     },
     baseForm: {
       width: '100%',
@@ -735,8 +741,20 @@ const theme: Theme = {
       bg: 'muted',
     },
   },
-  text: {
-
+  text: {    
+    labelSmall: {
+      pl: 1,
+      pr: 2,
+      mr: 3,
+      fontSize: 0,
+      fontWeight: 400,
+      color: 'gray.8',
+      display: 'inline-block',
+      textAlign: 'right',
+      width: 'auto',
+      textTransform: 'uppercase',
+      letterSpacing: '-0.01rem',
+    },
     labelcaps: {
       fontWeight: 300,
       color: 'gray.6',
@@ -758,8 +776,8 @@ const theme: Theme = {
       textTransform: 'uppercase',
     },
     menulink: {
-      fontSize: 1,
-      fontWeight: 500,
+      fontSize: 3,
+      fontWeight: 600,
     },
     pagetitle: {
       // color: 'red.6',
@@ -806,6 +824,9 @@ const theme: Theme = {
     },
   },
   buttons: {
+    primary: {
+      bg: 'red.4'
+    },
     btnPrimaryIcon: {
       bg: 'gray.0',
       border: 'solid 1px',
@@ -849,6 +870,16 @@ const theme: Theme = {
       '&:hover': {
         bg: 'gray.0',
         color: 'gray.8',
+      },
+    },
+    btnAction: {
+      variant: 'buttons.btnBig',
+      bg: 'gray.8',
+      color: 'gray.1',
+      borderColor: 'gray.8',
+      '&:hover': {
+        bg: 'gray.9',
+        color: 'gray.0',
       },
     },
     btnMain: {

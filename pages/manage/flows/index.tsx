@@ -20,13 +20,13 @@ const Index: FC = () => {
         <Container sx={{ pl: 4, pt: 4}}>
           <Box>
             <Box sx={{ ml: 'auto' }}>
-              <Link variant="button" href="/layouts/new">
-                Add Layout
+              <Link variant="btnPrimary" href="/manage/flows/new">
+                Add Flow
               </Link>
             </Box>
           </Box>
           <Flex>
-            <ManageSidebar/>
+            <ManageSidebar items={[]}/>
             <FlowList />            
           </Flex>
         </Container>
