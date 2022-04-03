@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Link, Button } from 'theme-ui';
+import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
@@ -41,6 +41,40 @@ const blockTypes = [
   },
 ];
 
+/**
+ * Steps Indication Block
+ */
+interface StepBlockProps {
+  tab: any;
+  title?: string;
+  desc?: string;
+  no?: number;
+}
+
+export const StepBlock = ({ no, tab, title, desc }: StepBlockProps) => {
+  return (
+    <Flex>
+      <NumberBlock no={no} active={tab.selectedId === 'view' ? true : false} />
+      <Box>
+        <Text
+          as="h4"
+          sx={{
+            fontFamily: 'body',
+            fontSize: 0,
+            color: tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
+          }}>
+          {title}
+        </Text>
+        <Text
+          as="h5"
+          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
+          {desc}
+        </Text>
+      </Box>
+    </Flex>
+  );
+};
+
 interface NumberBlockProps {
   no?: number;
   active?: boolean;
@@ -78,6 +112,37 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
         {no}
       </Text>
     </Box>
+  );
+};
+
+/**
+ * Profile Block
+ */
+//  `http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`
+interface ProfileCardP {
+  name: string;
+  time: string;
+  image: string;
+}
+
+export const ProfileCard = ({ name, time, image }: ProfileCardP) => {
+  return (
+    <Flex
+      sx={{
+        fontSize: 0,
+        color: 'gray.8',
+        my: 2,
+      }}>
+      <Avatar
+        width={22}
+        sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
+        src={image}
+      />
+      <Text as="h3" sx={{ mr: 3, fontSize: '14.4px', fontWeight: 600 }}>
+        {name}
+      </Text>
+      <TimeAgo time={time} ago={true} />
+    </Flex>
   );
 };
 
@@ -245,7 +310,7 @@ const ContentDetail = () => {
 
   return (
     <Box py={0}>
-      <Nav navtitle={ contents?.content?.title } />
+      <Nav navtitle={contents?.content?.title} />
       <Box sx={{ position: 'relative', pl: 4, pt: 0 }}>
         {loading && (
           <Box
@@ -279,13 +344,11 @@ const ContentDetail = () => {
                   <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
                     {contents.content.serialized.title}
                   </Text>
-                  <Box
-                    sx={{
-                      fontSize: 0,
-                      color: 'gray.6',
-                    }}>
-                    <TimeAgo time={contents.content.inserted_at} /> ago
-                  </Box>
+                  <ProfileCard
+                    time={contents.content.inserted_at}
+                    name={contents.creator?.name}
+                    image="http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803"
+                  />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>
                   <Box
@@ -334,29 +397,16 @@ const ContentDetail = () => {
                       bg: 'gray.0',
                       color: 'green.9',
                       borderRadius: 0,
-                      border: 'solid 1px #ddd',
-                      px: 4,
+                      // border: 'solid 1px #ddd',
+                      // px: 4,
                     }}
                     {...tab}>
-                    <Flex>
-                      <NumberBlock
-                        no={1}
-                        active={tab.selectedId === 'edit' ? true : false}
-                      />
-                      <Box>
-                        <Text
-                          as="h4"
-                          sx={{
-                            color:
-                              tab.selectedId === 'edit' ? 'teal.9' : 'gray.7',
-                          }}>
-                          Content
-                        </Text>
-                        <Text as="h5" sx={{ fontWeight: 100, color: 'gray.5' }}>
-                          Edit content
-                        </Text>
-                      </Box>
-                    </Flex>
+                    <StepBlock
+                      no={1}
+                      title="Content"
+                      desc="Draft contents"
+                      tab={tab}
+                    />
                   </Tab>
                   <Tab
                     id="view"
@@ -367,29 +417,16 @@ const ContentDetail = () => {
                       bg: 'gray.1',
                       color: 'green.9',
                       borderRadius: 0,
-                      border: 'solid 1px #ddd',
+                      // border: 'solid 1px #ddd',
                       px: 4,
                       borderLeft: 0,
                     }}>
-                    <Flex>
-                      <NumberBlock
-                        no={2}
-                        active={tab.selectedId === 'view' ? true : false}
-                      />
-                      <Box>
-                        <Text
-                          as="h4"
-                          sx={{
-                            color:
-                              tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
-                          }}>
-                          File
-                        </Text>
-                        <Text as="h5" sx={{ fontWeight: 100, color: 'gray.5' }}>
-                          Edit content
-                        </Text>
-                      </Box>
-                    </Flex>
+                    <StepBlock
+                      no={2}
+                      title="File"
+                      desc="Edit content"
+                      tab={tab}
+                    />
                   </Tab>
                 </TabList>
 
@@ -404,7 +441,6 @@ const ContentDetail = () => {
                           starter={contentBody}
                           cleanInsert={true}
                           token={contentBody}
-                          // mt={0}
                         />
                       )}
                     </PreTag>

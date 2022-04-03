@@ -226,8 +226,7 @@ const Nav = (props: any) => {
               <Box
                 sx={{
                   mr: 2,
-                  color: checkActive(pathname, m) ? 'teal.4' : 'gray.5',                  
-                  // opacity: 0.6,
+                  color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',                  
                 }}>
                 {m.logo}
               </Box>

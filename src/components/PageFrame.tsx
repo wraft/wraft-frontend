@@ -23,7 +23,7 @@ export interface IAlert {
 export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
   const shouldShow: boolean = showFull ? true : false;
   const fontName = 'Poppins';
-  const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`
+  const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
     <>
@@ -42,11 +42,10 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
             name="description"
             content="Wraft Docs help busines move steady and fast with Document Automation System"
           />
-          <link rel="preconnect" href="https://fonts.googleapis.com"/>
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-          <link href={url} rel="stylesheet"/>
-
-          <link href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet"/>
+          <link
+            href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
+            rel="stylesheet"
+          />
         </Head>
 
         <Flex
@@ -93,26 +92,6 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
           )}
         </Flex>
       </Flex>
-
-      {/* <Container width={100} bg={'white'}>
-        {!token && (
-          <Box>
-            <Nav />
-            <Box>{props.children}</Box>
-          </Box>
-        )}
-        {token && (
-          <Flex>
-            <Sidebar showFull={showFull} />
-            <Box bg="gray.0" sx={{ width: '100%' }}>
-              <Nav />
-              <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
-                {props.children}
-              </Box>
-            </Box>
-          </Flex>
-        )}
-      </Container> */}
     </>
   );
 };

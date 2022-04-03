@@ -51,9 +51,17 @@ const ManageHomePage = (_props: INav) => {
   return (
     <Box>
       <PageHeader title="Manage" desc="Manage Variants">
-        <Box sx={{ flexGrow: 1, ml: 'auto', textAlign: 'right', mr: 0, pt: 2, mt: 1 }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            ml: 'auto',
+            textAlign: 'right',
+            mr: 0,
+            pt: 2,
+            mt: 1,
+          }}>
           {/* <NavLink href="/content-types/new" variant="btnSmall"> */}
-            {/* <Text as="h5" sx={{ color: 'gray.7' }}>Functionary Labs</Text>
+          {/* <Text as="h5" sx={{ color: 'gray.7' }}>Functionary Labs</Text>
             <Text as="p" sx={{ color: 'gray.4', fontSize: 0 }}>Bengaluru, India</Text> */}
           {/* </NavLink> */}
         </Box>
@@ -70,13 +78,13 @@ const ManageHomePage = (_props: INav) => {
                 border: 'solid 1px',
                 bg: 'gray.0',
                 // width: '240px',
-                borderColor: 'gray.4',
+                borderColor: 'teal.7',
                 borderRadius: 4,
                 py: 4,
                 mb: 4,
                 px: 4,
-                ':hover': { bg: 'blue.0', borderColor: 'blue.2' },
-                color: 'blue.8',
+                ':hover': { bg: 'teal.7', borderColor: 'teal.6' },
+                color: 'teal.8',
               }}>
               <NavLink href={l.path}>
                 <Flex>
@@ -84,13 +92,11 @@ const ManageHomePage = (_props: INav) => {
                     sx={{
                       width: '4rem',
                       height: '4rem',
-                      // border: 'solid 1px',
-                      // borderColor: 'gray.3',
                       mb: 1,
                       mr: 1,
                       color: 'gray.7',
                       svg: {
-                        fill: 'blue.4',
+                        fill: 'teal.2',
                       },
                     }}>
                     {l.logo}
@@ -126,7 +132,6 @@ const ManageHomePage = (_props: INav) => {
 };
 
 export default ManageHomePage;
-
 
 export const IconStyleWrapper = styled.div`
   color: #444;

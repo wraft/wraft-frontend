@@ -13,7 +13,7 @@ const theme: Theme = {
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [12, 16, 20, 22, 25, 31.25, 39.06, 48.83, 61.04],
+  fontSizes: [13, 16, 20, 22, 25, 31.25, 39.06, 48.83, 61.04],
   fontWeights: {
     body: 400,
     heading: 600,
@@ -223,7 +223,8 @@ const theme: Theme = {
   forms: {
     label: {
       color: 'gray.6',
-      fontSize: 2,
+      fontSize: 1,
+      fontWeight: 500,
       pb: 0,
     },
     input: {
@@ -583,7 +584,7 @@ const theme: Theme = {
       color: 'gray.7',
       py: 0,
       ':hover': {
-        color: 'primary',
+        color: 'gray.9',
       },
     },
     menuLink: {
