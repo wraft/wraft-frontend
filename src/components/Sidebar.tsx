@@ -13,10 +13,16 @@ import {
   Note,
   Layout,
   Water,
+  Like,
   Cabinet as BookOpen,
   Carousel,
   Cog,
+  UserVoice,
+  Wrench,
+  Dna as PaintRoll,
+  Text as TextIcon
 } from '@styled-icons/boxicons-regular';
+
 import ModeToggle from './ModeToggle';
 // import ContentTypeDashboard from './ContentTypeDashboard';
 
@@ -52,7 +58,7 @@ const listMenu = [
   },
   {
     name: 'Approvals',
-    logo: <Layout width={20} />,
+    logo: <Like width={20} />,
     path: '/approvals',
   },
   {
@@ -73,15 +79,15 @@ const listMenu = [
 
   {
     name: 'Blocks',
-    logo: <Water width={20} />,
+    logo: <TextIcon width={20} />,
     path: '/blocks',
   },
 
-  {
-    name: 'Forms',
-    logo: <Water width={20} />,
-    path: '/forms',
-  },
+  // {
+  //   name: 'Forms',
+  //   logo: <Water width={20} />,
+  //   path: '/forms',
+  // },
   // {
   //   name: 'Flows',
   //   logo: <GitMerge width={20} />,
@@ -103,15 +109,16 @@ const listMenu = [
   //   path: '/themes',
   // },
   {
-    name: 'Manage',
-    logo: <Cog width={20} />,
-    path: '/manage',
-  },
-  {
     name: 'Vendors',
-    logo: <Cog width={20} />,
+    logo: <UserVoice width={20} />,
     path: '/vendors',
   },
+  {
+    name: 'Manage',
+    logo: <Wrench width={20} />,
+    path: '/manage',
+  },
+  
   {
     name: 'Settings',
     logo: <Cog width={20} />,
