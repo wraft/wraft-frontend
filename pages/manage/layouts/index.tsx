@@ -26,7 +26,7 @@ const Index: FC = () => {
         />
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
-            <ManageSidebar items={menuLinks}/>
+            <ManageSidebar items={menuLinks} />
             <LayoutList />
           </Flex>
         </Container>

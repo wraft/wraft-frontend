@@ -5,7 +5,7 @@ import { Box, Text } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
-import { env } from './vars'
+import { env } from './vars';
 
 export interface IField {
   name: string;
@@ -24,25 +24,19 @@ const Form = () => {
       },
       body: JSON.stringify(data),
     })
-      .then(function(response) {
+      .then(function (response) {
         return response.json();
       })
-      .then(function(data) {
+      .then(function (data) {
         console.log('Created Profile:', data);
       });
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}>
-      <Text mb={3}>
-        Sign-in to Wraft
-      </Text>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
+      <Text mb={3}>Sign-in to Wraft</Text>
       <Box mx={-2} mb={3}>
-        <Box >
+        <Box>
           <Label htmlFor="email" mb={1}>
             Email
           </Label>
@@ -53,7 +47,7 @@ const Form = () => {
             ref={register({ required: true })}
           />
         </Box>
-        <Box >
+        <Box>
           <Label htmlFor="location" mb={1}>
             Password
           </Label>
@@ -67,7 +61,6 @@ const Form = () => {
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
       </Box>
-      
     </Box>
   );
 };

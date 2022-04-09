@@ -6,7 +6,7 @@ import { loadEntityDetail } from '../utils/models';
 import { useRouter } from 'next/router';
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [sachet, setSachet] = useState<any>();
   // const [_ains, setMains] = useState<any>();
   // const [chartData, setChartData] = useState<any>();
@@ -55,7 +55,8 @@ const Form = () => {
                 borderTop: 'solid 1px #ddd',
                 borderLeft: 'solid 1px #ddd',
                 borderRight: 'solid 1px #ddd',
-              }}>
+              }}
+            >
               <Text variant="blocktitle">Orders</Text>
             </Box>
           </Flex>
@@ -67,9 +68,7 @@ const Form = () => {
                     {m.start_date} to {m.end_date}
                   </Text>
 
-                  <Text mt={2}>
-                    {m.amount} QAR
-                  </Text>
+                  <Text mt={2}>{m.amount} QAR</Text>
                 </Box>
               ))}
           </Box>

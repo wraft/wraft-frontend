@@ -5,7 +5,7 @@ import auth from './auth';
 import basicEntity from './default';
 
 const profile = {
-  profile:{},
+  profile: {},
   updateProfile: action((state, payload) => {
     state.profile = payload;
   }),
@@ -34,7 +34,7 @@ const nutrilabelsEntity = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -47,7 +47,7 @@ const menusEntity = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -60,7 +60,7 @@ const groceriesEntity = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -77,7 +77,6 @@ const groceriesEntity = {
 //   }),
 // };
 
-
 const categoriesEntity = {
   items: [],
   add: action((state, payload) => {
@@ -87,7 +86,7 @@ const categoriesEntity = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -100,7 +99,7 @@ const sachetTypesModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -113,7 +112,7 @@ const images = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -126,7 +125,7 @@ const sachetsModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -139,7 +138,7 @@ const macrosModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -152,7 +151,7 @@ const mealTypeModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -165,7 +164,7 @@ const combinationsModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 
@@ -178,10 +177,10 @@ const orderItemModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
   clear: action((state, payload) => {
-    state.items = []
+    state.items = [];
   }),
 };
 
@@ -195,17 +194,17 @@ const orderSlotModel = {
   }),
 
   update: action((state, payload) => {
-    const { data, meal_pack, type } = payload
+    const { data, meal_pack, type } = payload;
 
-    var foundIndex = state.items.findIndex(x => x.id == meal_pack);
-    state.items[foundIndex]  = {
+    var foundIndex = state.items.findIndex((x) => x.id == meal_pack);
+    state.items[foundIndex] = {
       ...state.items[foundIndex],
-      [type]: data
-    }
+      [type]: data,
+    };
   }),
 
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 

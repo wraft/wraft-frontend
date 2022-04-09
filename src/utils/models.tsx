@@ -12,7 +12,7 @@ const httpClient = axios.create({
 
 // Request interceptor for API calls
 httpClient.interceptors.request.use(
-  async config => {
+  async (config) => {
     const token = (await cookie.get('token')) || false;
     // eslint-disable-next-line no-param-reassign
     config.headers = {
@@ -20,14 +20,14 @@ httpClient.interceptors.request.use(
     };
     return config;
   },
-  error => {
+  (error) => {
     Promise.reject(error);
   },
 );
 
 httpClient.interceptors.response.use(
-  response => response,
-  async function(error) {
+  (response) => response,
+  async function (error) {
     const originalRequest = error.config;
     // eslint-disable-next-line no-underscore-dangle
     if (error.response.status === 401 && !originalRequest._retry) {
@@ -48,10 +48,10 @@ export const fetchAPI = (path: any, query = '') =>
   new Promise((resolve, reject) => {
     httpClient
       .get(`/${path}${query}`)
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         const res = err.response.data;
         if (err.response.status === 400) {
           resolve(res);
@@ -68,10 +68,10 @@ export const deleteAPI = (path: any) =>
   new Promise((resolve, reject) => {
     httpClient
       .delete(`/${path}`)
-      .then(response => {
+      .then((response) => {
         resolve(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         const res = err.response.data;
         if (err.response.status === 400) {
           resolve(res);
@@ -87,8 +87,7 @@ export const deleteAPI = (path: any) =>
  */
 
 export const loadEntity = (token: string, path: string, onSuccess: any) => {
-
-  console.log('API_HOST', API_HOST)
+  console.log('API_HOST', API_HOST);
 
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'GET',
@@ -98,10 +97,10 @@ export const loadEntity = (token: string, path: string, onSuccess: any) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       onSuccess(data);
     });
 };
@@ -124,10 +123,10 @@ export const loadEntityDetail = (
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       onSuccess(data);
     });
 };
@@ -144,7 +143,6 @@ export const createEntity = (
   token: string,
   onSuccess?: any,
 ) => {
-
   console.log('🥷', API_HOST, data);
 
   fetch(`${API_HOST}/api/v1/${path}`, {
@@ -156,10 +154,10 @@ export const createEntity = (
     },
     body: JSON.stringify(data),
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (onSuccess) {
         console.log(`Created a model ${path} with Pass`, data);
         onSuccess(data);
@@ -183,10 +181,10 @@ export const deleteEntity = (path: string, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       console.log(`Created a model ${path}`, data);
     });
 };
@@ -211,10 +209,10 @@ export const updateEntity = (
     },
     body: JSON.stringify(data),
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       onSuccess(data);
     });
 };
@@ -270,10 +268,10 @@ export const createEntityFile = (
     },
     body: data,
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       console.log(`Created a asset ${path}`, data);
       if (onSuccess) {
         onSuccess(data);
@@ -301,10 +299,10 @@ export const updateEntityFile = (
     },
     body: data,
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       console.log(`Created a model ${path}`, data);
       if (onSuccess) {
         onSuccess(data);
@@ -321,10 +319,10 @@ export const registerUser = (data: any, onSuccess?: any) => {
     },
     body: JSON.stringify(data),
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       onSuccess(data);
     });
 };
@@ -337,10 +335,10 @@ export const checkUser = (token: any, onSuccess?: any) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       onSuccess(data);
     });
 };
@@ -359,10 +357,10 @@ export const userLogin = (data: any, onSuccess?: any) => {
     },
     body: JSON.stringify(data),
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       const { token } = data;
       cookie.set('token', token);
       onSuccess(token);
@@ -383,10 +381,10 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
     },
     body: JSON.stringify(data),
   })
-    .then(function(response) {
+    .then(function (response) {
       return response.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       const { token } = data;
       cookie.set('token', token);
       onSuccess(token);

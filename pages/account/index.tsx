@@ -16,7 +16,7 @@ const Contents: FC = () => {
       </Head>
       <Page>
         <PageHeader title="My Account" desc="Manage your account">
-          <Box sx={{ ml: 'auto' }}/>
+          <Box sx={{ ml: 'auto' }} />
         </PageHeader>
         <Flex>
           <OrgSidebar />

@@ -79,27 +79,54 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
         </Link>
       </Flex> */}
       {parent && (
-        <>          
+        <>
           <Box mx={0} mb={3}>
             <Flex mb={4}>
               <Box>
-                <Text as="h2" sx={{ pt: 0, mb: 3, fontSize: 2, pb: 1}}>Members</Text>
+                <Text as="h2" sx={{ pt: 0, mb: 3, fontSize: 2, pb: 1 }}>
+                  Members
+                </Text>
               </Box>
-              <Box sx={{ ml: 'auto'}}>
-                <Button variant="btnSecondary" onClick={() => onInitInvite()} sx={{ pt: 1, pb: 1}}>+ Invite</Button>
+              <Box sx={{ ml: 'auto' }}>
+                <Button
+                  variant="btnSecondary"
+                  onClick={() => onInitInvite()}
+                  sx={{ pt: 1, pb: 1 }}
+                >
+                  + Invite
+                </Button>
               </Box>
             </Flex>
             <Box>
               {members &&
                 members.length > 0 &&
                 members.map((_m: Member) => (
-                  <Flex variant="plateBox" sx={{ border: 'solid 1px', pl: 4, pr: 4, borderColor: '#ddd', borderRadius: 3 }}>
+                  <Flex
+                    variant="plateBox"
+                    sx={{
+                      border: 'solid 1px',
+                      pl: 4,
+                      pr: 4,
+                      borderColor: '#ddd',
+                      borderRadius: 3,
+                    }}
+                  >
                     <Box pt={3}>
-                      <Image src={`http://localhost:4000/` + _m.profile_pic} sx={{ borderRadius: "99rem", width: '40px', height: '40px',mr: 3}}/>
+                      <Image
+                        src={`http://localhost:4000/` + _m.profile_pic}
+                        sx={{
+                          borderRadius: '99rem',
+                          width: '40px',
+                          height: '40px',
+                          mr: 3,
+                        }}
+                      />
                     </Box>
                     <Box sx={{ pt: 3, pb: 3 }}>
-                      <Text as="h4" sx={{ fontWeight: 600}}>{_m.name}</Text>
-                      <Text as="p" sx={{ fontSize: 1,  color: 'gray.6' }}>
+                      <Text as="h4" sx={{ fontWeight: 600 }}>
+                        {_m.name}
+                      </Text>
+                      <Text as="p" sx={{ fontSize: 1, color: 'gray.6' }}>
                         {_m.email}
                       </Text>
                     </Box>
@@ -111,7 +138,8 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                         color: 'blue.5',
                         ml: 'auto',
                         textTransform: 'uppercase',
-                      }}>
+                      }}
+                    >
                       {/* {_m.roles[0].name} */}
                     </Text>
                   </Flex>

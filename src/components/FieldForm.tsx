@@ -126,7 +126,8 @@ const FieldForm = ({
           mb: 3,
           border: 'solid 1px',
           borderColor: 'gray.3',
-        }}>
+        }}
+      >
         {fieldMap &&
           fieldMap.map((x: any) => (
             <Flex
@@ -138,13 +139,15 @@ const FieldForm = ({
                 borderBottom: 'solid 0.5px',
                 borderColor: 'gray.2',
                 // mb: 2,
-              }}>
+              }}
+            >
               <Text
                 sx={{
                   color: '#363e4980',
                   fontSize: '16px',
                   fontWeight: 300,
-                }}>
+                }}
+              >
                 {x.name}
               </Text>
               <Text
@@ -155,7 +158,8 @@ const FieldForm = ({
                   color: '#363E49',
                   fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
-                }}>
+                }}
+              >
                 {x.value}
               </Text>
               <Text>{x.type}</Text>

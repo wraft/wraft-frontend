@@ -125,7 +125,8 @@ interface FlowStateBlock {
 
 const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
   <Flex
-    sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
+    sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}
+  >
     <Box
       sx={{
         mt: 2,
@@ -136,7 +137,8 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
         bg: 'green.1',
         textAlign: 'center',
         mr: 2,
-      }}>
+      }}
+    >
       {order}
     </Box>
     <Text variant="labelcaps" sx={{ pt: 2 }}>
@@ -694,7 +696,8 @@ const Form = (props: IContentForm) => {
             as="form"
             id="hook-form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
+            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}
+          >
             <Box sx={{ display: showDev ? 'block' : 'none' }}>
               <FieldText
                 name="body"
@@ -722,7 +725,8 @@ const Form = (props: IContentForm) => {
                 width: '100%',
                 pl: 2,
                 pt: 2,
-              }}>
+              }}
+            >
               <Flex>
                 <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
                   <Field
@@ -761,7 +765,8 @@ const Form = (props: IContentForm) => {
                     letterSpacing: '0.2px',
                     textTransform: 'uppercase',
                     fontSize: '10.24px',
-                  }}>
+                  }}
+                >
                   Words
                 </Text>
                 <Text
@@ -771,7 +776,8 @@ const Form = (props: IContentForm) => {
                     fontSize: '16px',
                     lineHeight: '24px',
                     pb: 2,
-                  }}>
+                  }}
+                >
                   0
                 </Text>
               </Box>
@@ -785,11 +791,13 @@ const Form = (props: IContentForm) => {
                   position: 'relative',
                   lineHeight: 1.5,
                   fontFamily: 'body',
-                }}>
+                }}
+              >
                 <Button
                   variant="secondary"
                   type="button"
-                  onClick={() => setShowDev(!showDev)}>
+                  onClick={() => setShowDev(!showDev)}
+                >
                   Dev
                 </Button>
                 <EditorWraft
@@ -802,7 +810,8 @@ const Form = (props: IContentForm) => {
                   searchables={ALL_USERS}
                 />
                 <Box
-                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
+                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}
+                >
                   {body && body?.md && raw && (
                     <Box sx={{ color: 'green.4' }}>
                       <TickIcon />
@@ -853,7 +862,8 @@ const Form = (props: IContentForm) => {
               width: '30%',
               borderLeft: 'solid 1px #ddd',
               pt: 3,
-            }}>
+            }}
+          >
             <Box sx={{ px: 3 }}>
               <Flex sx={{ mb: 3 }}>
                 {content && <h1>Content Undu</h1>}
@@ -868,7 +878,8 @@ const Form = (props: IContentForm) => {
                         fontWeight: 'heading',
                         fontSize: '16px',
                         lineHeight: '24px',
-                      }}>
+                      }}
+                    >
                       v1.0
                     </Text>
                     <Text
@@ -884,7 +895,8 @@ const Form = (props: IContentForm) => {
                         letterSpacing: '0.2px',
                         textTransform: 'uppercase',
                         fontSize: '10.24px',
-                      }}>
+                      }}
+                    >
                       Draft
                     </Text>
                   </Flex>
@@ -920,7 +932,8 @@ const Form = (props: IContentForm) => {
                           pb: 2,
                           background: '#FFFFFF',
                           border: '1px solid #E9ECEF',
-                        }}>
+                        }}
+                      >
                         <Text
                           onClick={() => setTemplate(true)}
                           as="h6"
@@ -929,12 +942,14 @@ const Form = (props: IContentForm) => {
                             mb: 0,
                             fontWeight: 500,
                             letterSpacing: '0.2px',
-                          }}>
+                          }}
+                        >
                           {selectedTemplate?.title}
                         </Text>
                         <Text
                           as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}
+                        >
                           {selectedTemplate?.content_type?.prefix}
                         </Text>
                       </Box>
@@ -967,15 +982,18 @@ const Form = (props: IContentForm) => {
                           pr: 3,
                           width: '100%',
                         }}
-                        onClick={() => changeText(n)}>
+                        onClick={() => changeText(n)}
+                      >
                         <Text
                           as="h6"
-                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}
+                        >
                           {n.title}
                         </Text>
                         <Text
                           as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}
+                        >
                           Description
                         </Text>
                       </Box>
@@ -1011,7 +1029,8 @@ const Form = (props: IContentForm) => {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
-                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}>
+                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}
+                  >
                     <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
@@ -1045,7 +1064,8 @@ const Form = (props: IContentForm) => {
                         borderColor: 'green.9',
                         border: 'solid 1px',
                       }}
-                      type="submit">
+                      type="submit"
+                    >
                       Publish
                     </Button>
                   </Box>

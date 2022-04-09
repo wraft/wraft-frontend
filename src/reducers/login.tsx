@@ -7,13 +7,13 @@ const initialState = {
 };
 
 const getCookie = () => {
-  const c:string = cookie.get('token') as string;
-  if(c && c.length> 10){
+  const c: string = cookie.get('token') as string;
+  if (c && c.length > 10) {
     return c;
   } else {
     return false;
   }
-}
+};
 
 const reducer = (state = initialState, action: any) => {
   switch (action.type) {
@@ -21,7 +21,7 @@ const reducer = (state = initialState, action: any) => {
       return {
         ...state,
         loggin_in: true,
-        payload: action.payload
+        payload: action.payload,
       };
     case 'LOGIN_SUCCESS':
       return {
@@ -35,13 +35,13 @@ const reducer = (state = initialState, action: any) => {
         logged_in: false,
       };
     case 'LOGIN_CHECK':
-       let token:any = getCookie()
-        return {
-          ...state,
-          logged_in: false,
-          checking: true,
-          token:token,
-        };
+      let token: any = getCookie();
+      return {
+        ...state,
+        logged_in: false,
+        checking: true,
+        token: token,
+      };
     default:
       return state;
   }

@@ -195,7 +195,8 @@ const CollectionForm = () => {
     <Box>
       <PageHeader
         title={`${cId ? 'Edit' : 'New '} Collection Form`}
-        desc="Manage Custom Forms">
+        desc="Manage Custom Forms"
+      >
         <Box />
       </PageHeader>
       <Flex>

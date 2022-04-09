@@ -126,7 +126,7 @@ const Form = () => {
 
   const toggleEdit = () => {
     setEdit(!isEdit);
-    setImagePreview('')
+    setImagePreview('');
   };
 
   // const [showDate, setShowDate] = useState<boolean>(false);
@@ -253,7 +253,8 @@ const Form = () => {
                         },
                       }}
                       pr={4}
-                      pb={4}>
+                      pb={4}
+                    >
                       <Box sx={{ position: 'relative' }}>
                         {/* \\!imageSaved && ( */}
                         {!isEdit && (
@@ -278,7 +279,8 @@ const Form = () => {
                             isOpen={true}
                             onRequestClose={closeModal}
                             ariaHideApp={false}
-                            contentLabel="Profile Image">
+                            contentLabel="Profile Image"
+                          >
                             {/* <ImageCropper /> */}
                             image cropper
                           </Modal>

@@ -3,14 +3,11 @@
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "es2017"
-    ],
+    "lib": ["dom", "es2017"],
     "moduleResolution": "node",
     "allowJs": true,
     "noEmit": true,
-    "strict": true,
+    "strict": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
@@ -23,12 +20,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "experimentalDecorators": true,
+    "experimentalDecorators": true
   },
-  "exclude": [
-    "node_modules",
-    "__tests__"
-  ],
+  "exclude": ["node_modules", "__tests__"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

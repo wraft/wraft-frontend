@@ -374,7 +374,8 @@ const Form = () => {
     <Box>
       <PageHeader
         title={`${cId ? 'Edit' : 'New '} Variant`}
-        desc="Manage Variants">
+        desc="Manage Variants"
+      >
         <Box />
       </PageHeader>
       <Flex>
@@ -423,7 +424,8 @@ const Form = () => {
                   <Select
                     id="layout_id"
                     name="layout_id"
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -441,7 +443,8 @@ const Form = () => {
                     id="flow_id"
                     name="flow_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -470,7 +473,8 @@ const Form = () => {
                     id="theme_id"
                     name="theme_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
@@ -510,7 +514,8 @@ const Form = () => {
               <Button
                 type="button"
                 variant="btnPrimaryLarge"
-                onClick={() => deleteMe(cId)}>
+                onClick={() => deleteMe(cId)}
+              >
                 Delete
               </Button>
             )}

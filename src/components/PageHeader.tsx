@@ -15,7 +15,7 @@ interface breadLinksLink {
   link?: string;
 }
 
-const breadLinks: breadLinksLink[] = [  
+const breadLinks: breadLinksLink[] = [
   {
     name: 'Flows',
     link: '/links/',
@@ -28,7 +28,7 @@ const breadLinks: breadLinksLink[] = [
 
 const BreadLinks = (props: any) => {
   return (
-    <Flex sx={{ py: 2}}>
+    <Flex sx={{ py: 2 }}>
       {props?.links &&
         props?.links.map((l: any) => (
           <Link sx={{ color: 'gray.6', fontSize: 0, mr: 2 }}>
@@ -49,14 +49,16 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
           <Text
             as="h1"
             variant="pageheading"
-            sx={{ color: 'gray.7', mb: 0, fontSize: 1, fontWeight: 'heading' }}>
+            sx={{ color: 'gray.7', mb: 0, fontSize: 1, fontWeight: 'heading' }}
+          >
             {title}
           </Text>
           {desc && (
             <Text
               as="h4"
               variant="pageheading"
-              sx={{ fontSize: 1, mt: 0, color: 'gray.6', fontWeight: 400 }}>
+              sx={{ fontSize: 1, mt: 0, color: 'gray.6', fontWeight: 400 }}
+            >
               {desc}
             </Text>
           )}

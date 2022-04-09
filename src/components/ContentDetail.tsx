@@ -62,12 +62,14 @@ export const StepBlock = ({ no, tab, title, desc }: StepBlockProps) => {
             fontFamily: 'body',
             fontSize: 0,
             color: tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
-          }}>
+          }}
+        >
           {title}
         </Text>
         <Text
           as="h5"
-          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
+          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}
+        >
           {desc}
         </Text>
       </Box>
@@ -101,14 +103,16 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
         borderColor: activeBorder,
         width: size?.wh,
         height: size?.wh,
-      }}>
+      }}
+    >
       <Text
         as="span"
         sx={{
           color: activeColor,
           lineHeight: 'body',
           fontSize: size?.fontSize,
-        }}>
+        }}
+      >
         {no}
       </Text>
     </Box>
@@ -132,7 +136,8 @@ export const ProfileCard = ({ name, time, image }: ProfileCardP) => {
         fontSize: 0,
         color: 'gray.8',
         my: 2,
-      }}>
+      }}
+    >
       <Avatar
         width={22}
         sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
@@ -317,7 +322,8 @@ const ContentDetail = () => {
               right: '-50%',
               left: '50%',
               top: '80px',
-            }}>
+            }}
+          >
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
@@ -326,7 +332,8 @@ const ContentDetail = () => {
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
+              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}
+            >
               <Flex
                 sx={{
                   // px: 4,
@@ -337,7 +344,8 @@ const ContentDetail = () => {
                   borderBottom: 'solid 1px',
                   borderColor: 'gray.3',
                   mb: 3,
-                }}>
+                }}
+              >
                 <Box>
                   <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
                     {contents.content.serialized.title}
@@ -363,11 +371,13 @@ const ContentDetail = () => {
                       svg: {
                         fill: 'gray.6',
                       },
-                    }}>
+                    }}
+                  >
                     <MenuItem
                       variant="btnPrimary"
                       href={`/content/edit/[id]`}
-                      path={`/content/edit/${contents.content.id}`}>
+                      path={`/content/edit/${contents.content.id}`}
+                    >
                       <Box>
                         <Pencil size={22} height={22} />
                         <Text
@@ -377,7 +387,8 @@ const ContentDetail = () => {
                             mt: 0,
                             fontWeight: 'bold',
                             fontSize: 1,
-                          }}>
+                          }}
+                        >
                           Edit
                         </Text>
                       </Box>
@@ -398,7 +409,8 @@ const ContentDetail = () => {
                       // border: 'solid 1px #ddd',
                       // px: 4,
                     }}
-                    {...tab}>
+                    {...tab}
+                  >
                     <StepBlock
                       no={1}
                       title="Content"
@@ -418,7 +430,8 @@ const ContentDetail = () => {
                       // border: 'solid 1px #ddd',
                       px: 4,
                       borderLeft: 0,
-                    }}>
+                    }}
+                  >
                     <StepBlock
                       no={2}
                       title="File"
@@ -466,7 +479,8 @@ const ContentDetail = () => {
                 width: '30%',
                 borderLeft: 'solid 1px #ddd',
                 pt: 3,
-              }}>
+              }}
+            >
               <Box sx={{ px: 3 }}>
                 <Flex sx={{ mb: 3 }}>
                   <Box sx={{ mr: 3 }}>
@@ -480,7 +494,8 @@ const ContentDetail = () => {
                           fontWeight: 'heading',
                           fontSize: '16px',
                           lineHeight: '24px',
-                        }}>
+                        }}
+                      >
                         {contents.content.instance_id}
                       </Text>
                       <Text
@@ -496,7 +511,8 @@ const ContentDetail = () => {
                           letterSpacing: '0.2px',
                           textTransform: 'uppercase',
                           fontSize: '10.24px',
-                        }}>
+                        }}
+                      >
                         {contents?.state.state}
                       </Text>
                     </Flex>
@@ -527,12 +543,14 @@ const ContentDetail = () => {
                           <Box>
                             <Text
                               as="h3"
-                              sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
+                              sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}
+                            >
                               {contents.content.instance_id}
                             </Text>
                             <Text
                               as="h4"
-                              sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                              sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}
+                            >
                               {contents.state?.state}
                             </Text>
                           </Box>
@@ -541,7 +559,8 @@ const ContentDetail = () => {
                         <Link
                           variant="download"
                           href={`/${contents.content.build}`}
-                          target="_blank">
+                          target="_blank"
+                        >
                           <Box
                             sx={{
                               p: 2,
@@ -549,7 +568,8 @@ const ContentDetail = () => {
                               bg: 'green.8',
                               borderRadius: 4,
                               ml: 4,
-                            }}>
+                            }}
+                          >
                             <Download size={20} color="white" />
                           </Box>
                         </Link>
@@ -585,7 +605,8 @@ const ContentDetail = () => {
                   mr: 4,
                   borderTop: 'solid 1px',
                   borderColor: 'gray.3',
-                }}>
+                }}
+              >
                 <Flex
                   sx={{
                     pt: 3,
@@ -593,11 +614,13 @@ const ContentDetail = () => {
                     alignContent: 'flex-start',
                     flexDirection: 'row',
                     // border: 'solid 1px #ddd',
-                  }}>
+                  }}
+                >
                   <Button
                     sx={{ py: 2 }}
                     variant="btnPrimary"
-                    onClick={() => doBuild()}>
+                    onClick={() => doBuild()}
+                  >
                     <>
                       {loading && <Spinner color="white" size={24} />}
                       {!loading && (

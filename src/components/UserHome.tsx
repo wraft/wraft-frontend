@@ -22,7 +22,8 @@ const TextBlock = ({ title, body }: TextBlockProps) => {
           fontSize: 4,
           fontWeight: 600,
           color: 'gray.9',
-        }}>
+        }}
+      >
         {title}
       </Text>
       <Text as="p" sx={{ fontSize: 3, color: 'gray.6' }}>
@@ -55,17 +56,34 @@ const UserHome = () => {
                 mb: 3,
                 color: 'gray.9',
                 lineHeight: '1.20',
-              }}>
+              }}
+            >
               Documents for all
             </Text>
             <Text
               as="h2"
-              sx={{ fontWeight: 300, fontSize: 5, mt: 0, color: 'gray.6', lineHeight: '1.25' }}>
+              sx={{
+                fontWeight: 300,
+                fontSize: 5,
+                mt: 0,
+                color: 'gray.6',
+                lineHeight: '1.25',
+              }}
+            >
               Open source platform for office/personal documents
             </Text>
           </Box>
           <Button
-            sx={{  mt: 3, fontWeight: 600, mb: 5, fontSize: 3, borderRadius: '3rem', py: 3, px: 4 }}>
+            sx={{
+              mt: 3,
+              fontWeight: 600,
+              mb: 5,
+              fontSize: 3,
+              borderRadius: '3rem',
+              py: 3,
+              px: 4,
+            }}
+          >
             Get Started
           </Button>
         </Container>

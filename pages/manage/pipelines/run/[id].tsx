@@ -14,8 +14,8 @@ const Index: FC = () => {
       </Head>
       <Page>
         {/* <Box> */}
-          <PipelineView />
-          {/* <BulkBuild master="" master_id=""/> */}
+        <PipelineView />
+        {/* <BulkBuild master="" master_id=""/> */}
         {/* </Box> */}
       </Page>
     </>

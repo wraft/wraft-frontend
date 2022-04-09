@@ -10,7 +10,7 @@ const Index: FC = () => {
         <title>Blocks - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <Page>        
+      <Page>
         <BlockTemplateList />
       </Page>
     </>
