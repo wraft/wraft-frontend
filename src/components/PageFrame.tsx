@@ -22,8 +22,8 @@ export interface IAlert {
 
 export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
   const shouldShow: boolean = showFull ? true : false;
-  const fontName = 'Poppins';
-  const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
+  // const fontName = 'Poppins';
+  // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
     <>

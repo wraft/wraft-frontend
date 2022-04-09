@@ -2,7 +2,6 @@ import { FC } from 'react';
 import Head from 'next/head';
 import ManageSidebar from '../../src/components/ManageView';
 import Page from '../../src/components/PageFrame';
-// <HeadingFrame title="Manage"/>
 const Index: FC = () => {
   return (
     <>
@@ -11,7 +10,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <ManageSidebar />
+        <ManageSidebar showFull={true} />
       </Page>
     </>
   );

@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box, Text, Container, Flex } from 'theme-ui';
+import { Container, Flex } from 'theme-ui';
 import ThemeList from '../../../src/components/ThemeList';
 import Page from '../../../src/components/PageFrame';
 import Link from '../../../src/components/NavLink';
 import ManageSidebar from '../../../src/components/ManageSidebar';
 import { HeadingFrame } from '../../../src/components/Card';
+import { menuLinks } from '../../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -23,9 +24,9 @@ const Index: FC = () => {
             </Link>
           }
         />
-        <Container variant="layout.pageFrame">          
+        <Container variant="layout.pageFrame">
           <Flex>
-            <ManageSidebar />    
+            <ManageSidebar items={menuLinks} />
             <ThemeList />
           </Flex>
         </Container>

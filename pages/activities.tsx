@@ -6,8 +6,6 @@ import { useStoreState } from 'easy-peasy';
 import UserNav from '../src/components/UserNav';
 import UserHome from '../src/components/UserHome';
 import ActivityFeed from '../src/components/ActivityFeed';
-import ContentTypeDashboard from '../src/components/ContentTypeDashboard';
-
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);

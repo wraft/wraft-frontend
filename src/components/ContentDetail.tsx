@@ -17,7 +17,7 @@ import { File } from './Icons';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { createEntity, loadEntity, deleteEntity } from '../utils/models';
+import { createEntity, loadEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
@@ -162,13 +162,14 @@ export interface ContentInstance {
 }
 
 export interface Content {
-  updated_at: Date;
+  updated_at: any;
   serialized: Serialized;
   raw: string;
   instance_id: string;
-  inserted_at: Date;
+  inserted_at: any;
   id: string;
   build: string;
+  title: string;
 }
 
 export interface Serialized {
@@ -236,9 +237,6 @@ const ContentDetail = () => {
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
 
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
   const tab = useTabState({ selectedId: 'edit' });
 
   const loadDataSucces = (data: any) => {
@@ -254,11 +252,11 @@ const ContentDetail = () => {
   /** DELETE content
    * @TODO move to inner page [design]
    */
-  const delData = (id: string) => {
-    if (token) {
-      deleteEntity(`contents/${id}`, token);
-    }
-  };
+  // const delData = (id: string) => {
+  //   if (token) {
+  //     deleteEntity(`contents/${id}`, token);
+  //   }
+  // };
 
   /**
    * On Build success
@@ -345,7 +343,7 @@ const ContentDetail = () => {
                     {contents.content.serialized.title}
                   </Text>
                   <ProfileCard
-                    time={contents.content.inserted_at}
+                    time={contents.content?.inserted_at}
                     name={contents.creator?.name}
                     image="http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803"
                   />

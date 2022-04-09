@@ -6,6 +6,7 @@ import Page from '../../../src/components/PageFrame';
 import ManageSidebar from '../../../src/components/ManageSidebar';
 import { HeadingFrame } from '../../../src/components/Card';
 import Link from '../../../src/components/NavLink';
+import { menuLinks } from '../../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -25,7 +26,7 @@ const Index: FC = () => {
         />
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
-            <ManageSidebar />
+            <ManageSidebar items={menuLinks}/>
             <LayoutList />
           </Flex>
         </Container>

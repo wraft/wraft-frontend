@@ -1,11 +1,4 @@
-import React, {
-  FC,
-  useRef,
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react';
+import React, { FC, useCallback, useState, useEffect, useMemo } from 'react';
 import { RemirrorJSON, getTheme } from 'remirror';
 import { BlockquoteExtension } from '@remirror/extension-blockquote';
 import { BoldExtension } from '@remirror/extension-bold';
@@ -39,7 +32,7 @@ import { HolderAtomExtension } from './holder/holder-atom';
 import {
   // MentionAtomPopupComponent,
   Toolbar,
-  useCommands,
+  // useCommands,
 } from '@remirror/react';
 
 import { HolderAtomPopupComponent } from './holder/holder-popover';
@@ -88,7 +81,7 @@ interface EditorProps {
  */
 function HolderSuggestComponent({ tokens }: any) {
   const [mentionState, setMentionState] = useState<any>();
-  const commands = useCommands();
+  // const commands = useCommands();
 
   const items = useMemo(() => {
     const allItems = tokens;
@@ -114,13 +107,13 @@ function HolderSuggestComponent({ tokens }: any) {
 
 const EditorWraft: FC<EditorProps> = ({
   cleanInsert,
-  variables,
+  // variables,
   starter,
-  insertable,
+  // insertable,
   token,
   onUpdate,
   editable,
-  ready,
+  // ready,
   showToolbar = false,
   searchables,
 }) => {
@@ -128,7 +121,12 @@ const EditorWraft: FC<EditorProps> = ({
   const [loaded, setLoaded] = useState<boolean>(false);
 
   const [fieldtokens, setFieldtokens] = useState<any>([]);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    console.log('🎃🎃 searchables', docState);
+  }, [docState]);
+
   /**
    * Document variables
    */
@@ -165,7 +163,7 @@ const EditorWraft: FC<EditorProps> = ({
       new BulletListExtension({}),
       new OrderedListExtension(),
       new TableExtension(),
-      new MarkdownExtension(),
+      new MarkdownExtension({}),
       new ImageExtension(),
       new HolderAtomExtension({
         extraAttributes: {
@@ -177,7 +175,20 @@ const EditorWraft: FC<EditorProps> = ({
           { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
         ],
       }),
-      new MentionAtomExtension({ extraAttributes: null }),
+      // new MentionAtomExtension({ extraAttributes: {} }),
+
+      new MentionAtomExtension({
+        disableDecorations: false,
+        matchers: [
+          {
+            name: 'mentionAtom',
+            char: '@',
+            matchOffset: 0,
+            mentionClassName: 'mention-class-name',
+            suggestClassName: 'sugget-class-name',
+          },
+        ],
+      }),
     ];
   }, []);
 
@@ -186,7 +197,7 @@ const EditorWraft: FC<EditorProps> = ({
   });
 
   const handleChange = useCallback(
-    ({ state, tr }) => {
+    ({ state }) => {
       const ctx = getContext();
       const md = ctx?.helpers.getMarkdown();
       const obj = {
@@ -205,10 +216,6 @@ const EditorWraft: FC<EditorProps> = ({
   useEffect(() => {
     if (!loaded && starter) {
       console.log('🎃🎃', starter, starter?.content?.length);
-      //   console.log('🧶 🧶 [content] A', starter)
-
-      //   getContext()?.setContent(starter);
-      //   setLoaded(true)
     }
   }, [starter]);
 
@@ -252,15 +259,6 @@ const EditorWraft: FC<EditorProps> = ({
     }
   }, [token]);
 
-  const items = [
-    { id: 'x', label: 'XX' },
-    { id: 'y', label: 'YY' },
-  ];
-
-  const setMentionState = (x) => {
-    console.log('x', x);
-  };
-
   return (
     <Box
       variant="styles.editorBody2"
@@ -272,7 +270,7 @@ const EditorWraft: FC<EditorProps> = ({
         lineHeight: 1.5,
         fontSize: 2,
         m: 0,
-        px: 0,
+        px: 4,
         '.remirror-toolbar': {
           bg: 'gray.0',
         },

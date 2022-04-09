@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
-import { EmptyForm, Plus } from './Icons';
+import { EmptyForm } from './Icons';
 import { fetchAPI, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';

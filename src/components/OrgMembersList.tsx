@@ -112,7 +112,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                         ml: 'auto',
                         textTransform: 'uppercase',
                       }}>
-                      {_m.roles[0].name}
+                      {/* {_m.roles[0].name} */}
                     </Text>
                   </Flex>
                 ))}

@@ -7,10 +7,10 @@ import { useCallback, useMemo, useState } from 'react';
 // } from '@remirror/extension-mention-atom';
 
 import {
-    HolderAtomChangeHandler,
-    HolderAtomExtension,
-    HolderAtomNodeAttributes,
-  } from './holder-atom';
+  HolderAtomChangeHandler,
+  HolderAtomExtension,
+  HolderAtomNodeAttributes,
+} from './holder-atom';
 
 import { ChangeReason, SuggestChangeHandlerProps } from '@remirror/pm/suggest';
 import { useExtension, useHelpers } from '@remirror/react-core';
@@ -60,9 +60,9 @@ export interface UseHolderAtomReturn<
  *
  * @param props - the props that can be passed through to the mention atom.
  */
-export function useHolderAtom<Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes>(
-  props: UseHolderAtomProps<Data>,
-): UseHolderAtomReturn<Data> {
+export function useHolderAtom<
+  Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,
+>(props: UseHolderAtomProps<Data>): UseHolderAtomReturn<Data> {
   const {
     ignoreMatchesOnDismiss = true,
     items,
@@ -85,7 +85,9 @@ export function useHolderAtom<Data extends HolderAtomNodeAttributes = HolderAtom
     if (ignoreMatchesOnDismiss) {
       // Ignore the current mention so that it doesn't show again for this
       // matching area
-      helpers.getSuggestMethods().addIgnored({ from: range.from, name, specific: true });
+      helpers
+        .getSuggestMethods()
+        .addIgnored({ from: range.from, name, specific: true });
     }
 
     // Remove the matches.
@@ -166,9 +168,11 @@ export function useHolderAtom<Data extends HolderAtomNodeAttributes = HolderAtom
   );
 
   // Add the handlers to the `MentionExtension`
-  useExtension(HolderAtomExtension, ({ addHandler }) => addHandler('onChange', onChange), [
-    onChange,
-  ]);
+  useExtension(
+    HolderAtomExtension,
+    ({ addHandler }) => addHandler('onChange', onChange),
+    [onChange],
+  );
 
   return useMemo(() => ({ ...menu, state }), [menu, state]);
 }

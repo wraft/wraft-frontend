@@ -4,8 +4,6 @@ import { Box, Flex, Text } from 'theme-ui';
 import Head from 'next/head';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
-import Sidebar from './Sidebar';
-import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
 export interface IPage {
@@ -22,11 +20,11 @@ export interface IAlert {
 
 export const PageFrameInner = ({
   children,
-  showFull = true,
-  // noSide = true,
-}: IPage) => {
+}: // showFull = true,
+// noSide = true,
+IPage) => {
   // const shouldShow: boolean = showFull ? true : false;
-  const fontName = 'Poppins';
+  // const fontName = 'Poppins';
   // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
