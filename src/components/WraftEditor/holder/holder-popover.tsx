@@ -92,7 +92,6 @@ export function HolderAtomPopupComponent<
                   isHighlighted && Theme.MENTION_ATOM_POPUP_HIGHLIGHT,
                   isHovered && Theme.MENTION_ATOM_POPUP_HOVERED,
                 )}
-
                 sx={{
                   border: 'solid 0.5px',
                   borderColor: 'gray.3',

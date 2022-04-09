@@ -5,7 +5,6 @@ import ThemeForm from '../../../../src/components/ThemeForm';
 import Page from '../../../../src/components/PageFrame';
 import { Box } from 'theme-ui';
 import { HeadingFrame } from '../../../../src/components/Card';
-import Link from '../../../../src/components/NavLink';
 
 const Index: FC = () => {
   return (
@@ -15,10 +14,8 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
-          title="Edit Theme"
-        />
-        <Box sx={{ pl: 4}}>
+        <HeadingFrame title="Edit Theme" />
+        <Box sx={{ pl: 4 }}>
           <ThemeForm />
         </Box>
       </Page>

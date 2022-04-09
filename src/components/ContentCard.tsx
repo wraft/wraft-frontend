@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 import MenuItem from './NavLink';
 
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo } from './Atoms';
 
 export interface ILayout {
   width: number;

@@ -1,12 +1,13 @@
 import React, { ReactElement, ReactNode, ChangeEvent } from 'react';
-import styled from 'styled-components/macro';
-import {Input, Label as InputLabel, Button as InvisibleButton} from 'theme-ui';
+import styled from '@emotion/styled';
+import {Input, Label as InputLabel, Button as InvisibleButton, Close} from 'theme-ui';
 // import InputLabel from 'Atoms/Input/InputLabel';
 import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
 // import { ReactComponent as Close } from 'Assets/Close.svg';
 import 'react-image-crop/dist/ReactCrop.css';
+import { isString } from 'remirror';
 // import InvisibleButton from 'Atoms/Button/InvisibleButton';
-import { isString } from 'Types/General';
+// import { isString } from 'Types/General';
 
 const ImagePickerStyled = styled.div`
   display: flex;
@@ -14,8 +15,6 @@ const ImagePickerStyled = styled.div`
 `;
 
 const InputLabelStyled = styled(InputLabel)`
-  background-color: ${props => props.theme.colors.background.secondaryDark};
-
   padding: 6px 10px;
   border-radius: 8px;
   display: block;
@@ -27,10 +26,6 @@ const InputLabelStyled = styled(InputLabel)`
   }
 
   transition: all 300ms ease;
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    width: 100%;
-  }
 `;
 
 const InputStyled = styled(Input)`
@@ -46,54 +41,33 @@ const ButtonContainer = styled.div`
   &[data-has-image='true'] {
     margin-top: 10px;
   }
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    flex-direction: column;
-  }
 `;
 
 const ReactCropStyled = styled(ReactCrop)`
   max-width: 512px;
   border-radius: 8px;
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    width: 100%;
-  }
 `;
 
 const CloseStyled = styled(Close)`
   width: 30px;
   height: 30px;
-
-  fill: ${props => props.theme.colors.text.primaryDarker};
 `;
 
 const InvisibleButtonStyled = styled(InvisibleButton)`
   display: flex;
   margin: 0 0 0 20px;
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    display: none;
-  }
 `;
 
 const InvisibleButtonMobileStyled = styled(InvisibleButton)`
   display: flex;
   margin: 0 0 0 20px;
 
-  @media (min-width: ${props => props.theme.breakpoints.mobile}) {
-    display: none;
-  }
 `;
 
 const LabelContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  @media (max-width: ${props => props.theme.breakpoints.mobile}) {
-    width: 100%;
-  }
 `;
 
 type Props = {
@@ -128,8 +102,8 @@ const ImagePicker = ({
     reader.addEventListener(
       'load',
       () => {
-        if (isString(reader.result)) {
-          onImageChange(reader.result);
+        if (isString(reader?.result)) {
+          onImageChange(reader?.result);
         }
       },
       false,
@@ -146,14 +120,14 @@ const ImagePicker = ({
           minWidth={128}
           minHeight={128}
           crop={crop}
-          src={image || ''}
+          // src={image || ''}
           onChange={onCropChange}
           onComplete={onCropComplete}
         />
       )}
       <ButtonContainer data-has-image={!!image}>
         <LabelContainer>
-          <InputLabelStyled htmlFor="image-picker" color="primaryLight" fontWeight="light">
+          <InputLabelStyled htmlFor="image-picker" color="primaryLight">
             {inputLabel}
           </InputLabelStyled>
           {onImageClear && image && (

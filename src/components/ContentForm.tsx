@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
 import { Box, Flex, Button, Text } from 'theme-ui';
@@ -159,7 +159,6 @@ const Form = (props: IContentForm) => {
   const router = useRouter();
   const { register, getValues, handleSubmit, errors, setValue } = useForm();
   const token = useStoreState((state) => state.auth.token);
-  const searchables = ALL_USERS;
 
   // Content Specific
   // -------
@@ -172,7 +171,7 @@ const Form = (props: IContentForm) => {
 
   // Testing
   // -------
-  const [foelds, setFoeld] = useState<Array<IFieldModel>>([]);
+  // const [foelds, setFoeld] = useState<Array<IFieldModel>>([]);
   // -------
 
   const [fields, setField] = useState<Array<FieldT>>([]);
@@ -193,13 +192,13 @@ const Form = (props: IContentForm) => {
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
   const [raw, setRaw] = useState<any>(null);
 
-  const [varias, setVarias] = useState<IContentType>();
+  // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const { addToast } = useToasts();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
-  const refSubmitButtom = useRef<HTMLButtonElement>(null);
+  // const refSubmitButtom = useRef<HTMLButtonElement>(null);
 
   /**
    * Toggle Title Edit
@@ -207,6 +206,15 @@ const Form = (props: IContentForm) => {
    */
   const toggleEdit = () => {
     setTitleEdit(!showTitleEdit);
+  };
+
+  /**
+   * pass
+   * @param map
+   */
+  const passMe = () => {
+    setActive('');
+    setBody('');
   };
   /**
    *
@@ -217,6 +225,8 @@ const Form = (props: IContentForm) => {
 
     setStatus(1);
     setMaps(map);
+
+    passMe();
 
     if (raw && raw.length > 0) {
       setCleanInsert(true);
@@ -463,11 +473,8 @@ const Form = (props: IContentForm) => {
     }
   }, [fields]);
 
-  const findTemplates = () => {};
-
-  const updateTitle = (f: any) => {
+  const updateTitle = (_f: any) => {
     // console.log('🐴  [updateTitle] tm', selectedTemplate);
-
     setTitle(selectedTemplate?.title_template);
     setValue('title', selectedTemplate?.title_template);
   };
@@ -505,13 +512,13 @@ const Form = (props: IContentForm) => {
   /**
    * Load Field data
    */
-  const loadFields = () => {
-    if (content && content.content_type) {
-      const m: FieldT[] = content.content_type.fields;
-      console.log('🎃🎃🎃 [fields]', m);
-      setField(m);
-    }
-  };
+  // const loadFields = () => {
+  //   if (content && content.content_type) {
+  //     const m: FieldT[] = content.content_type.fields;
+  //     console.log('🎃🎃🎃 [fields]', m);
+  //     setField(m);
+  //   }
+  // };
 
   /**
    * @param x
@@ -536,7 +543,7 @@ const Form = (props: IContentForm) => {
       const m = findVars(tempTitle, false);
 
       // let namesList = [];
-      let newTitle = tempTitle;
+      // let newTitle = tempTitle;
       m.map((x: any) => {
         const cName = cleanName(x);
         // localBody = localBody.replace(`[${cleanNames}]`, m.value);
@@ -567,7 +574,7 @@ const Form = (props: IContentForm) => {
     updateStuff(x, maps);
   };
 
-  const passUpdates = (content, mappings, isClean) => {
+  const passUpdates = (content: any, mappings: any, isClean: any) => {
     setStatus(0);
     const updatedCont = updateVars(content, mappings);
     setCleanInsert(isClean);
@@ -595,7 +602,7 @@ const Form = (props: IContentForm) => {
         respx = res;
       }
 
-      const xr: ContentState = respx;
+      const xr: any = respx;
       passUpdates(xr, mapx, true);
     }
 
@@ -613,11 +620,6 @@ const Form = (props: IContentForm) => {
   const doUpdate = (state: any) => {
     // turn OFF appending blocks
     setCleanInsert(false);
-
-    // console.log('🎃 doUpdate', state);
-
-    // console.log('🐴🐴🐴🐴', activeFlow?.states);
-    // setValue('state', activeFlow?.states[0].id);
 
     if (state.body) {
       // setDef(state.body)
@@ -677,29 +679,6 @@ const Form = (props: IContentForm) => {
     updatePageTitle(resx);
   };
 
-  interface prepareMapProps {
-    fields: any;
-    defx: any;
-  }
-
-  /**
-   * onSaved fields */
-  const prepareMap = (fields, defx) => {
-    // for all fields
-    let obj: any = [];
-
-    if (fields && fields.length > 0) {
-      fields.forEach(function (value: any) {
-        const ff = defx.find((e: any) => e.name === value.name);
-        const name = ff.value;
-        let x: IFieldType = { ...value, value: name };
-        obj.push(x);
-      });
-    }
-
-    setFieldMap(obj);
-  };
-
   const closeModal = () => {
     setTemplate(false);
   };
@@ -708,6 +687,8 @@ const Form = (props: IContentForm) => {
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
+        <Text>{status}</Text>
+        {insertable && <Text>Insertables</Text>}
         <Flex>
           <Box
             as="form"
@@ -805,7 +786,12 @@ const Form = (props: IContentForm) => {
                   lineHeight: 1.5,
                   fontFamily: 'body',
                 }}>
-                {/* <Button variant="secondary" type="button" onClick={() => setShowDev(!showDev)}>Dev</Button> */}
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => setShowDev(!showDev)}>
+                  Dev
+                </Button>
                 <EditorWraft
                   value={active}
                   editable={true}
@@ -870,6 +856,7 @@ const Form = (props: IContentForm) => {
             }}>
             <Box sx={{ px: 3 }}>
               <Flex sx={{ mb: 3 }}>
+                {content && <h1>Content Undu</h1>}
                 <Box sx={{ mr: 3 }}>
                   <Text as="h6" variant="labelcaps">
                     Version

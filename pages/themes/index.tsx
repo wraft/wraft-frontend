@@ -5,6 +5,7 @@ import ThemeList from '../../src/components/ThemeList';
 import Page from '../../src/components/PageFrame';
 import Link from '../../src/components/NavLink';
 import ManageSidebar from '../../src/components/ManageSidebar';
+import { menuLinks } from '../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -19,7 +20,7 @@ const Index: FC = () => {
             <Text variant="text.pageTitle">Manage</Text>
           </Box>
           <Flex>
-            <ManageSidebar />
+            <ManageSidebar items={menuLinks}/>
             <Box>
               <Box sx={{ pt: 4 }}>
                 <Box sx={{ ml: 'auto' }}>

@@ -4,7 +4,6 @@ import Link from './NavLink';
 // import { Plus } from './Icons';
 import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
-// import { Table } from '@plateui/ui-react';
 
 import Table from './Table';
 

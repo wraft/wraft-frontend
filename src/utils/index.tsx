@@ -1,9 +1,13 @@
-// import dayjs from 'dayjs';
-// import dayjsTwitter from 'dayjs-twitter';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import produce from 'immer';
 import { ContentState } from './types';
 // import { Flat } from "lodash";
 
+import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
+
+import { Style } from '@styled-icons/material-sharp/Style';
+import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
 
 // dayjs.extend(dayjsTwitter)
 
@@ -299,3 +303,45 @@ export const isNumeric = (str: any) => {
     !isNaN(parseFloat(str))
   ); // ...and ensure strings of whitespace fail
 };
+
+
+// const ICON_COLOR = '#999';
+export interface menuLinksProps {
+  name: string;
+  path: string;
+  logo: any;
+}
+
+export const menuLinks: menuLinksProps[] = [
+  {
+    name: 'Layouts',
+    logo: <Layout width="20px" />,
+    path: '/manage/layouts',
+  },
+  {
+    name: 'Flows',
+    logo: <FlowBranch width="20px" />,
+    path: '/manage/flows',
+  },
+
+  {
+    name: 'Themes',
+    logo: <Style width="20px" />,
+    path: '/manage/themes',
+  },
+  {
+    name: 'Roles',
+    logo: <User width="20px" />,
+    path: '/manage/roles',
+  },
+  {
+    name: 'Fields',
+    logo: <User width="20px" />,
+    path: '/manage/fields',
+  },
+  {
+    name: 'Pipelines',
+    logo: <Collection width={20} />,
+    path: '/manage/pipelines',
+  },
+];

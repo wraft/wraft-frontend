@@ -20,12 +20,6 @@ import FieldEditor from './FieldEditor';
 import { FieldType, FieldTypeList } from './ContentTypeForm';
 import { isNumeric } from '../utils';
 
-interface ThemeElement {
-  name: string;
-  file?: string;
-  font?: string;
-}
-
 export interface FieldTypeItem {
   key: string;
   title?: string;
@@ -94,17 +88,6 @@ const CollectionForm = () => {
   };
 
   const onSubmit = (data: any) => {
-    // const sampleD = {
-    //   name: data.name,
-    //   layout_id: data.layout_id,
-    //   fields: formatFields(fields),
-    //   description: data.desc,
-    //   prefix: data.prefix,
-    //   flow_id: data.flow_id,
-    //   color: data.color,
-    //   theme_id: data.theme_id,
-    // };
-
     const sampleD = {
       title: data.title,
       fields: formatFields(fields),
@@ -121,29 +104,7 @@ const CollectionForm = () => {
     }
   };
 
-  const setContentDetails = (data: any) => {
-    const res: any = data;
-    // setContent(res);
-
-    if (res && res?.theme) {
-      const currTheme: ThemeElement = res?.theme;
-      setTheme(currTheme);
-
-      console.log('theme', res);
-
-      setValue('name', currTheme?.name);
-      setValue('font', currTheme?.font);
-
-      // setValue('prefix', res.content_type.prefix);
-      // setValue('layout_id', res.content_type.layout?.id || undefined);
-      // setValue('edit', res.content_type.id);
-      // setValue('color', res.content_type.color);
-    }
-  };
-
-  const onLoadForms = () => {
-
-  }
+  const onLoadForms = () => {};
 
   /**
    * Entity Loader
@@ -164,6 +125,7 @@ const CollectionForm = () => {
       setIsEdit(true);
       loadDataDetalis(cId, token);
       setValue('edit', cId);
+      setTheme('x');
     }
   }, [cId, token]);
 
@@ -171,9 +133,9 @@ const CollectionForm = () => {
    * On Change Color
    */
 
-  const onChangeField = (name: string, value: any) => {
-    setValue(name, value);
-  };
+  // const onChangeField = (name: string, value: any) => {
+  //   setValue(name, value);
+  // };
 
   const addFieldVal = (val: any) =>
     setFields((fields) => {
@@ -192,11 +154,11 @@ const CollectionForm = () => {
       return outputState;
     });
 
-  const deleteField = (id: number, fields: any) => {
-    // const deletable = fields[id];
-    // const deletableId = deletable.value.id;
-    // deleteEntity(`/content_type_fields/${deletableId}`, token);
-  };
+  // const deleteField = (id: number, fields: any) => {
+  //   // const deletable = fields[id];
+  //   // const deletableId = deletable.value.id;
+  //   // deleteEntity(`/content_type_fields/${deletableId}`, token);
+  // };
 
   const onFieldsSave = (fds: any) => {
     console.log('saved fields', fds, fields);

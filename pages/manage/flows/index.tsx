@@ -7,6 +7,7 @@ import Page from '../../../src/components/PageFrame';
 import Link from '../../../src/components/NavLink';
 
 import ManageSidebar from '../../../src/components/ManageSidebar';
+import { menuLinks } from '../../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -26,7 +27,7 @@ const Index: FC = () => {
             </Box>
           </Box>
           <Flex>
-            <ManageSidebar items={[]}/>
+            <ManageSidebar items={menuLinks}/>
             <FlowList />            
           </Flex>
         </Container>

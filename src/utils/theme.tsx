@@ -825,9 +825,6 @@ const theme: Theme = {
     },
   },
   buttons: {
-    primary: {
-      bg: 'red.4'
-    },
     btnPrimaryIcon: {
       bg: 'gray.0',
       border: 'solid 1px',

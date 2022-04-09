@@ -26,7 +26,6 @@ import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
 import PageHeader from './PageHeader';
-import NavLink from './NavLink';
 
 import { ReactSortable } from 'react-sortablejs';
 
@@ -478,7 +477,6 @@ const FlowForm = () => {
                     px: 3,
                     py: 3,
                     bg: 'gray.2',
-                    borderBottom: 0,
                     borderTop: 'solid 1px',
                     borderLeft: 'solid 1px',
                     borderBottom: 'solid 1px',

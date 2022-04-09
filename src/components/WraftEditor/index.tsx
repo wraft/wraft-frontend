@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box } from 'theme-ui';
 
-import MarkdownEditor  from './layout';
+import MarkdownEditor from './layout';
 
 const WraftEditor = (props: any) => {
   return (

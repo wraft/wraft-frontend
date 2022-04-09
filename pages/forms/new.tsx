@@ -2,8 +2,6 @@ import { FC } from 'react';
 import Head from 'next/head';
 import CollectionForm from '../../src/components/CollectionForm';
 import Page from '../../src/components/PageFrame';
-import { Flex } from 'theme-ui';
-import Link from 'next/link';
 
 const Index: FC = () => {
   return (
