@@ -116,7 +116,7 @@ const ThemeForm = () => {
 
   const onChangeField = (name: string, value: any) => {
     setValue(name, value);
-  }
+  };
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
@@ -136,21 +136,32 @@ const ThemeForm = () => {
               defaultValue=""
               register={register}
             />
-            <Box sx={{ p: 3, bg: 'gray.2', border: 'solid 1px', borderColor: 'gray.3'}}>
+            <Box
+              sx={{
+                p: 3,
+                bg: 'gray.2',
+                border: 'solid 1px',
+                borderColor: 'gray.3',
+              }}
+            >
               <Text>Colors</Text>
               <FieldColor
                 name="primary_color"
                 label="Primary Color"
                 defaultValue="#000"
                 register={register}
-                onChangeColor={(value: string) => onChangeField('primary_color', value)}
+                onChangeColor={(value: string) =>
+                  onChangeField('primary_color', value)
+                }
               />
               <FieldColor
                 name="secondary_color"
                 label="Secondary Color"
                 defaultValue="#111"
                 register={register}
-                onChangeColor={(value: string) => onChangeField('secondary_color', value)}
+                onChangeColor={(value: string) =>
+                  onChangeField('secondary_color', value)
+                }
               />
 
               <FieldColor
@@ -158,7 +169,9 @@ const ThemeForm = () => {
                 label="Body Color"
                 defaultValue="#111"
                 register={register}
-                onChangeColor={(value: string) => onChangeField('body_color', value)}
+                onChangeColor={(value: string) =>
+                  onChangeField('body_color', value)
+                }
               />
             </Box>
             <Field

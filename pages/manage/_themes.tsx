@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import Page from '../../src/components/PageFrame';
 
-import { Text} from 'theme-ui'
+import { Text } from 'theme-ui';
 
 const ThemeIndex: FC = () => {
   return (
@@ -12,7 +12,7 @@ const ThemeIndex: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-          <Text>Themes Index</Text>
+        <Text>Themes Index</Text>
       </Page>
     </>
   );

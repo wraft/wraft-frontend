@@ -172,7 +172,8 @@ const Nav = (props: any) => {
           borderColor: 'gray.2',
           mb: 3,
           pt: 1,
-        }}>
+        }}
+      >
         <Link href="/">
           <Flex color="primary" sx={{ fill: 'text' }}>
             <BrandLogo width="5rem" height="2rem" />
@@ -200,12 +201,14 @@ const Nav = (props: any) => {
                 checkActive(pathname, m)
                   ? 'layout.menuLinkActive'
                   : 'layout.menuLink'
-              }>
+              }
+            >
               <Box
                 sx={{
                   mr: 2,
                   color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
-                }}>
+                }}
+              >
                 {m.logo}
               </Box>
               {showFull && (
@@ -227,7 +230,8 @@ const Nav = (props: any) => {
           borderBottom: 'solid 1px',
           bg: 'gray.0',
           borderColor: 'gray.1',
-        }}>
+        }}
+      >
         <ModeToggle variant="button" />
       </Box>
     </Box>

@@ -1,5 +1,4 @@
-
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import Router from 'next/router';
 import nextCookie from 'next-cookies';
 
@@ -19,40 +18,39 @@ export const auth = (ctx: any) => {
   return token;
 };
 
-
 export const withAuthSync = (WrappedComponent: any) => {
-  console.log('withAuthSync')
+  console.log('withAuthSync');
   const Wrapper = (props: any) => {
     const syncLogout = (event: any) => {
       if (event.key === 'logout') {
-        console.log('logged out from storage!')
-        Router.push('/login')
+        console.log('logged out from storage!');
+        Router.push('/login');
       }
-    }
+    };
 
     useEffect(() => {
-      window.addEventListener('storage', syncLogout)
+      window.addEventListener('storage', syncLogout);
 
       return () => {
-        window.removeEventListener('storage', syncLogout)
-        window.localStorage.removeItem('logout')
-      }
-    }, [])
+        window.removeEventListener('storage', syncLogout);
+        window.localStorage.removeItem('logout');
+      };
+    }, []);
 
-    return <WrappedComponent {...props} />
-  }
+    return <WrappedComponent {...props} />;
+  };
 
   Wrapper.getInitialProps = async (ctx: any) => {
-    console.log('withAuthSync[2]')
-    const token = auth(ctx)
-   
+    console.log('withAuthSync[2]');
+    const token = auth(ctx);
+
     const componentProps =
       WrappedComponent.getInitialProps &&
-      (await WrappedComponent.getInitialProps(ctx))
+      (await WrappedComponent.getInitialProps(ctx));
 
-    return { ...componentProps, token }
-  }
+    return { ...componentProps, token };
+  };
 
-  console.log('withAuthSync[3]')
-  return Wrapper
-}
+  console.log('withAuthSync[3]');
+  return Wrapper;
+};

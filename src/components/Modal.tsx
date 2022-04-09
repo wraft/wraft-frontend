@@ -101,7 +101,8 @@ const Modal: React.FC<ModalProps> = ({
             hideOnEsc
             hideOnClickOutside
             {...props}
-            aria-label={label}>
+            aria-label={label}
+          >
             <React.Fragment>{children}</React.Fragment>
           </Dialog>
         </DialogBackdrop>

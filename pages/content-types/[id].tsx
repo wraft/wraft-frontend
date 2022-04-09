@@ -13,15 +13,15 @@ const Index: FC = () => {
   // const onSave = () => {
   //   console.log('saved');
   // }
-  
+
   return (
     <>
       <Head>
         <title>Create Instance - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <PageFull id="Modal" showFull={true}>        
-        <CreateForm id={router.query.id}/>
+      <PageFull id="Modal" showFull={true}>
+        <CreateForm id={router.query.id} />
       </PageFull>
     </>
   );

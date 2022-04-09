@@ -16,11 +16,11 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Container variant="layout.pageFrame">
-          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd'}}>
+          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd' }}>
             <Text variant="text.pageTitle">Manage</Text>
           </Box>
           <Flex>
-            <ManageSidebar items={menuLinks}/>
+            <ManageSidebar items={menuLinks} />
             <Box>
               <Box sx={{ pt: 4 }}>
                 <Box sx={{ ml: 'auto' }}>
@@ -33,7 +33,6 @@ const Index: FC = () => {
                 <ThemeList />
               </Box>
             </Box>
-            
           </Flex>
         </Container>
       </Page>

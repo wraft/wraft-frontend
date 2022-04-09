@@ -107,7 +107,8 @@ const StateStateForm = ({ onSave }: StateStateFormProps) => {
         type="button"
         variant="btnPrimary"
         sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
-        onClick={() => onSave(newState)}>
+        onClick={() => onSave(newState)}
+      >
         Add State
       </Button>
     </Box>
@@ -202,7 +203,8 @@ const StatesForm = ({
         <Text
           as="p"
           variant="sectiontitle"
-          sx={{ color: 'gray.6', mb: 2, mt: 0 }}>
+          sx={{ color: 'gray.6', mb: 2, mt: 0 }}
+        >
           Manage your flows
         </Text>
       </Box>
@@ -212,7 +214,8 @@ const StatesForm = ({
           sx={{
             borderBottom: 'solid 1px',
             borderColor: 'gray.2',
-          }}>
+          }}
+        >
           <ReactSortable list={state} setList={setOrder}>
             {state.map((c: ItemType, index) => (
               <Flex
@@ -225,13 +228,15 @@ const StatesForm = ({
                   borderColor: 'gray.4',
                   h6: { opacity: 1 },
                   ':hover': { h6: { opacity: 1 } },
-                }}>
+                }}
+              >
                 <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
                   {index + 1}
                 </Text>
                 <Text
                   sx={{ fontWeight: 'heading', color: 'gray.9' }}
-                  key={c.id}>
+                  key={c.id}
+                >
                   {c.name}
                 </Text>
                 <Flex sx={{ ml: 'auto' }}>
@@ -244,7 +249,8 @@ const StatesForm = ({
                       textTransform: 'uppercase',
                     }}
                     variant="btnSecondary"
-                    onClick={() => changeForm(c)}>
+                    onClick={() => changeForm(c)}
+                  >
                     Add Approval
                   </Button>
                   <Button
@@ -256,7 +262,8 @@ const StatesForm = ({
                       fontWeight: 600,
                       fontFamily: 'heading',
                       textTransform: 'uppercase',
-                    }}>
+                    }}
+                  >
                     Delete
                   </Button>
                 </Flex>
@@ -418,15 +425,18 @@ const FlowForm = () => {
           mx: 'auto',
           border: 'solid 1px',
           borderColor: 'gray.4',
-        }}>
+        }}
+      >
         <Container
           variant="layout.pageFrame"
           sx={{ p: 0 }}
-          data-flow={flow?.id}>
+          data-flow={flow?.id}
+        >
           <Box
             as="form"
             sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
-            onSubmit={handleSubmit(onSubmit)}>
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Flex
               variant="layout.pageFrame"
               sx={{
@@ -434,7 +444,8 @@ const FlowForm = () => {
                 borderBottom: 'solid 1px',
                 borderColor: 'gray.4',
                 flexGrow: 1,
-              }}>
+              }}
+            >
               {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
               <Box sx={{ flexGrow: 1 }}>
                 <Field
@@ -483,11 +494,13 @@ const FlowForm = () => {
                     borderColor: 'gray.4',
                     h6: { opacity: 1 },
                     ':hover': { h6: { opacity: 1 } },
-                  }}>
+                  }}
+                >
                   <Button
                     variant="btnPrimary"
                     sx={{ fontSize: 1, p: 2, px: 3 }}
-                    onClick={() => setAddState(true)}>
+                    onClick={() => setAddState(true)}
+                  >
                     Add State
                   </Button>
                 </Flex>
@@ -496,7 +509,8 @@ const FlowForm = () => {
                   isOpen={addState}
                   onClose={() => setAddState(false)}
                   label="ModalX"
-                  aria-label="Add New State">
+                  aria-label="Add New State"
+                >
                   <StateStateForm onSave={updateState} />
                 </Modal>
               </Box>

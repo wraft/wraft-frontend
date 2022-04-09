@@ -15,7 +15,7 @@ const CompanyForm: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Settings">
-          <Box sx={{ ml: 'auto' }}/>
+          <Box sx={{ ml: 'auto' }} />
         </PageHeader>
         <Flex>
           <OrgSidebar />

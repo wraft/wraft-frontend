@@ -60,7 +60,8 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
           border: '1px solid',
           borderColor: 'gray.3',
           color: 'gray.6',
-        }}>
+        }}
+      >
         {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (
           <Box as="tr" {...headerGroup.getHeaderGroupProps()}>

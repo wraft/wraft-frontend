@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Button,
-  Text,
-  Divider,
-  Flex,
-  Select,
-} from 'theme-ui';
+import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -108,7 +100,8 @@ const StatesForm = (props: StateFormProps) => {
           sx={{
             borderBottom: 'solid 1px',
             borderColor: 'blue.2',
-          }}>
+          }}
+        >
           {props.content.map((c: StateElement, index) => (
             <Flex
               key={index + 1}
@@ -118,18 +111,21 @@ const StatesForm = (props: StateFormProps) => {
                 border: 'solid 1px',
                 borderBottom: 0,
                 borderColor: 'blue.2',
-              }}>
+              }}
+            >
               <Text mr={2} sx={{ color: 'blue.6' }}>
                 {index + 1}
               </Text>
               <Text
                 sx={{ fontWeight: 'heading', color: 'blue.9' }}
-                key={c.state.id}>
+                key={c.state.id}
+              >
                 {c.state.state}
               </Text>
               <Text
                 onClick={() => onDeleteFlow(c.state.id)}
-                sx={{ ml: 'auto' }}>
+                sx={{ ml: 'auto' }}
+              >
                 Delete
               </Text>
             </Flex>

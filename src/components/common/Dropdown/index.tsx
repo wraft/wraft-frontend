@@ -57,14 +57,16 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
     <DropDownBoxBlock
       ml="14px"
       ref={wrapperRef}
-      onClick={() => toggleDropdown()}>
+      onClick={() => toggleDropdown()}
+    >
       <Box
         sx={{
           width: '32px',
-          height: '32px',          
+          height: '32px',
           objectFit: 'cover',
           cursor: 'pointer',
-        }}>
+        }}
+      >
         <Image
           src={imageUrl || ''}
           sx={{

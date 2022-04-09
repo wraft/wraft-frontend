@@ -16,9 +16,9 @@ const Index: FC = () => {
         <title>Manage Flows - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      
+
       <Page>
-        <Container sx={{ pl: 4, pt: 4}}>
+        <Container sx={{ pl: 4, pt: 4 }}>
           <Box>
             <Box sx={{ ml: 'auto' }}>
               <Link variant="btnPrimary" href="/manage/flows/new">
@@ -27,8 +27,8 @@ const Index: FC = () => {
             </Box>
           </Box>
           <Flex>
-            <ManageSidebar items={menuLinks}/>
-            <FlowList />            
+            <ManageSidebar items={menuLinks} />
+            <FlowList />
           </Flex>
         </Container>
       </Page>

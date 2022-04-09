@@ -286,7 +286,8 @@ const EditorWraft: FC<EditorProps> = ({
           p: 5,
           bg: 'blue',
         },
-      }}>
+      }}
+    >
       <AllStyledComponent>
         <ThemeProvider>
           <Remirror
@@ -341,7 +342,8 @@ const EditorWraft: FC<EditorProps> = ({
                 }
               }
             `,
-            ]}>
+            ]}
+          >
             {showToolbar ? (
               <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
             ) : (

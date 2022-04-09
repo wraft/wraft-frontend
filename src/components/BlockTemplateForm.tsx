@@ -69,7 +69,7 @@ const EMPTY_MARKDOWN_NODE = {
 // };
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const { register, handleSubmit, errors, setValue } = useForm();
   // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   // const [varias, setVarias] = useState<IContentType>();
@@ -80,7 +80,7 @@ const Form = () => {
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
 
-  const [insertable, setInsertable] = useState<any>();  
+  const [insertable, setInsertable] = useState<any>();
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
   const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
@@ -103,7 +103,7 @@ const Form = () => {
     setAddAsset(!addAsset);
   };
 
-  const formatImageNode = (src:string) => {
+  const formatImageNode = (src: string) => {
     // image object
     const imageNode = {
       type: 'doc',
@@ -111,17 +111,19 @@ const Form = () => {
         {
           type: 'paragraph',
           attrs: {},
-          content: [{
-            type:"image",
-            attrs: {
-              src: `http://localhost:4000/${src}`,
+          content: [
+            {
+              type: 'image',
+              attrs: {
+                src: `http://localhost:4000/${src}`,
+              },
             },
-          }],
+          ],
         },
       ],
     };
     return imageNode;
-  }
+  };
 
   /**
    *
@@ -183,8 +185,8 @@ const Form = () => {
     }
 
     if (state.body) {
-      const castBody = state.body
-      console.log('ASHT', JSON.stringify(castBody))
+      const castBody = state.body;
+      console.log('ASHT', JSON.stringify(castBody));
       setValue('serialized', JSON.stringify(castBody));
     }
   };
@@ -214,7 +216,7 @@ const Form = () => {
 
     // dummy
 
-    if(cId === 'xd') {
+    if (cId === 'xd') {
       setCleanInsert(false);
     }
     if (token && cId) {
@@ -247,14 +249,17 @@ const Form = () => {
       mt={4}
       mx={4}
       mb={3}
-      variant="w100">
+      variant="w100"
+    >
       <Box>
         <Text mb={3} variant="pagetitle">
           Create Block
         </Text>
       </Box>
 
-      <Button variant="secondary" onClick={() => toggleAssetForm()}>+ Image</Button>
+      <Button variant="secondary" onClick={() => toggleAssetForm()}>
+        + Image
+      </Button>
       {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />}
       <Box variant="w50">
         <Flex>
@@ -265,7 +270,7 @@ const Form = () => {
               defaultValue=""
               register={register}
             />
-            <Box variant="hidden" sx={{ display: 'none'}}>
+            <Box variant="hidden" sx={{ display: 'none' }}>
               <Field
                 name="body"
                 label="Body"
@@ -273,7 +278,7 @@ const Form = () => {
                 register={register}
               />
             </Box>
-            <Box variant="hidden" sx={{ display: 'none'}}>
+            <Box variant="hidden" sx={{ display: 'none' }}>
               <FieldText
                 name="serialized"
                 label="Serialized"

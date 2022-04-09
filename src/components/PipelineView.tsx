@@ -356,7 +356,8 @@ const PipelineView = () => {
                       ':hover': {
                         bg: 'green.8',
                       },
-                    }}>
+                    }}
+                  >
                     <Flex>
                       <Box sx={{ mr: 2 }}>
                         <PlayCircle width={16} sx={{ mr: 2, bg: 'green.3' }} />
@@ -373,7 +374,8 @@ const PipelineView = () => {
                       borderColor: 'gray.3',
                       color: 'gray.8',
                     }}
-                    onClick={() => pipelineCollect()}>
+                    onClick={() => pipelineCollect()}
+                  >
                     <Flex>
                       <PlayCircle width={16} sx={{ mr: 2 }} />
                       <Text ml={2}>Collect</Text>
@@ -394,7 +396,8 @@ const PipelineView = () => {
                   borderRadius: 0,
                   // border: 'solid 1px',
                   // borderColor: 'gray.3',
-                }}>
+                }}
+              >
                 {state === 'running' ? `Running` : ''}
               </Text>
             </Box>
@@ -405,7 +408,8 @@ const PipelineView = () => {
                 isOpen={true}
                 onRequestClose={closeRunning}
                 ariaHideApp={false}
-                contentLabel="Example Modal">
+                contentLabel="Example Modal"
+              >
                 <Box>
                   <Text as="h2">Enter Fields</Text>
                   <Box
@@ -414,12 +418,14 @@ const PipelineView = () => {
                       bg: 'gray.0',
                       borderLeft: 'solid 1px #eee',
                       my: 3,
-                    }}>
+                    }}
+                  >
                     <Box
                       mx={0}
                       mb={3}
                       as="form"
-                      onSubmit={handleSubmit(onSubmit)}>
+                      onSubmit={handleSubmit(onSubmit)}
+                    >
                       {fields &&
                         fields.length > 0 &&
                         fields.map((fd: any, index: any) => (
@@ -470,7 +476,8 @@ const PipelineView = () => {
                     }}
                     my={4}
                     mt={2}
-                    bg="gray.0">
+                    bg="gray.0"
+                  >
                     {activePipeline &&
                       activePipeline.stages.length > 0 &&
                       activePipeline.stages.map((props: any) => (
@@ -487,7 +494,8 @@ const PipelineView = () => {
                             borderColor: 'gray.4',
                             // background: '#fff',
                             borderLeft: 0,
-                          }}>
+                          }}
+                        >
                           <Box sx={{ pl: 4 }}>
                             <Box
                               sx={{
@@ -497,7 +505,8 @@ const PipelineView = () => {
                                 color: 'white',
                                 p: 3,
                                 position: 'relative',
-                              }}>
+                              }}
+                            >
                               {props.content_type.prefix}
                               {/* <Dot /> */}
                               {/* <Line /> */}
@@ -528,7 +537,8 @@ const PipelineView = () => {
                                 color: 'secondary',
                                 marginLeft: 'auto',
                                 mt: 3,
-                              }}>
+                              }}
+                            >
                               Edit
                             </Text>
                           </Box>
@@ -543,7 +553,8 @@ const PipelineView = () => {
                               p: 4,
                               bg: 'gray.1',
                               borderBottom: 'solid 1px #ddd',
-                            }}>
+                            }}
+                          >
                             <Box
                               sx={{
                                 p: 0,
@@ -553,7 +564,8 @@ const PipelineView = () => {
                                   m.state === 'success' ? 'green' : 'orange',
                                 borderRadius: 0,
                                 mr: 4,
-                              }}>
+                              }}
+                            >
                               {m.state}
                             </Box>
                             <Box
@@ -567,7 +579,8 @@ const PipelineView = () => {
                                 width: '60%',
                                 borderRadius: 0,
                                 mr: 4,
-                              }}>
+                              }}
+                            >
                               {JSON.stringify(m.error)}
                             </Box>
                             {/* {m.id} */}
@@ -579,7 +592,8 @@ const PipelineView = () => {
                                 color: 'gray.8',
                                 border: 'solid 1px',
                                 borderColor: 'gray.5',
-                              }}>
+                              }}
+                            >
                               Re-run
                             </Button>
                           </Flex>

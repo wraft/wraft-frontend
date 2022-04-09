@@ -22,11 +22,7 @@ export interface IAlert {
   inner?: any;
 }
 
-export const Page = ({
-  children,
-  inner,
-}: IPage) => {
-
+export const Page = ({ children, inner }: IPage) => {
   return (
     <>
       <Flex
@@ -34,22 +30,25 @@ export const Page = ({
           flexDirection: 'column',
           minHeight: '100%',
           bg: 'red',
-        }}>
+        }}
+      >
         <Flex
           sx={{
             flex: 1,
             flexDirection: ['column', 'row'],
-          }}>
+          }}
+        >
           <Box
             sx={{
               flex: 1,
               bg: 'gray.1',
               minWidth: 0,
               '.ProseMirror p': {
-                bg: 'base'
-              }              
-            }}>
-            {inner && <Box sx={{ minHeight: '100vh'}}>{inner}</Box>}
+                bg: 'base',
+              },
+            }}
+          >
+            {inner && <Box sx={{ minHeight: '100vh' }}>{inner}</Box>}
 
             {children}
             <Flex bg="gray.1" sx={{ pt: 0 }}>
@@ -60,7 +59,8 @@ export const Page = ({
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
-                }}>
+                }}
+              >
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>
                   Support | Contact Us
                 </Text>

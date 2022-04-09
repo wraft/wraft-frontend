@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Text,
-  Avatar,
-  Flex,
-  Container,
-  Spinner,
-} from 'theme-ui';
+import { Box, Text, Avatar, Flex, Container, Spinner } from 'theme-ui';
 
 import { Table } from './Table';
 
@@ -166,16 +159,8 @@ const ContentList = () => {
               <TimeAgo time={r.content.updated_at} />
             </Box>
           ),
-          col4: (
-            <Avatar
-              mt={2}
-              width="20px"
-              src={r.creator?.profile_pic}
-            />
-          ),
-          status: (
-            <StateBadge name={r.state.state} color="green.3"/>            
-          ),
+          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
+          status: <StateBadge name={r.state.state} color="green.3" />,
         };
 
         row.push(rFormated);
@@ -187,7 +172,7 @@ const ContentList = () => {
 
   return (
     <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents" desc="All Official Documents"/>        
+      <PageHeader title="Documents" desc="All Official Documents" />
       {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
         <Flex>
@@ -246,7 +231,8 @@ const ContentList = () => {
                   fontSize: 0,
                   fontWeight: 'body',
                   color: 'gray.6',
-                }}>
+                }}
+              >
                 Filter by Variant
               </Text>
               <Box
@@ -258,7 +244,8 @@ const ContentList = () => {
                   '&:last-child': {
                     borderBottom: 0,
                   },
-                }}>
+                }}
+              >
                 {variants &&
                   variants.map((v: any) => (
                     <FilterBlock title={v?.name} no={32} {...v} />
@@ -274,7 +261,8 @@ const ContentList = () => {
                   fontSize: 0,
                   fontWeight: 'body',
                   color: 'gray.6',
-                }}>
+                }}
+              >
                 Filter by State
               </Text>
               <Box
@@ -286,11 +274,12 @@ const ContentList = () => {
                   '&:last-child': {
                     borderBottom: 0,
                   },
-                }}>
-                <FilterBlock title="Draft" no={32}  color="blue.3"/>
-                <FilterBlock title="In Review" no={32} color="orange.3"/>
-                <FilterBlock title="Published" no={32} color="green.3"/>
-                <FilterBlock title="Archived" no={32} color="purple"/>
+                }}
+              >
+                <FilterBlock title="Draft" no={32} color="blue.3" />
+                <FilterBlock title="In Review" no={32} color="orange.3" />
+                <FilterBlock title="Published" no={32} color="green.3" />
+                <FilterBlock title="Archived" no={32} color="purple" />
               </Box>
             </Box>
           </Box>

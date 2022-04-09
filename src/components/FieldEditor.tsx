@@ -45,14 +45,16 @@ const FieldForm = (props: FieldFormProps) => {
         border: 'solid 1px',
         borderColor: 'gray.3',
         maxWidth: '40ch',
-      }}>
+      }}
+    >
       <Flex
         sx={{
           py: 2,
           px: 3,
           alignItems: 'flex-start',
           borderBottom: 'solid 1px #ddd',
-        }}>
+        }}
+      >
         <Text as="h4" mb={0} pt={1}>
           Fields
         </Text>
@@ -68,17 +70,20 @@ const FieldForm = (props: FieldFormProps) => {
           pt: 3,
           pb: 3,
           alignItems: 'flex-start',
-        }}>
+        }}
+      >
         {props.fields.map((f: any) => (
           <Flex
             key={f?.id}
-            sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
+            sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}
+          >
             <Text as="h4">{(f && f.value.name) || ''}</Text>
             <Text
               variant="caps"
               pt={1}
               pb={1}
-              sx={{ opacity: '0.5', ml: 'auto' }}>
+              sx={{ opacity: '0.5', ml: 'auto' }}
+            >
               {(f && f.value.field_type.name) || 'X'}
             </Text>
           </Flex>
@@ -93,7 +98,8 @@ const FieldForm = (props: FieldFormProps) => {
               px: 4,
               borderBottom: 'solid 1px',
               borderColor: 'gray.3',
-            }}>
+            }}
+          >
             <Text as="h4" sx={{ fontSize: 1 }}>
               Edit Fields
             </Text>
@@ -107,7 +113,8 @@ const FieldForm = (props: FieldFormProps) => {
                 pb: 4,
                 px: 4,
                 alignItems: 'flex-start',
-              }}>
+              }}
+            >
               <Text as="h3" sx={{ mb: 0 }}>
                 Empty State
               </Text>
@@ -118,7 +125,8 @@ const FieldForm = (props: FieldFormProps) => {
               <Button
                 type="button"
                 variant="btnPrimary"
-                onClick={props.addField}>
+                onClick={props.addField}
+              >
                 Add Field
               </Button>
             </Box>
@@ -127,7 +135,8 @@ const FieldForm = (props: FieldFormProps) => {
             sx={{
               borderTop: 'solid 1px',
               borderColor: 'gray.3',
-            }}>
+            }}
+          >
             {props.fields.map((f: any, idx: number) => (
               <Box
                 key={idx}
@@ -136,7 +145,8 @@ const FieldForm = (props: FieldFormProps) => {
                   '&:hover': { bg: 'gray.1' },
                   py: 3,
                   px: 4,
-                }}>
+                }}
+              >
                 <Flex p={0} pl={0}>
                   <Box sx={{ flexGrow: 1 }}>
                     <Label htmlFor="`fields[${idx}][name]`" variant="text.caps">
@@ -153,13 +163,15 @@ const FieldForm = (props: FieldFormProps) => {
                     <Label
                       htmlFor="`fields[${idx}][type]`"
                       variant="text.caps"
-                      mb={1}>
+                      mb={1}
+                    >
                       Type
                     </Label>
                     <Select
                       name={`fields[${idx}][type]`}
                       ref={register}
-                      defaultValue={(f && f.value.field_type.id) || ''}>
+                      defaultValue={(f && f.value.field_type.id) || ''}
+                    >
                       {props.fieldtypes &&
                         props.fieldtypes.length > 0 &&
                         props.fieldtypes.map((m: any) => (
@@ -175,7 +187,8 @@ const FieldForm = (props: FieldFormProps) => {
                       variant="btnSecondary"
                       type="button"
                       sx={{ py: 1, px: 2, mt: 2 }}
-                      onClick={() => props.removeField(idx)}>
+                      onClick={() => props.removeField(idx)}
+                    >
                       <Trash color="red" width="24px" />
                     </Button>
                   </Box>
@@ -192,11 +205,13 @@ const FieldForm = (props: FieldFormProps) => {
                 pb: 4,
                 px: 4,
                 alignItems: 'flex-start',
-              }}>
+              }}
+            >
               <Button
                 variant="btnPrimary"
                 type="button"
-                onClick={props.addField}>
+                onClick={props.addField}
+              >
                 Add Field
               </Button>
             </Box>
@@ -209,7 +224,8 @@ const FieldForm = (props: FieldFormProps) => {
                   variant="btnSecondary"
                   sx={{ mr: 2 }}
                   type="button"
-                  onClick={closeModal}>
+                  onClick={closeModal}
+                >
                   Cancel
                 </Button>
                 <Button variant="btnPrimaryLarge" sx={{ ml: 1 }} type="submit">

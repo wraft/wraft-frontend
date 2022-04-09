@@ -35,7 +35,8 @@ const CommentCard = (comment: Comment) => {
             borderColor: 'gray.3',
             pb: 3,
             mb: 2,
-          }}>
+          }}
+        >
           <Flex sx={{ display: 'inline-flex' }}>
             <Box sx={{ pl: 0 }}>
               <ProfileCard
@@ -56,7 +57,8 @@ const CommentCard = (comment: Comment) => {
                 lineHeight: 1.35,
                 pl: 2,
                 m: 0,
-              }}>
+              }}
+            >
               {comment.comment}
             </Text>
           </Box>

@@ -117,7 +117,8 @@ const Approvals = () => {
                 <Box>
                   <Button
                     variant="btnAction"
-                    onClick={() => approveInstance(r.instance?.id)}>
+                    onClick={() => approveInstance(r.instance?.id)}
+                  >
                     Approve
                   </Button>
                 </Box>
@@ -147,7 +148,8 @@ const Approvals = () => {
                 bg: 'gray.0',
                 border: 'solid 1px',
                 borderColor: 'gray.2',
-              }}>
+              }}
+            >
               <Text>Nothing to approve</Text>
             </Box>
           )}
@@ -197,7 +199,8 @@ const Approvals = () => {
             width: '25%',
             borderLeft: 'solid 1px',
             borderColor: 'gray.3',
-          }}></Box>
+          }}
+        ></Box>
       </Flex>
     </Box>
   );

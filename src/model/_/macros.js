@@ -8,7 +8,7 @@ const macrosModel = {
     state.items = payload;
   }),
   remove: action((state, id) => {
-    state.items = state.items.filter(food => food.id !== id);
+    state.items = state.items.filter((food) => food.id !== id);
   }),
 };
 

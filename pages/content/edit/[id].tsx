@@ -2,7 +2,6 @@ import { FC } from 'react';
 import Head from 'next/head';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
-
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -10,10 +9,8 @@ import Page from '../../../src/components/PageFrameInner';
 
 const CreateForm = dynamic(
   () => import('../../../src/components/ContentForm'),
-  { ssr: false }
+  { ssr: false },
 );
-
-
 
 const Index: FC = () => {
   const router = useRouter();

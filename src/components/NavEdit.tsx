@@ -59,13 +59,15 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         borderColor: 'gray.3',
         pt: 1,
         pb: 3,
-      }}>
+      }}
+    >
       <Flex>
         <Box
           sx={{
             flexBasis: ['auto', '100%'],
             order: -1,
-          }}>
+          }}
+        >
           <Box
             sx={{
               p: 0,
@@ -74,8 +76,9 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               borderRight: 'solid 1px',
               borderColor: 'gray.0',
               color: 'gray.8',
-            }}>
-            <Flex >
+            }}
+          >
+            <Flex>
               <Link href="/contents" sx={{ pt: 0 }}>
                 <ArrowBack width={22} />
               </Link>
@@ -83,8 +86,19 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                 <Text
                   onClick={onToggleEdit}
                   variant="navtitle"
-                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}>
-                    <Text as="span" sx={{ fontSize: '10.24px', textTransform: 'uppercase', fontWeight: 300, display: 'block' }}>Functionary Labs Pvt Ltd</Text>
+                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}
+                >
+                  <Text
+                    as="span"
+                    sx={{
+                      fontSize: '10.24px',
+                      textTransform: 'uppercase',
+                      fontWeight: 300,
+                      display: 'block',
+                    }}
+                  >
+                    Functionary Labs Pvt Ltd
+                  </Text>
                   {navtitle}
                 </Text>
               )}
@@ -113,7 +127,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       alignContent: 'top',
                       verticalAlign: 'top',
                       mt: 2,
-                    }}>
+                    }}
+                  >
                     <Dropdown imageUrl={API_HOST + '/' + profile?.profile_pic}>
                       <Box
                         sx={{

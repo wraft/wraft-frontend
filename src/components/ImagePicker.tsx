@@ -1,6 +1,11 @@
 import React, { ReactElement, ReactNode, ChangeEvent } from 'react';
 import styled from '@emotion/styled';
-import {Input, Label as InputLabel, Button as InvisibleButton, Close} from 'theme-ui';
+import {
+  Input,
+  Label as InputLabel,
+  Button as InvisibleButton,
+  Close,
+} from 'theme-ui';
 // import InputLabel from 'Atoms/Input/InputLabel';
 import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
 // import { ReactComponent as Close } from 'Assets/Close.svg';
@@ -61,7 +66,6 @@ const InvisibleButtonStyled = styled(InvisibleButton)`
 const InvisibleButtonMobileStyled = styled(InvisibleButton)`
   display: flex;
   margin: 0 0 0 20px;
-
 `;
 
 const LabelContainer = styled.div`
@@ -137,7 +141,13 @@ const ImagePicker = ({
           )}
         </LabelContainer>
         {children}
-        <InputStyled name="image-picker" id="image-picker" type="file" accept="image/*" onChange={onChange} />
+        <InputStyled
+          name="image-picker"
+          id="image-picker"
+          type="file"
+          accept="image/*"
+          onChange={onChange}
+        />
         {onImageClear && image && (
           <InvisibleButtonStyled onClick={onImageClear}>
             <CloseStyled />

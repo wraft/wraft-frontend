@@ -15,17 +15,16 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Container variant="layout.pageFrame">
-          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd'}}>
+          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd' }}>
             <Text variant="text.pageTitle">Manage Roles</Text>
           </Box>
           <Flex>
-            <ManageSidebar items={menuLinks}/>
-            <Box>             
+            <ManageSidebar items={menuLinks} />
+            <Box>
               <Box>
                 <OrgRolesList />
               </Box>
             </Box>
-            
           </Flex>
         </Container>
       </Page>

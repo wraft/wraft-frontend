@@ -1,5 +1,3 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-
 const structuredData: any = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
@@ -18,10 +16,24 @@ const structuredData: any = {
   ],
 };
 
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+} from 'next/document';
+import { InitializeColorMode } from 'theme-ui';
+
 class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return { ...initialProps };
+  }
+
   render() {
     return (
-      <Html lang="en">
+      <Html>
         <Head>
           <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
           <script
@@ -30,6 +42,7 @@ class MyDocument extends Document {
           />
         </Head>
         <body>
+          <InitializeColorMode />
           <Main />
           <NextScript />
         </body>

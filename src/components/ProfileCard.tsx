@@ -21,7 +21,8 @@ const IconBlock = ({ val, icon }: IconBlockProps) => {
         pb: 0,
         borderTop: 'solid 1px #eee',
         mt: 3,
-      }}>
+      }}
+    >
       {icon}
       <Text ml={2} mt={1} variant="personBlock">
         {val}
@@ -43,7 +44,7 @@ interface IItemField {
 
 const ProfileCard = ({
   name,
-  profile_pic,  
+  profile_pic,
   bio = 'Content Producer, Wraft',
 }: IItemField) => {
   return (
@@ -64,12 +65,11 @@ const ProfileCard = ({
             {/* <Text variant="personPlace">{organisation_id}</Text> */}
           </Box>
           <Flex pl={3}>
-            <IconBlock val={""} icon={<MailSend width={24} height={24} />} />
-            <IconBlock val={""} icon={<Phone width={24} height={24} />} />
+            <IconBlock val={''} icon={<MailSend width={24} height={24} />} />
+            <IconBlock val={''} icon={<Phone width={24} height={24} />} />
           </Flex>
         </Box>
       </Flex>
-
     </Box>
   );
 };

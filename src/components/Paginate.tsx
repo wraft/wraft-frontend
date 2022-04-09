@@ -14,7 +14,6 @@ export interface IPageMeta {
 
 const StyledPaginateContainer = styled.div`
   .pagination {
-    
     display: flex;
     list-style: none;
     padding: 0;
@@ -30,7 +29,7 @@ const StyledPaginateContainer = styled.div`
   }
   .active {
     border-color: transparent;
-    
+
     color: white;
     font-size: 14px;
     padding-top: 2px;
@@ -38,23 +37,23 @@ const StyledPaginateContainer = styled.div`
   }
 `;
 
-const Paginate = ({ total_pages, changePage }: IPageMeta ) => {
+const Paginate = ({ total_pages, changePage }: IPageMeta) => {
   return (
-      <StyledPaginateContainer>
-        <ReactPaginate
-          pageCount={total_pages || 0}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={5}
-          onPageChange={(e) => changePage(e)}
-          containerClassName="pagination"
-          activeClassName="active"
-          previousLabel="prev"
-          nextLabel="next"
-          breakLabel="..."
-          breakClassName="break-me"
-        />
-      </StyledPaginateContainer>
-    )
-}
+    <StyledPaginateContainer>
+      <ReactPaginate
+        pageCount={total_pages || 0}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={5}
+        onPageChange={(e) => changePage(e)}
+        containerClassName="pagination"
+        activeClassName="active"
+        previousLabel="prev"
+        nextLabel="next"
+        breakLabel="..."
+        breakClassName="break-me"
+      />
+    </StyledPaginateContainer>
+  );
+};
 
 export default Paginate;
