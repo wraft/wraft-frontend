@@ -52,7 +52,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                 </Text>
               </Flex>
             </NavLink>
-            {showFull && <h1>Full page</h1>}
+            {showFull && <Box/>}
           </Box>
         ))}
     </Box>

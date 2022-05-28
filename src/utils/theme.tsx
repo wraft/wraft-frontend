@@ -365,13 +365,12 @@ const theme: Theme = {
       '.remirror-editor-wrapper': {},
       '.remirror-theme .ProseMirror': {
         outline: 'none',
-        border: 'solid 1px #ddd',
-        bg: 'red !important',
+        // border: 'solid 1px #ddd',
         // color: #721515 !important;
-        pl: '4rem',
-        pr: '4rem',
-        pt: '4rem',
-        pb: '4rem',
+        // pl: '4rem',
+        // pr: '4rem',
+        // pt: '4rem',
+        // pb: '4rem',
       },
       p: { color: 'gray.9', fontFamily: 'body', pt: 2, pb: 1, fontSize: 0 },
       h1: {
@@ -433,7 +432,6 @@ const theme: Theme = {
         color: 'red.5',
         py: 3,
         fontFamily: 'editor2',
-        textTransform: 'uppercase',
         lineHeight: 1.25,
         fontSize: 1,
       },
@@ -446,9 +444,8 @@ const theme: Theme = {
       },
       h3: {
         color: 'red.3',
-        py: 3,
+        py: 2,
         fontFamily: 'editor2',
-        textTransform: 'uppercase',
         lineHeight: 1.25,
         fontSize: 1,
       },
@@ -462,6 +459,12 @@ const theme: Theme = {
     },
   },
   links: {
+    download: {
+      color: 'red.4',
+      svg: {
+        fill: 'red.4',
+      },
+    },
     btnNavLink: {
       p: 2,
       px: 3,
@@ -516,7 +519,7 @@ const theme: Theme = {
       display: 'block',
       // bg: 'red'
     },
-    download: {
+    download2: {
       color: 'green.9',
       fontSize: 0,
       textTransform: 'uppercase',
@@ -887,6 +890,17 @@ const theme: Theme = {
     },
   },
   buttons: {
+    download: {
+      bg: 'gray.1',
+      textTransform: 'capitalize',
+    },
+    contentButton: {
+      bg: 'gray.0',
+      border: 0,
+      borderColor: 'gray.4',
+      color: 'gray.8',
+      textAlign: 'left',
+    },
     btnPrimaryIcon: {
       bg: 'gray.0',
       border: 'solid 1px',

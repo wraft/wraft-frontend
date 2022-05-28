@@ -12,11 +12,21 @@ import { TableExtension } from '@remirror/extension-tables';
 import { ImageExtension } from '@remirror/extension-image';
 import { MarkdownExtension } from '@remirror/extension-markdown';
 
+import { CountExtension } from '@remirror/extension-count';
+
 import { css } from '@emotion/css';
 
 import { isBoolean, Cast } from '@remirror/core';
 
 import { ResolvedPos } from 'prosemirror-model';
+
+// import { ArrowsAngleContract } from '@styled-icons/bootstrap/ArrowsAngleContract';
+// import { ArrowsAngleExpand } from '@styled-icons/bootstrap/ArrowsAngleExpand';
+import { ArrowMinimize as ArrowsAngleContract } from '@styled-icons/fluentui-system-filled/ArrowMinimize';
+import { ArrowMaximize as ArrowsAngleExpand } from '@styled-icons/fluentui-system-filled/ArrowMaximize';
+// import { ListOl } from '@styled-icons/boxicons-regular/ListOl';
+import { Close as CloseIcon } from '@styled-icons/evil/Close';
+import { TaskListLtr } from '@styled-icons/fluentui-system-filled/TaskListLtr';
 
 import {
   BulletListExtension,
@@ -32,6 +42,7 @@ import { HolderAtomExtension } from './holder/holder-atom';
 import {
   // MentionAtomPopupComponent,
   Toolbar,
+  useHelpers,
   // useCommands,
 } from '@remirror/react';
 
@@ -44,14 +55,59 @@ import {
   useRemirror,
 } from '@remirror/react';
 
-import { Box } from 'theme-ui';
+import { Box, Flex, Text, Button } from 'theme-ui';
 
+const WordsCounter = () => {
+  const { getWordCount } = useHelpers(true);
+  const count = getWordCount();
+
+  return (
+    <Box
+      sx={{
+        mr: 0,
+        ml: 'auto',
+        textAlign: 'right',
+        '.remirror-theme h3': {
+          fontSize: 1,
+          m: 0,
+          color: 'red.3',
+          margin: '0 !important',
+        },
+      }}>
+      <Text
+        as="span"
+        sx={{
+          fontWeight: 100,
+          letterSpacing: '0.2px',
+          fontSize: '12px',
+          padding: `0 important!`,
+          m: 0,
+          mr: 2,
+        }}>
+        Words
+      </Text>
+      <Text
+        as="span"
+        sx={{
+          fontWeight: 400,
+          fontSize: '16px',
+          lineHeight: 1,
+          // pb: 2,
+          padding: `0 important!`,
+          m: 0,
+        }}>
+        {count}
+      </Text>
+    </Box>
+  );
+};
 // import { HolderExtension } from "./holder";
 
 import toolbarItems from './toolbar';
 import { MentionAtomExtension } from 'remirror/extensions';
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const hasCursor = <T extends object>(
   arg: T,
 ): arg is T & { $cursor: ResolvedPos } => {
@@ -60,7 +116,9 @@ const hasCursor = <T extends object>(
 
 interface EditorProps {
   starter?: any;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onFetch?: Function;
+  // eslint-disable-next-line @typescript-eslint/ban-types
   onSave?: Function;
   initialValue?: any;
   insertable?: any;
@@ -99,6 +157,12 @@ function HolderSuggestComponent({ tokens }: any) {
   return <HolderAtomPopupComponent onChange={setMentionState} items={items} />;
 }
 
+interface outlineP {
+  type?: string;
+  body?: string;
+  vista?: any;
+  onGo?: any;
+}
 /**
  * Generic Editor built for Wraft
  * @param param0
@@ -119,12 +183,31 @@ const EditorWraft: FC<EditorProps> = ({
 }) => {
   const [docState, setDocState] = useState<RemirrorJSON>();
   const [loaded, setLoaded] = useState<boolean>(false);
+  const [viewPortal, setViewPortal] = useState<boolean>(false);
 
   const [fieldtokens, setFieldtokens] = useState<any>([]);
-  // const [search, setSearch] = useState('');
+  const [outline, setOutline] = useState<Array<outlineP>>([]);
+  const [showoutline, setShowOutline] = useState<boolean>(false);
+
+  const getSummary = () => {
+    const res = Array.from(
+      document
+        .querySelector('.ProseMirror')
+        ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [],
+      (section: any) => ({
+        type: section.tagName.toLowerCase(),
+        body: section.textContent,
+        vista: scrollY + innerHeight >= section.offsetTop,
+        onGo: () => scrollTo({ top: section.offsetTop - 74 }),
+      }),
+    );
+
+    console.log('ProseMirror', res);
+    setOutline(res);
+  };
 
   useEffect(() => {
-    console.log('🎃🎃 searchables', docState);
+    console.log('[docState]', docState);
   }, [docState]);
 
   /**
@@ -132,7 +215,6 @@ const EditorWraft: FC<EditorProps> = ({
    */
   useEffect(() => {
     if (searchables?.fields) {
-      // console.log('🎃🎃 searchables', searchables);
       const { fields } = searchables;
 
       if (fields.length > 0) {
@@ -149,7 +231,7 @@ const EditorWraft: FC<EditorProps> = ({
   }, [searchables]);
 
   // const { mentionAtomExtension } = getMentionExtension();
-  const createExtensions = useCallback(() => {
+  const createExtensions: any = useCallback(() => {
     return [
       new BoldExtension({}),
       new HeadingExtension({ levels: [1, 2, 3, 4, 5, 6] }),
@@ -175,6 +257,7 @@ const EditorWraft: FC<EditorProps> = ({
           { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
         ],
       }),
+      new CountExtension({}),
       // new MentionAtomExtension({ extraAttributes: {} }),
 
       new MentionAtomExtension({
@@ -206,6 +289,8 @@ const EditorWraft: FC<EditorProps> = ({
       };
 
       onUpdate(obj);
+
+      getSummary();
     },
     [setDocState],
   );
@@ -259,10 +344,17 @@ const EditorWraft: FC<EditorProps> = ({
     }
   }, [token]);
 
+  const toggleView = () => {
+    console.log('viewPortal A', viewPortal);
+    setViewPortal(!viewPortal);
+    console.log('viewPortal B', viewPortal);
+  };
+
   return (
     <Box
       variant="styles.editorBody2"
       sx={{
+        position: 'relative',
         mx: 'auto',
         whiteSpace: 'pre-wrap',
         boxShadow: 'none',
@@ -286,9 +378,62 @@ const EditorWraft: FC<EditorProps> = ({
           p: 5,
           bg: 'blue',
         },
-      }}
-    >
+      }}>
       <AllStyledComponent>
+        <Box
+          sx={{
+            px: 3,
+            position: 'fixed',
+            bottotm: 0,
+            left: 0,
+            zIndex: 10,
+          }}>
+          <Box
+            sx={{
+              bg: 'gray.0',
+              border: 'solid 1px',
+              borderColor: 'gray.3',
+              px: 3,
+              py: 2,
+              display: showoutline ? 'block' : 'none',
+            }}>
+            <Flex>
+              <Text variant="labelcaps">Outline</Text>
+              <Button
+                type="button"
+                variant="btnSecondary"
+                sx={{
+                  py: 0,
+                  mr: 1,
+                  ml: 'auto',
+                  border: 'solid 1px',
+                  borderColor: 'gray.3',
+                  // color: 'gray.6',
+                }}
+                onClick={() => setShowOutline(!showoutline)}>
+                <CloseIcon width={12} />
+              </Button>
+            </Flex>
+
+            {outline &&
+              outline.length > 0 &&
+              outline.map((o: outlineP, index: any) => (
+                <Box variant="styles.boxHeading" key={index}>
+                  <Text
+                    sx={{
+                      fontSize: 1,
+                      display: 'block',
+                      borderBottom: 'dotted 1px',
+                      borderColor: 'gray.3',
+                    }}
+                    as="span"
+                    onClick={o.onGo}>
+                    {o.body}
+                  </Text>
+                </Box>
+              ))}
+          </Box>
+        </Box>
         <ThemeProvider>
           <Remirror
             manager={manager}
@@ -296,9 +441,6 @@ const EditorWraft: FC<EditorProps> = ({
             editable={editable}
             classNames={[
               css`
-              .remirror-theme .ProseMirror {
-                background: red !important;
-              }
               &.ProseMirror { 
                 width: 100%;
                 
@@ -306,10 +448,6 @@ const EditorWraft: FC<EditorProps> = ({
                 box-shadow: none !important;
                 .remirror-role {
                   background: #000 !important;
-                } 
-
-                p:hover {
-                  color: #000;
                 }
 
                 .holder {
@@ -342,14 +480,52 @@ const EditorWraft: FC<EditorProps> = ({
                 }
               }
             `,
-            ]}
-          >
+            ]}>
             {showToolbar ? (
               <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
             ) : (
               ''
             )}
-            <EditorComponent />
+            <Flex>
+              <Box>
+                <Button
+                  type="button"
+                  variant="btnSecondary"
+                  sx={{
+                    py: 0,
+                    mr: 1,
+                    px: 2,
+                    border: 'solid 1px',
+                    borderColor: 'gray.3',
+                    // color: 'gray.6',
+                  }}
+                  onClick={() => setShowOutline(!showoutline)}>
+                  <TaskListLtr width={16} />
+                </Button>
+                <Button
+                  type="button"
+                  variant="btnSecondary"
+                  sx={{ py: 0 }}
+                  onClick={() => toggleView()}>
+                  {viewPortal ? (
+                    <ArrowsAngleExpand width={12} />
+                  ) : (
+                    <ArrowsAngleContract width={12} />
+                  )}
+                </Button>
+              </Box>
+              <Box sx={{ ml: 'auto' }}>
+                <WordsCounter />
+              </Box>
+            </Flex>
+            <Box
+              sx={{
+                mx: viewPortal ? 5 : 0,
+                p: { fontSize: viewPortal ? 3 : 2 },
+              }}>
+              <EditorComponent />
+            </Box>
+
             <HolderSuggestComponent tokens={fieldtokens} />
           </Remirror>
         </ThemeProvider>

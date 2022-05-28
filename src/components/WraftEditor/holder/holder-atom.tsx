@@ -185,7 +185,7 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
         ...(override.parseDOM ?? []),
       ],
       toDOM: (node) => {
-        const { label, id, name } = omitExtraAttributes(
+        const { id, name } = omitExtraAttributes(
           node.attrs,
           extra,
         ) as NamedHolderAtomNodeAttributes;
@@ -197,7 +197,7 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
         //     ? matcher.mentionClassName ?? DEFAULT_MATCHER.mentionClassName
         //     : DEFAULT_MATCHER.mentionClassName;
 
-        console.log('EMO', node.attrs, label);
+        // console.log('EMO', node.attrs, label);
 
         const { named } = node.attrs;
 
@@ -308,16 +308,19 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
   }
 }
 
+const pickers: any[] = [
+  'startOfLine',
+  'supportedCharacters',
+  'validPrefixCharacters',
+  'invalidPrefixCharacters',
+];
 /**
  * The default matcher to use when none is provided in options
  */
+
+//  DEFAULT_SUGGESTER: PickPartial<Suggester<any>>;
 const DEFAULT_MATCHER = {
-  ...pick(DEFAULT_SUGGESTER, [
-    'startOfLine',
-    'supportedCharacters',
-    'validPrefixCharacters',
-    'invalidPrefixCharacters',
-  ]),
+  ...pick(DEFAULT_SUGGESTER, pickers),
   appendText: '',
   matchOffset: 1,
   suggestClassName: Theme.SUGGEST_ATOM,
@@ -442,10 +445,10 @@ function getAppendText(
   return DEFAULT_MATCHER.appendText;
 }
 
-declare global {
-  namespace Remirror {
-    interface AllExtensions {
-      holder: HolderAtomExtension;
-    }
-  }
-}
+// declare global {
+//   namespace Remirror {
+//     interface AllExtensions {
+//       holder: HolderAtomExtension;
+//     }
+//   }
+// }

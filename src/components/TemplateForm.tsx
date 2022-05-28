@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
@@ -38,6 +38,19 @@ export interface BlockTemplate {
   body: string;
   serialized: string;
 }
+
+import { useHelpers } from '@remirror/react';
+
+const Counter: FC = () => {
+  const { getWordCount } = useHelpers(true);
+  const count = getWordCount();
+
+  return (
+    <p>
+      {count} {count === 1 ? 'word' : 'words'}
+    </p>
+  );
+};
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -300,12 +313,11 @@ const Form = () => {
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
           <Flex>
-            {insertable && <h1>Insertable</h1>}
+            {insertable && <Box />}
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}
-            >
+              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}>
               <Box sx={{ px: 4 }}>
                 <Field
                   name="title"
@@ -349,6 +361,7 @@ const Form = () => {
                   />
                 )}
               </Box>
+              <Counter />
             </Box>
             <Box
               px={4}
@@ -357,8 +370,7 @@ const Form = () => {
                 bg: '#FAFBFC',
                 width: '100%',
                 borderLeft: 'solid 1px #ddd',
-              }}
-            >
+              }}>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
@@ -370,8 +382,7 @@ const Form = () => {
                       name="parent"
                       defaultValue="Parent ID"
                       onChange={(e) => ctypeChange(e)}
-                      ref={register({ required: true })}
-                    >
+                      ref={register({ required: true })}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (
@@ -403,8 +414,7 @@ const Form = () => {
                           }}
                           as="p"
                           key={k.id}
-                          onClick={() => insertToken(k)}
-                        >
+                          onClick={() => insertToken(k)}>
                           {k.name}
                           <Box sx={{ ml: 'auto', svg: { fill: 'blue.7' } }}>
                             <BracesVariable width={16} />
@@ -432,8 +442,7 @@ const Form = () => {
                         mb: 1,
                         pt: 2,
                         pb: 3,
-                      }}
-                    >
+                      }}>
                       <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
                         {k.title}
                       </Text>

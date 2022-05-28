@@ -6,7 +6,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // import { useHotkeys } from 'react-hotkeys-hook';
 // relative
 import Link from './NavLink';
-import { API_HOST, checkUser } from '../utils/models';
+import { checkUser } from '../utils/models';
 import { Bell, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
 import Dropdown from './common/Dropdown';
 
@@ -59,15 +59,13 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         borderColor: 'gray.3',
         pt: 1,
         pb: 3,
-      }}
-    >
+      }}>
       <Flex>
         <Box
           sx={{
             flexBasis: ['auto', '100%'],
             order: -1,
-          }}
-        >
+          }}>
           <Box
             sx={{
               p: 0,
@@ -76,8 +74,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               borderRight: 'solid 1px',
               borderColor: 'gray.0',
               color: 'gray.8',
-            }}
-          >
+            }}>
             <Flex>
               <Link href="/contents" sx={{ pt: 0 }}>
                 <ArrowBack width={22} />
@@ -86,8 +83,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                 <Text
                   onClick={onToggleEdit}
                   variant="navtitle"
-                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}
-                >
+                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}>
                   <Text
                     as="span"
                     sx={{
@@ -95,8 +91,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       textTransform: 'uppercase',
                       fontWeight: 300,
                       display: 'block',
-                    }}
-                  >
+                    }}>
                     Functionary Labs Pvt Ltd
                   </Text>
                   {navtitle}
@@ -127,9 +122,10 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       alignContent: 'top',
                       verticalAlign: 'top',
                       mt: 2,
-                    }}
-                  >
-                    <Dropdown imageUrl={API_HOST + '/' + profile?.profile_pic}>
+                    }}>
+                    {/* <Dropdown imageUrl={API_HOST + '/' + profile?.profile_pic}> */}
+                    <Dropdown
+                      imageUrl={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`}>
                       <Box
                         sx={{
                           color: 'gray.8',
