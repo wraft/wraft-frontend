@@ -12,6 +12,7 @@ import { useStoreState } from 'easy-peasy';
 import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
 import { useToasts } from 'react-toast-notifications';
+// import ImageCropper from './ImageCropper';
 
 export const defaultStyle: Styles = {
   overlay: {
@@ -253,8 +254,7 @@ const Form = () => {
                         },
                       }}
                       pr={4}
-                      pb={4}
-                    >
+                      pb={4}>
                       <Box sx={{ position: 'relative' }}>
                         {/* \\!imageSaved && ( */}
                         {!isEdit && (
@@ -279,10 +279,9 @@ const Form = () => {
                             isOpen={true}
                             onRequestClose={closeModal}
                             ariaHideApp={false}
-                            contentLabel="Profile Image"
-                          >
+                            contentLabel="Profile Image">
+                            <Text>Editor</Text>
                             {/* <ImageCropper /> */}
-                            image cropper
                           </Modal>
                         )}
                         {imagePreview && (

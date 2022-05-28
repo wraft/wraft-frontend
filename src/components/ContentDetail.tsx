@@ -4,8 +4,9 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 // import { Document, Page } from 'react-pdf';
-import { Pencil, Download } from '@styled-icons/boxicons-regular';
-
+import { Pencil } from '@styled-icons/boxicons-regular';
+import { Download } from '@styled-icons/remix-line/Download';
+import { IosArrowRight } from '@styled-icons/fluentui-system-filled/IosArrowRight';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 import MenuItem from './MenuItem';
@@ -36,8 +37,8 @@ const blockTypes = [
   },
   {
     name: 'small',
-    wh: '24px',
-    fontSize: 0,
+    wh: '22px',
+    fontSize: '13px',
   },
 ];
 
@@ -51,9 +52,9 @@ interface StepBlockProps {
   no?: number;
 }
 
-export const StepBlock = ({ no, tab, title, desc }: StepBlockProps) => {
+export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
   return (
-    <Flex>
+    <Flex sx={{ flex: 1 }}>
       <NumberBlock no={no} active={tab.selectedId === 'view' ? true : false} />
       <Box>
         <Text
@@ -62,16 +63,18 @@ export const StepBlock = ({ no, tab, title, desc }: StepBlockProps) => {
             fontFamily: 'body',
             fontSize: 0,
             color: tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
-          }}
-        >
+            mb: 0,
+          }}>
           {title}
         </Text>
-        <Text
+        {/* <Text
           as="h5"
-          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}
-        >
+          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
           {desc}
-        </Text>
+        </Text> */}
+      </Box>
+      <Box sx={{ pl: 3 }}>
+        <IosArrowRight width={10} sx={{ ml: 2 }} />
       </Box>
     </Flex>
   );
@@ -83,36 +86,31 @@ interface NumberBlockProps {
 }
 
 const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
-  const activeBorder = active ? 'teal.6' : 'gray.4';
-  const activeColor = active ? 'teal.1' : 'gray.6';
-  const activeBg = active ? 'teal.7' : 'gray.0';
-
-  const defaultSize = 'medium';
+  const activeBorder = active ? 'teal.6' : 'gray.2';
+  const defaultSize = 'small';
   const size = blockTypes.find((b: any) => b.name === defaultSize);
 
   return (
     <Box
       sx={{
-        bg: activeBg,
+        bg: 'gray.2',
         textAlign: 'center',
         mr: 3,
         verticalAlign: 'middle',
-        pt: size?.fontSize,
         borderRadius: '99rem',
         border: 'solid 1px',
         borderColor: activeBorder,
         width: size?.wh,
         height: size?.wh,
-      }}
-    >
+      }}>
       <Text
         as="span"
         sx={{
-          color: activeColor,
-          lineHeight: 'body',
+          lineHeight: 'auto',
+          m: 0,
+          p: 0,
           fontSize: size?.fontSize,
-        }}
-      >
+        }}>
         {no}
       </Text>
     </Box>
@@ -126,22 +124,22 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
 interface ProfileCardP {
   name: string;
   time: string;
-  image: string;
+  image?: string;
 }
 
-export const ProfileCard = ({ name, time, image }: ProfileCardP) => {
+export const ProfileCard = ({ name, time }: ProfileCardP) => {
   return (
     <Flex
       sx={{
         fontSize: 0,
         color: 'gray.8',
         my: 2,
-      }}
-    >
+      }}>
       <Avatar
         width={22}
+        height={22}
         sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
-        src={image}
+        src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
       />
       <Text as="h3" sx={{ mr: 3, fontSize: '14.4px', fontWeight: 600 }}>
         {name}
@@ -164,6 +162,7 @@ export interface ContentInstance {
   creator: Creator;
   content_type: ContentType;
   content: Content;
+  versions?: any;
 }
 
 export interface Content {
@@ -190,6 +189,7 @@ export interface ContentType {
   id: string;
   fields: Fields;
   description: string;
+  layout?: any;
 }
 
 export interface Fields {
@@ -314,7 +314,7 @@ const ContentDetail = () => {
   return (
     <Box py={0}>
       <Nav navtitle={contents?.content?.title} />
-      <Box sx={{ position: 'relative', pl: 4, pt: 0 }}>
+      <Box sx={{ pt: 0 }}>
         {loading && (
           <Box
             sx={{
@@ -322,8 +322,7 @@ const ContentDetail = () => {
               right: '-50%',
               left: '50%',
               top: '80px',
-            }}
-          >
+            }}>
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
@@ -332,11 +331,10 @@ const ContentDetail = () => {
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}
-            >
+              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
               <Flex
                 sx={{
-                  // px: 4,
+                  px: 4,
                   // py: 3,
                   py: 3,
                   pb: 3,
@@ -344,8 +342,8 @@ const ContentDetail = () => {
                   borderBottom: 'solid 1px',
                   borderColor: 'gray.3',
                   mb: 3,
-                }}
-              >
+                  bg: 'gray.0',
+                }}>
                 <Box>
                   <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
                     {contents.content.serialized.title}
@@ -371,13 +369,11 @@ const ContentDetail = () => {
                       svg: {
                         fill: 'gray.6',
                       },
-                    }}
-                  >
+                    }}>
                     <MenuItem
                       variant="btnPrimary"
                       href={`/content/edit/[id]`}
-                      path={`/content/edit/${contents.content.id}`}
-                    >
+                      path={`/content/edit/${contents.content.id}`}>
                       <Box>
                         <Pencil size={22} height={22} />
                         <Text
@@ -387,8 +383,7 @@ const ContentDetail = () => {
                             mt: 0,
                             fontWeight: 'bold',
                             fontSize: 1,
-                          }}
-                        >
+                          }}>
                           Edit
                         </Text>
                       </Box>
@@ -397,24 +392,12 @@ const ContentDetail = () => {
                 </Box>
               </Flex>
               <Box sx={{ mb: 4 }}>
-                <TabList {...tab} aria-label="My tabs" sx={{ mb: 4 }}>
-                  <Tab
-                    id="edit"
-                    as={Button}
-                    sx={{
-                      textAlign: 'left',
-                      bg: 'gray.0',
-                      color: 'green.9',
-                      borderRadius: 0,
-                      // border: 'solid 1px #ddd',
-                      // px: 4,
-                    }}
-                    {...tab}
-                  >
+                <TabList {...tab} aria-label="Content Stages" sx={{ mb: 4 }}>
+                  <Tab id="edit" variant="contentButton" as={Button} {...tab}>
                     <StepBlock
                       no={1}
-                      title="Content"
-                      desc="Draft contents"
+                      title="Draft"
+                      desc="Edit contents"
                       tab={tab}
                     />
                   </Tab>
@@ -422,20 +405,31 @@ const ContentDetail = () => {
                     id="view"
                     {...tab}
                     as={Button}
+                    variant="contentButton"
                     sx={{
-                      textAlign: 'left',
-                      bg: 'gray.1',
-                      color: 'green.9',
-                      borderRadius: 0,
-                      // border: 'solid 1px #ddd',
                       px: 4,
                       borderLeft: 0,
-                    }}
-                  >
+                    }}>
                     <StepBlock
                       no={2}
                       title="File"
-                      desc="Edit content"
+                      desc="Sign and Manage"
+                      tab={tab}
+                    />
+                  </Tab>
+                  <Tab
+                    id="sign"
+                    {...tab}
+                    as={Button}
+                    variant="contentButton"
+                    sx={{
+                      px: 4,
+                      borderLeft: 0,
+                    }}>
+                    <StepBlock
+                      no={3}
+                      title="Sign"
+                      desc="Send for signatures"
                       tab={tab}
                     />
                   </Tab>
@@ -458,7 +452,8 @@ const ContentDetail = () => {
                   </Box>
                 </TabPanel>
                 <TabPanel {...tab}>
-                  <Box sx={{ mt: 4, border: 'solid 1px #ddd' }}>
+                  <Box
+                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
                     {contents.content.build && (
                       <PdfViewer
                         url={`/${contents.content.build}`}
@@ -475,12 +470,12 @@ const ContentDetail = () => {
               variant="plateRightBar"
               sx={{
                 bg: '#FAFBFC',
-                ml: 4,
+                py: 0,
                 width: '30%',
-                borderLeft: 'solid 1px #ddd',
+                borderLeft: 'solid 1px',
+                borderColor: 'gray.3',
                 pt: 3,
-              }}
-            >
+              }}>
               <Box sx={{ px: 3 }}>
                 <Flex sx={{ mb: 3 }}>
                   <Box sx={{ mr: 3 }}>
@@ -494,8 +489,7 @@ const ContentDetail = () => {
                           fontWeight: 'heading',
                           fontSize: '16px',
                           lineHeight: '24px',
-                        }}
-                      >
+                        }}>
                         {contents.content.instance_id}
                       </Text>
                       <Text
@@ -511,8 +505,7 @@ const ContentDetail = () => {
                           letterSpacing: '0.2px',
                           textTransform: 'uppercase',
                           fontSize: '10.24px',
-                        }}
-                      >
+                        }}>
                         {contents?.state.state}
                       </Text>
                     </Flex>
@@ -531,7 +524,7 @@ const ContentDetail = () => {
                     {build && (
                       <Box>
                         <Text>Updated At</Text>
-                        <Text>{build.inserted_at}</Text>
+                        <TimeAgo time={build.inserted_at} />
                       </Box>
                     )}
 
@@ -541,37 +534,53 @@ const ContentDetail = () => {
                         <File />
                         <Box>
                           <Box>
-                            <Text
-                              as="h3"
-                              sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}
-                            >
-                              {contents.content.instance_id}
-                            </Text>
-                            <Text
-                              as="h4"
-                              sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}
-                            >
-                              {contents.state?.state}
-                            </Text>
+                            <Flex>
+                              <Text
+                                as="h3"
+                                sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
+                                {contents.content.instance_id}
+                              </Text>
+                              <Text
+                                as="h4"
+                                sx={{
+                                  fontSize: '12px',
+                                  mb: 0,
+                                  mt: 1,
+                                  color: 'gray.6',
+                                  fontWeight: 500,
+                                  ml: 2,
+                                }}>
+                                v{contents.versions[0]?.version_number}
+                              </Text>
+                            </Flex>
+                            <Flex>
+                              <Text
+                                as="h4"
+                                sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                                {contents.content_type?.layout?.name} /{' '}
+                                {contents.content_type?.name}
+                              </Text>
+                            </Flex>
                           </Box>
                         </Box>
 
                         <Link
                           variant="download"
                           href={`/${contents.content.build}`}
-                          target="_blank"
-                        >
-                          <Box
+                          target="_blank">
+                          <Flex
                             sx={{
                               p: 2,
                               pt: 1,
-                              bg: 'green.8',
+                              // bg: 'green.8',
                               borderRadius: 4,
+                              border: 'solid 1px',
+                              borderColor: 'gray.4',
                               ml: 4,
-                            }}
-                          >
-                            <Download size={20} color="white" />
-                          </Box>
+                            }}>
+                            <Download size={18} color="gray.3" />
+                            {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
+                          </Flex>
                         </Link>
                       </Flex>
                     )}
@@ -605,8 +614,7 @@ const ContentDetail = () => {
                   mr: 4,
                   borderTop: 'solid 1px',
                   borderColor: 'gray.3',
-                }}
-              >
+                }}>
                 <Flex
                   sx={{
                     pt: 3,
@@ -614,13 +622,11 @@ const ContentDetail = () => {
                     alignContent: 'flex-start',
                     flexDirection: 'row',
                     // border: 'solid 1px #ddd',
-                  }}
-                >
+                  }}>
                   <Button
                     sx={{ py: 2 }}
                     variant="btnPrimary"
-                    onClick={() => doBuild()}
-                  >
+                    onClick={() => doBuild()}>
                     <>
                       {loading && <Spinner color="white" size={24} />}
                       {!loading && (

@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import ContentListAll from '../src/components/ContentList';
 // import Page from '../src/components/PageFrame';
 
 import { Box } from 'theme-ui';

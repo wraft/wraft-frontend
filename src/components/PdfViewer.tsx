@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 
 import { Document, Page } from 'react-pdf';
 
+// CHECK BACK
 import { pdfjs } from 'react-pdf';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
 import { Text } from 'theme-ui';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface PdfViewerProps {
   url?: string;
@@ -13,33 +13,37 @@ interface PdfViewerProps {
   pageNumber?: any;
 }
 
-const PdfViewer = ({ url, width }: PdfViewerProps) => {
-  const [numPages, setNumPages] = useState(1);
+export const repeat = (times: number) => (callback: (index: number) => any) =>
+  Array(times)
+    .fill(0)
+    .map((_, index) => callback(index));
+
+const PdfViewer = ({ url }: PdfViewerProps) => {
+  const [numPages, setNumPages] = useState<any>(0);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const onDocumentLoadSuccess = (numPages: any) => {
-    console.log('error: ', numPages);
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages);
-    setPageNumber(0);
+    setPageNumber(1);
   };
 
-  // const onLoadError = (numPages: any)  => {
-  //   console.log('error: ', numPages)
-  //   setPageNumber(0)
-  // }
-
   return (
-    <Document file={url}>
-      <Text>
-        {numPages} {width}
-      </Text>
-      <Page
-        pageNumber={pageNumber}
-        width={960}
-        onLoadSuccess={onDocumentLoadSuccess}
-        // onSourceError={onLoadError}
-      />
-    </Document>
+    <React.Fragment>
+      <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
+        <style
+          scoped
+          dangerouslySetInnerHTML={{
+            __html: ` canvas { margin: auto; }`,
+          }}
+        />
+        {repeat(numPages)((index) => (
+          // TODO: Dynamically resize width to fit container
+          // https://github.com/wojtekmaj/react-pdf/issues/129
+          <Page key={`page_${index + 1}`} pageNumber={index + 1} />
+        ))}
+      </Document>
+      <Text>{pageNumber}</Text>
+    </React.Fragment>
   );
 };
 export default PdfViewer;

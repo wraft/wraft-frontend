@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Avatar, Flex, Container, Spinner } from 'theme-ui';
+import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 
 import { Table } from './Table';
 
@@ -7,6 +7,7 @@ import { fetchAPI } from '../utils/models';
 import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
 import Paginate from './Paginate';
 import PageHeader from './PageHeader';
+import ContentLoader from './ContentLoader';
 
 export interface ILayout {
   width: number;
@@ -129,7 +130,7 @@ const ContentList = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col1: (
@@ -177,11 +178,7 @@ const ContentList = () => {
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
-            {!loading && (
-              <Box>
-                <Spinner width={40} height={40} color="primary" />
-              </Box>
-            )}
+            {!loading && <ContentLoader />}
             <Box mx={0} mb={3} sx={{}}>
               {vendors && (
                 <Table
@@ -222,7 +219,7 @@ const ContentList = () => {
             {total}
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
@@ -231,8 +228,7 @@ const ContentList = () => {
                   fontSize: 0,
                   fontWeight: 'body',
                   color: 'gray.6',
-                }}
-              >
+                }}>
                 Filter by Variant
               </Text>
               <Box
@@ -244,15 +240,14 @@ const ContentList = () => {
                   '&:last-child': {
                     borderBottom: 0,
                   },
-                }}
-              >
+                }}>
                 {variants &&
                   variants.map((v: any) => (
                     <FilterBlock title={v?.name} no={32} {...v} />
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
@@ -261,8 +256,7 @@ const ContentList = () => {
                   fontSize: 0,
                   fontWeight: 'body',
                   color: 'gray.6',
-                }}
-              >
+                }}>
                 Filter by State
               </Text>
               <Box
@@ -274,8 +268,7 @@ const ContentList = () => {
                   '&:last-child': {
                     borderBottom: 0,
                   },
-                }}
-              >
+                }}>
                 <FilterBlock title="Draft" no={32} color="blue.3" />
                 <FilterBlock title="In Review" no={32} color="orange.3" />
                 <FilterBlock title="Published" no={32} color="green.3" />

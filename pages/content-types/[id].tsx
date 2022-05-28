@@ -4,7 +4,12 @@ import Head from 'next/head';
 
 import PageFull from '../../src/components/BlankFrame';
 import { useRouter } from 'next/router';
-import CreateForm from '../../src/components/ContentForm';
+import dynamic from 'next/dynamic';
+// import CreateForm from '../../src/components/ContentForm';
+
+const CreateForm = dynamic(() => import('../../src/components/ContentForm'), {
+  ssr: false,
+});
 
 const Index: FC = () => {
   const router = useRouter();

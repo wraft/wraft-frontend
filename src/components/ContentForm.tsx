@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
 
@@ -121,12 +121,12 @@ export const EMPTY_MARKDOWN_NODE = {
 interface FlowStateBlock {
   state?: string;
   order?: number;
+  id?: any;
 }
 
-const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
+const FlowStateBlock = ({ state, order, id }: FlowStateBlock) => (
   <Flex
-    sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}
-  >
+    sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
     <Box
       sx={{
         mt: 2,
@@ -137,13 +137,13 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
         bg: 'green.1',
         textAlign: 'center',
         mr: 2,
-      }}
-    >
+      }}>
       {order}
     </Box>
     <Text variant="labelcaps" sx={{ pt: 2 }}>
       {state}
     </Text>
+    <Text>{id}</Text>
   </Flex>
 );
 
@@ -179,8 +179,8 @@ const Form = (props: IContentForm) => {
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [active, setActive] = useState('');
   const [body, setBody] = useState<any>();
-  const [showForm, setShowForm] = useState<Boolean>(false);
-  const [showTitleEdit, setTitleEdit] = useState<Boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
 
@@ -189,7 +189,7 @@ const Form = (props: IContentForm) => {
 
   const [insertable, setInsertable] = useState<any>();
   const [showDev, setShowDev] = useState<boolean>(false);
-  const [showTemplate, setTemplate] = useState<boolean>(true);
+  const [showTemplate, setTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
   const [raw, setRaw] = useState<any>(null);
@@ -292,16 +292,16 @@ const Form = (props: IContentForm) => {
    */
 
   const onSubmit = (data: any) => {
-    console.log('🧶 [content] Creating Content', data, '');
+    // console.log('🧶 [content] Creating Content', data, '');
 
-    let obj: any = {};
+    const obj: any = {};
 
     maps &&
       maps.forEach((f: any) => {
         obj[f.name] = f.value;
       });
 
-    let serials: any = {
+    const serials: any = {
       ...obj,
       title: data.title,
       body: data.body,
@@ -309,7 +309,7 @@ const Form = (props: IContentForm) => {
     };
 
     const template = {
-      state_uuid: data.state,
+      // state_uuid: data.state,
       serialized: serials,
       raw: data.body,
     };
@@ -378,9 +378,14 @@ const Form = (props: IContentForm) => {
       const serialbody = data?.content?.serialized;
       const ctypeId = data?.content_type?.id;
 
+      // middle wares
+      const content_title = serialbody?.title || undefined;
+
       // fields and templates
       loadEntity(token, `content_types/${ctypeId}`, onLoadData);
       loadTemplates(ctypeId);
+
+      console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
 
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
@@ -460,12 +465,47 @@ const Form = (props: IContentForm) => {
   //   setValue('state', defaultState);
   // };
 
+  // const [summary, setSummary] = useState<
+  //   {
+  //     type: string;
+  //     title: string;
+  //     visibility: boolean;
+  //     onClick: () => void;
+  //   }[]
+  // >([]);
+
+  const getSummary = () => {
+    const res =
+      document
+        .querySelector('.remirror-editor')
+        ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
+
+    console.log('remirror-editor', res);
+  };
+  // setSummary(
+  //   Array.from(
+  //     document
+  //       .querySelector('.ProseMirror')
+  //       ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [],
+  //     (seção) => ({
+  //       tipo: seção.tagName.toLowerCase(),
+  //       título: seção.textContent,
+  //       vista: scrollY + innerHeight >= seção.offsetTop,
+  //       irAté: () => scrollTo({ top: seção.offsetTop - 74 }),
+  //     }),
+  //   ),
+  // );
+
   useEffect(() => {
     if (token && token.length > 0) {
       console.log('🧶 [content] `token` check refresh', token);
       loadData(id);
     }
   }, [token]);
+
+  useEffect(() => {
+    // getSummary();
+  }, []);
   // syncable field
 
   useEffect(() => {
@@ -584,6 +624,8 @@ const Form = (props: IContentForm) => {
     console.log('[updateStuff] passUpdates ', updatedCont);
     setDef(updatedCont);
     setStatus(1);
+
+    getSummary();
   };
 
   /**
@@ -657,17 +699,15 @@ const Form = (props: IContentForm) => {
 
   const updatePageTitle = (x: any) => {
     const tempTitle = selectedTemplate?.title_template;
-    console.log('🐴🐴 title upate', x, tempTitle);
+    // console.log('🐴🐴 title upate', x, tempTitle);
 
     const m = replaceTitles(tempTitle, x);
 
     const actState = activeFlow?.states[0]?.id;
-    console.log('🐴🐴  🧶 [updateFields] m', m, actState);
+    console.log('🐴🐴  🧶 [activeFlow] x', activeFlow);
 
     setValue('state', actState);
-
     setValue('title', m);
-
     setTitle(m);
   };
 
@@ -689,15 +729,15 @@ const Form = (props: IContentForm) => {
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
-        <Text>{status}</Text>
-        {insertable && <Text>Insertables</Text>}
+        {/* {status && <Box sx={{ display: 'none' }} />} */}
+        {insertable && status && <Box sx={{ display: 'none' }} />}
+
         <Flex>
           <Box
             as="form"
             id="hook-form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}
-          >
+            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
             <Box sx={{ display: showDev ? 'block' : 'none' }}>
               <FieldText
                 name="body"
@@ -725,8 +765,7 @@ const Form = (props: IContentForm) => {
                 width: '100%',
                 pl: 2,
                 pt: 2,
-              }}
-            >
+              }}>
               <Flex>
                 <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
                   <Field
@@ -746,44 +785,24 @@ const Form = (props: IContentForm) => {
                         fontSize: 3,
                       },
                     }}
-                    defaultValue={body?.title}
+                    // defaultValue={body?.title}
                     register={register}
                   />
                 </Box>
                 <Box sx={{ width: '10%', pt: 2 }}>
-                  {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit" sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>Publish</Button> */}
+                  <Button
+                    // ref={refSubmitButtom}
+                    variant="btnPrimary"
+                    type="submit"
+                    sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>
+                    Publish
+                  </Button>
                 </Box>
               </Flex>
             </Box>
 
-            <Flex sx={{ pt: 3 }}>
-              <Box sx={{ mr: 4, ml: 'auto', textAlign: 'right' }}>
-                <Text
-                  as="h6"
-                  sx={{
-                    fontWeight: 100,
-                    letterSpacing: '0.2px',
-                    textTransform: 'uppercase',
-                    fontSize: '10.24px',
-                  }}
-                >
-                  Words
-                </Text>
-                <Text
-                  as="h3"
-                  sx={{
-                    fontWeight: 300,
-                    fontSize: '16px',
-                    lineHeight: '24px',
-                    pb: 2,
-                  }}
-                >
-                  0
-                </Text>
-              </Box>
-            </Flex>
+            {!def && <Spinner />}
 
-            {!def && <h1>Content Loading ..</h1>}
             {def && (
               <Box
                 sx={{
@@ -791,13 +810,12 @@ const Form = (props: IContentForm) => {
                   position: 'relative',
                   lineHeight: 1.5,
                   fontFamily: 'body',
-                }}
-              >
+                }}>
                 <Button
                   variant="secondary"
                   type="button"
-                  onClick={() => setShowDev(!showDev)}
-                >
+                  sx={{ display: 'none' }}
+                  onClick={() => setShowDev(!showDev)}>
                   Dev
                 </Button>
                 <EditorWraft
@@ -810,8 +828,7 @@ const Form = (props: IContentForm) => {
                   searchables={ALL_USERS}
                 />
                 <Box
-                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}
-                >
+                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
                   {body && body?.md && raw && (
                     <Box sx={{ color: 'green.4' }}>
                       <TickIcon />
@@ -829,21 +846,25 @@ const Form = (props: IContentForm) => {
             )}
 
             {/* <Button>Publish</Button> */}
-            <Box sx={{ display: 'none' }}>
+            <Box sx={{ display: 'block' }}>
               <Field
                 name="state"
                 label="state"
                 defaultValue=""
                 register={register}
               />
+
               {id && (
-                <Input
-                  id="edit"
-                  name="edit"
-                  defaultValue={id}
-                  hidden={true}
-                  ref={register({ required: true })}
-                />
+                <Box>
+                  <Label>Edit </Label>
+                  <Input
+                    id="edit"
+                    name="edit"
+                    defaultValue={id}
+                    // hidden={true}
+                    ref={register({ required: true })}
+                  />
+                </Box>
               )}
               <Field
                 name="ttype"
@@ -862,11 +883,10 @@ const Form = (props: IContentForm) => {
               width: '30%',
               borderLeft: 'solid 1px #ddd',
               pt: 3,
-            }}
-          >
+            }}>
             <Box sx={{ px: 3 }}>
               <Flex sx={{ mb: 3 }}>
-                {content && <h1>Content Undu</h1>}
+                {content && <Box sx={{ display: 'none' }} />}
                 <Box sx={{ mr: 3 }}>
                   <Text as="h6" variant="labelcaps">
                     Version
@@ -878,8 +898,7 @@ const Form = (props: IContentForm) => {
                         fontWeight: 'heading',
                         fontSize: '16px',
                         lineHeight: '24px',
-                      }}
-                    >
+                      }}>
                       v1.0
                     </Text>
                     <Text
@@ -895,8 +914,7 @@ const Form = (props: IContentForm) => {
                         letterSpacing: '0.2px',
                         textTransform: 'uppercase',
                         fontSize: '10.24px',
-                      }}
-                    >
+                      }}>
                       Draft
                     </Text>
                   </Flex>
@@ -932,8 +950,7 @@ const Form = (props: IContentForm) => {
                           pb: 2,
                           background: '#FFFFFF',
                           border: '1px solid #E9ECEF',
-                        }}
-                      >
+                        }}>
                         <Text
                           onClick={() => setTemplate(true)}
                           as="h6"
@@ -942,14 +959,12 @@ const Form = (props: IContentForm) => {
                             mb: 0,
                             fontWeight: 500,
                             letterSpacing: '0.2px',
-                          }}
-                        >
+                          }}>
                           {selectedTemplate?.title}
                         </Text>
                         <Text
                           as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}
-                        >
+                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
                           {selectedTemplate?.content_type?.prefix}
                         </Text>
                       </Box>
@@ -959,7 +974,7 @@ const Form = (props: IContentForm) => {
               </Box>
             </Box>
 
-            <Modal isOpen={!cId && showTemplate} onClose={closeModal}>
+            <Modal isOpen={showTemplate} onClose={closeModal}>
               <Box sx={{ p: 4 }}>
                 <Box sx={{ pb: 2 }}>
                   <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
@@ -982,18 +997,15 @@ const Form = (props: IContentForm) => {
                           pr: 3,
                           width: '100%',
                         }}
-                        onClick={() => changeText(n)}
-                      >
+                        onClick={() => changeText(n)}>
                         <Text
                           as="h6"
-                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}
-                        >
+                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
                           {n.title}
                         </Text>
                         <Text
                           as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}
-                        >
+                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
                           Description
                         </Text>
                       </Box>
@@ -1029,8 +1041,7 @@ const Form = (props: IContentForm) => {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
-                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}
-                  >
+                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}>
                     <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
@@ -1046,7 +1057,11 @@ const Form = (props: IContentForm) => {
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
                           <>
-                            <FlowStateBlock state={x?.state} order={x?.order} />
+                            <FlowStateBlock
+                              state={x?.state}
+                              order={x?.order}
+                              id={x?.id}
+                            />
                           </>
                         ))}
                       </Box>
@@ -1064,8 +1079,7 @@ const Form = (props: IContentForm) => {
                         borderColor: 'green.9',
                         border: 'solid 1px',
                       }}
-                      type="submit"
-                    >
+                      type="submit">
                       Publish
                     </Button>
                   </Box>

@@ -6,7 +6,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
 // relative
 
-import { API_HOST, checkUser } from '../utils/models';
+import { checkUser } from '../utils/models';
 import { Bell, Search } from '@styled-icons/boxicons-regular';
 import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
 
@@ -62,8 +62,7 @@ const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
           fill: 'gray.8',
         },
         // borderRadius: 4,
-      }}
-    >
+      }}>
       {/* <Search width="16px" /> */}
 
       <Text
@@ -73,8 +72,7 @@ const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
           fontWeight: 900,
           letterSpacing: '-0.15px',
           fontSize: '14px',
-        }}
-      >
+        }}>
         <Add width={18} />
         <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
       </Text>
@@ -141,15 +139,13 @@ const Nav = ({ navtitle }: INav) => {
         borderColor: 'gray.3',
         pt: 0,
         pb: 2,
-      }}
-    >
+      }}>
       <Flex sx={{ pt: 2 }}>
         <Box
           sx={{
             flexBasis: ['auto', 200],
             order: -1,
-          }}
-        >
+          }}>
           <Box
             sx={{
               p: 0,
@@ -159,8 +155,7 @@ const Nav = ({ navtitle }: INav) => {
               borderColor: 'gray.0',
               color: 'gray.8',
               pb: 1,
-            }}
-          >
+            }}>
             <Flex sx={{ minWidth: '80ch' }}>
               {/* <Button variant="btnPrimaryIcon" sx={{ fontSize: 0, fontWeight: 600, pt: 1 }} onClick={() => toggleSearch()}>New</Button> */}
               {/* <Link href="/contents">
@@ -181,8 +176,7 @@ const Nav = ({ navtitle }: INav) => {
                     width: '80ch',
                     border: 'solid 1px #ddd',
                     borderRadius: '4px',
-                  }}
-                >
+                  }}>
                   <Input
                     variant="small"
                     placeholder="Search for docs"
@@ -206,8 +200,7 @@ const Nav = ({ navtitle }: INav) => {
                         fill: 'gray.8',
                         pr: 2,
                       },
-                    }}
-                  >
+                    }}>
                     <Search
                       sx={{
                         borderLeft: 'solid 1px',
@@ -229,8 +222,7 @@ const Nav = ({ navtitle }: INav) => {
 
               <Box
                 variant="button"
-                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}
-              >
+                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
                   <Bell width="20px" />
                 </Link>
@@ -249,14 +241,14 @@ const Nav = ({ navtitle }: INav) => {
                       alignContent: 'top',
                       verticalAlign: 'top',
                       mt: 2,
-                    }}
-                  >
+                    }}>
                     <Box>
                       <MenuButton as={Box} {...menu}>
                         <Image
                           sx={{ borderRadius: '3rem' }}
                           width="30px"
-                          src={API_HOST + '/' + profile?.profile_pic}
+                          // src={API_HOST + '/' + profile?.profile_pic}
+                          src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu
@@ -264,8 +256,7 @@ const Nav = ({ navtitle }: INav) => {
                         // sx={{ border: 'solid 1px #eee' }}
                         {...menu}
                         sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
-                        aria-label="Preferences"
-                      >
+                        aria-label="Preferences">
                         <MenuItem
                           as={Box}
                           sx={{
@@ -277,16 +268,14 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.1',
                             },
                           }}
-                          {...menu}
-                        >
+                          {...menu}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
 
                             {profile?.roles?.size > 0 && (
                               <Text
                                 as="p"
-                                sx={{ fontSize: 0, color: 'gray.6' }}
-                              >
+                                sx={{ fontSize: 0, color: 'gray.6' }}>
                                 {profile?.roles[0]?.name}
                               </Text>
                             )}
@@ -303,8 +292,7 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.1',
                             },
                           }}
-                          {...menu}
-                        >
+                          {...menu}>
                           Settings
                         </MenuItem>
                         <MenuItem
@@ -318,16 +306,14 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.1',
                             },
                           }}
-                          {...menu}
-                        >
+                          {...menu}>
                           Profile
                         </MenuItem>
                         <MenuItem
                           as={Box}
                           onClick={userLogout}
                           {...menu}
-                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}
-                        >
+                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
                           Signout
                         </MenuItem>
                       </Menu>
