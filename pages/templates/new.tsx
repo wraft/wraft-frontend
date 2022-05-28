@@ -10,8 +10,8 @@ const Index: FC = () => {
         <title>New Template - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <Page>        
-        <TemplateForm/>
+      <Page>
+        <TemplateForm />
       </Page>
     </>
   );

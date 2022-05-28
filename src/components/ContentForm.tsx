@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
 
@@ -121,9 +121,10 @@ export const EMPTY_MARKDOWN_NODE = {
 interface FlowStateBlock {
   state?: string;
   order?: number;
+  id?: any;
 }
 
-const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
+const FlowStateBlock = ({ state, order, id }: FlowStateBlock) => (
   <Flex
     sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
     <Box
@@ -142,6 +143,7 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
     <Text variant="labelcaps" sx={{ pt: 2 }}>
       {state}
     </Text>
+    <Text>{id}</Text>
   </Flex>
 );
 
@@ -159,7 +161,6 @@ const Form = (props: IContentForm) => {
   const router = useRouter();
   const { register, getValues, handleSubmit, errors, setValue } = useForm();
   const token = useStoreState((state) => state.auth.token);
-  const searchables = ALL_USERS;
 
   // Content Specific
   // -------
@@ -172,14 +173,14 @@ const Form = (props: IContentForm) => {
 
   // Testing
   // -------
-  const [foelds, setFoeld] = useState<Array<IFieldModel>>([]);
+  // const [foelds, setFoeld] = useState<Array<IFieldModel>>([]);
   // -------
 
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [active, setActive] = useState('');
   const [body, setBody] = useState<any>();
-  const [showForm, setShowForm] = useState<Boolean>(false);
-  const [showTitleEdit, setTitleEdit] = useState<Boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
 
@@ -188,18 +189,18 @@ const Form = (props: IContentForm) => {
 
   const [insertable, setInsertable] = useState<any>();
   const [showDev, setShowDev] = useState<boolean>(false);
-  const [showTemplate, setTemplate] = useState<boolean>(true);
+  const [showTemplate, setTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
   const [raw, setRaw] = useState<any>(null);
 
-  const [varias, setVarias] = useState<IContentType>();
+  // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const { addToast } = useToasts();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
-  const refSubmitButtom = useRef<HTMLButtonElement>(null);
+  // const refSubmitButtom = useRef<HTMLButtonElement>(null);
 
   /**
    * Toggle Title Edit
@@ -207,6 +208,15 @@ const Form = (props: IContentForm) => {
    */
   const toggleEdit = () => {
     setTitleEdit(!showTitleEdit);
+  };
+
+  /**
+   * pass
+   * @param map
+   */
+  const passMe = () => {
+    setActive('');
+    setBody('');
   };
   /**
    *
@@ -217,6 +227,8 @@ const Form = (props: IContentForm) => {
 
     setStatus(1);
     setMaps(map);
+
+    passMe();
 
     if (raw && raw.length > 0) {
       setCleanInsert(true);
@@ -280,16 +292,16 @@ const Form = (props: IContentForm) => {
    */
 
   const onSubmit = (data: any) => {
-    console.log('🧶 [content] Creating Content', data, '');
+    // console.log('🧶 [content] Creating Content', data, '');
 
-    let obj: any = {};
+    const obj: any = {};
 
     maps &&
       maps.forEach((f: any) => {
         obj[f.name] = f.value;
       });
 
-    let serials: any = {
+    const serials: any = {
       ...obj,
       title: data.title,
       body: data.body,
@@ -297,7 +309,7 @@ const Form = (props: IContentForm) => {
     };
 
     const template = {
-      state_uuid: data.state,
+      // state_uuid: data.state,
       serialized: serials,
       raw: data.body,
     };
@@ -366,9 +378,14 @@ const Form = (props: IContentForm) => {
       const serialbody = data?.content?.serialized;
       const ctypeId = data?.content_type?.id;
 
+      // middle wares
+      const content_title = serialbody?.title || undefined;
+
       // fields and templates
       loadEntity(token, `content_types/${ctypeId}`, onLoadData);
       loadTemplates(ctypeId);
+
+      console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
 
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
@@ -448,12 +465,47 @@ const Form = (props: IContentForm) => {
   //   setValue('state', defaultState);
   // };
 
+  // const [summary, setSummary] = useState<
+  //   {
+  //     type: string;
+  //     title: string;
+  //     visibility: boolean;
+  //     onClick: () => void;
+  //   }[]
+  // >([]);
+
+  const getSummary = () => {
+    const res =
+      document
+        .querySelector('.remirror-editor')
+        ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
+
+    console.log('remirror-editor', res);
+  };
+  // setSummary(
+  //   Array.from(
+  //     document
+  //       .querySelector('.ProseMirror')
+  //       ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [],
+  //     (seção) => ({
+  //       tipo: seção.tagName.toLowerCase(),
+  //       título: seção.textContent,
+  //       vista: scrollY + innerHeight >= seção.offsetTop,
+  //       irAté: () => scrollTo({ top: seção.offsetTop - 74 }),
+  //     }),
+  //   ),
+  // );
+
   useEffect(() => {
     if (token && token.length > 0) {
       console.log('🧶 [content] `token` check refresh', token);
       loadData(id);
     }
   }, [token]);
+
+  useEffect(() => {
+    // getSummary();
+  }, []);
   // syncable field
 
   useEffect(() => {
@@ -463,11 +515,8 @@ const Form = (props: IContentForm) => {
     }
   }, [fields]);
 
-  const findTemplates = () => {};
-
-  const updateTitle = (f: any) => {
+  const updateTitle = (_f: any) => {
     // console.log('🐴  [updateTitle] tm', selectedTemplate);
-
     setTitle(selectedTemplate?.title_template);
     setValue('title', selectedTemplate?.title_template);
   };
@@ -505,13 +554,13 @@ const Form = (props: IContentForm) => {
   /**
    * Load Field data
    */
-  const loadFields = () => {
-    if (content && content.content_type) {
-      const m: FieldT[] = content.content_type.fields;
-      console.log('🎃🎃🎃 [fields]', m);
-      setField(m);
-    }
-  };
+  // const loadFields = () => {
+  //   if (content && content.content_type) {
+  //     const m: FieldT[] = content.content_type.fields;
+  //     console.log('🎃🎃🎃 [fields]', m);
+  //     setField(m);
+  //   }
+  // };
 
   /**
    * @param x
@@ -536,7 +585,7 @@ const Form = (props: IContentForm) => {
       const m = findVars(tempTitle, false);
 
       // let namesList = [];
-      let newTitle = tempTitle;
+      // let newTitle = tempTitle;
       m.map((x: any) => {
         const cName = cleanName(x);
         // localBody = localBody.replace(`[${cleanNames}]`, m.value);
@@ -567,7 +616,7 @@ const Form = (props: IContentForm) => {
     updateStuff(x, maps);
   };
 
-  const passUpdates = (content, mappings, isClean) => {
+  const passUpdates = (content: any, mappings: any, isClean: any) => {
     setStatus(0);
     const updatedCont = updateVars(content, mappings);
     setCleanInsert(isClean);
@@ -575,6 +624,8 @@ const Form = (props: IContentForm) => {
     console.log('[updateStuff] passUpdates ', updatedCont);
     setDef(updatedCont);
     setStatus(1);
+
+    getSummary();
   };
 
   /**
@@ -595,7 +646,7 @@ const Form = (props: IContentForm) => {
         respx = res;
       }
 
-      const xr: ContentState = respx;
+      const xr: any = respx;
       passUpdates(xr, mapx, true);
     }
 
@@ -613,11 +664,6 @@ const Form = (props: IContentForm) => {
   const doUpdate = (state: any) => {
     // turn OFF appending blocks
     setCleanInsert(false);
-
-    // console.log('🎃 doUpdate', state);
-
-    // console.log('🐴🐴🐴🐴', activeFlow?.states);
-    // setValue('state', activeFlow?.states[0].id);
 
     if (state.body) {
       // setDef(state.body)
@@ -653,17 +699,15 @@ const Form = (props: IContentForm) => {
 
   const updatePageTitle = (x: any) => {
     const tempTitle = selectedTemplate?.title_template;
-    console.log('🐴🐴 title upate', x, tempTitle);
+    // console.log('🐴🐴 title upate', x, tempTitle);
 
     const m = replaceTitles(tempTitle, x);
 
     const actState = activeFlow?.states[0]?.id;
-    console.log('🐴🐴  🧶 [updateFields] m', m, actState);
+    console.log('🐴🐴  🧶 [activeFlow] x', activeFlow);
 
     setValue('state', actState);
-
     setValue('title', m);
-
     setTitle(m);
   };
 
@@ -677,29 +721,6 @@ const Form = (props: IContentForm) => {
     updatePageTitle(resx);
   };
 
-  interface prepareMapProps {
-    fields: any;
-    defx: any;
-  }
-
-  /**
-   * onSaved fields */
-  const prepareMap = (fields, defx) => {
-    // for all fields
-    let obj: any = [];
-
-    if (fields && fields.length > 0) {
-      fields.forEach(function (value: any) {
-        const ff = defx.find((e: any) => e.name === value.name);
-        const name = ff.value;
-        let x: IFieldType = { ...value, value: name };
-        obj.push(x);
-      });
-    }
-
-    setFieldMap(obj);
-  };
-
   const closeModal = () => {
     setTemplate(false);
   };
@@ -708,6 +729,9 @@ const Form = (props: IContentForm) => {
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
+        {/* {status && <Box sx={{ display: 'none' }} />} */}
+        {insertable && status && <Box sx={{ display: 'none' }} />}
+
         <Flex>
           <Box
             as="form"
@@ -761,42 +785,24 @@ const Form = (props: IContentForm) => {
                         fontSize: 3,
                       },
                     }}
-                    defaultValue={body?.title}
+                    // defaultValue={body?.title}
                     register={register}
                   />
                 </Box>
                 <Box sx={{ width: '10%', pt: 2 }}>
-                  {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit" sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>Publish</Button> */}
+                  <Button
+                    // ref={refSubmitButtom}
+                    variant="btnPrimary"
+                    type="submit"
+                    sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>
+                    Publish
+                  </Button>
                 </Box>
               </Flex>
             </Box>
 
-            <Flex sx={{ pt: 3 }}>
-              <Box sx={{ mr: 4, ml: 'auto', textAlign: 'right' }}>
-                <Text
-                  as="h6"
-                  sx={{
-                    fontWeight: 100,
-                    letterSpacing: '0.2px',
-                    textTransform: 'uppercase',
-                    fontSize: '10.24px',
-                  }}>
-                  Words
-                </Text>
-                <Text
-                  as="h3"
-                  sx={{
-                    fontWeight: 300,
-                    fontSize: '16px',
-                    lineHeight: '24px',
-                    pb: 2,
-                  }}>
-                  0
-                </Text>
-              </Box>
-            </Flex>
+            {!def && <Spinner />}
 
-            {!def && <h1>Content Loading ..</h1>}
             {def && (
               <Box
                 sx={{
@@ -805,7 +811,13 @@ const Form = (props: IContentForm) => {
                   lineHeight: 1.5,
                   fontFamily: 'body',
                 }}>
-                {/* <Button variant="secondary" type="button" onClick={() => setShowDev(!showDev)}>Dev</Button> */}
+                <Button
+                  variant="secondary"
+                  type="button"
+                  sx={{ display: 'none' }}
+                  onClick={() => setShowDev(!showDev)}>
+                  Dev
+                </Button>
                 <EditorWraft
                   value={active}
                   editable={true}
@@ -834,21 +846,25 @@ const Form = (props: IContentForm) => {
             )}
 
             {/* <Button>Publish</Button> */}
-            <Box sx={{ display: 'none' }}>
+            <Box sx={{ display: 'block' }}>
               <Field
                 name="state"
                 label="state"
                 defaultValue=""
                 register={register}
               />
+
               {id && (
-                <Input
-                  id="edit"
-                  name="edit"
-                  defaultValue={id}
-                  hidden={true}
-                  ref={register({ required: true })}
-                />
+                <Box>
+                  <Label>Edit </Label>
+                  <Input
+                    id="edit"
+                    name="edit"
+                    defaultValue={id}
+                    // hidden={true}
+                    ref={register({ required: true })}
+                  />
+                </Box>
               )}
               <Field
                 name="ttype"
@@ -870,6 +886,7 @@ const Form = (props: IContentForm) => {
             }}>
             <Box sx={{ px: 3 }}>
               <Flex sx={{ mb: 3 }}>
+                {content && <Box sx={{ display: 'none' }} />}
                 <Box sx={{ mr: 3 }}>
                   <Text as="h6" variant="labelcaps">
                     Version
@@ -957,7 +974,7 @@ const Form = (props: IContentForm) => {
               </Box>
             </Box>
 
-            <Modal isOpen={!cId && showTemplate} onClose={closeModal}>
+            <Modal isOpen={showTemplate} onClose={closeModal}>
               <Box sx={{ p: 4 }}>
                 <Box sx={{ pb: 2 }}>
                   <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
@@ -1040,7 +1057,11 @@ const Form = (props: IContentForm) => {
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
                           <>
-                            <FlowStateBlock state={x?.state} order={x?.order} />
+                            <FlowStateBlock
+                              state={x?.state}
+                              order={x?.order}
+                              id={x?.id}
+                            />
                           </>
                         ))}
                       </Box>

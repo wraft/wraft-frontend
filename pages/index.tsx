@@ -147,9 +147,7 @@ const Index: FC = () => {
                 <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
                   <Text color="gray.7">Pending Actions</Text>
                 </Box>
-                <Box>
-                  {/* <ApprovalList /> */}
-                </Box>
+                <Box>{/* <ApprovalList /> */}</Box>
               </Box>
               <Box sx={{ pb: 4, width: '45%', pl: 4 }}>
                 <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>

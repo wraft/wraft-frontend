@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
@@ -12,11 +12,7 @@ import {
   DataTemplates,
 } from '../utils/types';
 
-import { Label, Select } from 'theme-ui';
-import styled from 'styled-components';
-
-
-// import { useHelpers, useKeymap } from '@remirror/react';
+import { Select } from 'theme-ui';
 
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
@@ -27,7 +23,6 @@ import { BracesVariable } from '@styled-icons/fluentui-system-regular/BracesVari
 
 import MarkdownEditor from './WraftEditor';
 
-
 import {
   loadEntity,
   loadEntityDetail,
@@ -37,26 +32,25 @@ import {
 
 import NavEdit from './NavEdit';
 
-const Tag = styled(Box)`
-  padding: 5px;
-  color: #444;
-  border-radius: 3px;
-  margin-bottom: 8px;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background-color: #d7f7e2;
-  font-family: monospace;
-  font-weight: bold;
-  color: #3d5039;
-`;
-
 export interface BlockTemplate {
   id: string;
   title: string;
   body: string;
   serialized: string;
 }
+
+import { useHelpers } from '@remirror/react';
+
+const Counter: FC = () => {
+  const { getWordCount } = useHelpers(true);
+  const count = getWordCount();
+
+  return (
+    <p>
+      {count} {count === 1 ? 'word' : 'words'}
+    </p>
+  );
+};
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -287,15 +281,6 @@ const Form = () => {
 
   const [tokens, setToken] = useState<any>();
   const [insertable, setInsertable] = useState<any>();
-  const [cleanIns, setCleanIns] = useState<boolean>(false);
-
-  const ALL_USERS = [
-    { id: 'joe', label: 'Joe' },
-    { id: 'sue', label: 'Sue' },
-    { id: 'pat', label: 'Pat' },
-    { id: 'tom', label: 'Tom' },
-    { id: 'jim', label: 'Jim' },
-  ];
 
   const insertToken = (token: any) => {
     const test = {
@@ -324,10 +309,11 @@ const Form = () => {
 
   return (
     <Box>
-      <NavEdit/>
+      <NavEdit />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
           <Flex>
+            {insertable && <Box />}
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
@@ -375,6 +361,7 @@ const Form = () => {
                   />
                 )}
               </Box>
+              <Counter />
             </Box>
             <Box
               px={4}
@@ -429,7 +416,7 @@ const Form = () => {
                           key={k.id}
                           onClick={() => insertToken(k)}>
                           {k.name}
-                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7'}}}>
+                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7' } }}>
                             <BracesVariable width={16} />
                           </Box>
                         </Flex>

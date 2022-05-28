@@ -3,12 +3,12 @@ import { Theme } from 'theme-ui';
 const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body:
-      '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    body: '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
-    editor1: '\'Satoshi\', sans-serif',
-    editor2:  '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',//"'IBM Plex Mono', monospace",
-    // font-family: 
+    editor1: "'Satoshi', sans-serif",
+    editor2:
+      '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif', //"'IBM Plex Mono', monospace",
+    // font-family:
     monospace: 'Menlo, monospace',
   },
   initialColorModeName: 'light',
@@ -125,7 +125,17 @@ const theme: Theme = {
       '#0c8599',
       '#0b7285',
     ],
-    teal: ['#087f5b', '#3a8f6e', '#599f81', '#76ae95', '#91bea9', '#accebe', '#c8dfd3', '#e3efe9', '#ffffff'],
+    teal: [
+      '#087f5b',
+      '#3a8f6e',
+      '#599f81',
+      '#76ae95',
+      '#91bea9',
+      '#accebe',
+      '#c8dfd3',
+      '#e3efe9',
+      '#ffffff',
+    ],
     // teal: [
     //   '#e6fcf5',
     //   '#c3fae8',
@@ -138,8 +148,7 @@ const theme: Theme = {
     //   '#099268',
     //   '#087f5b',
     // ],
-    
-    
+
     green: [
       '#ebfbee',
       '#d3f9d8',
@@ -237,7 +246,7 @@ const theme: Theme = {
       mb: 2,
       borderRadius: 2,
     },
-    
+
     small: {
       bg: 'gray.0',
       fontSize: 0,
@@ -245,7 +254,7 @@ const theme: Theme = {
       px: 3,
       fontFamily: 'body',
       fontWeight: 500,
-      borderColor: 'gray.2'
+      borderColor: 'gray.2',
     },
     select: {
       color: 'gray.8',
@@ -351,32 +360,54 @@ const theme: Theme = {
       maxWidth: '100%',
     },
     editorBody: {
-      '.remirror-theme h1': {
-
-      },
+      '.remirror-theme h1': {},
 
       '.remirror-editor-wrapper': {},
       '.remirror-theme .ProseMirror': {
         outline: 'none',
-        border: 'solid 1px #ddd',
-        bg: 'red !important',
+        // border: 'solid 1px #ddd',
         // color: #721515 !important;
-        pl: '4rem',
-        pr: '4rem',
-        pt: '4rem',
-        pb: '4rem',
+        // pl: '4rem',
+        // pr: '4rem',
+        // pt: '4rem',
+        // pb: '4rem',
       },
-      p: { color: "gray.9", fontFamily: 'body', pt: 2, pb: 1, fontSize: 0 },
-      h1: { color: 'red.5', py: 3, fontFamily: 'body', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
-      h2: { color: "red.3", py: 3, fontFamily: 'body', lineHeight: 1.25, fontSize: 1 },
-      h3: { color: "red.3", py: 3, fontFamily: 'body', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
-      h4: { color: 'red.3', py: 3, fontFamily: 'body', lineHeight: 1.25, fontSize: 1 },
+      p: { color: 'gray.9', fontFamily: 'body', pt: 2, pb: 1, fontSize: 0 },
+      h1: {
+        color: 'red.5',
+        py: 3,
+        fontFamily: 'body',
+        textTransform: 'uppercase',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h2: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h3: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        textTransform: 'uppercase',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h4: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
     },
-    editorBody2: {     
+    editorBody2: {
       '.remirror-theme .remirror-editor': {
         bg: 'red',
-        p: 5, 
-        
+        p: 5,
       },
       '.remirror-theme h1': {
         fontFamily: 'editor2',
@@ -388,22 +419,52 @@ const theme: Theme = {
         borderColor: 'gray.4',
         lineHeight: 1.65,
         bg: 'gray.0',
-        h1: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
-        h2: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
-        h3: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
+        h1: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+        h2: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+        h3: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
         '.holder': {
           bg: 'green.1',
           color: 'green.8',
-        }
+        },
       },
-      p: { color: "gray.7", fontFamily: 'editor2', pt: 2, pb: 1 },
-      h1: { color: 'red.5', py: 3, fontFamily: 'editor2', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
-      h2: { color: "red.3", py: 3, fontFamily: 'editor2', lineHeight: 1.25, fontSize: 1 },
-      h3: { color: "red.3", py: 3, fontFamily: 'editor2', textTransform: 'uppercase', lineHeight: 1.25, fontSize: 1 },
-      h4: { color: 'red.3', py: 3, fontFamily: 'editor2', lineHeight: 1.25, fontSize: 1 },
+      p: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+      h1: {
+        color: 'red.5',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h2: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h3: {
+        color: 'red.3',
+        py: 2,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h4: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
     },
   },
   links: {
+    download: {
+      color: 'red.4',
+      svg: {
+        fill: 'red.4',
+      },
+    },
     btnNavLink: {
       p: 2,
       px: 3,
@@ -458,7 +519,7 @@ const theme: Theme = {
       display: 'block',
       // bg: 'red'
     },
-    download: {
+    download2: {
       color: 'green.9',
       fontSize: 0,
       textTransform: 'uppercase',
@@ -490,10 +551,14 @@ const theme: Theme = {
     },
   },
   layout: {
-
     boxHeading: {
-      pl: 3, pt: 2, 
-      width: '100%', borderTop: 'solid 1px', borderTopColor: 'gray.3', borderBottom: 'solid 1px', borderBottomColor: 'gray.3'
+      pl: 3,
+      pt: 2,
+      width: '100%',
+      borderTop: 'solid 1px',
+      borderTopColor: 'gray.3',
+      borderBottom: 'solid 1px',
+      borderBottomColor: 'gray.3',
     },
 
     modalContent: {
@@ -595,7 +660,7 @@ const theme: Theme = {
       fontWeight: 600,
       width: '100%',
       a: {
-        fontWeight: 600
+        fontWeight: 600,
       },
       ':hover': {
         bg: 'gray.2',
@@ -742,7 +807,7 @@ const theme: Theme = {
       bg: 'muted',
     },
   },
-  text: {    
+  text: {
     labelSmall: {
       pl: 1,
       pr: 2,
@@ -825,8 +890,16 @@ const theme: Theme = {
     },
   },
   buttons: {
-    primary: {
-      bg: 'red.4'
+    download: {
+      bg: 'gray.1',
+      textTransform: 'capitalize',
+    },
+    contentButton: {
+      bg: 'gray.0',
+      border: 0,
+      borderColor: 'gray.4',
+      color: 'gray.8',
+      textAlign: 'left',
     },
     btnPrimaryIcon: {
       bg: 'gray.0',

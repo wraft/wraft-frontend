@@ -4,6 +4,7 @@ import { Box, Text, Container, Flex } from 'theme-ui';
 import Page from '../../../src/components/PageFrame';
 import ManageSidebar from '../../../src/components/ManageSidebar';
 import OrgRolesList from '../../../src/components/OrgRolesList';
+import { menuLinks } from '../../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -14,17 +15,16 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Container variant="layout.pageFrame">
-          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd'}}>
+          <Box sx={{ py: 4, borderBottom: 'solid 1px #ddd' }}>
             <Text variant="text.pageTitle">Manage Roles</Text>
           </Box>
           <Flex>
-            <ManageSidebar />
-            <Box>             
+            <ManageSidebar items={menuLinks} />
+            <Box>
               <Box>
                 <OrgRolesList />
               </Box>
             </Box>
-            
           </Flex>
         </Container>
       </Page>

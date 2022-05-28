@@ -9,12 +9,12 @@ import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 
 interface AssetFormProps {
-  onUpload?: any; 
+  onUpload?: any;
 }
 
 const AssetForm = ({ onUpload }: AssetFormProps) => {
   const { register, handleSubmit } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Asset>();
 
   const onImageUploaded = (data: any) => {
@@ -55,14 +55,8 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}>
-      <Text mb={3}>
-        Upload Files
-      </Text>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
+      <Text mb={3}>Upload Files</Text>
       {contents && (
         <Box>
           <Text>{contents.name}</Text>

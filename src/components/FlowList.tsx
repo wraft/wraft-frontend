@@ -46,10 +46,15 @@ export interface IFieldItem {
 const ItemField: FC<any> = ({ flow }) => {
   return (
     <Box key={flow.id} pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }}>
-      <MenuItem href={`/manage/flows/edit/[id]`} path={`/manage/flows/edit/${flow.id}`}>
+      <MenuItem
+        href={`/manage/flows/edit/[id]`}
+        path={`/manage/flows/edit/${flow.id}`}
+      >
         <Box>
           <Text as="h4">{flow.name}</Text>
-          <Text sx={{ fontSize: 0}} color="gray.6">{flow.id}</Text>
+          <Text sx={{ fontSize: 0 }} color="gray.6">
+            {flow.id}
+          </Text>
         </Box>
       </MenuItem>
     </Box>
@@ -93,7 +98,7 @@ const Form: FC = () => {
       contents.map((r: any) => {
         const rFormated = {
           col1: <Text>~</Text>,
-          col2: <ItemField {...r}/>,
+          col2: <ItemField {...r} />,
           col3: <Box>{r.flow.updated_at}</Box>,
         };
 
@@ -105,7 +110,7 @@ const Form: FC = () => {
   }, [contents]);
 
   return (
-    <Box py={3} mt={4} variant="layout.pageFrame">      
+    <Box py={3} mt={4} variant="layout.pageFrame">
       <Box mx={0} mb={3}>
         {!loading && (
           <Box>

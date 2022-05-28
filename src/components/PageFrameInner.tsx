@@ -4,8 +4,6 @@ import { Box, Flex, Text } from 'theme-ui';
 import Head from 'next/head';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
-import Sidebar from './Sidebar';
-import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
 export interface IPage {
@@ -22,11 +20,11 @@ export interface IAlert {
 
 export const PageFrameInner = ({
   children,
-  showFull = true,
-  // noSide = true,
-}: IPage) => {
+}: // showFull = true,
+// noSide = true,
+IPage) => {
   // const shouldShow: boolean = showFull ? true : false;
-  const fontName = 'Poppins';
+  // const fontName = 'Poppins';
   // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
@@ -35,7 +33,8 @@ export const PageFrameInner = ({
         sx={{
           flexDirection: 'column',
           minHeight: '100%',
-        }}>
+        }}
+      >
         <Head>
           {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -51,13 +50,15 @@ export const PageFrameInner = ({
           sx={{
             flex: 1,
             flexDirection: ['column', 'row'],
-          }}>
+          }}
+        >
           <Box
             sx={{
               flex: 1,
               bg: 'gray.1',
               minWidth: 0,
-            }}>
+            }}
+          >
             {children}
             <Flex bg="gray.1" sx={{ pt: 0 }}>
               <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
@@ -67,7 +68,8 @@ export const PageFrameInner = ({
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
-                }}>
+                }}
+              >
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
               </Box>
             </Flex>

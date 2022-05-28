@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './FieldText';
@@ -81,9 +81,9 @@ const CommentForm = (props: CommentFormProps) => {
   }, [master_id, token]);
 
   return (
-    <>      
+    <>
       {comments && comments.length > 0 && (
-        <Box >
+        <Box>
           {comments.map((comment: Comment) => (
             <CommentCard key={comment.id} {...comment} />
           ))}
@@ -94,7 +94,9 @@ const CommentForm = (props: CommentFormProps) => {
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="btnSecondary" ml={0} sx={{ mt: 0}}>{submiting ? 'Saving ... ' : 'Add Comment'}</Button>
+        <Button variant="btnSecondary" ml={0} sx={{ mt: 0 }}>
+          {submiting ? 'Saving ... ' : 'Add Comment'}
+        </Button>
       </Box>
     </>
   );

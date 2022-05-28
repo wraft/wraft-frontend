@@ -11,44 +11,16 @@ import { BrandLogo } from '../../src/components/Icons';
 
 import {
   Note,
-  Layout,
-  Water,
   Like,
   Cabinet as BookOpen,
   Carousel,
   Cog,
   UserVoice,
   Wrench,
-  Dna as PaintRoll,
-  Text as TextIcon
+  Text as TextIcon,
 } from '@styled-icons/boxicons-regular';
 
 import ModeToggle from './ModeToggle';
-// import ContentTypeDashboard from './ContentTypeDashboard';
-
-// export const IconWrapper = styled(Layout)`
-//   color: '#999';
-// `;
-
-// const Sidebar = styled(Box)`
-//   border-bottom: solid 1px #eee;
-//   padding-bottom: 8px;
-//   padding-top: 12px;
-//   padding-left: 8px;
-//   a {
-//     text-decoration: none;
-//     color: #000;
-//     font-weight: bold;
-//     padding-left: 8px;
-//   }
-
-//   a:hover {
-//     text-decoration: none;
-//     color: #092682;
-//     font-weight: bold;
-//     padding-left: 8px;
-//   }
-// `;
 
 const listMenu = [
   {
@@ -118,7 +90,7 @@ const listMenu = [
     logo: <Wrench width={20} />,
     path: '/manage',
   },
-  
+
   {
     name: 'Settings',
     logo: <Cog width={20} />,
@@ -200,7 +172,8 @@ const Nav = (props: any) => {
           borderColor: 'gray.2',
           mb: 3,
           pt: 1,
-        }}>
+        }}
+      >
         <Link href="/">
           <Flex color="primary" sx={{ fill: 'text' }}>
             <BrandLogo width="5rem" height="2rem" />
@@ -229,15 +202,20 @@ const Nav = (props: any) => {
                   ? 'layout.menuLinkActive'
                   : 'layout.menuLink'
               }
-              >
+            >
               <Box
                 sx={{
                   mr: 2,
-                  color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',                  
-                }}>
+                  color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
+                }}
+              >
                 {m.logo}
               </Box>
-              {showFull && <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>{m.name}</Text>}
+              {showFull && (
+                <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>
+                  {m.name}
+                </Text>
+              )}
             </Flex>
           </MenuItem>
         ))}
@@ -252,7 +230,8 @@ const Nav = (props: any) => {
           borderBottom: 'solid 1px',
           bg: 'gray.0',
           borderColor: 'gray.1',
-        }}>
+        }}
+      >
         <ModeToggle variant="button" />
       </Box>
     </Box>

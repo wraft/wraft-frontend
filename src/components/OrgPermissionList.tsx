@@ -76,19 +76,17 @@ const OrgPermissionList = () => {
     loadEntity(token, 'resources', loadResourceDataSuccess);
   };
 
-
   /**
-   * 
-   * @param r 
-   * @returns 
+   *
+   * @param r
+   * @returns
    */
   const ky = (r: any) => {
-    let pname = ''
+    let pname = '';
     Object.keys(r).map(function (key, index) {
       // myObject[key] *= 2;
       console.log('keys', key, index);
-      pname = key
-
+      pname = key;
     });
 
     // return pname;
@@ -96,7 +94,7 @@ const OrgPermissionList = () => {
       console.log('pname', r[`${pname}`]);
     }
     return pname;
-  }
+  };
 
   /** Trigger Load on Init */
 
@@ -123,31 +121,29 @@ const OrgPermissionList = () => {
     {
       name: 'Delete',
     },
-
-  ]
-
+  ];
 
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
+        {resources && <h1>REsources is tehre</h1>}
         <Text variant="pagetitle">All Permissions x</Text>
         <Box>
-        { permLevels.map((pm:any) => (
-          <Flex>
-            <Text sx={{ textTransform: 'uppercase'}}>{pm.name}</Text>
-          </Flex>
-        ))}
+          {permLevels.map((pm: any) => (
+            <Flex>
+              <Text sx={{ textTransform: 'uppercase' }}>{pm.name}</Text>
+            </Flex>
+          ))}
 
           <Flex>
             {contents &&
               contents?.permissions?.length > 0 &&
-              contents?.permissions?.map((r:any) => (
+              contents?.permissions?.map((r: any) => (
                 <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
                   <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
                 </Box>
               ))}
           </Flex>
-
         </Box>
 
         {/* <Text variant="pagetitle">All Resources</Text>

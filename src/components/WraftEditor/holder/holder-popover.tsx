@@ -75,7 +75,8 @@ export function HolderAtomPopupComponent<
       positioner="cursor"
       enabled={!!state}
       placement="auto-end"
-      renderOutsideEditor>
+      renderOutsideEditor
+    >
       <Box {...getMenuProps()} className={cx(Theme.MENTION_ATOM_POPUP_WRAPPER)}>
         {!!state && isEmptyArray(hookProps.items) ? (
           <ZeroItemsComponent />
@@ -92,7 +93,6 @@ export function HolderAtomPopupComponent<
                   isHighlighted && Theme.MENTION_ATOM_POPUP_HIGHLIGHT,
                   isHovered && Theme.MENTION_ATOM_POPUP_HOVERED,
                 )}
-
                 sx={{
                   border: 'solid 0.5px',
                   borderColor: 'gray.3',
@@ -109,7 +109,8 @@ export function HolderAtomPopupComponent<
                   },
                   item,
                   index,
-                })}>
+                })}
+              >
                 <ItemComponent item={item} state={state} />
               </Box>
             );

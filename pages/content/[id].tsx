@@ -11,7 +11,7 @@ const Index: FC = () => {
         <title>Content Types - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <Page>        
+      <Page>
         <ContentDetail />
       </Page>
     </>

@@ -6,7 +6,6 @@ import Field from './Field';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
 import Modal from './Modal';
-import { findAll, replaceTitles } from '../utils';
 
 export interface IFieldField {
   name: string;
@@ -31,10 +30,19 @@ interface FieldFormProps {
   onRefresh: any;
 }
 
-const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setShowForm, templates, showForm }: FieldFormProps) => {
+const FieldForm = ({
+  fields,
+  onSaved,
+  // setMaps,
+  // onRefresh,
+  // activeTemplate,
+  setShowForm,
+  // templates,
+  showForm,
+}: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
   const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
-  const [isReady, setIsReady] = useState<Boolean>(false);
+  // const [isReady, setIsReady] = useState<Boolean>(false);
 
   /**
    * Map form values to fields
@@ -57,7 +65,11 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
     let initials: IFieldField[] = [];
     field_maps &&
       field_maps.forEach((i: any) => {
-        const item: IFieldField = { name: i.name, value: i.value, id: i?.field_type?.id };
+        const item: IFieldField = {
+          name: i.name,
+          value: i.value,
+          id: i?.field_type?.id,
+        };
         initials.push(item);
       });
     return initials;
@@ -65,7 +77,7 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
 
   /**
    * Form Submit
-   * @param _data 
+   * @param _data
    */
   const onSubmit = (_data: any) => {
     const f: any = mapFields(fields);
@@ -82,39 +94,44 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
 
   useEffect(() => {
     // console.log('🐴  fields [3.0]', fields)
-
   }, [fields]);
 
-  useEffect(() => {    
-    if(fieldMap && fieldMap[0] && fieldMap[0]?.value){
-      console.log('🐴🐴  fields [4.0]', fieldMap)
+  useEffect(() => {
+    if (fieldMap && fieldMap[0] && fieldMap[0]?.value) {
+      console.log('🐴🐴  fields [4.0]', fieldMap);
     }
   }, [fieldMap]);
 
   function closeModal() {
     setShowForm(false);
   }
-  
 
-  const yoFileTha = () => {
-    onRefresh(fieldMap);
-  }
+  // const yoFileTha = () => {
+  //   onRefresh(fieldMap);
+  // };
 
   return (
     <Box sx={{ p: 3, borderColor: 'gray.1', bg: '#F5F7FE' }}>
       <Box>
-        <Text as="h6" variant='labelcaps'>Fields</Text>
+        <Text as="h6" variant="labelcaps">
+          Fields
+        </Text>
       </Box>
 
       <Box
         p={0}
-        sx={{ bg: 'white', mt: 1, mb: 3, border: 'solid 1px', borderColor: 'gray.3' }}>
-
+        sx={{
+          bg: 'white',
+          mt: 1,
+          mb: 3,
+          border: 'solid 1px',
+          borderColor: 'gray.3',
+        }}
+      >
         {fieldMap &&
           fieldMap.map((x: any) => (
             <Flex
               key={x.id}
-
               sx={{
                 // bg: 'red.3',
                 py: 2,
@@ -122,13 +139,15 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
                 borderBottom: 'solid 0.5px',
                 borderColor: 'gray.2',
                 // mb: 2,
-              }}>
+              }}
+            >
               <Text
                 sx={{
                   color: '#363e4980',
                   fontSize: '16px',
                   fontWeight: 300,
-                }}>
+                }}
+              >
                 {x.name}
               </Text>
               <Text
@@ -139,7 +158,8 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
                   color: '#363E49',
                   fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
-                }}>
+                }}
+              >
                 {x.value}
               </Text>
               <Text>{x.type}</Text>
@@ -156,7 +176,7 @@ const FieldForm = ({ fields, onSaved, setMaps, onRefresh, activeTemplate, setSho
           onSubmit={handleSubmit(onSubmit)}
           // py={2}
           sx={{ p: 4, bg: 'gray.0' }}
-        // mt={2}
+          // mt={2}
         >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (

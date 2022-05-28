@@ -1,7 +1,6 @@
 import React from 'react';
-import { Box, Flex, Text, Image } from 'theme-ui'; import { API_HOST } from '../utils/models';
-;
-import { TimeAgo } from './Atoms';
+import { Box, Flex, Text } from 'theme-ui';
+import { API_HOST } from '../utils/models';
 import { ProfileCard } from './ContentDetail';
 
 export interface Comment {
@@ -36,10 +35,15 @@ const CommentCard = (comment: Comment) => {
             borderColor: 'gray.3',
             pb: 3,
             mb: 2,
-          }}>
+          }}
+        >
           <Flex sx={{ display: 'inline-flex' }}>
             <Box sx={{ pl: 0 }}>
-              <ProfileCard image={`${API_HOST}${comment?.profile?.profile_pic}`} name={comment?.profile?.name} time={comment?.updated_at} />
+              <ProfileCard
+                image={`${API_HOST}${comment?.profile?.profile_pic}`}
+                name={comment?.profile?.name}
+                time={comment?.updated_at}
+              />
             </Box>
           </Flex>
           <Box sx={{ pl: 3 }}>
@@ -53,7 +57,8 @@ const CommentCard = (comment: Comment) => {
                 lineHeight: 1.35,
                 pl: 2,
                 m: 0,
-              }}>
+              }}
+            >
               {comment.comment}
             </Text>
           </Box>

@@ -1,9 +1,13 @@
-// import dayjs from 'dayjs';
-// import dayjsTwitter from 'dayjs-twitter';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import produce from 'immer';
 import { ContentState } from './types';
 // import { Flat } from "lodash";
 
+import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
+
+import { Style } from '@styled-icons/material-sharp/Style';
+import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
 
 // dayjs.extend(dayjsTwitter)
 
@@ -44,7 +48,7 @@ export const updateVars = (data: ContentState, fields: any) => {
   // cut it short if it map has no values
   if (fields && fields[0] && fields[0].value) {
     console.log('UPDATED_BODY updateStuff', fields);
-    const result = produce(data, draft => {
+    const result = produce(data, (draft) => {
       data.content.forEach((p: any, k: any) => {
         if (p && p.content && p.content.length > 0) {
           p.content.forEach((c: any, y: any) => {
@@ -84,7 +88,7 @@ export const replaceBoy = (
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 1) {
-      matches.forEach(e => {
+      matches.forEach((e) => {
         let cleanNames = escaped ? cleanName2(e) : cleanName(e);
         const m = findDefault(cleanNames, maps);
         // find the key from
@@ -127,7 +131,7 @@ export const findVars = (body: string, escaped: boolean): string[] => {
     }
 
     // The result can be accessed through the `m`-variable.
-    m.forEach(match => {
+    m.forEach((match) => {
       results.push(match);
     });
   }
@@ -151,7 +155,6 @@ export const replaceVars = (body: string, maps: IField[], escaped: boolean) => {
  * @param maps
  */
 export const replaceTitles = (body: string, maps: any) => {
-  
   const resultVars = findVars(body, false);
   return replaceTitle(body, resultVars, maps);
 };
@@ -167,26 +170,22 @@ export const replaceTitle = (
   matches: string[],
   maps: any,
 ): string => {
-
-  
-
   let localBody: string = body;
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 0) {
-      matches.forEach(e => {
+      matches.forEach((e) => {
         let cleanNames = cleanName(e);
-        
+
         const m = findDefault(cleanNames, maps);
         if (m && m.value) {
           console.log('🐴🐴  🧶  ');
           localBody = localBody.replace(`[${cleanNames}]`, m.value);
-        }else {
+        } else {
           console.log('🐴🐴  🧶  ', m);
-
         }
       });
-    }    
+    }
     return localBody;
   } else {
     return body;
@@ -254,7 +253,7 @@ export const defaultModalStyle = {
     backgroundColor: '#fff',
     boxShadow: '0px 3px 6px #00000029',
     borderRadius: '9px',
-    outline: 'none',    
+    outline: 'none',
     overflow: 'auto',
     padding: 0,
     marginBottom: 0,
@@ -291,7 +290,6 @@ export const modalStyle3 = {
   },
 };
 
-
 export const isNumeric = (str: any) => {
   if (typeof str != 'string') return false; // we only process strings!
   return (
@@ -299,3 +297,44 @@ export const isNumeric = (str: any) => {
     !isNaN(parseFloat(str))
   ); // ...and ensure strings of whitespace fail
 };
+
+// const ICON_COLOR = '#999';
+export interface menuLinksProps {
+  name: string;
+  path: string;
+  logo: any;
+}
+
+export const menuLinks: menuLinksProps[] = [
+  {
+    name: 'Layouts',
+    logo: <Layout width="20px" />,
+    path: '/manage/layouts',
+  },
+  {
+    name: 'Flows',
+    logo: <FlowBranch width="20px" />,
+    path: '/manage/flows',
+  },
+
+  {
+    name: 'Themes',
+    logo: <Style width="20px" />,
+    path: '/manage/themes',
+  },
+  {
+    name: 'Roles',
+    logo: <User width="20px" />,
+    path: '/manage/roles',
+  },
+  {
+    name: 'Fields',
+    logo: <User width="20px" />,
+    path: '/manage/fields',
+  },
+  {
+    name: 'Pipelines',
+    logo: <Collection width={20} />,
+    path: '/manage/pipelines',
+  },
+];

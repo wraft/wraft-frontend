@@ -86,7 +86,8 @@ const ApprovalFormBase = ({
       mb={3}
       sx={{ p: 4, mt: 0 }}
       as="form"
-      onSubmit={handleSubmit(onSubmit)}>
+      onSubmit={handleSubmit(onSubmit)}
+    >
       {showSearch && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
@@ -107,10 +108,13 @@ const ApprovalFormBase = ({
             id="pre_state_id"
             name="pre_state_id"
             defaultValue=""
-            ref={register({ required: true })}>
+            ref={register({ required: true })}
+          >
             {states &&
               states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>{s.state.state}</option>
+                <option key={s.state.id} value={s.state.id}>
+                  {s.state.state}
+                </option>
               ))}
           </Select>
         </Box>
@@ -121,10 +125,13 @@ const ApprovalFormBase = ({
             id="post_state_id"
             name="post_state_id"
             defaultValue=""
-            ref={register({ required: true })}>
+            ref={register({ required: true })}
+          >
             {states &&
               states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>{s.state.state}</option>
+                <option key={s.state.id} value={s.state.id}>
+                  {s.state.state}
+                </option>
               ))}
           </Select>
         </Box>
@@ -146,7 +153,8 @@ const ApprovalFormBase = ({
                 border: 'solid 1px',
                 borderColor: 'gray.3',
               }}
-              onClick={() => onUserSelect(x)}>
+              onClick={() => onUserSelect(x)}
+            >
               <Text as="h4" color="gray.9">
                 {x.name}
               </Text>
@@ -164,7 +172,8 @@ const ApprovalFormBase = ({
           onClick={() => dialog.hide}
           variant="btnSecondary"
           type="submit"
-          mt={3}>
+          mt={3}
+        >
           Cancel
         </Button>
       </Flex>

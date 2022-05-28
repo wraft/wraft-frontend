@@ -22,7 +22,8 @@ const OrgSidebar = (_props: INav) => {
         borderColor: 'gray.3',
         pt: 3,
         pl: 3,
-      }}>
+      }}
+    >
       <NavLink href={'/account'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>My Profile</Text>
       </NavLink>

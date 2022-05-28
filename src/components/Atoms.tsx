@@ -40,7 +40,8 @@ export const TimeAgo = (time: TimeAgoProps) => {
         '.hov': { opacity: 0 },
         ':hover': { '.hov': { opacity: 1 } },
       }}
-      color="gray.6">
+      color="gray.6"
+    >
       {timed}
     </Text>
   );
@@ -107,7 +108,8 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
         borderColor: 'gray.3',
         alignItems: 'flex-start',
         pl: 2,
-      }}>
+      }}
+    >
       <Box
         sx={{
           borderRadius: '3rem',
@@ -140,7 +142,8 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
             borderRadius: '3rem',
             px: '4px',
             py: '1px',
-          }}>
+          }}
+        >
           {no}
         </Text>
       </Text>
@@ -168,7 +171,8 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
             fontSize: '12px',
             color: 'gray.6',
             fontWeight: 300,
-          }}>
+          }}
+        >
           {id}
         </Text>
         <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500 }}>

@@ -45,7 +45,7 @@ export const Page = (props: any) => {
           content="Wraft Docs help busines move steady and fast with Document Automation System"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter&display=swap"
           rel="stylesheet"
@@ -67,7 +67,8 @@ export const Page = (props: any) => {
                 sx={{ minHeight: '100vh', bg: 'base' }}
                 color="#333"
                 p={4}
-                pt={3}>
+                pt={3}
+              >
                 {props.children}
               </Box>
             </Box>
