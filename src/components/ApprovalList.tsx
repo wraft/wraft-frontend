@@ -1,11 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Flex, Avatar, Button, Badge } from 'theme-ui';
+import React, { useEffect, useState } from 'react';
+import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
 import { loadEntity, updateEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import PageHeader from './PageHeader';
 import { Table } from './Table';
-import { TimeAgo, BoxWrap, StateBadge } from './Atoms';
+import { BoxWrap, StateBadge } from './Atoms';
 
 export interface ApprovalList {
   pre_state: State;
@@ -33,56 +33,6 @@ export interface State {
   state: string;
   id: string;
 }
-
-/**
- * Content List Card
- * @returns
- */
-
-const ContentListCard: FC = (props: any) => {
-  return (
-    <Flex
-      sx={{
-        py: 3,
-        mt: 0,
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.2',
-      }}>
-      <Box>
-        <Avatar
-          width="32px"
-          height="32px"
-          sx={{ mr: 2 }}
-          src={props?.creator?.profile_pic}
-        />
-      </Box>
-      <Box sx={{ pl: 3 }}>
-        <Box sx={{ fontSize: '12px', color: '#828282' }}>
-          {props?.instance?.instance_id} <Badge>{props?.state?.state}</Badge>
-        </Box>
-        <Text>{props?.instance?.serialized?.title}</Text>
-      </Box>
-      <Box sx={{ ml: 'auto' }}>
-        <Flex>
-          <Box sx={{ pr: 4, pt: 1 }}></Box>
-          <Flex sx={{ pt: 2, mr: 4 }}>
-            <Box>
-              <Text>{props?.creator?.name}</Text>
-            </Box>
-          </Flex>
-          <Button variant="btnSecondary" sx={{ mr: 1 }}>
-            Review
-          </Button>
-          <Button
-            variant="btnAction"
-            onClick={() => props.onApprove(props.instance?.id)}>
-            Approve
-          </Button>
-        </Flex>
-      </Box>
-    </Flex>
-  );
-};
 
 const Approvals = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -154,13 +104,7 @@ const Approvals = () => {
               {/* <TimeAgo time={r.content?.inserted_at} /> */}
             </Box>
           ),
-          col4: (
-            <Avatar
-              mt={2}
-              width="20px"
-              src={r.creator?.profile_pic}
-            />
-          ),
+          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
           state: <StateBadge name={r.state.state} color="green.3" />,
           status: (
             <Flex sx={{ mr: 1, p: 2 }}>
@@ -173,7 +117,8 @@ const Approvals = () => {
                 <Box>
                   <Button
                     variant="btnAction"
-                    onClick={() => approveInstance(r.instance?.id)}>
+                    onClick={() => approveInstance(r.instance?.id)}
+                  >
                     Approve
                   </Button>
                 </Box>
@@ -203,7 +148,8 @@ const Approvals = () => {
                 bg: 'gray.0',
                 border: 'solid 1px',
                 borderColor: 'gray.2',
-              }}>
+              }}
+            >
               <Text>Nothing to approve</Text>
             </Box>
           )}
@@ -245,13 +191,6 @@ const Approvals = () => {
               data: tableList,
             }}
           />
-          {/* <Box>
-            {contents &&
-              contents.length > 0 &&
-              contents.map((m: any) => (
-                <ContentListCard key={m.id} {...m} onApprove={approveInstance} />
-              ))}
-          </Box> */}
         </Box>
         <Box
           sx={{
@@ -260,7 +199,8 @@ const Approvals = () => {
             width: '25%',
             borderLeft: 'solid 1px',
             borderColor: 'gray.3',
-          }}></Box>
+          }}
+        ></Box>
       </Flex>
     </Box>
   );

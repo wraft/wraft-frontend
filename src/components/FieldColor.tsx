@@ -31,7 +31,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
   const popover = usePopoverState();
-  
+
   const changeColor = (_e: any) => {
     const colr = _e && _e.hex;
     setVal(colr);
@@ -97,7 +97,8 @@ const FieldColor: React.FC<FieldColorProps> = ({
         aria-label="Edit color"
         sx={{
           outline: 'none',
-        }}>
+        }}
+      >
         <ChromePicker
           color={valx}
           disableAlpha

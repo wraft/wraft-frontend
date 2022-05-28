@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 import Link from './NavLink';
-import { EmptyForm, Plus } from './Icons';
+import { EmptyForm } from './Icons';
 import { fetchAPI, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';
@@ -16,13 +16,12 @@ export interface Theme {
 }
 
 export interface FormElement {
-  updated_at: string
-  title: string
-  inserted_at: string
-  id: string
-  description: string
+  updated_at: string;
+  title: string;
+  inserted_at: string;
+  id: string;
+  description: string;
 }
-
 
 const ItemField = (props: any) => {
   return (
@@ -31,22 +30,41 @@ const ItemField = (props: any) => {
       key={props.id}
       p={3}
       sx={{
-        position: 'relative', bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px', ':hover': {
+        position: 'relative',
+        bg: '#fff',
+        borderBottom: 'solid 1px #eee',
+        borderRadius: '3px',
+        ':hover': {
           '.merry': {
             display: 'block',
-          }
-        }
-      }}>
+          },
+        },
+      }}
+    >
       <Box sx={{ width: '33ch', mb: 1 }}>
         <Link href={`/manage/themes/edit/${props.id}`}>
-          <Text as="h4" sx={{ mb: 0, p: 0, pb: 0 }}>{props.name}</Text>
+          <Text as="h4" sx={{ mb: 0, p: 0, pb: 0 }}>
+            {props.name}
+          </Text>
         </Link>
         <Text as="p" sx={{ mt: 0, p: 0 }} pt={0} color="grey">
           Sample Field Description
         </Text>
       </Box>
-      <Box className="merry" sx={{ display: 'none', position: 'absolute', top: 0, right: 0, mt: 3, mr: 3 }}>
-        <Button variant="secondary" onClick={() => props.onDelete(props.id)}>Delete</Button>
+      <Box
+        className="merry"
+        sx={{
+          display: 'none',
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          mt: 3,
+          mr: 3,
+        }}
+      >
+        <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
+          Delete
+        </Button>
       </Box>
     </Box>
   );
@@ -78,22 +96,27 @@ const FormList: FC = () => {
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
-        {contents.length < 1 &&
+        {contents.length < 1 && (
           <Box>
             <Flex>
               <Box sx={{ color: 'gray.5', width: 'auto' }}>
-                <EmptyForm sx={{ color: 'gray.4' }}/>
+                <EmptyForm sx={{ color: 'gray.4' }} />
               </Box>
               <Box sx={{ m: 2, pb: 0 }}>
-                <Text as="h2" sx={{ fontWeight: 300 }}>No Forms present</Text>
-                <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>You haven't created a collection form yet, click below to create one</Text>
+                <Text as="h2" sx={{ fontWeight: 300 }}>
+                  No Forms present
+                </Text>
+                <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                  You haven't created a collection form yet, click below to
+                  create one
+                </Text>
                 <Box sx={{ mt: 3, pb: 0 }}>
-              <Button>Add Form</Button>
-            </Box>
+                  <Button>Add Form</Button>
+                </Box>
               </Box>
-            </Flex>            
+            </Flex>
           </Box>
-        }
+        )}
         <Box>
           {contents &&
             contents.length > 0 &&

@@ -5,7 +5,7 @@ const createImage = (url: string) =>
     const image = new Image();
 
     image.addEventListener('load', () => resolve(image));
-    image.addEventListener('error', error => reject(error));
+    image.addEventListener('error', (error) => reject(error));
     image.setAttribute('crossOrigin', 'anonymous');
     image.src = url;
   });
@@ -62,10 +62,8 @@ export const getCroppedImg = async (
   }
 
   return new Promise<File>((resolve, reject) => {
-    const rand = Math.random()
-      .toString(36)
-      .substr(2); // remove `0.`
-    canvas.toBlob(blob => {
+    const rand = Math.random().toString(36).substr(2); // remove `0.`
+    canvas.toBlob((blob) => {
       if (blob) {
         resolve(new File([blob], `image_${rand}.jpg`));
       } else {

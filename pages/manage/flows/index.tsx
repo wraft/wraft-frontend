@@ -7,6 +7,7 @@ import Page from '../../../src/components/PageFrame';
 import Link from '../../../src/components/NavLink';
 
 import ManageSidebar from '../../../src/components/ManageSidebar';
+import { menuLinks } from '../../../src/utils';
 
 const Index: FC = () => {
   return (
@@ -15,9 +16,9 @@ const Index: FC = () => {
         <title>Manage Flows - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      
+
       <Page>
-        <Container sx={{ pl: 4, pt: 4}}>
+        <Container sx={{ pl: 4, pt: 4 }}>
           <Box>
             <Box sx={{ ml: 'auto' }}>
               <Link variant="btnPrimary" href="/manage/flows/new">
@@ -26,8 +27,8 @@ const Index: FC = () => {
             </Box>
           </Box>
           <Flex>
-            <ManageSidebar items={[]}/>
-            <FlowList />            
+            <ManageSidebar items={menuLinks} />
+            <FlowList />
           </Flex>
         </Container>
       </Page>

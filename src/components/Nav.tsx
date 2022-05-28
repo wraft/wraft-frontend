@@ -6,10 +6,9 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
 // relative
 
-import { API_HOST, checkUser } from '../utils/models';
-import { Bell, Search,  } from '@styled-icons/boxicons-regular';
-import { Plus as Add  } from '@styled-icons/boxicons-regular/Plus';
-
+import { checkUser } from '../utils/models';
+import { Bell, Search } from '@styled-icons/boxicons-regular';
+import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
 
 import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
 import { Clickable } from 'reakit/Clickable';
@@ -74,8 +73,8 @@ const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
           letterSpacing: '-0.15px',
           fontSize: '14px',
         }}>
-         <Add width={18}/>
-         <Text sx={{ ml: 1, pt: 1, fontSize: '14px'}}>New</Text>
+        <Add width={18} />
+        <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
       </Text>
     </Clickable>
   );
@@ -199,7 +198,7 @@ const Nav = ({ navtitle }: INav) => {
                       borderColor: 'gray.3',
                       svg: {
                         fill: 'gray.8',
-                        pr: 2,                        
+                        pr: 2,
                       },
                     }}>
                     <Search
@@ -248,7 +247,8 @@ const Nav = ({ navtitle }: INav) => {
                         <Image
                           sx={{ borderRadius: '3rem' }}
                           width="30px"
-                          src={API_HOST + '/' + profile?.profile_pic}
+                          // src={API_HOST + '/' + profile?.profile_pic}
+                          src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu

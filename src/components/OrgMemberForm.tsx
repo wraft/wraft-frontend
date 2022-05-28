@@ -69,7 +69,7 @@ const OrgMemberForm = () => {
     setShowSearch(false);
   };
 
-  const onCreate = (d: any) => {    
+  const onCreate = (d: any) => {
     setSuccess(true);
     console.log('__d', d);
     // if (d && d.id) {
@@ -133,7 +133,7 @@ const OrgMemberForm = () => {
 
   const onInvite = () => {
     setShowSearch(true);
-  }
+  };
 
   /**
    * Set Profile Context
@@ -164,14 +164,19 @@ const OrgMemberForm = () => {
         {organ && (
           <Box>
             <Box onClick={toggleSearch}></Box>
-            <OrgMembersList id={organ?.id} members={members} onInitInvite={onInvite}/>
+            <OrgMembersList
+              id={organ?.id}
+              members={members}
+              onInitInvite={onInvite}
+            />
             <Box>
               <Modal
                 isOpen={showSearch}
                 onRequestClose={closeSearch}
                 // style={defaultModalStyle}
                 ariaHideApp={false}
-                contentLabel="SearchWraft">
+                contentLabel="SearchWraft"
+              >
                 <Box p={4}>
                   <Text variant="blockTitle">Invite Members</Text>
                   <Box as="form" onSubmit={handleSubmit(onInviteSubmit)}>
@@ -190,7 +195,8 @@ const OrgMemberForm = () => {
                           py: 2,
                           color: 'primary',
                           textTransform: 'uppercase',
-                        }}>
+                        }}
+                      >
                         {organ?.name}
                       </Text>
                     </Box>

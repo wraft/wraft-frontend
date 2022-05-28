@@ -182,7 +182,7 @@ const Form = () => {
       console.log('content_type', res);
 
       setValue('name', res.content_type.name);
-      setValue('desc', res.content_type?.description);
+      setValue('desc', res.content_type?.decription);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('edit', res.content_type.id);
@@ -242,6 +242,7 @@ const Form = () => {
   const isNumeric = (str: any) => {
     if (typeof str != 'string') return false; // we only process strings!
     return (
+      // @ts-ignore: Argument of type 'string' is not assignable to parameter of type 'number'.
       !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
       !isNaN(parseFloat(str))
     ); // ...and ensure strings of whitespace fail
@@ -373,7 +374,8 @@ const Form = () => {
     <Box>
       <PageHeader
         title={`${cId ? 'Edit' : 'New '} Variant`}
-        desc="Manage Variants">
+        desc="Manage Variants"
+      >
         <Box />
       </PageHeader>
       <Flex>
@@ -422,7 +424,8 @@ const Form = () => {
                   <Select
                     id="layout_id"
                     name="layout_id"
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -440,7 +443,8 @@ const Form = () => {
                     id="flow_id"
                     name="flow_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -469,7 +473,8 @@ const Form = () => {
                     id="theme_id"
                     name="theme_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    ref={register({ required: true })}
+                  >
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
@@ -509,7 +514,8 @@ const Form = () => {
               <Button
                 type="button"
                 variant="btnPrimaryLarge"
-                onClick={() => deleteMe(cId)}>
+                onClick={() => deleteMe(cId)}
+              >
                 Delete
               </Button>
             )}

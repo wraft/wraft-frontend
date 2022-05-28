@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { useStoreState } from 'easy-peasy';
-import { Box, Text,Flex } from 'theme-ui';
+import { Box, Text, Flex } from 'theme-ui';
 
 import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
@@ -65,9 +65,7 @@ const Blok = () => {
 
   return (
     <Box bg="gray.0" sx={{ border: 'solid 1px', borderColor: 'gray.2' }}>
-      <Box>
-        {loading && <></>}
-      </Box>
+      <Box>{loading && <></>}</Box>
       {/* <Flex>
         <Input placeholder="Search eg: Offer Letter" sx={{ fontSize: 0, mb: 0 }} />
         <Button sx={{ bg: 'primary', borderRadius: 0 }}>
@@ -86,7 +84,8 @@ const Blok = () => {
             width: '100%',
             borderBottom: 'solid 1px',
             borderColor: 'gray.2',
-          }}>
+          }}
+        >
           <Text>Create New</Text>
         </Box>
         {contents && contents.map((x: any) => <BlockItem key={x.id} {...x} />)}
@@ -112,7 +111,8 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         borderBottom: 'solid 1px',
         borderColor: 'gray.2',
         '&:hover': { bg: 'gray.1' },
-      }}>
+      }}
+    >
       <Box
         sx={{
           width: '16px',
@@ -124,7 +124,6 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           bg: color,
         }}
       />
-
 
       <Link href={`/content-types/${id}`}>{name}</Link>
       {/* <Text as="h4" sx={{ m: 0, color: 'gray.7', fontWeight: 500 }}>
@@ -138,7 +137,8 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           ml: 'auto',
           color: 'gray.7',
           fontWeight: 300,
-        }}>
+        }}
+      >
         {prefix}
       </Text>
     </Flex>

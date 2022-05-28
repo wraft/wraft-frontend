@@ -69,8 +69,10 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
   return (
     <Box>
       <PageHeader title="Variants" desc="Manage Variants">
-        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 2, mt: 1}}>
-          <Link href="/content-types/new" variant="btnSmall">New Variant</Link>
+        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 2, mt: 1 }}>
+          <Link href="/content-types/new" variant="btnSmall">
+            New Variant
+          </Link>
         </Flex>
       </PageHeader>
       <Flex>
@@ -78,9 +80,12 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
           <Box>
             <Spinner width={40} height={40} color="primary" />
           </Box>
-        )}        
+        )}
       </Flex>
-      <Box variant="layout.pageFrame" sx={{ py: 1, pb: 4, borderBottom: 'solid 1px #ddd', mb: 3, mt: 3}}>
+      <Box
+        variant="layout.pageFrame"
+        sx={{ py: 1, pb: 4, borderBottom: 'solid 1px #ddd', mb: 3, mt: 3 }}
+      >
         <ContentTypeDashboard isEdit={isEdit} />
       </Box>
       {/* <Flex sx={{ width: '100%', pt: 4 }}>

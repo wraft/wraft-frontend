@@ -17,7 +17,6 @@ import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 
-
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
 import {
@@ -271,7 +270,8 @@ const Form = () => {
                 id="engine_uuid"
                 name="engine_uuid"
                 defaultValue="NYC"
-                ref={register({ required: true })}>
+                ref={register({ required: true })}
+              >
                 {engines &&
                   engines.length > 0 &&
                   engines.map((m: any) => (
@@ -282,7 +282,7 @@ const Form = () => {
               </Select>
             </Box>
             <Box mt={3}>
-              <Flex sx={{ display: 'none'}}>
+              <Flex sx={{ display: 'none' }}>
                 <Field
                   name="width"
                   label="Width"
@@ -316,16 +316,45 @@ const Form = () => {
         </Box>
         <Box pl={4}>
           <Box pt={3}>
-            <Text as="h3" mb={2} pb={1}>Assets</Text>
+            <Text as="h3" mb={2} pb={1}>
+              Assets
+            </Text>
             {assets &&
               assets.length > 0 &&
               assets.map((m: Asset) => (
-                <Box key={m.id} sx={{ p: 3, border: 'solid 1px', borderColor: 'gray.3', bg: 'base', mb: 1 }}>
-                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>{m.name}</Text>
+                <Box
+                  key={m.id}
+                  sx={{
+                    p: 3,
+                    border: 'solid 1px',
+                    borderColor: 'gray.3',
+                    bg: 'base',
+                    mb: 1,
+                  }}
+                >
+                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                    {m.name}
+                  </Text>
                   {/* <Text as="p" sx={{ overflow: 'scroll', maxWidth: '50%' }}>http://localhost:4000{m.file}</Text> */}
-                  <Link target="_blank" href={`http://localhost:4000${m.file}`}>Download</Link>
+                  <Link target="_blank" href={`http://localhost:4000${m.file}`}>
+                    Download
+                  </Link>
                   <Box>
-                    <Button sx={{ fontSize: 1, px: 1, py: 1, ml: 3, bg: 'white', color: 'red.4', border: 'solid 1px', borderColor: 'red.9' }} onClick={() => deleteAsset(cId, m.id)}>Delete</Button>
+                    <Button
+                      sx={{
+                        fontSize: 1,
+                        px: 1,
+                        py: 1,
+                        ml: 3,
+                        bg: 'white',
+                        color: 'red.4',
+                        border: 'solid 1px',
+                        borderColor: 'red.9',
+                      }}
+                      onClick={() => deleteAsset(cId, m.id)}
+                    >
+                      Delete
+                    </Button>
                   </Box>
                 </Box>
               ))}

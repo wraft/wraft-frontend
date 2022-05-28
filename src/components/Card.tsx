@@ -48,7 +48,8 @@ const LayoutCard = ({
           // height: '100px',
           // p: 3,
           // overflow: 'hidden',
-        }}>
+        }}
+      >
         <Box sx={{ pt: 0, pr: 0 }}>
           <Box
             sx={{
@@ -56,14 +57,16 @@ const LayoutCard = ({
               backgroundImage: `url(${screenshot})`,
               bg: 'gray.2',
               width: '100%',
-            }}>
+            }}
+          >
             <Box
               sx={{
                 position: 'absolute',
                 textAlign: 'right',
                 right: 2,
                 top: 0,
-              }}>
+              }}
+            >
               {/* <Box as={MenuButton}> */}
               <MenuButton
                 as={Button}
@@ -76,7 +79,8 @@ const LayoutCard = ({
                   bg: 'gray.0',
                   pb: 1,
                   mt: 2,
-                }}>
+                }}
+              >
                 <DotsVerticalRounded width="16px" />
               </MenuButton>
               <Menu
@@ -89,7 +93,8 @@ const LayoutCard = ({
                   borderRadius: 4,
                   bg: 'gray.0',
                   color: 'gray.9',
-                }}>
+                }}
+              >
                 <MenuItem
                   as={Button}
                   sx={{
@@ -103,13 +108,15 @@ const LayoutCard = ({
                   {...menu}
                   onClick={() => {
                     onDelete(id);
-                  }}>
+                  }}
+                >
                   Delete
                 </MenuItem>
                 <MenuItem {...menu} as={Box} sx={{ width: '100%', px: 3 }}>
                   <Link
                     href={`/manage/${model}/edit/[id]`}
-                    path={`/manage/${model}/edit/${id}`}>
+                    path={`/manage/${model}/edit/${id}`}
+                  >
                     <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
                   </Link>
                 </MenuItem>

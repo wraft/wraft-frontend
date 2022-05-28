@@ -43,11 +43,7 @@ const BlockTemplateListFrame: FC = () => {
       contents.map((r: any) => {
         const rFormated = {
           col1: <Text></Text>,
-          col2: (
-            <Box>
-              {r.title}
-            </Box>
-          ),
+          col2: <Box>{r.title}</Box>,
           col3: <Box>{r.updated_at}</Box>,
           col4: (
             <Box sx={{ px: 3, py: 2 }}>
@@ -86,27 +82,27 @@ const BlockTemplateListFrame: FC = () => {
       </Flex> */}
       <Box variant="layout.pageFrame">
         <Box mx={0} mb={3}>
-          {blocks.length === 0 &&
-
-          <Box>
-          <Flex>
-            <Box sx={{ color: 'gray.5', width: 'auto' }}>
-              <EmptyForm sx={{ color: 'gray.4' }}/>
+          {blocks.length === 0 && (
+            <Box>
+              <Flex>
+                <Box sx={{ color: 'gray.5', width: 'auto' }}>
+                  <EmptyForm sx={{ color: 'gray.4' }} />
+                </Box>
+                <Box sx={{ m: 2, pb: 0 }}>
+                  <Text as="h2" sx={{ fontWeight: 300 }}>
+                    Blocks are empty
+                  </Text>
+                  <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                    You haven't created a block yet, click below to create one
+                  </Text>
+                  <Box sx={{ mt: 3, pb: 0 }}>
+                    <Button>Add First Block</Button>
+                  </Box>
+                </Box>
+              </Flex>
             </Box>
-            <Box sx={{ m: 2, pb: 0 }}>
-              <Text as="h2" sx={{ fontWeight: 300 }}>Blocks are empty</Text>
-              <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>You haven't created a block yet, click below to create one</Text>
-              <Box sx={{ mt: 3, pb: 0 }}>
-            <Button>Add First Block</Button>
-          </Box>
-            </Box>
-          </Flex>            
-          </Box>
-
-          }
-          {!blocks &&
-            <Text>You do not have any blok, click here to add</Text>
-          }
+          )}
+          {!blocks && <Text>You do not have any blok, click here to add</Text>}
 
           {blocks && blocks.length > 0 && (
             <Table

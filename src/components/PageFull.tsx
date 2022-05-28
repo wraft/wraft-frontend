@@ -22,7 +22,7 @@ export interface IAlert {
 
 export const PageFull = (props: any) => {
   // const showFull: boolean = props && props.showFull ? true : false;
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   return (
     <>
       <Head>
@@ -46,15 +46,15 @@ export const PageFull = (props: any) => {
         {token && (
           <Flex>
             {/* <Sidebar showFull={showFull} /> */}
-            <Box sx={{ width: '100%'}}>
-              <NavEdit navtitle=""/>
+            <Box sx={{ width: '100%' }}>
+              <NavEdit navtitle="" />
               <Box
-                sx={{ minHeight: '100vh'}}
+                sx={{ minHeight: '100vh' }}
                 bg="gray.0"
                 // p={4}
                 // pt={3}
                 pl={4}
-                >
+              >
                 {props.children}
               </Box>
             </Box>

@@ -59,7 +59,8 @@ const ManageHomePage = (_props: INav) => {
             mr: 0,
             pt: 2,
             mt: 1,
-          }}>
+          }}
+        >
           {/* <NavLink href="/content-types/new" variant="btnSmall"> */}
           {/* <Text as="h5" sx={{ color: 'gray.7' }}>Functionary Labs</Text>
             <Text as="p" sx={{ color: 'gray.4', fontSize: 0 }}>Bengaluru, India</Text> */}
@@ -85,7 +86,8 @@ const ManageHomePage = (_props: INav) => {
                 px: 4,
                 ':hover': { bg: 'teal.7', borderColor: 'teal.6' },
                 color: 'teal.8',
-              }}>
+              }}
+            >
               <NavLink href={l.path}>
                 <Flex>
                   <Box
@@ -98,7 +100,8 @@ const ManageHomePage = (_props: INav) => {
                       svg: {
                         fill: 'teal.2',
                       },
-                    }}>
+                    }}
+                  >
                     {l.logo}
                   </Box>
                   <Box sx={{ pl: 3, pr: 2 }}>
@@ -109,7 +112,8 @@ const ManageHomePage = (_props: INav) => {
                         color: 'gray.7',
                         fontWeight: 'heading',
                         mb: 0,
-                      }}>
+                      }}
+                    >
                       {l.name}
                     </Text>
                     <Text
@@ -118,7 +122,8 @@ const ManageHomePage = (_props: INav) => {
                         fontWeight: 'body',
                         color: 'gray.6',
                         mb: 1,
-                      }}>
+                      }}
+                    >
                       Some description of the admin
                     </Text>
                   </Box>

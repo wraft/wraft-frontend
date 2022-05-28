@@ -76,7 +76,7 @@ const theme = {
     plateBox: {
       border: 'solid 1px #eee',
       p: 4,
-      bg:'white',
+      bg: 'white',
     },
     w34: {
       width: ['100%', '100%', '75%'],
@@ -304,9 +304,15 @@ const theme = {
       // pr: 4,
       // fontSize: 1,
     },
-    skelton : {
-      pt: 2, pb: 2, bg: 'white', color: 'gray',fontFamily: 'headings', border: 'solid 1px', fontSize: 0,
-    }
+    skelton: {
+      pt: 2,
+      pb: 2,
+      bg: 'white',
+      color: 'gray',
+      fontFamily: 'headings',
+      border: 'solid 1px',
+      fontSize: 0,
+    },
   },
   link: {
     button: {

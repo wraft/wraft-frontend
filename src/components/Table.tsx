@@ -1,6 +1,6 @@
 /* eslint react/jsx-key: 0 */
 import React from 'react';
-import { jsx, ThemeUIStyleObject, Box } from 'theme-ui';
+import { ThemeUIStyleObject, Box } from 'theme-ui';
 import { PluginHook, useTable, UseTableOptions } from 'react-table';
 export * from 'react-table';
 
@@ -44,13 +44,8 @@ export interface TableProps {
 export const Table: React.FC<TableProps> = ({ options, plugins }) => {
   const tableInstance = useTable(options, ...(plugins || []));
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
 
   // const { thead } = styles;
 
@@ -65,7 +60,8 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
           border: '1px solid',
           borderColor: 'gray.3',
           color: 'gray.6',
-        }}>
+        }}
+      >
         {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (
           <Box as="tr" {...headerGroup.getHeaderGroupProps()}>

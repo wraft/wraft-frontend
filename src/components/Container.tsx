@@ -14,7 +14,8 @@ const Container = (props: ContainerProps) => {
         mx: 'auto',
         px: 0,
         bg: props.bg ? props.bg : 'transparent',
-      }}>
+      }}
+    >
       {props.children}
     </Box>
   );

@@ -84,7 +84,8 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
         onRequestClose={closeModal}
         style={modalStyle}
         ariaHideApp={false}
-        contentLabel="FileUploader">
+        contentLabel="FileUploader"
+      >
         <ImagesForm onUpload={(_m: any) => onDone(_m)} />
       </Modal>
       {}

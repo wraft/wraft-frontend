@@ -63,7 +63,8 @@ export interface PopperActions {
   place: Dispatch<SetStateAction<Placement>>;
 }
 
-export interface UsePopperProps extends Partial<Pick<PopperState, 'placement'>> {
+export interface UsePopperProps
+  extends Partial<Pick<PopperState, 'placement'>> {
   /**
    * Whether or not the popover should have `position` set to `fixed`.
    */
@@ -217,7 +218,15 @@ export function usePopper(props: UsePopperProps = {}): PopperStateReturn {
         popper.current = null;
       }
     };
-  }, [originalPlacement, fixed, visible, flip, offset, preventOverflow, updateState]);
+  }, [
+    originalPlacement,
+    fixed,
+    visible,
+    flip,
+    offset,
+    preventOverflow,
+    updateState,
+  ]);
 
   // Ensure that the popover will be correctly positioned with an additional
   // update.

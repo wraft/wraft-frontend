@@ -134,6 +134,7 @@ const VendorListBlock: FC = () => {
         </Box>
       </PageHeader>
       <Container sx={{ pl: 5, pr: 5, pt: 4 }}>
+        {vendors && <h1>Has vendors</h1>}
         <Box mx={0} mb={3}>
           <Box sx={{ maxWidth: '70ch' }}>
             <ManageSidebar items={menuLinks} />

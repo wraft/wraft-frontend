@@ -1,4 +1,4 @@
-import { jsx, Box } from 'theme-ui';
+import { Box } from 'theme-ui';
 import React, {
   // FC,
   Ref,
@@ -101,7 +101,8 @@ const Modal: React.FC<ModalProps> = ({
             hideOnEsc
             hideOnClickOutside
             {...props}
-            aria-label={label}>
+            aria-label={label}
+          >
             <React.Fragment>{children}</React.Fragment>
           </Dialog>
         </DialogBackdrop>

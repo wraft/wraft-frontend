@@ -24,7 +24,7 @@ import {
   MenuCommandPaneItem,
   MenuPaneItem,
   ToolbarItem,
-} from '@remirror/react'
+} from '@remirror/react';
 
 import { Toolbar } from '@remirror/react';
 import { usePopper } from './use-popper';
@@ -88,7 +88,9 @@ interface FloatingWrapperProps extends BaseFloatingPositioner {
   floatingLabel?: string;
 }
 
-export const FloatingWrapper: FC<FloatingWrapperProps> = (props): JSX.Element => {
+export const FloatingWrapper: FC<FloatingWrapperProps> = (
+  props,
+): JSX.Element => {
   const {
     containerClass,
     placement = 'right-end',
@@ -124,7 +126,10 @@ export const FloatingWrapper: FC<FloatingWrapperProps> = (props): JSX.Element =>
   }, [isFocused, enabled, renderOutsideEditor]);
 
   const shouldShow = (hideWhenInvisible ? visible : true) && active;
-  const position = useMemo(() => ({ height, left, top, width }), [height, left, top, width]);
+  const position = useMemo(
+    () => ({ height, left, top, width }),
+    [height, left, top, width],
+  );
   const { popperRef, referenceRef, popoverStyles, update } = usePopper({
     placement,
     visible,
@@ -168,7 +173,9 @@ export const FloatingWrapper: FC<FloatingWrapperProps> = (props): JSX.Element =>
   );
 };
 
-interface FloatingToolbarProps extends Except<ToolbarItem, 'type'>, FloatingWrapperProps {}
+interface FloatingToolbarProps
+  extends Except<ToolbarItem, 'type'>,
+    FloatingWrapperProps {}
 
 export const FloatingToolbar = (props: FloatingToolbarProps): JSX.Element => {
   const {
@@ -223,7 +230,9 @@ interface FloatingActionsMenuProps extends Partial<FloatingWrapperProps> {
 /**
  * Respond to user queries in the editor.
  */
-export const FloatingActionsMenu = (props: FloatingActionsMenuProps): JSX.Element => {
+export const FloatingActionsMenu = (
+  props: FloatingActionsMenuProps,
+): JSX.Element => {
   const {
     actions,
     animated = false,
@@ -234,14 +243,26 @@ export const FloatingActionsMenu = (props: FloatingActionsMenuProps): JSX.Elemen
     enabled = true,
     ...floatingWrapperProps
   } = props;
-  const { change } = useSuggest({ char: '/', name: 'actions-dropdown', matchOffset: 0 });
+  const { change } = useSuggest({
+    char: '/',
+    name: 'actions-dropdown',
+    matchOffset: 0,
+  });
   const query = change?.query.full;
-  const menuState = useMenuState({ unstable_virtual: true, wrap: true, loop: true });
+  const menuState = useMenuState({
+    unstable_virtual: true,
+    wrap: true,
+    loop: true,
+  });
 
   const items = (
     query
       ? matchSorter(actions, query, {
-          keys: ['tags', 'description', (item) => item.description?.replace(/\W/g, '') ?? ''],
+          keys: [
+            'tags',
+            'description',
+            (item) => item.description?.replace(/\W/g, '') ?? '',
+          ],
           threshold: matchSorter.rankings.CONTAINS,
         })
       : actions
@@ -262,7 +283,11 @@ export const FloatingActionsMenu = (props: FloatingActionsMenuProps): JSX.Elemen
       {...floatingWrapperProps}
     >
       <div style={{ width: 50, height: 50, background: 'red' }} />
-      <MenuComponent open={!!query && enabled} items={items} menuState={menuState} />
+      <MenuComponent
+        open={!!query && enabled}
+        items={items}
+        menuState={menuState}
+      />
     </FloatingWrapper>
   );
 };

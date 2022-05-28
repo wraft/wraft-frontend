@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 import MenuItem from './NavLink';
 
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo } from './Atoms';
 
 export interface ILayout {
   width: number;
@@ -66,7 +66,8 @@ const ContentCardBase = (props: IField) => {
         ':hover': {
           bg: 'blue.0',
         },
-      }}>
+      }}
+    >
       <Box
         variant="cTyeMark"
         sx={{
@@ -85,7 +86,8 @@ const ContentCardBase = (props: IField) => {
         <MenuItem
           variant="rel"
           href={`/content/[id]`}
-          path={`content/${props.content.id}`}>
+          path={`content/${props.content.id}`}
+        >
           <Text>{props.content.serialized.title}</Text>
         </MenuItem>
       </Box>
@@ -114,7 +116,8 @@ const ContentCardBase = (props: IField) => {
             paddingRight: 1,
             paddingLeft: 1,
             borderRadius: 3,
-          }}>
+          }}
+        >
           {props.state.state}
         </Text>
       </Box>

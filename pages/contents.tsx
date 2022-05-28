@@ -10,7 +10,7 @@ const Contents: FC = () => {
         <title>Contents | Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <Page>        
+      <Page>
         <ContentListAll />
       </Page>
     </>

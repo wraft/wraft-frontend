@@ -6,12 +6,12 @@ import login from '../reducers/login.tsx';
 
 export const rootReducer = combineReducers({
   counter,
-  login
+  login,
 });
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunkMiddleware))
+  composeWithDevTools(applyMiddleware(thunkMiddleware)),
 );
 
 export default store;
