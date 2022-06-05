@@ -1,6 +1,8 @@
 // this is used to load fontawesome properly
 // const withCSS = require('@zeit/next-css');
 const withImages = require('next-images');
+
+const HOST = process.env.NEXT_PUBLIC_API_HOST;
 module.exports = withImages({
   env: {
     api: process.env.NEXT_PUBLIC_API_HOST,
@@ -10,7 +12,7 @@ module.exports = withImages({
     return [
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:4000/uploads/:path*', // Proxy to Backend
+        destination: `${HOST}/uploads/:path*`, // Proxy to Backend
       },
     ];
   },
