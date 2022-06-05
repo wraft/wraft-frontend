@@ -9,6 +9,7 @@ import { BlockTemplates } from '../utils/types';
 // import styled from 'styled-components';
 import EditorWraft from './EditorWraft';
 import {
+  API_HOST,
   createEntity,
   deleteEntity,
   loadEntityDetail,
@@ -57,17 +58,6 @@ const EMPTY_MARKDOWN_NODE = {
   ],
 };
 
-// const imageNode = {
-//   type: 'doc',
-//   content: [
-//     {
-//       type: 'image',
-//       src: `http://localhost:4000/${_p?.file}`,
-//       class: 'uploaded-image'
-//     },
-//   ],
-// };
-
 const Form = () => {
   const token = useStoreState((state) => state.auth.token);
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -115,7 +105,7 @@ const Form = () => {
             {
               type: 'image',
               attrs: {
-                src: `http://localhost:4000/${src}`,
+                src: `${API_HOST}/${src}`,
               },
             },
           ],

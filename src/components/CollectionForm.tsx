@@ -110,7 +110,6 @@ const CollectionForm = () => {
   /**
    * Entity Loader
    */
-  //  http://localhost:4000/api/v1/collection_forms
   const loadDataDetalis = (id: string, t: string) => {
     const tok = token ? token : t;
     loadEntityDetail(tok, `collection_forms?page=1`, id, onLoadForms);

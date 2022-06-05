@@ -18,7 +18,7 @@ import { File } from './Icons';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { createEntity, loadEntity } from '../utils/models';
+import { API_HOST, createEntity, loadEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
@@ -120,7 +120,6 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
 /**
  * Profile Block
  */
-//  `http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`
 interface ProfileCardP {
   name: string;
   time: string;
@@ -351,7 +350,7 @@ const ContentDetail = () => {
                   <ProfileCard
                     time={contents.content?.inserted_at}
                     name={contents.creator?.name}
-                    image="http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803"
+                    image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
                   />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>

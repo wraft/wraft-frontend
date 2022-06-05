@@ -333,8 +333,7 @@ const Form = () => {
                   <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                     {m.name}
                   </Text>
-                  {/* <Text as="p" sx={{ overflow: 'scroll', maxWidth: '50%' }}>http://localhost:4000{m.file}</Text> */}
-                  <Link target="_blank" href={`http://localhost:4000${m.file}`}>
+                  <Link target="_blank" href={`${API_HOST}/${m.file}`}>
                     Download
                   </Link>
                   <Box>

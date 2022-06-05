@@ -1,6 +1,7 @@
 /* eslint-disable */
 const express = require('express');
 const next = require('next');
+const { API_HOST } = require('./src/utils/models');
 
 const PORT = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -10,7 +11,7 @@ const handle = app.getRequestHandler();
 
 const devProxy = {
   '/api': {
-    target: 'http://localhost:4000/api/v1/',
+    target: `${API_HOST}/api/v1/`,
     pathRewrite: { '^/api': '/' },
     changeOrigin: true,
   },
