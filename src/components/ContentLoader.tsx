@@ -1,7 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment } from 'react';
 
-
-import ContentLoader from "react-content-loader";
+import ContentLoader from 'react-content-loader';
 
 /**
  * Table Loader
@@ -13,7 +12,7 @@ const ContentLoaderWrapper = (props: any) => {
 
   return (
     <ContentLoader viewBox={`0 0 1500 ${rowHeight * rows}`} {...props}>
-      {new Array(rows).fill(" ").map((_el, index) => {
+      {new Array(rows).fill(' ').map((_el, index) => {
         const contentVerticalPosition = (contentHeight: number) =>
           rows > 1 ? contentHeight + rowHeight * index : contentHeight;
         return (

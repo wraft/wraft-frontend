@@ -39,7 +39,7 @@ const BlockTemplateListFrame: FC = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col1: <Text></Text>,
@@ -93,7 +93,7 @@ const BlockTemplateListFrame: FC = () => {
                     Blocks are empty
                   </Text>
                   <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
-                    You haven't created a block yet, click below to create one
+                    You havent created a block yet, click below to create one
                   </Text>
                   <Box sx={{ mt: 3, pb: 0 }}>
                     <Button>Add First Block</Button>

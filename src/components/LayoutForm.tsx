@@ -98,7 +98,7 @@ const Form = () => {
     let assetsPath;
     //
     if (assets.length > 0) {
-      let a: any = [];
+      const a: any = [];
       assets.forEach((e: any) => {
         a.push(e.id);
       });
@@ -270,8 +270,7 @@ const Form = () => {
                 id="engine_uuid"
                 name="engine_uuid"
                 defaultValue="NYC"
-                ref={register({ required: true })}
-              >
+                ref={register({ required: true })}>
                 {engines &&
                   engines.length > 0 &&
                   engines.map((m: any) => (
@@ -330,8 +329,7 @@ const Form = () => {
                     borderColor: 'gray.3',
                     bg: 'base',
                     mb: 1,
-                  }}
-                >
+                  }}>
                   <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                     {m.name}
                   </Text>
@@ -351,8 +349,7 @@ const Form = () => {
                         border: 'solid 1px',
                         borderColor: 'red.9',
                       }}
-                      onClick={() => deleteAsset(cId, m.id)}
-                    >
+                      onClick={() => deleteAsset(cId, m.id)}>
                       Delete
                     </Button>
                   </Box>

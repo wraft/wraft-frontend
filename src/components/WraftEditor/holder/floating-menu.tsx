@@ -140,8 +140,7 @@ export const FloatingWrapper: FC<FloatingWrapperProps> = (
       aria-label={floatingLabel}
       ref={popperRef as any}
       style={popoverStyles}
-      className={cx(ComponentsTheme.FLOATING_POPOVER, containerClass)}
-    >
+      className={cx(ComponentsTheme.FLOATING_POPOVER, containerClass)}>
       {shouldShow && children}
     </div>
   );
@@ -280,8 +279,7 @@ export const FloatingActionsMenu = (
       animated={animated}
       blurOnInactive={blurOnInactive}
       ignoredElements={ignoredElements}
-      {...floatingWrapperProps}
-    >
+      {...floatingWrapperProps}>
       <div style={{ width: 50, height: 50, background: 'red' }} />
       <MenuComponent
         open={!!query && enabled}

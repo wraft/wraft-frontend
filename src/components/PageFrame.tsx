@@ -31,8 +31,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
         sx={{
           flexDirection: 'column',
           minHeight: '100%',
-        }}
-      >
+        }}>
         <Head>
           <title>Wraft Docs</title>
           <meta
@@ -53,15 +52,13 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
           sx={{
             flex: 1,
             flexDirection: ['column', 'row'],
-          }}
-        >
+          }}>
           <Box
             sx={{
               flex: 1,
               bg: 'gray.1',
               minWidth: 0,
-            }}
-          >
+            }}>
             <Box>
               <Nav />
             </Box>
@@ -74,8 +71,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
-                }}
-              >
+                }}>
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
               </Box>
             </Flex>
@@ -90,8 +86,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
                 bg: 'gray.0',
                 borderRight: 'solid 1px',
                 borderColor: 'gray.2',
-              }}
-            >
+              }}>
               <Sidebar showFull={shouldShow} />
             </Box>
           )}

@@ -17,7 +17,7 @@ export interface Activity {
   actor: Actor;
   actor_profile: ActorProfile;
   inserted_at: Date;
-  meta: Meta;
+  meta: any;
   object: string;
 }
 
@@ -55,7 +55,7 @@ export enum Gender {
   Male = 'Male',
 }
 
-export interface Meta {}
+// export interface Meta {}
 
 /**
  *

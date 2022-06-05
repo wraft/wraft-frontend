@@ -124,8 +124,7 @@ const Field: React.FC<Props> = ({
               {sub && (
                 <Text
                   color="gray.4"
-                  sx={{ position: 'absolute', right: 2, top: 2 }}
-                >
+                  sx={{ position: 'absolute', right: 2, top: 2 }}>
                   <Calendar width="20" />
                 </Text>
               )}

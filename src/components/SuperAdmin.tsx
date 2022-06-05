@@ -107,7 +107,7 @@ const VendorListBlock: FC = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col2: (

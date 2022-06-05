@@ -48,30 +48,26 @@ const FieldColor: React.FC<FieldColorProps> = ({
 
   return (
     <Box pb={2} mr={mr} sx={{ position: 'relative' }}>
-      <PopoverDisclosure
-        {...popover}
-        children={(disclosure) => (
-          <Box
-            sx={{
-              bg: valx,
-              width: '18px',
-              height: '18px',
-              border: 'solid 1px',
-              borderColor: 'gray.3',
-              position: 'absolute',
-              top: '45%',
-              right: 3,
-              padding: '5px',
-              // background: "#fff",
-              borderRadius: '1px',
-              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-              display: 'inline-block',
-              cursor: 'pointer',
-            }}
-            {...disclosure}
-          />
-        )}
-      />
+      <PopoverDisclosure {...popover}>
+        <Box
+          sx={{
+            bg: valx,
+            width: '18px',
+            height: '18px',
+            border: 'solid 1px',
+            borderColor: 'gray.3',
+            position: 'absolute',
+            top: '45%',
+            right: 3,
+            padding: '5px',
+            // background: "#fff",
+            borderRadius: '1px',
+            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+            display: 'inline-block',
+            cursor: 'pointer',
+          }}
+        />
+      </PopoverDisclosure>
 
       <Box>
         {sub && (
@@ -97,8 +93,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
         aria-label="Edit color"
         sx={{
           outline: 'none',
-        }}
-      >
+        }}>
         <ChromePicker
           color={valx}
           disableAlpha

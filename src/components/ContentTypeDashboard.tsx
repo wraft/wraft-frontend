@@ -30,16 +30,14 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         borderColor: 'gray.3',
         borderRadius: 2,
         mr: 3,
-      }}
-    >
+      }}>
       <Link
         variant="base"
         href={
           isEdit
             ? `/content-types/edit/` + `${id}`
             : `/content-types/` + `${id}`
-        }
-      >
+        }>
         <Box sx={{ height: '45px', bg: color }}></Box>
         {/* {isEdit ? 'yes' : 'no'} */}
         <Box pl={3} pt={1} pb={2} bg="gray.0">

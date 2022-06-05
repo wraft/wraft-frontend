@@ -82,8 +82,9 @@ const BulkBuild = (props: CommentFormProps) => {
     <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
       {comments && comments.length > 0 && (
         <Box>
-          {comments.map((comment: Comment) => (
+          {comments.map((comment: Comment, index) => (
             <Box
+              key={index}
               // pb={2}
               // pt={2}
               mb={1}
@@ -92,8 +93,7 @@ const BulkBuild = (props: CommentFormProps) => {
                 borderColor: 'gray.2',
                 pb: 3,
                 mb: 2,
-              }}
-            >
+              }}>
               <Flex sx={{ display: 'inline-flex' }}>
                 <Box sx={{ pl: 3 }}>
                   <Flex
@@ -107,8 +107,7 @@ const BulkBuild = (props: CommentFormProps) => {
                       borderRadius: 99,
                       pr: 2,
                       alignItems: 'flex-start',
-                    }}
-                  >
+                    }}>
                     <Image
                       sx={{
                         // border: 'solid 2px',
@@ -127,8 +126,7 @@ const BulkBuild = (props: CommentFormProps) => {
                         pb: 0,
                         fontWeight: 600,
                         pt: '1px',
-                      }}
-                    >
+                      }}>
                       {comment?.profile?.name}
                     </Text>
                     <Box as="span" pl={1}>

@@ -33,8 +33,7 @@ const ItemField = (props: any) => {
       variant="boxy"
       key={props.id}
       p={3}
-      sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}
-    >
+      sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
       <Link href={`/manage/pipelines/run/${props.id}`}>
         <Text as="h4">{props.name}</Text>
         <Text pt={1} color="grey">

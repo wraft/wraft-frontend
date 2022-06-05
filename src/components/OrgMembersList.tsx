@@ -91,8 +91,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                 <Button
                   variant="btnSecondary"
                   onClick={() => onInitInvite()}
-                  sx={{ pt: 1, pb: 1 }}
-                >
+                  sx={{ pt: 1, pb: 1 }}>
                   + Invite
                 </Button>
               </Box>
@@ -102,6 +101,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                 members.length > 0 &&
                 members.map((_m: Member) => (
                   <Flex
+                    key={_m?.id}
                     variant="plateBox"
                     sx={{
                       border: 'solid 1px',
@@ -109,8 +109,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                       pr: 4,
                       borderColor: '#ddd',
                       borderRadius: 3,
-                    }}
-                  >
+                    }}>
                     <Box pt={3}>
                       <Image
                         src={`http://localhost:4000/` + _m.profile_pic}
@@ -138,8 +137,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                         color: 'blue.5',
                         ml: 'auto',
                         textTransform: 'uppercase',
-                      }}
-                    >
+                      }}>
                       {/* {_m.roles[0].name} */}
                     </Text>
                   </Flex>

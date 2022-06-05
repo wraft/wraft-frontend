@@ -15,8 +15,7 @@ export const IndexPages: FC<BoxWrapProps> = ({ id }) => {
           fontSize: 0,
           color: 'gray.6',
           fontWeight: 300,
-        }}
-      >
+        }}>
         {id}
       </Text>
       <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500 }}>

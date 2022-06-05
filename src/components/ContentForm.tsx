@@ -124,7 +124,7 @@ interface FlowStateBlock {
   id?: any;
 }
 
-const FlowStateBlock = ({ state, order, id }: FlowStateBlock) => (
+const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
   <Flex
     sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
     <Box
@@ -143,7 +143,7 @@ const FlowStateBlock = ({ state, order, id }: FlowStateBlock) => (
     <Text variant="labelcaps" sx={{ pt: 2 }}>
       {state}
     </Text>
-    <Text>{id}</Text>
+    {/* <Text>{id}</Text> */}
   </Flex>
 );
 
@@ -257,12 +257,12 @@ const Form = (props: IContentForm) => {
     console.log('vals 🌿🌿🌿🌿🌿', vals, maps);
 
     // for all fields
-    let obj: any = [];
+    const obj: any = [];
     if (fields && fields.length > 0) {
       fields.forEach(function (value: any) {
         // console.log('field', value)
         const name = vals[`${value.name}`];
-        let x: FieldInstance = { ...value, value: name };
+        const x: FieldInstance = { ...value, value: name };
         // console.log('x', x);
         obj.push(x);
       });
@@ -351,7 +351,7 @@ const Form = (props: IContentForm) => {
     const tFields: IFieldModel[] = [];
     for (const [key, value] of Object.entries(body)) {
       if (!commonFields.includes(`${key}`)) {
-        const sval: string = `${value}`;
+        const sval = `${value}`;
         const fieldItem: IFieldModel = {
           id: key,
           name: key,
@@ -515,7 +515,7 @@ const Form = (props: IContentForm) => {
     }
   }, [fields]);
 
-  const updateTitle = (_f: any) => {
+  const updateTitle = () => {
     // console.log('🐴  [updateTitle] tm', selectedTemplate);
     setTitle(selectedTemplate?.title_template);
     setValue('title', selectedTemplate?.title_template);
@@ -529,7 +529,7 @@ const Form = (props: IContentForm) => {
 
     const newty = replaceTitles(selectedTemplate?.title_template, f);
     console.log('🐴🐴  [updateFields] fields', newty);
-    updateTitle(f);
+    updateTitle();
   };
 
   useEffect(() => {
@@ -547,7 +547,6 @@ const Form = (props: IContentForm) => {
   useEffect(() => {
     if (activeTemplate.length < 1) {
       setTemplate(true);
-    } else {
     }
   }, [activeTemplate]);
 
@@ -634,7 +633,7 @@ const Form = (props: IContentForm) => {
    * @param mapx
    * @param key
    */
-  const updateStuff = (data: any, mapx: any, _key?: any) => {
+  const updateStuff = (data: any, mapx: any) => {
     if (data?.data) {
       let respx = '';
 
@@ -684,7 +683,7 @@ const Form = (props: IContentForm) => {
   };
 
   const getInits = (field_maps: any) => {
-    let initials: IFieldField[] = [];
+    const initials: IFieldField[] = [];
     field_maps &&
       field_maps.forEach((i: any) => {
         const item: IFieldField = {
@@ -846,7 +845,7 @@ const Form = (props: IContentForm) => {
             )}
 
             {/* <Button>Publish</Button> */}
-            <Box sx={{ display: 'block' }}>
+            <Box sx={{ display: 'none' }}>
               <Field
                 name="state"
                 label="state"

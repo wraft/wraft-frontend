@@ -18,8 +18,7 @@ const ModeToggle = (props: any) => {
       onClick={() => {
         const next = mode === 'dark' ? 'light' : 'dark';
         setMode(next);
-      }}
-    >
+      }}>
       {mode === 'dark' ? <Sun width={22} /> : <Moon width={22} />}
     </Button>
   );

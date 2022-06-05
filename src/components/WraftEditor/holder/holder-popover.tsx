@@ -33,6 +33,7 @@ interface HolderAtomPopupComponentProps<
   /**
    * The message that is displayed when there are no items to display.
    */
+  // eslint-disable-next-line @typescript-eslint/ban-types
   ZeroItemsComponent?: ComponentType<object>;
 }
 
@@ -75,8 +76,7 @@ export function HolderAtomPopupComponent<
       positioner="cursor"
       enabled={!!state}
       placement="auto-end"
-      renderOutsideEditor
-    >
+      renderOutsideEditor>
       <Box {...getMenuProps()} className={cx(Theme.MENTION_ATOM_POPUP_WRAPPER)}>
         {!!state && isEmptyArray(hookProps.items) ? (
           <ZeroItemsComponent />
@@ -109,8 +109,7 @@ export function HolderAtomPopupComponent<
                   },
                   item,
                   index,
-                })}
-              >
+                })}>
                 <ItemComponent item={item} state={state} />
               </Box>
             );

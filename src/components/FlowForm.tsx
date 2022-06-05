@@ -157,16 +157,16 @@ const StatesForm = ({
     // new order
 
     if (content.size > 0) {
-      let listItems: ItemType[] = [];
+      const listItems: ItemType[] = [];
 
       content.map((c: any) => {
-        let newItemx: ItemType = { id: c?.id, name: c?.name };
+        const newItemx: ItemType = { id: c?.id, name: c?.name };
         listItems.push(newItemx);
       });
 
       setState(listItems);
 
-      let dbitems: any = [];
+      const dbitems: any = [];
 
       listItems.map((dbi: any, index) => {
         dbitems.push({ id: dbi.id, order: index });
@@ -179,9 +179,9 @@ const StatesForm = ({
 
   useEffect(() => {
     if (content) {
-      let listItems: ItemType[] = [];
+      const listItems: ItemType[] = [];
       content.map((c: any) => {
-        let newItemx: ItemType = {
+        const newItemx: ItemType = {
           id: c?.state.id,
           name: c?.state.state,
           meta: state,
@@ -345,7 +345,7 @@ const FlowForm = () => {
     loadStates(cId, token);
   };
 
-  const onCreateState = (_x: any) => {
+  const onCreateState = () => {
     if (cId && token) {
       loadStates(cId, token);
     }

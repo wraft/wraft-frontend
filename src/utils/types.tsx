@@ -5,6 +5,15 @@
 //   content_types: ContentType[];
 // }
 
+export interface TokenPayload {
+  iss: 'WraftAPI';
+  sub: string;
+  domain: string;
+  admin: boolean;
+  iat: number;
+  exp: number;
+}
+
 export interface ContentType {
   updated_at: Date;
   prefix: string;

@@ -67,8 +67,7 @@ export const Page = (props: any) => {
                 sx={{ minHeight: '100vh', bg: 'base' }}
                 color="#333"
                 p={4}
-                pt={3}
-              >
+                pt={3}>
                 {props.children}
               </Box>
             </Box>

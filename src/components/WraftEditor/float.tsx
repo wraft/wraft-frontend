@@ -25,8 +25,7 @@ export const FloatingActionsMenu = ({ options }: any) => {
             borderColor: 'gray.1',
             borderRadius: '4px',
             boxShadow: '0px 0px 6px #44444463',
-          }}
-        >
+          }}>
           {options &&
             options.map((opt: any) => (
               <Box
@@ -40,8 +39,7 @@ export const FloatingActionsMenu = ({ options }: any) => {
                   borderTop: 'solid 1px',
                   borderColor: 'gray.1',
                   ':hover': { bg: 'gray.2' },
-                }}
-              >
+                }}>
                 {opt.label}
               </Box>
             ))}
@@ -69,8 +67,7 @@ export const FloatingBubble: React.FC<{
             // exit={{ opacity: 0 }}
             // transition={{ duration: 0.2 }}
             css={{ top: rect.top + height, left: rect.left }}
-            ref={ref}
-          >
+            ref={ref}>
             {children}
           </Box>
         </Box>

@@ -53,8 +53,7 @@ export const PageFull = (props: any) => {
                 bg="gray.0"
                 // p={4}
                 // pt={3}
-                pl={4}
-              >
+                pl={4}>
                 {props.children}
               </Box>
             </Box>

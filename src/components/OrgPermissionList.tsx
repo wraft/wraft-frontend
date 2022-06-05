@@ -130,7 +130,7 @@ const OrgPermissionList = () => {
         <Text variant="pagetitle">All Permissions x</Text>
         <Box>
           {permLevels.map((pm: any) => (
-            <Flex>
+            <Flex key={pm.name}>
               <Text sx={{ textTransform: 'uppercase' }}>{pm.name}</Text>
             </Flex>
           ))}
@@ -139,7 +139,7 @@ const OrgPermissionList = () => {
             {contents &&
               contents?.permissions?.length > 0 &&
               contents?.permissions?.map((r: any) => (
-                <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                <Box key={r} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
                   <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
                 </Box>
               ))}

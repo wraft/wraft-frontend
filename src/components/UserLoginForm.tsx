@@ -53,8 +53,7 @@ const UserLoginForm = () => {
         bg: 'gray.1',
         // mt: 5,
         // mb: 6,
-      }}
-    >
+      }}>
       <Container sx={{ maxWidth: '100ch', py: 6, mx: 'auto' }}>
         <Text variant="pagetitle" sx={{ fontWeight: 500, mb: 3 }}>
           Sign-in to Wraft Docs

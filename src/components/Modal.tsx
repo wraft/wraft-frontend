@@ -1,4 +1,3 @@
-import { Box } from 'theme-ui';
 import React, {
   // FC,
   Ref,
@@ -19,7 +18,9 @@ import {
 
 import { Portal } from 'reakit/Portal';
 
+import { Box } from 'theme-ui';
 interface BackdropDivProps {
+  backdropWhite?: any;
   // backdropWhite?: ModalBaseProps['backdropWhite']
 }
 
@@ -36,6 +37,8 @@ export const BackdropDiv = forwardRef(
   },
 );
 
+BackdropDiv.displayName = 'BackdropDiv';
+
 export const DialogoBox = forwardRef(
   ({ ...props }: DialogProps, ref: Ref<HTMLDivElement>) => {
     const [mounted, setMounted] = useState(false);
@@ -49,6 +52,8 @@ export const DialogoBox = forwardRef(
   },
 );
 
+DialogoBox.displayName = 'DialogoBox';
+
 type ModalProps = {
   isOpen: boolean;
   hide?: any;
@@ -58,7 +63,6 @@ type ModalProps = {
 };
 
 const Modal: React.FC<ModalProps> = ({
-  hide,
   isOpen,
   children,
   label = 'Standard Modal',
@@ -101,8 +105,7 @@ const Modal: React.FC<ModalProps> = ({
             hideOnEsc
             hideOnClickOutside
             {...props}
-            aria-label={label}
-          >
+            aria-label={label}>
             <React.Fragment>{children}</React.Fragment>
           </Dialog>
         </DialogBackdrop>
