@@ -1,7 +1,7 @@
 {
   "name": "wraft-fe",
-  "version": "0.1.0",
-  "author": "Muneef Hameed",
+  "version": "0.1.1",
+  "author": "Functionary",
   "license": "ISC",
   "repository": "",
   "scripts": {
@@ -136,7 +136,7 @@
     ".next/cache/"
   ],
   "engines": {
-    "node": "^16.9.0",
+    "node": "18.2.0",
     "npm": ">= 6.10.2"
   }
 }
