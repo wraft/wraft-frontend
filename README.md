@@ -21,7 +21,8 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Best-README-Template</h3>    
+<h3 align="center">Wraft Docs [Frontend]</h3>    
+<p>Version: v0.0.2</>
 
 <p align="center">
     An awesome README template to jumpstart your projects!
@@ -57,7 +58,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[![Product Name Screen Shot][product-screenshot]](https://wraft.app)
 
 There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
 
