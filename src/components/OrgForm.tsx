@@ -211,7 +211,7 @@ const OrgForm = () => {
             as="form"
             onSubmit={handleSubmit(onSubmit)}>
             {formList.map((fl: any) => (
-              <Box>
+              <Box key={fl?.id}>
                 <Field
                   name={fl.id}
                   label={fl.label}

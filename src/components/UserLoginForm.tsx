@@ -23,6 +23,7 @@ const UserLoginForm = () => {
   const [ready, setReady] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
+    console.log('funfun', data);
     setReady(true);
     userLogin(data, ProxyToken);
   };
@@ -53,7 +54,7 @@ const UserLoginForm = () => {
         // mt: 5,
         // mb: 6,
       }}>
-      <Container sx={{ maxWidth: '100ch', py: 6, mx: 'auto'}}>
+      <Container sx={{ maxWidth: '100ch', py: 6, mx: 'auto' }}>
         <Text variant="pagetitle" sx={{ fontWeight: 500, mb: 3 }}>
           Sign-in to Wraft Docs
         </Text>

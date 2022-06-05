@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from "react";
-import Cropper from "react-easy-crop";
-import { Area } from "react-easy-crop/types";
-import { Box, Slider, Flex, Button, Image } from "theme-ui";
-import { getCroppedImg } from "../utils/imgCrop";
+import React, { useCallback, useState } from 'react';
+import Cropper from 'react-easy-crop';
+import { Area } from 'react-easy-crop/types';
+import { Box, Slider, Flex, Button, Image } from 'theme-ui';
+import { getCroppedImg } from '../utils/imgCrop';
 
 interface IImageCopperProps {
   image?: any;
@@ -24,12 +24,8 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(
-        image,
-        croppedAreaPixels,
-        0
-      );
-      console.log("donee", { croppedImage });
+      const croppedImage = await getCroppedImg(image, croppedAreaPixels, 0);
+      console.log('donee', { croppedImage });
       setCroppedImg(croppedImage);
       onUpdate(croppedImage);
     } catch (e) {
@@ -42,44 +38,38 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
   // }, []);
 
   const changeZoom = (_e: any) => {
-    console.log("__e", _e);
+    console.log('__e', _e);
     setZoom(_e.target.value);
   };
 
   return (
     <Box
-      sx={
-        {
-          p: 0,
-          width: "100%",
-        }
-      }
-    >
-      { croppedImg && <Image src={String(croppedImg)} />}
+      sx={{
+        p: 0,
+        width: '100%',
+      }}>
+      {croppedImg && <Image src={String(croppedImg)} />}
       <Box
         sx={{
-          position: "relative",
+          position: 'relative',
           zIndex: 5000,
-          minWidth: "100%",
-          width: "100%",
+          minWidth: '100%',
+          width: '100%',
           // bg: "black",
           // p: 4,
-        }}
-      >
-        <Box bg='gray.4'>
+        }}>
+        <Box bg="gray.4">
           {image && (
             <Box
               sx={{
                 // bg: "gray.2",
                 width: '180px',
-                height: "180px",
-                minHeight: "100%",
-                top: "0%",
-                position: "relative",
-                margin: "auto",
-
-              }}
-            >
+                height: '180px',
+                minHeight: '100%',
+                top: '0%',
+                position: 'relative',
+                margin: 'auto',
+              }}>
               <Cropper
                 image={image}
                 crop={crop}
@@ -94,7 +84,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
         </Box>
         <Flex
           sx={{
-            position: "relative",
+            position: 'relative',
             color: 'gray.3',
             p: 3,
             bg: 'gray.1',
@@ -102,8 +92,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
             borderTop: 'solid 1px',
             borderBottom: 'solid 1px',
             borderColor: 'gray.4',
-          }}
-        >
+          }}>
           <Slider
             value={zoom}
             min={1}
@@ -117,7 +106,15 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
       </Box>
       <Flex sx={{ bg: 'gray.1', p: 3 }}>
         <Box sx={{ ml: 'auto' }}>
-          <Button type="button" sx={{ border: 'solid 1px', borderColor: 'gray.4', bg: 'background', color: 'gray.7', mr: 1 }}>
+          <Button
+            type="button"
+            sx={{
+              border: 'solid 1px',
+              borderColor: 'gray.4',
+              bg: 'background',
+              color: 'gray.7',
+              mr: 1,
+            }}>
             Clear
           </Button>
           <Button type="button" onClick={showCroppedImage}>

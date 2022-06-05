@@ -1,52 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
-// import { Label, Input } from 'theme-ui';
-
 import { useForm } from 'react-hook-form';
 
-import Modal from 'react-modal';
-// import styled from 'styled-components';
 import Field from './Field';
-// import { replaceTitles } from '../utils';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
-import { findAll, replaceTitles } from '../utils';
-
-// import { find } from 'lodash';
-
-// const Tag = styled(Box)`
-//   border: solid 1px #ddd;
-//   padding: 5px;
-//   color: #444;
-//   border-radius: 7px;
-//   margin-bottom: 8px;
-//   padding-left: 16px;
-//   padding-top: 8px;
-//   padding-bottom: 8px;
-//   background-color: #ebffe8;
-// `;
-
-// import
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    minWidth: '55ch',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-  overlay: {
-    backgroundColor: '#000000ba',
-    border: 0,
-  },
-};
+import Modal from './Modal';
+// import { constants } from 'buffer';
 
 export interface IFieldField {
   name: string;
   value: string;
+  id?: string;
 }
 
 export interface IFieldType {
@@ -55,11 +20,30 @@ export interface IFieldType {
   type: string;
 }
 
-const Form = (props: any) => {
-  const { fields } = props;
+interface FieldFormProps {
+  fields: any;
+  onSaved: any;
+  setMaps?: any;
+  activeTemplate?: any;
+  templates?: any;
+  setShowForm?: any;
+  showForm?: any;
+  onRefresh: any;
+}
+
+const FieldForm = ({
+  fields,
+  onSaved,
+  // setMaps,
+  // onRefresh,
+  // activeTemplate,
+  setShowForm,
+  // templates,
+  showForm,
+}: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
-  //   const token = useSelector(({ login }: any) => login.token);
-  const [field_maps, setFieldMap] = useState<Array<IFieldType>>();
+  const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
+  // const [isReady, setIsReady] = useState<Boolean>(false);
 
   /**
    * Map form values to fields
@@ -67,11 +51,11 @@ const Form = (props: any) => {
    */
   const mapFields = (fields: any) => {
     const vals = getValues();
-    let obj: any = [];
+    const obj: any = [];
     if (fields && fields.length > 0) {
       fields.forEach(function (value: any) {
         const name = vals[`${value.name}`];
-        let x: FieldInstance = { ...value, value: name };
+        const x: FieldInstance = { ...value, value: name };
         obj.push(x);
       });
     }
@@ -79,79 +63,99 @@ const Form = (props: any) => {
   };
 
   const getInits = (field_maps: any) => {
-    let initials: IFieldField[] = [];
+    const initials: IFieldField[] = [];
     field_maps &&
       field_maps.forEach((i: any) => {
-        const item: IFieldField = { name: i.name, value: i.value };
+        const item: IFieldField = {
+          name: i.name,
+          value: i.value,
+          id: i?.field_type?.id,
+        };
         initials.push(item);
       });
     return initials;
   };
 
-  const onSubmit = (_data: any) => {
+  /**
+   * Form Submit
+   * @param _data
+   */
+  const onSubmit = () => {
     const f: any = mapFields(fields);
 
-    //
-    // console.log('Submitted', data);
+    console.log('🌿🎃🎃🌿 Submitted [1]', f);
 
     setFieldMap(f);
-    const vax = getInits(f);
-    console.log('Submitted', vax);
-    props.setMaps(f);
+    const simpleFieldMap = getInits(f);
+    // console.log('🐴🐴 Submitted [2]', simpleFieldMap);
 
-    const m: string = props.activeTemplate as string;
-
-    if (m && m.length > 0) {
-      const selection = findAll(props.templates, m);
-      const serialized: any = selection && (selection.serialized as string);
-
-      if (serialized && serialized.data) {
-        const bodyValue = JSON.parse(serialized.data);
-        console.log('(serialized', bodyValue);
-      }
-      const newTitle = replaceTitles(selection.title_template, vax);
-      props.setValue('title', newTitle);
-    }
-
+    onSaved(simpleFieldMap);
     closeModal();
-    // hide modal
   };
 
+  useEffect(() => {
+    // console.log('🐴  fields [3.0]', fields)
+  }, [fields]);
+
+  useEffect(() => {
+    if (fieldMap && fieldMap[0] && fieldMap[0]?.value) {
+      console.log('🐴🐴  fields [4.0]', fieldMap);
+    }
+  }, [fieldMap]);
+
   function closeModal() {
-    props.setShowForm(false);
+    setShowForm(false);
   }
 
+  // const yoFileTha = () => {
+  //   onRefresh(fieldMap);
+  // };
+
   return (
-    <Box>
-      <Text sx={{ fontSize: 1, color: 'gray.7', pb: 3, mb: 3 }}>Fields</Text>
+    <Box sx={{ p: 3, borderColor: 'gray.1', bg: '#F5F7FE' }}>
+      <Box>
+        <Text as="h6" variant="labelcaps">
+          Fields
+        </Text>
+      </Box>
+
       <Box
-        p={3}
-        bg="gray.0"
-        sx={{ mt: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
-        {field_maps &&
-          field_maps.map((x: any) => (
+        p={0}
+        sx={{
+          bg: 'white',
+          mt: 1,
+          mb: 3,
+          border: 'solid 1px',
+          borderColor: 'gray.3',
+        }}>
+        {fieldMap &&
+          fieldMap.map((x: any) => (
             <Flex
               key={x.id}
               sx={{
-                pb: 2,
+                // bg: 'red.3',
+                py: 2,
+                px: 3,
                 borderBottom: 'solid 0.5px',
                 borderColor: 'gray.2',
-                mb: 2,
+                // mb: 2,
               }}>
               <Text
                 sx={{
-                  color: 'red.7',
-                  fontSize: 0,
-                  fontFamily: 'Menlo, monospace',
+                  color: '#363e4980',
+                  fontSize: '16px',
+                  fontWeight: 300,
                 }}>
                 {x.name}
               </Text>
               <Text
                 sx={{
-                  fontSize: 0,
+                  fontSize: '16px',
+                  // color: 'green.9',
                   ml: 'auto',
-                  fontWeight: 'heading',
-                  fontFamily: 'Menlo, monospace',
+                  color: '#363E49',
+                  fontWeight: 300,
+                  // fontFamily: 'Menlo, monospace',
                 }}>
                 {x.value}
               </Text>
@@ -159,21 +163,18 @@ const Form = (props: any) => {
             </Flex>
           ))}
       </Box>
-      <Button variant="btnSecondary" onClick={props.setShowForm}>
-        Fill Form
-      </Button>
-      <Modal
-        isOpen={props.showForm}
-        onRequestClose={closeModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Example Modal">
+
+      {/* <Box sx={{ display: 'block' }}>
+        
+      </Box> */}
+      <Modal isOpen={showForm} onClose={closeModal}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          py={2}
-          sx={{ p: 5 }}
-          mt={2}>
+          // py={2}
+          sx={{ p: 4, bg: 'gray.0' }}
+          // mt={2}
+        >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (
             <Box sx={{ pt: 4 }}>
@@ -185,7 +186,6 @@ const Form = (props: any) => {
                       label={f.name}
                       register={register}
                       sub="Date"
-                      // defaultValue={profile?.dob}
                       onChange={() => console.log('x')}
                     />
                   )}
@@ -213,4 +213,4 @@ const Form = (props: any) => {
     </Box>
   );
 };
-export default Form;
+export default FieldForm;

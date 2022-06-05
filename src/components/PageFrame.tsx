@@ -1,7 +1,7 @@
 import React from 'react';
 // import Head from 'next/head';
 import { Box, Flex, Text } from 'theme-ui';
-
+import Head from 'next/head';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
 import Sidebar from './Sidebar';
@@ -22,6 +22,8 @@ export interface IAlert {
 
 export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
   const shouldShow: boolean = showFull ? true : false;
+  // const fontName = 'Poppins';
+  // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
     <>
@@ -30,6 +32,22 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
           flexDirection: 'column',
           minHeight: '100%',
         }}>
+        <Head>
+          <title>Wraft Docs</title>
+          <meta
+            name="keywords"
+            content="document,automation,proposals,sales,hr,contract management"
+          />
+          <meta
+            name="description"
+            content="Wraft Docs help busines move steady and fast with Document Automation System"
+          />
+          <link
+            href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+
         <Flex
           sx={{
             flex: 1,
@@ -54,9 +72,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
                 }}>
-                <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>
-                  Support
-                </Text>
+                <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
               </Box>
             </Flex>
           </Box>
@@ -76,26 +92,6 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
           )}
         </Flex>
       </Flex>
-
-      {/* <Container width={100} bg={'white'}>
-        {!token && (
-          <Box>
-            <Nav />
-            <Box>{props.children}</Box>
-          </Box>
-        )}
-        {token && (
-          <Flex>
-            <Sidebar showFull={showFull} />
-            <Box bg="gray.0" sx={{ width: '100%' }}>
-              <Nav />
-              <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
-                {props.children}
-              </Box>
-            </Box>
-          </Flex>
-        )}
-      </Container> */}
     </>
   );
 };

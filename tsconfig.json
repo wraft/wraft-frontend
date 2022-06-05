@@ -7,7 +7,7 @@
     "moduleResolution": "node",
     "allowJs": true,
     "noEmit": true,
-    "strict": true,
+    "strict": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
@@ -18,8 +18,18 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "incremental": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true
   },
   "exclude": ["node_modules", "__tests__"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "server.js", "src/components/WraftEditor"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "server.js",
+    "src/components/WraftEditor"
+  ]
 }

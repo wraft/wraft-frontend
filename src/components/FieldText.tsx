@@ -3,13 +3,18 @@ import { Box } from 'theme-ui';
 import { Label, Textarea } from 'theme-ui';
 
 interface Props {
-  register: any,
-  label: string,
-  name: string,
-  defaultValue: string,
+  register: any;
+  label: string;
+  name: string;
+  defaultValue: string;
 }
 
-const FieldText: React.FC<Props> = ({ name, label, register, defaultValue }) => {
+const FieldText: React.FC<Props> = ({
+  name,
+  label,
+  register,
+  defaultValue,
+}) => {
   return (
     <Box pb={2}>
       <Label htmlFor="description" mb={1}>
@@ -25,6 +30,5 @@ const FieldText: React.FC<Props> = ({ name, label, register, defaultValue }) => 
     </Box>
   );
 };
-
 
 export default FieldText;

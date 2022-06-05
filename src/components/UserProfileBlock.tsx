@@ -25,11 +25,7 @@ const UserProfileBlock = () => {
   //   setShowModal(!showModal);
   // };
 
-  return (
-    <Box py={8}>
-      
-    </Box>
-  );
+  return <Box py={8}></Box>;
 };
 
 export default UserProfileBlock;

@@ -61,7 +61,7 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
       <Box
         sx={{
           width: '32px',
-          height: '32px',          
+          height: '32px',
           objectFit: 'cover',
           cursor: 'pointer',
         }}>

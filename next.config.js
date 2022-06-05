@@ -6,4 +6,15 @@ module.exports = withImages({
     api: process.env.NEXT_PUBLIC_API_HOST,
     API_HOST: process.env.API_HOST,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: 'http://localhost:4000/uploads/:path*', // Proxy to Backend
+      },
+    ];
+  },
+  experimental: {
+    outputStandalone: true,
+  },
 });

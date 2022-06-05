@@ -36,18 +36,18 @@ const auth = {
             },
           },
         )
-        .then(response => actions.grantAccess(response.data))
-        .catch(error => {
+        .then((response) => actions.grantAccess(response.data))
+        .catch((error) => {
           console.log(error);
           message.error('Ah ocurrido un error, intente de nuevo.');
         }),
   ),
-  logout: action(state => {
+  logout: action((state) => {
     state.user = null;
     state.token = null;
     cookie.remove('token');
   }),
-  refreshToken: action(state => {
+  refreshToken: action((state) => {
     if (state.token) {
       console.log('Will refresh...');
     }

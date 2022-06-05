@@ -3,18 +3,21 @@ import { Theme } from 'theme-ui';
 const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body:
-      'Avenir, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    body: '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
+    editor1: "'Satoshi', sans-serif",
+    editor2:
+      '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif', //"'IBM Plex Mono', monospace",
+    // font-family:
     monospace: 'Menlo, monospace',
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [12.8, 16, 20, 20, 25, 31.25, 39.06, 48.83, 61.04],
+  fontSizes: [13, 16, 20, 22, 25, 31.25, 39.06, 48.83, 61.04],
   fontWeights: {
     body: 400,
-    heading: 700,
-    bold: 700,
+    heading: 600,
+    bold: 800,
   },
   lineHeights: {
     body: 1.5,
@@ -23,7 +26,7 @@ const theme: Theme = {
   colors: {
     text: '#000',
     background: 'text',
-    primary: '#07c',
+    primary: '#087f5b',
     secondary: '#30c',
     muted: '#f6f6f6',
     gray: [
@@ -123,17 +126,29 @@ const theme: Theme = {
       '#0b7285',
     ],
     teal: [
-      '#e6fcf5',
-      '#c3fae8',
-      '#96f2d7',
-      '#63e6be',
-      '#38d9a9',
-      '#20c997',
-      '#12b886',
-      '#0ca678',
-      '#099268',
       '#087f5b',
+      '#3a8f6e',
+      '#599f81',
+      '#76ae95',
+      '#91bea9',
+      '#accebe',
+      '#c8dfd3',
+      '#e3efe9',
+      '#ffffff',
     ],
+    // teal: [
+    //   '#e6fcf5',
+    //   '#c3fae8',
+    //   '#96f2d7',
+    //   '#63e6be',
+    //   '#38d9a9',
+    //   '#20c997',
+    //   '#12b886',
+    //   '#0ca678',
+    //   '#099268',
+    //   '#087f5b',
+    // ],
+
     green: [
       '#ebfbee',
       '#d3f9d8',
@@ -185,7 +200,20 @@ const theme: Theme = {
     modes: {
       dark: {
         text: '#fff',
+        base: '#000',
         background: 'gray.8',
+        green: [
+          '#ebfbee',
+          '#d3f9d8',
+          '#b2f2bb',
+          '#8ce99a',
+          '#69db7c',
+          '#51cf66',
+          '#40c057',
+          '#37b24d',
+          '#2f9e44',
+          '#2b8a3e',
+        ],
         gray: [
           '#212529',
           '#343a40',
@@ -203,9 +231,10 @@ const theme: Theme = {
   },
   forms: {
     label: {
-      color: 'gray.7',
+      color: 'gray.6',
       fontSize: 1,
-      pb: 1,
+      fontWeight: 500,
+      pb: 0,
     },
     input: {
       color: 'gray.8',
@@ -216,6 +245,16 @@ const theme: Theme = {
       bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
+    },
+
+    small: {
+      bg: 'gray.0',
+      fontSize: 0,
+      p: 0,
+      px: 3,
+      fontFamily: 'body',
+      fontWeight: 500,
+      borderColor: 'gray.2',
     },
     select: {
       color: 'gray.8',
@@ -294,14 +333,14 @@ const theme: Theme = {
       color: 'primary',
     },
     pre: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       overflowX: 'auto',
       code: {
         color: 'inherit',
       },
     },
     code: {
-      fontFamily: 'monospace',
+      fontFamily: 'body',
       fontSize: 'inherit',
     },
     table: {
@@ -320,39 +359,138 @@ const theme: Theme = {
     img: {
       maxWidth: '100%',
     },
+    editorBody: {
+      '.remirror-theme h1': {},
+
+      '.remirror-editor-wrapper': {},
+      '.remirror-theme .ProseMirror': {
+        outline: 'none',
+        // border: 'solid 1px #ddd',
+        // color: #721515 !important;
+        // pl: '4rem',
+        // pr: '4rem',
+        // pt: '4rem',
+        // pb: '4rem',
+      },
+      p: { color: 'gray.9', fontFamily: 'body', pt: 2, pb: 1, fontSize: 0 },
+      h1: {
+        color: 'red.5',
+        py: 3,
+        fontFamily: 'body',
+        textTransform: 'uppercase',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h2: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h3: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        textTransform: 'uppercase',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h4: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'body',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+    },
+    editorBody2: {
+      '.remirror-theme .remirror-editor': {
+        bg: 'red',
+        p: 5,
+      },
+      '.remirror-theme h1': {
+        fontFamily: 'editor2',
+      },
+      '.remirror-theme .ProseMirror': {
+        outline: 'none',
+        border: 'solid 1px',
+        fontFamily: 'editor2',
+        borderColor: 'gray.4',
+        lineHeight: 1.65,
+        bg: 'gray.0',
+        h1: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+        h2: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+        h3: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+        '.holder': {
+          bg: 'green.1',
+          color: 'green.8',
+        },
+      },
+      p: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
+      h1: {
+        color: 'red.5',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h2: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h3: {
+        color: 'red.3',
+        py: 2,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+      h4: {
+        color: 'red.3',
+        py: 3,
+        fontFamily: 'editor2',
+        lineHeight: 1.25,
+        fontSize: 1,
+      },
+    },
   },
   links: {
+    download: {
+      color: 'red.4',
+      svg: {
+        fill: 'red.4',
+      },
+    },
     btnNavLink: {
-      // bg: 'gray.2',
       p: 2,
       px: 3,
       display: 'block',
+      letterSpacing: '-0.15px',
     },
     btnPrimary: {
-      p: 2,
-      px: 3,
-      m: 0,
-      bg: 'primary.1',
-      color: 'primary.9',
-      border: 'solid 1px',
-      borderColor: 'gray.5',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
-      // textTransform: 'uppercase',
+      variant: 'buttons.btnPrimary',
     },
     btnSecondary: {
+      variant: 'buttons.btnSecondary',
+    },
+    btnSmall: {
+      variant: 'buttons.btnSmall',
       p: 2,
       px: 3,
-      m: 0,
-      bg: 'gray.1',
-      color: 'gray.9',
-      border: 'solid 1px',
-      borderColor: 'gray.5',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
-      // textTransform: 'uppercase',
+    },
+    btnPrimarySmall: {
+      variant: 'buttons.btnPrimary',
+      // fontSize: 0,
+      p: 2,
+      px: 2,
+      color: 'gray.0',
+      '&:hover': {
+        bg: 'teal.8',
+      },
     },
     btnPrimaryIcon: {
       bg: 'gray.0',
@@ -381,7 +519,7 @@ const theme: Theme = {
       display: 'block',
       // bg: 'red'
     },
-    download: {
+    download2: {
       color: 'green.9',
       fontSize: 0,
       textTransform: 'uppercase',
@@ -393,10 +531,10 @@ const theme: Theme = {
       fontWeight: 'bold',
     },
     button: {
+      fontFamily: 'body',
       fontWeight: 500,
       color: 'primary',
       border: 'solid 1px',
-      fontFamily: 'body',
       fontSize: 0,
       px: 3,
       py: 2,
@@ -413,8 +551,18 @@ const theme: Theme = {
     },
   },
   layout: {
+    boxHeading: {
+      pl: 3,
+      pt: 2,
+      width: '100%',
+      borderTop: 'solid 1px',
+      borderTopColor: 'gray.3',
+      borderBottom: 'solid 1px',
+      borderBottomColor: 'gray.3',
+    },
+
     modalContent: {
-      p:0,
+      p: 0,
       top: '10%',
       // m: 2,
       position: 'relative',
@@ -452,16 +600,19 @@ const theme: Theme = {
       // mr: '-50%',
       // transform: 'translate(-30% -30%)',
       // height: '10%', // <-- This sets the height
-      width: ['80%', '70%', '60%'],
+      width: ['80%', '70%', '40%'],
       bg: 'gray.0',
       mx: 'auto',
       // mt: '-30%',
+      // p: 4,
+      border: 'solid 1px',
+      borderColor: 'gray.2',
       overflow: 'scroll', // <-- This tells the modal to scrol
     },
     modalBackgroup: {
       bg: 'rgba(30,30,30,0.85)',
       position: 'fixed',
-      zIndex: 10000,
+      zIndex: 200,
       top: 0,
       left: 0,
       right: 0,
@@ -473,7 +624,7 @@ const theme: Theme = {
       bg: 'gray.0',
       pb: 3,
       px: 4,
-      pt: 3,
+      py: 2,
       borderBottom: 'solid 1px',
       borderColor: 'gray.3',
       mb: 0,
@@ -498,7 +649,7 @@ const theme: Theme = {
       color: 'gray.7',
       py: 0,
       ':hover': {
-        color: 'primary',
+        color: 'gray.9',
       },
     },
     menuLink: {
@@ -506,7 +657,11 @@ const theme: Theme = {
       mb: 0,
       p: 2,
       borderRadius: 3,
+      fontWeight: 600,
       width: '100%',
+      a: {
+        fontWeight: 600,
+      },
       ':hover': {
         bg: 'gray.2',
       },
@@ -518,7 +673,8 @@ const theme: Theme = {
       p: 2,
       borderRadius: 3,
       width: '100%',
-      color: 'primary',
+      color: '#0d1c17',
+      fontWeight: 900,
     },
     baseForm: {
       width: '100%',
@@ -539,7 +695,7 @@ const theme: Theme = {
       width: '80%',
     },
     w70: {
-      width: '70%',
+      minWidth: '70%',
     },
     w60: {
       width: '60%',
@@ -652,14 +808,42 @@ const theme: Theme = {
     },
   },
   text: {
+    labelSmall: {
+      pl: 1,
+      pr: 2,
+      mr: 3,
+      fontSize: 0,
+      fontWeight: 400,
+      color: 'gray.8',
+      display: 'inline-block',
+      textAlign: 'right',
+      width: 'auto',
+      textTransform: 'uppercase',
+      letterSpacing: '-0.01rem',
+    },
+    labelcaps: {
+      fontWeight: 300,
+      color: 'gray.6',
+      letterSpacing: '0.2px',
+      textTransform: 'uppercase',
+      fontSize: '10.24px',
+    },
+    sectionheading: {
+      fontWeight: 300,
+      fontSize: 1,
+      lineHeight: '24px',
+      pb: 2,
+    },
     caps: {
-      pt: 2,
+      pt: 0,
+      pb: 1,
+      color: 'gray.7',
       fontSize: 0,
       textTransform: 'uppercase',
     },
     menulink: {
-      fontSize: 1,
-      fontWeight: 500,
+      fontSize: 3,
+      fontWeight: 600,
     },
     pagetitle: {
       // color: 'red.6',
@@ -706,6 +890,17 @@ const theme: Theme = {
     },
   },
   buttons: {
+    download: {
+      bg: 'gray.1',
+      textTransform: 'capitalize',
+    },
+    contentButton: {
+      bg: 'gray.0',
+      border: 0,
+      borderColor: 'gray.4',
+      color: 'gray.8',
+      textAlign: 'left',
+    },
     btnPrimaryIcon: {
       bg: 'gray.0',
       border: 'solid 1px',
@@ -725,34 +920,63 @@ const theme: Theme = {
       // color: 'gray.0',
       // pb: 0,
     },
-    btnPrimary: {
-      p: 2,
-      px: 3,
+    btnBig: {
+      p: 1,
+      px: 2,
       m: 0,
-      bg: 'primary.1',
-      color: 'primary.9',
       border: 'solid 1px',
-      borderColor: 'gray.5',
       borderRadius: 4,
-      fontWeight: 800,
+      fontWeight: 'bold',
       fontSize: 0,
-      textTransform: 'uppercase',
+      fontFamily: 'inherit',
+    },
+    btnPrimary: {
+      variant: 'buttons.btnBig',
+      bg: 'teal.9',
+      color: 'primary.9',
+      borderColor: 'teal.8',
     },
     btnSecondary: {
-      p: 2,
-      px: 3,
-      m: 0,
+      variant: 'buttons.btnBig',
       bg: 'gray.1',
       color: 'gray.9',
-      border: 'solid 1px',
-      borderColor: 'gray.5',
-      borderRadius: 4,
-      fontWeight: 800,
-      fontSize: 0,
-      // textTransform: 'uppercase',
+      borderColor: 'gray.4',
+      '&:hover': {
+        bg: 'gray.0',
+        color: 'gray.8',
+      },
+    },
+    btnAction: {
+      variant: 'buttons.btnBig',
+      bg: 'gray.8',
+      color: 'gray.1',
+      borderColor: 'gray.8',
+      '&:hover': {
+        bg: 'gray.9',
+        color: 'gray.0',
+      },
     },
     btnMain: {
-      variant: 'button.btnSecondary',
+      variant: 'buttons.btnSecondary',
+    },
+    btnSmall: {
+      variant: 'buttons.btnSecondary',
+      fontSize: 0,
+      p: 1,
+      px: 2,
+    },
+    btnPrimaryLarge: {
+      variant: 'buttons.btnBig',
+      fontSize: 1,
+      p: 2,
+      px: 3,
+      border: 0,
+    },
+    btnPrimarySmall: {
+      variant: 'buttons.btnPrimary',
+      fontSize: 0,
+      p: 1,
+      px: 2,
     },
     base: {
       bg: 'transparent',
@@ -771,24 +995,9 @@ const theme: Theme = {
       color: 'blue.9',
       bg: 'blue.2',
       fontFamily: 'body',
-      // color: 'gray.2',
-      // bg: 'gray.7',
-      // border: 'solid 1px',
-      // borderColor: 'gray.2',
-      // mb: 3,
-      // mt: 3,
-      // display: 'inline-flex',
-      // pt: 1,
-      // pb: 1,
     },
     primary: {
-      color: 'white',
-      bg: 'primary',
-      fontFamily: 'body',
-      fontWeight: 600,
-      fontSize: 0,
-      borderRadius: 2,
-      textTransform: 'uppercase',
+      variant: 'button.btnPrimary',
     },
     delete: {
       color: 'text',

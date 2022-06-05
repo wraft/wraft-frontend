@@ -9,13 +9,12 @@ import FieldDate from './FieldDate';
 import { API_HOST, loadEntity, updateEntityFile } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
-import ImageCropper from './ImageCropper';
-
 import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
 import { useToasts } from 'react-toast-notifications';
+// import ImageCropper from './ImageCropper';
 
-export const defaultStyle:Styles = {
+export const defaultStyle: Styles = {
   overlay: {
     position: 'absolute',
     top: 0,
@@ -69,20 +68,20 @@ export interface IAccount {
   email: string;
 }
 
-interface IPreviewImage {
-  prevImage: any;
-  prevImageFile: any;
-}
+// interface IPreviewImage {
+//   prevImage: any;
+//   prevImageFile: any;
+// }
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
   const [image, setImage] = useState<any>();
   const [imagePreview, setImagePreview] = useState<string>();
-  const [imageTemp, setImageTemp] = useState<any>();
-  const [imageSaved, setImageSaved] = useState<boolean>(false);
+  // const [imageTemp, setImageTemp] = useState<any>();
+  // const [imageSaved, setImageSaved] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
 
@@ -109,26 +108,26 @@ const Form = () => {
     setMe(m);
   }
 
-  const [cropImage, setCroppedImage] = useState<File>(); // for file submit
+  // const [cropImage, setCroppedImage] = useState<File>(); // for file submit
   // const [editing, setEditing] = useState<boolean>(false);
 
   useEffect(() => {
     // console.log('setPreviewImage', image, imagePreview);
   }, [image, imagePreview]);
 
-  const setPreviewImage = ({ prevImage, prevImageFile }: IPreviewImage) => {
-    console.log('setPreviewImage', prevImage);
-    setCroppedImage(prevImageFile);
-    setImageTemp(prevImage);
-    // toggleModal();
-    setEdit(!isEdit);
-    setImagePreview(prevImage);
-    setImageSaved(true);
-  };
+  // const setPreviewImage = ({ prevImage, prevImageFile }: IPreviewImage) => {
+  //   console.log('setPreviewImage', prevImage);
+  //   setCroppedImage(prevImageFile);
+  //   setImageTemp(prevImage);
+  //   // toggleModal();
+  //   setEdit(!isEdit);
+  //   setImagePreview(prevImage);
+  //   setImageSaved(true);
+  // };
 
   const toggleEdit = () => {
     setEdit(!isEdit);
-    // toggleModal();
+    setImagePreview('');
   };
 
   // const [showDate, setShowDate] = useState<boolean>(false);
@@ -140,7 +139,7 @@ const Form = () => {
     console.log('Updated', d);
     console.log('me', me);
 
-    addToast('Saved Successfully', { appearance: 'success' })
+    addToast('Saved Successfully', { appearance: 'success' });
   };
 
   // const toggleDate = () => {
@@ -162,9 +161,9 @@ const Form = () => {
     formData.append('name', data.name);
     formData.append('dob', data.dob);
 
-    if (cropImage) {
-      formData.append('profile_pic', cropImage);
-    }
+    // if (cropImage) {
+    //   formData.append('profile_pic', cropImage);
+    // }
 
     formData.append('gender', data.gender);
 
@@ -177,9 +176,9 @@ const Form = () => {
   //   setMe(meme);
   // };
 
-  const onCropped = (_cp: any) => {
-    setPreviewImage(_cp);
-  };
+  // const onCropped = (_cp: any) => {
+  //   setPreviewImage(_cp);
+  // };
 
   const dateChange = (_p: any) => {
     console.log('dateChange', _p);
@@ -208,27 +207,27 @@ const Form = () => {
     }
   }, [token]);
 
-  const getBase64 = (file: any) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  };
+  // const getBase64 = (file: any) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
 
-  useEffect(() => {
-    try {
-      if (imageTemp && imageTemp.size > 0) {
-        getBase64(imageTemp).then((_e: any) => {
-          console.log('imageTemp', _e);
-          setImagePreview(_e);
-        });
-      }
-    } catch (error) {
-      console.log('errr', error);
-    }
-  }, [imageTemp]);
+  // useEffect(() => {
+  //   try {
+  //     if (imageTemp && imageTemp.size > 0) {
+  //       getBase64(imageTemp).then((_e: any) => {
+  //         console.log('imageTemp', _e);
+  //         setImagePreview(_e);
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log('errr', error);
+  //   }
+  // }, [imageTemp]);
 
   return (
     <Box py={3} mt={4} pl={4} variant="w50">
@@ -239,7 +238,7 @@ const Form = () => {
         <Text sx={{ fontSize: 1 }}>Your account settings</Text>
       </Box> */}
       <Box variant="w100">
-        <Flex variant="w100">          
+        <Flex variant="w100">
           <Box variant="w100">
             <Flex>
               <Box sx={{ pl: 4 }}>
@@ -256,8 +255,9 @@ const Form = () => {
                       }}
                       pr={4}
                       pb={4}>
-                      <Box sx={{ position: 'relative' }}>                        
-                        {!isEdit && !imageSaved && (
+                      <Box sx={{ position: 'relative' }}>
+                        {/* \\!imageSaved && ( */}
+                        {!isEdit && (
                           <>
                             <Image
                               onClick={() => toggleEdit()}
@@ -280,13 +280,11 @@ const Form = () => {
                             onRequestClose={closeModal}
                             ariaHideApp={false}
                             contentLabel="Profile Image">
-                              <ImageCropper
-                                onFileSubmit={setPreviewImage}
-                                onComplete={onCropped}
-                              />
+                            <Text>Editor</Text>
+                            {/* <ImageCropper /> */}
                           </Modal>
                         )}
-                        {imagePreview && imageSaved && (
+                        {imagePreview && (
                           <>
                             <Image
                               src={imagePreview}
@@ -308,12 +306,7 @@ const Form = () => {
                 </Flex>
               </Box>
               <Box>
-                <Box
-                  mx={0}
-                  mb={3}
-                  
-                  as="form"
-                  onSubmit={handleSubmit(onSubmit)}>
+                <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
                   <Field
                     name="name"
                     label="Name"

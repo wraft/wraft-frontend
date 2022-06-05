@@ -1,25 +1,153 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Link, Button } from 'theme-ui';
+import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import { File } from './Icons';
-import { MarkdownEditor } from './WraftEditor';
-import CommentForm from './CommentForm';
-
-import { parseISO, formatDistanceStrict } from 'date-fns';
-
-import { Pencil, Download } from '@styled-icons/boxicons-regular';
-
-import {
-  createEntity,
-  loadEntity,
-  deleteEntity,
-  API_HOST,
-} from '../utils/models';
+// import { Document, Page } from 'react-pdf';
+import { Pencil } from '@styled-icons/boxicons-regular';
+import { Download } from '@styled-icons/remix-line/Download';
+import { IosArrowRight } from '@styled-icons/fluentui-system-filled/IosArrowRight';
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 import MenuItem from './MenuItem';
+import dynamic from 'next/dynamic';
+
+import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
+
+import { File } from './Icons';
+import WraftEditor from './WraftEditor';
+import CommentForm from './CommentForm';
+
+import { createEntity, loadEntity } from '../utils/models';
+import { TimeAgo } from './Atoms';
+
+import Nav from './NavEdit';
+
+const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
+
+/**
+ * Number Block
+ */
+
+const blockTypes = [
+  {
+    name: 'medium',
+    wh: '32px',
+    fontSize: 1,
+  },
+  {
+    name: 'small',
+    wh: '22px',
+    fontSize: '13px',
+  },
+];
+
+/**
+ * Steps Indication Block
+ */
+interface StepBlockProps {
+  tab: any;
+  title?: string;
+  desc?: string;
+  no?: number;
+}
+
+export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
+  return (
+    <Flex sx={{ flex: 1 }}>
+      <NumberBlock no={no} active={tab.selectedId === 'view' ? true : false} />
+      <Box>
+        <Text
+          as="h4"
+          sx={{
+            fontFamily: 'body',
+            fontSize: 0,
+            color: tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
+            mb: 0,
+          }}>
+          {title}
+        </Text>
+        {/* <Text
+          as="h5"
+          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
+          {desc}
+        </Text> */}
+      </Box>
+      <Box sx={{ pl: 3 }}>
+        <IosArrowRight width={10} sx={{ ml: 2 }} />
+      </Box>
+    </Flex>
+  );
+};
+
+interface NumberBlockProps {
+  no?: number;
+  active?: boolean;
+}
+
+const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
+  const activeBorder = active ? 'teal.6' : 'gray.2';
+  const defaultSize = 'small';
+  const size = blockTypes.find((b: any) => b.name === defaultSize);
+
+  return (
+    <Box
+      sx={{
+        bg: 'gray.2',
+        textAlign: 'center',
+        mr: 3,
+        verticalAlign: 'middle',
+        borderRadius: '99rem',
+        border: 'solid 1px',
+        borderColor: activeBorder,
+        width: size?.wh,
+        height: size?.wh,
+      }}>
+      <Text
+        as="span"
+        sx={{
+          lineHeight: 'auto',
+          m: 0,
+          p: 0,
+          fontSize: size?.fontSize,
+        }}>
+        {no}
+      </Text>
+    </Box>
+  );
+};
+
+/**
+ * Profile Block
+ */
+//  `http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`
+interface ProfileCardP {
+  name: string;
+  time: string;
+  image?: string;
+}
+
+export const ProfileCard = ({ name, time }: ProfileCardP) => {
+  return (
+    <Flex
+      sx={{
+        fontSize: 0,
+        color: 'gray.8',
+        my: 2,
+      }}>
+      <Avatar
+        width={22}
+        height={22}
+        sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
+        src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+      />
+      <Text as="h3" sx={{ mr: 3, fontSize: '14.4px', fontWeight: 600 }}>
+        {name}
+      </Text>
+      <TimeAgo time={time} ago={true} />
+    </Flex>
+  );
+};
 
 const PreTag = styled(Box)`
   white-space: pre-wrap; /* css-3 */
@@ -34,16 +162,18 @@ export interface ContentInstance {
   creator: Creator;
   content_type: ContentType;
   content: Content;
+  versions?: any;
 }
 
 export interface Content {
-  updated_at: Date;
+  updated_at: any;
   serialized: Serialized;
   raw: string;
   instance_id: string;
-  inserted_at: Date;
+  inserted_at: any;
   id: string;
   build: string;
+  title: string;
 }
 
 export interface Serialized {
@@ -59,6 +189,7 @@ export interface ContentType {
   id: string;
   fields: Fields;
   description: string;
+  layout?: any;
 }
 
 export interface Fields {
@@ -101,30 +232,6 @@ export interface Serialized {
   body: string;
 }
 
-export const TimeAgo = (time: any) => {
-  const timetime = parseISO(time.time);
-  const nw = Date.now();
-  const timed = formatDistanceStrict(timetime, nw, { addSuffix: true });
-
-  let timed1 = timed.replace(' hours ago', 'h');
-  timed1 = timed1.replace(' days ago', 'd');
-  timed1 = timed1.replace(' years ago', 'y');
-
-  return (
-    <Text
-      pl={0}
-      pt="3px"
-      sx={{
-        fontSize: 0,
-        '.hov': { opacity: 0 },
-        ':hover': { '.hov': { opacity: 1 } },
-      }}
-      color="gray.6">
-      {timed1}
-    </Text>
-  );
-};
-
 const ContentDetail = () => {
   const token = useStoreState((state) => state.auth.token);
 
@@ -134,6 +241,8 @@ const ContentDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
+
+  const tab = useTabState({ selectedId: 'edit' });
 
   const loadDataSucces = (data: any) => {
     setLoading(false);
@@ -148,11 +257,11 @@ const ContentDetail = () => {
   /** DELETE content
    * @TODO move to inner page [design]
    */
-  const delData = (id: string) => {
-    if (token) {
-      deleteEntity(`contents/${id}`, token);
-    }
-  };
+  // const delData = (id: string) => {
+  //   if (token) {
+  //     deleteEntity(`contents/${id}`, token);
+  //   }
+  // };
 
   /**
    * On Build success
@@ -188,6 +297,7 @@ const ContentDetail = () => {
   useEffect(() => {
     if (contents && contents.content && contents.content.serialized) {
       const contentBodyAct = contents.content.serialized;
+      console.log('🧶 [content]', contents.content);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
@@ -202,8 +312,9 @@ const ContentDetail = () => {
   };
 
   return (
-    <Box py={3}>
-      <Box sx={{ position: 'relative', pl: 4, pt: 2 }}>
+    <Box py={0}>
+      <Nav navtitle={contents?.content?.title} />
+      <Box sx={{ pt: 0 }}>
         {loading && (
           <Box
             sx={{
@@ -218,159 +329,326 @@ const ContentDetail = () => {
         {contents && contents.content && (
           <Flex>
             <Box
-              sx={{
-                width: '65%',
-                bg: 'gray.0',
-                fontFamily: 'courier',
-                // border: 'solid 0.5px #ddd',
-                // borderRadius: 5,
-                overflow: 'hidden',
-              }}>
+              // as="form"
+              // onSubmit={handleSubmit(onSubmit)}
+              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
               <Flex
-                bg="background"
                 sx={{
                   px: 4,
-                  py: 4,
-                  pl: '115px',
-                  // border: 'solid 1px',
-                  // borderColor: 'gray.3',
+                  // py: 3,
+                  py: 3,
+                  pb: 3,
+                  // pl: '115px',
+                  borderBottom: 'solid 1px',
+                  borderColor: 'gray.3',
+                  mb: 3,
+                  bg: 'gray.0',
                 }}>
-                <Box bg="background">
-                  <Text sx={{ fontSize: 3 }}>
+                <Box>
+                  <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
                     {contents.content.serialized.title}
                   </Text>
-                  {/* <Text
-                  sx={{
-                    fontSize: 0,
-                    color: 'gray.6',
-                  }}>{`Updated ${contents.content.inserted_at}`}</Text> */}
+                  <ProfileCard
+                    time={contents.content?.inserted_at}
+                    name={contents.creator?.name}
+                    image="http://localhost:4000/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803"
+                  />
+                </Box>
+                <Box sx={{ ml: 'auto' }}>
                   <Box
                     sx={{
-                      // pt: 1,
-                      // pl: 2,
+                      pt: 1,
+                      pb: 0,
+                      mb: 0,
+                      borderRadius: 99,
+                      px: 2,
                       fontSize: 0,
-                      color: 'gray.6',
+                      ml: 'auto',
+                      color: 'gray.9',
+                      border: 'solid 1px #ddd',
+                      svg: {
+                        fill: 'gray.6',
+                      },
                     }}>
-                    <TimeAgo time={contents.content.inserted_at} />
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    pt: 1,
-                    pl: 2,
-                    fontSize: 0,
-                    ml: 'auto',
-                    color: 'gray.6',
-                  }}>
-                  <MenuItem
-                    variant="btnPrimary"
-                    href={`/content/edit/[id]`}
-                    path={`/content/edit/${contents.content.id}`}>
-                    <Pencil size={20} color="primary" />
-                  </MenuItem>
-                </Box>
-              </Flex>
-              <PreTag pt={0}>
-                {contentBody && (
-                  <MarkdownEditor
-                    hideToolbar={false}
-                    editable={false}
-                    value={contentBody}
-                    onUpdate={doUpdate}
-                    initialValue={contentBody}
-                    cleanInsert={true}
-                    editor="wysiwyg"
-                  />
-                )}
-                {/* <Text fontSize={1}>{contents.content.raw}</Text> */}
-              </PreTag>
-            </Box>
-            <Box variant="plateSide" sx={{ pl: 4, flexGrow: 1, mr: 4 }}>
-              <Box>
-                {build && (
-                  <Box>
-                    <Text>Updated At</Text>
-                    <Text>{build.inserted_at}</Text>
-                  </Box>
-                )}
-                <Box sx={{ pb: 2 }}></Box>
-                {contents.content.build && (
-                  <Flex pt={3}>
-                    <File />
-                    <Box>
+                    <MenuItem
+                      variant="btnPrimary"
+                      href={`/content/edit/[id]`}
+                      path={`/content/edit/${contents.content.id}`}>
                       <Box>
+                        <Pencil size={22} height={22} />
                         <Text
-                          as="h3"
-                          sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
-                          {contents.content.instance_id}
-                        </Text>
-                        <Text
-                          as="h4"
-                          sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
-                          {contents.state?.state}
+                          // as="span"
+                          sx={{
+                            mx: 2,
+                            mt: 0,
+                            fontWeight: 'bold',
+                            fontSize: 1,
+                          }}>
+                          Edit
                         </Text>
                       </Box>
-                    </Box>
-                    <Link
-                      variant="download"
-                      href={`${API_HOST}/${contents.content.build}`}
-                      target="_blank">
-                      <Box
-                        sx={{
-                          p: 2,
-                          pt: 1,
-                          bg: 'green.8',
-                          borderRadius: 4,
-                          ml: 4,
-                        }}>
-                        <Download size={20} color="white" />
-                      </Box>
-                    </Link>
-                  </Flex>
-                )}
-              </Box>
-              <Flex
-                sx={{
-                  pt: 4,
-                  alignItems: 'flex-start',
-                  alignContent: 'flex-start',
-                  flexDirection: 'row',
-                  // border: 'solid 1px #ddd',
-                }}>
-                <Button variant="btnPrimary" onClick={() => doBuild()}>
-                  <>
-                    {loading && <Spinner color="white" size={24} />}
-                    {!loading && <Text>Publish</Text>}
-                  </>
-                </Button>
-                <Button
-                  sx={{ ml: 2 }}
-                  variant="btnSecondary"
-                  onClick={() => delData(contents.content.id)}>
-                    <Text>Delete</Text>
-                  {/* <Trash size={20} /> */}
-                </Button>
-              </Flex>
-
-              {contents && contents.content && (
-                <Box mt={3}>
-                  <Text
-                    variant="blockTitle"
-                    sx={{
-                      pt: 2,
-                      pb: 3,
-                      textTransform: 'uppercase',
-                      fontSize: 0,
-                      color: 'gray.7',
-                    }}>
-                    Comments
-                  </Text>
-                  <CommentForm
-                    master={contents.content_type.id}
-                    master_id={contents.content.id}
-                  />
+                    </MenuItem>
+                  </Box>
                 </Box>
-              )}
+              </Flex>
+              <Box sx={{ mb: 4 }}>
+                <TabList {...tab} aria-label="Content Stages" sx={{ mb: 4 }}>
+                  <Tab id="edit" variant="contentButton" as={Button} {...tab}>
+                    <StepBlock
+                      no={1}
+                      title="Draft"
+                      desc="Edit contents"
+                      tab={tab}
+                    />
+                  </Tab>
+                  <Tab
+                    id="view"
+                    {...tab}
+                    as={Button}
+                    variant="contentButton"
+                    sx={{
+                      px: 4,
+                      borderLeft: 0,
+                    }}>
+                    <StepBlock
+                      no={2}
+                      title="File"
+                      desc="Sign and Manage"
+                      tab={tab}
+                    />
+                  </Tab>
+                  <Tab
+                    id="sign"
+                    {...tab}
+                    as={Button}
+                    variant="contentButton"
+                    sx={{
+                      px: 4,
+                      borderLeft: 0,
+                    }}>
+                    <StepBlock
+                      no={3}
+                      title="Sign"
+                      desc="Send for signatures"
+                      tab={tab}
+                    />
+                  </Tab>
+                </TabList>
+
+                <TabPanel {...tab}>
+                  <Box sx={{ mt: 4 }}>
+                    <PreTag pt={4}>
+                      {contentBody && (
+                        <WraftEditor
+                          // value={active}
+                          editable={false}
+                          onUpdate={doUpdate}
+                          starter={contentBody}
+                          cleanInsert={true}
+                          token={contentBody}
+                        />
+                      )}
+                    </PreTag>
+                  </Box>
+                </TabPanel>
+                <TabPanel {...tab}>
+                  <Box
+                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
+                    {contents.content.build && (
+                      <PdfViewer
+                        url={`/${contents.content.build}`}
+                        pageNumber={1}
+                        sx={{ width: '100%' }}
+                      />
+                    )}
+                  </Box>
+                </TabPanel>
+              </Box>
+            </Box>
+
+            <Box
+              variant="plateRightBar"
+              sx={{
+                bg: '#FAFBFC',
+                py: 0,
+                width: '30%',
+                borderLeft: 'solid 1px',
+                borderColor: 'gray.3',
+                pt: 3,
+              }}>
+              <Box sx={{ px: 3 }}>
+                <Flex sx={{ mb: 3 }}>
+                  <Box sx={{ mr: 3 }}>
+                    <Text as="h6" variant="labelcaps">
+                      Version
+                    </Text>
+                    <Flex>
+                      <Text
+                        as="h3"
+                        sx={{
+                          fontWeight: 'heading',
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                        }}>
+                        {contents.content.instance_id}
+                      </Text>
+                      <Text
+                        as="h6"
+                        sx={{
+                          fontWeight: 500,
+                          bg: 'green.1',
+                          ml: 2,
+                          color: 'green.9',
+                          px: 1,
+                          py: 1,
+                          borderRadius: '3px',
+                          letterSpacing: '0.2px',
+                          textTransform: 'uppercase',
+                          fontSize: '10.24px',
+                        }}>
+                        {contents?.state.state}
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Flex>
+              </Box>
+
+              <Box>
+                <Box variant="layout.boxHeading">
+                  <Text as="h3" variant="sectionheading">
+                    Content
+                  </Text>
+                </Box>
+                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                  <Box>
+                    {build && (
+                      <Box>
+                        <Text>Updated At</Text>
+                        <TimeAgo time={build.inserted_at} />
+                      </Box>
+                    )}
+
+                    <Box sx={{ pb: 2 }}></Box>
+                    {contents.content.build && (
+                      <Flex pt={0} pb={3}>
+                        <File />
+                        <Box>
+                          <Box>
+                            <Flex>
+                              <Text
+                                as="h3"
+                                sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
+                                {contents.content.instance_id}
+                              </Text>
+                              <Text
+                                as="h4"
+                                sx={{
+                                  fontSize: '12px',
+                                  mb: 0,
+                                  mt: 1,
+                                  color: 'gray.6',
+                                  fontWeight: 500,
+                                  ml: 2,
+                                }}>
+                                v{contents.versions[0]?.version_number}
+                              </Text>
+                            </Flex>
+                            <Flex>
+                              <Text
+                                as="h4"
+                                sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                                {contents.content_type?.layout?.name} /{' '}
+                                {contents.content_type?.name}
+                              </Text>
+                            </Flex>
+                          </Box>
+                        </Box>
+
+                        <Link
+                          variant="download"
+                          href={`/${contents.content.build}`}
+                          target="_blank">
+                          <Flex
+                            sx={{
+                              p: 2,
+                              pt: 1,
+                              // bg: 'green.8',
+                              borderRadius: 4,
+                              border: 'solid 1px',
+                              borderColor: 'gray.4',
+                              ml: 4,
+                            }}>
+                            <Download size={18} color="gray.3" />
+                            {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
+                          </Flex>
+                        </Link>
+                      </Flex>
+                    )}
+                  </Box>
+                </Box>
+              </Box>
+
+              <Box sx={{ pb: 3 }}>
+                <Box variant="layout.boxHeading">
+                  <Text as="h3" variant="sectionheading">
+                    Discuss
+                  </Text>
+                </Box>
+                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                  {contents && contents.content && (
+                    <Box mt={0}>
+                      <CommentForm
+                        master={contents.content_type.id}
+                        master_id={contents.content.id}
+                      />
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+
+              <Box
+                variant="plateSide"
+                sx={{
+                  pl: 3,
+                  flexGrow: 1,
+                  mr: 4,
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                }}>
+                <Flex
+                  sx={{
+                    pt: 3,
+                    alignItems: 'flex-start',
+                    alignContent: 'flex-start',
+                    flexDirection: 'row',
+                    // border: 'solid 1px #ddd',
+                  }}>
+                  <Button
+                    sx={{ py: 2 }}
+                    variant="btnPrimary"
+                    onClick={() => doBuild()}>
+                    <>
+                      {loading && <Spinner color="white" size={24} />}
+                      {!loading && (
+                        <Text sx={{ fontSize: 1, fontWeight: 600, p: 3 }}>
+                          Publish
+                        </Text>
+                      )}
+                    </>
+                  </Button>
+
+                  {/* 
+                  
+                  DELETE CONTENT
+                  
+                  <Button
+                    sx={{ ml: 2 }}
+                    variant="btnSecondary"
+                    onClick={() => delData(contents.content.id)}>
+                    <Text>Delete</Text>
+                  </Button> */}
+                </Flex>
+              </Box>
             </Box>
           </Flex>
         )}

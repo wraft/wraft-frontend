@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Button,
-  Text,
-  Divider,
-  Flex,
-  Select,
-} from 'theme-ui';
+import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -111,6 +103,7 @@ const StatesForm = (props: StateFormProps) => {
           }}>
           {props.content.map((c: StateElement, index) => (
             <Flex
+              key={index + 1}
               sx={{
                 p: 3,
                 bg: 'blue.0',
@@ -135,7 +128,7 @@ const StatesForm = (props: StateFormProps) => {
           ))}
         </Box>
       )}
-      <Button variant="tertiary" onClick={toggleModal}>
+      <Button variant="btnSecondary" onClick={toggleModal}>
         Add New
       </Button>
     </Box>
@@ -192,7 +185,7 @@ const ApprovalForm = () => {
     loadStates(cId, token);
   };
 
-  const onCreateState = (_x: any) => {
+  const onCreateState = () => {
     if (cId && token) {
       loadStates(cId, token);
     }
@@ -259,7 +252,7 @@ const ApprovalForm = () => {
                 defaultValue="Muneef Hameed (U01)"
                 register={register}
               />
-              <Button type="submit" mt={3}>
+              <Button variant="btnPrimary" type="submit" mt={3}>
                 Save
               </Button>
             </Box>

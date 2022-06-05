@@ -1,30 +1,84 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Image, Text } from 'theme-ui';
+import { Box, Flex, Image, Text, Input } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
 // relative
-import Link from './NavLink';
-import { API_HOST, checkUser } from '../utils/models';
-import { Bell, Plus } from '@styled-icons/boxicons-regular';
 
-// import Dropdown from './common/Dropdown';
-import Modal from './Modal';
+import { checkUser } from '../utils/models';
+import { Bell, Search } from '@styled-icons/boxicons-regular';
+import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
 
-// import { usePopper } from 'react-popper';
-
-import {
-  useMenuState,
-  Menu,
-  MenuItem,
-  MenuButton,
-  // MenuSeparator,
-} from 'reakit/Menu';
-import { useDialogState } from 'reakit/Dialog';
+import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
 import { Clickable } from 'reakit/Clickable';
 
 import Blok from './Blok';
+import Link from './NavLink';
+import Modal from './Modal';
+
+/**
+ * Reakit Button
+ */
+
+interface ButtonLinkProps {
+  onToggleSearch?: any;
+}
+
+const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
+  return (
+    <Clickable
+      as={Box}
+      onClick={() => onToggleSearch()}
+      sx={{
+        // pt: 0,
+        // bg: 'gray.2',
+        fontSize: 1,
+        color: '#111',
+        border: 'solid 1px',
+        verticleAlign: 'top',
+        borderColor: 'gray.4',
+        // bg: 'green.8',
+        borderRight: 0,
+        width: '8ch',
+        pl: 2,
+        pt: 1,
+        // mr: 2,
+        // px: 2,
+        // py: 1,
+        // mb: 2,
+        borderRadius: '4px 0 0 4px',
+        '&:hover': {
+          bg: 'gray.8',
+          color: 'gray.0',
+          border: 'solid 1px',
+          borderColor: 'gray.2',
+          cursor: 'pointer',
+          svg: {
+            fill: 'gray.0',
+          },
+        },
+        svg: {
+          fill: 'gray.8',
+        },
+        // borderRadius: 4,
+      }}>
+      {/* <Search width="16px" /> */}
+
+      <Text
+        sx={{
+          display: 'display-inline',
+          ml: 1,
+          fontWeight: 900,
+          letterSpacing: '-0.15px',
+          fontSize: '14px',
+        }}>
+        <Add width={18} />
+        <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
+      </Text>
+    </Clickable>
+  );
+};
 
 export interface IUser {
   name: string;
@@ -47,16 +101,6 @@ const Nav = ({ navtitle }: INav) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
 
   const menu = useMenuState();
-  const dialog = useDialogState();
-
-  // popper
-  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
-  // const [referenceElement, setReferenceElement] = useState(null);
-  // const [popperElement, setPopperElement] = useState(null);
-  // const [arrowElement, setArrowElement] = useState(null);
-  // const { styles, attributes } = usePopper(referenceElement, popperElement, {
-  //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-  // });
 
   const onProfileLoad = (data: any) => {
     setProfile(data);
@@ -87,7 +131,7 @@ const Nav = ({ navtitle }: INav) => {
   return (
     <Box
       variant="header"
-      onClick={() =>closeSearch}
+      // onClick={() =>closeSearch}
       sx={{
         p: 0,
         bg: 'gray.0',
@@ -110,39 +154,9 @@ const Nav = ({ navtitle }: INav) => {
               borderRight: 'solid 1px',
               borderColor: 'gray.0',
               color: 'gray.8',
+              pb: 1,
             }}>
-            <Flex>
-              <Clickable
-                as={Box}
-                onClick={() => toggleSearch()}
-                sx={{
-                  // pt: 0,
-                  // bg: 'gray.2',
-                  fontSize: 0,
-                  color: 'gray.7',
-                  border: 'solid 1px',
-                  verticleAlign: 'top',
-                  borderColor: 'gray.3',
-                  mr: 2,
-                  px: 1,
-                  py: 0,
-                  pb: 1,
-                  pt: 1,
-                  pr: 2,
-                  '&:hover': {
-                    bg: 'gray.1',
-                    color: 'gray.9',
-                    border: 'solid 1px',
-                    borderColor: 'gray.2',
-                  },
-                  svg: {
-                    fill: 'gray.5',
-                  },
-                  borderRadius: 4,
-                }}>
-                <Plus width="16px" />
-                <Text as="span">New</Text>
-              </Clickable>
+            <Flex sx={{ minWidth: '80ch' }}>
               {/* <Button variant="btnPrimaryIcon" sx={{ fontSize: 0, fontWeight: 600, pt: 1 }} onClick={() => toggleSearch()}>New</Button> */}
               {/* <Link href="/contents">
                 <Box color="gray.8" sx={{ ml: 3, mt: 2, fill: 'text' }}>
@@ -152,9 +166,51 @@ const Nav = ({ navtitle }: INav) => {
               {/* <Box>
                 <Text as="h4">NDA between Bijoy and Functionary Labs Pvt Ltd</Text>
               </Box> */}
-              {/* <Box variant="button" sx={{ mt: 1, pt: 2, ml: 3 }}>
-                <Search width="20px" />
-              </Box> */}
+
+              <Flex variant="button" sx={{ mt: 0, pt: 0, ml: 3 }}>
+                <ButtonLink onToggleSearch={toggleSearch} />
+                <Flex
+                  sx={{
+                    position: 'relative',
+                    height: '40px',
+                    width: '80ch',
+                    border: 'solid 1px #ddd',
+                    borderRadius: '4px',
+                  }}>
+                  <Input
+                    variant="small"
+                    placeholder="Search for docs"
+                    sx={{
+                      borderRadius: 0,
+                      width: '130% !important',
+                      fontSize: 1,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      pl: 2,
+                      right: 1,
+                      top: 0,
+                      pt: 1,
+                      bottom: 0,
+                      borderLeft: 'solid 1px',
+                      borderColor: 'gray.3',
+                      svg: {
+                        fill: 'gray.8',
+                        pr: 2,
+                      },
+                    }}>
+                    <Search
+                      sx={{
+                        borderLeft: 'solid 1px',
+                        borderColor: 'gray.4',
+                      }}
+                      width={28}
+                    />
+                  </Box>
+                </Flex>
+              </Flex>
             </Flex>
           </Box>
         </Box>
@@ -162,8 +218,14 @@ const Nav = ({ navtitle }: INav) => {
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
           <Flex sx={{ bg: 'gray.0' }}>
             <Flex sx={{ bg: 'gray.0', ':hover': { bg: 'gray.1' } }}>
-              <Box variant="button" sx={{ mt: 1, pt: 1, px: 3 }}>
-                <Bell width="20px" />
+              <Box as="span" sx={{ mt: 2 }}></Box>
+
+              <Box
+                variant="button"
+                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
+                <Link href="/activities">
+                  <Bell width="20px" />
+                </Link>
               </Box>
             </Flex>
             {!token && (
@@ -185,7 +247,8 @@ const Nav = ({ navtitle }: INav) => {
                         <Image
                           sx={{ borderRadius: '3rem' }}
                           width="30px"
-                          src={API_HOST + '/' + profile?.profile_pic}
+                          // src={API_HOST + '/' + profile?.profile_pic}
+                          src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu
@@ -208,9 +271,14 @@ const Nav = ({ navtitle }: INav) => {
                           {...menu}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
-                            <Text as="p" sx={{ fontSize: 0, color: 'gray.6' }}>
-                              Manager
-                            </Text>
+
+                            {profile?.roles?.size > 0 && (
+                              <Text
+                                as="p"
+                                sx={{ fontSize: 0, color: 'gray.6' }}>
+                                {profile?.roles[0]?.name}
+                              </Text>
+                            )}
                           </Box>
                         </MenuItem>
                         <MenuItem
@@ -257,7 +325,7 @@ const Nav = ({ navtitle }: INav) => {
           </Flex>
         </Box>
       </Flex>
-      <Modal dialog={dialog} isVisible={showSearch}>
+      <Modal isOpen={showSearch} onClose={closeSearch}>
         <Blok />
       </Modal>
     </Box>

@@ -6,7 +6,7 @@ import { loadEntityDetail } from '../utils/models';
 import { useRouter } from 'next/router';
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [sachet, setSachet] = useState<any>();
   // const [_ains, setMains] = useState<any>();
   // const [chartData, setChartData] = useState<any>();
@@ -62,14 +62,12 @@ const Form = () => {
           <Box variant="tableItem" pt={4} pb={4}>
             {sachet.user.orders &&
               sachet.user.orders.map((m: any) => (
-                <Box>
+                <Box key={m.amount}>
                   <Text variant="cardtitle">
                     {m.start_date} to {m.end_date}
                   </Text>
 
-                  <Text mt={2}>
-                    {m.amount} QAR
-                  </Text>
+                  <Text mt={2}>{m.amount} QAR</Text>
                 </Box>
               ))}
           </Box>

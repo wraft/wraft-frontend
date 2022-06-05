@@ -1,10 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box, Button, Flex, Text } from 'theme-ui';
+
 import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
 
 import PageHeader from './PageHeader';
 import { Table } from './Table';
+
+import { EmptyForm } from './Icons';
 
 export interface IField {
   id: string;
@@ -36,16 +39,19 @@ const BlockTemplateListFrame: FC = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col1: <Text></Text>,
-          col2: (
-            <Box>
-              {r.title}
+          col2: <Box>{r.title}</Box>,
+          col3: <Box>{r.updated_at}</Box>,
+          col4: (
+            <Box sx={{ px: 3, py: 2 }}>
+              <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary">
+                Edit
+              </Link>
             </Box>
           ),
-          col3: <Box>{r.updated_at}</Box>,
         };
 
         row.push(rFormated);
@@ -76,7 +82,29 @@ const BlockTemplateListFrame: FC = () => {
       </Flex> */}
       <Box variant="layout.pageFrame">
         <Box mx={0} mb={3}>
-          {blocks && (
+          {blocks.length === 0 && (
+            <Box>
+              <Flex>
+                <Box sx={{ color: 'gray.5', width: 'auto' }}>
+                  <EmptyForm sx={{ color: 'gray.4' }} />
+                </Box>
+                <Box sx={{ m: 2, pb: 0 }}>
+                  <Text as="h2" sx={{ fontWeight: 300 }}>
+                    Blocks are empty
+                  </Text>
+                  <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                    You havent created a block yet, click below to create one
+                  </Text>
+                  <Box sx={{ mt: 3, pb: 0 }}>
+                    <Button>Add First Block</Button>
+                  </Box>
+                </Box>
+              </Flex>
+            </Box>
+          )}
+          {!blocks && <Text>You do not have any blok, click here to add</Text>}
+
+          {blocks && blocks.length > 0 && (
             <Table
               options={{
                 columns: [
@@ -93,7 +121,12 @@ const BlockTemplateListFrame: FC = () => {
                   {
                     Header: 'Updated',
                     accessor: 'col3',
-                    width: '40%',
+                    width: '30%',
+                  },
+                  {
+                    Header: 'Action',
+                    accessor: 'col4',
+                    width: '10%',
                   },
                 ],
                 data: blocks,

@@ -17,7 +17,7 @@ const VendorForm = () => {
   /**
    * On Theme Created
    */
-  const onDone = (_d: any) => {
+  const onDone = () => {
     addToast('Saved Successfully', { appearance: 'success' });
     Router.push(`/vendors`);
   };

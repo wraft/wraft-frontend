@@ -1,121 +1,116 @@
-/** @jsx jsx */
-import { jsx, Box } from 'theme-ui';
-import * as React from 'react';
+import React, {
+  // FC,
+  Ref,
+  forwardRef,
+  useState,
+  useLayoutEffect,
+  // ReactElement,
+  useEffect,
+} from 'react';
 
 import {
-  DialogStateReturn,
-  Dialog as ReakitDialog,
+  Dialog,
   DialogDisclosure,
-  DialogBackdrop as ReakitDialogBackdrop,
+  DialogProps,
+  DialogBackdrop,
+  useDialogState,
 } from 'reakit/Dialog';
 
-import styled from '@emotion/styled';
+import { Portal } from 'reakit/Portal';
 
-const DialogBackdrop = styled(ReakitDialogBackdrop)`
-  &[data-leave] {
-    opacity: 0;
-  }
-  &[data-enter] {
-    opacity: 1;
-  }
-  transition: opacity 250ms ease-in-out;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 900;
-`;
+import { Box } from 'theme-ui';
+interface BackdropDivProps {
+  backdropWhite?: any;
+  // backdropWhite?: ModalBaseProps['backdropWhite']
+}
 
-const Dialog = styled(ReakitDialog)`
-  &[data-leave] {
-    opacity: 0;
-  }
-  &[data-enter] {
-    opacity: 1;
-  }
-  transition: opacity 250ms ease-in-out;
-  position: relative;
-  transform: translate(-50%, calc(-50% -50% 0 0));
-  outline: 0px;
-  z-index: 999;
-`;
+export const BackdropDiv = forwardRef(
+  ({ ...props }: DialogProps & BackdropDivProps, ref: Ref<HTMLDivElement>) => {
+    const [mounted, setMounted] = useState(false);
+    useLayoutEffect(function () {
+      setMounted(true);
+    }, []);
+
+    return mounted ? (
+      <Box variant="layout.modalBackgroup" {...props} ref={ref} />
+    ) : null;
+  },
+);
+
+BackdropDiv.displayName = 'BackdropDiv';
+
+export const DialogoBox = forwardRef(
+  ({ ...props }: DialogProps, ref: Ref<HTMLDivElement>) => {
+    const [mounted, setMounted] = useState(false);
+    useLayoutEffect(function () {
+      setMounted(true);
+    }, []);
+
+    return mounted ? (
+      <Box variant="layout.modalContentB" {...props} ref={ref} />
+    ) : null;
+  },
+);
+
+DialogoBox.displayName = 'DialogoBox';
 
 type ModalProps = {
-  isVisible?: boolean;
-  dialog: DialogStateReturn;
+  isOpen: boolean;
   hide?: any;
   label?: string;
-  className?: string;
   disclosure?: React.ReactElement;
-  onClose?: any;
+  onClose?: () => void;
 };
 
 const Modal: React.FC<ModalProps> = ({
-  hide,
-  isVisible,
+  isOpen,
   children,
-  label,
-  className,
+  label = 'Standard Modal',
+  // className,
   disclosure,
-  dialog,
   onClose,
   ...props
 }) => {
+  const dialog = useDialogState();
+
+  useEffect(() => {
+    if (!dialog.visible) {
+      if (onClose) {
+        onClose();
+      }
+    }
+  }, [dialog.visible]);
+
+  useEffect(() => {
+    if (isOpen) {
+      dialog.show();
+    } else {
+      dialog.hide();
+    }
+  }, [isOpen]);
+
   return (
-    <Box>
+    <>
       {disclosure && (
         <DialogDisclosure {...dialog} {...disclosure.props}>
           {(disclosureProps) => React.cloneElement(disclosure, disclosureProps)}
         </DialogDisclosure>
       )}
-      <DialogBackdrop
-        {...dialog}
-        {...{ visible: isVisible }}
-        onClick={onClose}
-        aria-label="Dialog"
-        sx={{
-          bg: 'rgba(30,30,30,0.85)',
-          position: 'fixed',
-          zIndex: 10000,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        // sx={{ variant: "layout.modalBackgroup", bg: 'gray.0'}}
-      >
-        <Dialog
-          {...dialog}
-          tabIndex={-1}
-          // variant="layout.modalContent"
-          sx={{
-            p: 0,
-            top: '10%',
-            position: 'relative',
-            right: 0,
-            zIndex: 300,
-            borderRadius: '8px',
-            width: ['80%', '70%', '60%'],
-            bg: 'gray.0',
-            mx: 'auto',
-            overflow: 'scroll', // <-- This tells the modal to scrol
-          }}
-          {...{
-            visible: isVisible,
-            hideOnEsc: true,
-            hideOnClickOutside: true,
-            preventBodyScroll: true,
-          }}
-          {...props}
-          // className={className}
-          aria-label={label}>
-          {children}
-        </Dialog>
-      </DialogBackdrop>
-    </Box>
+      <Portal>
+        <DialogBackdrop {...dialog} as={BackdropDiv} aria-label={label}>
+          <Dialog
+            {...dialog}
+            as={DialogoBox}
+            tabIndex={-1}
+            hideOnEsc
+            hideOnClickOutside
+            {...props}
+            aria-label={label}>
+            <React.Fragment>{children}</React.Fragment>
+          </Dialog>
+        </DialogBackdrop>
+      </Portal>
+    </>
   );
 };
 
