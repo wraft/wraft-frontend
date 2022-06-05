@@ -5,6 +5,8 @@ import { useStoreState } from 'easy-peasy';
 import { TimeAgo } from './Atoms';
 // import { Button } from 'theme-ui';
 
+import { API_HOST } from '../utils/models';
+
 export interface ActivityStream {
   activities: Activity[];
   page_number: number;
@@ -68,7 +70,7 @@ const ActivityCard = (props: any) => (
       <Avatar
         width="32px"
         sx={{ mr: 2 }}
-        src={`http://localhost:4000/${props?.actor_profile?.profile_pic}`}
+        src={`${API_HOST}/${props?.actor_profile?.profile_pic}`}
       />
     </Box>
     <Box pt={1}>

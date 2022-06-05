@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Text, Flex, Image } from 'theme-ui';
+import { API_HOST } from '../utils/models';
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -112,7 +113,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                     }}>
                     <Box pt={3}>
                       <Image
-                        src={`http://localhost:4000/` + _m.profile_pic}
+                        src={`${API_HOST}/` + _m.profile_pic}
                         sx={{
                           borderRadius: '99rem',
                           width: '40px',
