@@ -43,7 +43,7 @@ interface IItemField {
 
 const ProfileCard = ({
   name,
-  profile_pic,  
+  profile_pic,
   bio = 'Content Producer, Wraft',
 }: IItemField) => {
   return (
@@ -64,12 +64,11 @@ const ProfileCard = ({
             {/* <Text variant="personPlace">{organisation_id}</Text> */}
           </Box>
           <Flex pl={3}>
-            <IconBlock val={""} icon={<MailSend width={24} height={24} />} />
-            <IconBlock val={""} icon={<Phone width={24} height={24} />} />
+            <IconBlock val={''} icon={<MailSend width={24} height={24} />} />
+            <IconBlock val={''} icon={<Phone width={24} height={24} />} />
           </Flex>
         </Box>
       </Flex>
-
     </Box>
   );
 };

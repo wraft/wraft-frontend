@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
+import Modal from 'react-modal';
+
 import Field from './Field';
 import {
   createEntity,
@@ -9,8 +11,7 @@ import {
   loadEntityDetail,
   updateEntity,
 } from '../utils/models';
-
-import Modal from 'react-modal';
+import PageHeader from './PageHeader';
 
 const customStyles = {
   content: {
@@ -226,11 +227,9 @@ const PipelineForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
-      <Box>
-        <Text mb={3}>{isEdit ? 'Update' : 'Create'} Pipeline</Text>
-      </Box>
-      <Box mx={0} mb={3}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+      <PageHeader title="Edit Pipeline" />
+      <Box mx={0} mb={3} variant="layout.pageFrame">
         <Flex>
           <Box>
             <Field
@@ -372,7 +371,11 @@ const PipelineForm = () => {
           </Flex>
         </Box>
       </Box>
-      <Button ml={2}>{isEdit ? 'Update' : 'Create'}</Button>
+      <Box variant="layout.pageFrame" bg="gray.0">
+        <Button variant="btnPrimary" ml={2}>
+          {isEdit ? 'Update' : 'Create'}
+        </Button>
+      </Box>
     </Box>
   );
 };

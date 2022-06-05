@@ -12,35 +12,25 @@ import {
   DataTemplates,
 } from '../utils/types';
 
-import { Label, Select } from 'theme-ui';
-import styled from 'styled-components';
-// import {EditorWraft} from './EditorWraft';
+import { Select } from 'theme-ui';
+
+import { useRouter } from 'next/router';
+import { useStoreState } from 'easy-peasy';
+
+import { useToasts } from 'react-toast-notifications';
+
+import { BracesVariable } from '@styled-icons/fluentui-system-regular/BracesVariable';
+
+import MarkdownEditor from './WraftEditor';
+
 import {
   loadEntity,
   loadEntityDetail,
   createEntity,
   updateEntity,
 } from '../utils/models';
-import { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
 
-import { MarkdownEditor } from './WraftEditor';
-import { useToasts } from 'react-toast-notifications';
-
-const Tag = styled(Box)`
-  padding: 5px;
-  color: #444;
-  border-radius: 3px;
-  margin-bottom: 8px;
-  padding-left: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  background-color: #d7f7e2;
-  max-width: 60%;
-  font-family: monospace;
-  font-weight: bold;
-  color: #3d5039;
-`;
+import NavEdit from './NavEdit';
 
 export interface BlockTemplate {
   id: string;
@@ -51,14 +41,17 @@ export interface BlockTemplate {
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
   const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
   const [body, setBody] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [editorReady, setEditorReady] = useState<boolean>(false);
   // const [keys, setKeys] = useState<Array<string>>();
+
+  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
 
   const { addToast } = useToasts();
 
@@ -66,19 +59,8 @@ const Form = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  const EMPTY_MARKDOWN_NODE = {
-    type: 'doc',
-    content: [
-      {
-        type: 'paragraph',
-        content: [
-          {
-            type: 'text',
-            text: 'Write here',
-          },
-        ],
-      },
-    ],
+  const onCreated = () => {
+    console.log('[onCreated]');
   };
 
   /**
@@ -98,9 +80,11 @@ const Form = () => {
       },
     };
 
+    console.log('Create/Update Template', formValues);
+
     // if edit is live
     if (cId) {
-      updateEntity(`data_templates/${cId}`, formValues, token);
+      updateEntity(`data_templates/${cId}`, formValues, token, onCreated);
       addToast('Updated Successfully', { appearance: 'success' });
       setLoading(false);
     } else {
@@ -108,6 +92,7 @@ const Form = () => {
         formValues,
         `content_types/${data.parent}/data_templates`,
         token,
+        onCreated,
       );
       addToast('Created Successfully', { appearance: 'success' });
       setLoading(false);
@@ -127,7 +112,7 @@ const Form = () => {
     const formed: ContentTypes = data;
     setVarias(formed.content_type);
     dataFiller(formed.content_type.fields || {});
-    console.log('Loaded Content Type:', formed);
+    console.log('Loaded Content Type: 🎃', formed);
   };
 
   /**
@@ -156,11 +141,13 @@ const Form = () => {
    * @param id
    */
   const loadTemplate = (id: string, token: string) => {
+    setLoading(true);
     loadEntityDetail(token, 'data_templates', id, loadTemplateSuccess);
   };
 
   const loadTemplateSuccess = (data: DataTemplates) => {
-    let insert =
+    setLoading(false);
+    const insert =
       (data.data_template &&
         data.data_template.serialized &&
         data.data_template.serialized.data) ||
@@ -168,10 +155,14 @@ const Form = () => {
 
     if (insert) {
       const mm = JSON.parse(insert);
-      console.log('has serials', mm);
-      // setInsertable(mm);
+      if (mm) {
+        console.log('has serials', mm);
+        setCleanInsert(false);
+        setToken(mm);
+      }
     }
     setDataTemplate(data);
+    setCleanInsert(true);
   };
 
   const dataFiller = (entries: any) => {
@@ -196,19 +187,33 @@ const Form = () => {
    * @param data
    */
   const doUpdate = (data: any) => {
+    console.log('[When Editor is updated]', data);
+
     if (data.md) {
       setValue('body', data.md);
-      setValue('data', data.md);
     }
+
+    // body
+
+    if (data.body) {
+      const body = data.body;
+      setValue('serialized', JSON.stringify(body));
+      setValue('data', JSON.stringify(body));
+    }
+
+    // if (data.body) {
+    //   setValue('serialized', data.body);
+    // }
 
     if (data.serialized) {
       setValue('serialized', data.serialized);
     }
-    // console.log('data', data);
-    // setValue('body', data);
-    if (data && data.content) {
-      setValue('data', data.content);
-    }
+    // // console.log('data', data);
+    // // setValue('body', data);
+    // if (data.content) {
+    //   console.log('[When Editor is content]', data)
+    //   setValue('data', data.content);
+    // }
   };
 
   useEffect(() => {
@@ -245,7 +250,7 @@ const Form = () => {
       loadContentType(dataTemplate.content_type.id);
 
       //
-      let insert = (d && d.serialized && d.serialized.data) || false;
+      const insert = (d && d.serialized && d.serialized.data) || false;
 
       if (insert) {
         setValue('serialized', insert);
@@ -253,7 +258,6 @@ const Form = () => {
         console.log('mm', mm);
         setInsertable(mm);
       }
-      //
       setBody(d.data);
     }
   }, [dataTemplate]);
@@ -276,142 +280,178 @@ const Form = () => {
   };
 
   useEffect(() => {
-    console.log('insertable', insertable);
-  }, [insertable]);
+    setEditorReady(true);
+  }, []);
 
-  // useEffect(() => {
-  //   setToken('')
-  // }, []);
+  useEffect(() => {
+    console.log('body', body);
+  }, [body]);
 
   const insertBlock = (b: any) => {
     const n = JSON.parse(b.serialized);
     if (n && n.content) {
-      setInsertable(n);
+      setToken(n);
     }
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}
-      variant="w80">
-      <Box pl={4}>
-        <Text mb={3}>Create Template</Text>
-      </Box>
-      <Box mx={4} mb={3} variant="w100">
-        <Flex>
-          <Box mr={2} variant="w70">
-            <Field
-              name="title"
-              label="Name"
-              defaultValue=""
-              register={register}
-            />
-            <Box>
-              <Label htmlFor="parent" mb={1}>
-                Content Type
-              </Label>
-              <Select
-                id="parent"
-                name="parent"
-                defaultValue="Parent ID"
-                onChange={e => ctypeChange(e)}
-                ref={register({ required: true })}>
-                {ctypes &&
-                  ctypes.length > 0 &&
-                  ctypes.map((m: any) => (
-                    <option value={m.id} key={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-              </Select>
+    <Box>
+      <NavEdit />
+      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
+        <Box>
+          <Flex>
+            {insertable && <Box />}
+            <Box
+              // as="form"
+              // onSubmit={handleSubmit(onSubmit)}
+              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}>
+              <Box sx={{ px: 4 }}>
+                <Field
+                  name="title"
+                  label="Name"
+                  defaultValue=""
+                  register={register}
+                />
+                <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
+                <Field
+                  name="title_template"
+                  label="Title Template"
+                  defaultValue=""
+                  register={register}
+                />
+              </Box>
+              <Box sx={{ display: 'none' }}>
+                <FieldText
+                  name="data"
+                  label="Text Template"
+                  defaultValue={''}
+                  register={register}
+                />
+                <FieldText
+                  name="serialized"
+                  label="Text Template"
+                  defaultValue={''}
+                  register={register}
+                />
+              </Box>
+              <Box py={4}>
+                {editorReady && (
+                  <MarkdownEditor
+                    onUpdate={doUpdate}
+                    starter={tokens}
+                    cleanInsert={cleanInsert}
+                    token={tokens}
+                    editable={true}
+                    variables={varias}
+                    searchables={varias}
+                    showToolbar={true}
+                  />
+                )}
+              </Box>
+              {/* <Counter /> */}
             </Box>
-            <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
-            <Field
-              name="title_template"
-              label="Title Template"
-              defaultValue=""
-              register={register}
-            />
-            <Box sx={{ display: 'none' }}>
-              <FieldText
-                name="data"
-                label="Text Template"
-                defaultValue={''}
-                register={register}
-              />
-              <FieldText
-                name="serialized"
-                label="Text Template"
-                defaultValue={''}
-                register={register}
-              />
-            </Box>
-            <Box py={4}>
-              <MarkdownEditor
-                onUpdate={doUpdate}
-                initialValue={EMPTY_MARKDOWN_NODE}
-                editor="wysiwyg"
-                value={body}
-                token={tokens}
-                editable={true}
-                insertable={insertable}
-              />
-            </Box>
-          </Box>
-          {/* <Box mr={2} variant="w70"></Box> */}
-          <Box px={4} mr={3} variant="w40">
-            {varias && varias.fields && (
-              <Box>
-                <Text mb={2}>Tokens</Text>
-                {varias.fields &&
-                  varias.fields.map((k: FieldT) => (
-                    <Tag key={k.id} onClick={() => insertToken(k)}>
-                      {k.name}
-                    </Tag>
+            <Box
+              px={4}
+              variant="plateRightBar"
+              sx={{
+                bg: '#FAFBFC',
+                width: '100%',
+                borderLeft: 'solid 1px #ddd',
+              }}>
+              {varias && varias.fields && (
+                <Box sx={{ mb: 3, pt: 3 }}>
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 1 }}>
+                      Content Type
+                    </Text>
+                    <Select
+                      id="parent"
+                      name="parent"
+                      defaultValue="Parent ID"
+                      onChange={(e) => ctypeChange(e)}
+                      ref={register({ required: true })}>
+                      {ctypes &&
+                        ctypes.length > 0 &&
+                        ctypes.map((m: any) => (
+                          <option value={m.id} key={m.id}>
+                            {m.name}
+                          </option>
+                        ))}
+                    </Select>
+                  </Box>
+
+                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                      Variables
+                    </Text>
+                    {varias.fields &&
+                      varias.fields.map((k: FieldT) => (
+                        <Flex
+                          sx={{
+                            p: 1,
+                            border: 'solid 1px',
+                            borderBottom: 0,
+                            borderColor: 'gray.2',
+                            bg: 'teal.8',
+                            px: 3,
+                            ':last-child': {
+                              borderBottom: 'solid 1px',
+                              borderColor: 'gray.2',
+                            },
+                          }}
+                          as="p"
+                          key={k.id}
+                          onClick={() => insertToken(k)}>
+                          {k.name}
+                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7' } }}>
+                            <BracesVariable width={16} />
+                          </Box>
+                        </Flex>
+                      ))}
+                  </Box>
+                </Box>
+              )}
+
+              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2 }}>
+                <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                  Blocks
+                </Text>
+                {blocks &&
+                  blocks.map((k: BlockTemplate) => (
+                    <Box
+                      key={k.id}
+                      onClick={() => insertBlock(k)}
+                      sx={{
+                        pl: 3,
+                        border: 'solid 0.5px',
+                        borderColor: 'gray.3',
+                        bg: 'gray.1',
+                        mb: 1,
+                        pt: 2,
+                        pb: 3,
+                      }}>
+                      <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                        {k.title}
+                      </Text>
+                      <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                        Template Bio
+                      </Text>
+                    </Box>
                   ))}
               </Box>
-            )}
-
-            <Box>
-              <Text mb={2}>Insert Blocks</Text>
-              {blocks &&
-                blocks.map((k: BlockTemplate) => (
-                  <Box
-                    key={k.id}
-                    onClick={() => insertBlock(k)}
-                    sx={{
-                      pl: 3,
-                      border: 'solid 0.5px',
-                      borderColor: 'gray.2',
-                      bg: 'gray.1',
-                      mb: 1,
-                      pt: 2,
-                      pb: 3,
-                    }}>
-                    <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
-                      {k.title}
-                    </Text>
-                    <Text sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                      Template Bio
-                    </Text>
-                  </Box>
-                ))}
             </Box>
-          </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
-        </Flex>
-      </Box>
+            {errors.exampleRequired && <Text>This field is required</Text>}
+          </Flex>
+        </Box>
 
-      {/* <WraftEditor/> */}
-      <Button variant="primary">
-        <Flex>
-          {loading && <Spinner color="white" size={24} />}
-          {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
-        </Flex>
-      </Button>
+        {/* <WraftEditor/> */}
+        <Box variant="primary">
+          <Flex sx={{ px: 4, py: 1 }}>
+            {loading && <Spinner color="white" size={24} />}
+            {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
+          </Flex>
+        </Box>
+      </Box>
     </Box>
   );
 };

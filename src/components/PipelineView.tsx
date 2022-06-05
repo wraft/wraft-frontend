@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
-import { loadEntity, deleteEntity, createEntity } from '../utils/models';
-
 // import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { Pipeline } from './PipelineList';
-import Link from './NavLink';
+
 import { useStoreState } from 'easy-peasy';
 
 import { PlayCircle } from '@styled-icons/boxicons-regular';
+import { useForm } from 'react-hook-form';
 
 import Modal, { Styles } from 'react-modal';
-import Field from './Field';
 
-import { useForm } from 'react-hook-form';
+import { loadEntity, deleteEntity, createEntity } from '../utils/models';
+import { Pipeline } from './PipelineList';
+import Link from './NavLink';
+import Field from './Field';
+import PageHeader from './PageHeader';
+
 // import { Form } from '@theme-ui/form';
 
 export interface ITriggers {
@@ -128,14 +130,14 @@ const PipelineForm = (fields: any) => {
     <Box>
       <Text>Pipeline Form 2 ({fields?.fields?.length})</Text>
       {fields.fields.map((f: any) => (
-        <h1>{f.id}</h1>
+        <Text key={f?.id}>{f.id}</Text>
       ))}
     </Box>
   );
 };
 
 const PipelineView = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
 
   const [stages, addStage] = useState<Array<IStage>>([]);
   const [state, setState] = useState<string>('nostart');
@@ -189,11 +191,9 @@ const PipelineView = () => {
   // if we have a route param, load pipeline
   useEffect(() => {
     if (cId === 'dummy') {
-      buildPipelineNow({name: 'remove_me'})
+      buildPipelineNow({ name: 'remove_me' });
     }
   }, [cId]);
-
-  
 
   // When pipe line is ready
   useEffect(() => {
@@ -307,7 +307,7 @@ const PipelineView = () => {
     // return false;
 
     const dataPost = {
-      data
+      data,
     };
     const path = `/pipelines/${cId}/triggers`;
     createEntity(dataPost, path, token);
@@ -322,21 +322,32 @@ const PipelineView = () => {
   };
 
   return (
-    <Box py={3} px={3} mt={4}>
+    <Box>
+      <PageHeader title="Pipelines">
+        <Box sx={{ ml: 'auto' }}>
+          <Link href="/manage/pipelines/new" variant="btnSecondary">
+            + Add Pipeline
+          </Link>
+        </Box>
+      </PageHeader>
       {!activePipeline && <Text>Loading...</Text>}
       {activePipeline && (
-        <Flex>
+        <Flex sx={{ px: 4 }}>
           <Box sx={{ width: '70%' }}>
             <Flex>
-              <Box>
+              <Text as="h1" sx={{ py: 3, fontSize: 3 }}>
+                {activePipeline.name}
+              </Text>
+              {/* <Box>
                 <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
-              </Box>
+              </Box> */}
               <Box sx={{ ml: 'auto' }}>
                 <Flex py={3}>
                   <Button
+                    variant="btnPrimary"
                     onClick={() => runPipeline(activePipeline.id)}
                     sx={{
                       bg: 'green.7',
@@ -354,6 +365,7 @@ const PipelineView = () => {
                     </Flex>
                   </Button>
                   <Button
+                    variant="btnPrimary"
                     sx={{
                       ml: 2,
                       bg: 'gray.0',
@@ -363,10 +375,8 @@ const PipelineView = () => {
                     }}
                     onClick={() => pipelineCollect()}>
                     <Flex>
-                      <Box sx={{ mr: 2 }}>
-                        <PlayCircle width={16} sx={{ mr: 2 }} />
-                      </Box>
-                      <Text>Collect</Text>
+                      <PlayCircle width={16} sx={{ mr: 2 }} />
+                      <Text ml={2}>Collect</Text>
                     </Flex>
                   </Button>
                 </Flex>
@@ -413,10 +423,10 @@ const PipelineView = () => {
                       {fields &&
                         fields.length > 0 &&
                         fields.map((fd: any, index: any) => (
-                          <Box>
+                          <Box key={index}>
                             Group {index}
                             {fd.map((fx: any) => (
-                              <Box>
+                              <Box key={fx.name}>
                                 <Field
                                   name={`${fx.name}`}
                                   label={fx.name}
@@ -529,6 +539,7 @@ const PipelineView = () => {
                       {triggers &&
                         triggers?.triggers?.map((m: any) => (
                           <Flex
+                            key={m?.id}
                             sx={{
                               p: 4,
                               bg: 'gray.1',
@@ -585,7 +596,7 @@ const PipelineView = () => {
             <Text mr={3} onClick={() => deletePipeline(cId)}>
               Delete
             </Text>
-            <Link href={`/pipelines/edit/${cId}`}>Edit</Link>
+            <Link href={`/manage/pipelines/edit/${cId}`}>Edit</Link>
           </Box>
         </Flex>
       )}

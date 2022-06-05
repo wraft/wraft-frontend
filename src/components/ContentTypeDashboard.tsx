@@ -33,7 +33,11 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
       }}>
       <Link
         variant="base"
-        href={isEdit ? `/content-types/edit/` + `${id}` : `/content-types/` + `${id}`}>
+        href={
+          isEdit
+            ? `/content-types/edit/` + `${id}`
+            : `/content-types/` + `${id}`
+        }>
         <Box sx={{ height: '45px', bg: color }}></Box>
         {/* {isEdit ? 'yes' : 'no'} */}
         <Box pl={3} pt={1} pb={2} bg="gray.0">
@@ -72,7 +76,7 @@ interface ContentTypeDashboardProps {
   isEdit?: boolean;
 }
 
-const ContentTypeDashboard = ( { isEdit }:  ContentTypeDashboardProps) => {
+const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
   const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);

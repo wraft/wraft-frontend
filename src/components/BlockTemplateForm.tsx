@@ -69,7 +69,7 @@ const EMPTY_MARKDOWN_NODE = {
 // };
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const { register, handleSubmit, errors, setValue } = useForm();
   // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   // const [varias, setVarias] = useState<IContentType>();
@@ -80,10 +80,10 @@ const Form = () => {
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
 
-  const [insertable, setInsertable] = useState<any>();  
+  const [insertable, setInsertable] = useState<any>();
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
-  const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -103,7 +103,7 @@ const Form = () => {
     setAddAsset(!addAsset);
   };
 
-  const formatImageNode = (src:string) => {
+  const formatImageNode = (src: string) => {
     // image object
     const imageNode = {
       type: 'doc',
@@ -111,17 +111,19 @@ const Form = () => {
         {
           type: 'paragraph',
           attrs: {},
-          content: [{
-            type:"image",
-            attrs: {
-              src: `http://localhost:4000/${src}`,
+          content: [
+            {
+              type: 'image',
+              attrs: {
+                src: `http://localhost:4000/${src}`,
+              },
             },
-          }],
+          ],
         },
       ],
     };
     return imageNode;
-  }
+  };
 
   /**
    *
@@ -138,7 +140,7 @@ const Form = () => {
    * @param data
    */
 
-  const onSuccess = (_data: any) => {
+  const onSuccess = () => {
     addToast('Saved Successfully', { appearance: 'success' });
     setLoading(false);
     setSaved(true);
@@ -176,9 +178,16 @@ const Form = () => {
   };
 
   const doUpdate = (state: any) => {
+    console.log('[block] [doUpdate]', state.body);
     if (state.md) {
       setValue('body', state.md);
       setValue('serialized', state.serialized);
+    }
+
+    if (state.body) {
+      const castBody = state.body;
+      console.log('ASHT', JSON.stringify(castBody));
+      setValue('serialized', JSON.stringify(castBody));
     }
   };
 
@@ -188,12 +197,14 @@ const Form = () => {
       console.log('contentBody', contentBody);
       setDef(contentBody);
       setStatus(3);
+
+      setInsertable(contentBody);
     }
   }, [token, dataTemplate]);
 
   useEffect(() => {
     if (saved) {
-      Router.push(`/block_templates`);
+      Router.push(`/blocks`);
     }
   }, [saved]);
 
@@ -205,7 +216,7 @@ const Form = () => {
 
     // dummy
 
-    if(cId === 'xd') {
+    if (cId === 'xd') {
       setCleanInsert(false);
     }
     if (token && cId) {
@@ -245,7 +256,9 @@ const Form = () => {
         </Text>
       </Box>
 
-      <Button onClick={() => toggleAssetForm()}>+ Image</Button>
+      <Button variant="secondary" onClick={() => toggleAssetForm()}>
+        + Image
+      </Button>
       {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />}
       <Box variant="w50">
         <Flex>
@@ -256,7 +269,7 @@ const Form = () => {
               defaultValue=""
               register={register}
             />
-            <Box variant="hidden">
+            <Box variant="hidden" sx={{ display: 'none' }}>
               <Field
                 name="body"
                 label="Body"
@@ -264,7 +277,7 @@ const Form = () => {
                 register={register}
               />
             </Box>
-            <Box variant="hidden">
+            <Box variant="hidden" sx={{ display: 'none' }}>
               <FieldText
                 name="serialized"
                 label="Serialized"
@@ -276,13 +289,8 @@ const Form = () => {
             {def && status > 2 && (
               <EditorWraft
                 onUpdate={doUpdate}
-                initialValue={def}
-                editor="wysiwyg"
-                mt={4}
-                // value={body}
-                // cleanInsert={true}
+                document={def}
                 editable={true}
-                // insertable={true}
                 cleanInsert={cleanInsert}
                 insertable={insertable}
               />
@@ -301,7 +309,7 @@ const Form = () => {
             </Box> */}
             {/* {body} */}
           </Box>
-          {errors.exampleRequired && <Text>This field is required</Text>}
+          {errors.serialized && <Text>This field is required</Text>}
         </Flex>
       </Box>
       {saved && <Text>Saved</Text>}

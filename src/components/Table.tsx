@@ -1,7 +1,6 @@
-/** @jsx jsx */
 /* eslint react/jsx-key: 0 */
 import React from 'react';
-import { jsx, ThemeUIStyleObject, Box } from 'theme-ui';
+import { ThemeUIStyleObject, Box } from 'theme-ui';
 import { PluginHook, useTable, UseTableOptions } from 'react-table';
 export * from 'react-table';
 
@@ -38,20 +37,15 @@ const styles = {
 };
 
 export interface TableProps {
-  options: UseTableOptions<{}>;
-  plugins?: PluginHook<{}>[];
+  options: UseTableOptions<any>;
+  plugins?: PluginHook<any>[];
 }
 
 export const Table: React.FC<TableProps> = ({ options, plugins }) => {
   const tableInstance = useTable(options, ...(plugins || []));
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = tableInstance;
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    tableInstance;
 
   // const { thead } = styles;
 

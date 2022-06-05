@@ -1,5 +1,13 @@
 import React from 'react';
-import { Box, Flex, Button, Text, Link as LinkBase, Label, Input } from 'theme-ui';
+import {
+  Box,
+  Flex,
+  Button,
+  Text,
+  Link as LinkBase,
+  Label,
+  Input,
+} from 'theme-ui';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
@@ -12,24 +20,18 @@ export interface IField {
 
 const Form = () => {
   const { register, handleSubmit, errors } = useForm();
-  
+
   const onSignup = () => {
     console.log('signed up');
-  }
+  };
 
   const onSubmit = (data: any) => {
-    registerUser(data, onSignup)
+    registerUser(data, onSignup);
   };
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}>
-      <Text variant="pagetitle">
-        Join Wraft
-      </Text>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
+      <Text variant="pagetitle">Join Wraft</Text>
       <Box mx={0} mb={3}>
         <Box px={2} pb={3}>
           <Label htmlFor="email" mb={1}>

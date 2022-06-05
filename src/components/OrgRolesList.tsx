@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Flex, Box, Text } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { loadEntity } from '../utils/models';
-import { Member } from './OrgMemberForm';
 
 export interface PermissionGroupList {
   total_pages: number;
@@ -24,6 +23,7 @@ export interface ResourceGroupList {
 
 const OrgRolesList = () => {
   const token = useStoreState((state) => state.auth.token);
+  // const profile = useStoreState((state) => state.profile?.profile);
   const [contents, setContents] = useState<any>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
@@ -33,7 +33,7 @@ const OrgRolesList = () => {
    */
   const loadDataSuccess = (data: any) => {
     console.log('roles', data);
-    setContents(data.role);
+    setContents(data.role_groups);
   };
 
   /**
@@ -41,11 +41,9 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadLayout = (token: string) => {
-    loadEntity(
-      token,
-      '/organisations/f4dc74cc-1cac-4215-be75-87850f1e23dc/roles',
-      loadDataSuccess,
-    );
+    // console.log(profile)
+    // const org_id = profile?.organisation_id
+    loadEntity(token, `role_groups`, loadDataSuccess);
   };
 
   /**
@@ -62,7 +60,7 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadResources = (token: string) => {
-    loadEntity(token, 'resources', loadResourceDataSuccess);
+    loadEntity(token, 'role_groups', loadResourceDataSuccess);
   };
 
   /** Trigger Load on Init */
@@ -74,21 +72,47 @@ const OrgRolesList = () => {
     }
   }, [token]);
 
+  /**
+   *
+   * @param r
+   * @returns
+   */
+  const ky = (r: any) => {
+    let pname = '';
+    Object.keys(r).map(function (key, index) {
+      // myObject[key] *= 2;
+      console.log('keys', key, index);
+      pname = key;
+    });
+
+    // return pname;
+    if (pname) {
+      console.log('pname', r[`${pname}`]);
+    }
+    return pname;
+  };
+
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
         <Text as="h3" mb={3}>
           All Roles
         </Text>
-        <Box>
+        <Flex>
           {contents &&
             contents?.permissions?.length > 0 &&
-            contents?.permissions?.map((_m: Member) => <Text>Title</Text>)}
-        </Box>
+            contents?.permissions?.map((r: any) => (
+              <Box key={r?.id} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
+              </Box>
+            ))}
+        </Flex>
 
         {contents?.length < 1 && (
           <Box>
-            <Text as="h5" sx={{ fontSize: 1, color: 'gray.8' }}>No Roles?</Text>
+            <Text as="h5" sx={{ fontSize: 1, color: 'gray.8' }}>
+              No Roles?
+            </Text>
             <Text as="p" sx={{ fontSize: 0, color: 'gray.6' }}>
               Are you kidding?
             </Text>
@@ -98,7 +122,7 @@ const OrgRolesList = () => {
         <Box>
           {resources &&
             resources?.resources?.length > 0 &&
-            resources?.resources?.map((_n: any) => <Text>X</Text>)}
+            resources?.resources?.map((_n: any) => <Text key={_n?.id}>X</Text>)}
         </Box>
       </Box>
     </Box>

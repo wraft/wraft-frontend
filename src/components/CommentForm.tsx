@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './FieldText';
@@ -81,24 +81,22 @@ const CommentForm = (props: CommentFormProps) => {
   }, [master_id, token]);
 
   return (
-    <>      
+    <>
       {comments && comments.length > 0 && (
-        <Box sx={{ maxWidth: '40vh' }}>
+        <Box>
           {comments.map((comment: Comment) => (
             <CommentCard key={comment.id} {...comment} />
           ))}
         </Box>
       )}
-      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
+      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box mx={0} mb={0}>
-          <Flex>
-            <Box>
-              <Field name="body" label="" defaultValue="" register={register} />
-            </Box>
-            {errors.body && <Text>This field is required</Text>}
-          </Flex>
+          <Field name="body" label="" defaultValue="" register={register} />
+          {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="btnPrimary" ml={0}>{submiting ? 'Saving ... ' : 'Add Comment'}</Button>
+        <Button variant="btnSecondary" ml={0} sx={{ mt: 0 }}>
+          {submiting ? 'Saving ... ' : 'Add Comment'}
+        </Button>
       </Box>
     </>
   );

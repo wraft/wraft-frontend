@@ -1,7 +1,7 @@
 import React from 'react';
-import { Box, Flex, Text, Image } from 'theme-ui'; import { API_HOST } from '../utils/models';
-;
-import { TimeAgo } from './ContentDetail';
+import { Box, Flex, Text } from 'theme-ui';
+import { API_HOST } from '../utils/models';
+import { ProfileCard } from './ContentDetail';
 
 export interface Comment {
   updated_at: string;
@@ -38,38 +38,14 @@ const CommentCard = (comment: Comment) => {
           }}>
           <Flex sx={{ display: 'inline-flex' }}>
             <Box sx={{ pl: 0 }}>
-              <Flex
-                sx={{
-                  pt: 0,
-                  width: 'auto',
-                  pr: 2,
-                  alignItems: 'flex-start',
-                }}>
-                <Image
-                  variant="layout.avatar"
-                  src={`${API_HOST}${comment?.profile?.profile_pic}`}
-                />
-                <Text
-                  sx={{
-                    pl: 0,
-                    fontSize: 1,
-                    pb: 0,
-                    fontWeight: 600,
-                    // minWidth: '120px',
-                    pt: 0,
-                    ml: 2,
-                    color: 'blue.9',
-                  }}>
-                  {comment?.profile?.name}
-                </Text>
-
-                <Box as="span" pl={1}>
-                  <TimeAgo time={comment?.updated_at} />
-                </Box>
-              </Flex>
+              <ProfileCard
+                image={`${API_HOST}${comment?.profile?.profile_pic}`}
+                name={comment?.profile?.name}
+                time={comment?.updated_at}
+              />
             </Box>
           </Flex>
-          <Box sx={{ pl: 4 }}>
+          <Box sx={{ pl: 3 }}>
             <Text
               as="p"
               sx={{

@@ -22,11 +22,7 @@ export interface IAlert {
   inner?: any;
 }
 
-export const Page = ({
-  children,
-  inner,
-}: IPage) => {
-
+export const Page = ({ children, inner }: IPage) => {
   return (
     <>
       <Flex
@@ -45,8 +41,11 @@ export const Page = ({
               flex: 1,
               bg: 'gray.1',
               minWidth: 0,
+              '.ProseMirror p': {
+                bg: 'base',
+              },
             }}>
-            {inner && <Box>{inner}</Box>}
+            {inner && <Box sx={{ minHeight: '100vh' }}>{inner}</Box>}
 
             {children}
             <Flex bg="gray.1" sx={{ pt: 0 }}>

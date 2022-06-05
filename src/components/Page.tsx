@@ -31,7 +31,7 @@ export interface IAlert {
 
 export const Page = (props: any) => {
   const showFull: boolean = props && props.showFull ? true : false;
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   return (
     <>
       <Head>
@@ -44,26 +44,36 @@ export const Page = (props: any) => {
           name="description"
           content="Wraft Docs help busines move steady and fast with Document Automation System"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter&display=swap"
+          rel="stylesheet"
+        />
       </Head>
-        <Container width={100} bg={'white'}>
-          {!token && (
-            <Box>
+      <Container width={100} bg={'white'}>
+        {!token && (
+          <Box>
+            <Nav />
+            <Box>{props.children}</Box>
+          </Box>
+        )}
+        {token && (
+          <Flex>
+            <Sidebar showFull={showFull} />
+            <Box bg="gray.0" sx={{ width: '100%', minHeight: '100vh' }}>
               <Nav />
-              <Box>{props.children}</Box>
-            </Box>
-          )}
-          {token && (
-            <Flex>
-              <Sidebar showFull={showFull} />
-              <Box bg="gray.0" sx={{ width: '100%' }}>
-                <Nav />
-                <Box sx={{ minHeight: '100vh' }} color="#333" p={4} pt={3}>
-                  {props.children}
-                </Box>
+              <Box
+                sx={{ minHeight: '100vh', bg: 'base' }}
+                color="#333"
+                p={4}
+                pt={3}>
+                {props.children}
               </Box>
-            </Flex>
-          )}
-        </Container>
+            </Box>
+          </Flex>
+        )}
+      </Container>
     </>
   );
 };

@@ -12,16 +12,16 @@ const devProxy = {
   '/api': {
     target: 'http://localhost:4000/api/v1/',
     pathRewrite: { '^/api': '/' },
-    changeOrigin: true
-  }
+    changeOrigin: true,
+  },
 };
 
 const prodProxy = {
   '/api': {
     target: '/api',
     pathRewrite: { '^/api': '/' },
-    changeOrigin: true
-  }
+    changeOrigin: true,
+  },
 };
 
 app
@@ -39,12 +39,12 @@ app
     // Default catch-all handler to allow Next.js to handle all other routes
     server.all('*', (req, res) => handle(req, res));
 
-    server.listen(PORT, err => {
+    server.listen(PORT, (err) => {
       if (err) throw err;
       console.log(`> Ready on port ${PORT}`);
     });
   })
-  .catch(err => {
+  .catch((err) => {
     console.log('An error occurred, unable to start the server');
     console.log(err);
   });

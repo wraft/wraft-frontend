@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { loadEntity } from '../utils/models';
-import { Member } from './OrgMemberForm';
-
 export interface PermissionGroupList {
   total_pages: number;
   total_entries: number;
-  permissions: any;
+  permissions: { [key: string]: PermissionElement[] }[];
 }
+
+export interface PermissionElement {
+  id: string;
+  name: string;
+  permission: PermissionPermission;
+}
+
+export interface PermissionPermission {
+  id: string;
+  resource_id: string;
+}
+
+// interface Permission {
+//   id?: string;
+//   category?: string;
+//   action?: string;
+// }
 
 interface ResourceItem {
   id?: string;
@@ -23,7 +38,7 @@ export interface ResourceGroupList {
 }
 
 const OrgPermissionList = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<PermissionGroupList>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
@@ -61,6 +76,26 @@ const OrgPermissionList = () => {
     loadEntity(token, 'resources', loadResourceDataSuccess);
   };
 
+  /**
+   *
+   * @param r
+   * @returns
+   */
+  const ky = (r: any) => {
+    let pname = '';
+    Object.keys(r).map(function (key, index) {
+      // myObject[key] *= 2;
+      console.log('keys', key, index);
+      pname = key;
+    });
+
+    // return pname;
+    if (pname) {
+      console.log('pname', r[`${pname}`]);
+    }
+    return pname;
+  };
+
   /** Trigger Load on Init */
 
   useEffect(() => {
@@ -70,22 +105,57 @@ const OrgPermissionList = () => {
     }
   }, [token]);
 
+  const permLevels = [
+    {
+      name: 'All',
+    },
+    {
+      name: 'Show',
+    },
+    {
+      name: 'Create',
+    },
+    {
+      name: 'Update',
+    },
+    {
+      name: 'Delete',
+    },
+  ];
+
   return (
     <Box py={3} mt={4}>
       <Box mx={0} mb={3}>
-        <Text variant="pagetitle">All Permissions</Text>
+        {resources && <h1>REsources is tehre</h1>}
+        <Text variant="pagetitle">All Permissions x</Text>
         <Box>
-          {contents &&
-            contents?.permissions?.length > 0 &&
-            contents?.permissions?.map((_m: Member) => <Text>Title</Text>)}
+          {permLevels.map((pm: any) => (
+            <Flex key={pm.name}>
+              <Text sx={{ textTransform: 'uppercase' }}>{pm.name}</Text>
+            </Flex>
+          ))}
+
+          <Flex>
+            {contents &&
+              contents?.permissions?.length > 0 &&
+              contents?.permissions?.map((r: any) => (
+                <Box key={r} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                  <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
+                </Box>
+              ))}
+          </Flex>
         </Box>
-          
-        <Text variant="pagetitle">All Resources</Text>
+
+        {/* <Text variant="pagetitle">All Resources</Text>
         <Box>
           {resources &&
             resources?.resources?.length > 0 &&
-            resources?.resources?.map((_n: any) => <Text>X</Text>)}
-        </Box>
+            resources?.resources?.map((r: any) =>
+              <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
+              </Box>
+            )}
+        </Box> */}
       </Box>
     </Box>
   );

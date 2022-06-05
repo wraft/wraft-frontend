@@ -1,23 +1,13 @@
-import React, { FC, useEffect, useState } from 'react';
-import {
-  Box,
-  Text,
-  Button,
-  Avatar,
-  Flex,
-  // Badge,
-  Container,
-  Spinner,
-} from 'theme-ui';
-import MenuItem from './NavLink';
-// import ContentCard from './ContentCard';
+import React, { useEffect, useState } from 'react';
+import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
+
 import { Table } from './Table';
 
-// import { useStoreState } from 'easy-peasy';
 import { fetchAPI } from '../utils/models';
-import { TimeAgo } from './ContentDetail';
+import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
 import Paginate from './Paginate';
 import PageHeader from './PageHeader';
+import ContentLoader from './ContentLoader';
 
 export interface ILayout {
   width: number;
@@ -64,80 +54,12 @@ export interface IFieldItem {
   type: string;
 }
 
-// const Tablet = (props: any) => (
-//   <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
-//     <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
-//   </Badge>
-// );
-
-// const ContentCardB = (props: IField) => {
-//   return (
-//     <Box key={props.content.instance_id} pb={3} pt={3}>
-//       <Flex sx={{ position: 'relative' }}>
-//         <Box variant="cTyeMark" bg={props.content_type.color} />
-//         <MenuItem
-//           variant="rel"
-//           href={`/content/[id]`}
-//           path={`content/${props.content.id}`}>
-//           <Text>{props.content.serialized.title}</Text>
-//         </MenuItem>
-//         <Box ml="auto" mr={3}>
-//           {props.state.state === 'Published' && (
-//             <Check width={16} color="#2b8a3e" />
-//           )}
-
-//           {props.state.state === 'Draft' && (
-//             <InfoCircle width={16} color="#5c7cfa" />
-//           )}
-//           <Text
-//             pt={1}
-//             sx={{
-//               pl: 1,
-//               fontSize: 0,
-//               color: 'gray.7',
-//               display: 'inline-block',
-//             }}>
-//             {props.state.state}
-//           </Text>
-//           <Flex>{/* props.content_type.name */}</Flex>
-//         </Box>
-//       </Flex>
-//       <Flex>
-//         <Tablet type={props.content.instance_id} pr={2} />
-//         <Text color="gray.6" sx={{ fontSize: '8px', pt: 2, pl: 1, pr: 1 }}>
-//           •
-//         </Text>
-//         <TimeAgo time={props.content.updated_at} />
-//       </Flex>
-//     </Box>
-//   );
-// };
-
 export interface IPageMeta {
   page_number: number;
   total_entries: number;
   total_pages: number;
   contents?: any;
 }
-
-interface BoxWrapProps {
-  id: string;
-  name: string;
-  xid: string;
-}
-
-const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
-  return (
-    <Box sx={{ pt: 1, pb: 2 }}>
-      <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
-        <Text sx={{ fontSize: 0, color: 'gray.6' }}>{id}</Text>
-        <Text as="h4" p={0} sx={{ m: 0, fontWeight: 500 }}>
-          {name}
-        </Text>
-      </MenuItem>
-    </Box>
-  );
-};
 
 /**
  * Content List
@@ -149,6 +71,7 @@ const ContentList = () => {
   // const token = useStoreState((state) => state.auth.token);
 
   const [contents, setContents] = useState<Array<IField>>([]);
+  const [variants, setVariants] = useState<Array<any>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
@@ -157,7 +80,23 @@ const ContentList = () => {
 
   useEffect(() => {
     loadData(1);
+    loadVariants();
   }, []);
+
+  /**
+   * Load Content Types
+   */
+  const loadVariants = () => {
+    fetchAPI('content_types')
+      .then((data: any) => {
+        setLoading(true);
+        const res: any = data.content_types;
+        setVariants(res);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
+  };
 
   useEffect(() => {
     if (page) {
@@ -165,6 +104,10 @@ const ContentList = () => {
     }
   }, [page]);
 
+  /**
+   * Load Contents with pagination
+   * @param page
+   */
   const loadData = (page: number) => {
     const pageNo = page > 0 ? `?page=${page}` : '';
     fetchAPI(`contents${pageNo}`)
@@ -180,17 +123,6 @@ const ContentList = () => {
       });
   };
 
-  /** DELETE content
-   * @TODO move to inner page [design]
-   */
-  // const delData = (id: string) => {
-  //   deleteEntity(`contents/${id}`, token);
-  // };
-
-  // const doDelete = (id: string) => {
-  //   delData(id);
-  // };
-
   const changePage = (_e: any) => {
     console.log('page', _e?.selected);
     setPage(_e?.selected + 1);
@@ -198,18 +130,20 @@ const ContentList = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col1: (
             <Box
               sx={{
-                borderRadius: 99,
-                height: '32px',
-                width: '32px',
+                borderRadius: '4px',
+                height: '40px',
+                width: '5px',
+                border: 'solid 1px',
+                borderColor: 'gray.1',
                 bg: r.content_type.color,
-                mr: 2,
-                ml: 2,
+                mr: 0,
+                // ml: 2,
                 mt: 2,
               }}
             />
@@ -226,28 +160,8 @@ const ContentList = () => {
               <TimeAgo time={r.content.updated_at} />
             </Box>
           ),
-          col4: (
-            <Avatar
-              mt={2}
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
-          ),
-          status: (
-            <Text
-              pt={2}
-              sx={{
-                pl: 1,
-                fontSize: 0,
-                color: 'gray.7',
-                display: 'inline-block',
-                textAlign: 'right',
-                width: 'auto',
-                textTransform: 'uppercase',
-              }}>
-              {r.state.state}
-            </Text>
-          ),
+          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
+          status: <StateBadge name={r.state.state} color="green.3" />,
         };
 
         row.push(rFormated);
@@ -259,21 +173,13 @@ const ContentList = () => {
 
   return (
     <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents">
-        <Box sx={{ ml: 'auto', mr: 5 }}>
-          <Button variant="btnPrimary">+ New Doc</Button>
-        </Box>
-      </PageHeader>
+      <PageHeader title="Documents" desc="All Official Documents" />
       {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
-            {!loading && (
-              <Box>
-                <Spinner width={40} height={40} color="primary" />
-              </Box>
-            )}
-            <Box mx={0} mb={3} sx={{  }}>
+            {!loading && <ContentLoader />}
+            <Box mx={0} mb={3} sx={{}}>
               {vendors && (
                 <Table
                   options={{
@@ -281,7 +187,7 @@ const ContentList = () => {
                       {
                         Header: '',
                         accessor: 'col1', // accessor is the "key" in the data
-                        width: '10%',
+                        width: 'auto',
                       },
                       {
                         Header: 'Name',
@@ -308,27 +214,66 @@ const ContentList = () => {
                   }}
                 />
               )}
-              {/* <Box
-              sx={{
-                border: 'solid 1px',
-                borderColor: 'gray.3',
-                paddingLeft: '0',
-                borderRadius: 4,
-                // pl: 3,
-              }}>
-              {contents &&
-                contents.length > 0 &&
-                contents.map((m: any) => (
-                  <ContentCard key={m.content.id} doDelete={doDelete} {...m} />
-                ))}
-            </Box> */}
             </Box>
             <Paginate changePage={changePage} {...pageMeta} />
             {total}
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox">
-              <Text variant="blockTitle">Filter</Text>
+            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+              <Text
+                as="h4"
+                variant="blockTitle"
+                sx={{
+                  mb: 2,
+                  fontSize: 0,
+                  fontWeight: 'body',
+                  color: 'gray.6',
+                }}>
+                Filter by Variant
+              </Text>
+              <Box
+                sx={{
+                  borderRight: 'solid 1px',
+                  borderLeft: 'solid 1px',
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                  '&:last-child': {
+                    borderBottom: 0,
+                  },
+                }}>
+                {variants &&
+                  variants.map((v: any) => (
+                    <FilterBlock key={v?.name} title={v?.name} no={32} {...v} />
+                  ))}
+              </Box>
+            </Box>
+            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+              <Text
+                as="h4"
+                variant="blockTitle"
+                sx={{
+                  mb: 2,
+                  fontSize: 0,
+                  fontWeight: 'body',
+                  color: 'gray.6',
+                }}>
+                Filter by State
+              </Text>
+              <Box
+                sx={{
+                  borderRight: 'solid 1px',
+                  borderLeft: 'solid 1px',
+                  borderTop: 'solid 1px',
+                  borderColor: 'gray.3',
+                  '&:last-child': {
+                    borderBottom: 0,
+                  },
+                }}>
+                <FilterBlock title="Draft" no={32} color="blue.3" />
+                <FilterBlock title="In Review" no={32} color="orange.3" />
+                <FilterBlock title="Published" no={32} color="green.3" />
+                <FilterBlock title="Archived" no={32} color="purple" />
+              </Box>
             </Box>
           </Box>
         </Flex>

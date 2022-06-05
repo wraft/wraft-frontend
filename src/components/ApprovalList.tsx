@@ -1,13 +1,26 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
-import { loadEntity } from '../utils/models';
+import { loadEntity, updateEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
+
+import PageHeader from './PageHeader';
+import { Table } from './Table';
+import { BoxWrap, StateBadge } from './Atoms';
 
 export interface ApprovalList {
   pre_state: State;
   post_state: State;
   instance: Instance;
   approved: boolean;
+}
+
+export interface ApprovaSystemItem {
+  approval_system_id: string;
+  approved_at?: string;
+  flag: boolean;
+  id: string;
+  instance_id: string;
+  rejected_at?: string;
 }
 
 export interface Instance {
@@ -21,65 +34,20 @@ export interface State {
   id: string;
 }
 
-/**
- * Content List Card
- * @returns
- */
-
-const ContentListCard: FC = () => {
-  return (
-    <Flex
-      sx={{
-        py: 3,
-        mt: 0,
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.2',
-      }}>
-      <Box
-        sx={{ width: '30px', height: '30px', bg: 'blue.3', borderRadius: 99 }}
-      />
-      <Box sx={{ pl: 3 }}>
-        <Box sx={{ fontSize: 0, color: '#828282' }}>MNA/IN/240A</Box>
-        <Box>Offer Letter for Nizam Khadiri</Box>
-      </Box>
-      <Box sx={{ ml: 'auto' }}>
-        <Flex>
-          <Box sx={{ pr: 4, pt: 1 }}>
-            <Text sx={{ fontSize: 0 }}>1h</Text>
-          </Box>
-          <Box sx={{ pt: 2, mr: 4 }}>
-            <Avatar
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
-            <Avatar
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
-            <Avatar
-              width="20px"
-              src="https://wraft.x.aurut.com//uploads/avatars/1/profilepic_Richard%20Hendricks.jpg?v=63783661237"
-            />
-          </Box>
-          <Button>Review</Button>
-        </Flex>
-      </Box>
-    </Flex>
-  );
-};
-
 const Approvals = () => {
   const token = useStoreState((state) => state.auth.token);
-  const [contents, setContents] = useState<Array<ApprovalList>>([]);
+  const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
+  const [tableList, setTableList] = useState<Array<any>>([]);
+
   // const { addToast } = useToasts();
 
   const loadDataSuccess = (data: any) => {
-    const res: ApprovalList[] = data.themes;
+    const res: ApprovaSystemItem[] = data.instance_approval_systems;
     setContents(res);
   };
 
   const loadData = (t: string) => {
-    loadEntity(t, 'approval_systems', loadDataSuccess);
+    loadEntity(t, 'users/instance-approval-systems', loadDataSuccess);
   };
 
   useEffect(() => {
@@ -88,20 +56,149 @@ const Approvals = () => {
     }
   }, [token]);
 
+  const onApproved = () => {
+    console.log('onApproved');
+  };
+
+  /**
+   * Approve an Instance
+   */
+
+  const approveInstance = (id: string) => {
+    updateEntity(`/contents/${id}/approve`, {}, token, onApproved);
+  };
+
+  /**
+   * Table Constructor
+   */
+
+  useEffect(() => {
+    if (contents && contents.length > 0) {
+      const row: any = [];
+      contents.map((r: any) => {
+        const rFormated = {
+          col1: (
+            <Box
+              sx={{
+                borderRadius: '4px',
+                height: '40px',
+                width: '5px',
+                border: 'solid 1px',
+                borderColor: 'gray.1',
+                mr: 0,
+                // ml: 2,
+                mt: 2,
+              }}
+            />
+          ),
+          col2: (
+            <BoxWrap
+              id={r.instance?.instance_id}
+              name={r.instance?.serialized?.title}
+              xid={r.instance?.id}
+            />
+          ),
+          col3: (
+            <Box pt={1}>
+              {r.content?.inserted_at}
+              {/* <TimeAgo time={r.content?.inserted_at} /> */}
+            </Box>
+          ),
+          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
+          state: <StateBadge name={r.state.state} color="green.3" />,
+          status: (
+            <Flex sx={{ mr: 1, p: 2 }}>
+              <Flex>
+                <Box sx={{ mr: 2 }}>
+                  <Button variant="btnSecondary" sx={{ mr: 1 }}>
+                    Review
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    variant="btnAction"
+                    onClick={() => approveInstance(r.instance?.id)}>
+                    Approve
+                  </Button>
+                </Box>
+              </Flex>
+            </Flex>
+          ),
+        };
+
+        row.push(rFormated);
+      });
+
+      setTableList(row);
+    }
+  }, [contents]);
+
   return (
-    <Box py={0} mt={4} >
-      <Box mx={0} mb={3} variant="layout.pageFrame">
-        {!contents && (
-          <Box sx={{ p: 4, bg: 'gray.0', border: 'solid 1px', borderColor: 'gray.2'}}>
-            <Text>Nothing to approve</Text>
-          </Box>
-        )}
-        <Box>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => <ContentListCard key={m.id} {...m} />)}
+    <Box>
+      <PageHeader title="Approvals" desc="All Approvals across your feeds">
+        <Box sx={{ ml: 'auto' }}></Box>
+      </PageHeader>
+      <Flex>
+        <Box mx={0} mb={3} variant="layout.pageFrame" sx={{ width: '75%' }}>
+          {!contents && (
+            <Box
+              sx={{
+                p: 4,
+                bg: 'gray.0',
+                border: 'solid 1px',
+                borderColor: 'gray.2',
+              }}>
+              <Text>Nothing to approve</Text>
+            </Box>
+          )}
+
+          <Table
+            options={{
+              columns: [
+                {
+                  Header: '',
+                  accessor: 'col1', // accessor is the "key" in the data
+                  width: 'auto',
+                },
+                {
+                  Header: 'Name',
+                  accessor: 'col2',
+                  width: '50%',
+                },
+                {
+                  Header: 'Time',
+                  accessor: 'col3',
+                  width: 'auto',
+                },
+                {
+                  Header: 'Sent by',
+                  accessor: 'col4',
+                  width: '10%',
+                },
+                {
+                  Header: 'State',
+                  accessor: 'state',
+                  width: '10%',
+                },
+                {
+                  Header: 'Action',
+                  accessor: 'status',
+                  width: '15%',
+                },
+              ],
+              data: tableList,
+            }}
+          />
         </Box>
-      </Box>
+        <Box
+          sx={{
+            bg: 'gray.1',
+            minHeight: '100vh',
+            width: '25%',
+            borderLeft: 'solid 1px',
+            borderColor: 'gray.3',
+          }}></Box>
+      </Flex>
     </Box>
   );
 };

@@ -13,7 +13,7 @@ export interface INav {
   showFull?: boolean;
 }
 
-const OrgSidebar = (_props: INav) => {
+const OrgSidebar = () => {
   return (
     <Box
       sx={{
@@ -23,18 +23,21 @@ const OrgSidebar = (_props: INav) => {
         pt: 3,
         pl: 3,
       }}>
-      <NavLink href={'/account'}  variant="btnNavLink">
+      <NavLink href={'/account'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>My Profile</Text>
       </NavLink>
-      <NavLink href={'/account/company'}  variant="btnNavLink">
+      <NavLink href={'/account/company'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
       </NavLink>
-      <NavLink href={'/account/permissions'}  variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Permissions</Text>
+      <NavLink href={'/account/roles'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Roles</Text>
       </NavLink>
-      <NavLink href={'/account/members'} variant="btnNavLink" >
+      <NavLink href={'/account/members'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>
-      </NavLink>      
+      </NavLink>
+      <NavLink href={'/account/checks'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
+      </NavLink>
     </Box>
   );
 };

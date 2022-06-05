@@ -1,9 +1,13 @@
-// import dayjs from 'dayjs';
-// import dayjsTwitter from 'dayjs-twitter';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import produce from 'immer';
 import { ContentState } from './types';
 // import { Flat } from "lodash";
 
+import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
+
+import { Style } from '@styled-icons/material-sharp/Style';
+import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
 
 // dayjs.extend(dayjsTwitter)
 
@@ -19,14 +23,14 @@ export interface IField {
 
 // Clean Square Brackets
 export const cleanName = (val: string): string => {
-  let val1 = val.replace('[', '');
+  const val1 = val.replace('[', '');
   return val1.replace(']', '');
 };
 
 // Clean Square Brackets
 export const cleanName2 = (val: string): string => {
   // console.log('cleanName2', val)
-  let val1 = val.replace('\\[', '');
+  const val1 = val.replace('\\[', '');
   return val1.replace('\\]', '');
 };
 
@@ -43,8 +47,8 @@ export const findDefault = (needle: string, stack: any) => {
 export const updateVars = (data: ContentState, fields: any) => {
   // cut it short if it map has no values
   if (fields && fields[0] && fields[0].value) {
-    console.log('UPDATED_BODY', fields);
-    const result = produce(data, draft => {
+    console.log('UPDATED_BODY updateStuff', fields);
+    const result = produce(data, (draft) => {
       data.content.forEach((p: any, k: any) => {
         if (p && p.content && p.content.length > 0) {
           p.content.forEach((c: any, y: any) => {
@@ -53,7 +57,7 @@ export const updateVars = (data: ContentState, fields: any) => {
                 attrs: { name },
               } = c;
               const ff = fields.find((e: any) => e.name === name);
-              // console.log('c', ff);
+              // console.log('updateStuff ' + name, ff);
               draft['content'][k]['content'][y]['attrs']['named'] =
                 ff && ff.value;
             }
@@ -79,13 +83,13 @@ export const replaceBoy = (
   maps: IField[],
   escaped: boolean,
 ): string => {
-  let localBody: string = body;
+  const localBody: string = body;
 
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 1) {
-      matches.forEach(e => {
-        let cleanNames = escaped ? cleanName2(e) : cleanName(e);
+      matches.forEach((e) => {
+        const cleanNames = escaped ? cleanName2(e) : cleanName(e);
         const m = findDefault(cleanNames, maps);
         // find the key from
         if (m && m.value) {
@@ -112,13 +116,13 @@ export const replaceBoy = (
 
 export const findVars = (body: string, escaped: boolean): string[] => {
   // find vars in this form
-  let regexp = /\[\w+\]/gm;
+  const regexp = /\[\w+\]/gm;
   if (escaped) {
     regexp = /\\\[\w+\\\]/gm;
   }
 
   let m;
-  let results: string[] = [];
+  const results: string[] = [];
 
   while ((m = regexp.exec(body)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
@@ -127,7 +131,7 @@ export const findVars = (body: string, escaped: boolean): string[] => {
     }
 
     // The result can be accessed through the `m`-variable.
-    m.forEach(match => {
+    m.forEach((match) => {
       results.push(match);
     });
   }
@@ -150,7 +154,7 @@ export const replaceVars = (body: string, maps: IField[], escaped: boolean) => {
  * @param body
  * @param maps
  */
-export const replaceTitles = (body: string, maps: IField[]) => {
+export const replaceTitles = (body: string, maps: any) => {
   const resultVars = findVars(body, false);
   return replaceTitle(body, resultVars, maps);
 };
@@ -164,17 +168,21 @@ export const replaceTitles = (body: string, maps: IField[]) => {
 export const replaceTitle = (
   body: string,
   matches: string[],
-  maps: IField[],
+  maps: any,
 ): string => {
-  let localBody: string = body;
+  const localBody: string = body;
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 0) {
-      matches.forEach(e => {
-        let cleanNames = cleanName(e);
+      matches.forEach((e) => {
+        const cleanNames = cleanName(e);
+
         const m = findDefault(cleanNames, maps);
         if (m && m.value) {
+          console.log('🐴🐴  🧶  ');
           localBody = localBody.replace(`[${cleanNames}]`, m.value);
+        } else {
+          console.log('🐴🐴  🧶  ', m);
         }
       });
     }
@@ -202,7 +210,7 @@ export interface IFieldField {
 }
 
 export const getInits = (field_maps: any) => {
-  let initials: IFieldField[] = [];
+  const initials: IFieldField[] = [];
   field_maps &&
     field_maps.forEach((i: any) => {
       const item: IFieldField = { name: i.name, value: i.value };
@@ -245,7 +253,7 @@ export const defaultModalStyle = {
     backgroundColor: '#fff',
     boxShadow: '0px 3px 6px #00000029',
     borderRadius: '9px',
-    outline: 'none',    
+    outline: 'none',
     overflow: 'auto',
     padding: 0,
     marginBottom: 0,
@@ -280,4 +288,76 @@ export const modalStyle3 = {
     height: '70%', // <-- This sets the height
     overlfow: 'scroll', // <-- This tells the modal to scrol
   },
+};
+
+export const isNumeric = (str: any) => {
+  if (typeof str != 'string') return false; // we only process strings!
+  return (
+    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str))
+  ); // ...and ensure strings of whitespace fail
+};
+// const ICON_COLOR = '#999';
+export interface menuLinksProps {
+  name: string;
+  path: string;
+  logo: any;
+}
+
+export const menuLinks: menuLinksProps[] = [
+  {
+    name: 'Layouts',
+    logo: <Layout width="20px" />,
+    path: '/manage/layouts',
+  },
+  {
+    name: 'Flows',
+    logo: <FlowBranch width="20px" />,
+    path: '/manage/flows',
+  },
+
+  {
+    name: 'Themes',
+    logo: <Style width="20px" />,
+    path: '/manage/themes',
+  },
+  {
+    name: 'Roles',
+    logo: <User width="20px" />,
+    path: '/manage/roles',
+  },
+  {
+    name: 'Fields',
+    logo: <User width="20px" />,
+    path: '/manage/fields',
+  },
+  {
+    name: 'Pipelines',
+    logo: <Collection width={20} />,
+    path: '/manage/pipelines',
+  },
+];
+
+import cookie from 'js-cookie';
+import { AxiosRequestConfig, AxiosError } from 'axios';
+
+export const removeProtocol = (link: string) =>
+  link.replace(/^https?:\/\//, '');
+
+export const withComma = (num: number) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+export const getAxiosConfig = (
+  options: AxiosRequestConfig = {},
+): AxiosRequestConfig => ({
+  ...options,
+  headers: {
+    ...options.headers,
+    Authorization: cookie.get('token'),
+  },
+});
+
+export const errorMessage = (err: AxiosError, defaultMessage?: string) => {
+  const data = err?.response?.data;
+  return data?.message || data?.error || defaultMessage || '';
 };

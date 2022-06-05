@@ -1,18 +1,18 @@
-import React from 'react'
-import { Text, Box } from 'theme-ui'
-import { Label, Input } from 'theme-ui'
+import React from 'react';
+import { Text, Box } from 'theme-ui';
+import { Label, Input } from 'theme-ui';
 
 // import { Input } from "@chakra-ui/core";
 
 interface Props {
-  register: any
-  label: string
-  name: string
-  defaultValue?: string
-  mr?: number
-  placeholder?: string
-  sub?: string
-  variant?: string
+  register: any;
+  label: string;
+  name: string;
+  defaultValue?: string;
+  mr?: number;
+  placeholder?: string;
+  sub?: string;
+  variant?: string;
 }
 
 const Field: React.FC<Props> = ({
@@ -41,7 +41,7 @@ const Field: React.FC<Props> = ({
         ref={register({ required: true })}
       />
     </Box>
-  )
-}
+  );
+};
 
-export default Field
+export default Field;

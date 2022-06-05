@@ -144,7 +144,11 @@ const ProfileBasicForm = () => {
 
       {allMacros &&
         allMacros.length > 0 &&
-        allMacros.map((m: any) => <Text variant="tag">{m.name}</Text>)}
+        allMacros.map((m: any) => (
+          <Text key={m?.name} variant="tag">
+            {m.name}
+          </Text>
+        ))}
     </Box>
   );
 };

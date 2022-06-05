@@ -26,7 +26,7 @@ export interface ThemeElement {
 }
 
 const Form = () => {
-  const token = useStoreState(state => state.auth.token);
+  const token = useStoreState((state) => state.auth.token);
   // const token = useSelector(({ login }: any) => login.token);
   const [users, setUsers] = useState<any>([]);
   const [page, setPage] = useState<number>(0);
@@ -67,10 +67,10 @@ const Form = () => {
     <Box py={3} mt={4}>
       <PageHeader title="Customers" />
       <Box ml="auto">
-        <Input onChange={doSearch} placeholder="Search for Users" mb={4}/>
+        <Input onChange={doSearch} placeholder="Search for Users" mb={4} />
       </Box>
       <Box mx={0} mb={3} variant="table">
-        <Box mb={2} sx={{ position: 'relative' }}>          
+        <Box mb={2} sx={{ position: 'relative' }}>
           {search && search !== '' && (
             <Text
               onClick={() => setSearch('')}
@@ -83,12 +83,10 @@ const Form = () => {
           users.users &&
           users.users.length > 0 &&
           users.users.map((_m: any) => (
-            <Flex variant="tableItem">
+            <Flex variant="tableItem" key={_m?.profile?.id}>
               <Box p={2}>
                 <Link href={`/users/${_m.profile?.id}`}>
-                  <Text pb={2}>
-                    {_m.name}
-                  </Text>
+                  <Text pb={2}>{_m.name}</Text>
                   <Box>{_m.email}</Box>
                 </Link>
               </Box>

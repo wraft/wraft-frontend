@@ -11,38 +11,16 @@ import { BrandLogo } from '../../src/components/Icons';
 
 import {
   Note,
-  Layout,
-  Water,
+  Like,
   Cabinet as BookOpen,
   Carousel,
   Cog,
+  UserVoice,
+  Wrench,
+  Text as TextIcon,
 } from '@styled-icons/boxicons-regular';
+
 import ModeToggle from './ModeToggle';
-// import ContentTypeDashboard from './ContentTypeDashboard';
-
-// export const IconWrapper = styled(Layout)`
-//   color: '#999';
-// `;
-
-// const Sidebar = styled(Box)`
-//   border-bottom: solid 1px #eee;
-//   padding-bottom: 8px;
-//   padding-top: 12px;
-//   padding-left: 8px;
-//   a {
-//     text-decoration: none;
-//     color: #000;
-//     font-weight: bold;
-//     padding-left: 8px;
-//   }
-
-//   a:hover {
-//     text-decoration: none;
-//     color: #092682;
-//     font-weight: bold;
-//     padding-left: 8px;
-//   }
-// `;
 
 const listMenu = [
   {
@@ -52,7 +30,7 @@ const listMenu = [
   },
   {
     name: 'Approvals',
-    logo: <Layout width={20} />,
+    logo: <Like width={20} />,
     path: '/approvals',
   },
   {
@@ -73,9 +51,15 @@ const listMenu = [
 
   {
     name: 'Blocks',
-    logo: <Water width={20} />,
+    logo: <TextIcon width={20} />,
     path: '/blocks',
   },
+
+  // {
+  //   name: 'Forms',
+  //   logo: <Water width={20} />,
+  //   path: '/forms',
+  // },
   // {
   //   name: 'Flows',
   //   logo: <GitMerge width={20} />,
@@ -97,15 +81,16 @@ const listMenu = [
   //   path: '/themes',
   // },
   {
-    name: 'Manage',
-    logo: <Cog width={20} />,
-    path: '/manage',
-  },
-  {
     name: 'Vendors',
-    logo: <Cog width={20} />,
+    logo: <UserVoice width={20} />,
     path: '/vendors',
   },
+  {
+    name: 'Manage',
+    logo: <Wrench width={20} />,
+    path: '/manage',
+  },
+
   {
     name: 'Settings',
     logo: <Cog width={20} />,
@@ -219,12 +204,15 @@ const Nav = (props: any) => {
               <Box
                 sx={{
                   mr: 2,
-                  color: checkActive(pathname, m) ? 'blue.4' : 'gray.4',
-                  // opacity: 0.6,
+                  color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
                 }}>
                 {m.logo}
               </Box>
-              {showFull && <Text sx={{ fontWeight: 500 }}>{m.name}</Text>}
+              {showFull && (
+                <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>
+                  {m.name}
+                </Text>
+              )}
             </Flex>
           </MenuItem>
         ))}

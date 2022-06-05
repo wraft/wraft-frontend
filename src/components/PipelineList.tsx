@@ -34,8 +34,8 @@ const ItemField = (props: any) => {
       key={props.id}
       p={3}
       sx={{ bg: '#fff', borderBottom: 'solid 1px #eee', borderRadius: '3px' }}>
-      <Link href={`/pipelines/run/${props.id}`}>
-        <Text>{props.name}</Text>
+      <Link href={`/manage/pipelines/run/${props.id}`}>
+        <Text as="h4">{props.name}</Text>
         <Text pt={1} color="grey">
           Desc
         </Text>
