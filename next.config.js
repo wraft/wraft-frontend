@@ -14,4 +14,7 @@ module.exports = withImages({
       },
     ];
   },
+  experimental: {
+    outputStandalone: true,
+  },
 });
