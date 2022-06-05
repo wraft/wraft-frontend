@@ -74,8 +74,7 @@ const Form = () => {
           {search && search !== '' && (
             <Text
               onClick={() => setSearch('')}
-              sx={{ position: 'absolute', right: 8, top: 8 }}
-            >
+              sx={{ position: 'absolute', right: 8, top: 8 }}>
               CLEAR
             </Text>
           )}
@@ -84,7 +83,7 @@ const Form = () => {
           users.users &&
           users.users.length > 0 &&
           users.users.map((_m: any) => (
-            <Flex variant="tableItem">
+            <Flex variant="tableItem" key={_m?.profile?.id}>
               <Box p={2}>
                 <Link href={`/users/${_m.profile?.id}`}>
                   <Text pb={2}>{_m.name}</Text>

@@ -33,8 +33,7 @@ IPage) => {
         sx={{
           flexDirection: 'column',
           minHeight: '100%',
-        }}
-      >
+        }}>
         <Head>
           {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -50,15 +49,13 @@ IPage) => {
           sx={{
             flex: 1,
             flexDirection: ['column', 'row'],
-          }}
-        >
+          }}>
           <Box
             sx={{
               flex: 1,
               bg: 'gray.1',
               minWidth: 0,
-            }}
-          >
+            }}>
             {children}
             <Flex bg="gray.1" sx={{ pt: 0 }}>
               <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
@@ -68,8 +65,7 @@ IPage) => {
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
-                }}
-              >
+                }}>
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
               </Box>
             </Flex>

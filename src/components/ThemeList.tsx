@@ -39,8 +39,7 @@ const ItemField = (props: any) => {
             display: 'block',
           },
         },
-      }}
-    >
+      }}>
       <Box sx={{ width: '33ch', mb: 1 }}>
         <Link href={`/manage/themes/edit/${props.id}`}>
           <Text as="h4" sx={{ mb: 0, p: 0, pb: 0 }}>
@@ -60,8 +59,7 @@ const ItemField = (props: any) => {
           right: 0,
           mt: 3,
           mr: 3,
-        }}
-      >
+        }}>
         <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
           Delete
         </Button>

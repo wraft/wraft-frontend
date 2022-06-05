@@ -48,8 +48,7 @@ const ItemField: FC<any> = ({ flow }) => {
     <Box key={flow.id} pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }}>
       <MenuItem
         href={`/manage/flows/edit/[id]`}
-        path={`/manage/flows/edit/${flow.id}`}
-      >
+        path={`/manage/flows/edit/${flow.id}`}>
         <Box>
           <Text as="h4">{flow.name}</Text>
           <Text sx={{ fontSize: 0 }} color="gray.6">
@@ -94,7 +93,7 @@ const Form: FC = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col1: <Text>~</Text>,

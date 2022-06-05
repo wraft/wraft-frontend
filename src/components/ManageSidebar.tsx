@@ -24,8 +24,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         mr: 4,
         borderRight: 'solid 1px',
         borderColor: 'gray.3',
-      }}
-    >
+      }}>
       {items &&
         items.map((l: any) => (
           <Box sx={{ mr: 4 }} key={l.name}>
@@ -36,8 +35,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   borderColor: 'gray.3',
                   pb: 1,
                   mb: 2,
-                }}
-              >
+                }}>
                 <Box sx={{ mr: 2, pt: 1, color: 'gray.5' }}>{l.logo}</Box>
                 <Text
                   sx={{
@@ -46,13 +44,12 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                     fontWeight: 'body',
                     mb: 1,
                     pt: 1,
-                  }}
-                >
+                  }}>
                   {l.name}
                 </Text>
               </Flex>
             </NavLink>
-            {showFull && <Box/>}
+            {showFull && <Box />}
           </Box>
         ))}
     </Box>

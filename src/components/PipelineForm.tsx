@@ -265,8 +265,7 @@ const PipelineForm = () => {
                       p: 3,
                       borderBottom: 'solid 1px #eee',
                       borderLeft: 0,
-                    }}
-                  >
+                    }}>
                     <Box>
                       <Text mt={0} color="#111">
                         {props.name}
@@ -288,8 +287,7 @@ const PipelineForm = () => {
                   color: 'blue',
                   borderBottom: 'solid 1px #eee',
                   borderLeft: 0,
-                }}
-              >
+                }}>
                 <Button variant="small2" onClick={toggleModal}>
                   + Add Stage
                 </Button>
@@ -301,8 +299,7 @@ const PipelineForm = () => {
               onRequestClose={closeModal}
               style={customStyles}
               ariaHideApp={false}
-              contentLabel="Pipeline Form"
-            >
+              contentLabel="Pipeline Form">
               <Box>
                 <Text mb={3}>Add Stages</Text>
                 <Label htmlFor="parent" mb={1}>
@@ -315,8 +312,7 @@ const PipelineForm = () => {
                       name="content_type_id"
                       onChange={LoadContentType}
                       defaultValue="Parent ID"
-                      ref={register({ required: true })}
-                    >
+                      ref={register({ required: true })}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (
@@ -335,8 +331,7 @@ const PipelineForm = () => {
                           id="data_template_id"
                           name="data_template_id"
                           defaultValue="Parent ID"
-                          ref={register({ required: true })}
-                        >
+                          ref={register({ required: true })}>
                           {templates &&
                             templates.length > 0 &&
                             templates.map((m: any) => (
@@ -357,8 +352,7 @@ const PipelineForm = () => {
                           id="state_id"
                           name="state_id"
                           defaultValue="Default State"
-                          ref={register({ required: true })}
-                        >
+                          ref={register({ required: true })}>
                           {ctypeActive.flow.states &&
                             ctypeActive.flow.states.length > 0 &&
                             ctypeActive.flow.states.map((m: any) => (

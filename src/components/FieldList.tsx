@@ -27,8 +27,7 @@ const ItemField: FC<any> = ({ id, name }) => {
       p={3}
       sx={{
         flexGrow: 1,
-      }}
-    >
+      }}>
       <Text as="h4" color="gray.8">
         {name}
       </Text>
@@ -58,7 +57,7 @@ const FieldList: FC = () => {
 
   useEffect(() => {
     if (contents && contents.length > 0) {
-      let row: any = [];
+      const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
           col2: <ItemField {...r} />,

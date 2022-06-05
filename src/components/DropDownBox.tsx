@@ -90,8 +90,7 @@ class DropDownBox extends React.Component<any, any> {
       return (
         <DropDownItem
           onClick={() => this.props.onChangeDate(option.date)}
-          key={i}
-        >
+          key={i}>
           <Text px={3} py={3}>
             {option.date}
           </Text>
@@ -105,8 +104,7 @@ class DropDownBox extends React.Component<any, any> {
     return (
       <DropDownBoxBlock
         ref={this.wrapperRef}
-        onClick={() => this.toggleDropdown()}
-      >
+        onClick={() => this.toggleDropdown()}>
         <Flex className="dropdown-text">
           <Text>{this.props.title}</Text>
           <Image src="../static/images/next.svg" />

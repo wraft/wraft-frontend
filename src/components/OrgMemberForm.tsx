@@ -175,8 +175,7 @@ const OrgMemberForm = () => {
                 onRequestClose={closeSearch}
                 // style={defaultModalStyle}
                 ariaHideApp={false}
-                contentLabel="SearchWraft"
-              >
+                contentLabel="SearchWraft">
                 <Box p={4}>
                   <Text variant="blockTitle">Invite Members</Text>
                   <Box as="form" onSubmit={handleSubmit(onInviteSubmit)}>
@@ -195,8 +194,7 @@ const OrgMemberForm = () => {
                           py: 2,
                           color: 'primary',
                           textTransform: 'uppercase',
-                        }}
-                      >
+                        }}>
                         {organ?.name}
                       </Text>
                     </Box>

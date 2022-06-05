@@ -83,7 +83,7 @@ const Form = () => {
   const [insertable, setInsertable] = useState<any>();
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
-  const [cleanInsert, setCleanInsert] = useState<Boolean>(false);
+  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -140,7 +140,7 @@ const Form = () => {
    * @param data
    */
 
-  const onSuccess = (_data: any) => {
+  const onSuccess = () => {
     addToast('Saved Successfully', { appearance: 'success' });
     setLoading(false);
     setSaved(true);
@@ -249,8 +249,7 @@ const Form = () => {
       mt={4}
       mx={4}
       mb={3}
-      variant="w100"
-    >
+      variant="w100">
       <Box>
         <Text mb={3} variant="pagetitle">
           Create Block

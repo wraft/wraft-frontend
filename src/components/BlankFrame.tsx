@@ -30,14 +30,12 @@ export const Page = ({ children, inner }: IPage) => {
           flexDirection: 'column',
           minHeight: '100%',
           bg: 'red',
-        }}
-      >
+        }}>
         <Flex
           sx={{
             flex: 1,
             flexDirection: ['column', 'row'],
-          }}
-        >
+          }}>
           <Box
             sx={{
               flex: 1,
@@ -46,8 +44,7 @@ export const Page = ({ children, inner }: IPage) => {
               '.ProseMirror p': {
                 bg: 'base',
               },
-            }}
-          >
+            }}>
             {inner && <Box sx={{ minHeight: '100vh' }}>{inner}</Box>}
 
             {children}
@@ -59,8 +56,7 @@ export const Page = ({ children, inner }: IPage) => {
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
-                }}
-              >
+                }}>
                 <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>
                   Support | Contact Us
                 </Text>

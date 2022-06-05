@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
@@ -38,19 +38,6 @@ export interface BlockTemplate {
   body: string;
   serialized: string;
 }
-
-import { useHelpers } from '@remirror/react';
-
-const Counter: FC = () => {
-  const { getWordCount } = useHelpers(true);
-  const count = getWordCount();
-
-  return (
-    <p>
-      {count} {count === 1 ? 'word' : 'words'}
-    </p>
-  );
-};
 
 const Form = () => {
   const { register, handleSubmit, errors, setValue } = useForm();
@@ -160,7 +147,7 @@ const Form = () => {
 
   const loadTemplateSuccess = (data: DataTemplates) => {
     setLoading(false);
-    let insert =
+    const insert =
       (data.data_template &&
         data.data_template.serialized &&
         data.data_template.serialized.data) ||
@@ -263,7 +250,7 @@ const Form = () => {
       loadContentType(dataTemplate.content_type.id);
 
       //
-      let insert = (d && d.serialized && d.serialized.data) || false;
+      const insert = (d && d.serialized && d.serialized.data) || false;
 
       if (insert) {
         setValue('serialized', insert);
@@ -361,7 +348,7 @@ const Form = () => {
                   />
                 )}
               </Box>
-              <Counter />
+              {/* <Counter /> */}
             </Box>
             <Box
               px={4}

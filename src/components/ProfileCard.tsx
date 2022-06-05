@@ -21,8 +21,7 @@ const IconBlock = ({ val, icon }: IconBlockProps) => {
         pb: 0,
         borderTop: 'solid 1px #eee',
         mt: 3,
-      }}
-    >
+      }}>
       {icon}
       <Text ml={2} mt={1} variant="personBlock">
         {val}

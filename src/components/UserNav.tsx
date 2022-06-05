@@ -62,8 +62,7 @@ const UserNav = () => {
         borderBottom: 'solid 1px',
         borderColor: 'gray.3',
         py: 2,
-      }}
-    >
+      }}>
       <Container>
         <Flex sx={{ py: 3, px: 4 }}>
           <Box>
@@ -81,8 +80,7 @@ const UserNav = () => {
                   path: { fill: 'yellow' },
                   // fill: 'gray.9'
                 },
-              }}
-            >
+              }}>
               <BrandLogo width="6rem" height="2rem" />
             </Link>
           </Box>
@@ -118,8 +116,7 @@ const UserNav = () => {
                         px: 4,
                         py: 2,
                         ml: 4,
-                      }}
-                    >
+                      }}>
                       Login
                     </Text>
                   </Link>

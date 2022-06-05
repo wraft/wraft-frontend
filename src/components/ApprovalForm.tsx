@@ -100,8 +100,7 @@ const StatesForm = (props: StateFormProps) => {
           sx={{
             borderBottom: 'solid 1px',
             borderColor: 'blue.2',
-          }}
-        >
+          }}>
           {props.content.map((c: StateElement, index) => (
             <Flex
               key={index + 1}
@@ -111,21 +110,18 @@ const StatesForm = (props: StateFormProps) => {
                 border: 'solid 1px',
                 borderBottom: 0,
                 borderColor: 'blue.2',
-              }}
-            >
+              }}>
               <Text mr={2} sx={{ color: 'blue.6' }}>
                 {index + 1}
               </Text>
               <Text
                 sx={{ fontWeight: 'heading', color: 'blue.9' }}
-                key={c.state.id}
-              >
+                key={c.state.id}>
                 {c.state.state}
               </Text>
               <Text
                 onClick={() => onDeleteFlow(c.state.id)}
-                sx={{ ml: 'auto' }}
-              >
+                sx={{ ml: 'auto' }}>
                 Delete
               </Text>
             </Flex>
@@ -189,7 +185,7 @@ const ApprovalForm = () => {
     loadStates(cId, token);
   };
 
-  const onCreateState = (_x: any) => {
+  const onCreateState = () => {
     if (cId && token) {
       loadStates(cId, token);
     }

@@ -47,8 +47,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
       sx={{
         p: 0,
         width: '100%',
-      }}
-    >
+      }}>
       {croppedImg && <Image src={String(croppedImg)} />}
       <Box
         sx={{
@@ -58,8 +57,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
           width: '100%',
           // bg: "black",
           // p: 4,
-        }}
-      >
+        }}>
         <Box bg="gray.4">
           {image && (
             <Box
@@ -71,8 +69,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
                 top: '0%',
                 position: 'relative',
                 margin: 'auto',
-              }}
-            >
+              }}>
               <Cropper
                 image={image}
                 crop={crop}
@@ -95,8 +92,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
             borderTop: 'solid 1px',
             borderBottom: 'solid 1px',
             borderColor: 'gray.4',
-          }}
-        >
+          }}>
           <Slider
             value={zoom}
             min={1}
@@ -118,8 +114,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
               bg: 'background',
               color: 'gray.7',
               mr: 1,
-            }}
-          >
+            }}>
             Clear
           </Button>
           <Button type="button" onClick={showCroppedImage}>

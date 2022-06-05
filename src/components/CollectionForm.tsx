@@ -55,7 +55,7 @@ const CollectionForm = () => {
   };
 
   const formatFields = (fields: any) => {
-    let fieldsMap: any = [];
+    const fieldsMap: any = [];
 
     fields &&
       fields.length > 0 &&
@@ -67,8 +67,7 @@ const CollectionForm = () => {
           field_type_id: fid,
         };
 
-        if (isNumeric(item.name)) {
-        } else {
+        if (!isNumeric(item.name)) {
           fieldsMap.push(it);
         }
       });
@@ -104,7 +103,9 @@ const CollectionForm = () => {
     }
   };
 
-  const onLoadForms = () => {};
+  const onLoadForms = () => {
+    return false;
+  };
 
   /**
    * Entity Loader
@@ -195,8 +196,7 @@ const CollectionForm = () => {
     <Box>
       <PageHeader
         title={`${cId ? 'Edit' : 'New '} Collection Form`}
-        desc="Manage Custom Forms"
-      >
+        desc="Manage Custom Forms">
         <Box />
       </PageHeader>
       <Flex>

@@ -102,7 +102,7 @@ const OrgRolesList = () => {
           {contents &&
             contents?.permissions?.length > 0 &&
             contents?.permissions?.map((r: any) => (
-              <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+              <Box key={r?.id} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
                 <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
               </Box>
             ))}
@@ -122,7 +122,7 @@ const OrgRolesList = () => {
         <Box>
           {resources &&
             resources?.resources?.length > 0 &&
-            resources?.resources?.map((_n: any) => <Text>X</Text>)}
+            resources?.resources?.map((_n: any) => <Text key={_n?.id}>X</Text>)}
         </Box>
       </Box>
     </Box>

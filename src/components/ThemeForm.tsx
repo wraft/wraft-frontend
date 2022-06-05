@@ -37,7 +37,7 @@ const ThemeForm = () => {
   /**
    * On Theme Created
    */
-  const onDone = (_d: any) => {
+  const onDone = () => {
     addToast('Saved Successfully', { appearance: 'success' });
     Router.push(`/themes`);
   };
@@ -142,8 +142,7 @@ const ThemeForm = () => {
                 bg: 'gray.2',
                 border: 'solid 1px',
                 borderColor: 'gray.3',
-              }}
-            >
+              }}>
               <Text>Colors</Text>
               <FieldColor
                 name="primary_color"

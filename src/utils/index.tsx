@@ -23,14 +23,14 @@ export interface IField {
 
 // Clean Square Brackets
 export const cleanName = (val: string): string => {
-  let val1 = val.replace('[', '');
+  const val1 = val.replace('[', '');
   return val1.replace(']', '');
 };
 
 // Clean Square Brackets
 export const cleanName2 = (val: string): string => {
   // console.log('cleanName2', val)
-  let val1 = val.replace('\\[', '');
+  const val1 = val.replace('\\[', '');
   return val1.replace('\\]', '');
 };
 
@@ -83,13 +83,13 @@ export const replaceBoy = (
   maps: IField[],
   escaped: boolean,
 ): string => {
-  let localBody: string = body;
+  const localBody: string = body;
 
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 1) {
       matches.forEach((e) => {
-        let cleanNames = escaped ? cleanName2(e) : cleanName(e);
+        const cleanNames = escaped ? cleanName2(e) : cleanName(e);
         const m = findDefault(cleanNames, maps);
         // find the key from
         if (m && m.value) {
@@ -116,13 +116,13 @@ export const replaceBoy = (
 
 export const findVars = (body: string, escaped: boolean): string[] => {
   // find vars in this form
-  let regexp = /\[\w+\]/gm;
+  const regexp = /\[\w+\]/gm;
   if (escaped) {
     regexp = /\\\[\w+\\\]/gm;
   }
 
   let m;
-  let results: string[] = [];
+  const results: string[] = [];
 
   while ((m = regexp.exec(body)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
@@ -170,12 +170,12 @@ export const replaceTitle = (
   matches: string[],
   maps: any,
 ): string => {
-  let localBody: string = body;
+  const localBody: string = body;
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 0) {
       matches.forEach((e) => {
-        let cleanNames = cleanName(e);
+        const cleanNames = cleanName(e);
 
         const m = findDefault(cleanNames, maps);
         if (m && m.value) {
@@ -210,7 +210,7 @@ export interface IFieldField {
 }
 
 export const getInits = (field_maps: any) => {
-  let initials: IFieldField[] = [];
+  const initials: IFieldField[] = [];
   field_maps &&
     field_maps.forEach((i: any) => {
       const item: IFieldField = { name: i.name, value: i.value };
@@ -297,7 +297,6 @@ export const isNumeric = (str: any) => {
     !isNaN(parseFloat(str))
   ); // ...and ensure strings of whitespace fail
 };
-
 // const ICON_COLOR = '#999';
 export interface menuLinksProps {
   name: string;
@@ -338,3 +337,27 @@ export const menuLinks: menuLinksProps[] = [
     path: '/manage/pipelines',
   },
 ];
+
+import cookie from 'js-cookie';
+import { AxiosRequestConfig, AxiosError } from 'axios';
+
+export const removeProtocol = (link: string) =>
+  link.replace(/^https?:\/\//, '');
+
+export const withComma = (num: number) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+export const getAxiosConfig = (
+  options: AxiosRequestConfig = {},
+): AxiosRequestConfig => ({
+  ...options,
+  headers: {
+    ...options.headers,
+    Authorization: cookie.get('token'),
+  },
+});
+
+export const errorMessage = (err: AxiosError, defaultMessage?: string) => {
+  const data = err?.response?.data;
+  return data?.message || data?.error || defaultMessage || '';
+};

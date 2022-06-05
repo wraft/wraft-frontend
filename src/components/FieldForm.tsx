@@ -6,6 +6,7 @@ import Field from './Field';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
 import Modal from './Modal';
+// import { constants } from 'buffer';
 
 export interface IFieldField {
   name: string;
@@ -50,11 +51,11 @@ const FieldForm = ({
    */
   const mapFields = (fields: any) => {
     const vals = getValues();
-    let obj: any = [];
+    const obj: any = [];
     if (fields && fields.length > 0) {
       fields.forEach(function (value: any) {
         const name = vals[`${value.name}`];
-        let x: FieldInstance = { ...value, value: name };
+        const x: FieldInstance = { ...value, value: name };
         obj.push(x);
       });
     }
@@ -62,7 +63,7 @@ const FieldForm = ({
   };
 
   const getInits = (field_maps: any) => {
-    let initials: IFieldField[] = [];
+    const initials: IFieldField[] = [];
     field_maps &&
       field_maps.forEach((i: any) => {
         const item: IFieldField = {
@@ -79,7 +80,7 @@ const FieldForm = ({
    * Form Submit
    * @param _data
    */
-  const onSubmit = (_data: any) => {
+  const onSubmit = () => {
     const f: any = mapFields(fields);
 
     console.log('🌿🎃🎃🌿 Submitted [1]', f);
@@ -126,8 +127,7 @@ const FieldForm = ({
           mb: 3,
           border: 'solid 1px',
           borderColor: 'gray.3',
-        }}
-      >
+        }}>
         {fieldMap &&
           fieldMap.map((x: any) => (
             <Flex
@@ -139,15 +139,13 @@ const FieldForm = ({
                 borderBottom: 'solid 0.5px',
                 borderColor: 'gray.2',
                 // mb: 2,
-              }}
-            >
+              }}>
               <Text
                 sx={{
                   color: '#363e4980',
                   fontSize: '16px',
                   fontWeight: 300,
-                }}
-              >
+                }}>
                 {x.name}
               </Text>
               <Text
@@ -158,8 +156,7 @@ const FieldForm = ({
                   color: '#363E49',
                   fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
-                }}
-              >
+                }}>
                 {x.value}
               </Text>
               <Text>{x.type}</Text>

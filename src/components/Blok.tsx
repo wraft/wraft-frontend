@@ -84,8 +84,7 @@ const Blok = () => {
             width: '100%',
             borderBottom: 'solid 1px',
             borderColor: 'gray.2',
-          }}
-        >
+          }}>
           <Text>Create New</Text>
         </Box>
         {contents && contents.map((x: any) => <BlockItem key={x.id} {...x} />)}
@@ -111,8 +110,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         borderBottom: 'solid 1px',
         borderColor: 'gray.2',
         '&:hover': { bg: 'gray.1' },
-      }}
-    >
+      }}>
       <Box
         sx={{
           width: '16px',
@@ -137,8 +135,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           ml: 'auto',
           color: 'gray.7',
           fontWeight: 300,
-        }}
-      >
+        }}>
         {prefix}
       </Text>
     </Flex>

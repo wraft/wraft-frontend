@@ -55,15 +55,14 @@ const Form = () => {
                 borderTop: 'solid 1px #ddd',
                 borderLeft: 'solid 1px #ddd',
                 borderRight: 'solid 1px #ddd',
-              }}
-            >
+              }}>
               <Text variant="blocktitle">Orders</Text>
             </Box>
           </Flex>
           <Box variant="tableItem" pt={4} pb={4}>
             {sachet.user.orders &&
               sachet.user.orders.map((m: any) => (
-                <Box>
+                <Box key={m.amount}>
                   <Text variant="cardtitle">
                     {m.start_date} to {m.end_date}
                   </Text>

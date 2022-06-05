@@ -243,7 +243,7 @@ const ContentList = () => {
                 }}>
                 {variants &&
                   variants.map((v: any) => (
-                    <FilterBlock title={v?.name} no={32} {...v} />
+                    <FilterBlock key={v?.name} title={v?.name} no={32} {...v} />
                   ))}
               </Box>
             </Box>
