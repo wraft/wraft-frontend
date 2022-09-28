@@ -155,13 +155,12 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Muneef Hameed - [@muneef](https://twitter.com/muneef) - muneef@aurut.com
 
-Project Link: [https://github.com/functionaryco/wraft-frontend](https://github.com/functionaryco/wraft-frontend)
+Project Link: [https://gitlab.com/wraft-docs/front-v2](https://gitlab.com/wraft-docs/front-v2)
 
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Acknowledgements
 
-- [Pandoc](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-- [Img Shields](https://shields.io)
+- [Pandoc](https://www.pandoc.org)
 
 <!-- MARKDOWN LINKS & IMAGES -->

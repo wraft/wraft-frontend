@@ -170,7 +170,7 @@ export const replaceTitle = (
   matches: string[],
   maps: any,
 ): string => {
-  const localBody: string = body;
+  let localBody: string = body;
   if (localBody && localBody.length > 1) {
     // loop through variables
     if (matches && matches.length > 0) {
