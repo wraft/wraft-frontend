@@ -1,6 +1,6 @@
 {
   "name": "wraft-fe",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Functionary",
   "license": "ISC",
   "repository": "",
@@ -12,7 +12,8 @@
     "prettier": "prettier --write --ignore-unknown",
     "test": "jest --watchAll",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
-    "lint": "eslint --ext js,jsx,ts,tsx --fix"
+    "lint": "eslint --ext js,jsx,ts,tsx --fix",
+    "start-prod": "next start -H 0.0.0.0 -p ${PORT:-8080}"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.15.4",
