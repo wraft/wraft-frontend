@@ -2,7 +2,7 @@ import React from 'react';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
 import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
-import { IosArrowRight } from '@styled-icons/fluentui-system-filled/IosArrowRight';
+import { ArrowBack } from '@styled-icons/boxicons-regular/ArrowBack';
 interface PageHeaderProps {
   children?: any;
   title: string;
@@ -33,7 +33,7 @@ const BreadLinks = (props: any) => {
         props?.links.map((l: any) => (
           <Link key={l?.name} sx={{ color: 'gray.6', fontSize: 0, mr: 2 }}>
             <Text sx={{ pr: 1 }}>{l.name}</Text>
-            <IosArrowRight width={10} sx={{ ml: 2 }} />
+            <ArrowBack width={10}/>
           </Link>
         ))}
     </Flex>

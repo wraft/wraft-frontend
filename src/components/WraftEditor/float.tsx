@@ -51,6 +51,7 @@ export const FloatingActionsMenu = ({ options }: any) => {
 
 export const FloatingBubble: React.FC<{
   change?: UseSuggestReturn['change'];
+  children?: any;
 }> = ({ children, change }) => {
   const { ref, rect, height, active } = usePositioner(
     change?.reason === 'start' ? 'cursor' : 'nearestWord',

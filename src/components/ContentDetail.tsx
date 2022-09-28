@@ -6,13 +6,15 @@ import styled from 'styled-components';
 // import { Document, Page } from 'react-pdf';
 import { Pencil } from '@styled-icons/boxicons-regular';
 import { Download } from '@styled-icons/remix-line/Download';
-import { IosArrowRight } from '@styled-icons/fluentui-system-filled/IosArrowRight';
+import { ChevronRight } from '@styled-icons/boxicons-regular/ChevronRight';
+
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 import MenuItem from './MenuItem';
 import dynamic from 'next/dynamic';
 
-import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
+// import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
+import { Tab, TabList, TabPanel, useTabState } from "ariakit/tab";
 
 import { File } from './Icons';
 import WraftEditor from './WraftEditor';
@@ -74,7 +76,7 @@ export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
         </Text> */}
       </Box>
       <Box sx={{ pl: 3 }}>
-        <IosArrowRight width={10} sx={{ ml: 2 }} />
+        <ChevronRight color='gray.4' width={24}/>
       </Box>
     </Flex>
   );
@@ -234,6 +236,8 @@ export interface Serialized {
 const ContentDetail = () => {
   const token = useStoreState((state) => state.auth.token);
 
+  
+
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
@@ -241,7 +245,10 @@ const ContentDetail = () => {
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
 
-  const tab = useTabState({ selectedId: 'edit' });
+  // const tab = useTabState({ selectedId: 'edit' });
+
+  const defaultSelectedId = "edit";
+  const tab = useTabState({ defaultSelectedId });
 
   const loadDataSucces = (data: any) => {
     setLoading(false);
@@ -391,7 +398,7 @@ const ContentDetail = () => {
                 </Box>
               </Flex>
               <Box sx={{ mb: 4 }}>
-                <TabList {...tab} aria-label="Content Stages" sx={{ mb: 4 }}>
+                <TabList state={tab} aria-label="Content Stages">
                   <Tab id="edit" variant="contentButton" as={Button} {...tab}>
                     <StepBlock
                       no={1}
@@ -434,7 +441,7 @@ const ContentDetail = () => {
                   </Tab>
                 </TabList>
 
-                <TabPanel {...tab}>
+                <TabPanel state={tab}>
                   <Box sx={{ mt: 4 }}>
                     <PreTag pt={4}>
                       {contentBody && (
@@ -450,14 +457,14 @@ const ContentDetail = () => {
                     </PreTag>
                   </Box>
                 </TabPanel>
-                <TabPanel {...tab}>
+                <TabPanel state={tab}>
                   <Box
                     sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
                     {contents.content.build && (
                       <PdfViewer
-                        url={`/${contents.content.build}`}
+                        url={contents.content.build}
                         pageNumber={1}
-                        sx={{ width: '100%' }}
+                        // sx={{ width: '100%' }}
                       />
                     )}
                   </Box>
