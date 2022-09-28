@@ -17,7 +17,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImg, setCroppedImg] = useState<File>();
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: React.SetStateAction<Area | undefined>): any => {
     setCroppedAreaPixels(croppedAreaPixels);
     console.log('croppedArea', croppedArea);
   }, []);

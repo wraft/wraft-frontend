@@ -359,7 +359,7 @@ const PipelineView = () => {
                     }}>
                     <Flex>
                       <Box sx={{ mr: 2 }}>
-                        <PlayCircle width={16} sx={{ mr: 2, bg: 'green.3' }} />
+                        <PlayCircle width={16}/>
                       </Box>
                       <Text>Run</Text>
                     </Flex>
@@ -375,7 +375,7 @@ const PipelineView = () => {
                     }}
                     onClick={() => pipelineCollect()}>
                     <Flex>
-                      <PlayCircle width={16} sx={{ mr: 2 }} />
+                      <PlayCircle width={16} />
                       <Text ml={2}>Collect</Text>
                     </Flex>
                   </Button>

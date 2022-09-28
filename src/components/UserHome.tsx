@@ -42,7 +42,7 @@ const UserHome = () => {
         />
       </Head>
       <Box variant="hero" pb={4} sx={{ pb: 6 }}>
-        <Container width={70} bg="" sx={{ mb: 6 }}>
+        <Container width={70} bg="">
           <Box p={4} pl={0} pt={6} pb={4} sx={{ maxWidth: '50ch' }}>
             <Text
               as="h1"
@@ -85,7 +85,7 @@ const UserHome = () => {
         </Container>
       </Box>
       <Box sx={{ pt: 5, bg: 'gray.0' }}>
-        <Container width={70} bg="" sx={{ pt: 5, bg: 'gray.0' }}>
+        <Container width={70} bg="">
           <Grid gap={2} columns={3}>
             <TextBlock
               title="Entities with UUID"
