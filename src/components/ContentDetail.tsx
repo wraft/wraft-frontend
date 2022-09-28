@@ -462,7 +462,8 @@ const ContentDetail = () => {
                     sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
                     {contents.content.build && (
                       <PdfViewer
-                        url={contents.content.build}
+                        // url={contents.content.build}
+                        url={`/${contents.content.build}`}
                         pageNumber={1}
                         // sx={{ width: '100%' }}
                       />
@@ -471,7 +472,6 @@ const ContentDetail = () => {
                 </TabPanel>
               </Box>
             </Box>
-
             <Box
               variant="plateRightBar"
               sx={{
@@ -483,6 +483,7 @@ const ContentDetail = () => {
                 pt: 3,
               }}>
               <Box sx={{ px: 3 }}>
+              {contents.content.build}
                 <Flex sx={{ mb: 3 }}>
                   <Box sx={{ mr: 3 }}>
                     <Text as="h6" variant="labelcaps">
