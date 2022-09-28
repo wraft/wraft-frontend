@@ -651,8 +651,10 @@ const theme: Theme = {
       ':hover': {
         color: 'gray.9',
       },
+      cursor: 'pointer'
     },
     menuLink: {
+      cursor: 'pointer',
       bg: 'gray.0',
       mb: 0,
       p: 2,
@@ -929,6 +931,7 @@ const theme: Theme = {
       fontWeight: 'bold',
       fontSize: 0,
       fontFamily: 'inherit',
+      cursor: 'pointer'
     },
     btnPrimary: {
       variant: 'buttons.btnBig',
@@ -990,6 +993,7 @@ const theme: Theme = {
       lineHeight: 0,
       svg: { fill: 'text' },
       bg: 'gray.1',
+      cursor: 'pointer'
     },
     secondary: {
       color: 'blue.9',
