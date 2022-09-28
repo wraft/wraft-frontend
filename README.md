@@ -109,8 +109,8 @@ This is an example of how to list things you need to use the software and how to
 ### Getting started
 
 ```
-git clone https://github.com/novellito/the-nextjs-starter my-project
-cd my-project
+git clone https://gitlab.com/wraft-docs/front-v2 front-v2
+cd front-v2
 npm install
 npm start
 ```
