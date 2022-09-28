@@ -60,6 +60,7 @@ type ModalProps = {
   label?: string;
   disclosure?: React.ReactElement;
   onClose?: () => void;
+  children: any;
 };
 
 const Modal: React.FC<ModalProps> = ({

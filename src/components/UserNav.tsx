@@ -68,19 +68,21 @@ const UserNav = () => {
           <Box>
             <Link
               href={token ? '/user-profile' : '/'}
-              sx={{
-                p: 0,
-                color: 'gray.0',
-                fill: 'red',
-                bg: 'red',
-                display: 'block',
-                svg: {
-                  color: 'green',
-                  display: 'block',
-                  path: { fill: 'yellow' },
-                  // fill: 'gray.9'
-                },
-              }}>
+              // sx={{
+              //   p: 0,
+              //   color: 'gray.0',
+              //   fill: 'red',
+              //   bg: 'red',
+              //   display: 'block',
+              //   svg: {
+              //     color: 'green',
+              //     display: 'block',
+              //     path: { fill: 'yellow' },
+              //     // fill: 'gray.9'
+              //   },
+              // }}
+              
+              >
               <BrandLogo width="6rem" height="2rem" />
             </Link>
           </Box>

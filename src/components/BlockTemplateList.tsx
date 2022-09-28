@@ -86,7 +86,7 @@ const BlockTemplateListFrame: FC = () => {
             <Box>
               <Flex>
                 <Box sx={{ color: 'gray.5', width: 'auto' }}>
-                  <EmptyForm sx={{ color: 'gray.4' }} />
+                  <EmptyForm />
                 </Box>
                 <Box sx={{ m: 2, pb: 0 }}>
                   <Text as="h2" sx={{ fontWeight: 300 }}>

@@ -43,8 +43,7 @@ const Contents: FC = () => {
                 <CheckCircle
                   width="24"
                   height="24px"
-                  color="green"
-                  sx={{ color: 'green.2' }}
+                  color="green.2"
                 />
                 <Text as="h3" sx={{ fontWeight: 400, color: 'gray.6', ml: 3 }}>
                   {cb?.name}

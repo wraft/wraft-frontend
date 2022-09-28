@@ -3,8 +3,6 @@ import { cx, isEmptyArray } from '@remirror/core';
 import { ReactComponentMessages as Messages } from '@remirror/messages';
 import { useCommands, useI18n } from '@remirror/react-core';
 
-import { Box } from 'theme-ui';
-
 import {
   HolderAtomState,
   useHolderAtom,
@@ -77,7 +75,7 @@ export function HolderAtomPopupComponent<
       enabled={!!state}
       placement="auto-end"
       renderOutsideEditor>
-      <Box {...getMenuProps()} className={cx(Theme.MENTION_ATOM_POPUP_WRAPPER)}>
+      <div {...getMenuProps()} className={cx(Theme.MENTION_ATOM_POPUP_WRAPPER)}>
         {!!state && isEmptyArray(hookProps.items) ? (
           <ZeroItemsComponent />
         ) : (
@@ -86,22 +84,22 @@ export function HolderAtomPopupComponent<
             const isHovered = indexIsHovered(index);
 
             return (
-              <Box
+              <div
                 key={item.id}
                 className={cx(
                   Theme.MENTION_ATOM_POPUP_ITEM,
                   isHighlighted && Theme.MENTION_ATOM_POPUP_HIGHLIGHT,
                   isHovered && Theme.MENTION_ATOM_POPUP_HOVERED,
                 )}
-                sx={{
-                  border: 'solid 0.5px',
-                  borderColor: 'gray.3',
-                  fontSize: 1,
-                  fontWeight: 500,
-                  color: 'green.8',
-                  px: 0,
-                  py: 0,
-                }}
+                // sx={{
+                //   border: 'solid 0.5px',
+                //   borderColor: 'gray.3',
+                //   fontSize: 1,
+                //   fontWeight: 500,
+                //   color: 'green.8',
+                //   px: 0,
+                //   py: 0,
+                // }}
                 {...getItemProps({
                   onClick: () => {
                     state?.command(item);
@@ -111,11 +109,11 @@ export function HolderAtomPopupComponent<
                   index,
                 })}>
                 <ItemComponent item={item} state={state} />
-              </Box>
+              </div>
             );
           })
         )}
-      </Box>
+      </div>
     </FloatingWrapper>
   );
 }

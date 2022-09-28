@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useState, useEffect, useMemo } from 'react';
-import { RemirrorJSON, getTheme } from 'remirror';
+import { RemirrorJSON } from 'remirror';
 import { BlockquoteExtension } from '@remirror/extension-blockquote';
 import { BoldExtension } from '@remirror/extension-bold';
 import { ItalicExtension } from '@remirror/extension-italic';
@@ -12,7 +12,7 @@ import { TableExtension } from '@remirror/extension-tables';
 import { ImageExtension } from '@remirror/extension-image';
 import { MarkdownExtension } from '@remirror/extension-markdown';
 
-import { CountExtension } from '@remirror/extension-count';
+// import { CountExtension } from '@remirror/extension-count';
 
 import { css } from '@emotion/css';
 
@@ -33,18 +33,13 @@ import {
   ListItemExtension,
   OrderedListExtension,
 } from '@remirror/extension-list';
+
 import 'remirror/styles/all.css';
-import { AllStyledComponent } from '@remirror/styles/emotion';
+// import { AllStyledComponent } from '@remirror/styles/emotion';
 import { HolderAtomExtension } from './holder/holder-atom';
 
 // import { IdentifierSchemaAttributes } from 'remirror';
 
-import {
-  // MentionAtomPopupComponent,
-  Toolbar,
-  useHelpers,
-  // useCommands,
-} from '@remirror/react';
 
 import { HolderAtomPopupComponent } from './holder/holder-popover';
 
@@ -55,55 +50,55 @@ import {
   useRemirror,
 } from '@remirror/react';
 
-import { Box, Flex, Text, Button } from 'theme-ui';
+import { Box, Button } from 'theme-ui';
 
-const WordsCounter = () => {
-  const { getWordCount } = useHelpers(true);
-  const count = getWordCount();
+// const WordsCounter = () => {
+//   const { getWordCount } = useHelpers(true);
+//   const count = getWordCount();
 
-  return (
-    <Box
-      sx={{
-        mr: 0,
-        ml: 'auto',
-        textAlign: 'right',
-        '.remirror-theme h3': {
-          fontSize: 1,
-          m: 0,
-          color: 'red.3',
-          margin: '0 !important',
-        },
-      }}>
-      <Text
-        as="span"
-        sx={{
-          fontWeight: 100,
-          letterSpacing: '0.2px',
-          fontSize: '12px',
-          padding: `0 important!`,
-          m: 0,
-          mr: 2,
-        }}>
-        Words
-      </Text>
-      <Text
-        as="span"
-        sx={{
-          fontWeight: 400,
-          fontSize: '16px',
-          lineHeight: 1,
-          // pb: 2,
-          padding: `0 important!`,
-          m: 0,
-        }}>
-        {count}
-      </Text>
-    </Box>
-  );
-};
+//   return (
+//     <div
+//       sx={{
+//         mr: 0,
+//         ml: 'auto',
+//         textAlign: 'right',
+//         '.remirror-theme h3': {
+//           fontSize: 1,
+//           m: 0,
+//           color: 'red.3',
+//           margin: '0 !important',
+//         },
+//       }}>
+//       <Text
+//         as="span"
+//         sx={{
+//           fontWeight: 100,
+//           letterSpacing: '0.2px',
+//           fontSize: '12px',
+//           padding: `0 important!`,
+//           m: 0,
+//           mr: 2,
+//         }}>
+//         Words
+//       </Text>
+//       <Text
+//         as="span"
+//         sx={{
+//           fontWeight: 400,
+//           fontSize: '16px',
+//           lineHeight: 1,
+//           // pb: 2,
+//           padding: `0 important!`,
+//           m: 0,
+//         }}>
+//         {count}
+//       </Text>
+//     </Div>
+//   );
+// };
 // import { HolderExtension } from "./holder";
 
-import toolbarItems from './toolbar';
+// import toolbarItems from './toolbar';
 import { MentionAtomExtension } from 'remirror/extensions';
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 
@@ -257,7 +252,7 @@ const EditorWraft: FC<EditorProps> = ({
           { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
         ],
       }),
-      new CountExtension({}),
+      // new CountExtension({}),
       // new MentionAtomExtension({ extraAttributes: {} }),
 
       new MentionAtomExtension({
@@ -280,7 +275,7 @@ const EditorWraft: FC<EditorProps> = ({
   });
 
   const handleChange = useCallback(
-    ({ state }) => {
+    ({ state }: any) => {
       const ctx = getContext();
       const md = ctx?.helpers.getMarkdown();
       const obj = {
@@ -379,26 +374,12 @@ const EditorWraft: FC<EditorProps> = ({
           bg: 'blue',
         },
       }}>
-      <AllStyledComponent>
-        <Box
-          sx={{
-            px: 3,
-            position: 'fixed',
-            bottotm: 0,
-            left: 0,
-            zIndex: 10,
-          }}>
-          <Box
-            sx={{
-              bg: 'gray.0',
-              border: 'solid 1px',
-              borderColor: 'gray.3',
-              px: 3,
-              py: 2,
-              display: showoutline ? 'block' : 'none',
-            }}>
-            <Flex>
-              <Text variant="labelcaps">Outline</Text>
+        <div>{showToolbar}</div>
+      <div>
+        <div>
+          <div>
+            <div>
+              {/* <Text variant="labelcaps">Outline</Text> */}
               <Button
                 type="button"
                 variant="btnSecondary"
@@ -413,27 +394,17 @@ const EditorWraft: FC<EditorProps> = ({
                 onClick={() => setShowOutline(!showoutline)}>
                 <CloseIcon width={12} />
               </Button>
-            </Flex>
+            </div>
 
             {outline &&
               outline.length > 0 &&
               outline.map((o: outlineP, index: any) => (
-                <Box variant="styles.boxHeading" key={index}>
-                  <Text
-                    sx={{
-                      fontSize: 1,
-                      display: 'block',
-                      borderBottom: 'dotted 1px',
-                      borderColor: 'gray.3',
-                    }}
-                    as="span"
-                    onClick={o.onGo}>
-                    {o.body}
-                  </Text>
-                </Box>
+                <div key={index}>
+                  <div onClick={o.onGo}>{o.body}</div>
+                </div>
               ))}
-          </Box>
-        </Box>
+          </div>
+        </div>
         <ThemeProvider>
           <Remirror
             manager={manager}
@@ -470,66 +441,66 @@ const EditorWraft: FC<EditorProps> = ({
                 p,
                 h3,
                 h4 {
-                  margin-top: ${getTheme((t) => t.space[2])};
-                  margin-bottom: ${getTheme((t) => t.space[2])};
+                  
                 }
                 h1,
                 h2 {
-                  margin-bottom: ${getTheme((t) => t.space[3])};
-                  margin-top: ${getTheme((t) => t.space[3])};
+                  
                 }
               }
             `,
             ]}>
-            {showToolbar ? (
+            {/* {showToolbar ? (
               <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
             ) : (
               ''
-            )}
-            <Flex>
-              <Box>
-                <Button
+            )} */}
+            <div>
+              <div>
+                <button
                   type="button"
-                  variant="btnSecondary"
-                  sx={{
-                    py: 0,
-                    mr: 1,
-                    px: 2,
-                    border: 'solid 1px',
-                    borderColor: 'gray.3',
-                    // color: 'gray.6',
-                  }}
+                  // variant="btnSecondary"
+                  // sx={{
+                  //   py: 0,
+                  //   mr: 1,
+                  //   px: 2,
+                  //   border: 'solid 1px',
+                  //   borderColor: 'gray.3',
+                  //   // color: 'gray.6',
+                  // }}
                   onClick={() => setShowOutline(!showoutline)}>
                   <TaskListLtr width={16} />
-                </Button>
-                <Button
+                </button>
+                <button
                   type="button"
-                  variant="btnSecondary"
-                  sx={{ py: 0 }}
+                  // variant="btnSecondary"
+                  // sx={{
+                  //   py: 0,
+                  //   mr: 1,
+                  //   ml: 'auto',
+                  //   border: 'solid 1px',
+                  //   borderColor: 'gray.3',
+                  //   // color: 'gray.6',
+                  // }}
+                  // sx={{ py: 0 }}
                   onClick={() => toggleView()}>
                   {viewPortal ? (
                     <ArrowsAngleExpand width={12} />
                   ) : (
                     <ArrowsAngleContract width={12} />
                   )}
-                </Button>
-              </Box>
-              <Box sx={{ ml: 'auto' }}>
-                <WordsCounter />
-              </Box>
-            </Flex>
-            <Box
-              sx={{
-                mx: viewPortal ? 5 : 0,
-                p: { fontSize: viewPortal ? 3 : 2 },
-              }}>
+                </button>
+              </div>
+              <div>{/* <WordsCounter /> */}</div>
+            </div>
+            <div>
               <EditorComponent />
-            </Box>
+            </div>
 
             <HolderSuggestComponent tokens={fieldtokens} />
           </Remirror>
         </ThemeProvider>
-      </AllStyledComponent>
+      </div>
     </Box>
   );
 };

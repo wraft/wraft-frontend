@@ -76,7 +76,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               color: 'gray.8',
             }}>
             <Flex>
-              <Link href="/contents" sx={{ pt: 0 }}>
+              <Link href="/contents">
                 <ArrowBack width={22} />
               </Link>
               {navtitle && (
