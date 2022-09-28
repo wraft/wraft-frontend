@@ -25,7 +25,7 @@ const theme = {
   radii: {
     default: 2,
   },
-  breakpoints: ['850px', '1100px', '64em'],
+  // breakpoints: ['850px', '1100px', '64em'],
   fonts: {
     system: [
       'Inter',

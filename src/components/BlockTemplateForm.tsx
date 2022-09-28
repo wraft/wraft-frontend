@@ -70,7 +70,7 @@ const Form = () => {
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
 
-  const [insertable, setInsertable] = useState<any>();
+  const [insertable, setInsertable] = useState<any>(EMPTY_MARKDOWN_NODE);
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);

@@ -771,19 +771,19 @@ const Form = (props: IContentForm) => {
                     name="title"
                     label=""
                     placeholder="Document Name"
-                    sx={{
-                      '&': {
-                        width: '100%',
-                        display: 'block',
-                        bg: 'red',
-                      },
-                      div: {
-                        width: '100%',
-                      },
-                      button: {
-                        fontSize: 3,
-                      },
-                    }}
+                    // sx={{
+                    //   '&': {
+                    //     width: '100%',
+                    //     display: 'block',
+                    //     bg: 'red',
+                    //   },
+                    //   div: {
+                    //     width: '100%',
+                    //   },
+                    //   button: {
+                    //     fontSize: 3,
+                    //   },
+                    // }}
                     // defaultValue={body?.title}
                     register={register}
                   />
@@ -1051,8 +1051,6 @@ const Form = (props: IContentForm) => {
 
                   <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
                     <Box>
-                      {console.log('rockrock', activeFlow)}
-
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
                           <>

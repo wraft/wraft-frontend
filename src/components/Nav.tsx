@@ -202,10 +202,10 @@ const Nav = ({ navtitle }: INav) => {
                       },
                     }}>
                     <Search
-                      sx={{
-                        borderLeft: 'solid 1px',
-                        borderColor: 'gray.4',
-                      }}
+                      // sx={{
+                      //   borderLeft: 'solid 1px',
+                      //   borderColor: 'gray.4',
+                      // }}
                       width={28}
                     />
                   </Box>
