@@ -29,6 +29,7 @@ import {
 
 import Field from './Field';
 import FieldText from './FieldText';
+import PdfViewer from './PdfViewer';
 
 export interface Layouts {
   layout: Layout;
@@ -330,6 +331,17 @@ const Form = () => {
                     bg: 'base',
                     mb: 1,
                   }}>
+                  <Box
+                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
+                    {m && m.file && (
+                      <PdfViewer
+                        // url={contents.content.build}
+                        url={`http://localhost:3000${m.file}`}
+                        pageNumber={1}
+                        // sx={{ width: '100%' }}
+                      />
+                    )}
+                  </Box>
                   <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                     {m.name}
                   </Text>
