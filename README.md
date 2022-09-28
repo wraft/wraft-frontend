@@ -22,7 +22,7 @@
   </a>
 
 <h3 align="center">Wraft Docs [Frontend]</h3>    
-<p>Version: v0.0.4</>
+<p>Version: v0.0.6</p>
 
 <p align="center">
     An awesome README template to jumpstart your projects!
@@ -111,8 +111,8 @@ This is an example of how to list things you need to use the software and how to
 ```
 git clone https://gitlab.com/wraft-docs/front-v2 front-v2
 cd front-v2
-npm install
-npm start
+yarn install
+yarn dev
 ```
 
 The app will run at `http://localhost:3000`
