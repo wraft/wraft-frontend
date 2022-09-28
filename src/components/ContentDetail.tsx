@@ -483,7 +483,7 @@ const ContentDetail = () => {
                 pt: 3,
               }}>
               <Box sx={{ px: 3 }}>
-              {contents.content.build}
+              {/* {contents.content.build} */}
                 <Flex sx={{ mb: 3 }}>
                   <Box sx={{ mr: 3 }}>
                     <Text as="h6" variant="labelcaps">
