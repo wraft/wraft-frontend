@@ -22,7 +22,7 @@
   </a>
 
 <h3 align="center">Wraft Docs [Frontend]</h3>    
-<p>Version: v0.0.6</p>
+<p>Version: v0.0.7</p>
 
 <p align="center">
     An awesome README template to jumpstart your projects!
