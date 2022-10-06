@@ -1,6 +1,6 @@
 {
   "name": "wraft-fe",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "author": "Functionary",
   "license": "ISC",
   "repository": "",
@@ -136,7 +136,7 @@
     ".next/cache/"
   ],
   "engines": {
-    "node": "18.2",
-    "yarn": "1.22.19"
+    "node": "16.x",
+    "yarn": "1.22.18"
   }
 }
