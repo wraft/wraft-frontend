@@ -18,7 +18,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="public/demo.png" alt="Logo" width="100%" height="auto">
   </a>
 
 <h3 align="center">Wraft Docs [Frontend]</h3>    
@@ -92,7 +92,7 @@ To get a local copy up and running follow these simple example steps.
 This is an example of how to list things you need to use the software and how to install them.
 
 - npm
-
+  
   ```sh
   npm install npm@latest -g
   ```
