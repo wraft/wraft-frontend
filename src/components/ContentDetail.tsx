@@ -6,7 +6,6 @@ import styled from 'styled-components';
 // import { Document, Page } from 'react-pdf';
 import { Pencil } from '@styled-icons/boxicons-regular';
 import { Download } from '@styled-icons/remix-line/Download';
-import { ChevronRight } from '@styled-icons/boxicons-regular/ChevronRight';
 
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
@@ -14,7 +13,7 @@ import MenuItem from './MenuItem';
 import dynamic from 'next/dynamic';
 
 // import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
-import { Tab, TabList, TabPanel, useTabState } from "ariakit/tab";
+import { Tab, TabList, TabPanel, useTabState } from 'ariakit/tab';
 
 import { File } from './Icons';
 import WraftEditor from './WraftEditor';
@@ -56,15 +55,22 @@ interface StepBlockProps {
 
 export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
   return (
-    <Flex sx={{ flex: 1 }}>
+    <Flex
+      sx={{
+        flex: 1,
+        borderRight: `solid 1px`,
+        borderColor: 'gray.3',
+        p: 0,
+        '&:last-child': { borderRight: 0 },
+      }}>
       <NumberBlock no={no} active={tab.selectedId === 'view' ? true : false} />
       <Box>
         <Text
           as="h4"
           sx={{
             fontFamily: 'body',
-            fontSize: 0,
-            color: tab.selectedId === 'view' ? 'teal.9' : 'gray.7',
+            fontSize: 1,
+            color: tab.selectedId === 'view' ? 'teal.9' : 'gray.9',
             mb: 0,
           }}>
           {title}
@@ -76,7 +82,7 @@ export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
         </Text> */}
       </Box>
       <Box sx={{ pl: 3 }}>
-        <ChevronRight color='gray.4' width={24}/>
+        {/* <ChevronRight color='gray.4' width={24}/> */}
       </Box>
     </Flex>
   );
@@ -95,9 +101,14 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
   return (
     <Box
       sx={{
-        bg: 'gray.2',
+        bg: 'gray.3',
         textAlign: 'center',
         mr: 3,
+        // mt: `-7px`,
+        pb: `3px`,
+        pt: `1px`,
+        color: `gray.7`,
+        display: `block`,
         verticalAlign: 'middle',
         borderRadius: '99rem',
         border: 'solid 1px',
@@ -236,8 +247,6 @@ export interface Serialized {
 const ContentDetail = () => {
   const token = useStoreState((state) => state.auth.token);
 
-  
-
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
@@ -247,7 +256,7 @@ const ContentDetail = () => {
 
   // const tab = useTabState({ selectedId: 'edit' });
 
-  const defaultSelectedId = "edit";
+  const defaultSelectedId = 'edit';
   const tab = useTabState({ defaultSelectedId });
 
   const loadDataSucces = (data: any) => {
@@ -400,12 +409,14 @@ const ContentDetail = () => {
               <Box sx={{ mb: 4 }}>
                 <TabList state={tab} aria-label="Content Stages">
                   <Tab id="edit" variant="contentButton" as={Button} {...tab}>
+                    <Box sx={{ ml: 3}}>
                     <StepBlock
                       no={1}
                       title="Draft"
                       desc="Edit contents"
                       tab={tab}
                     />
+                    </Box>
                   </Tab>
                   <Tab
                     id="view"
@@ -483,7 +494,7 @@ const ContentDetail = () => {
                 pt: 3,
               }}>
               <Box sx={{ px: 3 }}>
-              {/* {contents.content.build} */}
+                {/* {contents.content.build} */}
                 <Flex sx={{ mb: 3 }}>
                   <Box sx={{ mr: 3 }}>
                     <Text as="h6" variant="labelcaps">

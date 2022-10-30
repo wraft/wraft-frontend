@@ -83,7 +83,9 @@ const UserNav = () => {
               // }}
               
               >
-              <BrandLogo width="6rem" height="2rem" />
+                <Box sx={{ color: `gray.0`, fill: 'gray.9'}}>
+                  <BrandLogo width="6rem" height="2rem" />
+                </Box>
             </Link>
           </Box>
 
