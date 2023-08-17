@@ -35,7 +35,8 @@ const reducer = (state = initialState, action: any) => {
         logged_in: false,
       };
     case 'LOGIN_CHECK':
-      let token: any = getCookie();
+      // eslint-disable-next-line no-case-declarations
+      const token: any = getCookie();
       return {
         ...state,
         logged_in: false,

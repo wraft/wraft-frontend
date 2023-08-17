@@ -40,7 +40,6 @@ import { HolderAtomExtension } from './holder/holder-atom';
 
 // import { IdentifierSchemaAttributes } from 'remirror';
 
-
 import { HolderAtomPopupComponent } from './holder/holder-popover';
 
 import {
@@ -374,7 +373,7 @@ const EditorWraft: FC<EditorProps> = ({
           bg: 'blue',
         },
       }}>
-        <div>{showToolbar}</div>
+      <div>{showToolbar}</div>
       <div>
         <div>
           <div>
@@ -400,7 +399,7 @@ const EditorWraft: FC<EditorProps> = ({
               outline.length > 0 &&
               outline.map((o: outlineP, index: any) => (
                 <div key={index}>
-                  <div onClick={o.onGo}>{o.body}</div>
+                  <Box onClick={o.onGo}>{o.body}</Box>
                 </div>
               ))}
           </div>

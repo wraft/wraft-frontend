@@ -170,11 +170,14 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
             fontSize: '12px',
             color: 'gray.6',
             fontWeight: 300,
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
           {id}
         </Text>
-        <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500, cursor: 'pointer' }}>
+        <Text
+          as="h4"
+          p={0}
+          sx={{ m: 0, fontSize: 1, fontWeight: 500, cursor: 'pointer' }}>
           {name}
         </Text>
       </MenuItem>
