@@ -12,10 +12,11 @@ const httpClient = axios.create({
 httpClient.interceptors.request.use(
   async (config) => {
     const token = (await cookie.get('token')) || false;
-    // eslint-disable-next-line no-param-reassign
-    config.headers = {
-      Authorization: `Bearer ${token}`,
-    };
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
