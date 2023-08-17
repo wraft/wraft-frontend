@@ -66,7 +66,7 @@ const UserLoginForm = () => {
             <Input
               id="email"
               name="email"
-              defaultValue="admin@wraftdocs.com"
+              defaultValue="shijith.k@aurut.com"
               ref={register({ required: true })}
             />
           </Box>
@@ -77,7 +77,7 @@ const UserLoginForm = () => {
             <Input
               id="password"
               name="password"
-              defaultValue="Admin@WraftDocs"
+              defaultValue="pa55w0rd"
               type="password"
               ref={register({ required: true })}
             />

@@ -38,7 +38,7 @@ export interface Actor {
 }
 
 export enum Email {
-  AdminWraftdocsCOM = 'admin@wraftdocs.com',
+  AdminWraftdocsCOM = 'shijith.k@aurut.com',
 }
 
 export enum Name {

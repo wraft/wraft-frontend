@@ -360,9 +360,9 @@ export const userLogin = (data: any, onSuccess?: any) => {
       return response.json();
     })
     .then(function (data) {
-      const { token } = data;
-      cookie.set('token', token);
-      onSuccess(token);
+      const { access_token } = data;
+      cookie.set('token', access_token);
+      onSuccess(access_token);
     });
 };
 
