@@ -85,7 +85,7 @@ const ActivityCard = (props: any) => (
       </Text> */}
     </Box>
     <Box sx={{ ml: 'auto' }}>
-      <TimeAgo time={props?.inserted_at}/>
+      <TimeAgo time={props?.inserted_at} />
     </Box>
   </Flex>
 );

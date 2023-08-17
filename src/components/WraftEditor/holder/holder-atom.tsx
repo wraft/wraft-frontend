@@ -424,6 +424,16 @@ export interface HolderAtomExtensionMatcher
    * use different tags.
    */
   mentionTag?: string;
+
+  /**
+   * Text to append after the mention has been added.
+   *
+   * **NOTE**: If it seems that your editor is swallowing  up empty whitespace,
+   * make sure you've imported the core css from the `@remirror/styles` library.
+   *
+   * @default ' '
+   */
+  appendText?: string;
 }
 
 /**

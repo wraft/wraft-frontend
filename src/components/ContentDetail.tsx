@@ -409,13 +409,13 @@ const ContentDetail = () => {
               <Box sx={{ mb: 4 }}>
                 <TabList state={tab} aria-label="Content Stages">
                   <Tab id="edit" variant="contentButton" as={Button} {...tab}>
-                    <Box sx={{ ml: 3}}>
-                    <StepBlock
-                      no={1}
-                      title="Draft"
-                      desc="Edit contents"
-                      tab={tab}
-                    />
+                    <Box sx={{ ml: 3 }}>
+                      <StepBlock
+                        no={1}
+                        title="Draft"
+                        desc="Edit contents"
+                        tab={tab}
+                      />
                     </Box>
                   </Tab>
                   <Tab

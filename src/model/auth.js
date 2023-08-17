@@ -1,4 +1,4 @@
-import { createStore, action, thunk } from 'easy-peasy';
+import { action, thunk } from 'easy-peasy';
 
 import axios from 'axios';
 import cookie from 'js-cookie';
@@ -39,7 +39,7 @@ const auth = {
         .then((response) => actions.grantAccess(response.data))
         .catch((error) => {
           console.log(error);
-          message.error('Ah ocurrido un error, intente de nuevo.');
+          console.error('Ah ocurrido un error, intente de nuevo.');
         }),
   ),
   logout: action((state) => {
