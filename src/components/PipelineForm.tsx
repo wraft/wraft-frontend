@@ -28,7 +28,7 @@ const customStyles = {
 
 import { IContentType, Template } from '../utils/types';
 import { Label, Select } from 'theme-ui';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { Pipeline } from './PipelineList';
 import { useStoreState } from 'easy-peasy';
