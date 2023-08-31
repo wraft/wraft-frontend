@@ -1,5 +1,5 @@
 import React, { FC, useRef, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 import { Box, Image } from 'theme-ui';
 
 const DropDownBoxBlock = styled(Box)`
