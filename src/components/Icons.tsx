@@ -269,7 +269,7 @@ export const EmptyForm = (props: React.SVGProps<SVGSVGElement>) => {
       viewBox="0 0 752 752"
       fill="currentColor"
       height="6rem"
-      width="auto"
+      // width="auto"
       {...props}>
       <path
         fill="currentColor"
