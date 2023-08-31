@@ -1,7 +1,12 @@
 import React, { ReactElement } from 'react';
 import { Box } from 'theme-ui';
-import { Link } from 'theme-ui';
 import NextLink from 'next/link';
+import styled from '@emotion/styled';
+
+export const NextLinkWrapper = styled(NextLink)`
+  color: #444;
+  text-decoration: none;
+`;
 
 interface Props {
   children: React.ReactNode;
@@ -11,14 +16,12 @@ interface Props {
   path?: string;
 }
 
-const NavLink: React.FC<Props> = ({ href, children, icon, variant, path }) => {
+const NavLink: React.FC<Props> = ({ href, children, icon, path }) => {
   return (
-    <NextLink href={href} as={path || ''}>
-      <Link variant={variant || 'primary'}>
-        {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
-        {children}
-      </Link>
-    </NextLink>
+    <NextLinkWrapper href={href} as={path || ''}>
+      {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
+      {children}
+    </NextLinkWrapper>
   );
 };
 
