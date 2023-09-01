@@ -1,11 +1,15 @@
 import { FC } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { Text, Box, Flex, Container } from 'theme-ui';
 import Page from '../components/PageFrame';
 import { useStoreState } from 'easy-peasy';
 import UserNav from '../components/UserNav';
-import UserHome from '../components/UserHome';
+// import UserHome from '../components/UserHome';
 import ContentTypeDashboard from '../components/ContentTypeDashboard';
+const UserHome = dynamic(() => import('../components/UserHome'), {
+  ssr: false,
+});
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
