@@ -10,7 +10,9 @@ export interface IMenuItem {
 
 const MenuItem = (props: IMenuItem) => {
   return (
-    <Flex variant={props?.variant || 'button'}>
+    <Flex
+      variant={props?.variant || 'button'}
+      sx={{ a: { textDecoration: 'none', color: '#444', width: '100%' } }}>
       <Link href={props.href} as={props.path}>
         {props.children}
       </Link>

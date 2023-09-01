@@ -23,6 +23,7 @@ const auth = {
     async (actions, payload) =>
       await axios
         .post(
+          // eslint-disable-next-line no-undef
           config.app.api_url + '/login',
           JSON.stringify({
             email: payload.email.value,
@@ -37,13 +38,15 @@ const auth = {
         .then((response) => actions.grantAccess(response.data))
         .catch((error) => {
           console.log(error);
-          message.error('Ah ocurrido un error, intente de nuevo.');
+          console.error('Ah ocurrido un error, intente de nuevo.');
         }),
   ),
   logout: action((state) => {
     state.user = null;
     state.token = null;
+    // eslint-disable-next-line no-undef
     localStorage.removeItem('uToken');
+    // eslint-disable-next-line no-undef
     localStorage.removeItem('uCandidate');
   }),
   refreshToken: action((state) => {

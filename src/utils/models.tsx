@@ -12,10 +12,11 @@ const httpClient = axios.create({
 httpClient.interceptors.request.use(
   async (config) => {
     const token = (await cookie.get('token')) || false;
-    // eslint-disable-next-line no-param-reassign
-    config.headers = {
-      Authorization: `Bearer ${token}`,
-    };
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -359,9 +360,9 @@ export const userLogin = (data: any, onSuccess?: any) => {
       return response.json();
     })
     .then(function (data) {
-      const { token } = data;
-      cookie.set('token', token);
-      onSuccess(token);
+      const { access_token } = data;
+      cookie.set('token', access_token);
+      onSuccess(access_token);
     });
 };
 

@@ -7,10 +7,9 @@ import dynamic from 'next/dynamic';
 
 import Page from '../../../components/PageFrameInner';
 
-const CreateForm = dynamic(
-  () => import('../../../components/ContentForm'),
-  { ssr: false },
-);
+const CreateForm = dynamic(() => import('../../../components/ContentForm'), {
+  ssr: false,
+});
 
 const Index: FC = () => {
   const router = useRouter();

@@ -88,10 +88,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
         />
       </Box>
 
-      <Popover
-        {...popover}
-        aria-label="Edit color"
-        >
+      <Popover {...popover} aria-label="Edit color">
         <ChromePicker
           color={valx}
           disableAlpha

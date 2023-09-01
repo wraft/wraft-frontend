@@ -1,8 +1,8 @@
-import { createStore, action, thunk } from 'easy-peasy';
-import { loadEntity } from '../utils/models';
+import { createStore, action } from 'easy-peasy';
+// import { loadEntity } from '../utils/models';
 
 import auth from './auth';
-import basicEntity from './default';
+// import basicEntity from './default';
 
 const profile = {
   profile: {},

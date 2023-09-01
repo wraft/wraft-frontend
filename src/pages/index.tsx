@@ -29,7 +29,7 @@ const Index: FC = () => {
           <Container variant="layout.pageFrame">
             <Box pb={3} pt={4} sx={{}}>
               {/* <Text variant="pagetitle" pb={0} mb={1}>
-              Quick Start
+              Quick Start s
             </Text> */}
               <Text sx={{ color: 'gray.7', fontSize: 1, pt: 0 }}>
                 Get started with templates
