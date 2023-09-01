@@ -359,7 +359,7 @@ const PipelineView = () => {
                     }}>
                     <Flex>
                       <Box sx={{ mr: 2 }}>
-                        <PlayCircle width={16}/>
+                        <PlayCircle width={16} />
                       </Box>
                       <Text>Run</Text>
                     </Flex>

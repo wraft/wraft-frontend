@@ -31,7 +31,7 @@ const PdfViewer = ({ url }: PdfViewerProps) => {
     <React.Fragment>
       <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
         <style
-          scoped
+          // scoped
           dangerouslySetInnerHTML={{
             __html: ` canvas { margin: auto; }`,
           }}

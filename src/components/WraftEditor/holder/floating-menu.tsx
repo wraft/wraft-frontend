@@ -5,7 +5,11 @@ import { cx } from '@remirror/core';
 import type { PositionerParam } from '@remirror/extension-positioner';
 import { getPositioner } from '@remirror/extension-positioner';
 import { useHelpers } from '@remirror/react-core';
-import { useEditorFocus, UseEditorFocusProps, usePositioner } from '@remirror/react-hooks';
+import {
+  useEditorFocus,
+  UseEditorFocusProps,
+  usePositioner,
+} from '@remirror/react-hooks';
 import { ComponentsTheme, ExtensionPositionerTheme } from '@remirror/theme';
 
 import { composeRefs } from './seznam-compose-react-refs';
@@ -80,7 +84,10 @@ interface UseMemoizedPositionProps {
 
 function useMemoizedPosition(props: UseMemoizedPositionProps) {
   const { height, left, top, width } = props;
-  return useMemo(() => ({ height, left, top, width }), [height, left, top, width]);
+  return useMemo(
+    () => ({ height, left, top, width }),
+    [height, left, top, width],
+  );
 }
 
 export const FloatingWrapper: FC<PropsWithChildren<FloatingWrapperProps>> = (
@@ -126,8 +133,7 @@ export const FloatingWrapper: FC<PropsWithChildren<FloatingWrapperProps>> = (
       aria-label={floatingLabel}
       ref={popperRef as any}
       style={popoverStyles}
-      className={cx(ComponentsTheme.FLOATING_POPOVER, containerClass)}
-    >
+      className={cx(ComponentsTheme.FLOATING_POPOVER, containerClass)}>
       {shouldShow && children}
     </div>
   );

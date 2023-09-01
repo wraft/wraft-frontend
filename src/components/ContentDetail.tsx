@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 // import { Document, Page } from 'react-pdf';
 import { Pencil } from '@styled-icons/boxicons-regular';
@@ -409,13 +409,13 @@ const ContentDetail = () => {
               <Box sx={{ mb: 4 }}>
                 <TabList state={tab} aria-label="Content Stages">
                   <Tab id="edit" variant="contentButton" as={Button} {...tab}>
-                    <Box sx={{ ml: 3}}>
-                    <StepBlock
-                      no={1}
-                      title="Draft"
-                      desc="Edit contents"
-                      tab={tab}
-                    />
+                    <Box sx={{ ml: 3 }}>
+                      <StepBlock
+                        no={1}
+                        title="Draft"
+                        desc="Edit contents"
+                        tab={tab}
+                      />
                     </Box>
                   </Tab>
                   <Tab
