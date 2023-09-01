@@ -7,7 +7,9 @@ import { useStoreState } from 'easy-peasy';
 import UserNav from '../components/UserNav';
 // import UserHome from '../components/UserHome';
 import ContentTypeDashboard from '../components/ContentTypeDashboard';
-const UserHome = dynamic(() => import('../components/UserHome'),{ssr: false})
+const UserHome = dynamic(() => import('../components/UserHome'), {
+  ssr: false,
+});
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
