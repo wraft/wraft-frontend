@@ -2,7 +2,7 @@ import withReduxStore from '../lib/with-redux-store';
 import { StoreProvider } from 'easy-peasy';
 import { AppProps } from 'next/app';
 
-import { ThemeProvider, Alert, Close } from 'theme-ui';
+import { ThemeUIProvider, Alert, Close } from 'theme-ui';
 import theme from '../utils/theme';
 // import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
   return (
     <StoreProviderOverride store={reduxStore}>
       <>
-        <ThemeProvider theme={theme}>
+        <ThemeUIProvider theme={theme}>
           {/* <GlobalStyle /> */}
           <ToastProvider
             autoDismiss
@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
             placement="top-center">
             <Component {...pageProps} />
           </ToastProvider>
-        </ThemeProvider>
+        </ThemeUIProvider>
       </>
     </StoreProviderOverride>
   );
