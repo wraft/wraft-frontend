@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import styled from '@emotion/styled';
 
 // import { Document, Page } from 'react-pdf';
 import { Pencil } from '@styled-icons/boxicons-regular';
