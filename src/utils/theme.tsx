@@ -13,7 +13,7 @@ const theme: Theme = {
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [13, 16, 20, 22, 25, 31.25, 39.06, 48.83, 61.04],
+  fontSizes: [12, 15, 18.75, 23.44, 29.3, 36.62, 45.78, 57.22, 71.53],
   fontWeights: {
     body: 400,
     heading: 600,
