@@ -3,11 +3,11 @@ import { Theme } from 'theme-ui';
 const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    body: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
     heading: 'inherit',
-    editor1: "'Satoshi', sans-serif",
+    editor1: "'Inter', sans-serif",
     editor2:
-      '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif', //"'IBM Plex Mono', monospace",
+      '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif', //"'IBM Plex Mono', monospace",
     // font-family:
     monospace: 'Menlo, monospace',
   },
