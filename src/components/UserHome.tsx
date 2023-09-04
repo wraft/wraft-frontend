@@ -41,8 +41,8 @@ const TextBlock = ({ title, body }: TextBlockProps) => {
 };
 
 const UserHome = () => {
-  var dark600 = '#343E49';
-  var success600 = '#00471A';
+  const dark600 = '#343E49';
+  const success600 = '#00471A';
   return (
     <Box bg="gray.0">
       <Head>
