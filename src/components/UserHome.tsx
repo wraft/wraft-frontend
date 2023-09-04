@@ -5,6 +5,7 @@ import { Button, Grid } from 'theme-ui';
 import Head from 'next/head';
 import ModeToggle from './ModeToggle';
 import { BrandLogo } from './Icons';
+import SvgTypewriter from './SvgTypewriter';
 
 // import styled from 'styled-components';
 // import Page from '../components/Page';
@@ -48,53 +49,73 @@ const UserHome = () => {
           rel="stylesheet"
         />
       </Head>
-      <Box variant="hero" pb={4} sx={{ px: [4, 2, 0] }}>
-        <Container width={70} bg="">
-          <Box p={4} pl={0} pt={6} pb={4} sx={{ maxWidth: '50ch' }}>
-            <Text
-              as="h1"
-              variant="pagetitle"
-              sx={{
-                fontSize: [5, 5, 7],
-                fontWeight: 900,
-                pb: 0,
-                m: 0,
-                mb: 3,
-                color: 'gray.9',
-                lineHeight: '1.20',
-              }}>
-              Documents for All
-            </Text>
-            <Text
-              as="h2"
-              sx={{
-                fontWeight: 300,
-                fontSize: [4, 4, 5],
-                mt: 0,
-                color: 'gray.6',
-                lineHeight: '1.25',
-              }}>
-              Open source platform for office/personal documents
-            </Text>
-          </Box>
-          <Button
+      <Box variant="hero" sx={{ px: [4, 2, 0], pt: '128px', pb: '200px' }}>
+        {/* <Container bg="" width={}> */}
+        {/* <Box p={4} pl={0} pt={6} pb={4} sx={{ maxWidth: '50ch' }}> */}
+        <Box p={0} sx={{ maxWidth: '1040px', mx: 'auto', width: '100%' }}>
+          <Flex
             sx={{
-              mt: [1, 2, 3],
-              fontWeight: 500,
-              mb: 5,
-              fontSize: [2, 2, 2],
-              borderRadius: '4px',
-              py: [2, 1, 2],
-              px: [4, 1, 3],
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '400px',
+              // alignItems: 'center',
             }}>
-            Get Started
-          </Button>
-          <Divider sx={{ color: `#464646` }} />
-        </Container>
-      </Box>
-      <Box sx={{ pt: 2, bg: 'gray.0' }}>
-        <Container width={70} bg="">
-          {/* <Box sx={{ pl: 0, py: 0, pb: 4, }}>
+            <Flex>
+              {/* 1st section */}
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  // alignItems: 'center',
+                }}>
+                <div>
+                  <Text
+                    as="h1"
+                    variant="pagetitle"
+                    sx={{
+                      // fontSize: [5, 5, 7],
+                      fontSize: [6, 7, 8],
+                      fontWeight: 900,
+                      pb: 0,
+                      m: 0,
+                      color: 'gray.9',
+                      lineHeight: '1.20',
+                    }}>
+                    Documents for Humans
+                  </Text>
+                  <Text
+                    as="h2"
+                    sx={{
+                      fontWeight: 300,
+                      fontSize: [4, 4, 5],
+                      my: 4,
+                      color: 'gray.6',
+                      lineHeight: '1.25',
+                    }}>
+                    <span style={{ fontWeight: 'bold' }}>Automate</span>{' '}
+                    Professional Documents
+                  </Text>
+                  <Button
+                    sx={{
+                      // mt: [1, 2, 3],
+                      fontWeight: 500,
+                      // mb: 5,
+                      fontSize: [2, 2, 2],
+                      borderRadius: '4px',
+                      py: [2, 1, 2],
+                      px: [4, 1, 3],
+                    }}>
+                    Get Started
+                  </Button>
+                </div>
+              </Flex>
+              <SvgTypewriter style={{ maxHeight: '485px' }} />
+            </Flex>
+
+            {/* 2nd section */}
+            <Box sx={{ pt: 2, bg: 'gray.0' }}>
+              <Container width={70} bg="">
+                {/* <Box sx={{ pl: 0, py: 0, pb: 4, }}>
             <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
               For Teams
             </Text>
@@ -104,65 +125,70 @@ const UserHome = () => {
               Built to suite your organizational needs
             </Text>
           </Box> */}
-          <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
-            <TextBlock
-              title="Entities with UUID"
-              body="Custom serializations for Documents with relationships"
-            />
-            <TextBlock
-              title="Automatable"
-              body="Create custom pipelines for your Document flows"
-            />
-            <TextBlock
-              title="Extendable"
-              body="Integrate with with 100+ apps"
-            />
-            <TextBlock
-              title="Approval System"
-              body="Custom serializations for Documents with relationships"
-            />
-            <TextBlock
-              title="Custom Design"
-              body="Bring your own style, keep in sync with your Design System"
-            />
-            <TextBlock
-              title="E-Signatures"
-              body="Easy Approvals with our flexible signature collection"
-            />
-          </Grid>
-          <Divider sx={{ pt: 4 }} />
-        </Container>
-      </Box>
-      <Box sx={{ pt: 4 }}>
-        <Container width={70} bg="">
-          <Box sx={{ py: 5, px: [0] }}>
-            <Box sx={{ pl: 0, py: 0, pb: 4 }}>
-              <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
-                For Teams
-              </Text>
-              <Text
-                as="h3"
-                sx={{ fontWeight: 100, fontSize: 4, color: 'gray.6' }}>
-                Built to suite your organizational needs
-              </Text>
+                <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
+                  <TextBlock
+                    title="Entities with UUID"
+                    body="Custom serializations for Documents with relationships"
+                  />
+                  <TextBlock
+                    title="Automatable"
+                    body="Create custom pipelines for your Document flows"
+                  />
+                  <TextBlock
+                    title="Extendable"
+                    body="Integrate with with 100+ apps"
+                  />
+                  <TextBlock
+                    title="Approval System"
+                    body="Custom serializations for Documents with relationships"
+                  />
+                  <TextBlock
+                    title="Custom Design"
+                    body="Bring your own style, keep in sync with your Design System"
+                  />
+                  <TextBlock
+                    title="E-Signatures"
+                    body="Easy Approvals with our flexible signature collection"
+                  />
+                </Grid>
+                <Divider sx={{ pt: 4 }} />
+              </Container>
             </Box>
+            <Box sx={{ pt: 4 }}>
+              <Container width={70} bg="">
+                <Box sx={{ py: 5, px: [0] }}>
+                  <Box sx={{ pl: 0, py: 0, pb: 4 }}>
+                    <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
+                      For Teams
+                    </Text>
+                    <Text
+                      as="h3"
+                      sx={{ fontWeight: 100, fontSize: 4, color: 'gray.6' }}>
+                      Built to suite your organizational needs
+                    </Text>
+                  </Box>
 
-            <Grid gap={[1, 1, 2]} columns={[1, 2, 3]}>
-              <TextBlock
-                title="Approval System"
-                body="Verify documents across Organisations"
-              />
-              <TextBlock
-                title="Smart Templates"
-                body="Easily replicate or bring your your own workflow!"
-              />
-              <TextBlock
-                title="Self-hosted"
-                body="Open source software that’s ready to meet your needs!"
-              />
-            </Grid>
-          </Box>
-        </Container>
+                  <Grid gap={[1, 1, 2]} columns={[1, 2, 3]}>
+                    <TextBlock
+                      title="Approval System"
+                      body="Verify documents across Organisations"
+                    />
+                    <TextBlock
+                      title="Smart Templates"
+                      body="Easily replicate or bring your your own workflow!"
+                    />
+                    <TextBlock
+                      title="Self-hosted"
+                      body="Open source software that’s ready to meet your needs!"
+                    />
+                  </Grid>
+                </Box>
+              </Container>
+            </Box>
+          </Flex>
+        </Box>
+        {/* <Divider sx={{ color: `#464646` }} /> */}
+        {/* </Container> */}
       </Box>
       <Box sx={{ pt: 2, bg: 'gray.1' }}>
         <Container width={70} bg="">
