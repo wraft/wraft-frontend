@@ -48,6 +48,10 @@ const UserHome = () => {
           href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
       </Head>
       <Box variant="hero" sx={{ px: [4, 2, 0], pt: '128px', pb: '200px' }}>
         {/* <Container bg="" width={}> */}
