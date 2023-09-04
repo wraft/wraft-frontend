@@ -41,6 +41,8 @@ const TextBlock = ({ title, body }: TextBlockProps) => {
 };
 
 const UserHome = () => {
+  var dark600 = '#343E49';
+  var success600 = '#00471A';
   return (
     <Box bg="gray.0">
       <Head>
@@ -53,16 +55,15 @@ const UserHome = () => {
           rel="stylesheet"
         />
       </Head>
-      <Box variant="hero" sx={{ px: [4, 2, 0], pt: '128px', pb: '200px' }}>
-        {/* <Container bg="" width={}> */}
-        {/* <Box p={4} pl={0} pt={6} pb={4} sx={{ maxWidth: '50ch' }}> */}
+      <Box
+        variant="hero"
+        sx={{ fontFamily: 'Satoshi', px: [4, 2, 0], pt: '128px', pb: '200px' }}>
         <Box p={0} sx={{ maxWidth: '1040px', mx: 'auto', width: '100%' }}>
           <Flex
             sx={{
               flexDirection: 'column',
               justifyContent: 'center',
               gap: '400px',
-              // alignItems: 'center',
             }}>
             <Flex>
               {/* 1st section */}
@@ -70,7 +71,6 @@ const UserHome = () => {
                 sx={{
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  // alignItems: 'center',
                 }}>
                 <div>
                   <Text
@@ -78,11 +78,12 @@ const UserHome = () => {
                     variant="pagetitle"
                     sx={{
                       // fontSize: [5, 5, 7],
-                      fontSize: [6, 7, 8],
-                      fontWeight: 900,
+                      fontSize: '56px',
+                      fontWeight: 700,
                       pb: 0,
                       m: 0,
-                      color: 'gray.9',
+                      // color: 'gray.9',
+                      color: dark600,
                       lineHeight: '1.20',
                     }}>
                     Documents for Humans
@@ -90,24 +91,33 @@ const UserHome = () => {
                   <Text
                     as="h2"
                     sx={{
-                      fontWeight: 300,
-                      fontSize: [4, 4, 5],
+                      fontWeight: 400,
+                      // fontSize: [4, 4, 5],
+                      fontSize: [2, 2, 3],
                       my: 4,
-                      color: 'gray.6',
+                      // color: 'gray.6',
+                      color: dark600,
                       lineHeight: '1.25',
                     }}>
-                    <span style={{ fontWeight: 'bold' }}>Automate</span>{' '}
+                    <span style={{ fontWeight: 700 }}>Automate</span>{' '}
                     Professional Documents
                   </Text>
                   <Button
                     sx={{
-                      // mt: [1, 2, 3],
+                      cursor: 'pointer',
                       fontWeight: 500,
-                      // mb: 5,
                       fontSize: [2, 2, 2],
+                      border: '1px solid',
                       borderRadius: '4px',
+                      borderColor: success600,
                       py: [2, 1, 2],
                       px: [4, 1, 3],
+                      color: success600,
+                      bg: 'transparent',
+                      '&:hover': {
+                        bg: success600,
+                        color: 'white',
+                      },
                     }}>
                     Get Started
                   </Button>
