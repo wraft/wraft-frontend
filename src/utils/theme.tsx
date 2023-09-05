@@ -32,8 +32,12 @@ const theme: Theme = {
     // primary: '#087f5b',
     // secondary: '#30c',
     background: '#FAFBFC',
+    bgWhite: '#fff',
     primary: 'green.4',
     secondary: 'gray.5',
+    neutral: [
+      '#E4E9EF', //nutral/light
+    ],
     gray: [
       '#D4D7DA',
       '#BCC0C5',
@@ -124,6 +128,10 @@ const theme: Theme = {
         text: '#fff',
         base: '#000',
         background: '#111',
+        bgWhite: '#000',
+        neutral: [
+          '#111', //nutral/light
+        ],
         gray: [
           '#1D252F',
           '#2C3641',
