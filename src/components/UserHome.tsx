@@ -1,11 +1,19 @@
-import React from 'react';
-import { Box, Divider, Flex, Image, Text } from 'theme-ui';
+import React, { ReactElement } from 'react';
+import { Box, Flex, Text } from 'theme-ui';
 import Container from './Container';
 import { Button, Grid } from 'theme-ui';
 import Head from 'next/head';
 import ModeToggle from './ModeToggle';
 import { BrandLogo } from './Icons';
 import SvgTypewriter from './SvgTypewriter';
+import {
+  IconApproval,
+  IconAutomatable,
+  IconCustomDesign,
+  IconEntities,
+  IconIntegrations,
+  IconSignature,
+} from './IconFeatures';
 
 // import styled from 'styled-components';
 // import Page from '../components/Page';
@@ -13,27 +21,33 @@ import SvgTypewriter from './SvgTypewriter';
 export interface TextBlockProps {
   title: string;
   body: string;
+  icon: ReactElement;
 }
 
-const TextBlock = ({ title, body }: TextBlockProps) => {
+const TextBlock = ({ title, body, icon }: TextBlockProps) => {
   return (
-    <Box sx={{ py: [2, 2, 5], mr: [2, 2, 4] }}>
-      <Image
-        width="48px"
-        height="48px"
-        src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzUycHQiIGhlaWdodD0iNzUycHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDc1MiA3NTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8Zz4KICA8cGF0aCBkPSJtNDU5LjM1IDYwOS40OGMtNzUuMzAxIDAtMTM2Ljg2LTYxLjU2Ni0xMzYuODYtMTM2Ljg2IDAtNzUuMzAxIDYxLjU2Ni0xMzYuODYgMTM2Ljg2LTEzNi44NiA3NS4zMDEgMCAxMzYuODYgNjEuNTY2IDEzNi44NiAxMzYuODZzLTYxLjU2MiAxMzYuODYtMTM2Ljg2IDEzNi44NnptMC0yNTYuNjhjLTY2LjMwMSAwLTExOS44MiA1My45ODgtMTE5LjgyIDExOS44MiAwIDY2LjMwMSA1My45ODggMTE5LjgyIDExOS44MiAxMTkuODIgNjYuMzAxIDAgMTE5LjgyLTUzLjk4OCAxMTkuODItMTE5LjgyIDAtNjYuMzAxLTUzLjk4OC0xMTkuODItMTE5LjgyLTExOS44MnoiLz4KICA8cGF0aCBkPSJtNDI5Ljk5IDUyMS4zOWMtMi4zNjcyIDAuNDcyNjYtNC43MzQ0LTAuNDcyNjYtNi42Mjg5LTIuMzY3MmwtNDEuNjc2LTQzLjA5OGMtMi44Mzk4LTIuODM5OC0yLjgzOTgtOC4wNTA4IDAtMTAuODkxczguMDUwOC0yLjgzOTggMTAuODkxIDBsMzYuNDY1IDM3Ljg4NyA5NS4xOTEtODMuODI0YzMuMzE2NC0yLjgzOTggOC4wNTA4LTIuMzY3MiAxMC44OTEgMC40NzI2NiAyLjgzOTggMy4zMTY0IDIuMzY3MiA4LjA1MDgtMC40NzI2NiAxMC44OTFsLTEwMC40IDg5LjAzNWMtMS40MTggMS40MjE5LTIuODM5OCAxLjg5NDUtNC4yNjE3IDEuODk0NXoiLz4KICA8cGF0aCBkPSJtMzM5LjA2IDYwOS40OGgtMTY5LjU0Yy00LjczNDQgMC04Ljk5NjEtNC4yNjE3LTguOTk2MS04Ljk5NjF2LTQ0OC45NmMwLTQuNzM0NCA0LjI2MTctOC45OTYxIDguOTk2MS04Ljk5NjFoMjg0LjYyYzIuMzY3MiAwIDQuNzM0NCAwLjk0NTMxIDYuMTU2MiAyLjM2NzJsODIuNDAyIDgwLjUwOGMxLjg5NDUgMS44OTQ1IDIuODM5OCAzLjc4OTEgMi44Mzk4IDYuNjI4OXY4Mi40MDJjMCA0LjczNDQtNC4yNjE3IDguOTk2MS04Ljk5NjEgOC45OTYxLTQuNzM0NCAwLjAwMzkwNi04Ljk5NjEtNC4yNTc4LTguOTk2MS05LjQ2ODh2LTc4LjE0MWwtNzcuMTkxLTc1LjI5N2gtMjcxLjg0djQzMC45NmgxNjAuNTRjNC43MzQ0IDAgOC45OTYxIDQuMjYxNyA4Ljk5NjEgOC45OTYxIDAgNC43MzgzLTMuNzg1MiA5LTguOTk2MSA5eiIvPgogIDxwYXRoIGQ9Im0yMzIuMDMgMjk2LjQ0aDE4OS45MWM1LjY4MzYgMCAxMC40MTgtNC43MzQ0IDEwLjQxOC0xMC40MTggMC01LjY4MzYtNC43MzQ0LTEwLjQxOC0xMC40MTgtMTAuNDE4bC0xODkuOTEtMC4wMDM5MDdjLTUuNjgzNiAwLTEwLjQxOCA0LjczNDQtMTAuNDE4IDEwLjQxOCAwIDUuNjgzNiA0LjczODMgMTAuNDIyIDEwLjQxOCAxMC40MjJ6Ii8+CiAgPHBhdGggZD0ibTIzMi45OCAyMzkuMTRoMTg5LjkxYzUuNjgzNiAwIDEwLjQxOC00LjczNDQgMTAuNDE4LTEwLjQxOHMtNC43MzQ0LTEwLjQxOC0xMC40MTgtMTAuNDE4aC0xODkuOTFjLTUuNjgzNiAwLTEwLjQxOCA0LjczNDQtMTAuNDE4IDEwLjQxOHM0LjczNDQgMTAuNDE4IDEwLjQxOCAxMC40MTh6Ii8+CiAgPHBhdGggZD0ibTIzMi45OCAzNTUuMTZoMTExLjI5YzUuNjgzNiAwIDEwLjQxOC00LjczNDQgMTAuNDE4LTEwLjQxOHMtNC43MzQ0LTEwLjQxOC0xMC40MTgtMTAuNDE4aC0xMTEuMjljLTUuNjgzNiAwLTEwLjQxOCA0LjczNDQtMTAuNDE4IDEwLjQxOHM0LjczNDQgMTAuNDE4IDEwLjQxOCAxMC40MTh6Ii8+CiAgPHBhdGggZD0ibTMwMS42NSA0MTUuNzhoLTY5LjE0MWMtNS42ODM2IDAtMTAuNDE4LTQuNzM0NC0xMC40MTgtMTAuNDE4IDAtNS42ODM2IDQuNzM0NC0xMC40MTggMTAuNDE4LTEwLjQxOGg2OS42MTdjNS42ODM2IDAgMTAuNDE4IDQuNzM0NCAxMC40MTggMTAuNDE4IDAgNS42ODM2LTUuMjEwOSAxMC40MTgtMTAuODk1IDEwLjQxOHoiLz4KIDwvZz4KPC9zdmc+Cg=="
-      />
+    <Box
+      sx={{
+        py: [2, 2, 5],
+        mr: [2, 2, 4],
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+        gap: '12px',
+      }}>
+      {icon}
       <Text
         as="h1"
         sx={{
           fontFamily: 'Satoshi',
           fontSize: 3,
           fontWeight: 600,
-          color: 'gray.9',
+          color: 'green.5',
         }}>
         {title}
       </Text>
-      <Text as="p" sx={{ fontSize: 3, color: 'gray.6' }}>
+      <Text as="p" sx={{ fontSize: 2, color: 'gray.3', textWrap: 'balance' }}>
         {body}
       </Text>
     </Box>
@@ -41,10 +55,8 @@ const TextBlock = ({ title, body }: TextBlockProps) => {
 };
 
 const UserHome = () => {
-  const dark600 = '#343E49';
-  const success600 = '#00471A';
   return (
-    <Box bg="gray.0">
+    <Box bg="background">
       <Head>
         <link
           href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
@@ -83,7 +95,7 @@ const UserHome = () => {
                       pb: 0,
                       m: 0,
                       // color: 'gray.9',
-                      color: dark600,
+                      color: 'secondary',
                       lineHeight: '1.20',
                     }}>
                     Documents for Humans
@@ -96,7 +108,7 @@ const UserHome = () => {
                       fontSize: [2, 2, 3],
                       my: 4,
                       // color: 'gray.6',
-                      color: dark600,
+                      color: 'secondary',
                       lineHeight: '1.25',
                     }}>
                     <span style={{ fontWeight: 700 }}>Automate</span>{' '}
@@ -109,14 +121,14 @@ const UserHome = () => {
                       fontSize: [2, 2, 2],
                       border: '1px solid',
                       borderRadius: '4px',
-                      borderColor: success600,
+                      borderColor: 'green.5',
                       py: [2, 1, 2],
                       px: [4, 1, 3],
-                      color: success600,
+                      color: 'green.5',
                       bg: 'transparent',
                       '&:hover': {
-                        bg: success600,
-                        color: 'white',
+                        bg: 'green.5',
+                        color: 'background',
                       },
                     }}>
                     Get Started
@@ -127,9 +139,9 @@ const UserHome = () => {
             </Flex>
 
             {/* 2nd section */}
-            <Box sx={{ pt: 2, bg: 'gray.0' }}>
-              <Container width={70} bg="">
-                {/* <Box sx={{ pl: 0, py: 0, pb: 4, }}>
+            <Box sx={{ pt: 2, bg: 'background' }}>
+              {/* <Container width={70} bg=""> */}
+              {/* <Box sx={{ pl: 0, py: 0, pb: 4, }}>
             <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
               For Teams
             </Text>
@@ -139,36 +151,42 @@ const UserHome = () => {
               Built to suite your organizational needs
             </Text>
           </Box> */}
-                <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
-                  <TextBlock
-                    title="Entities with UUID"
-                    body="Custom serializations for Documents with relationships"
-                  />
-                  <TextBlock
-                    title="Automatable"
-                    body="Create custom pipelines for your Document flows"
-                  />
-                  <TextBlock
-                    title="Extendable"
-                    body="Integrate with with 100+ apps"
-                  />
-                  <TextBlock
-                    title="Approval System"
-                    body="Custom serializations for Documents with relationships"
-                  />
-                  <TextBlock
-                    title="Custom Design"
-                    body="Bring your own style, keep in sync with your Design System"
-                  />
-                  <TextBlock
-                    title="E-Signatures"
-                    body="Easy Approvals with our flexible signature collection"
-                  />
-                </Grid>
-                <Divider sx={{ pt: 4 }} />
-              </Container>
+              <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
+                <TextBlock
+                  icon={<IconEntities />}
+                  title="Entities with UUID"
+                  body="Custom serializations for Documents with relationships"
+                />
+                <TextBlock
+                  icon={<IconAutomatable />}
+                  title="Automatable"
+                  body="Create custom pipelines for your Document flows"
+                />
+                <TextBlock
+                  icon={<IconIntegrations />}
+                  title="Integrations"
+                  body="Integrate with with 100+ apps"
+                />
+                <TextBlock
+                  icon={<IconApproval />}
+                  title="Approval System"
+                  body="Custom serializations for Documents with relationships"
+                />
+                <TextBlock
+                  icon={<IconCustomDesign />}
+                  title="Custom Design"
+                  body="Bring your own style, keep in sync with your Design System"
+                />
+                <TextBlock
+                  icon={<IconSignature />}
+                  title="E-Signatures"
+                  body="Easy Approvals with our flexible signature collection"
+                />
+              </Grid>
+              {/* <Divider sx={{ pt: 4 }} /> */}
+              {/* </Container> */}
             </Box>
-            <Box sx={{ pt: 4 }}>
+            {/* <Box sx={{ pt: 4 }}>
               <Container width={70} bg="">
                 <Box sx={{ py: 5, px: [0] }}>
                   <Box sx={{ pl: 0, py: 0, pb: 4 }}>
@@ -198,13 +216,14 @@ const UserHome = () => {
                   </Grid>
                 </Box>
               </Container>
-            </Box>
+            </Box> */}
           </Flex>
         </Box>
         {/* <Divider sx={{ color: `#464646` }} /> */}
         {/* </Container> */}
       </Box>
-      <Box sx={{ pt: 2, bg: 'gray.1' }}>
+      {/* footer */}
+      <Box sx={{ pt: 2, bg: 'background' }}>
         <Container width={70} bg="">
           <Flex sx={{ py: 5, flex: 1, flexDirection: `row` }}>
             <Flex sx={{ flexDirection: `column` }}>
