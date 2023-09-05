@@ -15,6 +15,7 @@ import {
   IconSignature,
 } from './IconFeatures';
 import HR from './HR';
+import SvgTeams from './SvgTeams';
 
 export interface TextBlockProps {
   title: string;
@@ -26,8 +27,8 @@ const TextBlock = ({ title, body, icon }: TextBlockProps) => {
   return (
     <Box
       sx={{
-        py: [2, 2, 5],
-        mr: [2, 2, 4],
+        // pb: [2, 2, 6],
+        // mr: [2, 2, 4],
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -75,8 +76,8 @@ const UserHome = () => {
               justifyContent: 'center',
               // gap: '400px',
             }}>
-            <Flex>
-              {/* 1st section */}
+            {/* 1st section */}
+            <Flex sx={{ justifyContent: 'space-between', gap: 6 }}>
               <Flex
                 sx={{
                   flexDirection: 'column',
@@ -116,6 +117,7 @@ const UserHome = () => {
                     sx={{
                       cursor: 'pointer',
                       fontWeight: 500,
+                      fontFamily: 'Satoshi',
                       fontSize: [2, 2, 2],
                       border: '1px solid',
                       borderRadius: '4px',
@@ -133,12 +135,15 @@ const UserHome = () => {
                   </Button>
                 </div>
               </Flex>
-              <SvgTypewriter style={{ maxHeight: '485px' }} />
+              <SvgTypewriter />
             </Flex>
             <HR />
             {/* 2nd section */}
             <Box sx={{ pt: 2 }}>
-              <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
+              <Grid
+                gap={2}
+                columns={[1, 2, 3]}
+                sx={{ px: [4, 2, 0], gridRowGap: 6 }}>
                 <TextBlock
                   icon={<IconEntities />}
                   title="Entities with UUID"
@@ -172,6 +177,68 @@ const UserHome = () => {
               </Grid>
             </Box>
             <HR />
+            {/* 3rd section */}
+            <Flex sx={{ justifyContent: 'space-between', gap: 6 }}>
+              <SvgTeams />
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                }}>
+                <div>
+                  <Text
+                    as="h1"
+                    variant="pagetitle"
+                    sx={{
+                      // fontSize: [5, 5, 7],
+                      fontSize: '56px',
+                      fontWeight: 700,
+                      pb: 0,
+                      m: 0,
+                      // color: 'gray.9',
+                      color: 'secondary',
+                      lineHeight: '1.20',
+                    }}>
+                    For teams
+                  </Text>
+                  <Text
+                    as="h2"
+                    sx={{
+                      fontWeight: 400,
+                      // fontSize: [4, 4, 5],
+                      fontSize: [2, 2, 3],
+                      my: 4,
+                      // color: 'gray.6',
+                      color: 'secondary',
+                      lineHeight: '1.25',
+                    }}>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua.
+                  </Text>
+                  <Button
+                    sx={{
+                      cursor: 'pointer',
+                      fontWeight: 500,
+                      fontFamily: 'Satoshi',
+                      fontSize: [2, 2, 2],
+                      border: '1px solid',
+                      borderRadius: '4px',
+                      borderColor: 'green.5',
+                      py: [2, 1, 2],
+                      px: [4, 1, 3],
+                      color: 'green.5',
+                      bg: 'transparent',
+                      '&:hover': {
+                        bg: 'green.5',
+                        color: 'bgWhite',
+                      },
+                    }}>
+                    Join now
+                  </Button>
+                </div>
+              </Flex>
+            </Flex>
           </Flex>
         </Box>
       </Box>
