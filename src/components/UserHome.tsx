@@ -140,17 +140,6 @@ const UserHome = () => {
 
             {/* 2nd section */}
             <Box sx={{ pt: 2, bg: 'background' }}>
-              {/* <Container width={70} bg=""> */}
-              {/* <Box sx={{ pl: 0, py: 0, pb: 4, }}>
-            <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
-              For Teams
-            </Text>
-            <Text
-              as="h3"
-              sx={{ fontWeight: 100, fontSize: 4, color: 'gray.6' }}>
-              Built to suite your organizational needs
-            </Text>
-          </Box> */}
               <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
                 <TextBlock
                   icon={<IconEntities />}
@@ -183,44 +172,9 @@ const UserHome = () => {
                   body="Easy Approvals with our flexible signature collection"
                 />
               </Grid>
-              {/* <Divider sx={{ pt: 4 }} /> */}
-              {/* </Container> */}
             </Box>
-            {/* <Box sx={{ pt: 4 }}>
-              <Container width={70} bg="">
-                <Box sx={{ py: 5, px: [0] }}>
-                  <Box sx={{ pl: 0, py: 0, pb: 4 }}>
-                    <Text as="h2" sx={{ fontSize: 5, color: 'gray.9' }}>
-                      For Teams
-                    </Text>
-                    <Text
-                      as="h3"
-                      sx={{ fontWeight: 100, fontSize: 4, color: 'gray.6' }}>
-                      Built to suite your organizational needs
-                    </Text>
-                  </Box>
-
-                  <Grid gap={[1, 1, 2]} columns={[1, 2, 3]}>
-                    <TextBlock
-                      title="Approval System"
-                      body="Verify documents across Organisations"
-                    />
-                    <TextBlock
-                      title="Smart Templates"
-                      body="Easily replicate or bring your your own workflow!"
-                    />
-                    <TextBlock
-                      title="Self-hosted"
-                      body="Open source software that’s ready to meet your needs!"
-                    />
-                  </Grid>
-                </Box>
-              </Container>
-            </Box> */}
           </Flex>
         </Box>
-        {/* <Divider sx={{ color: `#464646` }} /> */}
-        {/* </Container> */}
       </Box>
       {/* footer */}
       <Box sx={{ pt: 2, bg: 'background' }}>
