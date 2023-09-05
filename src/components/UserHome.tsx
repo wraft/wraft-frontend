@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Box, Divider, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import Container from './Container';
 import { Button, Grid } from 'theme-ui';
 import Head from 'next/head';
