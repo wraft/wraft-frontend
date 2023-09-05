@@ -67,14 +67,14 @@ export const IconApproval = (props: SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}>
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M40 6H8C5.8 6 4 7.8 4 10V38C4 40.2 5.8 42 8 42H40C42.2 42 44 40.2 44 38V10C44 7.8 42.2 6 40 6ZM40 38H8V10H40V38Z"
       fill="#00471A"
     />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M38.82 20.84L35.98 18L29.64 24.34L26.82 21.5L24 24.32L29.64 30L38.82 20.84Z"
       fill="#00471A"
     />
