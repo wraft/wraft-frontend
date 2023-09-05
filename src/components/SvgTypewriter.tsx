@@ -3,8 +3,11 @@ import { SVGProps } from 'react';
 
 const SvgTypewriter = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    // width="485"
-    height="100%"
+    // style={{ maxHeight: '485px' }}
+    // height="100%"
+    style={{ flexShrink: 0 }}
+    width="485"
+    height="485"
     viewBox="0 0 485 485"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
