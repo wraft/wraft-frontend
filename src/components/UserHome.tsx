@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Divider, Flex, Text } from 'theme-ui';
 import Container from './Container';
 import { Button, Grid } from 'theme-ui';
 import Head from 'next/head';
@@ -14,9 +14,7 @@ import {
   IconIntegrations,
   IconSignature,
 } from './IconFeatures';
-
-// import styled from 'styled-components';
-// import Page from '../components/Page';
+import HR from './HR';
 
 export interface TextBlockProps {
   title: string;
@@ -56,7 +54,7 @@ const TextBlock = ({ title, body, icon }: TextBlockProps) => {
 
 const UserHome = () => {
   return (
-    <Box bg="background">
+    <Box bg="bgWhite">
       <Head>
         <link
           href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
@@ -75,7 +73,7 @@ const UserHome = () => {
             sx={{
               flexDirection: 'column',
               justifyContent: 'center',
-              gap: '400px',
+              // gap: '400px',
             }}>
             <Flex>
               {/* 1st section */}
@@ -128,7 +126,7 @@ const UserHome = () => {
                       bg: 'transparent',
                       '&:hover': {
                         bg: 'green.5',
-                        color: 'background',
+                        color: 'bgWhite',
                       },
                     }}>
                     Get Started
@@ -137,9 +135,9 @@ const UserHome = () => {
               </Flex>
               <SvgTypewriter style={{ maxHeight: '485px' }} />
             </Flex>
-
+            <HR />
             {/* 2nd section */}
-            <Box sx={{ pt: 2, bg: 'background' }}>
+            <Box sx={{ pt: 2 }}>
               <Grid gap={2} columns={[1, 2, 3]} sx={{ px: [4, 2, 0] }}>
                 <TextBlock
                   icon={<IconEntities />}
@@ -173,6 +171,7 @@ const UserHome = () => {
                 />
               </Grid>
             </Box>
+            <HR />
           </Flex>
         </Box>
       </Box>
@@ -206,7 +205,6 @@ const UserHome = () => {
                     sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
                     Team
                   </Box>
-                  {/* <Box as="li" sx={{ color: `gray.9`, pb: 1}}>Features</Box> */}
                   <Box
                     as="li"
                     sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
