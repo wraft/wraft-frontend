@@ -58,9 +58,9 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        bg: 'gray.0',
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        bg: 'background',
+        // borderBottom: 'solid 1px',
+        // borderColor: 'gray.3',
         py: 2,
       }}>
       <Container>
