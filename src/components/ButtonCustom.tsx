@@ -1,13 +1,13 @@
 import React from 'react';
-import { Button as ButtonTheme } from 'theme-ui';
+import { Button } from 'theme-ui';
 
 interface props {
   text: string;
 }
 
-const Button = ({ text }: props) => {
+const ButtonCustom = ({ text }: props) => {
   return (
-    <ButtonTheme
+    <Button
       sx={{
         cursor: 'pointer',
         fontWeight: 500,
@@ -26,8 +26,8 @@ const Button = ({ text }: props) => {
         },
       }}>
       {text}
-    </ButtonTheme>
+    </Button>
   );
 };
 
-export default Button;
+export default ButtonCustom;
