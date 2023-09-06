@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import UserNav from '../components/UserNav';
 import Footer from '../components/Footer';
-import { Box, Close, Flex, Text } from 'theme-ui';
+import { Box, Button, Close, Flex, Text } from 'theme-ui';
 import HR from '../components/HR';
 import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
 import ButtonCustom from '../components/ButtonCustom';
@@ -129,7 +129,22 @@ const Card = ({
           </Text>
         </Flex>
       </Flex>
-      <ButtonCustom text="Choose this plan" />
+      <Button
+        sx={{
+          cursor: 'pointer',
+          fontWeight: 500,
+          fontSize: 1,
+          borderRadius: '4px',
+          py: [2, 1, 2],
+          px: [4, 1, 3],
+          color: `${dark ? 'gray.8' : 'bgWhite'}`,
+          bg: `${dark ? 'bgWhite' : 'gray.8'}`,
+          '&:hover': {
+            bg: `${dark ? 'gray.1' : 'gray.6'}`,
+          },
+        }}>
+        Choose this plan
+      </Button>
     </Box>
   );
 };
