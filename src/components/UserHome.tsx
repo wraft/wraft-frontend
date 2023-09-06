@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import Container from './Container';
-import { Button, Grid } from 'theme-ui';
+import { Grid } from 'theme-ui';
 import Head from 'next/head';
 import ModeToggle from './ModeToggle';
 import { BrandLogo } from './Icons';
@@ -16,6 +16,7 @@ import {
 } from './IconFeatures';
 import HR from './HR';
 import SvgTeams from './SvgTeams';
+import Button from './Button';
 
 export interface TextBlockProps {
   title: string;
@@ -113,26 +114,7 @@ const UserHome = () => {
                     <span style={{ fontWeight: 700 }}>Automate</span>{' '}
                     Professional Documents
                   </Text>
-                  <Button
-                    sx={{
-                      cursor: 'pointer',
-                      fontWeight: 500,
-                      fontFamily: 'Satoshi',
-                      fontSize: [2, 2, 2],
-                      border: '1px solid',
-                      borderRadius: '4px',
-                      borderColor: 'green.5',
-                      py: [2, 1, 2],
-                      px: [4, 1, 3],
-                      color: 'green.5',
-                      bg: 'transparent',
-                      '&:hover': {
-                        bg: 'green.5',
-                        color: 'bgWhite',
-                      },
-                    }}>
-                    Get Started
-                  </Button>
+                  <Button text="Get Started" />
                 </div>
               </Flex>
               <SvgTypewriter />
@@ -216,26 +198,7 @@ const UserHome = () => {
                     do eiusmod tempor incididunt ut labore et dolore magna
                     aliqua.
                   </Text>
-                  <Button
-                    sx={{
-                      cursor: 'pointer',
-                      fontWeight: 500,
-                      fontFamily: 'Satoshi',
-                      fontSize: [2, 2, 2],
-                      border: '1px solid',
-                      borderRadius: '4px',
-                      borderColor: 'green.5',
-                      py: [2, 1, 2],
-                      px: [4, 1, 3],
-                      color: 'green.5',
-                      bg: 'transparent',
-                      '&:hover': {
-                        bg: 'green.5',
-                        color: 'bgWhite',
-                      },
-                    }}>
-                    Join now
-                  </Button>
+                  <Button text="Join now" />
                 </div>
               </Flex>
             </Flex>
