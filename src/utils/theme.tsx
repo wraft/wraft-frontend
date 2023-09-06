@@ -28,15 +28,14 @@ const theme: Theme = {
   colors: {
     muted: '#f6f6f6',
     text: '#000',
-    // background: 'text',
-    // primary: '#087f5b',
-    // secondary: '#30c',
     background: '#FAFBFC',
     bgWhite: '#fff',
     primary: 'green.4',
-    secondary: 'gray.5',
+    secondary: 'gray.8',
     neutral: [
-      '#E4E9EF', //nutral/light
+      '#E4E9EF', //light
+      '#D7DDE9', //nutral
+      '#C1C6DB', //dark
     ],
     gray: [
       '#D4D7DA',
