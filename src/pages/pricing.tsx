@@ -58,7 +58,7 @@ const Card = ({
         }}>
         {title}
       </Text>
-      <HR my="28px" color="gray.0" />
+      <HR my="28px" color={`${dark ? 'gray.5' : 'gray.0'}`} />
       <Text
         as="h1"
         sx={{
@@ -68,7 +68,9 @@ const Card = ({
           color: text,
         }}>
         ${price}
-        <Text as="span" sx={{ fontSize: 2, color: 'gray.3' }}>
+        <Text
+          as="span"
+          sx={{ fontSize: 2, color: `${dark ? 'gray.5' : 'gray.3'}` }}>
           /monthly
         </Text>
       </Text>
