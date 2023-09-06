@@ -97,7 +97,7 @@ const UserNav = () => {
                       Join Wraft
                     </Text>
                   </Link>
-                  <Link href="/signup">
+                  <Link href="/pricing">
                     <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
                       Pricing
                     </Text>
