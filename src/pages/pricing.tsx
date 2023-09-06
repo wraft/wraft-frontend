@@ -2,8 +2,10 @@ import { FC } from 'react';
 import Head from 'next/head';
 import UserNav from '../components/UserNav';
 import Footer from '../components/Footer';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Close, Flex, Text } from 'theme-ui';
 import HR from '../components/HR';
+import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
+import ButtonCustom from '../components/ButtonCustom';
 
 interface cardProps {
   dark?: boolean;
@@ -22,8 +24,17 @@ const Card = ({
   users,
   storage,
 }: cardProps) => {
+  const bgColor: string = dark ? 'gray.8' : 'bgWhite';
+  const text: string = dark ? 'bgWhite' : 'gray.8';
+  const iconYes = dark ? <IconCorrectDark /> : <IconCorrect />;
+  const iconNo = dark ? (
+    <Close size={16} m={0} color="white" />
+  ) : (
+    <Close size={16} m={0} />
+  );
   return (
     <Box
+      bg={bgColor}
       sx={{
         height: '448px',
         width: '315px',
@@ -31,6 +42,9 @@ const Card = ({
         border: '1px solid',
         borderColor: 'neutral.2',
         borderRadius: '12px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
       }}>
       <Text
         as="h1"
@@ -38,27 +52,84 @@ const Card = ({
           fontFamily: 'satoshi',
           fontWeight: 400,
           fontSize: 6,
-          color: 'gray.8',
+          lineHeight: '1',
+          color: text,
         }}>
         {title}
       </Text>
-      <HR my="28px" />
-      <Text as="h1" sx={{ fontWeight: 700, fontSize: 6, color: 'gray.8' }}>
+      <HR my="28px" color="gray.0" />
+      <Text
+        as="h1"
+        sx={{
+          fontWeight: 700,
+          fontSize: 6,
+          lineHeight: '1',
+          color: text,
+        }}>
         ${price}
         <Text as="span" sx={{ fontSize: 2, color: 'gray.3' }}>
           /monthly
         </Text>
       </Text>
       <Text
+        as="p"
+        mt="28px"
+        mb="16px"
         sx={{
-          color: 'gray.8',
+          color: text,
           fontSize: 1,
           fontWeight: 400,
-          mt: 3,
-          mb: '16px',
         }}>
         What’s included
       </Text>
+      <Flex sx={{ flexDirection: 'column', gap: '12px', mb: '30px' }}>
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              flexShrink: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mr: '12px',
+            }}>
+            {fullAccess ? iconYes : iconNo}
+          </Box>
+          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+            Full Access
+          </Text>
+        </Flex>
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              flexShrink: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mr: '12px',
+            }}>
+            {users ? iconYes : iconNo}
+          </Box>
+          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+            Upto 10 users
+          </Text>
+        </Flex>
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              flexShrink: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mr: '12px',
+            }}>
+            {storage ? iconYes : iconNo}
+          </Box>
+          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+            Upto 50GB of cloud storage
+          </Text>
+        </Flex>
+      </Flex>
+      <ButtonCustom text="Choose this plan" />
     </Box>
   );
 };
@@ -84,6 +155,7 @@ const Index: FC = () => {
           sx={{
             texWrap: 'balance',
             fontSize: [5, 5, 6],
+            lineHeight: '1.25',
             maxWidth: '410px',
             textAlign: 'center',
             color: 'gray.8',
@@ -92,8 +164,10 @@ const Index: FC = () => {
           }}>
           Different plans for different needs
         </Text>
-        <Flex>
-          <Card title="Basic" price={299} />
+        <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+          <Card title="Basic" price={299} fullAccess />
+          <Card dark title="Pro" price={399} fullAccess users />
+          <Card title="Expertise" price={599} fullAccess users storage />
         </Flex>
       </Box>
       <Footer />
