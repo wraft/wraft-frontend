@@ -6,6 +6,7 @@ import { Box, Button, Close, Flex, Text } from 'theme-ui';
 import HR from '../components/HR';
 import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
 import ButtonCustom from '../components/ButtonCustom';
+import { IconCustomDesign } from '../components/IconFeatures';
 
 interface cardProps {
   dark?: boolean;
@@ -129,22 +130,7 @@ const Card = ({
           </Text>
         </Flex>
       </Flex>
-      <Button
-        sx={{
-          cursor: 'pointer',
-          fontWeight: 500,
-          fontSize: 1,
-          borderRadius: '4px',
-          py: [2, 1, 2],
-          px: [4, 1, 3],
-          color: `${dark ? 'gray.8' : 'bgWhite'}`,
-          bg: `${dark ? 'bgWhite' : 'gray.8'}`,
-          '&:hover': {
-            bg: `${dark ? 'gray.1' : 'gray.6'}`,
-          },
-        }}>
-        Choose this plan
-      </Button>
+      <ButtonCustom text="Choose this plan" price dark={dark} />
     </Box>
   );
 };
@@ -185,6 +171,29 @@ const Index: FC = () => {
           <Card title="Expertise" price={599} fullAccess users storage />
         </Flex>
       </Box>
+      <Flex
+        my="200px"
+        sx={{
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '28px',
+        }}>
+        <IconCustomDesign />
+        <Text
+          sx={{
+            maxWidth: '652px',
+            fontSize: 3,
+            fontWeight: 400,
+            color: 'gray.8',
+            textAlign: 'center',
+            textWrap: 'balance',
+          }}>
+          Need something specific to fit your needs? Reach out and we'd be happy
+          to work with you to meet your goals.
+        </Text>
+        <ButtonCustom text="Get custom quote" price />
+      </Flex>
       <Footer />
     </>
   );
