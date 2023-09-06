@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import UserNav from '../components/UserNav';
 import Footer from '../components/Footer';
-import { Box, Button, Close, Flex, Text } from 'theme-ui';
+import { Box, Close, Flex, Text } from 'theme-ui';
 import HR from '../components/HR';
 import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
 import ButtonCustom from '../components/ButtonCustom';
@@ -191,8 +191,8 @@ const Index: FC = () => {
             textAlign: 'center',
             textWrap: 'balance',
           }}>
-          Need something specific to fit your needs? Reach out and we'd be happy
-          to work with you to meet your goals.
+          Need something specific to fit your needs? Reach out and we&apos;d be
+          happy to work with you to meet your goals.
         </Text>
         <ButtonCustom text="Get custom quote" price />
       </Flex>
