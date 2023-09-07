@@ -9,7 +9,7 @@ import ButtonCustom from '../components/ButtonCustom';
 import { IconCustomDesign } from '../components/IconFeatures';
 
 interface cardProps {
-  onClick: () => void;
+  onClick?: () => void;
   dark?: boolean;
   title: string;
   price: number;
