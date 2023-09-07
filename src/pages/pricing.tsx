@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import UserNav from '../components/UserNav';
 import Footer from '../components/Footer';
-import { Box, Close, Flex, Text } from 'theme-ui';
+import { Box, Close, Container, Flex, Text } from 'theme-ui';
 import HR from '../components/HR';
 import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
 import ButtonCustom from '../components/ButtonCustom';
@@ -145,57 +145,60 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <UserNav />
-      <Box
-        sx={{
-          maxWidth: '1041px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mx: 'auto',
-        }}>
-        <Text
-          as="h1"
+      <Container sx={{ bg: 'bgWhite' }}>
+        <Box
           sx={{
-            texWrap: 'balance',
-            fontSize: [5, 5, 6],
-            lineHeight: '1.25',
-            maxWidth: '410px',
-            textAlign: 'center',
-            color: 'gray.8',
-            mt: 5,
-            mb: '80px',
+            maxWidth: '1041px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mx: 'auto',
           }}>
-          Different plans for different needs
-        </Text>
-        <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
-          <Card title="Basic" price={299} fullAccess />
-          <Card dark title="Pro" price={399} fullAccess users />
-          <Card title="Expertise" price={599} fullAccess users storage />
+          <Text
+            as="h1"
+            sx={{
+              texWrap: 'balance',
+              fontSize: [5, 5, 6],
+              lineHeight: '1.25',
+              maxWidth: '410px',
+              textAlign: 'center',
+              color: 'gray.8',
+              mt: 5,
+              mb: '80px',
+            }}>
+            Different plans for different needs
+          </Text>
+          <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
+            <Card title="Basic" price={299} fullAccess />
+            <Card dark title="Pro" price={399} fullAccess users />
+            <Card title="Expertise" price={599} fullAccess users storage />
+          </Flex>
+        </Box>
+        <Flex
+          mt="200px"
+          pb="200px"
+          sx={{
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '28px',
+          }}>
+          <IconCustomDesign />
+          <Text
+            sx={{
+              maxWidth: '652px',
+              fontSize: 3,
+              fontWeight: 400,
+              color: 'gray.8',
+              textAlign: 'center',
+              textWrap: 'balance',
+            }}>
+            Need something specific to fit your needs? Reach out and we&apos;d
+            be happy to work with you to meet your goals.
+          </Text>
+          <ButtonCustom text="Get custom quote" price />
         </Flex>
-      </Box>
-      <Flex
-        my="200px"
-        sx={{
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: '28px',
-        }}>
-        <IconCustomDesign />
-        <Text
-          sx={{
-            maxWidth: '652px',
-            fontSize: 3,
-            fontWeight: 400,
-            color: 'gray.8',
-            textAlign: 'center',
-            textWrap: 'balance',
-          }}>
-          Need something specific to fit your needs? Reach out and we&apos;d be
-          happy to work with you to meet your goals.
-        </Text>
-        <ButtonCustom text="Get custom quote" price />
-      </Flex>
+      </Container>
       <Footer />
     </>
   );
