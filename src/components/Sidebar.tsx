@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text, Button } from 'theme-ui';
 
 import { useRouter } from 'next/router';
 
@@ -22,38 +22,138 @@ import {
 
 import ModeToggle from './ModeToggle';
 
+// const listMenu = [
+//   {
+//     name: 'Documents',
+//     logo: <Note width={20} />,
+//     path: '/contents',
+//   },
+//   {
+//     name: 'Approvals',
+//     logo: <Like width={20} />,
+//     path: '/approvals',
+//   },
+//   {
+//     name: 'Variants',
+//     logo: <BookOpen width={20} />,
+//     path: '/content-types',
+//   },
+//   {
+//     name: 'Templates',
+//     logo: <Carousel width={20} />,
+//     path: '/templates',
+//   },
+//   // {
+//   //   name: 'Frames',
+//   //   logo: <Layout width={20} />,
+//   //   path: '/layouts',
+//   // },
+
+//   {
+//     name: 'Blocks',
+//     logo: <TextIcon width={20} />,
+//     path: '/blocks',
+//   },
+
+//   // {
+//   //   name: 'Forms',
+//   //   logo: <Water width={20} />,
+//   //   path: '/forms',
+//   // },
+//   // {
+//   //   name: 'Flows',
+//   //   logo: <GitMerge width={20} />,
+//   //   path: '/flows',
+//   // },
+//   // {
+//   //   name: 'Fields',
+//   //   logo: <Spreadsheet width={20} />,
+//   //   path: '/fields',
+//   // },
+//   // {
+//   //   name: 'Pipelines',
+//   //   logo: <Collection width={20} />,
+//   //   path: '/pipelines',
+//   // },
+//   // {
+//   //   name: 'Themes',
+//   //   logo: <ColorFill width={20} />,
+//   //   path: '/themes',
+//   // },
+//   {
+//     name: 'Vendors',
+//     logo: <UserVoice width={20} />,
+//     path: '/vendors',
+//   },
+//   {
+//     name: 'Manage',
+//     logo: <Wrench width={20} />,
+//     path: '/manage',
+//   },
+
+//   {
+//     name: 'Settings',
+//     logo: <Cog width={20} />,
+//     path: '/account',
+//   },
+// ];
 const listMenu = [
   {
-    name: 'Documents',
-    logo: <Note width={20} />,
-    path: '/contents',
+    section: 'content',
+    menus: [
+      {
+        name: 'Documents',
+        logo: <Note width={20} />,
+        path: '/contents',
+      },
+      {
+        name: 'Approvals',
+        logo: <Like width={20} />,
+        path: '/approvals',
+      },
+    ],
   },
   {
-    name: 'Approvals',
-    logo: <Like width={20} />,
-    path: '/approvals',
+    section: 'structure',
+    menus: [
+      {
+        name: 'Variants',
+        logo: <BookOpen width={20} />,
+        path: '/content-types',
+      },
+      {
+        name: 'Templates',
+        logo: <Carousel width={20} />,
+        path: '/templates',
+      },
+      {
+        name: 'Blocks',
+        logo: <TextIcon width={20} />,
+        path: '/blocks',
+      },
+      {
+        name: 'Vendors',
+        logo: <UserVoice width={20} />,
+        path: '/vendors',
+      },
+      {
+        name: 'Manage',
+        logo: <Wrench width={20} />,
+        path: '/manage',
+      },
+      {
+        name: 'Settings',
+        logo: <Cog width={20} />,
+        path: '/account',
+      },
+    ],
   },
-  {
-    name: 'Variants',
-    logo: <BookOpen width={20} />,
-    path: '/content-types',
-  },
-  {
-    name: 'Templates',
-    logo: <Carousel width={20} />,
-    path: '/templates',
-  },
+
   // {
   //   name: 'Frames',
   //   logo: <Layout width={20} />,
   //   path: '/layouts',
   // },
-
-  {
-    name: 'Blocks',
-    logo: <TextIcon width={20} />,
-    path: '/blocks',
-  },
 
   // {
   //   name: 'Forms',
@@ -80,22 +180,6 @@ const listMenu = [
   //   logo: <ColorFill width={20} />,
   //   path: '/themes',
   // },
-  {
-    name: 'Vendors',
-    logo: <UserVoice width={20} />,
-    path: '/vendors',
-  },
-  {
-    name: 'Manage',
-    logo: <Wrench width={20} />,
-    path: '/manage',
-  },
-
-  {
-    name: 'Settings',
-    logo: <Cog width={20} />,
-    path: '/account',
-  },
 ];
 
 export interface INav {
@@ -136,7 +220,12 @@ const Nav = (props: any) => {
   };
 
   return (
-    <Box>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        height: '100%',
+        justifyContent: 'space-between',
+      }}>
       {/* <Modal
         isOpen={showSearch}
         onRequestClose={closeSearch}
@@ -169,9 +258,9 @@ const Nav = (props: any) => {
           pl: 3,
           pb: 3,
           borderBottom: 'solid 1px',
-          borderColor: 'gray.2',
+          borderColor: '#E4E9EF',
           mb: 3,
-          pt: 1,
+          pt: 3,
         }}>
         <Link href="/">
           <Flex color="primary" sx={{ fill: 'text' }}>
@@ -179,58 +268,72 @@ const Nav = (props: any) => {
           </Flex>
         </Link>
       </Box>
-      {/* <Box
-        sx={{
-          pl: 3,
-          pr: 3,
-          mb: 2,
-          pb: 3,
-          borderBottom: 'solid 1px',
-          borderColor: 'gray.2',
-        }}>
-        <Button onClick={toggleSearch} variant="btnMain">
-          New Doc
-        </Button>
-      </Box> */}
-      <Box>
-        {listMenu.map((m) => (
-          <MenuItem href={m.path} key={m.path} variant="layout.menuWrapper">
-            <Flex
-              variant={
-                checkActive(pathname, m)
-                  ? 'layout.menuLinkActive'
-                  : 'layout.menuLink'
-              }>
-              <Box
-                sx={{
-                  mr: 2,
-                  color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
-                }}>
-                {m.logo}
-              </Box>
-              {showFull && (
-                <Text sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>
-                  {m.name}
-                </Text>
-              )}
-            </Flex>
-          </MenuItem>
+      <Box sx={{ flex: 1 }}>
+        {listMenu.map((m, i) => (
+          <Box key={i} sx={{ mb: 4 }}>
+            <Box
+              sx={{
+                textTransform: 'uppercase',
+                fontSize: '9.6px',
+                fontWeight: '500',
+                px: 3,
+                mb: '12px',
+                color: '#B1B5B9',
+              }}>
+              {m.section}
+            </Box>
+            {m.menus.map((menu) => (
+              <MenuItem
+                href={menu.path}
+                key={menu.path}
+                variant="layout.menuWrapper">
+                <Flex
+                  variant={
+                    checkActive(pathname, m)
+                      ? 'layout.menuLinkActive'
+                      : 'layout.menuLink'
+                  }>
+                  <Box
+                    sx={{
+                      mr: 2,
+                      color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
+                    }}>
+                    {menu.logo}
+                  </Box>
+                  {showFull && (
+                    <Text
+                      sx={{ fontWeight: checkActive(pathname, m) ? 600 : 500 }}>
+                      {menu.name}
+                    </Text>
+                  )}
+                </Flex>
+              </MenuItem>
+            ))}
+          </Box>
         ))}
       </Box>
 
-      <Box
-        pl={3}
-        pb={3}
-        pt={3}
-        sx={{
-          mb: 3,
-          borderBottom: 'solid 1px',
-          bg: 'gray.0',
-          borderColor: 'gray.1',
-        }}>
-        <ModeToggle variant="button" />
+      <Box>
+        <Box
+          pl={3}
+          pb={3}
+          pt={3}
+          sx={{
+            mb: 3,
+          }}>
+          <ModeToggle variant="button" />
+        </Box>
+        <Box
+          sx={{
+            pl: 3,
+            pr: 3,
+            mb: 2,
+            pb: 3,
+          }}>
+          <Button sx={{ width: '100%' }}>New Document</Button>
+        </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

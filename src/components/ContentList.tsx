@@ -161,7 +161,9 @@ const ContentList = () => {
             </Box>
           ),
           col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
-          status: <StateBadge name={r.state.state} color="green.3" />,
+          status: (
+            <StateBadge name={r.state && r.state.state} color="green.3" />
+          ),
         };
 
         row.push(rFormated);
@@ -172,7 +174,7 @@ const ContentList = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
+    <Box sx={{ pl: 0, minHeight: '100%' }}>
       <PageHeader title="Documents" desc="All Official Documents" />
       {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
@@ -219,7 +221,7 @@ const ContentList = () => {
             {total}
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
@@ -247,7 +249,7 @@ const ContentList = () => {
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0 }}>
               <Text
                 as="h4"
                 variant="blockTitle"

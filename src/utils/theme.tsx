@@ -30,7 +30,7 @@ const theme: Theme = {
     text: '#000',
     background: '#FAFBFC',
     bgWhite: '#fff',
-    primary: 'green.4',
+    primary: '#00471A',
     secondary: 'gray.8',
     neutral: [
       '#E4E9EF', //light
@@ -171,13 +171,13 @@ const theme: Theme = {
       border: 'solid 1px',
       borderColor: 'gray.3',
       fontFamily: 'body',
-      bg: 'gray.0',
+      // bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
     },
 
     small: {
-      bg: 'gray.0',
+      // bg: 'gray.0',
       fontSize: 0,
       p: 0,
       px: 3,
@@ -550,12 +550,12 @@ const theme: Theme = {
       alignItems: 'center',
     },
     frameHeading: {
-      bg: 'gray.0',
+      bg: 'white',
       pb: 3,
       px: 4,
       py: 2,
       borderBottom: 'solid 1px',
-      borderColor: 'gray.3',
+      borderColor: '#E4E9EF',
       mb: 0,
     },
     button: {
@@ -584,17 +584,17 @@ const theme: Theme = {
     },
     menuLink: {
       cursor: 'pointer',
-      bg: 'gray.0',
       mb: 0,
       p: 2,
       borderRadius: 3,
       fontWeight: 600,
       width: '100%',
+      color: '#343E49',
       a: {
         fontWeight: 600,
       },
       ':hover': {
-        bg: 'gray.2',
+        bg: 'rgba(155, 225, 181, 0.3);',
       },
     },
 
@@ -661,8 +661,8 @@ const theme: Theme = {
     plateBox: {
       border: 'solid 1px',
       borderColor: 'gray.3',
-      bg: 'gray.0',
-      px: 3,
+      // bg: 'gray.0',
+      // px: 3,
       py: 3,
     },
     button2: {
