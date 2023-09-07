@@ -134,9 +134,9 @@ const Nav = ({ navtitle }: INav) => {
       // onClick={() =>closeSearch}
       sx={{
         p: 0,
-        bg: 'gray.0',
+        bg: 'white',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: '#E4E9EF',
         pt: 0,
         pb: 2,
       }}>
@@ -216,8 +216,8 @@ const Nav = ({ navtitle }: INav) => {
         </Box>
         <Box ml="auto" mr={3}>
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
-          <Flex sx={{ bg: 'gray.0' }}>
-            <Flex sx={{ bg: 'gray.0', ':hover': { bg: 'gray.1' } }}>
+          <Flex>
+            <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
               <Box as="span" sx={{ mt: 2 }}></Box>
 
               <Box
