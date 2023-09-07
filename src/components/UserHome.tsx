@@ -36,7 +36,7 @@ const TextBlock = ({ title, body, icon }: TextBlockProps) => {
       <Text
         as="h1"
         sx={{
-          fontFamily: 'Satoshi',
+          fontFamily: 'satoshi',
           fontSize: 3,
           fontWeight: 600,
           color: 'green.5',
@@ -65,13 +65,12 @@ const UserHome = () => {
       </Head>
       <Box
         variant="hero"
-        sx={{ fontFamily: 'Satoshi', px: [4, 2, 0], pt: '128px', pb: '200px' }}>
+        sx={{ fontFamily: 'satoshi', px: [4, 2, 0], pt: '128px', pb: '200px' }}>
         <Box p={0} sx={{ maxWidth: '1040px', mx: 'auto', width: '100%' }}>
           <Flex
             sx={{
               flexDirection: 'column',
               justifyContent: 'center',
-              // gap: '400px',
             }}>
             {/* 1st section */}
             <Flex sx={{ justifyContent: 'space-between', gap: 6 }}>
@@ -90,8 +89,7 @@ const UserHome = () => {
                       fontWeight: 700,
                       pb: 0,
                       m: 0,
-                      // color: 'gray.9',
-                      color: 'secondary',
+                      color: 'gray.8',
                       lineHeight: '1.20',
                     }}>
                     Documents for Humans
@@ -100,11 +98,9 @@ const UserHome = () => {
                     as="h2"
                     sx={{
                       fontWeight: 400,
-                      // fontSize: [4, 4, 5],
                       fontSize: [2, 2, 3],
                       my: 4,
-                      // color: 'gray.6',
-                      color: 'secondary',
+                      color: 'gray.8',
                       lineHeight: '1.25',
                     }}>
                     <span style={{ fontWeight: 700 }}>Automate</span>{' '}
@@ -173,8 +169,7 @@ const UserHome = () => {
                       fontWeight: 700,
                       pb: 0,
                       m: 0,
-                      // color: 'gray.9',
-                      color: 'secondary',
+                      color: 'gray.8',
                       lineHeight: '1.20',
                     }}>
                     For teams
@@ -183,11 +178,9 @@ const UserHome = () => {
                     as="h2"
                     sx={{
                       fontWeight: 400,
-                      // fontSize: [4, 4, 5],
                       fontSize: [2, 2, 3],
                       my: 4,
-                      // color: 'gray.6',
-                      color: 'secondary',
+                      color: 'gray.8',
                       lineHeight: '1.25',
                     }}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
