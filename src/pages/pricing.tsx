@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import Head from 'next/head';
 import UserNav from '../components/UserNav';
 import Footer from '../components/Footer';
@@ -9,6 +9,7 @@ import ButtonCustom from '../components/ButtonCustom';
 import { IconCustomDesign } from '../components/IconFeatures';
 
 interface cardProps {
+  onClick: () => void;
   dark?: boolean;
   title: string;
   price: number;
@@ -18,6 +19,7 @@ interface cardProps {
 }
 
 const Card = ({
+  onClick,
   dark,
   title,
   price,
@@ -34,7 +36,9 @@ const Card = ({
     <Close size={16} m={0} />
   );
   return (
+    //jump
     <Box
+      onClick={onClick}
       bg={bgColor}
       sx={{
         height: '448px',
@@ -138,6 +142,11 @@ const Card = ({
 };
 
 const Index: FC = () => {
+  //jump
+  const [activeCard, setActiveCard] = React.useState(1);
+  const handleCardClick = (index: number) => {
+    setActiveCard(index);
+  };
   return (
     <>
       <Head>
@@ -169,9 +178,30 @@ const Index: FC = () => {
             Different plans for different needs
           </Text>
           <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
-            <Card title="Basic" price={299} fullAccess />
-            <Card dark title="Pro" price={399} fullAccess users />
-            <Card title="Expertise" price={599} fullAccess users storage />
+            <Card
+              onClick={() => handleCardClick(0)}
+              dark={0 === activeCard}
+              title="Basic"
+              price={299}
+              fullAccess
+            />
+            <Card
+              onClick={() => handleCardClick(1)}
+              dark={1 === activeCard}
+              title="Pro"
+              price={399}
+              fullAccess
+              users
+            />
+            <Card
+              onClick={() => handleCardClick(2)}
+              dark={2 === activeCard}
+              title="Expertise"
+              price={599}
+              fullAccess
+              users
+              storage
+            />
           </Flex>
         </Box>
         <Flex
