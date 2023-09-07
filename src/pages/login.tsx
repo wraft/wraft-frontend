@@ -15,7 +15,7 @@ export const Index: FC = () => {
           content="Wraft - The Document Automation Platform"
         />
       </Head>
-      <Box bg="gray.0">
+      <Box>
         <UserNav />
         <UserLoginForm />
       </Box>
