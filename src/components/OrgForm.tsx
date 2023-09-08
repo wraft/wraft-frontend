@@ -86,7 +86,12 @@ const formList = [
 ];
 
 const OrgForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);

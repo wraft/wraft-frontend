@@ -159,7 +159,13 @@ const Form = (props: IContentForm) => {
   // Base
   // -------
   const router = useRouter();
-  const { register, getValues, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
 
   // Content Specific
@@ -858,10 +864,11 @@ const Form = (props: IContentForm) => {
                   <Label>Edit </Label>
                   <Input
                     id="edit"
-                    name="edit"
+                    // name="edit"
                     defaultValue={id}
                     // hidden={true}
-                    ref={register({ required: true })}
+                    // ref={register({ required: true })}
+                    {...register('edit', { required: true })}
                   />
                 </Box>
               )}

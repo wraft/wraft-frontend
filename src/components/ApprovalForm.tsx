@@ -136,7 +136,11 @@ const StatesForm = (props: StateFormProps) => {
 };
 
 const ApprovalForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
 

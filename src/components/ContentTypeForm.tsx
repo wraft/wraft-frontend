@@ -111,7 +111,12 @@ export interface FieldTypeItem {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
@@ -412,8 +417,10 @@ const Form = () => {
                   </Label>
                   <Select
                     id="layout_id"
-                    name="layout_id"
-                    ref={register({ required: true })}>
+                    // name="layout_id"
+                    {...(register('layout_id'), { required: true })}
+                    // ref={register({ required: true })}
+                  >
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -429,9 +436,10 @@ const Form = () => {
                   </Label>
                   <Select
                     id="flow_id"
-                    name="flow_id"
+                    // name="flow_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    // ref={register({ required: true })}
+                    {...(register('flow_id'), { required: true })}>
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -445,10 +453,11 @@ const Form = () => {
                 <Box sx={{ display: 'none' }}>
                   <Input
                     id="edit"
-                    name="edit"
+                    // name="edit"
                     defaultValue={0}
                     hidden={true}
-                    ref={register({ required: true })}
+                    // ref={register({ required: true })}
+                    {...(register('edit'), { required: true })}
                   />
                 </Box>
 
@@ -458,9 +467,10 @@ const Form = () => {
                   </Label>
                   <Select
                     id="theme_id"
-                    name="theme_id"
+                    // name="theme_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    // ref={register({ required: true })}
+                    {...register('theme_id', { required: true })}>
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (

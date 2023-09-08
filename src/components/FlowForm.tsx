@@ -270,7 +270,12 @@ const StatesForm = ({
 };
 
 const FlowForm = () => {
-  const { register, handleSubmit, setValue, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);

@@ -17,7 +17,11 @@ export interface IField {
 }
 
 const UserLoginForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,9 +55,10 @@ const UserLoginForm = () => {
             </Label>
             <Input
               id="email"
-              name="email"
+              // name="email"
               defaultValue="shijith.k@aurut.com"
-              ref={register({ required: true })}
+              // ref={register({ required: true })}
+              {...register('email', { required: true })}
             />
           </Box>
           <Box px={2}>
@@ -62,10 +67,11 @@ const UserLoginForm = () => {
             </Label>
             <Input
               id="password"
-              name="password"
+              // name="password"
               defaultValue="pa55w0rd"
               type="password"
-              ref={register({ required: true })}
+              // ref={register({ required: true })}
+              {...register('password', { required: true })}
             />
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}
