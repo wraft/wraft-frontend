@@ -144,9 +144,10 @@ const FieldForm = (props: FieldFormProps) => {
                     </Label>
                     <Input
                       type="text"
-                      ref={register}
+                      // ref={register}
                       defaultValue={(f && f.value.name) || ''}
-                      name={`fields[${idx}][name]`}
+                      // name={`fields[${idx}][name]`}
+                      {...register(`fields[${idx}][name]`)}
                     />
                   </Box>
                   <Box sx={{ flexGrow: 1, px: 3 }}>
@@ -157,8 +158,9 @@ const FieldForm = (props: FieldFormProps) => {
                       Type
                     </Label>
                     <Select
-                      name={`fields[${idx}][type]`}
-                      ref={register}
+                      // name={`fields[${idx}][type]`}
+                      // ref={register}
+                      {...register(`fields[${idx}][type]`)}
                       defaultValue={(f && f.value.field_type.id) || ''}>
                       {props.fieldtypes &&
                         props.fieldtypes.length > 0 &&

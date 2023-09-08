@@ -13,7 +13,11 @@ export interface IField {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data: any) => {
     console.log('data', data);
     fetch(`${env.api_dev}/api/v1/users/signin`, {
@@ -42,9 +46,10 @@ const Form = () => {
           </Label>
           <Input
             id="email"
-            name="email"
+            // name="email"
             defaultValue="John Doe"
-            ref={register({ required: true })}
+            // ref={register({ required: true })}
+            {...register('email', { required: true })}
           />
         </Box>
         <Box>
@@ -53,10 +58,11 @@ const Form = () => {
           </Label>
           <Input
             id="password"
-            name="password"
+            // name="password"
             defaultValue=""
             type="password"
-            ref={register({ required: true })}
+            // ref={register({ required: true })}
+            {...register('password', { required: true })}
           />
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}

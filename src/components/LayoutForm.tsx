@@ -70,7 +70,12 @@ export interface IEngine {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
@@ -226,9 +231,10 @@ const Form = () => {
               </Label>
               <Input
                 id="name"
-                name="name"
+                // name="name"
                 defaultValue="Layout X"
-                ref={register({ required: true })}
+                // ref={register({ required: true })}
+                {...register('name', { required: true })}
               />
             </Box>
             <Box>
@@ -258,9 +264,10 @@ const Form = () => {
               </Label>
               <Input
                 id="screenshot"
-                name="screenshot"
+                // name="screenshot"
                 type="file"
-                ref={register()}
+                // ref={register()}
+                {...register('screenshot')}
               />
             </Box>
             <Box>
@@ -269,9 +276,10 @@ const Form = () => {
               </Label>
               <Select
                 id="engine_uuid"
-                name="engine_uuid"
+                // name="engine_uuid"
                 defaultValue="NYC"
-                ref={register({ required: true })}>
+                // ref={register({ required: true })}
+                {...register('engine_uuid', { required: true })}>
                 {engines &&
                   engines.length > 0 &&
                   engines.map((m: any) => (

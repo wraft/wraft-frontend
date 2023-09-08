@@ -7,7 +7,11 @@ import { createEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 const FieldTypeForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
 
   const onSubmit = (data: any) => {

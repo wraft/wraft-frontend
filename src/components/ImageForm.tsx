@@ -36,11 +36,23 @@ const Form = (props: IImageForm) => {
       {loading && <Spinner width={32} color="primary" />}
       <Text mb={3}>Upload Files</Text>
       <Box mx={-2} mb={3}>
-        <Input id="name" name="name" type="hidden" ref={register} />
+        <Input
+          id="name"
+          // name="name"
+          type="hidden"
+          // ref={register}
+          {...register('name')}
+        />
         <Label htmlFor="name" mb={1}>
           File
         </Label>
-        <Input id="file" name="file" type="file" ref={register} />
+        <Input
+          id="file"
+          // name="file"
+          type="file"
+          // ref={register}
+          {...register('file')}
+        />
       </Box>
       <Flex mx={-2} mt={2}>
         <Button type="submit" ml={2}>
