@@ -115,9 +115,10 @@ const Field: React.FC<Props> = ({
           component={(_props: any) => (
             <Box sx={{ position: 'relative' }}>
               <Input
-                name={name}
+                // name={name}
                 // placeholder={placeholder ? placeholder: ''}
-                ref={register({ required })}
+                // ref={register({ required })}
+                {...register(name, { required: required })}
                 {..._props}
                 // value={value || selected}
               />
