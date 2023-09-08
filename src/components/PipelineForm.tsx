@@ -53,7 +53,13 @@ const ListGroup = styled(Box)`
 `;
 
 const PipelineForm = () => {
-  const { register, handleSubmit, errors, getValues, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [templates, setTemplates] = useState<Array<Template>>([]);
   //
@@ -309,10 +315,11 @@ const PipelineForm = () => {
                   <Box>
                     <Select
                       id="content_type_id"
-                      name="content_type_id"
-                      onChange={LoadContentType}
+                      // name="content_type_id"
                       defaultValue="Parent ID"
-                      ref={register({ required: true })}>
+                      // ref={register({ required: true })}
+                      {...register('content_type_id', { required: true })}
+                      onChange={LoadContentType}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (
@@ -329,9 +336,10 @@ const PipelineForm = () => {
                         </Label>
                         <Select
                           id="data_template_id"
-                          name="data_template_id"
+                          // name="data_template_id"
                           defaultValue="Parent ID"
-                          ref={register({ required: true })}>
+                          // ref={register({ required: true })}
+                          {...register('data_template_id', { required: true })}>
                           {templates &&
                             templates.length > 0 &&
                             templates.map((m: any) => (
@@ -350,9 +358,10 @@ const PipelineForm = () => {
                         </Label>
                         <Select
                           id="state_id"
-                          name="state_id"
+                          // name="state_id"
                           defaultValue="Default State"
-                          ref={register({ required: true })}>
+                          // ref={register({ required: true })}
+                          {...register('state_id', { required: true })}>
                           {ctypeActive.flow.states &&
                             ctypeActive.flow.states.length > 0 &&
                             ctypeActive.flow.states.map((m: any) => (
