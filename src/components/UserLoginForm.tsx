@@ -17,24 +17,23 @@ export interface IField {
 }
 
 const UserLoginForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const [ready, setReady] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
-    console.log('funfun', data);
-    setReady(true);
+    setLoading(true);
     userLogin(data, ProxyToken);
   };
 
-  // if(token) {
-  //   return (<h1>Logged in da</h1>)
-  // }
-
   const ProxyToken = (t: string) => {
     setToken(t);
-    setReady(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -44,16 +43,7 @@ const UserLoginForm = () => {
   }, [token]);
 
   return (
-    <Box
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
-      // py={3}
-      // mt={4}
-      sx={{
-        bg: 'gray.1',
-        // mt: 5,
-        // mb: 6,
-      }}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)}>
       <Container sx={{ maxWidth: '100ch', py: 6, mx: 'auto' }}>
         <Text variant="pagetitle" sx={{ fontWeight: 500, mb: 3 }}>
           Sign-in to Wraft Docs
@@ -65,9 +55,10 @@ const UserLoginForm = () => {
             </Label>
             <Input
               id="email"
-              name="email"
+              // name="email"
               defaultValue="shijith.k@aurut.com"
-              ref={register({ required: true })}
+              // ref={register({ required: true })}
+              {...register('email', { required: true })}
             />
           </Box>
           <Box px={2}>
@@ -76,19 +67,37 @@ const UserLoginForm = () => {
             </Label>
             <Input
               id="password"
-              name="password"
+              // name="password"
               defaultValue="pa55w0rd"
               type="password"
-              ref={register({ required: true })}
+              // ref={register({ required: true })}
+              {...register('password', { required: true })}
             />
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Box>
         <Flex sx={{ flexWrap: 'wrap', mt: 1, mx: -2 }}>
-          <Button ml={2} sx={{ mt: 0, mr: 3, ':hover': { bg: `blue.9` } }}>
-            {ready && <Spinner color="white" width={24} />}
-            {!ready && <Text sx={{ fontWeight: 800 }}>Login</Text>}
+          <Button
+            ml={2}
+            sx={{
+              mt: 0,
+              mr: 3,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text mr={2} sx={{ fontWeight: 800 }}>
+              Login
+            </Text>
+
+            {loading && <Spinner color="white" width={18} height={18} />}
+
+            {/* {loading && <Spinner color="white" width={18} />} */}
           </Button>
+          {/* <Button ml={2} sx={{ mt: 0, mr: 3 }}>
+            {loading && <Spinner color="white" width={24} />}
+            {!loading && <Text sx={{ fontWeight: 800 }}>Login</Text>}
+          </Button> */}
         </Flex>
         <Text pl={0} pt={2}>
           Not a user yet ?{' '}

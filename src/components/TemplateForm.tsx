@@ -40,7 +40,12 @@ export interface BlockTemplate {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [varias, setVarias] = useState<IContentType>();
@@ -366,10 +371,11 @@ const Form = () => {
                     </Text>
                     <Select
                       id="parent"
-                      name="parent"
+                      // name="parent"
                       defaultValue="Parent ID"
-                      onChange={(e) => ctypeChange(e)}
-                      ref={register({ required: true })}>
+                      // ref={register({ required: true })}
+                      {...register('parent', { required: true })}
+                      onChange={(e) => ctypeChange(e)}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (

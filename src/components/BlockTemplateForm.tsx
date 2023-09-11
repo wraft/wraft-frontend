@@ -60,7 +60,12 @@ const EMPTY_MARKDOWN_NODE = {
 
 const Form = () => {
   const token = useStoreState((state) => state.auth.token);
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   // const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();

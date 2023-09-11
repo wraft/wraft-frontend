@@ -22,7 +22,12 @@ interface ThemeElement {
 }
 
 const ThemeForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const { addToast } = useToasts();
 
   const [isEdit, setIsEdit] = useState(false);
@@ -123,7 +128,12 @@ const ThemeForm = () => {
       <Box mx={0} mb={3}>
         <Flex>
           <Box>
-            <Input name="edit" type="hidden" ref={register} />
+            <Input
+              // name="edit"
+              type="hidden"
+              // ref={register}
+              {...register('edit')}
+            />
             <Field
               name="name"
               label="Name"
@@ -183,7 +193,13 @@ const ThemeForm = () => {
               <Label htmlFor="name" mb={1}>
                 File ( only ttf/otf)
               </Label>
-              <Input id="file" name="file" type="file" ref={register} />
+              <Input
+                id="file"
+                // name="file"
+                type="file"
+                // ref={register}
+                {...register('file')}
+              />
             </Box>
 
             <Box>
@@ -191,9 +207,10 @@ const ThemeForm = () => {
                 Default Theme?
               </Label>
               <Checkbox
-                ref={register}
+                // ref={register}
                 defaultChecked={true}
-                name="default_theme"
+                // name="default_theme"
+                {...register('default_theme')}
               />
             </Box>
           </Box>

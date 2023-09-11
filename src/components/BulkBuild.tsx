@@ -51,7 +51,11 @@ export interface User {
 }
 
 const BulkBuild = (props: CommentFormProps) => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
 
   const [comments, setComments] = useState<Array<Comment>>([]);

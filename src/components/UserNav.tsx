@@ -58,9 +58,9 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        bg: 'gray.0',
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        bg: 'background',
+        // borderBottom: 'solid 1px',
+        // borderColor: 'gray.3',
         py: 2,
       }}>
       <Container>
@@ -97,7 +97,7 @@ const UserNav = () => {
                       Join Wraft
                     </Text>
                   </Link>
-                  <Link href="/signup">
+                  <Link href="/pricing">
                     <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
                       Pricing
                     </Text>

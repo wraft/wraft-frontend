@@ -59,10 +59,10 @@
     "react-dom": "^18.2.0",
     "react-dropzone-uploader": "^2.11.0",
     "react-easy-crop": "^3.2.0",
-    "react-hook-form": "^4.9.8",
+    "react-hook-form": "^7.46.1",
     "react-hotkeys-hook": "^3.3.1",
     "react-image-crop": "^10.0.0",
-    "react-modal": "^3.11.2",
+    "react-modal": "^3.16.1",
     "react-multi-carousel": "^2.5.5",
     "react-multi-select-component": "^2.0.11",
     "react-paginate": "^6.3.2",
@@ -102,7 +102,7 @@
     "@types/react": "^18.2.21",
     "@types/react-color": "^3.0.4",
     "@types/react-dom": "^18.2.7",
-    "@types/react-modal": "^3.10.5",
+    "@types/react-modal": "^3.16.0",
     "@types/react-paginate": "^6.2.1",
     "@types/react-phone-number-input": "^3.0.4",
     "@types/react-redux": "^7.1.26",
@@ -137,7 +137,6 @@
     ".next/cache/"
   ],
   "engines": {
-    "node": "16.x",
-    "yarn": "1.22.x"
+    "node": "18.x"
   }
 }

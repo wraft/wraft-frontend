@@ -9,7 +9,11 @@ import Field from './Field';
 import { createEntity } from '../utils/models';
 
 const VendorForm = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { addToast } = useToasts();
 
   const token = useStoreState((state) => state.auth.token);
