@@ -13,7 +13,7 @@ const styles = {
     textAlign: 'left',
   } as ThemeUIStyleObject,
   thead: {
-    bg: 'gray.0',
+    // bg: 'gray.0',
     fontSize: 0,
     textTransform: 'uppercase',
     border: '1px solid',
@@ -22,7 +22,7 @@ const styles = {
   },
   tr: {
     verticalAlign: 'top',
-    bg: 'gray.0',
+    // bg: 'gray.0',
     borderBottom: '1px solid',
     borderBottomColor: 'gray.2',
     '&:last-child': {
@@ -54,7 +54,6 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
       <Box
         as="thead"
         sx={{
-          bg: 'gray.0',
           fontSize: 0,
           textTransform: 'uppercase',
           border: '1px solid',

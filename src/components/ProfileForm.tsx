@@ -74,7 +74,12 @@ export interface IAccount {
 // }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
@@ -324,7 +329,10 @@ const Form = () => {
                   />
                   {errors.dob && <Text>This field is required</Text>}
                   <Label>Gender</Label>
-                  <Select name="gender" ref={register({ required: true })}>
+                  <Select
+                    // name="gender"
+                    // ref={register({ required: true })}
+                    {...register('gender', { required: true })}>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </Select>

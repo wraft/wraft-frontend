@@ -27,7 +27,12 @@ export interface FieldTypeItem {
 }
 
 const CollectionForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const { addToast } = useToasts();
 
   const [isEdit, setIsEdit] = useState(false);
@@ -206,7 +211,12 @@ const CollectionForm = () => {
                 <Box mx={0} mb={3}>
                   <Flex>
                     <Box>
-                      <Input name="edit" type="hidden" ref={register} />
+                      <Input
+                        // name="edit"
+                        type="hidden"
+                        // ref={register}
+                        {...register('edit', { required: true })}
+                      />
                       <Field
                         name="title"
                         label="Name"

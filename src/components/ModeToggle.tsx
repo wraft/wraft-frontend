@@ -9,7 +9,7 @@ const ModeToggle = (props: any) => {
       {...props}
       sx={{
         p: 0,
-        bg: 'gray.0',
+        // bg: 'gray.0',
         border: 0,
         svg: {
           fill: 'gray.5',

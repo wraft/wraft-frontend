@@ -81,10 +81,11 @@ const FieldColor: React.FC<FieldColorProps> = ({
         <Input
           placeholder={placeholder ? placeholder : ''}
           id={name}
-          name={name}
+          // name={name}
           type={ftype}
           defaultValue={valx || defaultValue || ''}
-          ref={register({ required: required })}
+          // ref={register({ required: required })}
+          {...register(name, { required: required })}
         />
       </Box>
 

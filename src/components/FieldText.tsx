@@ -23,9 +23,10 @@ const FieldText: React.FC<Props> = ({
       <Textarea
         rows={3}
         id={name}
-        name={name}
+        // name={name}
         defaultValue={defaultValue}
-        ref={register({ required: true })}
+        // ref={register({ required: true })}
+        {...register(name, { required: true })}
       />
     </Box>
   );
