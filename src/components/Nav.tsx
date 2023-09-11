@@ -8,10 +8,10 @@ import { useHotkeys } from 'react-hotkeys-hook';
 
 import { checkUser } from '../utils/models';
 import { Bell, Search } from '@styled-icons/boxicons-regular';
-import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
+// import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
 
 import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
-import { Clickable } from 'reakit/Clickable';
+// import { Clickable } from 'reakit/Clickable';
 
 import Blok from './Blok';
 import Link from './NavLink';
@@ -21,64 +21,64 @@ import Modal from './Modal';
  * Reakit Button
  */
 
-interface ButtonLinkProps {
-  onToggleSearch?: any;
-}
+// interface ButtonLinkProps {
+//   onToggleSearch?: any;
+// }
 
-const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
-  return (
-    <Clickable
-      as={Box}
-      onClick={() => onToggleSearch()}
-      sx={{
-        // pt: 0,
-        // bg: 'gray.2',
-        fontSize: 1,
-        color: '#111',
-        border: 'solid 1px',
-        verticleAlign: 'top',
-        borderColor: 'gray.4',
-        // bg: 'green.8',
-        borderRight: 0,
-        width: '8ch',
-        pl: 2,
-        pt: 1,
-        // mr: 2,
-        // px: 2,
-        // py: 1,
-        // mb: 2,
-        borderRadius: '4px 0 0 4px',
-        '&:hover': {
-          bg: 'gray.8',
-          color: 'gray.0',
-          border: 'solid 1px',
-          borderColor: 'gray.2',
-          cursor: 'pointer',
-          svg: {
-            fill: 'gray.0',
-          },
-        },
-        svg: {
-          fill: 'gray.8',
-        },
-        // borderRadius: 4,
-      }}>
-      {/* <Search width="16px" /> */}
+// const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
+//   return (
+//     <Clickable
+//       as={Box}
+//       onClick={() => onToggleSearch()}
+//       sx={{
+//         // pt: 0,
+//         // bg: 'gray.2',
+//         fontSize: 1,
+//         color: '#111',
+//         border: 'solid 1px',
+//         verticleAlign: 'top',
+//         borderColor: 'gray.4',
+//         // bg: 'green.8',
+//         borderRight: 0,
+//         width: '8ch',
+//         pl: 2,
+//         pt: 1,
+//         // mr: 2,
+//         // px: 2,
+//         // py: 1,
+//         // mb: 2,
+//         borderRadius: '4px 0 0 4px',
+//         '&:hover': {
+//           bg: 'gray.8',
+//           color: 'gray.0',
+//           border: 'solid 1px',
+//           borderColor: 'gray.2',
+//           cursor: 'pointer',
+//           svg: {
+//             fill: 'gray.0',
+//           },
+//         },
+//         svg: {
+//           fill: 'gray.8',
+//         },
+//         // borderRadius: 4,
+//       }}>
+//       {/* <Search width="16px" /> */}
 
-      <Text
-        sx={{
-          display: 'display-inline',
-          ml: 1,
-          fontWeight: 900,
-          letterSpacing: '-0.15px',
-          fontSize: '14px',
-        }}>
-        <Add width={18} />
-        <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
-      </Text>
-    </Clickable>
-  );
-};
+//       <Text
+//         sx={{
+//           display: 'display-inline',
+//           ml: 1,
+//           fontWeight: 900,
+//           letterSpacing: '-0.15px',
+//           fontSize: '14px',
+//         }}>
+//         <Add width={18} />
+//         <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
+//       </Text>
+//     </Clickable>
+//   );
+// };
 
 export interface IUser {
   name: string;
@@ -168,7 +168,7 @@ const Nav = ({ navtitle }: INav) => {
               </Box> */}
 
               <Flex variant="button" sx={{ mt: 0, pt: 0, ml: 3 }}>
-                <ButtonLink onToggleSearch={toggleSearch} />
+                {/* <ButtonLink onToggleSearch={toggleSearch} /> */}
                 <Flex
                   sx={{
                     position: 'relative',
@@ -201,13 +201,7 @@ const Nav = ({ navtitle }: INav) => {
                         pr: 2,
                       },
                     }}>
-                    <Search
-                      // sx={{
-                      //   borderLeft: 'solid 1px',
-                      //   borderColor: 'gray.4',
-                      // }}
-                      width={28}
-                    />
+                    <Search width={28} />
                   </Box>
                 </Flex>
               </Flex>
