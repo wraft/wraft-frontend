@@ -5,7 +5,7 @@ import { Box, Flex, Text } from 'theme-ui';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
 import Sidebar from './Sidebar';
-import Nav from './Nav';
+// import Nav from './Nav';
 // import { Close } from 'theme-ui';
 
 export interface IPage {
@@ -54,9 +54,6 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
             bg: 'background',
             minWidth: 0,
           }}>
-          <Box>
-            <Nav />
-          </Box>
           {children}
 
           <Flex sx={{ pt: 0 }}>
