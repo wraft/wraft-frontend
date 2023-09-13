@@ -16,9 +16,7 @@ const Index: FC = () => {
       <Page>
         x
         <Flex>
-          <Link href="/content-types/new">
-            <a>New Content Type</a>
-          </Link>
+          <Link href="/content-types/new">New Content Type</Link>
           <ContentTypeList />
           <Box>
             <Text>Dashboard</Text>

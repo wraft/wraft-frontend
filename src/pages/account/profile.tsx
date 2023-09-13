@@ -14,9 +14,7 @@ const Contents: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/account">
-            <a>Back to Profile</a>
-          </Link>
+          <Link href="/account">Back to Profile</Link>
         </Flex>
         <Flex>
           <ProfileForm />
