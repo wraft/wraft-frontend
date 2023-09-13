@@ -27,6 +27,7 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('name', data.name);
+    formData.append('type', 'layout');
 
     // const formData = new FormData();
     // formData.append('image', data.file[0]);

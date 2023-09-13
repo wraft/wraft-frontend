@@ -15,9 +15,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/flows">
-            <a>Back</a>
-          </Link>
+          <Link href="/flows">Back</Link>
           <FlowForm />
         </Flex>
       </Page>

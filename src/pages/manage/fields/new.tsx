@@ -14,9 +14,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/fields">
-            <a>Back</a>
-          </Link>
+          <Link href="/fields">Back</Link>
           <FieldTypeForm />
         </Flex>
       </Page>
