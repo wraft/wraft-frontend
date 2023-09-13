@@ -10,7 +10,6 @@ import {
   Text,
   Image,
   Link,
-  Paragraph,
 } from 'theme-ui';
 
 import { Controller, useForm } from 'react-hook-form';
