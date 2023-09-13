@@ -240,233 +240,220 @@ const Form = () => {
   function next() {
     setFormStep((i) => i + 1);
   }
-  function back() {
-    setFormStep((i) => i - 1);
-  }
+  // function back() {
+  //   setFormStep((i) => i - 1);
+  // }
 
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
   return (
     <Container sx={{ px: 4 }}>
       <Flex>
-        {/* {formStep >= 0 && ( */}
         <Container sx={{ styleEl }}>
           <Box py={3} mt={4}>
-            <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Box pb={3}>
-                <Label htmlFor="name" mb={1}>
-                  Layout Name
-                </Label>
-                <Input
-                  id="name"
-                  // name="name"
-                  defaultValue="Layout X"
-                  // ref={register({ required: true })}
-                  {...register('name', {
-                    required: 'Layout Name is required',
-                  })}
-                />
-                {errors.name && <Error text={errors.name.message} />}
-              </Box>
-              <Box>
-                <FieldText
-                  name="description"
-                  label="Description"
-                  defaultValue=""
-                  register={register}
-                  error={errors.description}
-                />
-              </Box>
-              <Box>
-                <Field
-                  name="slug"
-                  label="Slug"
-                  defaultValue=""
-                  register={register}
-                  error={errors.slug}
-                />
-              </Box>
-              <Box pb={3} sx={{ display: 'none' }}>
-                {layout && layout.screenshot && (
-                  <div>
-                    <Image src={API_HOST + layout.screenshot} />
-                  </div>
-                )}
-                <Label htmlFor="screenshot" mb={1}>
-                  Screenshot
-                </Label>
-                <Input
-                  id="screenshot"
-                  type="file"
-                  {...register('screenshot')}
-                />
-              </Box>
-              <Box>
-                <Label htmlFor="engine_uuid" mb={1}>
-                  Engine ID
-                </Label>
-                <Controller
-                  control={control}
-                  name="engine_uuid"
-                  defaultValue="NYC"
-                  rules={{ required: 'Please select a Engine ID' }}
-                  render={({ field }) => (
-                    <Select {...field}>
-                      {engines &&
-                        engines.length > 0 &&
-                        engines.map((m: any) => (
-                          <option key={m.id} value={m.id}>
+            {formStep >= 1 && (
+              <section>
+                <Box pl={4}>
+                  <Box pt={3}>
+                    <Text as="h3" mb={2} pb={1}>
+                      Assets
+                    </Text>
+                    {assets &&
+                      assets.length > 0 &&
+                      assets.map((m: Asset) => (
+                        <Box
+                          key={m.id}
+                          sx={{
+                            p: 3,
+                            border: 'solid 1px',
+                            borderColor: 'gray.3',
+                            bg: 'base',
+                            mb: 1,
+                          }}>
+                          <Box
+                            sx={{
+                              mt: 4,
+                              border: 'solid 1px',
+                              borderColor: 'gray.3',
+                            }}>
+                            {m && m.file && (
+                              <PdfViewer
+                                // url={contents.content.build}
+                                url={`http://localhost:3000${m.file}`}
+                                pageNumber={1}
+                                // sx={{ width: '100%' }}
+                              />
+                            )}
+                          </Box>
+                          <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                             {m.name}
-                          </option>
-                        ))}
-                    </Select>
-                  )}
-                />
-                {errors.engine_uuid && (
-                  <Error text={errors.engine_uuid.message} />
+                          </Text>
+                          <Link target="_blank" href={`${API_HOST}/${m.file}`}>
+                            Download
+                          </Link>
+                          <Box>
+                            <Button
+                              sx={{
+                                fontSize: 1,
+                                px: 1,
+                                py: 1,
+                                // ml: 3,
+                                bg: 'white',
+                                color: 'red.4',
+                                border: 'solid 1px',
+                                borderColor: 'red.9',
+                              }}
+                              onClick={() => deleteAsset(cId, m.id)}>
+                              Delete
+                            </Button>
+                          </Box>
+                        </Box>
+                      ))}
+                  </Box>
+                  <AssetForm onUpload={addUploads} />
+                </Box>
+              </section>
+            )}
+            <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
+              {/* Form start */}
+              {formStep >= 0 && (
+                <Container
+                  sx={
+                    formStep > 0 ? { display: 'none' } : { display: 'block' }
+                  }>
+                  <Box pb={3}>
+                    <Label htmlFor="name" mb={1}>
+                      Layout Name
+                    </Label>
+                    <Input
+                      id="name"
+                      // name="name"
+                      defaultValue="Layout X"
+                      // ref={register({ required: true })}
+                      {...register('name', {
+                        required: 'Layout Name is required',
+                      })}
+                    />
+                    {errors.name && <Error text={errors.name.message} />}
+                  </Box>
+                  <Box>
+                    <FieldText
+                      name="description"
+                      label="Description"
+                      defaultValue=""
+                      register={register}
+                      error={errors.description}
+                    />
+                  </Box>
+                  <Box>
+                    <Field
+                      name="slug"
+                      label="Slug"
+                      defaultValue=""
+                      register={register}
+                      error={errors.slug}
+                    />
+                  </Box>
+                  <Box pb={3} sx={{ display: 'none' }}>
+                    {layout && layout.screenshot && (
+                      <div>
+                        <Image src={API_HOST + layout.screenshot} />
+                      </div>
+                    )}
+                    <Label htmlFor="screenshot" mb={1}>
+                      Screenshot
+                    </Label>
+                    <Input
+                      id="screenshot"
+                      type="file"
+                      {...register('screenshot')}
+                    />
+                  </Box>
+                  <Box>
+                    <Label htmlFor="engine_uuid" mb={1}>
+                      Engine ID
+                    </Label>
+                    <Controller
+                      control={control}
+                      name="engine_uuid"
+                      defaultValue="NYC"
+                      rules={{ required: 'Please select a Engine ID' }}
+                      render={({ field }) => (
+                        <Select {...field}>
+                          {engines &&
+                            engines.length > 0 &&
+                            engines.map((m: any) => (
+                              <option key={m.id} value={m.id}>
+                                {m.name}
+                              </option>
+                            ))}
+                        </Select>
+                      )}
+                    />
+                    {errors.engine_uuid && (
+                      <Error text={errors.engine_uuid.message} />
+                    )}
+                  </Box>
+                  <Box mt={3}>
+                    <Flex sx={{ display: 'none' }}>
+                      <Field
+                        name="width"
+                        label="Width"
+                        defaultValue="40"
+                        register={register}
+                        error={errors.width}
+                        mr={2}
+                      />
+                      <Field
+                        name="height"
+                        label="Height"
+                        defaultValue="40"
+                        register={register}
+                        error={errors.height}
+                        mr={2}
+                      />
+                      <Field
+                        name="unit"
+                        label="Unit"
+                        defaultValue="cm"
+                        register={register}
+                        error={errors.unit}
+                      />
+                    </Flex>
+                  </Box>
+                </Container>
+              )}
+              <Flex sx={{ justifyContent: 'end', width: '100%' }}>
+                {formStep === 0 && (
+                  <Button
+                    disabled={!isValid}
+                    type="button"
+                    onClick={next}
+                    sx={{
+                      ':disabled': {
+                        bg: 'gray.4',
+                      },
+                    }}>
+                    Next
+                  </Button>
                 )}
-                {/* <Select
-                id="engine_uuid"
-                // name="engine_uuid"
-                defaultValue="NYC"
-                // ref={register({ required: true })}
-                {...register('engine_uuid', { required: true })}>
-                {engines &&
-                  engines.length > 0 &&
-                  engines.map((m: any) => (
-                    <option key={m.id} value={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-              </Select> */}
-              </Box>
-              <Box mt={3}>
-                <Flex sx={{ display: 'none' }}>
-                  <Field
-                    name="width"
-                    label="Width"
-                    defaultValue="40"
-                    register={register}
-                    error={errors.width}
-                    mr={2}
-                  />
-                  <Field
-                    name="height"
-                    label="Height"
-                    defaultValue="40"
-                    register={register}
-                    error={errors.height}
-                    mr={2}
-                  />
-                  <Field
-                    name="unit"
-                    label="Unit"
-                    defaultValue="cm"
-                    register={register}
-                    error={errors.unit}
-                  />
-                </Flex>
-              </Box>
-              {/* {errors.exampleRequired && <Text>This field is required</Text>} */}
+                {formStep === 1 && (
+                  <Button
+                    disabled={!isValid}
+                    type="submit"
+                    ml={2}
+                    sx={{
+                      ':disabled': {
+                        bg: 'gray.4',
+                      },
+                    }}>
+                    {isEdit ? 'Update' : 'Create'}
+                  </Button>
+                )}
+              </Flex>
+              {/* Form End */}
             </Box>
           </Box>
         </Container>
-        {/* )}
-        {formStep >= 1 && ( */}
-        <section>
-          <Box pl={4}>
-            <Box pt={3}>
-              <Text as="h3" mb={2} pb={1}>
-                Assets
-              </Text>
-              {assets &&
-                assets.length > 0 &&
-                assets.map((m: Asset) => (
-                  <Box
-                    key={m.id}
-                    sx={{
-                      p: 3,
-                      border: 'solid 1px',
-                      borderColor: 'gray.3',
-                      bg: 'base',
-                      mb: 1,
-                    }}>
-                    <Box
-                      sx={{
-                        mt: 4,
-                        border: 'solid 1px',
-                        borderColor: 'gray.3',
-                      }}>
-                      {m && m.file && (
-                        <PdfViewer
-                          // url={contents.content.build}
-                          url={`http://localhost:3000${m.file}`}
-                          pageNumber={1}
-                          // sx={{ width: '100%' }}
-                        />
-                      )}
-                    </Box>
-                    <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                      {m.name}
-                    </Text>
-                    <Link target="_blank" href={`${API_HOST}/${m.file}`}>
-                      Download
-                    </Link>
-                    <Box>
-                      <Button
-                        sx={{
-                          fontSize: 1,
-                          px: 1,
-                          py: 1,
-                          // ml: 3,
-                          bg: 'white',
-                          color: 'red.4',
-                          border: 'solid 1px',
-                          borderColor: 'red.9',
-                        }}
-                        onClick={() => deleteAsset(cId, m.id)}>
-                        Delete
-                      </Button>
-                    </Box>
-                  </Box>
-                ))}
-            </Box>
-            <AssetForm onUpload={addUploads} />
-          </Box>
-        </section>
-        {/* )} */}
-      </Flex>
-      <Flex mt={2} sx={{ width: '100%', justifyContent: 'end' }}>
-        {/* {formStep === 0 && (
-          <Button
-            disabled={!isValid}
-            type="button"
-            onClick={next}
-            sx={{
-              ':disabled': {
-                bg: 'gray.4',
-              },
-            }}>
-            Next
-          </Button>
-        )} */}
-        {/* {formStep === 1 && ( */}
-        <Flex sx={{ justifyContent: 'space-between', width: '100%' }}>
-          {/* <Button type="button" onClick={back}>
-              Back
-            </Button> */}
-          <Button
-            // disabled={!isValid}
-            type="submit"
-            ml={2}
-            sx={{
-              ':disabled': {
-                bg: 'gray.4',
-              },
-            }}>
-            {isEdit ? 'Update' : 'Create'}
-          </Button>
-        </Flex>
-        {/* )} */}
       </Flex>
       <pre>{JSON.stringify(watch(), null, 2)}</pre>
     </Container>
