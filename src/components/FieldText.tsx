@@ -4,7 +4,7 @@ import { Label, Textarea } from 'theme-ui';
 import Error from './Error';
 
 interface Props {
-  error: any;
+  error?: any;
   register: any;
   label: string;
   name: string;
