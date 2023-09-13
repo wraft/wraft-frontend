@@ -30,6 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     "server.js",
-    "src/components/WraftEditor"
+    "src/components/WraftEditor",
+    "src/pages/manage/layouts/new.tsx.bak"
   ]
 }
