@@ -71,20 +71,13 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
         </Label>
         <Input
           id="name"
-          // name="name"
           type="name"
-          // ref={register({ required: true })}
           {...register('name', { required: true })}
         />
         <Label htmlFor="name" mb={1}>
           File
         </Label>
-        <Input
-          id="file"
-          // name="file"
-          type="file"
-          {...register('file')}
-        />
+        <Input id="file" type="file" {...register('file')} />
       </Box>
       <Flex mx={-2} mt={2}>
         <Button type="submit" ml={2}>
