@@ -25,7 +25,7 @@ const Index: FC = () => {
               <Box sx={{ pt: 4 }}>
                 <Box sx={{ ml: 'auto' }}>
                   <Link variant="button" href="/themes/new">
-                    <a>Add Theme</a>
+                    Add Theme
                   </Link>
                 </Box>
               </Box>

@@ -14,9 +14,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/themes">
-            <a>Back</a>
-          </Link>
+          <Link href="/themes">Back</Link>
           <Theme />
         </Flex>
       </Page>

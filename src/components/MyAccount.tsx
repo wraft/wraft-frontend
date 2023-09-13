@@ -38,7 +38,7 @@ const Form = () => {
               </Text>
               <Box pt={3}>
                 <Link href="/account/profile" variant="caps">
-                  <a>Edit Profile</a>
+                  Edit Profile
                 </Link>
               </Box>
               <Text variant="caps" pt={3}>

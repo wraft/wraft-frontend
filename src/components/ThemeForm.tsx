@@ -58,10 +58,16 @@ const ThemeForm = () => {
     //   formData.append('file', data.file[0]);
     // }
 
-    formData.append('file', data.file[0]);
+    const typeScaleValue: any = { h1: 10, p: 6, h2: 8 };
+
+    // formData.append('assets', data.file[0]);
 
     formData.append('name', data.name);
     formData.append('font', data.font);
+    formData.append('secondary_color', data?.secondary_color);
+    formData.append('primary_color', data?.primary_color);
+    formData.append('body_color', data?.body_color);
+    formData.append('typescale', typeScaleValue);
 
     formData.append('content_type_id', stat);
     formData.append('default_theme', data?.default_theme);
