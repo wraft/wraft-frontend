@@ -7,7 +7,7 @@ import Error from './Error';
 // import { Input } from "@chakra-ui/core";
 
 interface Props {
-  error: any;
+  error?: any;
   register: any;
   label: string;
   name: string;
