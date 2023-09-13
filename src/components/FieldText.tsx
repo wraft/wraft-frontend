@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box } from 'theme-ui';
 import { Label, Textarea } from 'theme-ui';
+import Error from './Error';
 
 interface Props {
+  error: any;
   register: any;
   label: string;
   name: string;
@@ -10,6 +12,7 @@ interface Props {
 }
 
 const FieldText: React.FC<Props> = ({
+  error,
   name,
   label,
   register,
@@ -26,8 +29,9 @@ const FieldText: React.FC<Props> = ({
         // name={name}
         defaultValue={defaultValue}
         // ref={register({ required: true })}
-        {...register(name, { required: true })}
+        {...register(name, { required: `${label} is required` })}
       />
+      {error && <Error text={error.message} />}
     </Box>
   );
 };
