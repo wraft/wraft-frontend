@@ -13,9 +13,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/vendors">
-            <a>Back</a>
-          </Link>
+          <Link href="/vendors">Back</Link>
           <VendorForm />
         </Flex>
       </Page>

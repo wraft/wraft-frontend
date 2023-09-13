@@ -129,7 +129,9 @@ const Form = () => {
 
   const { addToast } = useToasts();
   const router = useRouter();
+
   const cId: string = router.query.id as string;
+  console.log('cId', cId);
 
   const addField = () => {
     console.log('[addField]', fields);
@@ -277,6 +279,7 @@ const Form = () => {
   };
 
   const onSubmit = (data: any) => {
+    console.log('onSubmit');
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -288,7 +291,7 @@ const Form = () => {
       theme_id: data.theme_id,
     };
 
-    const isUpdate = data.edit != 0 ? true : false;
+    const isUpdate = cId ? true : false;
     if (isUpdate) {
       console.log('[isUpdate]', isUpdate);
       updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
@@ -417,10 +420,7 @@ const Form = () => {
                   </Label>
                   <Select
                     id="layout_id"
-                    // name="layout_id"
-                    {...(register('layout_id'), { required: true })}
-                    // ref={register({ required: true })}
-                  >
+                    {...register('layout_id', { required: true })}>
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -438,8 +438,7 @@ const Form = () => {
                     id="flow_id"
                     // name="flow_id"
                     defaultValue=""
-                    // ref={register({ required: true })}
-                    {...(register('flow_id'), { required: true })}>
+                    {...register('flow_id', { required: true })}>
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -456,8 +455,8 @@ const Form = () => {
                     // name="edit"
                     defaultValue={0}
                     hidden={true}
+                    {...register('edit', { required: true })}
                     // ref={register({ required: true })}
-                    {...(register('edit'), { required: true })}
                   />
                 </Box>
 
