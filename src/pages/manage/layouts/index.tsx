@@ -28,6 +28,8 @@ const Index: FC = () => {
           }
         />
         <Modal
+          shouldCloseOnOverlayClick={true}
+          onRequestClose={() => setIsOpen(false)}
           isOpen={isOpen}
           style={{
             overlay: {
@@ -41,9 +43,10 @@ const Index: FC = () => {
               right: '0px',
               top: '0px',
               borderRadius: '0px',
+              padding: '0px',
             },
           }}>
-          <Close onClick={() => setIsOpen(false)} sx={{ cursor: 'pointer' }} />
+          {/* <Close onClick={() => setIsOpen(false)} sx={{ cursor: 'pointer' }} /> */}
           <LayoutForm />
         </Modal>
         <Container sx={{ px: 4, pt: 0 }}>
