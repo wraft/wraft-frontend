@@ -31,6 +31,7 @@ import Field from './Field';
 import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
+import { TickIcon } from './Icons';
 
 export interface Layouts {
   layout: Layout;
@@ -239,101 +240,203 @@ const Form = () => {
   function next() {
     setFormStep((i) => i + 1);
   }
-  // function back() {
-  //   setFormStep((i) => i - 1);
-  // }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
 
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
   return (
-    <Container sx={{ px: 4 }}>
+    <Flex
+      sx={{
+        p: 4,
+        pb: '44px',
+        height: '100%',
+        flexDirection: 'column',
+        gap: '28px',
+      }}>
+      <Text
+        sx={{
+          fontSize: 1,
+          color: 'gray.8',
+          letterSpacing: '-0.2px',
+          fontWeight: 700,
+        }}>
+        Create new layout
+      </Text>
       <Flex>
-        <Container sx={{ styleEl }}>
-          <Box py={3} mt={4}>
-            {formStep >= 1 && (
-              <section>
-                <Box pl={4}>
-                  <Box pt={3}>
-                    <Text as="h3" mb={2} pb={1}>
-                      Assets
-                    </Text>
-                    {assets &&
-                      assets.length > 0 &&
-                      assets.map((m: Asset) => (
+        <Flex sx={{ alignItems: 'center' }}>
+          {formStep === 0 ? (
+            <Flex
+              sx={{
+                width: '24px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: 'green.5',
+                bg: 'green.0',
+                borderRadius: '50%',
+              }}>
+              <Text sx={{ fontSize: 0, fontWeight: 500 }}>1</Text>
+            </Flex>
+          ) : (
+            <Flex
+              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              color="green.5">
+              <TickIcon fontSize={'24px'} color="inherit" />
+            </Flex>
+          )}
+          <Text
+            ml={'10px'}
+            sx={{
+              fontSize: 1,
+              fontWeight: 400,
+              color: formStep === 0 ? 'gray.8' : 'green.5',
+            }}>
+            Basic details
+          </Text>
+        </Flex>
+        <Flex ml={4} sx={{ alignItems: 'center' }}>
+          <Flex
+            sx={{
+              width: '24px',
+              height: '24px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: formStep === 0 ? 'gray.5' : 'green.5',
+              bg: formStep === 0 ? 'neutral.0' : 'green.0',
+              borderRadius: '50%',
+            }}>
+            <Text sx={{ fontSize: 0, fontWeight: 500 }}>2</Text>
+          </Flex>
+          <Text
+            ml={'10px'}
+            sx={{
+              fontSize: 1,
+              fontWeight: 400,
+              color: formStep === 0 ? 'gray.5' : 'gray.8',
+            }}>
+            Background PDF
+          </Text>
+        </Flex>
+      </Flex>
+      <Container sx={{ styleEl }}>
+        <Box>
+          {formStep >= 1 && (
+            <section>
+              <Box pl={4}>
+                <Box pt={3}>
+                  <Text as="h3" mb={2} pb={1}>
+                    Assets
+                  </Text>
+                  {assets &&
+                    assets.length > 0 &&
+                    assets.map((m: Asset) => (
+                      <Box
+                        key={m.id}
+                        sx={{
+                          p: 3,
+                          border: 'solid 1px',
+                          borderColor: 'gray.3',
+                          bg: 'base',
+                          mb: 1,
+                        }}>
                         <Box
-                          key={m.id}
                           sx={{
-                            p: 3,
+                            mt: 4,
                             border: 'solid 1px',
                             borderColor: 'gray.3',
-                            bg: 'base',
-                            mb: 1,
                           }}>
-                          <Box
-                            sx={{
-                              mt: 4,
-                              border: 'solid 1px',
-                              borderColor: 'gray.3',
-                            }}>
-                            {m && m.file && (
-                              <PdfViewer
-                                // url={contents.content.build}
-                                url={`http://localhost:3000${m.file}`}
-                                pageNumber={1}
-                                // sx={{ width: '100%' }}
-                              />
-                            )}
-                          </Box>
-                          <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                            {m.name}
-                          </Text>
-                          <Link target="_blank" href={`${API_HOST}/${m.file}`}>
-                            Download
-                          </Link>
-                          <Box>
-                            <Button
-                              sx={{
-                                fontSize: 1,
-                                px: 1,
-                                py: 1,
-                                // ml: 3,
-                                bg: 'white',
-                                color: 'red.4',
-                                border: 'solid 1px',
-                                borderColor: 'red.9',
-                              }}
-                              onClick={() => deleteAsset(cId, m.id)}>
-                              Delete
-                            </Button>
-                          </Box>
+                          {m && m.file && (
+                            <PdfViewer
+                              // url={contents.content.build}
+                              url={`http://localhost:3000${m.file}`}
+                              pageNumber={1}
+                              // sx={{ width: '100%' }}
+                            />
+                          )}
                         </Box>
-                      ))}
-                  </Box>
-                  <AssetForm onUpload={addUploads} />
+                        <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                          {m.name}
+                        </Text>
+                        <Link target="_blank" href={`${API_HOST}/${m.file}`}>
+                          Download
+                        </Link>
+                        <Box>
+                          <Button
+                            sx={{
+                              fontSize: 1,
+                              px: 1,
+                              py: 1,
+                              // ml: 3,
+                              bg: 'white',
+                              color: 'red.4',
+                              border: 'solid 1px',
+                              borderColor: 'red.9',
+                            }}
+                            onClick={() => deleteAsset(cId, m.id)}>
+                            Delete
+                          </Button>
+                        </Box>
+                      </Box>
+                    ))}
                 </Box>
-              </section>
-            )}
-            <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
-              {/* Form start */}
-              {formStep >= 0 && (
-                <Container
-                  sx={
-                    formStep > 0 ? { display: 'none' } : { display: 'block' }
-                  }>
-                  <Box pb={3}>
-                    <Label htmlFor="name" mb={1}>
-                      Layout Name
-                    </Label>
-                    <Input
-                      id="name"
-                      // name="name"
+                <AssetForm onUpload={addUploads} />
+              </Box>
+            </section>
+          )}
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            {/* Form start */}
+            {formStep >= 0 && (
+              <Container
+                sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
+                <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
+                  <Box>
+                    <Field
+                      name="name"
+                      label="Layout Name"
                       defaultValue="Layout X"
-                      // ref={register({ required: true })}
-                      {...register('name', {
-                        required: 'Layout Name is required',
-                      })}
+                      register={register}
+                      error={errors.name}
                     />
-                    {errors.name && <Error text={errors.name.message} />}
+                    {/* <Label htmlFor="name" mb={1}>
+                    Layout Name
+                  </Label>
+                  <Input
+                    id="name"
+                    // name="name"
+                    defaultValue="Layout X"
+                    // ref={register({ required: true })}
+                    {...register('name', {
+                      required: 'Layout Name is required',
+                    })}
+                  />
+                  {errors.name && <Error text={errors.name.message} />} */}
                   </Box>
+                  <Box>
+                    <Label htmlFor="slug">Slug</Label>
+                    <Controller
+                      control={control}
+                      name="slug"
+                      defaultValue=""
+                      rules={{ required: 'Please select a slug' }}
+                      render={({ field }) => (
+                        <Select mb={0} {...field}>
+                          <option>contract</option>
+                          <option>pletter</option>
+                        </Select>
+                      )}
+                    />
+                    {errors.slug && <Error text={errors.slug.message} />}
+                  </Box>
+                  {/* <Box>
+                  <Field
+                    name="slug"
+                    label="Slug"
+                    defaultValue=""
+                    register={register}
+                    error={errors.slug}
+                  />
+                </Box> */}
                   <Box>
                     <FieldText
                       name="description"
@@ -343,24 +446,13 @@ const Form = () => {
                       error={errors.description}
                     />
                   </Box>
-                  <Box>
-                    <Field
-                      name="slug"
-                      label="Slug"
-                      defaultValue=""
-                      register={register}
-                      error={errors.slug}
-                    />
-                  </Box>
                   <Box pb={3} sx={{ display: 'none' }}>
                     {layout && layout.screenshot && (
                       <div>
                         <Image src={API_HOST + layout.screenshot} />
                       </div>
                     )}
-                    <Label htmlFor="screenshot" mb={1}>
-                      Screenshot
-                    </Label>
+                    <Label htmlFor="screenshot">Screenshot</Label>
                     <Input
                       id="screenshot"
                       type="file"
@@ -368,13 +460,11 @@ const Form = () => {
                     />
                   </Box>
                   <Box>
-                    <Label htmlFor="engine_uuid" mb={1}>
-                      Engine ID
-                    </Label>
+                    <Label htmlFor="engine_uuid">Engine ID</Label>
                     <Controller
                       control={control}
                       name="engine_uuid"
-                      defaultValue="NYC"
+                      defaultValue=""
                       rules={{ required: 'Please select a Engine ID' }}
                       render={({ field }) => (
                         <Select {...field}>
@@ -419,23 +509,45 @@ const Form = () => {
                       />
                     </Flex>
                   </Box>
-                </Container>
+                </Flex>
+              </Container>
+            )}
+            {/* <Flex
+              sx={{
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                flexGrow: 1,
+              }}>
+              <Box />
+              <Box> */}
+            <Flex sx={{ position: 'absolute', bottom: '48px' }}>
+              {formStep === 0 && (
+                <Button
+                  disabled={!isValid}
+                  type="button"
+                  onClick={next}
+                  sx={{
+                    ':disabled': {
+                      bg: 'gray.4',
+                    },
+                  }}>
+                  Next
+                </Button>
               )}
-              <Flex sx={{ justifyContent: 'end', width: '100%' }}>
-                {formStep === 0 && (
+              {formStep === 1 && (
+                <>
                   <Button
-                    disabled={!isValid}
+                    variant=""
                     type="button"
-                    onClick={next}
+                    onClick={prev}
                     sx={{
-                      ':disabled': {
-                        bg: 'gray.4',
-                      },
+                      bg: 'neutral.0',
+                      color: 'gray.8',
                     }}>
-                    Next
+                    <Text as={'p'} variant="pm">
+                      Prev
+                    </Text>
                   </Button>
-                )}
-                {formStep === 1 && (
                   <Button
                     disabled={!isValid}
                     type="submit"
@@ -447,15 +559,17 @@ const Form = () => {
                     }}>
                     {isEdit ? 'Update' : 'Create'}
                   </Button>
-                )}
-              </Flex>
-              {/* Form End */}
-            </Box>
+                </>
+              )}
+            </Flex>
           </Box>
-        </Container>
-      </Flex>
-      <pre>{JSON.stringify(watch(), null, 2)}</pre>
-    </Container>
+          {/* </Flex> */}
+          {/* Form End */}
+          {/* </Box> */}
+        </Box>
+      </Container>
+      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
+    </Flex>
   );
 };
 export default Form;
