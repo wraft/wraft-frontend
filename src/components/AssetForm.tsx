@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import React from 'react';
+import { Box, Flex, Button } from 'theme-ui';
 // import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
@@ -20,12 +20,12 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
     formState: { isValid },
   } = useForm();
   const token = useStoreState((state) => state.auth.token);
-  const [contents, setContents] = useState<Asset>();
+  // const [contents, setContents] = useState<Asset>();
 
   const onImageUploaded = (data: any) => {
     const mData: Asset = data;
     onUpload(mData);
-    setContents(data);
+    // setContents(data);
   };
 
   const onSubmit = (data: any) => {

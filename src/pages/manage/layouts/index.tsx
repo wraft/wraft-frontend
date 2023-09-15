@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Button, Close } from 'theme-ui';
+import { Flex, Container, Button } from 'theme-ui';
 import LayoutList from '../../../components/LayoutList';
 import LayoutForm from '../../../components/LayoutForm';
 import Page from '../../../components/PageFrame';
