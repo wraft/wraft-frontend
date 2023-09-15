@@ -160,10 +160,11 @@ const theme: Theme = {
   },
   forms: {
     label: {
-      color: 'gray.6',
+      color: 'gray.5',
       fontSize: 1,
-      fontWeight: 500,
-      pb: 0,
+      fontWeight: 400,
+      lineHeight: '1.6',
+      // pb: 0,
     },
     input: {
       color: 'gray.8',
@@ -259,12 +260,6 @@ const theme: Theme = {
       lineHeight: 'body',
     },
     // paragraph/medium
-    pm: {
-      fontSize: 2,
-      color: 'gray.8',
-      fontWeight: 500,
-      lineHeight: 'body',
-    },
     a: {
       color: 'primary',
     },
@@ -746,6 +741,20 @@ const theme: Theme = {
     },
   },
   text: {
+    // paragraph
+    pR: {
+      // color: 'gray.5',
+      color: 'red.3',
+      fontSize: 1,
+      fontWeight: 400,
+      lineHeight: '1.6',
+    },
+    pM: {
+      color: 'gray.5',
+      fontSize: 1,
+      fontWeight: 500,
+      lineHeight: '1.6',
+    },
     labelSmall: {
       pl: 1,
       pr: 2,
