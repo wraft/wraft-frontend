@@ -9,11 +9,16 @@ import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 
 interface AssetFormProps {
+  setAsset?: any;
   onUpload?: any;
 }
 
-const AssetForm = ({ onUpload }: AssetFormProps) => {
-  const { register, handleSubmit } = useForm();
+const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Asset>();
 
@@ -24,6 +29,7 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
   };
 
   const onSubmit = (data: any) => {
+    setAsset(true);
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('name', data.name);
@@ -56,31 +62,35 @@ const AssetForm = ({ onUpload }: AssetFormProps) => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
-      <Text mb={3}>Upload Files</Text>
-      {contents && (
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
+      {/* <Text mb={3}>Upload Files</Text> */}
+      {/* {contents && (
         <Box>
           <Text>{contents.name}</Text>
           <Text>{contents.id}</Text>
           <Text>{contents.file}</Text>
         </Box>
-      )}
-      <Box mx={-2} mb={3}>
-        <Label htmlFor="name" mb={1}>
-          File Name
-        </Label>
+      )} */}
+      <Box>
+        <Label htmlFor="name">File Name</Label>
         <Input
           id="name"
           type="name"
           {...register('name', { required: true })}
         />
-        <Label htmlFor="name" mb={1}>
-          File
-        </Label>
+        <Label htmlFor="name">File</Label>
         <Input id="file" type="file" {...register('file')} />
       </Box>
-      <Flex mx={-2} mt={2}>
-        <Button type="submit" ml={2}>
+      <Flex>
+        <Button
+          type="submit"
+          disabled={!isValid}
+          sx={{
+            ':disabled': {
+              bg: 'gray.0',
+              color: 'gray.5',
+            },
+          }}>
           Upload
         </Button>
       </Flex>
