@@ -245,6 +245,9 @@ const Form = () => {
   }
 
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
+
+  const [isAssetValid, setAssetValid] = React.useState(false);
+
   return (
     <Flex
       sx={{
@@ -296,24 +299,33 @@ const Form = () => {
           </Text>
         </Flex>
         <Flex ml={4} sx={{ alignItems: 'center' }}>
-          <Flex
-            sx={{
-              width: '24px',
-              height: '24px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              color: formStep === 0 ? 'gray.5' : 'green.5',
-              bg: formStep === 0 ? 'neutral.0' : 'green.0',
-              borderRadius: '50%',
-            }}>
-            <Text sx={{ fontSize: 0, fontWeight: 500 }}>2</Text>
-          </Flex>
+          {isAssetValid ? (
+            <Flex
+              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              color="green.5">
+              <TickIcon fontSize={'24px'} color="inherit" />
+            </Flex>
+          ) : (
+            <Flex
+              sx={{
+                width: '24px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: formStep === 0 ? 'gray.5' : 'green.5',
+                bg: formStep === 0 ? 'neutral.0' : 'green.0',
+                borderRadius: '50%',
+              }}>
+              <Text sx={{ fontSize: 0, fontWeight: 500 }}>2</Text>
+            </Flex>
+          )}
           <Text
             ml={'10px'}
             sx={{
               fontSize: 1,
               fontWeight: 400,
-              color: formStep === 0 ? 'gray.5' : 'gray.8',
+              color:
+                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
             }}>
             Background PDF
           </Text>
@@ -323,22 +335,22 @@ const Form = () => {
         <Box>
           {formStep >= 1 && (
             <section>
-              <Box pl={4}>
+              <Box>
                 <Box pt={3}>
-                  <Text as="h3" mb={2} pb={1}>
+                  {/* <Text as="h3" mb={2} pb={1}>
                     Assets
-                  </Text>
+                  </Text> */}
                   {assets &&
                     assets.length > 0 &&
                     assets.map((m: Asset) => (
                       <Box
                         key={m.id}
                         sx={{
-                          p: 3,
+                          // p: 3,
                           border: 'solid 1px',
                           borderColor: 'gray.3',
                           bg: 'base',
-                          mb: 1,
+                          // mb: 1,
                         }}>
                         <Box
                           sx={{
@@ -380,7 +392,7 @@ const Form = () => {
                       </Box>
                     ))}
                 </Box>
-                <AssetForm onUpload={addUploads} />
+                <AssetForm setAsset={setAssetValid} onUpload={addUploads} />
               </Box>
             </section>
           )}
@@ -398,26 +410,13 @@ const Form = () => {
                       register={register}
                       error={errors.name}
                     />
-                    {/* <Label htmlFor="name" mb={1}>
-                    Layout Name
-                  </Label>
-                  <Input
-                    id="name"
-                    // name="name"
-                    defaultValue="Layout X"
-                    // ref={register({ required: true })}
-                    {...register('name', {
-                      required: 'Layout Name is required',
-                    })}
-                  />
-                  {errors.name && <Error text={errors.name.message} />} */}
                   </Box>
                   <Box>
                     <Label htmlFor="slug">Slug</Label>
                     <Controller
                       control={control}
                       name="slug"
-                      defaultValue=""
+                      defaultValue="Select slug"
                       rules={{ required: 'Please select a slug' }}
                       render={({ field }) => (
                         <Select mb={0} {...field}>
@@ -428,15 +427,6 @@ const Form = () => {
                     />
                     {errors.slug && <Error text={errors.slug.message} />}
                   </Box>
-                  {/* <Box>
-                  <Field
-                    name="slug"
-                    label="Slug"
-                    defaultValue=""
-                    register={register}
-                    error={errors.slug}
-                  />
-                </Box> */}
                   <Box>
                     <FieldText
                       name="description"
@@ -464,14 +454,17 @@ const Form = () => {
                     <Controller
                       control={control}
                       name="engine_uuid"
-                      defaultValue=""
                       rules={{ required: 'Please select a Engine ID' }}
                       render={({ field }) => (
                         <Select {...field}>
                           {engines &&
                             engines.length > 0 &&
-                            engines.map((m: any) => (
-                              <option key={m.id} value={m.id}>
+                            engines.map((m: any, index) => (
+                              <option
+                                key={m.id}
+                                value={m.id}
+                                selected={index === 2}>
+                                {console.log(m.id)}
                                 {m.name}
                               </option>
                             ))}
@@ -549,7 +542,7 @@ const Form = () => {
                     </Text>
                   </Button>
                   <Button
-                    disabled={!isValid}
+                    disabled={!isValid || !isAssetValid}
                     type="submit"
                     ml={2}
                     sx={{
@@ -568,7 +561,7 @@ const Form = () => {
           {/* </Box> */}
         </Box>
       </Container>
-      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
+      <pre>{JSON.stringify(watch(), null, 2)}</pre>
     </Flex>
   );
 };
