@@ -1,24 +1,27 @@
 /** @jsxImportSource theme-ui */
 
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+import { Box, Flex, Text, Button, Divider } from 'theme-ui';
 import Router from 'next/router';
 import Image from 'next/image';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input, Grid, Heading } from 'theme-ui';
+import { Label, Input, Heading, Grid } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';
 import { userLogin } from '../utils/models';
 import { Spinner } from 'theme-ui';
 
+import Logo from '../../public/Logo.svg';
+import GoogleLogo from '../../public/GoogleLogo.svg';
+
 export interface IField {
   name: string;
   value: string;
 }
 
-const UserLoginForm = () => {
+const UserLogin = () => {
   const {
     register,
     handleSubmit,
@@ -44,10 +47,14 @@ const UserLoginForm = () => {
     }
   }, [token]);
 
+  const handleGoogleSignIn = () => {
+    // Perform Google sign-in logic here
+  };
+
   return (
-    <Grid as="main" variant="variants.signinGrid">
+    <Grid as="main" sx={{ margin: '80px' }} variant="signinGrid">
       <Box as="section" sx={{ marginRight: 'auto' }}>
-        <Image src={Logo} alt="Wraft Logo" className="" priority />
+        <img src={Logo} alt="" />
       </Box>
 
       <Flex as="section" variant="signinRight">
@@ -55,22 +62,24 @@ const UserLoginForm = () => {
           Sign in
         </Heading>
 
-        <Box as="form" onSubmit={onSubmit}>
+        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
           <Label htmlFor="email">Email</Label>
           <Input
             type="text"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            defaultValue="shijith.k@aurut.com"
+            {...register('email', { required: true })}
             mb={'24px'}
           />
 
           <Label htmlFor="password">Password</Label>
           <Input
-            type="text"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            // name="password"
+            defaultValue="pa55w0rd"
+            type="password"
+            // ref={register({ required: true })}
+            {...register('password', { required: true })}
             mb={'12px'}
           />
           <Flex
@@ -79,17 +88,17 @@ const UserLoginForm = () => {
               flexDirection: 'row-reverse',
               position: 'relative',
             }}>
-            <Link
-              href="/resetpassword"
-              sx={{
-                textDecoration: 'none',
-                color: 'dark_300',
-              }}>
-              Forgot Password?
+            <Link href="/resetpassword">
+              <Text
+                sx={{
+                  textDecoration: 'none',
+                  color: 'dark_300',
+                }}>
+                Forgot Password?
+              </Text>
             </Link>
             <Button
               type="submit"
-              onClick={handleSubmit}
               sx={{
                 position: 'absolute',
                 mr: 'auto',
@@ -109,25 +118,26 @@ const UserLoginForm = () => {
         />
 
         <Button onClick={handleGoogleSignIn} variant="googleLogin">
-          <Image src={GoogleLogo} alt="Google Logo" className="" />
+          <img src={GoogleLogo} alt="" />
           Continue with Google
         </Button>
 
         <Text as="p" sx={{ mt: 5, color: 'dark_600' }}>
           Not a user yet?
-          <Link
-            href="/signup"
-            sx={{
-              textDecoration: 'none',
-              color: 'dark_600',
-              fontWeight: 'bold',
-              pl: 0,
-            }}>
-            Request invite
+          <Link href="/signup">
+            <Text
+              sx={{
+                textDecoration: 'none',
+                color: 'dark_600',
+                fontWeight: 'bold',
+                pl: 0,
+              }}>
+              Request invite
+            </Text>
           </Link>
         </Text>
       </Flex>
     </Grid>
   );
 };
-export default UserLoginForm;
+export default UserLogin;

@@ -1,6 +1,15 @@
-import { Theme } from 'theme-ui';
+import { Theme, ThemeUIStyleObject } from 'theme-ui';
 
-const theme: Theme = {
+type Variant = ThemeUIStyleObject;
+
+type CustomVariantGroups = {
+  variants: {
+    signinRight: Variant;
+    signinGrid: Variant;
+  };
+};
+
+const theme: Theme & CustomVariantGroups = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
@@ -18,19 +27,39 @@ const theme: Theme = {
   fontSizes: [12, 15, 18.75, 23.44, 29.3, 36.62, 45.78, 57.22, 71.53],
   fontWeights: {
     body: 400,
-    heading: 600,
-    bold: 800,
+    heading: 500,
+    bold: 700,
+    // heading: 600,
+    // bold: 800,
   },
   lineHeights: {
     body: 1.5,
     heading: 1.125,
   },
   colors: {
-    muted: '#f6f6f6',
-    text: '#000',
-    background: '#FAFBFC',
-    bgWhite: '#fff',
+    text: '#8F959B',
+    background: '#FFFFFF',
     primary: '#00471A',
+    success_100: '#9FE5B9',
+    success_400: '#008932',
+    success_500: '#006726',
+    success_600: '#00471A',
+    dark_300: 'text',
+    dark_600: '#343E49',
+    dark_200: '#B1B5B9',
+    dark_400: '#6F777F',
+    input_border: '#D7DDE9',
+    info_400: '#007FA6',
+    info_200: '#41C3E9',
+    error_400: '#D33E60',
+    warning_300: '#E3774C',
+    warning_500: '#88472E',
+    primary_500: '#3748CF',
+    muted: '#f6f6f6',
+    // text: '#000',
+    // background: '#FAFBFC',
+    bgWhite: '#fff',
+    // primary: '#00471A',
     secondary: 'gray.8',
     neutral: [
       '#E4E9EF', //light
@@ -821,6 +850,27 @@ const theme: Theme = {
     },
   },
   buttons: {
+    googleLogin: {
+      fontWeight: 'body',
+      color: 'dark_600',
+      bg: 'background',
+      border: '1px solid',
+      borderColor: '#E4E9EF',
+      borderRadius: '4px',
+      py: '9px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '16px',
+      cursor: 'pointer',
+      width: '100%',
+      '&:hover': {
+        bg: 'transparent',
+      },
+      '&:focus': {
+        bg: 'transparent',
+      },
+    },
     download: {
       bg: 'gray.1',
       textTransform: 'capitalize',
@@ -946,6 +996,23 @@ const theme: Theme = {
       px: 3,
       py: 1,
       fontSize: 0,
+    },
+  },
+  variants: {
+    signinRight: {
+      padding: '32px',
+      border: '1px solid',
+      borderColor: '#E4E9EF',
+      borderRadius: '4px',
+      width: '574px',
+      height: '629px',
+      gridColumnEnd: '3',
+      flexDirection: 'column',
+    },
+    signinGrid: {
+      gridTemplateColumns: '1fr auto 1fr',
+      margin: '80px',
+      fontFamily: 'inter',
     },
   },
 };
