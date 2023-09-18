@@ -1,12 +1,12 @@
 /** @jsxImportSource theme-ui */
 
-import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button, Divider } from 'theme-ui';
+import { useEffect, useState } from 'react';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input, Heading, Grid } from 'theme-ui';
+import { Label, Input, Heading } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';
@@ -52,13 +52,13 @@ const UserLogin = () => {
   };
 
   return (
-    <Grid as="main" sx={{ margin: '80px' }} variant="signinGrid">
-      <Box as="section" sx={{ marginRight: 'auto' }}>
+    <Flex variant="userLoginPage">
+      <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
         <img src={Logo} alt="" />
       </Box>
 
-      <Flex as="section" variant="signinRight">
-        <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
+      <Flex variant="userLoginForm" sx={{ justifySelf: 'center' }}>
+        <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
           Sign in
         </Heading>
 
@@ -82,11 +82,13 @@ const UserLogin = () => {
             {...register('password', { required: true })}
             mb={'12px'}
           />
+          {errors.exampleRequired && <Text>This field is required</Text>}
           <Flex
             sx={{
               width: '100%',
               flexDirection: 'row-reverse',
               position: 'relative',
+              marginBottom: '28px',
             }}>
             <Link href="/resetpassword">
               <Text
@@ -99,6 +101,7 @@ const UserLogin = () => {
             </Link>
             <Button
               type="submit"
+              variant="buttonPrimary"
               sx={{
                 position: 'absolute',
                 mr: 'auto',
@@ -109,13 +112,16 @@ const UserLogin = () => {
             </Button>
           </Flex>
         </Box>
-
-        <Divider
-          sx={{
-            margin: '56px 0',
-            color: 'rgba(0.141, 0.243, 0.286, 0.1)',
-          }}
-        />
+        <Box>
+          {loading && <Spinner color="black" width={18} height={18} />}
+          <Box
+            sx={{
+              height: '1px',
+              margin: '56px 0',
+              backgroundColor: 'border',
+            }}
+          />
+        </Box>
 
         <Button onClick={handleGoogleSignIn} variant="googleLogin">
           <img src={GoogleLogo} alt="" />
@@ -123,7 +129,7 @@ const UserLogin = () => {
         </Button>
 
         <Text as="p" sx={{ mt: 5, color: 'dark_600' }}>
-          Not a user yet?
+          Not a user yet? {''}
           <Link href="/signup">
             <Text
               sx={{
@@ -137,7 +143,7 @@ const UserLogin = () => {
           </Link>
         </Text>
       </Flex>
-    </Grid>
+    </Flex>
   );
 };
 export default UserLogin;
