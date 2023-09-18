@@ -375,7 +375,7 @@ const Form = () => {
                 </Box>
               ))}
           </Box>
-          <AssetForm onUpload={addUploads} />
+          <AssetForm onUpload={addUploads} filetype="layout" />
         </Box>
       </Flex>
     </Container>

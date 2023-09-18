@@ -13,12 +13,12 @@ interface AssetFormProps {
   filetype?: string;
 }
 
-const AssetForm = ({ onUpload, filetype }: AssetFormProps) => {
+const AssetForm = ({ onUpload, filetype = 'layout' }: AssetFormProps) => {
   const { register, handleSubmit } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Asset>();
 
-  const thisFileType: any = filetype;
+  // const thisFileType: any = filetype;
 
   const onImageUploaded = (data: any) => {
     const mData: Asset = data;
@@ -30,7 +30,7 @@ const AssetForm = ({ onUpload, filetype }: AssetFormProps) => {
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('name', data.name);
-    formData.append('type', thisFileType);
+    formData.append('type', filetype);
 
     // const formData = new FormData();
     // formData.append('image', data.file[0]);
@@ -69,7 +69,7 @@ const AssetForm = ({ onUpload, filetype }: AssetFormProps) => {
         </Box>
       )}
       <Box mx={-2} mb={3}>
-        {thisFileType === 'theme' && (
+        {filetype === 'theme' && (
           <Box>
             <Label htmlFor="name" mb={1}>
               Font Weight
@@ -91,7 +91,7 @@ const AssetForm = ({ onUpload, filetype }: AssetFormProps) => {
             </Select>
           </Box>
         )}
-        {thisFileType !== 'theme' && (
+        {filetype !== 'theme' && (
           <Box>
             <Label htmlFor="name" mb={1}>
               Asset Name
