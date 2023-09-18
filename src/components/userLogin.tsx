@@ -54,7 +54,9 @@ const UserLogin = () => {
   return (
     <Flex variant="userLoginPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-        <img src={Logo} alt="" />
+        <Link href="/">
+          <img src={Logo} alt="" />
+        </Link>
       </Box>
 
       <Flex variant="userLoginForm" sx={{ justifySelf: 'center' }}>
