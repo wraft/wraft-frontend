@@ -71,7 +71,7 @@ export interface ContentTypeClass {
   id: string;
   flow: ContentTypeFlow;
   fields: any;
-  decription: string;
+  description: string;
   color: null;
 }
 
@@ -122,6 +122,7 @@ export interface Asset {
   updated_at: string;
   inserted_at: string;
   file: string;
+  type?: string;
 }
 
 /**

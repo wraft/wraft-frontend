@@ -231,8 +231,9 @@ const StatesForm = ({
                 </Text>
                 <Text
                   sx={{ fontWeight: 'heading', color: 'gray.9' }}
-                  key={c.id}>
-                  {c.name} | {c.id}
+                  key={c.id}
+                  data-rel={c.id}>
+                  {c.name}
                 </Text>
                 <Flex sx={{ ml: 'auto' }}>
                   <Button
