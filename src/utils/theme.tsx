@@ -199,6 +199,7 @@ const theme: Theme = {
       fontWeight: 500,
       border: 'solid 1px',
       borderColor: 'gray.4',
+      fontFamily: 'body',
       bg: 'gray.0',
       mb: 2,
       borderRadius: 2,
