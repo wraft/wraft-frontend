@@ -4,15 +4,15 @@ type Variant = ThemeUIStyleObject;
 
 type CustomVariantGroups = {
   variants: {
-    signinRight: Variant;
-    signinGrid: Variant;
+    userLoginPage: Variant;
+    userLoginForm: Variant;
   };
 };
 
 const theme: Theme & CustomVariantGroups = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    body: "'Inter', sans-serif",
     heading: 'inherit',
     editor1: "'Inter', sans-serif",
     editor2:
@@ -38,13 +38,15 @@ const theme: Theme & CustomVariantGroups = {
   },
   colors: {
     text: '#8F959B',
-    background: '#FFFFFF',
+    background: '#FAFBFC',
     primary: '#00471A',
+    primary_700: '#004A0F',
+    border: '#E4E9EF',
     success_100: '#9FE5B9',
     success_400: '#008932',
     success_500: '#006726',
     success_600: '#00471A',
-    dark_300: 'text',
+    dark_300: '#8F959B',
     dark_600: '#343E49',
     dark_200: '#B1B5B9',
     dark_400: '#6F777F',
@@ -56,9 +58,11 @@ const theme: Theme & CustomVariantGroups = {
     warning_500: '#88472E',
     primary_500: '#3748CF',
     muted: '#f6f6f6',
+    white: '#fff',
+    bgWhite: '#fff',
     // text: '#000',
     // background: '#FAFBFC',
-    bgWhite: '#fff',
+
     // primary: '#00471A',
     secondary: 'gray.8',
     neutral: [
@@ -189,20 +193,20 @@ const theme: Theme & CustomVariantGroups = {
   },
   forms: {
     label: {
-      color: 'gray.6',
-      fontSize: 1,
-      fontWeight: 500,
-      pb: 0,
+      color: 'dark_300',
+      fontSize: '15px',
+      fontWeight: 'body',
+      pb: '4px',
     },
     input: {
       color: 'gray.8',
-      fontWeight: 500,
+      fontWeight: 'body',
       border: 'solid 1px',
-      borderColor: 'gray.3',
+      borderColor: '#D7DDE9',
       fontFamily: 'body',
       // bg: 'gray.0',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: '1.5px',
     },
 
     small: {
@@ -286,6 +290,12 @@ const theme: Theme & CustomVariantGroups = {
       fontFamily: 'body',
       fontWeight: 'body',
       lineHeight: 'body',
+    },
+    h3Medium: {
+      color: 'primary_700',
+      fontWeight: 'heading',
+      lineHeight: '38.88px',
+      fontSize: '29.3px',
     },
     a: {
       color: 'primary',
@@ -850,12 +860,18 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   buttons: {
+    buttonPrimary: {
+      color: 'white',
+      backgroundColor: 'primary_700',
+      borderRadius: '4px',
+      p: '8px 16px',
+    },
     googleLogin: {
       fontWeight: 'body',
       color: 'dark_600',
-      bg: 'background',
+      bg: 'bgWhite',
       border: '1px solid',
-      borderColor: '#E4E9EF',
+      borderColor: 'border',
       borderRadius: '4px',
       py: '9px',
       display: 'flex',
@@ -999,20 +1015,21 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   variants: {
-    signinRight: {
+    userLoginForm: {
       padding: '32px',
       border: '1px solid',
-      borderColor: '#E4E9EF',
+      borderColor: 'border',
       borderRadius: '4px',
+      backgroundColor: 'bgWhite',
       width: '574px',
       height: '629px',
-      gridColumnEnd: '3',
       flexDirection: 'column',
     },
-    signinGrid: {
-      gridTemplateColumns: '1fr auto 1fr',
-      margin: '80px',
+    userLoginPage: {
+      padding: '80px',
       fontFamily: 'inter',
+      backgroundColor: 'background',
+      justifyContent: 'center',
     },
   },
 };
