@@ -7,18 +7,24 @@ import Router, { useRouter } from 'next/router';
 
 import { Label, Input, Checkbox } from 'theme-ui';
 
+import { Asset } from '../utils/types';
 import Field from './Field';
 import {
-  createEntityFile,
+  createEntity,
+  deleteEntity,
+  // createEntityFile,
   loadEntityDetail,
-  updateEntityFile,
+  updateEntity,
+  // updateEntityFile,
 } from '../utils/models';
 import FieldColor from './FieldColor';
+import AssetForm from './AssetForm';
 
 interface ThemeElement {
   name: string;
   file?: string;
   font?: string;
+  assets?: any;
 }
 
 const ThemeForm = () => {
@@ -32,8 +38,26 @@ const ThemeForm = () => {
 
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
+  const [assets, setAssets] = useState<Array<Asset>>([]);
 
   const token = useStoreState((state) => state.auth.token);
+
+  /**
+   * Upload Assets
+   * @param data
+   */
+  const addUploads = (data: Asset) => {
+    setAssets((prevArray) => [...prevArray, data]);
+  };
+
+  /**
+   * Delete Asset from Theme
+   * @param id
+   */
+  const deleteAsset = (id: string) => {
+    deleteEntity(`/assets/${id}`, token);
+    addToast(`Deleting Asset`, { appearance: 'error' });
+  };
 
   // determine edit state based on URL
   const router = useRouter();
@@ -48,34 +72,57 @@ const ThemeForm = () => {
   };
 
   const onSubmit = (data: any) => {
-    const formData = new FormData();
+    // const formData = new FormData();
+
+    let assetsList;
+    //
+    if (assets.length > 0) {
+      const a: any = [];
+      assets.forEach((e: any) => {
+        a.push(e.id);
+      });
+
+      // Remove comma in the end
+      assetsList = a; //a.join(',');
+    }
+
+    console.log('assetsList', assetsList);
 
     // @TODO - do what ?
-    const stat = 'f67d779f-3b55-4428-99f1-1efe84305f93';
+    // const stat = 'f67d779f-3b55-4428-99f1-1efe84305f93';
 
     // only if files's presetn
     // if(data.file?.size > 0) {
     //   formData.append('file', data.file[0]);
     // }
 
-    const typeScaleValue: any = { h1: 10, p: 6, h2: 8 };
+    // const typeScaleValue: any = {
+    //   p: 6,
+    //   h2: 8,
+    //   h1: 10,
+    // };
 
-    // formData.append('assets', data.file[0]);
-
-    formData.append('name', data.name);
-    formData.append('font', data.font);
-    formData.append('secondary_color', data?.secondary_color);
-    formData.append('primary_color', data?.primary_color);
-    formData.append('body_color', data?.body_color);
-    formData.append('typescale', typeScaleValue);
-
-    formData.append('content_type_id', stat);
-    formData.append('default_theme', data?.default_theme);
+    const themeData: any = {
+      // @TODO
+      // remove static def, connect with right API
+      typescale: {
+        p: 6,
+        h2: 8,
+        h1: 10,
+      },
+      secondary_color: data?.secondary_color,
+      primary_color: data?.primary_color,
+      name: data.name,
+      font: data.font,
+      default_theme: data?.default_theme,
+      body_color: data?.body_color,
+      assets: assetsList,
+    };
 
     if (data?.edit) {
-      updateEntityFile(`themes/${data?.edit}`, formData, token, onDone);
+      updateEntity(`themes/${data?.edit}`, themeData, token, onDone);
     } else {
-      createEntityFile(formData, token, 'themes', onDone);
+      createEntity(themeData, `themes`, token);
     }
   };
 
@@ -86,16 +133,9 @@ const ThemeForm = () => {
     if (res && res?.theme) {
       const currTheme: ThemeElement = res?.theme;
       setTheme(currTheme);
-
-      console.log('theme', res);
-
       setValue('name', currTheme?.name);
       setValue('font', currTheme?.font);
-
-      // setValue('prefix', res.content_type.prefix);
-      // setValue('layout_id', res.content_type.layout?.id || undefined);
-      // setValue('edit', res.content_type.id);
-      // setValue('color', res.content_type.color);
+      setAssets(currTheme?.assets);
     }
   };
 
@@ -130,108 +170,139 @@ const ThemeForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
-      <Box mx={0} mb={3}>
-        <Flex>
-          <Box>
-            <Input
-              // name="edit"
-              type="hidden"
-              // ref={register}
-              {...register('edit')}
-            />
-            <Field
-              name="name"
-              label="Name"
-              defaultValue="New Theme"
-              register={register}
-            />
-            <Field
-              name="font"
-              label="Font"
-              defaultValue=""
-              register={register}
-            />
-            <Box
-              sx={{
-                p: 3,
-                bg: 'gray.2',
-                border: 'solid 1px',
-                borderColor: 'gray.3',
-              }}>
-              <Text>Colors</Text>
-              <FieldColor
-                name="primary_color"
-                label="Primary Color"
-                defaultValue="#000"
-                register={register}
-                onChangeColor={(value: string) =>
-                  onChangeField('primary_color', value)
-                }
-              />
-              <FieldColor
-                name="secondary_color"
-                label="Secondary Color"
-                defaultValue="#111"
-                register={register}
-                onChangeColor={(value: string) =>
-                  onChangeField('secondary_color', value)
-                }
-              />
-
-              <FieldColor
-                name="body_color"
-                label="Body Color"
-                defaultValue="#111"
-                register={register}
-                onChangeColor={(value: string) =>
-                  onChangeField('body_color', value)
-                }
-              />
-            </Box>
-            <Field
-              name="typescale"
-              label="Typescale"
-              defaultValue="1.25"
-              register={register}
-            />
-            <Box>
-              <Label htmlFor="name" mb={1}>
-                File ( only ttf/otf)
-              </Label>
+    <Flex>
+      <Box
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}
+        py={3}
+        mt={4}
+        pr={4}
+        sx={{ width: '50ch' }}>
+        <Box mx={0} mb={3}>
+          <Flex sx={{ width: '90%' }}>
+            <Box sx={{ width: '100%' }}>
               <Input
-                id="file"
-                // name="file"
-                type="file"
+                // name="edit"
+                type="hidden"
                 // ref={register}
-                {...register('file')}
+                {...register('edit')}
               />
+              <Field
+                name="name"
+                label="Name"
+                defaultValue="New Theme"
+                register={register}
+              />
+              <Field
+                name="font"
+                label="Font"
+                defaultValue=""
+                register={register}
+              />
+              <Box
+                sx={{
+                  p: 3,
+                  bg: 'gray.2',
+                  border: 'solid 1px',
+                  borderColor: 'gray.3',
+                }}>
+                <Text>Colors</Text>
+                <FieldColor
+                  name="primary_color"
+                  label="Primary Color"
+                  defaultValue="#000"
+                  register={register}
+                  onChangeColor={(value: string) =>
+                    onChangeField('primary_color', value)
+                  }
+                />
+                <FieldColor
+                  name="secondary_color"
+                  label="Secondary Color"
+                  defaultValue="#111"
+                  register={register}
+                  onChangeColor={(value: string) =>
+                    onChangeField('secondary_color', value)
+                  }
+                />
+
+                <FieldColor
+                  name="body_color"
+                  label="Body Color"
+                  defaultValue="#111"
+                  register={register}
+                  onChangeColor={(value: string) =>
+                    onChangeField('body_color', value)
+                  }
+                />
+              </Box>
+              <Box>
+                <Label htmlFor="default_theme" mb={1}>
+                  Default Theme?
+                </Label>
+                <Checkbox
+                  // ref={register}
+                  defaultChecked={true}
+                  // name="default_theme"
+                  {...register('default_theme')}
+                />
+              </Box>
             </Box>
 
-            <Box>
-              <Label htmlFor="name" mb={1}>
-                Default Theme?
-              </Label>
-              <Checkbox
-                // ref={register}
-                defaultChecked={true}
-                // name="default_theme"
-                {...register('default_theme')}
-              />
+            {errors.exampleRequired && <Text>This field is required</Text>}
+          </Flex>
+
+          {theme?.file && (
+            <Box sx={{ p: 3, bg: 'teal.6' }}>
+              <Text>{theme?.file}</Text>
             </Box>
-          </Box>
-
-          {errors.exampleRequired && <Text>This field is required</Text>}
-        </Flex>
-
-        {theme?.file && (
-          <Box sx={{ p: 3, bg: 'teal.6' }}>
-            <Text>{theme?.file}</Text>
-          </Box>
-        )}
+          )}
+        </Box>
+        <Button ml={2}>{isEdit ? 'Update' : 'Create Theme'}</Button>
       </Box>
-      <Button ml={2}>{isEdit ? 'Update' : 'Create Theme'}</Button>
-    </Box>
+      <Box>
+        <Box pt={3}>
+          <Text as="h3" mb={2} pb={1}>
+            Fonts
+          </Text>
+
+          {assets &&
+            assets.length > 0 &&
+            assets.map((m: any) => (
+              <Box
+                key={m.id}
+                sx={{
+                  p: 3,
+                  border: 'solid 1px',
+                  borderColor: 'gray.3',
+                  bg: 'base',
+                  mb: 1,
+                }}>
+                <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                  {m.name}
+                </Text>
+                <Box>
+                  <Button
+                    sx={{
+                      fontSize: 1,
+                      px: 1,
+                      py: 1,
+                      ml: 3,
+                      bg: 'white',
+                      color: 'red.4',
+                      border: 'solid 1px',
+                      borderColor: 'red.9',
+                    }}
+                    onClick={() => deleteAsset(m.id)}>
+                    Delete
+                  </Button>
+                </Box>
+              </Box>
+            ))}
+        </Box>
+        <AssetForm onUpload={addUploads} filetype="theme" />
+      </Box>
+    </Flex>
   );
 };
 export default ThemeForm;
