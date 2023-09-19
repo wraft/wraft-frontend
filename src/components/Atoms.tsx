@@ -204,7 +204,7 @@ interface StateBadgeProps {
 
 export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
   return (
-    <Flex sx={{ pt: 2}}>
+    <Flex sx={{ pt: 2 }}>
       <Text
         pt={0}
         variant="labelSmall"
