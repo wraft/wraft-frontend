@@ -174,7 +174,7 @@ const Nav = (props: any) => {
       <Flex
         sx={{
           flexDirection: 'column',
-          height: '100%',
+          maxHeight: '100%',
           justifyContent: 'space-between',
         }}>
         <Flex
@@ -182,7 +182,7 @@ const Nav = (props: any) => {
             py: 3,
             px: 3,
             borderBottom: 'solid 1px',
-            borderColor: '#E4E9EF',
+            borderColor: 'neutral.1',
             mb: 3,
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -261,7 +261,7 @@ const Nav = (props: any) => {
                             p: 3,
                             py: 2,
                             bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
+                            borderBottom: 'solid 1px',
                             '&:hover': {
                               bg: 'gray.1',
                             },
@@ -275,7 +275,7 @@ const Nav = (props: any) => {
                             p: 3,
                             py: 2,
                             bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
+                            borderBottom: 'solid 1px red',
                             '&:hover': {
                               bg: 'gray.1',
                             },
@@ -302,18 +302,22 @@ const Nav = (props: any) => {
           <Flex
             sx={{
               // position: 'relative',
-              height: '40px',
-              border: 'solid 1px #E4E9EF',
+              // height: '40px',
+              pt: 1,
+              pb: 1,
+              border: 'solid 1px',
+              borderColor: 'neutral.1',
               borderRadius: '4px',
-              mx: '18px',
+              mx: 3,
               alignItems: 'center',
-              bg: 'rgba(215, 221, 233, 0.25)',
-              my: '22px',
+              bg: 'dimGray',
+              my: 1,
+              mb: 3,
               input: {
                 border: 'none',
                 outline: 'none',
                 '::placeholder': {
-                  color: '#C1C6DB',
+                  color: 'gray.4',
                 },
               },
             }}>
@@ -325,7 +329,7 @@ const Nav = (props: any) => {
                 top: 0,
                 bottom: 0,
                 svg: {
-                  fill: '#C1C6DB',
+                  fill: 'gray.0',
                   pr: 2,
                 },
               }}>
@@ -337,8 +341,9 @@ const Nav = (props: any) => {
               sx={{
                 borderRadius: 0,
                 width: '130% !important',
-                fontSize: 1,
+                fontSize: 2,
                 pl: 2,
+                color: 'gray.4',
               }}
             />
           </Flex>
@@ -351,7 +356,7 @@ const Nav = (props: any) => {
                   fontWeight: '500',
                   px: 3,
                   mb: '12px',
-                  color: '#B1B5B9',
+                  color: 'gray.1',
                 }}>
                 {m.section}
               </Box>
@@ -369,14 +374,16 @@ const Nav = (props: any) => {
                     <Box
                       sx={{
                         mr: 2,
-                        color: checkActive(pathname, m) ? 'teal.2' : 'gray.6',
+                        color: checkActive(pathname, m) ? 'teal.2' : 'gray.3',
                       }}>
                       {menu.logo}
                     </Box>
                     {showFull && (
                       <Text
                         sx={{
+                          color: 'gray.8',
                           fontWeight: checkActive(pathname, m) ? 600 : 500,
+                          fontSize: 3,
                         }}>
                         {menu.name}
                       </Text>
