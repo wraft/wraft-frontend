@@ -131,7 +131,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
             ml: 1,
             // pl: 2,
             bg: 'gray.3',
-            fontSize: '11px',
+            fontSize: 0,
             fontWeight: 'heading',
             color: 'gray.7',
             // border: 'solid 0.5px',
@@ -167,7 +167,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
         <Text
           sx={{
-            fontSize: '12px',
+            fontSize: 0,
             color: 'gray.6',
             fontWeight: 300,
             cursor: 'pointer',
@@ -177,7 +177,13 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
         <Text
           as="h4"
           p={0}
-          sx={{ m: 0, fontSize: 1, fontWeight: 500, cursor: 'pointer' }}>
+          sx={{
+            color: 'gray.9',
+            m: 0,
+            fontSize: 2,
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}>
           {name}
         </Text>
       </MenuItem>
@@ -198,18 +204,19 @@ interface StateBadgeProps {
 
 export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
   return (
-    <Flex sx={{ mr: 1, p: 2, pt: 3, pl: 0 }}>
-      <Box
+    <Flex sx={{ pt: 2}}>
+      <Text
+        pt={0}
+        variant="labelSmall"
         sx={{
-          width: '10px',
-          height: '10px',
           bg: color ? color : 'red',
-          mt: 1,
-          mr: 1,
+          color: '#005517',
           borderRadius: '3rem',
-        }}
-      />
-      <Text pt={0} variant="labelSmall">
+          pl: '8px',
+          pt: '2px',
+          pb: '2px',
+          fontWeight: '600',
+        }}>
         {name}
       </Text>
     </Flex>

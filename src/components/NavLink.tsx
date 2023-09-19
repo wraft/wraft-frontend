@@ -4,7 +4,7 @@ import NextLink from 'next/link';
 import styled from '@emotion/styled';
 
 export const NextLinkWrapper = styled(NextLink)`
-  color: #444;
+  color: '#111';
   text-decoration: none;
 `;
 

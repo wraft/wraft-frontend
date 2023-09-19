@@ -42,8 +42,8 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
               flexBasis: ['auto', 245],
               minHeight: '100vh',
               borderRight: 'solid 1px',
-              borderColor: '#E4E9EF',
-              bg: 'white',
+              borderColor: 'neutral.1',
+              bg: 'bgWhite',
             }}>
             <Sidebar showFull={shouldShow} />
           </Box>
@@ -51,13 +51,13 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
         <Box
           sx={{
             flex: 1,
-            bg: 'background',
+            bg: 'bgWhite',
             minWidth: 0,
           }}>
           {children}
 
           <Flex sx={{ pt: 0 }}>
-            <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
+            <Text sx={{ fontSize: 1, p: 4, color: 'gray.3' }}>
               (c) Wraft Docs Inc 2021 . All Rights Reserved
             </Text>
             <Box
@@ -65,7 +65,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
                 ml: 'auto',
                 flexDirection: ['column', 'column'],
               }}>
-              <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
+              <Text sx={{ fontSize: 1, p: 4, color: 'gray.5' }}>Support</Text>
             </Box>
           </Flex>
         </Box>

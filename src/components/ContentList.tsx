@@ -162,7 +162,7 @@ const ContentList = () => {
           ),
           col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
           status: (
-            <StateBadge name={r.state && r.state.state} color="green.3" />
+            <StateBadge name={r.state && r.state.state} color="#E2F7EA" />
           ),
         };
 
@@ -174,8 +174,8 @@ const ContentList = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents" desc="All Official Documents" />
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+      <PageHeader title="Documents" />
       {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
         <Flex>
@@ -218,7 +218,7 @@ const ContentList = () => {
               )}
             </Box>
             <Paginate changePage={changePage} {...pageMeta} />
-            {total}
+            {total} of {total} pages
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox" sx={{ border: 0 }}>
@@ -227,7 +227,7 @@ const ContentList = () => {
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 0,
+                  fontSize: 1,
                   fontWeight: 'body',
                   color: 'gray.6',
                 }}>
@@ -255,7 +255,7 @@ const ContentList = () => {
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 0,
+                  fontSize: 1,
                   fontWeight: 'body',
                   color: 'gray.6',
                 }}>

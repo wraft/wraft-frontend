@@ -9,22 +9,23 @@ const styles = {
     borderCollapse: 'collapse',
     width: '100%',
     border: '1px solid',
-    borderColor: 'gray.3',
+    borderColor: 'neutral.1',
     textAlign: 'left',
+    bg: 'bgWhite',
   } as ThemeUIStyleObject,
   thead: {
-    // bg: 'gray.0',
+    bg: 'gray.0',
     fontSize: 0,
     textTransform: 'uppercase',
     border: '1px solid',
-    borderColor: 'gray.3',
-    color: 'gray.6',
+    borderColor: 'neutral.1',
+    color: 'gray.1',
   },
   tr: {
     verticalAlign: 'top',
     // bg: 'gray.0',
     borderBottom: '1px solid',
-    borderBottomColor: 'gray.2',
+    borderBottomColor: 'neutral.1',
     '&:last-child': {
       border: '0',
     },
@@ -57,8 +58,8 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
           fontSize: 0,
           textTransform: 'uppercase',
           border: '1px solid',
-          borderColor: 'gray.3',
-          color: 'gray.6',
+          borderColor: 'neutral.1',
+          color: 'gray.3',
         }}>
         {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (

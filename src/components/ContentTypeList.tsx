@@ -84,7 +84,14 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
       </Flex>
       <Box
         variant="layout.pageFrame"
-        sx={{ py: 1, pb: 4, borderBottom: 'solid 1px #ddd', mb: 3, mt: 3 }}>
+        sx={{
+          py: 1,
+          pb: 4,
+          borderBottom: 'solid 1px',
+          borderColor: 'neutral.0',
+          mb: 3,
+          mt: 3,
+        }}>
         <ContentTypeDashboard isEdit={isEdit} />
       </Box>
       {/* <Flex sx={{ width: '100%', pt: 4 }}>

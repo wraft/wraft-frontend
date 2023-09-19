@@ -3,7 +3,7 @@ import { Box, Text } from 'theme-ui';
 import Link from './NavLink';
 import { fetchAPI, deleteEntity } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
-import { Button } from 'theme-ui';
+// import { Button } from 'theme-ui';
 
 import { useToasts } from 'react-toast-notifications';
 
@@ -31,8 +31,8 @@ const ItemField = (props: any) => {
       p={3}
       sx={{
         position: 'relative',
-        bg: '#fff',
-        borderBottom: 'solid 1px #eee',
+        borderBottom: 'solid 1px',
+        borderBottomColor: 'gray.0',
         borderRadius: '3px',
         ':hover': {
           '.merry': {
@@ -46,9 +46,6 @@ const ItemField = (props: any) => {
             {props.name}
           </Text>
         </Link>
-        <Text as="p" sx={{ mt: 0, p: 0 }} pt={0} color="grey">
-          Sample Field Description
-        </Text>
       </Box>
       <Box
         className="merry"
@@ -60,9 +57,9 @@ const ItemField = (props: any) => {
           mt: 3,
           mr: 3,
         }}>
-        <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
+        {/* <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
           Delete
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );

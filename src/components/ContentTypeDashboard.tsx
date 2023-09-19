@@ -23,11 +23,11 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
   return (
     <Box
       sx={{
-        bg: 'background',
+        bg: 'neutral.0',
         minWidth: '220px',
         // maxHeight: '200px',
         border: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'neutral.1',
         borderRadius: 2,
         mr: 3,
       }}>
@@ -40,8 +40,8 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         }>
         <Box sx={{ height: '45px', bg: color }}></Box>
         {/* {isEdit ? 'yes' : 'no'} */}
-        <Box pl={3} pt={1} pb={2} bg="gray.0">
-          <Text sx={{ fontSize: 1, pt: 1, color: 'gray.8' }}>{name}</Text>
+        <Box pl={3} pt={1} pb={2} bg="">
+          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>
         </Box>
       </Link>
     </Box>
