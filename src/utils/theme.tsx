@@ -4,8 +4,8 @@ type Variant = ThemeUIStyleObject;
 
 type CustomVariantGroups = {
   variants: {
-    userLoginPage: Variant;
-    userLoginForm: Variant;
+    onboardingFormPage: Variant;
+    onboardingForms: Variant;
   };
 };
 
@@ -1015,7 +1015,7 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   variants: {
-    userLoginForm: {
+    onboardingForms: {
       padding: '32px',
       border: '1px solid',
       borderColor: 'border',
@@ -1025,7 +1025,7 @@ const theme: Theme & CustomVariantGroups = {
       height: '629px',
       flexDirection: 'column',
     },
-    userLoginPage: {
+    onboardingFormPage: {
       padding: '80px',
       fontFamily: 'inter',
       backgroundColor: 'background',

@@ -30,15 +30,23 @@ const UserLogin = () => {
   const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
     setLoading(true);
-    userLogin(data, ProxyToken);
+    userLogin(data, ProxyToken, handleError);
   };
 
   const ProxyToken = (t: string) => {
+    console.log(t);
     setToken(t);
     setLoading(false);
+  };
+
+  const handleError = (error: any) => {
+    // Handle the error here, e.g., display an error message to the user.
+    setError(true);
+    console.error('Login error: vb', error);
   };
 
   useEffect(() => {
@@ -52,14 +60,14 @@ const UserLogin = () => {
   };
 
   return (
-    <Flex variant="userLoginPage">
+    <Flex variant="onboardingFormPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
         <Link href="/">
           <img src={Logo} alt="" />
         </Link>
       </Box>
 
-      <Flex variant="userLoginForm" sx={{ justifySelf: 'center' }}>
+      <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
         <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
           Sign in
         </Heading>
@@ -90,7 +98,7 @@ const UserLogin = () => {
               width: '100%',
               flexDirection: 'row-reverse',
               position: 'relative',
-              marginBottom: '28px',
+              height: error ? '88px' : '52px',
             }}>
             <Link href="/resetpassword">
               <Text
@@ -101,36 +109,45 @@ const UserLogin = () => {
                 Forgot Password?
               </Text>
             </Link>
-            <Button
-              type="submit"
-              variant="buttonPrimary"
+            <Flex
               sx={{
-                position: 'absolute',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                position: error ? 'static' : 'absolute',
                 mr: 'auto',
-                top: '12px',
+                top: error ? '0px' : '12px',
                 left: '0',
               }}>
-              Sign in
-            </Button>
+              {error && (
+                <Text sx={{ mb: '24px', color: 'warning_300' }}>
+                  Email or password entered is incorrect
+                </Text>
+              )}
+              <Button type="submit" variant="buttonPrimary">
+                <Flex sx={{ alignItems: 'center' }}>
+                  Sign in
+                  {loading && <Spinner color="white" width={18} height={18} />}
+                </Flex>
+              </Button>
+            </Flex>
           </Flex>
         </Box>
-        <Box>
-          {loading && <Spinner color="black" width={18} height={18} />}
-          <Box
-            sx={{
-              height: '1px',
-              margin: '56px 0',
-              backgroundColor: 'border',
-            }}
-          />
-        </Box>
+
+        <Box
+          sx={{
+            minHeight: '1px',
+            maxHeight: '1px',
+            margin: '56px 0',
+            backgroundColor: 'border',
+          }}
+        />
 
         <Button onClick={handleGoogleSignIn} variant="googleLogin">
           <img src={GoogleLogo} alt="" />
           Continue with Google
         </Button>
 
-        <Text as="p" sx={{ mt: 5, color: 'dark_600' }}>
+        <Text as="p" sx={{ mt: '24px', color: 'dark_600' }}>
           Not a user yet? {''}
           <Link href="/signup">
             <Text
