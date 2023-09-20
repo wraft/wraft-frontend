@@ -347,7 +347,7 @@ export const checkUser = (token: any, onSuccess?: any) => {
  * @param data
  * @param onSucces ref to handle
  */
-export const userLogin = (data: any, onSuccess?: any) => {
+export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
   fetch(`${API_HOST}/api/v1/users/signin`, {
     method: 'POST',
     headers: {
@@ -357,12 +357,21 @@ export const userLogin = (data: any, onSuccess?: any) => {
     body: JSON.stringify(data),
   })
     .then(function (response) {
+      if (!response.ok) {
+        throw new Error();
+      }
       return response.json();
     })
     .then(function (data) {
       const { access_token } = data;
       cookie.set('token', access_token);
       onSuccess(access_token);
+    })
+    .catch(function (error) {
+      // console.error('Error:', error);
+      if (onError) {
+        onError(error);
+      }
     });
 };
 

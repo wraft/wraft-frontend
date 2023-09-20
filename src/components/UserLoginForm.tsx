@@ -1,12 +1,10 @@
-/** @jsxImportSource theme-ui */
-
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
-import Image from 'next/image';
+
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input, Grid, Heading } from 'theme-ui';
+import { Label, Input, Container } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';
@@ -45,89 +43,70 @@ const UserLoginForm = () => {
   }, [token]);
 
   return (
-    <Grid as="main" variant="variants.signinGrid">
-      <Box as="section" sx={{ marginRight: 'auto' }}>
-        <Image src={Logo} alt="Wraft Logo" className="" priority />
-      </Box>
-
-      <Flex as="section" variant="signinRight">
-        <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
-          Sign in
-        </Heading>
-
-        <Box as="form" onSubmit={onSubmit}>
-          <Label htmlFor="email">Email</Label>
-          <Input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            mb={'24px'}
-          />
-
-          <Label htmlFor="password">Password</Label>
-          <Input
-            type="text"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            mb={'12px'}
-          />
-          <Flex
-            sx={{
-              width: '100%',
-              flexDirection: 'row-reverse',
-              position: 'relative',
-            }}>
-            <Link
-              href="/resetpassword"
-              sx={{
-                textDecoration: 'none',
-                color: 'dark_300',
-              }}>
-              Forgot Password?
-            </Link>
-            <Button
-              type="submit"
-              onClick={handleSubmit}
-              sx={{
-                position: 'absolute',
-                mr: 'auto',
-                top: '12px',
-                left: '0',
-              }}>
-              Sign in
-            </Button>
-          </Flex>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Container sx={{ maxWidth: '100ch', py: 6, mx: 'auto' }}>
+        <Text variant="pagetitle" sx={{ fontWeight: 500, mb: 3 }}>
+          Sign-in to Wraft Docs
+        </Text>
+        <Box mx={-2} mb={3} sx={{ maxWidth: '40ch', mb: 4 }}>
+          <Box px={2} pb={3} sx={{}}>
+            <Label htmlFor="email" mb={1}>
+              Email
+            </Label>
+            <Input
+              id="email"
+              // name="email"
+              defaultValue="shijith.k@aurut.com"
+              // ref={register({ required: true })}
+              {...register('email', { required: true })}
+            />
+          </Box>
+          <Box px={2}>
+            <Label htmlFor="location" mb={1}>
+              Password
+            </Label>
+            <Input
+              id="password"
+              // name="password"
+              defaultValue="pa55w0rd"
+              type="password"
+              // ref={register({ required: true })}
+              {...register('password', { required: true })}
+            />
+          </Box>
+          {errors.exampleRequired && <Text>This field is required</Text>}
         </Box>
-
-        <Divider
-          sx={{
-            margin: '56px 0',
-            color: 'rgba(0.141, 0.243, 0.286, 0.1)',
-          }}
-        />
-
-        <Button onClick={handleGoogleSignIn} variant="googleLogin">
-          <Image src={GoogleLogo} alt="Google Logo" className="" />
-          Continue with Google
-        </Button>
-
-        <Text as="p" sx={{ mt: 5, color: 'dark_600' }}>
-          Not a user yet?
-          <Link
-            href="/signup"
+        <Flex sx={{ flexWrap: 'wrap', mt: 1, mx: -2 }}>
+          <Button
+            ml={2}
             sx={{
-              textDecoration: 'none',
-              color: 'dark_600',
-              fontWeight: 'bold',
-              pl: 0,
+              mt: 0,
+              mr: 3,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}>
-            Request invite
+            <Text mr={2} sx={{ fontWeight: 800 }}>
+              Login
+            </Text>
+
+            {loading && <Spinner color="white" width={18} height={18} />}
+
+            {/* {loading && <Spinner color="white" width={18} />} */}
+          </Button>
+          {/* <Button ml={2} sx={{ mt: 0, mr: 3 }}>
+            {loading && <Spinner color="white" width={24} />}
+            {!loading && <Text sx={{ fontWeight: 800 }}>Login</Text>}
+          </Button> */}
+        </Flex>
+        <Text pl={0} pt={2}>
+          Not a user yet ?{' '}
+          <Link href="signup">
+            <Text sx={{ fontWeight: 800 }}>Join us now!</Text>
           </Link>
         </Text>
-      </Flex>
-    </Grid>
+      </Container>
+    </Box>
   );
 };
 export default UserLoginForm;
