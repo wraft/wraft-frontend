@@ -1,7 +1,6 @@
 import React from 'react';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
-import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
 import { ArrowBack } from '@styled-icons/boxicons-regular/ArrowBack';
 interface PageHeaderProps {
   children?: any;
@@ -61,10 +60,10 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
             </Text>
           )}
         </Box>
-        <Box sx={{ ml: 'auto' }}>{children}</Box>
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ ml: 'auto', pt: 1 }}>{children}</Box>
+        {/* <Box sx={{ py: 2 }}>
           <DotsVerticalRounded width={22} />
-        </Box>
+        </Box> */}
       </Flex>
     </Box>
   );

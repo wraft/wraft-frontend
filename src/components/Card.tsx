@@ -143,7 +143,9 @@ export const HeadingFrame = ({ title, side }: HeadingFrameProps) => (
   <Box variant="layout.frameHeading">
     <Flex>
       <Text variant="pageheading">{title}</Text>
-      <Box sx={{ ml: 'auto', mr: 5 }}>{side && <Box>{side}</Box>}</Box>
+      <Box sx={{ ml: 'auto', mr: 0, pt: 2 }}>
+        {side && <Box sx={{ pt: 0 }}>{side}</Box>}
+      </Box>
     </Flex>
   </Box>
 );

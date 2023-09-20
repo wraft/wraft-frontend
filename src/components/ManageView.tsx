@@ -55,7 +55,7 @@ const listMenu = [
 
 const ManageHomePage = () => {
   return (
-    <Box>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Manage" desc="Manage Variants">
         <Box
           sx={{
@@ -96,7 +96,7 @@ const ManageHomePage = () => {
                   fill: 'teal.2',
                 },
               }}>
-              <NavLink href={l.path}>
+              <NavLink href={l.path} locale={''}>
                 <Flex>
                   <Box
                     sx={{
@@ -115,7 +115,7 @@ const ManageHomePage = () => {
                     <Text
                       as="h5"
                       sx={{
-                        fontSize: 3,
+                        fontSize: 2,
                         color: 'gray.7',
                         fontWeight: 'heading',
                         mb: 0,

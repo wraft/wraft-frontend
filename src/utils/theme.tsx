@@ -160,8 +160,8 @@ const theme: Theme = {
   },
   forms: {
     label: {
-      color: 'gray.6',
-      fontSize: 1,
+      color: 'gray.5',
+      fontSize: 2,
       fontWeight: 500,
       pb: 0,
     },
@@ -169,11 +169,11 @@ const theme: Theme = {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.3',
+      borderColor: 'neutral.2',
       fontFamily: 'body',
       // bg: 'gray.0',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: 4,
     },
 
     small: {
@@ -189,20 +189,18 @@ const theme: Theme = {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.4',
-      bg: 'gray.0',
+      borderColor: 'neutral.2',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: 4,
     },
     textarea: {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.4',
+      borderColor: 'neutral.2',
       fontFamily: 'body',
-      bg: 'gray.0',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: 4,
     },
   },
   styles: {
@@ -261,6 +259,7 @@ const theme: Theme = {
     },
     a: {
       color: 'primary',
+      textDecoration: 'none',
     },
     pre: {
       fontFamily: 'body',
@@ -400,19 +399,36 @@ const theme: Theme = {
       px: 3,
       display: 'block',
       letterSpacing: '-0.15px',
+      textDecoration: 'none',
     },
     btnPrimary: {
+      textDecoration: 'none',
       variant: 'buttons.btnPrimary',
+      color: 'bgWhite',
+      fontWeight: 500,
+      px: 3,
+      borderRadius: 4,
     },
     btnSecondary: {
       variant: 'buttons.btnSecondary',
+      fontSize: 2,
+      px: 3,
+      py: 2,
+      bg: 'gray.0',
+      borderRadius: 4,
+      color: 'gray.7',
+      fontWeight: 600,
+      textDecoration: 'none',
+      borderColor: 'gray.1',
     },
     btnSmall: {
       variant: 'buttons.btnSmall',
       p: 2,
       px: 3,
-      bg: 'red.1',
-      border: 'solid 1px red',
+      bg: 'gray.0',
+      borderColor: 'neutral.1',
+      textDecoration: 'none',
+      fontSize: 1,
     },
     btnPrimarySmall: {
       variant: 'buttons.btnPrimary',
@@ -445,11 +461,12 @@ const theme: Theme = {
     },
     base: {
       color: 'red',
+      textDecoration: 'none',
     },
     rel: {
       position: 'relative',
       display: 'block',
-      // bg: 'red'
+      textDecoration: 'none',
     },
     download2: {
       color: 'green.9',

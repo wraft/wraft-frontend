@@ -4,9 +4,9 @@ import { Flex, Container } from 'theme-ui';
 import LayoutList from '../../../components/LayoutList';
 import Page from '../../../components/PageFrame';
 import ManageSidebar from '../../../components/ManageSidebar';
-import { HeadingFrame } from '../../../components/Card';
-import Link from '../../../components/NavLink';
 import { menuLinks } from '../../../utils';
+import PageHeader from '../../../components/PageHeader';
+import NavLink from '../../../components/NavLink';
 
 const Index: FC = () => {
   return (
@@ -16,14 +16,19 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
+        <PageHeader title="Manage Layouts" desc="Document Layouts">
+          <NavLink variant="btnSecondary" href="/manage/layouts/new">
+            Add Layout
+          </NavLink>
+        </PageHeader>
+        {/* <HeadingFrame
           title="Manage"
           side={
-            <Link variant="btnPrimary" href="/manage/layouts/new">
+            <Link variant="btnSecondary" href="/manage/layouts/new">
               Add Layout
             </Link>
           }
-        />
+        /> */}
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />

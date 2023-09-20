@@ -1,6 +1,6 @@
 import React from 'react';
 // import Head from 'next/head';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 // import Head from 'next/head';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';
@@ -55,19 +55,6 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
             minWidth: 0,
           }}>
           {children}
-
-          <Flex sx={{ pt: 0 }}>
-            <Text sx={{ fontSize: 1, p: 4, color: 'gray.3' }}>
-              (c) Wraft Docs Inc 2021 . All Rights Reserved
-            </Text>
-            <Box
-              sx={{
-                ml: 'auto',
-                flexDirection: ['column', 'column'],
-              }}>
-              <Text sx={{ fontSize: 1, p: 4, color: 'gray.5' }}>Support</Text>
-            </Box>
-          </Flex>
         </Box>
       </Flex>
     </Flex>
