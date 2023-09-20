@@ -176,13 +176,12 @@ const ContentList = () => {
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Documents" />
-      {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
             {!loading && <ContentLoader />}
             <Box mx={0} mb={3} sx={{}}>
-              {vendors && (
+              {loading && vendors && (
                 <Table
                   options={{
                     columns: [

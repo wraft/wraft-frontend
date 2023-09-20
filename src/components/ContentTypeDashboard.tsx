@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'easy-peasy';
-import { Box, Text, Flex, Spinner, Grid } from 'theme-ui';
+import { Box, Text, Flex, Grid } from 'theme-ui';
 
 import Link from './NavLink';
 import { deleteEntity, fetchAPI } from '../utils/models';
+import ContentLoader from './ContentLoader';
 
 /**
  * DocType Cards
@@ -107,16 +108,11 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
 
   return (
     <Box>
-      <Flex sx={{ width: '100%' }}>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
-      </Flex>
+      <Flex sx={{ width: '100%' }}>{!loading && <ContentLoader />}</Flex>
       <Flex sx={{ width: '100%', pt: 2 }}>
         <Grid columns={3}>
-          {contents &&
+          {loading &&
+            contents &&
             contents.length > 0 &&
             contents.map((m: any) => (
               <DocCard key={m.id} {...m} isEdit={isEdit} onDelete={delData} />

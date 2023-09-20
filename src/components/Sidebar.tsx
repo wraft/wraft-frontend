@@ -42,6 +42,12 @@ const listMenu = [
         logo: <Like width={20} />,
         path: '/approvals',
       },
+
+      {
+        name: 'Templates',
+        logo: <Carousel width={20} />,
+        path: '/templates',
+      },
     ],
   },
   {
@@ -51,11 +57,6 @@ const listMenu = [
         name: 'Variants',
         logo: <BookOpen width={20} />,
         path: '/content-types',
-      },
-      {
-        name: 'Templates',
-        logo: <Carousel width={20} />,
-        path: '/templates',
       },
       {
         name: 'Blocks',
@@ -188,7 +189,7 @@ const Nav = (props: any) => {
             alignItems: 'center',
           }}>
           <Box>
-            <Link href="/">
+            <Link href="/" variant="base">
               <Flex color="primary" sx={{ fill: 'text' }}>
                 <BrandLogo width="5rem" height="2rem" />
               </Flex>

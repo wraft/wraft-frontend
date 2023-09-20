@@ -6,6 +6,7 @@ import { useStoreState } from 'easy-peasy';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
 import { BoxWrap, StateBadge } from './Atoms';
+import ContentLoader from './ContentLoader';
 
 export interface ApprovalList {
   pre_state: State;
@@ -38,10 +39,12 @@ const Approvals = () => {
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
 
   const loadDataSuccess = (data: any) => {
+    setLoading(true);
     const res: ApprovaSystemItem[] = data.instance_approval_systems;
     setContents(res);
   };
@@ -134,13 +137,14 @@ const Approvals = () => {
   }, [contents]);
 
   return (
-    <Box>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Approvals" desc="All Approvals across your feeds">
         <Box sx={{ ml: 'auto' }}></Box>
       </PageHeader>
       <Flex>
         <Box mx={0} mb={3} variant="layout.pageFrame" sx={{ width: '75%' }}>
-          {!contents && (
+          {!loading && <ContentLoader />}
+          {loading && !contents && (
             <Box
               sx={{
                 p: 4,
@@ -151,52 +155,53 @@ const Approvals = () => {
               <Text>Nothing to approve</Text>
             </Box>
           )}
-
-          <Table
-            options={{
-              columns: [
-                {
-                  Header: '',
-                  accessor: 'col1', // accessor is the "key" in the data
-                  width: 'auto',
-                },
-                {
-                  Header: 'Name',
-                  accessor: 'col2',
-                  width: '50%',
-                },
-                {
-                  Header: 'Time',
-                  accessor: 'col3',
-                  width: 'auto',
-                },
-                {
-                  Header: 'Sent by',
-                  accessor: 'col4',
-                  width: '10%',
-                },
-                {
-                  Header: 'State',
-                  accessor: 'state',
-                  width: '10%',
-                },
-                {
-                  Header: 'Action',
-                  accessor: 'status',
-                  width: '15%',
-                },
-              ],
-              data: tableList,
-            }}
-          />
+          {loading && contents && (
+            <Table
+              options={{
+                columns: [
+                  {
+                    Header: '',
+                    accessor: 'col1', // accessor is the "key" in the data
+                    width: 'auto',
+                  },
+                  {
+                    Header: 'Name',
+                    accessor: 'col2',
+                    width: '50%',
+                  },
+                  {
+                    Header: 'Time',
+                    accessor: 'col3',
+                    width: 'auto',
+                  },
+                  {
+                    Header: 'Sent by',
+                    accessor: 'col4',
+                    width: '10%',
+                  },
+                  {
+                    Header: 'State',
+                    accessor: 'state',
+                    width: '10%',
+                  },
+                  {
+                    Header: 'Action',
+                    accessor: 'status',
+                    width: '15%',
+                  },
+                ],
+                data: tableList,
+              }}
+            />
+          )}
         </Box>
         <Box
           sx={{
-            bg: 'gray.1',
+            bg: 'bgWhite',
             minHeight: '100vh',
             width: '25%',
             borderLeft: 'solid 1px',
-            borderColor: 'gray.3',
+            borderColor: 'neutral.1',
           }}></Box>
       </Flex>
     </Box>
