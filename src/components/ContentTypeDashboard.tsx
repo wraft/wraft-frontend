@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreState } from 'easy-peasy';
-import { Box, Text, Flex, Spinner, Grid } from 'theme-ui';
+import { Box, Text, Flex, Grid } from 'theme-ui';
 
 import Link from './NavLink';
 import { deleteEntity, fetchAPI } from '../utils/models';
+import ContentLoader from './ContentLoader';
 
 /**
  * DocType Cards
@@ -23,11 +24,11 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
   return (
     <Box
       sx={{
-        bg: 'background',
+        bg: 'neutral.0',
         minWidth: '220px',
         // maxHeight: '200px',
         border: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'neutral.1',
         borderRadius: 2,
         mr: 3,
       }}>
@@ -40,8 +41,8 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         }>
         <Box sx={{ height: '45px', bg: color }}></Box>
         {/* {isEdit ? 'yes' : 'no'} */}
-        <Box pl={3} pt={1} pb={2} bg="gray.0">
-          <Text sx={{ fontSize: 1, pt: 1, color: 'gray.8' }}>{name}</Text>
+        <Box pl={3} pt={1} pb={2} bg="">
+          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>
         </Box>
       </Link>
     </Box>
@@ -107,16 +108,11 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
 
   return (
     <Box>
-      <Flex sx={{ width: '100%' }}>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
-      </Flex>
+      <Flex sx={{ width: '100%' }}>{!loading && <ContentLoader />}</Flex>
       <Flex sx={{ width: '100%', pt: 2 }}>
         <Grid columns={3}>
-          {contents &&
+          {loading &&
+            contents &&
             contents.length > 0 &&
             contents.map((m: any) => (
               <DocCard key={m.id} {...m} isEdit={isEdit} onDelete={delData} />

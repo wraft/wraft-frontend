@@ -30,15 +30,18 @@ import {
   MenuButton,
   // MenuSeparator,
 } from 'reakit/Menu';
+import ContentLoader from './ContentLoader';
 
 const BlockTemplateListFrame: FC = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [blocks, setBlocks] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const loadData = () => {
     fetchAPI('block_templates')
       .then((data: any) => {
         const res: IField[] = data.block_templates;
         setContents(res);
+        setLoading(true);
       })
       .catch();
   };
@@ -153,7 +156,8 @@ const BlockTemplateListFrame: FC = () => {
       </Flex> */}
       <Box variant="layout.pageFrame">
         <Box mx={0} mb={3}>
-          {blocks.length === 0 && (
+          {!loading && <ContentLoader />}
+          {loading && blocks.length === 0 && (
             <Box>
               <Flex>
                 <Box sx={{ color: 'gray.5', width: 'auto' }}>
@@ -175,7 +179,7 @@ const BlockTemplateListFrame: FC = () => {
           )}
           {!blocks && <Text>You do not have any blok, click here to add</Text>}
 
-          {blocks && blocks.length > 0 && (
+          {loading && blocks && blocks.length > 0 && (
             <Table
               options={{
                 columns: [

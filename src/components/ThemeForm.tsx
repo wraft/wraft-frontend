@@ -199,13 +199,7 @@ const ThemeForm = () => {
                 defaultValue=""
                 register={register}
               />
-              <Box
-                sx={{
-                  p: 3,
-                  bg: 'gray.2',
-                  border: 'solid 1px',
-                  borderColor: 'gray.3',
-                }}>
+              <Box>
                 <Text>Colors</Text>
                 <FieldColor
                   name="primary_color"
@@ -275,7 +269,7 @@ const ThemeForm = () => {
                   p: 3,
                   border: 'solid 1px',
                   borderColor: 'gray.3',
-                  bg: 'base',
+                  // bg: 'base',
                   mb: 1,
                 }}>
                 <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>

@@ -1,14 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Container } from 'theme-ui';
-// import Link from './NavLink';
+import Link from './NavLink';
 import { Table } from './Table';
-// import { Plus } from './Icons';
 import { fetchAPI } from '../utils/models';
-// import { useStoreState } from 'easy-peasy';
-import { Button } from 'theme-ui';
 
-// import { useToasts } from 'react-toast-notifications';
 import PageHeader from './PageHeader';
+import ContentLoader from './ContentLoader';
 
 export interface VendorTypes {
   vendors: Vendor[];
@@ -48,6 +45,7 @@ const VendorListBlock: FC = () => {
   // const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Vendor>>([]);
   const [vendors, setVendors] = useState<Array<Vendor>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // const { addToast } = useToasts();
 
   const loadData = () => {
@@ -55,6 +53,7 @@ const VendorListBlock: FC = () => {
       .then((data: any) => {
         const res: Vendor[] = data.vendors;
         setContents(res);
+        setLoading(true);
       })
       .catch();
   };
@@ -87,14 +86,17 @@ const VendorListBlock: FC = () => {
   return (
     <Box>
       <PageHeader title="Vendors" desc="Manage your vendors">
-        <Box sx={{ ml: 'auto', mr: 5 }}>
-          <Button variant="btnPrimary">+ New Vendor</Button>
+        <Box sx={{ ml: 'auto', mr: 0, pt: 2 }}>
+          <Link href="/vendor/new" variant="btnSecondary" locale={''}>
+            + Add Vendor
+          </Link>
         </Box>
       </PageHeader>
       <Container sx={{ pl: 5, pr: 5, pt: 4 }}>
         <Box mx={0} mb={3}>
+          {!loading && <ContentLoader />}
           <Box sx={{ maxWidth: '70ch' }}>
-            {vendors && (
+            {loading && vendors && (
               <Table
                 options={{
                   columns: [

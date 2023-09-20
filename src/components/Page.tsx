@@ -51,7 +51,7 @@ export const Page = (props: any) => {
           rel="stylesheet"
         />
       </Head>
-      <Container width={100} bg={'white'}>
+      <Container width={100} bg="gray.0">
         {!token && (
           <Box>
             <Nav />
@@ -61,11 +61,11 @@ export const Page = (props: any) => {
         {token && (
           <Flex>
             <Sidebar showFull={showFull} />
-            <Box bg="gray.0" sx={{ width: '100%', minHeight: '100vh' }}>
+            <Box sx={{ width: '100%', minHeight: '100vh' }}>
               <Nav />
               <Box
-                sx={{ minHeight: '100vh', bg: 'base' }}
-                color="#333"
+                sx={{ minHeight: '100vh', bg: 'red' }}
+                // color="#333"
                 p={4}
                 pt={3}>
                 {props.children}
