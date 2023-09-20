@@ -19,12 +19,13 @@ const OrgSidebar = () => {
       sx={{
         width: '22%',
         borderRight: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'neutral.1',
+        minHeight: '80vh',
         pt: 3,
         pl: 3,
       }}>
       <NavLink href={'/account'} variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>My Profile</Text>
+        My Profile
       </NavLink>
       <NavLink href={'/account/company'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>

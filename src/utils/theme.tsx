@@ -24,7 +24,7 @@ const theme: Theme & CustomVariantGroups = {
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [12, 15, 18.75, 23.44, 29.3, 36.62, 45.78, 57.22, 71.53],
+  fontSizes: [10, 12, 14, 16, 18, 22, 36.62, 45.78, 57.22, 71.53],
   fontWeights: {
     body: 400,
     heading: 500,
@@ -37,7 +37,9 @@ const theme: Theme & CustomVariantGroups = {
     heading: 1.125,
   },
   colors: {
-    text: '#8F959B',
+    muted: '#f6f6f6',
+    text: '#000',
+    dimGray: '#F5F7FA',
     background: '#FAFBFC',
     primary: '#00471A',
     primary_700: '#004A0F',
@@ -57,7 +59,6 @@ const theme: Theme & CustomVariantGroups = {
     warning_300: '#E3774C',
     warning_500: '#88472E',
     primary_500: '#3748CF',
-    muted: '#f6f6f6',
     white: '#fff',
     bgWhite: '#fff',
     // text: '#000',
@@ -66,8 +67,8 @@ const theme: Theme & CustomVariantGroups = {
     // primary: '#00471A',
     secondary: 'gray.8',
     neutral: [
-      '#E4E9EF', //light
-      '#D7DDE9', //nutral
+      '#FAFBFD', //light
+      '#E4E9EF', //nutral
       '#C1C6DB', //dark
     ],
     gray: [
@@ -143,16 +144,16 @@ const theme: Theme & CustomVariantGroups = {
       '#00283B',
     ],
     teal: [
-      '#e6fcf5',
-      '#c3fae8',
-      '#96f2d7',
-      '#63e6be',
-      '#38d9a9',
-      '#20c997',
-      '#12b886',
-      '#0ca678',
-      '#099268',
-      '#087f5b',
+      '#EFF5F0',
+      '#C5DCC7',
+      '#68A371',
+      '#3A8549',
+      '#197231',
+      '#006222',
+      '#005517',
+      '#004008',
+      '#003604',
+      '#002D02',
     ],
 
     modes: {
@@ -160,10 +161,9 @@ const theme: Theme & CustomVariantGroups = {
         text: '#fff',
         base: '#000',
         background: '#111',
-        bgWhite: '#000',
-        neutral: [
-          '#111', //nutral/light
-        ],
+        dimGray: '#f5f7fa0f',
+        bgWhite: '#1D252F',
+        neutral: ['#1D252F', '#2C3641', '#D4D7DA'],
         gray: [
           '#1D252F',
           '#2C3641',
@@ -193,20 +193,20 @@ const theme: Theme & CustomVariantGroups = {
   },
   forms: {
     label: {
-      color: 'dark_300',
-      fontSize: '15px',
-      fontWeight: 'body',
-      pb: '4px',
+      color: 'gray.5',
+      fontSize: 2,
+      fontWeight: 500,
+      pb: 0,
     },
     input: {
       color: 'gray.8',
       fontWeight: 'body',
       border: 'solid 1px',
-      borderColor: '#D7DDE9',
+      borderColor: 'neutral.2',
       fontFamily: 'body',
       // bg: 'gray.0',
       mb: 2,
-      borderRadius: '1.5px',
+      borderRadius: 4,
     },
 
     small: {
@@ -222,19 +222,18 @@ const theme: Theme & CustomVariantGroups = {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.4',
-      bg: 'gray.0',
+      borderColor: 'neutral.2',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: 4,
     },
     textarea: {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
-      borderColor: 'gray.4',
-      bg: 'gray.0',
+      borderColor: 'neutral.2',
+      fontFamily: 'body',
       mb: 2,
-      borderRadius: 2,
+      borderRadius: 4,
     },
   },
   styles: {
@@ -299,6 +298,7 @@ const theme: Theme & CustomVariantGroups = {
     },
     a: {
       color: 'primary',
+      textDecoration: 'none',
     },
     pre: {
       fontFamily: 'body',
@@ -438,17 +438,36 @@ const theme: Theme & CustomVariantGroups = {
       px: 3,
       display: 'block',
       letterSpacing: '-0.15px',
+      textDecoration: 'none',
     },
     btnPrimary: {
+      textDecoration: 'none',
       variant: 'buttons.btnPrimary',
+      color: 'bgWhite',
+      fontWeight: 500,
+      px: 3,
+      borderRadius: 4,
     },
     btnSecondary: {
       variant: 'buttons.btnSecondary',
+      fontSize: 2,
+      px: 3,
+      py: 2,
+      bg: 'gray.0',
+      borderRadius: 4,
+      color: 'gray.7',
+      fontWeight: 600,
+      textDecoration: 'none',
+      borderColor: 'gray.1',
     },
     btnSmall: {
       variant: 'buttons.btnSmall',
       p: 2,
       px: 3,
+      bg: 'gray.0',
+      borderColor: 'neutral.1',
+      textDecoration: 'none',
+      fontSize: 1,
     },
     btnPrimarySmall: {
       variant: 'buttons.btnPrimary',
@@ -481,11 +500,12 @@ const theme: Theme & CustomVariantGroups = {
     },
     base: {
       color: 'red',
+      textDecoration: 'none',
     },
     rel: {
       position: 'relative',
       display: 'block',
-      // bg: 'red'
+      textDecoration: 'none',
     },
     download2: {
       color: 'green.9',
@@ -589,13 +609,14 @@ const theme: Theme & CustomVariantGroups = {
       alignItems: 'center',
     },
     frameHeading: {
-      bg: 'white',
+      bg: 'bgWhite',
       pb: 3,
       px: 4,
       py: 2,
       borderBottom: 'solid 1px',
-      borderColor: '#E4E9EF',
+      borderColor: 'neutral.1',
       mb: 0,
+      minHeight: '65px',
     },
     button: {
       border: 'solid 1px',
@@ -634,6 +655,9 @@ const theme: Theme & CustomVariantGroups = {
       },
       ':hover': {
         bg: 'rgba(155, 225, 181, 0.3);',
+        svg: {
+          color: '#008932',
+        },
       },
     },
 
@@ -933,6 +957,11 @@ const theme: Theme & CustomVariantGroups = {
       bg: 'teal.9',
       color: 'primary.9',
       borderColor: 'teal.8',
+      fontSize: 2,
+      '&:hover': {
+        bg: 'teal.8',
+        borderColor: 'gray.5',
+      },
     },
     btnSecondary: {
       variant: 'buttons.btnBig',
