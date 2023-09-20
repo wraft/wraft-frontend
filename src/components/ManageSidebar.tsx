@@ -23,7 +23,8 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         pl: 0,
         mr: 4,
         borderRight: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'gray.0',
+        minHeight: '100vh',
       }}>
       {items &&
         items.map((l: any) => (
@@ -32,14 +33,14 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
               <Flex
                 sx={{
                   borderBottom: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'neutral.0',
                   pb: 1,
                   mb: 2,
                 }}>
                 <Box sx={{ mr: 2, pt: 1, color: 'gray.5' }}>{l.logo}</Box>
                 <Text
                   sx={{
-                    fontSize: 1,
+                    fontSize: 2,
                     color: 'gray.7',
                     fontWeight: 'body',
                     mb: 1,

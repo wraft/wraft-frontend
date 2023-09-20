@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 // import { useStoreState } from 'easy-peasy';
-import { Box, Flex, Spinner } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 // import { Plus } from '@styled-icons/boxicons-regular';
 
-import Link from './NavLink';
+import NavLink from './NavLink';
 // import { deleteEntity, fetchAPI } from '../utils/models';
 // import LayoutCard from './Card';
 import ContentTypeDashboard from './ContentTypeDashboard';
@@ -40,9 +40,6 @@ interface ContentTypeList {
 const ContentTypeList = ({ isEdit }: ContentTypeList) => {
   // const token = useStoreState((state) => state.auth.token);
 
-  // const [contents, setContents] = useState<Array<IField>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
   /** DELETE content
    * @TODO move to inner page [design]
    */
@@ -62,29 +59,29 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
   //     });
   // };
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+  // useEffect(() => {
+  //   setLoading(false);
+  // }, []);
 
   return (
-    <Box>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Variants" desc="Manage Variants">
-        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 2, mt: 1 }}>
-          <Link href="/content-types/new" variant="btnSmall">
+        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
+          <NavLink href="/content-types/new" variant="btnSecondary" locale={''}>
             New Variant
-          </Link>
+          </NavLink>
         </Flex>
       </PageHeader>
-      <Flex>
-        {loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
-      </Flex>
       <Box
         variant="layout.pageFrame"
-        sx={{ py: 1, pb: 4, borderBottom: 'solid 1px #ddd', mb: 3, mt: 3 }}>
+        sx={{
+          py: 1,
+          pb: 4,
+          borderBottom: 'solid 1px',
+          borderColor: 'neutral.0',
+          mb: 3,
+          mt: 3,
+        }}>
         <ContentTypeDashboard isEdit={isEdit} />
       </Box>
       {/* <Flex sx={{ width: '100%', pt: 4 }}>
