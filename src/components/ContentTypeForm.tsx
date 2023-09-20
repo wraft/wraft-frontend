@@ -189,7 +189,7 @@ const Form = () => {
       console.log('content_type', res);
 
       setValue('name', res.content_type.name);
-      setValue('desc', res.content_type?.decription);
+      setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('edit', res.content_type.id);
@@ -255,6 +255,7 @@ const Form = () => {
         // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
+          name: item.name,
           key: item.name,
           field_type_id: fid,
         };
@@ -284,7 +285,7 @@ const Form = () => {
       name: data.name,
       layout_id: data.layout_id,
       fields: formatFields(fields),
-      description: data.desc,
+      description: data.description,
       prefix: data.prefix,
       flow_id: data.flow_id,
       color: data.color,
@@ -335,7 +336,7 @@ const Form = () => {
   }, [token]);
 
   const onFieldsSave = (fds: any) => {
-    console.log('saved fields', fds, fields);
+    // console.log('saved fields', fds, fields);
     setFields([]);
     // let newFields:any = []
     // format and replae existing fields
@@ -349,7 +350,7 @@ const Form = () => {
   };
 
   const onChangeFields = (_e: any, _name: string) => {
-    console.log('updating ', _name, _e);
+    // console.log('updating ', _name, _e);
     setValue(_name, _e);
     // const sampleTheme: themeObject = {
     //   ...theme,
@@ -393,7 +394,7 @@ const Form = () => {
                   <FieldText
                     register={register}
                     label="Description"
-                    name="desc"
+                    name="description"
                     defaultValue="Something to guide the user here"
                   />
                 </Box>
