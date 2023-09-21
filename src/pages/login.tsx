@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 // import Container from '../src/components/Container';
-import UserLogin from '../components/userLogin';
+import UserLoginForm from '../components/userLoginForm';
 
 export const Index: FC = () => {
   return (
@@ -14,7 +14,7 @@ export const Index: FC = () => {
         />
       </Head>
 
-      <UserLogin />
+      <UserLoginForm />
     </>
   );
 };
