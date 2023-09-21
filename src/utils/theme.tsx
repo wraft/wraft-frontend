@@ -1056,7 +1056,6 @@ const theme: Theme & CustomVariantGroups = {
     },
     onboardingFormPage: {
       padding: '80px',
-      fontFamily: 'inter',
       backgroundColor: 'background',
       justifyContent: 'center',
     },
