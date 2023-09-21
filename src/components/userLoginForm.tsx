@@ -73,7 +73,9 @@ const UserLoginForm = () => {
         </Heading>
 
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" mb={1}>
+            Email
+          </Label>
           <Input
             type="text"
             id="email"
@@ -82,7 +84,9 @@ const UserLoginForm = () => {
             mb={'24px'}
           />
 
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password" mb={1}>
+            Password
+          </Label>
           <Input
             id="password"
             // name="password"
@@ -147,20 +151,18 @@ const UserLoginForm = () => {
           Continue with Google
         </Button>
 
-        <Text as="p" sx={{ mt: '24px', color: 'dark_600' }}>
+        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'dark_600' }}>
           Not a user yet? {''}
           <Link href="/signup">
             <Text
               sx={{
-                textDecoration: 'none',
                 color: 'dark_600',
                 fontWeight: 'bold',
-                pl: 0,
               }}>
               Request invite
             </Text>
           </Link>
-        </Text>
+        </Flex>
       </Flex>
     </Flex>
   );
