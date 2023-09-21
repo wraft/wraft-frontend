@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Flex, Button, Text, Label, Input, Select } from 'theme-ui';
 
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
 import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 import { CloudUploadIcon } from './Icons';
-import { useDropzone } from 'react-dropzone';
+import Error from './Error';
+// import { useDropzone } from 'react-dropzone';
 
 interface AssetFormProps {
   setAsset?: any;
@@ -25,38 +26,26 @@ const AssetForm = ({
   filetype = 'layout',
 }: AssetFormProps) => {
   const {
-    control,
-    setValue,
     watch,
     register,
     handleSubmit,
     formState: { isValid, errors },
   } = useForm<FormInputs>({ mode: 'all' });
-  //incoming
-  // const AssetForm = ({ onUpload, filetype = 'layout' }: AssetFormProps) => {
-  // const { register, handleSubmit } = useForm();
-  //endincoming
   const token = useStoreState((state) => state.auth.token);
-  const [contents, setContents] = React.useState<Asset>();
-
-  // const thisFileType: any = filetype;
+  // const [contents, setContents] = React.useState<Asset>();
 
   const onImageUploaded = (data: any) => {
     const mData: Asset = data;
     onUpload(mData);
-    setContents(data);
+    // setContents(data);
   };
 
   const onSubmit = (data: any) => {
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
-    // formData.append('name', data.file[0].name);
-    // formData.append('type', 'layout');
-    //incoming
     formData.append('name', data.name);
     formData.append('type', filetype);
-    //endincoming
 
     createEntityFile(formData, token, 'assets', onImageUploaded);
     setAsset(true);
@@ -74,15 +63,11 @@ const AssetForm = ({
     event?.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
     setFile(droppedFile);
-    // setValue('file', droppedFile);
     console.log(droppedFile);
-    // console.log(setValue('file', droppedFile));
   };
 
   React.useEffect(() => {
     console.log(file);
-    // setValue('file', file);
-    // console.log(setValue('file', file));
   }, [file]);
 
   // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
@@ -179,15 +164,6 @@ const AssetForm = ({
             {...register('file', { required: true })}
           /> */
   }
-  {
-    /* endcurrent */
-  }
-  {
-    /* incomming */
-  }
-  {
-    /* )} */
-  }
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
@@ -213,7 +189,6 @@ const AssetForm = ({
               <Label htmlFor="name" mb={1}>
                 Font Weight
               </Label>
-
               <Select
                 id="flow_id"
                 defaultValue=""
@@ -228,6 +203,7 @@ const AssetForm = ({
                   Bold
                 </option>
               </Select>
+              {errors.name && <Error text={errors.name.message} />}
             </Box>
           )}
           {filetype !== 'theme' && (
