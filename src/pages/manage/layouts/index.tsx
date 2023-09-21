@@ -1,23 +1,21 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Container, Button } from 'theme-ui';
+import Modal from 'react-modal';
+
 import LayoutList from '../../../components/LayoutList';
 import LayoutForm from '../../../components/LayoutForm';
 import Page from '../../../components/PageFrame';
-import ManageSidebar from '../../../components/ManageSidebar';
-// import { HeadingFrame } from '../../../components/Card';
-// import { menuLinks } from '../../../utils';
-import Modal from 'react-modal';
-import { menuLinks } from '../../../utils';
 import PageHeader from '../../../components/PageHeader';
-import NavLink from '../../../components/NavLink';
+import ManageSidebar from '../../../components/ManageSidebar';
+import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  // React.useEffect(() => {
-  //   // Set the app element to document.body when the component mounts (client-side).
-  //   Modal.setAppElement(document.body);
-  // }, []);
+  React.useEffect(() => {
+    // Set the app element to document.body when the component mounts (client-side).
+    Modal.setAppElement(document.body);
+  }, []);
   return (
     <>
       <Head>
@@ -26,19 +24,8 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <NavLink variant="btnSecondary" href="/manage/layouts/new">
-            Add Layout
-          </NavLink>
+          <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
         </PageHeader>
-        {/* <HeadingFrame
-          title="Manage"
-          side={
-            // <Link variant="btnPrimary" href="/manage/layouts/new">
-            //   Add Layout
-            // </Link>
-            <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
-          }
-        />*/}
         <Modal
           shouldCloseOnOverlayClick={true}
           onRequestClose={() => setIsOpen(false)}
@@ -58,13 +45,8 @@ const Index: FC = () => {
               padding: '0px',
             },
           }}>
-          {/* <Close onClick={() => setIsOpen(false)} sx={{ cursor: 'pointer' }} /> */}
           <LayoutForm />
         </Modal>
-        {/* <Link variant="btnSecondary" href="/manage/layouts/new">
-              Add Layout
-            </Link> */}
-
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />
