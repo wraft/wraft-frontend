@@ -34,6 +34,7 @@ const UserLogin = () => {
 
   const onSubmit = (data: any) => {
     setLoading(true);
+    setError(false);
     userLogin(data, ProxyToken, handleError);
   };
 
@@ -47,6 +48,7 @@ const UserLogin = () => {
     // Handle the error here, e.g., display an error message to the user.
     setError(true);
     console.error('Login error: vb', error);
+    setLoading(false);
   };
 
   useEffect(() => {
