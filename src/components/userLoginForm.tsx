@@ -45,7 +45,6 @@ const UserLoginForm = () => {
   };
 
   const handleError = (error: any) => {
-    // Handle the error here, e.g., display an error message to the user.
     setError(true);
     console.error('Login error: vb', error);
     setLoading(false);
