@@ -1,12 +1,11 @@
 import React from 'react';
 import { Box, Flex, Button, Text, Label, Input } from 'theme-ui';
 
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
 import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 import { CloudUploadIcon } from './Icons';
-import { useDropzone } from 'react-dropzone';
 
 interface AssetFormProps {
   setAsset?: any;
@@ -15,7 +14,6 @@ interface AssetFormProps {
 
 const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
   const {
-    control,
     setValue,
     watch,
     register,
@@ -36,15 +34,36 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
     const formData = new FormData();
     formData.append('file', data.file[0]);
     formData.append('name', data.file[0].name);
-    // formData.append('file', data.files[0]);
-    // formData.append('name', data.files[0].name);
     formData.append('type', 'layout');
 
+    // const formData = new FormData();
+    // formData.append('image', data.file[0]);
+    // formData.append('tag', 'file');
     createEntityFile(formData, token, 'assets', onImageUploaded);
     setAsset(true);
+
+    // fetch(`${env.api_dev}/api/v1/assets`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     // 'Content-Type': 'multipart/form-data',
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    //   // headers: {'Content-Type':'multipart/form-data'},
+    //   body: formData,
+    // })
+    //   .then(function(response) {
+    //     return response.json();
+    //   })
+    //   .then(function(data) {
+    //     const mData: Asset = data;
+    //     console.log('Created Asset', mData);
+    //     props.onUpload(mData);
+    //     setContents(mData);
+    //   });
   };
 
-  const [file, setFile] = React.useState([]);
+  const [file, setFile] = React.useState(null);
   const [dragging, setDragging] = React.useState(false);
 
   const handleDragOver = (event: any) => {
@@ -56,69 +75,11 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
     event?.preventDefault();
     const droppedFile = event.dataTransfer.files[0];
     setFile(droppedFile);
-    // setValue('file', droppedFile);
     console.log(droppedFile);
-    // console.log(setValue('file', droppedFile));
+    setValue('file', droppedFile);
+    console.log(setValue('file', droppedFile));
   };
-
-  React.useEffect(() => {
-    setValue('file', file);
-    console.log(file);
-    console.log(setValue('file', file));
-  }, [file]);
-
-  // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-
-  // const files = acceptedFiles.map((file) => (
-  //   <li key={file.name}>
-  //     {file.name} - {file.size} bytes
-  //   </li>
-  // ));
-  // return (
-  //   <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
-  //     <Box
-  //       {...getRootProps({})}
-  //       sx={{
-  //         display: 'flex',
-  //         flexDirection: 'column',
-  //         alignItems: 'center',
-  //         border: '1px dashed',
-  //         borderColor: 'neutral.0',
-  //         p: '18px',
-  //         // bg: dragging ? 'green.0' : 'bgWhite',
-  //       }}>
-  //       <input {...getInputProps({ ...register('file') })} />
-  //       <p>Drag 'n' drop some files here, or click to select files</p>
-  //     </Box>
-  //     {/* <p>
-  //         Drag & drop or{' '}
-  //         <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
-  //           upload files
-  //         </Text>
-  //       </p> */}
-  //     {/* <Box mb="12px">
-  //         <CloudUploadIcon />
-  //       </Box>
-  //       <Text variant="capM">PDF - Max file size 5MB</Text>
-  //     */}
-  //     <Flex>
-  //       <Button
-  //         type="submit"
-  //         disabled={!isValid}
-  //         sx={{
-  //           ':disabled': {
-  //             bg: 'gray.0',
-  //             color: 'gray.5',
-  //           },
-  //         }}>
-  //         Upload
-  //       </Button>
-  //     </Flex>
-  //     <pre>{JSON.stringify(watch())}</pre>
-  //     <ul>{files}</ul>
-  //   </Box>
-  // );
-
+  // const { ref, ...rest } = register('file');
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
       <Box
@@ -148,27 +109,13 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
               </Text>
             </Text>
           </Label>
-          <Controller
-            name="file"
-            control={control}
-            defaultValue={null}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Input
-                id="fileInput"
-                type="file"
-                accept="application/pdf"
-                {...field}
-              />
-            )}
-          />
-          {/* <Input
+          <Input
             // sx={{ display: 'none' }}
-            id="fileInput"
+            id="file"
             type="file"
             accept="application/pdf"
             {...register('file', { required: true })}
-          /> */}
+          />
         </Box>
         <Text variant="capM">PDF - Max file size 5MB</Text>
       </Box>
@@ -185,6 +132,14 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
           Upload
         </Button>
       </Flex>
+      {/* <Text mb={3}>Upload Files</Text>
+      {contents && (
+        <Box>
+          <Text>{contents.name}</Text>
+          <Text>{contents.id}</Text>
+          <Text>{contents.file}</Text>
+        </Box>
+      )} */}
       <pre>{JSON.stringify(watch())}</pre>
     </Box>
   );
