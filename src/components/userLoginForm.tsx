@@ -21,7 +21,7 @@ export interface IField {
   value: string;
 }
 
-const UserLogin = () => {
+const UserLoginForm = () => {
   const {
     register,
     handleSubmit,
@@ -169,4 +169,4 @@ const UserLogin = () => {
     </Flex>
   );
 };
-export default UserLogin;
+export default UserLoginForm;
