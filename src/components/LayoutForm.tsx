@@ -11,6 +11,7 @@ import {
   Image,
   Link,
 } from 'theme-ui';
+import { transparentize } from '@theme-ui/color';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -115,8 +116,8 @@ const Form = () => {
    */
   const onSubmit = (data: any) => {
     console.log('Submitted!');
-    console.log(data);
-    console.log(engines);
+    // console.log(data);
+    // console.log(engines);
     let assetsPath;
     //
     if (assets.length > 0) {
@@ -276,7 +277,7 @@ const Form = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'green.5',
-                bg: 'green.0',
+                bg: transparentize('green.0', 0.4),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 0, fontWeight: 500 }}>1</Text>
@@ -313,7 +314,8 @@ const Form = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: formStep === 0 ? 'gray.5' : 'green.5',
-                bg: formStep === 0 ? 'neutral.0' : 'green.0',
+                bg:
+                  formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 0, fontWeight: 500 }}>2</Text>
@@ -464,7 +466,6 @@ const Form = () => {
                                 key={m.id}
                                 value={m.id}
                                 selected={index === 2}>
-                                {console.log(m.id)}
                                 {m.name}
                               </option>
                             ))}
@@ -505,14 +506,6 @@ const Form = () => {
                 </Flex>
               </Container>
             )}
-            {/* <Flex
-              sx={{
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                flexGrow: 1,
-              }}>
-              <Box />
-              <Box> */}
             <Flex sx={{ position: 'absolute', bottom: '48px' }}>
               {formStep === 0 && (
                 <Button
@@ -556,12 +549,10 @@ const Form = () => {
               )}
             </Flex>
           </Box>
-          {/* </Flex> */}
           {/* Form End */}
-          {/* </Box> */}
         </Box>
       </Container>
-      <pre>{JSON.stringify(watch(), null, 2)}</pre>
+      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
     </Flex>
   );
 };

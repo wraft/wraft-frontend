@@ -11,6 +11,10 @@ import Modal from 'react-modal';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  // React.useEffect(() => {
+  //   // Set the app element to document.body when the component mounts (client-side).
+  //   Modal.setAppElement(document.body);
+  // }, []);
   return (
     <>
       <Head>

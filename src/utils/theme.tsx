@@ -30,8 +30,10 @@ const theme: Theme = {
     text: '#000',
     background: '#FAFBFC',
     bgWhite: '#fff',
-    primary: '#00471A',
-    secondary: 'gray.8',
+    // green.5
+    primary: '#005517',
+    // gray.8
+    secondary: '#2C3641',
     neutral: [
       '#E4E9EF', //light
       '#D7DDE9', //nutral
@@ -743,15 +745,21 @@ const theme: Theme = {
   text: {
     // paragraph
     pR: {
-      // color: 'gray.5',
-      color: 'red.3',
+      color: 'gray.5',
       fontSize: 1,
       fontWeight: 400,
       lineHeight: '1.6',
     },
     pM: {
-      color: 'gray.5',
+      color: 'gray.7',
       fontSize: 1,
+      fontWeight: 500,
+      lineHeight: '1.6',
+    },
+    // caption
+    capM: {
+      color: 'gray.5',
+      fontSize: 0,
       fontWeight: 500,
       lineHeight: '1.6',
     },
