@@ -1,12 +1,13 @@
 import React from 'react';
-import { Box, Flex, Button, Text, Label, Input, Select } from 'theme-ui';
+import { Box, Flex, Button, Label, Input, Select } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
 import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
-import { CloudUploadIcon } from './Icons';
+// import { CloudUploadIcon } from './Icons';
 import Error from './Error';
+import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
 
 interface AssetFormProps {
@@ -26,7 +27,7 @@ const AssetForm = ({
   filetype = 'layout',
 }: AssetFormProps) => {
   const {
-    watch,
+    // watch,
     register,
     handleSubmit,
     formState: { isValid, errors },
@@ -51,24 +52,24 @@ const AssetForm = ({
     setAsset(true);
   };
 
-  const [file, setFile] = React.useState([]);
-  const [dragging, setDragging] = React.useState(false);
+  // const [file, setFile] = React.useState([]);
+  // const [dragging, setDragging] = React.useState(false);
 
-  const handleDragOver = (event: any) => {
-    setDragging(true);
-    event?.preventDefault();
-  };
-  const handleDrop = (event: any) => {
-    setDragging(false);
-    event?.preventDefault();
-    const droppedFile = event.dataTransfer.files[0];
-    setFile(droppedFile);
-    console.log(droppedFile);
-  };
+  // const handleDragOver = (event: any) => {
+  //   setDragging(true);
+  //   event?.preventDefault();
+  // };
+  // const handleDrop = (event: any) => {
+  //   setDragging(false);
+  //   event?.preventDefault();
+  //   const droppedFile = event.dataTransfer.files[0];
+  //   setFile(droppedFile);
+  //   console.log(droppedFile);
+  // };
 
-  React.useEffect(() => {
-    console.log(file);
-  }, [file]);
+  // React.useEffect(() => {
+  //   console.log(file);
+  // }, [file]);
 
   // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
@@ -164,10 +165,8 @@ const AssetForm = ({
             {...register('file', { required: true })}
           /> */
   }
-
-  return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
-      <Box
+  {
+    /* <Box
         onDragOver={handleDragOver}
         onDragLeave={() => setDragging(false)}
         onDrop={handleDrop}
@@ -182,63 +181,66 @@ const AssetForm = ({
         }}>
         <Box mb="12px">
           <CloudUploadIcon />
-        </Box>
-        <Box mx={-2} mb={3}>
-          {filetype === 'theme' && (
-            <Box>
-              <Label htmlFor="name" mb={1}>
-                Font Weight
-              </Label>
-              <Select
-                id="flow_id"
-                defaultValue=""
-                {...register('name', { required: true })}>
-                <option value="Regular" key="regular">
-                  Regular
-                </option>
-                <option value="Italic" key="italic">
-                  Italic
-                </option>
-                <option value="Bold" key="bold">
-                  Bold
-                </option>
-              </Select>
-              {errors.name && <Error text={errors.name.message} />}
-            </Box>
-          )}
-          {filetype !== 'theme' && (
-            <Box>
-              <Label htmlFor="name" mb={1}>
-                Asset Name
-              </Label>
-              <Input
-                id="name"
-                type="name"
-                {...register('name', { required: true })}
-              />
-            </Box>
-          )}
-          <Label htmlFor="file" mb={1}>
-            File
-          </Label>
-          <Input id="file" type="file" {...register('file')} />
-          {/*end incomming */}
-        </Box>
-        <Flex>
-          <Button
-            type="submit"
-            disabled={!isValid}
-            sx={{
-              ':disabled': {
-                bg: 'gray.0',
-                color: 'gray.5',
-              },
-            }}>
-            Upload
-          </Button>
-        </Flex>
-        <pre>{JSON.stringify(watch())}</pre>
+        </Box> */
+  }
+  {
+    /* <pre>{JSON.stringify(watch())}</pre> */
+  }
+
+  return (
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
+      <Box mx={-2} mb={3}>
+        {filetype === 'theme' && (
+          <Box>
+            <Label htmlFor="name" mb={1}>
+              Font Weight
+            </Label>
+            <Select
+              id="flow_id"
+              defaultValue=""
+              {...register('name', { required: true })}>
+              <option value="Regular" key="regular">
+                Regular
+              </option>
+              <option value="Italic" key="italic">
+                Italic
+              </option>
+              <option value="Bold" key="bold">
+                Bold
+              </option>
+            </Select>
+            {errors.name && <Error text={errors.name.message} />}
+          </Box>
+        )}
+        {filetype !== 'theme' && (
+          <Box>
+            <Field
+              name="name"
+              label="Asset Name"
+              defaultValue=""
+              register={register}
+              error={errors.name}
+            />
+          </Box>
+        )}
+        <Label htmlFor="file" mb={1}>
+          File
+        </Label>
+        <Input id="file" type="file" {...register('file')} />
       </Box>
+      <Flex>
+        <Button
+          type="submit"
+          disabled={!isValid}
+          sx={{
+            ':disabled': {
+              bg: 'gray.0',
+              color: 'gray.5',
+            },
+          }}>
+          Upload
+        </Button>
+      </Flex>
     </Box>
   );
 };
