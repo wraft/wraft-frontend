@@ -18,38 +18,44 @@ const listMenu = [
     name: 'Layouts',
     logo: <LayoutLogo />,
     path: '/manage/layouts',
+    desc: 'Manage Document Structures',
   },
   {
     name: 'Flows',
     logo: <FlowLogo />,
     path: '/manage/flows',
+    desc: 'Manage Document Flows',
   },
 
   {
     name: 'Themes',
     logo: <ThemeLogo />,
     path: '/manage/themes',
+    desc: 'Manage Themes',
   },
   {
     name: 'Roles',
     logo: <PermLogo />,
     path: '/manage/roles',
+    desc: 'Manage RBAC',
   },
   {
     name: 'Fields',
     logo: <PermLogo />,
     path: '/manage/fields',
+    desc: 'Manage Fields',
   },
   {
     name: 'Pipelines',
     logo: <PermLogo />,
     path: '/manage/pipelines',
+    desc: 'Manage Pipelines',
   },
 ];
 
 const ManageHomePage = () => {
   return (
-    <Box>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Manage" desc="Manage Variants">
         <Box
           sx={{
@@ -76,17 +82,21 @@ const ManageHomePage = () => {
                 width: '33%',
                 mr: 4,
                 border: 'solid 1px',
-                bg: 'gray.0',
+                borderColor: 'neutral.1',
+                bg: 'bgWhite',
                 // width: '240px',
-                borderColor: 'teal.7',
+                // borderColor: 'teal.7',
                 borderRadius: 4,
                 py: 4,
                 mb: 4,
                 px: 4,
-                ':hover': { bg: 'teal.7', borderColor: 'teal.6' },
+                ':hover': { bg: 'teal.0', borderColor: 'teal.0' },
                 color: 'teal.8',
+                svg: {
+                  fill: 'teal.2',
+                },
               }}>
-              <NavLink href={l.path}>
+              <NavLink href={l.path} locale={''}>
                 <Flex>
                   <Box
                     sx={{
@@ -96,7 +106,7 @@ const ManageHomePage = () => {
                       mr: 1,
                       color: 'gray.7',
                       svg: {
-                        fill: 'teal.2',
+                        fill: 'teal.6',
                       },
                     }}>
                     {l.logo}
@@ -105,7 +115,7 @@ const ManageHomePage = () => {
                     <Text
                       as="h5"
                       sx={{
-                        fontSize: 1,
+                        fontSize: 2,
                         color: 'gray.7',
                         fontWeight: 'heading',
                         mb: 0,
@@ -114,12 +124,12 @@ const ManageHomePage = () => {
                     </Text>
                     <Text
                       sx={{
-                        fontSize: 1,
+                        fontSize: 2,
                         fontWeight: 'body',
-                        color: 'gray.6',
+                        color: 'gray.4',
                         mb: 1,
                       }}>
-                      Some description of the admin
+                      {l.desc}
                     </Text>
                   </Box>
                 </Flex>

@@ -550,6 +550,7 @@ const Form = () => {
             </Flex>
           </Box>
           {/* Form End */}
+          <AssetForm onUpload={addUploads} filetype="layout" />
         </Box>
       </Container>
       {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
