@@ -513,7 +513,7 @@ const Form = () => {
             <Flex sx={{ position: 'absolute', bottom: '48px' }}>
               {formStep === 0 && (
                 <Button
-                  // disabled={!isValid}
+                  disabled={!isValid}
                   type="button"
                   onClick={next}
                   sx={{
