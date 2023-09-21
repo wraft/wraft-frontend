@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Flex, Button, Text, Label, Input } from 'theme-ui';
+import React, { useState } from 'react';
+import { Box, Flex, Button, Text, Label, Input, Select } from 'theme-ui';
 
 import { Controller, useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
@@ -11,9 +11,19 @@ import { useDropzone } from 'react-dropzone';
 interface AssetFormProps {
   setAsset?: any;
   onUpload?: any;
+  filetype?: string;
 }
 
-const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
+type FormInputs = {
+  file: FileList;
+  name: string;
+};
+
+const AssetForm = ({
+  onUpload,
+  setAsset,
+  filetype = 'layout',
+}: AssetFormProps) => {
   const {
     control,
     setValue,
@@ -21,9 +31,15 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
     register,
     handleSubmit,
     formState: { isValid, errors },
-  } = useForm<{ file: any }>({ mode: 'all' });
+  } = useForm<FormInputs>({ mode: 'all' });
+  //incoming
+  // const AssetForm = ({ onUpload, filetype = 'layout' }: AssetFormProps) => {
+  // const { register, handleSubmit } = useForm();
+  //endincoming
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = React.useState<Asset>();
+
+  // const thisFileType: any = filetype;
 
   const onImageUploaded = (data: any) => {
     const mData: Asset = data;
@@ -35,10 +51,12 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
-    formData.append('name', data.file[0].name);
-    // formData.append('file', data.files[0]);
-    // formData.append('name', data.files[0].name);
-    formData.append('type', 'layout');
+    // formData.append('name', data.file[0].name);
+    // formData.append('type', 'layout');
+    //incoming
+    formData.append('name', data.name);
+    formData.append('type', filetype);
+    //endincoming
 
     createEntityFile(formData, token, 'assets', onImageUploaded);
     setAsset(true);
@@ -62,9 +80,9 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
   };
 
   React.useEffect(() => {
-    setValue('file', file);
     console.log(file);
-    console.log(setValue('file', file));
+    // setValue('file', file);
+    // console.log(setValue('file', file));
   }, [file]);
 
   // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
@@ -119,25 +137,11 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
   //   </Box>
   // );
 
-  return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
-      <Box
-        onDragOver={handleDragOver}
-        onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          border: '1px dashed',
-          borderColor: 'neutral.0',
-          p: '18px',
-          bg: dragging ? 'green.0' : 'bgWhite',
-        }}>
-        <Box mb="12px">
-          <CloudUploadIcon />
-        </Box>
-        <Box>
+  {
+    /*current */
+  }
+  {
+    /* <Box>
           <Label
             htmlFor="file"
             sx={{ color: 'primary', display: 'inline-block' }}>
@@ -162,30 +166,103 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
               />
             )}
           />
-          {/* <Input
+        </Box>
+        <Text variant="capM">PDF - Max file size 5MB</Text> */
+  }
+  {
+    /*//inside upper box
+           <Input
             // sx={{ display: 'none' }}
             id="fileInput"
             type="file"
             accept="application/pdf"
             {...register('file', { required: true })}
-          /> */}
+          /> */
+  }
+  {
+    /* endcurrent */
+  }
+  {
+    /* incomming */
+  }
+  {
+    /* )} */
+  }
+
+  return (
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
+      <Box
+        onDragOver={handleDragOver}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          border: '1px dashed',
+          borderColor: 'neutral.0',
+          p: '18px',
+          bg: dragging ? 'green.0' : 'bgWhite',
+        }}>
+        <Box mb="12px">
+          <CloudUploadIcon />
         </Box>
-        <Text variant="capM">PDF - Max file size 5MB</Text>
+        <Box mx={-2} mb={3}>
+          {filetype === 'theme' && (
+            <Box>
+              <Label htmlFor="name" mb={1}>
+                Font Weight
+              </Label>
+
+              <Select
+                id="flow_id"
+                defaultValue=""
+                {...register('name', { required: true })}>
+                <option value="Regular" key="regular">
+                  Regular
+                </option>
+                <option value="Italic" key="italic">
+                  Italic
+                </option>
+                <option value="Bold" key="bold">
+                  Bold
+                </option>
+              </Select>
+            </Box>
+          )}
+          {filetype !== 'theme' && (
+            <Box>
+              <Label htmlFor="name" mb={1}>
+                Asset Name
+              </Label>
+              <Input
+                id="name"
+                type="name"
+                {...register('name', { required: true })}
+              />
+            </Box>
+          )}
+          <Label htmlFor="file" mb={1}>
+            File
+          </Label>
+          <Input id="file" type="file" {...register('file')} />
+          {/*end incomming */}
+        </Box>
+        <Flex>
+          <Button
+            type="submit"
+            disabled={!isValid}
+            sx={{
+              ':disabled': {
+                bg: 'gray.0',
+                color: 'gray.5',
+              },
+            }}>
+            Upload
+          </Button>
+        </Flex>
+        <pre>{JSON.stringify(watch())}</pre>
       </Box>
-      <Flex>
-        <Button
-          type="submit"
-          disabled={!isValid}
-          sx={{
-            ':disabled': {
-              bg: 'gray.0',
-              color: 'gray.5',
-            },
-          }}>
-          Upload
-        </Button>
-      </Flex>
-      <pre>{JSON.stringify(watch())}</pre>
     </Box>
   );
 };

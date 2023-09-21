@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Spinner } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 
 // import { useTable } from 'react-table';
 // import styled from 'styled-components';
@@ -10,6 +10,7 @@ import Paginate, { IPageMeta } from './Paginate';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
+import ContentLoader from './ContentLoader';
 
 export interface ILayout {
   width: number;
@@ -87,20 +88,23 @@ const TemplateList = () => {
       contents.map((r: any) => {
         const rFormated = {
           col2: (
-            <Text sx={{ fontSize: 0, fontWeight: 'body', py: 2 }}>
+            <Text sx={{ fontSize: 1, fontWeight: 'body', py: 2 }}>
               {r.updated_at}
             </Text>
           ),
           col3: (
             <Box sx={{ px: 3, py: 2 }}>
-              <Link href={`/templates/edit/${r.id}`} variant="btnSecondary">
+              <Link
+                href={`/templates/edit/${r.id}`}
+                variant="btnSmall"
+                locale={''}>
                 Edit
               </Link>
             </Box>
           ),
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
-              <Text as="h4">{r.title}</Text>
+              <Text as="h5">{r.title}</Text>
               <Text sx={{ color: 'gray.6' }}></Text>
             </Box>
           ),
@@ -114,22 +118,18 @@ const TemplateList = () => {
   }, [contents]);
 
   return (
-    <Box>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="btnSecondary">
+          <Link href="/templates/new" variant="btnSecondary" locale={''}>
             + New Template
           </Link>
         </Box>
       </PageHeader>
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
+        {!loading && <ContentLoader />}
         <Box mx={0} mb={3}>
-          {templates && (
+          {loading && templates && (
             <Table
               options={{
                 columns: [

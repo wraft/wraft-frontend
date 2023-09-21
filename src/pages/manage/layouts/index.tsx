@@ -5,9 +5,12 @@ import LayoutList from '../../../components/LayoutList';
 import LayoutForm from '../../../components/LayoutForm';
 import Page from '../../../components/PageFrame';
 import ManageSidebar from '../../../components/ManageSidebar';
-import { HeadingFrame } from '../../../components/Card';
-import { menuLinks } from '../../../utils';
+// import { HeadingFrame } from '../../../components/Card';
+// import { menuLinks } from '../../../utils';
 import Modal from 'react-modal';
+import { menuLinks } from '../../../utils';
+import PageHeader from '../../../components/PageHeader';
+import NavLink from '../../../components/NavLink';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -22,7 +25,12 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
+        <PageHeader title="Manage Layouts" desc="Document Layouts">
+          <NavLink variant="btnSecondary" href="/manage/layouts/new">
+            Add Layout
+          </NavLink>
+        </PageHeader>
+        {/* <HeadingFrame
           title="Manage"
           side={
             // <Link variant="btnPrimary" href="/manage/layouts/new">
@@ -30,7 +38,7 @@ const Index: FC = () => {
             // </Link>
             <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
           }
-        />
+        />*/}
         <Modal
           shouldCloseOnOverlayClick={true}
           onRequestClose={() => setIsOpen(false)}
@@ -53,6 +61,10 @@ const Index: FC = () => {
           {/* <Close onClick={() => setIsOpen(false)} sx={{ cursor: 'pointer' }} /> */}
           <LayoutForm />
         </Modal>
+        {/* <Link variant="btnSecondary" href="/manage/layouts/new">
+              Add Layout
+            </Link> */}
+
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />
