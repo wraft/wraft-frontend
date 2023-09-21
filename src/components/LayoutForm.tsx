@@ -260,7 +260,7 @@ const Form = () => {
       }}>
       <Text
         sx={{
-          fontSize: 1,
+          fontSize: 2,
           color: 'gray.8',
           letterSpacing: '-0.2px',
           fontWeight: 700,
@@ -280,7 +280,7 @@ const Form = () => {
                 bg: transparentize('green.0', 0.4),
                 borderRadius: '50%',
               }}>
-              <Text sx={{ fontSize: 0, fontWeight: 500 }}>1</Text>
+              <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
             </Flex>
           ) : (
             <Flex
@@ -292,7 +292,7 @@ const Form = () => {
           <Text
             ml={'10px'}
             sx={{
-              fontSize: 1,
+              fontSize: 2,
               fontWeight: 400,
               color: formStep === 0 ? 'gray.8' : 'green.5',
             }}>
@@ -318,13 +318,13 @@ const Form = () => {
                   formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
                 borderRadius: '50%',
               }}>
-              <Text sx={{ fontSize: 0, fontWeight: 500 }}>2</Text>
+              <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
           <Text
             ml={'10px'}
             sx={{
-              fontSize: 1,
+              fontSize: 2,
               fontWeight: 400,
               color:
                 formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
@@ -398,8 +398,9 @@ const Form = () => {
               </Box>
             </section>
           )}
+
+          {/* form start */}
           <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            {/* Form start */}
             {formStep >= 0 && (
               <Container
                 sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
@@ -506,10 +507,13 @@ const Form = () => {
                 </Flex>
               </Container>
             )}
+            {/* {formStep >= 1 && (
+              <AssetForm onUpload={addUploads} filetype="layout" />
+            )} */}
             <Flex sx={{ position: 'absolute', bottom: '48px' }}>
               {formStep === 0 && (
                 <Button
-                  disabled={!isValid}
+                  // disabled={!isValid}
                   type="button"
                   onClick={next}
                   sx={{
@@ -549,9 +553,8 @@ const Form = () => {
               )}
             </Flex>
           </Box>
-          {/* Form End */}
-          <AssetForm onUpload={addUploads} filetype="layout" />
         </Box>
+        {/* Form End */}
       </Container>
       {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
     </Flex>
