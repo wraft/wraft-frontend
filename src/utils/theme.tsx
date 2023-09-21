@@ -164,15 +164,15 @@ const theme: Theme = {
     label: {
       color: 'gray.5',
       // current
-      // fontSize: 1,
-      // fontWeight: 400,
-      // lineHeight: '1.6',
-      // pb: 0,
+      fontSize: 1,
+      fontWeight: 400,
+      lineHeight: '1.6',
+      pb: 0,
       // current
       // incomming
-      fontSize: 2,
-      fontWeight: 500,
-      pb: 0,
+      // fontSize: 2,
+      // fontWeight: 500,
+      // pb: 0,
       // incomming
     },
     input: {
@@ -180,18 +180,18 @@ const theme: Theme = {
       fontWeight: 500,
       border: 'solid 1px',
       // current
-      // borderColor: 'neutral.0',
-      // fontFamily: 'body',
-      // // bg: 'gray.0',
-      // // mb: 2,
-      // borderRadius: 2,
-      // current
-      // incomming
-      borderColor: 'neutral.2',
+      borderColor: 'neutral.0',
       fontFamily: 'body',
       // bg: 'gray.0',
-      mb: 2,
-      borderRadius: 4,
+      // mb: 2,
+      borderRadius: 2,
+      // current
+      // incomming
+      // borderColor: 'neutral.2',
+      // fontFamily: 'body',
+      // // bg: 'gray.0',
+      // mb: 2,
+      // borderRadius: 4,
       // incomming
     },
 
@@ -209,15 +209,15 @@ const theme: Theme = {
       fontWeight: 500,
       border: 'solid 1px',
       // current
-      // borderColor: 'neutral.0',
-      // bg: 'bgWhite',
-      // // mb: 2,
-      // borderRadius: 2,
+      borderColor: 'neutral.0',
+      bg: 'bgWhite',
+      // mb: 2,
+      borderRadius: 2,
       // current
       // incomming
-      borderColor: 'neutral.2',
-      mb: 2,
-      borderRadius: 4,
+      // borderColor: 'neutral.2',
+      // mb: 2,
+      // borderRadius: 4,
       // incomming
     },
     textarea: {
@@ -225,16 +225,16 @@ const theme: Theme = {
       fontWeight: 500,
       border: 'solid 1px',
       // current
-      // borderColor: 'neutral.0',
-      // bg: 'bgWhite',
-      // // mb: 2,
-      // borderRadius: 2,
+      borderColor: 'neutral.0',
+      bg: 'bgWhite',
+      // mb: 2,
+      borderRadius: 2,
       // current
       // incomming
-      borderColor: 'neutral.2',
-      fontFamily: 'body',
-      mb: 2,
-      borderRadius: 4,
+      // borderColor: 'neutral.2',
+      // fontFamily: 'body',
+      // mb: 2,
+      // borderRadius: 4,
       // incomming
     },
   },
