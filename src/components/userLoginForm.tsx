@@ -129,7 +129,7 @@ const UserLoginForm = () => {
                 </Text>
               )}
               <Button type="submit" variant="buttonPrimary">
-                <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center', gap: '4px' }}>
                   Sign in
                   {loading && <Spinner color="white" width={18} height={18} />}
                 </Flex>
