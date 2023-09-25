@@ -16,7 +16,8 @@ const theme: Theme = {
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
   // fontSizes: [12, 15, 18.75, 23.44, 29.3, 36.62, 45.78, 57.22, 71.53],
-  fontSizes: [10, 12, 14, 16, 18, 22, 36.62, 45.78, 57.22, 71.53],
+  // fontSizes: [10, 12, 14, 16, 18, 22, 36.62, 45.78, 57.22, 71.53],
+  fontSizes: [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48],
   fontWeights: {
     body: 400,
     heading: 600,
