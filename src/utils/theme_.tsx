@@ -217,6 +217,21 @@ const theme = {
       pl: 3,
       pb: 2,
     },
+    signinRight: {
+      padding: '32px',
+      border: '1px solid',
+      borderColor: '#E4E9EF',
+      borderRadius: '4px',
+      width: '574px',
+      height: '629px',
+      gridColumnEnd: '3',
+      flexDirection: 'column',
+    },
+    signinGrid: {
+      gridTemplateColumns: '1fr auto 1fr',
+      margin: '80px',
+      fontFamily: 'inter',
+    },
   },
   buttons: {
     button: {

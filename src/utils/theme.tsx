@@ -1,9 +1,18 @@
-import { Theme } from 'theme-ui';
+import { Theme, ThemeUIStyleObject } from 'theme-ui';
 
-const theme: Theme = {
+type Variant = ThemeUIStyleObject;
+
+type CustomVariantGroups = {
+  variants: {
+    onboardingFormPage: Variant;
+    onboardingForms: Variant;
+  };
+};
+
+const theme: Theme & CustomVariantGroups = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+    body: "'Inter', sans-serif",
     heading: 'inherit',
     editor1: "'Inter', sans-serif",
     editor2:
@@ -20,8 +29,10 @@ const theme: Theme = {
   fontSizes: [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48],
   fontWeights: {
     body: 400,
-    heading: 600,
-    bold: 800,
+    heading: 500,
+    bold: 700,
+    // heading: 600,
+    // bold: 800,
   },
   lineHeights: {
     body: 1.5,
@@ -32,11 +43,31 @@ const theme: Theme = {
     text: '#000',
     dimGray: '#F5F7FA',
     background: '#FAFBFC',
+    primary: '#00471A',
+    primary_700: '#004A0F',
+    border: '#E4E9EF',
+    success_100: '#9FE5B9',
+    success_400: '#008932',
+    success_500: '#006726',
+    success_600: '#00471A',
+    dark_300: '#8F959B',
+    dark_600: '#343E49',
+    dark_200: '#B1B5B9',
+    dark_400: '#6F777F',
+    input_border: '#D7DDE9',
+    info_400: '#007FA6',
+    info_200: '#41C3E9',
+    error_400: '#D33E60',
+    warning_300: '#E3774C',
+    warning_500: '#88472E',
+    primary_500: '#3748CF',
+    white: '#fff',
     bgWhite: '#fff',
-    // green.5
-    primary: '#005517',
-    // gray.8
-    secondary: '#2C3641',
+    // text: '#000',
+    // background: '#FAFBFC',
+
+    // primary: '#00471A',
+    secondary: 'gray.8',
     neutral: [
       '#FAFBFD', //light
       '#E4E9EF', //nutral
@@ -179,7 +210,7 @@ const theme: Theme = {
     },
     input: {
       color: 'gray.8',
-      fontWeight: 500,
+      fontWeight: 'body',
       border: 'solid 1px',
       // current
       // borderColor: 'neutral.0',
@@ -294,7 +325,12 @@ const theme: Theme = {
       fontWeight: 'body',
       lineHeight: 'body',
     },
-    // paragraph/medium
+    h3Medium: {
+      color: 'primary_700',
+      fontWeight: 'heading',
+      lineHeight: '38.88px',
+      fontSize: '29.3px',
+    },
     a: {
       color: 'primary',
       textDecoration: 'none',
@@ -906,6 +942,33 @@ const theme: Theme = {
     },
   },
   buttons: {
+    buttonPrimary: {
+      color: 'white',
+      backgroundColor: 'primary_700',
+      borderRadius: '4px',
+      p: '8px 16px',
+    },
+    googleLogin: {
+      fontWeight: 'body',
+      color: 'dark_600',
+      bg: 'bgWhite',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: '4px',
+      py: '9px',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '16px',
+      cursor: 'pointer',
+      width: '100%',
+      '&:hover': {
+        bg: 'transparent',
+      },
+      '&:focus': {
+        bg: 'transparent',
+      },
+    },
     download: {
       bg: 'gray.1',
       textTransform: 'capitalize',
@@ -1036,6 +1099,23 @@ const theme: Theme = {
       px: 3,
       py: 1,
       fontSize: 0,
+    },
+  },
+  variants: {
+    onboardingForms: {
+      padding: '32px',
+      border: '1px solid',
+      borderColor: 'border',
+      borderRadius: '4px',
+      backgroundColor: 'bgWhite',
+      width: '574px',
+      height: '629px',
+      flexDirection: 'column',
+    },
+    onboardingFormPage: {
+      padding: '80px',
+      backgroundColor: 'background',
+      justifyContent: 'center',
     },
   },
 };
