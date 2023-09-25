@@ -11,8 +11,9 @@ import {
   Image,
   Link,
 } from 'theme-ui';
+import { transparentize } from '@theme-ui/color';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
@@ -30,6 +31,8 @@ import {
 import Field from './Field';
 import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
+import Error from './Error';
+import { TickIcon } from './Icons';
 
 export interface Layouts {
   layout: Layout;
@@ -71,11 +74,22 @@ export interface IEngine {
 
 const Form = () => {
   const {
+    // watch,
     register,
+    control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
-  } = useForm();
+  } = useForm<{
+    name: string;
+    slug: string;
+    height: number;
+    width: number;
+    description: string;
+    engine_uuid: string;
+    screenshot: any;
+    unit: string;
+  }>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
@@ -101,6 +115,9 @@ const Form = () => {
    * @param data
    */
   const onSubmit = (data: any) => {
+    console.log('Submitted!');
+    // console.log(data);
+    // console.log(engines);
     let assetsPath;
     //
     if (assets.length > 0) {
@@ -220,165 +237,327 @@ const Form = () => {
     }
   };
 
-  return (
-    <Container sx={{ px: 6 }}>
-      <Flex>
-        <Box py={3} mt={4}>
-          <Box mb={3} mr={4} as="form" onSubmit={handleSubmit(onSubmit)}>
-            <Box pb={3}>
-              <Label htmlFor="name" mb={1}>
-                Name
-              </Label>
-              <Input
-                id="name"
-                // name="name"
-                defaultValue="Layout X"
-                // ref={register({ required: true })}
-                {...register('name', { required: true })}
-              />
-            </Box>
-            <Box>
-              <FieldText
-                name="description"
-                label="Description"
-                defaultValue=""
-                register={register}
-              />
-            </Box>
-            <Box>
-              <Field
-                name="slug"
-                label="Slug"
-                defaultValue=""
-                register={register}
-              />
-            </Box>
-            <Box pb={3}>
-              {layout && layout.screenshot && (
-                <div>
-                  <Image src={API_HOST + layout.screenshot} />
-                </div>
-              )}
-              <Label htmlFor="screenshot" mb={1}>
-                Screenshot
-              </Label>
-              <Input
-                id="screenshot"
-                // name="screenshot"
-                type="file"
-                // ref={register()}
-                {...register('screenshot')}
-              />
-            </Box>
-            <Box>
-              <Label htmlFor="engine_uuid" mb={1}>
-                Engine ID
-              </Label>
-              <Select
-                id="engine_uuid"
-                // name="engine_uuid"
-                defaultValue="NYC"
-                // ref={register({ required: true })}
-                {...register('engine_uuid', { required: true })}>
-                {engines &&
-                  engines.length > 0 &&
-                  engines.map((m: any) => (
-                    <option key={m.id} value={m.id}>
-                      {m.name}
-                    </option>
-                  ))}
-              </Select>
-            </Box>
-            <Box mt={3}>
-              <Flex sx={{ display: 'none' }}>
-                <Field
-                  name="width"
-                  label="Width"
-                  defaultValue="40"
-                  register={register}
-                  mr={2}
-                />
-                <Field
-                  name="height"
-                  label="Height"
-                  defaultValue="40"
-                  register={register}
-                  mr={2}
-                />
-                <Field
-                  name="unit"
-                  label="Unit"
-                  defaultValue="cm"
-                  register={register}
-                />
-              </Flex>
-            </Box>
-            {errors.exampleRequired && <Text>This field is required</Text>}
+  const [formStep, setFormStep] = useState(0);
+  function next() {
+    setFormStep((i) => i + 1);
+  }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
 
-            <Flex mx={-2} mt={2}>
-              <Button type="submit" ml={2}>
-                {isEdit ? 'Update' : 'Create'}
-              </Button>
+  const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
+
+  const [isAssetValid, setAssetValid] = React.useState(false);
+
+  return (
+    <Flex
+      sx={{
+        p: 4,
+        pb: '44px',
+        height: '100%',
+        flexDirection: 'column',
+        gap: '28px',
+      }}>
+      <Text
+        sx={{
+          fontSize: 2,
+          color: 'gray.8',
+          letterSpacing: '-0.2px',
+          fontWeight: 700,
+        }}>
+        Create new layout
+      </Text>
+      <Flex>
+        <Flex sx={{ alignItems: 'center' }}>
+          {formStep === 0 ? (
+            <Flex
+              sx={{
+                width: '24px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: 'green.5',
+                bg: transparentize('green.0', 0.4),
+                borderRadius: '50%',
+              }}>
+              <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
+            </Flex>
+          ) : (
+            <Flex
+              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              color="green.5">
+              <TickIcon fontSize={'24px'} color="inherit" />
+            </Flex>
+          )}
+          <Text
+            ml={'10px'}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color: formStep === 0 ? 'gray.8' : 'green.5',
+            }}>
+            Basic details
+          </Text>
+        </Flex>
+        <Flex ml={4} sx={{ alignItems: 'center' }}>
+          {isAssetValid ? (
+            <Flex
+              sx={{ justifyItems: 'center', alignItems: 'center' }}
+              color="green.5">
+              <TickIcon fontSize={'24px'} color="inherit" />
+            </Flex>
+          ) : (
+            <Flex
+              sx={{
+                width: '24px',
+                height: '24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: formStep === 0 ? 'gray.5' : 'green.5',
+                bg:
+                  formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
+                borderRadius: '50%',
+              }}>
+              <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
+            </Flex>
+          )}
+          <Text
+            ml={'10px'}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color:
+                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
+            }}>
+            Background PDF
+          </Text>
+        </Flex>
+      </Flex>
+      <Container sx={{ styleEl }}>
+        <Box>
+          {formStep >= 1 && (
+            <section>
+              <Box>
+                <Box pt={3}>
+                  {/* <Text as="h3" mb={2} pb={1}>
+                    Assets
+                  </Text> */}
+                  {assets &&
+                    assets.length > 0 &&
+                    assets.map((m: Asset) => (
+                      <Box
+                        key={m.id}
+                        sx={{
+                          // p: 3,
+                          border: 'solid 1px',
+                          borderColor: 'gray.3',
+                          bg: 'base',
+                          // mb: 1,
+                        }}>
+                        <Box
+                          sx={{
+                            mt: 4,
+                            border: 'solid 1px',
+                            borderColor: 'gray.3',
+                          }}>
+                          {m && m.file && (
+                            <PdfViewer
+                              // url={contents.content.build}
+                              url={`http://localhost:3000${m.file}`}
+                              pageNumber={1}
+                              // sx={{ width: '100%' }}
+                            />
+                          )}
+                        </Box>
+                        <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                          {m.name}
+                        </Text>
+                        <Link target="_blank" href={`${API_HOST}/${m.file}`}>
+                          Download
+                        </Link>
+                        <Box>
+                          <Button
+                            sx={{
+                              fontSize: 1,
+                              px: 1,
+                              py: 1,
+                              // ml: 3,
+                              bg: 'white',
+                              color: 'red.4',
+                              border: 'solid 1px',
+                              borderColor: 'red.9',
+                            }}
+                            onClick={() => deleteAsset(cId, m.id)}>
+                            Delete
+                          </Button>
+                        </Box>
+                      </Box>
+                    ))}
+                </Box>
+                <AssetForm setAsset={setAssetValid} onUpload={addUploads} />
+              </Box>
+            </section>
+          )}
+
+          {/* form start */}
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            {formStep >= 0 && (
+              <Container
+                sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
+                <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
+                  <Box>
+                    <Field
+                      name="name"
+                      label="Layout Name"
+                      defaultValue="Layout X"
+                      register={register}
+                      error={errors.name}
+                    />
+                  </Box>
+                  <Box>
+                    <Label htmlFor="slug">Slug</Label>
+                    <Controller
+                      control={control}
+                      name="slug"
+                      defaultValue="Select slug"
+                      rules={{ required: 'Please select a slug' }}
+                      render={({ field }) => (
+                        <Select mb={0} {...field}>
+                          <option>contract</option>
+                          <option>pletter</option>
+                        </Select>
+                      )}
+                    />
+                    {errors.slug && <Error text={errors.slug.message} />}
+                  </Box>
+                  <Box>
+                    <FieldText
+                      name="description"
+                      label="Description"
+                      defaultValue=""
+                      register={register}
+                      error={errors.description}
+                    />
+                  </Box>
+                  <Box pb={3} sx={{ display: 'none' }}>
+                    {layout && layout.screenshot && (
+                      <div>
+                        <Image src={API_HOST + layout.screenshot} />
+                      </div>
+                    )}
+                    <Label htmlFor="screenshot">Screenshot</Label>
+                    <Input
+                      id="screenshot"
+                      type="file"
+                      {...register('screenshot')}
+                    />
+                  </Box>
+                  <Box>
+                    <Label htmlFor="engine_uuid">Engine ID</Label>
+                    <Controller
+                      control={control}
+                      name="engine_uuid"
+                      rules={{ required: 'Please select a Engine ID' }}
+                      render={({ field }) => (
+                        <Select {...field}>
+                          {engines &&
+                            engines.length > 0 &&
+                            engines.map((m: any, index) => (
+                              <option
+                                key={m.id}
+                                value={m.id}
+                                selected={index === 2}>
+                                {m.name}
+                              </option>
+                            ))}
+                        </Select>
+                      )}
+                    />
+                    {errors.engine_uuid && (
+                      <Error text={errors.engine_uuid.message} />
+                    )}
+                  </Box>
+                  <Box mt={3}>
+                    <Flex sx={{ display: 'none' }}>
+                      <Field
+                        name="width"
+                        label="Width"
+                        defaultValue="40"
+                        register={register}
+                        error={errors.width}
+                        mr={2}
+                      />
+                      <Field
+                        name="height"
+                        label="Height"
+                        defaultValue="40"
+                        register={register}
+                        error={errors.height}
+                        mr={2}
+                      />
+                      <Field
+                        name="unit"
+                        label="Unit"
+                        defaultValue="cm"
+                        register={register}
+                        error={errors.unit}
+                      />
+                    </Flex>
+                  </Box>
+                </Flex>
+              </Container>
+            )}
+            {/* {formStep >= 1 && (
+              <AssetForm onUpload={addUploads} filetype="layout" />
+            )} */}
+            <Flex sx={{ position: 'absolute', bottom: '48px' }}>
+              {formStep === 0 && (
+                <Button
+                  disabled={!isValid}
+                  type="button"
+                  onClick={next}
+                  sx={{
+                    ':disabled': {
+                      bg: 'gray.4',
+                    },
+                  }}>
+                  Next
+                </Button>
+              )}
+              {formStep === 1 && (
+                <>
+                  <Button
+                    variant=""
+                    type="button"
+                    onClick={prev}
+                    sx={{
+                      bg: 'neutral.0',
+                      color: 'gray.8',
+                    }}>
+                    <Text as={'p'} variant="pm">
+                      Prev
+                    </Text>
+                  </Button>
+                  <Button
+                    disabled={!isValid || !isAssetValid}
+                    type="submit"
+                    ml={2}
+                    sx={{
+                      ':disabled': {
+                        bg: 'gray.4',
+                      },
+                    }}>
+                    {isEdit ? 'Update' : 'Create'}
+                  </Button>
+                </>
+              )}
             </Flex>
           </Box>
         </Box>
-        <Box pl={4}>
-          <Box pt={3}>
-            <Text as="h3" mb={2} pb={1}>
-              Assets
-            </Text>
-            {assets &&
-              assets.length > 0 &&
-              assets.map((m: Asset) => (
-                <Box
-                  key={m.id}
-                  sx={{
-                    p: 3,
-                    border: 'solid 1px',
-                    borderColor: 'gray.3',
-                    bg: 'base',
-                    mb: 1,
-                  }}>
-                  <Box
-                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
-                    {m && m.file && (
-                      <PdfViewer
-                        // url={contents.content.build}
-                        url={`http://localhost:3000${m.file}`}
-                        pageNumber={1}
-                        // sx={{ width: '100%' }}
-                      />
-                    )}
-                  </Box>
-                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                    {m.name}
-                  </Text>
-                  <Link target="_blank" href={`${API_HOST}/${m.file}`}>
-                    Download
-                  </Link>
-                  <Box>
-                    <Button
-                      sx={{
-                        fontSize: 1,
-                        px: 1,
-                        py: 1,
-                        ml: 3,
-                        bg: 'white',
-                        color: 'red.4',
-                        border: 'solid 1px',
-                        borderColor: 'red.9',
-                      }}
-                      onClick={() => deleteAsset(cId, m.id)}>
-                      Delete
-                    </Button>
-                  </Box>
-                </Box>
-              ))}
-          </Box>
-          <AssetForm onUpload={addUploads} filetype="layout" />
-        </Box>
-      </Flex>
-    </Container>
+        {/* Form End */}
+      </Container>
+      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
+    </Flex>
   );
 };
 export default Form;

@@ -5,3 +5,4 @@ build
 out
 *.swp
 *.swo
+.nvmrc
