@@ -1,14 +1,17 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container } from 'theme-ui';
+import { Flex, Container, Button } from 'theme-ui';
+
 import LayoutList from '../../../components/LayoutList';
+import LayoutForm from '../../../components/LayoutForm';
 import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { menuLinks } from '../../../utils';
-import PageHeader from '../../../components/PageHeader';
-import NavLink from '../../../components/NavLink';
+import ModalLeft from '../../../components/ModalLeft';
 
 const Index: FC = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <>
       <Head>
@@ -17,18 +20,11 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <NavLink variant="btnSecondary" href="/manage/layouts/new">
-            Add Layout
-          </NavLink>
+          <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
         </PageHeader>
-        {/* <HeadingFrame
-          title="Manage"
-          side={
-            <Link variant="btnSecondary" href="/manage/layouts/new">
-              Add Layout
-            </Link>
-          }
-        /> */}
+        <ModalLeft isOpen={isOpen} setOpen={setIsOpen}>
+          <LayoutForm />
+        </ModalLeft>
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />

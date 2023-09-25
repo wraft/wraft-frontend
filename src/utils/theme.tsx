@@ -24,7 +24,9 @@ const theme: Theme & CustomVariantGroups = {
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [10, 12, 14, 16, 18, 22, 36.62, 45.78, 57.22, 71.53],
+  // fontSizes: [12, 15, 18.75, 23.44, 29.3, 36.62, 45.78, 57.22, 71.53],
+  // fontSizes: [10, 12, 14, 16, 18, 22, 36.62, 45.78, 57.22, 71.53],
+  fontSizes: [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48],
   fontWeights: {
     body: 400,
     heading: 500,
@@ -194,19 +196,36 @@ const theme: Theme & CustomVariantGroups = {
   forms: {
     label: {
       color: 'gray.5',
+      // current
+      // fontSize: 1,
+      // fontWeight: 400,
+      // lineHeight: '1.6',
+      // pb: 0,
+      // current
+      // incomming
       fontSize: 2,
       fontWeight: 500,
       pb: 0,
+      // incomming
     },
     input: {
       color: 'gray.8',
       fontWeight: 'body',
       border: 'solid 1px',
+      // current
+      // borderColor: 'neutral.0',
+      // fontFamily: 'body',
+      // // bg: 'gray.0',
+      // // mb: 2,
+      // borderRadius: 2,
+      // current
+      // incomming
       borderColor: 'neutral.2',
       fontFamily: 'body',
       // bg: 'gray.0',
       mb: 2,
       borderRadius: 4,
+      // incomming
     },
 
     small: {
@@ -222,18 +241,34 @@ const theme: Theme & CustomVariantGroups = {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
+      // current
+      // borderColor: 'neutral.0',
+      // bg: 'bgWhite',
+      // // mb: 2,
+      // borderRadius: 2,
+      // current
+      // incomming
       borderColor: 'neutral.2',
       mb: 2,
       borderRadius: 4,
+      // incomming
     },
     textarea: {
       color: 'gray.8',
       fontWeight: 500,
       border: 'solid 1px',
+      // current
+      // borderColor: 'neutral.0',
+      // bg: 'bgWhite',
+      // // mb: 2,
+      // borderRadius: 2,
+      // current
+      // incomming
       borderColor: 'neutral.2',
       fontFamily: 'body',
       mb: 2,
       borderRadius: 4,
+      // incomming
     },
   },
   styles: {
@@ -802,6 +837,29 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   text: {
+    // paragraph
+    pR: {
+      color: 'gray.5',
+      // fontSize: 1,
+      fontSize: 2,
+      fontWeight: 400,
+      lineHeight: '1.6',
+    },
+    pM: {
+      color: 'gray.7',
+      // fontSize: 1,
+      fontSize: 2,
+      fontWeight: 500,
+      lineHeight: '1.6',
+    },
+    // caption
+    capM: {
+      color: 'gray.5',
+      // fontSize: 0,
+      fontSize: 1,
+      fontWeight: 500,
+      lineHeight: '1.6',
+    },
     labelSmall: {
       pl: 1,
       pr: 2,
