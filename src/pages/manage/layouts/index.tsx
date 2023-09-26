@@ -20,7 +20,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
+          <Button onClick={() => setIsOpen(true)}>Add Layout</Button>
         </PageHeader>
         <ModalLeft isOpen={isOpen} setOpen={setIsOpen}>
           <LayoutForm />
