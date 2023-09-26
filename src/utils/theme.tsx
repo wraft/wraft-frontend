@@ -651,7 +651,10 @@ const theme: Theme & CustomVariantGroups = {
       borderBottom: 'solid 1px',
       borderColor: 'neutral.1',
       mb: 0,
-      minHeight: '65px',
+      minHeight: '80px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
     },
     button: {
       border: 'solid 1px',
@@ -667,6 +670,8 @@ const theme: Theme & CustomVariantGroups = {
     },
     pageFrame: {
       p: 4,
+      height: 'calc(100vh - 80px)',
+      overflow: 'scroll',
     },
     menuWrapper: {
       px: 2,

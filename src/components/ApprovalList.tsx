@@ -141,69 +141,71 @@ const Approvals = () => {
       <PageHeader title="Approvals" desc="All Approvals across your feeds">
         <Box sx={{ ml: 'auto' }}></Box>
       </PageHeader>
-      <Flex>
-        <Box mx={0} mb={3} variant="layout.pageFrame" sx={{ width: '75%' }}>
-          {!loading && <ContentLoader />}
-          {loading && !contents && (
-            <Box
-              sx={{
-                p: 4,
-                bg: 'gray.0',
-                border: 'solid 1px',
-                borderColor: 'gray.2',
-              }}>
-              <Text>Nothing to approve</Text>
-            </Box>
-          )}
-          {loading && contents && (
-            <Table
-              options={{
-                columns: [
-                  {
-                    Header: '',
-                    accessor: 'col1', // accessor is the "key" in the data
-                    width: 'auto',
-                  },
-                  {
-                    Header: 'Name',
-                    accessor: 'col2',
-                    width: '50%',
-                  },
-                  {
-                    Header: 'Time',
-                    accessor: 'col3',
-                    width: 'auto',
-                  },
-                  {
-                    Header: 'Sent by',
-                    accessor: 'col4',
-                    width: '10%',
-                  },
-                  {
-                    Header: 'State',
-                    accessor: 'state',
-                    width: '10%',
-                  },
-                  {
-                    Header: 'Action',
-                    accessor: 'status',
-                    width: '15%',
-                  },
-                ],
-                data: tableList,
-              }}
-            />
-          )}
-        </Box>
-        <Box
-          sx={{
-            bg: 'bgWhite',
-            minHeight: '100vh',
-            width: '25%',
-            borderLeft: 'solid 1px',
-            borderColor: 'neutral.1',
-          }}></Box>
-      </Flex>
+      <Box mx={0} mb={3} variant="layout.pageFrame">
+        <Flex>
+          <Box mx={0} mb={3} sx={{ width: '75%' }}>
+            {!loading && <ContentLoader />}
+            {loading && !contents && (
+              <Box
+                sx={{
+                  p: 4,
+                  bg: 'gray.0',
+                  border: 'solid 1px',
+                  borderColor: 'gray.2',
+                }}>
+                <Text>Nothing to approve</Text>
+              </Box>
+            )}
+            {loading && contents && (
+              <Table
+                options={{
+                  columns: [
+                    {
+                      Header: '',
+                      accessor: 'col1', // accessor is the "key" in the data
+                      width: 'auto',
+                    },
+                    {
+                      Header: 'Name',
+                      accessor: 'col2',
+                      width: '50%',
+                    },
+                    {
+                      Header: 'Time',
+                      accessor: 'col3',
+                      width: 'auto',
+                    },
+                    {
+                      Header: 'Sent by',
+                      accessor: 'col4',
+                      width: '10%',
+                    },
+                    {
+                      Header: 'State',
+                      accessor: 'state',
+                      width: '10%',
+                    },
+                    {
+                      Header: 'Action',
+                      accessor: 'status',
+                      width: '15%',
+                    },
+                  ],
+                  data: tableList,
+                }}
+              />
+            )}
+          </Box>
+          <Box
+            sx={{
+              bg: 'bgWhite',
+              minHeight: '100vh',
+              width: '25%',
+              borderLeft: 'solid 1px',
+              borderColor: 'neutral.1',
+            }}></Box>
+        </Flex>
+      </Box>
     </Box>
   );
 };
