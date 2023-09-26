@@ -99,6 +99,7 @@ import { Box, Button } from 'theme-ui';
 
 // import toolbarItems from './toolbar';
 import { MentionAtomExtension } from 'remirror/extensions';
+
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -374,6 +375,7 @@ const EditorWraft: FC<EditorProps> = ({
         },
       }}>
       <div>{showToolbar}</div>
+
       <div>
         <div>
           <div>

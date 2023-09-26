@@ -4,6 +4,7 @@ import { AppProps } from 'next/app';
 
 import { ThemeUIProvider, Alert, Close } from 'theme-ui';
 import theme from '../utils/theme';
+
 // import { ThemeProvider, CSSReset } from "@chakra-ui/core";
 
 // import { createGlobalStyle } from 'styled-components';
@@ -12,6 +13,7 @@ import 'react-day-picker/lib/style.css';
 // import 'react-multi-carousel/lib/styles.css';
 // import "react-dropzone-uploader/dist/styles.css";
 import { ToastProvider } from 'react-toast-notifications';
+import { UserProvider } from '../contexts/user.context';
 
 const StoreProviderOverride = StoreProvider as any;
 // const GlobalStyle = createGlobalStyle`
@@ -55,7 +57,9 @@ function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
             autoDismissTimeout={1000}
             components={{ Toast: MyCustomToast }}
             placement="top-center">
-            <Component {...pageProps} />
+            <UserProvider>
+              <Component {...pageProps} />
+            </UserProvider>
           </ToastProvider>
         </ThemeUIProvider>
       </>
