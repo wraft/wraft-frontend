@@ -13,7 +13,7 @@ export const UserContext = createContext<IUserContextProps>(
 );
 
 export const UserProvider = ({ children }: { children: ReactElement }) => {
-  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [isUserLoading, setIsUserLoading] = useState(false);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
@@ -24,6 +24,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     const token = cookie.get('token') || false;
 
     if (token) {
+      setIsUserLoading(true);
       checkUser(
         token,
         (data: any) => {
