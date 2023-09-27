@@ -82,21 +82,17 @@ const Index: FC = () => {
     }
   }, [orgId]);
 
+  const backupLogo =
+    'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
+
   React.useEffect(() => {
     if (org?.logo) {
       setLogoSrc(org?.logo);
     } else {
-      setLogoSrc(
-        'https://images.unsplash.com/photo-1495615080073-6b89c9839ce0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3F1YXJlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
-      );
+      setLogoSrc(backupLogo);
     }
   }, [org]);
 
-  function handleLogoError() {
-    setLogoSrc(
-      'https://images.unsplash.com/photo-1495615080073-6b89c9839ce0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c3F1YXJlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
-    );
-  }
   const onSubmit = (data: any) => {
     console.log(data);
     if (orgId) {
@@ -139,7 +135,7 @@ const Index: FC = () => {
                   variant="profile"
                   src={logoSrc}
                   alt="logo"
-                  onError={handleLogoError}
+                  onError={() => setLogoSrc(backupLogo)}
                 />
                 <Label htmlFor="file">Logo</Label>
                 <Input
