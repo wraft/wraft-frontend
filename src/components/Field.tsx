@@ -1,10 +1,7 @@
 import React from 'react';
-// import { useForm } from 'react-hook-form';
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
 import Error from './Error';
-
-// import { Input } from "@chakra-ui/core";
 
 interface Props {
   error?: any;
@@ -16,10 +13,12 @@ interface Props {
   placeholder?: string;
   sub?: string;
   variant?: string;
+  disable?: boolean;
 }
 
 const Field: React.FC<Props> = ({
   error,
+  disable,
   name,
   label,
   placeholder,
@@ -29,7 +28,6 @@ const Field: React.FC<Props> = ({
   sub,
   variant = 'baseForm',
 }) => {
-  // const { formState: errors } = useForm();
   return (
     <Box mr={mr} variant={variant} sx={{ position: 'relative' }}>
       {sub && (
@@ -39,14 +37,12 @@ const Field: React.FC<Props> = ({
         {label}
       </Label>
       <Input
+        disabled={disable}
         placeholder={placeholder ? placeholder : ''}
         id={name}
-        // name={name}
         defaultValue={defaultValue || ''}
-        // ref={register({ required: true })}
         {...register(name, { required: `${label} is required` })}
       />
-      {/* {errors.errors.root?.message} */}
       {error && <Error text={error.message} />}
     </Box>
   );
