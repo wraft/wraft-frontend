@@ -124,6 +124,7 @@ const Nav = (props: any) => {
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
+
   const menu = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
@@ -176,6 +177,7 @@ const Nav = (props: any) => {
         sx={{
           flexDirection: 'column',
           maxHeight: '100%',
+          height: '100vh',
           justifyContent: 'space-between',
         }}>
         <Flex
