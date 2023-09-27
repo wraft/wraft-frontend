@@ -14,7 +14,6 @@ import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
 import {
   checkUser,
-  createEntityFile,
   loadEntityDetail,
   updateEntityFile,
 } from '../../../utils/models';
@@ -46,10 +45,10 @@ const Index: FC = () => {
   const {
     // watch,
     register,
-    control,
+    // control,
     handleSubmit,
-    formState: { errors, isValid },
-    setValue,
+    formState: { errors },
+    // setValue,
   } = useForm<{
     name: string;
     url: string;
