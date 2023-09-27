@@ -226,6 +226,10 @@ const theme: Theme & CustomVariantGroups = {
       mb: 2,
       borderRadius: 4,
       // incomming
+      ':disabled': {
+        color: 'gray.2',
+        borderColor: 'neutral.1',
+      },
     },
 
     small: {
