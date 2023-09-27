@@ -112,44 +112,6 @@ const Index: FC = () => {
       addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
     }
   };
-  // const onSubmit = (data: any) => {
-  //   console.log('Submitted!');
-  //   // console.log(data);
-  //   // console.log(engines);
-  //   let assetsPath;
-  //   //
-  //   if (assets.length > 0) {
-  //     const a: any = [];
-  //     assets.forEach((e: any) => {
-  //       a.push(e.id);
-  //     });
-
-  //     // Remove comma in the end
-  //     assetsPath = a.join(',');
-  //     console.log('assets', a.join(','));
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append('name', data.name);
-  //   formData.append('description', data.description);
-  //   formData.append('width', data.width);
-  //   formData.append('height', data.height);
-  //   formData.append('unit', data.unit);
-  //   formData.append('slug', data.slug);
-  //   formData.append('engine_id', data.engine_uuid);
-  //   formData.append('assets', assetsPath);
-  //   formData.append('screenshot', data.screenshot[0]);
-
-  //   if (isEdit) {
-  //     updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);
-  //     addToast(`Updated Layout ${data.name}`, { appearance: 'success' });
-  //   } else {
-  //     createEntityFile(formData, token, 'layouts', onImageUploaded);
-
-  //     addToast(`Created Layout ${data.name}`, { appearance: 'success' });
-  //   }
-  // };
-
   return (
     <>
       <Head>
