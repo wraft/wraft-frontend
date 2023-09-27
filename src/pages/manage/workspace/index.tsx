@@ -22,7 +22,7 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
-import ModalLeft from '../../../components/ModalLeft';
+import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
 
@@ -119,9 +119,9 @@ const Index: FC = () => {
             Invite people
           </Button>
         </PageHeader>
-        <ModalLeft isOpen={isOpen} setOpen={setIsOpen}>
+        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           {/* <LayoutForm /> */}
-        </ModalLeft>
+        </ModalCustom>
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={workspaceLinks} />
