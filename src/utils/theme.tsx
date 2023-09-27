@@ -822,6 +822,14 @@ const theme: Theme & CustomVariantGroups = {
       borderRadius: '0px',
     },
   },
+  images: {
+    profile: {
+      width: '128px',
+      height: '128px',
+      borderRadius: '50%',
+      objectFit: 'contain',
+    },
+  },
   alerts: {
     primary: {
       color: 'green.8',
