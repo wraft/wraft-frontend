@@ -18,6 +18,8 @@ import {
   updateEntityFile,
 } from '../../../utils/models';
 
+import { useToasts } from 'react-toast-notifications';
+
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
@@ -54,6 +56,8 @@ const Index: FC = () => {
     url: string;
     logo: FileList;
   }>({ mode: 'all' });
+
+  const { addToast } = useToasts();
 
   const [isOpen, setIsOpen] = React.useState(false);
   const token = useStoreState((state) => state.auth.token);
@@ -95,10 +99,56 @@ const Index: FC = () => {
 
   const onSubmit = (data: any) => {
     console.log(data);
+
+    const formData = new FormData();
+    if (data.name !== 'Personal') {
+      formData.append('name', data.name);
+    }
+    formData.append('logo', data.logo);
+    formData.append('url', data.url);
+
     if (orgId) {
-      updateEntityFile(`organisations/${orgId}`, data, token, onUpdate);
+      updateEntityFile(`organisations/${orgId}`, formData, token, onUpdate);
+      addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
     }
   };
+  // const onSubmit = (data: any) => {
+  //   console.log('Submitted!');
+  //   // console.log(data);
+  //   // console.log(engines);
+  //   let assetsPath;
+  //   //
+  //   if (assets.length > 0) {
+  //     const a: any = [];
+  //     assets.forEach((e: any) => {
+  //       a.push(e.id);
+  //     });
+
+  //     // Remove comma in the end
+  //     assetsPath = a.join(',');
+  //     console.log('assets', a.join(','));
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append('name', data.name);
+  //   formData.append('description', data.description);
+  //   formData.append('width', data.width);
+  //   formData.append('height', data.height);
+  //   formData.append('unit', data.unit);
+  //   formData.append('slug', data.slug);
+  //   formData.append('engine_id', data.engine_uuid);
+  //   formData.append('assets', assetsPath);
+  //   formData.append('screenshot', data.screenshot[0]);
+
+  //   if (isEdit) {
+  //     updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);
+  //     addToast(`Updated Layout ${data.name}`, { appearance: 'success' });
+  //   } else {
+  //     createEntityFile(formData, token, 'layouts', onImageUploaded);
+
+  //     addToast(`Created Layout ${data.name}`, { appearance: 'success' });
+  //   }
+  // };
 
   return (
     <>
@@ -144,6 +194,7 @@ const Index: FC = () => {
                   accept=".jpg,.png,.gif"
                 />
                 <Field
+                  disable={org?.name === 'Personal'}
                   label="Workspace name"
                   placeholder={org?.name ? org.name : 'Personal'}
                   defaultValue={org?.name ? org.name : 'Personal'}
