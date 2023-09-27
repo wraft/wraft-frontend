@@ -15,6 +15,12 @@ export interface INav {
 
 const listMenu = [
   {
+    name: 'Workspace',
+    logo: <PermLogo />,
+    path: '/manage/workspace',
+    desc: 'Manage RBAC',
+  },
+  {
     name: 'Layouts',
     logo: <LayoutLogo />,
     path: '/manage/layouts',
@@ -33,12 +39,12 @@ const listMenu = [
     path: '/manage/themes',
     desc: 'Manage Themes',
   },
-  {
-    name: 'Roles',
-    logo: <PermLogo />,
-    path: '/manage/roles',
-    desc: 'Manage RBAC',
-  },
+  // {
+  //   name: 'Roles',
+  //   logo: <PermLogo />,
+  //   path: '/manage/roles',
+  //   desc: 'Manage RBAC',
+  // },
   {
     name: 'Fields',
     logo: <PermLogo />,
