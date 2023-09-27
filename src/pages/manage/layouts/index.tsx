@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Button } from 'theme-ui';
+import { Flex, Container, Button, Box } from 'theme-ui';
 
 import LayoutList from '../../../components/LayoutList';
 import LayoutForm from '../../../components/LayoutForm';
@@ -20,17 +20,20 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <Button onClick={() => setIsOpen(true)}>Add Laybout</Button>
+          <Button onClick={() => setIsOpen(true)}>Add Layout</Button>
         </PageHeader>
         <ModalLeft isOpen={isOpen} setOpen={setIsOpen}>
           <LayoutForm />
         </ModalLeft>
-        <Container sx={{ px: 4, pt: 0 }}>
-          <Flex>
-            <ManageSidebar items={menuLinks} />
-            <LayoutList />
-          </Flex>
-        </Container>
+
+        <Box variant="layout.pageFrame" pt={0}>
+          <Container>
+            <Flex>
+              <ManageSidebar items={menuLinks} />
+              <LayoutList />
+            </Flex>
+          </Container>
+        </Box>
       </Page>
     </>
   );

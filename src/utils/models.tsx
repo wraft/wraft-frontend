@@ -325,7 +325,7 @@ export const registerUser = (data: any, onSuccess?: any) => {
       onSuccess(data);
     });
 };
-export const checkUser = (token: any, onSuccess?: any) => {
+export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
   fetch(`${API_HOST}/api/v1/users/me`, {
     method: 'GET',
     headers: {
@@ -339,6 +339,11 @@ export const checkUser = (token: any, onSuccess?: any) => {
     })
     .then(function (data) {
       onSuccess(data);
+    })
+    .catch(function (error) {
+      if (onError) {
+        onError(error);
+      }
     });
 };
 
