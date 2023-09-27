@@ -8,7 +8,7 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { menuLinks } from '../../../utils';
-import ModalLeft from '../../../components/ModalLeft';
+import ModalCustom from '../../../components/ModalCustom';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -22,9 +22,9 @@ const Index: FC = () => {
         <PageHeader title="Manage Layouts" desc="Document Layouts">
           <Button onClick={() => setIsOpen(true)}>Add Layout</Button>
         </PageHeader>
-        <ModalLeft isOpen={isOpen} setOpen={setIsOpen}>
+        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           <LayoutForm />
-        </ModalLeft>
+        </ModalCustom>
 
         <Box variant="layout.pageFrame" pt={0}>
           <Container>
