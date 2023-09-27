@@ -301,7 +301,7 @@ export const isNumeric = (str: any) => {
 export interface menuLinksProps {
   name: string;
   path: string;
-  logo: any;
+  logo?: any;
 }
 
 export const menuLinks: menuLinksProps[] = [
@@ -335,6 +335,26 @@ export const menuLinks: menuLinksProps[] = [
     name: 'Pipelines',
     logo: <Collection width={20} />,
     path: '/manage/pipelines',
+  },
+];
+
+export const workspaceLinks: menuLinksProps[] = [
+  {
+    name: 'Manage',
+    path: '/manage/workspace',
+  },
+  {
+    name: 'Team',
+    path: '/manage/workspace/team',
+  },
+
+  {
+    name: 'Roles',
+    path: '/manage/workspace/roles',
+  },
+  {
+    name: 'Permissions',
+    path: '/manage/workspace/permissions',
   },
 ];
 
