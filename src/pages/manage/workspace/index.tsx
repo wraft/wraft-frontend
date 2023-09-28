@@ -16,6 +16,7 @@ import {
   checkUser,
   loadEntityDetail,
   updateEntityFile,
+  deleteEntity,
 } from '../../../utils/models';
 
 import { useToasts } from 'react-toast-notifications';
@@ -60,6 +61,7 @@ const Index: FC = () => {
   const { addToast } = useToasts();
 
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isDelete, setIsDelete] = React.useState(false);
   const token = useStoreState((state) => state.auth.token);
   const [orgId, setOrgId] = React.useState('');
   const [org, setOrg] = React.useState<Organisation>();
@@ -112,6 +114,13 @@ const Index: FC = () => {
       addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
     }
   };
+  const onConfirmDelete = () => {
+    deleteEntity(`/organisations/${orgId}`, token);
+  };
+  React.useEffect(() => {
+    document.body.style.maxHeight = '100vh';
+    document.body.style.overflow = 'none';
+  }, []);
   return (
     <>
       <Head>
@@ -130,7 +139,7 @@ const Index: FC = () => {
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           {/* <LayoutForm /> */}
         </ModalCustom>
-        <Container sx={{ px: 4, pt: 0 }}>
+        <Container sx={{ px: 4, pt: 0, maxHeight: '90vh', overflow: 'auto' }}>
           <Flex>
             <ManageSidebar items={workspaceLinks} />
             <Box>
@@ -187,12 +196,31 @@ const Index: FC = () => {
                   Deleting your account will permanently remove your account
                 </Text>
                 <br />
-                <Button type="button" sx={{ bg: 'red.5' }}>
+                <Button
+                  onClick={() => setIsDelete(true)}
+                  type="button"
+                  sx={{ bg: 'red.5' }}>
                   Delete Workspace
                 </Button>
+                <ModalCustom isOpen={isDelete} setOpen={setIsDelete}>
+                  <Box sx={{ p: 5 }}>
+                    <Text sx={{ textWrap: 'balance', textAlign: 'center' }}>
+                      Are you sure you want to delete this workspace?
+                    </Text>
+                    <Flex sx={{ gap: 4, pt: 4, justifyContent: 'center' }}>
+                      <Button onClick={onConfirmDelete} sx={{ bg: 'red.5' }}>
+                        Yes
+                      </Button>
+                      <Button
+                        onClick={() => setIsDelete(false)}
+                        sx={{ bg: 'green.5' }}>
+                        No
+                      </Button>
+                    </Flex>
+                  </Box>
+                </ModalCustom>
               </Box>
             </Box>
-            {/* <Workspace /> */}
           </Flex>
         </Container>
       </Page>
