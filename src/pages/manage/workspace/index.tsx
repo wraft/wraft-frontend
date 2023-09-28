@@ -288,7 +288,12 @@ const Index: FC = () => {
                         </Label>
                         <Input></Input>
                       </Box>
-                      <Label sx={{ mt: '18px' }}>
+                      <Label
+                        sx={{
+                          mt: '18px',
+                          display: 'flex',
+                          alignItems: 'center',
+                        }}>
                         <Checkbox
                           checked={isChecked}
                           onChange={handleCheckboxChange}
