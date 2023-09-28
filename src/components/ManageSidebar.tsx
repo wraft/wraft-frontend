@@ -22,7 +22,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         pt: 4,
         pl: 0,
         mr: 4,
-        borderRight: 'solid 1px',
+        // borderRight: 'solid 1px',
         borderColor: 'gray.0',
         minHeight: '100vh',
       }}>
@@ -32,19 +32,23 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
             <NavLink href={l.path} variant="base1">
               <Flex
                 sx={{
-                  borderBottom: 'solid 1px',
-                  borderColor: 'neutral.0',
+                  // borderBottom: 'solid 1px',
+                  // borderColor: 'neutral.0',
                   pb: 1,
                   mb: 2,
                 }}>
                 <Box sx={{ mr: 2, pt: 1, color: 'gray.5' }}>{l.logo}</Box>
                 <Text
                   sx={{
+                    textDecoration: 'none',
                     fontSize: 2,
                     color: 'gray.7',
                     fontWeight: 'body',
                     mb: 1,
                     pt: 1,
+                    ':hover': {
+                      bg: 'neutral.1',
+                    },
                   }}>
                   {l.name}
                 </Text>
