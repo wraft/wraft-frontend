@@ -6,9 +6,16 @@ interface props {
   isOpen: boolean;
   setOpen: any;
   varient?: 'left' | 'right' | 'center';
+  borderRadius?: number;
 }
 
-const ModalCustom = ({ children, isOpen, setOpen, varient }: props) => {
+const ModalCustom = ({
+  children,
+  isOpen,
+  setOpen,
+  varient,
+  borderRadius,
+}: props) => {
   React.useEffect(() => {
     // Set the app element to document.body when the component mounts (client-side).
     Modal.setAppElement(document.body);
@@ -58,6 +65,7 @@ const ModalCustom = ({ children, isOpen, setOpen, varient }: props) => {
             backgroundColor: 'rgba(0, 0, 0, 0.50)',
           },
           content: {
+            background: 'white',
             minWidth: '100px',
             minHeight: '100px',
             width: 'fit-content',
@@ -65,9 +73,7 @@ const ModalCustom = ({ children, isOpen, setOpen, varient }: props) => {
             left: '50%',
             top: '50%',
             transform: 'translate(-50%, -50%)',
-            //   right: '0px',
-            //   top: '0px',
-            borderRadius: '0px',
+            borderRadius: borderRadius ? borderRadius : 4,
             padding: '0px',
           },
         }}>
@@ -89,6 +95,7 @@ const ModalCustom = ({ children, isOpen, setOpen, varient }: props) => {
             minWidth: '582px',
             width: '40%',
             height: '100%',
+            maxWidth: '556px',
             right: '0px',
             top: '0px',
             borderRadius: '0px',
