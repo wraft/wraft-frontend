@@ -967,8 +967,12 @@ const theme: Theme & CustomVariantGroups = {
     },
     delete: {
       variant: 'buttons.buttonPrimary',
-      color: '#fff  !important',
       bg: 'red.6',
+    },
+    cancel: {
+      variant: 'buttons.buttonPrimary',
+      bg: 'neutral.2',
+      color: 'gray.8',
     },
     googleLogin: {
       fontWeight: 'body',
@@ -1106,11 +1110,6 @@ const theme: Theme & CustomVariantGroups = {
     },
     primary: {
       variant: 'button.btnPrimary',
-    },
-    delete: {
-      color: 'text',
-      bg: 'red.6',
-      ml: 2,
     },
     tertiary: {
       color: 'blue.9',
