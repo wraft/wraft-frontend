@@ -474,7 +474,7 @@ const ContentDetail = () => {
                     {contents.content.build && (
                       <PdfViewer
                         // url={contents.content.build}
-                        url={`/${contents.content.build}`}
+                        url={`${contents.content.build}`}
                         pageNumber={1}
                         // sx={{ width: '100%' }}
                       />
@@ -584,7 +584,7 @@ const ContentDetail = () => {
 
                         <Link
                           variant="download"
-                          href={`/${contents.content.build}`}
+                          href={`${contents.content.build}`}
                           target="_blank">
                           <Flex
                             sx={{
@@ -655,10 +655,10 @@ const ContentDetail = () => {
                     </>
                   </Button>
 
-                  {/* 
-                  
+                  {/*
+
                   DELETE CONTENT
-                  
+
                   <Button
                     sx={{ ml: 2 }}
                     variant="btnSecondary"
