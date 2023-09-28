@@ -193,18 +193,30 @@ const theme: Theme & CustomVariantGroups = {
       fontSize: 2,
       fontWeight: 500,
       pb: 0,
+      ':disabled': {
+        color: 'gray.2',
+      },
     },
     input: {
       color: 'gray.8',
       fontWeight: 'body',
       border: 'solid 1px',
-      borderColor: 'neutral.2',
+      borderColor: 'neutral.1',
       fontFamily: 'body',
       mb: 2,
       borderRadius: 4,
       ':disabled': {
         color: 'gray.2',
-        borderColor: 'neutral.1',
+        bg: 'background',
+        // borderColor: 'neutral.0',
+      },
+    },
+    checkbox: {
+      color: 'white',
+      border: '1px solid',
+      borderColor: 'neutral.1',
+      ':checked': {
+        bg: 'gray.8',
       },
     },
 
@@ -222,7 +234,7 @@ const theme: Theme & CustomVariantGroups = {
       fontWeight: 500,
       border: 'solid 1px',
       bg: 'bgWhite',
-      borderColor: 'neutral.2',
+      borderColor: 'neutral.1',
       mb: 2,
       borderRadius: 4,
     },
@@ -231,7 +243,7 @@ const theme: Theme & CustomVariantGroups = {
       fontWeight: 500,
       border: 'solid 1px',
       bg: 'bgWhite',
-      borderColor: 'neutral.2',
+      borderColor: 'neutral.1',
       fontFamily: 'body',
       mb: 2,
       borderRadius: 4,
@@ -799,6 +811,7 @@ const theme: Theme & CustomVariantGroups = {
       height: '128px',
       borderRadius: '50%',
       objectFit: 'contain',
+      bg: 'background',
     },
   },
   alerts: {
@@ -829,6 +842,26 @@ const theme: Theme & CustomVariantGroups = {
       // fontSize: 1,
       fontSize: 2,
       fontWeight: 500,
+      lineHeight: '1.6',
+    },
+    pB: {
+      color: 'gray.8',
+      fontSize: 2,
+      fontWeight: 700,
+      lineHeight: '1.6',
+    },
+
+    subR: {
+      color: 'gray.5',
+      fontSize: 0,
+      fontWeight: 400,
+      lineHeight: '1.6',
+    },
+
+    subM: {
+      color: 'gray.5',
+      fontSize: 1,
+      fontWeight: 400,
       lineHeight: '1.6',
     },
     // caption
@@ -922,10 +955,20 @@ const theme: Theme & CustomVariantGroups = {
   },
   buttons: {
     buttonPrimary: {
+      cursor: 'pointer',
       color: 'white',
       backgroundColor: 'primary_700',
       borderRadius: '4px',
       p: '8px 16px',
+      ':disabled': {
+        color: 'gray.8',
+        bg: 'neutral.2',
+      },
+    },
+    delete: {
+      variant: 'buttons.buttonPrimary',
+      color: '#fff  !important',
+      bg: 'red.6',
     },
     googleLogin: {
       fontWeight: 'body',
