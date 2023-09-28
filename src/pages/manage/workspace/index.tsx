@@ -1,4 +1,4 @@
-import React, { FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import Head from 'next/head';
 import {
   Flex,
@@ -56,7 +56,7 @@ const Index: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
@@ -251,7 +251,7 @@ const Index: FC = () => {
                 <Button
                   onClick={() => setDelete(true)}
                   type="button"
-                  sx={{ bg: 'red.6' }}>
+                  variant="delete">
                   Delete Workspace
                 </Button>
                 <ModalCustom isOpen={isDelete} setOpen={setDelete}>
@@ -304,7 +304,8 @@ const Index: FC = () => {
                             setDelete(false);
                             setConfirmDelete(true);
                           }}
-                          sx={{ bg: 'red.7' }}>
+                          // sx={{ bg: 'red.7' }}
+                          variant="delete">
                           Delete workspace
                         </Button>
                         {/* <Button onClick={onConfirmDelete} sx={{ bg: 'red.5' }}>
@@ -312,7 +313,7 @@ const Index: FC = () => {
                         </Button> */}
                         <Button
                           onClick={() => setDelete(false)}
-                          sx={{ bg: 'neutral.2', color: 'gray.8' }}>
+                          variant="cancel">
                           Cancel
                         </Button>
                       </Flex>
@@ -341,19 +342,18 @@ const Index: FC = () => {
                             onClick={() => {
                               onConfirmDelete;
                             }}
+                            variant="delete"
                             sx={{
                               fontSize: 2,
-                              bg: 'red.7',
                               flexGrow: 1,
                             }}>
                             Confirm
                           </Button>
                           <Button
                             onClick={() => setConfirmDelete(false)}
+                            variant="cancel"
                             sx={{
                               fontSize: 2,
-                              bg: 'neutral.2',
-                              color: 'gray.8',
                               flexGrow: 1,
                             }}>
                             Cancel
