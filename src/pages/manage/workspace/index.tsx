@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, SetStateAction } from 'react';
 import Head from 'next/head';
 import {
   Flex,
@@ -44,28 +44,27 @@ export interface Organisation {
   name_of_cto: string;
 }
 
+type FormInputs = {
+  logo: FileList;
+  name: string;
+  url: string;
+  // file: any;
+};
+
 const Index: FC = () => {
   const {
-    // watch,
     register,
-    // control,
     handleSubmit,
     formState: { errors },
-    // setValue,
-  } = useForm<{
-    name: string;
-    url: string;
-    logo: FileList;
-  }>({ mode: 'all' });
-
+  } = useForm<FormInputs>({ mode: 'all' });
+  const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
-
   const [isOpen, setIsOpen] = React.useState(false);
   const [isDelete, setIsDelete] = React.useState(false);
-  const token = useStoreState((state) => state.auth.token);
   const [orgId, setOrgId] = React.useState('');
   const [org, setOrg] = React.useState<Organisation>();
   const [logoSrc, setLogoSrc] = React.useState(org?.logo);
+  const fileRef = React.useRef<HTMLInputElement | null>(null);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -103,24 +102,44 @@ const Index: FC = () => {
     console.log(data);
 
     const formData = new FormData();
-    if (data.name !== 'Personal') {
+    // if (data.file && data.file.length > 0) {
+    //   formData.append('logo', data.file[0]);
+    // }
+    formData.append('logo', data.logo[0]);
+    if (data.name !== 'Personal' && data.name !== '') {
       formData.append('name', data.name);
     }
-    formData.append('logo', data.logo);
-    formData.append('url', data.url);
+    if (data.url !== '') {
+      formData.append('url', data.url);
+    }
 
     if (orgId) {
       updateEntityFile(`organisations/${orgId}`, formData, token, onUpdate);
       addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
     }
   };
+
   const onConfirmDelete = () => {
     deleteEntity(`/organisations/${orgId}`, token);
   };
-  React.useEffect(() => {
-    document.body.style.maxHeight = '100vh';
-    document.body.style.overflow = 'none';
-  }, []);
+
+  const [previewSource, setPreviewSource] = React.useState<
+    string | undefined | null
+  >(undefined);
+  const handleImageUpload = (event: any) => {
+    const file = event.target.files[0];
+    previewFile(file);
+  };
+  const previewFile = (file: any) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      if (reader !== null) {
+        setPreviewSource(reader.result as string | null | undefined);
+      }
+    };
+  };
+
   return (
     <>
       <Head>
@@ -154,15 +173,19 @@ const Index: FC = () => {
                 }}>
                 <Image
                   variant="profile"
-                  src={logoSrc}
+                  src={previewSource ? previewSource : logoSrc}
                   alt="logo"
                   onError={() => setLogoSrc(backupLogo)}
+                  onClick={() => fileRef.current?.click()}
                 />
-                <Label htmlFor="file">Logo</Label>
+                {/* <Label htmlFor="file">Logo</Label> */}
                 <Input
+                  sx={{ display: 'none' }}
                   type="file"
                   {...register('logo')}
                   accept=".jpg,.png,.gif"
+                  ref={fileRef}
+                  onChange={handleImageUpload}
                 />
                 <Field
                   disable={org?.name === 'Personal'}
@@ -171,15 +194,15 @@ const Index: FC = () => {
                   defaultValue={org?.name ? org.name : 'Personal'}
                   name="name"
                   register={register}
-                  error={errors.name}
+                  // error={errors.name}
                 />
                 <Field
                   label="Workspace URL"
-                  placeholder={org?.url ? `${org.name}` : 'wraft.co/example'}
-                  defaultValue={org?.url ? `${org.name}` : 'wraft.co/example'}
+                  placeholder={org?.url ? org.url : 'wraft.co/example'}
+                  defaultValue={org?.url ? org.url : 'wraft.co/example'}
                   name="url"
                   register={register}
-                  error={errors.url}
+                  // error={errors.url}
                 />
                 <Button type="submit">Update</Button>
               </Box>
