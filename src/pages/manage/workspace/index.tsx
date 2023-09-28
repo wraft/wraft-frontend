@@ -207,16 +207,16 @@ const Index: FC = () => {
                 <Field
                   disable={org?.name === 'Personal'}
                   label="Workspace name"
-                  placeholder={org?.name ? org.name : 'Personal'}
-                  defaultValue={org?.name ? org.name : 'Personal'}
+                  placeholder="Personal"
+                  defaultValue={org?.name}
                   name="name"
                   register={register}
                   // error={errors.name}
                 />
                 <Field
                   label="Workspace URL"
-                  placeholder={org?.url ? org.url : 'wraft.co/example'}
-                  defaultValue={org?.url ? org.url : 'wraft.co/example'}
+                  placeholder={'wraft.co/example'}
+                  defaultValue={org?.url}
                   name="url"
                   register={register}
                   // error={errors.url}
