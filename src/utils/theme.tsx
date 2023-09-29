@@ -512,7 +512,8 @@ const theme: Theme & CustomVariantGroups = {
       // pb: 0,
     },
     base: {
-      color: 'red',
+      width: '100%',
+      color: 'gray.8',
       textDecoration: 'none',
     },
     rel: {
@@ -838,7 +839,7 @@ const theme: Theme & CustomVariantGroups = {
       lineHeight: '1.6',
     },
     pM: {
-      color: 'gray.7',
+      color: 'gray.8',
       // fontSize: 1,
       fontSize: 2,
       fontWeight: 500,
