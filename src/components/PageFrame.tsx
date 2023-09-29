@@ -30,8 +30,8 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
       sx={{
         flexDirection: 'column',
         minHeight: '100%',
-        maxHeight: '100dvh',
-        overflow: 'none',
+        // maxHeight: '100dvh',
+        // overflow: 'none',
       }}>
       <Flex
         sx={{
