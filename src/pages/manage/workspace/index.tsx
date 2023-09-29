@@ -46,10 +46,10 @@ export interface Organisation {
 }
 
 type FormInputs = {
-  logo: FileList;
+  // logo: FileList;
+  logo: any;
   name: string;
   url: string;
-  // file: any;
 };
 
 const Index: FC = () => {
@@ -105,7 +105,7 @@ const Index: FC = () => {
     console.log(data);
 
     const formData = new FormData();
-    if (data.file && data.file.length > 0) {
+    if (data.logo && data.logo.length > 0) {
       formData.append('logo', data.logo[0]);
     }
     if (data.name !== 'Personal' && data.name !== '') {
@@ -199,7 +199,7 @@ const Index: FC = () => {
                   sx={{ display: 'none' }}
                   type="file"
                   {...register('logo')}
-                  accept=".jpg,.png,.gif"
+                  accept=".jpg,.jepg,.png,.gif"
                   ref={fileRef}
                   onChange={handleImageUpload}
                 />
