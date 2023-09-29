@@ -105,10 +105,9 @@ const Index: FC = () => {
     console.log(data);
 
     const formData = new FormData();
-    // if (data.file && data.file.length > 0) {
-    //   formData.append('logo', data.file[0]);
-    // }
-    formData.append('logo', data.logo[0]);
+    if (data.file && data.file.length > 0) {
+      formData.append('logo', data.logo[0]);
+    }
     if (data.name !== 'Personal' && data.name !== '') {
       formData.append('name', data.name);
     }
@@ -205,12 +204,12 @@ const Index: FC = () => {
                   onChange={handleImageUpload}
                 />
                 <Field
-                  disable={org?.name === 'Personal'}
                   label="Workspace name"
                   placeholder="Personal"
-                  defaultValue={org?.name}
+                  defaultValue={org?.name ? org.name : 'Personal'}
                   name="name"
                   register={register}
+                  disable={org?.name === 'Personal'}
                   // error={errors.name}
                 />
                 <Field
@@ -242,12 +241,6 @@ const Index: FC = () => {
                   This workspace will be permanently removed from Wraft
                 </Text>
                 <br />
-                {/* <Button
-                  onClick={() => setDelete(true)}
-                  type="button"
-                  variant="delete">
-                  Delete Workspace
-                </Button> */}
                 <Button
                   onClick={() => setDelete(true)}
                   type="button"
