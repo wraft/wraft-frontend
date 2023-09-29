@@ -19,36 +19,43 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
   return (
     <Box
       sx={{
-        pt: 4,
+        mt: 4,
         pl: 0,
         mr: 4,
+        maxHeight: '90vh',
         // borderRight: 'solid 1px',
         borderColor: 'gray.0',
-        minHeight: '100vh',
+        // minHeight: '90vh',
       }}>
       {items &&
         items.map((l: any) => (
-          <Box sx={{ mr: 4 }} key={l.name}>
-            <NavLink href={l.path} variant="base1">
+          <Box
+            sx={{
+              // mr: 4,
+              width: '100%',
+            }}
+            key={l.name}>
+            <NavLink href={l.path} variant="links.base">
               <Flex
                 sx={{
-                  // borderBottom: 'solid 1px',
-                  // borderColor: 'neutral.0',
-                  pb: 1,
-                  mb: 2,
+                  py: '6px',
+                  px: '12px',
+                  width: '100%',
+                  color: 'gray.8',
+                  borderRadius: '4px',
+                  ':hover': { bg: 'neutral.1' },
                 }}>
-                <Box sx={{ mr: 2, pt: 1, color: 'gray.5' }}>{l.logo}</Box>
-                <Text
+                <Box
                   sx={{
-                    textDecoration: 'none',
-                    fontSize: 2,
-                    color: 'gray.7',
-                    fontWeight: 'body',
-                    mb: 1,
-                    pt: 1,
-                    ':hover': {
-                      bg: 'neutral.1',
-                    },
+                    color: 'gray.5',
+                  }}>
+                  {l.logo}
+                </Box>
+                <Text
+                  variant="pM"
+                  sx={{
+                    width: '100%',
+                    color: 'inherit',
                   }}>
                   {l.name}
                 </Text>
