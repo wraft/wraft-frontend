@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import PasswordVerified from '../../../../components/PasswordVerified';
 import Image from 'next/image';
 import { Flex, Box, Heading, Label, Input, Button } from 'theme-ui';
-import Logo from '../../public/Logo.svg';
-import { useRouter } from 'next/router';
-import Link from '../../../../components/NavLink';
+import Logo from '../../../../public/Logo.svg';
+import Link from '../../../components/NavLink';
+import { useSearchParams } from 'next/navigation';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import { Spinner } from 'theme-ui';
@@ -13,50 +12,66 @@ const Index = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [resetPasswordSuccess, setResetPasswordSuccess] = useState();
+  // const [resetPasswordSuccess, setResetPasswordSuccess] = useState();
 
   // const [verified, setVerified] = useState(false);
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+  console.log(token);
 
-  const { query } = useRouter();
-  const router = useRouter();
+  // const { query } = useRouter();
+  // console.log(query.token);
+  // const router = useRouter();
+  // const userToken1 = query.token;
+  // const userToken: string = (query.token as string).split('token=')[1];
+  // console.log(userToken1);
+  //   const router = useRouter();
+  //   const { token } = router.query;
+  //   console.log(token);
 
-  const userToken: string = (query.token as string).split('token=')[1];
+  // Check if 'token' exists before accessing it
+  // if (typeof token === 'string') {
+  //   userToken = token.split('token=')[1];
+  //   console.log('userToken:', userToken);
+  // } else {
+  //   console.log('Token not found in URL.');
+  // }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validatePassword(newPassword, confirmPassword)) {
       try {
         setLoading(true);
+        console.log(JSON.stringify({ token: token, password: newPassword }));
         const response = await fetch(`${API_HOST}/api/v1/user/password/reset`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ token: userToken, password: newPassword }),
+          body: JSON.stringify({ token: token, password: newPassword }),
         });
 
         if (!response.ok) {
-          // Handle non-2xx status codes
-          const errorData = await response.json(); // Parse error response
-          // Handle the error data as needed (e.g., display an error message to the user)
+          const errorData = await response.json();
           console.error('Error:q', errorData);
           // You can also throw a custom error if needed
           throw new Error('Password reset request failed');
         } else {
           // Handle a successful response (if needed)
           const responseData = await response.json();
-          setResetPasswordSuccess(responseData);
+          console.log(responseData);
+          // setResetPasswordSuccess(responseData);
           setLoading(false);
           setTimeout(() => {
-            router.push('/');
+            // router.push('/');
           }, 4000);
         }
       } catch (error) {
         // Handle network errors or other exceptions
         console.error('Network error:', error);
         setLoading(false);
-        setResetPasswordSuccess(undefined);
+        // setResetPasswordSuccess(undefined);
       }
     }
   };
@@ -80,7 +95,7 @@ const Index = () => {
 
   return (
     <>
-      {userToken ? (
+      {token ? (
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
             <Link href="/">
