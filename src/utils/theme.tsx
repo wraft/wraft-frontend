@@ -50,6 +50,7 @@ const theme: Theme & CustomVariantGroups = {
     dark_600: '#343E49',
     dark_200: '#B1B5B9',
     dark_400: '#6F777F',
+    dark_900: '#2C3641',
     input_border: '#D7DDE9',
     info_400: '#007FA6',
     info_200: '#41C3E9',
@@ -57,6 +58,7 @@ const theme: Theme & CustomVariantGroups = {
     warning_300: '#E3774C',
     warning_500: '#88472E',
     primary_500: '#3748CF',
+    neutral_nuetral: '#D7DDE9',
     white: '#fff',
     bgWhite: '#fff',
 
