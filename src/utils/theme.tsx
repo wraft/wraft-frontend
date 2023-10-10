@@ -913,6 +913,10 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   text: {
+    error: {
+      variant: 'text.subR',
+      color: 'red.5',
+    },
     // paragraph
     pR: {
       color: 'gray.5',
@@ -937,7 +941,7 @@ const theme: Theme & CustomVariantGroups = {
 
     subR: {
       color: 'gray.5',
-      fontSize: 0,
+      fontSize: 1,
       fontWeight: 400,
       lineHeight: '1.6',
     },
