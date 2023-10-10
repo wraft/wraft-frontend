@@ -4,9 +4,11 @@ import { Label, Input } from 'theme-ui';
 import Error from './Error';
 
 interface Props {
+  bg?: string;
+  type?: 'text' | 'email' | 'number' | 'password' | 'search';
   error?: any;
   register: any;
-  label: string;
+  label?: string;
   name: string;
   defaultValue?: string;
   mr?: number;
@@ -17,6 +19,8 @@ interface Props {
 }
 
 const Field: React.FC<Props> = ({
+  bg,
+  type,
   error,
   disable,
   name,
@@ -37,6 +41,8 @@ const Field: React.FC<Props> = ({
         {label}
       </Label>
       <Input
+        sx={{ bg: bg ? bg : 'transparent' }}
+        type={type ? type : 'text'}
         disabled={disable}
         placeholder={placeholder ? placeholder : ''}
         id={name}
