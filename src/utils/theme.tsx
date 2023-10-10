@@ -198,6 +198,7 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     input: {
+      variant: 'text.subM',
       color: 'gray.8',
       fontWeight: 'body',
       border: 'solid 1px',
@@ -208,15 +209,19 @@ const theme: Theme & CustomVariantGroups = {
       py: 1,
       borderRadius: 4,
       ':disabled': {
-        color: 'gray.2',
+        color: 'gray.1',
         bg: 'background',
         // borderColor: 'neutral.0',
+      },
+      '::placeholder': {
+        variant: 'text.subM',
+        color: 'gray.2',
       },
     },
     checkbox: {
       color: 'white',
       border: '1px solid',
-      borderColor: 'neutral.1',
+      borderColor: 'gray.0',
       ':checked': {
         bg: 'gray.8',
       },
