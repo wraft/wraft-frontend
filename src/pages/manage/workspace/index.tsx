@@ -29,6 +29,7 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
+import InviteTeam from '../../../components/manage/InviteTeam';
 
 export interface Organisation {
   id: string;
@@ -163,7 +164,7 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
+          <InviteTeam />
         </ModalCustom>
         <Container
           sx={{
