@@ -17,7 +17,7 @@ const InviteTeam = () => {
     register,
     // control,
     handleSubmit,
-    formState: { isValid },
+    formState: { errors, isValid },
     // setValue,
   } = useForm<FormInputs>({ mode: 'all' });
 
@@ -36,6 +36,7 @@ const InviteTeam = () => {
     loadRole(token);
   }, []);
 
+  const emailErrorRef = React.useRef<HTMLDivElement>(null);
   const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
   const [emailAddresses, setEmailAddresses] = React.useState([]);
@@ -47,6 +48,10 @@ const InviteTeam = () => {
       if (!emailRegex.test(emails[i])) {
         // Handle invalid email address
         console.error(`Invalid email address: ${emails[i]}`);
+        if (emailErrorRef.current)
+          emailErrorRef.current.textContent = `Invalid email address: ${emails[i]}`;
+      } else {
+        if (emailErrorRef.current) emailErrorRef.current.textContent = ``;
       }
     }
   };
@@ -129,11 +134,13 @@ const InviteTeam = () => {
             /> */}
             <Input
               type="text"
-              id="emails"
               placeholder="Enter the users email separated by commas"
-              {...register('email')}
+              {...register('email', { required: 'Email is required' })}
               onChange={checkEmail}
             />
+            <Text ref={emailErrorRef} variant="error">
+              {errors.email?.message}
+            </Text>
           </Box>
           {/* <Field
             label="Choose role"
@@ -169,6 +176,9 @@ const InviteTeam = () => {
                     borderColor: 'neutral.1',
                     py: '12px',
                     px: '16px',
+                    ':last-of-type': {
+                      borderBottom: 'none',
+                    },
                   }}>
                   <Checkbox
                     sx={{ width: '16px', height: '16px' }}
