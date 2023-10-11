@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Checkbox, Flex, Input, Label, Text } from 'theme-ui';
-import Field from '../Field';
+// import Field from '../Field';
 import { createEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 
@@ -17,7 +17,7 @@ const InviteTeam = () => {
     register,
     // control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
     // setValue,
   } = useForm<FormInputs>({ mode: 'all' });
 
