@@ -14,7 +14,6 @@ import {
 import Logo from '../../public/Logo.svg';
 import GoogleLogo from '../../public/GoogleLogo.svg';
 import WaitlistPrompt from '../components/WaitlistPrompt';
-import SignupVerification from '../components/SignupVerification';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import { Spinner } from 'theme-ui';
@@ -28,12 +27,7 @@ const SignUpPage = () => {
 
   // State variable for conditional rendering
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showSuccess1, setShowSuccess1] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const updateShowSuccess1 = (newValue: boolean) => {
-    setShowSuccess1(newValue);
-  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -49,47 +43,49 @@ const SignUpPage = () => {
       formData.firstName.length !== 0 &&
       formData.lastName.length !== 0
     ) {
-      setFormData({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-      });
+      // setFormData({
+      //   firstName: formData.firstName,
+      //   lastName: formData.lastName,
+      //   email: formData.email,
+      // });
 
-      //   try {
-      //     setLoading(true);
-      //     console.log(JSON.stringify({ token: token, password: newPassword }));
-      //     const response = await fetch(`${API_HOST}/api/v1/user/password/reset`, {
-      //       method: 'POST',
-      //       headers: {
-      //         Accept: 'application/json',
-      //         'Content-Type': 'application/json',
-      //       },
-      //       body: JSON.stringify({ token: token, password: newPassword }),
-      //     });
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_HOST}/api/v1/waiting_list`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            last_name: formData.lastName,
+            first_name: formData.firstName,
+            email: formData.email,
+          }),
+        });
 
-      //     if (!response.ok) {
-      //       const errorData = await response.json();
-      //       console.error('Error:q', errorData);
-      //       // You can also throw a custom error if needed
-      //       throw new Error('Password reset request failed');
-      //     } else {
-      //       // Handle a successful response (if needed)
-      //       const responseData = await response.json();
-      //       console.log(responseData);
-      //       // setResetPasswordSuccess(responseData);
-      //       setLoading(false);
-      //       setTimeout(() => {
-      //         // router.push('/');
-      //       }, 4000);
-      //     }
-      //   } catch (error) {
-      //     // Handle network errors or other exceptions
-      //     console.error('Network error:', error);
-      //     setLoading(false);
-      //     // setResetPasswordSuccess(undefined);
-      //   }
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Error:q', errorData);
 
-      setShowSuccess(true);
+          alert(errorData.errors.email[0]);
+
+          // You can also throw a custom error if needed
+          throw new Error('Password reset request failed');
+        } else {
+          setShowSuccess(true);
+          // Handle a successful response (if needed)
+          const responseData = await response;
+          console.log(responseData);
+          // setResetPasswordSuccess(responseData);
+          setLoading(false);
+        }
+      } catch (error) {
+        // Handle network errors or other exceptions
+        console.error('Network error1:', error);
+        setLoading(false);
+        // setResetPasswordSuccess(undefined);
+      }
     } else {
       alert('fill the inputs currectly');
     }
@@ -105,108 +101,107 @@ const SignUpPage = () => {
     // Perform Google sign-in logic here
   };
 
-  if (showSuccess) {
-    if (!showSuccess1) {
-      return <WaitlistPrompt updateShowSuccess1={updateShowSuccess1} />;
-    }
-    return <SignupVerification />;
-  }
-
   return (
-    <Flex variant="onboardingFormPage">
-      <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-        <Link href="/">
-          <Image
-            src={Logo}
-            alt="Wraft Logo"
-            width={116}
-            height={35}
-            className=""
-            priority
-          />
-        </Link>
-      </Box>
-      <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-        <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
-          Join Wraft
-        </Heading>
-
-        <Box as="form" onSubmit={handleSubmit}>
-          <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
-            <Box sx={{ flex: '1 1 264px' }}>
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
+    <>
+      {showSuccess ? (
+        <WaitlistPrompt />
+      ) : (
+        <Flex variant="onboardingFormPage">
+          <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
+            <Link href="/">
+              <Image
+                src={Logo}
+                alt="Wraft Logo"
+                width={116}
+                height={35}
+                className=""
+                priority
               />
-            </Box>
-            <Box sx={{ flex: '1 1 auto' }}>
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </Box>
-          </Flex>
-          <Box sx={{ marginBottom: '32px' }}>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
+            </Link>
           </Box>
-          <Button type="submit">Join waitlist</Button>
-        </Box>
+          <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
+            <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
+              Join Wraft
+            </Heading>
 
-        <Divider
-          sx={{
-            margin: '56px 0',
-            color: 'rgba(0.141, 0.243, 0.286, 0.1)',
-          }}
-        />
+            <Box as="form" onSubmit={handleSubmit}>
+              <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
+                <Box sx={{ flex: '1 1 264px' }}>
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                  />
+                </Box>
+                <Box sx={{ flex: '1 1 auto' }}>
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
+                </Box>
+              </Flex>
+              <Box sx={{ marginBottom: '32px' }}>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </Box>
+              <Button type="submit">Join waitlist</Button>
+            </Box>
 
-        <Button onClick={handleGoogleSignIn} variant="googleLogin">
-          <Image
-            src={GoogleLogo}
-            alt="Google Logo"
-            width={23}
-            height={24}
-            className=""
-          />
-          Continue with Google
-        </Button>
+            <Divider
+              sx={{
+                margin: '56px 0',
+                color: 'rgba(0.141, 0.243, 0.286, 0.1)',
+              }}
+            />
 
-        <Text as="p" sx={{ mt: 4, color: 'dark_600', mb: '4px' }}>
-          Already a member?
-          <Link
-            href="/"
-            sx={{
-              textDecoration: 'none',
-              color: 'dark_600',
-              fontWeight: 'bold',
-              pl: 0,
-            }}>
-            Sign in {''}
-            {loading && <Spinner color="white" width={18} height={18} />}
-          </Link>
-        </Text>
-        <Text as="p">
-          By Joining the waiting list, I agree to Wraf&apos;s{' '}
-          <Link href="" sx={{ color: 'text' }}>
-            Privacy Policy.
-          </Link>
-        </Text>
-      </Flex>
-    </Flex>
+            <Button onClick={handleGoogleSignIn} variant="googleLogin">
+              <Image
+                src={GoogleLogo}
+                alt="Google Logo"
+                width={23}
+                height={24}
+                className=""
+              />
+              Continue with Google
+            </Button>
+
+            <Text as="p" sx={{ mt: 4, color: 'dark_600', mb: '4px' }}>
+              Already a member?
+              <Link
+                href="/"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'dark_600',
+                  fontWeight: 'bold',
+                  pl: 0,
+                }}>
+                Sign in {''}
+                {loading && <Spinner color="white" width={18} height={18} />}
+              </Link>
+            </Text>
+            <Text as="p">
+              By Joining the waiting list, I agree to Wraf&apos;s{' '}
+              <Link href="" sx={{ color: 'text' }}>
+                Privacy Policy.
+              </Link>
+            </Text>
+          </Flex>
+        </Flex>
+      )}
+    </>
   );
 };
 

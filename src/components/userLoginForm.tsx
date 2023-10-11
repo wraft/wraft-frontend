@@ -6,7 +6,7 @@ import Router from 'next/router';
 import Image from 'next/image';
 import { useStoreActions, useStoreState } from 'easy-peasy';
 
-import { Label, Input, Heading } from 'theme-ui';
+import { Label, Input, Heading, Checkbox } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from './NavLink';
@@ -122,17 +122,23 @@ const UserLoginForm = () => {
               </Text>
             ) : (
               <Flex>
-                <Input
-                  type="checkbox"
-                  checked={showPassword}
-                  onChange={() => setShowPassword(!showPassword)}
+                <Label
                   sx={{
                     color: 'dark_900',
-                    width: '18px',
-                    backgroundColor: 'white',
-                  }}
-                />
-                <Label sx={{ color: 'dark_900', fontWeight: 'body' }}>
+                    fontWeight: 'body',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}>
+                  <Checkbox
+                    checked={showPassword}
+                    onChange={() => setShowPassword(!showPassword)}
+                    sx={{
+                      color: 'dark_900',
+                      width: '18px',
+                      backgroundColor: 'white',
+                      border: 'none',
+                    }}
+                  />
                   Show Password
                 </Label>
               </Flex>

@@ -1,16 +1,21 @@
 import Image from 'next/image';
-import { Flex, Box, Heading, Button, Link } from 'theme-ui';
+import { Flex, Box, Heading, Button } from 'theme-ui';
 import Verified from '../../public/Social 01 1.svg';
 
-const EmailVerified = () => {
+type ChildProps = {
+  setVerified: (newValue: boolean) => void; // Callback function prop
+};
+
+const EmailVerified: React.FC<ChildProps> = ({ setVerified }) => {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: '80px' }}>
       <Flex
         variant="onboardingForms"
         sx={{
-          flexDirection: 'column',
           alignItems: 'center',
+          p: '0px',
           pt: '103px',
+          px: '140px',
         }}>
         <Image
           src={Verified}
@@ -22,14 +27,16 @@ const EmailVerified = () => {
         />
         <Heading
           as="h3"
-          variant="styles.h3"
+          variant="styles.h3Medium"
           sx={{ mt: '88px', mb: '32px', color: '#363E49' }}>
           Your email is verified
         </Heading>
-
-        <Link href="/">
-          <Button>Go to login page</Button>
-        </Link>
+        <Button
+          onClick={() => {
+            setVerified(true);
+          }}>
+          okay
+        </Button>
       </Flex>
     </Box>
   );
