@@ -105,11 +105,11 @@ const ThemeForm = () => {
     const themeData: any = {
       // @TODO
       // remove static def, connect with right API
-      typescale: {
-        p: 6,
-        h2: 8,
-        h1: 10,
-      },
+      // typescale: {
+      //   p: 6,
+      //   h2: 8,
+      //   h1: 10,
+      // },
       secondary_color: data?.secondary_color,
       primary_color: data?.primary_color,
       name: data.name,
@@ -170,7 +170,7 @@ const ThemeForm = () => {
   };
 
   return (
-    <Flex>
+    <Flex sx={{ maxWidth: '90ch', margin: 'auto' }}>
       <Box
         as="form"
         onSubmit={handleSubmit(onSubmit)}

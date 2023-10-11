@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text, Image } from 'theme-ui';
 import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -7,8 +7,10 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // relative
 import Link from './NavLink';
 import { checkUser } from '../utils/models';
-import { Bell, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
-import Dropdown from './common/Dropdown';
+import { Bell, ArrowBack } from '@styled-icons/boxicons-regular';
+// import Dropdown from './common/Dropdown';
+
+import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
 
 import ModeToggle from './ModeToggle';
 
@@ -19,7 +21,7 @@ export interface IUser {
 }
 
 interface INav {
-  navtitle?: string;
+  navtitle: string;
   onToggleEdit?: any;
 }
 
@@ -32,6 +34,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
+
+  const menu = useMenuState();
 
   // const [showSearch, setShowSearch] = useState<boolean>(false);
 
@@ -54,9 +58,9 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
       variant="header"
       sx={{
         p: 0,
-        bg: 'gray.0',
+        bg: 'neutral.0',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'gray.0',
         pt: 1,
         pb: 3,
       }}>
@@ -107,7 +111,6 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               <Box variant="button" sx={{ mt: 1, pt: 2, ml: 3 }}>
                 <Bell width={22} />
               </Box>
-              <ModeToggle variant="button" />
             </Flex>
             {!token && (
               <Link href="/login">
@@ -123,35 +126,65 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       verticalAlign: 'top',
                       mt: 2,
                     }}>
-                    {/* <Dropdown imageUrl={API_HOST + '/' + profile?.profile_pic}> */}
-                    <Dropdown
-                      imageUrl={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`}>
-                      <Box
-                        sx={{
-                          color: 'gray.8',
-                          pl: 3,
-                          pt: 2,
-                          pb: 2,
-                          pr: 3,
-                          right: 2,
-                          borderRadius: 3,
-                          ':hover': { bg: 'gray.2', color: 'gray.8' },
-                        }}
-                        // ref={setPopperElement}
-                        // style={styles.popper}
-                        // {...attributes.popper}
-                      >
-                        <>
-                          <Text sx={{ fontWeight: 500, pb: 1 }}>
-                            {profile?.name}
-                          </Text>
-                          <Text sx={{ pt: 1, pb: 2 }}>Settings</Text>
-                          <Text onClick={userLogout}>
-                            Sign out <Exit width={16} />
-                          </Text>
-                        </>
-                      </Box>
-                    </Dropdown>
+                    <Box>
+                      <MenuButton {...menu} as={Box} sx={{ cursor: 'pointer' }}>
+                        <Image
+                          sx={{ borderRadius: '3rem', bg: 'red' }}
+                          width="32px"
+                          height="32px"
+                          src={profile?.profile_pic}
+                          // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+                        />
+                      </MenuButton>
+                      <Menu
+                        as={Box}
+                        // sx={{ border: 'solid 1px #eee' }}
+                        {...menu}
+                        variant="layout.menuBlockWrapper"
+                        aria-label="Preferences">
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                          <Box>
+                            <Text as="h4">{profile?.name}</Text>
+
+                            {profile?.roles?.size > 0 && (
+                              <Text
+                                as="p"
+                                sx={{ fontSize: 0, color: 'gray.6' }}>
+                                {profile?.roles[0]?.name}
+                              </Text>
+                            )}
+                          </Box>
+                        </MenuItem>
+                        <MenuItem {...menu} as={Box} variant="layout.menuItem">
+                          <Flex>
+                            <Text>Theme</Text>
+                            <Box
+                              sx={{
+                                // mb: 0,
+                                ml: 'auto',
+                              }}>
+                              <ModeToggle
+                                sx={{ pt: 0, m: 0 }}
+                                variant="button"
+                              />
+                            </Box>
+                          </Flex>
+                        </MenuItem>
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                          Settings
+                        </MenuItem>
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                          Profile
+                        </MenuItem>
+                        <MenuItem
+                          as={Box}
+                          onClick={userLogout}
+                          {...menu}
+                          variant="layout.menuItem">
+                          Signout
+                        </MenuItem>
+                      </Menu>
+                    </Box>
                   </Flex>
                 )}
               </Flex>

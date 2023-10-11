@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Bell, Search } from '@styled-icons/boxicons-regular';
@@ -8,10 +8,9 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
 
 import { useRouter } from 'next/router';
-
+import { useToasts } from 'react-toast-notifications';
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
-import { BrandLogo } from '../../src/components/Icons';
 
 // import Modal from 'react-modal';
 
@@ -27,7 +26,12 @@ import {
 } from '@styled-icons/boxicons-regular';
 
 import ModeToggle from './ModeToggle';
+import { createEntity, loadEntity, switchProfile } from '../utils/models';
+import { Organisation, OrganisationList } from '../store/profile';
 
+/**
+ * Sidebar Static Items
+ */
 const listMenu = [
   {
     section: 'content',
@@ -80,38 +84,6 @@ const listMenu = [
       },
     ],
   },
-
-  // {
-  //   name: 'Frames',
-  //   logo: <Layout width={20} />,
-  //   path: '/layouts',
-  // },
-
-  // {
-  //   name: 'Forms',
-  //   logo: <Water width={20} />,
-  //   path: '/forms',
-  // },
-  // {
-  //   name: 'Flows',
-  //   logo: <GitMerge width={20} />,
-  //   path: '/flows',
-  // },
-  // {
-  //   name: 'Fields',
-  //   logo: <Spreadsheet width={20} />,
-  //   path: '/fields',
-  // },
-  // {
-  //   name: 'Pipelines',
-  //   logo: <Collection width={20} />,
-  //   path: '/pipelines',
-  // },
-  // {
-  //   name: 'Themes',
-  //   logo: <ColorFill width={20} />,
-  //   path: '/themes',
-  // },
 ];
 
 export interface INav {
@@ -126,13 +98,17 @@ const Nav = (props: any) => {
   const profile = useStoreState((state) => state.profile.profile);
 
   const menu = useMenuState();
+  const menuWorkspace = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
   // const sidebarW = 'auto'; //props && props.showFull ? '90px' : '16%';
   const router = useRouter();
   const pathname: string = router.pathname as any;
 
-  // const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [workspaces, setWorkspaces] = useState<OrganisationList>();
+  const [activeSpace, setActiveSpace] = useState<Organisation>();
+
+  const { addToast } = useToasts();
   // popper
   // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
   // const [referenceElement, setReferenceElement] = useState(null);
@@ -167,9 +143,58 @@ const Nav = (props: any) => {
     setShowSearch(false);
   };
 
+  /**
+   * Load Organizations
+   */
+
+  const loadOrgs = (token: string) => {
+    // const tok = token ? token : t;
+    // token: string, path: string, onSuccess: any
+    loadEntity(token, `/users/organisations`, setWorkspaces);
+  };
+
   useHotkeys('/', () => {
     toggleSearch();
   });
+
+  const onSwitch = (_result: any) => {
+    console.log('switched', _result);
+    switchProfile(_result);
+  };
+
+  /**
+   * Swith Organization
+   * POST /switch_organisations
+   */
+
+  const switchOrg = (id: string) => {
+    // createEntity({ organisation_id: id})
+    createEntity(
+      { organisation_id: id },
+      `/switch_organisations`,
+      token,
+      onSwitch,
+    );
+
+    addToast('Workspace Switched', { appearance: 'success' });
+  };
+
+  /** Load Workspaces for the current user */
+  useEffect(() => {
+    loadOrgs(token);
+  }, [token]);
+
+  useEffect(() => {
+    // console.log('workspaces', workspaces);
+    const allOrgs = workspaces?.organisations;
+    const currentOrg = allOrgs?.find(
+      (og: Organisation) => og.id == profile?.organisation_id,
+    );
+
+    setActiveSpace(currentOrg);
+    // console.log('currentOrg', currentOrg);
+    // workspaces?.organisations.find({ id: profile.organisation_id });
+  }, [workspaces]);
 
   return (
     <>
@@ -182,8 +207,9 @@ const Nav = (props: any) => {
         }}>
         <Flex
           sx={{
-            py: 3,
+            py: 2,
             px: 3,
+            pt: 1,
             borderBottom: 'solid 1px',
             borderColor: 'neutral.1',
             mb: 3,
@@ -191,19 +217,91 @@ const Nav = (props: any) => {
             alignItems: 'center',
           }}>
           <Box>
-            <Link href="/" variant="base">
+            <MenuButton {...menuWorkspace} as={Box} sx={{ cursor: 'pointer' }}>
               <Flex color="primary" sx={{ fill: 'text' }}>
-                <BrandLogo width="5rem" height="2rem" />
+                {activeSpace && (
+                  <Flex sx={{ pt: 2 }}>
+                    <Image
+                      src={activeSpace.logo}
+                      width={24}
+                      height={24}
+                      alt="Workspace"
+                      sx={{
+                        borderRadius: '99rem',
+                        height: `24px`,
+                        width: `24px`,
+                        mr: 2,
+                      }}
+                    />
+                    <Box>
+                      <Text
+                        as="p"
+                        sx={{
+                          fontWeight: `bold`,
+                          color: 'gray.9',
+                          lineHeight: 1,
+                          fontSize: 2,
+                        }}>
+                        {activeSpace.name}
+                      </Text>
+                      <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
+                        3 members
+                      </Text>
+                    </Box>
+                  </Flex>
+                )}
+                {/* <BrandLogo width="5rem" height="2rem" /> */}
               </Flex>
-            </Link>
+            </MenuButton>
+            <Menu
+              {...menuWorkspace}
+              as={Box}
+              variant="layout.menuBlockWrapper"
+              aria-label="Switch Workspace">
+              <MenuItem
+                variant="layout.menuItemHeading"
+                as={Box}
+                {...menuWorkspace}>
+                Switch Workspace
+              </MenuItem>
+              {workspaces &&
+                workspaces.organisations.map((org: Organisation) => (
+                  <MenuItem
+                    key={org.id}
+                    variant="layout.menuItem"
+                    onClick={() => switchOrg(org?.id)}
+                    as={Box}
+                    {...menuWorkspace}>
+                    <Image
+                      src={org?.logo}
+                      width={24}
+                      height={24}
+                      alt="Workspace"
+                      sx={{
+                        borderRadius: '99rem',
+                        height: `18px`,
+                        width: `18px`,
+                        mr: 2,
+                      }}
+                    />
+                    {org.name}
+                  </MenuItem>
+                ))}
+              <MenuItem
+                variant="layout.menuItemHeading"
+                as={Box}
+                {...menuWorkspace}>
+                Create or join a workspace
+              </MenuItem>
+            </Menu>
           </Box>
           <Flex>
             <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
-              <Box as="span" sx={{ mt: 2 }}></Box>
+              {/* <Box as="span" sx={{ mt: 2 }}></Box> */}
 
               <Box
                 variant="button"
-                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
+                sx={{ mt: 0, pt: 0, px: 0, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
                   <Bell width="20px" />
                 </Link>
@@ -222,30 +320,20 @@ const Nav = (props: any) => {
                     <Box>
                       <MenuButton as={Box} {...menu}>
                         <Image
-                          sx={{ borderRadius: '3rem' }}
-                          width="30px"
-                          // src={API_HOST + '/' + profile?.profile_pic}
-                          src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+                          sx={{ borderRadius: '3rem', bg: 'red' }}
+                          width="24px"
+                          height="24px"
+                          src={profile?.profile_pic}
+                          // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu
                         as={Box}
                         // sx={{ border: 'solid 1px #eee' }}
                         {...menu}
-                        sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
+                        variant="layout.menuBlockWrapper"
                         aria-label="Preferences">
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
 
@@ -258,39 +346,32 @@ const Nav = (props: any) => {
                             )}
                           </Box>
                         </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
+                        <MenuItem {...menu} as={Box} variant="layout.menuItem">
+                          <Flex>
+                            <Text>Theme</Text>
+                            <Box
+                              sx={{
+                                // mb: 0,
+                                ml: 'auto',
+                              }}>
+                              <ModeToggle
+                                sx={{ pt: 0, m: 0 }}
+                                variant="button"
+                              />
+                            </Box>
+                          </Flex>
+                        </MenuItem>
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
                           Settings
                         </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px red',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
+                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
                           Profile
                         </MenuItem>
                         <MenuItem
                           as={Box}
                           onClick={userLogout}
                           {...menu}
-                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
+                          variant="layout.menuItem">
                           Signout
                         </MenuItem>
                       </Menu>
@@ -399,15 +480,6 @@ const Nav = (props: any) => {
         </Box>
 
         <Box>
-          <Box
-            pl={3}
-            pb={3}
-            pt={3}
-            sx={{
-              mb: 3,
-            }}>
-            <ModeToggle variant="button" />
-          </Box>
           <Box
             sx={{
               pl: 3,

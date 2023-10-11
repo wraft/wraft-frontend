@@ -15,7 +15,7 @@ export const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/block_templates">Back</Link>
+          <Link href="/blocks">Back</Link>
           <BlockTemplateForm />
         </Flex>
       </Page>

@@ -309,7 +309,13 @@ const Form = () => {
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}>
+              sx={{
+                minWidth: '70%',
+                bg: 'neutral.0',
+                maxWidth: '83ch',
+                m: 0,
+                pt: 4,
+              }}>
               <Box sx={{ px: 4 }}>
                 <Field
                   name="title"
@@ -317,7 +323,7 @@ const Form = () => {
                   defaultValue=""
                   register={register}
                 />
-                <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
+                {/* <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} /> */}
                 <Field
                   name="title_template"
                   label="Title Template"
@@ -359,9 +365,10 @@ const Form = () => {
               px={4}
               variant="plateRightBar"
               sx={{
-                bg: '#FAFBFC',
+                bg: 'neutral.0',
                 width: '100%',
-                borderLeft: 'solid 1px #ddd',
+                borderLeft: 'solid 1px',
+                borderColor: 'gray.2',
               }}>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
@@ -418,7 +425,7 @@ const Form = () => {
                 </Box>
               )}
 
-              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2 }}>
+              <Box sx={{ borderBottom: 'solid 1px red', mb: 3, pb: 2 }}>
                 <Text as="h4" mb={2} sx={{ mb: 3 }}>
                   Blocks
                 </Text>
@@ -451,7 +458,7 @@ const Form = () => {
         </Box>
 
         {/* <WraftEditor/> */}
-        <Box variant="primary">
+        <Box>
           <Flex sx={{ px: 4, py: 1 }}>
             {loading && <Spinner color="white" size={24} />}
             {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}

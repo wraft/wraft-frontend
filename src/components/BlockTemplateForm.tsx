@@ -168,6 +168,10 @@ const Form = () => {
     loadEntityDetail(token, 'block_templates', id, loadTemplateSuccess);
   };
 
+  /**
+   * Block Details load
+   * @param data
+   */
   const loadTemplateSuccess = (data: BlockTemplates) => {
     setDataTemplate(data);
   };
@@ -244,7 +248,8 @@ const Form = () => {
       mt={4}
       mx={4}
       mb={3}
-      variant="w100">
+      // variant="w100"
+    >
       <Box>
         <Text mb={3} variant="pagetitle">
           Create Block
@@ -288,6 +293,7 @@ const Form = () => {
                 editable={true}
                 cleanInsert={cleanInsert}
                 insertable={insertable}
+                inline={true}
               />
             )}
             {/* <Box pt={2} mb={3}>

@@ -92,7 +92,7 @@ import { Box, Button } from 'theme-ui';
 //         }}>
 //         {count}
 //       </Text>
-//     </Div>
+//     </div>
 //   );
 // };
 // import { HolderExtension } from "./holder";
@@ -125,6 +125,7 @@ interface EditorProps {
   cleanInsert?: boolean;
   showToolbar?: boolean;
   searchables?: any;
+  inline?: boolean;
 }
 
 /**
@@ -173,6 +174,7 @@ const EditorWraft: FC<EditorProps> = ({
   onUpdate,
   editable,
   // ready,
+  inline = false,
   showToolbar = false,
   searchables,
 }) => {
@@ -357,7 +359,7 @@ const EditorWraft: FC<EditorProps> = ({
         lineHeight: 1.5,
         fontSize: 2,
         m: 0,
-        px: 4,
+        px: inline ? 0 : 1,
         '.remirror-toolbar': {
           bg: 'gray.0',
         },
@@ -367,18 +369,21 @@ const EditorWraft: FC<EditorProps> = ({
         },
         '&.remirror-editor': {
           bg: 'blue',
-          p: 5,
+          p: inline ? 0 : 0,
         },
         '.remirror-editor': {
-          p: 5,
-          bg: 'blue',
+          p: inline ? 0 : 0,
+          bg: 'red.2',
+        },
+        '.hidden': {
+          display: 'none',
         },
       }}>
       <div>{showToolbar}</div>
 
       <div>
         <div>
-          <div>
+          <div className="hidden">
             <div>
               {/* <Text variant="labelcaps">Outline</Text> */}
               <Button
@@ -413,43 +418,32 @@ const EditorWraft: FC<EditorProps> = ({
             editable={editable}
             classNames={[
               css`
-              &.ProseMirror { 
-                width: 100%;
-                
-                padding: 100px;
-                box-shadow: none !important;
-                .remirror-role {
-                  background: #000 !important;
-                }
+                &.ProseMirror {
+                  width: 100%;
+                  box-shadow: none !important;
+                  .remirror-role {
+                    background: #000 !important;
+                  }
 
-                .holder {
-                  border-bottom:solid 2px #39bf3f;
-                  // background-color: #f1f7d498;
-                  font-style: normal;
-                  color: #022203;  
-                  font-weight: 900;
-                  margin-right: 4px;
-                  margin-left: 4px;
+                  .holder {
+                    border-bottom: solid 2px #39bf3f;
+                    // background-color: #f1f7d498;
+                    font-style: normal;
+                    color: #022203;
+                    font-weight: 900;
+                    margin-right: 4px;
+                    margin-left: 4px;
+                  }
+
+                  .no-holder {
+                    border-bottom: solid 2px #926666;
+                    margin-right: 6px;
+                    // background-color: #f1f7d4;
+                    font-style: normal;
+                    color: #9e0909;
+                  }
                 }
-                
-                .no-holder {
-                  border-bottom:solid 2px #926666;
-                  margin-right: 6px; */
-                  // background-color: #f1f7d4;
-                  font-style: normal;
-                  color: #9e0909;  
-                }
-                p,
-                h3,
-                h4 {
-                  
-                }
-                h1,
-                h2 {
-                  
-                }
-              }
-            `,
+              `,
             ]}>
             {/* {showToolbar ? (
               <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
@@ -457,7 +451,7 @@ const EditorWraft: FC<EditorProps> = ({
               ''
             )} */}
             <div>
-              <div>
+              <div className="hidden">
                 <button
                   type="button"
                   // variant="btnSecondary"
@@ -492,7 +486,6 @@ const EditorWraft: FC<EditorProps> = ({
                   )}
                 </button>
               </div>
-              <div>{/* <WordsCounter /> */}</div>
             </div>
             <div>
               <EditorComponent />

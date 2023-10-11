@@ -3,19 +3,37 @@ import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';
 import { getCroppedImg } from '../utils/imgCrop';
+import { useStoreState } from 'easy-peasy';
+import { updateEntityFile } from '../utils/models';
 
 interface IImageCopperProps {
   image?: any;
   onUpdate: any;
+  hideModal?: boolean;
+  onSavable?: any;
 }
 
 // const EmptyArea:Area = {}
 
-const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
+const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   const [crop, setCrop] = useState<any>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState<any>(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImg, setCroppedImg] = useState<File>();
+
+  // extra
+  const token = useStoreState((state) => state.auth.token);
+
+  /**
+   * Submit profile image individually
+   * @param _file Image File
+   */
+  const submitImage = (_file: any) => {
+    console.log('[xyz] [submitImage]', _file, token);
+    const formData = new FormData();
+    formData.append('profile_pic', _file);
+    updateEntityFile(`profiles`, formData, token, onUpdate);
+  };
 
   const onCropComplete = useCallback(
     (
@@ -32,8 +50,12 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
     try {
       const croppedImage = await getCroppedImg(image, croppedAreaPixels, 0);
       console.log('donee', { croppedImage });
+      onSavable(croppedImage);
       setCroppedImg(croppedImage);
       onUpdate(croppedImage);
+
+      // extra
+      submitImage(croppedImage);
     } catch (e) {
       console.error(e);
     }
@@ -55,6 +77,7 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
         width: '100%',
       }}>
       {croppedImg && <Image src={String(croppedImg)} />}
+      <Box sx={{ px: 3, py: 2 }}>Edit Profile Image</Box>
       <Box
         sx={{
           position: 'relative',
@@ -64,13 +87,13 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
           // bg: "black",
           // p: 4,
         }}>
-        <Box bg="gray.4">
+        <Box>
           {image && (
             <Box
               sx={{
                 // bg: "gray.2",
-                width: '180px',
-                height: '180px',
+                width: '280px',
+                height: '280px',
                 minHeight: '100%',
                 top: '0%',
                 position: 'relative',
@@ -110,9 +133,9 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
           />
         </Flex>
       </Box>
-      <Flex sx={{ bg: 'gray.1', p: 3 }}>
+      <Flex sx={{ bg: 'neutral.0', p: 3 }}>
         <Box sx={{ ml: 'auto' }}>
-          <Button
+          {/* <Button
             type="button"
             sx={{
               border: 'solid 1px',
@@ -122,9 +145,13 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
               mr: 1,
             }}>
             Clear
-          </Button>
-          <Button type="button" onClick={showCroppedImage}>
-            Save
+          </Button> */}
+          <Button
+            variant="btnSecondary"
+            sx={{ width: '100%', fontSize: 1 }}
+            type="button"
+            onClick={showCroppedImage}>
+            Done
           </Button>
         </Box>
       </Flex>

@@ -15,7 +15,21 @@ const FieldTypeForm = () => {
   const token = useStoreState((state) => state.auth.token);
 
   const onSubmit = (data: any) => {
-    createEntity(data, 'field_types', token);
+    const item: any = {
+      validations: [
+        {
+          validation: {
+            value: true,
+            rule: 'required',
+          },
+          error_message: "can't be blank",
+        },
+      ],
+      name: data.name,
+      meta: {},
+      description: data.description,
+    };
+    createEntity(item, 'field_types', token);
   };
 
   return (

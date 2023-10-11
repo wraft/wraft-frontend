@@ -113,7 +113,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                     }}>
                     <Box pt={3}>
                       <Image
-                        src={`${API_HOST}/` + _m.profile_pic}
+                        src={_m.profile_pic}
                         sx={{
                           borderRadius: '99rem',
                           width: '40px',

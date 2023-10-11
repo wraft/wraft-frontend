@@ -8,6 +8,7 @@ import PageHeader from './PageHeader';
 import { Table } from './Table';
 
 import { EmptyForm } from './Icons';
+import NavLink from './NavLink';
 
 import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
 // import { Menu, MenuButton, MenuItem } from 'reakit/ts/Menu';
@@ -57,9 +58,21 @@ const BlockTemplateListFrame: FC = () => {
       const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col1: <Text></Text>,
-          col2: <Box>{r.title}</Box>,
-          col3: <Box>{r.updated_at}</Box>,
+          col2: (
+            <Box>
+              <NavLink
+                variant="rel"
+                href={`/blocks/edit/[id]`}
+                path={`blocks/edit/${r.id}`}>
+                {r?.title}
+              </NavLink>
+            </Box>
+          ),
+          col3: (
+            <Box>
+              <Text as="span">{r.updated_at}</Text>
+            </Box>
+          ),
           col4: (
             // sx={{
             //   position: 'relative',
@@ -75,15 +88,16 @@ const BlockTemplateListFrame: FC = () => {
               {/* <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary"> */}
               <MenuButton
                 as={Button}
+                variant="btnSecondary"
                 {...menu}
                 sx={{
-                  border: 'solid 1px',
-                  color: 'gray.6',
-                  borderColor: 'gray.2',
-                  p: 0,
-                  bg: 'gray.0',
-                  pb: 1,
-                  mt: 2,
+                  // border: 'solid 1px',
+                  // color: 'gray.6',
+                  // borderColor: 'gray.2',
+                  p: 1,
+                  // bg: 'gray.0',
+                  // pb: 1,
+                  // mt: 2,
                 }}>
                 <DotsVerticalRounded width="16px" />
               </MenuButton>
@@ -183,11 +197,11 @@ const BlockTemplateListFrame: FC = () => {
             <Table
               options={{
                 columns: [
-                  {
-                    Header: 'Id',
-                    accessor: 'col1', // accessor is the "key" in the data
-                    width: '15%',
-                  },
+                  // {
+                  //   Header: 'Id',
+                  //   accessor: 'col1', // accessor is the "key" in the data
+                  //   width: '15%',
+                  // },
                   {
                     Header: 'Name',
                     accessor: 'col2',
