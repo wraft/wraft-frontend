@@ -3,6 +3,7 @@ import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
 
 interface Props {
+  onChange?: any;
   bg?: string;
   type?: 'text' | 'email' | 'number' | 'password' | 'search';
   error?: any;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 const Field: React.FC<Props> = ({
+  onChange,
   bg,
   type,
   error,
@@ -40,6 +42,7 @@ const Field: React.FC<Props> = ({
         {label}
       </Label>
       <Input
+        onChange={onChange}
         sx={{ bg: bg ? bg : 'transparent' }}
         type={type ? type : 'text'}
         disabled={disable}
