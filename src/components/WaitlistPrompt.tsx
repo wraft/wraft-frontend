@@ -1,25 +1,18 @@
 import Image from 'next/image';
-import { Flex, Box, Heading, Button } from 'theme-ui';
+import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import MailSend from '../../public/Group 164.svg';
+import Link from './NavLink';
 
-type ChildProps = {
-  updateShowSuccess1: (newValue: boolean) => void; // Callback function prop
-};
-
-const WaitlistPrompt: React.FC<ChildProps> = ({ updateShowSuccess1 }) => {
-  const handleClick = () => {
-    updateShowSuccess1(true);
-  };
-
+const WaitlistPrompt: React.FC = () => {
   return (
-    <Box as="main" sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: '80px' }}>
       <Flex
-        as="section"
-        variant="signinRight"
+        variant="onboardingForms"
         sx={{
-          flexDirection: 'column',
           alignItems: 'center',
+          p: '0px',
           pt: '109px',
+          px: '98px',
         }}>
         <Image
           src={MailSend}
@@ -29,16 +22,27 @@ const WaitlistPrompt: React.FC<ChildProps> = ({ updateShowSuccess1 }) => {
           height={145}
           priority
         />
-        <Heading as="h1" variant="styles.h1" sx={{ mt: '40px', mb: '8px' }}>
+        <Heading
+          as="h1"
+          variant="styles.h1Medium"
+          sx={{ mt: '40px', mb: '8px', color: 'dark_600' }}>
           Hang tight!
         </Heading>
         <Heading
           as="h5"
-          variant="styles.h5"
-          sx={{ maxWidth: '376px', mb: '32px', textAlign: 'center' }}>
-          We have sent a verification link to the registered email waitlist
+          variant="styles.h5Bold"
+          sx={{ mb: '28px', textAlign: 'center', color: 'dark_500' }}>
+          You have been added to our waitlist
         </Heading>
-        <Button onClick={handleClick}>Okay</Button>
+        <Text
+          variant="styles.h5Medium"
+          sx={{ color: 'dark_300', textAlign: 'center', mb: '24px' }}>
+          Thanks for showing interest in Wraft, we will reach out to you once
+          the availability opens up.
+        </Text>
+        <Link href="/">
+          <Button>Okay</Button>
+        </Link>
       </Flex>
     </Box>
   );

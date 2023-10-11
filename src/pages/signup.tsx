@@ -7,8 +7,11 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Login - Wraft</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Signup - Wraft</title>
+        <meta
+          name="description"
+          content="Wraft - The Document Automation Platform"
+        />
       </Head>
 
       <SignupForm />

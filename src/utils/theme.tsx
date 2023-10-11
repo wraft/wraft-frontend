@@ -48,6 +48,7 @@ const theme: Theme & CustomVariantGroups = {
     success_600: '#00471A',
     dark_300: '#8F959B',
     dark_600: '#343E49',
+    dark_500: '#515A64',
     dark_200: '#B1B5B9',
     dark_400: '#6F777F',
     dark_900: '#2C3641',
@@ -318,10 +319,24 @@ const theme: Theme & CustomVariantGroups = {
       lineHeight: 'body',
     },
     h3Medium: {
-      color: 'primary_700',
       fontWeight: 'heading',
       lineHeight: '38.88px',
       fontSize: '29.3px',
+    },
+    h1Medium: {
+      fontSize: '45.78px',
+      fontWeight: 'heading',
+      lineHeight: ' 59.24px',
+    },
+    h5Bold: {
+      fontSize: '18.75px',
+      fontWeight: 'bold',
+      lineHeight: ' 30px',
+    },
+    h5Medium: {
+      fontSize: '18.75px',
+      fontWeight: 'heading',
+      lineHeight: ' 30px',
     },
     a: {
       color: 'primary',
