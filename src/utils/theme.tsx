@@ -219,12 +219,17 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     checkbox: {
-      color: 'white',
-      border: '1px solid',
-      borderColor: 'gray.0',
-      ':checked': {
-        bg: 'gray.8',
-      },
+      // '-webkit-tap-highlight-color': 'transparent',
+      color: 'neutral.1',
+      // bg: 'gray.8',
+      // border: '1px solid',
+      // borderColor: 'gray.0',
+      // ':checked': {
+      //   bg: 'gray.8',
+      // },
+      // ':focus': {
+      //   outline: 'none',
+      // },
     },
 
     small: {
@@ -1046,7 +1051,8 @@ const theme: Theme & CustomVariantGroups = {
       cursor: 'pointer',
       color: 'white',
       backgroundColor: 'primary_700',
-      borderRadius: '6px',
+      // backgroundColor: 'primary',
+      borderRadius: '4px',
       p: '8px 16px',
       ':disabled': {
         color: 'gray.8',
@@ -1055,6 +1061,10 @@ const theme: Theme & CustomVariantGroups = {
       ':hover': {
         bg: 'green.8',
       },
+    },
+    buttonPrimarySmall: {
+      variant: 'buttons.buttonPrimary',
+      fontSize: 2,
     },
     delete: {
       variant: 'buttons.buttonPrimary',
@@ -1210,12 +1220,12 @@ const theme: Theme & CustomVariantGroups = {
       color: 'blue.9',
       bg: 'blue.2',
     },
-    small: {
-      bg: 'blue.5',
-      px: 3,
-      py: 1,
-      fontSize: 0,
-    },
+    // small: {
+    //   bg: 'blue.5',
+    //   px: 3,
+    //   py: 1,
+    //   fontSize: 0,
+    // },
   },
   variants: {
     onboardingForms: {
