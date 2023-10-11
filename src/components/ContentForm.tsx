@@ -206,6 +206,8 @@ const Form = (props: IContentForm) => {
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
+  const [pageTitle, setPageTitle] = useState<string>('');
+
   // const refSubmitButtom = useRef<HTMLButtonElement>(null);
 
   /**
@@ -395,6 +397,8 @@ const Form = (props: IContentForm) => {
 
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
+      setPageTitle(serialbody.title);
+
       const rawraw = serialbody.serialized;
 
       /**
@@ -732,7 +736,7 @@ const Form = (props: IContentForm) => {
 
   return (
     <Box sx={{ p: 0 }}>
-      <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
+      <NavEdit navtitle={pageTitle} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
         {/* {status && <Box sx={{ display: 'none' }} />} */}
         {insertable && status && <Box sx={{ display: 'none' }} />}
@@ -762,8 +766,10 @@ const Form = (props: IContentForm) => {
 
             <Box
               sx={{
-                bg: 'gray.0',
-                borderBottom: 'solid 1px #ddd',
+                position: 'relative',
+                bg: 'neutral.0',
+                borderBottom: 'solid 1px',
+                borderBottomColor: 'neutral.0',
                 p: 4,
                 display: showTitleEdit ? 'block' : 'block',
                 flexGrow: 1,
@@ -771,8 +777,16 @@ const Form = (props: IContentForm) => {
                 pl: 2,
                 pt: 2,
               }}>
-              <Flex>
-                <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
+              <Flex
+                sx={{
+                  bg: '#fff',
+                  position: 'absolute',
+                  top: 0,
+                  right: 1,
+                  left: 1,
+                  zIndex: 9000,
+                }}>
+                <Box sx={{ width: '90%', pl: 3, pt: 2, display: 'none' }}>
                   <Field
                     name="title"
                     label=""
@@ -884,7 +898,7 @@ const Form = (props: IContentForm) => {
           <Box
             variant="plateRightBar"
             sx={{
-              bg: '#FAFBFC',
+              bg: 'neutral.0',
               ml: 0,
               width: '30%',
               borderLeft: 'solid 1px #ddd',
@@ -993,7 +1007,7 @@ const Form = (props: IContentForm) => {
                       <Box
                         key={n.id}
                         sx={{
-                          bg: 'gray.0',
+                          bg: 'neutral.0',
                           pl: 3,
                           border: 'solid 0.5px',
                           borderColor: 'gray.2',
@@ -1078,7 +1092,7 @@ const Form = (props: IContentForm) => {
                       sx={{
                         fontWeight: 600,
                         mr: 2,
-                        bg: 'primary',
+                        // bg: 'primary',
                         color: 'green.0',
                         borderColor: 'green.9',
                         border: 'solid 1px',

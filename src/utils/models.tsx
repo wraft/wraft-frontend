@@ -403,3 +403,35 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
       onSuccess(token);
     });
 };
+
+/**
+ * Set User , Switch Workpace for tokens
+ */
+
+export const switchProfile = (data: any) => {
+  // fetch(`${API_HOST}/api/v1/users/signin`, {
+  //   method: 'POST',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(data),
+  // })
+  //   .then(function (response) {
+  //     if (!response.ok) {
+  //       throw new Error();
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(function (data) {
+  const { access_token } = data;
+  cookie.set('token', access_token);
+  // onSuccess(access_token);
+  // })
+  // .catch(function (error) {
+  //   // console.error('Error:', error);
+  //   if (onError) {
+  //     onError(error);
+  //   }
+  // });
+};

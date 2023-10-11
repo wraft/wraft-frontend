@@ -17,16 +17,16 @@ const Index: FC = () => {
       </Head>
       <Page>
         <HeadingFrame
-          title="Manage"
+          title="Manage > Themes"
           side={
-            <Link variant="btnPrimary" href="/manage/themes/new">
+            <Link variant="btnSecondary" href="/manage/themes/new">
               Add Theme
             </Link>
           }
         />
         <Container variant="layout.pageFrame">
           <Flex>
-            <ManageSidebar items={menuLinks} />
+            {/* <ManageSidebar items={menuLinks} /> */}
             <ThemeList />
           </Flex>
         </Container>

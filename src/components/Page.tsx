@@ -4,7 +4,7 @@ import { Box, Flex } from 'theme-ui';
 
 import { useStoreState } from 'easy-peasy';
 import Container from './Container';
-import Sidebar from './Sidebar';
+import Sidebar from './Nav.1';
 import Nav from './Nav';
 // import { Close } from 'theme-ui';
 

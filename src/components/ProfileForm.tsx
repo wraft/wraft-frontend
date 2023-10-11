@@ -12,7 +12,7 @@ import { useStoreState } from 'easy-peasy';
 import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
 import { useToasts } from 'react-toast-notifications';
-// import ImageCropper from './ImageCropper';
+import ImageCropper from './ImageCropper';
 
 export const defaultStyle: Styles = {
   overlay: {
@@ -89,12 +89,14 @@ const Form = () => {
   // const [imageSaved, setImageSaved] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
+  const [profileImageModal, setProfileImageModal] = useState<boolean>(false);
 
   const { addToast } = useToasts();
 
   const [showModal, setModal] = useState<boolean>(false);
   function closeModal() {
     setModal(false);
+    setProfileImageModal(false);
   }
 
   function toggleModal() {
@@ -113,7 +115,7 @@ const Form = () => {
     setMe(m);
   }
 
-  // const [cropImage, setCroppedImage] = useState<File>(); // for file submit
+  const [cropImage, setCroppedImage] = useState<File>(); // for file submit
   // const [editing, setEditing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -166,9 +168,9 @@ const Form = () => {
     formData.append('name', data.name);
     formData.append('dob', data.dob);
 
-    // if (cropImage) {
-    //   formData.append('profile_pic', cropImage);
-    // }
+    if (cropImage) {
+      formData.append('profile_pic', cropImage);
+    }
 
     formData.append('gender', data.gender);
 
@@ -201,9 +203,38 @@ const Form = () => {
         setValue('dob', data.dob);
       }
       setValue('gender', data.gender);
-      const img = API_HOST + data?.profile_pic;
+      const img = data?.profile_pic;
       setImage(img);
     }
+  };
+
+  /**
+   * Catch update response
+   * @param respo
+   */
+  const onUpdated = (respo: any) => {
+    console.log('response', respo);
+    addToast('Image Updated', { appearance: 'success' });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onCroppedImage = (e: any, f: any) => {
+    console.log('cropped', e, f);
+    setCroppedImage(f);
+
+    // setProfileImageModal(!profileImageModal);
+
+    // setSaving(true);
+
+    const formData = new FormData();
+    // formData.append('name', 'Tx');
+    // formData.append('dob', data.dob);
+
+    if (f) {
+      formData.append('profile_pic', f);
+    }
+
+    updateEntityFile(`profiles`, formData, token, onUpdated);
   };
 
   useEffect(() => {
@@ -274,20 +305,39 @@ const Form = () => {
                                 border: 'solid 1px',
                                 borderColor: 'gray.3',
                               }}
-                              src={`${API_HOST}${profile?.profile_pic}`}
+                              src={`${profile?.profile_pic}`}
                             />
                           </>
                         )}
                         {isEdit && (
-                          <Modal
-                            style={defaultStyle}
-                            isOpen={true}
-                            onRequestClose={closeModal}
-                            ariaHideApp={false}
-                            contentLabel="Profile Image">
-                            <Text>Editor</Text>
-                            {/* <ImageCropper /> */}
-                          </Modal>
+                          <Box>
+                            {/* onClick={() =>
+                                setProfileImageModal(!profileImageModal)
+                              } */}
+                            <Image
+                              onClick={() =>
+                                setProfileImageModal(!profileImageModal)
+                              }
+                              sx={{
+                                width: '80px',
+                                maxWidth: 'auto',
+                                height: '80px',
+                                borderRadius: 99,
+                                border: 'solid 1px',
+                                borderColor: 'gray.3',
+                              }}
+                              src={`${profile?.profile_pic}`}
+                            />
+                            <Modal
+                              style={defaultStyle}
+                              isOpen={profileImageModal}
+                              onRequestClose={closeModal}
+                              ariaHideApp={false}
+                              contentLabel="Profile Image">
+                              {/* <Text>Editor</Text> */}
+                              <ImageCropper onFileSubmit={onCroppedImage} />
+                            </Modal>
+                          </Box>
                         )}
                         {imagePreview && (
                           <>

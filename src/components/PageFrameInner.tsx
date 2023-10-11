@@ -57,13 +57,13 @@ IPage) => {
           <Box
             sx={{
               flex: 1,
-              bg: 'gray.1',
+              // bg: 'gray.1',
               minWidth: 0,
             }}>
             {children}
-            <Flex bg="gray.1" sx={{ pt: 0 }}>
+            <Flex sx={{ pt: 0 }}>
               <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
-                (c) Wraft Docs Inc 2021 . All Rights Reserved
+                (c) Wraft Docs Inc 2023 . All Rights Reserved
               </Text>
               <Box
                 sx={{

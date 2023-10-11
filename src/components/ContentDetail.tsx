@@ -59,7 +59,7 @@ export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
       sx={{
         flex: 1,
         borderRight: `solid 1px`,
-        borderColor: 'gray.3',
+        borderColor: 'gray.2',
         p: 0,
         '&:last-child': { borderRight: 0 },
       }}>
@@ -101,7 +101,7 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
   return (
     <Box
       sx={{
-        bg: 'gray.3',
+        bg: 'neutral.1',
         textAlign: 'center',
         mr: 3,
         // mt: `-7px`,
@@ -139,7 +139,11 @@ interface ProfileCardP {
   image?: string;
 }
 
-export const ProfileCard = ({ name, time }: ProfileCardP) => {
+export const ProfileCard = ({
+  name,
+  time,
+  image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
+}: ProfileCardP) => {
   return (
     <Flex
       sx={{
@@ -150,8 +154,8 @@ export const ProfileCard = ({ name, time }: ProfileCardP) => {
       <Avatar
         width={22}
         height={22}
-        sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
-        src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+        sx={{ mr: 2, borderColor: 'gray.1', border: 0 }}
+        src={image} // image
       />
       <Text as="h3" sx={{ mr: 3, fontSize: '14.4px', fontWeight: 600 }}>
         {name}
@@ -253,6 +257,7 @@ const ContentDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
+  const [pageTitle, setPageTitle] = useState<string>('');
 
   // const tab = useTabState({ selectedId: 'edit' });
 
@@ -313,6 +318,7 @@ const ContentDetail = () => {
     if (contents && contents.content && contents.content.serialized) {
       const contentBodyAct = contents.content.serialized;
       console.log('🧶 [content]', contents.content);
+      setPageTitle(contents.content.serialized?.title);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
@@ -326,9 +332,11 @@ const ContentDetail = () => {
     //
   };
 
+  // const navTitle = contents?.content?.title;
+
   return (
     <Box py={0}>
-      <Nav navtitle={contents?.content?.title} />
+      {!loading && pageTitle && <Nav navtitle={pageTitle} />}
       <Box sx={{ pt: 0 }}>
         {loading && (
           <Box
@@ -347,65 +355,6 @@ const ContentDetail = () => {
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
               sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
-              <Flex
-                sx={{
-                  px: 4,
-                  // py: 3,
-                  py: 3,
-                  pb: 3,
-                  // pl: '115px',
-                  borderBottom: 'solid 1px',
-                  borderColor: 'gray.3',
-                  mb: 3,
-                  bg: 'gray.0',
-                }}>
-                <Box>
-                  <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
-                    {contents.content.serialized.title}
-                  </Text>
-                  <ProfileCard
-                    time={contents.content?.inserted_at}
-                    name={contents.creator?.name}
-                    image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
-                  />
-                </Box>
-                <Box sx={{ ml: 'auto' }}>
-                  <Box
-                    sx={{
-                      pt: 1,
-                      pb: 0,
-                      mb: 0,
-                      borderRadius: 99,
-                      px: 2,
-                      fontSize: 0,
-                      ml: 'auto',
-                      color: 'gray.9',
-                      border: 'solid 1px #ddd',
-                      svg: {
-                        fill: 'gray.6',
-                      },
-                    }}>
-                    <MenuItem
-                      variant="btnPrimary"
-                      href={`/content/edit/[id]`}
-                      path={`/content/edit/${contents.content.id}`}>
-                      <Box>
-                        <Pencil size={22} height={22} />
-                        <Text
-                          // as="span"
-                          sx={{
-                            mx: 2,
-                            mt: 0,
-                            fontWeight: 'bold',
-                            fontSize: 1,
-                          }}>
-                          Edit
-                        </Text>
-                      </Box>
-                    </MenuItem>
-                  </Box>
-                </Box>
-              </Flex>
               <Box sx={{ mb: 4 }}>
                 <TabList state={tab} aria-label="Content Stages">
                   <Tab id="edit" variant="contentButton" as={Button} {...tab}>
@@ -454,17 +403,76 @@ const ContentDetail = () => {
 
                 <TabPanel state={tab}>
                   <Box sx={{ mt: 4 }}>
-                    <PreTag pt={4}>
-                      {contentBody && (
-                        <WraftEditor
-                          // value={active}
-                          editable={false}
-                          onUpdate={doUpdate}
-                          starter={contentBody}
-                          cleanInsert={true}
-                          token={contentBody}
+                    <Flex
+                      sx={{
+                        px: 4,
+                        // py: 3,
+                        py: 3,
+                        pb: 3,
+                        // pl: '115px',
+                        borderBottom: 'solid 1px',
+                        borderColor: 'gray.0',
+                        mb: 3,
+                        bg: 'neutral.1',
+                      }}>
+                      <Box>
+                        <ProfileCard
+                          time={contents.content?.inserted_at}
+                          name={contents.creator?.name}
+                          image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
                         />
-                      )}
+                      </Box>
+                      <Box sx={{ ml: 'auto' }}>
+                        <Box
+                          sx={{
+                            pt: 1,
+                            pb: 0,
+                            mb: 0,
+                            borderRadius: 99,
+                            px: 2,
+                            fontSize: 0,
+                            ml: 'auto',
+                            color: 'gray.9',
+                            border: 'solid 1px',
+                            borderBottom: 'neutral.1',
+                            svg: {
+                              fill: 'gray.6',
+                            },
+                          }}>
+                          <MenuItem
+                            variant="btnPrimary"
+                            href={`/content/edit/[id]`}
+                            path={`/content/edit/${contents.content.id}`}>
+                            <Box>
+                              <Pencil size={22} height={22} />
+                              <Text
+                                // as="span"
+                                sx={{
+                                  mx: 2,
+                                  mt: 0,
+                                  fontWeight: 'bold',
+                                  fontSize: 1,
+                                }}>
+                                Edit
+                              </Text>
+                            </Box>
+                          </MenuItem>
+                        </Box>
+                      </Box>
+                    </Flex>
+                    <PreTag pt={4}>
+                      <Box sx={{ px: 5, '.remirror-editor': { bg: 'red.3' } }}>
+                        {contentBody && (
+                          <WraftEditor
+                            // value={active}
+                            editable={false}
+                            onUpdate={doUpdate}
+                            starter={contentBody}
+                            cleanInsert={true}
+                            token={contentBody}
+                          />
+                        )}
+                      </Box>
                     </PreTag>
                   </Box>
                 </TabPanel>
@@ -486,11 +494,11 @@ const ContentDetail = () => {
             <Box
               variant="plateRightBar"
               sx={{
-                bg: '#FAFBFC',
+                bg: 'neutral.0',
                 py: 0,
                 width: '30%',
                 borderLeft: 'solid 1px',
-                borderColor: 'gray.3',
+                borderColor: 'gray.0',
                 pt: 3,
               }}>
               <Box sx={{ px: 3 }}>
@@ -537,7 +545,7 @@ const ContentDetail = () => {
                     Content
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                <Box sx={{ pt: 2, px: 3, bg: 'neutral.0' }}>
                   <Box>
                     {build && (
                       <Box>
@@ -612,7 +620,7 @@ const ContentDetail = () => {
                     Discuss
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                <Box sx={{ pt: 2, px: 3, bg: 'neutral.1' }}>
                   {contents && contents.content && (
                     <Box mt={0}>
                       <CommentForm
