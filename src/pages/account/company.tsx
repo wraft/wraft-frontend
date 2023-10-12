@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import OrgForm from '../../components/OrgForm';
 import Page from '../../components/PageFrame';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import OrgSidebar from '../../components/OrgSidebar';
 import PageHeader from '../../components/PageHeader';
 

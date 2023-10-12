@@ -339,7 +339,8 @@ export const menuLinks: menuLinksProps[] = [
   },
 ];
 
-{/* <NavLink href={'/account'} variant="btnNavLink">
+{
+  /* <NavLink href={'/account'} variant="btnNavLink">
         My Profile
       </NavLink>
       <NavLink href={'/account/company'} variant="btnSecondary">
@@ -353,7 +354,8 @@ export const menuLinks: menuLinksProps[] = [
       </NavLink>
       <NavLink href={'/account/checks'} variant="btnNavLink">
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
-      </NavLink> */}
+      </NavLink> */
+}
 
 export const workspaceLinks: menuLinksProps[] = [
   {
