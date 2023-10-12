@@ -7,7 +7,7 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // relative
 import Link from './NavLink';
 import { checkUser } from '../utils/models';
-import { Bell, Exit, ArrowBack } from '@styled-icons/boxicons-regular';
+import { Bell, Exit, ArrowBack } from './Icons';
 import Dropdown from './common/Dropdown';
 
 import ModeToggle from './ModeToggle';

@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Bell, Search } from '@styled-icons/boxicons-regular';
-import Modal from './Modal';
-import Blok from './Blok';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { useRouter } from 'next/router';
 
+import { Bell, Search } from './Icons';
+import Modal from './Modal';
+import Blok from './Blok';
+
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
-import { BrandLogo } from '../../src/components/Icons';
-
-// import Modal from 'react-modal';
-
 import {
+  BrandLogo,
   Note,
   Like,
   Cabinet as BookOpen,
@@ -24,8 +22,8 @@ import {
   Cog,
   UserVoice,
   Wrench,
-  Text as TextIcon,
-} from '@styled-icons/boxicons-regular';
+  TextIcon,
+} from '../../src/components/Icons';
 
 import ModeToggle from './ModeToggle';
 
@@ -46,7 +44,7 @@ const listMenu = [
 
       {
         name: 'Templates',
-        logo: <Carousel width={20} />,
+        logo: <Carousel width={20} height={20} />,
         path: '/templates',
       },
     ],
@@ -206,7 +204,7 @@ const Nav = (props: any) => {
                 variant="button"
                 sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
-                  <Bell width="20px" />
+                  <Bell width={20} height={20} />
                 </Link>
               </Box>
             </Flex>

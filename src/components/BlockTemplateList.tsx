@@ -7,9 +7,7 @@ import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
 
-import { EmptyForm } from './Icons';
-
-import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
+import { EmptyForm, DotsVerticalRounded } from './Icons';
 export interface IField {
   id: string;
   title: string;
@@ -40,8 +38,6 @@ const BlockTemplateListFrame: FC = () => {
       .catch();
   };
 
-  // const menu = useMenuState();
-
   useEffect(() => {
     loadData();
   }, []);
@@ -55,16 +51,6 @@ const BlockTemplateListFrame: FC = () => {
           col2: <Box>{r.title}</Box>,
           col3: <Box>{r.updated_at}</Box>,
           col4: (
-            // sx={{
-            //   position: 'relative',
-            //   border: 'solid 1px',
-            //   bg: 'gray.0',
-            //   borderColor: 'gray.3',
-            //   borderRadius: 4,
-            //   // height: '100px',
-            //   // p: 3,
-            //   // overflow: 'hidden',
-            // }}
             <Box as={MenuProvider} sx={{ position: 'relative', px: 3, py: 1 }}>
               {/* <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary"> */}
               <MenuButton
@@ -78,7 +64,7 @@ const BlockTemplateListFrame: FC = () => {
                   pb: 1,
                   mt: 2,
                 }}>
-                <DotsVerticalRounded width="16px" />
+                <DotsVerticalRounded width={16} height={16} />
               </MenuButton>
               <Menu
                 as={Box}

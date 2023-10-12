@@ -4,13 +4,10 @@ import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
-// relative
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import { Bell, Search } from './Icons';
 
 import { checkUser } from '../utils/models';
-import { Bell, Search } from '@styled-icons/boxicons-regular';
-// import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
-
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import Blok from './Blok';
 import Link from './NavLink';
@@ -141,7 +138,7 @@ const Nav = ({ navtitle }: INav) => {
                         pr: 2,
                       },
                     }}>
-                    <Search width={28} />
+                    <Search width={28} height={28} />
                   </Box>
                 </Flex>
               </Flex>
@@ -158,7 +155,7 @@ const Nav = ({ navtitle }: INav) => {
                 variant="button"
                 sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
-                  <Bell width="20px" />
+                  <Bell width={20} height={20} />
                 </Link>
               </Box>
             </Flex>
