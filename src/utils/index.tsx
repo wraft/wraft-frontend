@@ -3,10 +3,16 @@
 import produce from 'immer';
 import { ContentState } from './types';
 
-import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
-
-import { Style } from '@styled-icons/material-sharp/Style';
-import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
+/**
+ *  @TODO Icons: Convert to local files
+ */
+import {
+  Layout,
+  User,
+  Collection,
+  Style,
+  FlowBranch,
+} from '../components/Icons';
 
 import cookie from 'js-cookie';
 import { AxiosRequestConfig, AxiosError } from 'axios';
@@ -53,7 +59,6 @@ export const updateVars = (data: ContentState, fields: any) => {
                 attrs: { name },
               } = c;
               const ff = fields.find((e: any) => e.name === name);
-              // console.log('updateStuff ' + name, ff);
               draft['content'][k]['content'][y]['attrs']['named'] =
                 ff && ff.value;
             }

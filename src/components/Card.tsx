@@ -3,7 +3,7 @@ import { Box, Flex, Text, Button } from 'theme-ui';
 
 import Link from './NavLink';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
+import { DotsVerticalRounded } from './Icons';
 
 /**
  * Page Heading Section
@@ -77,7 +77,7 @@ const LayoutCard = ({
                     pb: 1,
                     mt: 2,
                   }}>
-                  <DotsVerticalRounded width="16px" />
+                  <DotsVerticalRounded width={16} height={16} />
                 </MenuButton>
                 <Menu
                   as={Box}

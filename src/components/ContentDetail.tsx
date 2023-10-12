@@ -4,8 +4,7 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 
 // import { Document, Page } from 'react-pdf';
-import { Pencil } from '@styled-icons/boxicons-regular';
-import { Download } from '@styled-icons/remix-line/Download';
+import { Download, Pencil } from './Icons';
 
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
@@ -394,7 +393,7 @@ const ContentDetail = () => {
                       href={`/content/edit/[id]`}
                       path={`/content/edit/${contents.content.id}`}>
                       <Box>
-                        <Pencil size={22} height={22} />
+                        <Pencil width={22} height={22} />
                         <Text
                           // as="span"
                           sx={{
@@ -579,7 +578,7 @@ const ContentDetail = () => {
                               borderColor: 'gray.4',
                               ml: 4,
                             }}>
-                            <Download size={18} color="gray.3" />
+                            <Download height={18} width={18} color="gray.3" />
                             {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
                           </Flex>
                         </Link>

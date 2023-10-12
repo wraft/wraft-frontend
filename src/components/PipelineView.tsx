@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useStoreState } from 'easy-peasy';
 
-import { PlayCircle } from '@styled-icons/boxicons-regular';
+import { PlayCircle } from './Icons';
 import { useForm } from 'react-hook-form';
 
 import Modal, { Styles } from 'react-modal';
