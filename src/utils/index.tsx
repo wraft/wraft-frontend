@@ -339,6 +339,22 @@ export const menuLinks: menuLinksProps[] = [
   },
 ];
 
+{/* <NavLink href={'/account'} variant="btnNavLink">
+        My Profile
+      </NavLink>
+      <NavLink href={'/account/company'} variant="btnSecondary">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
+      </NavLink>
+      <NavLink href={'/account/roles'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Roles</Text>
+      </NavLink>
+      <NavLink href={'/account/members'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>
+      </NavLink>
+      <NavLink href={'/account/checks'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
+      </NavLink> */}
+
 export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'Manage',
@@ -356,6 +372,30 @@ export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'Permissions',
     path: '/manage/workspace/permissions',
+  },
+];
+
+export const profileLinks: menuLinksProps[] = [
+  {
+    name: 'My Account',
+    path: '/account',
+  },
+  {
+    name: 'Manage Team',
+    path: '/account/company',
+  },
+
+  {
+    name: 'Roles',
+    path: '/account/roles',
+  },
+  {
+    name: 'Members',
+    path: '/account/members',
+  },
+  {
+    name: 'Checks',
+    path: '/account/checks',
   },
 ];
 

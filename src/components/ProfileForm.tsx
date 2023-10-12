@@ -6,7 +6,7 @@ import { Label, Select } from 'theme-ui';
 
 import Field from './Field';
 import FieldDate from './FieldDate';
-import { API_HOST, loadEntity, updateEntityFile } from '../utils/models';
+import { loadEntity, updateEntityFile } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import Modal, { Styles } from 'react-modal';
@@ -387,7 +387,11 @@ const Form = () => {
                     <option value="Female">Female</option>
                   </Select>
                   {errors.gender && <Text>This field is required</Text>}
-                  <Button type="submit" ml={0} mt={3}>
+                  <Button
+                    type="submit"
+                    ml={0}
+                    mt={3}
+                    sx={{ borderRadius: '6px' }}>
                     {saving && <Spinner width={16} height={16} color="white" />}
                     {!saving && <Text>Save</Text>}
                   </Button>

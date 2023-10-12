@@ -53,7 +53,6 @@ const Modal: React.FC<ModalProps> = ({
             <DialogHeading className="heading">{label}</DialogHeading>
           )}
           <React.Fragment>{children}</React.Fragment>
-          <DialogDismiss className="button">OK</DialogDismiss>
         </div>
       </Dialog>
     </>

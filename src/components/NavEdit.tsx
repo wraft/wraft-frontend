@@ -75,7 +75,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               pt: 1,
               pl: 3,
               borderRight: 'solid 1px',
-              borderColor: 'gray.0',
+              borderColor: 'neutral.1',
               color: 'gray.8',
             }}>
             <Flex>
@@ -95,9 +95,9 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       fontWeight: 300,
                       display: 'block',
                     }}>
-                    Functionary Labs Pvt Ltd
+                    OFFLET
                   </Text>
-                  {navtitle}
+                  <Text sx={{ fontSize: 2, fontWeight: 500 }}>{navtitle}</Text>
                 </Text>
               )}
             </Flex>

@@ -48,7 +48,7 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
           <Text
             as="h1"
             variant="pageheading"
-            sx={{ color: 'gray.9', mb: 0, fontSize: 3, fontWeight: 'heading' }}>
+            sx={{ color: 'gray.9', mb: 0, fontSize: 2, fontWeight: 'heading' }}>
             {title}
           </Text>
           {desc && (

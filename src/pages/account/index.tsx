@@ -18,7 +18,7 @@ const Contents: FC = () => {
         <PageHeader title="My Account" desc="Manage your account">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
-        <Flex>
+        <Flex sx={{ px: 4 }}>
           <OrgSidebar />
           <ProfileForm />
         </Flex>

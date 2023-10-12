@@ -98,15 +98,16 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
   return (
     <Flex
       sx={{
-        bg: 'gray.0',
+        bg: 'bgWhite',
+        cursor: 'pointer',
         ':hover': {
-          bg: 'gray.1',
+          bg: 'neutral.1',
           fontWeight: 400,
-          color: '#000',
+          color: 'gray.8',
         },
         p: 1,
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'neutral.1',
         alignItems: 'flex-start',
         pl: 2,
       }}>
@@ -116,22 +117,22 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
           height: '12px',
           width: '12px',
           border: 'solid 1px',
-          borderColor: 'gray.1',
+          borderColor: 'neutral.0',
           bg: color,
           mr: 2,
           // ml: 2,
           mt: 2,
         }}
       />
-      <Text as="h4" sx={{ fontSize: 1, mt: 1, fontWeight: 300 }}>
+      <Text as="h4" sx={{ fontSize: 2, mt: 1, fontWeight: 500 }}>
         {title}
         <Text
           as="span"
           sx={{
             ml: 1,
             // pl: 2,
-            bg: 'gray.3',
-            fontSize: 0,
+            bg: 'neutral.1',
+            fontSize: '10px',
             fontWeight: 'heading',
             color: 'gray.7',
             // border: 'solid 0.5px',

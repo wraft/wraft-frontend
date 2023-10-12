@@ -18,9 +18,9 @@ const CompanyForm: FC = () => {
         <PageHeader title="Permissions">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
-        <Flex>
+        <Flex sx={{ px: 4 }}>
           <OrgSidebar />
-          <Box pl={4}>
+          <Box>
             <OrgPermissionList />
             <OrgRolesList />
           </Box>

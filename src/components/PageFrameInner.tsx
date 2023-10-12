@@ -61,18 +61,6 @@ IPage) => {
               minWidth: 0,
             }}>
             {children}
-            <Flex sx={{ pt: 0 }}>
-              <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
-                (c) Wraft Docs Inc 2023 . All Rights Reserved
-              </Text>
-              <Box
-                sx={{
-                  ml: 'auto',
-                  flexDirection: ['column', 'column'],
-                }}>
-                <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>Support</Text>
-              </Box>
-            </Flex>
           </Box>
         </Flex>
       </Flex>

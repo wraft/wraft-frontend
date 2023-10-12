@@ -76,16 +76,18 @@ const Blok = () => {
         <Box
           variant="caps"
           sx={{
-            fontSize: 0,
+            // fontSize: 0,
             bg: 'gray.1',
             py: 1,
             pl: 3,
             color: 'gray.6',
             width: '100%',
             borderBottom: 'solid 1px',
-            borderColor: 'gray.2',
+            borderColor: 'neutral.2',
           }}>
-          <Text>Create New</Text>
+          <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
+            Select a variant
+          </Text>
         </Box>
         {contents && contents.map((x: any) => <BlockItem key={x.id} {...x} />)}
       </Box>
@@ -108,8 +110,9 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         px: 3,
         py: 2,
         borderBottom: 'solid 1px',
-        borderColor: 'gray.2',
-        '&:hover': { bg: 'gray.1' },
+        bg: 'neutral.0',
+        borderColor: 'neutral.1',
+        '&:hover': { bg: 'neutral.1' },
       }}>
       <Box
         sx={{
@@ -117,7 +120,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           borderRadius: 4,
           mr: 2,
           mt: 1,
-          borderColor: '#00000026',
+          borderColor: 'neutral.2',
           height: '16px',
           bg: color,
         }}

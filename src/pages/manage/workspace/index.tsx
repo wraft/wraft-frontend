@@ -155,8 +155,9 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Team management" desc="Manage  >  Workspace">
           <Button
+            variant="btnSecondary"
             onClick={() => setIsOpen(true)}
-            sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <InviteUserIcon />
             Invite people
           </Button>
@@ -220,7 +221,7 @@ const Index: FC = () => {
                   register={register}
                   // error={errors.url}
                 />
-                <Button sx={{ mt: '18px' }} type="submit">
+                <Button variant="btnPrimary" sx={{ mt: '18px' }} type="submit">
                   Update
                 </Button>
               </Box>
@@ -244,7 +245,8 @@ const Index: FC = () => {
                 <Button
                   onClick={() => setDelete(true)}
                   type="button"
-                  variant="delete">
+                  variant="delete"
+                  sx={{ borderRadius: 6, fontSize: 2, fontWeight: 'heading' }}>
                   Delete Workspace
                 </Button>
                 <ModalCustom isOpen={isDelete} setOpen={setDelete}>

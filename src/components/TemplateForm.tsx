@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
+import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
@@ -301,7 +301,7 @@ const Form = () => {
 
   return (
     <Box>
-      <NavEdit />
+      <NavEdit navtitle="Hello" />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
           <Flex>
@@ -311,10 +311,13 @@ const Form = () => {
               // onSubmit={handleSubmit(onSubmit)}
               sx={{
                 minWidth: '70%',
-                bg: 'neutral.0',
+                bg: 'neutral.1',
                 maxWidth: '83ch',
                 m: 0,
                 pt: 4,
+                input: {
+                  bg: 'neutral.1',
+                },
               }}>
               <Box sx={{ px: 4 }}>
                 <Field
@@ -345,7 +348,14 @@ const Form = () => {
                   register={register}
                 />
               </Box>
-              <Box py={4}>
+              <Box
+                py={4}
+                sx={{
+                  px: 4,
+                  '.remirror-editor-wrapper .remirror-theme .ProseMirror': {
+                    py: '5rem !important',
+                  },
+                }}>
                 {editorReady && (
                   <MarkdownEditor
                     onUpdate={doUpdate}
@@ -368,12 +378,12 @@ const Form = () => {
                 bg: 'neutral.0',
                 width: '100%',
                 borderLeft: 'solid 1px',
-                borderColor: 'gray.2',
+                borderColor: 'neutral.1',
               }}>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 1 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
                       Content Type
                     </Text>
                     <Select
@@ -394,7 +404,7 @@ const Form = () => {
                   </Box>
 
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
                       Variables
                     </Text>
                     {varias.fields &&
@@ -402,14 +412,15 @@ const Form = () => {
                         <Flex
                           sx={{
                             p: 1,
+                            fontSize: 2,
                             border: 'solid 1px',
                             borderBottom: 0,
-                            borderColor: 'gray.2',
-                            bg: 'teal.8',
+                            borderColor: 'teal.1',
+                            bg: 'teal.0',
                             px: 3,
                             ':last-child': {
                               borderBottom: 'solid 1px',
-                              borderColor: 'gray.2',
+                              borderColor: 'teal.1',
                             },
                           }}
                           as="p"
@@ -437,17 +448,14 @@ const Form = () => {
                       sx={{
                         pl: 3,
                         border: 'solid 0.5px',
-                        borderColor: 'gray.3',
-                        bg: 'gray.1',
+                        borderColor: 'gray.0',
+                        bg: 'neutral.1',
                         mb: 1,
                         pt: 2,
                         pb: 3,
                       }}>
-                      <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                      <Text sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
                         {k.title}
-                      </Text>
-                      <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                        Template Bio
                       </Text>
                     </Box>
                   ))}

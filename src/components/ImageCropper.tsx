@@ -42,6 +42,7 @@ const Layout = ({
       <Box {...dropzoneProps} sx={{ p: 0, m: 0 }}>
         {files.length < extra.maxFiles && input}
       </Box>
+      <Button onClick={() => submitButton()}>submitButton</Button>
     </Box>
   );
 };
@@ -111,6 +112,8 @@ const Preview = ({ meta }: IPreviewProps) => {
     console.log('saved', _e);
   };
 
+  const showModel = false;
+
   return (
     <Box>
       <UploaderContext.Consumer>
@@ -127,7 +130,7 @@ const Preview = ({ meta }: IPreviewProps) => {
               <ImageEdit
                 image={previewUrl}
                 onUpdate={imageUpdate}
-                hideModal={toggleUpload}
+                hideModal={showModel}
                 onSavable={onSaved}
               />
             )}
@@ -182,6 +185,7 @@ const ImageCropper = ({ onFileSubmit }: MyUploaderProps) => {
   };
   const handleSubmit = (_files: any) => {
     onFileSubmit(parent, _files);
+    console.log('imagePrev', imagePrev);
   };
 
   return (

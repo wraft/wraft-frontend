@@ -204,7 +204,7 @@ const theme: Theme & CustomVariantGroups = {
       borderColor: 'neutral.1',
       fontFamily: 'body',
       mb: 2,
-      fontSize: 2,
+      fontSize: 3,
       py: 1,
       borderRadius: 4,
       ':disabled': {
@@ -401,8 +401,6 @@ const theme: Theme & CustomVariantGroups = {
         border: 'solid 1px',
         fontFamily: 'editor2',
         borderColor: 'neutral.1',
-        py: 2,
-        px: 3,
         lineHeight: 1.65,
         bg: 'neutral.0',
         h1: { color: 'gray.7', fontFamily: 'editor2', pt: 2, pb: 1 },
@@ -472,10 +470,10 @@ const theme: Theme & CustomVariantGroups = {
       px: 3,
       py: 2,
       bg: 'neutral.1',
-      borderRadius: 4,
       color: 'gray.7',
       fontWeight: 600,
       textDecoration: 'none',
+      borderRadius: 6,
       borderColor: 'gray.1',
     },
     btnSmall: {
@@ -559,8 +557,9 @@ const theme: Theme & CustomVariantGroups = {
   },
   layout: {
     dialog: {
+      bg: 'neutral.0',
       position: 'fixed',
-      inset: '0.75rem',
+      inset: '20ch',
       zIndex: 50,
       margin: 'auto',
       display: 'flex',
@@ -570,8 +569,7 @@ const theme: Theme & CustomVariantGroups = {
       gap: '1rem',
       overflow: 'auto',
       borderRadius: '0.75rem',
-      backgroundColor: 'hsl(204 20% 100%)',
-      padding: '1rem',
+      padding: 0,
       color: 'hsl(204 10% 10%)',
       boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
       transformOrigin: 'center',
@@ -582,8 +580,8 @@ const theme: Theme & CustomVariantGroups = {
       transform: 'scale(0.95)',
     },
     backdrop: {
-      bg: 'hsl(204 10% 10% / 0.1)',
-      opacity: 0,
+      bg: 'hsl(204 10% 10% / 0.8)',
+      opacity: 1,
       transitionProperty: 'opacity, backdrop-filter',
       transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
       transitionDuration: '150ms',
@@ -609,9 +607,9 @@ const theme: Theme & CustomVariantGroups = {
       pt: 2,
       width: '100%',
       borderTop: 'solid 1px',
-      borderTopColor: 'gray.1',
+      borderTopColor: 'neutral.1',
       borderBottom: 'solid 1px',
-      borderBottomColor: 'gray.1',
+      borderBottomColor: 'neutral.1',
     },
 
     modalContent: {
@@ -675,13 +673,13 @@ const theme: Theme & CustomVariantGroups = {
     },
     frameHeading: {
       bg: 'bgWhite',
-      pb: 3,
+      pb: 4,
       px: 4,
       py: 2,
       borderBottom: 'solid 1px',
       borderColor: 'neutral.1',
       mb: 0,
-      minHeight: '80px',
+      // minHeight: '80px',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -704,9 +702,10 @@ const theme: Theme & CustomVariantGroups = {
       overflow: 'scroll',
     },
     menuWrapper: {
+      // bg: 'red.2',
       px: 2,
-      color: 'gray.7',
       py: 0,
+      color: 'gray.7',
       ':hover': {
         color: 'gray.9',
       },
@@ -715,7 +714,8 @@ const theme: Theme & CustomVariantGroups = {
     menuLink: {
       cursor: 'pointer',
       mb: 0,
-      p: 2,
+      p: 1,
+      px: 2,
       borderRadius: 3,
       fontWeight: 600,
       width: '100%',
@@ -739,7 +739,7 @@ const theme: Theme & CustomVariantGroups = {
       boxShadow: `2px 3px 14px 0px rgba(0, 0, 0, 0.16)`,
     },
     menuItem: {
-      p: 3,
+      px: 3,
       py: 2,
       fontSize: 2,
       cursor: 'pointer',
@@ -747,6 +747,9 @@ const theme: Theme & CustomVariantGroups = {
       bg: 'neutral.0',
       color: 'gray.6',
       borderBottomColor: 'neutral.1',
+      '&:hover': {
+        bg: 'neutral.1',
+      },
     },
     menuItemHeading: {
       variant: 'layouts.menuItem',
@@ -1034,11 +1037,14 @@ const theme: Theme & CustomVariantGroups = {
       cursor: 'pointer',
       color: 'white',
       backgroundColor: 'primary_700',
-      borderRadius: '4px',
+      borderRadius: '6px',
       p: '8px 16px',
       ':disabled': {
         color: 'gray.8',
         bg: 'neutral.2',
+      },
+      ':hover': {
+        bg: 'green.8',
       },
     },
     delete: {
@@ -1114,19 +1120,23 @@ const theme: Theme & CustomVariantGroups = {
     },
     btnPrimary: {
       variant: 'buttons.btnBig',
-      bg: 'teal.9',
-      color: 'primary.9',
-      borderColor: 'teal.8',
+      bg: 'primary.9',
+      color: 'primary.1',
       fontSize: 2,
+      borderRadius: 6,
+      px: 3,
+      py: 2,
       '&:hover': {
-        bg: 'teal.8',
-        borderColor: 'gray.5',
+        bg: 'green.4',
+        borderColor: 'neutral.0',
       },
     },
     btnSecondary: {
-      variant: 'buttons.btnBig',
+      variant: 'buttons.btnPrimary',
       bg: 'neutral.0',
       color: 'gray.9',
+      fontSize: 2,
+      borderRadius: 6,
       borderColor: 'neutral.1',
       '&:hover': {
         bg: 'gray.1',

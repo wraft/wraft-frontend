@@ -610,9 +610,10 @@ const Form = (props: IContentForm) => {
    */
 
   const changeText = (x: any) => {
-    setShowForm(!showForm);
+    setShowForm(true);
 
     setActiveTemplate(x.id);
+    setTemplate(false);
 
     textOperation(x);
 
@@ -736,7 +737,7 @@ const Form = (props: IContentForm) => {
 
   return (
     <Box sx={{ p: 0 }}>
-      <NavEdit navtitle={pageTitle} onToggleEdit={toggleEdit} />
+      <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
         {/* {status && <Box sx={{ display: 'none' }} />} */}
         {insertable && status && <Box sx={{ display: 'none' }} />}
@@ -766,10 +767,10 @@ const Form = (props: IContentForm) => {
 
             <Box
               sx={{
-                position: 'relative',
+                // position: 'relative',
                 bg: 'neutral.0',
                 borderBottom: 'solid 1px',
-                borderBottomColor: 'neutral.0',
+                borderBottomColor: 'neutral.1',
                 p: 4,
                 display: showTitleEdit ? 'block' : 'block',
                 flexGrow: 1,
@@ -779,8 +780,8 @@ const Form = (props: IContentForm) => {
               }}>
               <Flex
                 sx={{
-                  bg: '#fff',
-                  position: 'absolute',
+                  bg: 'neutral.0',
+                  // position: 'absolute',
                   top: 0,
                   right: 1,
                   left: 1,
@@ -808,7 +809,7 @@ const Form = (props: IContentForm) => {
                     register={register}
                   />
                 </Box>
-                <Box sx={{ width: '10%', pt: 2 }}>
+                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
                   <Button
                     // ref={refSubmitButtom}
                     variant="btnPrimary"
@@ -828,7 +829,12 @@ const Form = (props: IContentForm) => {
                   p: 0,
                   position: 'relative',
                   lineHeight: 1.5,
+                  py: 3,
                   fontFamily: 'body',
+                  '.remirror-editor-wrapper ': {
+                    pl: '2rem',
+                    pr: '2rem',
+                  },
                 }}>
                 <Button
                   variant="secondary"
@@ -901,7 +907,8 @@ const Form = (props: IContentForm) => {
               bg: 'neutral.0',
               ml: 0,
               width: '30%',
-              borderLeft: 'solid 1px #ddd',
+              borderLeft: 'solid 1px',
+              borderColor: 'neutral.1',
               pt: 3,
             }}>
             <Box sx={{ px: 3 }}>
@@ -995,9 +1002,9 @@ const Form = (props: IContentForm) => {
             </Box>
 
             <Modal isOpen={showTemplate} onClose={closeModal}>
-              <Box sx={{ p: 4 }}>
+              <Box sx={{ px: 3, py: 3 }}>
                 <Box sx={{ pb: 2 }}>
-                  <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
+                  <Text sx={{ fontSize: 2, color: 'gray.6', pb: 3, mb: 3 }}>
                     Templates
                   </Text>
                 </Box>
@@ -1010,23 +1017,22 @@ const Form = (props: IContentForm) => {
                           bg: 'neutral.0',
                           pl: 3,
                           border: 'solid 0.5px',
-                          borderColor: 'gray.2',
+                          borderColor: 'neutral.1',
                           mb: 1,
                           pt: 2,
                           pb: 3,
                           pr: 3,
+                          cursor: 'pointer',
                           width: '100%',
+                          ':hover': {
+                            bg: 'neutral.1',
+                          },
                         }}
                         onClick={() => changeText(n)}>
                         <Text
                           as="h6"
-                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                          sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
                           {n.title}
-                        </Text>
-                        <Text
-                          as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                          Description
                         </Text>
                       </Box>
                     ))}
@@ -1061,7 +1067,7 @@ const Form = (props: IContentForm) => {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
-                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}>
+                    sx={{ bg: 'teal.0', pb: 2, borderTop: 0 }}>
                     <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
@@ -1070,7 +1076,7 @@ const Form = (props: IContentForm) => {
                     </Text>
                   </Box>
 
-                  <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                  <Box sx={{ pt: 2, px: 3, bg: 'teal.0' }}>
                     <Box>
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
@@ -1086,21 +1092,18 @@ const Form = (props: IContentForm) => {
                     </Box>
                   </Box>
 
-                  <Box sx={{ bg: 'white', p: 3 }}>
+                  {/* <Box sx={{ bg: 'neutral.0', p: 3 }}>
                     <Button
+                      variant="btnPrimary"
                       form="hook-form"
                       sx={{
                         fontWeight: 600,
                         mr: 2,
-                        // bg: 'primary',
-                        color: 'green.0',
-                        borderColor: 'green.9',
-                        border: 'solid 1px',
                       }}
                       type="submit">
                       Publish
                     </Button>
-                  </Box>
+                  </Box> */}
                 </Box>
               )}
             </Box>
