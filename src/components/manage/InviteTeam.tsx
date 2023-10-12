@@ -6,6 +6,7 @@ import theme from '../../utils/theme';
 import { createEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import Creatable from 'react-select/creatable';
+import { forEach } from 'lodash';
 
 interface FormInputs {
   email: string;
@@ -41,22 +42,22 @@ const InviteTeam = () => {
   const emailErrorRef = React.useRef<HTMLDivElement>(null);
   const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
-  const [emailAddresses, setEmailAddresses] = React.useState([]);
-  const checkEmail = (e: any) => {
-    const email = e.target.value;
-    const emails = email.replace(/\s+/g, '').split(',');
-    setEmailAddresses(emails);
-    for (let i = 0; i < emails.length; i++) {
-      if (!emailRegex.test(emails[i])) {
-        // Handle invalid email address
-        console.error(`Invalid email address: ${emails[i]}`);
-        if (emailErrorRef.current)
-          emailErrorRef.current.textContent = `Invalid email address: ${emails[i]}`;
-      } else {
-        if (emailErrorRef.current) emailErrorRef.current.textContent = ``;
-      }
-    }
-  };
+  // const [emailAddresses, setEmailAddresses] = React.useState([]);
+  // const checkEmail = (e: any) => {
+  //   const email = e.target.value;
+  //   const emails = email.replace(/\s+/g, '').split(',');
+  //   setEmailAddresses(emails);
+  //   for (let i = 0; i < emails.length; i++) {
+  //     if (!emailRegex.test(emails[i])) {
+  //       // Handle invalid email address
+  //       console.error(`Invalid email address: ${emails[i]}`);
+  //       if (emailErrorRef.current)
+  //         emailErrorRef.current.textContent = `Invalid email address: ${emails[i]}`;
+  //     } else {
+  //       if (emailErrorRef.current) emailErrorRef.current.textContent = ``;
+  //     }
+  //   }
+  // };
 
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
@@ -83,52 +84,58 @@ const InviteTeam = () => {
     console.log(checkedValues);
   }, [checkedValues]);
 
-  // const customStyles = {
-  //   control: (base: any, state: any) => ({
-  //     ...base,
-  //     backgroundColor: "bgWhite", // picks up value from `theme.colors.foreground`
-  //     borderRadius: 4, // raw CSS value
-  //     fontSize: theme?.fontSizes.2, // picks up value from `theme.fontSizes[4]`
-  //     margin: 3, // picks up value from `theme.space[3]`
-  //     padding: 3, // picks up value from `theme.space[3]`
-  //   }),
-  //   option: (styles: any) => {
-  //     return {
-  //       ...styles,
-  //       backgroundColor: 'red',
-  //       color: '#FFF',
-  //       cursor: 'default',
-  //     };
-  //   },
+  const [selectedEmails, setSelectedEmails] = React.useState<
+    { value: string; label: string }[]
+  >([]);
+  const [emailValidity, setEmailValidity] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const handleChange = (selectedOption: any) => {
+    setSelectedEmails(selectedOption);
+
+    // Check the validity of each email option and update emailValidity
+    const newEmailValidity: { [key: string]: boolean } = {};
+
+    selectedOption.forEach((emailOption: any) => {
+      const isValid = emailRegex.test(emailOption.value);
+      newEmailValidity[emailOption.value] = isValid;
+    });
+
+    setEmailValidity(newEmailValidity);
+  };
+  // const handleChange = (selectedOption: any) => {
+  //   setSelectedEmails(selectedOption);
   // };
 
-  const [selectedEmails, setSelectedEmails] = React.useState([]);
+  React.useEffect(() => {
+    // console.log('value', selectedEmails.values);
+    for (const email of selectedEmails) {
+      console.log('value:', email.value);
+    }
+    const invalidEmails = selectedEmails.filter(
+      (emailOption) => !emailRegex.test(emailOption.value),
+    );
 
-  const handleChange = (selectedOptions: any) => {
-    setSelectedEmails(selectedOptions);
-    console.log(selectedOptions);
-    console.log(selectedEmails);
-  };
+    if (invalidEmails.length > 0) {
+      for (const email of invalidEmails) {
+        if (emailErrorRef.current)
+          emailErrorRef.current.textContent = `Invalid email addresses: ${email.value}`;
+      }
+    } else if (emailErrorRef.current) emailErrorRef.current.textContent = '';
+
+    console.info('invalid', invalidEmails);
+  }, [handleChange]);
 
   function onSubmit(data: any) {
     console.log('submitted', data);
-
-    // const formData = new FormData();
-    for (const email of emailAddresses) {
+    for (const email of selectedEmails) {
       for (const checkedValue of checkedValues) {
-        // formData.append('email', email);
-        // formData.append('role_id', checkedValue);
-        // console.log('formData', formData, email, checkedValue);
         const data = {
-          email: email,
+          email: email.value,
           role_id: checkedValue,
         };
-
         createEntity(data, 'organisations/users/invite', token, onSuccess);
-        // Clear formData for the next iteration
-        // formData.delete('email');
-        // formData.delete('role_id');
-        // console.info('clearing', email, checkedValue);
       }
     }
   }
@@ -169,14 +176,29 @@ const InviteTeam = () => {
             <Creatable
               isMulti
               placeholder="Enter the users email"
-              options={[]} // You can provide a list of emails as options here
+              // options={selectedEmails}
+              options={[]}
+              onChange={handleChange}
+              // isOptionDisabled={(option) => !emailValidity[option.value]}
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  borderColor: state.isFocused ? 'grey' : 'neutral.1',
+                }),
+              }}
             />
-            <Input
+            {/* <Creatable
+              isMulti
+              placeholder="Enter the users email"
+              options={[]} // You can provide a list of emails as options here
+              onChange={handleChange}
+            /> */}
+            {/* <Input
               type="text"
               placeholder="Enter the users email separated by commas"
               {...register('email', { required: 'Email is required' })}
               onChange={checkEmail}
-            />
+            /> */}
             <Text ref={emailErrorRef} variant="error">
               {errors.email?.message}
             </Text>
