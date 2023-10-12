@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
-// import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import { useStoreState } from 'easy-peasy';

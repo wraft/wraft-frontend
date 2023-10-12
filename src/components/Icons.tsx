@@ -48,71 +48,32 @@ const IconBox = styled.div`
   }
 `;
 
-export const Book = () => (
+interface IconBoxWrapperProps {
+  content: string;
+}
+
+/**
+ * Generic Wrapper
+ * @param param0
+ * @returns
+ */
+export const IconBoxWrapper = ({ content }: IconBoxWrapperProps) => (
   <IconBox>
     <Image src={content} />
   </IconBox>
 );
 
-export const Layout = () => (
-  <IconBox>
-    <Image src={grid} />
-  </IconBox>
-);
-
-export const ContentType = () => (
-  <IconBox>
-    <Image src={layout} />
-  </IconBox>
-);
-
-export const Template = () => (
-  <IconBox>
-    <Image src={templates} />
-  </IconBox>
-);
-
-export const Flow = () => (
-  <IconBox>
-    <Image src={flow} />
-  </IconBox>
-);
-
-export const Del = () => (
-  <IconBox>
-    <Image src={del} />
-  </IconBox>
-);
-
-export const Edit = () => (
-  <IconBox>
-    <Image src={edit} />
-  </IconBox>
-);
-
-export const File = () => (
-  <IconBox>
-    <Image src={file} />
-  </IconBox>
-);
-
-export const Plus = () => (
-  <IconBox>
-    <Image src={plus} />
-  </IconBox>
-);
-
-export const User = () => (
-  <IconBox>
-    <Image src={user} />
-  </IconBox>
-);
-
-export const FieldIcon = () => (
-  <IconBox>
-    <Image src={field} />
-  </IconBox>
-);
+export const Book = () => <IconBoxWrapper content={content} />;
+export const Layout = () => <IconBoxWrapper content={grid} />;
+export const ContentType = () => <IconBoxWrapper content={layout} />;
+export const Template = () => <IconBoxWrapper content={templates} />;
+export const Flow = () => <IconBoxWrapper content={flow} />;
+export const Del = () => <IconBoxWrapper content={del} />;
+export const Edit = () => <IconBoxWrapper content={edit} />;
+export const File = () => <IconBoxWrapper content={file} />;
+export const FieldIcon = () => <IconBoxWrapper content={field} />;
+export const User = () => <IconBoxWrapper content={user} />;
+export const Plus = () => <IconBoxWrapper content={plus} />;
 
 export const Logo = () => (
   <IconBox>

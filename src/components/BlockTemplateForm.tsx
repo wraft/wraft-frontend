@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import Field from './Field';
 import FieldText from './FieldText';
 import { BlockTemplates } from '../utils/types';
-// import styled from 'styled-components';
 import EditorWraft from './EditorWraft';
 import {
   API_HOST,

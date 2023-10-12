@@ -4,13 +4,7 @@ import { useStoreState } from 'easy-peasy';
 import { useForm, Controller } from 'react-hook-form';
 
 import Field from './Field';
-// import styled from 'styled-components';
 import { createEntity, loadEntity } from '../utils/models';
-// import { useDialogState } from 'reakit/Dialog';
-// import { defaultModalStyle } from '../utils';
-
-// import Modal from 'react-modal';
-
 interface ApprovalFormBaseProps {
   states?: Array<any>;
   isOpen?: boolean;
