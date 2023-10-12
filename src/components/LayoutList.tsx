@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-// import { TrashAlt } from '@styled-icons/boxicons-regular';
 import { deleteEntity, fetchAPI } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 import LayoutCard from './Card';

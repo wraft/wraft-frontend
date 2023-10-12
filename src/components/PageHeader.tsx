@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
-import { ArrowBack } from '@styled-icons/boxicons-regular/ArrowBack';
+import { ArrowBack } from './Icons';
 interface PageHeaderProps {
   children?: any;
   title: string;

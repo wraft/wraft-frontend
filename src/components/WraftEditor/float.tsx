@@ -3,7 +3,6 @@ import { usePositioner, useSuggest, UseSuggestReturn } from '@remirror/react';
 import { AnimatePresence } from 'framer-motion';
 
 import { Box } from 'theme-ui';
-// import { Portal } from 'reakit/ts'
 
 export const FloatingActionsMenu = ({ options }: any) => {
   // const { commands } = useRemirrorContext();
