@@ -39,7 +39,7 @@ export const Page = ({ children, inner }: IPage) => {
           <Box
             sx={{
               flex: 1,
-              bg: 'blue.4',
+              bg: 'neutral.1',
               minWidth: 0,
               '.ProseMirror p': {
                 // bg: 'bgWhite',

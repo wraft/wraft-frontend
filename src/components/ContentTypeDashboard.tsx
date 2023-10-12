@@ -29,8 +29,11 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         // maxHeight: '200px',
         border: 'solid 1px',
         borderColor: 'neutral.1',
-        borderRadius: 2,
+        borderRadius: 6,
         mr: 3,
+        ':hover': {
+          bg: 'neutral.1',
+        },
       }}>
       <Link
         variant="base"
@@ -39,7 +42,8 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
             ? `/content-types/edit/` + `${id}`
             : `/content-types/` + `${id}`
         }>
-        <Box sx={{ height: '45px', bg: color }}></Box>
+        <Box
+          sx={{ height: '45px', bg: color, borderRadius: '6px 6px 0 0' }}></Box>
         {/* {isEdit ? 'yes' : 'no'} */}
         <Box pl={3} pt={1} pb={2} bg="">
           <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>

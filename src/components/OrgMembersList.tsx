@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Box, Text, Flex, Image } from 'theme-ui';
-import { API_HOST } from '../utils/models';
 import { Member } from './OrgMemberForm';
 
 export interface Theme {

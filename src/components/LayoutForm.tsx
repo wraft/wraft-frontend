@@ -33,8 +33,7 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-import { Menu, MenuItem } from 'reakit';
-
+import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -100,7 +99,7 @@ const Form = () => {
 
   // determine edit state based on URL
   const router = useRouter();
-  const cId: string = router.query.id as string;
+  const cId: string = (router.query.id as string) || '';
   // toats
   const { addToast } = useToasts();
 
@@ -402,7 +401,7 @@ const Form = () => {
                               border: 'solid 1px',
                               borderColor: 'red.9',
                             }}
-                            onClick={() => deleteAsset(cId, m.id)}>
+                            onClick={() => deleteAsset('cId', m.id)}>
                             Delete
                           </Button>
                         </Box>
@@ -522,9 +521,6 @@ const Form = () => {
                 </Flex>
               </Container>
             )}
-            {/* {formStep >= 1 && (
-              <AssetForm onUpload={addUploads} filetype="layout" />
-            )} */}
             <Flex sx={{ position: 'absolute', bottom: '48px' }}>
               {formStep === 0 && (
                 <Button

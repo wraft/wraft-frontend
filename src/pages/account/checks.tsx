@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import Page from '../../components/PageFrame';
-import { Text, Flex, Container } from 'theme-ui';
+import { Text, Flex, Box } from 'theme-ui';
 import PageHeader from '../../components/PageHeader';
+import OrgSidebar from '../../components/OrgSidebar';
 
 /**
  *  @TODO Icons: Convert to local files
@@ -34,22 +35,25 @@ const Contents: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Checks" desc="Infrastructure Checks" />
-        {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
-        <Container variant="layout.pageFrame">
-          <Text as="h3" sx={{ mb: 2 }}>
-            Basic
-          </Text>
-          {checkBoxes &&
-            checkBoxes.map((cb: any) => (
-              <Flex sx={{ p: 3, border: 'solid 1px #ddd' }} key={cb?.name}>
-                {/* <CheckCircle width="24" height="24px" color="green.2" /> */}
-                <Text as="h3" sx={{ fontWeight: 400, color: 'gray.6', ml: 3 }}>
-                  {cb?.name}
-                </Text>
-              </Flex>
-            ))}
-        </Container>
+        <PageHeader title="Settings" desc="Infrastructure Checks">
+          <Box sx={{ ml: 'auto' }} />
+        </PageHeader>
+        <Flex sx={{ px: 4 }}>
+          <OrgSidebar />
+          <Box pl={4}>
+            {checkBoxes &&
+              checkBoxes.map((cb: any) => (
+                <Flex sx={{ p: 3, border: 'solid 1px #ddd' }} key={cb?.name}>
+                  {/* <CheckCircle width="24" height="24px" color="green.2" /> */}
+                  <Text
+                    as="h3"
+                    sx={{ fontWeight: 400, color: 'gray.6', ml: 3 }}>
+                    {cb?.name}
+                  </Text>
+                </Flex>
+              ))}
+          </Box>
+        </Flex>
       </Page>
     </>
   );

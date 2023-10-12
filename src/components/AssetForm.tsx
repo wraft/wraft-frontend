@@ -49,7 +49,7 @@ const AssetForm = ({
     formData.append('type', filetype);
 
     createEntityFile(formData, token, 'assets', onImageUploaded);
-    // setAsset(true);
+    setAsset(true);
   };
 
   // const [file, setFile] = React.useState([]);

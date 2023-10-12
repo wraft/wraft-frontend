@@ -31,11 +31,17 @@ const Index: FC = () => {
       {token && (
         <Page>
           <Container variant="layout.pageFrame">
-            <Box pb={3} pt={4} sx={{}}>
+            <Box pb={3} pt={1} sx={{}}>
               {/* <Text variant="pagetitle" pb={0} mb={1}>
               Quick Start s
             </Text> */}
-              <Text sx={{ color: 'gray.7', fontSize: 1, pt: 0 }}>
+              <Text
+                sx={{
+                  color: 'gray.7',
+                  fontSize: 2,
+                  fontWeight: 'heading',
+                  pt: 0,
+                }}>
                 Get started with templates
               </Text>
             </Box>
@@ -45,20 +51,6 @@ const Index: FC = () => {
                 <ContentTypeDashboard />
               </Flex>
             </Box>
-            <Flex sx={{ width: '100%' }}>
-              <Box sx={{ pb: 4, width: '55%' }}>
-                <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
-                  <Text color="gray.7">Pending Actions</Text>
-                </Box>
-                <Box>{/* <ApprovalList /> */}</Box>
-              </Box>
-              <Box sx={{ pb: 4, width: '45%', pl: 4 }}>
-                <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
-                  <Text color="gray.7">Activities</Text>
-                </Box>
-                {/* <ActivityFeed /> */}
-              </Box>
-            </Flex>
           </Container>
         </Page>
       )}

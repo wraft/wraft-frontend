@@ -14,10 +14,10 @@ const CompanyForm: FC = () => {
         <meta name="description" content="Wraft Docs" />
       </Head>
       <Page>
-        <PageHeader title="Members">
+        <PageHeader title="Settings" desc="Members">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
-        <Flex>
+        <Flex sx={{ px: 4 }}>
           <OrgSidebar />
           <Box pl={4}>
             <OrgMemberForm />

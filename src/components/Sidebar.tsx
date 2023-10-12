@@ -29,6 +29,7 @@ import {
 import { createEntity, loadEntity, switchProfile } from '../utils/models';
 import { Organisation, OrganisationList } from '../store/profile';
 import { useToasts } from 'react-toast-notifications';
+import ModeToggle from './ModeToggle';
 
 /**
  * Sidebar Static Items
@@ -68,11 +69,11 @@ const listMenu = [
         logo: <TextIcon width={20} />,
         path: '/blocks',
       },
-      {
-        name: 'Vendors',
-        logo: <UserVoice width={20} />,
-        path: '/vendors',
-      },
+      // {
+      //   name: 'Vendors',
+      //   logo: <UserVoice width={20} />,
+      //   path: '/vendors',
+      // },
       {
         name: 'Manage',
         logo: <Wrench width={20} />,
@@ -203,7 +204,7 @@ const Nav = (props: any) => {
           flexDirection: 'column',
           maxHeight: '100%',
           height: '100vh',
-          justifyContent: 'space-between',
+          justifyContent: 'stretch',
         }}>
         <Flex
           sx={{
@@ -241,7 +242,7 @@ const Nav = (props: any) => {
                             fontWeight: `bold`,
                             color: 'gray.9',
                             lineHeight: 1,
-                            fontSize: 2,
+                            fontSize: 1,
                           }}>
                           {activeSpace.name}
                         </Text>
@@ -325,19 +326,14 @@ const Nav = (props: any) => {
                         as={Box}
                         // sx={{ border: 'solid 1px #eee' }}
 
-                        sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
+                        sx={{
+                          border: 'solid 1px',
+                          borderColor: 'neutral.1',
+                          minWidth: '20ch',
+                          bg: 'neutral.0',
+                        }}
                         aria-label="Preferences">
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}>
+                        <MenuItem as={Box} variant="layout.menuItem">
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
 
@@ -350,36 +346,31 @@ const Nav = (props: any) => {
                             )}
                           </Box>
                         </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}>
+                        <MenuItem as={Box} variant="layout.menuItem">
+                          <Flex>
+                            <Text>Theme</Text>
+                            <Box
+                              sx={{
+                                // mb: 0,
+                                ml: 'auto',
+                              }}>
+                              <ModeToggle
+                                sx={{ pt: 0, m: 0 }}
+                                variant="button"
+                              />
+                            </Box>
+                          </Flex>
+                        </MenuItem>
+                        <MenuItem as={Box} variant="layout.menuItem">
                           Settings
                         </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px red',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}>
+                        <MenuItem as={Box} variant="layout.menuItem">
                           Profile
                         </MenuItem>
                         <MenuItem
                           as={Box}
-                          onClick={userLogout}
-                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
+                          variant="layout.menuItem"
+                          onClick={() => userLogout()}>
                           Signout
                         </MenuItem>
                       </Menu>
@@ -475,7 +466,7 @@ const Nav = (props: any) => {
                         sx={{
                           color: 'gray.8',
                           fontWeight: checkActive(pathname, m) ? 600 : 500,
-                          fontSize: 3,
+                          fontSize: 2,
                         }}>
                         {menu.name}
                       </Text>
@@ -495,8 +486,11 @@ const Nav = (props: any) => {
               mb: 2,
               pb: 3,
             }}>
-            <Button onClick={() => toggleSearch()} sx={{ width: '100%' }}>
-              New Document
+            <Button
+              variant="btnPrimary"
+              onClick={() => toggleSearch()}
+              sx={{ width: '100%', borderRadius: 6, py: 2 }}>
+              + New Document
             </Button>
           </Box>
         </Box>

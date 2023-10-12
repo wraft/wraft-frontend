@@ -4,9 +4,9 @@ import { Container, Flex } from 'theme-ui';
 import ThemeList from '../../../components/ThemeList';
 import Page from '../../../components/PageFrame';
 import Link from '../../../components/NavLink';
-import ManageSidebar from '../../../components/ManageSidebar';
+// import ManageSidebar from '../../../components/ManageSidebar';
 import { HeadingFrame } from '../../../components/Card';
-import { menuLinks } from '../../../utils';
+// import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
   return (
