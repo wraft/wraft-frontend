@@ -1,12 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Checkbox, Flex, Input, Label, Text } from 'theme-ui';
-import theme from '../../utils/theme';
-// import Field from '../Field';
 import { createEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import Creatable from 'react-select/creatable';
-import { forEach } from 'lodash';
 
 interface FormInputs {
   email: string;
@@ -42,23 +39,6 @@ const InviteTeam = () => {
   const emailErrorRef = React.useRef<HTMLDivElement>(null);
   const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
-  // const [emailAddresses, setEmailAddresses] = React.useState([]);
-  // const checkEmail = (e: any) => {
-  //   const email = e.target.value;
-  //   const emails = email.replace(/\s+/g, '').split(',');
-  //   setEmailAddresses(emails);
-  //   for (let i = 0; i < emails.length; i++) {
-  //     if (!emailRegex.test(emails[i])) {
-  //       // Handle invalid email address
-  //       console.error(`Invalid email address: ${emails[i]}`);
-  //       if (emailErrorRef.current)
-  //         emailErrorRef.current.textContent = `Invalid email address: ${emails[i]}`;
-  //     } else {
-  //       if (emailErrorRef.current) emailErrorRef.current.textContent = ``;
-  //     }
-  //   }
-  // };
-
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
   const filteredRoles = roles.filter((role: any) =>
@@ -87,26 +67,23 @@ const InviteTeam = () => {
   const [selectedEmails, setSelectedEmails] = React.useState<
     { value: string; label: string }[]
   >([]);
-  const [emailValidity, setEmailValidity] = React.useState<{
-    [key: string]: boolean;
-  }>({});
+  // const [emailValidity, setEmailValidity] = React.useState<{
+  //   [key: string]: boolean;
+  // }>({});
 
   const handleChange = (selectedOption: any) => {
     setSelectedEmails(selectedOption);
 
     // Check the validity of each email option and update emailValidity
-    const newEmailValidity: { [key: string]: boolean } = {};
+    //   const newEmailValidity: { [key: string]: boolean } = {};
 
-    selectedOption.forEach((emailOption: any) => {
-      const isValid = emailRegex.test(emailOption.value);
-      newEmailValidity[emailOption.value] = isValid;
-    });
+    //   selectedOption.forEach((emailOption: any) => {
+    //     const isValid = emailRegex.test(emailOption.value);
+    //     newEmailValidity[emailOption.value] = isValid;
+    //   });
 
-    setEmailValidity(newEmailValidity);
+    //   setEmailValidity(newEmailValidity);
   };
-  // const handleChange = (selectedOption: any) => {
-  //   setSelectedEmails(selectedOption);
-  // };
 
   React.useEffect(() => {
     // console.log('value', selectedEmails.values);
@@ -167,19 +144,11 @@ const InviteTeam = () => {
         </Box>
         <Box sx={{ px: 4 }}>
           <Box sx={{ py: '24px' }}>
-            {/* <Field
-              name="emails"
-              register={register}
-              placeholder="Enter the users email separated by commas"
-              error={errors.email}
-            /> */}
             <Creatable
               isMulti
               placeholder="Enter the users email"
-              // options={selectedEmails}
               options={[]}
               onChange={handleChange}
-              // isOptionDisabled={(option) => !emailValidity[option.value]}
               styles={{
                 control: (baseStyles, state) => ({
                   ...baseStyles,
@@ -187,29 +156,10 @@ const InviteTeam = () => {
                 }),
               }}
             />
-            {/* <Creatable
-              isMulti
-              placeholder="Enter the users email"
-              options={[]} // You can provide a list of emails as options here
-              onChange={handleChange}
-            /> */}
-            {/* <Input
-              type="text"
-              placeholder="Enter the users email separated by commas"
-              {...register('email', { required: 'Email is required' })}
-              onChange={checkEmail}
-            /> */}
             <Text ref={emailErrorRef} variant="error">
               {errors.email?.message}
             </Text>
           </Box>
-          {/* <Field
-            label="Choose role"
-            name="search"
-            register={register}
-            placeholder="Search by"
-            onChange={(e: any) => setSearchTerm(e.target.value)}
-          /> */}
           <Box>
             <Label htmlFor="search">Choose role</Label>
             <Input
