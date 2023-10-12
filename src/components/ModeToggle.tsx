@@ -1,6 +1,6 @@
 import { Button, useColorMode } from 'theme-ui';
 
-import { Moon, Sun } from '@styled-icons/boxicons-regular';
+import { Moon, Sun } from './Icons';
 
 const ModeToggle = (props: any) => {
   const [mode, setMode] = useColorMode();
@@ -19,7 +19,11 @@ const ModeToggle = (props: any) => {
         const next = mode === 'dark' ? 'light' : 'dark';
         setMode(next);
       }}>
-      {mode === 'dark' ? <Sun width={22} /> : <Moon width={22} />}
+      {mode === 'dark' ? (
+        <Sun width={22} height={22} />
+      ) : (
+        <Moon width={22} height={22} />
+      )}
     </Button>
   );
 };

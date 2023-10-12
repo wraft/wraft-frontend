@@ -6,7 +6,7 @@ import { DateUtils } from 'react-day-picker';
 import dateFnsFormat from 'date-fns/format';
 import dateFnsParse from 'date-fns/parse';
 
-import { Calendar } from '@styled-icons/boxicons-regular';
+import { Calendar } from './Icons';
 
 interface Props {
   register: any;
@@ -126,7 +126,7 @@ const Field: React.FC<Props> = ({
                 <Text
                   color="gray.4"
                   sx={{ position: 'absolute', right: 2, top: 2 }}>
-                  <Calendar width="20" />
+                  <Calendar width={20} height={20} />
                 </Text>
               )}
             </Box>

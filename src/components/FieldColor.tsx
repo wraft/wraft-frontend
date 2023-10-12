@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Box, Label, Input } from 'theme-ui';
+import { Text, Box, Label, Input, Flex } from 'theme-ui';
 import { ChromePicker } from 'react-color';
 
-import { usePopoverState, Popover, PopoverDisclosure } from 'reakit/Popover';
+import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
 
 interface FieldColorProps {
   register: any;
@@ -17,6 +17,12 @@ interface FieldColorProps {
   onChangeColor?: any;
 }
 
+/**
+ * Basic Color Picker
+ * @param param0
+ * @returns
+ */
+
 const FieldColor: React.FC<FieldColorProps> = ({
   name,
   label,
@@ -30,8 +36,11 @@ const FieldColor: React.FC<FieldColorProps> = ({
   required = true,
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
-  const popover = usePopoverState();
 
+  /**
+   * On Color selected
+   * @param _e
+   */
   const changeColor = (_e: any) => {
     const colr = _e && _e.hex;
     setVal(colr);
@@ -47,56 +56,42 @@ const FieldColor: React.FC<FieldColorProps> = ({
   }, [defaultValue]);
 
   return (
-    <Box pb={2} mr={mr} sx={{ position: 'relative' }}>
-      <PopoverDisclosure {...popover}>
-        <Box
-          sx={{
-            bg: valx,
-            width: '18px',
-            height: '18px',
-            border: 'solid 1px',
-            borderColor: 'gray.3',
-            position: 'absolute',
-            top: '45%',
-            right: 3,
-            padding: '5px',
-            // background: "#fff",
-            borderRadius: '1px',
-            boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-            display: 'inline-block',
-            cursor: 'pointer',
-          }}
-        />
-      </PopoverDisclosure>
-
-      <Box>
-        {sub && (
-          <Text color="#111" sx={{ position: 'absolute', right: 16, top: 32 }}>
-            {sub}
-          </Text>
-        )}
-        <Label htmlFor="description" sx={{ color: '#333', pb: 1 }}>
-          {label}
-        </Label>
-        <Input
-          placeholder={placeholder ? placeholder : ''}
-          id={name}
-          // name={name}
-          type={ftype}
-          defaultValue={valx || defaultValue || ''}
-          // ref={register({ required: required })}
-          {...register(name, { required: required })}
-        />
+    <PopoverProvider>
+      <Box pb={2} mr={mr} sx={{ position: 'relative' }}>
+        <Box sx={{ ml: 0 }}>
+          {sub && (
+            <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
+          )}
+          <Label htmlFor="description" sx={{ color: '#333', pb: 1 }}>
+            {label}
+          </Label>
+          <Flex sx={{ position: 'relative' }}>
+            <Input
+              placeholder={placeholder ? placeholder : ''}
+              id={name}
+              // name={name}
+              type={ftype}
+              defaultValue={valx || defaultValue || ''}
+              sx={{ pl: 3 }}
+              // ref={register({ required: required })}
+              {...register(name, { required: required })}
+            />
+            <Box sx={{ pt: 0 }}>
+              <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
+                <Box bg={valx} variant="layout.squareButton" />
+              </Box>
+              <Popover aria-label="Edit color">
+                <ChromePicker
+                  color={valx}
+                  disableAlpha
+                  onChangeComplete={(e: any) => changeColor(e)}
+                />
+              </Popover>
+            </Box>
+          </Flex>
+        </Box>
       </Box>
-
-      <Popover {...popover} aria-label="Edit color">
-        <ChromePicker
-          color={valx}
-          disableAlpha
-          onChangeComplete={(e: any) => changeColor(e)}
-        />
-      </Popover>
-    </Box>
+    </PopoverProvider>
   );
 };
 

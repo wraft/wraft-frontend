@@ -4,10 +4,8 @@ import styled from '@emotion/styled';
 
 import PageHeader from './PageHeader';
 
-import { Layout } from '@styled-icons/boxicons-regular';
-
 import NavLink from './NavLink';
-import { LayoutLogo, FlowLogo, ThemeLogo, PermLogo } from './Icons';
+import { LayoutLogo, FlowLogo, ThemeLogo, PermLogo, Layout } from './Icons';
 
 export interface INav {
   showFull?: boolean;
