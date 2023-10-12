@@ -7,10 +7,7 @@ import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
 
-import { EmptyForm } from './Icons';
-
-import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
-// import { Menu, MenuButton, MenuItem } from 'reakit/ts/Menu';
+import { EmptyForm, DotsVerticalRounded } from './Icons';
 export interface IField {
   id: string;
   title: string;
@@ -23,13 +20,8 @@ export interface IFieldItem {
   type: string;
 }
 
-import {
-  useMenuState,
-  Menu,
-  MenuItem,
-  MenuButton,
-  // MenuSeparator,
-} from 'reakit/Menu';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+
 import ContentLoader from './ContentLoader';
 
 const BlockTemplateListFrame: FC = () => {
@@ -46,8 +38,6 @@ const BlockTemplateListFrame: FC = () => {
       .catch();
   };
 
-  const menu = useMenuState();
-
   useEffect(() => {
     loadData();
   }, []);
@@ -61,41 +51,29 @@ const BlockTemplateListFrame: FC = () => {
           col2: <Box>{r.title}</Box>,
           col3: <Box>{r.updated_at}</Box>,
           col4: (
-            // sx={{
-            //   position: 'relative',
-            //   border: 'solid 1px',
-            //   bg: 'gray.0',
-            //   borderColor: 'gray.3',
-            //   borderRadius: 4,
-            //   // height: '100px',
-            //   // p: 3,
-            //   // overflow: 'hidden',
-            // }}
-            <Box sx={{ position: 'relative', px: 3, py: 1 }}>
+            <Box as={MenuProvider} sx={{ position: 'relative', px: 3, py: 1 }}>
               {/* <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary"> */}
               <MenuButton
                 as={Button}
-                {...menu}
                 sx={{
                   border: 'solid 1px',
                   color: 'gray.6',
-                  borderColor: 'gray.2',
+                  borderColor: 'neutral.1',
                   p: 0,
-                  bg: 'gray.0',
+                  bg: 'neutral.0',
                   pb: 1,
                   mt: 2,
                 }}>
-                <DotsVerticalRounded width="16px" />
+                <DotsVerticalRounded width={16} height={16} />
               </MenuButton>
               <Menu
                 as={Box}
-                {...menu}
                 aria-label="Manage Block"
                 sx={{
                   border: 'solid 1px',
                   borderColor: 'gray.1',
                   borderRadius: 4,
-                  bg: 'gray.0',
+                  bg: 'neutral.0',
                   color: 'gray.9',
                 }}>
                 <MenuItem
@@ -103,18 +81,17 @@ const BlockTemplateListFrame: FC = () => {
                   sx={{
                     p: 0,
                     color: 'red.7',
-                    bg: 'gray.0',
+                    bg: 'neutral.0',
                     px: 3,
                     borderBottom: 'solid 1px',
                     borderColor: 'gray.1',
                   }}
-                  {...menu}
                   onClick={() => {
                     // onDelete(id);
                   }}>
                   Delete
                 </MenuItem>
-                <MenuItem {...menu} as={Box} sx={{ width: '100%', px: 3 }}>
+                <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
                   <Link
                     href={`/manage/blocks/edit/[id]`}
                     // path={`/manage/${model}/edit/${id}`}

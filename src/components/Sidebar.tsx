@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Bell, Search } from '@styled-icons/boxicons-regular';
-import Modal from './Modal';
-import Blok from './Blok';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
+
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { useRouter } from 'next/router';
 
+import { Bell, Search } from './Icons';
+import Modal from './Modal';
+import Blok from './Blok';
+
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
-import { BrandLogo } from '../../src/components/Icons';
-
-// import Modal from 'react-modal';
-
 import {
+  BrandLogo,
   Note,
   Like,
   Cabinet as BookOpen,
@@ -23,8 +22,8 @@ import {
   Cog,
   UserVoice,
   Wrench,
-  Text as TextIcon,
-} from '@styled-icons/boxicons-regular';
+  TextIcon,
+} from '../../src/components/Icons';
 
 import ModeToggle from './ModeToggle';
 
@@ -45,7 +44,7 @@ const listMenu = [
 
       {
         name: 'Templates',
-        logo: <Carousel width={20} />,
+        logo: <Carousel width={20} height={20} />,
         path: '/templates',
       },
     ],
@@ -125,7 +124,7 @@ const Nav = (props: any) => {
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
 
-  const menu = useMenuState();
+  // const menu = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
   // const sidebarW = 'auto'; //props && props.showFull ? '90px' : '16%';
@@ -197,7 +196,7 @@ const Nav = (props: any) => {
               </Flex>
             </Link>
           </Box>
-          <Flex>
+          <MenuProvider>
             <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
               <Box as="span" sx={{ mt: 2 }}></Box>
 
@@ -205,7 +204,7 @@ const Nav = (props: any) => {
                 variant="button"
                 sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
-                  <Bell width="20px" />
+                  <Bell width={20} height={20} />
                 </Link>
               </Box>
             </Flex>
@@ -220,7 +219,7 @@ const Nav = (props: any) => {
                       mt: 2,
                     }}>
                     <Box>
-                      <MenuButton as={Box} {...menu}>
+                      <MenuButton as={Box}>
                         <Image
                           sx={{ borderRadius: '3rem' }}
                           width="30px"
@@ -231,7 +230,7 @@ const Nav = (props: any) => {
                       <Menu
                         as={Box}
                         // sx={{ border: 'solid 1px #eee' }}
-                        {...menu}
+
                         sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
                         aria-label="Preferences">
                         <MenuItem
@@ -244,8 +243,7 @@ const Nav = (props: any) => {
                             '&:hover': {
                               bg: 'gray.1',
                             },
-                          }}
-                          {...menu}>
+                          }}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
 
@@ -268,8 +266,7 @@ const Nav = (props: any) => {
                             '&:hover': {
                               bg: 'gray.1',
                             },
-                          }}
-                          {...menu}>
+                          }}>
                           Settings
                         </MenuItem>
                         <MenuItem
@@ -282,14 +279,12 @@ const Nav = (props: any) => {
                             '&:hover': {
                               bg: 'gray.1',
                             },
-                          }}
-                          {...menu}>
+                          }}>
                           Profile
                         </MenuItem>
                         <MenuItem
                           as={Box}
                           onClick={userLogout}
-                          {...menu}
                           sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
                           Signout
                         </MenuItem>
@@ -299,9 +294,9 @@ const Nav = (props: any) => {
                 )}
               </Flex>
             )}
-          </Flex>
+          </MenuProvider>
         </Flex>
-        <Box sx={{ flex: 1 }}>
+        <Box as={MenuProvider} sx={{ flex: 1 }}>
           <Flex
             sx={{
               // position: 'relative',
