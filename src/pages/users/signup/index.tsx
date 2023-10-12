@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import EmailVerified from '../../components/EmailVerified';
+import EmailVerified from '../../../components/EmailVerified';
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Flex, Box, Heading, Label, Input, Button, Text } from 'theme-ui';
-import Logo from '../../../public/Logo.svg';
-import Link from '../../components/NavLink';
+import Logo from '../../../../public/Logo.svg';
+import Link from '../../../components/NavLink';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
@@ -13,13 +13,13 @@ const Index: FC = () => {
   const [verified, setVerified] = useState(false);
   const [email, setEmail] = useState<string>('');
   const searchParams = useSearchParams();
-  const token = searchParams.get('email');
+  const email1 = searchParams.get('email');
 
   useEffect(() => {
-    if (token !== null) {
-      setEmail(token);
+    if (email1 !== null) {
+      setEmail(email1);
     }
-  }, [token]);
+  }, [email1]);
 
   const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +31,7 @@ const Index: FC = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: email, first_time_setup: true }),
       });
 
       if (!response.ok) {
@@ -73,7 +73,7 @@ const Index: FC = () => {
 
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
             <Heading as="h3" variant="styles.h3" sx={{ mb: '18px' }}>
-              Reset password
+              Set Your password
             </Heading>
 
             <Text

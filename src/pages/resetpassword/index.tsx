@@ -19,7 +19,7 @@ const Index = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email }),
+        body: JSON.stringify({ email: email, first_time_setup: false }),
       });
 
       if (!response.ok) {

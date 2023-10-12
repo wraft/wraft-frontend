@@ -4,23 +4,23 @@ import CheckSuccess from '../../public/check-success.svg';
 
 const PasswordVerified = () => {
   return (
-    <Box as="main" sx={{ display: 'flex', justifyContent: 'center', mt: 7 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: '80px' }}>
       <Flex
-        as="section"
-        variant="signinRight"
+        variant="onboardingForms"
         sx={{
-          flexDirection: 'column',
           alignItems: 'center',
+          p: '0px',
           pt: '170px',
+          px: '228px',
         }}>
         <img src={CheckSuccess} alt="" className="" />
         <Heading
           as="h3"
-          variant="styles.h3"
+          variant="styles.h3Medium"
           sx={{ mt: '127px', mb: '32px', color: '#363E49' }}>
           Password changed
         </Heading>
-        <Link href="/">
+        <Link href="/login">
           <Button>Go to login page</Button>
         </Link>
       </Flex>
