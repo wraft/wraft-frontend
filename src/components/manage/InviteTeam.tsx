@@ -1,9 +1,11 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Checkbox, Flex, Input, Label, Text } from 'theme-ui';
+import theme from '../../utils/theme';
 // import Field from '../Field';
 import { createEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
+import Creatable from 'react-select/creatable';
 
 interface FormInputs {
   email: string;
@@ -81,20 +83,52 @@ const InviteTeam = () => {
     console.log(checkedValues);
   }, [checkedValues]);
 
+  // const customStyles = {
+  //   control: (base: any, state: any) => ({
+  //     ...base,
+  //     backgroundColor: "bgWhite", // picks up value from `theme.colors.foreground`
+  //     borderRadius: 4, // raw CSS value
+  //     fontSize: theme?.fontSizes.2, // picks up value from `theme.fontSizes[4]`
+  //     margin: 3, // picks up value from `theme.space[3]`
+  //     padding: 3, // picks up value from `theme.space[3]`
+  //   }),
+  //   option: (styles: any) => {
+  //     return {
+  //       ...styles,
+  //       backgroundColor: 'red',
+  //       color: '#FFF',
+  //       cursor: 'default',
+  //     };
+  //   },
+  // };
+
+  const [selectedEmails, setSelectedEmails] = React.useState([]);
+
+  const handleChange = (selectedOptions: any) => {
+    setSelectedEmails(selectedOptions);
+    console.log(selectedOptions);
+    console.log(selectedEmails);
+  };
+
   function onSubmit(data: any) {
     console.log('submitted', data);
 
-    const formData = new FormData();
-
+    // const formData = new FormData();
     for (const email of emailAddresses) {
       for (const checkedValue of checkedValues) {
-        formData.append('email', email);
-        formData.append('role_id', checkedValue);
+        // formData.append('email', email);
+        // formData.append('role_id', checkedValue);
+        // console.log('formData', formData, email, checkedValue);
+        const data = {
+          email: email,
+          role_id: checkedValue,
+        };
 
-        createEntity(formData, token, 'organisations/users/invite', onSuccess);
+        createEntity(data, 'organisations/users/invite', token, onSuccess);
         // Clear formData for the next iteration
-        formData.delete('email');
-        formData.delete('role_id');
+        // formData.delete('email');
+        // formData.delete('role_id');
+        // console.info('clearing', email, checkedValue);
       }
     }
   }
@@ -132,6 +166,11 @@ const InviteTeam = () => {
               placeholder="Enter the users email separated by commas"
               error={errors.email}
             /> */}
+            <Creatable
+              isMulti
+              placeholder="Enter the users email"
+              options={[]} // You can provide a list of emails as options here
+            />
             <Input
               type="text"
               placeholder="Enter the users email separated by commas"
@@ -182,7 +221,7 @@ const InviteTeam = () => {
                   }}>
                   <Checkbox
                     sx={{ width: '16px', height: '16px' }}
-                    {...register('role')}
+                    {...register('role', { required: true })}
                     value={role.id}
                     onChange={(e: any) => {
                       handleCheckboxChange(e);
@@ -200,7 +239,10 @@ const InviteTeam = () => {
         </Box>
       </Box>
       <Box sx={{ p: 4 }}>
-        <Button disabled={!isValid} type="submit" variant="buttonPrimarySmall">
+        <Button
+          disabled={true && !isValid}
+          type="submit"
+          variant="buttonPrimarySmall">
           Invite people
         </Button>
       </Box>
