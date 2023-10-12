@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import {
   Dialog,
   DialogDisclosure,
-  DialogDismiss,
+  // DialogDismiss,
   DialogHeading,
   useDialogStore,
 } from '@ariakit/react';

@@ -1,6 +1,6 @@
 import React from 'react';
 // import Head from 'next/head';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import Head from 'next/head';
 // import { useStoreState } from 'easy-peasy';
 // import Container from './Container';

@@ -20,7 +20,6 @@ import {
   Cabinet as BookOpen,
   Carousel,
   Cog,
-  UserVoice,
   Wrench,
   TextIcon,
 } from '../../src/components/Icons';
