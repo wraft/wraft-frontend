@@ -3,7 +3,7 @@ import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
 import Modal from './Modal';
 import { useForm } from 'react-hook-form';
-import { Trash } from '@styled-icons/boxicons-regular';
+import { Trash } from './Icons';
 
 interface FieldFormProps {
   fields?: any;
@@ -186,7 +186,7 @@ const FieldForm = (props: FieldFormProps) => {
                       type="button"
                       sx={{ py: 1, px: 2, mt: 2 }}
                       onClick={() => props.removeField(idx)}>
-                      <Trash color="red" width="24px" />
+                      <Trash color="red" width={24} height={24} />
                     </Button>
                   </Box>
                 </Flex>

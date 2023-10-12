@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Button } from 'theme-ui';
-import { Plus } from '@styled-icons/boxicons-regular';
 import Modal from 'react-modal';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+
+import { PlusAlt as Plus } from './Icons';
+
 import { loadEntity } from '../utils/models';
 import { modalStyle } from '../utils';
 import ImagesForm from './AssetForm';
@@ -96,7 +98,7 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
       </PageHeader> */}
 
       <Button type="button" onClick={toggleModal}>
-        <Plus width={20} />
+        <Plus width={20} height={20} />
         New Image
       </Button>
       {/* <Box mx={0} mb={3} width={1}>

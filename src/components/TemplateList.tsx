@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 
-// import { useTable } from 'react-table';
-// import styled from 'styled-components';
-// import { useStoreState } from 'easy-peasy';
-// import { Plus } from '@styled-icons/boxicons-regular';
 import { fetchAPI } from '../utils/models';
 import Paginate, { IPageMeta } from './Paginate';
 import Link from './NavLink';

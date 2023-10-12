@@ -19,7 +19,7 @@ import { useStoreState } from 'easy-peasy';
 
 import { useToasts } from 'react-toast-notifications';
 
-import { BracesVariable } from '@styled-icons/fluentui-system-regular/BracesVariable';
+import { BracesVariable } from './Icons';
 
 import MarkdownEditor from './WraftEditor';
 

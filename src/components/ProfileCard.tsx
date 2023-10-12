@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text, Image } from 'theme-ui';
 
-import { Phone, MailSend } from '@styled-icons/boxicons-regular';
+import { Phone, MailSend } from './Icons';
 import { API_HOST } from '../utils/models';
 
 /**

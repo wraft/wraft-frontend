@@ -7,12 +7,11 @@ import { useStoreState, useStoreActions } from 'easy-peasy';
 // relative
 import Link from './NavLink';
 import { checkUser } from '../utils/models';
-import { Bell, ArrowBack } from '@styled-icons/boxicons-regular';
+import { Bell, ArrowBack } from './Icons';
 // import Dropdown from './common/Dropdown';
 
-import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
-
 import ModeToggle from './ModeToggle';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 
 // import { usePopper } from 'react-popper';
 
@@ -35,7 +34,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
 
-  const menu = useMenuState();
+  // const menu = useMenuState();
 
   // const [showSearch, setShowSearch] = useState<boolean>(false);
 
@@ -127,63 +126,63 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       mt: 2,
                     }}>
                     <Box>
-                      <MenuButton {...menu} as={Box} sx={{ cursor: 'pointer' }}>
-                        <Image
-                          sx={{ borderRadius: '3rem', bg: 'red' }}
-                          width="32px"
-                          height="32px"
-                          src={profile?.profile_pic}
-                          // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
-                        />
-                      </MenuButton>
-                      <Menu
-                        as={Box}
-                        // sx={{ border: 'solid 1px #eee' }}
-                        {...menu}
-                        variant="layout.menuBlockWrapper"
-                        aria-label="Preferences">
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
-                          <Box>
-                            <Text as="h4">{profile?.name}</Text>
-
-                            {profile?.roles?.size > 0 && (
-                              <Text
-                                as="p"
-                                sx={{ fontSize: 0, color: 'gray.6' }}>
-                                {profile?.roles[0]?.name}
-                              </Text>
-                            )}
-                          </Box>
-                        </MenuItem>
-                        <MenuItem {...menu} as={Box} variant="layout.menuItem">
-                          <Flex>
-                            <Text>Theme</Text>
-                            <Box
-                              sx={{
-                                // mb: 0,
-                                ml: 'auto',
-                              }}>
-                              <ModeToggle
-                                sx={{ pt: 0, m: 0 }}
-                                variant="button"
-                              />
-                            </Box>
-                          </Flex>
-                        </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
-                          Settings
-                        </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
-                          Profile
-                        </MenuItem>
-                        <MenuItem
+                      <MenuProvider>
+                        <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
+                          <Image
+                            sx={{ borderRadius: '3rem', bg: 'red' }}
+                            width="32px"
+                            height="32px"
+                            src={profile?.profile_pic}
+                            // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+                          />
+                        </MenuButton>
+                        <Menu
                           as={Box}
-                          onClick={userLogout}
-                          {...menu}
-                          variant="layout.menuItem">
-                          Signout
-                        </MenuItem>
-                      </Menu>
+                          // sx={{ border: 'solid 1px #eee' }}
+                          variant="layout.menuBlockWrapper"
+                          aria-label="Preferences">
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            <Box>
+                              <Text as="h4">{profile?.name}</Text>
+
+                              {profile?.roles?.size > 0 && (
+                                <Text
+                                  as="p"
+                                  sx={{ fontSize: 0, color: 'gray.6' }}>
+                                  {profile?.roles[0]?.name}
+                                </Text>
+                              )}
+                            </Box>
+                          </MenuItem>
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            <Flex>
+                              <Text>Theme</Text>
+                              <Box
+                                sx={{
+                                  // mb: 0,
+                                  ml: 'auto',
+                                }}>
+                                <ModeToggle
+                                  sx={{ pt: 0, m: 0 }}
+                                  variant="button"
+                                />
+                              </Box>
+                            </Flex>
+                          </MenuItem>
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            Settings
+                          </MenuItem>
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            Profile
+                          </MenuItem>
+                          <MenuItem
+                            as={Box}
+                            onClick={userLogout}
+                            variant="layout.menuItem">
+                            Signout
+                          </MenuItem>
+                        </Menu>
+                      </MenuProvider>
                     </Box>
                   </Flex>
                 )}

@@ -2,24 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-
-// import { Document, Page } from 'react-pdf';
-import { Pencil } from '@styled-icons/boxicons-regular';
-import { Download } from '@styled-icons/remix-line/Download';
+import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
+import { File, Download, Pencil } from './Icons';
 import MenuItem from './MenuItem';
 import dynamic from 'next/dynamic';
 
-// import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
-import { Tab, TabList, TabPanel, useTabState } from 'ariakit/tab';
-
-import { File } from './Icons';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { API_HOST, createEntity, loadEntity } from '../utils/models';
+import { createEntity, loadEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
@@ -47,13 +41,17 @@ const blockTypes = [
  * Steps Indication Block
  */
 interface StepBlockProps {
-  tab: any;
+  tab?: any;
   title?: string;
   desc?: string;
   no?: number;
 }
 
-export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
+export const StepBlock = ({
+  no,
+  tab = { selectedId: 'view' },
+  title,
+}: StepBlockProps) => {
   return (
     <Flex
       sx={{
@@ -261,8 +259,9 @@ const ContentDetail = () => {
 
   // const tab = useTabState({ selectedId: 'edit' });
 
-  const defaultSelectedId = 'edit';
-  const tab = useTabState({ defaultSelectedId });
+  // const defaultSelectedId = 'edit';
+  // const tab = useTabState({ defaultSelectedId });
+  const defaultSelectedId = 'default-selected-tab';
 
   const loadDataSucces = (data: any) => {
     setLoading(false);
@@ -355,113 +354,88 @@ const ContentDetail = () => {
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
               sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
-              <Box sx={{ mb: 4 }}>
-                <TabList state={tab} aria-label="Content Stages">
-                  <Tab id="edit" variant="contentButton" as={Button} {...tab}>
-                    <Box sx={{ ml: 3 }}>
-                      <StepBlock
-                        no={1}
-                        title="Draft"
-                        desc="Edit contents"
-                        tab={tab}
-                      />
-                    </Box>
-                  </Tab>
-                  <Tab
-                    id="view"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
+              <Flex
+                sx={{
+                  px: 4,
+                  // py: 3,
+                  py: 3,
+                  pb: 3,
+                  // pl: '115px',
+                  borderBottom: 'solid 1px',
+                  borderColor: 'gray.3',
+                  mb: 3,
+                  bg: 'gray.0',
+                }}>
+                <Box>
+                  <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
+                    {contents.content.serialized.title}
+                  </Text>
+                  <ProfileCard
+                    time={contents.content?.inserted_at}
+                    name={contents.creator?.name}
+                    image={`/uploads/default.jpg`}
+                  />
+                </Box>
+                <Box sx={{ ml: 'auto' }}>
+                  <Box
                     sx={{
-                      px: 4,
-                      borderLeft: 0,
+                      pt: 1,
+                      pb: 0,
+                      mb: 0,
+                      borderRadius: 99,
+                      px: 2,
+                      fontSize: 0,
+                      ml: 'auto',
+                      color: 'gray.9',
+                      border: 'solid 1px #ddd',
+                      svg: {
+                        fill: 'gray.6',
+                      },
                     }}>
-                    <StepBlock
-                      no={2}
-                      title="File"
-                      desc="Sign and Manage"
-                      tab={tab}
-                    />
-                  </Tab>
-                  <Tab
-                    id="sign"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
-                    sx={{
-                      px: 4,
-                      borderLeft: 0,
-                    }}>
-                    <StepBlock
-                      no={3}
-                      title="Sign"
-                      desc="Send for signatures"
-                      tab={tab}
-                    />
-                  </Tab>
-                </TabList>
-
-                <TabPanel state={tab}>
-                  <Box sx={{ mt: 4 }}>
-                    <Flex
-                      sx={{
-                        px: 4,
-                        // py: 3,
-                        py: 3,
-                        pb: 3,
-                        // pl: '115px',
-                        borderBottom: 'solid 1px',
-                        borderColor: 'gray.0',
-                        mb: 3,
-                        bg: 'neutral.1',
-                      }}>
+                    <MenuItem
+                      variant="btnPrimary"
+                      href={`/content/edit/[id]`}
+                      path={`/content/edit/${contents.content.id}`}>
                       <Box>
-                        <ProfileCard
-                          time={contents.content?.inserted_at}
-                          name={contents.creator?.name}
-                          image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
-                        />
-                      </Box>
-                      <Box sx={{ ml: 'auto' }}>
-                        <Box
+                        <Pencil width={22} height={22} />
+                        <Text
+                          // as="span"
                           sx={{
-                            pt: 1,
-                            pb: 0,
-                            mb: 0,
-                            borderRadius: 99,
-                            px: 2,
-                            fontSize: 0,
-                            ml: 'auto',
-                            color: 'gray.9',
-                            border: 'solid 1px',
-                            borderBottom: 'neutral.1',
-                            svg: {
-                              fill: 'gray.6',
-                            },
+                            mx: 2,
+                            mt: 0,
+                            fontWeight: 'bold',
+                            fontSize: 1,
                           }}>
-                          <MenuItem
-                            variant="btnPrimary"
-                            href={`/content/edit/[id]`}
-                            path={`/content/edit/${contents.content.id}`}>
-                            <Box>
-                              <Pencil size={22} height={22} />
-                              <Text
-                                // as="span"
-                                sx={{
-                                  mx: 2,
-                                  mt: 0,
-                                  fontWeight: 'bold',
-                                  fontSize: 1,
-                                }}>
-                                Edit
-                              </Text>
-                            </Box>
-                          </MenuItem>
-                        </Box>
+                          Edit
+                        </Text>
                       </Box>
-                    </Flex>
-                    <PreTag pt={4}>
-                      <Box sx={{ px: 5, '.remirror-editor': { bg: 'red.3' } }}>
+                    </MenuItem>
+                  </Box>
+                </Box>
+              </Flex>
+              <Box sx={{ mb: 4 }}>
+                <TabProvider defaultSelectedId={defaultSelectedId}>
+                  <TabList aria-label="Content Stages">
+                    <Tab id="edit">
+                      <Box sx={{ ml: 3 }}>
+                        <StepBlock no={1} title="Draft" desc="Edit contents" />
+                      </Box>
+                    </Tab>
+                    <Tab id="view">
+                      <StepBlock no={2} title="File" desc="Sign and Manage" />
+                    </Tab>
+                    <Tab id="sign">
+                      <StepBlock
+                        no={3}
+                        title="Sign"
+                        desc="Send for signatures"
+                      />
+                    </Tab>
+                  </TabList>
+
+                  <TabPanel>
+                    <Box sx={{ mt: 4 }}>
+                      <PreTag pt={4}>
                         {contentBody && (
                           <WraftEditor
                             // value={active}
@@ -472,23 +446,27 @@ const ContentDetail = () => {
                             token={contentBody}
                           />
                         )}
-                      </Box>
-                    </PreTag>
-                  </Box>
-                </TabPanel>
-                <TabPanel state={tab}>
-                  <Box
-                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
-                    {contents.content.build && (
-                      <PdfViewer
-                        // url={contents.content.build}
-                        url={`${contents.content.build}`}
-                        pageNumber={1}
-                        // sx={{ width: '100%' }}
-                      />
-                    )}
-                  </Box>
-                </TabPanel>
+                      </PreTag>
+                    </Box>
+                  </TabPanel>
+                  <TabPanel>
+                    <Box
+                      sx={{
+                        mt: 4,
+                        border: 'solid 1px',
+                        borderColor: 'gray.3',
+                      }}>
+                      {contents.content.build && (
+                        <PdfViewer
+                          // url={contents.content.build}
+                          url={`${contents.content.build}`}
+                          pageNumber={1}
+                          // sx={{ width: '100%' }}
+                        />
+                      )}
+                    </Box>
+                  </TabPanel>
+                </TabProvider>
               </Box>
             </Box>
             <Box
@@ -604,7 +582,7 @@ const ContentDetail = () => {
                               borderColor: 'gray.4',
                               ml: 4,
                             }}>
-                            <Download size={18} color="gray.3" />
+                            <Download height={18} width={18} color="gray.3" />
                             {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
                           </Flex>
                         </Link>

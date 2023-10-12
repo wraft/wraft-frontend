@@ -20,13 +20,15 @@ import { isBoolean, Cast } from '@remirror/core';
 
 import { ResolvedPos } from 'prosemirror-model';
 
-// import { ArrowsAngleContract } from '@styled-icons/bootstrap/ArrowsAngleContract';
-// import { ArrowsAngleExpand } from '@styled-icons/bootstrap/ArrowsAngleExpand';
-import { ArrowMinimize as ArrowsAngleContract } from '@styled-icons/fluentui-system-filled/ArrowMinimize';
-import { ArrowMaximize as ArrowsAngleExpand } from '@styled-icons/fluentui-system-filled/ArrowMaximize';
-// import { ListOl } from '@styled-icons/boxicons-regular/ListOl';
-import { Close as CloseIcon } from '@styled-icons/evil/Close';
-import { TaskListLtr } from '@styled-icons/fluentui-system-filled/TaskListLtr';
+/**
+ *  @TODO Icons: Convert to local files
+ */
+import {
+  ArrowMinimize as ArrowsAngleContract,
+  ArrowMaximize as ArrowsAngleExpand,
+  TaskListLtr,
+  Close as CloseIcon,
+} from '../Icons';
 
 import {
   BulletListExtension,
@@ -420,6 +422,8 @@ const EditorWraft: FC<EditorProps> = ({
               css`
                 &.ProseMirror {
                   width: 100%;
+
+                  padding: 100px;
                   box-shadow: none !important;
                   .remirror-role {
                     background: #000 !important;
@@ -438,9 +442,15 @@ const EditorWraft: FC<EditorProps> = ({
                   .no-holder {
                     border-bottom: solid 2px #926666;
                     margin-right: 6px;
-                    // background-color: #f1f7d4;
                     font-style: normal;
                     color: #9e0909;
+                  }
+                  p,
+                  h3,
+                  h4 {
+                  }
+                  h1,
+                  h2 {
                   }
                 }
               `,

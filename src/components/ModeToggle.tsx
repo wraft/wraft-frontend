@@ -1,6 +1,6 @@
 import { Button, useColorMode } from 'theme-ui';
 
-import { Moon, Sun } from '@styled-icons/boxicons-regular';
+import { Moon, Sun } from './Icons';
 
 const ModeToggle = (props: any) => {
   const [mode, setMode] = useColorMode();

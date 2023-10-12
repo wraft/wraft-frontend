@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Bell, Search } from '@styled-icons/boxicons-regular';
-import Modal from './Modal';
-import Blok from './Blok';
 import { useStoreState, useStoreActions } from 'easy-peasy';
-import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
+
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
+
+import { Bell, Search } from './Icons';
+import Modal from './Modal';
+import Blok from './Blok';
+
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
-
-// import Modal from 'react-modal';
-
 import {
+  // BrandLogo,
   Note,
   Like,
   Cabinet as BookOpen,
@@ -22,12 +22,13 @@ import {
   Cog,
   UserVoice,
   Wrench,
-  Text as TextIcon,
-} from '@styled-icons/boxicons-regular';
+  TextIcon,
+} from '../../src/components/Icons';
 
-import ModeToggle from './ModeToggle';
+// import ModeToggle from './ModeToggle';
 import { createEntity, loadEntity, switchProfile } from '../utils/models';
 import { Organisation, OrganisationList } from '../store/profile';
+import { useToasts } from 'react-toast-notifications';
 
 /**
  * Sidebar Static Items
@@ -49,7 +50,7 @@ const listMenu = [
 
       {
         name: 'Templates',
-        logo: <Carousel width={20} />,
+        logo: <Carousel width={20} height={20} />,
         path: '/templates',
       },
     ],
@@ -97,8 +98,7 @@ const Nav = (props: any) => {
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
 
-  const menu = useMenuState();
-  const menuWorkspace = useMenuState();
+  // const menu = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
   // const sidebarW = 'auto'; //props && props.showFull ? '90px' : '16%';
@@ -217,85 +217,79 @@ const Nav = (props: any) => {
             alignItems: 'center',
           }}>
           <Box>
-            <MenuButton {...menuWorkspace} as={Box} sx={{ cursor: 'pointer' }}>
-              <Flex color="primary" sx={{ fill: 'text' }}>
-                {activeSpace && (
-                  <Flex sx={{ pt: 2 }}>
-                    <Image
-                      src={activeSpace.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `24px`,
-                        width: `24px`,
-                        mr: 2,
-                      }}
-                    />
-                    <Box>
-                      <Text
-                        as="p"
+            <MenuProvider>
+              <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
+                <Flex color="primary" sx={{ fill: 'text' }}>
+                  {activeSpace && (
+                    <Flex sx={{ pt: 2 }}>
+                      <Image
+                        src={activeSpace.logo}
+                        width={24}
+                        height={24}
+                        alt="Workspace"
                         sx={{
-                          fontWeight: `bold`,
-                          color: 'gray.9',
-                          lineHeight: 1,
-                          fontSize: 2,
-                        }}>
-                        {activeSpace.name}
-                      </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
-                        3 members
-                      </Text>
-                    </Box>
-                  </Flex>
-                )}
-                {/* <BrandLogo width="5rem" height="2rem" /> */}
-              </Flex>
-            </MenuButton>
-            <Menu
-              {...menuWorkspace}
-              as={Box}
-              variant="layout.menuBlockWrapper"
-              aria-label="Switch Workspace">
-              <MenuItem
-                variant="layout.menuItemHeading"
+                          borderRadius: '99rem',
+                          height: `24px`,
+                          width: `24px`,
+                          mr: 2,
+                        }}
+                      />
+                      <Box>
+                        <Text
+                          as="p"
+                          sx={{
+                            fontWeight: `bold`,
+                            color: 'gray.9',
+                            lineHeight: 1,
+                            fontSize: 2,
+                          }}>
+                          {activeSpace.name}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
+                          3 members
+                        </Text>
+                      </Box>
+                    </Flex>
+                  )}
+                  {/* <BrandLogo width="5rem" height="2rem" /> */}
+                </Flex>
+              </MenuButton>
+              <Menu
                 as={Box}
-                {...menuWorkspace}>
-                Switch Workspace
-              </MenuItem>
-              {workspaces &&
-                workspaces.organisations.map((org: Organisation) => (
-                  <MenuItem
-                    key={org.id}
-                    variant="layout.menuItem"
-                    onClick={() => switchOrg(org?.id)}
-                    as={Box}
-                    {...menuWorkspace}>
-                    <Image
-                      src={org?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `18px`,
-                        width: `18px`,
-                        mr: 2,
-                      }}
-                    />
-                    {org.name}
-                  </MenuItem>
-                ))}
-              <MenuItem
-                variant="layout.menuItemHeading"
-                as={Box}
-                {...menuWorkspace}>
-                Create or join a workspace
-              </MenuItem>
-            </Menu>
+                variant="layout.menuBlockWrapper"
+                aria-label="Switch Workspace">
+                <MenuItem variant="layout.menuItemHeading" as={Box}>
+                  Switch Workspace
+                </MenuItem>
+                {workspaces &&
+                  workspaces.organisations.map((org: Organisation) => (
+                    <MenuItem
+                      key={org.id}
+                      variant="layout.menuItem"
+                      onClick={() => switchOrg(org?.id)}
+                      as={Box}>
+                      <Image
+                        src={org?.logo}
+                        width={24}
+                        height={24}
+                        alt="Workspace"
+                        sx={{
+                          borderRadius: '99rem',
+                          height: `18px`,
+                          width: `18px`,
+                          mr: 2,
+                        }}
+                      />
+                      {org.name}
+                    </MenuItem>
+                  ))}
+                <MenuItem variant="layout.menuItemHeading" as={Box}>
+                  Create or join a workspace
+                </MenuItem>
+              </Menu>
+            </MenuProvider>
           </Box>
-          <Flex>
+          <MenuProvider>
             <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
               {/* <Box as="span" sx={{ mt: 2 }}></Box> */}
 
@@ -303,7 +297,7 @@ const Nav = (props: any) => {
                 variant="button"
                 sx={{ mt: 0, pt: 0, px: 0, svg: { fill: 'gray.6' } }}>
                 <Link href="/activities">
-                  <Bell width="20px" />
+                  <Bell width={20} height={20} />
                 </Link>
               </Box>
             </Flex>
@@ -318,7 +312,7 @@ const Nav = (props: any) => {
                       mt: 2,
                     }}>
                     <Box>
-                      <MenuButton as={Box} {...menu}>
+                      <MenuButton as={Box}>
                         <Image
                           sx={{ borderRadius: '3rem', bg: 'red' }}
                           width="24px"
@@ -330,10 +324,20 @@ const Nav = (props: any) => {
                       <Menu
                         as={Box}
                         // sx={{ border: 'solid 1px #eee' }}
-                        {...menu}
-                        variant="layout.menuBlockWrapper"
+
+                        sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
                         aria-label="Preferences">
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                        <MenuItem
+                          as={Box}
+                          sx={{
+                            p: 3,
+                            py: 2,
+                            bg: 'gray.0',
+                            borderBottom: 'solid 1px #eee',
+                            '&:hover': {
+                              bg: 'gray.1',
+                            },
+                          }}>
                           <Box>
                             <Text as="h4">{profile?.name}</Text>
 
@@ -346,32 +350,36 @@ const Nav = (props: any) => {
                             )}
                           </Box>
                         </MenuItem>
-                        <MenuItem {...menu} as={Box} variant="layout.menuItem">
-                          <Flex>
-                            <Text>Theme</Text>
-                            <Box
-                              sx={{
-                                // mb: 0,
-                                ml: 'auto',
-                              }}>
-                              <ModeToggle
-                                sx={{ pt: 0, m: 0 }}
-                                variant="button"
-                              />
-                            </Box>
-                          </Flex>
-                        </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                        <MenuItem
+                          as={Box}
+                          sx={{
+                            p: 3,
+                            py: 2,
+                            bg: 'gray.0',
+                            borderBottom: 'solid 1px',
+                            '&:hover': {
+                              bg: 'gray.1',
+                            },
+                          }}>
                           Settings
                         </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem" {...menu}>
+                        <MenuItem
+                          as={Box}
+                          sx={{
+                            p: 3,
+                            py: 2,
+                            bg: 'gray.0',
+                            borderBottom: 'solid 1px red',
+                            '&:hover': {
+                              bg: 'gray.1',
+                            },
+                          }}>
                           Profile
                         </MenuItem>
                         <MenuItem
                           as={Box}
                           onClick={userLogout}
-                          {...menu}
-                          variant="layout.menuItem">
+                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
                           Signout
                         </MenuItem>
                       </Menu>
@@ -380,9 +388,9 @@ const Nav = (props: any) => {
                 )}
               </Flex>
             )}
-          </Flex>
+          </MenuProvider>
         </Flex>
-        <Box sx={{ flex: 1 }}>
+        <Box as={MenuProvider} sx={{ flex: 1 }}>
           <Flex
             sx={{
               // position: 'relative',
