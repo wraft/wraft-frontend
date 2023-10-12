@@ -12,14 +12,13 @@ import { Spinner } from 'theme-ui';
 import MenuItem from './MenuItem';
 import dynamic from 'next/dynamic';
 
-// import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
-import { Tab, TabList, TabPanel, useTabState } from 'ariakit/tab';
+import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
 import { File } from './Icons';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { API_HOST, createEntity, loadEntity } from '../utils/models';
+import { createEntity, loadEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
@@ -47,13 +46,17 @@ const blockTypes = [
  * Steps Indication Block
  */
 interface StepBlockProps {
-  tab: any;
+  tab?: any;
   title?: string;
   desc?: string;
   no?: number;
 }
 
-export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
+export const StepBlock = ({
+  no,
+  tab = { selectedId: 'view' },
+  title,
+}: StepBlockProps) => {
   return (
     <Flex
       sx={{
@@ -256,8 +259,9 @@ const ContentDetail = () => {
 
   // const tab = useTabState({ selectedId: 'edit' });
 
-  const defaultSelectedId = 'edit';
-  const tab = useTabState({ defaultSelectedId });
+  // const defaultSelectedId = 'edit';
+  // const tab = useTabState({ defaultSelectedId });
+  const defaultSelectedId = 'default-selected-tab';
 
   const loadDataSucces = (data: any) => {
     setLoading(false);
@@ -366,7 +370,7 @@ const ContentDetail = () => {
                   <ProfileCard
                     time={contents.content?.inserted_at}
                     name={contents.creator?.name}
-                    image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
+                    image={`/uploads/default.jpg`}
                   />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>
@@ -407,80 +411,59 @@ const ContentDetail = () => {
                 </Box>
               </Flex>
               <Box sx={{ mb: 4 }}>
-                <TabList state={tab} aria-label="Content Stages">
-                  <Tab id="edit" variant="contentButton" as={Button} {...tab}>
-                    <Box sx={{ ml: 3 }}>
+                <TabProvider defaultSelectedId={defaultSelectedId}>
+                  <TabList aria-label="Content Stages">
+                    <Tab id="edit">
+                      <Box sx={{ ml: 3 }}>
+                        <StepBlock no={1} title="Draft" desc="Edit contents" />
+                      </Box>
+                    </Tab>
+                    <Tab id="view">
+                      <StepBlock no={2} title="File" desc="Sign and Manage" />
+                    </Tab>
+                    <Tab id="sign">
                       <StepBlock
-                        no={1}
-                        title="Draft"
-                        desc="Edit contents"
-                        tab={tab}
+                        no={3}
+                        title="Sign"
+                        desc="Send for signatures"
                       />
-                    </Box>
-                  </Tab>
-                  <Tab
-                    id="view"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
-                    sx={{
-                      px: 4,
-                      borderLeft: 0,
-                    }}>
-                    <StepBlock
-                      no={2}
-                      title="File"
-                      desc="Sign and Manage"
-                      tab={tab}
-                    />
-                  </Tab>
-                  <Tab
-                    id="sign"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
-                    sx={{
-                      px: 4,
-                      borderLeft: 0,
-                    }}>
-                    <StepBlock
-                      no={3}
-                      title="Sign"
-                      desc="Send for signatures"
-                      tab={tab}
-                    />
-                  </Tab>
-                </TabList>
+                    </Tab>
+                  </TabList>
 
-                <TabPanel state={tab}>
-                  <Box sx={{ mt: 4 }}>
-                    <PreTag pt={4}>
-                      {contentBody && (
-                        <WraftEditor
-                          // value={active}
-                          editable={false}
-                          onUpdate={doUpdate}
-                          starter={contentBody}
-                          cleanInsert={true}
-                          token={contentBody}
+                  <TabPanel>
+                    <Box sx={{ mt: 4 }}>
+                      <PreTag pt={4}>
+                        {contentBody && (
+                          <WraftEditor
+                            // value={active}
+                            editable={false}
+                            onUpdate={doUpdate}
+                            starter={contentBody}
+                            cleanInsert={true}
+                            token={contentBody}
+                          />
+                        )}
+                      </PreTag>
+                    </Box>
+                  </TabPanel>
+                  <TabPanel>
+                    <Box
+                      sx={{
+                        mt: 4,
+                        border: 'solid 1px',
+                        borderColor: 'gray.3',
+                      }}>
+                      {contents.content.build && (
+                        <PdfViewer
+                          // url={contents.content.build}
+                          url={`${contents.content.build}`}
+                          pageNumber={1}
+                          // sx={{ width: '100%' }}
                         />
                       )}
-                    </PreTag>
-                  </Box>
-                </TabPanel>
-                <TabPanel state={tab}>
-                  <Box
-                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
-                    {contents.content.build && (
-                      <PdfViewer
-                        // url={contents.content.build}
-                        url={`${contents.content.build}`}
-                        pageNumber={1}
-                        // sx={{ width: '100%' }}
-                      />
-                    )}
-                  </Box>
-                </TabPanel>
+                    </Box>
+                  </TabPanel>
+                </TabProvider>
               </Box>
             </Box>
             <Box

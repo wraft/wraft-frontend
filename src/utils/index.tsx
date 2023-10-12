@@ -2,18 +2,14 @@
 // @ts-nocheck
 import produce from 'immer';
 import { ContentState } from './types';
-// import { Flat } from "lodash";
 
 import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
 
 import { Style } from '@styled-icons/material-sharp/Style';
 import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
 
-// dayjs.extend(dayjsTwitter)
-
-// export function shortDate(date:any) {
-//   return dayjs(date)?.twitter();
-// }
+import cookie from 'js-cookie';
+import { AxiosRequestConfig, AxiosError } from 'axios';
 
 // util fns here!
 export interface IField {
@@ -83,7 +79,7 @@ export const replaceBoy = (
   maps: IField[],
   escaped: boolean,
 ): string => {
-  const localBody: string = body;
+  let localBody: string = body;
 
   if (localBody && localBody.length > 1) {
     // loop through variables
@@ -116,7 +112,7 @@ export const replaceBoy = (
 
 export const findVars = (body: string, escaped: boolean): string[] => {
   // find vars in this form
-  const regexp = /\[\w+\]/gm;
+  let regexp = /\[\w+\]/gm;
   if (escaped) {
     regexp = /\\\[\w+\\\]/gm;
   }
@@ -357,9 +353,6 @@ export const workspaceLinks: menuLinksProps[] = [
     path: '/manage/workspace/permissions',
   },
 ];
-
-import cookie from 'js-cookie';
-import { AxiosRequestConfig, AxiosError } from 'axios';
 
 export const removeProtocol = (link: string) =>
   link.replace(/^https?:\/\//, '');

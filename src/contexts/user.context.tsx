@@ -18,7 +18,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
   );
-  console.log('dd');
+  // console.log('dd');
 
   useEffect(() => {
     const token = cookie.get('token') || false;

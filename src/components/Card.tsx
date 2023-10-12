@@ -2,15 +2,17 @@ import React from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
 import Link from './NavLink';
-// import { API_HOST } from '../utils/models';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
 
-import {
-  useMenuState,
-  Menu,
-  MenuItem,
-  MenuButton,
-  // MenuSeparator,
-} from 'reakit/Menu';
+/**
+ * Page Heading Section
+ */
+
+interface HeadingFrameProps {
+  title?: string;
+  side?: any;
+}
 
 interface IItemField {
   id?: string;
@@ -23,8 +25,6 @@ interface IItemField {
   prefix?: string;
 }
 
-import { DotsVerticalRounded } from '@styled-icons/boxicons-regular/DotsVerticalRounded';
-
 const LayoutCard = ({
   id,
   name,
@@ -34,7 +34,7 @@ const LayoutCard = ({
   screenshot,
   onDelete,
 }: IItemField) => {
-  const menu = useMenuState();
+  // const menu = useMenuState();
 
   return (
     <Box variant="layout.m" sx={{ mb: 4, mr: 3, minWidth: '20ch' }}>
@@ -65,55 +65,54 @@ const LayoutCard = ({
                 top: 0,
               }}>
               {/* <Box as={MenuButton}> */}
-              <MenuButton
-                as={Button}
-                {...menu}
-                sx={{
-                  border: 'solid 1px',
-                  color: 'gray.6',
-                  borderColor: 'gray.2',
-                  p: 0,
-                  bg: 'gray.0',
-                  pb: 1,
-                  mt: 2,
-                }}>
-                <DotsVerticalRounded width="16px" />
-              </MenuButton>
-              <Menu
-                as={Box}
-                {...menu}
-                aria-label="Example"
-                sx={{
-                  border: 'solid 1px',
-                  borderColor: 'gray.1',
-                  borderRadius: 4,
-                  bg: 'gray.0',
-                  color: 'gray.9',
-                }}>
-                <MenuItem
+              <MenuProvider>
+                <MenuButton
                   as={Button}
                   sx={{
+                    border: 'solid 1px',
+                    color: 'gray.6',
+                    borderColor: 'gray.2',
                     p: 0,
-                    color: 'red.7',
                     bg: 'gray.0',
-                    px: 3,
-                    borderBottom: 'solid 1px',
-                    borderColor: 'gray.1',
-                  }}
-                  {...menu}
-                  onClick={() => {
-                    onDelete(id);
+                    pb: 1,
+                    mt: 2,
                   }}>
-                  Delete
-                </MenuItem>
-                <MenuItem {...menu} as={Box} sx={{ width: '100%', px: 3 }}>
-                  <Link
-                    href={`/manage/${model}/edit/[id]`}
-                    path={`/manage/${model}/edit/${id}`}>
-                    <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
-                  </Link>
-                </MenuItem>
-              </Menu>
+                  <DotsVerticalRounded width="16px" />
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  aria-label="Example"
+                  sx={{
+                    border: 'solid 1px',
+                    borderColor: 'gray.1',
+                    borderRadius: 4,
+                    bg: 'gray.0',
+                    color: 'gray.9',
+                  }}>
+                  <MenuItem
+                    as={Button}
+                    sx={{
+                      p: 0,
+                      color: 'red.7',
+                      bg: 'gray.0',
+                      px: 3,
+                      borderBottom: 'solid 1px',
+                      borderColor: 'gray.1',
+                    }}
+                    onClick={() => {
+                      onDelete(id);
+                    }}>
+                    Delete
+                  </MenuItem>
+                  <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
+                    <Link
+                      href={`/manage/${model}/edit/[id]`}
+                      path={`/manage/${model}/edit/${id}`}>
+                      <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
+                    </Link>
+                  </MenuItem>
+                </Menu>
+              </MenuProvider>
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>
@@ -129,15 +128,6 @@ const LayoutCard = ({
     </Box>
   );
 };
-
-/**
- * Page Heading Section
- */
-
-interface HeadingFrameProps {
-  title?: string;
-  side?: any;
-}
 
 export const HeadingFrame = ({ title, side }: HeadingFrameProps) => (
   <Box variant="layout.frameHeading">
