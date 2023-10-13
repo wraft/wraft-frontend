@@ -30,7 +30,7 @@ const styles = {
       border: '0',
     },
     '&:hover': {
-      bg: 'gray.1',
+      bg: 'neutral.1',
     },
   },
   th: { p: 2, textAlign: 'left', fontWeight: 'normal' },

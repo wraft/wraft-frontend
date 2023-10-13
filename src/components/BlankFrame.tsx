@@ -29,7 +29,7 @@ export const Page = ({ children, inner }: IPage) => {
         sx={{
           flexDirection: 'column',
           minHeight: '100%',
-          bg: 'red',
+          // bg: 'red',
         }}>
         <Flex
           sx={{
@@ -39,16 +39,18 @@ export const Page = ({ children, inner }: IPage) => {
           <Box
             sx={{
               flex: 1,
-              bg: 'gray.1',
+              bg: 'neutral.1',
               minWidth: 0,
               '.ProseMirror p': {
-                bg: 'base',
+                // bg: 'bgWhite',
+                mb: 1,
+                pb: 4,
               },
             }}>
             {inner && <Box sx={{ minHeight: '100vh' }}>{inner}</Box>}
 
             {children}
-            <Flex bg="gray.1" sx={{ pt: 0 }}>
+            <Flex sx={{ pt: 0 }}>
               <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
                 (c) Wraft Docs Inc 2021 . All Rights Reserved
               </Text>

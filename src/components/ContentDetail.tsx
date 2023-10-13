@@ -2,27 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-
-// import { Document, Page } from 'react-pdf';
-import { Pencil } from '@styled-icons/boxicons-regular';
-import { Download } from '@styled-icons/remix-line/Download';
+import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
 import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
+import { File, Download } from './Icons';
 import MenuItem from './MenuItem';
 import dynamic from 'next/dynamic';
 
-// import { useTabState, Tab, TabList, TabPanel } from 'reakit/Tab';
-import { Tab, TabList, TabPanel, useTabState } from 'ariakit/tab';
-
-import { File } from './Icons';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { API_HOST, createEntity, loadEntity } from '../utils/models';
+import { createEntity, loadEntity } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
+// import { right } from '@popperjs/core';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -39,7 +34,7 @@ const blockTypes = [
   {
     name: 'small',
     wh: '22px',
-    fontSize: '13px',
+    fontSize: '12px',
   },
 ];
 
@@ -47,31 +42,42 @@ const blockTypes = [
  * Steps Indication Block
  */
 interface StepBlockProps {
-  tab: any;
+  tab?: any;
   title?: string;
   desc?: string;
   no?: number;
 }
 
-export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
+export const StepBlock = ({
+  no,
+  tab = { selectedId: 'view' },
+  title,
+}: StepBlockProps) => {
   return (
     <Flex
       sx={{
         flex: 1,
         borderRight: `solid 1px`,
-        borderColor: 'gray.3',
+        borderColor: 'gray.1',
         p: 0,
         '&:last-child': { borderRight: 0 },
       }}>
-      <NumberBlock no={no} active={tab.selectedId === 'view' ? true : false} />
+      {no && (
+        <NumberBlock
+          no={no}
+          active={tab.selectedId === 'view' ? true : false}
+        />
+      )}
       <Box>
         <Text
-          as="h4"
+          as="h5"
           sx={{
             fontFamily: 'body',
             fontSize: 1,
-            color: tab.selectedId === 'view' ? 'teal.9' : 'gray.9',
+            color: 'gray.8',
+            // color: tab.selectedId === 'view' ? 'teal.1' : 'gray.9',
             mb: 0,
+            // pt: 1,
           }}>
           {title}
         </Text>
@@ -80,9 +86,6 @@ export const StepBlock = ({ no, tab, title }: StepBlockProps) => {
           sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
           {desc}
         </Text> */}
-      </Box>
-      <Box sx={{ pl: 3 }}>
-        {/* <ChevronRight color='gray.4' width={24}/> */}
       </Box>
     </Flex>
   );
@@ -94,20 +97,20 @@ interface NumberBlockProps {
 }
 
 const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
-  const activeBorder = active ? 'teal.6' : 'gray.2';
+  const activeBorder = active ? 'gray.1' : 'gray.2';
   const defaultSize = 'small';
   const size = blockTypes.find((b: any) => b.name === defaultSize);
 
   return (
     <Box
       sx={{
-        bg: 'gray.3',
+        bg: 'neutral.1',
         textAlign: 'center',
-        mr: 3,
+        mr: 2,
         // mt: `-7px`,
         pb: `3px`,
-        pt: `1px`,
-        color: `gray.7`,
+        pt: `2px`,
+        color: `gray.9`,
         display: `block`,
         verticalAlign: 'middle',
         borderRadius: '99rem',
@@ -139,7 +142,16 @@ interface ProfileCardP {
   image?: string;
 }
 
-export const ProfileCard = ({ name, time }: ProfileCardP) => {
+export const ProfileCard = ({
+  name,
+  time,
+  image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
+}: ProfileCardP) => {
+  const finalImage =
+    image == '/uploads/default.jpg'
+      ? 'https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg'
+      : image;
+
   return (
     <Flex
       sx={{
@@ -148,12 +160,12 @@ export const ProfileCard = ({ name, time }: ProfileCardP) => {
         my: 2,
       }}>
       <Avatar
-        width={22}
-        height={22}
-        sx={{ mr: 2, borderColor: 'gray.1', border: 'solid 1px' }}
-        src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+        width={18}
+        height={18}
+        sx={{ mr: 2, borderColor: 'gray.1', border: 0 }}
+        src={finalImage} // image
       />
-      <Text as="h3" sx={{ mr: 3, fontSize: '14.4px', fontWeight: 600 }}>
+      <Text as="h3" sx={{ mr: 3, fontSize: 1, fontWeight: 600 }}>
         {name}
       </Text>
       <TimeAgo time={time} ago={true} />
@@ -253,11 +265,13 @@ const ContentDetail = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
+  const [pageTitle, setPageTitle] = useState<string>('');
 
   // const tab = useTabState({ selectedId: 'edit' });
 
+  // const defaultSelectedId = 'edit';
+  // const tab = useTabState({ defaultSelectedId });
   const defaultSelectedId = 'edit';
-  const tab = useTabState({ defaultSelectedId });
 
   const loadDataSucces = (data: any) => {
     setLoading(false);
@@ -313,6 +327,7 @@ const ContentDetail = () => {
     if (contents && contents.content && contents.content.serialized) {
       const contentBodyAct = contents.content.serialized;
       console.log('🧶 [content]', contents.content);
+      setPageTitle(contents.content.serialized?.title);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
@@ -326,9 +341,11 @@ const ContentDetail = () => {
     //
   };
 
+  // const navTitle = contents?.content?.title;
+
   return (
-    <Box py={0}>
-      <Nav navtitle={contents?.content?.title} />
+    <Box py={0} sx={{ minHeight: '100vh' }}>
+      {!loading && pageTitle && <Nav navtitle={pageTitle} />}
       <Box sx={{ pt: 0 }}>
         {loading && (
           <Box
@@ -337,6 +354,7 @@ const ContentDetail = () => {
               right: '-50%',
               left: '50%',
               top: '80px',
+              bottom: 0,
             }}>
             <Spinner width={40} height={40} color="primary" />
           </Box>
@@ -351,22 +369,23 @@ const ContentDetail = () => {
                 sx={{
                   px: 4,
                   // py: 3,
-                  py: 3,
-                  pb: 3,
+                  py: 1,
+                  pb: 1,
                   // pl: '115px',
                   borderBottom: 'solid 1px',
-                  borderColor: 'gray.3',
-                  mb: 3,
-                  bg: 'gray.0',
+                  borderColor: 'neutral.1',
+                  // mb: 3,
+                  bg: 'neutral.0',
                 }}>
                 <Box>
-                  <Text sx={{ fontSize: 3, fontWeight: 'bold' }}>
+                  <Text
+                    sx={{ fontSize: 3, fontWeight: 'bold', display: 'none' }}>
                     {contents.content.serialized.title}
                   </Text>
                   <ProfileCard
                     time={contents.content?.inserted_at}
                     name={contents.creator?.name}
-                    image={`${API_HOST}/uploads/avatars/6c0d05d7-bf3c-4bb8-8052-7e38f9dceb18/profilepic_Merissa%20Meyer.jpg?v=63816237803`}
+                    image={`/uploads/default.jpg`}
                   />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>
@@ -390,7 +409,7 @@ const ContentDetail = () => {
                       href={`/content/edit/[id]`}
                       path={`/content/edit/${contents.content.id}`}>
                       <Box>
-                        <Pencil size={22} height={22} />
+                        {/* <Pencil width={22} height={22} /> */}
                         <Text
                           // as="span"
                           sx={{
@@ -406,91 +425,89 @@ const ContentDetail = () => {
                   </Box>
                 </Box>
               </Flex>
-              <Box sx={{ mb: 4 }}>
-                <TabList state={tab} aria-label="Content Stages">
-                  <Tab id="edit" variant="contentButton" as={Button} {...tab}>
-                    <Box sx={{ ml: 3 }}>
-                      <StepBlock
-                        no={1}
-                        title="Draft"
-                        desc="Edit contents"
-                        tab={tab}
-                      />
-                    </Box>
-                  </Tab>
-                  <Tab
-                    id="view"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
-                    sx={{
-                      px: 4,
-                      borderLeft: 0,
-                    }}>
-                    <StepBlock
-                      no={2}
-                      title="File"
-                      desc="Sign and Manage"
-                      tab={tab}
-                    />
-                  </Tab>
-                  <Tab
-                    id="sign"
-                    {...tab}
-                    as={Button}
-                    variant="contentButton"
-                    sx={{
-                      px: 4,
-                      borderLeft: 0,
-                    }}>
-                    <StepBlock
-                      no={3}
-                      title="Sign"
-                      desc="Send for signatures"
-                      tab={tab}
-                    />
-                  </Tab>
-                </TabList>
+              <Box
+                sx={{
+                  mb: 0,
+                  '.tabPanel': { border: 0, bg: 'neutral.1' },
+                  button: {
+                    border: 0,
+                    bg: 'transparent',
+                    px: 3,
+                    py: 2,
+                    borderRadius: 6,
+                  },
+                  '.tabGroup': {
+                    bg: 'neutral.1',
+                    // border: 'solid 1px blue',
+                    px: 3,
+                    py: 2,
+                  },
+                  'button[aria-selected=true]': {
+                    border: 0,
+                    bg: 'neutral.0',
+                    px: 3,
+                    py: 2,
+                  },
+                }}>
+                <TabProvider defaultSelectedId={defaultSelectedId}>
+                  <TabList
+                    aria-label="Content Stages"
+                    className="tabPanel tabGroup">
+                    <Tab id="edit">
+                      <Box sx={{ ml: 3 }}>
+                        <StepBlock title="Draft" desc="Edit contents" />
+                      </Box>
+                    </Tab>
+                    <Tab id="view">
+                      <StepBlock title="File" desc="Sign and Manage" />
+                    </Tab>
+                  </TabList>
 
-                <TabPanel state={tab}>
-                  <Box sx={{ mt: 4 }}>
-                    <PreTag pt={4}>
-                      {contentBody && (
-                        <WraftEditor
-                          // value={active}
-                          editable={false}
-                          onUpdate={doUpdate}
-                          starter={contentBody}
-                          cleanInsert={true}
-                          token={contentBody}
+                  <TabPanel tabId={defaultSelectedId} className="tabPanel">
+                    <Box sx={{ mt: 0, px: 6, pb: 6 }}>
+                      <PreTag pt={4} pb={6}>
+                        {contentBody && (
+                          <WraftEditor
+                            // value={active}
+                            editable={false}
+                            onUpdate={doUpdate}
+                            starter={contentBody}
+                            cleanInsert={true}
+                            token={contentBody}
+                          />
+                        )}
+                      </PreTag>
+                    </Box>
+                  </TabPanel>
+                  <TabPanel>
+                    <Box
+                      sx={{
+                        mt: 4,
+                        border: 'solid 1px',
+                        borderColor: 'neutral.0',
+                      }}>
+                      {contents.content.build && (
+                        <PdfViewer
+                          // url={contents.content.build}
+                          url={`${contents.content.build}`}
+                          pageNumber={1}
+                          // sx={{ width: '100%' }}
                         />
                       )}
-                    </PreTag>
-                  </Box>
-                </TabPanel>
-                <TabPanel state={tab}>
-                  <Box
-                    sx={{ mt: 4, border: 'solid 1px', borderColor: 'gray.3' }}>
-                    {contents.content.build && (
-                      <PdfViewer
-                        // url={contents.content.build}
-                        url={`${contents.content.build}`}
-                        pageNumber={1}
-                        // sx={{ width: '100%' }}
-                      />
-                    )}
-                  </Box>
-                </TabPanel>
+                    </Box>
+                  </TabPanel>
+                </TabProvider>
               </Box>
             </Box>
             <Box
               variant="plateRightBar"
               sx={{
-                bg: '#FAFBFC',
+                bg: 'neutral.0',
                 py: 0,
                 width: '30%',
                 borderLeft: 'solid 1px',
-                borderColor: 'gray.3',
+                borderColor: 'neutral.1',
+                minHeight: '100vh',
                 pt: 3,
               }}>
               <Box sx={{ px: 3 }}>
@@ -505,27 +522,30 @@ const ContentDetail = () => {
                         as="h3"
                         sx={{
                           fontWeight: 'heading',
-                          fontSize: '16px',
+                          fontSize: 2,
                           lineHeight: '24px',
                         }}>
                         {contents.content.instance_id}
                       </Text>
-                      <Text
-                        as="h6"
-                        sx={{
-                          fontWeight: 500,
-                          bg: 'green.1',
-                          ml: 2,
-                          color: 'green.9',
-                          px: 1,
-                          py: 1,
-                          borderRadius: '3px',
-                          letterSpacing: '0.2px',
-                          textTransform: 'uppercase',
-                          fontSize: '10.24px',
-                        }}>
-                        {contents?.state.state}
-                      </Text>
+                      <Box>
+                        <Text
+                          as="span"
+                          sx={{
+                            display: 'inline-flex',
+                            fontWeight: 500,
+                            bg: 'green.0',
+                            ml: 2,
+                            color: 'green.9',
+                            px: 1,
+                            py: 0,
+                            borderRadius: '3px',
+                            letterSpacing: '0.2px',
+                            textTransform: 'uppercase',
+                            fontSize: 0,
+                          }}>
+                          {contents?.state.state}
+                        </Text>
+                      </Box>
                     </Flex>
                   </Box>
                 </Flex>
@@ -537,7 +557,7 @@ const ContentDetail = () => {
                     Content
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                <Box sx={{ pt: 2, px: 3, border: 0 }}>
                   <Box>
                     {build && (
                       <Box>
@@ -596,7 +616,7 @@ const ContentDetail = () => {
                               borderColor: 'gray.4',
                               ml: 4,
                             }}>
-                            <Download size={18} color="gray.3" />
+                            <Download height={18} width={18} color="gray.3" />
                             {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
                           </Flex>
                         </Link>
@@ -612,7 +632,7 @@ const ContentDetail = () => {
                     Discuss
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                <Box sx={{ pt: 2, px: 3, bg: 'neutral.0' }}>
                   {contents && contents.content && (
                     <Box mt={0}>
                       <CommentForm
@@ -631,7 +651,8 @@ const ContentDetail = () => {
                   flexGrow: 1,
                   mr: 4,
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'neutral.1',
+                  bg: 'neutral.0',
                 }}>
                 <Flex
                   sx={{

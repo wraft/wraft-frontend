@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 
 import { useStoreState } from 'easy-peasy';
 
-import { Button, Alert, Close, Spinner, Box } from 'theme-ui';
+import { Button, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
 import Field from './Field';
@@ -100,7 +100,7 @@ const OrgForm = () => {
 
   const onCreate = (d: any) => {
     setSuccess(true);
-    console.log('__d', d);
+    console.log('__d', d, success);
     // if (d && d.id) {
     //   // Router.push(`/user-profile`);
     // }
@@ -198,14 +198,8 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box>
+    <Box sx={{ pt: 4 }}>
       {!ready && <Spinner />}
-      {success && (
-        <Alert>
-          Category created succesfully!
-          <Close ml="auto" mr={-2} />
-        </Alert>
-      )}
 
       <Box>
         {ready && (

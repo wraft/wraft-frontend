@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Box, Flex, Text } from 'theme-ui';
+import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
 import Modal from './Modal';
 import { useForm } from 'react-hook-form';
-import { Trash } from '@styled-icons/boxicons-regular';
+import { Trash } from './Icons';
 
 interface FieldFormProps {
   fields?: any;
@@ -17,8 +17,10 @@ interface FieldFormProps {
 const FieldForm = (props: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
   const [showModal, setModal] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
+    setSubmitting(true);
     const vals = getValues();
     const results = {
       count: props.fields.size,
@@ -27,6 +29,7 @@ const FieldForm = (props: FieldFormProps) => {
     };
 
     props.onSave(results);
+    setModal(false);
   };
 
   function toggleModal() {
@@ -42,8 +45,8 @@ const FieldForm = (props: FieldFormProps) => {
       pl={4}
       sx={{
         p: 0,
-        border: 'solid 1px',
-        borderColor: 'gray.3',
+        // border: 'solid 1px',
+        // borderColor: 'gray.3',
         maxWidth: '40ch',
       }}>
       <Flex
@@ -51,7 +54,8 @@ const FieldForm = (props: FieldFormProps) => {
           py: 2,
           px: 3,
           alignItems: 'flex-start',
-          borderBottom: 'solid 1px #ddd',
+          borderBottom: 'solid 1px',
+          borderColor: 'gray.1',
         }}>
         <Text as="h4" mb={0} pt={1}>
           Fields
@@ -62,7 +66,7 @@ const FieldForm = (props: FieldFormProps) => {
       </Flex>
       <Box
         sx={{
-          bg: 'gray.0',
+          // bg: 'gray.0',
           py: 2,
           px: 3,
           pt: 3,
@@ -86,23 +90,26 @@ const FieldForm = (props: FieldFormProps) => {
       </Box>
 
       <Modal isOpen={showModal} onClose={closeModal}>
-        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ bg: 'neutral.0' }}>
           <Box
             sx={{
               py: 3,
               px: 4,
               borderBottom: 'solid 1px',
-              borderColor: 'gray.3',
+              borderColor: 'neutral.1',
             }}>
-            <Text as="h4" sx={{ fontSize: 1 }}>
-              Edit Fields
+            <Text as="p" sx={{ fontSize: 2 }}>
+              Manage Fields
             </Text>
           </Box>
 
           {props.fields?.length < 1 && (
             <Box
               sx={{
-                bg: 'gray.1',
+                bg: 'neutral.1',
                 pt: 4,
                 pb: 4,
                 px: 4,
@@ -126,13 +133,14 @@ const FieldForm = (props: FieldFormProps) => {
           <Box
             sx={{
               borderTop: 'solid 1px',
-              borderColor: 'gray.3',
+              borderColor: 'neutral.1',
             }}>
             {props.fields.map((f: any, idx: number) => (
               <Box
                 key={idx}
                 sx={{
-                  borderBottom: 'solid 1px #ddd',
+                  borderBottom: 'solid 1px',
+                  borderColor: 'neutral.1',
                   '&:hover': { bg: 'gray.1' },
                   py: 3,
                   px: 4,
@@ -178,7 +186,7 @@ const FieldForm = (props: FieldFormProps) => {
                       type="button"
                       sx={{ py: 1, px: 2, mt: 2 }}
                       onClick={() => props.removeField(idx)}>
-                      <Trash color="red" width="24px" />
+                      <Trash color="red" width={24} height={24} />
                     </Button>
                   </Box>
                 </Flex>
@@ -189,7 +197,7 @@ const FieldForm = (props: FieldFormProps) => {
           {props.fields?.length > 0 && (
             <Box
               sx={{
-                bg: 'gray.1',
+                bg: 'neutral.1',
                 pt: 4,
                 pb: 4,
                 px: 4,
@@ -208,13 +216,14 @@ const FieldForm = (props: FieldFormProps) => {
             <Flex sx={{ py: 3, px: 4, mb: 0 }}>
               <Box sx={{ ml: 'auto' }}>
                 <Button
-                  variant="btnSecondary"
+                  variant="btnPrimaryLarge"
                   sx={{ mr: 2 }}
                   type="button"
                   onClick={closeModal}>
                   Cancel
                 </Button>
                 <Button variant="btnPrimaryLarge" sx={{ ml: 1 }} type="submit">
+                  {submitting && <Spinner color="white" width={24} />}
                   Save
                 </Button>
               </Box>

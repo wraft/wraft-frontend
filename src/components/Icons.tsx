@@ -48,71 +48,32 @@ const IconBox = styled.div`
   }
 `;
 
-export const Book = () => (
+interface IconBoxWrapperProps {
+  content: string;
+}
+
+/**
+ * Generic Wrapper
+ * @param param0
+ * @returns
+ */
+export const IconBoxWrapper = ({ content }: IconBoxWrapperProps) => (
   <IconBox>
     <Image src={content} />
   </IconBox>
 );
 
-export const Layout = () => (
-  <IconBox>
-    <Image src={grid} />
-  </IconBox>
-);
-
-export const ContentType = () => (
-  <IconBox>
-    <Image src={layout} />
-  </IconBox>
-);
-
-export const Template = () => (
-  <IconBox>
-    <Image src={templates} />
-  </IconBox>
-);
-
-export const Flow = () => (
-  <IconBox>
-    <Image src={flow} />
-  </IconBox>
-);
-
-export const Del = () => (
-  <IconBox>
-    <Image src={del} />
-  </IconBox>
-);
-
-export const Edit = () => (
-  <IconBox>
-    <Image src={edit} />
-  </IconBox>
-);
-
-export const File = () => (
-  <IconBox>
-    <Image src={file} />
-  </IconBox>
-);
-
-export const Plus = () => (
-  <IconBox>
-    <Image src={plus} />
-  </IconBox>
-);
-
-export const User = () => (
-  <IconBox>
-    <Image src={user} />
-  </IconBox>
-);
-
-export const FieldIcon = () => (
-  <IconBox>
-    <Image src={field} />
-  </IconBox>
-);
+export const Book = () => <IconBoxWrapper content={content} />;
+export const Layout = () => <IconBoxWrapper content={grid} />;
+export const ContentType = () => <IconBoxWrapper content={layout} />;
+export const Template = () => <IconBoxWrapper content={templates} />;
+export const Flow = () => <IconBoxWrapper content={flow} />;
+export const Del = () => <IconBoxWrapper content={del} />;
+export const Edit = () => <IconBoxWrapper content={edit} />;
+export const File = () => <IconBoxWrapper content={file} />;
+export const FieldIcon = () => <IconBoxWrapper content={field} />;
+export const User = () => <IconBoxWrapper content={user} />;
+export const Plus = () => <IconBoxWrapper content={plus} />;
 
 export const Logo = () => (
   <IconBox>
@@ -333,6 +294,370 @@ export const EmptyForm = (props: React.SVGProps<SVGSVGElement>) => {
       />
     </svg>
   );
+};
+
+interface IconItem {
+  width?: number;
+  height?: number;
+  children?: any;
+  color?: string;
+}
+
+/**
+ * Regular Icon Frame
+ * @param param0
+ * @returns
+ */
+export const GenericIcon = ({
+  width = 24,
+  height = 24,
+  children,
+  color = 'red',
+}: IconItem) => {
+  return (
+    <svg
+      height="1.25rem"
+      width="1.25rem"
+      viewBox={`0 0 ${width} ${height}`}
+      fill="currentColor"
+      data-color={color}>
+      {children}
+    </svg>
+  );
+};
+
+interface PlIconProps {
+  size?: number;
+  width: number;
+  height?: number;
+  color?: string;
+}
+
+/**
+ * Temp place for styled-icons
+ */
+const DotsVerticalRounded = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+    </GenericIcon>
+  );
+};
+
+const Pencil = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="m7 17.013 4.413-.015 9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583v4.43zM18.045 4.458l1.589 1.583-1.597 1.582-1.586-1.585 1.594-1.58zM9 13.417l6.03-5.973 1.586 1.586-6.029 5.971L9 15.006v-1.589z"></path>
+      <path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2z"></path>
+    </GenericIcon>
+  );
+};
+
+const Download = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M3 19H21V21H3V19ZM13 13.1716L19.0711 7.1005L20.4853 8.51472L12 17L3.51472 8.51472L4.92893 7.1005L11 13.1716V2H13V13.1716Z"></path>
+    </GenericIcon>
+  );
+};
+
+const Calendar = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7v2H5a2 2 0 0 0-2 2zm16 14H5V8h14z"></path>
+    </GenericIcon>
+  );
+};
+
+const Trash = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M5 20a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8h2V6h-4V4a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2H3v2h2zM9 4h6v2H9zM8 8h9v12H7V8z"></path>
+      <path d="M9 10h2v8H9zm4 0h2v8h-2z"></path>
+    </GenericIcon>
+  );
+};
+
+const PlusAlt = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path>
+    </GenericIcon>
+  );
+};
+
+const LayoutAlt = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm0 2 .001 4H5V5h14zM5 11h8v8H5v-8zm10 8v-8h4.001l.001 8H15z"></path>
+    </GenericIcon>
+  );
+};
+
+const UserAlt = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"></path>
+    </GenericIcon>
+  );
+};
+
+const Collection = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19 10H5c-1.103 0-2 .897-2 2v8c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2v-8c0-1.103-.897-2-2-2zM5 20v-8h14l.002 8H5zM5 6h14v2H5zm2-4h10v2H7z"></path>
+    </GenericIcon>
+  );
+};
+
+const Bell = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"></path>
+    </GenericIcon>
+  );
+};
+
+const Search = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path>
+    </GenericIcon>
+  );
+};
+
+const Phone = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M17.707 12.293a.999.999 0 0 0-1.414 0l-1.594 1.594c-.739-.22-2.118-.72-2.992-1.594s-1.374-2.253-1.594-2.992l1.594-1.594a.999.999 0 0 0 0-1.414l-4-4a.999.999 0 0 0-1.414 0L3.581 5.005c-.38.38-.594.902-.586 1.435.023 1.424.4 6.37 4.298 10.268s8.844 4.274 10.269 4.298h.028c.528 0 1.027-.208 1.405-.586l2.712-2.712a.999.999 0 0 0 0-1.414l-4-4.001zm-.127 6.712c-1.248-.021-5.518-.356-8.873-3.712-3.366-3.366-3.692-7.651-3.712-8.874L7 4.414 9.586 7 8.293 8.293a1 1 0 0 0-.272.912c.024.115.611 2.842 2.271 4.502s4.387 2.247 4.502 2.271a.991.991 0 0 0 .912-.271L17 14.414 19.586 17l-2.006 2.005z"></path>
+    </GenericIcon>
+  );
+};
+
+const MailSend = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M20 4H6c-1.103 0-2 .897-2 2v5h2V8l6.4 4.8a1.001 1.001 0 0 0 1.2 0L20 8v9h-8v2h8c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm-7 6.75L6.666 6h12.668L13 10.75z"></path>
+      <path d="M2 12h7v2H2zm2 3h6v2H4zm3 3h4v2H7z"></path>
+    </GenericIcon>
+  );
+};
+
+const PlayCircle = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path>
+      <path d="m9 17 8-5-8-5z"></path>
+    </GenericIcon>
+  );
+};
+
+const ArrowBack = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z"></path>
+    </GenericIcon>
+  );
+};
+
+const Exit = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19.002 3h-14c-1.103 0-2 .897-2 2v4h2V5h14v14h-14v-4h-2v4c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.898-2-2-2z"></path>
+      <path d="m11 16 5-4-5-4v3.001H3v2h8z"></path>
+    </GenericIcon>
+  );
+};
+
+const Note = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19 3H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h8a.996.996 0 0 0 .707-.293l7-7a.997.997 0 0 0 .196-.293c.014-.03.022-.061.033-.093a.991.991 0 0 0 .051-.259c.002-.021.013-.041.013-.062V5c0-1.103-.897-2-2-2zM5 5h14v7h-6a1 1 0 0 0-1 1v6H5V5zm9 12.586V14h3.586L14 17.586z"></path>
+    </GenericIcon>
+  );
+};
+
+const Like = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M20 8h-5.612l1.123-3.367c.202-.608.1-1.282-.275-1.802S14.253 2 13.612 2H12c-.297 0-.578.132-.769.36L6.531 8H4c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h13.307a2.01 2.01 0 0 0 1.873-1.298l2.757-7.351A1 1 0 0 0 22 12v-2c0-1.103-.897-2-2-2zM4 10h2v9H4v-9zm16 1.819L17.307 19H8V9.362L12.468 4h1.146l-1.562 4.683A.998.998 0 0 0 13 10h7v1.819z"></path>
+    </GenericIcon>
+  );
+};
+
+const Cabinet = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M21 4c0-1.103-.897-2-2-2H5c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V4zM5 4h14v7H5V4zm0 16v-7h14.001v7H5z"></path>
+      <path d="M14 7h-4V6H8v3h8V6h-2zm0 8v1h-4v-1H8v3h8v-3z"></path>
+    </GenericIcon>
+  );
+};
+
+const Carousel = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M4 19h2c0 1.103.897 2 2 2h8c1.103 0 2-.897 2-2h2c1.103 0 2-.897 2-2V7c0-1.103-.897-2-2-2h-2c0-1.103-.897-2-2-2H8c-1.103 0-2 .897-2 2H4c-1.103 0-2 .897-2 2v10c0 1.103.897 2 2 2zM20 7v10h-2V7h2zM8 5h8l.001 14H8V5zM4 7h2v10H4V7z"></path>
+    </GenericIcon>
+  );
+};
+
+const TextIcon = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M5 8h2V6h3.252L7.68 18H5v2h8v-2h-2.252L13.32 6H17v2h2V4H5z"></path>
+    </GenericIcon>
+  );
+};
+
+const Cog = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M12 16c2.206 0 4-1.794 4-4s-1.794-4-4-4-4 1.794-4 4 1.794 4 4 4zm0-6c1.084 0 2 .916 2 2s-.916 2-2 2-2-.916-2-2 .916-2 2-2z"></path>
+      <path d="m2.845 16.136 1 1.73c.531.917 1.809 1.261 2.73.73l.529-.306A8.1 8.1 0 0 0 9 19.402V20c0 1.103.897 2 2 2h2c1.103 0 2-.897 2-2v-.598a8.132 8.132 0 0 0 1.896-1.111l.529.306c.923.53 2.198.188 2.731-.731l.999-1.729a2.001 2.001 0 0 0-.731-2.732l-.505-.292a7.718 7.718 0 0 0 0-2.224l.505-.292a2.002 2.002 0 0 0 .731-2.732l-.999-1.729c-.531-.92-1.808-1.265-2.731-.732l-.529.306A8.1 8.1 0 0 0 15 4.598V4c0-1.103-.897-2-2-2h-2c-1.103 0-2 .897-2 2v.598a8.132 8.132 0 0 0-1.896 1.111l-.529-.306c-.924-.531-2.2-.187-2.731.732l-.999 1.729a2.001 2.001 0 0 0 .731 2.732l.505.292a7.683 7.683 0 0 0 0 2.223l-.505.292a2.003 2.003 0 0 0-.731 2.733zm3.326-2.758A5.703 5.703 0 0 1 6 12c0-.462.058-.926.17-1.378a.999.999 0 0 0-.47-1.108l-1.123-.65.998-1.729 1.145.662a.997.997 0 0 0 1.188-.142 6.071 6.071 0 0 1 2.384-1.399A1 1 0 0 0 11 5.3V4h2v1.3a1 1 0 0 0 .708.956 6.083 6.083 0 0 1 2.384 1.399.999.999 0 0 0 1.188.142l1.144-.661 1 1.729-1.124.649a1 1 0 0 0-.47 1.108c.112.452.17.916.17 1.378 0 .461-.058.925-.171 1.378a1 1 0 0 0 .471 1.108l1.123.649-.998 1.729-1.145-.661a.996.996 0 0 0-1.188.142 6.071 6.071 0 0 1-2.384 1.399A1 1 0 0 0 13 18.7l.002 1.3H11v-1.3a1 1 0 0 0-.708-.956 6.083 6.083 0 0 1-2.384-1.399.992.992 0 0 0-1.188-.141l-1.144.662-1-1.729 1.124-.651a1 1 0 0 0 .471-1.108z"></path>
+    </GenericIcon>
+  );
+};
+
+const UserVoice = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M8 12c2.28 0 4-1.72 4-4s-1.72-4-4-4-4 1.72-4 4 1.72 4 4 4zm0-6c1.178 0 2 .822 2 2s-.822 2-2 2-2-.822-2-2 .822-2 2-2zm1 7H7c-2.757 0-5 2.243-5 5v1h2v-1c0-1.654 1.346-3 3-3h2c1.654 0 3 1.346 3 3v1h2v-1c0-2.757-2.243-5-5-5zm9.364-10.364L16.95 4.05C18.271 5.373 19 7.131 19 9s-.729 3.627-2.05 4.95l1.414 1.414C20.064 13.663 21 11.403 21 9s-.936-4.663-2.636-6.364z"></path>
+      <path d="M15.535 5.464 14.121 6.88C14.688 7.445 15 8.198 15 9s-.312 1.555-.879 2.12l1.414 1.416C16.479 11.592 17 10.337 17 9s-.521-2.592-1.465-3.536z"></path>
+    </GenericIcon>
+  );
+};
+
+const Wrench = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M5.122 21c.378.378.88.586 1.414.586S7.572 21.378 7.95 21l4.336-4.336a7.495 7.495 0 0 0 2.217.333 7.446 7.446 0 0 0 5.302-2.195 7.484 7.484 0 0 0 1.632-8.158l-.57-1.388-4.244 4.243-2.121-2.122 4.243-4.243-1.389-.571A7.478 7.478 0 0 0 14.499 2c-2.003 0-3.886.78-5.301 2.196a7.479 7.479 0 0 0-1.862 7.518L3 16.05a2.001 2.001 0 0 0 0 2.828L5.122 21zm4.548-8.791-.254-.616a5.486 5.486 0 0 1 1.196-5.983 5.46 5.46 0 0 1 4.413-1.585l-3.353 3.353 4.949 4.95 3.355-3.355a5.49 5.49 0 0 1-1.587 4.416c-1.55 1.55-3.964 2.027-5.984 1.196l-.615-.255-5.254 5.256h.001l-.001 1v-1l-2.122-2.122 5.256-5.255z"></path>
+    </GenericIcon>
+  );
+};
+
+// EMPTY
+const Style = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M5.122 21c.378.378.88.586 1.414.586S7.572 21.378 7.95 21l4.336-4.336a7.495 7.495 0 0 0 2.217.333 7.446 7.446 0 0 0 5.302-2.195 7.484 7.484 0 0 0 1.632-8.158l-.57-1.388-4.244 4.243-2.121-2.122 4.243-4.243-1.389-.571A7.478 7.478 0 0 0 14.499 2c-2.003 0-3.886.78-5.301 2.196a7.479 7.479 0 0 0-1.862 7.518L3 16.05a2.001 2.001 0 0 0 0 2.828L5.122 21zm4.548-8.791-.254-.616a5.486 5.486 0 0 1 1.196-5.983 5.46 5.46 0 0 1 4.413-1.585l-3.353 3.353 4.949 4.95 3.355-3.355a5.49 5.49 0 0 1-1.587 4.416c-1.55 1.55-3.964 2.027-5.984 1.196l-.615-.255-5.254 5.256h.001l-.001 1v-1l-2.122-2.122 5.256-5.255z"></path>
+    </GenericIcon>
+  );
+};
+
+// EMPTY
+const FlowBranch = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M5.122 21c.378.378.88.586 1.414.586S7.572 21.378 7.95 21l4.336-4.336a7.495 7.495 0 0 0 2.217.333 7.446 7.446 0 0 0 5.302-2.195 7.484 7.484 0 0 0 1.632-8.158l-.57-1.388-4.244 4.243-2.121-2.122 4.243-4.243-1.389-.571A7.478 7.478 0 0 0 14.499 2c-2.003 0-3.886.78-5.301 2.196a7.479 7.479 0 0 0-1.862 7.518L3 16.05a2.001 2.001 0 0 0 0 2.828L5.122 21zm4.548-8.791-.254-.616a5.486 5.486 0 0 1 1.196-5.983 5.46 5.46 0 0 1 4.413-1.585l-3.353 3.353 4.949 4.95 3.355-3.355a5.49 5.49 0 0 1-1.587 4.416c-1.55 1.55-3.964 2.027-5.984 1.196l-.615-.255-5.254 5.256h.001l-.001 1v-1l-2.122-2.122 5.256-5.255z"></path>
+    </GenericIcon>
+  );
+};
+
+const Sun = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z"></path>
+    </GenericIcon>
+  );
+};
+
+const Moon = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z"></path>
+    </GenericIcon>
+  );
+};
+
+const BracesVariable = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path
+        d="M3 6a3 3 0 0 1 3-3 1 1 0 0 1 0 2 1 1 0 0 0-1 1v3.938c0 .789-.307 1.519-.82 2.062.513.543.82 1.273.82 2.062V18a1 1 0 0 0 1 1 1 1 0 1 1 0 2 3 3 0 0 1-3-3v-3.938a1 1 0 0 0-.757-.97l-.486-.122a1 1 0 0 1 0-1.94l.486-.121A1 1 0 0 0 3 9.939V6Zm18 0a3 3 0 0 0-3-3 1 1 0 1 0 0 2 1 1 0 0 1 1 1v3.938c0 .789.307 1.519.82 2.062a2.997 2.997 0 0 0-.82 2.062V18a1 1 0 0 1-1 1 1 1 0 1 0 0 2 3 3 0 0 0 3-3v-3.938a1 1 0 0 1 .758-.97l.485-.122a1 1 0 0 0 0-1.94l-.485-.121a1 1 0 0 1-.758-.97V6Zm-11.71.886a1 1 0 1 0-1.58 1.228L10.734 12l-3.022 3.886a1 1 0 1 0 1.578 1.228L12 13.629l2.71 3.485a1 1 0 0 0 1.58-1.228L13.266 12l3.022-3.886a1 1 0 0 0-1.578-1.228L12 10.371 9.29 6.886Z"
+        fill="inherit"
+      />
+    </GenericIcon>
+  );
+};
+
+const ArrowMinimize = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path
+        d="M10.498 12.504a1 1 0 0 1 .993.884l.007.116v7.504a1 1 0 0 1-1.993.117l-.007-.117v-5.093l-5.79 5.792a1 1 0 0 1-1.32.083l-.095-.083a1 1 0 0 1-.083-1.32l.083-.095 5.788-5.788H2.997a1 1 0 0 1-.117-1.993l.117-.007h7.501ZM13.5 2a1 1 0 0 1 .993.883L14.5 3v5.087l5.794-5.793a1 1 0 0 1 1.32-.084l.094.083a1 1 0 0 1 .083 1.32l-.083.095-5.796 5.795H21a1 1 0 0 1 .116 1.994l-.116.007h-7.502a1 1 0 0 1-.993-.883l-.007-.117V2.999a1 1 0 0 1 1-1Z"
+        fill="inherit"
+      />
+    </GenericIcon>
+  );
+};
+
+const ArrowMaximize = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path
+        d="m12.497 3.002 7.555.001.121.014.088.02.104.034.09.04.063.036.063.042.064.05.063.058.094.11.072.11.053.114.035.105.016.065.01.053.01.148v7.504a1 1 0 0 1-1.993.117l-.007-.117v-5.09L6.413 19h5.088a1 1 0 0 1 .993.884L12.5 20a1 1 0 0 1-.884.994l-.116.006L3.94 21l-.096-.01-.077-.015-.077-.022-.07-.026-.09-.042-.089-.053-.091-.07.032.027a1.006 1.006 0 0 1-.166-.166l-.051-.07-.04-.064-.032-.064-.034-.082-.025-.08-.024-.111-.007-.061-.004-.09v-7.503a1 1 0 0 1 1.993-.117l.007.117v5.088L17.583 5.002h-5.086a1 1 0 0 1-.993-.883l-.007-.117a1 1 0 0 1 1-1Z"
+        fill="inherit"
+      />
+    </GenericIcon>
+  );
+};
+
+const TaskListLtr = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path
+        d="M6.707 3.293a1 1 0 0 0-1.414 0L4 4.586l-.293-.293a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414 0l2-2a1 1 0 0 0 0-1.414Zm14.296 13.7H10L9.883 17A1 1 0 0 0 10 18.993h11.003l.117-.006a1 1 0 0 0-.117-1.994Zm0-5.993H10l-.117.007A1 1 0 0 0 10 13h11.003l.117-.007A1 1 0 0 0 21.003 11Zm0-6H10l-.117.007A1 1 0 0 0 10 7h11.003l.117-.007A1 1 0 0 0 21.003 5ZM6.707 16.293a1 1 0 0 0-1.414 0L4 17.586l-.293-.293a1 1 0 0 0-1.414 1.414l1 1a1 1 0 0 0 1.414 0l2-2a1 1 0 0 0 0-1.414Zm-1.414-6.5a1 1 0 0 1 1.414 1.414l-2 2a1 1 0 0 1-1.414 0l-1-1a1 1 0 1 1 1.414-1.414l.293.293 1.293-1.293Z"
+        fill="inherit"
+      />
+    </GenericIcon>
+  );
+};
+
+const Close = (props: PlIconProps) => {
+  return (
+    <GenericIcon {...props}>
+      <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+    </GenericIcon>
+  );
+};
+const Plusx = '';
+
+export {
+  DotsVerticalRounded,
+  Pencil,
+  Download,
+  Calendar,
+  Trash,
+  Plusx,
+  LayoutAlt,
+  PlusAlt,
+  UserAlt,
+  Collection,
+  Bell,
+  Search,
+  Phone,
+  MailSend,
+  PlayCircle,
+  ArrowBack,
+  Exit,
+  Note,
+  Like,
+  Cabinet,
+  Carousel,
+  TextIcon,
+  Cog,
+  UserVoice,
+  Wrench,
+  Style,
+  FlowBranch,
+  Sun,
+  Moon,
+  BracesVariable,
+  ArrowMinimize,
+  ArrowMaximize,
+  TaskListLtr,
+  Close,
 };
 
 export default NotifIcon;

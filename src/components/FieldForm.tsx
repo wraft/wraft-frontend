@@ -43,6 +43,7 @@ const FieldForm = ({
 }: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
   const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
+  const [submitting, setSubmitting] = useState<boolean>(false);
   // const [isReady, setIsReady] = useState<Boolean>(false);
 
   /**
@@ -81,6 +82,7 @@ const FieldForm = ({
    * @param _data
    */
   const onSubmit = () => {
+    setSubmitting(true);
     const f: any = mapFields(fields);
 
     console.log('🌿🎃🎃🌿 Submitted [1]', f);
@@ -111,8 +113,12 @@ const FieldForm = ({
   //   onRefresh(fieldMap);
   // };
 
+  // const updateForm = () => {
+  //   console.log('done', fieldMap);
+  // };
+
   return (
-    <Box sx={{ p: 3, borderColor: 'gray.1', bg: '#F5F7FE' }}>
+    <Box sx={{ p: 3, borderColor: 'gray.1', bg: 'neutral.0' }}>
       <Box>
         <Text as="h6" variant="labelcaps">
           Fields
@@ -126,7 +132,7 @@ const FieldForm = ({
           mt: 1,
           mb: 3,
           border: 'solid 1px',
-          borderColor: 'gray.3',
+          borderColor: 'red.3',
         }}>
         {fieldMap &&
           fieldMap.map((x: any) => (
@@ -137,12 +143,12 @@ const FieldForm = ({
                 py: 2,
                 px: 3,
                 borderBottom: 'solid 0.5px',
-                borderColor: 'gray.2',
+                borderColor: 'red.2',
                 // mb: 2,
               }}>
               <Text
                 sx={{
-                  color: '#363e4980',
+                  color: 'red.1',
                   fontSize: '16px',
                   fontWeight: 300,
                 }}>
@@ -172,7 +178,7 @@ const FieldForm = ({
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           // py={2}
-          sx={{ p: 4, bg: 'gray.0' }}
+          sx={{ p: 4, bg: 'bgWhite' }}
           // mt={2}
         >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
@@ -203,7 +209,9 @@ const FieldForm = ({
             </Box>
           )}
           <Flex sx={{ pt: 3 }}>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={submitting ? true : false}>
+              Save
+            </Button>
             <Text onClick={closeModal} pl={2} pt={1}>
               Close
             </Text>

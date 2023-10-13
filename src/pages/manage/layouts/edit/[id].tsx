@@ -1,8 +1,16 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import LayoutForm from '../../../../components/LayoutForm';
+// import LayoutForm from '../../../../components/LayoutForm';
 import Page from '../../../../components/PageFrame';
 import { Box } from 'theme-ui';
+import dynamic from 'next/dynamic';
+
+const LayoutFormFrame = dynamic(
+  () => import('../../../../components/LayoutForm'),
+  {
+    ssr: false,
+  },
+);
 
 const Index: FC = () => {
   return (
@@ -13,7 +21,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Box variant="layout.pageFrame">
-          <LayoutForm />
+          <LayoutFormFrame />
         </Box>
       </Page>
     </>

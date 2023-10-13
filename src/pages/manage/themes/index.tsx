@@ -4,9 +4,9 @@ import { Container, Flex } from 'theme-ui';
 import ThemeList from '../../../components/ThemeList';
 import Page from '../../../components/PageFrame';
 import Link from '../../../components/NavLink';
-import ManageSidebar from '../../../components/ManageSidebar';
+// import ManageSidebar from '../../../components/ManageSidebar';
 import { HeadingFrame } from '../../../components/Card';
-import { menuLinks } from '../../../utils';
+// import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
   return (
@@ -17,16 +17,16 @@ const Index: FC = () => {
       </Head>
       <Page>
         <HeadingFrame
-          title="Manage"
+          title="Manage > Themes"
           side={
-            <Link variant="btnPrimary" href="/manage/themes/new">
+            <Link variant="btnSecondary" href="/manage/themes/new">
               Add Theme
             </Link>
           }
         />
         <Container variant="layout.pageFrame">
           <Flex>
-            <ManageSidebar items={menuLinks} />
+            {/* <ManageSidebar items={menuLinks} /> */}
             <ThemeList />
           </Flex>
         </Container>

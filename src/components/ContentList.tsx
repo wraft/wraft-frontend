@@ -175,7 +175,7 @@ const ContentList = () => {
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
-      <PageHeader title="Documents" />
+      <PageHeader title="Documents" desc="Manage all documents" />
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
@@ -216,18 +216,21 @@ const ContentList = () => {
                 />
               )}
             </Box>
-            <Paginate changePage={changePage} {...pageMeta} />
-            {total} of {total} pages
+            <Paginate
+              changePage={changePage}
+              {...pageMeta}
+              info={`${total} of ${total} pages`}
+            />
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 1,
                   fontWeight: 'body',
+                  fontSize: 2,
                   color: 'gray.6',
                 }}>
                 Filter by Variant
@@ -237,24 +240,24 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'neutral.1',
                   '&:last-child': {
                     borderBottom: 0,
                   },
                 }}>
                 {variants &&
                   variants.map((v: any) => (
-                    <FilterBlock key={v?.name} title={v?.name} no={32} {...v} />
+                    <FilterBlock key={v?.name} title={v?.name} no={0} {...v} />
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 1,
+                  fontSize: 2,
                   fontWeight: 'body',
                   color: 'gray.6',
                 }}>
@@ -265,7 +268,8 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'neutral.1',
+                  borderRadius: '5px',
                   '&:last-child': {
                     borderBottom: 0,
                   },

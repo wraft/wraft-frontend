@@ -172,7 +172,9 @@ const Form = () => {
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
     const deletableId = deletable.value.id;
-    deleteEntity(`/content_type_fields/${deletableId}`, token);
+    console.log('delete', deletable);
+    deleteEntity(`content_type_fields/${deletableId}`, token);
+    addToast('Deleted Field' + deletable.value.id, { appearance: 'success' });
   };
 
   const deleteMe = (deletableId: string) => {
@@ -223,7 +225,7 @@ const Form = () => {
   };
 
   const loadFieldTypes = (token: string) => {
-    loadEntity(token, 'field_types', loadFieldTypesSuccess);
+    loadEntity(token, 'field_types?page_size=200', loadFieldTypesSuccess);
   };
 
   const loadFlowsSuccess = (data: any) => {
@@ -243,7 +245,7 @@ const Form = () => {
   };
 
   const loadThemes = (token: string) => {
-    loadEntity(token, 'themes', loadThemeSuccess);
+    loadEntity(token, 'themes?page_size=50', loadThemeSuccess);
   };
 
   const formatFields = (fields: any) => {
@@ -335,18 +337,28 @@ const Form = () => {
     }
   }, [token]);
 
-  const onFieldsSave = (fds: any) => {
+  /**
+   * When form is submitted from Forms Editor
+   * @param fileds
+   */
+  const onFieldsSave = (fieldsNew: any) => {
     // console.log('saved fields', fds, fields);
     setFields([]);
     // let newFields:any = []
     // format and replae existing fields
-    fds?.data?.fields?.forEach((el: any) => {
+    fieldsNew?.data?.fields?.forEach((el: any) => {
       // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       const fff = { field_type: ff, name: el.name };
       const fieldType = { value: fff, name: el.name };
       addFieldVal(fieldType);
     });
+
+    /**
+     * Do something when its done ?
+     */
+
+    console.log('fieldsNew', fieldsNew);
   };
 
   const onChangeFields = (_e: any, _name: string) => {
@@ -376,7 +388,7 @@ const Form = () => {
         desc="Manage Variants">
         <Box />
       </PageHeader>
-      <Flex>
+      <Flex sx={{ maxWidth: '100ch', mx: `auto` }}>
         <Box sx={{ minWidth: '60ch' }}>
           <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
             <Flex variant="layout.pageFrame">
@@ -490,14 +502,6 @@ const Form = () => {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} variant="layout.pageFrame">
-          {cId && (
-            <Box mb={2}>
-              <Text as="h4" variant="sectionTitle">
-                Manage
-              </Text>
-            </Box>
-          )}
-
           <FieldEditor
             fields={fields}
             fieldtypes={fieldtypes}
