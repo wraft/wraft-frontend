@@ -1,8 +1,10 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import TemplateForm from '../../../components/BlockTemplateForm';
-import Page from '../../../components/Page';
+
+import Page from '../../../components/PageFrame';
 import { Box } from 'theme-ui';
+import { HeadingFrame } from '../../../components/Card';
 
 const Index: FC = () => {
   return (
@@ -12,7 +14,8 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Box>
+        <HeadingFrame title="Blocks / Edit Block" />
+        <Box sx={{ pl: 4 }}>
           <TemplateForm />
         </Box>
       </Page>

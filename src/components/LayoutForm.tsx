@@ -11,7 +11,7 @@ import {
   Image,
   Link,
 } from 'theme-ui';
-import { transparentize } from '@theme-ui/color';
+// import { transparentize } from '@theme-ui/color';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -33,7 +33,7 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-
+import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -99,7 +99,7 @@ const Form = () => {
 
   // determine edit state based on URL
   const router = useRouter();
-  const cId: string = router.query.id as string;
+  const cId: string = (router.query.id as string) || '';
   // toats
   const { addToast } = useToasts();
 
@@ -245,6 +245,10 @@ const Form = () => {
     setFormStep((i) => i - 1);
   }
 
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
+
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
 
   const [isAssetValid, setAssetValid] = React.useState(false);
@@ -277,7 +281,7 @@ const Form = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'green.5',
-                bg: transparentize('green.0', 0.4),
+                // bg: transparentize('green.0', 0.4),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
@@ -289,15 +293,18 @@ const Form = () => {
               <TickIcon fontSize={'24px'} color="inherit" />
             </Flex>
           )}
-          <Text
-            ml={'10px'}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color: formStep === 0 ? 'gray.8' : 'green.5',
-            }}>
-            Basic details
-          </Text>
+          <MenuItem>
+            <Text
+              ml={'10px'}
+              onClick={() => goTo(0)}
+              sx={{
+                fontSize: 2,
+                fontWeight: 400,
+                color: formStep === 0 ? 'gray.8' : 'green.5',
+              }}>
+              Basic details
+            </Text>
+          </MenuItem>
         </Flex>
         <Flex ml={4} sx={{ alignItems: 'center' }}>
           {isAssetValid ? (
@@ -314,23 +321,30 @@ const Form = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: formStep === 0 ? 'gray.5' : 'green.5',
-                bg:
-                  formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
+                // bg:
+                // formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
-          <Text
-            ml={'10px'}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color:
-                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
-            }}>
-            Background PDF
-          </Text>
+          <MenuItem>
+            <Text
+              onClick={() => goTo(1)}
+              ml={'10px'}
+              sx={{
+                fontSize: 2,
+                fontWeight: 400,
+                color:
+                  formStep === 0
+                    ? 'gray.5'
+                    : isAssetValid
+                    ? 'green.5'
+                    : 'gray.8',
+              }}>
+              Set Background
+            </Text>
+          </MenuItem>
         </Flex>
       </Flex>
       <Container sx={{ styleEl }}>
@@ -387,7 +401,7 @@ const Form = () => {
                               border: 'solid 1px',
                               borderColor: 'red.9',
                             }}
-                            onClick={() => deleteAsset(cId, m.id)}>
+                            onClick={() => deleteAsset('cId', m.id)}>
                             Delete
                           </Button>
                         </Box>
@@ -507,9 +521,6 @@ const Form = () => {
                 </Flex>
               </Container>
             )}
-            {/* {formStep >= 1 && (
-              <AssetForm onUpload={addUploads} filetype="layout" />
-            )} */}
             <Flex sx={{ position: 'absolute', bottom: '48px' }}>
               {formStep === 0 && (
                 <Button
@@ -539,7 +550,7 @@ const Form = () => {
                     </Text>
                   </Button>
                   <Button
-                    disabled={!isValid || !isAssetValid}
+                    // disabled={!isValid || !isAssetValid}
                     type="submit"
                     ml={2}
                     sx={{

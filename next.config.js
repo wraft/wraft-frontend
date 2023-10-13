@@ -12,7 +12,7 @@ module.exports = withImages({
     return [
       {
         source: '/uploads/:path*',
-        destination: `${HOST}uploads/:path*`, // Proxy to Backend
+        destination: `${HOST}/uploads/:path*`, // Proxy to Backend
       },
     ];
   },

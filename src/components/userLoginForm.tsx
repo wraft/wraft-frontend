@@ -81,7 +81,7 @@ const UserLoginForm = () => {
           <Input
             type="text"
             id="email"
-            defaultValue="shijith.k@aurut.com"
+            defaultValue="wraftuser@gmail.com"
             {...register('email', { required: true })}
             mb={'24px'}
           />
@@ -92,7 +92,7 @@ const UserLoginForm = () => {
           <Input
             id="password"
             // name="password"
-            defaultValue="pa55w0rd"
+            defaultValue="password"
             type="password"
             // ref={register({ required: true })}
             {...register('password', { required: true })}

@@ -93,11 +93,9 @@ const OrgRolesList = () => {
   };
 
   return (
-    <Box py={3} mt={4}>
+    <Box py={3} mt={4} sx={{ width: '100%' }}>
       <Box mx={0} mb={3}>
-        <Text as="h3" mb={3}>
-          All Roles
-        </Text>
+        <Text mb={5}>All Roles</Text>
         <Flex>
           {contents &&
             contents?.permissions?.length > 0 &&
@@ -109,7 +107,7 @@ const OrgRolesList = () => {
         </Flex>
 
         {contents?.length < 1 && (
-          <Box>
+          <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'neutral.1' }}>
             <Text as="h5" sx={{ fontSize: 1, color: 'gray.8' }}>
               No Roles?
             </Text>

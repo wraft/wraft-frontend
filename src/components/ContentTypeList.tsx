@@ -1,7 +1,6 @@
 import React from 'react';
 // import { useStoreState } from 'easy-peasy';
 import { Box, Flex } from 'theme-ui';
-// import { Plus } from '@styled-icons/boxicons-regular';
 
 import NavLink from './NavLink';
 // import { deleteEntity, fetchAPI } from '../utils/models';
