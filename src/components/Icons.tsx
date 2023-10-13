@@ -102,9 +102,9 @@ export const AddIcon = () => (
     <path
       d="M13.6568 8.0006H2.34314M7.99999 2.34375V13.6575"
       stroke="#B1B5B9"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 );
