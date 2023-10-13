@@ -92,6 +92,23 @@ export const Abstract = () => (
 
 export const UserIcon = () => <Image className="x" src={userno} width="32" />;
 
+export const AddIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none">
+    <path
+      d="M13.6568 8.0006H2.34314M7.99999 2.34375V13.6575"
+      stroke="#B1B5B9"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
 export const InviteUserIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
