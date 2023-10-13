@@ -29,7 +29,7 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
-import {InviteTeam} from '../../../components/manage';
+import { InviteTeam } from '../../../components/manage';
 
 export interface Organisation {
   id: string;
