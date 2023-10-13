@@ -109,7 +109,7 @@ const ContentList = () => {
    * @param page
    */
   const loadData = (page: number) => {
-    const pageNo = page > 0 ? `?page=${page}` : '';
+    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`contents${pageNo}`)
       .then((data: any) => {
         setLoading(true);
