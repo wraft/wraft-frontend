@@ -1051,8 +1051,7 @@ const theme: Theme & CustomVariantGroups = {
       cursor: 'pointer',
       color: 'white',
       backgroundColor: 'primary_700',
-      // backgroundColor: 'primary',
-      borderRadius: '4px',
+      borderRadius: '6px',
       p: '8px 16px',
       ':disabled': {
         color: 'gray.8',
