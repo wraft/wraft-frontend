@@ -1052,8 +1052,6 @@ const theme: Theme & CustomVariantGroups = {
       color: 'white',
       backgroundColor: 'primary_700',
       borderRadius: '6px',
-      // backgroundColor: 'primary',
-      borderRadius: '4px',
       p: '8px 16px',
       ':disabled': {
         color: 'gray.8',
