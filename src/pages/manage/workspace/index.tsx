@@ -156,7 +156,7 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Team management" desc="Manage  >  Workspace">
           <Button
-            variant="btnSecondary"
+            variant="btnPrimary"
             onClick={() => setIsOpen(true)}
             sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <InviteUserIcon />
