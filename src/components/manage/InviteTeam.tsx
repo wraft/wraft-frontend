@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -20,7 +20,13 @@ interface FormInputs {
   role: string;
 }
 
-const InviteTeam = () => {
+interface Props {
+  // setOpen: (value: boolean | ((prevVar: boolean) => boolean)) => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+// Dispatch<SetStateAction<boolean>>
+const InviteTeam = ({ setOpen }: Props) => {
   // setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   const { theme } = useThemeUI();
   const token = useStoreState((state) => state.auth.token);
@@ -130,10 +136,10 @@ const InviteTeam = () => {
     }
   }
 
-  function onSuccess(data: any) {
-    addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
+  function onSuccess() {
+    addToast(`Invited `, { appearance: 'success' });
+    setOpen(false);
     // setIsOpen(false);
-    console.log(data);
   }
 
   return (
@@ -180,9 +186,6 @@ const InviteTeam = () => {
                     theme.colors &&
                     theme.colors.neutral &&
                     theme.colors.neutral[1],
-                  // borderColor: theme?.colors?.gray
-                  //   ? theme.colors.gray[0]
-                  //   : 'red',
                   fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
                   borderRadius: '6px',
                 }),
@@ -191,12 +194,10 @@ const InviteTeam = () => {
                   fontSize: 12,
                   color:
                     theme.colors && theme.colors.gray && theme?.colors?.gray[2],
-                  // fontSize: '12px'
                 }),
                 multiValue: (baseStyles) => ({
                   ...baseStyles,
                   border: '1px solid',
-                  // borderColor: 'gray',
                   borderColor:
                     theme.colors &&
                     theme.colors.neutral &&
