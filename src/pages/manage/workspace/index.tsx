@@ -164,7 +164,7 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          <InviteTeam />
+          <InviteTeam setOpen={setIsOpen} />
         </ModalCustom>
         <Container
           sx={{
