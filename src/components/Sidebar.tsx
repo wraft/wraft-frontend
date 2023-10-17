@@ -157,9 +157,11 @@ const Nav = (props: any) => {
     toggleSearch();
   });
 
+  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const onSwitch = (_result: any) => {
     console.log('switched', _result);
     switchProfile(_result);
+    setToken(_result.access_token);
   };
 
   /**
