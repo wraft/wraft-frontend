@@ -71,7 +71,7 @@ const Form: FC = () => {
   const { addToast } = useToasts();
 
   const loadData = () => {
-    fetchAPI('themes')
+    fetchAPI('themes?sort=inserted_at_desc')
       .then((data: any) => {
         const res: ThemeElement[] = data.themes;
         setContents(res);
