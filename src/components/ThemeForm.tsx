@@ -83,7 +83,8 @@ const ThemeForm = () => {
       });
 
       // Remove comma in the end
-      assetsList = a; //a.join(',');
+      // assetsList = a; //a.join(',');
+      assetsList = a.join(',');
     }
 
     console.log('assetsList', assetsList);
