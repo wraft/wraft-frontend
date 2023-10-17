@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import { Flex, Box, Heading, Label, Input, Button } from 'theme-ui';
+import {
+  Flex,
+  Box,
+  Heading,
+  Label,
+  Input,
+  Button,
+  Text,
+  Checkbox,
+} from 'theme-ui';
 import Logo from '../../../../public/Logo.svg';
 import Link from '../../../components/NavLink';
 import { useSearchParams } from 'next/navigation';
@@ -14,6 +23,7 @@ const Index = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -99,12 +109,16 @@ const Index = () => {
               </Link>
             </Box>
             <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-              <Heading as="h3" variant="styles.h3" sx={{ mb: '64px' }}>
-                Set your password
+              <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
+                New Password
               </Heading>
 
+              <Text sx={{ mb: '48px' }}>
+                Create a password for your Wraft account
+              </Text>
+
               <Box as="form" onSubmit={handleSubmit}>
-                <Label htmlFor="New password">New password</Label>
+                <Label htmlFor="New password">Enter password</Label>
                 <Input
                   type="password"
                   id="newPassword"
@@ -119,11 +133,32 @@ const Index = () => {
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  mb={'24px'}
+                  mb={'12px'}
                 />
+                <Flex>
+                  <Label
+                    sx={{
+                      color: 'dark_900',
+                      fontWeight: 'body',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}>
+                    <Checkbox
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                      sx={{
+                        color: 'dark_900',
+                        width: '18px',
+                        backgroundColor: 'white',
+                        border: 'none',
+                      }}
+                    />
+                    Show Password
+                  </Label>
+                </Flex>
 
                 <Button type="submit">
-                  Set your password{' '}
+                  Create Password{' '}
                   {loading && <Spinner color="white" width={18} height={18} />}
                 </Button>
               </Box>

@@ -73,7 +73,7 @@ const Index: FC = () => {
 
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
             <Heading as="h3" variant="styles.h3" sx={{ mb: '18px' }}>
-              Set Your password
+              New Password
             </Heading>
 
             <Text
