@@ -103,7 +103,7 @@ const UserLoginForm = () => {
           <Input
             id="password"
             // name="password"
-            defaultValue="pa55w0rd"
+            defaultValue="password"
             type={showPassword ? 'text' : 'password'}
             // ref={register({ required: true })}
             {...register('password', { required: true })}
