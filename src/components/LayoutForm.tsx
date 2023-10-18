@@ -72,7 +72,11 @@ export interface IEngine {
   api_route: null;
 }
 
-const Form = () => {
+interface Props {
+  setOpen: any;
+}
+
+const Form = ({ setOpen }: Props) => {
   const {
     // watch,
     register,
@@ -105,9 +109,11 @@ const Form = () => {
 
   const onImageUploaded = (data: any) => {
     console.log('data', data);
+    setOpen(false);
   };
   const onUpdate = (data: any) => {
     console.log('updated', data);
+    setOpen(false);
   };
 
   /**

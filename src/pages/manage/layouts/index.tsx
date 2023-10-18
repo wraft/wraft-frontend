@@ -28,7 +28,7 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          <LayoutForm />
+          <LayoutForm setOpen={setIsOpen} />
         </ModalCustom>
 
         <Box variant="layout.pageFrame" pt={0}>
