@@ -33,7 +33,6 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-import MenuItem from './MenuItem';
 // import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
@@ -294,18 +293,18 @@ const Form = () => {
               <TickIcon fontSize={'24px'} color="inherit" />
             </Flex>
           )}
-          <MenuItem href="">
-            <Text
-              ml={'10px'}
-              onClick={() => goTo(0)}
-              sx={{
-                fontSize: 2,
-                fontWeight: 400,
-                color: formStep === 0 ? 'gray.8' : 'green.5',
-              }}>
-              Basic details
-            </Text>
-          </MenuItem>
+          {/* <MenuItem> */}
+          <Text
+            ml={'10px'}
+            onClick={() => goTo(0)}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color: formStep === 0 ? 'gray.8' : 'green.5',
+            }}>
+            Basic details
+          </Text>
+          {/* </MenuItem> */}
         </Flex>
         <Flex ml={4} sx={{ alignItems: 'center' }}>
           {isAssetValid ? (
@@ -329,23 +328,19 @@ const Form = () => {
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
-          <MenuItem href="">
-            <Text
-              onClick={() => goTo(1)}
-              ml={'10px'}
-              sx={{
-                fontSize: 2,
-                fontWeight: 400,
-                color:
-                  formStep === 0
-                    ? 'gray.5'
-                    : isAssetValid
-                    ? 'green.5'
-                    : 'gray.8',
-              }}>
-              Set Background
-            </Text>
-          </MenuItem>
+          {/* <MenuItem> */}
+          <Text
+            onClick={() => goTo(1)}
+            ml={'10px'}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color:
+                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
+            }}>
+            Set Background
+          </Text>
+          {/* </MenuItem> */}
         </Flex>
       </Flex>
       <Container sx={{ styleEl }}>
