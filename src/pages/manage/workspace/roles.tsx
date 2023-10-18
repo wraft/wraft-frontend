@@ -37,7 +37,7 @@ const Index: FC = () => {
             Create new role
           </Button>
         </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
+        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           <div></div>
           {/* <LayoutForm /> */}
         </ModalCustom>

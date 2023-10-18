@@ -33,7 +33,7 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-import { MenuItem } from '@ariakit/react';
+// import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -72,7 +72,11 @@ export interface IEngine {
   api_route: null;
 }
 
-const Form = () => {
+interface Props {
+  setOpen: any;
+}
+
+const Form = ({ setOpen }: Props) => {
   const {
     // watch,
     register,
@@ -105,9 +109,11 @@ const Form = () => {
 
   const onImageUploaded = (data: any) => {
     console.log('data', data);
+    setOpen(false);
   };
   const onUpdate = (data: any) => {
     console.log('updated', data);
+    setOpen(false);
   };
 
   /**
@@ -293,18 +299,18 @@ const Form = () => {
               <TickIcon fontSize={'24px'} color="inherit" />
             </Flex>
           )}
-          <MenuItem>
-            <Text
-              ml={'10px'}
-              onClick={() => goTo(0)}
-              sx={{
-                fontSize: 2,
-                fontWeight: 400,
-                color: formStep === 0 ? 'gray.8' : 'green.5',
-              }}>
-              Basic details
-            </Text>
-          </MenuItem>
+          {/* <MenuItem> */}
+          <Text
+            ml={'10px'}
+            onClick={() => goTo(0)}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color: formStep === 0 ? 'gray.8' : 'green.5',
+            }}>
+            Basic details
+          </Text>
+          {/* </MenuItem> */}
         </Flex>
         <Flex ml={4} sx={{ alignItems: 'center' }}>
           {isAssetValid ? (
@@ -328,23 +334,19 @@ const Form = () => {
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
-          <MenuItem>
-            <Text
-              onClick={() => goTo(1)}
-              ml={'10px'}
-              sx={{
-                fontSize: 2,
-                fontWeight: 400,
-                color:
-                  formStep === 0
-                    ? 'gray.5'
-                    : isAssetValid
-                    ? 'green.5'
-                    : 'gray.8',
-              }}>
-              Set Background
-            </Text>
-          </MenuItem>
+          {/* <MenuItem> */}
+          <Text
+            onClick={() => goTo(1)}
+            ml={'10px'}
+            sx={{
+              fontSize: 2,
+              fontWeight: 400,
+              color:
+                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
+            }}>
+            Set Background
+          </Text>
+          {/* </MenuItem> */}
         </Flex>
       </Flex>
       <Container sx={{ styleEl }}>
@@ -433,7 +435,7 @@ const Form = () => {
                     <Controller
                       control={control}
                       name="slug"
-                      defaultValue="Select slug"
+                      defaultValue="contract"
                       rules={{ required: 'Please select a slug' }}
                       render={({ field }) => (
                         <Select mb={0} {...field}>

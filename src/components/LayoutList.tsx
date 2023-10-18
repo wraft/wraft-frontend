@@ -51,7 +51,7 @@ const LayoutList: FC = () => {
    * Load all Engines
    */
   const loadLayout = () => {
-    fetchAPI('layouts')
+    fetchAPI('layouts?sort=inserted_at_desc')
       .then((data: any) => {
         const res: IField[] = data.layouts;
         setContents(res);
@@ -69,7 +69,7 @@ const LayoutList: FC = () => {
         Layouts
       </Text>
       <Box mx={0} mb={3}>
-        <Flex>
+        <Flex sx={{ flexWrap: 'wrap' }}>
           {contents &&
             contents.length > 0 &&
             contents.map((m: any) => (
