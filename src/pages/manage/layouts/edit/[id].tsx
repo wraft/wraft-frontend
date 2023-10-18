@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Head from 'next/head';
 // import LayoutForm from '../../../../components/LayoutForm';
 import Page from '../../../../components/PageFrame';
 import { Box } from 'theme-ui';
 import dynamic from 'next/dynamic';
+import ModalCustom from '../../../../components/ModalCustom';
 
 const LayoutFormFrame = dynamic(
   () => import('../../../../components/LayoutForm'),
@@ -13,6 +14,7 @@ const LayoutFormFrame = dynamic(
 );
 
 const Index: FC = () => {
+  const [isOpen, setOpen] = useState<boolean>(true);
   return (
     <>
       <Head>
@@ -21,7 +23,9 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Box variant="layout.pageFrame">
-          <LayoutFormFrame />
+          <ModalCustom varient="right" isOpen={isOpen} setOpen={setOpen}>
+            <LayoutFormFrame setOpen={setOpen} />
+          </ModalCustom>
         </Box>
       </Page>
     </>
