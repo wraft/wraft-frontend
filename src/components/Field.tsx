@@ -1,12 +1,14 @@
 import React from 'react';
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
-import Error from './Error';
 
 interface Props {
+  onChange?: any;
+  bg?: string;
+  type?: 'text' | 'email' | 'number' | 'password' | 'search';
   error?: any;
   register: any;
-  label: string;
+  label?: string;
   name: string;
   defaultValue?: string;
   mr?: number;
@@ -17,6 +19,9 @@ interface Props {
 }
 
 const Field: React.FC<Props> = ({
+  onChange,
+  bg,
+  type,
   error,
   disable,
   name,
@@ -37,13 +42,22 @@ const Field: React.FC<Props> = ({
         {label}
       </Label>
       <Input
+        onChange={onChange}
+        sx={{ bg: bg ? bg : 'transparent' }}
+        type={type ? type : 'text'}
         disabled={disable}
         placeholder={placeholder ? placeholder : ''}
         id={name}
         defaultValue={defaultValue || ''}
-        {...register(name, { required: `${label} is required` })}
+        {...register(name, { required: `${label ? label : name} is required` })}
       />
-      {error && <Error text={error.message} />}
+      {error && (
+        <Text
+          sx={{ position: 'absolute', bottom: '-20px', left: '4px' }}
+          variant="error">
+          {error.message}
+        </Text>
+      )}
     </Box>
   );
 };
