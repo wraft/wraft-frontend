@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Button } from 'theme-ui';
+import { Flex, Container, Button, Box } from 'theme-ui';
 
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
