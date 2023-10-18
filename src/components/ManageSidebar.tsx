@@ -22,6 +22,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         mt: 4,
         pl: 0,
         mr: 4,
+        flexShrink: 0,
         maxHeight: '90vh',
         // borderRight: 'solid 1px',
         borderColor: 'gray.0',
@@ -40,17 +41,22 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                 sx={{
                   py: '6px',
                   px: '12px',
+                  minWidth: '135px',
                   width: '100%',
                   color: 'gray.8',
                   borderRadius: '4px',
+                  alignItems: 'center',
                   ':hover': { bg: 'neutral.1' },
                 }}>
-                <Box
-                  sx={{
-                    color: 'gray.5',
-                  }}>
-                  {l.logo}
-                </Box>
+                {l.lgoo && (
+                  <Box
+                    sx={{
+                      color: 'gray.5',
+                      mr: '12px',
+                    }}>
+                    {l.logo}
+                  </Box>
+                )}
                 <Text
                   variant="pM"
                   sx={{
