@@ -33,7 +33,8 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-import { MenuItem } from '@ariakit/react';
+import MenuItem from './MenuItem';
+// import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -293,7 +294,7 @@ const Form = () => {
               <TickIcon fontSize={'24px'} color="inherit" />
             </Flex>
           )}
-          <MenuItem>
+          <MenuItem href="">
             <Text
               ml={'10px'}
               onClick={() => goTo(0)}
@@ -328,7 +329,7 @@ const Form = () => {
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
-          <MenuItem>
+          <MenuItem href="">
             <Text
               onClick={() => goTo(1)}
               ml={'10px'}
@@ -433,7 +434,7 @@ const Form = () => {
                     <Controller
                       control={control}
                       name="slug"
-                      defaultValue="Select slug"
+                      defaultValue="contract"
                       rules={{ required: 'Please select a slug' }}
                       render={({ field }) => (
                         <Select mb={0} {...field}>
