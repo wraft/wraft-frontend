@@ -29,6 +29,7 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
+import { InviteTeam } from '../../../components/manage';
 
 export interface Organisation {
   id: string;
@@ -155,7 +156,7 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Team management" desc="Manage  >  Workspace">
           <Button
-            variant="btnSecondary"
+            variant="btnPrimary"
             onClick={() => setIsOpen(true)}
             sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <InviteUserIcon />
@@ -163,7 +164,7 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
+          <InviteTeam setOpen={setIsOpen} />
         </ModalCustom>
         <Container
           sx={{

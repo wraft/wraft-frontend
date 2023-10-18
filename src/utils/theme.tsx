@@ -198,6 +198,7 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     input: {
+      variant: 'text.subM',
       color: 'gray.8',
       fontWeight: 'body',
       border: 'solid 1px',
@@ -208,18 +209,27 @@ const theme: Theme & CustomVariantGroups = {
       py: 1,
       borderRadius: 4,
       ':disabled': {
-        color: 'gray.2',
+        color: 'gray.1',
         bg: 'background',
         // borderColor: 'neutral.0',
       },
+      '::placeholder': {
+        variant: 'text.subM',
+        color: 'gray.2',
+      },
     },
     checkbox: {
-      color: 'white',
-      border: '1px solid',
-      borderColor: 'neutral.1',
-      ':checked': {
-        bg: 'gray.8',
-      },
+      // '-webkit-tap-highlight-color': 'transparent',
+      color: 'neutral.1',
+      // bg: 'gray.8',
+      // border: '1px solid',
+      // borderColor: 'gray.0',
+      // ':checked': {
+      //   bg: 'gray.8',
+      // },
+      // ':focus': {
+      //   outline: 'none',
+      // },
     },
 
     small: {
@@ -908,6 +918,10 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   text: {
+    error: {
+      variant: 'text.subR',
+      color: 'red.5',
+    },
     // paragraph
     pR: {
       color: 'gray.5',
@@ -932,7 +946,7 @@ const theme: Theme & CustomVariantGroups = {
 
     subR: {
       color: 'gray.5',
-      fontSize: 0,
+      fontSize: 1,
       fontWeight: 400,
       lineHeight: '1.6',
     },
@@ -1046,6 +1060,10 @@ const theme: Theme & CustomVariantGroups = {
       ':hover': {
         bg: 'green.8',
       },
+    },
+    buttonPrimarySmall: {
+      variant: 'buttons.buttonPrimary',
+      fontSize: 2,
     },
     delete: {
       variant: 'buttons.buttonPrimary',
@@ -1201,12 +1219,12 @@ const theme: Theme & CustomVariantGroups = {
       color: 'blue.9',
       bg: 'blue.2',
     },
-    small: {
-      bg: 'blue.5',
-      px: 3,
-      py: 1,
-      fontSize: 0,
-    },
+    // small: {
+    //   bg: 'blue.5',
+    //   px: 3,
+    //   py: 1,
+    //   fontSize: 0,
+    // },
   },
   variants: {
     onboardingForms: {
