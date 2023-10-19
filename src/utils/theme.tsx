@@ -479,7 +479,7 @@ const theme: Theme & CustomVariantGroups = {
     btnNavLink: {
       p: 2,
       px: 3,
-      display: 'block',
+      // display: 'block',
       letterSpacing: '-0.15px',
       textDecoration: 'none',
     },

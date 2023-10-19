@@ -1,20 +1,61 @@
-import { Label, Input, Heading, Checkbox } from 'theme-ui';
+/** @jsxImportSource theme-ui */
+
+import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
+import Router from 'next/router';
 import Image from 'next/image';
+import { useStoreActions, useStoreState } from 'easy-peasy';
+
+import { Label, Input, Heading } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import Link from '../components/NavLink';
+import { userLogin } from '../utils/models';
 import { Spinner } from 'theme-ui';
 
 import Logo from '../../public/Logo.svg';
 import GoogleLogo from '../../public/GoogleLogo.svg';
 
-const index = () => {
+export interface IField {
+  name: string;
+  value: string;
+}
+
+const UserLoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const token = useStoreState((state) => state.auth.token);
+  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const onSubmit = (data: any) => {
+    setLoading(true);
+    setError(false);
+    userLogin(data, ProxyToken, handleError);
+  };
+
+  const ProxyToken = (t: string) => {
+    console.log(t);
+    setToken(t);
+    setLoading(false);
+  };
+
+  const handleError = (error: any) => {
+    setError(true);
+    console.error('Login error: vb', error);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (token && token.length > 10) {
+      Router.push('/');
+    }
+  }, [token]);
 
   return (
     <Flex variant="onboardingFormPage">
@@ -31,118 +72,106 @@ const index = () => {
         </Link>
       </Box>
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-        <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
-          Sign in
+        <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '12px' }}>
+          Invitation to join
         </Heading>
 
+        <Text sx={{ color: 'dark_900', mb: '24px' }}>
+          You have been invited by{' '}
+          <Text sx={{ fontWeight: 'bold' }}> ‘Litmus Blue’</Text> software
+          company to join the team to improve the workflow
+        </Text>
+
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email" sx={{ mb: '4px', color: 'dark_600' }}>
+          <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
+            <Box sx={{ flex: '1 1 264px' }}>
+              <Label htmlFor="firstName" sx={{ mb: '4px', color: 'dark_300' }}>
+                First Name
+              </Label>
+              <Input
+                type="text"
+                id="firstName"
+                {...register('firstName', { required: true })}
+                color={'nuetral_nuetral'}
+                mb={'0px'}
+              />
+            </Box>
+            <Box sx={{ flex: '1 1 auto' }}>
+              <Label htmlFor="lastName" sx={{ mb: '4px', color: 'dark_300' }}>
+                Last Name
+              </Label>
+              <Input
+                type="text"
+                id="lastName"
+                {...register('lastName', { required: true })}
+                color={'nuetral_nuetral'}
+                mb={'0px'}
+              />
+            </Box>
+          </Flex>
+
+          <Label htmlFor="email" sx={{ mb: '4px', color: 'dark_300' }}>
             Email
           </Label>
           <Input
             type="text"
             id="email"
-            defaultValue="wraftuser@gmail.com"
+            defaultValue=""
             {...register('email', { required: true })}
             mb={'24px'}
             color={'nuetral_nuetral'}
           />
 
-          <Label htmlFor="password" sx={{ mb: '4px', color: 'dark_600' }}>
-            Password
+          <Label htmlFor="password" sx={{ mb: '4px', color: 'dark_300' }}>
+            Create Password
           </Label>
           <Input
             id="password"
             // name="password"
-            defaultValue="password"
-            type={'password'}
+            defaultValue=""
+            type={showPassword ? 'text' : 'password'}
             // ref={register({ required: true })}
             {...register('password', { required: true })}
-            mb={'12px'}
+            mb={'24px'}
           />
-          {errors.exampleRequired && <Text>This field is required</Text>}
-          <Flex
-            sx={{
-              alignItems: 'center',
-              mb: '28px',
-              justifyContent: 'space-between',
-            }}>
-            {/* {error ? (
-              <Text sx={{ color: 'warning_300' }}>
-                Email or password entered is incorrect
-              </Text>
-            ) : (
-              <Flex>
-                <Label
-                  sx={{
-                    color: 'dark_900',
-                    fontWeight: 'body',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  <Checkbox
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
-                    sx={{
-                      color: 'dark_900',
-                      width: '18px',
-                      backgroundColor: 'white',
-                      border: 'none',
-                    }}
-                  />
-                  Show Password
-                </Label>
+          {/* {errors.exampleRequired && <Text>This field is required</Text>} */}
+          <Flex sx={{ width: '100%', gap: '39px', mb: '24px' }}>
+            <Button type="submit" variant="buttonPrimary">
+              <Flex sx={{ alignItems: 'center', gap: '4px' }}>
+                Accept Invitation
+                {loading && <Spinner color="white" width={18} height={18} />}
               </Flex>
-            )} */}
-            <Link href="/resetpassword">
-              <Text
-                sx={{
-                  textDecoration: 'none',
-                  color: 'dark_900',
-                  fontWeight: 'heading',
-                }}>
-                Forgot Password?
-              </Text>
-            </Link>
-          </Flex>
-
-          <Button type="submit" variant="buttonPrimary">
-            <Flex sx={{ alignItems: 'center', gap: '4px' }}>
-              Sign in
-              {loading && <Spinner color="white" width={18} height={18} />}
+            </Button>
+            <Flex sx={{ alignItems: 'center', color: 'dark_600' }}>
+              <Text>Already joined?</Text>
+              <Link href="/signup">
+                <Text
+                  sx={{
+                    color: 'dark_600',
+                    fontWeight: 'bold',
+                  }}>
+                  Sign In
+                </Text>
+              </Link>
             </Flex>
-          </Button>
+          </Flex>
         </Box>
 
-        <Box
-          sx={{
-            minHeight: '1px',
-            maxHeight: '1px',
-            margin: '48px 0',
-            backgroundColor: 'border',
-          }}
-        />
-
-        <Button onClick={handleGoogleSignIn} variant="googleLogin">
-          <img src={GoogleLogo} alt="" />
-          Continue with Google
-        </Button>
-
-        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'dark_600' }}>
-          Already joined? {''}
-          <Link href="/signup">
-            <Text
-              sx={{
-                color: 'dark_600',
-                fontWeight: 'bold',
-              }}>
-              SignIn
+        <Text as="p" sx={{ color: 'dark_300', mb: '24px' }}>
+          By Joining the waiting list, I agree to Wraf&apos;s{' '}
+          <Link href="">
+            <Text sx={{ color: 'dark_300', textDecoration: 'underline' }}>
+              Privacy Policy.
             </Text>
           </Link>
-        </Flex>
+        </Text>
+        <Text sx={{ fontSize: '12px', color: 'dark_300', lineHeight: '18px' }}>
+          Welcome to Wraft! We are thrilled to have you join our community of
+          professionals who rely on our document generation tool to save time
+          and improve their workflow.
+        </Text>
       </Flex>
     </Flex>
   );
 };
-
-export default index;
+export default UserLoginForm;

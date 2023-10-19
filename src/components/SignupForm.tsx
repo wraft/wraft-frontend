@@ -157,7 +157,10 @@ const SignUpPage = () => {
                   onChange={handleChange}
                 />
               </Box>
-              <Button type="submit">Join waitlist</Button>
+              <Button type="submit">
+                Join waitlist {''}
+                {loading && <Spinner color="white" width={18} height={18} />}
+              </Button>
             </Box>
 
             <Divider
@@ -181,15 +184,14 @@ const SignUpPage = () => {
             <Text as="p" sx={{ mt: 4, color: 'dark_600', mb: '4px' }}>
               Already a member?
               <Link
-                href="/"
+                href="/login"
                 sx={{
                   textDecoration: 'none',
                   color: 'dark_600',
                   fontWeight: 'bold',
                   pl: 0,
                 }}>
-                Sign in {''}
-                {loading && <Spinner color="white" width={18} height={18} />}
+                Sign in
               </Link>
             </Text>
             <Text as="p">
