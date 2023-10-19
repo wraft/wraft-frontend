@@ -10,6 +10,7 @@ import ModalCustom from '../../../components/ModalCustom';
 import { AddIcon } from '../../../components/Icons';
 import { loadEntity } from '../../../utils/models';
 import { useStoreState } from 'easy-peasy';
+import { RolesList } from '../../../components/manage';
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -54,13 +55,16 @@ const Index: FC = () => {
             <ManageSidebar items={workspaceLinks} />
             <Box
               sx={{
+                width: '100%',
                 bg: 'bgWhite',
                 border: '1px solid',
                 borderColor: 'neutral.1',
                 borderRadius: 4,
-                p: 4,
+                // p: 4,
                 m: 4,
-              }}></Box>
+              }}>
+              <RolesList />
+            </Box>
             {/* <Workspace /> */}
           </Flex>
         </Container>
