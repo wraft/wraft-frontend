@@ -41,6 +41,7 @@ const theme: Theme & CustomVariantGroups = {
     background: '#FAFBFC',
     primary: '#00471A',
     primary_700: '#004A0F',
+    primary_A30: '#E2F7EA',
     border: '#E4E9EF',
     success_100: '#9FE5B9',
     success_400: '#008932',
@@ -348,6 +349,11 @@ const theme: Theme & CustomVariantGroups = {
     td: {
       textAlign: 'left',
       borderBottomStyle: 'solid',
+    },
+    tableInput: {
+      variant: 'text.pM',
+      fontSize: 0,
+      color: 'gray.4',
     },
     img: {
       maxWidth: '100%',
