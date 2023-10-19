@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource theme-ui */
 
 import { useEffect, useState } from 'react';
@@ -24,13 +25,13 @@ const UserLoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
   } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [_error, setError] = useState<boolean>(false);
+  const [showPassword, _setShowPassword] = useState(false);
 
   const onSubmit = (data: any) => {
     setLoading(true);
