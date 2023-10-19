@@ -14,7 +14,6 @@ import { userLogin } from '../utils/models';
 import { Spinner } from 'theme-ui';
 
 import Logo from '../../public/Logo.svg';
-import GoogleLogo from '../../public/GoogleLogo.svg';
 
 export interface IField {
   name: string;
