@@ -7,7 +7,9 @@ import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
-import { InviteUserIcon } from '../../../components/Icons';
+import { AddIcon } from '../../../components/Icons';
+import { loadEntity } from '../../../utils/models';
+import { useStoreState } from 'easy-peasy';
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -49,6 +51,15 @@ const Index: FC = () => {
           }}>
           <Flex>
             <ManageSidebar items={workspaceLinks} />
+            <Box
+              sx={{
+                bg: 'bgWhite',
+                border: '1px solid',
+                borderColor: 'neutral.1',
+                borderRadius: 4,
+                p: 4,
+                m: 4,
+              }}></Box>
             {/* <Workspace /> */}
           </Flex>
         </Container>
