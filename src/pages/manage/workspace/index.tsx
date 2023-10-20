@@ -83,13 +83,13 @@ const Index: FC = () => {
 
   React.useEffect(() => {
     checkUser(token, onSuccess);
-  }, []);
+  }, [token]);
 
   React.useEffect(() => {
     if (orgId) {
       loadEntityDetail(token, `organisations`, orgId, onLoad);
     }
-  }, [orgId]);
+  }, [orgId, token]);
 
   const backupLogo =
     'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
