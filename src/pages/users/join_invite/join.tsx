@@ -10,8 +10,8 @@ import { useStoreActions, useStoreState } from 'easy-peasy';
 import { Label, Input, Heading } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
-import Link from '../components/NavLink';
-import { userLogin } from '../utils/models';
+import Link from '../../../components/NavLink';
+import { userLogin } from '../../../utils/models';
 import { Spinner } from 'theme-ui';
 
 import Logo from '../../public/Logo.svg';
@@ -21,7 +21,7 @@ export interface IField {
   value: string;
 }
 
-const UserLoginForm = () => {
+const Join = () => {
   const {
     register,
     handleSubmit,
@@ -174,4 +174,4 @@ const UserLoginForm = () => {
     </Flex>
   );
 };
-export default UserLoginForm;
+export default Join;
