@@ -1,105 +1,210 @@
-import React from 'react';
+import { useState, ChangeEvent } from 'react';
+import Image from 'next/image';
 import {
-  Box,
   Flex,
-  Button,
-  Text,
-  Link as LinkBase,
+  Box,
+  Heading,
   Label,
   Input,
+  Button,
+  Text,
+  Link,
+  Divider,
 } from 'theme-ui';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import Logo from '../../public/Logo.svg';
+import GoogleLogo from '../../public/GoogleLogo.svg';
+import WaitlistPrompt from '../components/WaitlistPrompt';
+export const API_HOST =
+  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { Spinner } from 'theme-ui';
 
-import { registerUser } from '../utils/models';
+const SignUpPage = () => {
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+  });
 
-export interface IField {
-  name: string;
-  value: string;
-}
+  // State variable for conditional rendering
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-const Form = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSignup = () => {
-    console.log('signed up');
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    // console.log(formData)
   };
 
-  const onSubmit = (data: any) => {
-    registerUser(data, onSignup);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(formData.email);
+    if (
+      isValidEmail(formData.email) &&
+      formData.firstName.length !== 0 &&
+      formData.lastName.length !== 0
+    ) {
+      // setFormData({
+      //   firstName: formData.firstName,
+      //   lastName: formData.lastName,
+      //   email: formData.email,
+      // });
+
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_HOST}/api/v1/waiting_list`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            last_name: formData.lastName,
+            first_name: formData.firstName,
+            email: formData.email,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Error:q', errorData);
+
+          alert(errorData.errors.email[0]);
+
+          // You can also throw a custom error if needed
+          throw new Error('Password reset request failed');
+        } else {
+          setShowSuccess(true);
+          // Handle a successful response (if needed)
+          const responseData = await response;
+          console.log(responseData);
+          // setResetPasswordSuccess(responseData);
+          setLoading(false);
+        }
+      } catch (error) {
+        // Handle network errors or other exceptions
+        console.error('Network error1:', error);
+        setLoading(false);
+        // setResetPasswordSuccess(undefined);
+      }
+    } else {
+      alert('fill the inputs currectly');
+    }
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    // Simple email validation using regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleGoogleSignIn = () => {
+    // Perform Google sign-in logic here
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
-      <Text variant="pagetitle">Join Wraft</Text>
-      <Box mx={0} mb={3}>
-        <Box px={2} pb={3}>
-          <Label htmlFor="email" mb={1}>
-            Name
-          </Label>
-          <Input
-            id="name"
-            // name="name"
-            defaultValue="Muneef Hameed"
-            // ref={register({ required: true })}
-            {...register('name', { required: true })}
-          />
-        </Box>
-        <Box px={2} pb={3}>
-          <Label htmlFor="email" mb={1}>
-            Email
-          </Label>
-          <Input
-            id="email"
-            // name="email"
-            defaultValue="john@doe.com"
-            // ref={register({ required: true })}
-            {...register('email', { required: true })}
-          />
-        </Box>
-        <Box px={2} pb={3}>
-          <Label htmlFor="token" mb={1}>
-            Token
-          </Label>
-          <Input
-            id="token"
-            // name="token"
-            defaultValue="SFMyNTY.g3QAAAACZAAEZGF0YXQAAAACZAAFZW1haWxtAAAAD2hlbGxvQGF1cnV0LmNvbWQADG9yZ2FuaXNhdGlvbnQAAAATZAAIX19tZXRhX190AAAABmQACl9fc3RydWN0X19kABtFbGl4aXIuRWN0by5TY2hlbWEuTWV0YWRhdGFkAAdjb250ZXh0ZAADbmlsZAAGcHJlZml4ZAADbmlsZAAGc2NoZW1hZAAnRWxpeGlyLldyYWZ0RG9jLkVudGVycHJpc2UuT3JnYW5pc2F0aW9uZAAGc291cmNlbQAAAAxvcmdhbmlzYXRpb25kAAVzdGF0ZWQABmxvYWRlZGQACl9fc3RydWN0X19kACdFbGl4aXIuV3JhZnREb2MuRW50ZXJwcmlzZS5PcmdhbmlzYXRpb25kAAdhZGRyZXNzbQAAABUjMjQsIENhcmF2ZWwgQnVpbGRpbmdkABBhcHByb3ZhbF9zeXN0ZW1zdAAAAARkAA9fX2NhcmRpbmFsaXR5X19kAARtYW55ZAAJX19maWVsZF9fZAAQYXBwcm92YWxfc3lzdGVtc2QACV9fb3duZXJfX2QAJ0VsaXhpci5XcmFmdERvYy5FbnRlcnByaXNlLk9yZ2FuaXNhdGlvbmQACl9fc3RydWN0X19kACFFbGl4aXIuRWN0by5Bc3NvY2lhdGlvbi5Ob3RMb2FkZWRkAAxjb3Jwb3JhdGVfaWRkAANuaWxkAAVlbWFpbG0AAAAPaGVsbG9AYXVydXQuY29tZAAFZ3N0aW5kAANuaWxkAAJpZGEBZAALaW5zZXJ0ZWRfYXR0AAAACWQACl9fc3RydWN0X19kABRFbGl4aXIuTmFpdmVEYXRlVGltZWQACGNhbGVuZGFyZAATRWxpeGlyLkNhbGVuZGFyLklTT2QAA2RheWEWZAAEaG91cmEIZAALbWljcm9zZWNvbmRoAmEAYQBkAAZtaW51dGVhBGQABW1vbnRoYQZkAAZzZWNvbmRhLmQABHllYXJiAAAH5GQACmxlZ2FsX25hbWVtAAAAGEZ1bmN0aW9uYXJ5IExhYnMgUHZ0IEx0ZGQABGxvZ29kAANuaWxkAARuYW1lbQAAABlGdW5jdGlvbmFyeSBMYWJzIFB2dCBMdGQuZAALbmFtZV9vZl9jZW9tAAAADU11bmVlZiBIYW1lZWRkAAtuYW1lX29mX2N0b20AAAALU2Fsc2FiZWVsIEtkAAVwaG9uZWQAA25pbGQACXBpcGVsaW5lc3QAAAAEZAAPX19jYXJkaW5hbGl0eV9fZAAEbWFueWQACV9fZmllbGRfX2QACXBpcGVsaW5lc2QACV9fb3duZXJfX2QAJ0VsaXhpci5XcmFmdERvYy5FbnRlcnByaXNlLk9yZ2FuaXNhdGlvbmQACl9fc3RydWN0X19kACFFbGl4aXIuRWN0by5Bc3NvY2lhdGlvbi5Ob3RMb2FkZWRkAAp1cGRhdGVkX2F0dAAAAAlkAApfX3N0cnVjdF9fZAAURWxpeGlyLk5haXZlRGF0ZVRpbWVkAAhjYWxlbmRhcmQAE0VsaXhpci5DYWxlbmRhci5JU09kAANkYXlhFmQABGhvdXJhCGQAC21pY3Jvc2Vjb25kaAJhAGEAZAAGbWludXRlYQRkAAVtb250aGEGZAAGc2Vjb25kYS5kAAR5ZWFyYgAAB-RkAAV1c2Vyc3QAAAAEZAAPX19jYXJkaW5hbGl0eV9fZAAEbWFueWQACV9fZmllbGRfX2QABXVzZXJzZAAJX19vd25lcl9fZAAnRWxpeGlyLldyYWZ0RG9jLkVudGVycHJpc2UuT3JnYW5pc2F0aW9uZAAKX19zdHJ1Y3RfX2QAIUVsaXhpci5FY3RvLkFzc29jaWF0aW9uLk5vdExvYWRlZGQABHV1aWRtAAAAJDkyOWY0Y2QyLWU0NmMtNGUxNy1iYjkyLTEyY2VlZjY4NWM1MmQABnNpZ25lZG4GAJiVvTJ1AQ.2eDMcmIR243NJl1naO65zFywUjinUaFkAkmIX0C44vI"
-            // ref={register({ required: true })}
-            {...register('token', { required: true })}
-          />
-        </Box>
-        <Box px={2}>
-          <Label htmlFor="password" mb={1}>
-            Password
-          </Label>
-          <Input
-            id="password"
-            // name="password"
-            type="password"
-            // ref={register({ required: true })}
-            {...register('password', { required: true })}
-          />
-        </Box>
+    <>
+      {showSuccess ? (
+        <WaitlistPrompt />
+      ) : (
+        <Flex variant="onboardingFormPage">
+          <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
+            <Link href="/">
+              <Image
+                src={Logo}
+                alt="Wraft Logo"
+                width={116}
+                height={35}
+                className=""
+                priority
+              />
+            </Link>
+          </Box>
+          <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
+            <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
+              Join Wraft
+            </Heading>
 
-        {errors.exampleRequired && <Text>This field is required</Text>}
-        <Flex mx={-2} mt={2}>
-          <Button type="submit" ml={2}>
-            Join Now
-          </Button>
-          <Text pl={3} pt={2}>
-            Already a user ?{' '}
-            <LinkBase href="login" as={Link}>
-              Sign in
-            </LinkBase>
-          </Text>
+            <Box as="form" onSubmit={handleSubmit}>
+              <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
+                <Box sx={{ flex: '1 1 264px' }}>
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                  />
+                </Box>
+                <Box sx={{ flex: '1 1 auto' }}>
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
+                </Box>
+              </Flex>
+              <Box sx={{ marginBottom: '32px' }}>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </Box>
+              <Button type="submit">
+                Join waitlist {''}
+                {loading && <Spinner color="white" width={18} height={18} />}
+              </Button>
+            </Box>
+
+            <Divider
+              sx={{
+                margin: '56px 0',
+                color: 'rgba(0.141, 0.243, 0.286, 0.1)',
+              }}
+            />
+
+            <Button onClick={handleGoogleSignIn} variant="googleLogin">
+              <Image
+                src={GoogleLogo}
+                alt="Google Logo"
+                width={23}
+                height={24}
+                className=""
+              />
+              Continue with Google
+            </Button>
+
+            <Text as="p" sx={{ mt: 4, color: 'dark_600', mb: '4px' }}>
+              Already a member?
+              <Link
+                href="/login"
+                sx={{
+                  textDecoration: 'none',
+                  color: 'dark_600',
+                  fontWeight: 'bold',
+                  pl: 0,
+                }}>
+                Sign in
+              </Link>
+            </Text>
+            <Text as="p">
+              By Joining the waiting list, I agree to Wraf&apos;s{' '}
+              <Link href="" sx={{ color: 'text' }}>
+                Privacy Policy.
+              </Link>
+            </Text>
+          </Flex>
         </Flex>
-      </Box>
-    </Box>
+      )}
+    </>
   );
 };
-export default Form;
+
+export default SignUpPage;
