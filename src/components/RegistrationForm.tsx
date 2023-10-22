@@ -1,61 +1,107 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /** @jsxImportSource theme-ui */
 
-import { useEffect, useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
-import Router from 'next/router';
+export const API_HOST =
+  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import Image from 'next/image';
-import { useStoreActions, useStoreState } from 'easy-peasy';
-
 import { Label, Input, Heading } from 'theme-ui';
-
-import { useForm } from 'react-hook-form';
-import Link from '../../../components/NavLink';
-import { userLogin } from '../../../utils/models';
+import Link from './NavLink';
 import { Spinner } from 'theme-ui';
-
 import Logo from '../../public/Logo.svg';
+import Router from 'next/router';
 
 export interface IField {
   name: string;
   value: string;
 }
 
-const Join = () => {
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm();
-  const token = useStoreState((state) => state.auth.token);
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [_error, setError] = useState<boolean>(false);
+interface RegistrationFormProps {
+  inviteToken: string | null;
+}
+
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
   const [showPassword, _setShowPassword] = useState(false);
+  // console.log(token1);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
 
-  const onSubmit = (data: any) => {
-    setLoading(true);
-    setError(false);
-    userLogin(data, ProxyToken, handleError);
+  // State variable for conditional rendering
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    // console.log(formData)
   };
 
-  const ProxyToken = (t: string) => {
-    console.log(t);
-    setToken(t);
-    setLoading(false);
-  };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log(formData);
+    if (
+      isValidEmail(formData.email) &&
+      formData.firstName.length !== 0 &&
+      formData.lastName.length !== 0
+    ) {
+      // setFormData({
+      //   firstName: formData.firstName,
+      //   lastName: formData.lastName,
+      //   email: formData.email,
+      // });
 
-  const handleError = (error: any) => {
-    setError(true);
-    console.error('Login error: vb', error);
-    setLoading(false);
-  };
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_HOST}/api/v1/users/signup/`, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token: inviteToken,
+            name: formData.firstName,
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
 
-  useEffect(() => {
-    if (token && token.length > 10) {
-      Router.push('/');
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Error:q', errorData);
+
+          alert(errorData.errors.email[0]);
+
+          // You can also throw a custom error if needed
+          throw new Error('Password reset request failed');
+        } else {
+          // Handle a successful response (if needed)
+          const responseData = await response;
+          console.log(responseData);
+          // setResetPasswordSuccess(responseData);
+          setLoading(false);
+          Router.push('/login');
+        }
+      } catch (error) {
+        // Handle network errors or other exceptions
+        console.error('Network error1:', error);
+        setLoading(false);
+        // setResetPasswordSuccess(undefined);
+      }
+    } else {
+      alert('fill the inputs currectly');
     }
-  }, [token]);
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    // Simple email validation using regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   return (
     <Flex variant="onboardingFormPage">
@@ -82,7 +128,7 @@ const Join = () => {
           company to join the team to improve the workflow
         </Text>
 
-        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box as="form" onSubmit={handleSubmit}>
           <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
             <Box sx={{ flex: '1 1 264px' }}>
               <Label htmlFor="firstName" sx={{ mb: '4px', color: 'dark_300' }}>
@@ -91,7 +137,9 @@ const Join = () => {
               <Input
                 type="text"
                 id="firstName"
-                {...register('firstName', { required: true })}
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
                 color={'nuetral_nuetral'}
                 mb={'0px'}
               />
@@ -103,7 +151,9 @@ const Join = () => {
               <Input
                 type="text"
                 id="lastName"
-                {...register('lastName', { required: true })}
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
                 color={'nuetral_nuetral'}
                 mb={'0px'}
               />
@@ -117,7 +167,9 @@ const Join = () => {
             type="text"
             id="email"
             defaultValue=""
-            {...register('email', { required: true })}
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             mb={'24px'}
             color={'nuetral_nuetral'}
           />
@@ -131,7 +183,9 @@ const Join = () => {
             defaultValue=""
             type={showPassword ? 'text' : 'password'}
             // ref={register({ required: true })}
-            {...register('password', { required: true })}
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             mb={'24px'}
           />
           {/* {errors.exampleRequired && <Text>This field is required</Text>} */}
@@ -144,7 +198,7 @@ const Join = () => {
             </Button>
             <Flex sx={{ alignItems: 'center', color: 'dark_600' }}>
               <Text>Already joined?</Text>
-              <Link href="/signup">
+              <Link href="/login">
                 <Text
                   sx={{
                     color: 'dark_600',
@@ -174,4 +228,4 @@ const Join = () => {
     </Flex>
   );
 };
-export default Join;
+export default RegistrationForm;
