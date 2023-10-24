@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 import { transparentize } from '@theme-ui/color';
-import { loadEntity } from '../../utils/models';
+import { deleteEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import { Table } from '../Table';
 import ContentLoader from 'react-content-loader';
 import { OptionsIcon } from '../Icons';
+import ModalCustom from '../ModalCustom';
 
 export interface RolesItem {
   id: string;
@@ -36,11 +37,11 @@ const RolesList = () => {
     }
   }, [token]);
 
-  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState<number | null>(0);
   useEffect(() => {
     if (contents && contents.length > 0) {
       const row: any = [];
-      contents.map((r: any) => {
+      contents.map((r: any, index: number) => {
         const rFormated = {
           name: (
             <Text variant="text.pM" sx={{ color: 'gray.5' }}>
@@ -53,11 +54,62 @@ const RolesList = () => {
             </Text>
           ),
           // col3: (
+          //   // <Box
+          //   //   sx={{ cursor: 'pointer', position: 'relative' }}
+          //   //   onClick={() => setIsOpen(true)}>
+          //   //   <OptionsIcon />
+          //   //   {isOpen && <Box>hello</Box>}
+          //   // </Box>
           //   <Box
           //     sx={{ cursor: 'pointer', position: 'relative' }}
-          //     onClick={() => setIsOpen(true)}>
+          //     // onClick={() => setIsOpen(r.)}
+          //     onClick={() => {
+          //       setIsOpen(index);
+          //       console.log(index);
+          //       console.log(isOpen);
+          //       console.log(isOpen === index);
+          //     }}>
           //     <OptionsIcon />
-          //     {isOpen && <Box>hello</Box>}
+          //     {isOpen === index ? (
+          //       <Box
+          //         sx={{
+          //           position: 'absolute',
+          //           bg: 'bgWhite',
+          //           // p: 3,
+          //           right: 0,
+          //           top: 0,
+          //           zIndex: 10,
+          //           border: '1px solid',
+          //           borderColor: 'neutral.1',
+          //           width: '155px',
+          //         }}>
+          //         <Box
+          //           onClick={() => console.log('edit', row.index)}
+          //           variant="text.pM"
+          //           sx={{
+          //             color: 'gray.6',
+          //             ':hover': {
+          //               bg: transparentize('neutral.1', 0.5),
+          //             },
+          //             p: 3,
+          //           }}>
+          //           Edit
+          //         </Box>
+          //         <Box
+          //           variant="text.pM"
+          //           sx={{
+          //             color: 'red.5',
+          //             ':hover': {
+          //               bg: transparentize('neutral.1', 0.5),
+          //             },
+          //             p: 3,
+          //           }}>
+          //           Disable
+          //         </Box>
+          //       </Box>
+          //     ) : (
+          //       <Box></Box>
+          //     )}
           //   </Box>
           // ),
         };
@@ -67,7 +119,7 @@ const RolesList = () => {
 
       setTableList(row);
     }
-  }, [contents]);
+  }, [contents, deleteEntity]);
 
   return (
     <Flex sx={{ width: '100%' }}>
@@ -104,7 +156,11 @@ const RolesList = () => {
                   return (
                     <Box
                       sx={{ cursor: 'pointer', position: 'relative' }}
-                      onClick={() => setIsOpen(row.index)}
+                      onClick={() => {
+                        setIsOpen(row.index);
+                        console.log(row);
+                        console.log(contents[row.index]);
+                      }}
                       onMouseLeave={() => setIsOpen(null)}>
                       <OptionsIcon />
                       {isOpen === row.index ? (
@@ -121,6 +177,7 @@ const RolesList = () => {
                             width: '155px',
                           }}>
                           <Box
+                            onClick={() => console.log('edit', row.index)}
                             variant="text.pM"
                             sx={{
                               color: 'gray.6',
@@ -133,6 +190,12 @@ const RolesList = () => {
                           </Box>
                           <Box
                             variant="text.pM"
+                            onClick={() => {
+                              deleteEntity(
+                                `roles/${contents[row.index].id}`,
+                                token,
+                              );
+                            }}
                             sx={{
                               color: 'red.5',
                               ':hover': {
@@ -140,8 +203,14 @@ const RolesList = () => {
                               },
                               p: 3,
                             }}>
-                            Disable
+                            Delete
                           </Box>
+                          {/* <ModalCustom
+                            varient="center"
+                            isOpen={contents[row.index].user_count > 0}
+                            setOpen={}>
+                            <Box>You cannot remove a role that is in use</Box>
+                          </ModalCustom> */}
                         </Box>
                       ) : (
                         <Box />
