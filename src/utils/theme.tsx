@@ -1091,11 +1091,17 @@ const theme: Theme & CustomVariantGroups = {
     delete: {
       variant: 'buttons.buttonPrimary',
       bg: 'red.6',
+      ':hover': {
+        bg: 'red.5',
+      },
     },
     cancel: {
       variant: 'buttons.buttonPrimary',
       bg: 'neutral.2',
       color: 'gray.8',
+      ':hover': {
+        bg: 'neutral.1',
+      },
     },
     googleLogin: {
       fontWeight: 'body',
