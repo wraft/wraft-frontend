@@ -25,7 +25,7 @@ const Index = () => {
     const objectString = JSON.stringify(myObject);
 
     // Set the cookie with the object string
-    cookie.set('myCookie', objectString);
+    cookie.set('inviteCookie', objectString);
   }, []);
 
   console.log(inviteOrganisation);
