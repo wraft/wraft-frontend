@@ -33,7 +33,7 @@ const Index: FC = () => {
     // Parse the JSON string back into an object
     if (inviteCookie) {
       const retrievedObject = JSON.parse(inviteCookie);
-      console.log(retrievedObject);
+      console.log(JSON.stringify({ token: retrievedObject.inviteToken }));
       try {
         // setLoading(true);
         const response = await fetch(`${API_HOST}/api/v1/join_organisation`, {
