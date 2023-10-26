@@ -10,7 +10,7 @@ import ModalCustom from '../../../components/ModalCustom';
 import { AddIcon } from '../../../components/Icons';
 import { loadEntity } from '../../../utils/models';
 import { useStoreState } from 'easy-peasy';
-import { RolesList } from '../../../components/manage';
+import { RolesAdd, RolesList } from '../../../components/manage';
 
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -31,15 +31,16 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Manage roles" desc="Document Layouts">
           <Button
-            // variant="btnPrimary"
+            variant="buttonPrimarySmall"
             onClick={() => setIsOpen(true)}
             sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <AddIcon />
             Create new role
           </Button>
         </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
+        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           {/* <LayoutForm /> */}
+          <RolesAdd key={1} setOpen={setIsOpen} />
         </ModalCustom>
         <Container
           sx={{
