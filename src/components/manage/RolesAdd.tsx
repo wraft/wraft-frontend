@@ -1,26 +1,19 @@
 /** @jsxImportSource theme-ui */
 import React, { useEffect, useState } from 'react';
 import { Label, Input, Box, Flex, Button, Text, Checkbox } from 'theme-ui';
-// import { transparentize } from '@theme-ui/color';
 
 import { Controller, useForm } from 'react-hook-form';
-// import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 
-// import { Asset, Engine } from '../../utils/types';
 import { loadEntity, createEntity } from '../../utils/models';
 
 import Field from '../Field';
-// import FieldText from '../FieldText';
-// import Error from '../Error';
-// import { TickIcon } from '../Icons';
 import {
   Disclosure,
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
-// import { MenuItem } from '@ariakit/react';
 
 interface Props {
   setOpen: any;
@@ -31,66 +24,63 @@ interface FormInputs {
   permissions: string[];
 }
 
-interface PermissionsItemProps {
-  index: any;
-  register: any;
-  permission: any;
-  handleCheckboxChange: any;
-}
-const PermissionsItem = ({
-  index,
-  register,
-  permission,
-  handleCheckboxChange,
-}: PermissionsItemProps) => {
-  return (
-    <Box>
-      <Label
-        key={index}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          borderBottom: '1px solid',
-          borderColor: 'neutral.1',
-          py: '12px',
-          px: '16px',
-          ':last-of-type': {
-            borderBottom: 'none',
-          },
-        }}>
-        <Checkbox
-          sx={{ width: '16px', height: '16px' }}
-          {...register('permissions', { required: true })}
-          value={permission.name}
-          onChange={(e: any) => {
-            handleCheckboxChange(e);
-          }}
-        />
-        <Text
-          variant="pR"
-          sx={{ textTransform: 'capitalize', color: 'green.5' }}>
-          {permission.action}
-          {permission.name}
-          {permission}
-        </Text>
-      </Label>
-    </Box>
-  );
-};
-const PermissionsAccordain = () => {
-  return <Box>{/* <PermissionsItem /> */}</Box>;
-};
+// interface PermissionsItemProps {
+//   index: any;
+//   register: any;
+//   permission: any;
+//   handleCheckboxChange: any;
+// }
+// const PermissionsItem = ({
+//   index,
+//   register,
+//   permission,
+//   handleCheckboxChange,
+// }: PermissionsItemProps) => {
+//   return (
+//     <Box>
+//       <Label
+//         key={index}
+//         sx={{
+//           display: 'flex',
+//           alignItems: 'center',
+//           borderBottom: '1px solid',
+//           borderColor: 'neutral.1',
+//           py: '12px',
+//           px: '16px',
+//           ':last-of-type': {
+//             borderBottom: 'none',
+//           },
+//         }}>
+//         <Checkbox
+//           sx={{ width: '16px', height: '16px' }}
+//           {...register('permissions', { required: true })}
+//           value={permission.name}
+//           onChange={(e: any) => {
+//             handleCheckboxChange(e);
+//           }}
+//         />
+//         <Text
+//           variant="pR"
+//           sx={{ textTransform: 'capitalize', color: 'green.5' }}>
+//           {permission.action}
+//           {permission.name}
+//           {permission}
+//         </Text>
+//       </Label>
+//     </Box>
+//   );
+// };
+// const PermissionsAccordain = () => {
+//   return <Box>{/* <PermissionsItem /> */}</Box>;
+// };
 
 const RolesAdd = ({ setOpen }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const {
-    // watch,
     register,
-    // control,
     handleSubmit,
-    // formState: { errors, isValid },
-    // setValue,
+    formState: { errors, isValid },
   } = useForm<FormInputs>({ mode: 'all' });
 
   const [permissions, setPermissions] = React.useState<any>({});
@@ -108,29 +98,42 @@ const RolesAdd = ({ setOpen }: Props) => {
     loadPermissions(token);
   }, []);
 
-  // const emailErrorRef = React.useRef<HTMLDivElement>(null);
-  // const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
-
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
-  // const filteredPermissions = permissions.filter((permission: any) =>
-  //   permission.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  // );
-  const permissionsArray = Object.entries(permissions);
-  React.useEffect(() => {
-    console.log('Array Permissions:', permissionsArray);
-    console.table(permissionsArray);
-  });
-
-  const filteredPermissions = Object.keys(permissions).filter((e: any) =>
+  const filteredPermissionKeys = Object.keys(permissions).filter((e: any) =>
     e.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // const filteredPermissions = Object.keys(permissions).filter((key: any) =>
-  //   key.toLowerCase().includes(searchTerm.toLowerCase()),
-  // );
+  const [isParentChecked, setIsParentChecked] = useState(false);
+  const changeCheckboxStatus = (e: any, id: any) => {
+    const users = { ...permissions };
+    const { checked } = e.target;
+    filteredPermissionKeys.map((key: any) => {
+      users[key].map((sub: any) => {
+        if (id === key) {
+          setIsParentChecked(checked);
+          sub.isChecked = checked;
+        } else {
+          if (sub.id === id) {
+            sub.isChecked = checked;
+          }
+          const isAllChildsChecked = users[key].every(
+            (sub: any) => sub.isChecked === true,
+          );
+          if (isAllChildsChecked) {
+            setIsParentChecked(checked && id === key);
+          } else {
+            setIsParentChecked(false && id === key);
+          }
+        }
+      });
+      return users;
+    });
+    setPermissions({ ...users });
+  };
+
   useEffect(() => {
-    if (token) console.log('filtered permissions', filteredPermissions);
+    if (token) console.log('filtered permissions', filteredPermissionKeys);
   }, [token]);
 
   const [checkedValues, setCheckedValues] = React.useState<any>([]);
@@ -148,10 +151,9 @@ const RolesAdd = ({ setOpen }: Props) => {
     }
   };
 
-  const [checkboxStates, setCheckboxStates] = useState({});
-
   function onSuccess() {
     setOpen(false);
+    addToast(`Role Added `, { appearance: 'success' });
   }
 
   function onSubmit(data: any) {
@@ -173,7 +175,7 @@ const RolesAdd = ({ setOpen }: Props) => {
         justifyContent: 'space-between',
         // height: '100%',
         maxHeight: '100dvh',
-        overflow: 'hidden',
+        // overflow: 'hidden',
         // overflowY: 'hidden',
       }}>
       <Box>
@@ -196,7 +198,7 @@ const RolesAdd = ({ setOpen }: Props) => {
             />
           </div>
           <Box>
-            <Label htmlFor="search">Permssions</Label>
+            <Label htmlFor="search">Permissions</Label>
             <Input
               type="search"
               placeholder="Search by"
@@ -213,14 +215,13 @@ const RolesAdd = ({ setOpen }: Props) => {
                 borderColor: 'neutral.1',
                 borderRadius: 4,
                 maxHeight: '450px',
-                // overflow: 'scroll',
                 overflowX: 'hidden',
                 overflowY: 'scroll',
                 scrollbarWidth: 'none',
                 scrollbarColor: 'red.5',
               }}>
               <Box>
-                {filteredPermissions.map((key, index) => {
+                {filteredPermissionKeys.map((key, index) => {
                   return (
                     <DisclosureProvider>
                       <Box key={index}>
@@ -228,9 +229,16 @@ const RolesAdd = ({ setOpen }: Props) => {
                           sx={{
                             width: '100%',
                             bg: 'bgWhite',
-                            border: 'none',
                             py: '12px',
                             px: '16px',
+                            borderTop: 'none',
+                            borderLeft: 'none',
+                            borderRight: 'none',
+                            borderBottom: '1px solid',
+                            borderColor: 'neutral.2',
+                            ':last-of-type': {
+                              borderBottom: 'none',
+                            },
                           }}>
                           <Box>
                             <Label
@@ -238,20 +246,17 @@ const RolesAdd = ({ setOpen }: Props) => {
                                 display: 'flex',
                                 maxWidth: 'max-content',
                                 alignItems: 'center',
-                                borderBottom: '1px solid',
-                                borderColor: 'neutral.1',
-                                ':last-of-type': {
-                                  borderBottom: 'none',
-                                },
                               }}>
-                              {/* this checkbox should be checked when all of the sub checkbox is checked of i check or uncheck here all of the sub checkbox should also check uncheck */}
                               <Checkbox
                                 sx={{ width: '16px', height: '16px' }}
-                                {...register('permissions', { required: true })}
-                                // value={permission.name}
-                                // onChange={(e: any) => {
-                                //   handleCheckboxChange(e);
-                                // }}
+                                // {...register('permissions', { required: true })}
+                                // onChange={(e) => changeCheckboxStatus(e, 'p1')}
+                                checked={isParentChecked}
+                                // value={key}
+                                onChange={(e: any) => {
+                                  handleCheckboxChange(e);
+                                  changeCheckboxStatus(e, key);
+                                }}
                               />
                               <Text
                                 variant="pR"
@@ -287,8 +292,10 @@ const RolesAdd = ({ setOpen }: Props) => {
                                       required: true,
                                     })}
                                     value={sub.name}
+                                    checked={sub?.isChecked}
                                     onChange={(e: any) => {
                                       handleCheckboxChange(e);
+                                      changeCheckboxStatus(e, sub.id);
                                     }}
                                   />
                                   <Text
@@ -315,7 +322,7 @@ const RolesAdd = ({ setOpen }: Props) => {
       </Box>
       <Box sx={{ p: 4 }}>
         <Button
-          // disabled={true && !isValid}
+          disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
