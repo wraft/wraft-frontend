@@ -31,11 +31,10 @@ const RolesAdd = ({ setOpen }: Props) => {
     register,
     handleSubmit,
     // formState: { isValid },
-  } = useForm<FormInputs>({ mode: 'all' });
+  } = useForm<FormInputs>({ mode: 'onChange' });
 
   const [permissions, setPermissions] = useState<any>({});
   const [newDataFormat, setNewDataFormat] = useState<any>([]);
-  const [checkedValues, setCheckedValues] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const loadPermissionsSuccess = (data: any) => {
@@ -78,32 +77,17 @@ const RolesAdd = ({ setOpen }: Props) => {
 
     if (data[name].isChecked) {
       data[name].children.map((child: any) => (child.isChecked = checked));
-      data[name].children.forEach((child: any) => {
-        setCheckedValues([...checkedValues, child.name]);
-      });
     } else {
       data[name].children.map((child: any) => (child.isChecked = false));
-      data[name].children.forEach((child: any) => {
-        setCheckedValues(
-          checkedValues.filter((item: any) => item !== child.name),
-        );
-      });
     }
     setNewDataFormat({ ...data });
     console.log('parent', newDataFormat);
   };
 
   const checkChild = (e: any, name: any, id: any) => {
-    const { checked, value } = e.target;
+    const { checked } = e.target;
     const data = { ...newDataFormat };
 
-    if (checked) {
-      console.log('checked', value);
-      setCheckedValues([...checkedValues, value]);
-    } else {
-      console.log('unchecked', value);
-      setCheckedValues(checkedValues.filter((item: any) => item !== value));
-    }
     data[name].children.map((sub: any) => {
       if (sub.id === id) {
         sub.isChecked = checked;
@@ -142,9 +126,10 @@ const RolesAdd = ({ setOpen }: Props) => {
 
   function onSubmit(data: any) {
     console.log('submitted', data);
+    console.log('submitted permissions', data.permissions);
     const dataNew = {
       name: data.name,
-      permissions: checkedValues,
+      permissions: data.permissions,
     };
     createEntity(dataNew, 'roles', token, onSuccess);
   }
