@@ -25,7 +25,12 @@ import {
 } from '../../src/components/Icons';
 
 // import ModeToggle from './ModeToggle';
-import { createEntity, loadEntity, switchProfile } from '../utils/models';
+import {
+  checkUser,
+  createEntity,
+  loadEntity,
+  switchProfile,
+} from '../utils/models';
 import { Organisation, OrganisationList } from '../store/profile';
 import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
@@ -92,11 +97,23 @@ export interface INav {
 }
 
 const Nav = (props: any) => {
+  const { addToast } = useToasts();
   const [showSearch, setShowSearch] = useState<boolean>(false);
 
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
+
+  const [workspaces, setWorkspaces] = useState<OrganisationList>();
+  const [activeSpace, setActiveSpace] = useState<Organisation>();
+
+  const setProfile = useStoreActions(
+    (actions: any) => actions.profile.updateProfile,
+  );
+
+  const onProfileLoad = (data: any) => {
+    setProfile(data);
+  };
 
   // const menu = useMenuState();
 
@@ -105,10 +122,6 @@ const Nav = (props: any) => {
   const router = useRouter();
   const pathname: string = router.pathname as any;
 
-  const [workspaces, setWorkspaces] = useState<OrganisationList>();
-  const [activeSpace, setActiveSpace] = useState<Organisation>();
-
-  const { addToast } = useToasts();
   // popper
   // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
   // const [referenceElement, setReferenceElement] = useState(null);
@@ -184,19 +197,34 @@ const Nav = (props: any) => {
   /** Load Workspaces for the current user */
   useEffect(() => {
     loadOrgs(token);
+    if (token) {
+      checkUser(token, onProfileLoad);
+    }
   }, [token]);
 
   useEffect(() => {
-    // console.log('workspaces', workspaces);
+    console.log('workspaces', workspaces);
     const allOrgs = workspaces?.organisations;
     const currentOrg = allOrgs?.find(
       (og: Organisation) => og.id == profile?.organisation_id,
     );
 
     setActiveSpace(currentOrg);
-    // console.log('currentOrg', currentOrg);
+    // setActiveSpace(profile.organisation_id);
+    console.log('currentOrg', currentOrg);
+    // console.log('currentOrg', profile.organisation_id);
     // workspaces?.organisations.find({ id: profile.organisation_id });
-  }, [workspaces]);
+  }, [profile]);
+
+  // useEffect(() => {
+  //   // check if token is there
+  //   const t = cookie.get('token') || false;
+  //   // login to check
+  //   if (t) {
+  //     checkUser(t, onProfileLoad);
+  //     setToken(t);
+  //   }
+  // }, [switchOrg]);
 
   return (
     <>
@@ -253,7 +281,7 @@ const Nav = (props: any) => {
                       </Box>
                     </Flex>
                   )}
-                  {/* <BrandLogo width="5rem" height="2rem" /> */}
+                  {/* //  <BrandLogo width="5rem" height="2rem" />  */}
                 </Flex>
               </MenuButton>
               <Menu
