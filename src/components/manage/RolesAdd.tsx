@@ -1,5 +1,5 @@
 /** @jsxImportSource theme-ui */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Label, Input, Box, Flex, Button, Text, Checkbox } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
@@ -24,66 +24,19 @@ interface FormInputs {
   permissions: string[];
 }
 
-// interface PermissionsItemProps {
-//   index: any;
-//   register: any;
-//   permission: any;
-//   handleCheckboxChange: any;
-// }
-// const PermissionsItem = ({
-//   index,
-//   register,
-//   permission,
-//   handleCheckboxChange,
-// }: PermissionsItemProps) => {
-//   return (
-//     <Box>
-//       <Label
-//         key={index}
-//         sx={{
-//           display: 'flex',
-//           alignItems: 'center',
-//           borderBottom: '1px solid',
-//           borderColor: 'neutral.1',
-//           py: '12px',
-//           px: '16px',
-//           ':last-of-type': {
-//             borderBottom: 'none',
-//           },
-//         }}>
-//         <Checkbox
-//           sx={{ width: '16px', height: '16px' }}
-//           {...register('permissions', { required: true })}
-//           value={permission.name}
-//           onChange={(e: any) => {
-//             handleCheckboxChange(e);
-//           }}
-//         />
-//         <Text
-//           variant="pR"
-//           sx={{ textTransform: 'capitalize', color: 'green.5' }}>
-//           {permission.action}
-//           {permission.name}
-//           {permission}
-//         </Text>
-//       </Label>
-//     </Box>
-//   );
-// };
-// const PermissionsAccordain = () => {
-//   return <Box>{/* <PermissionsItem /> */}</Box>;
-// };
-
 const RolesAdd = ({ setOpen }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const {
     register,
     handleSubmit,
-    formState: { isValid },
+    // formState: { isValid },
   } = useForm<FormInputs>({ mode: 'all' });
 
-  const [permissions, setPermissions] = React.useState<any>({});
+  const [permissions, setPermissions] = useState<any>({});
+  const [newDataFormat, setNewDataFormat] = useState<any>([]);
+  const [checkedValues, setCheckedValues] = useState<any>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const loadPermissionsSuccess = (data: any) => {
     console.log(data);
@@ -94,59 +47,55 @@ const RolesAdd = ({ setOpen }: Props) => {
     loadEntity(token, 'permissions', loadPermissionsSuccess);
   };
 
-  React.useEffect(() => {
-    loadPermissions(token);
-  }, []);
+  useEffect(() => {
+    if (token) loadPermissions(token);
+  }, [token]);
 
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const newFormat = Object.fromEntries(
+    Object.entries(permissions).map(([category, datas]: [any, any[]]) => [
+      category,
+      {
+        name: category,
+        isChecked: false,
+        children: datas.map((data: any) => ({ ...data, isChecked: false })),
+      },
+    ]),
+  );
 
-  const filteredPermissionKeys = Object.keys(permissions).filter((e: any) =>
+  useEffect(() => {
+    setNewDataFormat(newFormat);
+    console.log('new Data for permissions', newFormat);
+  }, [token, permissions]);
+
+  const filteredPermissionKeys = Object.keys(newDataFormat).filter((e: any) =>
     e.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const [isParentChecked, setIsParentChecked] = useState<any>([]);
-  const changeCheckboxStatus = (e: any, id: any) => {
-    const users = { ...permissions };
+  const checkParent = (e: any, name: any) => {
     const { checked } = e.target;
-    filteredPermissionKeys.map((key: any) => {
-      users[key].map((sub: any) => {
-        if (id === key) {
-          setIsParentChecked([...isParentChecked, key]);
-          sub.isChecked = checked;
-        } else {
-          if (sub.id === id) {
-            sub.isChecked = checked;
-          }
-          const isAllChildsChecked = users[key].every(
-            (sub: any) => sub.isChecked === true,
-          );
-          console.log('is all child checked?', isAllChildsChecked);
-          if (isAllChildsChecked) {
-            setIsParentChecked([...isParentChecked, key]);
-            // setIsParentChecked(key);
-          } else {
-            // setIsParentChecked(null);
-            setIsParentChecked(
-              isParentChecked.filter((item: any) => item !== key),
-            );
-          }
-        }
+    const data = { ...newDataFormat };
+    data[name].isChecked = checked;
+
+    if (data[name].isChecked) {
+      data[name].children.map((child: any) => (child.isChecked = checked));
+      data[name].children.forEach((child: any) => {
+        setCheckedValues([...checkedValues, child.name]);
       });
-      return users;
-    });
-    setPermissions({ ...users });
-    console.log('permssions after onchange', permissions);
+    } else {
+      data[name].children.map((child: any) => (child.isChecked = false));
+      data[name].children.forEach((child: any) => {
+        setCheckedValues(
+          checkedValues.filter((item: any) => item !== child.name),
+        );
+      });
+    }
+    setNewDataFormat({ ...data });
+    console.log('parent', newDataFormat);
   };
 
-  useEffect(() => {
-    if (token) console.log('filtered permissions', filteredPermissionKeys);
-  }, [token]);
-
-  const [checkedValues, setCheckedValues] = React.useState<any>([]);
-
-  const handleCheckboxChange = (event: any) => {
-    const checked = event.target.checked;
-    const value = event.target.value;
+  const checkChild = (e: any, name: any, id: any) => {
+    const { checked, value } = e.target;
+    const data = { ...newDataFormat };
 
     if (checked) {
       console.log('checked', value);
@@ -155,7 +104,36 @@ const RolesAdd = ({ setOpen }: Props) => {
       console.log('unchecked', value);
       setCheckedValues(checkedValues.filter((item: any) => item !== value));
     }
+    data[name].children.map((sub: any) => {
+      if (sub.id === id) {
+        sub.isChecked = checked;
+      }
+      const isAllSelected = data[name].children.every(
+        (child: any) => child.isChecked === true,
+      );
+      if (isAllSelected) {
+        data[name].isChecked = checked;
+      } else {
+        data[name].isChecked = false;
+      }
+    });
+    setNewDataFormat({ ...data });
+    console.log('child', newDataFormat);
   };
+
+  // const handleCheckboxChange = (event: any) => {
+  //   const checked = event.target.checked;
+  //   const value = event.target.value;
+
+  //   if (checked) {
+  //     console.log('checked', value);
+  //     setCheckedValues([...checkedValues, value]);
+  //   } else {
+  //     console.log('unchecked', value);
+  //     setCheckedValues(checkedValues.filter((item: any) => item !== value));
+  //   }
+
+  // };
 
   function onSuccess() {
     setOpen(false);
@@ -179,10 +157,7 @@ const RolesAdd = ({ setOpen }: Props) => {
         bg: 'bgWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        // height: '100%',
         maxHeight: '100dvh',
-        // overflow: 'hidden',
-        // overflowY: 'hidden',
       }}>
       <Box>
         <Box
@@ -255,14 +230,9 @@ const RolesAdd = ({ setOpen }: Props) => {
                               }}>
                               <Checkbox
                                 sx={{ width: '16px', height: '16px' }}
-                                // {...register('permissions', { required: true })}
-                                // onChange={(e) => changeCheckboxStatus(e, 'p1')}
-                                checked={isParentChecked.includes(`${key}`)}
-                                // checked={true}
-                                // value={key}
+                                checked={newDataFormat[key].isChecked}
                                 onChange={(e: any) => {
-                                  handleCheckboxChange(e);
-                                  changeCheckboxStatus(e, key);
+                                  checkParent(e, newDataFormat[key].name);
                                 }}
                               />
                               <Text
@@ -271,14 +241,14 @@ const RolesAdd = ({ setOpen }: Props) => {
                                   textTransform: 'capitalize',
                                   color: 'green.5',
                                 }}>
-                                {key}
+                                {newDataFormat[key].name}
                               </Text>
                             </Label>
                           </Box>
                         </Disclosure>
                         <DisclosureContent>
                           <Box>
-                            {permissions[key].map((sub: any) => (
+                            {newDataFormat[key].children.map((sub: any) => (
                               <Box key={sub.id}>
                                 <Label
                                   sx={{
@@ -299,10 +269,14 @@ const RolesAdd = ({ setOpen }: Props) => {
                                       required: true,
                                     })}
                                     value={sub.name}
-                                    checked={sub?.isChecked}
+                                    checked={sub.isChecked}
                                     onChange={(e: any) => {
-                                      handleCheckboxChange(e);
-                                      changeCheckboxStatus(e, sub.id);
+                                      checkChild(
+                                        e,
+                                        newDataFormat[key].name,
+                                        sub.id,
+                                      );
+                                      // handleCheckboxChange(e);
                                     }}
                                   />
                                   <Text
@@ -329,7 +303,7 @@ const RolesAdd = ({ setOpen }: Props) => {
       </Box>
       <Box sx={{ p: 4 }}>
         <Button
-          disabled={true && !isValid}
+          // disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
