@@ -11,6 +11,7 @@ import Link from './NavLink';
 import { Spinner } from 'theme-ui';
 import Logo from '../../public/Logo.svg';
 import Router from 'next/router';
+import cookie from 'js-cookie';
 
 export interface IField {
   name: string;
@@ -82,6 +83,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
           // Handle a successful response (if needed)
           const responseData = await response;
           console.log(responseData);
+          cookie.remove('inviteCookie');
           // setResetPasswordSuccess(responseData);
           setLoading(false);
           Router.push('/login');
@@ -90,6 +92,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
         // Handle network errors or other exceptions
         console.error('Network error1:', error);
         setLoading(false);
+        cookie.remove('inviteCookie');
         // setResetPasswordSuccess(undefined);
       }
     } else {

@@ -59,6 +59,7 @@ const Index: FC = () => {
         }
       } catch (error) {
         // Handle network errors or other exceptions
+        cookie.remove('inviteCookie');
         console.error('Network error1:', error);
         // setResetPasswordSuccess(undefined);
       }
