@@ -129,7 +129,7 @@ const InviteTeam = ({ setOpen }: Props) => {
       for (const checkedValue of checkedValues) {
         const data = {
           email: email.value,
-          role_id: checkedValue,
+          role_ids: checkedValue,
         };
         createEntity(data, 'organisations/users/invite', token, onSuccess);
       }

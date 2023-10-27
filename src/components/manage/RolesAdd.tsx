@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Label, Input, Box, Flex, Button, Text, Checkbox } from 'theme-ui';
 
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 
@@ -80,7 +80,7 @@ const RolesAdd = ({ setOpen }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<FormInputs>({ mode: 'all' });
 
   const [permissions, setPermissions] = React.useState<any>({});
@@ -104,14 +104,14 @@ const RolesAdd = ({ setOpen }: Props) => {
     e.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const [isParentChecked, setIsParentChecked] = useState(false);
+  const [isParentChecked, setIsParentChecked] = useState<any>([]);
   const changeCheckboxStatus = (e: any, id: any) => {
     const users = { ...permissions };
     const { checked } = e.target;
     filteredPermissionKeys.map((key: any) => {
       users[key].map((sub: any) => {
         if (id === key) {
-          setIsParentChecked(checked);
+          setIsParentChecked([...isParentChecked, key]);
           sub.isChecked = checked;
         } else {
           if (sub.id === id) {
@@ -120,16 +120,22 @@ const RolesAdd = ({ setOpen }: Props) => {
           const isAllChildsChecked = users[key].every(
             (sub: any) => sub.isChecked === true,
           );
+          console.log('is all child checked?', isAllChildsChecked);
           if (isAllChildsChecked) {
-            setIsParentChecked(checked && id === key);
+            setIsParentChecked([...isParentChecked, key]);
+            // setIsParentChecked(key);
           } else {
-            setIsParentChecked(false && id === key);
+            // setIsParentChecked(null);
+            setIsParentChecked(
+              isParentChecked.filter((item: any) => item !== key),
+            );
           }
         }
       });
       return users;
     });
     setPermissions({ ...users });
+    console.log('permssions after onchange', permissions);
   };
 
   useEffect(() => {
@@ -189,7 +195,7 @@ const RolesAdd = ({ setOpen }: Props) => {
           <Text variant="pB">Create new role</Text>
         </Box>
         <Box sx={{ p: 4 }}>
-          <div sx={{}}>
+          <div>
             <Field
               label="Role Name"
               name="name"
@@ -223,8 +229,8 @@ const RolesAdd = ({ setOpen }: Props) => {
               <Box>
                 {filteredPermissionKeys.map((key, index) => {
                   return (
-                    <DisclosureProvider>
-                      <Box key={index}>
+                    <DisclosureProvider key={index}>
+                      <Box>
                         <Disclosure
                           sx={{
                             width: '100%',
@@ -251,7 +257,8 @@ const RolesAdd = ({ setOpen }: Props) => {
                                 sx={{ width: '16px', height: '16px' }}
                                 // {...register('permissions', { required: true })}
                                 // onChange={(e) => changeCheckboxStatus(e, 'p1')}
-                                checked={isParentChecked}
+                                checked={isParentChecked.includes(`${key}`)}
+                                // checked={true}
                                 // value={key}
                                 onChange={(e: any) => {
                                   handleCheckboxChange(e);
@@ -272,7 +279,7 @@ const RolesAdd = ({ setOpen }: Props) => {
                         <DisclosureContent>
                           <Box>
                             {permissions[key].map((sub: any) => (
-                              <Box>
+                              <Box key={sub.id}>
                                 <Label
                                   sx={{
                                     display: 'flex',
