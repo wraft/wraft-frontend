@@ -9,13 +9,15 @@ export const API_HOST =
 
 const EmailVerified: React.FC = () => {
   const router = useRouter();
-  const { verifyToken } = router.query;
+  // const { verifyToken } = router.query;
+
   const [show, setShow] = useState(false);
 
+  const emailToken = router.query.verifyToken as string | undefined;
+
   useEffect(() => {
-    // Example: Make an API GET request
-    if (verifyToken) {
-      fetch(`${API_HOST}/api/v1/user/verify_email_token/${verifyToken}`)
+    if (emailToken) {
+      fetch(`${API_HOST}/api/v1/user/verify_email_token/${emailToken}`)
         .then((response) => {
           setShow(true);
           console.log(response);
@@ -24,7 +26,7 @@ const EmailVerified: React.FC = () => {
           console.log(error);
         });
     }
-  }, [verifyToken]);
+  }, [emailToken]);
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: '80px' }}>
       {show && (
