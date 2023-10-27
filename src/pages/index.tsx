@@ -33,34 +33,42 @@ const Index: FC = () => {
     // Parse the JSON string back into an object
     if (inviteCookie) {
       const retrievedObject = JSON.parse(inviteCookie);
-      console.log(JSON.stringify({ token: retrievedObject.inviteToken }));
+      console.log(retrievedObject.inviteToken);
+      const formData = new FormData();
+      formData.append('token', retrievedObject.inviteToken);
+
       try {
-        // setLoading(true);
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append('token', retrievedObject.inviteToken);
+
+        // Send the FormData object in the POST request
         const response = await fetch(`${API_HOST}/api/v1/join_organisation`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Add your authorization token here
           },
-          body: JSON.stringify({ token: retrievedObject.inviteToken }),
+          body: formData,
         });
 
         if (!response.ok) {
           const errorData = await response.json();
-          console.error('Error:q', errorData);
+          console.error('Errorq:', errorData);
           // You can also throw a custom error if needed
-          throw new Error('team joining failed');
+          throw new Error('Team joining failed');
         } else {
           // Handle a successful response (if needed)
           const responseData = await response;
           console.log(responseData);
           setIsTeamInvite(false);
+          cookie.remove('inviteCookie');
           // setResetPasswordSuccess(responseData);
         }
       } catch (error) {
         // Handle network errors or other exceptions
+        console.error('Network error:', error);
         cookie.remove('inviteCookie');
-        console.error('Network error1:', error);
         // setResetPasswordSuccess(undefined);
       }
     }
@@ -139,7 +147,10 @@ const Index: FC = () => {
             <Button onClick={handleClick}>Confirm</Button>
 
             <Button
-              onClick={() => setIsTeamInvite(false)}
+              onClick={() => {
+                setIsTeamInvite(false);
+                cookie.remove('inviteCookie');
+              }}
               sx={{ bg: 'red', color: 'white' }}>
               Cancel
             </Button>
