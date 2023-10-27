@@ -126,13 +126,11 @@ const InviteTeam = ({ setOpen }: Props) => {
   function onSubmit(data: any) {
     console.log('submitted', data);
     for (const email of selectedEmails) {
-      for (const checkedValue of checkedValues) {
-        const data = {
-          email: email.value,
-          role_id: checkedValue,
-        };
-        createEntity(data, 'organisations/users/invite', token, onSuccess);
-      }
+      const data = {
+        email: email.value,
+        role_ids: checkedValues,
+      };
+      createEntity(data, 'organisations/users/invite', token, onSuccess);
     }
   }
 

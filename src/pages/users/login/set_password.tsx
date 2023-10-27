@@ -13,7 +13,7 @@ import {
 import Logo from '../../../../public/Logo.svg';
 import Link from '../../../components/NavLink';
 import { useSearchParams } from 'next/navigation';
-import PasswordVerified from '../../../components/PasswordVerified';
+import PasswordCreated from '../../../components/PasswordCreated';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import { Spinner } from 'theme-ui';
@@ -52,14 +52,24 @@ const Index = () => {
     if (validatePassword(newPassword, confirmPassword)) {
       try {
         setLoading(true);
-        console.log(JSON.stringify({ token: token, password: newPassword }));
-        const response = await fetch(`${API_HOST}/api/v1/user/password/reset`, {
+        console.log(
+          JSON.stringify({
+            token: token,
+            password: newPassword,
+            confirm_password: newPassword,
+          }),
+        );
+        const response = await fetch(`${API_HOST}/api/v1/users/set_password`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ token: token, password: newPassword }),
+          body: JSON.stringify({
+            token: token,
+            password: newPassword,
+            confirm_password: newPassword,
+          }),
         });
 
         if (!response.ok) {
@@ -93,7 +103,7 @@ const Index = () => {
     <>
       {token ? (
         verified ? (
-          <PasswordVerified />
+          <PasswordCreated />
         ) : (
           <Flex variant="onboardingFormPage">
             <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
@@ -113,14 +123,14 @@ const Index = () => {
                 New Password
               </Heading>
 
-              <Text sx={{ mb: '48px' }}>
+              <Text sx={{ mb: '28px' }}>
                 Create a password for your Wraft account
               </Text>
 
               <Box as="form" onSubmit={handleSubmit}>
                 <Label htmlFor="New password">Enter password</Label>
                 <Input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="newPassword"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -129,13 +139,13 @@ const Index = () => {
 
                 <Label htmlFor="Confirm password">Confirm password</Label>
                 <Input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   mb={'12px'}
                 />
-                <Flex>
+                <Flex sx={{ mb: '28px' }}>
                   <Label
                     sx={{
                       color: 'dark_900',
