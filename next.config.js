@@ -16,9 +16,7 @@ module.exports = withImages({
       },
     ];
   },
-  experimental: {
-    outputStandalone: true,
-  },
+  output: 'standalone',
   images: {
     unoptimized: true
   }

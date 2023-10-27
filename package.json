@@ -6,7 +6,7 @@
   "repository": "",
   "scripts": {
     "dev": "next",
-    "build": "next build && next export",
+    "build": "next build",
     "export": "next export",
     "start": "next start",
     "prettier": "prettier --write --ignore-unknown",
