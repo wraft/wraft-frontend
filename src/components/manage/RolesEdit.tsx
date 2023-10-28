@@ -18,6 +18,7 @@ import {
 
 interface Props {
   setOpen: any;
+  setRender: any;
   roleId: string;
 }
 
@@ -26,7 +27,7 @@ interface FormInputs {
   permissions: string[];
 }
 
-const RolesAdd = ({ setOpen, roleId }: Props) => {
+const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const {
@@ -142,6 +143,7 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
 
   function onSuccess() {
     setOpen(null);
+    setRender((prev: boolean) => !prev);
     addToast(`Role Added `, { appearance: 'success' });
   }
 

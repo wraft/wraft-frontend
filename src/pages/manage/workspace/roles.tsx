@@ -15,6 +15,7 @@ import { RolesAdd, RolesList } from '../../../components/manage';
 const Index: FC = () => {
   const token = useStoreState((state) => state.auth.token);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [render, setRender] = React.useState(false);
   function onsuccess(data: any) {
     console.log(data);
   }
@@ -40,7 +41,7 @@ const Index: FC = () => {
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           {/* <LayoutForm /> */}
-          <RolesAdd key={1} setOpen={setIsOpen} />
+          <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
         </ModalCustom>
         <Container
           sx={{
@@ -63,7 +64,7 @@ const Index: FC = () => {
                 // p: 4,
                 m: 4,
               }}>
-              <RolesList />
+              <RolesList render={render} setRender={setRender} />
             </Box>
             {/* <Workspace /> */}
           </Flex>

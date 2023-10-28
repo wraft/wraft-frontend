@@ -17,7 +17,12 @@ export interface RolesItem {
   user_count: number;
 }
 
-const RolesList = () => {
+interface Props {
+  render: boolean;
+  setRender: any;
+}
+
+const RolesList = ({ render, setRender }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<RolesItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
@@ -36,7 +41,7 @@ const RolesList = () => {
     if (token) {
       loadData(token);
     }
-  }, [token]);
+  }, [token, render]);
 
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [isDelete, setIsDelete] = useState<number | null>(null);
@@ -57,65 +62,6 @@ const RolesList = () => {
               {r.user_count}
             </Text>
           ),
-          // col3: (
-          //   // <Box
-          //   //   sx={{ cursor: 'pointer', position: 'relative' }}
-          //   //   onClick={() => setIsOpen(true)}>
-          //   //   <OptionsIcon />
-          //   //   {isOpen && <Box>hello</Box>}
-          //   // </Box>
-          //   <Box
-          //     sx={{ cursor: 'pointer', position: 'relative' }}
-          //     // onClick={() => setIsOpen(r.)}
-          //     onClick={() => {
-          //       setIsOpen(index);
-          //       console.log(index);
-          //       console.log(isOpen);
-          //       console.log(isOpen === index);
-          //     }}>
-          //     <OptionsIcon />
-          //     {isOpen === index ? (
-          //       <Box
-          //         sx={{
-          //           position: 'absolute',
-          //           bg: 'bgWhite',
-          //           // p: 3,
-          //           right: 0,
-          //           top: 0,
-          //           zIndex: 10,
-          //           border: '1px solid',
-          //           borderColor: 'neutral.1',
-          //           width: '155px',
-          //         }}>
-          //         <Box
-          //           onClick={() => console.log('edit', row.index)}
-          //           variant="text.pM"
-          //           sx={{
-          //             color: 'gray.6',
-          //             ':hover': {
-          //               bg: transparentize('neutral.1', 0.5),
-          //             },
-          //             p: 3,
-          //           }}>
-          //           Edit
-          //         </Box>
-          //         <Box
-          //           variant="text.pM"
-          //           sx={{
-          //             color: 'red.5',
-          //             ':hover': {
-          //               bg: transparentize('neutral.1', 0.5),
-          //             },
-          //             p: 3,
-          //           }}>
-          //           Disable
-          //         </Box>
-          //       </Box>
-          //     ) : (
-          //       <Box></Box>
-          //     )}
-          //   </Box>
-          // ),
         };
 
         row.push(rFormated);
@@ -123,7 +69,7 @@ const RolesList = () => {
 
       setTableList(row);
     }
-  }, [contents, deleteEntity]);
+  }, [contents, deleteEntity, render]);
 
   return (
     <Flex sx={{ width: '100%' }}>
@@ -245,8 +191,9 @@ const RolesList = () => {
                         isOpen={isEdit === row.index}
                         setOpen={setIsEdit}>
                         <RolesEdit
+                          setRender={setRender}
                           setOpen={setIsEdit}
-                          roleId={contents[row.index].id}
+                          roleId={contents[row.index]?.id}
                         />
                       </ModalCustom>
                       <ModalCustom
@@ -295,8 +242,10 @@ const RolesList = () => {
                                         `roles/${contents[row.index].id}`,
                                         token,
                                       );
-                                      loadData(token);
                                       setIsDelete(null);
+                                      console.log('before', render);
+                                      setRender((prev: boolean) => !prev);
+                                      console.log('after', render);
                                     }}>
                                     Confirm
                                   </Button>
