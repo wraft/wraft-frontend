@@ -8,6 +8,7 @@ import { Table } from '../Table';
 import ContentLoader from 'react-content-loader';
 import { ErrorIcon, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
+import { RolesEdit } from '.';
 
 export interface RolesItem {
   id: string;
@@ -39,6 +40,7 @@ const RolesList = () => {
 
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [isDelete, setIsDelete] = useState<number | null>(null);
+  const [isEdit, setIsEdit] = useState<number | null>(null);
   useEffect(() => setIsOpen(null), []);
   useEffect(() => {
     if (contents && contents.length > 0) {
@@ -185,7 +187,14 @@ const RolesList = () => {
                               disabled={
                                 contents[row.index].name === 'superadmin'
                               }
-                              onClick={() => console.log('edit', row.index)}
+                              onClick={() => {
+                                setIsOpen(null);
+                                setIsEdit(row.index);
+                                console.log(
+                                  'passedroleid',
+                                  contents[row.index].id,
+                                );
+                              }}
                               variant="text.pM"
                               sx={{
                                 textAlign: 'left',
@@ -231,6 +240,15 @@ const RolesList = () => {
                           <Box />
                         )}
                       </Box>
+                      <ModalCustom
+                        varient="right"
+                        isOpen={isEdit === row.index}
+                        setOpen={setIsEdit}>
+                        <RolesEdit
+                          setOpen={setIsEdit}
+                          roleId={contents[row.index].id}
+                        />
+                      </ModalCustom>
                       <ModalCustom
                         // transparent
                         varient="center"
