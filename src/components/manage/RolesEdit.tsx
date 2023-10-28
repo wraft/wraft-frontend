@@ -140,20 +140,6 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
     console.log('child', newDataFormat);
   };
 
-  // const handleCheckboxChange = (event: any) => {
-  //   const checked = event.target.checked;
-  //   const value = event.target.value;
-
-  //   if (checked) {
-  //     console.log('checked', value);
-  //     setCheckedValues([...checkedValues, value]);
-  //   } else {
-  //     console.log('unchecked', value);
-  //     setCheckedValues(checkedValues.filter((item: any) => item !== value));
-  //   }
-
-  // };
-
   function onSuccess() {
     setOpen(null);
     addToast(`Role Added `, { appearance: 'success' });
@@ -253,8 +239,6 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
                                 sx={{
                                   width: '14px',
                                   height: '14px',
-                                  // color: 'green.5',
-                                  // accentColor: 'green.5',
                                 }}
                                 checked={newDataFormat[key].isChecked}
                                 onChange={(e: any) => {
@@ -295,18 +279,13 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
                                       required: true,
                                     })}
                                     value={sub.name}
-                                    checked={
-                                      // role?.permissions?.includes(sub.name) ||
-                                      sub.isChecked
-                                    }
-                                    // checked={sub.isChecked}
+                                    checked={sub.isChecked}
                                     onChange={(e: any) => {
                                       checkChild(
                                         e,
                                         newDataFormat[key].name,
                                         sub.id,
                                       );
-                                      // handleCheckboxChange(e);
                                     }}
                                   />
                                   <Text
