@@ -1,6 +1,7 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useState } from 'react';
-import { Label, Input, Box, Flex, Button, Text, Checkbox } from 'theme-ui';
+import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
+import { Checkbox } from '@ariakit/react';
 
 import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
@@ -166,7 +167,7 @@ const RolesAdd = ({ setOpen }: Props) => {
                 border: '1px solid',
                 borderColor: 'neutral.1',
                 borderRadius: 4,
-                maxHeight: '450px',
+                maxHeight: '400px',
                 overflowX: 'hidden',
                 overflowY: 'scroll',
                 scrollbarWidth: 'none',
@@ -200,7 +201,7 @@ const RolesAdd = ({ setOpen }: Props) => {
                                 alignItems: 'center',
                               }}>
                               <Checkbox
-                                sx={{ width: '16px', height: '16px' }}
+                                sx={{ width: '14px', height: '14px' }}
                                 checked={newDataFormat[key].isChecked}
                                 onChange={(e: any) => {
                                   checkParent(e, newDataFormat[key].name);
@@ -209,6 +210,7 @@ const RolesAdd = ({ setOpen }: Props) => {
                               <Text
                                 variant="pR"
                                 sx={{
+                                  pl: 1,
                                   textTransform: 'capitalize',
                                   color: 'green.5',
                                 }}>
@@ -235,7 +237,7 @@ const RolesAdd = ({ setOpen }: Props) => {
                                     },
                                   }}>
                                   <Checkbox
-                                    sx={{ width: '16px', height: '16px' }}
+                                    sx={{ width: '12px', height: '12px' }}
                                     {...register('permissions', {
                                       required: true,
                                     })}
@@ -250,10 +252,11 @@ const RolesAdd = ({ setOpen }: Props) => {
                                     }}
                                   />
                                   <Text
-                                    variant="pR"
+                                    variant="subR"
                                     sx={{
+                                      pl: 1,
                                       textTransform: 'capitalize',
-                                      color: 'green.5',
+                                      color: 'gray.4',
                                     }}>
                                     {sub.action}
                                   </Text>
@@ -271,7 +274,7 @@ const RolesAdd = ({ setOpen }: Props) => {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ p: 4 }}>
+      <Box sx={{ p: 4, pt: 2 }}>
         <Button
           disabled={true && !isValid}
           type="submit"

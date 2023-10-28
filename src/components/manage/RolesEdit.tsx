@@ -248,6 +248,7 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
                               <Text
                                 variant="pR"
                                 sx={{
+                                  pl: 1,
                                   textTransform: 'capitalize',
                                   color: 'green.5',
                                 }}>
@@ -274,7 +275,7 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
                                     },
                                   }}>
                                   <Checkbox
-                                    sx={{ width: '14px', height: '14px' }}
+                                    sx={{ width: '12px', height: '12px' }}
                                     {...register('permissions', {
                                       required: true,
                                     })}
@@ -289,10 +290,11 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
                                     }}
                                   />
                                   <Text
-                                    variant="pR"
+                                    variant="subR"
                                     sx={{
+                                      pl: 1,
                                       textTransform: 'capitalize',
-                                      color: 'green.5',
+                                      color: 'gray.4',
                                     }}>
                                     {sub.action}
                                   </Text>
@@ -310,7 +312,7 @@ const RolesAdd = ({ setOpen, roleId }: Props) => {
           </Box>
         </Box>
       </Box>
-      <Box sx={{ p: 4 }}>
+      <Box sx={{ p: 4, pt: 2 }}>
         <Button
           disabled={true && !isValid}
           type="submit"
