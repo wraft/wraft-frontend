@@ -30,7 +30,7 @@ const RolesAdd = ({ setOpen }: Props) => {
   const {
     register,
     handleSubmit,
-    // formState: { isValid },
+    formState: { isValid },
   } = useForm<FormInputs>({ mode: 'onChange' });
 
   const [permissions, setPermissions] = useState<any>({});
@@ -104,20 +104,6 @@ const RolesAdd = ({ setOpen }: Props) => {
     setNewDataFormat({ ...data });
     console.log('child', newDataFormat);
   };
-
-  // const handleCheckboxChange = (event: any) => {
-  //   const checked = event.target.checked;
-  //   const value = event.target.value;
-
-  //   if (checked) {
-  //     console.log('checked', value);
-  //     setCheckedValues([...checkedValues, value]);
-  //   } else {
-  //     console.log('unchecked', value);
-  //     setCheckedValues(checkedValues.filter((item: any) => item !== value));
-  //   }
-
-  // };
 
   function onSuccess() {
     setOpen(false);
@@ -261,7 +247,6 @@ const RolesAdd = ({ setOpen }: Props) => {
                                         newDataFormat[key].name,
                                         sub.id,
                                       );
-                                      // handleCheckboxChange(e);
                                     }}
                                   />
                                   <Text
@@ -288,7 +273,7 @@ const RolesAdd = ({ setOpen }: Props) => {
       </Box>
       <Box sx={{ p: 4 }}>
         <Button
-          // disabled={true && !isValid}
+          disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
