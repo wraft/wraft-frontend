@@ -111,10 +111,6 @@ const Nav = (props: any) => {
     (actions: any) => actions.profile.updateProfile,
   );
 
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
-  };
-
   // const menu = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
@@ -195,6 +191,9 @@ const Nav = (props: any) => {
   };
 
   /** Load Workspaces for the current user */
+  const onProfileLoad = (data: any) => {
+    setProfile(data);
+  };
   useEffect(() => {
     loadOrgs(token);
     if (token) {
@@ -214,7 +213,7 @@ const Nav = (props: any) => {
     console.log('currentOrg', currentOrg);
     // console.log('currentOrg', profile.organisation_id);
     // workspaces?.organisations.find({ id: profile.organisation_id });
-  }, [profile]);
+  }, [profile, token, workspaces]);
 
   // useEffect(() => {
   //   // check if token is there
