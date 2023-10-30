@@ -99,7 +99,6 @@ export const OptionsIcon = () => (
     height="18"
     viewBox="0 0 36 18"
     fill="none">
-    <rect width="36" height="18" fill="white" />
     <circle cx="8.5" cy="8.5" r="2.5" fill="#C1C6DB" />
     <circle cx="17.5" cy="8.5" r="2.5" fill="#C1C6DB" />
     <circle cx="26.5" cy="8.5" r="2.5" fill="#C1C6DB" />

@@ -143,14 +143,12 @@ const RolesList = ({ render, setRender }: Props) => {
                               }}
                               variant="text.pM"
                               sx={{
+                                cursor: 'pointer',
                                 textAlign: 'left',
                                 width: '100%',
                                 bg: 'bgWhite',
                                 color: 'gray.6',
                                 p: 3,
-                                ':hover': {
-                                  bg: transparentize('neutral.1', 0.5),
-                                },
                                 ':disabled': {
                                   color: 'gray.2',
                                 },
@@ -167,14 +165,12 @@ const RolesList = ({ render, setRender }: Props) => {
                                 setIsDelete(row.index);
                               }}
                               sx={{
+                                cursor: 'pointer',
                                 textAlign: 'left',
                                 width: '100%',
                                 bg: 'bgWhite',
                                 color: 'red.5',
                                 p: 3,
-                                ':hover': {
-                                  bg: transparentize('neutral.1', 0.5),
-                                },
                                 ':disabled': {
                                   color: 'gray.2',
                                 },
