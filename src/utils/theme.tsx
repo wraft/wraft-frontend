@@ -223,8 +223,14 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     checkbox: {
-      // '-webkit-tap-highlight-color': 'transparent',
+      '-moz-appearance': 'none',
+      '-webkit-appearance': 'none',
+      '-o-appearance': 'none',
+      outline: 'none',
+      content: 'none',
       color: 'neutral.1',
+      accentColor: 'gray.8',
+      // '-webkit-tap-highlight-color': 'transparent',
       // bg: 'gray.8',
       // border: '1px solid',
       // borderColor: 'gray.0',
@@ -1080,9 +1086,9 @@ const theme: Theme & CustomVariantGroups = {
         color: 'gray.8',
         bg: 'neutral.2',
       },
-      ':hover': {
-        bg: 'green.8',
-      },
+      // ':hover': {
+      //   bg: 'green.8',
+      // },
     },
     buttonPrimarySmall: {
       variant: 'buttons.buttonPrimary',
