@@ -201,10 +201,8 @@ const RolesList = ({ render, setRender }: Props) => {
                           <Flex
                             sx={{
                               width: '403px',
-                              height: '226px',
                               flexDirection: 'column',
                               alignItems: 'center',
-                              justifyContent: 'space-around',
                               p: 4,
                               gap: 3,
                             }}>
@@ -213,6 +211,7 @@ const RolesList = ({ render, setRender }: Props) => {
                               You cannot remove a role that is in use
                             </Text>
                             <Button
+                              sx={{ mt: 2 }}
                               variant="buttonPrimary"
                               onClick={() => setIsDelete(null)}>
                               Okay
