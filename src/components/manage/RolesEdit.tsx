@@ -16,6 +16,7 @@ import {
   DisclosureContent,
 } from '@ariakit/react';
 import { ArrowDropdown } from '../Icons';
+import theme from '../../utils/theme';
 
 interface Props {
   setOpen: any;
@@ -33,6 +34,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   const { addToast } = useToasts();
   const {
     register,
+    trigger,
     handleSubmit,
     formState: { isValid },
   } = useForm<FormInputs>({ mode: 'onChange' });
@@ -101,6 +103,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
         }
       });
       setNewDataFormat({ ...data });
+      trigger(['name', 'permissions'], { shouldFocus: true });
     }
   }, [role]);
 
@@ -120,6 +123,8 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     }
     setNewDataFormat({ ...data });
     console.log('parent', newDataFormat);
+    trigger('permissions', { shouldFocus: true });
+    trigger();
   };
 
   const checkChild = (e: any, name: any, id: any) => {
@@ -177,7 +182,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
             borderBottom: '1px solid',
             borderColor: 'gray.0',
           }}>
-          <Text variant="pB">Create new role</Text>
+          <Text variant="pB">Edit role</Text>
         </Box>
         <Box sx={{ p: 4 }}>
           <div>
@@ -252,6 +257,9 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                                 sx={{
                                   width: '14px',
                                   height: '14px',
+                                  accentColor:
+                                    theme?.colors &&
+                                    ((theme?.colors?.gray ?? [])[9] as string),
                                 }}
                                 checked={newDataFormat[key].isChecked}
                                 onChange={(e: any) => {
@@ -263,7 +271,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                                 sx={{
                                   pl: 1,
                                   textTransform: 'capitalize',
-                                  color: 'green.5',
+                                  color: 'gray.7',
                                 }}>
                                 {newDataFormat[key].name}
                               </Text>
@@ -299,7 +307,14 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                                     },
                                   }}>
                                   <Checkbox
-                                    sx={{ width: '12px', height: '12px' }}
+                                    sx={{
+                                      width: '12px',
+                                      height: '12px',
+                                      accentColor:
+                                        theme?.colors &&
+                                        ((theme?.colors?.gray ??
+                                          [])[9] as string),
+                                    }}
                                     {...register('permissions', {
                                       required: true,
                                     })}
@@ -338,6 +353,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       </Box>
       <Box sx={{ p: 4, pt: 2 }}>
         <Button
+          onMouseOver={() => trigger()}
           disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
