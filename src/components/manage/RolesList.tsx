@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Button } from 'theme-ui';
-import { transparentize } from '@theme-ui/color';
 import { deleteEntity, loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import { Table } from '../Table';
 import ContentLoader from 'react-content-loader';
-import { ErrorIcon, OptionsIcon } from '../Icons';
+import { BigErrorIcon, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
 import { RolesEdit } from '.';
 
@@ -201,14 +200,23 @@ const RolesList = ({ render, setRender }: Props) => {
                         contents[row.index].user_count > 0 ? (
                           <Flex
                             sx={{
+                              width: '403px',
+                              height: '226px',
                               flexDirection: 'column',
                               alignItems: 'center',
-                              justifyContent: 'center',
+                              justifyContent: 'space-around',
                               p: 4,
                               gap: 3,
                             }}>
-                            <ErrorIcon />
-                            <Text>You cannot remove a role that is in use</Text>
+                            <BigErrorIcon />
+                            <Text variant="pR" sx={{ color: 'gray.8' }}>
+                              You cannot remove a role that is in use
+                            </Text>
+                            <Button
+                              variant="buttonPrimary"
+                              onClick={() => setIsDelete(null)}>
+                              Okay
+                            </Button>
                           </Flex>
                         ) : (
                           <Box>

@@ -105,6 +105,20 @@ export const OptionsIcon = () => (
   </svg>
 );
 
+export const BigErrorIcon = () => (
+  <svg
+    width="66"
+    height="66"
+    viewBox="0 0 66 66"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M30.25 41.25H35.75V46.75H30.25V41.25ZM30.25 19.25H35.75V35.75H30.25V19.25ZM32.9725 5.5C17.7925 5.5 5.5 17.82 5.5 33C5.5 48.18 17.7925 60.5 32.9725 60.5C48.18 60.5 60.5 48.18 60.5 33C60.5 17.82 48.18 5.5 32.9725 5.5ZM33 55C20.845 55 11 45.155 11 33C11 20.845 20.845 11 33 11C45.155 11 55 20.845 55 33C55 45.155 45.155 55 33 55Z"
+      fill="#A5ABB2"
+    />
+  </svg>
+);
+
 export const AddIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
