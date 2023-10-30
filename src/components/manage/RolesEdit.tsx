@@ -15,6 +15,7 @@ import {
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
+import { ArrowDropdown } from '../Icons';
 
 interface Props {
   setOpen: any;
@@ -40,6 +41,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   const [role, setRole] = useState<any>({});
   const [newDataFormat, setNewDataFormat] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isExpanded, setExpanded] = useState<number | null>(null);
 
   const loadPermissionsSuccess = (data: any) => {
     console.log(data);
@@ -212,10 +214,15 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
               }}>
               <Box>
                 {filteredPermissionKeys.map((key, index) => {
+                  const dropped = isExpanded === index;
                   return (
                     <DisclosureProvider key={index}>
                       <Box>
                         <Disclosure
+                          onClick={() => {
+                            if (isExpanded === index) setExpanded(null);
+                            else setExpanded(index);
+                          }}
                           sx={{
                             width: '100%',
                             bg: 'bgWhite',
@@ -230,7 +237,11 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                               borderBottom: 'none',
                             },
                           }}>
-                          <Box>
+                          <Flex
+                            sx={{
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                            }}>
                             <Label
                               sx={{
                                 display: 'flex',
@@ -257,7 +268,18 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                                 {newDataFormat[key].name}
                               </Text>
                             </Label>
-                          </Box>
+                            <Flex
+                              as={'div'}
+                              className="icon"
+                              sx={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                transform: dropped && 'rotate(180deg)',
+                                color: 'gray.2',
+                              }}>
+                              <ArrowDropdown />
+                            </Flex>
+                          </Flex>
                         </Disclosure>
                         <DisclosureContent>
                           <Box>
