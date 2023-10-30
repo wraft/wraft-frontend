@@ -45,7 +45,7 @@ const Index: FC = () => {
         </ModalCustom>
         <Container
           sx={{
-            px: 4,
+            // px: 4,
             pt: 0,
             height: '100%',
             maxHeight: '90vh',

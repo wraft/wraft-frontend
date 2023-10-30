@@ -20,8 +20,9 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
     <Box
       sx={{
         mt: 4,
+        ml: 4,
         pl: 0,
-        mr: 4,
+        // mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
         // borderRight: 'solid 1px',
