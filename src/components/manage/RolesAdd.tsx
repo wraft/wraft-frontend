@@ -119,14 +119,38 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
     addToast(`Role Added `, { appearance: 'success' });
   }
 
+  // const [checkedValues, setCheckedValues] = useState<string[]>([]);
+  const checkedValuesFunc = (permissions: string[]) => {
+    filteredPermissionKeys.forEach((key) => {
+      newDataFormat[key].children.forEach((e: any) => {
+        if (e.isChecked === true) {
+          permissions.push(e.name);
+          //   setCheckedValues([...checkedValues, e.name]);
+          // } else {
+          //   setCheckedValues(
+          //     checkedValues.filter((item: any) => item !== e.name),
+          //   );
+        }
+      });
+    });
+  };
   function onSubmit(data: any) {
-    console.log('submitted', data);
-    console.log('submitted permissions', data.permissions);
-    const dataNew = {
+    const permissions: string[] = [];
+    checkedValuesFunc(permissions);
+    // console.log('checked values', checkedValues);
+    // console.log('checked values', permissions);
+    // console.log('submitted', data);
+    // console.log('submitted permissions', data.permissions);
+
+    const body = {
       name: data.name,
-      permissions: data.permissions,
+      permissions: permissions,
     };
-    createEntity(dataNew, 'roles', token, onSuccess);
+    // console.log(body);
+    // console.log(data);
+    createEntity(body, 'roles', token, onSuccess);
+
+    // console.log(JSON.stringify(data));
   }
 
   return (
@@ -283,10 +307,15 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                         ((theme?.colors?.gray ??
                                           [])[9] as string),
                                     }}
-                                    {...register('permissions', {
-                                      required: true,
-                                    })}
+                                    {...register(
+                                      // `permissions[${sub.name}]`,
+                                      'permissions',
+                                    )}
+                                    // {...register('permissions', {
+                                    //   required: true,
+                                    // })}
                                     value={sub.name}
+                                    // value={sub.isChecked && sub.name}
                                     checked={sub.isChecked}
                                     onChange={(e: any) => {
                                       checkChild(
@@ -322,7 +351,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       <Box sx={{ p: 4, pt: 2 }}>
         <Button
           onMouseEnter={() => trigger()}
-          disabled={true && !isValid}
+          // disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
