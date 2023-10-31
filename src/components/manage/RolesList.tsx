@@ -217,8 +217,10 @@ const RolesList = ({ render, setRender }: Props) => {
                           </Flex>
                         ) : (
                           <ConfirmDelete
-                            title="Delete workspace"
-                            text="Are you sure you want to delete this workspace?"
+                            title="Delete role"
+                            text={`Are you sure you want to delete ‘${contents[
+                              row.index
+                            ]?.name}’?`}
                             setOpen={setIsDelete}
                             onConfirmDelete={() => {
                               deleteEntity(
