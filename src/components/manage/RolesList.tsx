@@ -18,15 +18,19 @@ export interface RolesItem {
 }
 
 interface Props {
+  searchTerm: string;
   render: boolean;
   setRender: any;
 }
 
-const RolesList = ({ render, setRender }: Props) => {
+const RolesList = ({ render, setRender, searchTerm }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<RolesItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [isDelete, setIsDelete] = useState<number | null>(null);
+  const [isEdit, setIsEdit] = useState<number | null>(null);
 
   const loadDataSuccess = (data: any) => {
     setLoading(true);
@@ -44,14 +48,15 @@ const RolesList = ({ render, setRender }: Props) => {
     // }, [token]);
   }, [token, render]);
 
-  const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [isDelete, setIsDelete] = useState<number | null>(null);
-  const [isEdit, setIsEdit] = useState<number | null>(null);
+  const filteredContents = contents.filter((e: any) =>
+    e.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
   useEffect(() => setIsOpen(null), []);
   useEffect(() => {
-    if (contents && contents.length > 0) {
+    if (filteredContents && filteredContents.length > 0) {
       const row: any = [];
-      contents.map((r: any) => {
+      filteredContents.map((r: any) => {
         const rFormated = {
           name: (
             <Text variant="text.pM" sx={{ color: 'gray.5' }}>
@@ -70,12 +75,12 @@ const RolesList = ({ render, setRender }: Props) => {
 
       setTableList(row);
     }
-  }, [contents, deleteEntity]);
+  }, [contents, filteredContents, deleteEntity]);
 
   return (
     <Flex sx={{ width: '100%' }}>
       {!loading && <ContentLoader />}
-      {loading && !contents && (
+      {loading && !filteredContents && (
         <Box
           sx={{
             p: 4,
@@ -86,7 +91,7 @@ const RolesList = ({ render, setRender }: Props) => {
           <Text>Nothing to approve</Text>
         </Box>
       )}
-      {loading && contents && (
+      {loading && filteredContents && (
         <Table
           options={{
             columns: [
@@ -128,14 +133,15 @@ const RolesList = ({ render, setRender }: Props) => {
                             }}>
                             <Button
                               disabled={
-                                contents[row.index].name === 'superadmin'
+                                filteredContents[row.index].name ===
+                                'superadmin'
                               }
                               onClick={() => {
                                 setIsOpen(null);
                                 setIsEdit(row.index);
                                 console.log(
                                   'passedroleid',
-                                  contents[row.index].id,
+                                  filteredContents[row.index].id,
                                 );
                               }}
                               variant="text.pM"
@@ -154,7 +160,8 @@ const RolesList = ({ render, setRender }: Props) => {
                             </Button>
                             <Button
                               disabled={
-                                contents[row.index].name === 'superadmin'
+                                filteredContents[row.index].name ===
+                                'superadmin'
                               }
                               variant="text.pM"
                               onClick={() => {
@@ -186,7 +193,7 @@ const RolesList = ({ render, setRender }: Props) => {
                         <RolesEdit
                           setRender={setRender}
                           setOpen={setIsEdit}
-                          roleId={contents[row.index]?.id}
+                          roleId={filteredContents[row.index]?.id}
                         />
                       </ModalCustom>
 
@@ -194,8 +201,8 @@ const RolesList = ({ render, setRender }: Props) => {
                         varient="center"
                         isOpen={isDelete === row.index}
                         setOpen={setIsDelete}>
-                        {contents[row.index] &&
-                        contents[row.index].user_count > 0 ? (
+                        {filteredContents[row.index] &&
+                        filteredContents[row.index].user_count > 0 ? (
                           <Flex
                             sx={{
                               width: '403px',
@@ -218,13 +225,13 @@ const RolesList = ({ render, setRender }: Props) => {
                         ) : (
                           <ConfirmDelete
                             title="Delete role"
-                            text={`Are you sure you want to delete ‘${contents[
+                            text={`Are you sure you want to delete ‘${filteredContents[
                               row.index
                             ]?.name}’?`}
                             setOpen={setIsDelete}
                             onConfirmDelete={() => {
                               deleteEntity(
-                                `roles/${contents[row.index].id}`,
+                                `roles/${filteredContents[row.index].id}`,
                                 token,
                               );
                               setIsDelete(null);
