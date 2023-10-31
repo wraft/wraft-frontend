@@ -54,9 +54,9 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
 
   useEffect(() => setIsOpen(null), []);
   useEffect(() => {
-    if (filteredContents && filteredContents.length > 0) {
+    if (contents && contents.length > 0) {
       const row: any = [];
-      filteredContents.map((r: any) => {
+      contents.map((r: any) => {
         const rFormated = {
           name: (
             <Text variant="text.pM" sx={{ color: 'gray.5' }}>
@@ -75,12 +75,12 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
 
       setTableList(row);
     }
-  }, [contents, filteredContents, deleteEntity]);
+  }, [contents, contents, deleteEntity]);
 
   return (
     <Flex sx={{ width: '100%' }}>
       {!loading && <ContentLoader />}
-      {loading && !filteredContents && (
+      {loading && !contents && (
         <Box
           sx={{
             p: 4,
@@ -91,7 +91,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
           <Text>Nothing to approve</Text>
         </Box>
       )}
-      {loading && filteredContents && (
+      {loading && contents && (
         <Table
           options={{
             columns: [
@@ -133,15 +133,14 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                             }}>
                             <Button
                               disabled={
-                                filteredContents[row.index].name ===
-                                'superadmin'
+                                contents[row.index]?.name === 'superadmin'
                               }
                               onClick={() => {
                                 setIsOpen(null);
                                 setIsEdit(row.index);
                                 console.log(
                                   'passedroleid',
-                                  filteredContents[row.index].id,
+                                  contents[row.index].id,
                                 );
                               }}
                               variant="text.pM"
@@ -160,8 +159,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                             </Button>
                             <Button
                               disabled={
-                                filteredContents[row.index].name ===
-                                'superadmin'
+                                contents[row.index].name === 'superadmin'
                               }
                               variant="text.pM"
                               onClick={() => {
@@ -193,7 +191,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         <RolesEdit
                           setRender={setRender}
                           setOpen={setIsEdit}
-                          roleId={filteredContents[row.index]?.id}
+                          roleId={contents[row.index]?.id}
                         />
                       </ModalCustom>
 
@@ -201,8 +199,8 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         varient="center"
                         isOpen={isDelete === row.index}
                         setOpen={setIsDelete}>
-                        {filteredContents[row.index] &&
-                        filteredContents[row.index].user_count > 0 ? (
+                        {contents[row.index] &&
+                        contents[row.index].user_count > 0 ? (
                           <Flex
                             sx={{
                               width: '403px',
@@ -225,13 +223,13 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         ) : (
                           <ConfirmDelete
                             title="Delete role"
-                            text={`Are you sure you want to delete ‘${filteredContents[
+                            text={`Are you sure you want to delete ‘${contents[
                               row.index
                             ]?.name}’?`}
                             setOpen={setIsDelete}
                             onConfirmDelete={() => {
                               deleteEntity(
-                                `roles/${filteredContents[row.index].id}`,
+                                `roles/${contents[row.index].id}`,
                                 token,
                               );
                               setIsDelete(null);
