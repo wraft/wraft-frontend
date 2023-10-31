@@ -8,6 +8,7 @@ import ContentLoader from 'react-content-loader';
 import { BigErrorIcon, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
 import { RolesEdit } from '.';
+import { ConfirmDelete } from '../common';
 
 export interface RolesItem {
   id: string;
@@ -40,6 +41,7 @@ const RolesList = ({ render, setRender }: Props) => {
     if (token) {
       loadData(token);
     }
+    // }, [token]);
   }, [token, render]);
 
   const [isOpen, setIsOpen] = useState<number | null>(null);
@@ -68,7 +70,7 @@ const RolesList = ({ render, setRender }: Props) => {
 
       setTableList(row);
     }
-  }, [contents, deleteEntity, render]);
+  }, [contents, deleteEntity]);
 
   return (
     <Flex sx={{ width: '100%' }}>
@@ -108,12 +110,8 @@ const RolesList = ({ render, setRender }: Props) => {
                         sx={{ cursor: 'pointer', position: 'relative' }}
                         onClick={() => {
                           setIsOpen(row.index);
-                          // console.log(row);
-                          // console.log(contents[row.index]);
                         }}
-                        onMouseLeave={() => setIsOpen(null)}
-                        // onMouseOut={() => setIsOpen(null)}
-                      >
+                        onMouseLeave={() => setIsOpen(null)}>
                         <OptionsIcon />
                         {isOpen === row.index ? (
                           <Box
@@ -191,8 +189,8 @@ const RolesList = ({ render, setRender }: Props) => {
                           roleId={contents[row.index]?.id}
                         />
                       </ModalCustom>
+
                       <ModalCustom
-                        // transparent
                         varient="center"
                         isOpen={isDelete === row.index}
                         setOpen={setIsDelete}>
@@ -218,49 +216,19 @@ const RolesList = ({ render, setRender }: Props) => {
                             </Button>
                           </Flex>
                         ) : (
-                          <Box>
-                            <Flex
-                              sx={{
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                p: 4,
-                                gap: 3,
-                              }}>
-                              <Box>
-                                Are you sure you want to delete{' '}
-                                <Text
-                                  as={'span'}
-                                  sx={{ display: 'inline-block' }}>
-                                  {contents[row.index]?.name}
-                                </Text>
-                                ?
-                              </Box>
-                              <Box>
-                                <Flex sx={{ gap: 3 }}>
-                                  <Button
-                                    variant="delete"
-                                    onClick={() => {
-                                      deleteEntity(
-                                        `roles/${contents[row.index].id}`,
-                                        token,
-                                      );
-                                      setIsDelete(null);
-                                      console.log('before', render);
-                                      setRender((prev: boolean) => !prev);
-                                      console.log('after', render);
-                                    }}>
-                                    Confirm
-                                  </Button>
-                                  <Button
-                                    variant="cancel"
-                                    onClick={() => setIsDelete(null)}>
-                                    Cancel
-                                  </Button>
-                                </Flex>
-                              </Box>
-                            </Flex>
-                          </Box>
+                          <ConfirmDelete
+                            title="Delete workspace"
+                            text="Are you sure you want to delete this workspace?"
+                            setOpen={setIsDelete}
+                            onConfirmDelete={() => {
+                              deleteEntity(
+                                `roles/${contents[row.index].id}`,
+                                token,
+                              );
+                              setIsDelete(null);
+                              setRender((prev: boolean) => !prev);
+                            }}
+                          />
                         )}
                       </ModalCustom>
                     </>
