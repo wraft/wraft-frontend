@@ -45,12 +45,15 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
     if (token) {
       loadData(token);
     }
-    // }, [token]);
   }, [token, render]);
 
-  const filteredContents = contents.filter((e: any) =>
-    e.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  useEffect(() => {
+    const contentCopy = [...contents];
+    const filteredContents = contentCopy.filter((e: any) =>
+      e.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+    setContents([...filteredContents]);
+  }, [searchTerm]);
 
   useEffect(() => setIsOpen(null), []);
   useEffect(() => {
@@ -75,7 +78,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
 
       setTableList(row);
     }
-  }, [contents, contents, deleteEntity]);
+  }, [contents, deleteEntity]);
 
   return (
     <Flex sx={{ width: '100%' }}>
@@ -115,6 +118,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         sx={{ cursor: 'pointer', position: 'relative' }}
                         onClick={() => {
                           setIsOpen(row.index);
+                          console.log(row.index, isOpen, isOpen === row.index);
                         }}
                         onMouseLeave={() => setIsOpen(null)}>
                         <OptionsIcon />

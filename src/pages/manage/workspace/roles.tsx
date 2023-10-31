@@ -20,10 +20,9 @@ const Index: FC = () => {
   function onsuccess(data: any) {
     console.log(data);
   }
-  loadEntity(token, 'roles', onsuccess);
   React.useEffect(() => {
-    loadEntity;
-  }, []);
+    if (token) loadEntity(token, 'roles', onsuccess);
+  }, [token]);
   return (
     <>
       <Head>
