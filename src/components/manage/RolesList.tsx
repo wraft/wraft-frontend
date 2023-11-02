@@ -118,7 +118,6 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         sx={{ cursor: 'pointer', position: 'relative' }}
                         onClick={() => {
                           setIsOpen(row.index);
-                          console.log(row.index, isOpen, isOpen === row.index);
                         }}
                         onMouseLeave={() => setIsOpen(null)}>
                         <OptionsIcon />
@@ -142,10 +141,6 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                               onClick={() => {
                                 setIsOpen(null);
                                 setIsEdit(row.index);
-                                console.log(
-                                  'passedroleid',
-                                  contents[row.index].id,
-                                );
                               }}
                               variant="text.pM"
                               sx={{

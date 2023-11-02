@@ -44,7 +44,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
   const [isExpanded, setExpanded] = useState<number | null>(null);
 
   const loadPermissionsSuccess = (data: any) => {
-    console.log(data);
     setPermissions(data);
   };
 
@@ -69,7 +68,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
 
   useEffect(() => {
     setNewDataFormat(newFormat);
-    console.log('new Data for permissions', newFormat);
   }, [token, permissions]);
 
   const filteredPermissionKeys = Object.keys(newDataFormat).filter((e: any) =>
@@ -87,7 +85,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       data[name].children.map((child: any) => (child.isChecked = false));
     }
     setNewDataFormat({ ...data });
-    console.log('parent', newDataFormat);
     trigger('permissions', { shouldFocus: true });
     trigger();
   };
@@ -110,7 +107,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       }
     });
     setNewDataFormat({ ...data });
-    console.log('child', newDataFormat);
   };
 
   function onSuccess() {
@@ -215,9 +211,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                             ':last-of-type': {
                               borderBottom: 'none',
                             },
-                            // '&[aria-expanded="true"]': {
-                            //   bg: 'yellow',
-                            // },
                           }}>
                           <Flex
                             sx={{
@@ -330,7 +323,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       <Box sx={{ p: 4, pt: 2 }}>
         <Button
           onMouseEnter={() => trigger()}
-          // disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
