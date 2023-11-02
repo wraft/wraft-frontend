@@ -17,8 +17,8 @@ const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  function onsuccess(data: any) {
-    console.log(data);
+  function onsuccess() {
+    console.log('success');
   }
   React.useEffect(() => {
     if (token) loadEntity(token, 'roles', onsuccess);
@@ -44,7 +44,6 @@ const Index: FC = () => {
                 mr: 2,
               }}>
               <Input
-                // type="search"
                 placeholder="Search by role names"
                 onChange={(e: any) => setSearchTerm(e.target.value)}
                 sx={{
@@ -77,12 +76,10 @@ const Index: FC = () => {
           </Flex>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
           <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
         </ModalCustom>
         <Container
           sx={{
-            // px: 4,
             pt: 0,
             height: '100%',
             maxHeight: '90vh',
@@ -98,7 +95,6 @@ const Index: FC = () => {
                 border: '1px solid',
                 borderColor: 'neutral.1',
                 borderRadius: 4,
-                // p: 4,
                 m: 4,
               }}>
               <RolesList

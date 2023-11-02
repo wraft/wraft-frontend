@@ -46,7 +46,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   const [isExpanded, setExpanded] = useState<number | null>(null);
 
   const loadPermissionsSuccess = (data: any) => {
-    console.log(data);
     setPermissions(data);
   };
 
@@ -55,7 +54,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   };
 
   const loadRolesOnSuccess = (data: any) => {
-    console.log(data);
     setRole(data);
   };
 
@@ -83,7 +81,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
 
   useEffect(() => {
     setNewDataFormat(newFormat);
-    console.log('new Data for permissions', newFormat);
   }, [token, permissions]);
 
   useEffect(() => {
@@ -122,7 +119,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       data[name].children.map((child: any) => (child.isChecked = false));
     }
     setNewDataFormat({ ...data });
-    console.log('parent', newDataFormat);
     trigger('permissions', { shouldFocus: true });
     trigger();
   };
@@ -145,7 +141,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       }
     });
     setNewDataFormat({ ...data });
-    console.log('child', newDataFormat);
   };
 
   function onSuccess() {
@@ -164,8 +159,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     });
   };
   function onSubmit(data: any) {
-    // console.log('submitted', data);
-    // console.log('submitted permissions', data.permissions);
     const permissions: string[] = [];
     checkedValuesFunc(permissions);
     const body = {
@@ -219,14 +212,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                 sx={{ bg: 'background' }}
               />
             </Box>
-            {/* <Box sx={{ maxHeight: '500px', overflow: 'hidden' }}> */}
             <Box>
-              {/* <Flex
-              sx={{
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                flexGrow: 1,
-              }}> */}
               <Flex
                 sx={{
                   flexDirection: 'column',
@@ -369,7 +355,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                     );
                   })}
                 </Box>
-                {/* </Flex> */}
               </Flex>
             </Box>
           </Box>
@@ -378,7 +363,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       <Box sx={{ p: 4, pt: 2 }}>
         <Button
           onMouseOver={() => trigger()}
-          // disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save
