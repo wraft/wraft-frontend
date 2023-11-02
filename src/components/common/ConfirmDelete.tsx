@@ -2,12 +2,19 @@ import { Box, Button, Flex, Text } from 'theme-ui';
 
 interface props {
   setOpen: any;
+  setRender?: any;
   onConfirmDelete: any;
   title: string;
   text: string;
 }
 
-const ConfirmDelete = ({ setOpen, onConfirmDelete, title, text }: props) => {
+const ConfirmDelete = ({
+  setOpen,
+  setRender,
+  onConfirmDelete,
+  title,
+  text,
+}: props) => {
   return (
     <Box sx={{ maxWidth: '342px' }}>
       <Text variant="pB" sx={{ display: 'inline-block', py: 3, px: 4 }}>
@@ -29,7 +36,12 @@ const ConfirmDelete = ({ setOpen, onConfirmDelete, title, text }: props) => {
               Confirm
             </Button>
             <Button
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                if (setRender) {
+                  setRender((prev: boolean) => prev);
+                }
+              }}
               variant="cancel"
               sx={{
                 fontSize: 2,

@@ -35,7 +35,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
     register,
     trigger,
     handleSubmit,
-    formState: { isValid },
+    // formState: { isValid },
   } = useForm<FormInputs>({ mode: 'onChange' });
 
   const [permissions, setPermissions] = useState<any>({});
