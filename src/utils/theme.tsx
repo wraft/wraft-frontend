@@ -41,6 +41,7 @@ const theme: Theme & CustomVariantGroups = {
     background: '#FAFBFC',
     primary: '#00471A',
     primary_700: '#004A0F',
+    primary_A30: '#E2F7EA',
     border: '#E4E9EF',
     success_100: '#9FE5B9',
     success_400: '#008932',
@@ -222,8 +223,14 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     checkbox: {
-      // '-webkit-tap-highlight-color': 'transparent',
+      '-moz-appearance': 'none',
+      '-webkit-appearance': 'none',
+      '-o-appearance': 'none',
+      outline: 'none',
+      content: 'none',
       color: 'neutral.1',
+      accentColor: 'gray.8',
+      // '-webkit-tap-highlight-color': 'transparent',
       // bg: 'gray.8',
       // border: '1px solid',
       // borderColor: 'gray.0',
@@ -365,6 +372,11 @@ const theme: Theme & CustomVariantGroups = {
     td: {
       textAlign: 'left',
       borderBottomStyle: 'solid',
+    },
+    tableInput: {
+      variant: 'text.pM',
+      fontSize: 0,
+      color: 'gray.4',
     },
     img: {
       maxWidth: '100%',
@@ -1074,9 +1086,9 @@ const theme: Theme & CustomVariantGroups = {
         color: 'gray.8',
         bg: 'neutral.2',
       },
-      ':hover': {
-        bg: 'green.8',
-      },
+      // ':hover': {
+      //   bg: 'green.8',
+      // },
     },
     buttonPrimarySmall: {
       variant: 'buttons.buttonPrimary',
@@ -1085,11 +1097,17 @@ const theme: Theme & CustomVariantGroups = {
     delete: {
       variant: 'buttons.buttonPrimary',
       bg: 'red.6',
+      ':hover': {
+        bg: 'red.5',
+      },
     },
     cancel: {
       variant: 'buttons.buttonPrimary',
       bg: 'neutral.2',
       color: 'gray.8',
+      ':hover': {
+        bg: 'neutral.1',
+      },
     },
     googleLogin: {
       fontWeight: 'body',
