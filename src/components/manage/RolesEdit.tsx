@@ -36,7 +36,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     register,
     trigger,
     handleSubmit,
-    formState: { isValid },
+    // formState: { isValid },
   } = useForm<FormInputs>({ mode: 'onChange' });
 
   const [permissions, setPermissions] = useState<any>({});
@@ -154,14 +154,25 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     addToast(`Role Added `, { appearance: 'success' });
   }
 
+  const checkedValuesFunc = (permissions: string[]) => {
+    filteredPermissionKeys.forEach((key) => {
+      newDataFormat[key].children.forEach((e: any) => {
+        if (e.isChecked === true) {
+          permissions.push(e.name);
+        }
+      });
+    });
+  };
   function onSubmit(data: any) {
-    console.log('submitted', data);
-    console.log('submitted permissions', data.permissions);
-    const dataNew = {
+    // console.log('submitted', data);
+    // console.log('submitted permissions', data.permissions);
+    const permissions: string[] = [];
+    checkedValuesFunc(permissions);
+    const body = {
       name: data.name,
-      permissions: data.permissions,
+      permissions: permissions,
     };
-    updateEntity(`roles/${role.id}`, dataNew, token, onSuccess);
+    updateEntity(`roles/${role.id}`, body, token, onSuccess);
   }
 
   return (
@@ -173,188 +184,201 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
         flexDirection: 'column',
         justifyContent: 'space-between',
         maxHeight: '100dvh',
+        height: '100%',
       }}>
-      <Box>
-        <Box
-          sx={{
-            px: 4,
-            py: 3,
-            borderBottom: '1px solid',
-            borderColor: 'gray.0',
-          }}>
-          <Text variant="pB">Edit role</Text>
-        </Box>
-        <Box sx={{ p: 4 }}>
-          <div>
-            <Field
-              label="Role Name"
-              name="name"
-              placeholder="Role Name"
-              defaultValue={role.name}
-              register={register}
-            />
-          </div>
-          <Box>
-            <Label htmlFor="search">Permissions</Label>
-            <Input
-              type="search"
-              placeholder="Search by"
-              onChange={(e: any) => setSearchTerm(e.target.value)}
-              sx={{ bg: 'background' }}
-            />
+      <Flex
+        sx={{
+          flexDirection: 'column',
+        }}>
+        <Box>
+          <Box
+            sx={{
+              px: 4,
+              py: 3,
+              borderBottom: '1px solid',
+              borderColor: 'gray.0',
+            }}>
+            <Text variant="pB">Edit role</Text>
           </Box>
-          <Box sx={{ maxHeight: '500px', overflow: 'hidden' }}>
-            <Flex
+          <Box sx={{ p: 4, pt: 3 }}>
+            <div>
+              <Field
+                label="Role Name"
+                name="name"
+                placeholder="Role Name"
+                defaultValue={role.name}
+                register={register}
+              />
+            </div>
+            <Box sx={{ pt: 2 }}>
+              <Label htmlFor="search">Permissions</Label>
+              <Input
+                type="search"
+                placeholder="Search by"
+                onChange={(e: any) => setSearchTerm(e.target.value)}
+                sx={{ bg: 'background' }}
+              />
+            </Box>
+            {/* <Box sx={{ maxHeight: '500px', overflow: 'hidden' }}> */}
+            <Box>
+              {/* <Flex
               sx={{
                 flexDirection: 'column',
-                mt: '18px',
-                border: '1px solid',
-                borderColor: 'neutral.1',
-                borderRadius: 4,
-                maxHeight: '400px',
-                overflowX: 'hidden',
-                overflowY: 'scroll',
-                scrollbarWidth: 'none',
-                scrollbarColor: 'red.5',
-              }}>
-              <Box>
-                {filteredPermissionKeys.map((key, index) => {
-                  const dropped = isExpanded === index;
-                  return (
-                    <DisclosureProvider key={index}>
-                      <Box>
-                        <Disclosure
-                          onClick={() => {
-                            if (isExpanded === index) setExpanded(null);
-                            else setExpanded(index);
-                          }}
-                          sx={{
-                            width: '100%',
-                            bg: 'bgWhite',
-                            py: '12px',
-                            px: '16px',
-                            borderTop: 'none',
-                            borderLeft: 'none',
-                            borderRight: 'none',
-                            borderBottom: '1px solid',
-                            borderColor: 'neutral.2',
-                            ':last-of-type': {
-                              borderBottom: 'none',
-                            },
-                          }}>
-                          <Flex
+                justifyContent: 'space-between',
+                flexGrow: 1,
+              }}> */}
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  mt: '18px',
+                  border: '1px solid',
+                  borderColor: 'neutral.1',
+                  borderRadius: 4,
+                  maxHeight: '400px',
+                  overflowX: 'hidden',
+                  overflowY: 'scroll',
+                  scrollbarWidth: 'none',
+                  scrollbarColor: 'red.5',
+                }}>
+                <Box>
+                  {filteredPermissionKeys.map((key, index) => {
+                    const dropped = isExpanded === index;
+                    return (
+                      <DisclosureProvider key={index}>
+                        <Box>
+                          <Disclosure
+                            onClick={() => {
+                              if (isExpanded === index) setExpanded(null);
+                              else setExpanded(index);
+                            }}
                             sx={{
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
+                              width: '100%',
+                              bg: 'bgWhite',
+                              py: '12px',
+                              px: '16px',
+                              borderTop: 'none',
+                              borderLeft: 'none',
+                              borderRight: 'none',
+                              borderBottom: '1px solid',
+                              borderColor: 'neutral.2',
+                              ':last-of-type': {
+                                borderBottom: 'none',
+                              },
                             }}>
-                            <Label
-                              sx={{
-                                display: 'flex',
-                                maxWidth: 'max-content',
-                                alignItems: 'center',
-                              }}>
-                              <Checkbox
-                                sx={{
-                                  width: '14px',
-                                  height: '14px',
-                                  accentColor:
-                                    theme?.colors &&
-                                    ((theme?.colors?.gray ?? [])[9] as string),
-                                }}
-                                checked={newDataFormat[key].isChecked}
-                                onChange={(e: any) => {
-                                  checkParent(e, newDataFormat[key].name);
-                                }}
-                              />
-                              <Text
-                                variant="pR"
-                                sx={{
-                                  pl: 1,
-                                  textTransform: 'capitalize',
-                                  color: 'gray.7',
-                                }}>
-                                {newDataFormat[key].name}
-                              </Text>
-                            </Label>
                             <Flex
-                              as={'div'}
-                              className="icon"
                               sx={{
-                                justifyContent: 'center',
+                                justifyContent: 'space-between',
                                 alignItems: 'center',
-                                transform: dropped && 'rotate(180deg)',
-                                color: 'gray.2',
                               }}>
-                              <ArrowDropdown />
-                            </Flex>
-                          </Flex>
-                        </Disclosure>
-                        <DisclosureContent>
-                          <Box>
-                            {newDataFormat[key].children.map((sub: any) => (
-                              <Box key={sub.id}>
-                                <Label
+                              <Label
+                                sx={{
+                                  display: 'flex',
+                                  maxWidth: 'max-content',
+                                  alignItems: 'center',
+                                }}>
+                                <Checkbox
                                   sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    borderBottom: '1px solid',
-                                    borderColor: 'neutral.1',
-                                    bg: 'background',
-                                    py: '12px',
-                                    px: '16px',
-                                    ':last-of-type': {
-                                      borderBottom: 'none',
-                                    },
+                                    width: '14px',
+                                    height: '14px',
+                                    accentColor:
+                                      theme?.colors &&
+                                      ((theme?.colors?.gray ??
+                                        [])[9] as string),
+                                  }}
+                                  checked={newDataFormat[key].isChecked}
+                                  onChange={(e: any) => {
+                                    checkParent(e, newDataFormat[key].name);
+                                  }}
+                                />
+                                <Text
+                                  variant="pR"
+                                  sx={{
+                                    pl: 1,
+                                    textTransform: 'capitalize',
+                                    color: 'gray.7',
                                   }}>
-                                  <Checkbox
+                                  {newDataFormat[key].name}
+                                </Text>
+                              </Label>
+                              <Flex
+                                as={'div'}
+                                className="icon"
+                                sx={{
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  transform: dropped && 'rotate(180deg)',
+                                  color: 'gray.2',
+                                }}>
+                                <ArrowDropdown />
+                              </Flex>
+                            </Flex>
+                          </Disclosure>
+                          <DisclosureContent>
+                            <Box>
+                              {newDataFormat[key].children.map((sub: any) => (
+                                <Box key={sub.id}>
+                                  <Label
                                     sx={{
-                                      width: '12px',
-                                      height: '12px',
-                                      accentColor:
-                                        theme?.colors &&
-                                        ((theme?.colors?.gray ??
-                                          [])[9] as string),
-                                    }}
-                                    {...register('permissions', {
-                                      required: true,
-                                    })}
-                                    value={sub.name}
-                                    checked={sub.isChecked}
-                                    onChange={(e: any) => {
-                                      checkChild(
-                                        e,
-                                        newDataFormat[key].name,
-                                        sub.id,
-                                      );
-                                    }}
-                                  />
-                                  <Text
-                                    variant="subR"
-                                    sx={{
-                                      pl: 1,
-                                      textTransform: 'capitalize',
-                                      color: 'gray.4',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      borderBottom: '1px solid',
+                                      borderColor: 'neutral.1',
+                                      bg: 'background',
+                                      py: '12px',
+                                      px: '16px',
+                                      ':last-of-type': {
+                                        borderBottom: 'none',
+                                      },
                                     }}>
-                                    {sub.action}
-                                  </Text>
-                                </Label>
-                              </Box>
-                            ))}
-                          </Box>
-                        </DisclosureContent>
-                      </Box>
-                    </DisclosureProvider>
-                  );
-                })}
-              </Box>
-            </Flex>
+                                    <Checkbox
+                                      sx={{
+                                        width: '12px',
+                                        height: '12px',
+                                        accentColor:
+                                          theme?.colors &&
+                                          ((theme?.colors?.gray ??
+                                            [])[9] as string),
+                                      }}
+                                      {...register('permissions')}
+                                      // value={sub.name}
+                                      checked={sub.isChecked}
+                                      onChange={(e: any) => {
+                                        checkChild(
+                                          e,
+                                          newDataFormat[key].name,
+                                          sub.id,
+                                        );
+                                      }}
+                                    />
+                                    <Text
+                                      variant="subR"
+                                      sx={{
+                                        pl: 1,
+                                        textTransform: 'capitalize',
+                                        color: 'gray.4',
+                                      }}>
+                                      {sub.action}
+                                    </Text>
+                                  </Label>
+                                </Box>
+                              ))}
+                            </Box>
+                          </DisclosureContent>
+                        </Box>
+                      </DisclosureProvider>
+                    );
+                  })}
+                </Box>
+                {/* </Flex> */}
+              </Flex>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Flex>
       <Box sx={{ p: 4, pt: 2 }}>
         <Button
           onMouseOver={() => trigger()}
-          disabled={true && !isValid}
+          // disabled={true && !isValid}
           type="submit"
           variant="buttonPrimarySmall">
           Save

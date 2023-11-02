@@ -163,7 +163,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                             </Button>
                             <Button
                               disabled={
-                                contents[row.index].name === 'superadmin'
+                                contents[row.index]?.name === 'superadmin'
                               }
                               variant="text.pM"
                               onClick={() => {
@@ -231,13 +231,16 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                               row.index
                             ]?.name}’?`}
                             setOpen={setIsDelete}
+                            setRender={setRender}
                             onConfirmDelete={() => {
                               deleteEntity(
                                 `roles/${contents[row.index].id}`,
                                 token,
                               );
                               setIsDelete(null);
-                              setRender((prev: boolean) => !prev);
+                              if (setRender) {
+                                setRender((prev: boolean) => !prev);
+                              }
                             }}
                           />
                         )}
