@@ -30,6 +30,7 @@ import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
 import { InviteTeam } from '../../../components/manage';
+import { ConfirmDelete } from '../../../components/common';
 
 export interface Organisation {
   id: string;
@@ -196,7 +197,6 @@ const Index: FC = () => {
                   onClick={() => fileRef.current?.click()}
                   sx={{ mb: 4 }}
                 />
-                {/* <Label htmlFor="file">Logo</Label> */}
                 <Input
                   sx={{ display: 'none' }}
                   type="file"
@@ -305,13 +305,9 @@ const Index: FC = () => {
                             setDelete(false);
                             setConfirmDelete(true);
                           }}
-                          // sx={{ bg: 'red.7' }}
                           variant="delete">
                           Delete workspace
                         </Button>
-                        {/* <Button onClick={onConfirmDelete} sx={{ bg: 'red.5' }}>
-                          Yes
-                        </Button> */}
                         <Button
                           onClick={() => setDelete(false)}
                           variant="cancel">
@@ -324,45 +320,12 @@ const Index: FC = () => {
                 <ModalCustom
                   isOpen={isConfirmDelete}
                   setOpen={setConfirmDelete}>
-                  <Box sx={{ maxWidth: '342px' }}>
-                    <Text
-                      variant="pB"
-                      sx={{ display: 'inline-block', py: 3, px: 4 }}>
-                      Delete workspace
-                    </Text>
-                    <Box
-                      sx={{ borderTop: '1px solid', borderColor: 'neutral.1' }}>
-                      <Box sx={{ px: 4 }}>
-                        <Text
-                          variant="pM"
-                          sx={{ display: 'inline-block', pt: 3 }}>
-                          Are you sure you want to delete this workspace?
-                        </Text>
-                        <Flex sx={{ gap: 3, py: 4 }}>
-                          <Button
-                            onClick={() => {
-                              onConfirmDelete;
-                            }}
-                            variant="delete"
-                            sx={{
-                              fontSize: 2,
-                              flexGrow: 1,
-                            }}>
-                            Confirm
-                          </Button>
-                          <Button
-                            onClick={() => setConfirmDelete(false)}
-                            variant="cancel"
-                            sx={{
-                              fontSize: 2,
-                              flexGrow: 1,
-                            }}>
-                            Cancel
-                          </Button>
-                        </Flex>
-                      </Box>
-                    </Box>
-                  </Box>
+                  <ConfirmDelete
+                    title="Delete workspace"
+                    text="Are you sure you want to delete this workspace?"
+                    onConfirmDelete={onConfirmDelete}
+                    setOpen={setConfirmDelete}
+                  />
                 </ModalCustom>
               </Box>
             </Box>
