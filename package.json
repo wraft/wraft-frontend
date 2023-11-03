@@ -30,6 +30,7 @@
     "@remirror/react": "^2.0.2",
     "@remirror/styles": "2.0.7",
     "@svgr/webpack": "^5.3.0",
+    "@tanstack/react-table": "^8.10.7",
     "@theme-ui/color": "^0.16.1",
     "@types/react-pdf": "5.7.2",
     "@zeit/next-css": "^1.0.1",
