@@ -8,35 +8,38 @@ import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
+import { useStoreState } from 'easy-peasy';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const currentOrg = useStoreState((state) => state.currentOrg.name);
   return (
-    <>
-      <Head>
-        <title>Layouts | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
-      </Head>
-      <Page>
-        <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <Button
-            onClick={() => setIsOpen(true)}
-            sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <InviteUserIcon />
-            Invite people
-          </Button>
-        </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
-        </ModalCustom>
-        <Container sx={{ px: 4, pt: 0 }}>
-          <Flex>
-            <ManageSidebar items={workspaceLinks} />
-            {/* <Workspace /> */}
-          </Flex>
-        </Container>
-      </Page>
-    </>
+    (currentOrg !== 'Personal' || '') && (
+      <>
+        <Head>
+          <title>Layouts | Wraft Docs</title>
+          <meta name="description" content="a nextjs starter boilerplate" />
+        </Head>
+        <Page>
+          <PageHeader title="Manage Layouts" desc="Document Layouts">
+            <Button
+              onClick={() => setIsOpen(true)}
+              sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <InviteUserIcon />
+              Invite people
+            </Button>
+          </PageHeader>
+          <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
+            <div />
+          </ModalCustom>
+          <Container sx={{ px: 4, pt: 0 }}>
+            <Flex>
+              <ManageSidebar items={workspaceLinks} />
+            </Flex>
+          </Container>
+        </Page>
+      </>
+    )
   );
 };
 
