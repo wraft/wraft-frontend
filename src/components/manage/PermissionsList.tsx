@@ -13,17 +13,118 @@ import {
 //style
 import { styles } from '../Table';
 
-// export interface RolesItem {
-//   id: string;
-//   name: string;
-//   permissions?: string[];
-//   user_count: number;
-// }
+const PermissionsList = () => {
+  const token = useStoreState((state) => state.auth.token);
+  const [permissionsInitial, setPermissionsInitial] = useState<any>({});
+  const [rolesInitial, setRolesInitial] = useState<any>([]);
+  const [permissions, setPermissions] = useState<any>([]);
 
-export interface TableProps {
-  data: any;
-  columns: any;
-}
+  const onSuccess = (data: any) => {
+    setPermissionsInitial(data);
+    console.log(data);
+  };
+  const onSuccessRoles = (data: any) => {
+    setRolesInitial(data);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    if (token) {
+      loadEntity(token, 'permissions', onSuccess);
+      loadEntity(token, 'roles', onSuccessRoles);
+    }
+  }, [token]);
+
+  const newFormat = Object.fromEntries(
+    Object.entries(permissionsInitial).map(
+      ([category, datas]: [any, any[]]) => [
+        category,
+        {
+          name: category,
+          isChecked: false,
+          children: datas.map((data: any) => ({ ...data, isChecked: false })),
+        },
+      ],
+    ),
+  );
+
+  useEffect(() => {
+    const result: any[] = Object.entries(permissionsInitial).map(
+      ([key, value], index) => {
+        return { id: index, name: key, children: value };
+      },
+    );
+    setPermissions(result);
+    console.log('brrrr', newFormat);
+    console.log('ddddddddd', result);
+  }, [permissionsInitial, token]);
+
+  const data = useMemo(() => permissions, [token, permissions]);
+
+  const ColumnRoles = rolesInitial.map((e: any) => {
+    return {
+      header: e.name,
+      accessorKey: e.name,
+      id: e.name,
+      cell: ({ row }: any) => (
+        <div
+          style={
+            {
+              // paddingLeft: `${row.depth * 2}rem`,
+            }
+          }>
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        </div>
+      ),
+    };
+  });
+
+  const columns = [
+    {
+      header: 'Name',
+      accessorKey: 'name',
+      id: 'name',
+      cell: ({ row, getValue }: any) => (
+        <div
+          style={
+            {
+              // paddingLeft: `${row.depth * 2}rem`,
+            }
+          }>
+          {row.getCanExpand() ? (
+            <Button
+              variant="base"
+              {...{
+                onClick: row.getToggleExpandedHandler(),
+                style: { cursor: 'pointer', width: '100%' },
+              }}>
+              <Flex sx={{ justifyContent: 'space-between' }}>
+                <Box>{getValue()}</Box>
+                <Box>{row.getIsExpanded() ? '🔼' : '🔽'}</Box>
+              </Flex>
+            </Button>
+          ) : (
+            <Box>{getValue()}</Box>
+          )}
+        </div>
+      ),
+    },
+    ...ColumnRoles,
+  ];
+
+  return (
+    <Flex sx={{ width: '100%' }}>
+      <Table data={data} columns={columns} />
+    </Flex>
+  );
+};
+export default PermissionsList;
 
 function IndeterminateCheckbox({
   indeterminate,
@@ -46,6 +147,11 @@ function IndeterminateCheckbox({
       {...rest}
     />
   );
+}
+
+export interface TableProps {
+  data: any;
+  columns: any;
 }
 
 export const Table = ({ data, columns }: TableProps) => {
@@ -112,102 +218,3 @@ export const Table = ({ data, columns }: TableProps) => {
     </Box>
   );
 };
-
-// type Children = {
-//   action: string;
-//   id: string;
-//   name: string;
-// };
-// type Result = {
-//   id: number;
-//   name: string;
-//   children: Children[];
-// };
-
-const PermissionsList = () => {
-  const token = useStoreState((state) => state.auth.token);
-  const [permissionsInitial, setPermissionsInitial] = useState<any>({});
-  const [permissions, setPermissions] = useState<any>([]);
-
-  const onSuccess = (data: any) => {
-    setPermissionsInitial(data);
-    console.log(data);
-  };
-
-  useEffect(() => {
-    if (token) loadEntity(token, 'permissions', onSuccess);
-  }, [token]);
-
-  const result: any[] = Object.entries(permissionsInitial).map(
-    ([key, value], index) => {
-      return { id: index, name: key, children: value };
-    },
-  );
-
-  const newFormat = Object.fromEntries(
-    Object.entries(permissionsInitial).map(
-      ([category, datas]: [any, any[]]) => [
-        category,
-        {
-          name: category,
-          isChecked: false,
-          children: datas.map((data: any) => ({ ...data, isChecked: false })),
-        },
-      ],
-    ),
-  );
-
-  useEffect(() => {
-    setPermissions(result);
-    console.log('brrrr', newFormat);
-    console.log('ddddddddd', result);
-  }, [permissionsInitial]);
-
-  const data = useMemo(() => permissions, [token]);
-
-  const columns = [
-    {
-      header: 'Name',
-      accessorKey: 'name',
-      // accessorFn: (row: any) => row.name,
-      cell: ({ row, getValue }: any) => (
-        <div
-          style={{
-            paddingLeft: `${row.depth * 2}rem`,
-          }}>
-          {/* <> */}
-          {/* <IndeterminateCheckbox
-              {...{
-                checked: row.getIsSelected(),
-                indeterminate: row.getIsSomeSelected(),
-                onChange: row.getToggleSelectedHandler(),
-              }}
-            />{' '} */}
-          {/* {row.getCanExpand() && */}
-          <Button
-            variant="base"
-            // onKeyDown={...onClick}
-            {...{
-              onClick: row.getToggleExpandedHandler(),
-              // onKeyDown:
-              style: { cursor: 'pointer' },
-            }}>
-            {getValue()}
-            {/* {row.getIsExpanded() ? '👇' : '👉'} */}
-            {row.getIsExpanded()}
-          </Button>
-          {/* } */}
-          {/* {getValue()} */}
-          {/* </> */}
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <Flex sx={{ width: '100%' }}>
-      <Table data={data} columns={columns} />
-    </Flex>
-  );
-};
-export default PermissionsList;
