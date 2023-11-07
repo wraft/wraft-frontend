@@ -1,8 +1,10 @@
 import React from 'react';
 import { ThemeUIStyleObject, Box } from 'theme-ui';
 import {
+  ExpandedState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { styles } from './Table';
@@ -13,10 +15,18 @@ export interface TableProps {
 }
 
 export const TableNew = ({ data, columns }: TableProps) => {
+  const [expanded, setExpanded] = React.useState<ExpandedState>({});
   const table = useReactTable({
     data,
     columns,
+    state: {
+      expanded,
+    },
+    onExpandedChange: setExpanded,
+    getSubRows: (row: any) => row.children,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    debugTable: true,
   });
 
   return (
