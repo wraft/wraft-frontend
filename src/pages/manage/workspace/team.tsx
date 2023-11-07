@@ -27,6 +27,7 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
+          <div />
           {/* <LayoutForm /> */}
         </ModalCustom>
         <Container sx={{ px: 4, pt: 0 }}>

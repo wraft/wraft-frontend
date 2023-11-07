@@ -8,6 +8,7 @@ import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
+import PermissionsList from '../../../components/manage/PermissionsList';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -27,12 +28,12 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
+          <div />
         </ModalCustom>
         <Container sx={{ px: 4, pt: 0 }}>
           <Flex>
             <ManageSidebar items={workspaceLinks} />
-            {/* <Workspace /> */}
+            <PermissionsList />
           </Flex>
         </Container>
       </Page>
