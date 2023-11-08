@@ -3,6 +3,7 @@ import { Box, Button, Flex } from 'theme-ui';
 import { loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import TableNew from '../TableNew';
+import { ArrowDropdown } from '../Icons';
 
 const PermissionsList = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -70,9 +71,18 @@ const PermissionsList = () => {
                 onClick: row.getToggleExpandedHandler(),
                 style: { cursor: 'pointer', width: '100%' },
               }}>
-              <Flex sx={{ justifyContent: 'space-between' }}>
+              <Flex sx={{ gap: '8px' }}>
                 <Box>{getValue()}</Box>
-                <Box>{row.getIsExpanded() ? '🔼' : '🔽'}</Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    transform: row.getIsExpanded()
+                      ? 'rotate(180deg)'
+                      : 'rotate(0deg)',
+                  }}>
+                  <ArrowDropdown />
+                </Box>
               </Flex>
             </Button>
           ) : (
