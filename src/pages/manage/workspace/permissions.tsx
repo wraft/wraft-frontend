@@ -1,17 +1,14 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Button } from 'theme-ui';
+import { Flex, Container, Box } from 'theme-ui';
 
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
-import ModalCustom from '../../../components/ModalCustom';
-import { InviteUserIcon } from '../../../components/Icons';
 import PermissionsList from '../../../components/manage/PermissionsList';
 
 const Index: FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <>
       <Head>
@@ -19,21 +16,30 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <Button
-            onClick={() => setIsOpen(true)}
-            sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <InviteUserIcon />
-            Invite people
-          </Button>
-        </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-          <div />
-        </ModalCustom>
-        <Container sx={{ px: 4, pt: 0 }}>
+        <PageHeader
+          title="Manage Permissions"
+          desc="Manage > Workspace"></PageHeader>
+        <Container
+          sx={{
+            pt: 0,
+            height: '100%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            bg: 'background',
+          }}>
           <Flex>
             <ManageSidebar items={workspaceLinks} />
-            <PermissionsList />
+            <Box
+              sx={{
+                width: '100%',
+                bg: 'bgWhite',
+                border: '1px solid',
+                borderColor: 'neutral.1',
+                borderRadius: 4,
+                m: 4,
+              }}>
+              <PermissionsList />
+            </Box>
           </Flex>
         </Container>
       </Page>
