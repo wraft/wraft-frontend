@@ -61,6 +61,7 @@ const theme: Theme & CustomVariantGroups = {
     warning_500: '#88472E',
     primary_500: '#3748CF',
     neutral_nuetral: '#D7DDE9',
+    neutral_light: '#E4E9EF',
     white: '#fff',
     bgWhite: '#fff',
 
