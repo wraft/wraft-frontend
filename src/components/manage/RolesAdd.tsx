@@ -31,20 +31,17 @@ interface FormInputs {
 const RolesAdd = ({ setOpen, setRender }: Props) => {
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
-  const {
-    register,
-    trigger,
-    handleSubmit,
-    // formState: { isValid },
-  } = useForm<FormInputs>({ mode: 'onChange' });
+  const { register, trigger, handleSubmit } = useForm<FormInputs>({
+    mode: 'onChange',
+  });
 
-  const [permissions, setPermissions] = useState<any>({});
-  const [newDataFormat, setNewDataFormat] = useState<any>([]);
+  const [initialPermissions, setInitialPermissions] = useState<any>({});
+  const [permissions, setPermissions] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isExpanded, setExpanded] = useState<number | null>(null);
 
   const loadPermissionsSuccess = (data: any) => {
-    setPermissions(data);
+    setInitialPermissions(data);
   };
 
   const loadPermissions = (token: string) => {
@@ -53,30 +50,34 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
 
   useEffect(() => {
     if (token) loadPermissions(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  const newFormat = Object.fromEntries(
-    Object.entries(permissions).map(([category, datas]: [any, any[]]) => [
-      category,
-      {
-        name: category,
-        isChecked: false,
-        children: datas.map((data: any) => ({ ...data, isChecked: false })),
-      },
-    ]),
+  const newFormatPermissions = Object.fromEntries(
+    Object.entries(initialPermissions).map(
+      ([category, datas]: [any, any[]]) => [
+        category,
+        {
+          name: category,
+          isChecked: false,
+          children: datas.map((data: any) => ({ ...data, isChecked: false })),
+        },
+      ],
+    ),
   );
 
   useEffect(() => {
-    setNewDataFormat(newFormat);
-  }, [token, permissions]);
+    setPermissions(newFormatPermissions);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, initialPermissions]);
 
-  const filteredPermissionKeys = Object.keys(newDataFormat).filter((e: any) =>
+  const filteredPermissionKeys = Object.keys(permissions).filter((e: any) =>
     e.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const checkParent = (e: any, name: any) => {
     const { checked } = e.target;
-    const data = { ...newDataFormat };
+    const data = { ...permissions };
     data[name].isChecked = checked;
 
     if (data[name].isChecked) {
@@ -84,14 +85,14 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
     } else {
       data[name].children.map((child: any) => (child.isChecked = false));
     }
-    setNewDataFormat({ ...data });
+    setPermissions({ ...data });
     trigger('permissions', { shouldFocus: true });
     trigger();
   };
 
   const checkChild = (e: any, name: any, id: any) => {
     const { checked } = e.target;
-    const data = { ...newDataFormat };
+    const data = { ...permissions };
 
     data[name].children.map((sub: any) => {
       if (sub.id === id) {
@@ -106,7 +107,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
         data[name].isChecked = false;
       }
     });
-    setNewDataFormat({ ...data });
+    setPermissions({ ...data });
   };
 
   function onSuccess() {
@@ -115,22 +116,22 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
     addToast(`Role Added `, { appearance: 'success' });
   }
 
-  const checkedValuesFunc = (permissions: string[]) => {
-    filteredPermissionKeys.forEach((key) => {
-      newDataFormat[key].children.forEach((e: any) => {
+  const checkedValuesFunc = (permissionsList: string[]) => {
+    filteredPermissionKeys.forEach((key: any) => {
+      permissions[key].children.forEach((e: any) => {
         if (e.isChecked === true) {
-          permissions.push(e.name);
+          permissionsList.push(e.name);
         }
       });
     });
   };
   function onSubmit(data: any) {
-    const permissions: string[] = [];
-    checkedValuesFunc(permissions);
+    const permissionsList: string[] = [];
+    checkedValuesFunc(permissionsList);
 
     const body = {
       name: data.name,
-      permissions: permissions,
+      permissions: permissionsList,
     };
     createEntity(body, 'roles', token, onSuccess);
   }
@@ -233,9 +234,9 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                     ((theme?.colors?.gray ?? [])[9] as string),
                                 }}
                                 onChange={(e: any) => {
-                                  checkParent(e, newDataFormat[key].name);
+                                  checkParent(e, permissions[key].name);
                                 }}
-                                checked={newDataFormat[key].isChecked}
+                                checked={permissions[key].isChecked}
                               />
                               <Text
                                 variant="pR"
@@ -244,7 +245,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                   textTransform: 'capitalize',
                                   color: 'gray.7',
                                 }}>
-                                {newDataFormat[key].name}
+                                {permissions[key].name}
                               </Text>
                             </Label>
                             <Flex
@@ -262,7 +263,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                         </Disclosure>
                         <DisclosureContent>
                           <Box>
-                            {newDataFormat[key].children.map((sub: any) => (
+                            {permissions[key].children.map((sub: any) => (
                               <Box key={sub.id}>
                                 <Label
                                   sx={{
@@ -292,7 +293,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                     onChange={(e: any) => {
                                       checkChild(
                                         e,
-                                        newDataFormat[key].name,
+                                        permissions[key].name,
                                         sub.id,
                                       );
                                     }}

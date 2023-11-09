@@ -11,6 +11,13 @@ const profile = {
   }),
 };
 
+const currentOrg = {
+  name: {},
+  set: action((state, payload) => {
+    state.name = payload;
+  }),
+};
+
 const images = {
   items: [],
   add: action((state, payload) => {
@@ -27,6 +34,7 @@ const images = {
 const model = {
   auth,
   profile,
+  currentOrg,
   images,
 };
 

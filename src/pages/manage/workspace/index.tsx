@@ -70,6 +70,7 @@ const Index: FC = () => {
   const [logoSrc, setLogoSrc] = React.useState(org?.logo);
   const fileRef = React.useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = React.useState(false);
+  const currentOrg = useStoreState((state) => state.currentOrg.name);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -156,13 +157,15 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Team management" desc="Manage  >  Workspace">
-          <Button
-            variant="btnPrimary"
-            onClick={() => setIsOpen(true)}
-            sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <InviteUserIcon />
-            Invite people
-          </Button>
+          {(currentOrg !== 'Personal' || '') && (
+            <Button
+              variant="btnPrimary"
+              onClick={() => setIsOpen(true)}
+              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <InviteUserIcon />
+              Invite people
+            </Button>
+          )}
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
           <InviteTeam setOpen={setIsOpen} />
@@ -176,7 +179,9 @@ const Index: FC = () => {
             bg: 'background',
           }}>
           <Flex>
-            <ManageSidebar items={workspaceLinks} />
+            {(currentOrg !== 'Personal' || '') && (
+              <ManageSidebar items={workspaceLinks} />
+            )}
             <Box>
               <Box
                 as="form"
