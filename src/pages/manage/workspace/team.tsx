@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Button } from 'theme-ui';
+import { Flex, Container, Button, Box } from 'theme-ui';
 
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -9,9 +9,10 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import { useStoreState } from 'easy-peasy';
+import TeamList from '../../../components/manage/TeamList';
 
 const Index: FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
   return (
     (currentOrg !== 'Personal' || '') && (
@@ -32,9 +33,27 @@ const Index: FC = () => {
           <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
             <div />
           </ModalCustom>
-          <Container sx={{ px: 4, pt: 0 }}>
+          <Container
+            sx={{
+              pt: 0,
+              height: '100%',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              bg: 'background',
+            }}>
             <Flex>
               <ManageSidebar items={workspaceLinks} />
+              <Box
+                sx={{
+                  width: '100%',
+                  bg: 'bgWhite',
+                  border: '1px solid',
+                  borderColor: 'neutral.1',
+                  borderRadius: 4,
+                  m: 4,
+                }}>
+                <TeamList />
+              </Box>
             </Flex>
           </Container>
         </Page>
