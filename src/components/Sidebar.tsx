@@ -111,6 +111,16 @@ const Nav = (props: any) => {
     (actions: any) => actions.profile.updateProfile,
   );
 
+  const setCurrentOrgName = useStoreActions(
+    (actions: any) => actions.currentOrg.set,
+  );
+
+  useEffect(() => {
+    setCurrentOrgName({ name: 'hai' });
+  }, [profile]);
+
+  // console.log('dammmm sooon', currentOrg);
+
   // const menu = useMenuState();
 
   const showFull = props && props.showFull ? true : true;
@@ -208,6 +218,7 @@ const Nav = (props: any) => {
     const currentOrg = allOrgs?.find(
       (og: Organisation) => og.id == profile?.organisation_id,
     );
+    setCurrentOrgName(currentOrg?.name);
 
     setActiveSpace(currentOrg);
     // setActiveSpace(profile.organisation_id);
