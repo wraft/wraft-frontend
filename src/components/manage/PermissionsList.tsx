@@ -4,11 +4,13 @@ import { loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import TableNew from '../TableNew';
 import { ArrowDropdown } from '../Icons';
+import cookies from 'next-cookies';
 
 const PermissionsList = () => {
   const token = useStoreState((state) => state.auth.token);
   const [permissionsInitial, setPermissionsInitial] = useState<any>({});
   const [rolesInitial, setRolesInitial] = useState<any>([]);
+  // const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
 
   const onSuccess = (data: any) => {
@@ -28,34 +30,86 @@ const PermissionsList = () => {
   }, [token]);
 
   useEffect(() => {
-    const result: any[] = Object.entries(permissionsInitial).map(
+    const data: any[] = Object.entries(permissionsInitial).map(
       ([key, value], index) => {
         return { id: index, name: key, children: value };
       },
     );
-    setPermissions(result);
+    const renamedData = data.map((item) => {
+      const newChildren = item.children.map((child: any) => {
+        return {
+          name: child.action,
+          action: child.name,
+        };
+      });
+      return {
+        ...item,
+        children: newChildren,
+      };
+    });
+    setPermissions(renamedData);
+    // [{ name: 'superadmin', permissions: ['layout:delete', 'layout:manage'] }];
+    // const finalData = rolesInitial.map((role: any) => {
+    //   console.log(role);
+    //   const renamedData: any = data.map((item) => {
+    //     console.log(item);
+    //     const newChildren = item.children.map((child: any) => {
+    //       console.log(child);
+    //       // const rolecheck = role.permissions.includes(child.name);
+    //       if (role.permissions.includes(child.name)) {
+    //         return {
+    //           name: child.action,
+    //           action: child.name,
+    //           // role?.name: rolecheck,
+    //           checked: true,
+    //         };
+    //       } else {
+    //         return {
+    //           name: child.action,
+    //           action: child.name,
+    //           // 'superandin':
+    //           // 'mangeer':
+    //           // role?.name: rolecheck,
+    //           checked: false,
+    //         };
+    //       }
+    //     });
+    //     return {
+    //       ...item,
+    //       children: newChildren,
+    //     };
+    //     return {
+    //       renamedData,
+    //     };
+    //   });
+    // });
+    // console.log(finalData);
+    // setPermissions(finalData);
   }, [permissionsInitial, token]);
 
   const data = useMemo(() => permissions, [permissions]);
+  console.log('data', data);
 
   const ColumnRoles = rolesInitial.map((e: any) => {
     return {
       header: e.name,
       accessorKey: e.name,
-      id: e.name,
+      id: e.id,
       cell: ({ row }: any) => (
         <Box>
-          <IndeterminateCheckbox
+          {/* <IndeterminateCheckbox
             {...{
               checked: row.getIsSelected(),
               indeterminate: row.getIsSomeSelected(),
               onChange: row.getToggleSelectedHandler(),
             }}
-          />
+          /> */}
+          <input type="checkbox" />
         </Box>
       ),
     };
   });
+  console.log('rolessssss', ColumnRoles);
 
   const columns = [
     {
@@ -63,7 +117,10 @@ const PermissionsList = () => {
       accessorKey: 'name',
       id: 'name',
       cell: ({ row, getValue }: any) => (
-        <Box>
+        <Box
+          sx={{
+            paddingLeft: `${row.depth * 2}rem`,
+          }}>
           {row.getCanExpand() ? (
             <Button
               variant="base"
@@ -113,7 +170,7 @@ function IndeterminateCheckbox({
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate]);
+  }, [ref, indeterminate, rest.checked]);
 
   return (
     <input
