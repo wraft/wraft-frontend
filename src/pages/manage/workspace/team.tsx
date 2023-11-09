@@ -8,52 +8,57 @@ import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
+import { useStoreState } from 'easy-peasy';
 import TeamList from '../../../components/manage/TeamList';
+
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const currentOrg = useStoreState((state) => state.currentOrg.name);
   return (
-    <>
-      <Head>
-        <title>Layouts | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
-      </Head>
-      <Page>
-        <PageHeader title="Manage Layouts" desc="Document Layouts">
-          <Button
-            onClick={() => setIsOpen(true)}
-            sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <InviteUserIcon />
-            Invite people
-          </Button>
-        </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-          {/* <LayoutForm /> */}
-        </ModalCustom>
-        <Container
-          sx={{
-            pt: 0,
-            height: '100%',
-            maxHeight: '90vh',
-            overflow: 'auto',
-            bg: 'background',
-          }}>
-          <Flex>
-            <ManageSidebar items={workspaceLinks} />
-            <Box
-              sx={{
-                width: '100%',
-                bg: 'bgWhite',
-                border: '1px solid',
-                borderColor: 'neutral.1',
-                borderRadius: 4,
-                m: 4,
-              }}>
-              <TeamList />
-            </Box>
-          </Flex>
-        </Container>
-      </Page>
-    </>
+    (currentOrg !== 'Personal' || '') && (
+      <>
+        <Head>
+          <title>Layouts | Wraft Docs</title>
+          <meta name="description" content="a nextjs starter boilerplate" />
+        </Head>
+        <Page>
+          <PageHeader title="Manage Layouts" desc="Document Layouts">
+            <Button
+              onClick={() => setIsOpen(true)}
+              sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <InviteUserIcon />
+              Invite people
+            </Button>
+          </PageHeader>
+          <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
+            <div />
+          </ModalCustom>
+          <Container
+            sx={{
+              pt: 0,
+              height: '100%',
+              maxHeight: '90vh',
+              overflow: 'auto',
+              bg: 'background',
+            }}>
+            <Flex>
+              <ManageSidebar items={workspaceLinks} />
+              <Box
+                sx={{
+                  width: '100%',
+                  bg: 'bgWhite',
+                  border: '1px solid',
+                  borderColor: 'neutral.1',
+                  borderRadius: 4,
+                  m: 4,
+                }}>
+                <TeamList />
+              </Box>
+            </Flex>
+          </Container>
+        </Page>
+      </>
+    )
   );
 };
 
