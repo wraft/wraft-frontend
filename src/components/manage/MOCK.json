@@ -1,0 +1,49 @@
+[
+  {
+    "id": "af265ffe-2b47-4f6b-9599-d448dc6dd55f",
+    "name": "superadmin",
+    "permissions": [],
+    "user_count": 1
+  },
+  {
+    "id": "d2d6abce-7038-44f5-94e4-1cbaec03aeae",
+    "name": "editor",
+    "permissions": [
+      {
+        "resource": "Layout",
+        "status": false,
+        "perimissions": [
+          {
+            "id": 1,
+            "action": "Show",
+            "name": "layout:show",
+            "status": true
+          },
+          {
+            "id": 2,
+            "action": "Manage",
+            "name": "layout:manage",
+            "status": false
+          }
+        ]
+      },
+      {
+        "resource": "Asset",
+        "permissions": [
+          {
+            "id": 3,
+            "action": "Show",
+            "name": "asset:show",
+            "status": true
+          },
+          {
+            "id": 4,
+            "action": "Manage",
+            "name": "asset:manage",
+            "status": true
+          }
+        ]
+      }
+    ]
+  }
+]
