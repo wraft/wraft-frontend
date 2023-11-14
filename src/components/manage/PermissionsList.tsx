@@ -9,7 +9,7 @@ import { loadEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import TableNew from '../TableNew';
 import { ArrowDropdown } from '../Icons';
-import mData from './MOCK.json';
+import _ from 'lodash';
 
 const PermissionsList = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -36,103 +36,39 @@ const PermissionsList = () => {
   console.log('roleeeee', rolesInitial);
 
   useEffect(() => {
+    //normalize
     const data: any[] = Object.entries(permissionsInitial).map(
       ([key, value], index) => {
         return { id: index, name: key, children: value };
       },
     );
     console.log(data);
-    // const renamedData = data.map((item) => {
-    //   const newChildren = item.children.map((child: any) => {
-    //     return {
-    //       name: child.action,
-    //       action: child.name,
-    //     };
-    //   });
-    //   return {
-    //     ...item,
-    //     children: newChildren,
-    //   };
-    // });
-    // setPermissions(renamedData);
-    // [{ name: 'superadmin', permissions: ['layout:delete', 'layout:manage'] }];
 
-    // rolesInitial.map((role: any) => {
-    //   const renamedData: any = data.map((item) => {
-    //     const newChildren = item.children.map((child: any) => {
-    //       const rolecheck = role.permissions.includes(child.name);
-    //       return {
-    //         name: child.action,
-    //         action: child.name,
-    //         [role?.name]: rolecheck,
-    //       };
-    //     });
-    //     return {
-    //       ...item,
-    //       children: newChildren,
-    //       [role?.name]: false,
-    //     };
-    //   });
-    //   setPermissions(renamedData);
-    // });
+    //adding roles
+    const renamedData: any = data.map((item) => {
+      const newData = rolesInitial.map((role: any) => {
+        const newChildren = item.children.map((child: any) => {
+          const rolecheck = role.permissions.includes(child.name);
 
-    // const updatedPermissions = rolesInitial.map((role: any) => {
-    //   return data.map((item) => {
-    //     const newChildren = item.children.map((child: any) => {
-    //       const roleCheck = role.permissions.includes(child.name);
-    //       return {
-    //         name: child.action,
-    //         action: child.name,
-    //         [role.name]: roleCheck,
-    //       };
-    //     });
-    //     return {
-    //       ...item,
-    //       children: newChildren,
-    //       [role.name]: false,
-    //     };
-    //   });
-    // });
+          return {
+            name: child.action,
+            action: child.name,
+            [role?.name]: rolecheck,
+          };
+        });
+        return {
+          ...item,
+          children: newChildren,
+          [role?.name]: false,
+        };
+      });
+      return _.merge.apply(null, newData);
+    });
 
-    // // Merge changes for each role
-    // const mergedPermissions = updatedPermissions.reduce(
-    //   (acc: any, rolePermissions: any) => {
-    //     return acc.map((item: any, index: any) => ({
-    //       ...item,
-    //       ...rolePermissions[index],
-    //     }));
-    //   },
-    //   data,
-    // );
-
-    // setPermissions(mergedPermissions);
-
-    // const updatedPermissions = data.map((item) => {
-    //   return rolesInitial.map((role: any) => {
-    //     const newChildren = item.children.map((child: any) => {
-    //       const roleCheck = role.permissions.includes(child.name);
-    //       return {
-    //         name: child.action,
-    //         action: child.name,
-    //         [role.name]: roleCheck,
-    //       };
-    //     });
-    //     return {
-    //       ...item,
-    //       children: newChildren,
-    //       [role.name]: false,
-    //     };
-    //   });
-    // });
-
-    setPermissions(data);
-
-    // setPermissions(finalData);
-  }, [permissionsInitial, token]);
-  console.log(permissions);
+    setPermissions(renamedData);
+  }, [permissionsInitial]);
 
   const data = useMemo(() => permissions, [permissions]);
-  // const data = useMemo(() => mData, []);
   console.log(data);
 
   const ColumnRoles = rolesInitial.map((e: any) => {
