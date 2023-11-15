@@ -162,6 +162,7 @@ const PermissionsList = () => {
         <Box>
           {row.getCanExpand() ? (
             <input
+              style={{ accentColor: 'black' }}
               type="checkbox"
               name="parent"
               checked={permissions[row.index][role.name]}
@@ -169,6 +170,7 @@ const PermissionsList = () => {
             />
           ) : (
             <input
+              style={{ accentColor: 'black' }}
               type="checkbox"
               name="child"
               checked={
