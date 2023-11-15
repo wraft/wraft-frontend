@@ -22,11 +22,9 @@ const PermissionsList = () => {
 
   const onSuccess = (data: any) => {
     setPermissionsInitial(data);
-    console.log(data);
   };
   const onSuccessRoles = (data: any) => {
     setRolesInitial(data);
-    console.log(data);
   };
 
   useEffect(() => {
@@ -35,7 +33,6 @@ const PermissionsList = () => {
       loadEntity(token, 'roles', onSuccessRoles);
     }
   }, [token]);
-  console.log('roleeeee', rolesInitial);
 
   useEffect(() => {
     //normalize
@@ -44,7 +41,6 @@ const PermissionsList = () => {
         return { id: index, name: key, children: value };
       },
     );
-    console.log(data);
 
     //adding roles
     const Data: any = data.map((item) => {
@@ -72,7 +68,6 @@ const PermissionsList = () => {
         const isAllSelected = item.children.every(
           (child: any) => child[role.name] === true,
         );
-        console.log(isAllSelected);
         if (isAllSelected) {
           return {
             ...item,
@@ -92,7 +87,6 @@ const PermissionsList = () => {
   }, [permissionsInitial, token]);
 
   const data = useMemo(() => permissions, [permissions]);
-  console.log(data);
   const { addToast } = useToasts();
 
   function onSuccessUpdate() {
@@ -118,18 +112,9 @@ const PermissionsList = () => {
       permissions: permissionsList,
     };
     updateEntity(`roles/${role.id}`, body, token, onSuccessUpdate);
-    console.log('success');
-    console.log(role.id, permissionsList, body);
   };
 
   const onChangeParent = (e: any, role: any, index: any) => {
-    console.log(role.name, index);
-    console.log(
-      'testinnng',
-      permissions[index].children,
-      'parent',
-      permissions[index][role.name],
-    );
     const { checked } = e.target;
     const data = [...permissions];
 
@@ -151,14 +136,6 @@ const PermissionsList = () => {
     childIndex: any,
     parentIndex: any,
   ) => {
-    console.log(role.name, childIndex, parentIndex);
-    console.log(
-      'testinnng',
-      permissions[parentIndex].children[childIndex][e.name],
-      'parent',
-      permissions[parentIndex][role.name],
-      permissions[parentIndex][e.name],
-    );
     const { checked } = e.target;
     const data = [...permissions];
 
@@ -220,7 +197,6 @@ const PermissionsList = () => {
       ),
     };
   });
-  console.log('colsss', ColumnRoles);
 
   const columns = [
     {
