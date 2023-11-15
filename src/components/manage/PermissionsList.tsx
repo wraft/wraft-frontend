@@ -1,10 +1,4 @@
-import React, {
-  HTMLProps,
-  //  HTMLProps,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Flex } from 'theme-ui';
 import { loadEntity, updateEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
@@ -84,7 +78,7 @@ const PermissionsList = () => {
     });
 
     setPermissions(updatedData);
-  }, [permissionsInitial, token]);
+  }, [permissionsInitial, token, roles]);
 
   const data = useMemo(() => permissions, [permissions]);
   const { addToast } = useToasts();
@@ -118,7 +112,7 @@ const PermissionsList = () => {
     const { checked } = e.target;
     const data = [...permissions];
 
-    e.data[index][role.name] = checked;
+    data[index][role.name] = checked;
 
     if (data[index][role.name]) {
       data[index].children.map((child: any) => (child[role.name] = checked));
@@ -169,12 +163,14 @@ const PermissionsList = () => {
           {row.getCanExpand() ? (
             <input
               type="checkbox"
+              name="parent"
               checked={permissions[row.index][role.name]}
               onChange={(e: any) => onChangeParent(e, role, row.index)}
             />
           ) : (
             <input
               type="checkbox"
+              name="child"
               checked={
                 permissions[row.parentId]?.children[row.index][role.name]
               }
