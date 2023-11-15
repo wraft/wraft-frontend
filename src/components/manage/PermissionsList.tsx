@@ -17,6 +17,7 @@ const PermissionsList = () => {
   const [rolesInitial, setRolesInitial] = useState<any>([]);
   // const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
+  const render = React.useRef<any>();
 
   const onSuccess = (data: any) => {
     setPermissionsInitial(data);
@@ -46,16 +47,20 @@ const PermissionsList = () => {
 
     //adding roles
     const renamedData: any = data.map((item) => {
+      // const arr = [];
       const newData = rolesInitial.map((role: any) => {
         const newChildren = item.children.map((child: any) => {
           const rolecheck = role.permissions.includes(child.name);
-
+          // arr.push(rolecheck);
           return {
             name: child.action,
             action: child.name,
+            // name: child.name,
+            // action: child.action,
             [role?.name]: rolecheck,
           };
         });
+
         return {
           ...item,
           children: newChildren,
@@ -66,10 +71,30 @@ const PermissionsList = () => {
     });
 
     setPermissions(renamedData);
-  }, [permissionsInitial]);
+  }, [permissionsInitial, token]);
 
   const data = useMemo(() => permissions, [permissions]);
   console.log(data);
+
+  const changeChild = (
+    e: any,
+    roleName: any,
+    childIndex: any,
+    parentIndex: any,
+  ) => {
+    // const { checked } = e.target;
+    // permissions[index].children.map((sub:any)=>{
+    // })
+    console.log(roleName, childIndex, parentIndex);
+    console.log(
+      'testinnng',
+      permissions[parentIndex].children[childIndex][e.name],
+    );
+  };
+
+  useEffect(() => {
+    render;
+  }, [permissions]);
 
   const ColumnRoles = rolesInitial.map((e: any) => {
     return {
@@ -77,8 +102,8 @@ const PermissionsList = () => {
       accessorKey: e.name,
       // accessorFn: (row: any) => row.permissions.layout,
       id: e.id,
-      // cell: ({ row }: any) => (
-      cell: () => (
+      cell: ({ row }: any) => (
+        // cell: () => (
         <Box>
           {/* <IndeterminateCheckbox
             {...{
@@ -87,12 +112,28 @@ const PermissionsList = () => {
               onChange: row.getToggleSelectedHandler(),
             }}
           /> */}
-          <input type="checkbox" />
+
+          {row.getCanExpand() ? (
+            // <input
+            //   type="checkbox"
+            //   checked={permissions[row.index].ch}
+            //   onChange={() => changeChild(e, e.name, row.index)}
+            // />
+            <div />
+          ) : (
+            <>
+              <input
+                type="checkbox"
+                checked={permissions[row.parentId]?.children[row.index][e.name]}
+                onChange={() => changeChild(e, e.name, row.index, row.parentId)}
+              />
+            </>
+          )}
         </Box>
       ),
     };
   });
-  console.log('rolessssss', ColumnRoles);
+  console.log('colsss', ColumnRoles);
 
   const columns = [
     {
@@ -136,7 +177,7 @@ const PermissionsList = () => {
   ];
 
   return (
-    <Flex sx={{ width: '100%' }}>
+    <Flex sx={{ width: '100%' }} ref={render}>
       <TableNew data={data} columns={columns} />
     </Flex>
   );
