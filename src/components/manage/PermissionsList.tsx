@@ -5,11 +5,12 @@ import React, {
   useState,
 } from 'react';
 import { Box, Button, Flex } from 'theme-ui';
-import { loadEntity } from '../../utils/models';
+import { loadEntity, updateEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import TableNew from '../TableNew';
 import { ArrowDropdown } from '../Icons';
 import _ from 'lodash';
+import { useToasts } from 'react-toast-notifications';
 
 const PermissionsList = () => {
   const token = useStoreState((state) => state.auth.token);
@@ -92,69 +93,89 @@ const PermissionsList = () => {
 
   const data = useMemo(() => permissions, [permissions]);
   console.log(data);
+  const { addToast } = useToasts();
 
-  const onChangeParent = (e: any, roleName: any, index: any) => {
-    console.log(roleName, index);
+  function onSuccessUpdate() {
+    addToast(`Updated Permissions`, { appearance: 'success' });
+  }
+
+  const checkedValuesFunc = (permissionsList: string[], role: any) => {
+    permissions.forEach((item: any) => {
+      item.children.forEach((child: any) => {
+        if (child[role.name] === true) {
+          //swapped name to action
+          permissionsList.push(child.action);
+        }
+      });
+    });
+  };
+
+  const onSubmit = (role: any) => {
+    const permissionsList: string[] = [];
+    checkedValuesFunc(permissionsList, role);
+    const body = {
+      name: role.name,
+      permissions: permissionsList,
+    };
+    updateEntity(`roles/${role.id}`, body, token, onSuccessUpdate);
+    console.log('success');
+    console.log(role.id, permissionsList, body);
+  };
+
+  const onChangeParent = (e: any, role: any, index: any) => {
+    console.log(role.name, index);
     console.log(
       'testinnng',
       permissions[index].children,
       'parent',
-      permissions[index][roleName],
+      permissions[index][role.name],
     );
     const { checked } = e.target;
     const data = [...permissions];
 
-    data[index][roleName] = checked;
-    // data[parentIndex].children.map(() => {
-    //   const isAllSelected = data[parentIndex].children.every(
-    //     (child: any) => child[roleName] === true,
-    //   );
-    //   if (isAllSelected) {
-    //     data[parentIndex][roleName] = checked;
-    //   } else {
-    //     data[parentIndex][roleName] = false;
-    //   }
-    // });
+    data[index][role.name] = checked;
 
-    if (data[index][roleName]) {
-      data[index].children.map((child: any) => (child[roleName] = checked));
+    if (data[index][role.name]) {
+      data[index].children.map((child: any) => (child[role.name] = checked));
     } else {
-      data[index].children.map((child: any) => (child[roleName] = false));
+      data[index].children.map((child: any) => (child[role.name] = false));
     }
 
     setPermissions(data);
+    onSubmit(role);
   };
 
   const onChangeChild = (
     e: any,
-    roleName: any,
+    role: any,
     childIndex: any,
     parentIndex: any,
   ) => {
-    console.log(roleName, childIndex, parentIndex);
+    console.log(role.name, childIndex, parentIndex);
     console.log(
       'testinnng',
       permissions[parentIndex].children[childIndex][e.name],
       'parent',
-      permissions[parentIndex][roleName],
+      permissions[parentIndex][role.name],
       permissions[parentIndex][e.name],
     );
     const { checked } = e.target;
     const data = [...permissions];
 
-    data[parentIndex].children[childIndex][roleName] = checked;
+    data[parentIndex].children[childIndex][role.name] = checked;
     data[parentIndex].children.map(() => {
       const isAllSelected = data[parentIndex].children.every(
-        (child: any) => child[roleName] === true,
+        (child: any) => child[role.name] === true,
       );
       if (isAllSelected) {
-        data[parentIndex][roleName] = checked;
+        data[parentIndex][role.name] = checked;
       } else {
-        data[parentIndex][roleName] = false;
+        data[parentIndex][role.name] = false;
       }
     });
 
     setPermissions(data);
+    onSubmit(role);
   };
 
   useEffect(() => {
@@ -182,7 +203,7 @@ const PermissionsList = () => {
             <input
               type="checkbox"
               checked={permissions[row.index][role.name]}
-              onChange={(e: any) => onChangeParent(e, role.name, row.index)}
+              onChange={(e: any) => onChangeParent(e, role, row.index)}
             />
           ) : (
             <input
@@ -191,7 +212,7 @@ const PermissionsList = () => {
                 permissions[row.parentId]?.children[row.index][role.name]
               }
               onChange={(e: any) =>
-                onChangeChild(e, role.name, row.index, row.parentId)
+                onChangeChild(e, role, row.index, row.parentId)
               }
             />
           )}
