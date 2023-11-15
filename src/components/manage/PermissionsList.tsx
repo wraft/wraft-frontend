@@ -1,4 +1,5 @@
 import React, {
+  HTMLProps,
   //  HTMLProps,
   useEffect,
   useMemo,
@@ -15,8 +16,7 @@ import { useToasts } from 'react-toast-notifications';
 const PermissionsList = () => {
   const token = useStoreState((state) => state.auth.token);
   const [permissionsInitial, setPermissionsInitial] = useState<any>({});
-  const [rolesInitial, setRolesInitial] = useState<any>([]);
-  // const [roles, setRoles] = useState<any>([]);
+  const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
   const render = React.useRef<any>();
 
@@ -24,7 +24,7 @@ const PermissionsList = () => {
     setPermissionsInitial(data);
   };
   const onSuccessRoles = (data: any) => {
-    setRolesInitial(data);
+    setRoles(data);
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const PermissionsList = () => {
 
     //adding roles
     const Data: any = data.map((item) => {
-      const newItem = rolesInitial.map((role: any) => {
+      const newItem = roles.map((role: any) => {
         const newChildren = item.children.map((child: any) => {
           const rolecheck = role.permissions.includes(child.name);
           return {
@@ -64,7 +64,7 @@ const PermissionsList = () => {
 
     // adding parent role check
     const updatedData = Data.map((item: any) => {
-      const newItem = rolesInitial.map((role: any) => {
+      const newItem = roles.map((role: any) => {
         const isAllSelected = item.children.every(
           (child: any) => child[role.name] === true,
         );
@@ -118,7 +118,7 @@ const PermissionsList = () => {
     const { checked } = e.target;
     const data = [...permissions];
 
-    data[index][role.name] = checked;
+    e.data[index][role.name] = checked;
 
     if (data[index][role.name]) {
       data[index].children.map((child: any) => (child[role.name] = checked));
@@ -159,23 +159,13 @@ const PermissionsList = () => {
     render;
   }, [permissions]);
 
-  const ColumnRoles = rolesInitial.map((role: any) => {
+  const ColumnRoles = roles.map((role: any) => {
     return {
       header: role.name,
       accessorKey: role.name,
-      // accessorFn: (row: any) => row.permissions.layout,
       id: role.id,
       cell: ({ row }: any) => (
-        // cell: () => (
         <Box>
-          {/* <IndeterminateCheckbox
-            {...{
-              checked: row.getIsSelected(),
-              indeterminate: row.getIsSomeSelected(),
-              onChange: row.getToggleSelectedHandler(),
-            }}
-          /> */}
-
           {row.getCanExpand() ? (
             <input
               type="checkbox"
@@ -202,7 +192,6 @@ const PermissionsList = () => {
     {
       header: 'Name',
       accessorKey: 'name',
-      // accessorFn: (row: any) => row[1]?.permissions[1]?.permissions[0].resource,
       id: 'name',
       cell: ({ row, getValue }: any) => (
         <Box
@@ -246,26 +235,3 @@ const PermissionsList = () => {
   );
 };
 export default PermissionsList;
-
-// function IndeterminateCheckbox({
-//   indeterminate,
-//   className = '',
-//   ...rest
-// }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-//   const ref = React.useRef<HTMLInputElement>(null!);
-
-//   React.useEffect(() => {
-//     if (typeof indeterminate === 'boolean') {
-//       ref.current.indeterminate = !rest.checked && indeterminate;
-//     }
-//   }, [ref, indeterminate, rest.checked]);
-
-//   return (
-//     <input
-//       type="checkbox"
-//       ref={ref}
-//       className={className + ' cursor-pointer'}
-//       {...rest}
-//     />
-//   );
-// }
