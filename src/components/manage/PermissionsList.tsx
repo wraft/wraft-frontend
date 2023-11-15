@@ -46,62 +46,127 @@ const PermissionsList = () => {
     console.log(data);
 
     //adding roles
-    const renamedData: any = data.map((item) => {
-      // const arr = [];
-      const newData = rolesInitial.map((role: any) => {
+    const Data: any = data.map((item) => {
+      const newItem = rolesInitial.map((role: any) => {
         const newChildren = item.children.map((child: any) => {
           const rolecheck = role.permissions.includes(child.name);
-          // arr.push(rolecheck);
           return {
+            //swapping name and action because subRow is looking for name
             name: child.action,
             action: child.name,
-            // name: child.name,
-            // action: child.action,
             [role?.name]: rolecheck,
           };
         });
-
         return {
           ...item,
           children: newChildren,
-          [role?.name]: false,
         };
       });
-      return _.merge.apply(null, newData);
+      return _.merge.apply(null, newItem);
     });
 
-    setPermissions(renamedData);
+    // adding parent role check
+    const updatedData = Data.map((item: any) => {
+      const newItem = rolesInitial.map((role: any) => {
+        const isAllSelected = item.children.every(
+          (child: any) => child[role.name] === true,
+        );
+        console.log(isAllSelected);
+        if (isAllSelected) {
+          return {
+            ...item,
+            [role?.name]: true,
+          };
+        } else {
+          return {
+            ...item,
+            [role?.name]: false,
+          };
+        }
+      });
+      return _.merge.apply(null, newItem);
+    });
+
+    setPermissions(updatedData);
   }, [permissionsInitial, token]);
 
   const data = useMemo(() => permissions, [permissions]);
   console.log(data);
 
-  const changeChild = (
+  const onChangeParent = (e: any, roleName: any, index: any) => {
+    console.log(roleName, index);
+    console.log(
+      'testinnng',
+      permissions[index].children,
+      'parent',
+      permissions[index][roleName],
+    );
+    const { checked } = e.target;
+    const data = [...permissions];
+
+    data[index][roleName] = checked;
+    // data[parentIndex].children.map(() => {
+    //   const isAllSelected = data[parentIndex].children.every(
+    //     (child: any) => child[roleName] === true,
+    //   );
+    //   if (isAllSelected) {
+    //     data[parentIndex][roleName] = checked;
+    //   } else {
+    //     data[parentIndex][roleName] = false;
+    //   }
+    // });
+
+    if (data[index][roleName]) {
+      data[index].children.map((child: any) => (child[roleName] = checked));
+    } else {
+      data[index].children.map((child: any) => (child[roleName] = false));
+    }
+
+    setPermissions(data);
+  };
+
+  const onChangeChild = (
     e: any,
     roleName: any,
     childIndex: any,
     parentIndex: any,
   ) => {
-    // const { checked } = e.target;
-    // permissions[index].children.map((sub:any)=>{
-    // })
     console.log(roleName, childIndex, parentIndex);
     console.log(
       'testinnng',
       permissions[parentIndex].children[childIndex][e.name],
+      'parent',
+      permissions[parentIndex][roleName],
+      permissions[parentIndex][e.name],
     );
+    const { checked } = e.target;
+    const data = [...permissions];
+
+    data[parentIndex].children[childIndex][roleName] = checked;
+    data[parentIndex].children.map(() => {
+      const isAllSelected = data[parentIndex].children.every(
+        (child: any) => child[roleName] === true,
+      );
+      if (isAllSelected) {
+        data[parentIndex][roleName] = checked;
+      } else {
+        data[parentIndex][roleName] = false;
+      }
+    });
+
+    setPermissions(data);
   };
 
   useEffect(() => {
     render;
   }, [permissions]);
 
-  const ColumnRoles = rolesInitial.map((e: any) => {
+  const ColumnRoles = rolesInitial.map((role: any) => {
     return {
-      header: e.name,
-      accessorKey: e.name,
+      header: role.name,
+      accessorKey: role.name,
       // accessorFn: (row: any) => row.permissions.layout,
-      id: e.id,
+      id: role.id,
       cell: ({ row }: any) => (
         // cell: () => (
         <Box>
@@ -114,20 +179,21 @@ const PermissionsList = () => {
           /> */}
 
           {row.getCanExpand() ? (
-            // <input
-            //   type="checkbox"
-            //   checked={permissions[row.index].ch}
-            //   onChange={() => changeChild(e, e.name, row.index)}
-            // />
-            <div />
+            <input
+              type="checkbox"
+              checked={permissions[row.index][role.name]}
+              onChange={(e: any) => onChangeParent(e, role.name, row.index)}
+            />
           ) : (
-            <>
-              <input
-                type="checkbox"
-                checked={permissions[row.parentId]?.children[row.index][e.name]}
-                onChange={() => changeChild(e, e.name, row.index, row.parentId)}
-              />
-            </>
+            <input
+              type="checkbox"
+              checked={
+                permissions[row.parentId]?.children[row.index][role.name]
+              }
+              onChange={(e: any) =>
+                onChangeChild(e, role.name, row.index, row.parentId)
+              }
+            />
           )}
         </Box>
       ),
