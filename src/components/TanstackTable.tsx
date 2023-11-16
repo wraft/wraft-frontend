@@ -13,40 +13,8 @@ export interface TableProps {
   data: any;
   columns: any;
 }
-// export const styles = {
-//   table: {
-//     borderCollapse: 'collapse',
-//     width: '100%',
-//     border: '1px solid',
-//     borderColor: 'neutral.1',
-//     textAlign: 'left',
-//     bg: 'bgWhite',
-//   } as ThemeUIStyleObject,
-//   thead: {
-//     bg: 'gray.0',
-//     fontSize: 0,
-//     textTransform: 'uppercase',
-//     border: '1px solid',
-//     borderColor: 'neutral.1',
-//     color: 'gray.1',
-//   },
-//   tr: {
-//     verticalAlign: 'top',
-//     // bg: 'gray.0',
-//     borderBottom: '1px solid',
-//     borderBottomColor: 'neutral.1',
-//     '&:last-child': {
-//       border: '0',
-//     },
-//     '&:hover': {
-//       bg: 'background',
-//     },
-//   },
-//   th: { p: 2, textAlign: 'left', fontWeight: 'normal' },
-//   td: { p: 2 },
-// };
 
-export const TableNew = ({ data, columns }: TableProps) => {
+export const Table = ({ data, columns }: TableProps) => {
   const [expanded, setExpanded] = React.useState<ExpandedState>({});
   const table = useReactTable({
     data,
@@ -77,12 +45,6 @@ export const TableNew = ({ data, columns }: TableProps) => {
             {headerGroup.headers.map((header) => {
               const thSx = {
                 ...styles.th,
-                // width: flexRender(
-                //   header.column.columnDef.width,
-                //   header.getContext,
-                // ),
-                // minWidth: header.column.columnDef.minWidth,
-                // maxWidth: header.column.columnDef.maxWidth,
               } as ThemeUIStyleObject;
               return (
                 <Box as="th" key={header.id} sx={{ ...thSx }}>
@@ -123,4 +85,4 @@ export const TableNew = ({ data, columns }: TableProps) => {
   );
 };
 
-export default TableNew;
+export default Table;
