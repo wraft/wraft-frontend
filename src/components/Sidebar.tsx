@@ -209,6 +209,7 @@ const Nav = (props: any) => {
     if (token) {
       checkUser(token, onProfileLoad);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   useEffect(() => {
@@ -224,7 +225,7 @@ const Nav = (props: any) => {
     console.log('currentOrg', currentOrg);
     // console.log('currentOrg', profile.organisation_id);
     // workspaces?.organisations.find({ id: profile.organisation_id });
-  }, [profile, token, workspaces]);
+  }, [profile, workspaces]);
 
   // useEffect(() => {
   //   // check if token is there
