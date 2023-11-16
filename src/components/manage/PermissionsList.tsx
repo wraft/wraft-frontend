@@ -296,14 +296,13 @@ function IndeterminateCheckbox({
   className = '',
   ...rest
 }: { indeterminate?: boolean; className?: string } & CheckboxOptions<'input'>) {
-  // HTMLProps<HTMLInputElement>
   const ref = React.useRef<HTMLInputElement>(null!);
 
   React.useEffect(() => {
     if (typeof indeterminate === 'boolean') {
       ref.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate]);
+  }, [ref, indeterminate, rest.checked]);
 
   return (
     <Checkbox
