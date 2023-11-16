@@ -148,7 +148,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   function onSuccess() {
     setOpen(null);
     setRender((prev: boolean) => !prev);
-    addToast(`Role Added `, { appearance: 'success' });
+    addToast(`Role Edited `, { appearance: 'success' });
   }
 
   const checkedValuesFunc = (permissionsList: string[]) => {

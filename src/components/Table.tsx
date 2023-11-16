@@ -4,7 +4,7 @@ import { ThemeUIStyleObject, Box } from 'theme-ui';
 import { PluginHook, useTable, UseTableOptions } from 'react-table';
 export * from 'react-table';
 
-const styles = {
+export const styles = {
   table: {
     borderCollapse: 'collapse',
     width: '100%',
