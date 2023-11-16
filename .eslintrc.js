@@ -6,12 +6,12 @@ module.exports = {
   },
   // parserOptions: { ecmaVersion: 11 }, // to enable features such as async/await
   parserOptions: {
-    sourceType: "module",
+    sourceType: 'module',
     ecmaVersion: 11,
     ecmaFeatures: {
       jsx: true,
-      experimentalObjectRestSpread: true
-    }
+      experimentalObjectRestSpread: true,
+    },
   },
   ignorePatterns: ['node_modules/*', '.next/*', '.out/*', '!.prettierrc.js'], // We don't want to lint generated files nor node_modules, but we want to lint .prettierrc.js (ignored by default by eslint)
   extends: ['eslint:recommended'],
@@ -33,6 +33,7 @@ module.exports = {
         'plugin:react-hooks/recommended', // React hooks rules
         'plugin:jsx-a11y/recommended', // Accessibility rules
         'plugin:prettier/recommended', // Prettier plugin
+        'plugin:theme-ui/recommended"', //Themeui plugin
       ],
       rules: {
         // We will use TypeScript's types for component props instead
