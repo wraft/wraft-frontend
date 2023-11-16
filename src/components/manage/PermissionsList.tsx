@@ -1,14 +1,14 @@
 /** @jsxImportSource theme-ui */
 
-import React, { HTMLProps, useEffect, useMemo, useState } from 'react';
-import { Box, Button, Flex, Text, ThemeUIStyleObject } from 'theme-ui';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Box, Button, Flex, Text } from 'theme-ui';
 import { loadEntity, updateEntity } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import TableNew from '../TableNew';
 import { ArrowDropdown } from '../Icons';
 import _ from 'lodash';
 import { useToasts } from 'react-toast-notifications';
-import { Checkbox } from '@ariakit/react';
+import { Checkbox, CheckboxOptions } from '@ariakit/react';
 
 const svgDataUriDash =
   encodeURIComponent(`<svg width="12" height="3" viewBox="0 0 12 3" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -295,7 +295,8 @@ function IndeterminateCheckbox({
   indeterminate,
   className = '',
   ...rest
-}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
+}: { indeterminate?: boolean; className?: string } & CheckboxOptions<'input'>) {
+  // HTMLProps<HTMLInputElement>
   const ref = React.useRef<HTMLInputElement>(null!);
 
   React.useEffect(() => {
@@ -305,7 +306,7 @@ function IndeterminateCheckbox({
   }, [ref, indeterminate]);
 
   return (
-    <input
+    <Checkbox
       sx={{
         appearance: 'none',
         border: '1px solid #D4D7DA',
