@@ -29,7 +29,7 @@ const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
 
   function onSuccess() {
     setOpen(false);
-    addToast(`Role Added `, { appearance: 'success' });
+    addToast(`Created new workspace `, { appearance: 'success' });
     setRerender((prev: any) => !prev);
   }
 
