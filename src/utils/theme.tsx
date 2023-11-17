@@ -1106,9 +1106,9 @@ const theme: Theme & CustomVariantGroups = {
       variant: 'buttons.buttonPrimary',
       bg: 'neutral.2',
       color: 'gray.8',
-      ':hover': {
-        bg: 'neutral.1',
-      },
+      // ':hover': {
+      //   bg: 'neutral.1',
+      // },
     },
     googleLogin: {
       fontWeight: 'body',
