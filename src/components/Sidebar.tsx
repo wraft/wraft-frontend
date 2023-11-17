@@ -32,6 +32,8 @@ import {
 import { Organisation, OrganisationList } from '../store/profile';
 import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
+import ModalCustom from './ModalCustom';
+import WorkspaceCreate from './manage/WorkspaceCreate';
 
 /**
  * Sidebar Static Items
@@ -104,6 +106,7 @@ const Nav = (props: any) => {
 
   const [workspaces, setWorkspaces] = useState<OrganisationList>();
   const [activeSpace, setActiveSpace] = useState<Organisation>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
@@ -280,7 +283,18 @@ const Nav = (props: any) => {
                     </MenuItem>
                   ))}
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
-                  Create or join a workspace
+                  <Button
+                    variant="base"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => setIsOpen(true)}>
+                    Create a workspace
+                  </Button>
+                  <ModalCustom
+                    isOpen={isOpen}
+                    setOpen={setIsOpen}
+                    varient="center">
+                    <WorkspaceCreate setOpen={setIsOpen} />
+                  </ModalCustom>
                 </MenuItem>
               </Menu>
             </MenuProvider>
