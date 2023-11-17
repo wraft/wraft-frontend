@@ -107,6 +107,7 @@ const Nav = (props: any) => {
   const [workspaces, setWorkspaces] = useState<OrganisationList>();
   const [activeSpace, setActiveSpace] = useState<Organisation>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
@@ -184,7 +185,7 @@ const Nav = (props: any) => {
       checkUser(token, onProfileLoad);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [token, rerender]);
 
   useEffect(() => {
     const allOrgs = workspaces?.organisations;
@@ -293,7 +294,10 @@ const Nav = (props: any) => {
                     isOpen={isOpen}
                     setOpen={setIsOpen}
                     varient="center">
-                    <WorkspaceCreate setOpen={setIsOpen} />
+                    <WorkspaceCreate
+                      setOpen={setIsOpen}
+                      setRerender={setRerender}
+                    />
                   </ModalCustom>
                 </MenuItem>
               </Menu>

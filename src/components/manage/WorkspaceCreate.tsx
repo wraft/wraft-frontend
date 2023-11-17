@@ -8,13 +8,14 @@ import { useToasts } from 'react-toast-notifications';
 
 interface props {
   setOpen: any;
+  setRerender: any;
 }
 interface FormInputs {
   name: string;
   url: string;
 }
 
-const WorkspaceCreate = ({ setOpen }: props) => {
+const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const {
@@ -29,6 +30,7 @@ const WorkspaceCreate = ({ setOpen }: props) => {
   function onSuccess() {
     setOpen(false);
     addToast(`Role Added `, { appearance: 'success' });
+    setRerender((prev: any) => !prev);
   }
 
   function onSubmit(data: any) {
