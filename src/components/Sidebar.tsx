@@ -14,7 +14,6 @@ import Blok from './Blok';
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../../src/components/NavLink';
 import {
-  // BrandLogo,
   Note,
   Like,
   Cabinet as BookOpen,
@@ -24,7 +23,6 @@ import {
   TextIcon,
 } from '../../src/components/Icons';
 
-// import ModeToggle from './ModeToggle';
 import {
   checkUser,
   createEntity,
@@ -34,6 +32,8 @@ import {
 import { Organisation, OrganisationList } from '../store/profile';
 import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
+import ModalCustom from './ModalCustom';
+import WorkspaceCreate from './manage/WorkspaceCreate';
 
 /**
  * Sidebar Static Items
@@ -106,6 +106,8 @@ const Nav = (props: any) => {
 
   const [workspaces, setWorkspaces] = useState<OrganisationList>();
   const [activeSpace, setActiveSpace] = useState<Organisation>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
@@ -119,38 +121,15 @@ const Nav = (props: any) => {
     setCurrentOrgName({ name: 'hai' });
   }, [profile]);
 
-  // console.log('dammmm sooon', currentOrg);
-
-  // const menu = useMenuState();
-
   const showFull = props && props.showFull ? true : true;
-  // const sidebarW = 'auto'; //props && props.showFull ? '90px' : '16%';
   const router = useRouter();
   const pathname: string = router.pathname as any;
-
-  // popper
-  // const [toggleDrop, setToggleDrop] = useState<boolean>(false);
-  // const [referenceElement, setReferenceElement] = useState(null);
-  // const [popperElement, setPopperElement] = useState(null);
-  // const [arrowElement, setArrowElement] = useState(null);
-  // const { styles, attributes } = usePopper(referenceElement, popperElement, {
-  //   modifiers: [{ name: 'arrow', options: { element: arrowElement } }],
-  // });
-
-  // const toggleSearch = () => {
-  //   setShowSearch(!showSearch);
-  // };
-
-  // const closeSearch = () => {
-  //   setShowSearch(false);
-  // };
 
   const checkActive = (pathname: string, m: any) => {
     if (pathname === '/content/[id]' && m.path === '/contents') {
       return true;
     }
 
-    // console.log(pathname, m.path);
     return pathname === m.path ? true : false;
   };
 
@@ -167,8 +146,6 @@ const Nav = (props: any) => {
    */
 
   const loadOrgs = (token: string) => {
-    // const tok = token ? token : t;
-    // token: string, path: string, onSuccess: any
     loadEntity(token, `/users/organisations`, setWorkspaces);
   };
 
@@ -178,7 +155,6 @@ const Nav = (props: any) => {
 
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const onSwitch = (_result: any) => {
-    console.log('switched', _result);
     switchProfile(_result);
     setToken(_result.access_token);
   };
@@ -189,7 +165,6 @@ const Nav = (props: any) => {
    */
 
   const switchOrg = (id: string) => {
-    // createEntity({ organisation_id: id})
     createEntity(
       { organisation_id: id },
       `/switch_organisations`,
@@ -210,10 +185,9 @@ const Nav = (props: any) => {
       checkUser(token, onProfileLoad);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, [token, rerender]);
 
   useEffect(() => {
-    console.log('workspaces', workspaces);
     const allOrgs = workspaces?.organisations;
     const currentOrg = allOrgs?.find(
       (og: Organisation) => og.id == profile?.organisation_id,
@@ -221,21 +195,7 @@ const Nav = (props: any) => {
     setCurrentOrgName(currentOrg?.name);
 
     setActiveSpace(currentOrg);
-    // setActiveSpace(profile.organisation_id);
-    console.log('currentOrg', currentOrg);
-    // console.log('currentOrg', profile.organisation_id);
-    // workspaces?.organisations.find({ id: profile.organisation_id });
   }, [profile, workspaces]);
-
-  // useEffect(() => {
-  //   // check if token is there
-  //   const t = cookie.get('token') || false;
-  //   // login to check
-  //   if (t) {
-  //     checkUser(t, onProfileLoad);
-  //     setToken(t);
-  //   }
-  // }, [switchOrg]);
 
   return (
     <>
@@ -292,7 +252,6 @@ const Nav = (props: any) => {
                       </Box>
                     </Flex>
                   )}
-                  {/* //  <BrandLogo width="5rem" height="2rem" />  */}
                 </Flex>
               </MenuButton>
               <Menu
@@ -325,15 +284,27 @@ const Nav = (props: any) => {
                     </MenuItem>
                   ))}
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
-                  Create or join a workspace
+                  <Button
+                    variant="base"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={() => setIsOpen(true)}>
+                    Create a workspace
+                  </Button>
+                  <ModalCustom
+                    isOpen={isOpen}
+                    setOpen={setIsOpen}
+                    varient="center">
+                    <WorkspaceCreate
+                      setOpen={setIsOpen}
+                      setRerender={setRerender}
+                    />
+                  </ModalCustom>
                 </MenuItem>
               </Menu>
             </MenuProvider>
           </Box>
           <MenuProvider>
             <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
-              {/* <Box as="span" sx={{ mt: 2 }}></Box> */}
-
               <Box
                 variant="button"
                 sx={{ mt: 0, pt: 0, px: 0, svg: { fill: 'gray.6' } }}>
@@ -359,13 +330,10 @@ const Nav = (props: any) => {
                           width="24px"
                           height="24px"
                           src={profile?.profile_pic}
-                          // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu
                         as={Box}
-                        // sx={{ border: 'solid 1px #eee' }}
-
                         sx={{
                           border: 'solid 1px',
                           borderColor: 'neutral.1',
@@ -424,8 +392,6 @@ const Nav = (props: any) => {
         <Box as={MenuProvider} sx={{ flex: 1 }}>
           <Flex
             sx={{
-              // position: 'relative',
-              // height: '40px',
               pt: 1,
               pb: 1,
               border: 'solid 1px',
@@ -446,7 +412,6 @@ const Nav = (props: any) => {
             }}>
             <Box
               sx={{
-                // position: 'absolute',
                 pl: 2,
                 left: 1,
                 top: 0,
