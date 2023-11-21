@@ -11,11 +11,22 @@ const profile = {
   }),
 };
 
+// const currentWorkspace = {
+//   org: {},
+//   set: action((state, payload) => {
+//     state.org = payload;
+//   }),
+// };
+
 const currentOrg = {
   name: {},
+  // id: {},
   set: action((state, payload) => {
     state.name = payload;
   }),
+  // setId: action((state, payload) => {
+  //   state.id = payload;
+  // }),
 };
 
 const images = {
@@ -35,6 +46,7 @@ const model = {
   auth,
   profile,
   currentOrg,
+  // currentWorkspace,
   images,
 };
 
