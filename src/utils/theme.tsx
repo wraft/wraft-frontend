@@ -224,9 +224,9 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     checkbox: {
-      '-moz-appearance': 'none',
-      '-webkit-appearance': 'none',
-      '-o-appearance': 'none',
+      MozAppearance: 'none',
+      WebkitAppearance: 'none',
+      OAppearance: 'none',
       outline: 'none',
       content: 'none',
       color: 'neutral.1',
