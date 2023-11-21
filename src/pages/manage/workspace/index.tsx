@@ -12,13 +12,16 @@ import {
   Checkbox,
 } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import {
   checkUser,
   loadEntityDetail,
   updateEntityFile,
   deleteEntity,
+  // switchProfile,
+  // createEntity,
 } from '../../../utils/models';
+import Router from 'next/router';
 
 import { useToasts } from 'react-toast-notifications';
 
@@ -71,6 +74,10 @@ const Index: FC = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = React.useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
+  // const profile = useStoreState((state) => state.profile.profile);
+  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
+  // const currentWorkspace = useStoreState((state) => state.currentWorkspace.org);
+  // console.log(profile);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -124,8 +131,28 @@ const Index: FC = () => {
     }
   };
 
+  // const setToken = useStoreActions((actions: any) => actions.auth.addToken);
+
+  // const onSwitch = (_result: any) => {
+  //   switchProfile(_result);
+  //   console.log(_result);
+  //   setToken(_result.access_token);
+  // };
   const onConfirmDelete = () => {
+    // const currentOrgId = orgId;
+    // console.log(currentOrgId);
+    // createEntity(
+    //   { organisation_id: profile.organisation_id },
+    //   `/switch_organisations`,
+    //   token,
+    //   onSwitch,
+    // );
+    // deleteEntity(`/organisations/${currentOrgId}`, token);
+    // console.log(currentWorkspace);
     deleteEntity(`/organisations/${orgId}`, token);
+    setConfirmDelete(false);
+    userLogout();
+    Router.push('/login');
   };
 
   const [previewSource, setPreviewSource] = React.useState<
