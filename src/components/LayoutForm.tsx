@@ -11,7 +11,6 @@ import {
   Image,
   Link,
 } from 'theme-ui';
-// import { transparentize } from '@theme-ui/color';
 
 import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -33,7 +32,6 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
-// import { MenuItem } from '@ariakit/react';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -78,7 +76,6 @@ interface Props {
 
 const Form = ({ setOpen }: Props) => {
   const {
-    // watch,
     register,
     control,
     handleSubmit,
@@ -104,7 +101,6 @@ const Form = ({ setOpen }: Props) => {
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = (router.query.id as string) || '';
-  // toats
   const { addToast } = useToasts();
 
   const onImageUploaded = (data: any) => {
@@ -121,11 +117,8 @@ const Form = ({ setOpen }: Props) => {
    * @param data
    */
   const onSubmit = (data: any) => {
-    console.log('Submitted!');
-    // console.log(data);
-    // console.log(engines);
     let assetsPath;
-    //
+
     if (assets.length > 0) {
       const a: any = [];
       assets.forEach((e: any) => {
@@ -299,7 +292,6 @@ const Form = ({ setOpen }: Props) => {
               <TickIcon fontSize={'24px'} color="inherit" />
             </Flex>
           )}
-          {/* <MenuItem> */}
           <Text
             ml={'10px'}
             onClick={() => goTo(0)}
@@ -310,7 +302,6 @@ const Form = ({ setOpen }: Props) => {
             }}>
             Basic details
           </Text>
-          {/* </MenuItem> */}
         </Flex>
         <Flex ml={4} sx={{ alignItems: 'center' }}>
           {isAssetValid ? (
@@ -334,7 +325,6 @@ const Form = ({ setOpen }: Props) => {
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
             </Flex>
           )}
-          {/* <MenuItem> */}
           <Text
             onClick={() => goTo(1)}
             ml={'10px'}
@@ -346,7 +336,6 @@ const Form = ({ setOpen }: Props) => {
             }}>
             Set Background
           </Text>
-          {/* </MenuItem> */}
         </Flex>
       </Flex>
       <Container sx={{ styleEl }}>
@@ -355,20 +344,15 @@ const Form = ({ setOpen }: Props) => {
             <section>
               <Box>
                 <Box pt={3}>
-                  {/* <Text as="h3" mb={2} pb={1}>
-                    Assets
-                  </Text> */}
                   {assets &&
                     assets.length > 0 &&
                     assets.map((m: Asset) => (
                       <Box
                         key={m.id}
                         sx={{
-                          // p: 3,
                           border: 'solid 1px',
                           borderColor: 'gray.3',
                           bg: 'base',
-                          // mb: 1,
                         }}>
                         <Box
                           sx={{
@@ -381,7 +365,6 @@ const Form = ({ setOpen }: Props) => {
                               // url={contents.content.build}
                               url={`http://localhost:3000${m.file}`}
                               pageNumber={1}
-                              // sx={{ width: '100%' }}
                             />
                           )}
                         </Box>
@@ -397,7 +380,6 @@ const Form = ({ setOpen }: Props) => {
                               fontSize: 1,
                               px: 1,
                               py: 1,
-                              // ml: 3,
                               bg: 'white',
                               color: 'red.4',
                               border: 'solid 1px',
@@ -476,13 +458,13 @@ const Form = ({ setOpen }: Props) => {
                       rules={{ required: 'Please select a Engine ID' }}
                       render={({ field }) => (
                         <Select {...field}>
+                          <option disabled selected>
+                            select an option
+                          </option>
                           {engines &&
                             engines.length > 0 &&
-                            engines.map((m: any, index) => (
-                              <option
-                                key={m.id}
-                                value={m.id}
-                                selected={index === 2}>
+                            engines.map((m: any) => (
+                              <option key={m.id} value={m.id}>
                                 {m.name}
                               </option>
                             ))}
@@ -569,7 +551,6 @@ const Form = ({ setOpen }: Props) => {
         </Box>
         {/* Form End */}
       </Container>
-      {/* <pre>{JSON.stringify(watch(), null, 2)}</pre> */}
     </Flex>
   );
 };
