@@ -73,11 +73,6 @@ const listMenu = [
         logo: <TextIcon width={20} />,
         path: '/blocks',
       },
-      // {
-      //   name: 'Vendors',
-      //   logo: <UserVoice width={20} />,
-      //   path: '/vendors',
-      // },
       {
         name: 'Manage',
         logo: <Wrench width={20} />,
@@ -103,9 +98,6 @@ const Nav = (props: any) => {
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
-  // const currentWorkspace = useStoreState(
-  //   (state) => state.currrentWorkspace.org,
-  // );
 
   const [workspaces, setWorkspaces] = useState<OrganisationList>();
   const [activeSpace, setActiveSpace] = useState<Organisation>();
@@ -120,23 +112,9 @@ const Nav = (props: any) => {
     (actions: any) => actions.currentOrg.set,
   );
 
-  // const setCurrentWorkspace = useStoreActions(
-  //   (actions: any) => actions.currentWorkspace.set,
-  // );
-
-  // const onOrgSuccess = (data: any) => {
-  //   // setCurrentWorkspace({ org: data });
-  //   console.log('orrrrrg', data);
-  // };
-
-  // useEffect(() => {
-  //   // console.log('asdfsadfasfdasd', currentWorkspace);
-  // });
-
+  // const
   useEffect(() => {
-    // loadEntity(token, `organisations/${profile.organisation_id}`, onOrgSuccess);
     setCurrentOrgName({ name: 'hai' });
-    // setCurrentOrgId({ id: profile.organisation_id });
   }, [profile]);
 
   const showFull = props && props.showFull ? true : true;
@@ -280,7 +258,6 @@ const Nav = (props: any) => {
                   Switch Workspace
                 </MenuItem>
                 {workspaces &&
-                  // workspaces.organisations &&
                   workspaces.organisations.map((org: Organisation) => (
                     <MenuItem
                       key={org.id}

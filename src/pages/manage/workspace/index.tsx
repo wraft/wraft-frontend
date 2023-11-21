@@ -18,8 +18,6 @@ import {
   loadEntityDetail,
   updateEntityFile,
   deleteEntity,
-  // switchProfile,
-  // createEntity,
 } from '../../../utils/models';
 import Router from 'next/router';
 
@@ -58,11 +56,7 @@ type FormInputs = {
 };
 
 const Index: FC = () => {
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm<FormInputs>({ mode: 'all' });
+  const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -74,10 +68,7 @@ const Index: FC = () => {
   const fileRef = React.useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = React.useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
-  // const profile = useStoreState((state) => state.profile.profile);
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  // const currentWorkspace = useStoreState((state) => state.currentWorkspace.org);
-  // console.log(profile);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -87,7 +78,6 @@ const Index: FC = () => {
   };
   const onLoad = (data: any) => {
     setOrg(data);
-    console.table(data);
   };
 
   React.useEffect(() => {
@@ -112,8 +102,6 @@ const Index: FC = () => {
   }, [org]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
-
     const formData = new FormData();
     if (data.logo && data.logo.length > 0) {
       formData.append('logo', data.logo[0]);
@@ -131,24 +119,7 @@ const Index: FC = () => {
     }
   };
 
-  // const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-
-  // const onSwitch = (_result: any) => {
-  //   switchProfile(_result);
-  //   console.log(_result);
-  //   setToken(_result.access_token);
-  // };
   const onConfirmDelete = () => {
-    // const currentOrgId = orgId;
-    // console.log(currentOrgId);
-    // createEntity(
-    //   { organisation_id: profile.organisation_id },
-    //   `/switch_organisations`,
-    //   token,
-    //   onSwitch,
-    // );
-    // deleteEntity(`/organisations/${currentOrgId}`, token);
-    // console.log(currentWorkspace);
     deleteEntity(`/organisations/${orgId}`, token);
     setConfirmDelete(false);
     userLogout();
