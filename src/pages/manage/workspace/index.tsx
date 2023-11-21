@@ -66,6 +66,7 @@ const Index: FC = () => {
   const [org, setOrg] = React.useState<Organisation>();
   const [logoSrc, setLogoSrc] = React.useState(org?.logo);
   const fileRef = React.useRef<HTMLInputElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = React.useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
@@ -283,9 +284,12 @@ const Index: FC = () => {
                       </Text>
                       <Box sx={{ mt: '24px' }}>
                         <Label variant="text.pR" sx={{ color: 'gray.8' }}>
-                          Enter the deletion code
+                          {/* Enter the deletion code */}
+                          <span>
+                            Enter the Workspace <b> name </b> to confirm
+                          </span>
                         </Label>
-                        <Input></Input>
+                        <Input ref={inputRef}></Input>
                       </Box>
                       <Label
                         sx={{
@@ -304,6 +308,11 @@ const Index: FC = () => {
                       </Label>
                       <Flex sx={{ gap: 3, pt: 4 }}>
                         <Button
+                          disabled={
+                            !isChecked ||
+                            inputRef.current?.value.toLowerCase() !==
+                              currentOrg.toLowerCase()
+                          }
                           onClick={() => {
                             setDelete(false);
                             setConfirmDelete(true);
