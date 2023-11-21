@@ -73,11 +73,6 @@ const listMenu = [
         logo: <TextIcon width={20} />,
         path: '/blocks',
       },
-      // {
-      //   name: 'Vendors',
-      //   logo: <UserVoice width={20} />,
-      //   path: '/vendors',
-      // },
       {
         name: 'Manage',
         logo: <Wrench width={20} />,
@@ -117,6 +112,7 @@ const Nav = (props: any) => {
     (actions: any) => actions.currentOrg.set,
   );
 
+  // const
   useEffect(() => {
     setCurrentOrgName({ name: 'hai' });
   }, [profile]);

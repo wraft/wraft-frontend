@@ -224,9 +224,9 @@ const theme: Theme & CustomVariantGroups = {
       },
     },
     checkbox: {
-      '-moz-appearance': 'none',
-      '-webkit-appearance': 'none',
-      '-o-appearance': 'none',
+      MozAppearance: 'none',
+      WebkitAppearance: 'none',
+      OAppearance: 'none',
       outline: 'none',
       content: 'none',
       color: 'neutral.1',
@@ -1098,17 +1098,11 @@ const theme: Theme & CustomVariantGroups = {
     delete: {
       variant: 'buttons.buttonPrimary',
       bg: 'red.6',
-      ':hover': {
-        bg: 'red.5',
-      },
     },
     cancel: {
       variant: 'buttons.buttonPrimary',
       bg: 'neutral.2',
       color: 'gray.8',
-      // ':hover': {
-      //   bg: 'neutral.1',
-      // },
     },
     googleLogin: {
       fontWeight: 'body',

@@ -12,13 +12,14 @@ import {
   Checkbox,
 } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 import {
   checkUser,
   loadEntityDetail,
   updateEntityFile,
   deleteEntity,
 } from '../../../utils/models';
+import Router from 'next/router';
 
 import { useToasts } from 'react-toast-notifications';
 
@@ -55,11 +56,7 @@ type FormInputs = {
 };
 
 const Index: FC = () => {
-  const {
-    register,
-    handleSubmit,
-    // formState: { errors },
-  } = useForm<FormInputs>({ mode: 'all' });
+  const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -69,8 +66,10 @@ const Index: FC = () => {
   const [org, setOrg] = React.useState<Organisation>();
   const [logoSrc, setLogoSrc] = React.useState(org?.logo);
   const fileRef = React.useRef<HTMLInputElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = React.useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
+  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -80,7 +79,6 @@ const Index: FC = () => {
   };
   const onLoad = (data: any) => {
     setOrg(data);
-    console.table(data);
   };
 
   React.useEffect(() => {
@@ -105,8 +103,6 @@ const Index: FC = () => {
   }, [org]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
-
     const formData = new FormData();
     if (data.logo && data.logo.length > 0) {
       formData.append('logo', data.logo[0]);
@@ -126,6 +122,9 @@ const Index: FC = () => {
 
   const onConfirmDelete = () => {
     deleteEntity(`/organisations/${orgId}`, token);
+    setConfirmDelete(false);
+    userLogout();
+    Router.push('/login');
   };
 
   const [previewSource, setPreviewSource] = React.useState<
@@ -285,9 +284,12 @@ const Index: FC = () => {
                       </Text>
                       <Box sx={{ mt: '24px' }}>
                         <Label variant="text.pR" sx={{ color: 'gray.8' }}>
-                          Enter the deletion code
+                          {/* Enter the deletion code */}
+                          <span>
+                            Enter the Workspace <b> name </b> to confirm
+                          </span>
                         </Label>
-                        <Input></Input>
+                        <Input ref={inputRef}></Input>
                       </Box>
                       <Label
                         sx={{
@@ -306,6 +308,11 @@ const Index: FC = () => {
                       </Label>
                       <Flex sx={{ gap: 3, pt: 4 }}>
                         <Button
+                          disabled={
+                            !isChecked ||
+                            inputRef.current?.value.toLowerCase() !==
+                              currentOrg.toLowerCase()
+                          }
                           onClick={() => {
                             setDelete(false);
                             setConfirmDelete(true);

@@ -35,6 +35,7 @@ const model = {
   auth,
   profile,
   currentOrg,
+  // currentWorkspace,
   images,
 };
 
