@@ -69,7 +69,7 @@ const Form: FC = () => {
   const [flows, setFlows] = useState<Array<any>>([]);
 
   const loadData = (page: number) => {
-    const pageNo = page > 0 ? `?page=${page}` : '';
+    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`flows${pageNo}`)
       .then((data: any) => {
         setLoading(true);
@@ -89,7 +89,7 @@ const Form: FC = () => {
 
   useEffect(() => {
     loadData(page);
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (contents && contents.length > 0) {
@@ -161,7 +161,12 @@ const Form: FC = () => {
           </Box> */}
           </Box>
         </Box>
-        <Paginate changePage={changePage} {...pageMeta} />
+        {/* <Paginate changePage={changePage} {...pageMeta} /> */}
+        <Paginate
+          changePage={changePage}
+          {...pageMeta}
+          info={`${total} of ${total} pages`}
+        />
         {total}
       </Box>
     </Box>
