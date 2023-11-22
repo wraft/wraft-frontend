@@ -12,7 +12,7 @@ import {
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 
 import {
@@ -84,9 +84,10 @@ export interface StateFormProps {
 
 interface StateStateFormProps {
   onSave: any;
+  setAddState: any;
 }
 
-const StateStateForm = ({ onSave }: StateStateFormProps) => {
+const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
   const [newState, setNewState] = useState<string | any>(null);
 
   const onChangeInput = (e: any) => {
@@ -107,7 +108,10 @@ const StateStateForm = ({ onSave }: StateStateFormProps) => {
         type="button"
         variant="btnPrimary"
         sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
-        onClick={() => onSave(newState)}>
+        onClick={() => {
+          onSave(newState);
+          setAddState(false);
+        }}>
         Add State
       </Button>
     </Box>
@@ -363,7 +367,7 @@ const FlowForm = () => {
    */
   const onSubmit = (data: any) => {
     createEntity(data, 'flows', token);
-    Router.push('/manage/flows');
+    // Router.push('/manage/flows');
   };
 
   useEffect(() => {
@@ -508,7 +512,10 @@ const FlowForm = () => {
                   onClose={() => setAddState(false)}
                   label="ModalX"
                   aria-label="Add New State">
-                  <StateStateForm onSave={updateState} />
+                  <StateStateForm
+                    onSave={updateState}
+                    setAddState={setAddState}
+                  />
                 </Modal>
               </Box>
             </Box>
