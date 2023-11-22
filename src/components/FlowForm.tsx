@@ -12,7 +12,7 @@ import {
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 
 import {
@@ -363,6 +363,7 @@ const FlowForm = () => {
    */
   const onSubmit = (data: any) => {
     createEntity(data, 'flows', token);
+    Router.push('/manage/flows');
   };
 
   useEffect(() => {
