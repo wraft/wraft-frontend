@@ -419,30 +419,33 @@ const FlowForm = () => {
       <Box
         sx={{
           mt: 4,
-          borderRadius: 5,
-          maxWidth: '80ch',
-          mx: 'auto',
-          border: 'solid 1px',
-          borderColor: 'gray.4',
+          // borderRadius: 5,
+          // maxWidth: '80ch',
+          // mx: 'auto',
+          // border: 'solid 1px',
+          // borderColor: 'gray.4',
         }}>
         <Container
-          variant="layout.pageFrame"
+          // variant="layout.pageFrame"
           sx={{ p: 0 }}
           data-flow={flow?.id}>
           <Box
             as="form"
-            sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
+            // sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
             onSubmit={handleSubmit(onSubmit)}>
             <Flex
-              variant="layout.pageFrame"
-              sx={{
-                flexWrap: 'wrap',
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.4',
-                flexGrow: 1,
-              }}>
+              // variant="layout.pageFrame"
+              sx={
+                {
+                  // flexWrap: 'wrap',
+                  // borderBottom: 'solid 1px',
+                  // borderColor: 'gray.4',
+                  // flexGrow: 1,
+                }
+              }>
               {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
-              <Box sx={{ flexGrow: 1 }}>
+              {/* <Box sx={{ flexGrow: 1 }}> */}
+              <Box>
                 <Field
                   name="name"
                   label="Name"
@@ -479,17 +482,18 @@ const FlowForm = () => {
                 )}
 
                 <Flex
-                  sx={{
-                    px: 3,
-                    py: 3,
-                    bg: 'gray.2',
-                    borderTop: 'solid 1px',
-                    borderLeft: 'solid 1px',
-                    borderBottom: 'solid 1px',
-                    borderColor: 'gray.4',
-                    h6: { opacity: 1 },
-                    ':hover': { h6: { opacity: 1 } },
-                  }}>
+                // sx={{
+                //   px: 3,
+                //   py: 3,
+                //   bg: 'gray.2',
+                //   borderTop: 'solid 1px',
+                //   borderLeft: 'solid 1px',
+                //   borderBottom: 'solid 1px',
+                //   borderColor: 'gray.4',
+                //   h6: { opacity: 1 },
+                //   ':hover': { h6: { opacity: 1 } },
+                // }}
+                >
                   <Button
                     variant="btnPrimary"
                     sx={{ fontSize: 1, p: 2, px: 3 }}
