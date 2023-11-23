@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Button,
-  Text,
-  Input,
-  Label,
-  Flex,
-  // Select,
-} from 'theme-ui';
+import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -25,7 +16,6 @@ import {
 import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
-// import PageHeader from './PageHeader';
 
 import { ReactSortable } from 'react-sortablejs';
 
@@ -424,41 +414,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
 
   return (
     <Box sx={{ px: 4, py: 3 }}>
-      {/* <PageHeader
-        title={cId ? 'Edit Flows' : 'Create Flows'}
-        desc="Mange document flows"
-        breads={true}
-      /> */}
-
       <Box
         sx={{
           mt: 4,
-          // borderRadius: 5,
-          // maxWidth: '80ch',
-          // mx: 'auto',
-          // border: 'solid 1px',
-          // borderColor: 'gray.4',
         }}>
-        <Container
-          // variant="layout.pageFrame"
-          sx={{ p: 0 }}
-          data-flow={flow?.id}>
-          <Box
-            as="form"
-            // sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
-            onSubmit={handleSubmit(onSubmit)}>
-            <Flex
-              // variant="layout.pageFrame"
-              sx={
-                {
-                  // flexWrap: 'wrap',
-                  // borderBottom: 'solid 1px',
-                  // borderColor: 'gray.4',
-                  // flexGrow: 1,
-                }
-              }>
-              {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
-              {/* <Box sx={{ flexGrow: 1 }}> */}
+        <Container sx={{ p: 0 }} data-flow={flow?.id}>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex>
               <Box>
                 <Field
                   name="name"
@@ -473,9 +435,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 </Button>
               </Box>
             </Flex>
-            <Box
-              //  variant="layout.pageFrame"
-              sx={{ pt: 3 }}>
+            <Box sx={{ pt: 3 }}>
               <Box mt={0}>
                 <Modal isOpen={approval} onClose={() => setAddState(false)}>
                   <ApprovalFormBase
@@ -490,26 +450,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   <StatesForm
                     onAttachApproval={onAttachApproval}
                     content={content}
-                    // dialog={dialog2}
                     onSave={CreateState}
                     onDelete={deleteState}
                     onSorted={onSortDone}
                   />
                 )}
 
-                <Flex
-                // sx={{
-                //   px: 3,
-                //   py: 3,
-                //   bg: 'gray.2',
-                //   borderTop: 'solid 1px',
-                //   borderLeft: 'solid 1px',
-                //   borderBottom: 'solid 1px',
-                //   borderColor: 'gray.4',
-                //   h6: { opacity: 1 },
-                //   ':hover': { h6: { opacity: 1 } },
-                // }}
-                >
+                <Flex>
                   <Button
                     variant="btnPrimary"
                     sx={{ fontSize: 1, p: 2, px: 3 }}
