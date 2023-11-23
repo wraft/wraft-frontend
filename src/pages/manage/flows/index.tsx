@@ -13,6 +13,8 @@ import FlowForm from '../../../components/FlowForm';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [rerender, setRerender] = React.useState(false);
+  console.log('render state', rerender);
   return (
     <>
       <Head>
@@ -32,13 +34,13 @@ const Index: FC = () => {
             Add Flow
           </Button>
         </PageHeader>
-        <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-          <FlowForm />
+        <ModalCustom varient="center" isOpen={isOpen} setOpen={setIsOpen}>
+          <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
         </ModalCustom>
         <Container sx={{ pl: 4, pt: 4 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowList />
+            <FlowList rerender={rerender} />
           </Flex>
         </Container>
       </Page>
