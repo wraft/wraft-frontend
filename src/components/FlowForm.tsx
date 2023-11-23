@@ -375,7 +375,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     setOpen(false);
     setTimeout(() => {
       setRerender((prev: boolean) => !prev);
-    }, 0);
+    }, 1000);
     // Router.push('/manage/flows');
   };
 
