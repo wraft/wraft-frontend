@@ -25,7 +25,7 @@ import {
 import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
-import PageHeader from './PageHeader';
+// import PageHeader from './PageHeader';
 
 import { ReactSortable } from 'react-sortablejs';
 
@@ -274,7 +274,12 @@ const StatesForm = ({
   );
 };
 
-const FlowForm = () => {
+interface Props {
+  setOpen: any;
+  setRerender: any;
+}
+
+const FlowForm = ({ setOpen, setRerender }: Props) => {
   const {
     register,
     handleSubmit,
@@ -365,8 +370,12 @@ const FlowForm = () => {
    * Submit Form
    * @param data Form Data
    */
-  const onSubmit = (data: any) => {
-    createEntity(data, 'flows', token);
+  const onSubmit = async (data: any) => {
+    await createEntity(data, 'flows', token);
+    setOpen(false);
+    setTimeout(() => {
+      setRerender((prev: boolean) => !prev);
+    }, 0);
     // Router.push('/manage/flows');
   };
 
@@ -414,12 +423,12 @@ const FlowForm = () => {
   };
 
   return (
-    <Box>
-      <PageHeader
+    <Box sx={{ px: 4, py: 3 }}>
+      {/* <PageHeader
         title={cId ? 'Edit Flows' : 'Create Flows'}
         desc="Mange document flows"
         breads={true}
-      />
+      /> */}
 
       <Box
         sx={{
@@ -464,7 +473,9 @@ const FlowForm = () => {
                 </Button>
               </Box>
             </Flex>
-            <Box variant="layout.pageFrame" sx={{ pt: 3 }}>
+            <Box
+              //  variant="layout.pageFrame"
+              sx={{ pt: 3 }}>
               <Box mt={0}>
                 <Modal isOpen={approval} onClose={() => setAddState(false)}>
                   <ApprovalFormBase

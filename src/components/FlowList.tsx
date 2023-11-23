@@ -60,7 +60,11 @@ const ItemField: FC<any> = ({ flow }) => {
   );
 };
 
-const Form: FC = () => {
+interface Props {
+  rerender: boolean;
+}
+
+const Form: FC<Props> = ({ rerender }) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -89,14 +93,14 @@ const Form: FC = () => {
 
   useEffect(() => {
     loadData(page);
-  }, [page]);
+  }, [page, rerender]);
 
   useEffect(() => {
     if (contents && contents.length > 0) {
       const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col1: <Text>~</Text>,
+          // col1: <Text>~</Text>,
           col2: <ItemField {...r} />,
           col3: <Box>{r.flow.updated_at}</Box>,
         };
@@ -106,11 +110,15 @@ const Form: FC = () => {
 
       setFlows(row);
     }
-  }, [contents]);
+  }, [contents, rerender]);
 
   return (
-    <Box py={3} mt={4} variant="layout.pageFrame">
-      <Box mx={0} mb={3}>
+    <Box
+      py={3}
+      mt={4}
+      // variant="layout.pageFrame"
+    >
+      <Box mx={0} mb={3} sx={{ width: '100%' }}>
         {!loading && (
           <Box>
             <Spinner width={40} height={40} color="primary" />
@@ -122,26 +130,30 @@ const Form: FC = () => {
             contents.map((m: any) => <ItemField key={m.flow.id} {...m} />)}
         </Box> */}
 
-        <Box variant="layout.contentFrame">
-          <Box mx={0} mb={3}>
+        <Box
+          //  variant="layout.contentFrame"
+          sx={{ width: '100%' }}>
+          <Box mx={0} mb={3} sx={{ width: '100%' }}>
             {flows && (
               <Table
                 options={{
                   columns: [
-                    {
-                      Header: 'Id',
-                      accessor: 'col1', // accessor is the "key" in the data
-                      width: '15%',
-                    },
+                    // {
+                    //   Header: 'Id',
+                    //   accessor: 'col1', // accessor is the "key" in the data
+                    //   width: '15%',
+                    // },
                     {
                       Header: 'Name',
                       accessor: 'col2',
-                      width: '45%',
+                      // width: '45%',
+                      width: 'auto',
                     },
                     {
                       Header: 'Updated',
                       accessor: 'col3',
-                      width: '40%',
+                      // width: '40%',
+                      width: 'auto',
                     },
                   ],
                   data: flows,
@@ -165,9 +177,8 @@ const Form: FC = () => {
         <Paginate
           changePage={changePage}
           {...pageMeta}
-          info={`${total} of ${total} pages`}
+          info={`${page} of ${total} pages`}
         />
-        {total}
       </Box>
     </Box>
   );
