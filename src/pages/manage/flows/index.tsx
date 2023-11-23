@@ -21,12 +21,10 @@ const Index: FC = () => {
         <title>Manage Flows - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-
       <Page>
         <PageHeader
           title="Manage Flows"
           desc="Manage Configurations for your workspace">
-          {/* <Link variant="btnSecondary" href="/manage/flows/new"> */}
           <Button
             onClick={() => {
               setIsOpen(true);
@@ -40,7 +38,7 @@ const Index: FC = () => {
         <Container sx={{ pl: 4, pt: 4 }}>
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowList rerender={rerender} />
+            <FlowList rerender={rerender} setRerender={setRerender} />
           </Flex>
         </Container>
       </Page>
