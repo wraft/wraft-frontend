@@ -55,9 +55,9 @@ const ItemField: FC<any> = ({ flow }) => {
         path={`/manage/flows/edit/${flow.id}`}>
         <Box>
           <Text as="h4">{flow.name}</Text>
-          <Text sx={{ fontSize: 0 }} color="gray.6">
+          {/* <Text sx={{ fontSize: 0 }} color="gray.6">
             {flow.id}
-          </Text>
+          </Text> */}
         </Box>
       </MenuItem>
     </Box>
@@ -122,6 +122,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
     <Box
       py={3}
       mt={4}
+      sx={{ width: '100%' }}
       // variant="layout.pageFrame"
     >
       <Box mx={0} mb={3} sx={{ width: '100%' }}>
