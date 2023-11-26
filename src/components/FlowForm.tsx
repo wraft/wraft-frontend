@@ -281,6 +281,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const [addState, setAddState] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
+  const errorRef = React.useRef<HTMLDivElement | null>(null);
 
   const token = useStoreState((state) => state.auth.token);
 
@@ -360,13 +361,24 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * Submit Form
    * @param data Form Data
    */
-  const onSubmit = async (data: any) => {
-    await createEntity(data, 'flows', token);
+  const onSuccess = () => {
+    addToast(`Flow created`, { appearance: 'success' });
     setOpen(false);
-    setTimeout(() => {
-      setRerender((prev: boolean) => !prev);
-    }, 1000);
-    // Router.push('/manage/flows');
+    setRerender((prev: boolean) => !prev);
+  };
+
+  const onSubmit = async (data: any) => {
+    await createEntity(data, 'flows', token, onSuccess, (error: any) => {
+      addToast(`${error.response.data.errors.name[0]}`, {
+        appearance: 'error',
+      });
+      if (errorRef.current) {
+        const errorElement = errorRef.current;
+        if (errorElement) {
+          errorElement.innerText = error.response.data.errors.name[0];
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -428,6 +440,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   defaultValue=""
                   register={register}
                 />
+                <Text variant="error" ref={errorRef} />
               </Box>
               <Box sx={{ pt: '12px', ml: 3 }}>
                 <Button variant="btnPrimaryBig" type="submit" mt={3}>
