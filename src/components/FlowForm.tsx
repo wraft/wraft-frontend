@@ -265,8 +265,8 @@ const StatesForm = ({
 };
 
 interface Props {
-  setOpen: any;
-  setRerender: any;
+  setOpen?: any;
+  setRerender?: any;
 }
 
 const FlowForm = ({ setOpen, setRerender }: Props) => {
@@ -369,13 +369,15 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
 
   const onSubmit = async (data: any) => {
     await createEntity(data, 'flows', token, onSuccess, (error: any) => {
-      addToast(`${error.response.data.errors.name[0]}`, {
-        appearance: 'error',
-      });
-      if (errorRef.current) {
-        const errorElement = errorRef.current;
-        if (errorElement) {
-          errorElement.innerText = error.response.data.errors.name[0];
+      if (!edit) {
+        addToast(`${error.response.data.errors.name[0]}`, {
+          appearance: 'error',
+        });
+        if (errorRef.current) {
+          const errorElement = errorRef.current;
+          if (errorElement) {
+            errorElement.innerText = error.response.data.errors.name[0];
+          }
         }
       }
     });
