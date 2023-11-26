@@ -368,8 +368,12 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
-    await createEntity(data, 'flows', token, onSuccess, (error: any) => {
-      if (!edit) {
+    if (edit) {
+      updateEntity(`flows/${cId}`, data, token, () => {
+        addToast(`flow updated`, { appearance: 'success' });
+      });
+    } else {
+      await createEntity(data, 'flows', token, onSuccess, (error: any) => {
         addToast(`${error.response.data.errors.name[0]}`, {
           appearance: 'error',
         });
@@ -379,8 +383,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             errorElement.innerText = error.response.data.errors.name[0];
           }
         }
-      }
-    });
+      });
+    }
   };
 
   useEffect(() => {
