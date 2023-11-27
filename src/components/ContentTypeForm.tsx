@@ -269,17 +269,17 @@ const Form = () => {
     return fieldsMap;
   };
 
-  const onSuccess = (d: any) => {
-    onDone(d);
+  // const onSuccess = (d: any) => {
+  const onSuccess = () => {
+    addToast('Saved Successfully', { appearance: 'success' });
+    Router.push(`/content-types`);
+    // const isUpdate = cId ? true : false;
+    // if (isUpdate) Router.push(`/content-types/edit/${_d?.id}`);
   };
 
   /**
    * On Theme Created
    */
-  const onDone = (_d: any) => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    Router.push(`/content-types/edit/${_d?.id}`);
-  };
 
   const onSubmit = (data: any) => {
     console.log('onSubmit');
