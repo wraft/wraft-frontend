@@ -194,12 +194,14 @@ const Form = () => {
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
+      setValue('flow_id', res.content_type.flow.flow?.id || undefined);
+      setValue('theme_id', res.content_type.theme_id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
   };
 
-  const loadDataDetalis = (id: string, t: string) => {
+  const loadDataDetails = (id: string, t: string) => {
     const tok = token ? token : t;
     loadEntityDetail(tok, `content_types`, id, setContentDetails);
     return false;
@@ -281,6 +283,8 @@ const Form = () => {
    * On Theme Created
    */
 
+  const isUpdate = cId ? true : false;
+
   const onSubmit = (data: any) => {
     console.log('onSubmit');
     const sampleD = {
@@ -294,7 +298,6 @@ const Form = () => {
       theme_id: data.theme_id,
     };
 
-    const isUpdate = cId ? true : false;
     if (isUpdate) {
       console.log('[isUpdate]', isUpdate);
       updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
@@ -326,7 +329,7 @@ const Form = () => {
   useEffect(() => {
     if (cId) {
       setValue('edit', cId);
-      loadDataDetalis(cId, token);
+      loadDataDetails(cId, token);
       loadThemes(token);
     }
   }, [cId, token]);
@@ -434,9 +437,11 @@ const Form = () => {
                   <Select
                     id="layout_id"
                     {...register('layout_id', { required: true })}>
-                    <option disabled selected>
-                      select an option
-                    </option>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -455,9 +460,11 @@ const Form = () => {
                     // name="flow_id"
                     defaultValue=""
                     {...register('flow_id', { required: true })}>
-                    <option disabled selected>
-                      select an option
-                    </option>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -489,9 +496,11 @@ const Form = () => {
                     defaultValue=""
                     // ref={register({ required: true })}
                     {...register('theme_id', { required: true })}>
-                    <option disabled selected>
-                      select an option
-                    </option>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
