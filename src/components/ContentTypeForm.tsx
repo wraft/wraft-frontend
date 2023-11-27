@@ -434,6 +434,9 @@ const Form = () => {
                   <Select
                     id="layout_id"
                     {...register('layout_id', { required: true })}>
+                    <option disabled selected>
+                      select an option
+                    </option>
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -452,6 +455,9 @@ const Form = () => {
                     // name="flow_id"
                     defaultValue=""
                     {...register('flow_id', { required: true })}>
+                    <option disabled selected>
+                      select an option
+                    </option>
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -483,6 +489,9 @@ const Form = () => {
                     defaultValue=""
                     // ref={register({ required: true })}
                     {...register('theme_id', { required: true })}>
+                    <option disabled selected>
+                      select an option
+                    </option>
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
