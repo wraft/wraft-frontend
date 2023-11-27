@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Button,
-  Text,
-  Input,
-  Label,
-  Flex,
-  // Select,
-} from 'theme-ui';
+import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
@@ -25,7 +16,6 @@ import {
 import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
-import PageHeader from './PageHeader';
 
 import { ReactSortable } from 'react-sortablejs';
 
@@ -84,9 +74,10 @@ export interface StateFormProps {
 
 interface StateStateFormProps {
   onSave: any;
+  setAddState: any;
 }
 
-const StateStateForm = ({ onSave }: StateStateFormProps) => {
+const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
   const [newState, setNewState] = useState<string | any>(null);
 
   const onChangeInput = (e: any) => {
@@ -107,7 +98,10 @@ const StateStateForm = ({ onSave }: StateStateFormProps) => {
         type="button"
         variant="btnPrimary"
         sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
-        onClick={() => onSave(newState)}>
+        onClick={() => {
+          onSave(newState);
+          setAddState(false);
+        }}>
         Add State
       </Button>
     </Box>
@@ -270,7 +264,12 @@ const StatesForm = ({
   );
 };
 
-const FlowForm = () => {
+interface Props {
+  setOpen?: any;
+  setRerender?: any;
+}
+
+const FlowForm = ({ setOpen, setRerender }: Props) => {
   const {
     register,
     handleSubmit,
@@ -282,6 +281,7 @@ const FlowForm = () => {
   const [addState, setAddState] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
+  const errorRef = React.useRef<HTMLDivElement | null>(null);
 
   const token = useStoreState((state) => state.auth.token);
 
@@ -361,8 +361,30 @@ const FlowForm = () => {
    * Submit Form
    * @param data Form Data
    */
-  const onSubmit = (data: any) => {
-    createEntity(data, 'flows', token);
+  const onSuccess = () => {
+    addToast(`Flow created`, { appearance: 'success' });
+    setOpen(false);
+    setRerender((prev: boolean) => !prev);
+  };
+
+  const onSubmit = async (data: any) => {
+    if (edit) {
+      updateEntity(`flows/${cId}`, data, token, () => {
+        addToast(`flow updated`, { appearance: 'success' });
+      });
+    } else {
+      await createEntity(data, 'flows', token, onSuccess, (error: any) => {
+        addToast(`${error.response.data.errors.name[0]}`, {
+          appearance: 'error',
+        });
+        if (errorRef.current) {
+          const errorElement = errorRef.current;
+          if (errorElement) {
+            errorElement.innerText = error.response.data.errors.name[0];
+          }
+        }
+      });
+    }
   };
 
   useEffect(() => {
@@ -409,46 +431,22 @@ const FlowForm = () => {
   };
 
   return (
-    <Box>
-      <PageHeader
-        title={cId ? 'Edit Flows' : 'Create Flows'}
-        desc="Mange document flows"
-        breads={true}
-      />
-
+    <Box sx={{ px: 4, py: 3 }}>
       <Box
         sx={{
           mt: 4,
-          borderRadius: 5,
-          maxWidth: '80ch',
-          mx: 'auto',
-          border: 'solid 1px',
-          borderColor: 'gray.4',
         }}>
-        <Container
-          variant="layout.pageFrame"
-          sx={{ p: 0 }}
-          data-flow={flow?.id}>
-          <Box
-            as="form"
-            sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
-            onSubmit={handleSubmit(onSubmit)}>
-            <Flex
-              variant="layout.pageFrame"
-              sx={{
-                flexWrap: 'wrap',
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.4',
-                flexGrow: 1,
-              }}>
-              {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
-              <Box sx={{ flexGrow: 1 }}>
+        <Container sx={{ p: 0 }} data-flow={flow?.id}>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex>
+              <Box>
                 <Field
                   name="name"
                   label="Name"
                   defaultValue=""
                   register={register}
                 />
+                <Text variant="error" ref={errorRef} />
               </Box>
               <Box sx={{ pt: '12px', ml: 3 }}>
                 <Button variant="btnPrimaryBig" type="submit" mt={3}>
@@ -456,7 +454,7 @@ const FlowForm = () => {
                 </Button>
               </Box>
             </Flex>
-            <Box variant="layout.pageFrame" sx={{ pt: 3 }}>
+            <Box sx={{ pt: 3 }}>
               <Box mt={0}>
                 <Modal isOpen={approval} onClose={() => setAddState(false)}>
                   <ApprovalFormBase
@@ -471,25 +469,13 @@ const FlowForm = () => {
                   <StatesForm
                     onAttachApproval={onAttachApproval}
                     content={content}
-                    // dialog={dialog2}
                     onSave={CreateState}
                     onDelete={deleteState}
                     onSorted={onSortDone}
                   />
                 )}
 
-                <Flex
-                  sx={{
-                    px: 3,
-                    py: 3,
-                    bg: 'gray.2',
-                    borderTop: 'solid 1px',
-                    borderLeft: 'solid 1px',
-                    borderBottom: 'solid 1px',
-                    borderColor: 'gray.4',
-                    h6: { opacity: 1 },
-                    ':hover': { h6: { opacity: 1 } },
-                  }}>
+                <Flex>
                   <Button
                     variant="btnPrimary"
                     sx={{ fontSize: 1, p: 2, px: 3 }}
@@ -503,7 +489,10 @@ const FlowForm = () => {
                   onClose={() => setAddState(false)}
                   label="ModalX"
                   aria-label="Add New State">
-                  <StateStateForm onSave={updateState} />
+                  <StateStateForm
+                    onSave={updateState}
+                    setAddState={setAddState}
+                  />
                 </Modal>
               </Box>
             </Box>
