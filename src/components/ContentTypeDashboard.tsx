@@ -95,7 +95,7 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
   };
 
   const loadData = () => {
-    fetchAPI('content_types')
+    fetchAPI('content_types?sort=inserted_at_desc')
       .then((data: any) => {
         setLoading(true);
         const res: IField[] = data.content_types;
