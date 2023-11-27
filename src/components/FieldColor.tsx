@@ -72,7 +72,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
               // name={name}
               type={ftype}
               defaultValue={valx || defaultValue || ''}
-              sx={{ pl: 3 }}
+              sx={{ pl: '40px' }}
               // ref={register({ required: required })}
               {...register(name, { required: required })}
             />
