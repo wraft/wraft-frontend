@@ -136,34 +136,37 @@ export const loadEntityDetail = (
  * @param path
  * @param token
  */
-export const createEntity = (
+
+export const createEntity = async (
   data: any,
   path: string,
   token: string,
   onSuccess?: any,
+  onFailed?: any,
 ) => {
   console.log('🥷', API_HOST, data);
 
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      if (onSuccess) {
-        console.log(`Created a model ${path} with Pass`, data);
-        onSuccess(data);
-      } else {
-        console.log(`Created a model ${path}`, data);
-      }
+  try {
+    const response = await axios.post(`${API_HOST}/api/v1/${path}`, data, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Created a model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Created a model ${path}`, response.data);
+    }
+  } catch (error) {
+    onFailed(error);
+    console.error('Errorrrrrrrrrrr:', error);
+  }
 };
 
 /**

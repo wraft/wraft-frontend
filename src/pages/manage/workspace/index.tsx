@@ -186,6 +186,7 @@ const Index: FC = () => {
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
                 sx={{
+                  minWidth: '556px',
                   bg: 'bgWhite',
                   border: '1px solid',
                   borderColor: 'neutral.1',
@@ -230,116 +231,124 @@ const Index: FC = () => {
                   Update
                 </Button>
               </Box>
-              <Box
-                sx={{
-                  bg: 'bgWhite',
-                  border: '1px solid',
-                  borderColor: 'neutral.1',
-                  borderRadius: 4,
-                  p: 4,
-                  m: 4,
-                }}>
-                <Text variant="pR" sx={{ display: 'inline-block', mb: 2 }}>
-                  Workspace removal
-                </Text>
-                <br />
-                <Text variant="pM" sx={{ display: 'inline-block', mb: '18px' }}>
-                  This workspace will be permanently removed from Wraft
-                </Text>
-                <br />
-                <Button
-                  onClick={() => setDelete(true)}
-                  type="button"
-                  variant="delete"
-                  sx={{ borderRadius: 6, fontSize: 2, fontWeight: 'heading' }}>
-                  Delete Workspace
-                </Button>
-                <ModalCustom isOpen={isDelete} setOpen={setDelete}>
-                  <Text
-                    variant="pB"
-                    sx={{
-                      py: 3,
-                      px: 4,
-                      display: 'inline-block',
-                    }}>
-                    Verify workspace delete request
+              {(currentOrg !== 'Personal' || '') && (
+                <Box
+                  sx={{
+                    bg: 'bgWhite',
+                    border: '1px solid',
+                    borderColor: 'neutral.1',
+                    borderRadius: 4,
+                    p: 4,
+                    m: 4,
+                  }}>
+                  <Text variant="pR" sx={{ display: 'inline-block', mb: 2 }}>
+                    Workspace removal
                   </Text>
-                  <Box
+                  <br />
+                  <Text
+                    variant="pM"
+                    sx={{ display: 'inline-block', mb: '18px' }}>
+                    This workspace will be permanently removed from Wraft
+                  </Text>
+                  <br />
+                  <Button
+                    onClick={() => setDelete(true)}
+                    type="button"
+                    variant="delete"
                     sx={{
-                      pt: 3,
-                      pb: 4,
-                      borderTop: '1px solid',
-                      borderColor: 'neutral.1',
+                      borderRadius: 6,
+                      fontSize: 2,
+                      fontWeight: 'heading',
                     }}>
-                    <Box sx={{ px: 4 }}>
-                      <Text
-                        variant="pR"
-                        sx={{ textWrap: 'balance', display: 'inline-block' }}>
-                        If you are sure you want to proceed with deletion of the
-                        workspace{' '}
-                        <Text as={'span'} variant="pB">
-                          Functionary
+                    Delete Workspace
+                  </Button>
+                  <ModalCustom isOpen={isDelete} setOpen={setDelete}>
+                    <Text
+                      variant="pB"
+                      sx={{
+                        py: 3,
+                        px: 4,
+                        display: 'inline-block',
+                      }}>
+                      Verify workspace delete request
+                    </Text>
+                    <Box
+                      sx={{
+                        pt: 3,
+                        pb: 4,
+                        borderTop: '1px solid',
+                        borderColor: 'neutral.1',
+                      }}>
+                      <Box sx={{ px: 4 }}>
+                        <Text
+                          variant="pR"
+                          sx={{ textWrap: 'balance', display: 'inline-block' }}>
+                          If you are sure you want to proceed with deletion of
+                          the workspace{' '}
+                          <Text as={'span'} variant="pB">
+                            Functionary
+                          </Text>
+                          , please enter the deletion sent to your email.
                         </Text>
-                        , please enter the deletion sent to your email.
-                      </Text>
-                      <Box sx={{ mt: '24px' }}>
-                        <Label variant="text.pR" sx={{ color: 'gray.8' }}>
-                          {/* Enter the deletion code */}
-                          <span>
-                            Enter the Workspace <b> name </b> to confirm
-                          </span>
+                        <Box sx={{ mt: '24px' }}>
+                          <Label variant="text.pR" sx={{ color: 'gray.8' }}>
+                            {/* Enter the deletion code */}
+                            <span>
+                              Enter the Workspace <b> name </b> to confirm
+                            </span>
+                          </Label>
+                          <Input ref={inputRef}></Input>
+                        </Box>
+                        <Label
+                          sx={{
+                            mt: '18px',
+                            display: 'flex',
+                            alignItems: 'center',
+                          }}>
+                          <Checkbox
+                            checked={isChecked}
+                            onChange={handleCheckboxChange}
+                          />
+                          <Text variant="subM">
+                            I acknowledge I understand that all of the data will
+                            be deleted and want to proceed
+                          </Text>
                         </Label>
-                        <Input ref={inputRef}></Input>
+                        <Flex sx={{ gap: 3, pt: 4 }}>
+                          <Button
+                            disabled={
+                              !isChecked ||
+                              inputRef.current?.value.toLowerCase() !==
+                                currentOrg.toLowerCase()
+                            }
+                            onClick={() => {
+                              setDelete(false);
+                              setConfirmDelete(true);
+                            }}
+                            variant="delete">
+                            Delete workspace
+                          </Button>
+                          <Button
+                            onClick={() => setDelete(false)}
+                            variant="cancel">
+                            Cancel
+                          </Button>
+                        </Flex>
                       </Box>
-                      <Label
-                        sx={{
-                          mt: '18px',
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}>
-                        <Checkbox
-                          checked={isChecked}
-                          onChange={handleCheckboxChange}
-                        />
-                        <Text variant="subM">
-                          I acknowledge I understand that all of the data will
-                          be deleted and want to proceed
-                        </Text>
-                      </Label>
-                      <Flex sx={{ gap: 3, pt: 4 }}>
-                        <Button
-                          disabled={
-                            !isChecked ||
-                            inputRef.current?.value.toLowerCase() !==
-                              currentOrg.toLowerCase()
-                          }
-                          onClick={() => {
-                            setDelete(false);
-                            setConfirmDelete(true);
-                          }}
-                          variant="delete">
-                          Delete workspace
-                        </Button>
-                        <Button
-                          onClick={() => setDelete(false)}
-                          variant="cancel">
-                          Cancel
-                        </Button>
-                      </Flex>
                     </Box>
-                  </Box>
-                </ModalCustom>
-                <ModalCustom
-                  isOpen={isConfirmDelete}
-                  setOpen={setConfirmDelete}>
-                  <ConfirmDelete
-                    title="Delete workspace"
-                    text="Are you sure you want to delete this workspace?"
-                    onConfirmDelete={onConfirmDelete}
-                    setOpen={setConfirmDelete}
-                  />
-                </ModalCustom>
-              </Box>
+                  </ModalCustom>
+                  <ModalCustom
+                    isOpen={isConfirmDelete}
+                    setOpen={setConfirmDelete}>
+                    <ConfirmDelete
+                      title="Delete workspace"
+                      text="Are you sure you want to delete this workspace?"
+                      onConfirmDelete={onConfirmDelete}
+                      setOpen={setConfirmDelete}
+                    />
+                  </ModalCustom>
+                </Box>
+              )}
             </Box>
           </Flex>
         </Container>
