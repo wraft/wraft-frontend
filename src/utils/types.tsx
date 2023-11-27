@@ -70,6 +70,7 @@ export interface ContentTypeClass {
   inserted_at: string;
   id: string;
   flow: ContentTypeFlow;
+  theme_id: string;
   fields: any;
   description: string;
   color: null;
