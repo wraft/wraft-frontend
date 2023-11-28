@@ -73,7 +73,7 @@ export interface ContentTypeClass {
   theme_id: string;
   fields: any;
   description: string;
-  color: null;
+  color: string;
 }
 
 export interface ContentTypeFlow {
