@@ -3,6 +3,7 @@ import { Text, Box, Label, Input, Flex } from 'theme-ui';
 import { ChromePicker } from 'react-color';
 
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
+import { on } from 'events';
 
 interface FieldColorProps {
   register: any;
@@ -37,6 +38,12 @@ const FieldColor: React.FC<FieldColorProps> = ({
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
 
+  // if (valx !== '') {
+  //   if (onChangeColor) {
+  //     onChangeColor(valx, name);
+  //   }
+  // }
+
   /**
    * On Color selected
    * @param _e
@@ -45,14 +52,30 @@ const FieldColor: React.FC<FieldColorProps> = ({
     const colr = _e && _e.hex;
     setVal(colr);
 
-    if (typeof onChangeColor.onChange === 'undefined') {
+    // if (typeof onChangeColor.onChange === 'undefined') {
+    if (onChangeColor) {
       onChangeColor(colr, name);
+    }
+  };
+
+  const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newHexColor = e.target.value;
+    setVal(newHexColor);
+    if (onChangeColor) {
+      onChangeColor(newHexColor, name);
     }
   };
 
   useEffect(() => {
     const vX: string = defaultValue || '';
     setVal(vX);
+    if (onChangeColor) {
+      onChangeColor(vX, name);
+    }
+    const colorBoxElement = document.getElementById('colorBox');
+    if (colorBoxElement) {
+      colorBoxElement.style.backgroundColor = vX;
+    }
   }, [defaultValue]);
 
   return (
@@ -75,10 +98,14 @@ const FieldColor: React.FC<FieldColorProps> = ({
               sx={{ pl: '40px' }}
               // ref={register({ required: required })}
               {...register(name, { required: required })}
+              onChange={(e) => {
+                handleHexInputChange(e);
+                // changeColor(e.target.value);
+              }}
             />
             <Box sx={{ pt: 0 }}>
               <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
-                <Box bg={valx} variant="layout.squareButton" />
+                <Box id="colorBox" bg={valx} variant="layout.squareButton" />
               </Box>
               <Popover aria-label="Edit color">
                 <ChromePicker
