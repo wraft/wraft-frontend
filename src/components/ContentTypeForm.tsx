@@ -426,7 +426,7 @@ const Form = () => {
                     register={register}
                     label="Color"
                     name="color"
-                    defaultValue=""
+                    defaultValue={content?.content_type.color || ''}
                     onChangeColor={onChangeFields}
                   />
                 </Box>

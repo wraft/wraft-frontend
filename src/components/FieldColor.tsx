@@ -3,7 +3,6 @@ import { Text, Box, Label, Input, Flex } from 'theme-ui';
 import { ChromePicker } from 'react-color';
 
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-import { on } from 'events';
 
 interface FieldColorProps {
   register: any;
@@ -36,13 +35,8 @@ const FieldColor: React.FC<FieldColorProps> = ({
   onChangeColor,
   required = true,
 }) => {
+  console.log(defaultValue);
   const [valx, setVal] = useState<string>(defaultValue);
-
-  // if (valx !== '') {
-  //   if (onChangeColor) {
-  //     onChangeColor(valx, name);
-  //   }
-  // }
 
   /**
    * On Color selected
@@ -69,13 +63,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
   useEffect(() => {
     const vX: string = defaultValue || '';
     setVal(vX);
-    if (onChangeColor) {
-      onChangeColor(vX, name);
-    }
-    const colorBoxElement = document.getElementById('colorBox');
-    if (colorBoxElement) {
-      colorBoxElement.style.backgroundColor = vX;
-    }
   }, [defaultValue]);
 
   return (
