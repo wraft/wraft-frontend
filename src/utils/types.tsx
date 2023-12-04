@@ -19,12 +19,20 @@ export interface ContentType {
   prefix: string;
   name: string;
   layout: Layout;
+  theme: Theme;
   inserted_at: Date;
   id: string;
   flow: Flow | null;
   fields: any;
   decription: string;
   color: null;
+}
+
+export interface Theme {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
 }
 
 export interface Flow {
@@ -67,6 +75,7 @@ export interface ContentTypeClass {
   prefix: string;
   name: string;
   layout: Layout;
+  theme: Theme;
   inserted_at: string;
   id: string;
   flow: ContentTypeFlow;
