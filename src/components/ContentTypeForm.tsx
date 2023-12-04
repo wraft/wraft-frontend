@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
 import { Label, Input, Select } from 'theme-ui';
@@ -121,7 +122,7 @@ const Form = () => {
 
   const [fields, setFields] = useState([]);
   // const [contents, setContents] = useState<Array<IField>>([]);
-  const [content, setContent] = useState<ContentType>();
+  const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
   const [themes, setThemes] = useState<Array<any>>([]);
@@ -186,7 +187,15 @@ const Form = () => {
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
-    setContent(res);
+    console.log('🍌', res);
+    // setContent(res);
+    setContent((draft) => {
+      if (draft) {
+        Object.assign(draft, res);
+      } else {
+        return res;
+      }
+    });
     if (res && res.content_type) {
       console.log('content_type', res);
 
