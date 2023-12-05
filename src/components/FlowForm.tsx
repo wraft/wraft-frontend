@@ -3,7 +3,7 @@ import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useToasts } from 'react-toast-notifications';
 
 import {
@@ -371,6 +371,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     if (edit) {
       updateEntity(`flows/${cId}`, data, token, () => {
         addToast(`flow updated`, { appearance: 'success' });
+        Router.push('/manage/flows');
       });
     } else {
       await createEntity(data, 'flows', token, onSuccess, (error: any) => {
