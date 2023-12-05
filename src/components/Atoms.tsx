@@ -1,37 +1,25 @@
 import React, { FC } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 
-import { parseISO, formatDistanceStrict } from 'date-fns';
+import { formatDistanceStrict } from 'date-fns';
 import MenuItem from './NavLink';
 
 /**
  * Convert UTC date to local date
  */
-export function convertUTCDateToLocalDate(date: Date) {
-  const newDate = new Date(
-    date.getTime() + date.getTimezoneOffset() * 60 * 1000,
-  );
-
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
-}
 interface TimeAgoProps {
   time?: any;
   ago?: boolean;
 }
 
-export const TimeAgo = (time: TimeAgoProps) => {
-  const timetime = parseISO(time.time);
-  const nw = Date.now();
-  const timed = formatDistanceStrict(timetime, nw, { addSuffix: true });
-
-  // let timed1 = timed.replace(' hours ago', 'hrs');
-  // timed1 = timed1.replace(' days ago', 'd');
-  // timed1 = timed1.replace(' years ago', 'y');
+export const TimeAgo = (props: TimeAgoProps) => {
+  const utc_time = new Date(props.time);
+  const offset_time_minutes = utc_time.getTimezoneOffset();
+  const local_time = new Date(
+    utc_time.getTime() - offset_time_minutes * 60 * 1000,
+  );
+  const now = new Date();
+  const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
     <Text
