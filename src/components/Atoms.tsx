@@ -15,12 +15,9 @@ interface TimeAgoProps {
 export const TimeAgo = (props: TimeAgoProps) => {
   const utc_time = new Date(props.time);
   const offset_time_minutes = utc_time.getTimezoneOffset();
-  const addOffset =
-    offset_time_minutes > 0
-      ? offset_time_minutes * 60 * 1000
-      : offset_time_minutes * -60 * 1000;
-
-  const local_time = new Date(utc_time.getTime() + addOffset);
+  const local_time = new Date(
+    utc_time.getTime() - offset_time_minutes * 60 * 1000,
+  );
   const now = new Date();
   const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
 
