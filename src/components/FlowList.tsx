@@ -8,6 +8,7 @@ import { Table } from './Table';
 import { OptionsIcon } from './Icons';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
+import { TimeAgo } from './Atoms';
 
 export interface ILayout {
   width: number;
@@ -107,7 +108,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       contents.map((r: any) => {
         const rFormated = {
           col1: <ItemField {...r} />,
-          col2: <Box>{r.flow.updated_at}</Box>,
+          col2: <TimeAgo time={r.flow.updated_at} />,
         };
 
         row.push(rFormated);
@@ -126,7 +127,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
           </Box>
         )}
 
-        <Box sx={{ width: '100%' }}>
+        <Box pr={4} sx={{ width: '100%' }}>
           <Box mx={0} mb={3} sx={{ width: '100%' }}>
             {flows && (
               <Table
@@ -211,12 +212,12 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
               />
             )}
           </Box>
+          <Paginate
+            changePage={changePage}
+            {...pageMeta}
+            info={`${page} of ${total} pages`}
+          />
         </Box>
-        <Paginate
-          changePage={changePage}
-          {...pageMeta}
-          info={`${page} of ${total} pages`}
-        />
       </Box>
     </Box>
   );
