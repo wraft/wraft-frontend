@@ -35,7 +35,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
   onChangeColor,
   required = true,
 }) => {
-  console.log(defaultValue);
   const [valx, setVal] = useState<string>(defaultValue);
 
   /**

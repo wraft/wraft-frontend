@@ -132,10 +132,10 @@ const Form = () => {
   const router = useRouter();
 
   const cId: string = router.query.id as string;
-  console.log('cId', cId);
+  // console.log('cId', cId);
 
   const addField = () => {
-    console.log('[addField]', fields);
+    // console.log('[addField]', fields);
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
@@ -173,7 +173,7 @@ const Form = () => {
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
     const deletableId = deletable.value.id;
-    console.log('delete', deletable);
+    // console.log('delete', deletable);
     deleteEntity(`content_type_fields/${deletableId}`, token);
     addToast('Deleted Field' + deletable.value.id, { appearance: 'success' });
   };
@@ -187,8 +187,6 @@ const Form = () => {
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
-    console.log('🍌', res);
-    // setContent(res);
     setContent((draft) => {
       if (draft) {
         Object.assign(draft, res);
@@ -197,8 +195,6 @@ const Form = () => {
       }
     });
     if (res && res.content_type) {
-      console.log('content_type', res);
-
       setValue('name', res.content_type.name);
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
@@ -296,7 +292,6 @@ const Form = () => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
-    console.log('onSubmit');
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -309,10 +304,8 @@ const Form = () => {
     };
 
     if (isUpdate) {
-      console.log('[isUpdate]', isUpdate);
       updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
     } else {
-      console.log('[isUpdate]', sampleD);
       createEntity(sampleD, 'content_types', token, onSuccess);
     }
   };
@@ -371,7 +364,7 @@ const Form = () => {
      * Do something when its done ?
      */
 
-    console.log('fieldsNew', fieldsNew);
+    // console.log('fieldsNew', fieldsNew);
   };
 
   const onChangeFields = (_e: any, _name: string) => {
