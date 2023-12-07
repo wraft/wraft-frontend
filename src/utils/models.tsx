@@ -173,21 +173,27 @@ export const createEntity = async (
  * Delete an Entity
  * @param path
  * @param token
+ * @param data
  */
-export const deleteEntity = (path: string, token: string) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(function (response) {
-      return response.json();
+
+export const deleteEntity = (path: string, token: string, data?: any) => {
+  axios
+    .delete(`${API_HOST}/api/v1/${path}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
     })
-    .then(function (data) {
-      console.log(`Created a model ${path}`, data);
+    .then(function (response) {
+      console.log(`Created a model ${path}`, response.data);
+    })
+    .catch(function (error) {
+      console.error(
+        'There has been a problem with your delete operation:',
+        error,
+      );
     });
 };
 
