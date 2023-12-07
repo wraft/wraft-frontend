@@ -164,7 +164,7 @@ export const createEntity = async (
       console.log(`Created a model ${path}`, response.data);
     }
   } catch (error) {
-    onFailed(error);
+    if (onFailed) onFailed(error);
     console.error('Errorrrrrrrrrrr:', error);
   }
 };
