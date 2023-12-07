@@ -18,6 +18,7 @@ import {
   loadEntityDetail,
   updateEntityFile,
   deleteEntity,
+  createEntity,
 } from '../../../utils/models';
 import Router from 'next/router';
 
@@ -70,6 +71,7 @@ const Index: FC = () => {
   const [isChecked, setIsChecked] = React.useState(false);
   const currentOrg = useStoreState((state) => state.currentOrg.name);
   const userLogout = useStoreActions((actions: any) => actions.auth.logout);
+  const [inputValue, setInputValue] = React.useState<number>(0);
 
   const onUpdate = (data: any) => {
     console.log(data);
@@ -120,8 +122,24 @@ const Index: FC = () => {
     }
   };
 
-  const onConfirmDelete = () => {
-    deleteEntity(`/organisations/${orgId}`, token);
+  React.useEffect(() => {
+    const data = inputRef.current?.value;
+    setInputValue(parseInt(data ?? '0', 10));
+    // Your code here
+  }, [inputRef.current?.value]);
+
+  const onConfirmDelete = async (inputValue: any) => {
+    // deleteEntity(`/organisations/${orgId}`, token, {
+    //   code: inputRef.current?.value,
+    // });
+    try {
+      deleteEntity(`/organisations`, token, { code: inputValue });
+      addToast(`Deleted workspace successfully`, { appearance: 'success' });
+    } catch (error) {
+      addToast(`${error.message}`, { appearance: 'error' });
+    }
+
+    console.log('⭐️', inputValue);
     setConfirmDelete(false);
     userLogout();
     Router.push('/login');
@@ -252,7 +270,26 @@ const Index: FC = () => {
                   </Text>
                   <br />
                   <Button
-                    onClick={() => setDelete(true)}
+                    onClick={() => {
+                      setDelete(true);
+                      createEntity(
+                        {},
+                        '/organisations/request_deletion',
+                        token,
+                        (data: any) => {
+                          console.log('success', data);
+                          addToast(`${data.info}`, {
+                            appearance: 'success',
+                          });
+                        },
+                        (error: any) => {
+                          // console.log(error);
+                          addToast(`${error}`, {
+                            appearance: 'error',
+                          });
+                        },
+                      );
+                    }}
                     type="button"
                     variant="delete"
                     sx={{
@@ -288,14 +325,12 @@ const Index: FC = () => {
                           <Text as={'span'} variant="pB">
                             Functionary
                           </Text>
-                          , please enter the deletion sent to your email.
+                          , please enter the deletion code sent to your email.
                         </Text>
                         <Box sx={{ mt: '24px' }}>
                           <Label variant="text.pR" sx={{ color: 'gray.8' }}>
                             {/* Enter the deletion code */}
-                            <span>
-                              Enter the Workspace <b> name </b> to confirm
-                            </span>
+                            <span>Enter the deletion code to confirm</span>
                           </Label>
                           <Input ref={inputRef}></Input>
                         </Box>
@@ -316,14 +351,14 @@ const Index: FC = () => {
                         </Label>
                         <Flex sx={{ gap: 3, pt: 4 }}>
                           <Button
-                            disabled={
-                              !isChecked ||
-                              inputRef.current?.value.toLowerCase() !==
-                                currentOrg.toLowerCase()
-                            }
+                            disabled={!isChecked}
                             onClick={() => {
                               setDelete(false);
                               setConfirmDelete(true);
+                              // deleteEntity(`/organisations`, token, {
+                              //   code: inputRef.current?.value,
+                              // });
+                              // console.log('🌈', inputRef.current?.value);
                             }}
                             variant="delete">
                             Delete workspace
@@ -341,6 +376,7 @@ const Index: FC = () => {
                     isOpen={isConfirmDelete}
                     setOpen={setConfirmDelete}>
                     <ConfirmDelete
+                      inputValue={inputValue}
                       title="Delete workspace"
                       text="Are you sure you want to delete this workspace?"
                       onConfirmDelete={onConfirmDelete}
