@@ -185,11 +185,8 @@ const Form = ({ setOpen }: Props) => {
   };
 
   useEffect(() => {
-    console.log('🦁load', assets);
-    console.log('⚽️load', layout?.assets);
     if (layout) {
       setEdit(true);
-      // console.log('assets', layout.assets);
       const assetsList: Asset[] = layout.assets;
 
       assetsList.forEach((a: Asset) => {
@@ -227,39 +224,18 @@ const Form = ({ setOpen }: Props) => {
    * @param data
    */
   const addUploads = (data: Asset) => {
-    console.log('☝️upload', data);
     setAssets((prevArray) => [...prevArray, data]);
   };
 
   const deleteAsset = (lid: string, id: string) => {
-    console.log('🦁', assets);
-    console.log('⚽️', layout?.assets);
     const indexOf = assets.findIndex((e) => e.id === id);
-    assets.splice(indexOf, 1);
-    // deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+    setAssets(assets.splice(indexOf, 1));
     if (layout?.assets.some((asset) => asset.id === id)) {
       deleteEntity(`/layouts/${lid}/assets/${id}`, token);
-      console.log('🍉deleting', lid, id);
     }
-    console.log('🦁after', assets);
-    console.log('⚽️after', layout?.assets);
-    // else {
-    //   const indexOf = assets.findIndex((e) => e.id === id);
-    //   assets.splice(indexOf, 1);
-    //   console.log('🦁after', assets);
-    //   // deleteEntity(`/assets/${id}`, token);
-    //   // console.log('🥭deleting', id);
-    // }
-
-    // deleteEntity(`/layouts/${lid}/assets/${id}`, token);
 
     addToast(`Deleted Asset`, { appearance: 'error' });
-
-    if (token && cId) {
-      loadLayout(cId, token);
-    }
   };
-
   const [formStep, setFormStep] = useState(0);
   function next() {
     setFormStep((i) => i + 1);
@@ -542,6 +518,7 @@ const Form = ({ setOpen }: Props) => {
                   disabled={!isValid}
                   type="button"
                   onClick={next}
+                  variant="buttonPrimary"
                   sx={{
                     ':disabled': {
                       bg: 'gray.4',
@@ -553,7 +530,8 @@ const Form = ({ setOpen }: Props) => {
               {formStep === 1 && (
                 <>
                   <Button
-                    variant=""
+                    variant="disabled"
+                    // variant=""
                     type="button"
                     onClick={prev}
                     sx={{
@@ -566,6 +544,7 @@ const Form = ({ setOpen }: Props) => {
                   </Button>
                   <Button
                     // disabled={!isValid || !isAssetValid}
+                    variant="buttonPrimary"
                     type="submit"
                     ml={2}
                     sx={{
