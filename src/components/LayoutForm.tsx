@@ -360,13 +360,20 @@ const Form = ({ setOpen }: Props) => {
                             border: 'solid 1px',
                             borderColor: 'gray.3',
                           }}>
-                          {m && m.file && (
-                            <PdfViewer
-                              // url={contents.content.build}
-                              url={`http://localhost:3000${m.file}`}
-                              pageNumber={1}
-                            />
-                          )}
+                          <Box
+                            sx={{
+                              overflow: 'scroll',
+                              maxHeight: '200px',
+                              objectFit: 'contain',
+                            }}>
+                            {m && m.file && (
+                              <PdfViewer
+                                // url={contents.content.build}
+                                url={`${m.file}`}
+                                pageNumber={1}
+                              />
+                            )}
+                          </Box>
                         </Box>
                         <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                           {m.name}
