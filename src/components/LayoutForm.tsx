@@ -392,7 +392,7 @@ const Form = ({ setOpen }: Props) => {
                               border: 'solid 1px',
                               borderColor: 'red.9',
                             }}
-                            onClick={() => deleteAsset('cId', m.id)}>
+                            onClick={() => deleteAsset(cId, m.id)}>
                             Delete
                           </Button>
                         </Box>
