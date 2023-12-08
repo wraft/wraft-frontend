@@ -36,6 +36,7 @@ const AssetForm = ({
   // const [contents, setContents] = React.useState<Asset>();
 
   const onImageUploaded = (data: any) => {
+    console.log('📸', data);
     const mData: Asset = data;
     onUpload(mData);
     // setContents(data);
@@ -51,141 +52,6 @@ const AssetForm = ({
     createEntityFile(formData, token, 'assets', onImageUploaded);
     setAsset(true);
   };
-
-  // const [file, setFile] = React.useState([]);
-  // const [dragging, setDragging] = React.useState(false);
-
-  // const handleDragOver = (event: any) => {
-  //   setDragging(true);
-  //   event?.preventDefault();
-  // };
-  // const handleDrop = (event: any) => {
-  //   setDragging(false);
-  //   event?.preventDefault();
-  //   const droppedFile = event.dataTransfer.files[0];
-  //   setFile(droppedFile);
-  //   console.log(droppedFile);
-  // };
-
-  // React.useEffect(() => {
-  //   console.log(file);
-  // }, [file]);
-
-  // const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-
-  // const files = acceptedFiles.map((file) => (
-  //   <li key={file.name}>
-  //     {file.name} - {file.size} bytes
-  //   </li>
-  // ));
-  // return (
-  //   <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
-  //     <Box
-  //       {...getRootProps({})}
-  //       sx={{
-  //         display: 'flex',
-  //         flexDirection: 'column',
-  //         alignItems: 'center',
-  //         border: '1px dashed',
-  //         borderColor: 'neutral.0',
-  //         p: '18px',
-  //         // bg: dragging ? 'green.0' : 'bgWhite',
-  //       }}>
-  //       <input {...getInputProps({ ...register('file') })} />
-  //       <p>Drag 'n' drop some files here, or click to select files</p>
-  //     </Box>
-  //     {/* <p>
-  //         Drag & drop or{' '}
-  //         <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
-  //           upload files
-  //         </Text>
-  //       </p> */}
-  //     {/* <Box mb="12px">
-  //         <CloudUploadIcon />
-  //       </Box>
-  //       <Text variant="capM">PDF - Max file size 5MB</Text>
-  //     */}
-  //     <Flex>
-  //       <Button
-  //         type="submit"
-  //         disabled={!isValid}
-  //         sx={{
-  //           ':disabled': {
-  //             bg: 'gray.0',
-  //             color: 'gray.5',
-  //           },
-  //         }}>
-  //         Upload
-  //       </Button>
-  //     </Flex>
-  //     <pre>{JSON.stringify(watch())}</pre>
-  //     <ul>{files}</ul>
-  //   </Box>
-  // );
-
-  {
-    /*current */
-  }
-  {
-    /* <Box>
-          <Label
-            htmlFor="file"
-            sx={{ color: 'primary', display: 'inline-block' }}>
-            <Text variant="pM" mb="4px">
-              Drag & drop or{' '}
-              <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
-                upload files
-              </Text>
-            </Text>
-          </Label>
-          <Controller
-            name="file"
-            control={control}
-            defaultValue={null}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Input
-                id="fileInput"
-                type="file"
-                accept="application/pdf"
-                {...field}
-              />
-            )}
-          />
-        </Box>
-        <Text variant="capM">PDF - Max file size 5MB</Text> */
-  }
-  {
-    /*//inside upper box
-           <Input
-            // sx={{ display: 'none' }}
-            id="fileInput"
-            type="file"
-            accept="application/pdf"
-            {...register('file', { required: true })}
-          /> */
-  }
-  {
-    /* <Box
-        onDragOver={handleDragOver}
-        onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          border: '1px dashed',
-          borderColor: 'neutral.0',
-          p: '18px',
-          bg: dragging ? 'green.0' : 'bgWhite',
-        }}>
-        <Box mb="12px">
-          <CloudUploadIcon />
-        </Box> */
-  }
-  {
-    /* <pre>{JSON.stringify(watch())}</pre> */
-  }
 
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
@@ -245,3 +111,138 @@ const AssetForm = ({
   );
 };
 export default AssetForm;
+
+// const [file, setFile] = React.useState([]);
+// const [dragging, setDragging] = React.useState(false);
+
+// const handleDragOver = (event: any) => {
+//   setDragging(true);
+//   event?.preventDefault();
+// };
+// const handleDrop = (event: any) => {
+//   setDragging(false);
+//   event?.preventDefault();
+//   const droppedFile = event.dataTransfer.files[0];
+//   setFile(droppedFile);
+//   console.log(droppedFile);
+// };
+
+// React.useEffect(() => {
+//   console.log(file);
+// }, [file]);
+
+// const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+// const files = acceptedFiles.map((file) => (
+//   <li key={file.name}>
+//     {file.name} - {file.size} bytes
+//   </li>
+// ));
+// return (
+//   <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
+//     <Box
+//       {...getRootProps({})}
+//       sx={{
+//         display: 'flex',
+//         flexDirection: 'column',
+//         alignItems: 'center',
+//         border: '1px dashed',
+//         borderColor: 'neutral.0',
+//         p: '18px',
+//         // bg: dragging ? 'green.0' : 'bgWhite',
+//       }}>
+//       <input {...getInputProps({ ...register('file') })} />
+//       <p>Drag 'n' drop some files here, or click to select files</p>
+//     </Box>
+//     {/* <p>
+//         Drag & drop or{' '}
+//         <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
+//           upload files
+//         </Text>
+//       </p> */}
+//     {/* <Box mb="12px">
+//         <CloudUploadIcon />
+//       </Box>
+//       <Text variant="capM">PDF - Max file size 5MB</Text>
+//     */}
+//     <Flex>
+//       <Button
+//         type="submit"
+//         disabled={!isValid}
+//         sx={{
+//           ':disabled': {
+//             bg: 'gray.0',
+//             color: 'gray.5',
+//           },
+//         }}>
+//         Upload
+//       </Button>
+//     </Flex>
+//     <pre>{JSON.stringify(watch())}</pre>
+//     <ul>{files}</ul>
+//   </Box>
+// );
+
+{
+  /*current */
+}
+{
+  /* <Box>
+          <Label
+            htmlFor="file"
+            sx={{ color: 'primary', display: 'inline-block' }}>
+            <Text variant="pM" mb="4px">
+              Drag & drop or{' '}
+              <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
+                upload files
+              </Text>
+            </Text>
+          </Label>
+          <Controller
+            name="file"
+            control={control}
+            defaultValue={null}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Input
+                id="fileInput"
+                type="file"
+                accept="application/pdf"
+                {...field}
+              />
+            )}
+          />
+        </Box>
+        <Text variant="capM">PDF - Max file size 5MB</Text> */
+}
+{
+  /*//inside upper box
+           <Input
+            // sx={{ display: 'none' }}
+            id="fileInput"
+            type="file"
+            accept="application/pdf"
+            {...register('file', { required: true })}
+          /> */
+}
+{
+  /* <Box
+        onDragOver={handleDragOver}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          border: '1px dashed',
+          borderColor: 'neutral.0',
+          p: '18px',
+          bg: dragging ? 'green.0' : 'bgWhite',
+        }}>
+        <Box mb="12px">
+          <CloudUploadIcon />
+        </Box> */
+}
+{
+  /* <pre>{JSON.stringify(watch())}</pre> */
+}
