@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Button, Label, Input, Select } from 'theme-ui';
+import { Box, Flex, Button, Label, Input, Select, Spinner } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
@@ -7,7 +7,7 @@ import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 // import { CloudUploadIcon } from './Icons';
 import Error from './Error';
-import Field from './Field';
+// import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
 
 interface AssetFormProps {
@@ -33,16 +33,19 @@ const AssetForm = ({
     formState: { isValid, errors },
   } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
+  const [isLoading, setLoading] = React.useState<boolean>(false);
   // const [contents, setContents] = React.useState<Asset>();
 
   const onImageUploaded = (data: any) => {
+    setLoading(false);
     console.log('📸', data);
     const mData: Asset = data;
     onUpload(mData);
     // setContents(data);
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    setLoading(true);
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
@@ -53,7 +56,7 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    createEntityFile(formData, token, 'assets', onImageUploaded);
+    await createEntityFile(formData, token, 'assets', onImageUploaded);
     setAsset(true);
   };
 
@@ -106,14 +109,16 @@ const AssetForm = ({
       <Flex>
         <Button
           type="submit"
-          disabled={!isValid}
+          variant="buttonPrimary"
+          disabled={!isValid || isLoading}
           sx={{
             ':disabled': {
               bg: 'gray.0',
               color: 'gray.5',
             },
           }}>
-          Upload
+          Upload {''}
+          {isLoading && <Spinner color="white" width={18} height={18} />}
         </Button>
       </Flex>
     </Box>
