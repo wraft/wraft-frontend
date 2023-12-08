@@ -268,7 +268,7 @@ const Form = ({ setOpen }: Props) => {
           letterSpacing: '-0.2px',
           fontWeight: 700,
         }}>
-        Create new layout
+        {isEdit ? 'Edit layout' : 'Create new layout'}
       </Text>
       <Flex>
         <Flex sx={{ alignItems: 'center' }}>
