@@ -46,7 +46,11 @@ const AssetForm = ({
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
-    formData.append('name', data.name);
+    // formData.append('name', data.name);
+    formData.append(
+      'name',
+      data.file[0].name.substring(0, data.file[0].name.lastIndexOf('.')),
+    );
     formData.append('type', filetype);
 
     createEntityFile(formData, token, 'assets', onImageUploaded);
@@ -78,7 +82,7 @@ const AssetForm = ({
             {errors.name && <Error text={errors.name.message} />}
           </Box>
         )}
-        {filetype !== 'theme' && (
+        {/* {filetype !== 'theme' && (
           <Box>
             <Field
               name="name"
@@ -88,11 +92,16 @@ const AssetForm = ({
               error={errors.name}
             />
           </Box>
-        )}
+        )} */}
         <Label htmlFor="file" mb={1}>
           File
         </Label>
-        <Input id="file" type="file" {...register('file')} />
+        <Input
+          id="file"
+          type="file"
+          accept="application/pdf"
+          {...register('file')}
+        />
       </Box>
       <Flex>
         <Button
