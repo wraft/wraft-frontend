@@ -127,7 +127,7 @@ const Form = ({ setOpen }: Props) => {
 
       // Remove comma in the end
       assetsPath = a.join(',');
-      console.log('assets', a.join(','));
+      console.log('🔥assets path', a.join(','));
     }
 
     const formData = new FormData();
@@ -175,6 +175,9 @@ const Form = ({ setOpen }: Props) => {
   const loadLayout = (cid: string, token: string) => {
     loadEntity(token, `layouts/${cid}`, loadLayoutSuccess);
   };
+  // const loadAssets = (id: string, token: string) => {
+  //   loadEntity(token, `assets/${id}`, loadAssetSuccess);
+  // };
 
   const loadLayoutSuccess = (data: any) => {
     const res: Layout = data.layout;
@@ -182,6 +185,8 @@ const Form = ({ setOpen }: Props) => {
   };
 
   useEffect(() => {
+    console.log('🦁load', assets);
+    console.log('⚽️load', layout?.assets);
     if (layout) {
       setEdit(true);
       // console.log('assets', layout.assets);
@@ -222,12 +227,31 @@ const Form = ({ setOpen }: Props) => {
    * @param data
    */
   const addUploads = (data: Asset) => {
+    console.log('☝️upload', data);
     setAssets((prevArray) => [...prevArray, data]);
   };
 
   const deleteAsset = (lid: string, id: string) => {
-    console.log('deleting', lid, id);
-    deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+    console.log('🦁', assets);
+    console.log('⚽️', layout?.assets);
+    const indexOf = assets.findIndex((e) => e.id === id);
+    assets.splice(indexOf, 1);
+    // deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+    if (layout?.assets.some((asset) => asset.id === id)) {
+      deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+      console.log('🍉deleting', lid, id);
+    }
+    console.log('🦁after', assets);
+    console.log('⚽️after', layout?.assets);
+    // else {
+    //   const indexOf = assets.findIndex((e) => e.id === id);
+    //   assets.splice(indexOf, 1);
+    //   console.log('🦁after', assets);
+    //   // deleteEntity(`/assets/${id}`, token);
+    //   // console.log('🥭deleting', id);
+    // }
+
+    // deleteEntity(`/layouts/${lid}/assets/${id}`, token);
 
     addToast(`Deleted Asset`, { appearance: 'error' });
 
