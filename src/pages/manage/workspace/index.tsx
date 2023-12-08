@@ -133,7 +133,7 @@ const Index: FC = () => {
     //   code: inputRef.current?.value,
     // });
     try {
-      deleteEntity(`/organisations`, token, { code: inputValue });
+      deleteEntity(`/organisations`, token, { code: `${inputValue}` });
       addToast(`Deleted workspace successfully`, { appearance: 'success' });
     } catch (error) {
       addToast(`${error.message}`, { appearance: 'error' });
