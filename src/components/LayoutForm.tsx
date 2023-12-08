@@ -405,7 +405,16 @@ const Form = ({ setOpen }: Props) => {
           )}
 
           {/* form start */}
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+          <Box
+            sx={{
+              height: 'calc(100vh - 200px)',
+              pt: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}>
             {formStep >= 0 && (
               <Container
                 sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
@@ -512,7 +521,8 @@ const Form = ({ setOpen }: Props) => {
                 </Flex>
               </Container>
             )}
-            <Flex sx={{ position: 'absolute', bottom: '48px' }}>
+            {/* <Flex sx={{ position: 'absolute', bottom: '48px' }}> */}
+            <Flex>
               {formStep === 0 && (
                 <Button
                   disabled={!isValid}
