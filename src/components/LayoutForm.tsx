@@ -229,7 +229,7 @@ const Form = ({ setOpen }: Props) => {
 
   const deleteAsset = (lid: string, id: string) => {
     const indexOf = assets.findIndex((e) => e.id === id);
-    setAssets(assets.splice(indexOf, 1));
+    assets.splice(indexOf, 1);
     if (layout?.assets.some((asset) => asset.id === id)) {
       deleteEntity(`/layouts/${lid}/assets/${id}`, token);
     }
@@ -343,7 +343,13 @@ const Form = ({ setOpen }: Props) => {
           {formStep >= 1 && (
             <section>
               <Box>
-                <Box pt={3}>
+                <Box
+                  pt={3}
+                  sx={{
+                    maxHeight: '400px',
+                    overflow: 'scroll',
+                    objectFit: 'contain',
+                  }}>
                   {assets &&
                     assets.length > 0 &&
                     assets.map((m: Asset) => (
