@@ -22,13 +22,16 @@ const FieldForm = (props: FieldFormProps) => {
   const onSubmit = (data: any) => {
     setSubmitting(true);
     const vals = getValues();
+    console.log('🦋vals on FieldEditor', vals);
     const results = {
       count: props.fields.size,
       values: vals,
       data: data,
     };
+    console.log('🦋results on FieldEditor', results);
 
     props.onSave(results);
+    console.log('🦋onSave results on FieldEditor', props.onSave(results));
     setModal(false);
   };
 
@@ -37,7 +40,7 @@ const FieldForm = (props: FieldFormProps) => {
   }
 
   function closeModal() {
-    // setModal(false);
+    setModal(false);
   }
 
   return (
