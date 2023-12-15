@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
-import { Label, Input, Select } from 'theme-ui';
+import {
+  Label,
+  //  Input,
+  Select,
+} from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -139,7 +143,9 @@ const Form = () => {
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
+      // const outputState: any = [];
       outputState.push('');
+      console.log('🍉', outputState);
       return outputState;
     });
   };
@@ -149,15 +155,22 @@ const Form = () => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
       outputState.push({ name: val.name, value: val.value });
+      console.log('🍉', outputState);
       return outputState;
     });
 
   const removeField = (did: number) =>
     setFields((fields) => {
+      console.log('🗑️delete start', fields);
+
       const outputState = fields.slice(0);
+      // const outputState = fields.splice(did, 1);
+      // const outputState = fields.toSpliced(did, 1);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
+      console.log('🗑️delete', delete outputState[did]);
+      console.log('🗑️delete end', outputState);
       return outputState;
     });
 
@@ -172,10 +185,14 @@ const Form = () => {
 
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
-    const deletableId = deletable.value.id;
+    if (deletable && deletable.value && deletable.value.id) {
+      const deletableId = deletable.value.id;
+      deleteEntity(`content_type_fields/${deletableId}`, token);
+      addToast('Deleted Field' + deletableId, { appearance: 'success' });
+    } else {
+      addToast('Deleted Field Failed', { appearance: 'error' });
+    }
     // console.log('delete', deletable);
-    deleteEntity(`content_type_fields/${deletableId}`, token);
-    addToast('Deleted Field' + deletable.value.id, { appearance: 'success' });
   };
 
   const deleteMe = (deletableId: string) => {
@@ -187,10 +204,14 @@ const Form = () => {
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
+    console.log('🥭content-type/id', res);
+    console.log('🥭data', res.content_type?.fields);
     setContent((draft) => {
       if (draft) {
+        console.log('🥭', Object.assign(draft, res));
         Object.assign(draft, res);
       } else {
+        console.log('🥭', res);
         return res;
       }
     });
@@ -199,8 +220,8 @@ const Form = () => {
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
-      setValue('flow_id', res.content_type.flow.flow?.id || undefined);
-      setValue('theme_id', res.content_type.theme_id || undefined);
+      setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
+      // setValue('theme_id', res.content_type.theme_id || undefined);
       setValue('theme_id', res.content_type.theme.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
@@ -259,21 +280,43 @@ const Form = () => {
   const formatFields = (fields: any) => {
     const fieldsMap: any = [];
 
+    console.log('👽🔥fields', fields);
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
         // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
+        console.log('👽fid', fid);
         const it: FieldTypeItem = {
           name: item.name,
           key: item.name,
           field_type_id: fid,
         };
+        console.log('👽it', it);
 
-        if (!Number(item.name)) {
+        console.log(
+          '👽wwwwww',
+          content?.content_type.fields.every(
+            (field: any) => field.name === item.name,
+          ),
+        );
+
+        // if (!Number(item.name)) {
+        if (
+          !Number(item.name) &&
+          item.name !== '0' &&
+          item.name !== '' &&
+          item.name !== null &&
+          item.name !== undefined &&
+          content?.content_type.fields.every(
+            (field: any) => field.name !== item.name,
+          )
+        ) {
           fieldsMap.push(it);
+          console.log('👽push', fieldsMap);
         }
       });
+    console.log('👽final', fieldsMap);
     return fieldsMap;
   };
 
@@ -292,6 +335,9 @@ const Form = () => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
+    console.log('😈data', data);
+    console.log('😈fields', fields);
+    console.log('😈formated', formatFields(fields));
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -313,13 +359,20 @@ const Form = () => {
   const loadFields = () => {
     if (content && content.content_type) {
       dataFiller(content.content_type.fields);
+      console.log('🐘', content.content_type.fields);
     }
   };
 
+  const [initialFields, setInitialFields] = useState<
+    { name: string; value: any }[]
+  >([]);
   const dataFiller = (entries: any) => {
     const keys = Object.entries(entries);
+    console.log('🐘🐘', entries);
+    console.log('🐘🔥', keys);
     keys.forEach((m: any) => {
       addFieldVal({ name: m[0], value: m[1] });
+      setInitialFields([...initialFields, { name: m[0], value: m[1] }]);
     });
   };
 
@@ -350,13 +403,17 @@ const Form = () => {
   const onFieldsSave = (fieldsNew: any) => {
     // console.log('saved fields', fds, fields);
     setFields([]);
+    console.log('🐯', fields);
     // let newFields:any = []
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
       // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       const ff = fieldtypes.find((f: any) => f.id === el.type);
+      console.log('🐯ff', ff);
       const fff = { field_type: ff, name: el.name };
+      console.log('🐯fff', fff);
       const fieldType = { value: fff, name: el.name };
+      console.log('🐯fieldType', fieldType);
       addFieldVal(fieldType);
     });
 
@@ -479,14 +536,14 @@ const Form = () => {
                 </Box>
 
                 <Box sx={{ display: 'none' }}>
-                  <Input
+                  {/* <Input
                     id="edit"
                     // name="edit"
                     defaultValue={0}
                     hidden={true}
                     {...register('edit', { required: true })}
                     // ref={register({ required: true })}
-                  />
+                  /> */}
                 </Box>
 
                 <Box px={0} pb={3}>
