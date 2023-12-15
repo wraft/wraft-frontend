@@ -7,6 +7,7 @@ import { Trash } from './Icons';
 
 interface FieldFormProps {
   fields?: any;
+  content?: any;
   fieldtypes?: any;
   addField?: any;
   removeField?: any;
@@ -155,6 +156,12 @@ const FieldForm = (props: FieldFormProps) => {
                     </Label>
                     <Input
                       type="text"
+                      disabled={
+                        props.content &&
+                        !props.content?.content_type.fields.every(
+                          (field: any) => field.name !== f.value.name,
+                        )
+                      }
                       // ref={register}
                       defaultValue={(f && f.value.name) || ''}
                       // name={`fields[${idx}][name]`}
@@ -169,6 +176,12 @@ const FieldForm = (props: FieldFormProps) => {
                       Type
                     </Label>
                     <Select
+                      disabled={
+                        props.content &&
+                        !props.content?.content_type.fields.every(
+                          (field: any) => field.name !== f.value.name,
+                        )
+                      }
                       // name={`fields[${idx}][type]`}
                       // ref={register}
                       {...register(`fields[${idx}][type]`)}
