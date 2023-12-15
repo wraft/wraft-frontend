@@ -582,6 +582,7 @@ const Form = () => {
         <Box sx={{ flexGrow: 1 }} variant="layout.pageFrame">
           <FieldEditor
             fields={fields}
+            content={content}
             fieldtypes={fieldtypes}
             removeField={removeField}
             addField={addField}
