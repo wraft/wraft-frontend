@@ -154,7 +154,8 @@ const Form = () => {
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
-      outputState.push({ name: val.name, value: val.value });
+      if (val.name !== undefined)
+        outputState.push({ name: val.name, value: val.value });
       console.log('🍉', outputState);
       return outputState;
     });
@@ -169,9 +170,12 @@ const Form = () => {
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
+      // outputState.splice(did, 0);
       console.log('🗑️delete', delete outputState[did]);
-      console.log('🗑️delete end', outputState);
-      return outputState;
+      const final = outputState.filter(Boolean);
+
+      console.log('🗑️delete end', outputState, final);
+      return final;
     });
 
   // const onContentTypeSuccess = (data: any) => {
@@ -363,16 +367,12 @@ const Form = () => {
     }
   };
 
-  const [initialFields, setInitialFields] = useState<
-    { name: string; value: any }[]
-  >([]);
   const dataFiller = (entries: any) => {
     const keys = Object.entries(entries);
     console.log('🐘🐘', entries);
     console.log('🐘🔥', keys);
     keys.forEach((m: any) => {
       addFieldVal({ name: m[0], value: m[1] });
-      setInitialFields([...initialFields, { name: m[0], value: m[1] }]);
     });
   };
 
@@ -402,7 +402,7 @@ const Form = () => {
    */
   const onFieldsSave = (fieldsNew: any) => {
     // console.log('saved fields', fds, fields);
-    setFields([]);
+    // setFields([]);
     console.log('🐯', fields);
     // let newFields:any = []
     // format and replae existing fields
