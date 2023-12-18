@@ -49,8 +49,6 @@ const FieldForm = (props: FieldFormProps) => {
       pl={4}
       sx={{
         p: 0,
-        // border: 'solid 1px',
-        // borderColor: 'gray.3',
         maxWidth: '40ch',
       }}>
       <Flex
@@ -70,7 +68,6 @@ const FieldForm = (props: FieldFormProps) => {
       </Flex>
       <Box
         sx={{
-          // bg: 'gray.0',
           py: 2,
           px: 3,
           pt: 3,
@@ -158,13 +155,12 @@ const FieldForm = (props: FieldFormProps) => {
                       type="text"
                       disabled={
                         props.content &&
+                        f &&
                         !props.content?.content_type.fields.every(
                           (field: any) => field.name !== f.value.name,
                         )
                       }
-                      // ref={register}
                       defaultValue={(f && f.value.name) || ''}
-                      // name={`fields[${idx}][name]`}
                       {...register(`fields[${idx}][name]`)}
                     />
                   </Box>
@@ -178,12 +174,11 @@ const FieldForm = (props: FieldFormProps) => {
                     <Select
                       disabled={
                         props.content &&
+                        f &&
                         !props.content?.content_type.fields.every(
                           (field: any) => field.name !== f.value.name,
                         )
                       }
-                      // name={`fields[${idx}][type]`}
-                      // ref={register}
                       {...register(`fields[${idx}][type]`)}
                       defaultValue={(f && f.value.field_type.id) || ''}>
                       {props.fieldtypes &&
