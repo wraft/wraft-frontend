@@ -9,6 +9,8 @@ import {
 } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
@@ -115,13 +117,24 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
+const schema = z.object({
+  name: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
+  prefix: z
+    .string()
+    .min(2, { message: 'Minimum 2 characters required' })
+    .max(6, { message: 'Maximum 6 characters allowed' }),
+});
+
 const Form = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm({ resolver: zodResolver(schema) });
   const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
@@ -191,10 +204,13 @@ const Form = () => {
     const deletable = fields[id];
     if (deletable && deletable.value && deletable.value.id) {
       const deletableId = deletable.value.id;
-      deleteEntity(`content_type_fields/${deletableId}`, token);
+      const contentypeId = content?.content_type.id;
+      deleteEntity(`content_type/${contentypeId}/field/${deletableId}`, token);
       addToast('Deleted Field' + deletableId, { appearance: 'success' });
+      // return true;
     } else {
       addToast('Deleted Field Failed', { appearance: 'error' });
+      // return false;
     }
     // console.log('delete', deletable);
   };
@@ -332,6 +348,11 @@ const Form = () => {
     // if (isUpdate) Router.push(`/content-types/edit/${_d?.id}`);
   };
 
+  const onFailed = (error: any) => {
+    console.log('🐞', error);
+    addToast('Save Failed', { appearance: 'error' });
+  };
+
   /**
    * On Theme Created
    */
@@ -354,9 +375,15 @@ const Form = () => {
     };
 
     if (isUpdate) {
-      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
+      updateEntity(
+        `content_types/${data.edit}`,
+        sampleD,
+        token,
+        onSuccess,
+        onFailed,
+      );
     } else {
-      createEntity(sampleD, 'content_types', token, onSuccess);
+      createEntity(sampleD, 'content_types', token, onSuccess, onFailed);
     }
   };
 
@@ -402,12 +429,13 @@ const Form = () => {
    */
   const onFieldsSave = (fieldsNew: any) => {
     // console.log('saved fields', fds, fields);
-    // setFields([]);
+    setFields([]);
     console.log('🐯', fields);
     // let newFields:any = []
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
       // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
+      console.log('🐼', el);
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       console.log('🐯ff', ff);
       const fff = { field_type: ff, name: el.name };
@@ -459,6 +487,7 @@ const Form = () => {
                 <Box>
                   <Field
                     register={register}
+                    error={errors.name}
                     label="Name"
                     name="name"
                     defaultValue=""
@@ -476,6 +505,7 @@ const Form = () => {
                 <Box>
                   <Field
                     register={register}
+                    error={errors.prefix}
                     label="Prefix"
                     name="prefix"
                     defaultValue=""
