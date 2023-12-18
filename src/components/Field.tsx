@@ -43,17 +43,19 @@ const Field: React.FC<Props> = ({
       </Label>
       <Input
         onChange={onChange}
-        sx={{ bg: bg ? bg : 'transparent' }}
+        sx={{ bg: bg ? bg : 'transparent', mb: error ? '24px' : '' }}
         type={type ? type : 'text'}
         disabled={disable}
         placeholder={placeholder ? placeholder : ''}
         id={name}
         defaultValue={defaultValue || ''}
-        {...register(name, { required: `${label ? label : name} is required` })}
+        {...register(name, {
+          required: `${label ? label : name} is required`,
+        })}
       />
       {error && (
         <Text
-          sx={{ position: 'absolute', bottom: '-20px', left: '4px' }}
+          sx={{ position: 'absolute', bottom: '-22px', left: '4px' }}
           variant="error">
           {error.message}
         </Text>
