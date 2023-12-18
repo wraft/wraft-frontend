@@ -125,7 +125,17 @@ const schema = z.object({
   prefix: z
     .string()
     .min(2, { message: 'Minimum 2 characters required' })
-    .max(6, { message: 'Maximum 6 characters allowed' }),
+    .max(6, { message: 'Maximum 6 characters allowed' })
+    .refine((value) => !/\d/.test(value), {
+      message: 'Prefix cannot contain numbers',
+    }),
+  color: z.string().min(4).max(7),
+  description: z.string().min(1),
+  fields: z.any(),
+  layout_id: z.any(),
+  flow_id: z.string(),
+  theme_id: z.string(),
+  edit: z.any(),
 });
 
 const Form = () => {
@@ -134,7 +144,9 @@ const Form = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm({ resolver: zodResolver(schema) });
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
