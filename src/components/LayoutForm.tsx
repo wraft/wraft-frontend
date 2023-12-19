@@ -127,7 +127,7 @@ const Form = ({ setOpen }: Props) => {
 
       // Remove comma in the end
       assetsPath = a.join(',');
-      console.log('assets', a.join(','));
+      console.log('🔥assets path', a.join(','));
     }
 
     const formData = new FormData();
@@ -175,6 +175,9 @@ const Form = ({ setOpen }: Props) => {
   const loadLayout = (cid: string, token: string) => {
     loadEntity(token, `layouts/${cid}`, loadLayoutSuccess);
   };
+  // const loadAssets = (id: string, token: string) => {
+  //   loadEntity(token, `assets/${id}`, loadAssetSuccess);
+  // };
 
   const loadLayoutSuccess = (data: any) => {
     const res: Layout = data.layout;
@@ -184,7 +187,6 @@ const Form = ({ setOpen }: Props) => {
   useEffect(() => {
     if (layout) {
       setEdit(true);
-      // console.log('assets', layout.assets);
       const assetsList: Asset[] = layout.assets;
 
       assetsList.forEach((a: Asset) => {
@@ -226,16 +228,14 @@ const Form = ({ setOpen }: Props) => {
   };
 
   const deleteAsset = (lid: string, id: string) => {
-    console.log('deleting', lid, id);
-    deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+    const indexOf = assets.findIndex((e) => e.id === id);
+    assets.splice(indexOf, 1);
+    if (layout?.assets.some((asset) => asset.id === id)) {
+      deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+    }
 
     addToast(`Deleted Asset`, { appearance: 'error' });
-
-    if (token && cId) {
-      loadLayout(cId, token);
-    }
   };
-
   const [formStep, setFormStep] = useState(0);
   function next() {
     setFormStep((i) => i + 1);
@@ -268,7 +268,7 @@ const Form = ({ setOpen }: Props) => {
           letterSpacing: '-0.2px',
           fontWeight: 700,
         }}>
-        Create new layout
+        {isEdit ? 'Edit layout' : 'Create new layout'}
       </Text>
       <Flex>
         <Flex sx={{ alignItems: 'center' }}>
@@ -343,7 +343,13 @@ const Form = ({ setOpen }: Props) => {
           {formStep >= 1 && (
             <section>
               <Box>
-                <Box pt={3}>
+                <Box
+                  pt={3}
+                  sx={{
+                    maxHeight: '400px',
+                    overflow: 'scroll',
+                    objectFit: 'contain',
+                  }}>
                   {assets &&
                     assets.length > 0 &&
                     assets.map((m: Asset) => (
@@ -360,13 +366,20 @@ const Form = ({ setOpen }: Props) => {
                             border: 'solid 1px',
                             borderColor: 'gray.3',
                           }}>
-                          {m && m.file && (
-                            <PdfViewer
-                              // url={contents.content.build}
-                              url={`http://localhost:3000${m.file}`}
-                              pageNumber={1}
-                            />
-                          )}
+                          <Box
+                            sx={{
+                              overflow: 'scroll',
+                              maxHeight: '200px',
+                              objectFit: 'contain',
+                            }}>
+                            {m && m.file && (
+                              <PdfViewer
+                                // url={contents.content.build}
+                                url={`${m.file}`}
+                                pageNumber={1}
+                              />
+                            )}
+                          </Box>
                         </Box>
                         <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
                           {m.name}
@@ -385,7 +398,7 @@ const Form = ({ setOpen }: Props) => {
                               border: 'solid 1px',
                               borderColor: 'red.9',
                             }}
-                            onClick={() => deleteAsset('cId', m.id)}>
+                            onClick={() => deleteAsset(cId, m.id)}>
                             Delete
                           </Button>
                         </Box>
@@ -398,7 +411,16 @@ const Form = ({ setOpen }: Props) => {
           )}
 
           {/* form start */}
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+          <Box
+            sx={{
+              height: 'calc(100vh - 200px)',
+              pt: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}>
             {formStep >= 0 && (
               <Container
                 sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
@@ -505,12 +527,14 @@ const Form = ({ setOpen }: Props) => {
                 </Flex>
               </Container>
             )}
-            <Flex sx={{ position: 'absolute', bottom: '48px' }}>
+            {/* <Flex sx={{ position: 'absolute', bottom: '48px' }}> */}
+            <Flex>
               {formStep === 0 && (
                 <Button
                   disabled={!isValid}
                   type="button"
                   onClick={next}
+                  variant="buttonPrimary"
                   sx={{
                     ':disabled': {
                       bg: 'gray.4',
@@ -522,7 +546,8 @@ const Form = ({ setOpen }: Props) => {
               {formStep === 1 && (
                 <>
                   <Button
-                    variant=""
+                    variant="disabled"
+                    // variant=""
                     type="button"
                     onClick={prev}
                     sx={{
@@ -535,6 +560,7 @@ const Form = ({ setOpen }: Props) => {
                   </Button>
                   <Button
                     // disabled={!isValid || !isAssetValid}
+                    variant="buttonPrimary"
                     type="submit"
                     ml={2}
                     sx={{
