@@ -34,6 +34,7 @@ const FieldForm = (props: FieldFormProps) => {
     props.onSave(results);
     console.log('🦋onSave results on FieldEditor', props.onSave(results));
     setModal(false);
+    setSubmitting(false);
   };
 
   function toggleModal() {
@@ -74,20 +75,21 @@ const FieldForm = (props: FieldFormProps) => {
           pb: 3,
           alignItems: 'flex-start',
         }}>
-        {props.fields.map((f: any) => (
-          <Flex
-            key={f?.id}
-            sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
-            <Text as="h4">{(f && f.value.name) || ''}</Text>
-            <Text
-              variant="caps"
-              pt={1}
-              pb={1}
-              sx={{ opacity: '0.5', ml: 'auto' }}>
-              {(f && f.value.field_type.name) || 'X'}
-            </Text>
-          </Flex>
-        ))}
+        {props.fields &&
+          props.fields.map((f: any) => (
+            <Flex
+              key={f?.id}
+              sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
+              <Text as="h4">{(f && f.value.name) || ''}</Text>
+              <Text
+                variant="caps"
+                pt={1}
+                pb={1}
+                sx={{ opacity: '0.5', ml: 'auto' }}>
+                {(f && f.value.field_type.name) || 'X'}
+              </Text>
+            </Flex>
+          ))}
       </Box>
 
       <Modal isOpen={showModal} onClose={closeModal}>
@@ -136,73 +138,76 @@ const FieldForm = (props: FieldFormProps) => {
               borderTop: 'solid 1px',
               borderColor: 'neutral.1',
             }}>
-            {props.fields.map((f: any, idx: number) => (
-              <Box
-                key={idx}
-                sx={{
-                  borderBottom: 'solid 1px',
-                  borderColor: 'neutral.1',
-                  '&:hover': { bg: 'gray.1' },
-                  py: 3,
-                  px: 4,
-                }}>
-                <Flex p={0} pl={0}>
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Label htmlFor="`fields[${idx}][name]`" variant="text.caps">
-                      Field Name
-                    </Label>
-                    <Input
-                      type="text"
-                      disabled={
-                        props.content &&
-                        f &&
-                        !props.content?.content_type.fields.every(
-                          (field: any) => field.name !== f.value.name,
-                        )
-                      }
-                      defaultValue={(f && f.value.name) || ''}
-                      {...register(`fields[${idx}][name]`)}
-                    />
-                  </Box>
-                  <Box sx={{ flexGrow: 1, px: 3 }}>
-                    <Label
-                      htmlFor="`fields[${idx}][type]`"
-                      variant="text.caps"
-                      mb={1}>
-                      Type
-                    </Label>
-                    <Select
-                      disabled={
-                        props.content &&
-                        f &&
-                        !props.content?.content_type.fields.every(
-                          (field: any) => field.name !== f.value.name,
-                        )
-                      }
-                      {...register(`fields[${idx}][type]`)}
-                      defaultValue={(f && f.value.field_type.id) || ''}>
-                      {props.fieldtypes &&
-                        props.fieldtypes.length > 0 &&
-                        props.fieldtypes.map((m: any) => (
-                          <option value={m.id} key={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                    </Select>
-                  </Box>
-                  <Box pt={0} pl={4} sx={{ textAlign: 'right' }}>
-                    <Label variant="text.caps">Action</Label>
-                    <Button
-                      variant="btnSecondary"
-                      type="button"
-                      sx={{ py: 1, px: 2, mt: 2 }}
-                      onClick={() => props.removeField(idx)}>
-                      <Trash color="red" width={24} height={24} />
-                    </Button>
-                  </Box>
-                </Flex>
-              </Box>
-            ))}
+            {props.fields &&
+              props.fields.map((f: any, idx: number) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    borderBottom: 'solid 1px',
+                    borderColor: 'neutral.1',
+                    '&:hover': { bg: 'gray.1' },
+                    py: 3,
+                    px: 4,
+                  }}>
+                  <Flex p={0} pl={0}>
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Label
+                        htmlFor="`fields[${idx}][name]`"
+                        variant="text.caps">
+                        Field Name
+                      </Label>
+                      <Input
+                        type="text"
+                        disabled={
+                          props.content &&
+                          f &&
+                          !props.content?.content_type.fields.every(
+                            (field: any) => field.name !== f.value.name,
+                          )
+                        }
+                        defaultValue={(f && f.value.name) || ''}
+                        {...register(`fields[${idx}][name]`)}
+                      />
+                    </Box>
+                    <Box sx={{ flexGrow: 1, px: 3 }}>
+                      <Label
+                        htmlFor="`fields[${idx}][type]`"
+                        variant="text.caps"
+                        mb={1}>
+                        Type
+                      </Label>
+                      <Select
+                        disabled={
+                          props.content &&
+                          f &&
+                          !props.content?.content_type.fields.every(
+                            (field: any) => field.name !== f.value.name,
+                          )
+                        }
+                        {...register(`fields[${idx}][type]`)}
+                        defaultValue={(f && f.value.field_type.id) || ''}>
+                        {props.fieldtypes &&
+                          props.fieldtypes.length > 0 &&
+                          props.fieldtypes.map((m: any) => (
+                            <option value={m.id} key={m.id}>
+                              {m.name}
+                            </option>
+                          ))}
+                      </Select>
+                    </Box>
+                    <Box pt={0} pl={4} sx={{ textAlign: 'right' }}>
+                      <Label variant="text.caps">Action</Label>
+                      <Button
+                        variant="btnSecondary"
+                        type="button"
+                        sx={{ py: 1, px: 2, mt: 2 }}
+                        onClick={() => props.removeField(idx)}>
+                        <Trash color="red" width={24} height={24} />
+                      </Button>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
           </Box>
 
           {props.fields?.length > 0 && (
