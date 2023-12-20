@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
-import {
-  Label,
-  //  Input,
-  Select,
-} from 'theme-ui';
+import { Label, Select } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -156,46 +152,77 @@ const Form = () => {
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
   const [themes, setThemes] = useState<Array<any>>([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
+  const [newFields, setNewFields] = useState<any>([]);
 
   const { addToast } = useToasts();
   const router = useRouter();
 
   const cId: string = router.query.id as string;
-  // console.log('cId', cId);
 
   const addField = () => {
-    // console.log('[addField]', fields);
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
-      // const outputState: any = [];
+
       outputState.push('');
       console.log('🍉', outputState);
+
       return outputState;
     });
   };
+
+  const [initialFields, setInitialFields] = useState<any>([]);
+  useEffect(() => {
+    const convertedArray = content?.content_type.fields.map((item: any) => {
+      return {
+        name: item.name,
+        value: item,
+      };
+    });
+    setInitialFields(convertedArray);
+    setFields(convertedArray);
+    console.log('🌈convertedArray form content', convertedArray);
+  }, [content]);
 
   const addFieldVal = (val: any) =>
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
-      if (val.name !== undefined)
-        outputState.push({ name: val.name, value: val.value });
+      if (val.name !== undefined || null) {
+        outputState.push({ name: val.value.name, value: val.value });
+
+        const newVal = { name: val.value.name, value: val.value.field_type };
+        if (newFields !== undefined || null) {
+          const newSet = Object.assign(newFields, [newVal]);
+          setNewFields(newSet);
+        } else setNewFields([newVal]);
+      }
       console.log('🍉', outputState);
+
       return outputState;
     });
+
+  useEffect(() => {
+    console.log('🔥🐲field', fields);
+    console.log('🐲nnnnnnnnnnn', newFields);
+  }, [newFields, fields]);
 
   const removeField = (did: number) =>
     setFields((fields) => {
       console.log('🗑️delete start', fields);
 
       const outputState = fields.slice(0);
-      // const outputState = fields.splice(did, 1);
-      // const outputState = fields.toSpliced(did, 1);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
-      // outputState.splice(did, 0);
+
+      // const id = initialFields.length() + did
+      const idToRemove = (fields[did] as { id: string }).id;
+      const popedNewArr = newFields.filter(
+        (item: any) => item.id !== idToRemove,
+      );
+      setNewFields(popedNewArr);
+
       console.log('🗑️delete', delete outputState[did]);
       const final = outputState.filter(Boolean);
 
@@ -203,28 +230,23 @@ const Form = () => {
       return final;
     });
 
-  // const onContentTypeSuccess = (data: any) => {
-  //   const res: IField[] = data.content_types;
-  //   setContents(res);
-  // };
-
-  // const loadData = (token: string) => {
-  //   loadEntity(token, 'content_types', onContentTypeSuccess);
-  // };
-
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
     if (deletable && deletable.value && deletable.value.id) {
       const deletableId = deletable.value.id;
       const contentypeId = content?.content_type.id;
-      deleteEntity(`content_type/${contentypeId}/field/${deletableId}`, token);
-      addToast('Deleted Field' + deletableId, { appearance: 'success' });
-      // return true;
-    } else {
-      addToast('Deleted Field Failed', { appearance: 'error' });
-      // return false;
+      deleteEntity(
+        `content_type/${contentypeId}/field/${deletableId}`,
+        token,
+        () => {
+          if (cId) loadDataDetails(cId, token);
+          addToast('Deleted Field' + deletableId, { appearance: 'success' });
+        },
+        () => {
+          addToast('Deleted Field Failed', { appearance: 'error' });
+        },
+      );
     }
-    // console.log('delete', deletable);
   };
 
   const deleteMe = (deletableId: string) => {
@@ -253,7 +275,6 @@ const Form = () => {
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
-      // setValue('theme_id', res.content_type.theme_id || undefined);
       setValue('theme_id', res.content_type.theme.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
@@ -316,7 +337,6 @@ const Form = () => {
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
-        // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
         console.log('👽fid', fid);
         const it: FieldTypeItem = {
@@ -333,7 +353,6 @@ const Form = () => {
           ),
         );
 
-        // if (!Number(item.name)) {
         if (
           !Number(item.name) &&
           item.name !== '0' &&
@@ -352,12 +371,9 @@ const Form = () => {
     return fieldsMap;
   };
 
-  // const onSuccess = (d: any) => {
   const onSuccess = () => {
     addToast('Saved Successfully', { appearance: 'success' });
     Router.push(`/content-types`);
-    // const isUpdate = cId ? true : false;
-    // if (isUpdate) Router.push(`/content-types/edit/${_d?.id}`);
   };
 
   const onFailed = (error: any) => {
@@ -399,28 +415,6 @@ const Form = () => {
     }
   };
 
-  const loadFields = () => {
-    if (content && content.content_type) {
-      dataFiller(content.content_type.fields);
-      console.log('🐘', content.content_type.fields);
-    }
-  };
-
-  const dataFiller = (entries: any) => {
-    const keys = Object.entries(entries);
-    console.log('🐘🐘', entries);
-    console.log('🐘🔥', keys);
-    keys.forEach((m: any) => {
-      addFieldVal({ name: m[0], value: m[1] });
-    });
-  };
-
-  useEffect(() => {
-    loadFields();
-  }, [content]);
-
-  // cId
-
   useEffect(() => {
     if (cId) {
       setValue('edit', cId);
@@ -440,44 +434,33 @@ const Form = () => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    // console.log('saved fields', fds, fields);
-    setFields([]);
+    setFields(initialFields);
     console.log('🐯', fields);
-    // let newFields:any = []
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
-      // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       console.log('🐼', el);
       const ff = fieldtypes.find((f: any) => f.id === el.type);
-      console.log('🐯ff', ff);
       const fff = { field_type: ff, name: el.name };
-      console.log('🐯fff', fff);
       const fieldType = { value: fff, name: el.name };
       console.log('🐯fieldType', fieldType);
-      addFieldVal(fieldType);
+      console.log(
+        'check 🌈',
+        newFields.every((f: any) => f.name !== fieldType.value.name),
+        fieldType.name,
+        fieldType.value.name,
+      );
+      if (newFields.every((f: any) => f.name !== fieldType.value.name)) {
+        addFieldVal(fieldType);
+      }
     });
-
-    /**
-     * Do something when its done ?
-     */
-
-    // console.log('fieldsNew', fieldsNew);
   };
 
   const onChangeFields = (_e: any, _name: string) => {
-    // console.log('updating ', _name, _e);
     setValue(_name, _e);
-    // const sampleTheme: themeObject = {
-    //   ...theme,
-    //   [_name]: _e,
-    // };
-    // // setTheme(sampleTheme);
   };
 
   useEffect(() => {
-    // if token
     if (token) {
-      // loadData(token);
       loadLayouts(token);
       loadFlows(token);
       loadFieldTypes(token);
@@ -528,7 +511,9 @@ const Form = () => {
                     register={register}
                     label="Color"
                     name="color"
-                    defaultValue={content?.content_type.color || ''}
+                    defaultValue={
+                      (content && content?.content_type.color) || ''
+                    }
                     onChangeColor={onChangeFields}
                   />
                 </Box>
@@ -559,7 +544,6 @@ const Form = () => {
                   </Label>
                   <Select
                     id="flow_id"
-                    // name="flow_id"
                     defaultValue=""
                     {...register('flow_id', { required: true })}>
                     {!isUpdate && (
@@ -594,9 +578,7 @@ const Form = () => {
                   </Label>
                   <Select
                     id="theme_id"
-                    // name="theme_id"
                     defaultValue=""
-                    // ref={register({ required: true })}
                     {...register('theme_id', { required: true })}>
                     {!isUpdate && (
                       <option disabled selected>
