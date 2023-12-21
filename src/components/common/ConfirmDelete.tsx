@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Text } from 'theme-ui';
 
 interface props {
+  inputValue?: any;
   setOpen: any;
   setRender?: any;
   onConfirmDelete: any;
@@ -9,6 +10,7 @@ interface props {
 }
 
 const ConfirmDelete = ({
+  inputValue,
   setOpen,
   setRender,
   onConfirmDelete,
@@ -27,7 +29,9 @@ const ConfirmDelete = ({
           </Text>
           <Flex sx={{ gap: 3, py: 4 }}>
             <Button
-              onClick={onConfirmDelete}
+              onClick={
+                inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
+              }
               variant="delete"
               sx={{
                 fontSize: 2,

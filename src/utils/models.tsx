@@ -173,6 +173,7 @@ export const createEntity = async (
  * Delete an Entity
  * @param path
  * @param token
+ * @param data
  */
 
 export const deleteEntity = async (
