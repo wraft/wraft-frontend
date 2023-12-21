@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Flex, Button, Text, Input } from 'theme-ui';
 
 import { Label, Select } from 'theme-ui';
 
@@ -146,7 +146,6 @@ const Form = () => {
   const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
-  // const [contents, setContents] = useState<Array<IField>>([]);
   const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
@@ -165,7 +164,6 @@ const Form = () => {
       const outputState: any = fields.slice(0);
 
       outputState.push('');
-      console.log('🍉', outputState);
 
       return outputState;
     });
@@ -181,7 +179,6 @@ const Form = () => {
     });
     setInitialFields(convertedArray);
     setFields(convertedArray);
-    console.log('🌈convertedArray form content', convertedArray);
   }, [content]);
 
   const addFieldVal = (val: any) =>
@@ -197,36 +194,25 @@ const Form = () => {
           setNewFields(newSet);
         } else setNewFields([newVal]);
       }
-      console.log('🍉', outputState);
 
       return outputState;
     });
 
-  useEffect(() => {
-    console.log('🔥🐲field', fields);
-    console.log('🐲nnnnnnnnnnn', newFields);
-  }, [newFields, fields]);
-
   const removeField = (did: number) =>
     setFields((fields) => {
-      console.log('🗑️delete start', fields);
-
       const outputState = fields.slice(0);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
 
-      // const id = initialFields.length() + did
       const idToRemove = (fields[did] as { id: string }).id;
       const popedNewArr = newFields.filter(
         (item: any) => item.id !== idToRemove,
       );
       setNewFields(popedNewArr);
 
-      console.log('🗑️delete', delete outputState[did]);
       const final = outputState.filter(Boolean);
 
-      console.log('🗑️delete end', outputState, final);
       return final;
     });
 
@@ -258,14 +244,10 @@ const Form = () => {
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
-    console.log('🥭content-type/id', res);
-    console.log('🥭data', res.content_type?.fields);
     setContent((draft) => {
       if (draft) {
-        console.log('🥭', Object.assign(draft, res));
         Object.assign(draft, res);
       } else {
-        console.log('🥭', res);
         return res;
       }
     });
@@ -333,25 +315,15 @@ const Form = () => {
   const formatFields = (fields: any) => {
     const fieldsMap: any = [];
 
-    console.log('👽🔥fields', fields);
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
         const fid: string = item && item.value && item.value.field_type.id;
-        console.log('👽fid', fid);
         const it: FieldTypeItem = {
           name: item.name,
           key: item.name,
           field_type_id: fid,
         };
-        console.log('👽it', it);
-
-        console.log(
-          '👽wwwwww',
-          content?.content_type.fields.every(
-            (field: any) => field.name === item.name,
-          ),
-        );
 
         if (
           !Number(item.name) &&
@@ -364,10 +336,8 @@ const Form = () => {
           )
         ) {
           fieldsMap.push(it);
-          console.log('👽push', fieldsMap);
         }
       });
-    console.log('👽final', fieldsMap);
     return fieldsMap;
   };
 
@@ -376,8 +346,7 @@ const Form = () => {
     Router.push(`/content-types`);
   };
 
-  const onFailed = (error: any) => {
-    console.log('🐞', error);
+  const onFailed = () => {
     addToast('Save Failed', { appearance: 'error' });
   };
 
@@ -388,9 +357,6 @@ const Form = () => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
-    console.log('😈data', data);
-    console.log('😈fields', fields);
-    console.log('😈formated', formatFields(fields));
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -435,23 +401,13 @@ const Form = () => {
    */
   const onFieldsSave = (fieldsNew: any) => {
     setFields(initialFields);
-    console.log('🐯', fields);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
-      console.log('🐼', el);
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       const fff = { field_type: ff, name: el.name };
       const fieldType = { value: fff, name: el.name };
-      console.log('🐯fieldType', fieldType);
-      console.log(
-        'check 🌈',
-        newFields.every((f: any) => f.name !== fieldType.value.name),
-        fieldType.name,
-        fieldType.value.name,
-      );
-      if (newFields.every((f: any) => f.name !== fieldType.value.name)) {
-        addFieldVal(fieldType);
-      }
+
+      addFieldVal(fieldType);
     });
   };
 
@@ -562,14 +518,12 @@ const Form = () => {
                 </Box>
 
                 <Box sx={{ display: 'none' }}>
-                  {/* <Input
+                  <Input
                     id="edit"
-                    // name="edit"
                     defaultValue={0}
                     hidden={true}
                     {...register('edit', { required: true })}
-                    // ref={register({ required: true })}
-                  /> */}
+                  />
                 </Box>
 
                 <Box px={0} pb={3}>
