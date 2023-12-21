@@ -132,12 +132,17 @@ const Index: FC = () => {
     // deleteEntity(`/organisations/${orgId}`, token, {
     //   code: inputRef.current?.value,
     // });
-    try {
-      deleteEntity(`/organisations`, token, { code: `${inputValue}` });
-      addToast(`Deleted workspace successfully`, { appearance: 'success' });
-    } catch (error) {
-      addToast(`${error.message}`, { appearance: 'error' });
-    }
+    deleteEntity(
+      `/organisations`,
+      token,
+      () => {
+        addToast(`Deleted workspace successfully`, { appearance: 'success' });
+      },
+      (error: any) => {
+        addToast(`${error.message}`, { appearance: 'error' });
+      },
+      { code: `${inputValue}` },
+    );
 
     console.log('⭐️', inputValue);
     setConfirmDelete(false);

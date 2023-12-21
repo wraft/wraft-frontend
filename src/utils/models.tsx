@@ -181,6 +181,7 @@ export const deleteEntity = async (
   token: string,
   onSuccess?: any,
   onFailed?: any,
+  data?: any,
 ) => {
   try {
     const response = await axios.delete(`${API_HOST}/api/v1/${path}`, {
@@ -189,6 +190,7 @@ export const deleteEntity = async (
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
+      data: data,
     });
 
     console.log(response);
