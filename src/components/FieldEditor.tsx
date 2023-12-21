@@ -23,23 +23,18 @@ const FieldForm = (props: FieldFormProps) => {
   const onSubmit = (data: any) => {
     setSubmitting(true);
     const vals = getValues();
-    console.log('🦋valssssssss', vals);
 
     const filteredVals = vals.fields.filter(
       (val: any) => val.name !== undefined,
     );
-    console.log('🍿filterd vals', filteredVals);
 
     const results = {
       count: props.fields.size,
-      // values: vals,
       values: filteredVals,
       data: data,
     };
-    console.log('🦋results on FieldEditor', results);
 
     props.onSave(results);
-    console.log('🦋onSave results on FieldEditor', props.onSave(results));
     setModal(false);
     setSubmitting(false);
   };
