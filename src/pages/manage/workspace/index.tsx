@@ -236,7 +236,7 @@ const Index: FC = () => {
                 <Field
                   label="Workspace name"
                   placeholder="Personal"
-                  defaultValue={org?.name ? org.name : 'Personal'}
+                  defaultValue={org?.name}
                   name="name"
                   register={register}
                   disable={org?.name === 'Personal'}
