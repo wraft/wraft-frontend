@@ -1,10 +1,7 @@
 import React from 'react';
-// import { useStoreState } from 'easy-peasy';
 import { Box, Flex } from 'theme-ui';
 
 import NavLink from './NavLink';
-// import { deleteEntity, fetchAPI } from '../utils/models';
-// import LayoutCard from './Card';
 import ContentTypeDashboard from './ContentTypeDashboard';
 import PageHeader from './PageHeader';
 
@@ -37,31 +34,6 @@ interface ContentTypeList {
 }
 
 const ContentTypeList = ({ isEdit }: ContentTypeList) => {
-  // const token = useStoreState((state) => state.auth.token);
-
-  /** DELETE content
-   * @TODO move to inner page [design]
-   */
-  // const delData = (id: string) => {
-  //   deleteEntity(`content_types/${id}`, token);
-  // };
-
-  // const loadData = () => {
-  //   fetchAPI('content_types')
-  //     .then((data: any) => {
-  //       setLoading(true);
-  //       const res: IField[] = data.content_types;
-  //       setContents(res);
-  //     })
-  //     .catch(() => {
-  //       setLoading(true);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   setLoading(false);
-  // }, []);
-
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
       <PageHeader title="Variants" desc="Manage Variants">
@@ -83,15 +55,6 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
         }}>
         <ContentTypeDashboard isEdit={isEdit} />
       </Box>
-      {/* <Flex sx={{ width: '100%', pt: 4 }}>
-        <Grid columns={3}>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => (
-              <LayoutCard key={m.id} {...m} onDelete={delData} />
-            ))}
-        </Grid>
-      </Flex> */}
     </Box>
   );
 };

@@ -633,8 +633,8 @@ const theme: Theme & CustomVariantGroups = {
       border: 'solid 1px',
       borderColor: 'neutral.1',
       position: 'absolute',
-      top: 2,
-      left: '20px',
+      top: '5px',
+      left: '8px',
       padding: '5px',
       // background: "#fff",
       borderRadius: '4px',
@@ -738,7 +738,7 @@ const theme: Theme & CustomVariantGroups = {
     },
     pageFrame: {
       p: 4,
-      height: 'calc(100vh - 80px)',
+      height: 'calc(100vh - 140px)',
       overflow: 'scroll',
     },
     menuWrapper: {

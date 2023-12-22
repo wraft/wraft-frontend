@@ -164,8 +164,8 @@ export const createEntity = async (
       console.log(`Created a model ${path}`, response.data);
     }
   } catch (error) {
-    onFailed(error);
-    console.error('Errorrrrrrrrrrr:', error);
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
   }
 };
 
@@ -176,25 +176,35 @@ export const createEntity = async (
  * @param data
  */
 
-export const deleteEntity = (path: string, token: string, data?: any) => {
-  axios
-    .delete(`${API_HOST}/api/v1/${path}`, {
+export const deleteEntity = async (
+  path: string,
+  token: string,
+  onSuccess?: any,
+  onFailed?: any,
+  data?: any,
+) => {
+  try {
+    const response = await axios.delete(`${API_HOST}/api/v1/${path}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
       data: data,
-    })
-    .then(function (response) {
-      console.log(`Created a model ${path}`, response.data);
-    })
-    .catch(function (error) {
-      console.error(
-        'There has been a problem with your delete operation:',
-        error,
-      );
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Deleted model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Deleted model ${path}`, response.data);
+    }
+  } catch (error) {
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
+  }
 };
 
 /**
@@ -202,27 +212,35 @@ export const deleteEntity = (path: string, token: string, data?: any) => {
  * @param path
  * @param token
  */
-export const updateEntity = (
+
+export const updateEntity = async (
   path: string,
   data: any,
   token: string,
   onSuccess?: any,
+  onFailed?: any,
 ) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      onSuccess(data);
+  try {
+    const response = await axios.put(`${API_HOST}/api/v1/${path}`, data, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Updated model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Updated model ${path}`, response.data);
+    }
+  } catch (error) {
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
+  }
 };
 
 // interface IapiWrapper {

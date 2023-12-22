@@ -45,8 +45,17 @@ const FieldColor: React.FC<FieldColorProps> = ({
     const colr = _e && _e.hex;
     setVal(colr);
 
-    if (typeof onChangeColor.onChange === 'undefined') {
+    // if (typeof onChangeColor.onChange === 'undefined') {
+    if (onChangeColor) {
       onChangeColor(colr, name);
+    }
+  };
+
+  const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newHexColor = e.target.value;
+    setVal(newHexColor);
+    if (onChangeColor) {
+      onChangeColor(newHexColor, name);
     }
   };
 
@@ -72,13 +81,17 @@ const FieldColor: React.FC<FieldColorProps> = ({
               // name={name}
               type={ftype}
               defaultValue={valx || defaultValue || ''}
-              sx={{ pl: 3 }}
+              sx={{ pl: '40px' }}
               // ref={register({ required: required })}
               {...register(name, { required: required })}
+              onChange={(e) => {
+                handleHexInputChange(e);
+                // changeColor(e.target.value);
+              }}
             />
             <Box sx={{ pt: 0 }}>
               <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
-                <Box bg={valx} variant="layout.squareButton" />
+                <Box id="colorBox" bg={valx} variant="layout.squareButton" />
               </Box>
               <Popover aria-label="Edit color">
                 <ChromePicker
