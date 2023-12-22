@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { useImmer } from 'use-immer';
+import { Box, Flex, Button, Text, Input } from 'theme-ui';
 
-import { Label, Input, Select } from 'theme-ui';
+import { Label, Select } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
@@ -110,44 +113,88 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
+const schema = z.object({
+  name: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
+  prefix: z
+    .string()
+    .min(2, { message: 'Minimum 2 characters required' })
+    .max(6, { message: 'Maximum 6 characters allowed' })
+    .refine((value) => !/\d/.test(value), {
+      message: 'Prefix cannot contain numbers',
+    }),
+  color: z.string().min(4).max(7),
+  description: z.string().min(1),
+  fields: z.any(),
+  layout_id: z.any(),
+  flow_id: z.string(),
+  theme_id: z.string(),
+  edit: z.any(),
+});
+
 const Form = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const token = useStoreState((state) => state.auth.token);
 
   const [fields, setFields] = useState([]);
-  // const [contents, setContents] = useState<Array<IField>>([]);
-  const [content, setContent] = useState<ContentType>();
+  const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
   const [themes, setThemes] = useState<Array<any>>([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
+  const [newFields, setNewFields] = useState<any>([]);
 
   const { addToast } = useToasts();
   const router = useRouter();
 
   const cId: string = router.query.id as string;
-  console.log('cId', cId);
 
   const addField = () => {
-    console.log('[addField]', fields);
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
+
       outputState.push('');
+
       return outputState;
     });
   };
+
+  const [initialFields, setInitialFields] = useState<any>([]);
+  useEffect(() => {
+    const convertedArray = content?.content_type.fields.map((item: any) => {
+      return {
+        name: item.name,
+        value: item,
+      };
+    });
+    setInitialFields(convertedArray);
+    setFields(convertedArray);
+  }, [content]);
 
   const addFieldVal = (val: any) =>
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);
-      outputState.push({ name: val.name, value: val.value });
+      if (val.name !== undefined || null) {
+        outputState.push({ name: val.value.name, value: val.value });
+
+        const newVal = { name: val.value.name, value: val.value.field_type };
+        if (newFields !== undefined || null) {
+          const newSet = Object.assign(newFields, [newVal]);
+          setNewFields(newSet);
+        } else setNewFields([newVal]);
+      }
+
       return outputState;
     });
 
@@ -157,24 +204,35 @@ const Form = () => {
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
-      return outputState;
+
+      const idToRemove = (fields[did] as { id: string }).id;
+      const popedNewArr = newFields.filter(
+        (item: any) => item.id !== idToRemove,
+      );
+      setNewFields(popedNewArr);
+
+      const final = outputState.filter(Boolean);
+
+      return final;
     });
-
-  // const onContentTypeSuccess = (data: any) => {
-  //   const res: IField[] = data.content_types;
-  //   setContents(res);
-  // };
-
-  // const loadData = (token: string) => {
-  //   loadEntity(token, 'content_types', onContentTypeSuccess);
-  // };
 
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
-    const deletableId = deletable.value.id;
-    console.log('delete', deletable);
-    deleteEntity(`content_type_fields/${deletableId}`, token);
-    addToast('Deleted Field' + deletable.value.id, { appearance: 'success' });
+    if (deletable && deletable.value && deletable.value.id) {
+      const deletableId = deletable.value.id;
+      const contentypeId = content?.content_type.id;
+      deleteEntity(
+        `content_type/${contentypeId}/field/${deletableId}`,
+        token,
+        () => {
+          if (cId) loadDataDetails(cId, token);
+          addToast('Deleted Field' + deletableId, { appearance: 'success' });
+        },
+        () => {
+          addToast('Deleted Field Failed', { appearance: 'error' });
+        },
+      );
+    }
   };
 
   const deleteMe = (deletableId: string) => {
@@ -186,20 +244,26 @@ const Form = () => {
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
-    setContent(res);
+    setContent((draft) => {
+      if (draft) {
+        Object.assign(draft, res);
+      } else {
+        return res;
+      }
+    });
     if (res && res.content_type) {
-      console.log('content_type', res);
-
       setValue('name', res.content_type.name);
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
+      setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
+      setValue('theme_id', res.content_type.theme.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
   };
 
-  const loadDataDetalis = (id: string, t: string) => {
+  const loadDataDetails = (id: string, t: string) => {
     const tok = token ? token : t;
     loadEntityDetail(tok, `content_types`, id, setContentDetails);
     return false;
@@ -254,7 +318,6 @@ const Form = () => {
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
-        // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
           name: item.name,
@@ -262,27 +325,38 @@ const Form = () => {
           field_type_id: fid,
         };
 
-        if (!Number(item.name)) {
+        if (
+          !Number(item.name) &&
+          item.name !== '0' &&
+          item.name !== '' &&
+          item.name !== null &&
+          item.name !== undefined &&
+          content?.content_type.fields.every(
+            (field: any) => field.name !== item.name,
+          )
+        ) {
           fieldsMap.push(it);
         }
       });
     return fieldsMap;
   };
 
-  const onSuccess = (d: any) => {
-    onDone(d);
+  const onSuccess = () => {
+    addToast('Saved Successfully', { appearance: 'success' });
+    Router.push(`/content-types`);
+  };
+
+  const onFailed = () => {
+    addToast('Save Failed', { appearance: 'error' });
   };
 
   /**
    * On Theme Created
    */
-  const onDone = (_d: any) => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    Router.push(`/content-types/edit/${_d?.id}`);
-  };
+
+  const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
-    console.log('onSubmit');
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -294,39 +368,23 @@ const Form = () => {
       theme_id: data.theme_id,
     };
 
-    const isUpdate = cId ? true : false;
     if (isUpdate) {
-      console.log('[isUpdate]', isUpdate);
-      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
+      updateEntity(
+        `content_types/${data.edit}`,
+        sampleD,
+        token,
+        onSuccess,
+        onFailed,
+      );
     } else {
-      console.log('[isUpdate]', sampleD);
-      createEntity(sampleD, 'content_types', token, onSuccess);
+      createEntity(sampleD, 'content_types', token, onSuccess, onFailed);
     }
   };
-
-  const loadFields = () => {
-    if (content && content.content_type) {
-      dataFiller(content.content_type.fields);
-    }
-  };
-
-  const dataFiller = (entries: any) => {
-    const keys = Object.entries(entries);
-    keys.forEach((m: any) => {
-      addFieldVal({ name: m[0], value: m[1] });
-    });
-  };
-
-  useEffect(() => {
-    loadFields();
-  }, [content]);
-
-  // cId
 
   useEffect(() => {
     if (cId) {
       setValue('edit', cId);
-      loadDataDetalis(cId, token);
+      loadDataDetails(cId, token);
       loadThemes(token);
     }
   }, [cId, token]);
@@ -342,39 +400,23 @@ const Form = () => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    // console.log('saved fields', fds, fields);
-    setFields([]);
-    // let newFields:any = []
+    setFields(initialFields);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
-      // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       const fff = { field_type: ff, name: el.name };
       const fieldType = { value: fff, name: el.name };
+
       addFieldVal(fieldType);
     });
-
-    /**
-     * Do something when its done ?
-     */
-
-    console.log('fieldsNew', fieldsNew);
   };
 
   const onChangeFields = (_e: any, _name: string) => {
-    // console.log('updating ', _name, _e);
     setValue(_name, _e);
-    // const sampleTheme: themeObject = {
-    //   ...theme,
-    //   [_name]: _e,
-    // };
-    // // setTheme(sampleTheme);
   };
 
   useEffect(() => {
-    // if token
     if (token) {
-      // loadData(token);
       loadLayouts(token);
       loadFlows(token);
       loadFieldTypes(token);
@@ -396,6 +438,7 @@ const Form = () => {
                 <Box>
                   <Field
                     register={register}
+                    error={errors.name}
                     label="Name"
                     name="name"
                     defaultValue=""
@@ -413,6 +456,7 @@ const Form = () => {
                 <Box>
                   <Field
                     register={register}
+                    error={errors.prefix}
                     label="Prefix"
                     name="prefix"
                     defaultValue=""
@@ -423,7 +467,9 @@ const Form = () => {
                     register={register}
                     label="Color"
                     name="color"
-                    defaultValue=""
+                    defaultValue={
+                      (content && content?.content_type.color) || ''
+                    }
                     onChangeColor={onChangeFields}
                   />
                 </Box>
@@ -434,6 +480,11 @@ const Form = () => {
                   <Select
                     id="layout_id"
                     {...register('layout_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -449,9 +500,13 @@ const Form = () => {
                   </Label>
                   <Select
                     id="flow_id"
-                    // name="flow_id"
                     defaultValue=""
                     {...register('flow_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -465,11 +520,9 @@ const Form = () => {
                 <Box sx={{ display: 'none' }}>
                   <Input
                     id="edit"
-                    // name="edit"
                     defaultValue={0}
                     hidden={true}
                     {...register('edit', { required: true })}
-                    // ref={register({ required: true })}
                   />
                 </Box>
 
@@ -479,10 +532,13 @@ const Form = () => {
                   </Label>
                   <Select
                     id="theme_id"
-                    // name="theme_id"
                     defaultValue=""
-                    // ref={register({ required: true })}
                     {...register('theme_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
@@ -504,6 +560,7 @@ const Form = () => {
         <Box sx={{ flexGrow: 1 }} variant="layout.pageFrame">
           <FieldEditor
             fields={fields}
+            content={content}
             fieldtypes={fieldtypes}
             removeField={removeField}
             addField={addField}
