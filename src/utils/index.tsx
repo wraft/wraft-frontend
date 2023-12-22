@@ -359,7 +359,7 @@ export const menuLinks: menuLinksProps[] = [
 
 export const workspaceLinks: menuLinksProps[] = [
   {
-    name: 'Manage',
+    name: 'Workspace',
     path: '/manage/workspace',
   },
   {
