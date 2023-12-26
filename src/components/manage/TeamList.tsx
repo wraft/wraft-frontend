@@ -121,8 +121,6 @@ const TeamList = () => {
                     } else {
                       setSort('name');
                     }
-                    // sort === 'name' ? setSort('name_desc') : setSort('name');
-                    console.log(sort);
                   }}
                   sx={{
                     cursor: 'pointer',
