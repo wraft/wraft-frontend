@@ -4,7 +4,7 @@ import { useStoreState } from 'easy-peasy';
 import { Table } from '../Table';
 import { Flex, Box, Text, Button } from 'theme-ui';
 import Image from 'next/image';
-import { OptionsIcon } from '../Icons';
+import { FilterArrowDown, OptionsIcon } from '../Icons';
 import AddRole from '../icon/add.svg';
 import RemoveRole from '../icon/remove.svg';
 import { ConfirmDelete } from '../common';
@@ -60,6 +60,7 @@ const TeamList = () => {
   const [isRemoveRole, setIsRemoveRole] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [isRemoveUser, setIsRemoveUser] = useState<number | null>(null);
+  const [sort, setSort] = useState('joined_at');
 
   const profile = useStoreState((state) => state.profile.profile);
   const organisationId = profile?.organisation_id;
@@ -70,7 +71,7 @@ const TeamList = () => {
   };
 
   const loadData = (token: string, id: string) => {
-    const path = `organisations/${id}/members`;
+    const path = `organisations/${id}/members?sort=${sort}`;
     loadEntity(token, path, loadDataSuccess);
   };
   useEffect(() => {
@@ -83,7 +84,7 @@ const TeamList = () => {
     if (token && organisationId) {
       loadData(token, organisationId);
     }
-  }, [token, organisationId, isRemoveRole, isRemoveUser, isAssignRole]);
+  }, [token, organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
 
   useEffect(() => {
     if (contents) {
@@ -114,20 +115,56 @@ const TeamList = () => {
             {
               Header: () => (
                 <Flex
-                  sx={{ ml: '24px', fontSize: '12px', fontWeight: 'heading' }}>
+                  onClick={() => {
+                    if (sort == 'name') {
+                      setSort('name_desc');
+                    } else {
+                      setSort('name');
+                    }
+                    // sort === 'name' ? setSort('name_desc') : setSort('name');
+                    console.log(sort);
+                  }}
+                  sx={{
+                    cursor: 'pointer',
+                    ml: '24px',
+                    fontSize: '12px',
+                    fontWeight: 'heading',
+                  }}>
                   NAME
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                      my: 'auto',
+                      ml: 2,
+                    }}>
+                    <FilterArrowDown />
+                  </Box>
                 </Flex>
               ),
               accessor: 'members',
               Cell: ({ row }) => {
                 return (
-                  <Flex sx={{ ml: '24px', gap: '18px' }}>
-                    <Image
-                      src={row.original.members.profilePic}
-                      alt="memberImg"
-                      width={32}
-                      height={32}
-                    />
+                  <Flex
+                    sx={{
+                      ml: '24px',
+                      gap: '18px',
+                    }}>
+                    <Box
+                      sx={{
+                        borderRadius: '999px',
+                        overflow: 'hidden',
+                        objectFit: 'cover',
+                      }}>
+                      <Image
+                        src={row.original.members.profilePic}
+                        alt="memberImg"
+                        width={32}
+                        height={32}
+                      />
+                    </Box>
                     <Text sx={{ fontWeight: 'heading', color: 'dark_600' }}>
                       {row.original.members.name}
                     </Text>
