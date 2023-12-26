@@ -125,13 +125,9 @@ const Index: FC = () => {
   React.useEffect(() => {
     const data = inputRef.current?.value;
     setInputValue(parseInt(data ?? '0', 10));
-    // Your code here
   }, [inputRef.current?.value]);
 
   const onConfirmDelete = async (inputValue: any) => {
-    // deleteEntity(`/organisations/${orgId}`, token, {
-    //   code: inputRef.current?.value,
-    // });
     deleteEntity(
       `/organisations`,
       token,
@@ -144,7 +140,6 @@ const Index: FC = () => {
       { code: `${inputValue}` },
     );
 
-    console.log('⭐️', inputValue);
     setConfirmDelete(false);
     userLogout();
     Router.push('/login');
@@ -282,13 +277,11 @@ const Index: FC = () => {
                         '/organisations/request_deletion',
                         token,
                         (data: any) => {
-                          console.log('success', data);
                           addToast(`${data.info}`, {
                             appearance: 'success',
                           });
                         },
                         (error: any) => {
-                          // console.log(error);
                           addToast(`${error}`, {
                             appearance: 'error',
                           });
@@ -360,10 +353,6 @@ const Index: FC = () => {
                             onClick={() => {
                               setDelete(false);
                               setConfirmDelete(true);
-                              // deleteEntity(`/organisations`, token, {
-                              //   code: inputRef.current?.value,
-                              // });
-                              // console.log('🌈', inputRef.current?.value);
                             }}
                             variant="delete">
                             Delete workspace
