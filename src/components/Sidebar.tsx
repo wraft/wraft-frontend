@@ -7,12 +7,11 @@ import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { useRouter } from 'next/router';
 
-import { Bell, Search } from './Icons';
+import { Search } from './Icons';
 import Modal from './Modal';
 import Blok from './Blok';
 
 import DefaultMenuItem from '../../src/components/MenuItem';
-import Link from '../../src/components/NavLink';
 import {
   Note,
   Like,
