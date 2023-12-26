@@ -29,9 +29,7 @@ import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
-import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
-import { InviteTeam } from '../../../components/manage';
 import { ConfirmDelete } from '../../../components/common';
 
 export interface Organisation {
@@ -60,7 +58,6 @@ const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
-  const [isOpen, setIsOpen] = React.useState(false);
   const [isDelete, setDelete] = React.useState(false);
   const [isConfirmDelete, setConfirmDelete] = React.useState(false);
   const [orgId, setOrgId] = React.useState('');
@@ -173,20 +170,9 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Team management" desc="Manage  >  Workspace">
-          {(currentOrg !== 'Personal' || '') && (
-            <Button
-              variant="btnPrimary"
-              onClick={() => setIsOpen(true)}
-              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <InviteUserIcon />
-              Invite people
-            </Button>
-          )}
+        <PageHeader title="Workspace management" desc="Manage  >  Workspace">
+          <div></div>
         </PageHeader>
-        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          <InviteTeam setOpen={setIsOpen} />
-        </ModalCustom>
         <Container
           sx={{
             px: 4,
@@ -235,7 +221,6 @@ const Index: FC = () => {
                   name="name"
                   register={register}
                   disable={org?.name === 'Personal'}
-                  // error={errors.name}
                 />
                 <Field
                   label="Workspace URL"
@@ -243,7 +228,6 @@ const Index: FC = () => {
                   defaultValue={org?.url}
                   name="url"
                   register={register}
-                  // error={errors.url}
                 />
                 <Button variant="btnPrimary" sx={{ mt: '18px' }} type="submit">
                   Update
