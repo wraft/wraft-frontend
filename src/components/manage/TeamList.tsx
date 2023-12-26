@@ -137,6 +137,7 @@ const TeamList = () => {
                       height: '100%',
                       my: 'auto',
                       ml: 2,
+                      rotate: sort === 'name_desc' ? '180deg' : '0deg',
                     }}>
                     <FilterArrowDown />
                   </Box>
