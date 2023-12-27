@@ -311,12 +311,12 @@ const Form = () => {
               // onSubmit={handleSubmit(onSubmit)}
               sx={{
                 minWidth: '70%',
-                bg: 'neutral.1',
+                bg: 'neutral.0',
                 maxWidth: '83ch',
                 m: 0,
                 pt: 4,
                 input: {
-                  bg: 'neutral.1',
+                  bg: 'white',
                 },
               }}>
               <Box sx={{ px: 4 }}>
