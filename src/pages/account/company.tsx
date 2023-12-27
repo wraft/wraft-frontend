@@ -14,7 +14,7 @@ const CompanyForm: FC = () => {
         <meta name="description" content="Wraft Docs" />
       </Head>
       <Page>
-        <PageHeader title="Settings" desc="x">
+        <PageHeader title="Settings" desc="">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
         <Flex sx={{ px: 4 }}>
