@@ -376,15 +376,6 @@ export const profileLinks: menuLinksProps[] = [
     name: 'Manage Team',
     path: '/account/company',
   },
-
-  {
-    name: 'Roles',
-    path: '/account/roles',
-  },
-  {
-    name: 'Members',
-    path: '/account/members',
-  },
   {
     name: 'Checks',
     path: '/account/checks',
