@@ -373,7 +373,7 @@ export const profileLinks: menuLinksProps[] = [
     path: '/account',
   },
   {
-    name: 'Manage Team',
+    name: 'Manage Workspace',
     path: '/account/company',
   },
   // {
