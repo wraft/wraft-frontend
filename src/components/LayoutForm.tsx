@@ -81,6 +81,7 @@ const Form = ({ setOpen }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm<{
     name: string;
     slug: string;
@@ -199,6 +200,8 @@ const Form = ({ setOpen }: Props) => {
       setValue('width', layout?.width);
       setValue('description', layout?.description);
       setValue('engine_uuid', layout?.engine?.id);
+
+      trigger(['name', 'slug', 'description']);
     }
   }, [layout]);
 
