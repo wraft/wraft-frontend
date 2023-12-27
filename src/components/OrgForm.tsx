@@ -7,7 +7,7 @@ import { Button, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
 import Field from './Field';
-import { checkUser, createEntity, loadEntity } from '../utils/models';
+import { checkUser, loadEntity, updateEntity } from '../utils/models';
 
 export interface Profile {
   allergies?: string[];
@@ -109,8 +109,12 @@ const OrgForm = () => {
   /** Update Form */
 
   const onSubmit = (data: any) => {
-    createEntity(data, 'organisations', token, onCreate);
-    // updateEntity('organisations', data, token, onCreate);
+    updateEntity(
+      `organisations/${profile.organisation_id}`,
+      data,
+      token,
+      onCreate,
+    );
   };
 
   useEffect(() => {
