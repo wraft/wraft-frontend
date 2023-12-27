@@ -105,6 +105,25 @@ export const OptionsIcon = () => (
   </svg>
 );
 
+export const FilterArrowDown = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <g id="Icons/24/Arrow_Down">
+      <path
+        id="Vector (Stroke)"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M1.20921 3.35179C1.48816 3.07284 1.94042 3.07284 2.21936 3.35179L6 7.13243L9.78064 3.35179C10.0596 3.07284 10.5118 3.07284 10.7908 3.35179C11.0697 3.63073 11.0697 4.08299 10.7908 4.36194L6.50508 8.64766C6.22613 8.9266 5.77387 8.9266 5.49492 8.64766L1.20921 4.36194C0.930263 4.08299 0.930263 3.63073 1.20921 3.35179Z"
+        fill="#A5ABB2"
+      />
+    </g>
+  </svg>
+);
+
 export const BigErrorIcon = () => (
   <svg
     width="66"

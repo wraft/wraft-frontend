@@ -29,9 +29,7 @@ import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
-import { InviteUserIcon } from '../../../components/Icons';
 import Field from '../../../components/Field';
-import { InviteTeam } from '../../../components/manage';
 import { ConfirmDelete } from '../../../components/common';
 
 export interface Organisation {
@@ -60,7 +58,6 @@ const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
   const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
-  const [isOpen, setIsOpen] = React.useState(false);
   const [isDelete, setDelete] = React.useState(false);
   const [isConfirmDelete, setConfirmDelete] = React.useState(false);
   const [orgId, setOrgId] = React.useState('');
@@ -125,13 +122,9 @@ const Index: FC = () => {
   React.useEffect(() => {
     const data = inputRef.current?.value;
     setInputValue(parseInt(data ?? '0', 10));
-    // Your code here
   }, [inputRef.current?.value]);
 
   const onConfirmDelete = async (inputValue: any) => {
-    // deleteEntity(`/organisations/${orgId}`, token, {
-    //   code: inputRef.current?.value,
-    // });
     deleteEntity(
       `/organisations`,
       token,
@@ -144,7 +137,6 @@ const Index: FC = () => {
       { code: `${inputValue}` },
     );
 
-    console.log('⭐️', inputValue);
     setConfirmDelete(false);
     userLogout();
     Router.push('/login');
@@ -178,20 +170,9 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Team management" desc="Manage  >  Workspace">
-          {(currentOrg !== 'Personal' || '') && (
-            <Button
-              variant="btnPrimary"
-              onClick={() => setIsOpen(true)}
-              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <InviteUserIcon />
-              Invite people
-            </Button>
-          )}
+        <PageHeader title="Workspace management" desc="Manage  >  Workspace">
+          <div></div>
         </PageHeader>
-        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          <InviteTeam setOpen={setIsOpen} />
-        </ModalCustom>
         <Container
           sx={{
             px: 4,
@@ -236,11 +217,10 @@ const Index: FC = () => {
                 <Field
                   label="Workspace name"
                   placeholder="Personal"
-                  defaultValue={org?.name ? org.name : 'Personal'}
+                  defaultValue={org?.name}
                   name="name"
                   register={register}
                   disable={org?.name === 'Personal'}
-                  // error={errors.name}
                 />
                 <Field
                   label="Workspace URL"
@@ -248,7 +228,6 @@ const Index: FC = () => {
                   defaultValue={org?.url}
                   name="url"
                   register={register}
-                  // error={errors.url}
                 />
                 <Button variant="btnPrimary" sx={{ mt: '18px' }} type="submit">
                   Update
@@ -282,13 +261,11 @@ const Index: FC = () => {
                         '/organisations/request_deletion',
                         token,
                         (data: any) => {
-                          console.log('success', data);
                           addToast(`${data.info}`, {
                             appearance: 'success',
                           });
                         },
                         (error: any) => {
-                          // console.log(error);
                           addToast(`${error}`, {
                             appearance: 'error',
                           });
@@ -360,10 +337,6 @@ const Index: FC = () => {
                             onClick={() => {
                               setDelete(false);
                               setConfirmDelete(true);
-                              // deleteEntity(`/organisations`, token, {
-                              //   code: inputRef.current?.value,
-                              // });
-                              // console.log('🌈', inputRef.current?.value);
                             }}
                             variant="delete">
                             Delete workspace

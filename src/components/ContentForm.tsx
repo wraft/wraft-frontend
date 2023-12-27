@@ -815,7 +815,7 @@ const Form = (props: IContentForm) => {
                     variant="btnPrimary"
                     type="submit"
                     sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>
-                    Publish
+                    Save
                   </Button>
                 </Box>
               </Flex>
