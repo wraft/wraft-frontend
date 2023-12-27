@@ -13,7 +13,7 @@ import {
 } from 'theme-ui';
 
 import { Controller, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 
@@ -111,6 +111,7 @@ const Form = ({ setOpen }: Props) => {
   const onUpdate = (data: any) => {
     console.log('updated', data);
     setOpen(false);
+    Router.push('/manage/layouts');
   };
 
   /**
