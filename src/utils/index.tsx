@@ -323,19 +323,9 @@ export const menuLinks: menuLinksProps[] = [
     path: '/manage/themes',
   },
   {
-    name: 'Roles',
-    logo: <User width="20px" />,
-    path: '/manage/roles',
-  },
-  {
     name: 'Fields',
     logo: <User width="20px" />,
     path: '/manage/fields',
-  },
-  {
-    name: 'Pipelines',
-    logo: <Collection width={20} />,
-    path: '/manage/pipelines',
   },
 ];
 
