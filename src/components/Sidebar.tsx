@@ -7,12 +7,11 @@ import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { useRouter } from 'next/router';
 
-import { Bell, Search } from './Icons';
+import { Search } from './Icons';
 import Modal from './Modal';
 import Blok from './Blok';
 
 import DefaultMenuItem from '../../src/components/MenuItem';
-import Link from '../../src/components/NavLink';
 import {
   Note,
   Like,
@@ -300,16 +299,6 @@ const Nav = (props: any) => {
             </MenuProvider>
           </Box>
           <MenuProvider>
-            <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
-              <Box
-                variant="button"
-                sx={{ mt: 0, pt: 0, px: 0, svg: { fill: 'gray.6' } }}>
-                <Link href="/activities">
-                  <Bell width={20} height={20} />
-                </Link>
-              </Box>
-            </Flex>
-
             {token && token !== '' && (
               <Flex ml={1}>
                 {profile && (

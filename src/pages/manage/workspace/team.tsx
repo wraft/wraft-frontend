@@ -10,6 +10,7 @@ import ModalCustom from '../../../components/ModalCustom';
 import { InviteUserIcon } from '../../../components/Icons';
 import { useStoreState } from 'easy-peasy';
 import TeamList from '../../../components/manage/TeamList';
+import { InviteTeam } from '../../../components/manage';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,14 +25,15 @@ const Index: FC = () => {
         <Page>
           <PageHeader title="Manage Layouts" desc="Document Layouts">
             <Button
+              variant="btnPrimary"
               onClick={() => setIsOpen(true)}
-              sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <InviteUserIcon />
               Invite people
             </Button>
           </PageHeader>
-          <ModalCustom isOpen={isOpen} setOpen={setIsOpen}>
-            <div />
+          <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+            <InviteTeam setOpen={setIsOpen} />
           </ModalCustom>
           <Container
             sx={{

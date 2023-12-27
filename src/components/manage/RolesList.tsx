@@ -5,7 +5,7 @@ import { useStoreState } from 'easy-peasy';
 
 import { Table } from '../Table';
 import ContentLoader from 'react-content-loader';
-import { BigErrorIcon, OptionsIcon } from '../Icons';
+import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
 import { RolesEdit } from '.';
 import { ConfirmDelete } from '../common';
@@ -31,6 +31,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [isDelete, setIsDelete] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | null>(null);
+  const [sort, setSort] = useState('');
 
   const loadDataSuccess = (data: any) => {
     setLoading(true);
@@ -38,14 +39,14 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
   };
 
   const loadData = (t: string) => {
-    loadEntity(t, 'roles', loadDataSuccess);
+    loadEntity(t, `roles?sort=${sort}`, loadDataSuccess);
   };
 
   useEffect(() => {
     if (token) {
       loadData(token);
     }
-  }, [token, render]);
+  }, [token, render, sort]);
 
   useEffect(() => {
     const contentCopy = [...contents];
@@ -99,12 +100,44 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
           options={{
             columns: [
               {
-                Header: 'Role Name',
+                Header: () => (
+                  <Flex
+                    onClick={() => {
+                      if (sort == 'name') {
+                        setSort('name_desc');
+                      } else {
+                        setSort('name');
+                      }
+                    }}
+                    sx={{
+                      cursor: 'pointer',
+                      ml: '24px',
+                      fontSize: '12px',
+                      fontWeight: 'heading',
+                    }}>
+                    ROLE NAME
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '100%',
+                        my: 'auto',
+                        ml: 2,
+                        rotate: sort === 'name_desc' ? '180deg' : '0deg',
+                      }}>
+                      <FilterArrowDown />
+                    </Box>
+                  </Flex>
+                ),
                 accessor: 'name',
                 width: '50%',
+                Cell: ({ row }) => {
+                  return <Box sx={{ ml: '24px' }}>{row.original.name}</Box>;
+                },
               },
               {
-                Header: 'Users',
+                Header: 'USERS',
                 accessor: 'users',
                 width: '30%',
               },
