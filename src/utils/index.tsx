@@ -376,10 +376,10 @@ export const profileLinks: menuLinksProps[] = [
     name: 'Manage Team',
     path: '/account/company',
   },
-  {
-    name: 'Checks',
-    path: '/account/checks',
-  },
+  // {
+  //   name: 'Checks',
+  //   path: '/account/checks',
+  // },
 ];
 
 export const removeProtocol = (link: string) =>
