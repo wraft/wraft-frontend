@@ -99,12 +99,21 @@ const AssetForm = ({
         <Label htmlFor="file" mb={1}>
           File
         </Label>
-        <Input
-          id="file"
-          type="file"
-          accept="application/pdf"
-          {...register('file')}
-        />
+        {filetype === 'theme' ? (
+          <Input
+            id="file"
+            type="file"
+            accept=".ttf, .otf"
+            {...register('file')}
+          />
+        ) : (
+          <Input
+            id="file"
+            type="file"
+            accept="application/pdf"
+            {...register('file')}
+          />
+        )}
       </Box>
       <Flex>
         <Button
