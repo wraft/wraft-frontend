@@ -14,7 +14,7 @@ import {
 
 import { Select } from 'theme-ui';
 
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
 import { useToasts } from 'react-toast-notifications';
@@ -66,6 +66,7 @@ const Form = () => {
 
   const onCreated = () => {
     console.log('[onCreated]');
+    Router.push('/templates');
   };
 
   /**
