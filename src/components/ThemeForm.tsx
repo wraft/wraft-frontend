@@ -68,7 +68,7 @@ const ThemeForm = () => {
     addToast(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
       appearance: 'success',
     });
-    Router.push(`/themes`);
+    Router.push(`/manage/themes`);
   };
 
   const onSubmit = (data: any) => {
