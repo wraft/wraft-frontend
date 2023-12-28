@@ -5,7 +5,8 @@ import { ArrowBack } from './Icons';
 interface PageHeaderProps {
   children?: any;
   title: string;
-  desc?: string;
+  // desc?: string;
+  desc?: any;
   breads?: boolean;
 }
 

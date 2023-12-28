@@ -124,6 +124,25 @@ export const FilterArrowDown = () => (
   </svg>
 );
 
+export const GraterThanIcon = () => (
+  <svg
+    width="8"
+    height="7"
+    viewBox="0 0 8 7"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <g id="Icons/24/Arrow_Right">
+      <path
+        id="Vector (Stroke)"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M2.13947 0.705535C2.32544 0.542816 2.62694 0.542816 2.81291 0.705535L5.67005 3.20553C5.85601 3.36825 5.85601 3.63207 5.67005 3.79479L2.81291 6.29479C2.62694 6.45751 2.32544 6.45751 2.13947 6.29479C1.95351 6.13207 1.95351 5.86825 2.13947 5.70553L4.6599 3.50016L2.13947 1.29479C1.95351 1.13207 1.95351 0.868253 2.13947 0.705535Z"
+        fill="#BCC0C5"
+      />
+    </g>
+  </svg>
+);
+
 export const BigErrorIcon = () => (
   <svg
     width="66"
