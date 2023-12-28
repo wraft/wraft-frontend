@@ -33,6 +33,7 @@ import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
 import ModalCustom from './ModalCustom';
 import WorkspaceCreate from './manage/WorkspaceCreate';
+import Link from '../components/NavLink';
 
 /**
  * Sidebar Static Items
@@ -324,6 +325,7 @@ const Nav = (props: any) => {
                           borderColor: 'neutral.1',
                           minWidth: '20ch',
                           bg: 'neutral.0',
+                          zIndex: 1000,
                         }}
                         aria-label="Preferences">
                         <MenuItem as={Box} variant="layout.menuItem">
@@ -354,12 +356,16 @@ const Nav = (props: any) => {
                             </Box>
                           </Flex>
                         </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem">
-                          Settings
-                        </MenuItem>
-                        <MenuItem as={Box} variant="layout.menuItem">
-                          Profile
-                        </MenuItem>
+                        <Link href="/account" path="/account">
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            Settings
+                          </MenuItem>
+                        </Link>
+                        <Link href="/account/profile" path="/account/profile">
+                          <MenuItem as={Box} variant="layout.menuItem">
+                            Profile
+                          </MenuItem>
+                        </Link>
                         <MenuItem
                           as={Box}
                           variant="layout.menuItem"
