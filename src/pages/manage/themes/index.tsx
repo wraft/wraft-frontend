@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Container, Flex } from 'theme-ui';
+import { Box, Button, Container, Flex } from 'theme-ui';
 import ThemeList from '../../../components/ThemeList';
 import Page from '../../../components/PageFrame';
 import Link from '../../../components/NavLink';
-// import ManageSidebar from '../../../components/ManageSidebar';
-import { HeadingFrame } from '../../../components/Card';
-// import { menuLinks } from '../../../utils';
+import PageHeader from '../../../components/PageHeader';
+import { AddIcon, GraterThanIcon } from '../../../components/Icons';
+import ManageSidebar from '../../../components/ManageSidebar';
+import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
   return (
@@ -16,18 +17,29 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
-          title="Manage > Themes"
-          side={
-            <Link variant="btnSecondary" href="/manage/themes/new">
+        <PageHeader
+          title="Themes"
+          desc={
+            <Flex sx={{ alignItems: 'center', gap: '6px', color: 'gray.3' }}>
+              Manage <GraterThanIcon /> Themes
+            </Flex>
+          }>
+          <Link href="themes/new" variant="none">
+            <Button
+              as={Button}
+              variant="btnPrimary"
+              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <AddIcon />
               Add Theme
-            </Link>
-          }
-        />
-        <Container variant="layout.pageFrame">
+            </Button>
+          </Link>
+        </PageHeader>
+        <Container variant="layout.newPageFrame">
           <Flex>
-            {/* <ManageSidebar items={menuLinks} /> */}
-            <ThemeList />
+            <ManageSidebar items={menuLinks} />
+            <Box variant="layout.contentFrame">
+              <ThemeList />
+            </Box>
           </Flex>
         </Container>
       </Page>

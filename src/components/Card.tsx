@@ -42,12 +42,9 @@ const LayoutCard = ({
         sx={{
           position: 'relative',
           border: 'solid 1px',
-          bg: 'gray.0',
+          bg: 'transparent',
           borderColor: 'gray.3',
           borderRadius: 4,
-          // height: '100px',
-          // p: 3,
-          // overflow: 'hidden',
         }}>
         <Box sx={{ pt: 0, pr: 0 }}>
           <Box
@@ -64,51 +61,54 @@ const LayoutCard = ({
                 right: 2,
                 top: 0,
               }}>
-              {/* <Box as={MenuButton}> */}
               <MenuProvider>
                 <MenuButton
                   as={Button}
                   sx={{
                     border: 'solid 1px',
                     color: 'gray.6',
-                    borderColor: 'gray.2',
-                    p: 0,
-                    bg: 'gray.0',
-                    pb: 1,
+                    borderColor: 'gray.0',
+                    p: 1,
+                    bg: 'neutral.1',
+                    // pb: 1,
                     mt: 2,
                   }}>
-                  <DotsVerticalRounded width={16} height={16} />
+                  <DotsVerticalRounded width={24} height={16} />
                 </MenuButton>
                 <Menu
                   as={Box}
                   aria-label="Example"
                   sx={{
+                    top: '-36px',
+                    left: '0px',
                     border: 'solid 1px',
                     borderColor: 'gray.1',
                     borderRadius: 4,
-                    bg: 'gray.0',
+                    bg: 'white',
                     color: 'gray.9',
+                    zIndex: 20,
                   }}>
                   <MenuItem
                     as={Button}
+                    variant="buttons.base"
                     sx={{
-                      p: 0,
+                      py: 1,
                       color: 'red.7',
-                      bg: 'gray.0',
                       px: 3,
-                      borderBottom: 'solid 1px',
-                      borderColor: 'gray.1',
                     }}
                     onClick={() => {
                       onDelete(id);
                     }}>
                     Delete
                   </MenuItem>
-                  <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
+                  <MenuItem as={Box} sx={{ width: '100%', px: 3, py: 1 }}>
                     <Link
                       href={`/manage/${model}/edit/[id]`}
                       path={`/manage/${model}/edit/${id}`}>
-                      <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
+                      <Text
+                        sx={{ fontSize: 3, fontWeight: 500, color: 'gray.8' }}>
+                        Edit
+                      </Text>
                     </Link>
                   </MenuItem>
                 </Menu>
@@ -116,9 +116,9 @@ const LayoutCard = ({
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>
-            <Link href={`/manage/${model}/[id]`} path={`/${model}/${id}`}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>{name}</Text>
-            </Link>
+            <Text sx={{ fontSize: 3, fontWeight: 500, color: 'gray.9' }}>
+              {name}
+            </Text>
           </Box>
         </Box>
         <Text sx={{ fontSize: 0 }} color="gray.6">

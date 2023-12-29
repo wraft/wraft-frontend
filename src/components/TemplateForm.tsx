@@ -14,7 +14,7 @@ import {
 
 import { Select } from 'theme-ui';
 
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 
 import { useToasts } from 'react-toast-notifications';
@@ -66,6 +66,7 @@ const Form = () => {
 
   const onCreated = () => {
     console.log('[onCreated]');
+    Router.push('/templates');
   };
 
   /**
@@ -311,12 +312,12 @@ const Form = () => {
               // onSubmit={handleSubmit(onSubmit)}
               sx={{
                 minWidth: '70%',
-                bg: 'neutral.1',
+                bg: 'neutral.0',
                 maxWidth: '83ch',
                 m: 0,
                 pt: 4,
                 input: {
-                  bg: 'neutral.1',
+                  bg: 'white',
                 },
               }}>
               <Box sx={{ px: 4 }}>
