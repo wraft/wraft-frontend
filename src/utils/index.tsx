@@ -6,13 +6,7 @@ import { ContentState } from './types';
 /**
  *  @TODO Icons: Convert to local files
  */
-import {
-  Layout,
-  User,
-  Collection,
-  Style,
-  FlowBranch,
-} from '../components/Icons';
+import { Layout, User, Style, FlowBranch } from '../components/Icons';
 
 import cookie from 'js-cookie';
 import { AxiosRequestConfig, AxiosError } from 'axios';
