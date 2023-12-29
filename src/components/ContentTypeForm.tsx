@@ -161,6 +161,7 @@ const Form = () => {
   const addField = () => {
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
 
       outputState.push('');
@@ -184,6 +185,7 @@ const Form = () => {
   const addFieldVal = (val: any) =>
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
       if (val.name !== undefined || null) {
         outputState.push({ name: val.value.name, value: val.value });
@@ -394,6 +396,10 @@ const Form = () => {
       loadThemes(token);
     }
   }, [token]);
+
+  useEffect(() => {
+    console.log('lllllllllllllllll', fields);
+  }, [fields]);
 
   /**
    * When form is submitted from Forms Editor

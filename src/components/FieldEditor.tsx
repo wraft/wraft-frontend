@@ -16,6 +16,7 @@ interface FieldFormProps {
 }
 
 const FieldForm = (props: FieldFormProps) => {
+  const fields = props.fields || [];
   const { register, handleSubmit, getValues } = useForm();
   const [showModal, setModal] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const FieldForm = (props: FieldFormProps) => {
     );
 
     const results = {
-      count: props.fields.size,
+      count: fields.size,
       values: filteredVals,
       data: data,
     };
@@ -66,7 +67,7 @@ const FieldForm = (props: FieldFormProps) => {
           Fields
         </Text>
         <Button variant="btnSmall" sx={{ ml: 'auto' }} onClick={toggleModal}>
-          Edit
+          {fields.length > 0 ? 'Edit' : 'Add'}
         </Button>
       </Flex>
       <Box
@@ -77,8 +78,8 @@ const FieldForm = (props: FieldFormProps) => {
           pb: 3,
           alignItems: 'flex-start',
         }}>
-        {props.fields &&
-          props.fields.map((f: any) => (
+        {fields &&
+          fields.map((f: any) => (
             <Flex
               key={f?.id}
               sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
@@ -111,7 +112,7 @@ const FieldForm = (props: FieldFormProps) => {
             </Text>
           </Box>
 
-          {props.fields?.length < 1 && (
+          {fields.length < 1 && (
             <Box
               sx={{
                 bg: 'neutral.1',
@@ -140,8 +141,8 @@ const FieldForm = (props: FieldFormProps) => {
               borderTop: 'solid 1px',
               borderColor: 'neutral.1',
             }}>
-            {props.fields &&
-              props.fields.map((f: any, idx: number) => (
+            {fields &&
+              fields.map((f: any, idx: number) => (
                 <Box
                   key={idx}
                   sx={{
@@ -212,7 +213,7 @@ const FieldForm = (props: FieldFormProps) => {
               ))}
           </Box>
 
-          {props.fields?.length > 0 && (
+          {fields?.length > 0 && (
             <Box
               sx={{
                 bg: 'neutral.1',
@@ -230,7 +231,7 @@ const FieldForm = (props: FieldFormProps) => {
             </Box>
           )}
 
-          {props.fields?.length > 0 && (
+          {fields?.length > 0 && (
             <Flex sx={{ py: 3, px: 4, mb: 0 }}>
               <Box sx={{ ml: 'auto' }}>
                 <Button
