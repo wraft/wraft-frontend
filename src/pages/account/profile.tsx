@@ -3,7 +3,6 @@ import Head from 'next/head';
 import ProfileForm from '../../components/ProfileForm';
 import Page from '../../components/PageFrame';
 import { Flex } from 'theme-ui';
-import Link from 'next/link';
 
 const Contents: FC = () => {
   return (
@@ -13,9 +12,6 @@ const Contents: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <Link href="/account">Back to Profile</Link>
-        </Flex>
         <Flex>
           <ProfileForm />
         </Flex>

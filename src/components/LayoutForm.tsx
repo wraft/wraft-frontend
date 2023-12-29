@@ -13,7 +13,7 @@ import {
 } from 'theme-ui';
 
 import { Controller, useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 
@@ -81,6 +81,7 @@ const Form = ({ setOpen }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm<{
     name: string;
     slug: string;
@@ -110,6 +111,7 @@ const Form = ({ setOpen }: Props) => {
   const onUpdate = (data: any) => {
     console.log('updated', data);
     setOpen(false);
+    Router.push('/manage/layouts');
   };
 
   /**
@@ -199,6 +201,8 @@ const Form = ({ setOpen }: Props) => {
       setValue('width', layout?.width);
       setValue('description', layout?.description);
       setValue('engine_uuid', layout?.engine?.id);
+
+      trigger(['name', 'slug', 'description']);
     }
   }, [layout]);
 

@@ -12,10 +12,8 @@ import Field from './Field';
 import {
   createEntity,
   deleteEntity,
-  // createEntityFile,
   loadEntityDetail,
   updateEntity,
-  // updateEntityFile,
 } from '../utils/models';
 import FieldColor from './FieldColor';
 import AssetForm from './AssetForm';
@@ -67,8 +65,10 @@ const ThemeForm = () => {
    * On Theme Created
    */
   const onDone = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    Router.push(`/themes`);
+    addToast(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
+      appearance: 'success',
+    });
+    Router.push(`/manage/themes`);
   };
 
   const onSubmit = (data: any) => {
@@ -123,7 +123,7 @@ const ThemeForm = () => {
     if (data?.edit) {
       updateEntity(`themes/${data?.edit}`, themeData, token, onDone);
     } else {
-      createEntity(themeData, `themes`, token);
+      createEntity(themeData, `themes`, token, onDone);
     }
   };
 
@@ -182,12 +182,7 @@ const ThemeForm = () => {
         <Box mx={0} mb={3}>
           <Flex sx={{ width: '90%' }}>
             <Box sx={{ width: '100%' }}>
-              <Input
-                // name="edit"
-                type="hidden"
-                // ref={register}
-                {...register('edit')}
-              />
+              <Input type="hidden" {...register('edit')} />
               <Field
                 name="name"
                 label="Name"
@@ -236,9 +231,7 @@ const ThemeForm = () => {
                   Default Theme?
                 </Label>
                 <Checkbox
-                  // ref={register}
                   defaultChecked={true}
-                  // name="default_theme"
                   {...register('default_theme')}
                 />
               </Box>
@@ -253,7 +246,9 @@ const ThemeForm = () => {
             </Box>
           )}
         </Box>
-        <Button ml={2}>{isEdit ? 'Update' : 'Create Theme'}</Button>
+        <Button variant="buttonPrimary" ml={2}>
+          {isEdit ? 'Update' : 'Create Theme'}
+        </Button>
       </Box>
       <Box>
         <Box pt={3}>
@@ -270,7 +265,6 @@ const ThemeForm = () => {
                   p: 3,
                   border: 'solid 1px',
                   borderColor: 'gray.3',
-                  // bg: 'base',
                   mb: 1,
                 }}>
                 <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>

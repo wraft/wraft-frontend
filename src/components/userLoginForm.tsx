@@ -91,7 +91,7 @@ const UserLoginForm = () => {
           <Input
             type="text"
             id="email"
-            defaultValue="wraftuser@gmail.com"
+            defaultValue=""
             {...register('email', { required: true })}
             mb={'24px'}
             color={'nuetral_nuetral'}
@@ -102,10 +102,8 @@ const UserLoginForm = () => {
           </Label>
           <Input
             id="password"
-            // name="password"
-            defaultValue="password"
+            defaultValue=""
             type={showPassword ? 'text' : 'password'}
-            // ref={register({ required: true })}
             {...register('password', { required: true })}
             mb={'12px'}
           />

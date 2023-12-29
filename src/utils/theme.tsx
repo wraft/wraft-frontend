@@ -483,6 +483,12 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   links: {
+    none: {
+      textDecoration: 'none',
+      color: 'inherit',
+      p: 0,
+      m: 0,
+    },
     download: {
       color: 'red.4',
       svg: {
@@ -740,6 +746,21 @@ const theme: Theme & CustomVariantGroups = {
       p: 4,
       height: 'calc(100vh - 140px)',
       overflow: 'scroll',
+    },
+    newPageFrame: {
+      p: 0,
+      height: '100%',
+      maxHeight: 'calc(100vh - 140px)',
+      overflow: 'auto',
+      bg: 'background',
+    },
+    contentFrame: {
+      width: '100%',
+      bg: 'bgWhite',
+      border: '1px solid',
+      borderColor: 'neutral.1',
+      borderRadius: 4,
+      m: 4,
     },
     menuWrapper: {
       // bg: 'red.2',

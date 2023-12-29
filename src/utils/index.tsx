@@ -6,13 +6,7 @@ import { ContentState } from './types';
 /**
  *  @TODO Icons: Convert to local files
  */
-import {
-  Layout,
-  User,
-  Collection,
-  Style,
-  FlowBranch,
-} from '../components/Icons';
+import { Layout, User, Style, FlowBranch } from '../components/Icons';
 
 import cookie from 'js-cookie';
 import { AxiosRequestConfig, AxiosError } from 'axios';
@@ -323,19 +317,9 @@ export const menuLinks: menuLinksProps[] = [
     path: '/manage/themes',
   },
   {
-    name: 'Roles',
-    logo: <User width="20px" />,
-    path: '/manage/roles',
-  },
-  {
     name: 'Fields',
     logo: <User width="20px" />,
     path: '/manage/fields',
-  },
-  {
-    name: 'Pipelines',
-    logo: <Collection width={20} />,
-    path: '/manage/pipelines',
   },
 ];
 
@@ -383,22 +367,13 @@ export const profileLinks: menuLinksProps[] = [
     path: '/account',
   },
   {
-    name: 'Manage Team',
+    name: 'Manage Workspace',
     path: '/account/company',
   },
-
-  {
-    name: 'Roles',
-    path: '/account/roles',
-  },
-  {
-    name: 'Members',
-    path: '/account/members',
-  },
-  {
-    name: 'Checks',
-    path: '/account/checks',
-  },
+  // {
+  //   name: 'Checks',
+  //   path: '/account/checks',
+  // },
 ];
 
 export const removeProtocol = (link: string) =>
