@@ -113,6 +113,11 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
+const uuidRegex =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+
 const schema = z.object({
   name: z
     .string()
@@ -125,12 +130,20 @@ const schema = z.object({
     .refine((value) => !/\d/.test(value), {
       message: 'Prefix cannot contain numbers',
     }),
-  color: z.string().min(4).max(7),
-  description: z.string().min(1),
+  color: z.string().refine((value) => hexColorRegex.test(value), {
+    message: 'Invalid hexadecimal color',
+  }),
+  description: z.string().min(5, { message: 'Minimum 5 characters required' }),
   fields: z.any(),
-  layout_id: z.any(),
-  flow_id: z.string(),
-  theme_id: z.string(),
+  layout_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Layout',
+  }),
+  flow_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Flow',
+  }),
+  theme_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Theme',
+  }),
   edit: z.any(),
 });
 
@@ -454,6 +467,11 @@ const Form = () => {
                     name="description"
                     defaultValue="Something to guide the user here"
                   />
+                  {errors.description && errors.description.message && (
+                    <Text variant="error">
+                      {errors.description.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box>
                   <Field
@@ -474,6 +492,11 @@ const Form = () => {
                     }
                     onChangeColor={onChangeFields}
                   />
+                  {errors.color && errors.color.message && (
+                    <Text variant="error">
+                      {errors.color.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="layout_id" mb={1}>
@@ -495,6 +518,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.layout_id && errors.layout_id.message && (
+                    <Text variant="error">
+                      {errors.layout_id.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="flow_id" mb={1}>
@@ -517,6 +545,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.flow_id && errors.flow_id.message && (
+                    <Text variant="error">
+                      {errors.flow_id.message as string}
+                    </Text>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'none' }}>
@@ -549,6 +582,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.theme_id && errors.theme_id.message && (
+                    <Text variant="error">
+                      {errors.theme_id.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
               {errors.exampleRequired && <Text>This field is required</Text>}
