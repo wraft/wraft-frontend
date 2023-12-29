@@ -397,10 +397,6 @@ const Form = () => {
     }
   }, [token]);
 
-  useEffect(() => {
-    console.log('lllllllllllllllll', fields);
-  }, [fields]);
-
   /**
    * When form is submitted from Forms Editor
    * @param fileds
