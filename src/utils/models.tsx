@@ -95,8 +95,8 @@ export const deleteAPI = (path: any) =>
         resolve(response.data);
       })
       .catch((err) => {
-        const res = err.response.data;
-        if (err.response.status === 400) {
+        if (err?.response?.data) {
+          const res = err.response.data;
           resolve(res);
         }
 

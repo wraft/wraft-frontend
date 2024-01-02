@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import toast from 'react-hot-toast';
-
 import { useRouter } from 'next/router';
 
 import { Search } from './Icons';
@@ -25,7 +22,6 @@ import {
 
 import { postAPI } from '../utils/models';
 import { Organisation } from '../store/profile';
-import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
 import ModalCustom from './ModalCustom';
 import WorkspaceCreate from './manage/WorkspaceCreate';
@@ -89,22 +85,16 @@ export interface INav {
 }
 
 const Nav = (props: any) => {
-  const { addToast } = useToasts();
   const [showSearch, setShowSearch] = useState<boolean>(false);
-
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const [rerender, setRerender] = useState<boolean>(false);
 
-  const { userProfile, login } = useAuth();
+  const { userProfile, accessToken, login, logout } = useAuth();
+  const router = useRouter();
 
   console.log('userProfile', userProfile);
 
   const showFull = props && props.showFull ? true : true;
-  const router = useRouter();
   const pathname: string = router.pathname as any;
 
   const checkActive = (pathname: string, m: any) => {
@@ -128,24 +118,30 @@ const Nav = (props: any) => {
   });
 
   const onSwitchOrganization = async (id: string) => {
-    try {
-      const res: any = await postAPI(`switch_organisations`, {
-        organisation_id: id,
-      });
-
-      if (res) {
+    const organRequest = postAPI('switch_organisations', {
+      organisation_id: id,
+    })
+      .then((res: any) => {
         login(res);
         router.push('/');
-      }
-
-      toast.success('Workspace Switched', {
-        duration: 4000,
-        position: 'top-center',
+      })
+      .catch(() => {
+        toast.error('failed Switch', {
+          duration: 1000,
+          position: 'top-center',
+        });
       });
-      addToast('Workspace Switched', { appearance: 'success' });
-    } catch {
-      addToast('failed Switched', { appearance: 'error' });
-    }
+
+    toast.promise(organRequest, {
+      loading: 'switching...',
+      success: <b>Switched workspace!</b>,
+      error: <b>Could not switch workspace.</b>,
+    });
+  };
+
+  const onUserlogout = () => {
+    logout();
+    router.push('/login');
   };
 
   return (
@@ -254,9 +250,9 @@ const Nav = (props: any) => {
             </MenuProvider>
           </Box>
           <MenuProvider>
-            {token && token !== '' && (
+            {accessToken && (
               <Flex ml={1}>
-                {profile && (
+                {userProfile && (
                   <Flex
                     sx={{
                       alignContent: 'top',
@@ -269,7 +265,7 @@ const Nav = (props: any) => {
                           sx={{ borderRadius: '3rem', bg: 'red' }}
                           width="24px"
                           height="24px"
-                          src={profile?.profile_pic}
+                          src={userProfile?.profile_pic}
                         />
                       </MenuButton>
                       <Menu
@@ -284,13 +280,13 @@ const Nav = (props: any) => {
                         aria-label="Preferences">
                         <MenuItem as={Box} variant="layout.menuItem">
                           <Box>
-                            <Text as="h4">{profile?.name}</Text>
+                            <Text as="h4">{userProfile?.name}</Text>
 
-                            {profile?.roles?.size > 0 && (
+                            {userProfile?.roles?.size > 0 && (
                               <Text
                                 as="p"
                                 sx={{ fontSize: 0, color: 'gray.6' }}>
-                                {profile?.roles[0]?.name}
+                                {userProfile?.roles[0]?.name}
                               </Text>
                             )}
                           </Box>
@@ -323,7 +319,7 @@ const Nav = (props: any) => {
                         <MenuItem
                           as={Box}
                           variant="layout.menuItem"
-                          onClick={() => userLogout()}>
+                          onClick={() => onUserlogout()}>
                           Signout
                         </MenuItem>
                       </Menu>
