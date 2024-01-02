@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
 import Modal from './Modal';
@@ -26,7 +26,7 @@ const FieldForm = (props: FieldFormProps) => {
     const vals = getValues();
 
     const filteredVals = vals.fields.filter(
-      (val: any) => val.name !== undefined,
+      (val: any) => val.name !== undefined || null || '',
     );
 
     const results = {
