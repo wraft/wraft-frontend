@@ -1,5 +1,5 @@
 import { action, Action, thunk, Thunk, computed, Computed } from 'easy-peasy';
-import decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import cookie from 'js-cookie';
 import axios from 'axios';
 
@@ -39,14 +39,14 @@ export const auth: Auth = {
     const res = await axios.post(APIv2.AuthLogin, payload);
     const { token } = res.data;
     cookie.set('token', token, { expires: 7 });
-    const tokenPayload: TokenPayload = decode(token);
+    const tokenPayload: TokenPayload = jwtDecode(token);
     actions.add(tokenPayload);
   }),
   renew: thunk(async (actions) => {
     const res = await axios.post(APIv2.AuthRenew, null, getAxiosConfig());
     const { token } = res.data;
     cookie.set('token', token, { expires: 7 });
-    const tokenPayload: TokenPayload = decode(token);
+    const tokenPayload: TokenPayload = jwtDecode(token);
     actions.add(tokenPayload);
   }),
 };

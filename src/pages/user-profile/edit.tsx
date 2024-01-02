@@ -17,9 +17,9 @@ const Index: FC = () => {
       <Box>
         <Container width={100} bg={''}>
           <UserNav />
-          <Container width={70} bg={''}>
-            {/* <ProfileBasicForm /> */}
-          </Container>
+          {/* <Container width={70} bg={''}> */}
+          {/* <ProfileBasicForm /> */}
+          {/* </Container> */}
         </Container>
       </Box>
 
