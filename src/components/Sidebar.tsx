@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import toast from 'react-hot-toast';
 
 import { useRouter } from 'next/router';
 
@@ -22,18 +23,14 @@ import {
   TextIcon,
 } from '../../src/components/Icons';
 
-import {
-  checkUser,
-  createEntity,
-  loadEntity,
-  switchProfile,
-} from '../utils/models';
-import { Organisation, OrganisationList } from '../store/profile';
+import { postAPI } from '../utils/models';
+import { Organisation } from '../store/profile';
 import { useToasts } from 'react-toast-notifications';
 import ModeToggle from './ModeToggle';
 import ModalCustom from './ModalCustom';
 import WorkspaceCreate from './manage/WorkspaceCreate';
 import Link from '../components/NavLink';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Sidebar Static Items
@@ -99,23 +96,12 @@ const Nav = (props: any) => {
   const token = useStoreState((state) => state.auth.token);
   const profile = useStoreState((state) => state.profile.profile);
 
-  const [workspaces, setWorkspaces] = useState<OrganisationList>();
-  const [activeSpace, setActiveSpace] = useState<Organisation>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [rerender, setRerender] = useState<boolean>(false);
+  // const [rerender, setRerender] = useState<boolean>(false);
 
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
+  const { userProfile, login } = useAuth();
 
-  const setCurrentOrgName = useStoreActions(
-    (actions: any) => actions.currentOrg.set,
-  );
-
-  // const
-  useEffect(() => {
-    setCurrentOrgName({ name: 'hai' });
-  }, [profile]);
+  console.log('userProfile', userProfile);
 
   const showFull = props && props.showFull ? true : true;
   const router = useRouter();
@@ -137,61 +123,30 @@ const Nav = (props: any) => {
     setShowSearch(false);
   };
 
-  /**
-   * Load Organizations
-   */
-
-  const loadOrgs = (token: string) => {
-    loadEntity(token, `/users/organisations`, setWorkspaces);
-  };
-
   useHotkeys('/', () => {
     toggleSearch();
   });
 
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const onSwitch = (_result: any) => {
-    switchProfile(_result);
-    setToken(_result.access_token);
-  };
+  const onSwitchOrganization = async (id: string) => {
+    try {
+      const res: any = await postAPI(`switch_organisations`, {
+        organisation_id: id,
+      });
 
-  /**
-   * Swith Organization
-   * POST /switch_organisations
-   */
+      if (res) {
+        login(res);
+        router.push('/');
+      }
 
-  const switchOrg = (id: string) => {
-    createEntity(
-      { organisation_id: id },
-      `/switch_organisations`,
-      token,
-      onSwitch,
-    );
-
-    addToast('Workspace Switched', { appearance: 'success' });
-  };
-
-  /** Load Workspaces for the current user */
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
-  };
-  useEffect(() => {
-    loadOrgs(token);
-    if (token) {
-      checkUser(token, onProfileLoad);
+      toast.success('Workspace Switched', {
+        duration: 4000,
+        position: 'top-center',
+      });
+      addToast('Workspace Switched', { appearance: 'success' });
+    } catch {
+      addToast('failed Switched', { appearance: 'error' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, rerender]);
-
-  useEffect(() => {
-    const allOrgs = workspaces?.organisations;
-    const currentOrg = allOrgs?.find(
-      (og: Organisation) => og.id == profile?.organisation_id,
-    );
-    setCurrentOrgName(currentOrg?.name);
-
-    setActiveSpace(currentOrg);
-  }, [profile, workspaces]);
+  };
 
   return (
     <>
@@ -217,10 +172,10 @@ const Nav = (props: any) => {
             <MenuProvider>
               <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
                 <Flex color="primary" sx={{ fill: 'text' }}>
-                  {activeSpace && (
+                  {userProfile?.currentOrganisation && (
                     <Flex sx={{ pt: 2 }}>
                       <Image
-                        src={activeSpace.logo}
+                        src={userProfile?.currentOrganisation?.logo}
                         width={24}
                         height={24}
                         alt="Workspace"
@@ -240,7 +195,7 @@ const Nav = (props: any) => {
                             lineHeight: 1,
                             fontSize: 1,
                           }}>
-                          {activeSpace.name}
+                          {userProfile?.currentOrganisation?.name}
                         </Text>
                         <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
                           3 members
@@ -257,28 +212,27 @@ const Nav = (props: any) => {
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   Switch Workspace
                 </MenuItem>
-                {workspaces &&
-                  workspaces.organisations.map((org: Organisation) => (
-                    <MenuItem
-                      key={org.id}
-                      variant="layout.menuItem"
-                      onClick={() => switchOrg(org?.id)}
-                      as={Box}>
-                      <Image
-                        src={org?.logo}
-                        width={24}
-                        height={24}
-                        alt="Workspace"
-                        sx={{
-                          borderRadius: '99rem',
-                          height: `18px`,
-                          width: `18px`,
-                          mr: 2,
-                        }}
-                      />
-                      {org.name}
-                    </MenuItem>
-                  ))}
+                {userProfile?.organisations?.map((org: Organisation) => (
+                  <MenuItem
+                    key={org.id}
+                    variant="layout.menuItem"
+                    onClick={() => onSwitchOrganization(org?.id)}
+                    as={Box}>
+                    <Image
+                      src={org?.logo}
+                      width={24}
+                      height={24}
+                      alt="Workspace"
+                      sx={{
+                        borderRadius: '99rem',
+                        height: `18px`,
+                        width: `18px`,
+                        mr: 2,
+                      }}
+                    />
+                    {org.name}
+                  </MenuItem>
+                ))}
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   <Button
                     variant="base"
@@ -292,7 +246,7 @@ const Nav = (props: any) => {
                     varient="center">
                     <WorkspaceCreate
                       setOpen={setIsOpen}
-                      setRerender={setRerender}
+                      // setRerender={setRerender}
                     />
                   </ModalCustom>
                 </MenuItem>

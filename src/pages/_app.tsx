@@ -7,7 +7,8 @@ import theme from '../utils/theme';
 
 import 'react-day-picker/lib/style.css';
 import { ToastProvider } from 'react-toast-notifications';
-import { UserProvider } from '../contexts/user.context';
+import { UserProvider } from '../contexts/AuthContext';
+import ToasterNewProvider from '../contexts/ToasterProvider';
 
 const StoreProviderOverride = StoreProvider as any;
 
@@ -29,20 +30,20 @@ const MyCustomToast = ({ appearance, children }: MyCustomToastProps) => (
 function MyApp({ Component, pageProps, reduxStore }: AppPropsWithRedux) {
   return (
     <StoreProviderOverride store={reduxStore}>
-      <>
-        <ThemeUIProvider theme={theme}>
-          {/* <GlobalStyle /> */}
-          <ToastProvider
-            autoDismiss
-            autoDismissTimeout={1000}
-            components={{ Toast: MyCustomToast }}
-            placement="top-center">
-            <UserProvider>
-              <Component {...pageProps} />
-            </UserProvider>
-          </ToastProvider>
-        </ThemeUIProvider>
-      </>
+      <ToasterNewProvider />
+      <ThemeUIProvider theme={theme}>
+        {/* <GlobalStyle /> */}
+        <ToastProvider
+          autoDismiss
+          autoDismissTimeout={1000}
+          components={{ Toast: MyCustomToast }}
+          placement="top-center">
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
+        </ToastProvider>
+      </ThemeUIProvider>
+      {/* </ToasterNewProvider> */}
     </StoreProviderOverride>
   );
 }

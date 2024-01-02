@@ -5,6 +5,7 @@ import { Box, Text, Flex, Grid } from 'theme-ui';
 import Link from './NavLink';
 import { deleteEntity, fetchAPI } from '../utils/models';
 import ContentLoader from './ContentLoader';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * DocType Cards
@@ -84,6 +85,8 @@ interface ContentTypeDashboardProps {
 const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
   const token = useStoreState((state) => state.auth.token);
 
+  const { accessToken } = useAuth();
+
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -108,7 +111,7 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [accessToken]);
 
   return (
     <Box>

@@ -8,7 +8,7 @@ import { useToasts } from 'react-toast-notifications';
 
 interface props {
   setOpen: any;
-  setRerender: any;
+  setRerender?: any;
 }
 interface FormInputs {
   name: string;
