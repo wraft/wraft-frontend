@@ -33,7 +33,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const setProfile = useStoreActions(
     (actions: any) => actions.profile.updateProfile,
   );
-  // console.log('dd');
 
   useEffect(() => {
     const refreshToken = cookie.get('refreshToken') || false;
@@ -94,6 +93,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
       const body = {
         ...userProfile,
+        ...user,
         organisations: res.organisations || [],
         currentOrganisation: currentOrg || {},
       };
@@ -108,6 +108,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUserProfile(null);
+    setProfile(null);
 
     cookie.remove('token');
     cookie.remove('refreshToken');
