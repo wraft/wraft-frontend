@@ -2,13 +2,14 @@ import React, { ReactNode } from 'react';
 import Modal from 'react-modal';
 
 interface props {
-  children: ReactNode;
+  children: ReactNode | any;
   isOpen: boolean;
   setOpen: any;
   varient?: 'left' | 'right' | 'center';
   borderRadius?: number;
 }
 
+Modal.setAppElement('#__next');
 const ModalCustom = ({
   children,
   isOpen,
@@ -16,16 +17,17 @@ const ModalCustom = ({
   varient,
   borderRadius,
 }: props) => {
-  React.useEffect(() => {
-    // Set the app element to document.body when the component mounts (client-side).
-    Modal.setAppElement(document.body);
-  }, []);
+  // React.useEffect(() => {
+  //   // Set the app element to document.body when the component mounts (client-side).
+  //   Modal.setAppElement(document.body);
+  // }, []);
   if (!varient || varient === 'center') {
     return (
       <Modal
         shouldCloseOnOverlayClick={true}
         onRequestClose={() => setOpen(false)}
         isOpen={isOpen}
+        ariaHideApp={false}
         style={{
           overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.50)',
@@ -46,7 +48,9 @@ const ModalCustom = ({
         {children}
       </Modal>
     );
-  } else if (varient === 'right') {
+  }
+
+  if (varient === 'right') {
     return (
       <Modal
         shouldCloseOnOverlayClick={true}
@@ -71,12 +75,15 @@ const ModalCustom = ({
         {children}
       </Modal>
     );
-  } else if (varient === 'left') {
+  }
+
+  if (varient === 'left') {
     return (
       <Modal
         shouldCloseOnOverlayClick={true}
         onRequestClose={() => setOpen(false)}
         isOpen={isOpen}
+        ariaHideApp={false}
         style={{
           overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.50)',
@@ -96,6 +103,8 @@ const ModalCustom = ({
       </Modal>
     );
   }
+
+  return null;
 };
 
 export default ModalCustom;

@@ -61,6 +61,7 @@ module.exports = {
         //       allowConciseArrowFunctionExpressionsStartingWithVoid: true,
         //     }
         //   ],
+        "@typescript-eslint/no-duplicate-enum-values": "off",
         'prettier/prettier': ['error', {}, { usePrettierrc: true }], // Includes .prettierrc.js rules
       },
     },
