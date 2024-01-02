@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { Label, Select } from 'theme-ui';
 
 import Field from './Field';
-import FieldDate from './FieldDate';
 import { loadEntity, updateEntityFile } from '../utils/models';
 import { useStoreState } from 'easy-peasy';
 
@@ -46,7 +45,7 @@ export interface Profile {
   profile_pic: null;
   name: string;
   gender: null;
-  dob: null;
+  dob: string;
 }
 
 export interface User {
@@ -160,7 +159,7 @@ const Form = () => {
   const onSubmit = (data: any) => {
     // const id: string = me && me.id;
 
-    console.log('data.profile_pic', data);
+    console.log('🔥🔥🔥data.profile_pic🔥', data);
 
     setSaving(true);
 
@@ -186,10 +185,6 @@ const Form = () => {
   // const onCropped = (_cp: any) => {
   //   setPreviewImage(_cp);
   // };
-
-  const dateChange = (_p: any) => {
-    console.log('dateChange', _p);
-  };
 
   const onOrg = (data: Profile) => {
     setProfile(data);
@@ -366,23 +361,20 @@ const Form = () => {
                     name="name"
                     label="Name"
                     variant="baseInput"
-                    defaultValue="Your Full Name"
+                    placeholder="Your Full Name"
                     register={register}
+                    error={errors.name}
                   />
-                  <FieldDate
+                  <Field
                     name="dob"
                     label="Birthday"
+                    variant="baseInput"
+                    type="date"
                     register={register}
-                    sub="Date"
-                    // defaultValue={profile?.dob}
-                    onChange={dateChange}
+                    error={errors.dob}
                   />
-                  {errors.dob && <Text>This field is required</Text>}
                   <Label>Gender</Label>
-                  <Select
-                    // name="gender"
-                    // ref={register({ required: true })}
-                    {...register('gender', { required: true })}>
+                  <Select {...register('gender', { required: true })}>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </Select>
