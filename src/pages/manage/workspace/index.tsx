@@ -65,7 +65,9 @@ const Index: FC = () => {
   const [inputValue, setInputValue] = useState<number>(0);
 
   const { userProfile, accessToken, logout } = useAuth();
-  const { organisation_id, currentOrganisation } = userProfile;
+
+  const orgId = userProfile?.organisation_id || null;
+  const currentOrg = userProfile?.currentOrganisation || null;
 
   console.log('userProfile', userProfile);
 
@@ -74,10 +76,12 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    fetchAPI(`organisations\${organisation_id}`).then((data: any) => {
-      setOrg(data);
-    });
-  }, []);
+    if (orgId) {
+      fetchAPI(`organisations/${orgId}`).then((data: any) => {
+        setOrg(data);
+      });
+    }
+  }, [orgId]);
 
   const backupLogo =
     'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
@@ -99,9 +103,9 @@ const Index: FC = () => {
       formData.append('url', data.url);
     }
 
-    if (organisation_id) {
+    if (orgId) {
       updateEntityFile(
-        `organisations/${organisation_id}`,
+        `organisations/${orgId}`,
         formData,
         accessToken as string,
         onUpdate,
@@ -183,7 +187,7 @@ const Index: FC = () => {
             bg: 'background',
           }}>
           <Flex>
-            {(currentOrganisation.name !== 'Personal' || '') && (
+            {(currentOrg?.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
             )}
             <Box>
@@ -234,7 +238,7 @@ const Index: FC = () => {
                   Update
                 </Button>
               </Box>
-              {(currentOrganisation.name !== 'Personal' || '') && (
+              {(currentOrg?.name !== 'Personal' || '') && (
                 <Box
                   sx={{
                     bg: 'bgWhite',

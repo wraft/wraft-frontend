@@ -6,6 +6,7 @@ import { DateUtils } from 'react-day-picker';
 import { format, parse } from 'date-fns';
 
 import { Calendar } from './Icons';
+import 'react-day-picker/lib/style.css';
 
 interface Props {
   register: any;
