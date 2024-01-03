@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
+import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import toast from 'react-hot-toast';
@@ -89,6 +89,8 @@ const Nav = (props: any) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const [rerender, setRerender] = useState<boolean>(false);
 
+  const [mode, setMode] = useColorMode();
+
   const { userProfile, accessToken, login, logout } = useAuth();
   const router = useRouter();
 
@@ -155,9 +157,8 @@ const Nav = (props: any) => {
         }}>
         <Flex
           sx={{
-            py: 2,
+            py: 3,
             px: 3,
-            pt: 1,
             borderBottom: 'solid 1px',
             borderColor: 'neutral.1',
             mb: 3,
@@ -169,7 +170,7 @@ const Nav = (props: any) => {
               <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
                 <Flex color="primary" sx={{ fill: 'text' }}>
                   {userProfile?.currentOrganisation && (
-                    <Flex sx={{ pt: 2 }}>
+                    <Flex>
                       <Image
                         src={userProfile?.currentOrganisation?.logo}
                         width={24}
@@ -292,7 +293,11 @@ const Nav = (props: any) => {
                           </Box>
                         </MenuItem>
                         <MenuItem as={Box} variant="layout.menuItem">
-                          <Flex>
+                          <Flex
+                            onClick={() => {
+                              const next = mode === 'dark' ? 'light' : 'dark';
+                              setMode(next);
+                            }}>
                             <Text>Theme</Text>
                             <Box
                               sx={{
