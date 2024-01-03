@@ -166,6 +166,10 @@ const Form = () => {
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [newFields, setNewFields] = useState<any>([]);
 
+  useEffect(() => {
+    console.log('🍅 source fields', fields);
+  }, [fields]);
+
   const { addToast } = useToasts();
   const router = useRouter();
 
@@ -220,7 +224,7 @@ const Form = () => {
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
 
-      const idToRemove = (fields[did] as { id: string }).id;
+      const idToRemove = (fields[did] as { id: string })?.id;
       const popedNewArr = newFields.filter(
         (item: any) => item.id !== idToRemove,
       );
@@ -418,11 +422,16 @@ const Form = () => {
     setFields(initialFields);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
-      const ff = fieldtypes.find((f: any) => f.id === el.type);
-      const fff = { field_type: ff, name: el.name };
-      const fieldType = { value: fff, name: el.name };
-
-      addFieldVal(fieldType);
+      const fieldType = fieldtypes.find((f: any) => f.id === el.type);
+      const value = { field_type: fieldType, name: el.name };
+      const fieldValue = { value: value, name: el.name };
+      if (
+        initialFields.every(
+          (initialField: any) => initialField.name !== el.name,
+        )
+      ) {
+        addFieldVal(fieldValue);
+      }
     });
   };
 
