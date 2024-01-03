@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
 import Modal from './Modal';
@@ -23,17 +23,22 @@ type FieldValues = {
 };
 
 const FieldForm = (props: FieldFormProps) => {
-  const initialValues = {
-    fields: props.content?.content_type?.fields?.map((field: any) => ({
-      name: field.name,
-      type: field.field_type.id,
-    })),
-  };
-  console.log('👨‍💻', initialValues);
-  const fieldsArr = props.fields || [];
-  const { register, handleSubmit, getValues, control, setValue } =
-    useForm<FieldValues>({ mode: 'onBlur' });
-  const { fields, append, remove } = useFieldArray({ name: 'fields', control });
+  const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    mode: 'onBlur',
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: 'fields',
+    control,
+  });
 
   useEffect(() => {
     props.content?.content_type?.fields?.forEach((field: any, index: any) => {
@@ -67,7 +72,7 @@ const FieldForm = (props: FieldFormProps) => {
   };
 
   function toggleModal() {
-    setModal(!showModal);
+    setModal((prev) => !prev);
   }
 
   function closeModal() {
@@ -92,7 +97,14 @@ const FieldForm = (props: FieldFormProps) => {
         <Text as="h4" mb={0} pt={1}>
           Fields
         </Text>
-        <Button variant="btnSmall" sx={{ ml: 'auto' }} onClick={toggleModal}>
+        <Button
+          variant="btnSmall"
+          sx={{ ml: 'auto' }}
+          onClick={() => {
+            toggleModal();
+            append({ name: '', type: '' });
+            remove(-1);
+          }}>
           {fieldsArr.length > 0 ? 'Edit' : 'Add'}
         </Button>
       </Flex>
@@ -104,14 +116,6 @@ const FieldForm = (props: FieldFormProps) => {
           pb: 3,
           alignItems: 'flex-start',
         }}>
-        {fields &&
-          fields.map((field: any) => {
-            return (
-              <Box key={field.id}>
-                <Text>{field.name as string}</Text>
-              </Box>
-            );
-          })}
         {fieldsArr &&
           fieldsArr.map((f: any) => (
             <Flex
@@ -150,7 +154,7 @@ const FieldForm = (props: FieldFormProps) => {
             </Text>
           </Box>
 
-          {fieldsArr.length < 1 && (
+          {fields.length < 1 && fieldsArr.length < 1 && (
             <Box
               sx={{
                 bg: 'neutral.1',
@@ -207,8 +211,15 @@ const FieldForm = (props: FieldFormProps) => {
                       }
                       defaultValue={(field && field.name) || ''}
                       type="text"
-                      {...register(`fields.${index}.name` as const)}
+                      {...register(`fields.${index}.name` as const, {
+                        required: true,
+                      })}
                     />
+                    {errors.fields && errors.fields?.[index]?.name && (
+                      <Text variant="error">
+                        {errors.fields?.[index]?.name?.message}
+                      </Text>
+                    )}
                   </Box>
                   <Box sx={{ flexGrow: 1, px: 3 }}>
                     <Label
@@ -226,8 +237,10 @@ const FieldForm = (props: FieldFormProps) => {
                         )
                       }
                       defaultValue={(field && field.type) || ''}
-                      {...register(`fields.${index}.type` as const)}>
-                      <option disabled selected>
+                      {...register(`fields.${index}.type` as const, {
+                        required: true,
+                      })}>
+                      <option disabled selected value={''}>
                         select an option
                       </option>
                       {props.fieldtypes &&
@@ -256,7 +269,7 @@ const FieldForm = (props: FieldFormProps) => {
               </Box>
             ))}
           </Box>
-          {fieldsArr?.length > 0 && (
+          {(fields?.length > 0 || fieldsArr.length > 0) && (
             <Box
               sx={{
                 bg: 'neutral.1',
@@ -276,7 +289,7 @@ const FieldForm = (props: FieldFormProps) => {
               </Button>
             </Box>
           )}
-          {fieldsArr?.length > 0 && (
+          {(fields?.length > 0 || fields?.length > 0) && (
             <Flex sx={{ py: 3, px: 4, mb: 0 }}>
               <Box sx={{ ml: 'auto' }}>
                 <Button
