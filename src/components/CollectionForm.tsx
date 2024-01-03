@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useToasts } from 'react-toast-notifications';
 import Router, { useRouter } from 'next/router';
-
+import toast from 'react-hot-toast';
 import { Input } from 'theme-ui';
 
 import Field from './Field';
@@ -27,7 +26,6 @@ const CollectionForm = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  const { addToast } = useToasts();
 
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
@@ -70,7 +68,10 @@ const CollectionForm = () => {
    * On Form Created
    */
   const onDone = (_d: any) => {
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
     Router.push(`/forms/edit/${_d?.id}`);
   };
 

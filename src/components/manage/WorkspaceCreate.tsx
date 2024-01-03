@@ -3,7 +3,7 @@ import { Box, Button, Text } from 'theme-ui';
 import Field from '../Field';
 import { useForm } from 'react-hook-form';
 import { postAPI } from '../../utils/models';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface props {
@@ -16,7 +16,6 @@ interface FormInputs {
 }
 
 const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
-  const { addToast } = useToasts();
   const { userProfile } = useAuth();
   const {
     register,
@@ -34,7 +33,10 @@ const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
     };
     postAPI('organisations', body).then(() => {
       setOpen(false);
-      addToast(`Created new workspace `, { appearance: 'success' });
+      toast.success('Created new workspace', {
+        duration: 1000,
+        position: 'top-right',
+      });
       setRerender((prev: any) => !prev);
     });
   };

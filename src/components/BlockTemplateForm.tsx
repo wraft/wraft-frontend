@@ -15,7 +15,7 @@ import {
   deleteAPI,
 } from '../utils/models';
 import Router, { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import ImagesList from './ImagesList';
 import { useAuth } from '../contexts/AuthContext';
@@ -83,8 +83,6 @@ const Form = () => {
 
   const [saved, setSaved] = useState<boolean>(false);
 
-  const { addToast } = useToasts();
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -143,13 +141,19 @@ const Form = () => {
     // if edit is live
     if (cId) {
       putAPI(`block_templates/${cId}`, formValues).then(() => {
-        addToast('Saved Successfully', { appearance: 'success' });
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
         setLoading(false);
         setSaved(true);
       });
     } else {
       postAPI(`block_templates`, formValues).then(() => {
-        addToast('Saved Successfully', { appearance: 'success' });
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
         setLoading(false);
         setSaved(true);
       });
@@ -226,7 +230,10 @@ const Form = () => {
     if (cId) {
       deleteAPI(`block_templates/${cId}`).then(() => {
         Router.push(`/block_templates`);
-        addToast('Deleted Block Successfully', { appearance: 'success' });
+        toast.success('Deleted Block Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
     }
   };

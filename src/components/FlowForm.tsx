@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 import Router, { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { ReactSortable } from 'react-sortablejs';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
@@ -274,8 +274,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
 
-  const { addToast } = useToasts();
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -328,7 +326,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const deleteState = (fId: any) => {
     deleteAPI(`states/${fId}`).then(() => {
-      addToast('Deleted a flow', { appearance: 'success' });
+      toast.success('Deleted a flow', {
+        duration: 1000,
+        position: 'top-right',
+      });
       loadStates(cId);
     });
   };
@@ -336,20 +337,30 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const onSubmit = async (data: any) => {
     if (edit) {
       putAPI(`flows/${cId}`, data).then(() => {
-        addToast(`flow updated`, { appearance: 'success' });
+        toast.success('flow updated', {
+          duration: 1000,
+          position: 'top-right',
+        });
         Router.push('/manage/flows');
       });
     } else {
       await postAPI('flows', data)
         .then(() => {
-          addToast(`Flow created`, { appearance: 'success' });
+          toast.success('Flow created', {
+            duration: 1000,
+            position: 'top-right',
+          });
           setOpen(false);
           setRerender((prev: boolean) => !prev);
         })
         .then((error: any) => {
-          addToast(`${error.response.data.errors.name[0]}`, {
-            appearance: 'error',
-          });
+          toast.error(
+            error?.response?.data?.errors?.name[0] || 'Flow created',
+            {
+              duration: 1000,
+              position: 'top-right',
+            },
+          );
           if (errorRef.current) {
             const errorElement = errorRef.current;
             if (errorElement) {
@@ -391,7 +402,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     };
 
     putAPI(`/flows/${cId}/align-states`, formative).then(() => {
-      addToast('Sorted flow state', { appearance: 'success' });
+      toast.success('Sorted flow state', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 

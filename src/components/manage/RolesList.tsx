@@ -52,7 +52,6 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
     setContents([...filteredContents]);
   }, [searchTerm]);
 
-  useEffect(() => setIsOpen(null), []);
   useEffect(() => {
     if (contents && contents.length > 0) {
       const row: any = [];
@@ -75,7 +74,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
 
       setTableList(row);
     }
-  }, [contents, deleteEntity]);
+  }, [contents]);
 
   return (
     <Flex sx={{ width: '100%' }}>

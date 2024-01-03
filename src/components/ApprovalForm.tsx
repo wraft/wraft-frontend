@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Field from './Field';
 import { useRouter } from 'next/router';
 import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 export interface States {
   total_pages: number;
@@ -143,8 +143,6 @@ const ApprovalForm = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
 
-  const { addToast } = useToasts();
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -180,11 +178,17 @@ const ApprovalForm = () => {
   const deleteState = (fId: any) => {
     deleteAPI(`states/${fId}`)
       .then(() => {
-        addToast('Deleted a flow', { appearance: 'success' });
+        toast.success('Deleted a flow', {
+          duration: 1000,
+          position: 'top-right',
+        });
         loadStates(cId);
       })
       .catch(() => {
-        addToast('failed Deleted a flow', { appearance: 'error' });
+        toast.error('failed Deleted a flow', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
   };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import Router from 'next/router';
 
 import Field from './Field';
@@ -13,13 +13,15 @@ const VendorForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { addToast } = useToasts();
 
   /**
    * On Theme Created
    */
   const onDone = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
     Router.push(`/vendors`);
   };
 

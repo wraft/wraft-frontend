@@ -12,7 +12,7 @@ import {
 } from 'theme-ui';
 import { fetchAPI, postAPI } from '../../utils/models';
 import Creatable from 'react-select/creatable';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 interface FormInputs {
   email: string;
@@ -28,7 +28,6 @@ interface Props {
 const InviteTeam = ({ setOpen }: Props) => {
   // setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   const { theme } = useThemeUI();
-  const { addToast } = useToasts();
   const {
     // watch,
     register,
@@ -126,7 +125,10 @@ const InviteTeam = ({ setOpen }: Props) => {
         role_ids: checkedValues,
       };
       postAPI('organisations/users/invite', data).then(() => {
-        addToast(`Invited `, { appearance: 'success' });
+        toast.success('Invited', {
+          duration: 1000,
+          position: 'top-right',
+        });
         setOpen(false);
       });
     }

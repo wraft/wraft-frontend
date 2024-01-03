@@ -6,7 +6,7 @@ import { putAPI, fetchAPI } from '../../utils/models';
 import Table from '../TanstackTable';
 import { ArrowDropdown } from '../Icons';
 import _ from 'lodash';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { Checkbox, CheckboxOptions } from '@ariakit/react';
 import {
   svgDataUriDash,
@@ -19,7 +19,6 @@ const PermissionsList = () => {
   const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
   const render = React.useRef<any>();
-  const { addToast } = useToasts();
 
   useEffect(() => {
     fetchAPI('permissions').then((data: any) => {
@@ -104,7 +103,10 @@ const PermissionsList = () => {
       permissions: permissionsList,
     };
     putAPI(`roles/${role.id}`, body).then(() => {
-      addToast(`Updated Permissions`, { appearance: 'success' });
+      toast.success('Updated Permissions', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 

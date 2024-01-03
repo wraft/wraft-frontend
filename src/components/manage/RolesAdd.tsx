@@ -5,7 +5,7 @@ import { Checkbox } from '@ariakit/react';
 
 import { useForm } from 'react-hook-form';
 import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import { loadEntity, createEntity } from '../../utils/models';
 
@@ -30,7 +30,6 @@ interface FormInputs {
 
 const RolesAdd = ({ setOpen, setRender }: Props) => {
   const token = useStoreState((state) => state.auth.token);
-  const { addToast } = useToasts();
   const { register, trigger, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
   });
@@ -113,7 +112,10 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
   function onSuccess() {
     setOpen(false);
     setRender((prev: boolean) => !prev);
-    addToast(`Role Added `, { appearance: 'success' });
+    toast.success('Role Added', {
+      duration: 1000,
+      position: 'top-right',
+    });
   }
 
   const checkedValuesFunc = (permissionsList: string[]) => {
