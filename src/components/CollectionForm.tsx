@@ -16,7 +16,7 @@ import {
 } from '../utils/models';
 
 import PageHeader from './PageHeader';
-import FieldEditor from './FieldEditor';
+import FieldEditor from './FieldEditorbak';
 import { FieldType, FieldTypeList } from './ContentTypeForm';
 import { isNumeric } from '../utils';
 
