@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
 import Image from 'next/image';
-import { useStoreState } from 'easy-peasy';
 import { Label, Input, Heading, Checkbox } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 import { Spinner } from 'theme-ui';
@@ -22,12 +21,11 @@ export interface IField {
 const UserLoginForm = () => {
   const { register, handleSubmit } = useForm();
 
-  const token = useStoreState((state) => state.auth.token);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  const { login, accessToken } = useAuth();
 
   const onSubmit = async (data: any): Promise<void> => {
     setLoading(true);
@@ -46,10 +44,10 @@ const UserLoginForm = () => {
   };
 
   useEffect(() => {
-    if (token && token.length > 10) {
+    if (accessToken) {
       Router.push('/');
     }
-  }, [token]);
+  }, [accessToken]);
 
   // const handlePasswordToggle = () => {
   //   setShowPassword(!showPassword);

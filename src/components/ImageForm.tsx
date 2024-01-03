@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-
-import { useStoreState } from 'easy-peasy';
-
-// import { Asset } from '../utils/types';
 import { Label, Input } from 'theme-ui';
+
 import { createEntityFile } from '../utils/models';
 import { Spinner } from 'theme-ui';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface IImageForm {
   onSuccess?: any;
@@ -15,12 +13,13 @@ export interface IImageForm {
 
 const Form = (props: IImageForm) => {
   const { register, handleSubmit } = useForm();
-  const token = useStoreState((state) => state.auth.token);
   const [loading, setLoading] = useState<boolean>(false);
   const onImageUploaded = (i: any) => {
     setLoading(false);
     props.onSuccess(i);
   };
+
+  const { accessToken } = useAuth();
 
   const onSubmit = (data: any) => {
     setLoading(true);
@@ -28,7 +27,13 @@ const Form = (props: IImageForm) => {
     const formData = new FormData();
     formData.append('image', data.file[0]);
     formData.append('tag', 'file');
-    createEntityFile(formData, token, 'images', onImageUploaded);
+
+    createEntityFile(
+      formData,
+      accessToken as string,
+      'images',
+      onImageUploaded,
+    );
   };
 
   return (

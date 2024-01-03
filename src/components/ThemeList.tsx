@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 import Link from './NavLink';
-import { fetchAPI, deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI, deleteAPI } from '../utils/models';
 // import { Button } from 'theme-ui';
 
 import { useToasts } from 'react-toast-notifications';
@@ -66,7 +65,6 @@ const ItemField = (props: any) => {
 };
 
 const Form: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const { addToast } = useToasts();
 
@@ -80,8 +78,9 @@ const Form: FC = () => {
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token);
-    addToast('Deleted Theme', { appearance: 'success' });
+    deleteAPI(`themes/${id}`).then(() => {
+      addToast('Deleted Theme', { appearance: 'success' });
+    });
   };
 
   useEffect(() => {

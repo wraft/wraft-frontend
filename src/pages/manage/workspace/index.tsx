@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import {
   Flex,
@@ -12,13 +12,11 @@ import {
   Checkbox,
 } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 import {
-  checkUser,
-  loadEntityDetail,
   updateEntityFile,
   deleteEntity,
   createEntity,
+  fetchAPI,
 } from '../../../utils/models';
 import Router from 'next/router';
 
@@ -31,6 +29,7 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import Field from '../../../components/Field';
 import { ConfirmDelete } from '../../../components/common';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export interface Organisation {
   id: string;
@@ -56,49 +55,37 @@ type FormInputs = {
 
 const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
-  const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
-  const [isDelete, setDelete] = React.useState(false);
-  const [isConfirmDelete, setConfirmDelete] = React.useState(false);
-  const [orgId, setOrgId] = React.useState('');
-  const [org, setOrg] = React.useState<Organisation>();
-  const [logoSrc, setLogoSrc] = React.useState(org?.logo);
-  const fileRef = React.useRef<HTMLInputElement | null>(null);
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
-  const [isChecked, setIsChecked] = React.useState(false);
-  const currentOrg = useStoreState((state) => state.currentOrg.name);
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const [inputValue, setInputValue] = React.useState<number>(0);
+  const [isDelete, setDelete] = useState(false);
+  const [isConfirmDelete, setConfirmDelete] = useState(false);
+  const [org, setOrg] = useState<Organisation>();
+  const [logoSrc, setLogoSrc] = useState(org?.logo);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
+  const [inputValue, setInputValue] = useState<number>(0);
+
+  const { userProfile, accessToken, logout } = useAuth();
+  const { organisation_id, currentOrganisation } = userProfile;
+
+  console.log('userProfile', userProfile);
 
   const onUpdate = (data: any) => {
     console.log(data);
   };
-  const onSuccess = (data: any) => {
-    setOrgId(data.organisation_id);
-  };
-  const onLoad = (data: any) => {
-    setOrg(data);
-  };
 
-  React.useEffect(() => {
-    checkUser(token, onSuccess);
-  }, [token]);
-
-  React.useEffect(() => {
-    if (orgId) {
-      loadEntityDetail(token, `organisations`, orgId, onLoad);
-    }
-  }, [orgId, token]);
+  useEffect(() => {
+    fetchAPI(`organisations\${organisation_id}`).then((data: any) => {
+      setOrg(data);
+    });
+  }, []);
 
   const backupLogo =
     'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
 
-  React.useEffect(() => {
-    if (org?.logo) {
-      setLogoSrc(org?.logo);
-    } else {
-      setLogoSrc(backupLogo);
-    }
+  useEffect(() => {
+    const logo = org?.logo || backupLogo;
+    setLogoSrc(logo);
   }, [org]);
 
   const onSubmit = (data: any) => {
@@ -113,13 +100,18 @@ const Index: FC = () => {
       formData.append('url', data.url);
     }
 
-    if (orgId) {
-      updateEntityFile(`organisations/${orgId}`, formData, token, onUpdate);
+    if (organisation_id) {
+      updateEntityFile(
+        `organisations/${organisation_id}`,
+        formData,
+        accessToken as string,
+        onUpdate,
+      );
       addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const data = inputRef.current?.value;
     setInputValue(parseInt(data ?? '0', 10));
   }, [inputRef.current?.value]);
@@ -127,7 +119,7 @@ const Index: FC = () => {
   const onConfirmDelete = async (inputValue: any) => {
     deleteEntity(
       `/organisations`,
-      token,
+      accessToken as string,
       () => {
         addToast(`Deleted workspace successfully`, { appearance: 'success' });
       },
@@ -138,7 +130,7 @@ const Index: FC = () => {
     );
 
     setConfirmDelete(false);
-    userLogout();
+    logout();
     Router.push('/login');
   };
 
@@ -182,7 +174,7 @@ const Index: FC = () => {
             bg: 'background',
           }}>
           <Flex>
-            {(currentOrg !== 'Personal' || '') && (
+            {(currentOrganisation.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
             )}
             <Box>
@@ -233,7 +225,7 @@ const Index: FC = () => {
                   Update
                 </Button>
               </Box>
-              {(currentOrg !== 'Personal' || '') && (
+              {(currentOrganisation.name !== 'Personal' || '') && (
                 <Box
                   sx={{
                     bg: 'bgWhite',
@@ -259,7 +251,7 @@ const Index: FC = () => {
                       createEntity(
                         {},
                         '/organisations/request_deletion',
-                        token,
+                        accessToken as string,
                         (data: any) => {
                           addToast(`${data.info}`, {
                             appearance: 'success',

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
 import { useRouter } from 'next/router';
-import { createEntity, deleteEntity, loadEntity } from '../utils/models';
+import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
 import { useToasts } from 'react-toast-notifications';
 
 export interface States {
@@ -144,8 +143,6 @@ const ApprovalForm = () => {
   const [edit, setEdit] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
 
-  const token = useStoreState((state) => state.auth.token);
-
   const { addToast } = useToasts();
 
   // determine edit state based on URL
@@ -153,22 +150,15 @@ const ApprovalForm = () => {
   const cId: string = router.query.id as string;
 
   /**
-   * Map states to types, and states
-   * @param data
-   */
-  const loadStatesSuccess = (data: any) => {
-    const res: States = data;
-    setContent(res.states);
-  };
-
-  /**
    * Load all states for a particular Flow
    * @param id flow id
    * @param t  token
    */
-  const loadStates = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntity(tok, `flows/${id}/states`, loadStatesSuccess);
+  const loadStates = (id: string) => {
+    fetchAPI(`flows/${id}/states`).then((data: any) => {
+      const res: States = data;
+      setContent(res.states);
+    });
   };
 
   /**
@@ -176,7 +166,11 @@ const ApprovalForm = () => {
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    createEntity(data, `flows/${cId}/states`, token, onCreateState);
+    postAPI(`flows/${cId}/states`, data).then(() => {
+      if (cId) {
+        loadStates(cId);
+      }
+    });
   };
 
   /**
@@ -184,15 +178,14 @@ const ApprovalForm = () => {
    * @param data Form Data
    */
   const deleteState = (fId: any) => {
-    deleteEntity(`states/${fId}`, token);
-    addToast('Deleted a flow', { appearance: 'error' });
-    loadStates(cId, token);
-  };
-
-  const onCreateState = () => {
-    if (cId && token) {
-      loadStates(cId, token);
-    }
+    deleteAPI(`states/${fId}`)
+      .then(() => {
+        addToast('Deleted a flow', { appearance: 'success' });
+        loadStates(cId);
+      })
+      .catch(() => {
+        addToast('failed Deleted a flow', { appearance: 'error' });
+      });
   };
 
   /**
@@ -200,7 +193,7 @@ const ApprovalForm = () => {
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
-    createEntity(data, 'flows', token);
+    postAPI('flows', data);
   };
 
   // const loadSearchSuccess = (d: any) => {
@@ -219,9 +212,9 @@ const ApprovalForm = () => {
   useEffect(() => {
     if (cId && cId.length > 0) {
       setEdit(true);
-      loadStates(cId, token);
+      loadStates(cId);
     }
-  }, [cId, token]);
+  }, [cId]);
 
   return (
     <Box py={3} mt={4}>

@@ -10,8 +10,7 @@ import {
   Text,
   useThemeUI,
 } from 'theme-ui';
-import { createEntity, loadEntity } from '../../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI, postAPI } from '../../utils/models';
 import Creatable from 'react-select/creatable';
 import { useToasts } from 'react-toast-notifications';
 
@@ -29,7 +28,6 @@ interface Props {
 const InviteTeam = ({ setOpen }: Props) => {
   // setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   const { theme } = useThemeUI();
-  const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
   const {
     // watch,
@@ -42,17 +40,14 @@ const InviteTeam = ({ setOpen }: Props) => {
 
   const [roles, setRoles] = React.useState<any>([]);
 
-  const loadRoleSuccess = (data: any) => {
-    console.log(data);
-    setRoles(data);
-  };
-
-  const loadRole = (token: string) => {
-    loadEntity(token, 'roles', loadRoleSuccess);
+  const loadRole = () => {
+    fetchAPI('roles').then((data: any) => {
+      setRoles(data);
+    });
   };
 
   React.useEffect(() => {
-    loadRole(token);
+    loadRole();
   }, []);
 
   const emailErrorRef = React.useRef<HTMLDivElement>(null);
@@ -130,14 +125,11 @@ const InviteTeam = ({ setOpen }: Props) => {
         email: email.value,
         role_ids: checkedValues,
       };
-      createEntity(data, 'organisations/users/invite', token, onSuccess);
+      postAPI('organisations/users/invite', data).then(() => {
+        addToast(`Invited `, { appearance: 'success' });
+        setOpen(false);
+      });
     }
-  }
-
-  function onSuccess() {
-    addToast(`Invited `, { appearance: 'success' });
-    setOpen(false);
-    // setIsOpen(false);
   }
 
   return (

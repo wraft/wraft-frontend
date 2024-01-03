@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Button } from 'theme-ui';
-import { deleteEntity, loadEntity } from '../../utils/models';
+import { deleteEntity, fetchAPI } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 
 import { Table } from '../Table';
@@ -33,20 +33,16 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
   const [isEdit, setIsEdit] = useState<number | null>(null);
   const [sort, setSort] = useState('');
 
-  const loadDataSuccess = (data: any) => {
-    setLoading(true);
-    setContents(data);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, `roles?sort=${sort}`, loadDataSuccess);
+  const loadData = () => {
+    fetchAPI(`roles?sort=${sort}`).then((data: any) => {
+      setLoading(true);
+      setContents(data);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token, render, sort]);
+    loadData();
+  }, [render, sort]);
 
   useEffect(() => {
     const contentCopy = [...contents];

@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 import Router, { useRouter } from 'next/router';
 
 import { Input } from 'theme-ui';
 
 import Field from './Field';
-import {
-  createEntity,
-  loadEntity,
-  loadEntityDetail,
-  updateEntity,
-} from '../utils/models';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
 
 import PageHeader from './PageHeader';
 import FieldEditor from './FieldEditor';
@@ -41,22 +35,15 @@ const CollectionForm = () => {
   const [fields, setFields] = useState([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
 
-  const token = useStoreState((state) => state.auth.token);
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  /**
-   * All Available Field Types
-   */
-  const loadFieldTypesSuccess = (data: any) => {
-    const res: FieldTypeList = data;
-    setFieldtypes(res.field_types);
-  };
-
-  const loadFieldTypes = (token: string) => {
-    loadEntity(token, 'field_types', loadFieldTypesSuccess);
+  const loadFieldTypes = () => {
+    fetchAPI('field_types').then((data: any) => {
+      const res: FieldTypeList = data;
+      setFieldtypes(res.field_types);
+    });
   };
 
   const formatFields = (fields: any) => {
@@ -79,10 +66,6 @@ const CollectionForm = () => {
     return fieldsMap;
   };
 
-  const onSuccess = (d: any) => {
-    onDone(d);
-  };
-
   /**
    * On Form Created
    */
@@ -101,23 +84,22 @@ const CollectionForm = () => {
     const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
       console.log('[isUpdate]', isUpdate);
-      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
+      putAPI(`content_types/${data.edit}`, sampleD).then((d: any) => {
+        onDone(d);
+      });
     } else {
       console.log('[isUpdate]', sampleD);
-      createEntity(sampleD, 'content_types', token, onSuccess);
+      postAPI('content_types', sampleD).then((d: any) => {
+        onDone(d);
+      });
     }
-  };
-
-  const onLoadForms = () => {
-    return false;
   };
 
   /**
    * Entity Loader
    */
-  const loadDataDetalis = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntityDetail(tok, `collection_forms?page=1`, id, onLoadForms);
+  const loadDataDetalis = (id: string) => {
+    fetchAPI(`collection_forms/${id}?page=1`);
     return false;
   };
 
@@ -128,11 +110,11 @@ const CollectionForm = () => {
   useEffect(() => {
     if (cId) {
       setIsEdit(true);
-      loadDataDetalis(cId, token);
+      loadDataDetalis(cId);
       setValue('edit', cId);
       setTheme('x');
     }
-  }, [cId, token]);
+  }, [cId]);
 
   /**
    * On Change Color
@@ -190,11 +172,8 @@ const CollectionForm = () => {
   };
 
   useEffect(() => {
-    // if token
-    if (token) {
-      loadFieldTypes(token);
-    }
-  }, [token]);
+    loadFieldTypes();
+  }, []);
 
   return (
     <Box>

@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { useRouter } from 'next/router';
-
-import { useStoreState } from 'easy-peasy';
-
-import { PlayCircle } from './Icons';
 import { useForm } from 'react-hook-form';
-
 import Modal, { Styles } from 'react-modal';
 
-import { loadEntity, deleteEntity, createEntity } from '../utils/models';
+import { PlayCircle } from './Icons';
+import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
 import { Pipeline } from './PipelineList';
 import Link from './NavLink';
 import Field from './Field';
 import PageHeader from './PageHeader';
-
-// import { Form } from '@theme-ui/form';
 
 export interface ITriggers {
   triggers: Trigger[];
@@ -136,28 +130,25 @@ const PipelineForm = (fields: any) => {
 };
 
 const PipelineView = () => {
-  const token = useStoreState((state) => state.auth.token);
-
   const [stages, addStage] = useState<Array<IStage>>([]);
   const [state, setState] = useState<string>('nostart');
-
   const [activePipeline, setActivePipeline] = useState<Pipeline>();
   const [triggers, setTriggers] = useState<ITriggers>();
-
   const [fields, setFields] = useState<any>();
 
   const { register, handleSubmit } = useForm();
-
-  // determine edit state based on URL
   const router = useRouter();
+
   const cId: string = router.query.id as string;
 
   /**
    * Load Layout Edit Details
    * @param token
    */
-  const loadPipeline = (cid: string, token: string) => {
-    loadEntity(token, `pipelines/${cid}`, loadPipelineSuccess);
+  const loadPipeline = (cid: string) => {
+    fetchAPI(`pipelines/${cid}`).then((data: any) => {
+      loadPipelineSuccess(data);
+    });
   };
 
   const loadPipelineSuccess = (data: any) => {
@@ -181,11 +172,11 @@ const PipelineView = () => {
 
   // if we have a route param, load pipeline
   useEffect(() => {
-    if (cId && token) {
-      loadPipeline(cId, token);
+    if (cId) {
+      loadPipeline(cId);
       loadTriggers(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   // if we have a route param, load pipeline
   useEffect(() => {
@@ -239,23 +230,16 @@ const PipelineView = () => {
   };
 
   /**
-   * Set Trigger log list
-   * @param data
-   */
-  const loadTriggerSuccess = (data: any) => {
-    const res: ITriggers = data;
-    setTriggers(res);
-  };
-
-  /**
    * Load trigger history
    * @param id pipline_id
    */
   const loadTriggers = (id: string) => {
     console.log('loading triggers for ', id);
     // setState('running');
-
-    loadEntity(token, `/pipelines/${id}/triggers`, loadTriggerSuccess);
+    fetchAPI(`/pipelines/${id}/triggers`).then((data: any) => {
+      const res: ITriggers = data;
+      setTriggers(res);
+    });
   };
 
   const closeRunning = () => {
@@ -292,7 +276,7 @@ const PipelineView = () => {
       },
     };
 
-    createEntity(dataPost, path, token);
+    postAPI(path, dataPost);
     // create(token, `pipelines/${cid}`, loadPipelineSuccess);
   };
 
@@ -309,7 +293,7 @@ const PipelineView = () => {
       data,
     };
     const path = `/pipelines/${cId}/triggers`;
-    createEntity(dataPost, path, token);
+    postAPI(path, dataPost);
     // updateEntity('organisations', data, token, onCreate);
   };
 
@@ -317,7 +301,7 @@ const PipelineView = () => {
    * Delete this pipeline
    */
   const deletePipeline = (id: any) => {
-    deleteEntity(`pipelines/${id}`, token);
+    deleteAPI(`pipelines/${id}`);
   };
 
   return (

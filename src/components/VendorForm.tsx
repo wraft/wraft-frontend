@@ -1,12 +1,11 @@
 import React from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 import Router from 'next/router';
 
 import Field from './Field';
-import { createEntity } from '../utils/models';
+import { postAPI } from '../utils/models';
 
 const VendorForm = () => {
   const {
@@ -15,8 +14,6 @@ const VendorForm = () => {
     formState: { errors },
   } = useForm();
   const { addToast } = useToasts();
-
-  const token = useStoreState((state) => state.auth.token);
 
   /**
    * On Theme Created
@@ -38,7 +35,9 @@ const VendorForm = () => {
       contact_person: data.contact_person,
       address: data.address,
     };
-    createEntity(submitter, 'vendors', token, onDone);
+    postAPI('vendors', submitter).then(() => {
+      onDone();
+    });
   };
 
   return (
