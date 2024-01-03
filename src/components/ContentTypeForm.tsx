@@ -419,17 +419,20 @@ const Form = () => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    setFields(initialFields);
+    initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
       const fieldType = fieldtypes.find((f: any) => f.id === el.type);
       const value = { field_type: fieldType, name: el.name };
       const fieldValue = { value: value, name: el.name };
       if (
+        initialFields &&
         initialFields.every(
           (initialField: any) => initialField.name !== el.name,
         )
       ) {
+        addFieldVal(fieldValue);
+      } else if (!initialFields) {
         addFieldVal(fieldValue);
       }
     });
