@@ -47,12 +47,10 @@ const FieldForm = (props: FieldFormProps) => {
     });
   }, [props.content, setValue]);
 
-  console.log('🍉', fields);
   const [showModal, setModal] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const onSubmit = (data: FieldValues) => {
-    console.log(data);
     setSubmitting(true);
     const vals = getValues();
 

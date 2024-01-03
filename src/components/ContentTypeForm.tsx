@@ -166,10 +166,6 @@ const Form = () => {
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [newFields, setNewFields] = useState<any>([]);
 
-  useEffect(() => {
-    console.log('🍅 source fields', fields);
-  }, [fields]);
-
   const { addToast } = useToasts();
   const router = useRouter();
 
