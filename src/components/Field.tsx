@@ -5,7 +5,7 @@ import { Label, Input } from 'theme-ui';
 interface Props {
   onChange?: any;
   bg?: string;
-  type?: 'text' | 'email' | 'number' | 'password' | 'search';
+  type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'date';
   error?: any;
   register: any;
   label?: string;
