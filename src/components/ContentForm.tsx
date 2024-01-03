@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
-import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
@@ -199,7 +199,6 @@ const Form = (props: IContentForm) => {
 
   // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { addToast } = useToasts();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
@@ -286,7 +285,10 @@ const Form = (props: IContentForm) => {
     }
 
     if (data?.content?.id) {
-      addToast('Saved Successfully', { appearance: 'success' });
+      toast.success('Saved Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
       Router.push(`/content/${data.content.id}`);
     }
   };
@@ -331,7 +333,10 @@ const Form = (props: IContentForm) => {
           }
 
           if (data?.content?.id) {
-            addToast('Saved Successfully', { appearance: 'success' });
+            toast.success('Saved Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
             Router.push(`/content/${data.content.id}`);
           }
         },

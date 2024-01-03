@@ -5,7 +5,7 @@ import { EmptyForm } from './Icons';
 import { fetchAPI, deleteAPI } from '../utils/models';
 import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 export interface Theme {
   total_pages: number;
@@ -69,7 +69,6 @@ const ItemField = (props: any) => {
 
 const FormList: FC = () => {
   const [contents, setContents] = useState<Array<FormElement>>([]);
-  const { addToast } = useToasts();
 
   const loadData = () => {
     fetchAPI('collection_forms')
@@ -82,7 +81,10 @@ const FormList: FC = () => {
 
   const onDelete = (id: string) => {
     deleteAPI(`themes/${id}`).then(() => {
-      addToast('Deleted Theme', { appearance: 'success' });
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 

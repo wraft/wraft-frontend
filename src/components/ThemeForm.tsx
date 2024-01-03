@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import Router, { useRouter } from 'next/router';
 
 import { Label, Input, Checkbox } from 'theme-ui';
@@ -26,7 +26,6 @@ const ThemeForm = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  const { addToast } = useToasts();
 
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
@@ -46,7 +45,10 @@ const ThemeForm = () => {
    */
   const deleteAsset = (id: string) => {
     deleteAPI(`/assets/${id}`).then(() => {
-      addToast(`Deleting Asset`, { appearance: 'success' });
+      toast.success('Deleting Asset', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 
@@ -58,8 +60,9 @@ const ThemeForm = () => {
    * On Theme Created
    */
   const onDone = () => {
-    addToast(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
-      appearance: 'success',
+    toast.success(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
+      duration: 1000,
+      position: 'top-right',
     });
     Router.push(`/manage/themes`);
   };

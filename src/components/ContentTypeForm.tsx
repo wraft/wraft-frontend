@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import Router from 'next/router';
 import { Label, Select } from 'theme-ui';
 import { useForm } from 'react-hook-form';
@@ -138,7 +138,6 @@ const Form = () => {
   } = useForm({
     resolver: zodResolver(schema),
   });
-  const { addToast } = useToasts();
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -210,17 +209,26 @@ const Form = () => {
       deleteAPI(`content_type/${contentypeId}/field/${deletableId}`)
         .then(() => {
           if (cId) loadDataDetails(cId);
-          addToast('Deleted Field' + deletableId, { appearance: 'success' });
+          toast.success('Deleted Field' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
         })
         .catch(() => {
-          addToast('Deleted Field Failed', { appearance: 'error' });
+          toast.error('Deleted Field Faile' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
         });
     }
   };
 
   const deleteMe = (deletableId: string) => {
     deleteAPI(`content_types/${deletableId}`).then(() => {
-      addToast('Deleted Successfully', { appearance: 'success' });
+      toast.success('Deleted Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
       Router.push(`/content-types`);
     });
   };
@@ -331,20 +339,32 @@ const Form = () => {
     if (isUpdate) {
       putAPI(`content_types/${data.edit}`, sampleD)
         .then(() => {
-          addToast('Saved Successfully', { appearance: 'success' });
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
           Router.push(`/content-types`);
         })
         .catch(() => {
-          addToast('Save Failed', { appearance: 'error' });
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
         });
     } else {
       postAPI('content_types', sampleD)
         .then(() => {
-          addToast('Saved Successfully', { appearance: 'success' });
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
           Router.push(`/content-types`);
         })
         .catch(() => {
-          addToast('Save Failed', { appearance: 'error' });
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
         });
     }
   };

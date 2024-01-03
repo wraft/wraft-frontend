@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import { fetchAPI, deleteAPI } from '../utils/models';
 import LayoutCard from './Card';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 export interface ILayout {
   width: number;
@@ -32,7 +32,6 @@ const LayoutList: FC = () => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
   const [contents, setContents] = useState<Array<IField>>([]);
-  const { addToast } = useToasts();
 
   /**
    * Delete a Layout
@@ -40,7 +39,10 @@ const LayoutList: FC = () => {
    */
   const onDelete = (_id: string) => {
     deleteAPI(`layouts/${_id}`).then(() => {
-      addToast('Deleted Theme', { appearance: 'success' });
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
       loadLayout();
     });
   };

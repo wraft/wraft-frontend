@@ -6,7 +6,7 @@ import Paginate, { IPageMeta } from './Paginate';
 
 import { Table } from './Table';
 import { OptionsIcon } from './Icons';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import { TimeAgo } from './Atoms';
 
 export interface ILayout {
@@ -68,7 +68,6 @@ interface Props {
 }
 
 const Form: FC<Props> = ({ rerender, setRerender }) => {
-  const { addToast } = useToasts();
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -175,8 +174,9 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                                       );
                                       setTimeout(() => {
                                         setRerender((prev: boolean) => !prev);
-                                        addToast('Deleted a flow', {
-                                          appearance: 'error',
+                                        toast.success('Deleted a flow', {
+                                          duration: 1000,
+                                          position: 'top-right',
                                         });
                                       }, 1000);
                                     }}

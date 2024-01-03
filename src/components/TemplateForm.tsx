@@ -15,8 +15,7 @@ import {
 import { Select } from 'theme-ui';
 
 import Router, { useRouter } from 'next/router';
-
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import { BracesVariable } from './Icons';
 import MarkdownEditor from './WraftEditor';
@@ -48,8 +47,6 @@ const Form = () => {
   // const [keys, setKeys] = useState<Array<string>>();
 
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-
-  const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -83,14 +80,20 @@ const Form = () => {
     if (cId) {
       putAPI(`data_templates/${cId}`, formValues).then(() => {
         onCreated();
-        addToast('Updated Successfully', { appearance: 'success' });
+        toast.success('Updated Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
         setLoading(false);
       });
     } else {
       postAPI(`content_types/${data.parent}/data_templates`, formValues).then(
         () => {
           onCreated();
-          addToast('Created Successfully', { appearance: 'success' });
+          toast.success('Created Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
         },
       );
 

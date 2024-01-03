@@ -4,7 +4,7 @@ import Link from './NavLink';
 import { fetchAPI, deleteAPI } from '../utils/models';
 // import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 export interface Theme {
   total_pages: number;
@@ -66,7 +66,6 @@ const ItemField = (props: any) => {
 
 const Form: FC = () => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
-  const { addToast } = useToasts();
 
   const loadData = () => {
     fetchAPI('themes?sort=inserted_at_desc')
@@ -79,7 +78,10 @@ const Form: FC = () => {
 
   const onDelete = (id: string) => {
     deleteAPI(`themes/${id}`).then(() => {
-      addToast('Deleted Theme', { appearance: 'success' });
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 

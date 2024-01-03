@@ -10,7 +10,7 @@ import { useStoreState } from 'easy-peasy';
 
 import Modal, { Styles } from 'react-modal';
 // import NavLink from './NavLink';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 import ImageCropper from './ImageCropper';
 
 export const defaultStyle: Styles = {
@@ -90,8 +90,6 @@ const Form = () => {
   const [saving, setSaving] = useState<boolean>(false);
   const [profileImageModal, setProfileImageModal] = useState<boolean>(false);
 
-  const { addToast } = useToasts();
-
   const [showModal, setModal] = useState<boolean>(false);
   function closeModal() {
     setModal(false);
@@ -145,7 +143,10 @@ const Form = () => {
     console.log('Updated', d);
     console.log('me', me);
 
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
   };
 
   // const toggleDate = () => {
@@ -209,7 +210,10 @@ const Form = () => {
    */
   const onUpdated = (respo: any) => {
     console.log('response', respo);
-    addToast('Image Updated', { appearance: 'success' });
+    toast.success('Image Updated', {
+      duration: 1000,
+      position: 'top-right',
+    });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

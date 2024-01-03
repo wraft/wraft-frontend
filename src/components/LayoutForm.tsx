@@ -14,7 +14,7 @@ import {
 
 import { Controller, useForm } from 'react-hook-form';
 import Router, { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
@@ -103,7 +103,6 @@ const Form = ({ setOpen }: Props) => {
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = (router.query.id as string) || '';
-  const { addToast } = useToasts();
 
   const onImageUploaded = (data: any) => {
     console.log('data', data);
@@ -151,7 +150,11 @@ const Form = ({ setOpen }: Props) => {
         accessToken as string,
         onUpdate,
       );
-      addToast(`Updated Layout ${data.name}`, { appearance: 'success' });
+
+      toast.success(`Updated Layout ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     } else {
       createEntityFile(
         formData,
@@ -160,7 +163,10 @@ const Form = ({ setOpen }: Props) => {
         onImageUploaded,
       );
 
-      addToast(`Created Layout ${data.name}`, { appearance: 'success' });
+      toast.success(`Created Layout ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -239,7 +245,10 @@ const Form = ({ setOpen }: Props) => {
       deleteAPI(`/layouts/${lid}/assets/${id}`);
     }
 
-    addToast(`Deleted Asset`, { appearance: 'error' });
+    toast.success('Deleted Asset', {
+      duration: 1000,
+      position: 'top-right',
+    });
   };
   const [formStep, setFormStep] = useState(0);
   function next() {

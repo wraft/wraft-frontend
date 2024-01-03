@@ -20,7 +20,7 @@ import {
 } from '../../../utils/models';
 import Router from 'next/router';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -55,7 +55,6 @@ type FormInputs = {
 
 const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
-  const { addToast } = useToasts();
   const [isDelete, setDelete] = useState(false);
   const [isConfirmDelete, setConfirmDelete] = useState(false);
   const [org, setOrg] = useState<Organisation>();
@@ -107,7 +106,11 @@ const Index: FC = () => {
         accessToken as string,
         onUpdate,
       );
-      addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
+
+      toast.success(`Updated Workspace ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -121,10 +124,16 @@ const Index: FC = () => {
       `/organisations`,
       accessToken as string,
       () => {
-        addToast(`Deleted workspace successfully`, { appearance: 'success' });
+        toast.success(`Deleted workspace successfully`, {
+          duration: 1000,
+          position: 'top-right',
+        });
       },
       (error: any) => {
-        addToast(`${error.message}`, { appearance: 'error' });
+        toast.success(error?.message || 'failed', {
+          duration: 1000,
+          position: 'top-right',
+        });
       },
       { code: `${inputValue}` },
     );
@@ -253,13 +262,15 @@ const Index: FC = () => {
                         '/organisations/request_deletion',
                         accessToken as string,
                         (data: any) => {
-                          addToast(`${data.info}`, {
-                            appearance: 'success',
+                          toast.success(data.info, {
+                            duration: 1000,
+                            position: 'top-right',
                           });
                         },
                         (error: any) => {
-                          addToast(`${error}`, {
-                            appearance: 'error',
+                          toast.success(error, {
+                            duration: 1000,
+                            position: 'top-right',
                           });
                         },
                       );

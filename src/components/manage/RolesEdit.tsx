@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 import { Checkbox } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import { putAPI, fetchAPI } from '../../utils/models';
 import Field from '../Field';
@@ -27,7 +27,6 @@ interface FormInputs {
 }
 
 const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
-  const { addToast } = useToasts();
   const {
     register,
     trigger,
@@ -154,7 +153,10 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     putAPI(`roles/${role.id}`, body).then(() => {
       setOpen(null);
       setRender((prev: boolean) => !prev);
-      addToast(`Role Edited `, { appearance: 'success' });
+      toast.success('Role Edited', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   }
 
