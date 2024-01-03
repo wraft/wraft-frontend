@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, Button, Text } from 'theme-ui';
 import Field from '../Field';
 import { useForm } from 'react-hook-form';
-import { createEntity } from '../../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { postAPI } from '../../utils/models';
 import { useToasts } from 'react-toast-notifications';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface props {
   setOpen: any;
@@ -16,8 +16,8 @@ interface FormInputs {
 }
 
 const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
-  const token = useStoreState((state) => state.auth.token);
   const { addToast } = useToasts();
+  const { userProfile } = useAuth();
   const {
     register,
     handleSubmit,
@@ -25,22 +25,19 @@ const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
   } = useForm<FormInputs>({
     mode: 'onChange',
   });
-  const profile = useStoreState((state) => state.profile.profile);
 
-  function onSuccess() {
-    setOpen(false);
-    addToast(`Created new workspace `, { appearance: 'success' });
-    setRerender((prev: any) => !prev);
-  }
-
-  function onSubmit(data: any) {
+  const onSubmit = (data: any) => {
     const body = {
       name: data.name,
       url: data.url,
-      email: profile.email,
+      email: userProfile.email,
     };
-    createEntity(body, 'organisations', token, onSuccess);
-  }
+    postAPI('organisations', body).then(() => {
+      setOpen(false);
+      addToast(`Created new workspace `, { appearance: 'success' });
+      setRerender((prev: any) => !prev);
+    });
+  };
 
   return (
     <Box

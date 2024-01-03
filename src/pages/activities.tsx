@@ -2,13 +2,13 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Text, Box, Flex, Container } from 'theme-ui';
 import Page from '../components/PageFrame';
-import { useStoreState } from 'easy-peasy';
 import UserNav from '../components/UserNav';
 import UserHome from '../components/UserHome';
 import ActivityFeed from '../components/ActivityFeed';
+import { useAuth } from '../contexts/AuthContext';
 
 const Index: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
+  const { accessToken } = useAuth();
   return (
     <>
       <Head>
@@ -18,13 +18,13 @@ const Index: FC = () => {
           content="Wraft is a document automation and pipelining tools for businesses"
         />
       </Head>
-      {!token && (
+      {!accessToken && (
         <Box>
           <UserNav />
           <UserHome />
         </Box>
       )}
-      {token && (
+      {accessToken && (
         <Page>
           <Container variant="layout.pageFrame">
             <Flex sx={{ width: '100%' }}>

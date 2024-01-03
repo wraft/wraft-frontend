@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-import { deleteEntity, fetchAPI } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI, deleteAPI } from '../utils/models';
 import LayoutCard from './Card';
 import { useToasts } from 'react-toast-notifications';
 
@@ -32,8 +31,6 @@ export interface IFieldItem {
 const LayoutList: FC = () => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
-  const token = useStoreState((state) => state.auth.token);
-
   const [contents, setContents] = useState<Array<IField>>([]);
   const { addToast } = useToasts();
 
@@ -42,9 +39,10 @@ const LayoutList: FC = () => {
    * @param _id  layout_id
    */
   const onDelete = (_id: string) => {
-    deleteEntity(`layouts/${_id}`, token);
-    addToast('Deleted Theme', { appearance: 'error' });
-    loadLayout();
+    deleteAPI(`layouts/${_id}`).then(() => {
+      addToast('Deleted Theme', { appearance: 'success' });
+      loadLayout();
+    });
   };
 
   /**

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
 
 import Link from './NavLink';
-import { loadEntity } from '../utils/models';
-
+import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
 
 export interface Pipelines {
@@ -45,24 +43,18 @@ const ItemField = (props: any) => {
 };
 
 const Form = () => {
-  const token = useStoreState((state) => state.auth.token);
-
   const [contents, setContents] = useState<Array<Pipeline>>([]);
 
-  const loadDataSuccess = (data: any) => {
-    const res: Pipeline[] = data.pipelines;
-    setContents(res);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, 'pipelines', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('pipelines').then((data: any) => {
+      const res: Pipeline[] = data.pipelines;
+      setContents(res);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
-  }, [token]);
+    loadData();
+  }, []);
 
   return (
     <Box>

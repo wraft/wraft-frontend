@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import { useStoreState } from 'easy-peasy';
 import { Box, Text, Flex } from 'theme-ui';
 
 import Link from './NavLink';

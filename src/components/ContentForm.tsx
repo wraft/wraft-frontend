@@ -4,6 +4,12 @@ import Router, { useRouter } from 'next/router';
 import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
 import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
+import { Field as FieldT, FieldInstance } from '../utils/types';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+// import { isString } from 'util';
+import { Input } from 'theme-ui';
+// import { Spinner } from 'theme-ui';
+// import RichEditorWraft from './EditWraft';
 
 import Field from './Field';
 import FieldText from './FieldText';
@@ -88,14 +94,6 @@ export interface IFieldTypeValue {
   type: string;
 }
 
-import { Field as FieldT, FieldInstance } from '../utils/types';
-import { createEntity, loadEntity, updateEntity } from '../utils/models';
-// import { isString } from 'util';
-import { Input } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-// import { Spinner } from 'theme-ui';
-// import RichEditorWraft from './EditWraft';
-
 export interface IContentForm {
   id: any;
   edit?: boolean;
@@ -166,7 +164,6 @@ const Form = (props: IContentForm) => {
     formState: { errors },
     setValue,
   } = useForm();
-  const token = useStoreState((state) => state.auth.token);
 
   // Content Specific
   // -------
@@ -323,13 +320,21 @@ const Form = (props: IContentForm) => {
     };
 
     if (edit) {
-      updateEntity(`contents/${id}`, template, token, onCreate);
+      putAPI(`contents/${id}`, template).then((data: any) => {
+        onCreate(data);
+      });
     } else {
-      createEntity(
-        template,
-        `content_types/${data.ttype}/contents`,
-        token,
-        onCreate,
+      postAPI(`content_types/${data.ttype}/contents`, template).then(
+        (data: any) => {
+          if (data?.info) {
+            console.log('Failed Build', data.info);
+          }
+
+          if (data?.content?.id) {
+            addToast('Saved Successfully', { appearance: 'success' });
+            Router.push(`/content/${data.content.id}`);
+          }
+        },
       );
     }
   };
@@ -342,9 +347,13 @@ const Form = (props: IContentForm) => {
     // console.log('🎃 refresh {', id, '}')
 
     if (edit) {
-      loadEntity(token, `contents/${id}`, onLoadContent);
+      fetchAPI(`contents/${id}`).then((data: any) => {
+        onLoadContent(data);
+      });
     } else {
-      loadEntity(token, `content_types/${id}`, onLoadData);
+      fetchAPI(`content_types/${id}`).then((data: any) => {
+        onLoadData(data);
+      });
       loadTemplates(id);
     }
   };
@@ -390,7 +399,9 @@ const Form = (props: IContentForm) => {
       const content_title = serialbody?.title || undefined;
 
       // fields and templates
-      loadEntity(token, `content_types/${ctypeId}`, onLoadData);
+      fetchAPI(`content_types/${ctypeId}`).then((data: any) => {
+        onLoadData(data);
+      });
       loadTemplates(ctypeId);
 
       console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
@@ -460,13 +471,10 @@ const Form = (props: IContentForm) => {
    */
   const loadTemplates = (id: string) => {
     setActiveTemplate(id);
-    token &&
-      loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
-  };
-
-  const onLoadTemplate = (data: any) => {
-    const res: Template[] = data.data_templates;
-    setTemplates(res);
+    fetchAPI(`content_types/${id}/data_templates`).then((data: any) => {
+      const res: Template[] = data.data_templates;
+      setTemplates(res);
+    });
   };
 
   // const setDefaultState = (content: IField) => {
@@ -507,11 +515,8 @@ const Form = (props: IContentForm) => {
   // );
 
   useEffect(() => {
-    if (token && token.length > 0) {
-      console.log('🧶 [content] `token` check refresh', token);
-      loadData(id);
-    }
-  }, [token]);
+    loadData(id);
+  }, []);
 
   useEffect(() => {
     // getSummary();

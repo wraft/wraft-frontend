@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
 import { useToasts } from 'react-toast-notifications';
 import Router, { useRouter } from 'next/router';
 
@@ -9,12 +8,7 @@ import { Label, Input, Checkbox } from 'theme-ui';
 
 import { Asset } from '../utils/types';
 import Field from './Field';
-import {
-  createEntity,
-  deleteEntity,
-  loadEntityDetail,
-  updateEntity,
-} from '../utils/models';
+import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import FieldColor from './FieldColor';
 import AssetForm from './AssetForm';
 
@@ -38,8 +32,6 @@ const ThemeForm = () => {
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
 
-  const token = useStoreState((state) => state.auth.token);
-
   /**
    * Upload Assets
    * @param data
@@ -53,8 +45,9 @@ const ThemeForm = () => {
    * @param id
    */
   const deleteAsset = (id: string) => {
-    deleteEntity(`/assets/${id}`, token);
-    addToast(`Deleting Asset`, { appearance: 'error' });
+    deleteAPI(`/assets/${id}`).then(() => {
+      addToast(`Deleting Asset`, { appearance: 'success' });
+    });
   };
 
   // determine edit state based on URL
@@ -121,9 +114,13 @@ const ThemeForm = () => {
     };
 
     if (data?.edit) {
-      updateEntity(`themes/${data?.edit}`, themeData, token, onDone);
+      putAPI(`themes/${data?.edit}`, themeData).then(() => {
+        onDone();
+      });
     } else {
-      createEntity(themeData, `themes`, token, onDone);
+      postAPI(`themes`, themeData).then(() => {
+        onDone();
+      });
     }
   };
 
@@ -144,9 +141,10 @@ const ThemeForm = () => {
    * Entity Loader
    */
 
-  const loadDataDetalis = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntityDetail(tok, `themes`, id, setContentDetails);
+  const loadDataDetalis = (id: string) => {
+    fetchAPI(`themes/${id}`).then((data: any) => {
+      setContentDetails(data);
+    });
     return false;
   };
 
@@ -157,10 +155,10 @@ const ThemeForm = () => {
   useEffect(() => {
     if (cId) {
       setIsEdit(true);
-      loadDataDetalis(cId, token);
+      loadDataDetalis(cId);
       setValue('edit', cId);
     }
-  }, [cId, token]);
+  }, [cId]);
 
   /**
    * On Change Color

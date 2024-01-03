@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
 import { useForm, Controller } from 'react-hook-form';
 
 import Field from './Field';
-import { createEntity, loadEntity } from '../utils/models';
+import { postAPI, fetchAPI } from '../utils/models';
 interface ApprovalFormBaseProps {
   states?: Array<any>;
   isOpen?: boolean;
@@ -35,22 +34,18 @@ const ApprovalFormBase = ({
   parent,
 }: ApprovalFormBaseProps) => {
   const { register, control, handleSubmit, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
   const [users, setUsers] = useState<any>();
   const [user, setUser] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
+
+  // const { accessToken } = useAuth();
 
   /**
    * Submit Form
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
-    createEntity(data, 'approval_systems', token);
-  };
-
-  const loadSearchSuccess = (d: any) => {
-    const usr = d.users;
-    setUsers(usr);
+    postAPI('approval_systems', data);
   };
 
   const onUserSelect = (e: User) => {
@@ -68,11 +63,10 @@ const ApprovalFormBase = ({
   const onChangeInput = (e: any) => {
     console.log('search', e.currentTarget.value);
     setShowSearch(true);
-    loadEntity(
-      token,
-      `users/search?key=${e.currentTarget.value}`,
-      loadSearchSuccess,
-    );
+    fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
+      const usr = data.users;
+      setUsers(usr);
+    });
   };
 
   return (

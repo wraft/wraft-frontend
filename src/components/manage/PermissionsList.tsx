@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import { loadEntity, updateEntity } from '../../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { putAPI, fetchAPI } from '../../utils/models';
 import Table from '../TanstackTable';
 import { ArrowDropdown } from '../Icons';
 import _ from 'lodash';
@@ -16,26 +15,21 @@ import {
 } from '../common/UriSvgs';
 
 const PermissionsList = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [permissionsInitial, setPermissionsInitial] = useState<any>({});
   const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
   const render = React.useRef<any>();
   const { addToast } = useToasts();
 
-  const onSuccess = (data: any) => {
-    setPermissionsInitial(data);
-  };
-  const onSuccessRoles = (data: any) => {
-    setRoles(data);
-  };
-
   useEffect(() => {
-    if (token) {
-      loadEntity(token, 'permissions', onSuccess);
-      loadEntity(token, 'roles', onSuccessRoles);
-    }
-  }, [token]);
+    fetchAPI('permissions').then((data: any) => {
+      setPermissionsInitial(data);
+    });
+
+    fetchAPI('roles').then((data: any) => {
+      setRoles(data);
+    });
+  }, []);
 
   useEffect(() => {
     //normalize
@@ -87,13 +81,9 @@ const PermissionsList = () => {
     });
 
     setPermissions(updatedData);
-  }, [permissionsInitial, token, roles]);
+  }, [permissionsInitial, roles]);
 
   const data = useMemo(() => permissions, [permissions]);
-
-  function onSuccessUpdate() {
-    addToast(`Updated Permissions`, { appearance: 'success' });
-  }
 
   const checkedValuesFunc = (permissionsList: string[], role: any) => {
     permissions.forEach((item: any) => {
@@ -113,7 +103,9 @@ const PermissionsList = () => {
       name: role.name,
       permissions: permissionsList,
     };
-    updateEntity(`roles/${role.id}`, body, token, onSuccessUpdate);
+    putAPI(`roles/${role.id}`, body).then(() => {
+      addToast(`Updated Permissions`, { appearance: 'success' });
+    });
   };
 
   const onChangeParent = (e: any, role: any, index: any) => {

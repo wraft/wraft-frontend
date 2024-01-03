@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { loadEntity, deleteEntity } from '../../utils/models';
+import { fetchAPI, deleteAPI } from '../../utils/models';
 import { useStoreState } from 'easy-peasy';
 import { Table } from '../Table';
 import { Flex, Box, Text, Button } from 'theme-ui';
@@ -66,13 +66,10 @@ const TeamList = () => {
   const organisationId = profile?.organisation_id;
   console.log(organisationId);
 
-  const loadDataSuccess = (data: any) => {
-    setContents(data);
-  };
-
-  const loadData = (token: string, id: string) => {
-    const path = `organisations/${id}/members?sort=${sort}`;
-    loadEntity(token, path, loadDataSuccess);
+  const loadData = (id: string) => {
+    fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
+      setContents(data);
+    });
   };
   useEffect(() => {
     if (updatedRoleList.length > 0) {
@@ -81,10 +78,10 @@ const TeamList = () => {
   }, [updatedRoleList]);
 
   useEffect(() => {
-    if (token && organisationId) {
-      loadData(token, organisationId);
+    if (organisationId) {
+      loadData(organisationId);
     }
-  }, [token, organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
+  }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
 
   useEffect(() => {
     if (contents) {
@@ -106,6 +103,11 @@ const TeamList = () => {
       setTableList(memberData);
     }
   }, [contents]);
+
+  const onConfirmDelete = () => {
+    deleteAPI(`users/${userId}/roles/${isRemoveRole}`);
+    setIsRemoveRole(null);
+  };
 
   return (
     <Flex>
@@ -237,13 +239,7 @@ const TeamList = () => {
                               title="Delete role"
                               text={`Are you sure you want to delete ${role.roleName} ?`}
                               setOpen={setIsRemoveRole}
-                              onConfirmDelete={() => {
-                                deleteEntity(
-                                  `users/${userId}/roles/${isRemoveRole}`,
-                                  token,
-                                );
-                                setIsRemoveRole(null);
-                              }}
+                              onConfirmDelete={onConfirmDelete}
                             />
                           </ModalCustom>
                         </>

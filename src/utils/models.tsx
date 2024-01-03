@@ -85,6 +85,45 @@ export const postAPI = (path: string, body: any) =>
   });
 
 /**
+ * Load postAPI
+ */
+export const putAPI = (path: string, body: any = {}) =>
+  new Promise((resolve, reject) => {
+    api
+      .put(`/${path}`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+export const postEntityFile = (path: string, formData: any, token: string) =>
+  new Promise((resolve, reject) => {
+    api
+      .post(path, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token: token,
+        },
+      })
+      .then(async (resp) => {
+        if (resp.status === 204) {
+          resolve(resp);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
  * delete API
  */
 export const deleteAPI = (path: any) =>
