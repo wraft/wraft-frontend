@@ -1,5 +1,8 @@
 import React from 'react';
+
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import Creatable from 'react-select/creatable';
 import {
   Box,
   Button,
@@ -10,9 +13,8 @@ import {
   Text,
   useThemeUI,
 } from 'theme-ui';
+
 import { fetchAPI, postAPI } from '../../utils/models';
-import Creatable from 'react-select/creatable';
-import toast from 'react-hot-toast';
 
 interface FormInputs {
   email: string;

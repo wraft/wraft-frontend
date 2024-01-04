@@ -1,9 +1,10 @@
 import React from 'react';
+
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
-import Link from './NavLink';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { DotsVerticalRounded } from './Icons';
+import Link from './NavLink';
 
 /**
  * Page Heading Section

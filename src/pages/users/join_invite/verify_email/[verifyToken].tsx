@@ -1,9 +1,11 @@
-import Image from 'next/image';
-import { Flex, Box, Heading, Button } from 'theme-ui';
-import Verified from '../../../../../public/Social 01 1.svg';
-import Router from 'next/router';
 import { useEffect, useState } from 'react';
+
+import Image from 'next/image';
+import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { Flex, Box, Heading, Button } from 'theme-ui';
+
+import Verified from '../../../../../public/Social 01 1.svg';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 

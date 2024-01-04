@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
+
 import FlowForm from '../../../../components/FlowForm';
 import Page from '../../../../components/PageFrame';
 

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Box, Flex, Image, Text, Input } from 'theme-ui';
-import { useHotkeys } from 'react-hotkeys-hook';
+
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useRouter } from 'next/router';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
-import { Bell, Search } from './Icons';
-import Blok from './Blok';
-import Link from './NavLink';
-import Modal from './Modal';
 import { useAuth } from '../contexts/AuthContext';
+
+import Blok from './Blok';
+import { Bell, Search } from './Icons';
+import Modal from './Modal';
+import Link from './NavLink';
+
 export interface IUser {
   name: string;
 }
@@ -156,6 +159,7 @@ const Nav = ({ navtitle }: INav) => {
                       <MenuProvider>
                         <MenuButton as={Box}>
                           <Image
+                            alt=""
                             sx={{ borderRadius: '3rem' }}
                             width="30px"
                             // src={API_HOST + '/' + userProfile?.profile_pic}

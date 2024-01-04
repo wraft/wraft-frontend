@@ -1,10 +1,8 @@
 import React from 'react';
-import { Box, Text } from 'theme-ui';
-// import Link from 'next/link';
-
-import { Label, Input } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
+import { Box, Text, Label, Input } from 'theme-ui';
+
 import { env } from './vars';
 
 export interface IField {

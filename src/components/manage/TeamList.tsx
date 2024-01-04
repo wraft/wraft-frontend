@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { fetchAPI, deleteAPI } from '../../utils/models';
+
 import { useStoreState } from 'easy-peasy';
-import { Table } from '../Table';
-import { Flex, Box, Text, Button } from 'theme-ui';
 import Image from 'next/image';
-import { FilterArrowDown, OptionsIcon } from '../Icons';
+import { Flex, Box, Text, Button } from 'theme-ui';
+
+import { fetchAPI, deleteAPI } from '../../utils/models';
+import { ConfirmDelete } from '../common';
 import AddRole from '../icon/add.svg';
 import RemoveRole from '../icon/remove.svg';
-import { ConfirmDelete } from '../common';
+import { FilterArrowDown, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
+import { Table } from '../Table';
+
 import AssignRole from './AssignRole';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';

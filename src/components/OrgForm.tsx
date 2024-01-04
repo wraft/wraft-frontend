@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+
 import { useForm } from 'react-hook-form';
 import { Button, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
-import Field from './Field';
 import { putAPI, fetchAPI, fetchUserInfo } from '../utils/models';
+
+import Field from './Field';
 
 export interface Profile {
   allergies?: string[];

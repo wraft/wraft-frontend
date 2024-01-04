@@ -1,6 +1,7 @@
 import { Box, Flex, Text } from 'theme-ui';
-import { BrandLogo } from './Icons';
+
 import Container from './Container';
+import { BrandLogo } from './Icons';
 import ModeToggle from './ModeToggle';
 
 const Footer = () => {

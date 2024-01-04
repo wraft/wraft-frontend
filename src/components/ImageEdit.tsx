@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
+
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';
 
+import { useAuth } from '../contexts/AuthContext';
 import { getCroppedImg } from '../utils/imgCrop';
 import { updateEntityFile } from '../utils/models';
-import { useAuth } from '../contexts/AuthContext';
 
 interface IImageCopperProps {
   image?: any;
@@ -75,7 +76,7 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
         p: 0,
         width: '100%',
       }}>
-      {croppedImg && <Image src={String(croppedImg)} />}
+      {croppedImg && <Image alt="" src={String(croppedImg)} />}
       <Box sx={{ px: 3, py: 2 }}>Edit Profile Image</Box>
       <Box
         sx={{

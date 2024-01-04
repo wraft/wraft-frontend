@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { Box, Flex, Text, Image } from 'theme-ui';
 
-import { Phone, MailSend } from './Icons';
 import { API_HOST } from '../utils/models';
+
+import { Phone, MailSend } from './Icons';
 
 /**
  * Icon Block
@@ -52,6 +54,7 @@ const ProfileCard = ({
         <Box>
           <Image
             sx={{ borderRadius: 99 }}
+            alt=""
             src={`${API_HOST}/` + profile_pic}
             width={60}
             height={60}

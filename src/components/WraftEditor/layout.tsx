@@ -1,48 +1,35 @@
 import React, { FC, useCallback, useState, useEffect, useMemo } from 'react';
-import { RemirrorJSON } from 'remirror';
-import { BlockquoteExtension } from '@remirror/extension-blockquote';
-import { BoldExtension } from '@remirror/extension-bold';
-import { ItalicExtension } from '@remirror/extension-italic';
-import { ParagraphExtension } from '@remirror/extension-paragraph';
-import { StrikeExtension } from '@remirror/extension-strike';
-import { UnderlineExtension } from '@remirror/extension-underline';
-import { HeadingExtension } from '@remirror/extension-heading';
-import { HardBreakExtension } from '@remirror/extension-hard-break';
-import { TableExtension } from '@remirror/extension-tables';
-import { ImageExtension } from '@remirror/extension-image';
-import { MarkdownExtension } from '@remirror/extension-markdown';
-
-// import { CountExtension } from '@remirror/extension-count';
 
 import { css } from '@emotion/css';
-
 import { isBoolean, Cast } from '@remirror/core';
-
-import { ResolvedPos } from 'prosemirror-model';
-
+import { BlockquoteExtension } from '@remirror/extension-blockquote';
+import { BoldExtension } from '@remirror/extension-bold';
+import { HardBreakExtension } from '@remirror/extension-hard-break';
+import { HeadingExtension } from '@remirror/extension-heading';
+import { ImageExtension } from '@remirror/extension-image';
+// eslint-disable-next-line import/order
+import { ItalicExtension } from '@remirror/extension-italic';
+// import { CountExtension } from '@remirror/extension-count';
 /**
  *  @TODO Icons: Convert to local files
  */
-import {
-  ArrowMinimize as ArrowsAngleContract,
-  ArrowMaximize as ArrowsAngleExpand,
-  TaskListLtr,
-  Close as CloseIcon,
-} from '../Icons';
 
 import {
   BulletListExtension,
   ListItemExtension,
   OrderedListExtension,
 } from '@remirror/extension-list';
+import { MarkdownExtension } from '@remirror/extension-markdown';
+import { ParagraphExtension } from '@remirror/extension-paragraph';
+import { StrikeExtension } from '@remirror/extension-strike';
+import { TableExtension } from '@remirror/extension-tables';
+// eslint-disable-next-line import/order
+import { UnderlineExtension } from '@remirror/extension-underline';
 
 import 'remirror/styles/all.css';
 // import { AllStyledComponent } from '@remirror/styles/emotion';
-import { HolderAtomExtension } from './holder/holder-atom';
 
 // import { IdentifierSchemaAttributes } from 'remirror';
-
-import { HolderAtomPopupComponent } from './holder/holder-popover';
 
 import {
   EditorComponent,
@@ -50,8 +37,9 @@ import {
   ThemeProvider,
   useRemirror,
 } from '@remirror/react';
-
-import { Box, Button } from 'theme-ui';
+import { ResolvedPos } from 'prosemirror-model';
+// eslint-disable-next-line import/order
+import { RemirrorJSON } from 'remirror';
 
 // const WordsCounter = () => {
 //   const { getWordCount } = useHelpers(true);
@@ -101,6 +89,17 @@ import { Box, Button } from 'theme-ui';
 
 // import toolbarItems from './toolbar';
 import { MentionAtomExtension } from 'remirror/extensions';
+import { Box, Button } from 'theme-ui';
+
+import {
+  ArrowMinimize as ArrowsAngleContract,
+  ArrowMaximize as ArrowsAngleExpand,
+  TaskListLtr,
+  Close as CloseIcon,
+} from '../Icons';
+
+import { HolderAtomExtension } from './holder/holder-atom';
+import { HolderAtomPopupComponent } from './holder/holder-popover';
 
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 

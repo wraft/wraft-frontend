@@ -1,12 +1,14 @@
 import { useState } from 'react';
+
 import Image from 'next/image';
-import { Flex, Box, Heading, Label, Input, Button } from 'theme-ui';
+import { useSearchParams } from 'next/navigation';
+import { Flex, Box, Heading, Label, Input, Button, Spinner } from 'theme-ui';
+
 import Logo from '../../../../public/Logo.svg';
 import Link from '../../../components/NavLink';
-import { useSearchParams } from 'next/navigation';
+
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
-import { Spinner } from 'theme-ui';
 
 const Index = () => {
   const [newPassword, setNewPassword] = useState('');

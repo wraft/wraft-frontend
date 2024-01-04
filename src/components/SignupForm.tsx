@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from 'react';
+
 import Image from 'next/image';
 import {
   Flex,
@@ -10,13 +11,15 @@ import {
   Text,
   Link,
   Divider,
+  Spinner,
 } from 'theme-ui';
-import Logo from '../../public/Logo.svg';
+
 import GoogleLogo from '../../public/GoogleLogo.svg';
+import Logo from '../../public/Logo.svg';
 import WaitlistPrompt from '../components/WaitlistPrompt';
+
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
-import { Spinner } from 'theme-ui';
 
 const SignUpPage = () => {
   const [formData, setFormData] = useState({

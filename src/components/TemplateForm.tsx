@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
-import { useForm } from 'react-hook-form';
 
-import Field from './Field';
-import FieldText from './FieldText';
+import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
+import { Select } from 'theme-ui';
+
+import { putAPI, postAPI, fetchAPI } from '../utils/models';
 import {
   IContentType,
   ContentTypes,
@@ -12,16 +15,11 @@ import {
   DataTemplates,
 } from '../utils/types';
 
-import { Select } from 'theme-ui';
-
-import Router, { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
-
+import Field from './Field';
+import FieldText from './FieldText';
 import { BracesVariable } from './Icons';
-import MarkdownEditor from './WraftEditor';
-import { putAPI, postAPI, fetchAPI } from '../utils/models';
-
 import NavEdit from './NavEdit';
+import MarkdownEditor from './WraftEditor';
 
 export interface BlockTemplate {
   id: string;

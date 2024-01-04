@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
-import { useForm } from 'react-hook-form';
 
+import { useStoreState } from 'easy-peasy';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import Modal, { Styles } from 'react-modal';
+import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
-import Field from './Field';
 import { loadEntity, updateEntityFile } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
 
-import Modal, { Styles } from 'react-modal';
-// import NavLink from './NavLink';
-import toast from 'react-hot-toast';
+import Field from './Field';
 import ImageCropper from './ImageCropper';
+// import NavLink from './NavLink';
 
 export const defaultStyle: Styles = {
   overlay: {
@@ -296,6 +296,7 @@ const Form = () => {
                           <>
                             <Image
                               onClick={() => toggleEdit()}
+                              alt=""
                               sx={{
                                 width: '80px',
                                 maxWidth: 'auto',
@@ -317,6 +318,7 @@ const Form = () => {
                               onClick={() =>
                                 setProfileImageModal(!profileImageModal)
                               }
+                              alt=""
                               sx={{
                                 width: '80px',
                                 maxWidth: 'auto',
@@ -342,6 +344,7 @@ const Form = () => {
                           <>
                             <Image
                               src={imagePreview}
+                              alt=""
                               sx={{
                                 width: '80px',
                                 mr: 3,

@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
-import Link from './NavLink';
-import { fetchAPI, deleteAPI } from '../utils/models';
-// import { Button } from 'theme-ui';
 
 import toast from 'react-hot-toast';
+import { Box, Text } from 'theme-ui';
+
+import { fetchAPI, deleteAPI } from '../utils/models';
+
+import Link from './NavLink';
+// import { Button } from 'theme-ui';
 
 export interface Theme {
   total_pages: number;

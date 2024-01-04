@@ -1,8 +1,12 @@
 import React, { ReactElement } from 'react';
+
+import Head from 'next/head';
 import { Box, Flex, Text } from 'theme-ui';
 import { Grid } from 'theme-ui';
-import Head from 'next/head';
-import SvgTypewriter from './SvgTypewriter';
+
+import ButtonCustom from './ButtonCustom';
+import Footer from './Footer';
+import HR from './HR';
 import {
   IconApproval,
   IconAutomatable,
@@ -11,10 +15,8 @@ import {
   IconIntegrations,
   IconSignature,
 } from './IconFeatures';
-import HR from './HR';
 import SvgTeams from './SvgTeams';
-import ButtonCustom from './ButtonCustom';
-import Footer from './Footer';
+import SvgTypewriter from './SvgTypewriter';
 
 export interface TextBlockProps {
   title: string;
