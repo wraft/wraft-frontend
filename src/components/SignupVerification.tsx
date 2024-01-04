@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Flex, Box, Heading, Button } from 'theme-ui';
+
 import MailSend from '../../public/Group 164.svg';
 
 const SignupVerification = () => {

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Flex, Box, Text } from 'theme-ui';
+
 import styled from '@emotion/styled';
+import { Flex, Box, Text } from 'theme-ui';
 
-import PageHeader from './PageHeader';
-
-import NavLink from './NavLink';
 import { LayoutLogo, FlowLogo, ThemeLogo, PermLogo, Layout } from './Icons';
+import NavLink from './NavLink';
+import PageHeader from './PageHeader';
 
 export interface INav {
   showFull?: boolean;

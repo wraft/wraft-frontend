@@ -1,14 +1,15 @@
 import React from 'react';
-import { Flex, Box } from 'theme-ui';
+
 import styled from '@emotion/styled';
+import { Flex, Box } from 'theme-ui';
 
 export const IconStyleWrapper = styled.div`
   color: #444;
   margin-right: 12px;
 `;
 
-import Page from './PageFrame';
 import { HeadingFrame } from './Card';
+import Page from './PageFrame';
 
 interface ManageHomePage {
   sidebar?: any;

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
+import ContentLoader from 'react-content-loader';
 import { Box, Text, Flex, Grid } from 'theme-ui';
 // import ContentLoader from 'react-content-loader';
 
-import Link from './NavLink';
-import { fetchAPI, deleteAPI } from '../utils/models';
 import { useAuth } from '../contexts/AuthContext';
+import { fetchAPI, deleteAPI } from '../utils/models';
+
 import { EmptyForm } from './Icons';
-import ContentLoader from 'react-content-loader';
+import Link from './NavLink';
 
 /**
  * DocType Cards
@@ -56,11 +58,11 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         <Box px={3} py={2} sx={{ borderTop: '1px solid #E4E9EF' }}>
           <Text
             sx={{
-              fontFamily: 'Satoshi',
+              fontFamily: 'inter',
               fontSize: 2,
               pt: 1,
               color: '#656E78',
-              fontWeight: 800,
+              fontWeight: 500,
             }}>
             {name}
           </Text>

@@ -1,5 +1,5 @@
-import { Flex } from 'theme-ui';
 import Link from 'next/link';
+import { Flex } from 'theme-ui';
 
 export interface IMenuItem {
   children: any;

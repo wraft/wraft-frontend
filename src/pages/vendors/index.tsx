@@ -1,7 +1,9 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import VendorList from '../../components/VendorList';
+
 import Page from '../../components/PageFrame';
+import VendorList from '../../components/VendorList';
 
 const VenderPage: FC = () => {
   return (

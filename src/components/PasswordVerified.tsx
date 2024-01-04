@@ -1,5 +1,6 @@
 // import Image from 'next/image';
 import { Flex, Box, Heading, Button, Link } from 'theme-ui';
+
 import CheckSuccess from '../../public/check-success.svg';
 
 const PasswordVerified = () => {

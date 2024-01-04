@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Box, Flex } from 'theme-ui';
+
 import Sidebar from './Sidebar';
 
 export interface IPage {

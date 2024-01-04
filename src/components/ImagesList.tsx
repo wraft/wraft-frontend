@@ -1,13 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Button } from 'theme-ui';
-import Modal from 'react-modal';
+
 import { useStoreActions } from 'easy-peasy';
+import Modal from 'react-modal';
+import { Box, Button } from 'theme-ui';
 
-import { PlusAlt as Plus } from './Icons';
-
-import { fetchAPI } from '../utils/models';
 import { modalStyle } from '../utils';
+import { fetchAPI } from '../utils/models';
+
 import ImagesForm from './AssetForm';
+import { PlusAlt as Plus } from './Icons';
 
 // const CategoryCard = (props: any) => (
 //   <Flex variant="tableItem" width={1}>

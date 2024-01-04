@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import Router from 'next/router';
+
 import Image from 'next/image';
-import { Label, Input, Heading, Checkbox } from 'theme-ui';
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
+import { Label, Input, Heading, Checkbox } from 'theme-ui';
+import { Box, Flex, Text, Button } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 
-import Link from './NavLink';
+import GoogleLogo from '../../public/GoogleLogo.svg';
+import Logo from '../../public/Logo.svg';
+import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
 
-import Logo from '../../public/Logo.svg';
-import GoogleLogo from '../../public/GoogleLogo.svg';
-import { useAuth } from '../contexts/AuthContext';
+import Link from './NavLink';
 
 export interface IField {
   name: string;

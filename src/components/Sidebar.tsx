@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
-import { useHotkeys } from 'react-hotkeys-hook';
+
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import { useHotkeys } from 'react-hotkeys-hook';
+import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
 
-import { Search } from './Icons';
-import Modal from './Modal';
-import Blok from './Blok';
-
-import DefaultMenuItem from '../../src/components/MenuItem';
 import {
   Note,
   Like,
@@ -19,14 +15,18 @@ import {
   Wrench,
   TextIcon,
 } from '../../src/components/Icons';
-
-import { postAPI } from '../utils/models';
-import { Organisation } from '../store/profile';
-import ModeToggle from './ModeToggle';
-import ModalCustom from './ModalCustom';
-import WorkspaceCreate from './manage/WorkspaceCreate';
+import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../components/NavLink';
 import { useAuth } from '../contexts/AuthContext';
+import { Organisation } from '../store/profile';
+import { postAPI } from '../utils/models';
+
+import Blok from './Blok';
+import { Search } from './Icons';
+import WorkspaceCreate from './manage/WorkspaceCreate';
+import Modal from './Modal';
+import ModalCustom from './ModalCustom';
+import ModeToggle from './ModeToggle';
 
 /**
  * Sidebar Static Items
@@ -264,6 +264,7 @@ const Nav = (props: any) => {
                       <MenuButton as={Box}>
                         <Image
                           sx={{ borderRadius: '3rem', bg: 'red' }}
+                          alt=""
                           width="24px"
                           height="24px"
                           src={userProfile?.profile_pic}

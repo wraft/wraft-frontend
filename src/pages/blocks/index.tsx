@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
+
 import BlockTemplateList from '../../components/BlockTemplateList';
 import Page from '../../components/PageFrame';
 

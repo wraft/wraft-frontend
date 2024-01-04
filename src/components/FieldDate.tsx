@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Label, Input, Text, Box } from 'theme-ui';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 
-import { DateUtils } from 'react-day-picker';
 import { format, parse } from 'date-fns';
+import { DateUtils } from 'react-day-picker';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { Label, Input, Text, Box } from 'theme-ui';
 
 import { Calendar } from './Icons';
 import 'react-day-picker/lib/style.css';

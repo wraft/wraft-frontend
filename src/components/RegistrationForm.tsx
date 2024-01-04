@@ -2,15 +2,18 @@
 /** @jsxImportSource theme-ui */
 
 import { useState, ChangeEvent } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+
+import cookie from 'js-cookie';
+import Image from 'next/image';
+import { Box, Flex, Text, Button, Label, Input, Heading } from 'theme-ui';
+import { Spinner } from 'theme-ui';
+
+import Logo from '../../public/Logo.svg';
+
+import Link from './NavLink';
+
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
-import Image from 'next/image';
-import { Label, Input, Heading } from 'theme-ui';
-import Link from './NavLink';
-import { Spinner } from 'theme-ui';
-import Logo from '../../public/Logo.svg';
-import cookie from 'js-cookie';
 
 export interface IField {
   name: string;

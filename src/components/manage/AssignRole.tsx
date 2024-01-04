@@ -1,7 +1,9 @@
-import { Flex, Text, Button } from 'theme-ui';
 import { useState, useEffect } from 'react';
-import { fetchAPI, postAPI } from '../../utils/models';
+
 import toast from 'react-hot-toast';
+import { Flex, Text, Button } from 'theme-ui';
+
+import { fetchAPI, postAPI } from '../../utils/models';
 
 interface RoleList {
   roleName: string;

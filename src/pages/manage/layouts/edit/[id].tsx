@@ -1,10 +1,13 @@
 import { FC, useState } from 'react';
-import Head from 'next/head';
-// import LayoutForm from '../../../../components/LayoutForm';
-import Page from '../../../../components/PageFrame';
-import { Box } from 'theme-ui';
+
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { Box } from 'theme-ui';
+
+// import LayoutForm from '../../../../components/LayoutForm';
+
 import ModalCustom from '../../../../components/ModalCustom';
+import Page from '../../../../components/PageFrame';
 
 const LayoutFormFrame = dynamic(
   () => import('../../../../components/LayoutForm'),

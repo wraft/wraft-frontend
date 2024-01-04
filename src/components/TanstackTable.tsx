@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeUIStyleObject, Box } from 'theme-ui';
+
 import {
   ExpandedState,
   flexRender,
@@ -7,6 +7,8 @@ import {
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { ThemeUIStyleObject, Box } from 'theme-ui';
+
 import { styles } from './Table';
 
 export interface TableProps {

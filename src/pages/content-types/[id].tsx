@@ -1,10 +1,11 @@
 import { FC } from 'react';
+
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 // import ContentTypeForm from '../../src/components/ContentTypeForm';
 
 import PageFull from '../../components/BlankFrame';
-import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 // import CreateForm from '../../src/components/ContentForm';
 
 const CreateForm = dynamic(() => import('../../components/ContentForm'), {

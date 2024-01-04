@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
+
 import CollectionForm from '../../components/CollectionForm';
 import Page from '../../components/PageFrame';
 

@@ -1,13 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Spinner, Button } from 'theme-ui';
-import MenuItem from './NavLink';
-import { deleteAPI, fetchAPI } from '../utils/models';
-import Paginate, { IPageMeta } from './Paginate';
 
-import { Table } from './Table';
-import { OptionsIcon } from './Icons';
 import toast from 'react-hot-toast';
+import { Box, Text, Spinner, Button } from 'theme-ui';
+
+import { deleteAPI, fetchAPI } from '../utils/models';
+
 import { TimeAgo } from './Atoms';
+import { OptionsIcon } from './Icons';
+import MenuItem from './NavLink';
+import Paginate, { IPageMeta } from './Paginate';
+import { Table } from './Table';
 
 export interface ILayout {
   width: number;

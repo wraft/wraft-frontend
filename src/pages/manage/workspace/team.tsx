@@ -1,16 +1,17 @@
 import React, { FC, useState } from 'react';
+
+import { useStoreState } from 'easy-peasy';
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
+import { InviteUserIcon } from '../../../components/Icons';
+import { InviteTeam } from '../../../components/manage';
+import TeamList from '../../../components/manage/TeamList';
+import ManageSidebar from '../../../components/ManageSidebar';
+import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
-import ModalCustom from '../../../components/ModalCustom';
-import { InviteUserIcon } from '../../../components/Icons';
-import { useStoreState } from 'easy-peasy';
-import TeamList from '../../../components/manage/TeamList';
-import { InviteTeam } from '../../../components/manage';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
-import Modal from 'react-modal';
-import { Label, Select } from 'theme-ui';
+
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import Modal from 'react-modal';
+import { Box, Flex, Button, Text } from 'theme-ui';
+import { Label, Select } from 'theme-ui';
 
-import { Pipeline } from './PipelineList';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { IContentType, Template } from '../utils/types';
+
 import Field from './Field';
 import PageHeader from './PageHeader';
-import { IContentType, Template } from '../utils/types';
-import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { Pipeline } from './PipelineList';
 
 const customStyles = {
   content: {

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text } from 'theme-ui';
 
-import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
+
+import Link from './NavLink';
 import PageHeader from './PageHeader';
 
 export interface Pipelines {

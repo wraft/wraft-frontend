@@ -40,6 +40,10 @@ class MyDocument extends Document {
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
           />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter&display=swap"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <InitializeColorMode />

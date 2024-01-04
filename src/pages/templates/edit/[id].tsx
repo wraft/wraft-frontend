@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
+
 import TemplateForm from '../../../components/TemplateForm';
 
 const Index: FC = () => {
