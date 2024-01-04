@@ -1,7 +1,9 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import PipelineView from '../../../../components/PipelineView';
+
 import Page from '../../../../components/PageFrame';
+import PipelineView from '../../../../components/PipelineView';
 // import { Box } from 'theme-ui';
 // import BulkBuild from '../../../src/components/Bu';
 

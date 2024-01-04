@@ -6,20 +6,19 @@ import { useCallback, useMemo, useState } from 'react';
 //   HolderAtomNodeAttributes,
 // } from '@remirror/extension-mention-atom';
 
-import {
-  HolderAtomChangeHandler,
-  HolderAtomExtension,
-  HolderAtomNodeAttributes,
-} from './holder-atom';
-
 import { ChangeReason, SuggestChangeHandlerProps } from '@remirror/pm/suggest';
 import { useExtension, useHelpers } from '@remirror/react-core';
-
 import {
   MenuNavigationOptions,
   useMenuNavigation,
   UseMenuNavigationReturn,
 } from '@remirror/react-hooks';
+
+import {
+  HolderAtomChangeHandler,
+  HolderAtomExtension,
+  HolderAtomNodeAttributes,
+} from './holder-atom';
 
 export interface HolderAtomState<
   Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,

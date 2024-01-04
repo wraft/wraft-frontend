@@ -1,9 +1,10 @@
 import { FC } from 'react';
-import Head from 'next/head';
-// import ContentTypeForm from '../../src/components/ContentTypeForm';
 
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+
+// import ContentTypeForm from '../../src/components/ContentTypeForm';
 
 import Page from '../../../components/PageFrameInner';
 

@@ -1,10 +1,12 @@
 import React from 'react';
-import { Box, Button, Text } from 'theme-ui';
-import Field from '../Field';
+
 import { useForm } from 'react-hook-form';
-import { postAPI } from '../../utils/models';
 import toast from 'react-hot-toast';
+import { Box, Button, Text } from 'theme-ui';
+
 import { useAuth } from '../../contexts/AuthContext';
+import { postAPI } from '../../utils/models';
+import Field from '../Field';
 
 interface props {
   setOpen: any;

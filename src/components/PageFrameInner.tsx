@@ -1,7 +1,7 @@
 import React from 'react';
+
 // import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
-import Head from 'next/head';
 // import Container from './Container';
 // import { Close } from 'theme-ui';
 
@@ -33,21 +33,6 @@ IPage) => {
           flexDirection: 'column',
           minHeight: '100%',
         }}>
-        <Head>
-          {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link href={url} rel="stylesheet" /> */}
-
-          <link
-            href="https://api.fontshare.com/css?f[]=satoshi@400,500,700&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
-
         <Flex
           sx={{
             flex: 1,

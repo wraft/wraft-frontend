@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 
-import { Table } from './Table';
-
 import { fetchAPI } from '../utils/models';
+
 import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
-import Paginate from './Paginate';
-import PageHeader from './PageHeader';
 import ContentLoader from './ContentLoader';
+import PageHeader from './PageHeader';
+import Paginate from './Paginate';
+import { Table } from './Table';
 
 export interface ILayout {
   width: number;

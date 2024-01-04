@@ -1,4 +1,7 @@
 import React from 'react';
+
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Flex,
@@ -8,8 +11,6 @@ import {
   Label,
   Input,
 } from 'theme-ui';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
 
 import { registerUser } from '../utils/models';
 

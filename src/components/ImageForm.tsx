@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
-import { Label, Input } from 'theme-ui';
 
-import { createEntityFile } from '../utils/models';
+import { useForm } from 'react-hook-form';
+import { Box, Flex, Button, Text } from 'theme-ui';
+import { Label, Input } from 'theme-ui';
 import { Spinner } from 'theme-ui';
+
 import { useAuth } from '../contexts/AuthContext';
+import { createEntityFile } from '../utils/models';
 
 export interface IImageForm {
   onSuccess?: any;

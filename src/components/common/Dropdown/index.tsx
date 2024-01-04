@@ -1,4 +1,5 @@
 import React, { FC, useRef, useEffect, useState } from 'react';
+
 import styled from '@emotion/styled';
 import { Box, Image } from 'theme-ui';
 
@@ -67,6 +68,7 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
         }}>
         <Image
           src={imageUrl || ''}
+          alt=""
           sx={{
             width: '100%',
             borderRadius: '50%',

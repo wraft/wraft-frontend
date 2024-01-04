@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
-import { useRouter } from 'next/router';
-import styled from '@emotion/styled';
+
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
-
-import { Spinner } from 'theme-ui';
-import { File, Download } from './Icons';
-import MenuItem from './MenuItem';
+import styled from '@emotion/styled';
 import dynamic from 'next/dynamic';
-
-import WraftEditor from './WraftEditor';
-import CommentForm from './CommentForm';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
+import { Spinner } from 'theme-ui';
 
 import { fetchAPI, postAPI } from '../utils/models';
-import { TimeAgo } from './Atoms';
 
+import { TimeAgo } from './Atoms';
+import CommentForm from './CommentForm';
+import { File, Download } from './Icons';
+import MenuItem from './MenuItem';
 import Nav from './NavEdit';
+import WraftEditor from './WraftEditor';
+
 // import { right } from '@popperjs/core';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });

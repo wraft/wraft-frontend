@@ -1,5 +1,6 @@
 // import Image from 'next/image';
 import { Flex, Box, Heading, Button, Link, Text } from 'theme-ui';
+
 import CheckSuccess from '../../public/check-success.svg';
 
 const PasswordCreated = () => {
@@ -18,7 +19,7 @@ const PasswordCreated = () => {
           sx={{ mb: '64px', color: 'dark_900' }}>
           Password Created
         </Heading>
-        <img src={CheckSuccess} alt="" className="" />
+        <img alt="" src={CheckSuccess} className="" />
         <Text sx={{ my: '40px', color: 'dark_400', fontWeight: 'heading' }}>
           Awesome! You are ready to access your Wraft account Login your account
           and enjoy your workplace

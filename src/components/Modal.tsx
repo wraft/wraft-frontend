@@ -7,7 +7,6 @@ import {
   DialogHeading,
   useDialogStore,
 } from '@ariakit/react';
-
 import { Box } from 'theme-ui';
 
 type ModalProps = {

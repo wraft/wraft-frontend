@@ -1,8 +1,10 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
+import { Container } from 'theme-ui';
+
 import ContentTypeForm from '../../../components/ContentTypeForm';
 import Page from '../../../components/PageFrame';
-import { Container } from 'theme-ui';
 
 const Index: FC = () => {
   return (

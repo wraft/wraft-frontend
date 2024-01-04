@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+
+import Router, { useRouter } from 'next/router';
+import { Controller, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import {
   Container,
   Label,
@@ -12,12 +16,7 @@ import {
   Link,
 } from 'theme-ui';
 
-import { Controller, useForm } from 'react-hook-form';
-import Router, { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
-
-import AssetForm from './AssetForm';
-import { Asset, Engine } from '../utils/types';
+import { useAuth } from '../contexts/AuthContext';
 import {
   updateEntityFile,
   createEntityFile,
@@ -25,13 +24,15 @@ import {
   fetchAPI,
   deleteAPI,
 } from '../utils/models';
+import { Asset, Engine } from '../utils/types';
 
+import AssetForm from './AssetForm';
+import Error from './Error';
 import Field from './Field';
 import FieldText from './FieldText';
-import PdfViewer from './PdfViewer';
-import Error from './Error';
 import { TickIcon } from './Icons';
-import { useAuth } from '../contexts/AuthContext';
+import PdfViewer from './PdfViewer';
+
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -476,7 +477,7 @@ const Form = ({ setOpen }: Props) => {
                   <Box pb={3} sx={{ display: 'none' }}>
                     {layout && layout.screenshot && (
                       <div>
-                        <Image src={API_HOST + layout.screenshot} />
+                        <Image alt="" src={API_HOST + layout.screenshot} />
                       </div>
                     )}
                     <Label htmlFor="screenshot">Screenshot</Label>

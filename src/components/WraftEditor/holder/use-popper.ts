@@ -1,4 +1,3 @@
-import { createPopper, Instance, Placement, State } from '@popperjs/core';
 import {
   CSSProperties,
   Dispatch,
@@ -13,6 +12,7 @@ import {
 
 import { shallowEqual } from '@ariakit/core/utils/misc';
 import { isSafari } from '@ariakit/core/utils/platform';
+import { createPopper, Instance, Placement, State } from '@popperjs/core';
 import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 export interface PopperState {

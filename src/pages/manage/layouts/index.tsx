@@ -1,14 +1,15 @@
 import React, { FC } from 'react';
+
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
-import LayoutList from '../../../components/LayoutList';
 import LayoutForm from '../../../components/LayoutForm';
+import LayoutList from '../../../components/LayoutList';
+import ManageSidebar from '../../../components/ManageSidebar';
+import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import ManageSidebar from '../../../components/ManageSidebar';
 import { menuLinks } from '../../../utils';
-import ModalCustom from '../../../components/ModalCustom';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);

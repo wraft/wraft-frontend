@@ -1,8 +1,9 @@
 import React from 'react';
+
 import { Box, Flex } from 'theme-ui';
 
-import NavLink from './NavLink';
 import ContentTypeDashboard from './ContentTypeDashboard';
+import NavLink from './NavLink';
 import PageHeader from './PageHeader';
 
 export interface ILayout {

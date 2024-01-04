@@ -1,11 +1,13 @@
 import React from 'react';
+
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
-import Container from './Container';
-import Sidebar from './Sidebar';
-import Nav from './Nav';
 import { useAuth } from '../contexts/AuthContext';
+
+import Container from './Container';
+import Nav from './Nav';
+import Sidebar from './Sidebar';
 
 // import { Close } from 'theme-ui';
 
@@ -47,10 +49,6 @@ export const Page = (props: any) => {
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins&family=Inter&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <Container width={100} bg="gray.0">
         {!accessToken && (
