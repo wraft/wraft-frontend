@@ -24,34 +24,54 @@ interface DocCardProps {
 
 export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
   return (
-    <Box
-      sx={{
-        bg: 'neutral.0',
-        minWidth: '220px',
-        // maxHeight: '200px',
-        border: 'solid 1px',
-        borderColor: 'neutral.1',
-        borderRadius: 6,
-        mr: 3,
-        ':hover': {
-          bg: 'neutral.1',
-        },
-      }}>
-      <Link
-        variant="base"
-        href={
-          isEdit
-            ? `/content-types/edit/` + `${id}`
-            : `/content-types/` + `${id}`
-        }>
-        <Box
-          sx={{ height: '45px', bg: color, borderRadius: '6px 6px 0 0' }}></Box>
-        {/* {isEdit ? 'yes' : 'no'} */}
-        <Box pl={3} pt={1} pb={2} bg="">
-          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>
+    <Link
+      variant="base"
+      href={
+        isEdit ? `/content-types/edit/` + `${id}` : `/content-types/` + `${id}`
+      }>
+      <Box
+        sx={{
+          bg: 'neutral.0',
+          minWidth: '220px',
+          // maxHeight: '200px',
+          border: 'solid 1px',
+          borderColor: 'neutral.1',
+          borderRadius: 6,
+          cursor: 'pointer',
+          mr: 3,
+          ':hover': {
+            bg: 'neutral.1',
+          },
+        }}>
+        <Box sx={{ height: '79px', pt: '12px', pl: '12px' }}>
+          <Box
+            sx={{
+              width: '53px',
+              height: '10px',
+              bg: color,
+              borderRadius: '2px',
+            }}
+          />
         </Box>
-      </Link>
-    </Box>
+        <Box px={3} py={2} sx={{ borderTop: '1px solid #E4E9EF' }}>
+          <Text
+            sx={{
+              fontFamily: 'Satoshi',
+              fontSize: 2,
+              pt: 1,
+              color: '#656E78',
+              fontWeight: 800,
+            }}>
+            {name}
+          </Text>
+        </Box>
+      </Box>
+
+      {/* {isEdit ? 'yes' : 'no'} */}
+      {/* <Box pl={3} pt={1} pb={2} bg="">
+          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>
+        </Box> */}
+    </Link>
   );
 };
 
@@ -158,12 +178,12 @@ const RepeatableTableRows = (props: any) => {
       backgroundColor="#f3f3f3"
       foregroundColor="#ecebeb"
       {...props}>
-      <rect x="12" y="58" rx="2" ry="2" width="211" height="211" />
-      <rect x="240" y="57" rx="2" ry="2" width="211" height="211" />
-      <rect x="467" y="56" rx="2" ry="2" width="211" height="211" />
-      <rect x="12" y="283" rx="2" ry="2" width="211" height="211" />
-      <rect x="240" y="281" rx="2" ry="2" width="211" height="211" />
-      <rect x="468" y="279" rx="2" ry="2" width="211" height="211" />
+      <rect x="12" y="58" rx="2" ry="2" width="211" height="150" />
+      <rect x="240" y="57" rx="2" ry="2" width="211" height="150" />
+      <rect x="467" y="56" rx="2" ry="2" width="211" height="150" />
+      <rect x="12" y="283" rx="2" ry="2" width="211" height="150" />
+      <rect x="240" y="281" rx="2" ry="2" width="211" height="150" />
+      <rect x="468" y="279" rx="2" ry="2" width="211" height="150" />
     </ContentLoader>
   );
 };
