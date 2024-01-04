@@ -10,6 +10,8 @@ import RemoveRole from '../icon/remove.svg';
 import { ConfirmDelete } from '../common';
 import ModalCustom from '../ModalCustom';
 import AssignRole from './AssignRole';
+import toast from 'react-hot-toast';
+
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
@@ -64,7 +66,7 @@ const TeamList = () => {
 
   const profile = useStoreState((state) => state.profile.profile);
   const organisationId = profile?.organisation_id;
-  console.log(organisationId);
+  // console.log(organisationId);
 
   const loadData = (id: string) => {
     fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
@@ -81,7 +83,8 @@ const TeamList = () => {
     if (organisationId) {
       loadData(organisationId);
     }
-  }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
+  }, [organisationId, isRemoveUser, isAssignRole, sort]);
+  // }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
 
   useEffect(() => {
     if (contents) {
@@ -99,13 +102,23 @@ const TeamList = () => {
         };
       });
 
-      console.log(memberData);
+      // console.log(memberData);
       setTableList(memberData);
     }
   }, [contents]);
 
   const onConfirmDelete = () => {
-    deleteAPI(`users/${userId}/roles/${isRemoveRole}`);
+    deleteAPI(`users/${userId}/roles/${isRemoveRole}`)
+      .then((response: any) => {
+        toast.success(`${response?.info}`, {
+          duration: 1000,
+          position: 'top-center',
+        });
+        console.log('success', response);
+      })
+      .catch((error) => {
+        console.log('failed', error);
+      });
     setIsRemoveRole(null);
   };
 
