@@ -15,20 +15,11 @@ import {
 import { Select } from 'theme-ui';
 
 import Router, { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import { BracesVariable } from './Icons';
-
 import MarkdownEditor from './WraftEditor';
-
-import {
-  loadEntity,
-  loadEntityDetail,
-  createEntity,
-  updateEntity,
-} from '../utils/models';
+import { putAPI, postAPI, fetchAPI } from '../utils/models';
 
 import NavEdit from './NavEdit';
 
@@ -46,7 +37,6 @@ const Form = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  const token = useStoreState((state) => state.auth.token);
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
@@ -57,8 +47,6 @@ const Form = () => {
   // const [keys, setKeys] = useState<Array<string>>();
 
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-
-  const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -90,17 +78,25 @@ const Form = () => {
 
     // if edit is live
     if (cId) {
-      updateEntity(`data_templates/${cId}`, formValues, token, onCreated);
-      addToast('Updated Successfully', { appearance: 'success' });
-      setLoading(false);
+      putAPI(`data_templates/${cId}`, formValues).then(() => {
+        onCreated();
+        toast.success('Updated Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+      });
     } else {
-      createEntity(
-        formValues,
-        `content_types/${data.parent}/data_templates`,
-        token,
-        onCreated,
+      postAPI(`content_types/${data.parent}/data_templates`, formValues).then(
+        () => {
+          onCreated();
+          toast.success('Created Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        },
       );
-      addToast('Created Successfully', { appearance: 'success' });
+
       setLoading(false);
     }
   };
@@ -111,7 +107,9 @@ const Form = () => {
   };
 
   const loadTypes = () => {
-    loadEntity(token, 'content_types', loadTypesSuccess);
+    fetchAPI('content_types').then((data: any) => {
+      loadTypesSuccess(data);
+    });
   };
 
   const loadContentTypeSuccess = (data: any) => {
@@ -126,7 +124,9 @@ const Form = () => {
    * @param id
    */
   const loadContentType = (id: string) => {
-    loadEntityDetail(token, 'content_types', id, loadContentTypeSuccess);
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      loadContentTypeSuccess(data);
+    });
   };
 
   /**
@@ -134,7 +134,9 @@ const Form = () => {
    * @param id
    */
   const loadBlocks = () => {
-    loadEntity(token, 'block_templates', loadBlocksSuccess);
+    fetchAPI(`block_templates`).then((data: any) => {
+      loadBlocksSuccess(data);
+    });
   };
 
   const loadBlocksSuccess = (data: any) => {
@@ -146,9 +148,11 @@ const Form = () => {
    * Load Content Type Details
    * @param id
    */
-  const loadTemplate = (id: string, token: string) => {
+  const loadTemplate = (id: string) => {
     setLoading(true);
-    loadEntityDetail(token, 'data_templates', id, loadTemplateSuccess);
+    fetchAPI(`data_templates/${id}`).then((data: any) => {
+      loadTemplateSuccess(data);
+    });
   };
 
   const loadTemplateSuccess = (data: DataTemplates) => {
@@ -164,7 +168,6 @@ const Form = () => {
       if (mm) {
         console.log('has serials', mm);
         setCleanInsert(false);
-        setToken(mm);
       }
     }
     setDataTemplate(data);
@@ -224,11 +227,10 @@ const Form = () => {
 
   useEffect(() => {
     setBody('Loading ...');
-    if (token) {
-      loadTypes();
-      loadBlocks();
-    }
-  }, [token]);
+
+    loadTypes();
+    loadBlocks();
+  }, []);
 
   useEffect(() => {
     // find the first element
@@ -238,10 +240,10 @@ const Form = () => {
   }, [ctypes]);
 
   useEffect(() => {
-    if (token && cId) {
-      loadTemplate(cId, token);
+    if (cId) {
+      loadTemplate(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   /**
    * On Template Load

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-import { loadEntity } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 export interface PermissionGroupList {
   total_pages: number;
   total_entries: number;
@@ -38,7 +37,6 @@ export interface ResourceGroupList {
 }
 
 const OrgPermissionList = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<PermissionGroupList>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
@@ -55,25 +53,21 @@ const OrgPermissionList = () => {
    * Load all Engines
    * @param token
    */
-  const loadLayout = (token: string) => {
-    loadEntity(token, 'permissions', loadDataSuccess);
-  };
-
-  /**
-   * On Loading done
-   * @param token
-   */
-  const loadResourceDataSuccess = (data: any) => {
-    const res: ResourceGroupList = data;
-    setResources(res);
+  const loadLayout = () => {
+    fetchAPI('permissions').then((data: any) => {
+      loadDataSuccess(data);
+    });
   };
 
   /**
    * Load all Engines
    * @param token
    */
-  const loadResources = (token: string) => {
-    loadEntity(token, 'resources', loadResourceDataSuccess);
+  const loadResources = () => {
+    fetchAPI('resources').then((data: any) => {
+      const res: ResourceGroupList = data;
+      setResources(res);
+    });
   };
 
   /**
@@ -99,11 +93,9 @@ const OrgPermissionList = () => {
   /** Trigger Load on Init */
 
   useEffect(() => {
-    if (token) {
-      loadLayout(token);
-      loadResources(token);
-    }
-  }, [token]);
+    loadLayout();
+    loadResources();
+  }, []);
 
   const permLevels = [
     {

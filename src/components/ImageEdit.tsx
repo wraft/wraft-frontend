@@ -2,9 +2,10 @@ import React, { useCallback, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';
+
 import { getCroppedImg } from '../utils/imgCrop';
-import { useStoreState } from 'easy-peasy';
 import { updateEntityFile } from '../utils/models';
+import { useAuth } from '../contexts/AuthContext';
 
 interface IImageCopperProps {
   image?: any;
@@ -21,18 +22,16 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImg, setCroppedImg] = useState<File>();
 
-  // extra
-  const token = useStoreState((state) => state.auth.token);
+  const { accessToken } = useAuth();
 
   /**
    * Submit profile image individually
    * @param _file Image File
    */
   const submitImage = (_file: any) => {
-    console.log('[xyz] [submitImage]', _file, token);
     const formData = new FormData();
     formData.append('profile_pic', _file);
-    updateEntityFile(`profiles`, formData, token, onUpdate);
+    updateEntityFile(`profiles`, formData, accessToken as string, onUpdate);
   };
 
   const onCropComplete = useCallback(

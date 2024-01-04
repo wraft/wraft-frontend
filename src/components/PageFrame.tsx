@@ -1,12 +1,6 @@
 import React from 'react';
-// import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
-// import Head from 'next/head';
-// import { useStoreState } from 'easy-peasy';
-// import Container from './Container';
 import Sidebar from './Sidebar';
-// import Nav from './Nav';
-// import { Close } from 'theme-ui';
 
 export interface IPage {
   showFull?: boolean;

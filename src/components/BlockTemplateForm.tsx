@@ -9,16 +9,16 @@ import { BlockTemplates } from '../utils/types';
 import EditorWraft from './EditorWraft';
 import {
   API_HOST,
-  createEntity,
-  deleteEntity,
-  loadEntityDetail,
-  updateEntity,
+  postAPI,
+  putAPI,
+  fetchAPI,
+  deleteAPI,
 } from '../utils/models';
 import Router, { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import ImagesList from './ImagesList';
+import { useAuth } from '../contexts/AuthContext';
 
 // const Tag = styled(Box)`
 //   padding: 5px;
@@ -58,7 +58,6 @@ const EMPTY_MARKDOWN_NODE = {
 };
 
 const Form = () => {
-  const token = useStoreState((state) => state.auth.token);
   const {
     register,
     handleSubmit,
@@ -74,6 +73,7 @@ const Form = () => {
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
 
+  const { accessToken } = useAuth();
   const [insertable, setInsertable] = useState<any>(EMPTY_MARKDOWN_NODE);
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
@@ -82,8 +82,6 @@ const Form = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [saved, setSaved] = useState<boolean>(false);
-
-  const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -129,17 +127,6 @@ const Form = () => {
     setInsertable(imageNode);
   };
 
-  /**
-   * Form Submit
-   * @param data
-   */
-
-  const onSuccess = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    setLoading(false);
-    setSaved(true);
-  };
-
   /** Editor Submit */
 
   const onSubmit = (data: any) => {
@@ -153,9 +140,23 @@ const Form = () => {
 
     // if edit is live
     if (cId) {
-      updateEntity(`block_templates/${cId}`, formValues, token, onSuccess);
+      putAPI(`block_templates/${cId}`, formValues).then(() => {
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+        setSaved(true);
+      });
     } else {
-      createEntity(formValues, `block_templates`, token, onSuccess);
+      postAPI(`block_templates`, formValues).then(() => {
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+        setSaved(true);
+      });
     }
   };
 
@@ -163,16 +164,10 @@ const Form = () => {
    * Load Content Type Details
    * @param id
    */
-  const loadTemplate = (id: string, token: string) => {
-    loadEntityDetail(token, 'block_templates', id, loadTemplateSuccess);
-  };
-
-  /**
-   * Block Details load
-   * @param data
-   */
-  const loadTemplateSuccess = (data: BlockTemplates) => {
-    setDataTemplate(data);
+  const loadTemplate = (id: string) => {
+    fetchAPI(`block_templates/${id}`).then((data: BlockTemplates) => {
+      setDataTemplate(data);
+    });
   };
 
   const doUpdate = (state: any) => {
@@ -198,7 +193,7 @@ const Form = () => {
 
       setInsertable(contentBody);
     }
-  }, [token, dataTemplate]);
+  }, [accessToken, dataTemplate]);
 
   useEffect(() => {
     if (saved) {
@@ -217,10 +212,10 @@ const Form = () => {
     if (cId === 'xd') {
       setCleanInsert(false);
     }
-    if (token && cId) {
-      loadTemplate(cId, token);
+    if (cId) {
+      loadTemplate(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   useEffect(() => {
     if (dataTemplate) {
@@ -232,10 +227,14 @@ const Form = () => {
    * Delete a block
    */
   const deleteBlock = () => {
-    if (cId && token) {
-      deleteEntity(`block_templates/${cId}`, token);
-      Router.push(`/block_templates`);
-      addToast('Deleted Block Successfully', { appearance: 'error' });
+    if (cId) {
+      deleteAPI(`block_templates/${cId}`).then(() => {
+        Router.push(`/block_templates`);
+        toast.success('Deleted Block Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
     }
   };
 

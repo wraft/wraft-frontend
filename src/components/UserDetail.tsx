@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex } from 'theme-ui';
 
-import { useStoreState } from 'easy-peasy';
-import { loadEntityDetail } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 import { useRouter } from 'next/router';
 
 const Form = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [sachet, setSachet] = useState<any>();
   // const [_ains, setMains] = useState<any>();
   // const [chartData, setChartData] = useState<any>();
@@ -18,15 +16,15 @@ const Form = () => {
     setSachet(data);
   };
 
-  const loadData = (t: string, id: string) => {
-    loadEntityDetail(t, 'profiles', id, loadDataSuccess);
+  const loadData = (id: string) => {
+    fetchAPI(`profiles/${id}`).then((data: any) => {
+      loadDataSuccess(data);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token, cId);
-    }
-  }, [token]);
+    loadData(cId);
+  }, []);
 
   // useEffect(() => {
   //   if (sachet && sachet.id) {

@@ -14,17 +14,16 @@ import {
 
 import { Controller, useForm } from 'react-hook-form';
 import Router, { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import AssetForm from './AssetForm';
 import { Asset, Engine } from '../utils/types';
 import {
-  loadEntity,
-  deleteEntity,
   updateEntityFile,
   createEntityFile,
   API_HOST,
+  fetchAPI,
+  deleteAPI,
 } from '../utils/models';
 
 import Field from './Field';
@@ -32,6 +31,7 @@ import FieldText from './FieldText';
 import PdfViewer from './PdfViewer';
 import Error from './Error';
 import { TickIcon } from './Icons';
+import { useAuth } from '../contexts/AuthContext';
 export interface Layouts {
   layout: Layout;
   creator: Creator;
@@ -92,17 +92,17 @@ const Form = ({ setOpen }: Props) => {
     screenshot: any;
     unit: string;
   }>({ mode: 'all' });
-  const token = useStoreState((state) => state.auth.token);
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
+
+  const { accessToken } = useAuth();
 
   const [isEdit, setEdit] = useState<boolean>(false);
 
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = (router.query.id as string) || '';
-  const { addToast } = useToasts();
 
   const onImageUploaded = (data: any) => {
     console.log('data', data);
@@ -144,47 +144,56 @@ const Form = ({ setOpen }: Props) => {
     formData.append('screenshot', data.screenshot[0]);
 
     if (isEdit) {
-      updateEntityFile(`layouts/${cId}`, formData, token, onUpdate);
-      addToast(`Updated Layout ${data.name}`, { appearance: 'success' });
+      updateEntityFile(
+        `layouts/${cId}`,
+        formData,
+        accessToken as string,
+        onUpdate,
+      );
+
+      toast.success(`Updated Layout ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     } else {
-      createEntityFile(formData, token, 'layouts', onImageUploaded);
+      createEntityFile(
+        formData,
+        accessToken as string,
+        'layouts',
+        onImageUploaded,
+      );
 
-      addToast(`Created Layout ${data.name}`, { appearance: 'success' });
+      toast.success(`Created Layout ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     }
-  };
-
-  /**
-   * on Engine Load Success
-   * @param data
-   */
-  const loadEngineSuccess = (data: any) => {
-    const res: Engine[] = data.engines;
-    setEngines(res);
   };
 
   /**
    * Load all Engines
    * @param token
    */
-  const loadEngine = (token: string) => {
-    loadEntity(token, 'engines', loadEngineSuccess);
+  const loadEngine = () => {
+    fetchAPI('engines').then((data: any) => {
+      const res: Engine[] = data.engines;
+      setEngines(res);
+    });
   };
 
   /**
    * Load Layout Edit Details
    * @param token
    */
-  const loadLayout = (cid: string, token: string) => {
-    loadEntity(token, `layouts/${cid}`, loadLayoutSuccess);
+  const loadLayout = (cid: string) => {
+    fetchAPI(`layouts/${cid}`).then((data: any) => {
+      const res: Layout = data.layout;
+      setLayout(res);
+    });
   };
   // const loadAssets = (id: string, token: string) => {
   //   loadEntity(token, `assets/${id}`, loadAssetSuccess);
   // };
-
-  const loadLayoutSuccess = (data: any) => {
-    const res: Layout = data.layout;
-    setLayout(res);
-  };
 
   useEffect(() => {
     if (layout) {
@@ -207,10 +216,8 @@ const Form = ({ setOpen }: Props) => {
   }, [layout]);
 
   useEffect(() => {
-    if (token) {
-      loadEngine(token);
-    }
-  }, [token]);
+    loadEngine();
+  }, []);
 
   /**
    * If in edit mode
@@ -218,10 +225,10 @@ const Form = ({ setOpen }: Props) => {
    */
 
   useEffect(() => {
-    if (token && cId) {
-      loadLayout(cId, token);
+    if (cId) {
+      loadLayout(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   /**
    * Upload Assets
@@ -235,10 +242,13 @@ const Form = ({ setOpen }: Props) => {
     const indexOf = assets.findIndex((e) => e.id === id);
     assets.splice(indexOf, 1);
     if (layout?.assets.some((asset) => asset.id === id)) {
-      deleteEntity(`/layouts/${lid}/assets/${id}`, token);
+      deleteAPI(`/layouts/${lid}/assets/${id}`);
     }
 
-    addToast(`Deleted Asset`, { appearance: 'error' });
+    toast.success('Deleted Asset', {
+      duration: 1000,
+      position: 'top-right',
+    });
   };
   const [formStep, setFormStep] = useState(0);
   function next() {

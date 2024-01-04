@@ -2,10 +2,11 @@ import React from 'react';
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
-import { useStoreState } from 'easy-peasy';
 import Container from './Container';
 import Sidebar from './Sidebar';
 import Nav from './Nav';
+import { useAuth } from '../contexts/AuthContext';
+
 // import { Close } from 'theme-ui';
 
 export interface IPage {
@@ -31,7 +32,7 @@ export interface IAlert {
 
 export const Page = (props: any) => {
   const showFull: boolean = props && props.showFull ? true : false;
-  const token = useStoreState((state) => state.auth.token);
+  const { accessToken } = useAuth();
   return (
     <>
       <Head>
@@ -52,13 +53,13 @@ export const Page = (props: any) => {
         />
       </Head>
       <Container width={100} bg="gray.0">
-        {!token && (
+        {!accessToken && (
           <Box>
             <Nav />
             <Box>{props.children}</Box>
           </Box>
         )}
-        {token && (
+        {accessToken && (
           <Flex>
             <Sidebar showFull={showFull} />
             <Box sx={{ width: '100%', minHeight: '100vh' }}>

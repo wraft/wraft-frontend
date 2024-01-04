@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Box, Text } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-import { loadEntity } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 
 export interface PermissionGroupList {
   total_pages: number;
@@ -22,55 +21,39 @@ export interface ResourceGroupList {
 }
 
 const OrgRolesList = () => {
-  const token = useStoreState((state) => state.auth.token);
-  // const profile = useStoreState((state) => state.profile?.profile);
   const [contents, setContents] = useState<any>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
   /**
-   * On Loading done
-   * @param token
-   */
-  const loadDataSuccess = (data: any) => {
-    console.log('roles', data);
-    setContents(data.role_groups);
-  };
-
-  /**
    * Load all Engines
    * @param token
    */
-  const loadLayout = (token: string) => {
+  const loadLayout = () => {
     // console.log(profile)
     // const org_id = profile?.organisation_id
-    loadEntity(token, `role_groups`, loadDataSuccess);
-  };
-
-  /**
-   * On Loading done
-   * @param token
-   */
-  const loadResourceDataSuccess = (data: any) => {
-    const res: ResourceGroupList = data;
-    setResources(res);
+    fetchAPI(`role_groups`).then((data: any) => {
+      console.log('roles', data);
+      setContents(data.role_groups);
+    });
   };
 
   /**
    * Load all Engines
    * @param token
    */
-  const loadResources = (token: string) => {
-    loadEntity(token, 'role_groups', loadResourceDataSuccess);
+  const loadResources = () => {
+    fetchAPI('role_groups').then((data: any) => {
+      const res: ResourceGroupList = data;
+      setResources(res);
+    });
   };
 
   /** Trigger Load on Init */
 
   useEffect(() => {
-    if (token) {
-      loadLayout(token);
-      loadResources(token);
-    }
-  }, [token]);
+    loadLayout();
+    loadResources();
+  }, []);
 
   /**
    *

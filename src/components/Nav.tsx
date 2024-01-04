@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
-import cookie from 'js-cookie';
-
-import { useStoreState, useStoreActions } from 'easy-peasy';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import { useRouter } from 'next/router';
+
 import { Bell, Search } from './Icons';
-
-import { checkUser } from '../utils/models';
-
 import Blok from './Blok';
 import Link from './NavLink';
 import Modal from './Modal';
+import { useAuth } from '../contexts/AuthContext';
 export interface IUser {
   name: string;
 }
@@ -26,21 +23,13 @@ interface INav {
  * @returns
  */
 const Nav = ({ navtitle }: INav) => {
-  // const [user, setUser] = useState<IUser>();
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const { userProfile, accessToken, logout } = useAuth();
+  const router = useRouter();
 
-  // const menu = useMenuState();
-
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
+  const userLogout = () => {
+    logout();
+    router.push('/');
   };
 
   const toggleSearch = () => {
@@ -50,16 +39,6 @@ const Nav = ({ navtitle }: INav) => {
   const closeSearch = () => {
     setShowSearch(false);
   };
-
-  useEffect(() => {
-    // check if token is there
-    const t = cookie.get('token') || false;
-    // login to check
-    if (t) {
-      checkUser(t, onProfileLoad);
-      setToken(t);
-    }
-  }, []);
 
   useHotkeys('/', () => {
     toggleSearch();
@@ -159,14 +138,14 @@ const Nav = ({ navtitle }: INav) => {
                 </Link>
               </Box>
             </Flex>
-            {!token && (
+            {!accessToken && (
               <Link href="/login">
                 <Text>Login</Text>
               </Link>
             )}
-            {token && token !== '' && (
+            {accessToken && accessToken !== '' && (
               <Flex ml={1}>
-                {profile && (
+                {userProfile && (
                   <Flex
                     sx={{
                       alignContent: 'top',
@@ -179,7 +158,7 @@ const Nav = ({ navtitle }: INav) => {
                           <Image
                             sx={{ borderRadius: '3rem' }}
                             width="30px"
-                            // src={API_HOST + '/' + profile?.profile_pic}
+                            // src={API_HOST + '/' + userProfile?.profile_pic}
                             src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                           />
                         </MenuButton>
@@ -199,13 +178,13 @@ const Nav = ({ navtitle }: INav) => {
                               },
                             }}>
                             <Box>
-                              <Text as="h4">{profile?.name}</Text>
+                              <Text as="h4">{userProfile?.name}</Text>
 
-                              {profile?.roles?.size > 0 && (
+                              {userProfile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
                                   sx={{ fontSize: 0, color: 'gray.6' }}>
-                                  {profile?.roles[0]?.name}
+                                  {userProfile?.roles[0]?.name}
                                 </Text>
                               )}
                             </Box>

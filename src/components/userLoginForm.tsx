@@ -1,20 +1,17 @@
-/** @jsxImportSource theme-ui */
-
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import Router from 'next/router';
 import Image from 'next/image';
-import { useStoreActions, useStoreState } from 'easy-peasy';
-
 import { Label, Input, Heading, Checkbox } from 'theme-ui';
-
 import { useForm } from 'react-hook-form';
+import { Spinner } from 'theme-ui';
+
 import Link from './NavLink';
 import { userLogin } from '../utils/models';
-import { Spinner } from 'theme-ui';
 
 import Logo from '../../public/Logo.svg';
 import GoogleLogo from '../../public/GoogleLogo.svg';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface IField {
   name: string;
@@ -22,40 +19,35 @@ export interface IField {
 }
 
 const UserLoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const token = useStoreState((state) => state.auth.token);
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
+  const { register, handleSubmit } = useForm();
+
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const onSubmit = (data: any) => {
+  const { login, accessToken } = useAuth();
+
+  const onSubmit = async (data: any): Promise<void> => {
     setLoading(true);
-    setError(false);
-    userLogin(data, ProxyToken, handleError);
-  };
-
-  const ProxyToken = (t: string) => {
-    console.log(t);
-    setToken(t);
-    setLoading(false);
-  };
-
-  const handleError = (error: any) => {
-    setError(true);
-    console.error('Login error: vb', error);
-    setLoading(false);
+    setError(null);
+    try {
+      const res = await userLogin(data);
+      if (res) {
+        login(res);
+      }
+      setLoading(false);
+    } catch (err) {
+      console.error('Login error: vb', err);
+      setError(err?.errors || 'something wrong');
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (token && token.length > 10) {
+    if (accessToken) {
       Router.push('/');
     }
-  }, [token]);
+  }, [accessToken]);
 
   // const handlePasswordToggle = () => {
   //   setShowPassword(!showPassword);
@@ -107,7 +99,6 @@ const UserLoginForm = () => {
             {...register('password', { required: true })}
             mb={'12px'}
           />
-          {errors.exampleRequired && <Text>This field is required</Text>}
           <Flex
             sx={{
               alignItems: 'center',
@@ -115,9 +106,7 @@ const UserLoginForm = () => {
               justifyContent: 'space-between',
             }}>
             {error ? (
-              <Text sx={{ color: 'warning_300' }}>
-                Email or password entered is incorrect
-              </Text>
+              <Text sx={{ color: 'warning_300' }}>{error}</Text>
             ) : (
               <Flex>
                 <Label

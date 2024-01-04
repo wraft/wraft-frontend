@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useImmer } from 'use-immer';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
-
+import toast from 'react-hot-toast';
+import Router from 'next/router';
 import { Label, Select } from 'theme-ui';
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
 
 import { IFlow, ICreator } from './FlowList';
 import { ContentType } from '../utils/types';
 import PageHeader from './PageHeader';
-
-import { useToasts } from 'react-toast-notifications';
-
-import Router from 'next/router';
-
-import {
-  loadEntity,
-  createEntity,
-  loadEntityDetail,
-  updateEntity,
-  deleteEntity,
-} from '../utils/models';
-
 import Field from './Field';
 import FieldColor from './FieldColor';
 import FieldText from './FieldText';
 import FieldEditor from './FieldEditor';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
 
 export interface IFlowItem {
   flow: IFlow;
@@ -148,16 +135,6 @@ const schema = z.object({
 });
 
 const Form = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({
-    resolver: zodResolver(schema),
-  });
-  const token = useStoreState((state) => state.auth.token);
-
   const [fields, setFields] = useState([]);
   const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
@@ -166,7 +143,14 @@ const Form = () => {
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [newFields, setNewFields] = useState<any>([]);
 
-  const { addToast } = useToasts();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -236,25 +220,32 @@ const Form = () => {
     if (deletable && deletable.value && deletable.value.id) {
       const deletableId = deletable.value.id;
       const contentypeId = content?.content_type.id;
-      deleteEntity(
-        `content_type/${contentypeId}/field/${deletableId}`,
-        token,
-        () => {
-          if (cId) loadDataDetails(cId, token);
-          addToast('Deleted Field' + deletableId, { appearance: 'success' });
-        },
-        () => {
-          addToast('Deleted Field Failed', { appearance: 'error' });
-        },
-      );
+
+      deleteAPI(`content_type/${contentypeId}/field/${deletableId}`)
+        .then(() => {
+          if (cId) loadDataDetails(cId);
+          toast.success('Deleted Field' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error('Deleted Field Faile' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     }
   };
 
   const deleteMe = (deletableId: string) => {
-    deleteEntity(`content_types/${deletableId}`, token);
-
-    addToast('Deleted Successfully', { appearance: 'success' });
-    Router.push(`/content-types`);
+    deleteAPI(`content_types/${deletableId}`).then(() => {
+      toast.success('Deleted Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      Router.push(`/content-types`);
+    });
   };
 
   const setContentDetails = (data: any) => {
@@ -278,53 +269,39 @@ const Form = () => {
     }
   };
 
-  const loadDataDetails = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntityDetail(tok, `content_types`, id, setContentDetails);
+  const loadDataDetails = (id: string) => {
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      setContentDetails(data);
+    });
     return false;
   };
 
-  // Layouts
-  const loadLayoutsSuccess = (data: any) => {
-    const res: ILayout[] = data.layouts;
-    setLayouts(res);
+  const loadLayouts = () => {
+    fetchAPI('layouts').then((data: any) => {
+      const res: ILayout[] = data.layouts;
+      setLayouts(res);
+    });
   };
 
-  const loadLayouts = (t: string) => {
-    loadEntity(t, 'layouts', loadLayoutsSuccess);
-    loadFieldTypesSuccess;
+  const loadFieldTypes = () => {
+    fetchAPI('field_types?page_size=200').then((data: any) => {
+      const res: FieldTypeList = data;
+      setFieldtypes(res.field_types);
+    });
   };
 
-  /**
-   * All Available Field Types
-   */
-  const loadFieldTypesSuccess = (data: any) => {
-    const res: FieldTypeList = data;
-    setFieldtypes(res.field_types);
+  const loadFlows = () => {
+    fetchAPI('flows').then((data: any) => {
+      const res: IFlowItem[] = data.flows;
+      setFlows(res);
+    });
   };
 
-  const loadFieldTypes = (token: string) => {
-    loadEntity(token, 'field_types?page_size=200', loadFieldTypesSuccess);
-  };
-
-  const loadFlowsSuccess = (data: any) => {
-    const res: IFlowItem[] = data.flows;
-    setFlows(res);
-  };
-
-  const loadFlows = (token: string) => {
-    loadEntity(token, 'flows', loadFlowsSuccess);
-  };
-
-  // Themes
-
-  const loadThemeSuccess = (data: any) => {
-    const res: any = data.themes;
-    setThemes(res);
-  };
-
-  const loadThemes = (token: string) => {
-    loadEntity(token, 'themes?page_size=50', loadThemeSuccess);
+  const loadThemes = () => {
+    fetchAPI('themes?page_size=50').then((data: any) => {
+      const res: any = data.themes;
+      setThemes(res);
+    });
   };
 
   const formatFields = (fields: any) => {
@@ -356,15 +333,6 @@ const Form = () => {
     return fieldsMap;
   };
 
-  const onSuccess = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    Router.push(`/content-types`);
-  };
-
-  const onFailed = () => {
-    addToast('Save Failed', { appearance: 'error' });
-  };
-
   /**
    * On Theme Created
    */
@@ -384,31 +352,49 @@ const Form = () => {
     };
 
     if (isUpdate) {
-      updateEntity(
-        `content_types/${data.edit}`,
-        sampleD,
-        token,
-        onSuccess,
-        onFailed,
-      );
+      putAPI(`content_types/${data.edit}`, sampleD)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          Router.push(`/content-types`);
+        })
+        .catch(() => {
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     } else {
-      createEntity(sampleD, 'content_types', token, onSuccess, onFailed);
+      postAPI('content_types', sampleD)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          Router.push(`/content-types`);
+        })
+        .catch(() => {
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     }
   };
 
   useEffect(() => {
     if (cId) {
       setValue('edit', cId);
-      loadDataDetails(cId, token);
-      loadThemes(token);
+      loadDataDetails(cId);
+      loadThemes();
     }
-  }, [cId, token]);
+  }, [cId]);
 
   useEffect(() => {
-    if (token) {
-      loadThemes(token);
-    }
-  }, [token]);
+    loadThemes();
+  }, []);
 
   /**
    * When form is submitted from Forms Editor
@@ -439,12 +425,10 @@ const Form = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      loadLayouts(token);
-      loadFlows(token);
-      loadFieldTypes(token);
-    }
-  }, [token]);
+    loadLayouts();
+    loadFlows();
+    loadFieldTypes();
+  }, []);
 
   return (
     <Box>

@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React, { ReactElement, memo } from 'react';
-import { Box, Link } from 'theme-ui';
+import { Box } from 'theme-ui';
 import NextLink from 'next/link';
 // import styled from '@emotion/styled';
 
@@ -43,10 +43,10 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
     children,
     href,
     locale = 'en',
-    target,
+    // target,
     path,
     icon,
-    variant = 'btnNavLink',
+    // variant = 'btnNavLink',
   }) => {
     if (!href) return <>{children}</>;
     return (
@@ -56,10 +56,12 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         locale={locale}
         passHref
         legacyBehavior>
-        <Link href="" target={target} variant={variant}>
+        {/* <Link href="" target={target} variant={variant}> */}
+        <Box>
           {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
           {children}
-        </Link>
+        </Box>
+        {/* </Link> */}
       </NextLink>
     );
   },

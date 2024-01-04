@@ -28,12 +28,10 @@ const Form = () => {
 
   const onSubmit = (data: any) => {
     setReady(true);
-    userLogin(data, ProxyToken);
-  };
-
-  const ProxyToken = (t: string) => {
-    setToken(t);
-    setReady(false);
+    userLogin(data).then((res: any) => {
+      setToken(res?.access_token);
+      setReady(false);
+    });
   };
 
   useEffect(() => {

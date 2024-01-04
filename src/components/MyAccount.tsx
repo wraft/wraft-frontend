@@ -1,18 +1,12 @@
 import React from 'react';
 import { Box, Flex, Text } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-import Link from './NavLink';
 
+import Link from './NavLink';
 import { UserIcon } from './Icons';
+import { useAuth } from '../contexts/AuthContext';
 
 const Form = () => {
-  const profile = {
-    name: 'Muneef Hameed',
-    age: '29 M',
-    location: 'Jabl Ali, Rusdha',
-  };
-
-  const profilex = useStoreState((state) => state.profile.data);
+  const { userProfile } = useAuth();
 
   return (
     <Box py={3}>
@@ -28,11 +22,11 @@ const Form = () => {
           /> */}
         </Box>
         <Box pt={3} pl={6}>
-          {profilex && (
+          {userProfile && (
             <Box>
-              <Text>{profilex.name}</Text>
+              <Text>{userProfile?.name}</Text>
               <Text>
-                {profile.age} - {profile.location}
+                {userProfile?.age} - {userProfile?.location}
               </Text>
               <Box pt={3}>
                 <Link href="/account/profile" variant="caps">

@@ -8,26 +8,25 @@ import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import { AddIcon, SearchIcon } from '../../../components/Icons';
-import { loadEntity } from '../../../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI } from '../../../utils/models';
 import { RolesAdd, RolesList } from '../../../components/manage';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const Index: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const currentOrg = useStoreState((state) => state.currentOrg.name);
 
-  function onsuccess() {
-    console.log('success');
-  }
+  const { userProfile } = useAuth();
+
   useEffect(() => {
-    if (token) loadEntity(token, 'roles', onsuccess);
-  }, [token]);
+    fetchAPI('roles').then(() => {
+      console.log('success');
+    });
+  }, []);
 
   return (
-    (currentOrg !== 'Personal' || '') && (
+    (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
       <>
         <Head>
           <title>Layouts | Wraft Docs</title>

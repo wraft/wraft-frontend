@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import {
   Flex,
@@ -12,17 +12,15 @@ import {
   Checkbox,
 } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { useStoreActions, useStoreState } from 'easy-peasy';
 import {
-  checkUser,
-  loadEntityDetail,
   updateEntityFile,
   deleteEntity,
   createEntity,
+  fetchAPI,
 } from '../../../utils/models';
 import Router from 'next/router';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -31,6 +29,7 @@ import { workspaceLinks } from '../../../utils';
 import ModalCustom from '../../../components/ModalCustom';
 import Field from '../../../components/Field';
 import { ConfirmDelete } from '../../../components/common';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export interface Organisation {
   id: string;
@@ -56,49 +55,40 @@ type FormInputs = {
 
 const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
-  const token = useStoreState((state) => state.auth.token);
-  const { addToast } = useToasts();
-  const [isDelete, setDelete] = React.useState(false);
-  const [isConfirmDelete, setConfirmDelete] = React.useState(false);
-  const [orgId, setOrgId] = React.useState('');
-  const [org, setOrg] = React.useState<Organisation>();
-  const [logoSrc, setLogoSrc] = React.useState(org?.logo);
-  const fileRef = React.useRef<HTMLInputElement | null>(null);
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
-  const [isChecked, setIsChecked] = React.useState(false);
-  const currentOrg = useStoreState((state) => state.currentOrg.name);
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const [inputValue, setInputValue] = React.useState<number>(0);
+  const [isDelete, setDelete] = useState(false);
+  const [isConfirmDelete, setConfirmDelete] = useState(false);
+  const [org, setOrg] = useState<Organisation>();
+  const [logoSrc, setLogoSrc] = useState(org?.logo);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
+  const [inputValue, setInputValue] = useState<number>(0);
+
+  const { userProfile, accessToken, logout } = useAuth();
+
+  const orgId = userProfile?.organisation_id || null;
+  const currentOrg = userProfile?.currentOrganisation || null;
+
+  console.log('userProfile', userProfile);
 
   const onUpdate = (data: any) => {
     console.log(data);
   };
-  const onSuccess = (data: any) => {
-    setOrgId(data.organisation_id);
-  };
-  const onLoad = (data: any) => {
-    setOrg(data);
-  };
 
-  React.useEffect(() => {
-    checkUser(token, onSuccess);
-  }, [token]);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (orgId) {
-      loadEntityDetail(token, `organisations`, orgId, onLoad);
+      fetchAPI(`organisations/${orgId}`).then((data: any) => {
+        setOrg(data);
+      });
     }
-  }, [orgId, token]);
+  }, [orgId]);
 
   const backupLogo =
     'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
 
-  React.useEffect(() => {
-    if (org?.logo) {
-      setLogoSrc(org?.logo);
-    } else {
-      setLogoSrc(backupLogo);
-    }
+  useEffect(() => {
+    const logo = org?.logo || backupLogo;
+    setLogoSrc(logo);
   }, [org]);
 
   const onSubmit = (data: any) => {
@@ -114,12 +104,21 @@ const Index: FC = () => {
     }
 
     if (orgId) {
-      updateEntityFile(`organisations/${orgId}`, formData, token, onUpdate);
-      addToast(`Updated Workspace ${data.name}`, { appearance: 'success' });
+      updateEntityFile(
+        `organisations/${orgId}`,
+        formData,
+        accessToken as string,
+        onUpdate,
+      );
+
+      toast.success(`Updated Workspace ${data.name}`, {
+        duration: 1000,
+        position: 'top-right',
+      });
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const data = inputRef.current?.value;
     setInputValue(parseInt(data ?? '0', 10));
   }, [inputRef.current?.value]);
@@ -127,18 +126,24 @@ const Index: FC = () => {
   const onConfirmDelete = async (inputValue: any) => {
     deleteEntity(
       `/organisations`,
-      token,
+      accessToken as string,
       () => {
-        addToast(`Deleted workspace successfully`, { appearance: 'success' });
+        toast.success(`Deleted workspace successfully`, {
+          duration: 1000,
+          position: 'top-right',
+        });
       },
       (error: any) => {
-        addToast(`${error.message}`, { appearance: 'error' });
+        toast.success(error?.message || 'failed', {
+          duration: 1000,
+          position: 'top-right',
+        });
       },
       { code: `${inputValue}` },
     );
 
     setConfirmDelete(false);
-    userLogout();
+    logout();
     Router.push('/login');
   };
 
@@ -182,7 +187,7 @@ const Index: FC = () => {
             bg: 'background',
           }}>
           <Flex>
-            {(currentOrg !== 'Personal' || '') && (
+            {(currentOrg?.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
             )}
             <Box>
@@ -233,7 +238,7 @@ const Index: FC = () => {
                   Update
                 </Button>
               </Box>
-              {(currentOrg !== 'Personal' || '') && (
+              {(currentOrg?.name !== 'Personal' || '') && (
                 <Box
                   sx={{
                     bg: 'bgWhite',
@@ -244,7 +249,7 @@ const Index: FC = () => {
                     m: 4,
                   }}>
                   <Text variant="pR" sx={{ display: 'inline-block', mb: 2 }}>
-                    Workspace removal
+                    Delete workspace
                   </Text>
                   <br />
                   <Text
@@ -259,15 +264,17 @@ const Index: FC = () => {
                       createEntity(
                         {},
                         '/organisations/request_deletion',
-                        token,
+                        accessToken as string,
                         (data: any) => {
-                          addToast(`${data.info}`, {
-                            appearance: 'success',
+                          toast.success(data.info, {
+                            duration: 1000,
+                            position: 'top-right',
                           });
                         },
                         (error: any) => {
-                          addToast(`${error}`, {
-                            appearance: 'error',
+                          toast.success(error, {
+                            duration: 1000,
+                            position: 'top-right',
                           });
                         },
                       );

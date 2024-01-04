@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
-import { loadEntity, updateEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { putAPI, fetchAPI } from '../utils/models';
 
 import PageHeader from './PageHeader';
 import { Table } from './Table';
 import { BoxWrap, StateBadge } from './Atoms';
 import ContentLoader from './ContentLoader';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface ApprovalList {
   pre_state: State;
@@ -36,39 +36,40 @@ export interface State {
 }
 
 const Approvals = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
 
-  const loadDataSuccess = (data: any) => {
-    setLoading(true);
-    const res: ApprovaSystemItem[] = data.instance_approval_systems;
-    setContents(res);
-  };
+  const { accessToken } = useAuth();
 
-  const loadData = (t: string) => {
-    loadEntity(t, 'users/instance-approval-systems', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('users/instance-approval-systems')
+      .then((data: any) => {
+        setLoading(true);
+        const res: ApprovaSystemItem[] = data.instance_approval_systems;
+        setContents(res);
+      })
+      .catch(() => {
+        setLoading(true);
+      });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
+    if (accessToken) {
+      loadData();
     }
-  }, [token]);
-
-  const onApproved = () => {
-    console.log('onApproved');
-  };
+  }, [accessToken]);
 
   /**
    * Approve an Instance
    */
 
   const approveInstance = (id: string) => {
-    updateEntity(`/contents/${id}/approve`, {}, token, onApproved);
+    putAPI(`contents/${id}/approve`).then(() => {
+      console.log('onApproved');
+    });
   };
 
   /**
