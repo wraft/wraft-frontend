@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useStoreState } from 'easy-peasy';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 import { Flex, Box, Text, Button } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../../utils/models';
@@ -13,7 +14,6 @@ import ModalCustom from '../ModalCustom';
 import { Table } from '../Table';
 
 import AssignRole from './AssignRole';
-import toast from 'react-hot-toast';
 
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
