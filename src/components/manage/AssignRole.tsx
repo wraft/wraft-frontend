@@ -1,8 +1,7 @@
 import { Flex, Text, Button } from 'theme-ui';
 import { useState, useEffect } from 'react';
-import { fetchAPI } from '../../utils/models';
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { fetchAPI, postAPI } from '../../utils/models';
+import toast from 'react-hot-toast';
 
 interface RoleList {
   roleName: string;
@@ -28,15 +27,17 @@ const AssignRole = ({
   currentRoleList,
   setCurrentRoleList,
   setIsAssignRole, // userId,
+  userId,
 }: AssignRoleProps) => {
   const [response, setResponse] = useState<ResponseData>();
+  console.log(response);
   const [roleList, setRoleList] = useState<Array<any>>([]);
 
   const loadDataSuccess = (data: any) => {
     setResponse(data);
-    console.log(data);
+    // console.log(data);
   };
-  console.log(currentRoleList);
+  // console.log(currentRoleList);
 
   const loadData = () => {
     fetchAPI('roles').then((data: any) => {
@@ -68,30 +69,17 @@ const AssignRole = ({
 
   const assignRoleFunction = async (roleId: string) => {
     if (roleId) {
-      // try {
-
-      //   // postAPI(`users/${userId}/roles/${roleId}`)
-      //   const response = await fetch(
-      //     `${API_HOST}/api/v1/users/${userId}/roles/${roleId}`,
-      //     {
-      //       method: 'POST',
-      //       headers: {
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //     },
-      //   );
-
-      //   if (!response.ok) {
-      //     const errorData = await response.json();
-      //     console.error('Errorq:', errorData);
-      //     throw new Error('Team joining failed');
-      //   } else {
-      //     const responseData = response;
-      //     console.log(responseData);
-      //   }
-      // } catch (error) {
-      //   console.error('Network error:', error);
-      // }
+      postAPI(`users/${userId}/roles/${roleId}`, {})
+        .then((data) => {
+          console.log('assigned role', data);
+          toast.success('Assigned Role Successfully', {
+            duration: 2000,
+            position: 'top-center',
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       setCurrentRoleList(null);
       setIsAssignRole(null);
     }
