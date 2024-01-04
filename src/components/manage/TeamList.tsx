@@ -4,19 +4,21 @@ import { useStoreState } from 'easy-peasy';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { Flex, Box, Text, Button } from 'theme-ui';
+import {
+  MenuProvider,
+  Menu,
+  MenuItem,
+  MenuButton,
+  Dialog,
+} from '@ariakit/react';
 
-import { fetchAPI, deleteAPI } from '../../utils/models';
+import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
-import AddRole from '../icon/add.svg';
-import RemoveRole from '../icon/remove.svg';
-import { FilterArrowDown, OptionsIcon } from '../Icons';
+import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
 import { Table } from '../Table';
 
 import AssignRole from './AssignRole';
-
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
 interface Role {
   id: string;
@@ -55,7 +57,6 @@ interface MemberData {
 }
 
 const TeamList = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<MembersList>();
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [currentRoleList, setCurrentRoleList] = useState<string[]>([]);
@@ -231,7 +232,6 @@ const TeamList = () => {
                                   tableList[row.index].members.memberId,
                                 );
                               }}
-                              disabled={role.roleName === 'superadmin'}
                               sx={{
                                 cursor: 'pointer',
                                 margin: '0px',
@@ -241,10 +241,15 @@ const TeamList = () => {
                                   display: 'none',
                                 },
                               }}>
-                              <img
-                                src={RemoveRole}
-                                alt="remove role from user"
-                              />
+                              <Box
+                                sx={{
+                                  color: 'gray.9',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  objectFit: 'contain',
+                                }}>
+                                <Close width={30} color="black" />
+                              </Box>
                             </Button>
                           </Flex>
                           <ModalCustom
@@ -291,7 +296,7 @@ const TeamList = () => {
                             display: 'none',
                           },
                         }}>
-                        <img src={AddRole} alt="assign role to the user" />
+                        <AddIcon />
                       </Button>
                     </Box>
                     <ModalCustom
@@ -315,23 +320,64 @@ const TeamList = () => {
               Cell: ({ row }) => {
                 return (
                   <Box sx={{ position: 'relative' }}>
-                    <Button
-                      sx={{
-                        cursor: 'pointer',
-                        margin: '0px',
-                        padding: '0px',
-                        bg: 'transparent',
-                        ':disabled': {
-                          display: 'none',
-                        },
-                      }}
-                      onClick={() => {
-                        setIsOpen(row.index);
-                        setUserID(tableList[row.index].members.memberId);
-                      }}>
-                      <OptionsIcon />
-                    </Button>
-                    {isOpen === row.index && (
+                    <MenuProvider>
+                      <MenuButton
+                        as={Box}
+                        sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Button
+                          sx={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            margin: '0px',
+                            padding: '0px',
+                            bg: 'transparent',
+                            ':disabled': {
+                              display: 'none',
+                            },
+                          }}
+                          onClick={() => {
+                            setIsOpen(row.index);
+                            setUserID(tableList[row.index].members.memberId);
+                          }}>
+                          <OptionsIcon />
+                        </Button>
+                      </MenuButton>
+                      <Menu
+                        as={Box}
+                        sx={{
+                          height: 'auto',
+                          // width: '200px',
+                          width: 'fit-content',
+                          position: 'absolute',
+                          top: -30,
+                          left: -10,
+                          zIndex: '50',
+                          display: 'flex',
+                          borderRadius: '0.75rem',
+                          backgroundColor: 'hsl(204 20% 100%)',
+                          padding: '1rem',
+                          color: 'hsl(204 10% 10%)',
+                          boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+                        }}
+                        open={isOpen == row.index}
+                        onClose={() => setIsOpen(null)}>
+                        <MenuItem>
+                          <Text variant="">Delete</Text>
+                        </MenuItem>
+                      </Menu>
+                      {/* <MenuItem variant="layout.menuItemHeading" as={Box}>
+                          Switch Workspace
+                        </MenuItem>
+                        <MenuItem variant="layout.menuItemHeading" as={Box}>
+                          <Button
+                            variant="base"
+                            sx={{ cursor: 'pointer' }}
+                            onClick={() => setIsOpen(true)}>
+                            Create a workspace
+                          </Button>
+                        </MenuItem> */}
+                      {/* Delete */}
+                      {/* {isOpen === row.index && (
                       <Box
                         sx={{
                           position: 'absolute',
@@ -364,46 +410,40 @@ const TeamList = () => {
                           Remove User
                         </Button>
                       </Box>
-                    )}
-                    <ModalCustom
-                      varient="center"
-                      isOpen={isRemoveUser === row.index}
-                      setOpen={setIsRemoveUser}>
-                      {
-                        <ConfirmDelete
-                          title="Delete role"
-                          text={`Are you sure you want to delete ‘${tableList[
-                            row.index
-                          ]?.members.name}’?`}
-                          setOpen={setIsRemoveUser}
-                          onConfirmDelete={async () => {
-                            try {
-                              const response = await fetch(
-                                `${API_HOST}/api/v1/organisations/remove_user/${userId}`,
-                                {
-                                  method: 'POST',
-                                  headers: {
-                                    Authorization: `Bearer ${token}`, // Add your authorization token here
-                                  },
-                                },
-                              );
-
-                              if (!response.ok) {
-                                const errorData = await response.json();
-                                console.error('Errorq:', errorData);
-                                throw new Error('Team joining failed');
-                              } else {
-                                const responseData = await response;
-                                console.log(responseData);
-                              }
-                            } catch (error) {
-                              console.error('Network error:', error);
-                            }
-                            setIsRemoveUser(null);
-                          }}
-                        />
-                      }
-                    </ModalCustom>
+                    )} */}
+                      <ModalCustom
+                        varient="center"
+                        isOpen={isRemoveUser === row.index}
+                        setOpen={setIsRemoveUser}>
+                        {
+                          <ConfirmDelete
+                            title="Delete role"
+                            text={`Are you sure you want to delete ‘${tableList[
+                              row.index
+                            ]?.members.name}’?`}
+                            setOpen={setIsRemoveUser}
+                            onConfirmDelete={async () => {
+                              postAPI(`organisations/remove_user/123`, {})
+                                .then((data) => {
+                                  console.log(data);
+                                  toast.success('User removed Successfully', {
+                                    duration: 2000,
+                                    position: 'top-center',
+                                  });
+                                })
+                                .catch((error) => {
+                                  console.log(error);
+                                  toast.error('User removed Failed', {
+                                    duration: 2000,
+                                    position: 'top-center',
+                                  });
+                                });
+                              setIsRemoveUser(null);
+                            }}
+                          />
+                        }
+                      </ModalCustom>
+                    </MenuProvider>
                   </Box>
                 );
               },
