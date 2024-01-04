@@ -1,10 +1,8 @@
 /* eslint-disable react/display-name */
 import React, { ReactElement, memo } from 'react';
-import { Box } from 'theme-ui';
-import NextLink from 'next/link';
-// import styled from '@emotion/styled';
 
-// import theme from '../utils/theme';
+import NextLink from 'next/link';
+import { Box } from 'theme-ui';
 
 // interface Props {
 //   children: React.ReactNode;

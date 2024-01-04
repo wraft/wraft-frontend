@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, Box, Label, Input, Flex } from 'theme-ui';
-import { ChromePicker } from 'react-color';
 
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
+import { ChromePicker } from 'react-color';
+import { Text, Box, Label, Input, Flex } from 'theme-ui';
 
 interface FieldColorProps {
   register: any;

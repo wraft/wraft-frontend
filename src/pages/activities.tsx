@@ -1,10 +1,12 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
 import { Text, Box, Flex, Container } from 'theme-ui';
-import Page from '../components/PageFrame';
-import UserNav from '../components/UserNav';
-import UserHome from '../components/UserHome';
+
 import ActivityFeed from '../components/ActivityFeed';
+import Page from '../components/PageFrame';
+import UserHome from '../components/UserHome';
+import UserNav from '../components/UserNav';
 import { useAuth } from '../contexts/AuthContext';
 
 const Index: FC = () => {

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text, Flex } from 'theme-ui';
 
-import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
+
+import Link from './NavLink';
 // import { SearchIcon } from './Icons';
 
 export interface ILayout {

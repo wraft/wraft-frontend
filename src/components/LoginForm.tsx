@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import Router from 'next/router';
 
 import { useStoreActions, useStoreState } from 'easy-peasy';
-
-import { Label, Input } from 'theme-ui';
-
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
-import Link from './NavLink';
-import { userLogin } from '../utils/models';
+import { Box, Flex, Text, Button } from 'theme-ui';
+import { Label, Input } from 'theme-ui';
 import { Spinner } from 'theme-ui';
+
+import { userLogin } from '../utils/models';
+
+import Link from './NavLink';
 
 export interface IField {
   name: string;

@@ -1,15 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { AxiosRequestConfig, AxiosError } from 'axios';
 import produce from 'immer';
+import cookie from 'js-cookie';
+
+import { Layout, User, Style, FlowBranch } from '../components/Icons';
+
 import { ContentState } from './types';
 
 /**
  *  @TODO Icons: Convert to local files
  */
-import { Layout, User, Style, FlowBranch } from '../components/Icons';
-
-import cookie from 'js-cookie';
-import { AxiosRequestConfig, AxiosError } from 'axios';
 
 // util fns here!
 export interface IField {

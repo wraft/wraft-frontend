@@ -5,10 +5,12 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
-import { fetchUserInfo, fetchAPI } from '../utils/models';
+
 import { useStoreActions } from 'easy-peasy';
-import { Flex, Spinner } from 'theme-ui';
 import cookie from 'js-cookie';
+import { Flex, Spinner } from 'theme-ui';
+
+import { fetchUserInfo, fetchAPI } from '../utils/models';
 
 interface IUserContextProps {
   isUserLoading: boolean;

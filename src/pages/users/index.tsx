@@ -1,7 +1,9 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import UserList from '../../components/UserList';
+
 import Page from '../../components/PageFrame';
+import UserList from '../../components/UserList';
 
 const Index: FC = () => {
   return (

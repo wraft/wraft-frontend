@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+
+import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import Router, { useRouter } from 'next/router';
-
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { Label, Input, Checkbox } from 'theme-ui';
 
-import { Asset } from '../utils/types';
-import Field from './Field';
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
-import FieldColor from './FieldColor';
+import { Asset } from '../utils/types';
+
 import AssetForm from './AssetForm';
+import Field from './Field';
+import FieldColor from './FieldColor';
 
 interface ThemeElement {
   name: string;

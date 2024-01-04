@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex, Button } from 'theme-ui';
-import { deleteEntity, fetchAPI } from '../../utils/models';
-import { useStoreState } from 'easy-peasy';
 
-import { Table } from '../Table';
+import { useStoreState } from 'easy-peasy';
 import ContentLoader from 'react-content-loader';
+import { Box, Text, Flex, Button } from 'theme-ui';
+
+import { deleteEntity, fetchAPI } from '../../utils/models';
+import { ConfirmDelete } from '../common';
 import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
 import ModalCustom from '../ModalCustom';
+import { Table } from '../Table';
+
 import { RolesEdit } from '.';
-import { ConfirmDelete } from '../common';
 
 export interface RolesItem {
   id: string;

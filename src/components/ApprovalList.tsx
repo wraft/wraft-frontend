@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
 import { putAPI, fetchAPI } from '../utils/models';
 
-import PageHeader from './PageHeader';
-import { Table } from './Table';
 import { BoxWrap, StateBadge } from './Atoms';
 import ContentLoader from './ContentLoader';
-import { useAuth } from '../contexts/AuthContext';
+import PageHeader from './PageHeader';
+import { Table } from './Table';
 
 export interface ApprovalList {
   pre_state: State;

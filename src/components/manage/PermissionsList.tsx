@@ -1,18 +1,20 @@
 /** @jsxImportSource theme-ui */
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Button, Flex, Text } from 'theme-ui';
-import { putAPI, fetchAPI } from '../../utils/models';
-import Table from '../TanstackTable';
-import { ArrowDropdown } from '../Icons';
+
+import { Checkbox, CheckboxOptions } from '@ariakit/react';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
-import { Checkbox, CheckboxOptions } from '@ariakit/react';
+import { Box, Button, Flex, Text } from 'theme-ui';
+
+import { putAPI, fetchAPI } from '../../utils/models';
 import {
   svgDataUriDash,
   svgDataUriTick,
   svgDataUriTickWhite,
 } from '../common/UriSvgs';
+import { ArrowDropdown } from '../Icons';
+import Table from '../TanstackTable';
 
 const PermissionsList = () => {
   const [permissionsInitial, setPermissionsInitial] = useState<any>({});

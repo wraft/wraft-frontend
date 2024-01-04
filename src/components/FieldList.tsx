@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
+
 import { Box, Text } from 'theme-ui';
+
+import { fetchAPI } from '../utils/models';
+
 import Link from './NavLink';
 // import { Plus } from './Icons';
-import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
-
 import Table from './Table';
 
 export interface FieldTypeList {

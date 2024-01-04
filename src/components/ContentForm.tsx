@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from 'react';
+
 import Router, { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
-
-import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
 import { useForm } from 'react-hook-form';
-import { Field as FieldT, FieldInstance } from '../utils/types';
-import { postAPI, fetchAPI, putAPI } from '../utils/models';
-// import { isString } from 'util';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
 import { Input } from 'theme-ui';
-// import { Spinner } from 'theme-ui';
-// import RichEditorWraft from './EditWraft';
 
-import Field from './Field';
-import FieldText from './FieldText';
-import FieldForm from './FieldForm';
-import EditorWraft from './WraftEditor';
-import NavEdit from './NavEdit';
-import { Template, ContentState } from '../../src/utils/types';
 import {
   cleanName,
   findVars,
   replaceTitles,
   updateVars,
 } from '../../src/utils';
+import { Template, ContentState } from '../../src/utils/types';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { Field as FieldT, FieldInstance } from '../utils/types';
 
+// import { isString } from 'util';
+// import { Spinner } from 'theme-ui';
+// import RichEditorWraft from './EditWraft';
+
+import Field from './Field';
+import FieldForm from './FieldForm';
+import FieldText from './FieldText';
 import { ErrorIcon, TickIcon } from './Icons';
-
 import Modal from './Modal';
+import NavEdit from './NavEdit';
+import EditorWraft from './WraftEditor';
 
 export interface ILayout {
   width: number;

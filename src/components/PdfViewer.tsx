@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
 import { Document, Page } from 'react-pdf';
-
-// CHECK BACK
 import { pdfjs } from 'react-pdf';
 import { Text } from 'theme-ui';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface PdfViewerProps {

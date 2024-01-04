@@ -1,7 +1,9 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import SuperAdmin from '../../components/SuperAdmin';
+
 import Page from '../../components/PageFrame';
+import SuperAdmin from '../../components/SuperAdmin';
 
 const VenderPage: FC = () => {
   return (

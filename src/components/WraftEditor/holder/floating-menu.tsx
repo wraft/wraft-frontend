@@ -1,6 +1,6 @@
-import { Placement } from '@popperjs/core';
 import React, { FC, PropsWithChildren, ReactChild, Ref, useMemo } from 'react';
-import { createPortal } from 'react-dom';
+
+import { Placement } from '@popperjs/core';
 import { cx } from '@remirror/core';
 import type { PositionerParam } from '@remirror/extension-positioner';
 import { getPositioner } from '@remirror/extension-positioner';
@@ -11,6 +11,7 @@ import {
   usePositioner,
 } from '@remirror/react-hooks';
 import { ComponentsTheme, ExtensionPositionerTheme } from '@remirror/theme';
+import { createPortal } from 'react-dom';
 
 import { composeRefs } from './seznam-compose-react-refs';
 import { useIsomorphicLayoutEffect } from './use-isomorphic-layout-effect';

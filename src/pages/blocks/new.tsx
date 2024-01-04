@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import Head from 'next/head';
-import BlockTemplateForm from '../../components/BlockTemplateForm';
 
-import Page from '../../components/PageFrame';
-import { Flex } from 'theme-ui';
+import Head from 'next/head';
 import Link from 'next/link';
+import { Flex } from 'theme-ui';
+
+import BlockTemplateForm from '../../components/BlockTemplateForm';
+import Page from '../../components/PageFrame';
 
 export const Index: FC = () => {
   return (
