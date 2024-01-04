@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import Head from 'next/head';
-// import Page from '../src/components/PageFrame';
-
-import { Box } from 'theme-ui';
 
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { Box } from 'theme-ui';
+
+// import Page from '../src/components/PageFrame';
 
 const PdfViewer = dynamic(() => import('../components/PdfViewer'), {
   ssr: false,

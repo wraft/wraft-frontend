@@ -1,11 +1,11 @@
-import { action, Action, thunk, Thunk, computed, Computed } from 'easy-peasy';
-import { jwtDecode } from 'jwt-decode';
-import cookie from 'js-cookie';
 import axios from 'axios';
+import { action, Action, thunk, Thunk, computed, Computed } from 'easy-peasy';
+import cookie from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
-import { TokenPayload } from '../utils/types';
-import { APIv2 } from '../utils/consts';
 import { getAxiosConfig } from '../utils';
+import { APIv2 } from '../utils/consts';
+import { TokenPayload } from '../utils/types';
 
 export interface Auth {
   domain?: string;

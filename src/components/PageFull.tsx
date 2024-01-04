@@ -1,13 +1,14 @@
 import React from 'react';
+
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
+import { useAuth } from '../contexts/AuthContext';
+
 import Container from './Container';
 // import Sidebar from './Sidebar';
-import NavEdit from './NavEdit';
 import Nav from './Nav';
-
-import { useAuth } from '../contexts/AuthContext';
+import NavEdit from './NavEdit';
 
 export interface IPage {
   showFull?: boolean;

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text, Flex, Avatar } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
 import { fetchAPI } from '../utils/models';
+import { API_HOST } from '../utils/models';
+
 import { TimeAgo } from './Atoms';
 
 // import { Button } from 'theme-ui';
-
-import { API_HOST } from '../utils/models';
-import { useAuth } from '../contexts/AuthContext';
 
 export interface ActivityStream {
   activities: Activity[];

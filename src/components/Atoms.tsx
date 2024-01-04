@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
-import { Box, Text, Flex } from 'theme-ui';
 
 import { formatDistanceStrict } from 'date-fns';
+import { Box, Text, Flex } from 'theme-ui';
+
 import MenuItem from './NavLink';
 
 /**

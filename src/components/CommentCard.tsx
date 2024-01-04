@@ -1,6 +1,9 @@
 import React from 'react';
+
 import { Box, Flex, Text } from 'theme-ui';
+
 import { API_HOST } from '../utils/models';
+
 import { ProfileCard } from './ContentDetail';
 
 export interface Comment {

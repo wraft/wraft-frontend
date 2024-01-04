@@ -1,19 +1,20 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useState } from 'react';
-import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
-import { Checkbox } from '@ariakit/react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
-import { putAPI, fetchAPI } from '../../utils/models';
-import Field from '../Field';
+import { Checkbox } from '@ariakit/react';
 import {
   Disclosure,
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
-import { ArrowDropdown } from '../Icons';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
+
+import { putAPI, fetchAPI } from '../../utils/models';
 import theme from '../../utils/theme';
+import Field from '../Field';
+import { ArrowDropdown } from '../Icons';
 
 interface Props {
   setOpen: any;

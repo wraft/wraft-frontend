@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
+
 import { Box, Text, Container } from 'theme-ui';
-import Link from './NavLink';
-import { Table } from './Table';
+
 import { fetchAPI } from '../utils/models';
 
-import PageHeader from './PageHeader';
 import ContentLoader from './ContentLoader';
+import Link from './NavLink';
+import PageHeader from './PageHeader';
+import { Table } from './Table';
 
 export interface VendorTypes {
   vendors: Vendor[];

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
+
+import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
 
-import { useForm } from 'react-hook-form';
-
-import Field from './Field';
-import FieldText from './FieldText';
-import { BlockTemplates } from '../utils/types';
-import EditorWraft from './EditorWraft';
+import { useAuth } from '../contexts/AuthContext';
 import {
   API_HOST,
   postAPI,
@@ -14,11 +13,12 @@ import {
   fetchAPI,
   deleteAPI,
 } from '../utils/models';
-import Router, { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
+import { BlockTemplates } from '../utils/types';
 
+import EditorWraft from './EditorWraft';
+import Field from './Field';
+import FieldText from './FieldText';
 import ImagesList from './ImagesList';
-import { useAuth } from '../contexts/AuthContext';
 
 // const Tag = styled(Box)`
 //   padding: 5px;

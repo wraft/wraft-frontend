@@ -1,12 +1,14 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
 import { Box, Button, Container, Flex } from 'theme-ui';
-import ThemeList from '../../../components/ThemeList';
-import Page from '../../../components/PageFrame';
-import Link from '../../../components/NavLink';
-import PageHeader from '../../../components/PageHeader';
+
 import { AddIcon, GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
+import Link from '../../../components/NavLink';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
+import ThemeList from '../../../components/ThemeList';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {

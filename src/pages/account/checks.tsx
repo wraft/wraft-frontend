@@ -1,9 +1,11 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import Page from '../../components/PageFrame';
 import { Text, Flex, Box } from 'theme-ui';
-import PageHeader from '../../components/PageHeader';
+
 import OrgSidebar from '../../components/OrgSidebar';
+import Page from '../../components/PageFrame';
+import PageHeader from '../../components/PageHeader';
 
 /**
  *  @TODO Icons: Convert to local files

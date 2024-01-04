@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
 import { Button, Box, Text, Flex, Image } from 'theme-ui';
+
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -113,6 +115,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                     <Box pt={3}>
                       <Image
                         src={_m.profile_pic}
+                        alt=""
                         sx={{
                           borderRadius: '99rem',
                           width: '40px',

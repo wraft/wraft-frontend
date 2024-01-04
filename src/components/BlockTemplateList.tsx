@@ -1,13 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
+
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Button, Flex, Text } from 'theme-ui';
 
-import Link from './NavLink';
 import { fetchAPI } from '../utils/models';
 
+import ContentLoader from './ContentLoader';
+import { EmptyForm, DotsVerticalRounded } from './Icons';
+import Link from './NavLink';
 import PageHeader from './PageHeader';
 import { Table } from './Table';
-
-import { EmptyForm, DotsVerticalRounded } from './Icons';
 
 export interface IField {
   id: string;
@@ -20,10 +22,6 @@ export interface IFieldItem {
   name: string;
   type: string;
 }
-
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-
-import ContentLoader from './ContentLoader';
 
 const BlockTemplateListFrame: FC = () => {
   const [contents, setContents] = useState<Array<IField>>([]);

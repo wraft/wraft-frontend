@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-import Paginate, { IPageMeta } from './Paginate';
+
+import ContentLoader from './ContentLoader';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
+import Paginate, { IPageMeta } from './Paginate';
 import { Table } from './Table';
-import ContentLoader from './ContentLoader';
 
 export interface ILayout {
   width: number;

@@ -1,7 +1,7 @@
 import React from 'react';
+
 import { usePositioner, useSuggest, UseSuggestReturn } from '@remirror/react';
 import { AnimatePresence } from 'framer-motion';
-
 import { Box } from 'theme-ui';
 
 export const FloatingActionsMenu = ({ options }: any) => {

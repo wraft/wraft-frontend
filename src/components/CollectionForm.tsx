@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
+
 import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { Input } from 'theme-ui';
 
-import Field from './Field';
+import { isNumeric } from '../utils';
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
 
-import PageHeader from './PageHeader';
-import FieldEditor from './FieldEditor';
 import { FieldType, FieldTypeList } from './ContentTypeForm';
-import { isNumeric } from '../utils';
+import Field from './Field';
+import FieldEditor from './FieldEditor';
+import PageHeader from './PageHeader';
 
 export interface FieldTypeItem {
   key: string;

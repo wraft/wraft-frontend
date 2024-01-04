@@ -27,7 +27,6 @@ import {
   SuggestChangeHandlerProps,
   Suggester,
 } from '@remirror/pm/suggest';
-
 import { ExtensionMentionAtomTheme as Theme } from '@remirror/theme';
 
 /**

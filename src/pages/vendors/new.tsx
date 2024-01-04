@@ -1,9 +1,11 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import VendorForm from '../../components/VendorForm';
-import Page from '../../components/PageFrame';
-import { Flex } from 'theme-ui';
 import Link from 'next/link';
+import { Flex } from 'theme-ui';
+
+import Page from '../../components/PageFrame';
+import VendorForm from '../../components/VendorForm';
 
 const Index: FC = () => {
   return (

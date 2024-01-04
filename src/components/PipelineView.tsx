@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
+
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import Modal, { Styles } from 'react-modal';
+import { Box, Flex, Text, Button } from 'theme-ui';
 
-import { PlayCircle } from './Icons';
 import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-import { Pipeline } from './PipelineList';
-import Link from './NavLink';
+
 import Field from './Field';
+import { PlayCircle } from './Icons';
+import Link from './NavLink';
 import PageHeader from './PageHeader';
+import { Pipeline } from './PipelineList';
 
 export interface ITriggers {
   triggers: Trigger[];
