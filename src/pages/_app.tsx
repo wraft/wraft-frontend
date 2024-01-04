@@ -4,11 +4,11 @@ import { AppProps } from 'next/app';
 
 import { ThemeUIProvider } from 'theme-ui';
 import theme from '../utils/theme';
-import { Global } from '@emotion/react';
+// import { Global } from '@emotion/react';
 
 import { UserProvider } from '../contexts/AuthContext';
 import ToasterNewProvider from '../contexts/ToasterProvider';
-import globalStyles from '../globalStyles';
+// import globalStyles from '../globalStyles';
 
 const StoreProviderOverride = StoreProvider as any;
 
@@ -21,7 +21,7 @@ const MyApp = ({ Component, pageProps, reduxStore }: AppPropsWithRedux) => {
     <StoreProviderOverride store={reduxStore}>
       <ToasterNewProvider />
       <ThemeUIProvider theme={theme}>
-        <Global styles={globalStyles} />
+        {/* <Global styles={globalStyles} /> */}
         <UserProvider>
           <Component {...pageProps} />
         </UserProvider>
