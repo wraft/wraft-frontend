@@ -58,7 +58,7 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         <Box px={3} py={2} sx={{ borderTop: '1px solid #E4E9EF' }}>
           <Text
             sx={{
-              fontFamily: 'inter',
+              fontFamily: 'body',
               fontSize: 2,
               pt: 1,
               color: '#656E78',
