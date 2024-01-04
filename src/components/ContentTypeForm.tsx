@@ -100,6 +100,11 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
+const uuidRegex =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;
+
+const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+
 const schema = z.object({
   name: z
     .string()
@@ -112,12 +117,20 @@ const schema = z.object({
     .refine((value) => !/\d/.test(value), {
       message: 'Prefix cannot contain numbers',
     }),
-  color: z.string().min(4).max(7),
-  description: z.string().min(1),
+  color: z.string().refine((value) => hexColorRegex.test(value), {
+    message: 'Invalid hexadecimal color',
+  }),
+  description: z.string().min(5, { message: 'Minimum 5 characters required' }),
   fields: z.any(),
-  layout_id: z.any(),
-  flow_id: z.string(),
-  theme_id: z.string(),
+  layout_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Layout',
+  }),
+  flow_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Flow',
+  }),
+  theme_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Theme',
+  }),
   edit: z.any(),
 });
 
@@ -145,6 +158,7 @@ const Form = () => {
   const addField = () => {
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
 
       outputState.push('');
@@ -168,6 +182,7 @@ const Form = () => {
   const addFieldVal = (val: any) =>
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
       if (val.name !== undefined || null) {
         outputState.push({ name: val.value.name, value: val.value });
@@ -189,7 +204,7 @@ const Form = () => {
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
 
-      const idToRemove = (fields[did] as { id: string }).id;
+      const idToRemove = (fields[did] as { id: string })?.id;
       const popedNewArr = newFields.filter(
         (item: any) => item.id !== idToRemove,
       );
@@ -386,14 +401,22 @@ const Form = () => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    setFields(initialFields);
+    initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
-      const ff = fieldtypes.find((f: any) => f.id === el.type);
-      const fff = { field_type: ff, name: el.name };
-      const fieldType = { value: fff, name: el.name };
-
-      addFieldVal(fieldType);
+      const fieldType = fieldtypes.find((f: any) => f.id === el.type);
+      const value = { field_type: fieldType, name: el.name };
+      const fieldValue = { value: value, name: el.name };
+      if (
+        initialFields &&
+        initialFields.every(
+          (initialField: any) => initialField.name !== el.name,
+        )
+      ) {
+        addFieldVal(fieldValue);
+      } else if (!initialFields) {
+        addFieldVal(fieldValue);
+      }
     });
   };
 
@@ -436,6 +459,11 @@ const Form = () => {
                     name="description"
                     defaultValue="Something to guide the user here"
                   />
+                  {errors.description && errors.description.message && (
+                    <Text variant="error">
+                      {errors.description.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box>
                   <Field
@@ -456,6 +484,11 @@ const Form = () => {
                     }
                     onChangeColor={onChangeFields}
                   />
+                  {errors.color && errors.color.message && (
+                    <Text variant="error">
+                      {errors.color.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="layout_id" mb={1}>
@@ -477,6 +510,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.layout_id && errors.layout_id.message && (
+                    <Text variant="error">
+                      {errors.layout_id.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="flow_id" mb={1}>
@@ -499,6 +537,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.flow_id && errors.flow_id.message && (
+                    <Text variant="error">
+                      {errors.flow_id.message as string}
+                    </Text>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'none' }}>
@@ -531,6 +574,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.theme_id && errors.theme_id.message && (
+                    <Text variant="error">
+                      {errors.theme_id.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
               {errors.exampleRequired && <Text>This field is required</Text>}
