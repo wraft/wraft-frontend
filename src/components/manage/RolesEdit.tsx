@@ -2,13 +2,10 @@
 import { useEffect, useState } from 'react';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 import { Checkbox } from '@ariakit/react';
-
 import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
-import { loadEntity, updateEntity } from '../../utils/models';
-
+import { putAPI, fetchAPI } from '../../utils/models';
 import Field from '../Field';
 import {
   Disclosure,
@@ -30,8 +27,6 @@ interface FormInputs {
 }
 
 const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
-  const token = useStoreState((state) => state.auth.token);
-  const { addToast } = useToasts();
   const {
     register,
     trigger,
@@ -45,28 +40,22 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isExpanded, setExpanded] = useState<number | null>(null);
 
-  const loadPermissionsSuccess = (data: any) => {
-    setInitialPermissions(data);
+  const loadPermissions = () => {
+    fetchAPI('permissions').then((data: any) => {
+      setInitialPermissions(data);
+    });
   };
 
-  const loadPermissions = (token: string) => {
-    loadEntity(token, 'permissions', loadPermissionsSuccess);
-  };
-
-  const loadRolesOnSuccess = (data: any) => {
-    setRole(data);
-  };
-
-  const loadRole = (token: string) => {
-    loadEntity(token, `roles/${roleId}`, loadRolesOnSuccess);
+  const loadRole = () => {
+    fetchAPI(`roles/${roleId}`).then((data: any) => {
+      setRole(data);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadPermissions(token);
-      loadRole(token);
-    }
-  }, [token]);
+    loadPermissions();
+    loadRole();
+  }, []);
 
   const newPermissoinsFormat = Object.fromEntries(
     Object.entries(initialPermissions).map(
@@ -83,7 +72,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
 
   useEffect(() => {
     setPermissions(newPermissoinsFormat);
-  }, [token, initialPermissions]);
+  }, [initialPermissions]);
 
   useEffect(() => {
     if (role) {
@@ -145,12 +134,6 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     setPermissions({ ...data });
   };
 
-  function onSuccess() {
-    setOpen(null);
-    setRender((prev: boolean) => !prev);
-    addToast(`Role Edited `, { appearance: 'success' });
-  }
-
   const checkedValuesFunc = (permissionsList: string[]) => {
     filteredPermissionKeys.forEach((key) => {
       permissions[key].children.forEach((e: any) => {
@@ -167,7 +150,14 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       name: data.name,
       permissions: permissionsList,
     };
-    updateEntity(`roles/${role.id}`, body, token, onSuccess);
+    putAPI(`roles/${role.id}`, body).then(() => {
+      setOpen(null);
+      setRender((prev: boolean) => !prev);
+      toast.success('Role Edited', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
   }
 
   return (

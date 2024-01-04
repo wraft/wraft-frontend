@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Button } from 'theme-ui';
 import Link from './NavLink';
 
-import { useStoreState } from 'easy-peasy';
 // import CombinationCard from './CombinationCard';
 import PageHeader from './PageHeader';
-import { loadEntity } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 import { Input } from 'theme-ui';
 
 export interface Theme {
@@ -26,41 +25,40 @@ export interface ThemeElement {
 }
 
 const Form = () => {
-  const token = useStoreState((state) => state.auth.token);
-  // const token = useSelector(({ login }: any) => login.token);
   const [users, setUsers] = useState<any>([]);
   const [page, setPage] = useState<number>(0);
   const [search, setSearch] = useState<string>('');
+
+  useEffect(() => {
+    loadData(page);
+  }, []);
 
   const loadDataSuccess = (data: any) => {
     const res: any = data;
     setUsers(res);
   };
 
-  const loadData = (t: string, page: number) => {
-    loadEntity(t, `users?page=${page}`, loadDataSuccess);
+  const loadData = (page: number) => {
+    fetchAPI(`users?page=${page}`).then((data: any) => {
+      loadDataSuccess(data);
+    });
   };
 
-  const searchLoadData = (t: string, page: number, search: string) => {
-    loadEntity(t, `users?page=${page}&name=${search}`, loadDataSuccess);
+  const searchLoadData = (page: number, search: string) => {
+    fetchAPI(`users?page=${page}&name=${search}`).then((data: any) => {
+      loadDataSuccess(data);
+    });
   };
 
   const loadDataPage = (page: number) => {
     setPage(page);
-    loadData(token, page);
+    loadData(page);
   };
-
-  useEffect(() => {
-    console.log('token', token);
-    if (token) {
-      loadData(token, page);
-    }
-  }, [token]);
 
   const doSearch = (e: any) => {
     const q: string = e.currentTarget.value;
     setSearch(q);
-    searchLoadData(token, page, q);
+    searchLoadData(page, q);
   };
 
   return (

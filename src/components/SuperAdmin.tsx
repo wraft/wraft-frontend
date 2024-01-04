@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Container } from 'theme-ui';
-import { fetchAPI } from '../utils/models';
 
-// import { useToasts } from 'react-toast-notifications';
+import { fetchAPI } from '../utils/models';
 import PageHeader from './PageHeader';
 import ManageSidebar from './ManageSidebar';
 

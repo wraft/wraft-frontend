@@ -1,11 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 import Link from './NavLink';
-import { fetchAPI, deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI, deleteAPI } from '../utils/models';
 // import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
 
 export interface Theme {
   total_pages: number;
@@ -66,9 +65,7 @@ const ItemField = (props: any) => {
 };
 
 const Form: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
-  const { addToast } = useToasts();
 
   const loadData = () => {
     fetchAPI('themes?sort=inserted_at_desc')
@@ -80,8 +77,12 @@ const Form: FC = () => {
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token);
-    addToast('Deleted Theme', { appearance: 'success' });
+    deleteAPI(`themes/${id}`).then(() => {
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
   };
 
   useEffect(() => {

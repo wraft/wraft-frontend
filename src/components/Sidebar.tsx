@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button, Input, Image } from 'theme-ui';
+import React, { useState } from 'react';
+import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
 import { Search } from './Icons';
@@ -22,18 +20,13 @@ import {
   TextIcon,
 } from '../../src/components/Icons';
 
-import {
-  checkUser,
-  createEntity,
-  loadEntity,
-  switchProfile,
-} from '../utils/models';
-import { Organisation, OrganisationList } from '../store/profile';
-import { useToasts } from 'react-toast-notifications';
+import { postAPI } from '../utils/models';
+import { Organisation } from '../store/profile';
 import ModeToggle from './ModeToggle';
 import ModalCustom from './ModalCustom';
 import WorkspaceCreate from './manage/WorkspaceCreate';
 import Link from '../components/NavLink';
+import { useAuth } from '../contexts/AuthContext';
 
 /**
  * Sidebar Static Items
@@ -92,33 +85,18 @@ export interface INav {
 }
 
 const Nav = (props: any) => {
-  const { addToast } = useToasts();
   const [showSearch, setShowSearch] = useState<boolean>(false);
-
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
-  const [workspaces, setWorkspaces] = useState<OrganisationList>();
-  const [activeSpace, setActiveSpace] = useState<Organisation>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [rerender, setRerender] = useState<boolean>(false);
+  // const [rerender, setRerender] = useState<boolean>(false);
 
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
+  const [mode, setMode] = useColorMode();
 
-  const setCurrentOrgName = useStoreActions(
-    (actions: any) => actions.currentOrg.set,
-  );
+  const { userProfile, accessToken, login, logout } = useAuth();
+  const router = useRouter();
 
-  // const
-  useEffect(() => {
-    setCurrentOrgName({ name: 'hai' });
-  }, [profile]);
+  console.log('userProfile', userProfile);
 
   const showFull = props && props.showFull ? true : true;
-  const router = useRouter();
   const pathname: string = router.pathname as any;
 
   const checkActive = (pathname: string, m: any) => {
@@ -137,61 +115,36 @@ const Nav = (props: any) => {
     setShowSearch(false);
   };
 
-  /**
-   * Load Organizations
-   */
-
-  const loadOrgs = (token: string) => {
-    loadEntity(token, `/users/organisations`, setWorkspaces);
-  };
-
   useHotkeys('/', () => {
     toggleSearch();
   });
 
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const onSwitch = (_result: any) => {
-    switchProfile(_result);
-    setToken(_result.access_token);
+  const onSwitchOrganization = async (id: string) => {
+    const organRequest = postAPI('switch_organisations', {
+      organisation_id: id,
+    })
+      .then((res: any) => {
+        login(res);
+        router.push('/');
+      })
+      .catch(() => {
+        toast.error('failed Switch', {
+          duration: 1000,
+          position: 'top-center',
+        });
+      });
+
+    toast.promise(organRequest, {
+      loading: 'switching...',
+      success: <b>Switched workspace!</b>,
+      error: <b>Could not switch workspace.</b>,
+    });
   };
 
-  /**
-   * Swith Organization
-   * POST /switch_organisations
-   */
-
-  const switchOrg = (id: string) => {
-    createEntity(
-      { organisation_id: id },
-      `/switch_organisations`,
-      token,
-      onSwitch,
-    );
-
-    addToast('Workspace Switched', { appearance: 'success' });
+  const onUserlogout = () => {
+    logout();
+    router.push('/login');
   };
-
-  /** Load Workspaces for the current user */
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
-  };
-  useEffect(() => {
-    loadOrgs(token);
-    if (token) {
-      checkUser(token, onProfileLoad);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, rerender]);
-
-  useEffect(() => {
-    const allOrgs = workspaces?.organisations;
-    const currentOrg = allOrgs?.find(
-      (og: Organisation) => og.id == profile?.organisation_id,
-    );
-    setCurrentOrgName(currentOrg?.name);
-
-    setActiveSpace(currentOrg);
-  }, [profile, workspaces]);
 
   return (
     <>
@@ -204,9 +157,8 @@ const Nav = (props: any) => {
         }}>
         <Flex
           sx={{
-            py: 2,
+            py: 3,
             px: 3,
-            pt: 1,
             borderBottom: 'solid 1px',
             borderColor: 'neutral.1',
             mb: 3,
@@ -217,10 +169,10 @@ const Nav = (props: any) => {
             <MenuProvider>
               <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
                 <Flex color="primary" sx={{ fill: 'text' }}>
-                  {activeSpace && (
-                    <Flex sx={{ pt: 2 }}>
+                  {userProfile?.currentOrganisation && (
+                    <Flex>
                       <Image
-                        src={activeSpace.logo}
+                        src={userProfile?.currentOrganisation?.logo}
                         width={24}
                         height={24}
                         alt="Workspace"
@@ -240,7 +192,7 @@ const Nav = (props: any) => {
                             lineHeight: 1,
                             fontSize: 1,
                           }}>
-                          {activeSpace.name}
+                          {userProfile?.currentOrganisation?.name}
                         </Text>
                         <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
                           3 members
@@ -257,28 +209,27 @@ const Nav = (props: any) => {
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   Switch Workspace
                 </MenuItem>
-                {workspaces &&
-                  workspaces.organisations.map((org: Organisation) => (
-                    <MenuItem
-                      key={org.id}
-                      variant="layout.menuItem"
-                      onClick={() => switchOrg(org?.id)}
-                      as={Box}>
-                      <Image
-                        src={org?.logo}
-                        width={24}
-                        height={24}
-                        alt="Workspace"
-                        sx={{
-                          borderRadius: '99rem',
-                          height: `18px`,
-                          width: `18px`,
-                          mr: 2,
-                        }}
-                      />
-                      {org.name}
-                    </MenuItem>
-                  ))}
+                {userProfile?.organisations?.map((org: Organisation) => (
+                  <MenuItem
+                    key={org.id}
+                    variant="layout.menuItem"
+                    onClick={() => onSwitchOrganization(org?.id)}
+                    as={Box}>
+                    <Image
+                      src={org?.logo}
+                      width={24}
+                      height={24}
+                      alt="Workspace"
+                      sx={{
+                        borderRadius: '99rem',
+                        height: `18px`,
+                        width: `18px`,
+                        mr: 2,
+                      }}
+                    />
+                    {org.name}
+                  </MenuItem>
+                ))}
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   <Button
                     variant="base"
@@ -292,7 +243,7 @@ const Nav = (props: any) => {
                     varient="center">
                     <WorkspaceCreate
                       setOpen={setIsOpen}
-                      setRerender={setRerender}
+                      // setRerender={setRerender}
                     />
                   </ModalCustom>
                 </MenuItem>
@@ -300,9 +251,9 @@ const Nav = (props: any) => {
             </MenuProvider>
           </Box>
           <MenuProvider>
-            {token && token !== '' && (
+            {accessToken && (
               <Flex ml={1}>
-                {profile && (
+                {userProfile && (
                   <Flex
                     sx={{
                       alignContent: 'top',
@@ -315,7 +266,7 @@ const Nav = (props: any) => {
                           sx={{ borderRadius: '3rem', bg: 'red' }}
                           width="24px"
                           height="24px"
-                          src={profile?.profile_pic}
+                          src={userProfile?.profile_pic}
                         />
                       </MenuButton>
                       <Menu
@@ -330,19 +281,23 @@ const Nav = (props: any) => {
                         aria-label="Preferences">
                         <MenuItem as={Box} variant="layout.menuItem">
                           <Box>
-                            <Text as="h4">{profile?.name}</Text>
+                            <Text as="h4">{userProfile?.name}</Text>
 
-                            {profile?.roles?.size > 0 && (
+                            {userProfile?.roles?.size > 0 && (
                               <Text
                                 as="p"
                                 sx={{ fontSize: 0, color: 'gray.6' }}>
-                                {profile?.roles[0]?.name}
+                                {userProfile?.roles[0]?.name}
                               </Text>
                             )}
                           </Box>
                         </MenuItem>
                         <MenuItem as={Box} variant="layout.menuItem">
-                          <Flex>
+                          <Flex
+                            onClick={() => {
+                              const next = mode === 'dark' ? 'light' : 'dark';
+                              setMode(next);
+                            }}>
                             <Text>Theme</Text>
                             <Box
                               sx={{
@@ -369,7 +324,7 @@ const Nav = (props: any) => {
                         <MenuItem
                           as={Box}
                           variant="layout.menuItem"
-                          onClick={() => userLogout()}>
+                          onClick={() => onUserlogout()}>
                           Signout
                         </MenuItem>
                       </Menu>

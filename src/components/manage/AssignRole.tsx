@@ -1,8 +1,6 @@
-/** @jsxImportSource theme-ui */
 import { Flex, Text, Button } from 'theme-ui';
 import { useState, useEffect } from 'react';
-import { loadEntity } from '../../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI } from '../../utils/models';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
@@ -29,10 +27,8 @@ type AssignRoleProps = {
 const AssignRole = ({
   currentRoleList,
   setCurrentRoleList,
-  setIsAssignRole,
-  userId,
+  setIsAssignRole, // userId,
 }: AssignRoleProps) => {
-  const token = useStoreState((state) => state.auth.token);
   const [response, setResponse] = useState<ResponseData>();
   const [roleList, setRoleList] = useState<Array<any>>([]);
 
@@ -42,14 +38,14 @@ const AssignRole = ({
   };
   console.log(currentRoleList);
 
-  const loadData = (token: string) => {
-    loadEntity(token, 'roles', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('roles').then((data: any) => {
+      loadDataSuccess(data);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
-    }
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -72,28 +68,30 @@ const AssignRole = ({
 
   const assignRoleFunction = async (roleId: string) => {
     if (roleId) {
-      try {
-        const response = await fetch(
-          `${API_HOST}/api/v1/users/${userId}/roles/${roleId}`,
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
+      // try {
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Errorq:', errorData);
-          throw new Error('Team joining failed');
-        } else {
-          const responseData = response;
-          console.log(responseData);
-        }
-      } catch (error) {
-        console.error('Network error:', error);
-      }
+      //   // postAPI(`users/${userId}/roles/${roleId}`)
+      //   const response = await fetch(
+      //     `${API_HOST}/api/v1/users/${userId}/roles/${roleId}`,
+      //     {
+      //       method: 'POST',
+      //       headers: {
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //     },
+      //   );
+
+      //   if (!response.ok) {
+      //     const errorData = await response.json();
+      //     console.error('Errorq:', errorData);
+      //     throw new Error('Team joining failed');
+      //   } else {
+      //     const responseData = response;
+      //     console.log(responseData);
+      //   }
+      // } catch (error) {
+      //   console.error('Network error:', error);
+      // }
       setCurrentRoleList(null);
       setIsAssignRole(null);
     }

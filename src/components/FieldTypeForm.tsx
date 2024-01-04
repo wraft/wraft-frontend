@@ -3,8 +3,7 @@ import { Box, Flex, Button, Text } from 'theme-ui';
 import { useForm } from 'react-hook-form';
 
 import Field from './Field';
-import { createEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { postAPI } from '../utils/models';
 
 const FieldTypeForm = () => {
   const {
@@ -12,7 +11,6 @@ const FieldTypeForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const token = useStoreState((state) => state.auth.token);
 
   const onSubmit = (data: any) => {
     const item: any = {
@@ -29,7 +27,8 @@ const FieldTypeForm = () => {
       meta: {},
       description: data.description,
     };
-    createEntity(item, 'field_types', token);
+
+    postAPI('field_types', item);
   };
 
   return (

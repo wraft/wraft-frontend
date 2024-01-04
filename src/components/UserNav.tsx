@@ -64,24 +64,9 @@ const UserNav = () => {
         py: 2,
       }}>
       <Container>
-        <Flex sx={{ py: 3, px: 4 }}>
-          <Box>
-            <Link
-              href={token ? '/user-profile' : '/'}
-              // sx={{
-              //   p: 0,
-              //   color: 'gray.0',
-              //   fill: 'red',
-              //   bg: 'red',
-              //   display: 'block',
-              //   svg: {
-              //     color: 'green',
-              //     display: 'block',
-              //     path: { fill: 'yellow' },
-              //     // fill: 'gray.9'
-              //   },
-              // }}
-            >
+        <Flex sx={{ py: 3, px: 4, alignItems: 'center' }}>
+          <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
+            <Link href={token ? '/user-profile' : '/'}>
               <Box sx={{ color: `gray.0`, fill: 'gray.9' }}>
                 <BrandLogo width="6rem" height="2rem" />
               </Box>
@@ -93,18 +78,39 @@ const UserNav = () => {
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Join Wraft
                     </Text>
                   </Link>
                   <Link href="/pricing">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Pricing
                     </Text>
                   </Link>
 
                   <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Features
                     </Text>
                   </Link>

@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
-import { useStoreState } from 'easy-peasy';
 import { Spinner } from 'theme-ui';
 import { File, Download } from './Icons';
 import MenuItem from './MenuItem';
@@ -13,7 +12,7 @@ import dynamic from 'next/dynamic';
 import WraftEditor from './WraftEditor';
 import CommentForm from './CommentForm';
 
-import { createEntity, loadEntity } from '../utils/models';
+import { fetchAPI, postAPI } from '../utils/models';
 import { TimeAgo } from './Atoms';
 
 import Nav from './NavEdit';
@@ -257,8 +256,6 @@ export interface Serialized {
 }
 
 const ContentDetail = () => {
-  const token = useStoreState((state) => state.auth.token);
-
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
@@ -273,14 +270,12 @@ const ContentDetail = () => {
   // const tab = useTabState({ defaultSelectedId });
   const defaultSelectedId = 'edit';
 
-  const loadDataSucces = (data: any) => {
-    setLoading(false);
-    const res: ContentInstance = data;
-    setContents(res);
-  };
-
-  const loadData = (t: string, id: string) => {
-    loadEntity(t, `contents/${id}`, loadDataSucces);
+  const loadData = (id: string) => {
+    fetchAPI(`contents/${id}`).then((data: any) => {
+      setLoading(false);
+      const res: ContentInstance = data;
+      setContents(res);
+    });
   };
 
   /** DELETE content
@@ -293,31 +288,21 @@ const ContentDetail = () => {
   // };
 
   /**
-   * On Build success
-   * @param data
-   */
-  const onBuild = (data: any) => {
-    setLoading(false);
-    setBuild(data);
-    if (token) {
-      loadData(token, cId);
-    }
-  };
-
-  /**
    * Pass for build
    */
   const doBuild = () => {
     console.log('Building');
     setLoading(true);
-    createEntity([], `contents/${cId}/build`, token, onBuild);
+    postAPI(`contents/${cId}/build`, []).then((data: any) => {
+      setLoading(false);
+      setBuild(data);
+      loadData(cId);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token, cId);
-    }
-  }, [token]);
+    loadData(cId);
+  }, []);
 
   useEffect(() => {
     console.log('contentBody', contentBody);

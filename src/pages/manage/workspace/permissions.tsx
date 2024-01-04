@@ -7,12 +7,12 @@ import PageHeader from '../../../components/PageHeader';
 import ManageSidebar from '../../../components/ManageSidebar';
 import { workspaceLinks } from '../../../utils';
 import PermissionsList from '../../../components/manage/PermissionsList';
-import { useStoreState } from 'easy-peasy';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const Index: FC = () => {
-  const currentOrg = useStoreState((state) => state.currentOrg.name);
+  const { userProfile } = useAuth();
   return (
-    (currentOrg !== 'Personal' || '') && (
+    (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
       <>
         <Head>
           <title>Layouts | Wraft Docs</title>

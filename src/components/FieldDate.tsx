@@ -3,10 +3,10 @@ import { Label, Input, Text, Box } from 'theme-ui';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import { DateUtils } from 'react-day-picker';
-import dateFnsFormat from 'date-fns/format';
-import dateFnsParse from 'date-fns/parse';
+import { format, parse } from 'date-fns';
 
 import { Calendar } from './Icons';
+import 'react-day-picker/lib/style.css';
 
 interface Props {
   register: any;
@@ -63,14 +63,14 @@ const Field: React.FC<Props> = ({
     // // onChange(date);
   };
 
-  const formatDate = (date: any, format: string, locale: any) => {
+  const formatDate = (date: any, formatStr: string, locale: any) => {
     // console.log('frm', date);
-    return dateFnsFormat(date, format, { locale });
+    return format(date, formatStr, { locale });
   };
 
   const parseDate = (str: string, format: string, locale: any) => {
     // console.log('str', str);
-    const parsed = dateFnsParse(str, format, new Date(), { locale });
+    const parsed = parse(str, format, new Date(), { locale });
     if (DateUtils.isDate(parsed)) {
       return parsed;
     }

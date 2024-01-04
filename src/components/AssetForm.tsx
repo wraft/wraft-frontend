@@ -3,10 +3,10 @@ import { Box, Flex, Button, Label, Input, Select, Spinner } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
 import { Asset } from '../utils/types';
-import { useStoreState } from 'easy-peasy';
 import { createEntityFile } from '../utils/models';
 // import { CloudUploadIcon } from './Icons';
 import Error from './Error';
+import { useAuth } from '../contexts/AuthContext';
 // import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
 
@@ -32,9 +32,10 @@ const AssetForm = ({
     handleSubmit,
     formState: { isValid, errors },
   } = useForm<FormInputs>({ mode: 'all' });
-  const token = useStoreState((state) => state.auth.token);
   const [isLoading, setLoading] = React.useState<boolean>(false);
   // const [contents, setContents] = React.useState<Asset>();
+
+  const { accessToken } = useAuth();
 
   const onImageUploaded = (data: any) => {
     setLoading(false);
@@ -56,7 +57,12 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    await createEntityFile(formData, token, 'assets', onImageUploaded);
+    await createEntityFile(
+      formData,
+      accessToken as string,
+      'assets',
+      onImageUploaded,
+    );
     setAsset(true);
   };
 

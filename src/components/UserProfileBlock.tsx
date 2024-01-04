@@ -7,8 +7,6 @@ import { Box } from 'theme-ui';
 // import ProfilePopup from './ProfilePopup';
 // import { format } from 'date-fns';
 
-// import { useStoreState } from 'easy-peasy';
-
 const UserProfileBlock = () => {
   // const [showModal, setShowModal] = useState<boolean>(false);
   // // const [activeModal, setActiveModal] = useState<string>();

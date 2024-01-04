@@ -11,6 +11,7 @@ const ModeToggle = (props: any) => {
         p: 0,
         bg: 'background',
         border: 0,
+        mt: 0,
         svg: {
           fill: 'gray.5',
         },

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
-import { loadEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { fetchAPI } from '../utils/models';
 import { TimeAgo } from './Atoms';
+
 // import { Button } from 'theme-ui';
 
 import { API_HOST } from '../utils/models';
+import { useAuth } from '../contexts/AuthContext';
 
 export interface ActivityStream {
   activities: Activity[];
@@ -91,24 +92,22 @@ const ActivityCard = (props: any) => (
 );
 
 const ActivityFeed = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Activity>>([]);
   // const { addToast } = useToasts();
+  const { accessToken } = useAuth();
 
-  const loadDataSuccess = (data: any) => {
-    const res: Activity[] = data.activities;
-    setContents(res);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, 'activities', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('activities').then((data: any) => {
+      const res: Activity[] = data.activities;
+      setContents(res);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadData(token);
+    if (accessToken) {
+      loadData();
     }
-  }, [token]);
+  }, [accessToken]);
 
   return (
     <Box py={3} mt={4}>

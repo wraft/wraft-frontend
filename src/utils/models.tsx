@@ -1,43 +1,47 @@
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import cookie from 'js-cookie';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-//Base URL config
-const httpClient = axios.create({
-  baseURL: `${API_HOST}/api/v1`, // ---temp hard code ---
-});
+const createAxiosInstance = (): AxiosInstance => {
+  const instance = axios.create({
+    baseURL: `${API_HOST}/api/v1`,
+  });
 
-// Request interceptor for API calls
-httpClient.interceptors.request.use(
-  async (config) => {
-    const token = (await cookie.get('token')) || false;
+  instance.interceptors.request.use(
+    async (config) => {
+      const token = (await cookie.get('token')) || false;
 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
-    return config;
-  },
-  (error) => {
-    Promise.reject(error);
-  },
-);
+      return config;
+    },
+    (error) => {
+      Promise.reject(error);
+    },
+  );
 
-httpClient.interceptors.response.use(
-  (response) => response,
-  async function (error) {
-    const originalRequest = error.config;
-    // eslint-disable-next-line no-underscore-dangle
-    if (error.response.status === 401 && !originalRequest._retry) {
-      // eslint-disable-next-line no-underscore-dangle
-      originalRequest._retry = true;
-      await cookie.remove('token');
-      window.location.pathname = '/login';
-    }
-    return Promise.reject(error);
-  },
-);
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        await cookie.remove('token');
+        window.location.pathname = '/login';
+      }
+      return Promise.reject(error);
+    },
+  );
+
+  return instance;
+};
+
+const api = createAxiosInstance();
+
+export default api;
 
 /**
  * Load fetchAPI
@@ -45,14 +49,93 @@ httpClient.interceptors.response.use(
  */
 export const fetchAPI = (path: any, query = '') =>
   new Promise((resolve, reject) => {
-    httpClient
+    api
       .get(`/${path}${query}`)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        const res = err.response.data;
-        if (err.response.status === 400) {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+/**
+ * Load postAPI
+ */
+export const postAPI = (path: string, body: any) =>
+  new Promise((resolve, reject) => {
+    api
+      .post(`/${path}`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+/**
+ * Load postAPI
+ */
+export const putAPI = (path: string, body: any = {}) =>
+  new Promise((resolve, reject) => {
+    api
+      .put(`/${path}`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+export const postEntityFile = (path: string, formData: any, token: string) =>
+  new Promise((resolve, reject) => {
+    api
+      .post(path, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token: token,
+        },
+      })
+      .then(async (resp) => {
+        if (resp.status === 204) {
+          resolve(resp);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
+ * delete API
+ */
+export const deleteAPI = (path: any) =>
+  new Promise((resolve, reject) => {
+    api
+      .delete(`/${path}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
           resolve(res);
         }
 
@@ -63,16 +146,16 @@ export const fetchAPI = (path: any, query = '') =>
 /**
  * delete API
  */
-export const deleteAPI = (path: any) =>
+export const fetchUserInfo = () =>
   new Promise((resolve, reject) => {
-    httpClient
-      .delete(`/${path}`)
+    api
+      .get(`${API_HOST}/api/v1/users/me`)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        const res = err.response.data;
-        if (err.response.status === 400) {
+        if (err?.response?.data) {
+          const res = err.response.data;
           resolve(res);
         }
 
@@ -379,33 +462,51 @@ export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
  * @param data
  * @param onSucces ref to handle
  */
-export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
-  fetch(`${API_HOST}/api/v1/users/signin`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      if (!response.ok) {
-        throw new Error();
-      }
-      return response.json();
-    })
-    .then(function (data) {
-      const { access_token } = data;
-      cookie.set('token', access_token);
-      onSuccess(access_token);
-    })
-    .catch(function (error) {
-      // console.error('Error:', error);
-      if (onError) {
-        onError(error);
-      }
-    });
-};
+
+export const userLogin = async (body: any) =>
+  new Promise((resolve, reject) => {
+    axios
+      .post(`${API_HOST}/api/v1/users/signin`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (!err.response) {
+          reject('Unable to process request. Please try again later');
+        }
+        if (err?.response?.data) {
+          reject(err.response.data);
+        }
+        reject(err);
+      });
+  });
+// export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
+//   fetch(`${API_HOST}/api/v1/users/signin`, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   })
+//     .then(function (response) {
+//       if (!response.ok) {
+//         throw new Error();
+//       }
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       const { access_token } = data;
+//       cookie.set('token', access_token);
+//       onSuccess(access_token);
+//     })
+//     .catch(function (error) {
+//       // console.error('Error:', error);
+//       if (onError) {
+//         onError(error);
+//       }
+//     });
+// };
 
 /**
  * Login a user
