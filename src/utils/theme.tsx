@@ -1177,6 +1177,7 @@ const theme: Theme & CustomVariantGroups = {
       // pb: 0,
     },
     btnBig: {
+      variant: 'buttons.buttonPrimary',
       p: 1,
       px: 2,
       m: 0,
