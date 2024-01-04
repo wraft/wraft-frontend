@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+
 import 'react-dropzone-uploader/dist/styles.css';
 import Dropzone from 'react-dropzone-uploader';
-
 import { Box, Button, Flex, Image } from 'theme-ui';
 
 import ImageEdit from './ImageEdit';
@@ -123,7 +123,7 @@ const Preview = ({ meta }: IPreviewProps) => {
           // style={{ backgroundColor: theme.background }}
           >
             {prevImage && hideUpload && (
-              <Image sx={{ maxWidth: '100%' }} src={prevImage} />
+              <Image alt="" sx={{ maxWidth: '100%' }} src={prevImage} />
             )}
 
             {previewUrl && !hideUpload && (

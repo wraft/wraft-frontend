@@ -1,16 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
+
 import Head from 'next/head';
 import { Flex, Container, Button, Box, Input } from 'theme-ui';
 
+import { AddIcon, SearchIcon } from '../../../components/Icons';
+import { RolesAdd, RolesList } from '../../../components/manage';
+import ManageSidebar from '../../../components/ManageSidebar';
+import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import ManageSidebar from '../../../components/ManageSidebar';
-import { workspaceLinks } from '../../../utils';
-import ModalCustom from '../../../components/ModalCustom';
-import { AddIcon, SearchIcon } from '../../../components/Icons';
-import { fetchAPI } from '../../../utils/models';
-import { RolesAdd, RolesList } from '../../../components/manage';
 import { useAuth } from '../../../contexts/AuthContext';
+import { workspaceLinks } from '../../../utils';
+import { fetchAPI } from '../../../utils/models';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);

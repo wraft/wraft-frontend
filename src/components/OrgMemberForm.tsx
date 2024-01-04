@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
-// import { Label, Select, Textarea } from 'theme-ui';
 
-import OrgMembersList from './OrgMembersList';
-import Field from './Field';
+import { useForm } from 'react-hook-form';
+import Modal from 'react-modal';
+import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
 import { fetchAPI, postAPI } from '../utils/models';
 
-// import { defaultModalStyle } from '../utils';
-import Modal from 'react-modal';
-import { useAuth } from '../contexts/AuthContext';
+import Field from './Field';
+import OrgMembersList from './OrgMembersList';
 
 export interface Members {
   total_pages: number;

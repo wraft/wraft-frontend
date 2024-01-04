@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
+
+import { useFieldArray, useForm } from 'react-hook-form';
 import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
-import Modal from './Modal';
-import { useFieldArray, useForm } from 'react-hook-form';
+
 import { Trash } from './Icons';
+import Modal from './Modal';
 
 interface FieldFormProps {
   fields?: any;

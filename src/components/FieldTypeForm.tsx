@@ -1,9 +1,11 @@
 import React from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+
 import { useForm } from 'react-hook-form';
+import { Box, Flex, Button, Text } from 'theme-ui';
+
+import { postAPI } from '../utils/models';
 
 import Field from './Field';
-import { postAPI } from '../utils/models';
 
 const FieldTypeForm = () => {
   const {

@@ -1,9 +1,11 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
 import { Box } from 'theme-ui';
+
 import Container from '../../components/Container';
-import Nav from '../../components/Nav';
 import LoginForm from '../../components/LoginForm';
+import Nav from '../../components/Nav';
 
 const Index: FC = () => {
   return (

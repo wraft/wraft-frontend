@@ -1,5 +1,9 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
+
 import Head from 'next/head';
+import Router from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import {
   Flex,
   Container,
@@ -11,25 +15,21 @@ import {
   Image,
   Checkbox,
 } from 'theme-ui';
-import { useForm } from 'react-hook-form';
+
+import { ConfirmDelete } from '../../../components/common';
+import Field from '../../../components/Field';
+import ManageSidebar from '../../../components/ManageSidebar';
+import ModalCustom from '../../../components/ModalCustom';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
+import { useAuth } from '../../../contexts/AuthContext';
+import { workspaceLinks } from '../../../utils';
 import {
   updateEntityFile,
   deleteEntity,
   createEntity,
   fetchAPI,
 } from '../../../utils/models';
-import Router from 'next/router';
-
-import toast from 'react-hot-toast';
-
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import ManageSidebar from '../../../components/ManageSidebar';
-import { workspaceLinks } from '../../../utils';
-import ModalCustom from '../../../components/ModalCustom';
-import Field from '../../../components/Field';
-import { ConfirmDelete } from '../../../components/common';
-import { useAuth } from '../../../contexts/AuthContext';
 
 export interface Organisation {
   id: string;

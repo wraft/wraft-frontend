@@ -1,12 +1,15 @@
 import React from 'react';
-import { Box, Flex, Button, Label, Input, Select, Spinner } from 'theme-ui';
 
 import { useForm } from 'react-hook-form';
-import { Asset } from '../utils/types';
+import { Box, Flex, Button, Label, Input, Select, Spinner } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
 import { createEntityFile } from '../utils/models';
+import { Asset } from '../utils/types';
+
 // import { CloudUploadIcon } from './Icons';
 import Error from './Error';
-import { useAuth } from '../contexts/AuthContext';
+
 // import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
 

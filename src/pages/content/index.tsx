@@ -1,7 +1,8 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import { Flex, Box, Text } from 'theme-ui';
 import Link from 'next/link';
+import { Flex, Box, Text } from 'theme-ui';
 
 import ContentTypeList from '../../components/ContentTypeList';
 import Page from '../../components/PageFrame';

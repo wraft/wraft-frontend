@@ -1,4 +1,5 @@
 import React from 'react';
+
 import styled from '@emotion/styled';
 import { Box, Flex, Text, Image } from 'theme-ui';
 
@@ -107,7 +108,7 @@ class DropDownBox extends React.Component<any, any> {
         onClick={() => this.toggleDropdown()}>
         <Flex className="dropdown-text">
           <Text>{this.props.title}</Text>
-          <Image src="../static/images/next.svg" />
+          <Image alt="" src="../static/images/next.svg" />
         </Flex>
         {this.state.active && (
           <DropDownList>{this.renderOptions()}</DropDownList>

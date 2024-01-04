@@ -1,8 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
-import { fetchAPI, deleteAPI } from '../utils/models';
-import LayoutCard from './Card';
+
 import toast from 'react-hot-toast';
+import { Box, Flex, Text } from 'theme-ui';
+
+import { fetchAPI, deleteAPI } from '../utils/models';
+
+import LayoutCard from './Card';
 
 export interface ILayout {
   width: number;

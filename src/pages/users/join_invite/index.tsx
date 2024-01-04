@@ -1,10 +1,12 @@
 // components/JoinInvitationPage.js
 import { useEffect } from 'react';
+
 import { useStoreState } from 'easy-peasy';
-import { useSearchParams } from 'next/navigation';
-import RegistrationForm from '../../../components/RegistrationForm';
-import Router from 'next/router';
 import cookie from 'js-cookie';
+import { useSearchParams } from 'next/navigation';
+import Router from 'next/router';
+
+import RegistrationForm from '../../../components/RegistrationForm';
 
 // import { isAuthenticated, joinTeam, sendNotification } from '../api/auth'; // Replace with your authentication and notification logic
 

@@ -1,7 +1,8 @@
 import React from 'react';
+
+import styled from '@emotion/styled';
 import { Text, Box } from 'theme-ui';
 import { Input } from 'theme-ui';
-import styled from '@emotion/styled';
 // import { Input } from "@chakra-ui/core";
 
 const SearchList = styled(Box)`

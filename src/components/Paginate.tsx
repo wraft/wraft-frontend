@@ -1,6 +1,7 @@
 import React from 'react';
-import ReactPaginate from 'react-paginate';
+
 import styled from '@emotion/styled';
+import ReactPaginate from 'react-paginate';
 import { Box, Flex } from 'theme-ui';
 
 export interface IPageMeta {

@@ -1,15 +1,17 @@
 import React, { useEffect, Fragment } from 'react';
-import { Box, Flex, Text, Container } from 'theme-ui';
-import { Avatar } from 'theme-ui';
-import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import cookie from 'js-cookie';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Container } from 'theme-ui';
+import { Avatar } from 'theme-ui';
+
 // import Container from '../../src/components/Container';
 // relative
-import Link from './NavLink';
-import { UserIcon, BrandLogo } from './Icons';
 import { checkUser } from '../utils/models';
-import { useRouter } from 'next/router';
+
+import { UserIcon, BrandLogo } from './Icons';
+import Link from './NavLink';
 
 export interface IUser {
   name: string;

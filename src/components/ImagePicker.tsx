@@ -1,5 +1,8 @@
 import React, { ReactElement, ReactNode, ChangeEvent } from 'react';
+
 import styled from '@emotion/styled';
+import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
+import { isString } from 'remirror';
 import {
   Input,
   Label as InputLabel,
@@ -7,10 +10,9 @@ import {
   Close,
 } from 'theme-ui';
 // import InputLabel from 'Atoms/Input/InputLabel';
-import ReactCrop, { Crop, PercentCrop } from 'react-image-crop';
+
 // import { ReactComponent as Close } from 'Assets/Close.svg';
 import 'react-image-crop/dist/ReactCrop.css';
-import { isString } from 'remirror';
 // import InvisibleButton from 'Atoms/Button/InvisibleButton';
 // import { isString } from 'Types/General';
 

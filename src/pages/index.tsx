@@ -1,15 +1,20 @@
 import { FC, useEffect, useState } from 'react';
-import Head from 'next/head';
-import dynamic from 'next/dynamic';
-import { Text, Box, Flex, Container, Button } from 'theme-ui';
-import Page from '../components/PageFrame';
+
 import { useStoreState } from 'easy-peasy';
+import cookie from 'js-cookie';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
+import { Text, Box, Flex, Container, Button } from 'theme-ui';
+
+import ContentTypeDashboard from '../components/ContentTypeDashboard';
+import Page from '../components/PageFrame';
 import UserNav from '../components/UserNav';
+
+// import UserHome from '../components/UserHome';
+
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
-// import UserHome from '../components/UserHome';
-import ContentTypeDashboard from '../components/ContentTypeDashboard';
-import cookie from 'js-cookie';
+
 const UserHome = dynamic(() => import('../components/UserHome'), {
   ssr: false,
 });

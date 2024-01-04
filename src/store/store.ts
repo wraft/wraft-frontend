@@ -1,4 +1,5 @@
 import { Action, createStore, createTypedHooks, action } from 'easy-peasy';
+
 import { auth, Auth } from './auth';
 
 export interface StoreModel {

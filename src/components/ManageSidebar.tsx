@@ -1,14 +1,16 @@
 import React from 'react';
-import { Flex, Box, Text } from 'theme-ui';
+
 import styled from '@emotion/styled';
+import { Flex, Box, Text } from 'theme-ui';
 
 export const IconStyleWrapper = styled.div`
   color: #444;
   margin-right: 12px;
 `;
 
-import NavLink from './NavLink';
 import { menuLinksProps } from '../utils';
+
+import NavLink from './NavLink';
 
 export interface INav {
   showFull?: boolean;

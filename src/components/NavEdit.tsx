@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
-import { Box, Flex, Text, Image } from 'theme-ui';
-import cookie from 'js-cookie';
 
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import cookie from 'js-cookie';
+import { Box, Flex, Text, Image } from 'theme-ui';
+
 // import { useHotkeys } from 'react-hotkeys-hook';
 // relative
-import Link from './NavLink';
 import { checkUser } from '../utils/models';
-import { Bell, ArrowBack } from './Icons';
-// import Dropdown from './common/Dropdown';
 
+import { Bell, ArrowBack } from './Icons';
 import ModeToggle from './ModeToggle';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import Link from './NavLink';
+// import Dropdown from './common/Dropdown';
 
 // import { usePopper } from 'react-popper';
 
@@ -129,6 +130,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       <MenuProvider>
                         <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
                           <Image
+                            alt=""
                             sx={{ borderRadius: '3rem', bg: 'red' }}
                             width="32px"
                             height="32px"

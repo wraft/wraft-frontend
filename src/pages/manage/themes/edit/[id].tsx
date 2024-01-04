@@ -1,10 +1,12 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import ThemeForm from '../../../../components/ThemeForm';
-// import Page from '../../../../src/components/Page';
-import Page from '../../../../components/PageFrame';
 import { Box } from 'theme-ui';
+
+// import Page from '../../../../src/components/Page';
 import { HeadingFrame } from '../../../../components/Card';
+import Page from '../../../../components/PageFrame';
+import ThemeForm from '../../../../components/ThemeForm';
 
 const Index: FC = () => {
   return (

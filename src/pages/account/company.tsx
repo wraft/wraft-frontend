@@ -1,9 +1,11 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import OrgForm from '../../components/OrgForm';
-import Page from '../../components/PageFrame';
 import { Box, Flex } from 'theme-ui';
+
+import OrgForm from '../../components/OrgForm';
 import OrgSidebar from '../../components/OrgSidebar';
+import Page from '../../components/PageFrame';
 import PageHeader from '../../components/PageHeader';
 
 const CompanyForm: FC = () => {
