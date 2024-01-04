@@ -1,3 +1,4 @@
+import { Inter } from 'next/font/google';
 import { Theme, ThemeUIStyleObject } from 'theme-ui';
 
 type Variant = ThemeUIStyleObject;
@@ -9,14 +10,20 @@ type CustomVariantGroups = {
   };
 };
 
+const inter = Inter({
+  weight: ['400', '500', '700'],
+  display: 'block',
+  subsets: ['latin'],
+  preload: true,
+});
+
 const theme: Theme & CustomVariantGroups = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: "'Inter', sans-serif",
+    body: `${inter.style.fontFamily}, sans-serif`,
     heading: 'inherit',
-    editor1: "'Inter', sans-serif",
-    editor2:
-      '\'Inter\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif', //"'IBM Plex Mono', monospace",
+    editor1: `${inter.style.fontFamily}, sans-serif`,
+    editor2: `${inter.style.fontFamily} , system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
     // font-family:
     monospace: 'Menlo, monospace',
     satoshi:
