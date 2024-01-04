@@ -249,7 +249,7 @@ const Index: FC = () => {
                     m: 4,
                   }}>
                   <Text variant="pR" sx={{ display: 'inline-block', mb: 2 }}>
-                    Workspace removal
+                    Delete workspace
                   </Text>
                   <br />
                   <Text
