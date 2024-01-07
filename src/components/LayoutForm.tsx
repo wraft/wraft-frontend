@@ -267,10 +267,10 @@ const Form = ({ setOpen, setRerender }: Props) => {
 
   const deleteAsset = (lid: string, id: string) => {
     const indexOf = assets.findIndex((e) => e.id === id);
-    console.log(indexOf);
     assets.splice(indexOf, 1);
+    setAssets(assets.splice(indexOf, 1));
     if (layout?.assets.some((asset) => asset.id === id)) {
-      deleteAPI(`/layouts/${lid}/assets/${id}`)
+      deleteAPI(`layouts/${lid}/assets/${id}`)
         .then(() => {
           toast.success('Deleted Asset', {
             duration: 1000,
