@@ -607,7 +607,7 @@ const Form = ({ setOpen }: Props) => {
                     </Text>
                   </Button>
                   <Button
-                    disabled={!isValid && assets.length < 1}
+                    disabled={!isValid || assets.length < 1}
                     variant="buttonPrimary"
                     type="submit"
                     ml={2}
