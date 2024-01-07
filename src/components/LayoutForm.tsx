@@ -25,6 +25,7 @@ import {
   postAPI,
   putAPI,
 } from '../utils/models';
+import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
 
 import AssetForm from './AssetForm';
@@ -33,7 +34,6 @@ import Field from './Field';
 import FieldText from './FieldText';
 import { TickIcon } from './Icons';
 import PdfViewer from './PdfViewer';
-import { uuidRegex } from '../utils/regex';
 
 export interface Layouts {
   layout: Layout;
