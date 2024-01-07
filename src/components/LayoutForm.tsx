@@ -75,6 +75,7 @@ export interface IEngine {
 
 interface Props {
   setOpen: any;
+  setRerender?: any;
 }
 
 type FormValues = {
@@ -112,7 +113,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const Form = ({ setOpen }: Props) => {
+const Form = ({ setOpen, setRerender }: Props) => {
   const {
     register,
     control,
@@ -183,6 +184,7 @@ const Form = ({ setOpen }: Props) => {
       //create
       postAPI(`layouts`, formData)
         .then(() => {
+          setRerender((prev: boolean) => !prev);
           setOpen(false);
           toast.success(`Updated Layout ${data.name}`, {
             duration: 1000,
