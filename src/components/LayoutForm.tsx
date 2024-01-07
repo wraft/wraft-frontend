@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import Router, { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -76,6 +75,7 @@ export interface IEngine {
 interface Props {
   setOpen: any;
   setRerender?: any;
+  cId?: string;
 }
 
 type FormValues = {
@@ -113,7 +113,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const Form = ({ setOpen, setRerender }: Props) => {
+const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   const {
     register,
     control,
@@ -129,10 +129,6 @@ const Form = ({ setOpen, setRerender }: Props) => {
   // const { accessToken } = useAuth();
 
   const [isEdit, setEdit] = useState<boolean>(false);
-
-  // determine edit state based on URL
-  const router = useRouter();
-  const cId: string = (router.query.id as string) || '';
 
   /**
    * Form Submit
@@ -168,7 +164,6 @@ const Form = ({ setOpen, setRerender }: Props) => {
       putAPI(`layouts/${cId}`, formData)
         .then(() => {
           setOpen(false);
-          Router.push('/manage/layouts');
           toast.success(`Updated Layout ${data.name}`, {
             duration: 1000,
             position: 'top-right',
@@ -577,7 +572,6 @@ const Form = ({ setOpen, setRerender }: Props) => {
                 </Flex>
               </Container>
             )}
-            {/* <Flex sx={{ position: 'absolute', bottom: '48px' }}> */}
             <Flex>
               {formStep === 0 && (
                 <Button
