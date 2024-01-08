@@ -561,6 +561,7 @@ const theme: Theme & CustomVariantGroups = {
       // pb: 0,
     },
     base: {
+      cursor: 'pointer',
       width: '100%',
       color: 'gray.8',
       textDecoration: 'none',
