@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { useStoreState } from 'easy-peasy';
 import Image from 'next/image';
@@ -110,6 +110,8 @@ const TeamList = () => {
       setTableList(memberData);
     }
   }, [contents]);
+
+  const data = useMemo(() => tableList, [contents]);
 
   const onConfirmDelete = () => {
     deleteAPI(`users/${userId}/roles/${isRemoveRole}`)
@@ -450,7 +452,7 @@ const TeamList = () => {
               width: '10%',
             },
           ],
-          data: tableList,
+          data: data,
         }}
       />
     </Flex>
