@@ -80,7 +80,7 @@ const TeamList = () => {
     if (organisationId) {
       loadData(organisationId);
     }
-  }, []);
+  }, [organisationId]);
   // }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
 
   useEffect(() => {
@@ -99,7 +99,6 @@ const TeamList = () => {
         };
       });
 
-      // console.log(memberData);
       setTableList(memberData);
     }
   }, [contents]);
@@ -116,6 +115,10 @@ const TeamList = () => {
         console.log('success', response);
       })
       .catch((error) => {
+        toast.error(`Failed to Delete!`, {
+          duration: 1000,
+          position: 'top-center',
+        });
         console.log('failed', error);
       });
     setIsRemoveRole(null);
@@ -346,21 +349,7 @@ const TeamList = () => {
                       </MenuButton>
                       <Menu
                         as={Box}
-                        sx={{
-                          height: 'auto',
-                          // width: '200px',
-                          width: 'fit-content',
-                          position: 'absolute',
-                          top: -30,
-                          left: -10,
-                          zIndex: '50',
-                          display: 'flex',
-                          borderRadius: '0.75rem',
-                          backgroundColor: 'hsl(204 20% 100%)',
-                          padding: '1rem',
-                          color: 'hsl(204 10% 10%)',
-                          boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-                        }}
+                        variant="layout.menu"
                         open={isOpen == row.index}
                         onClose={() => setIsOpen(null)}>
                         <MenuItem>
@@ -370,7 +359,9 @@ const TeamList = () => {
                               setIsOpen(null);
                               setIsRemoveUser(row.index);
                             }}>
-                            <Text variant="" sx={{ cursor: 'pointer' }}>
+                            <Text
+                              variant=""
+                              sx={{ cursor: 'pointer', color: 'red.6' }}>
                               Delete
                             </Text>
                           </Button>

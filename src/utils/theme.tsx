@@ -603,6 +603,22 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   layout: {
+    menu: {
+      height: 'auto',
+      width: 'fit-content',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: '50',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+      borderRadius: '5px',
+      backgroundColor: 'hsl(204 20% 100%)',
+      padding: '8px',
+      color: 'hsl(204 10% 10%)',
+      boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+    },
     dialog: {
       bg: 'neutral.0',
       position: 'fixed',
