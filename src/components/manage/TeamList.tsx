@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useStoreState } from 'easy-peasy';
-import Image from 'next/image';
 import toast from 'react-hot-toast';
-import { Flex, Box, Text, Button } from 'theme-ui';
-import {
-  MenuProvider,
-  Menu,
-  MenuItem,
-  MenuButton,
-  Dialog,
-} from '@ariakit/react';
+import { Flex, Box, Text, Button, Image } from 'theme-ui';
 
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
@@ -70,7 +63,7 @@ const TeamList = () => {
 
   const profile = useStoreState((state) => state.profile.profile);
   const organisationId = profile?.organisation_id;
-  // console.log(organisationId);
+  console.log(organisationId);
 
   const loadData = (id: string) => {
     fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
@@ -87,7 +80,7 @@ const TeamList = () => {
     if (organisationId) {
       loadData(organisationId);
     }
-  }, [organisationId, isRemoveUser, isAssignRole, sort]);
+  }, []);
   // }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
 
   useEffect(() => {
@@ -171,20 +164,23 @@ const TeamList = () => {
                     sx={{
                       ml: '24px',
                       gap: '18px',
+                      alignItems: 'center',
                     }}>
-                    <Box
+                    <Image
+                      src={row.original.members.profilePic}
+                      alt="memberImg"
                       sx={{
-                        borderRadius: '999px',
+                        width: '32px',
+                        height: '32px',
+                        maxWidth: 'auto',
+                        borderRadius: 99,
+                        border: 'solid 1px',
+                        borderColor: 'gray.3',
                         overflow: 'hidden',
                         objectFit: 'cover',
-                      }}>
-                      <Image
-                        src={row.original.members.profilePic}
-                        alt="memberImg"
-                        width={32}
-                        height={32}
-                      />
-                    </Box>
+                        flexShrink: 0,
+                      }}
+                    />
                     <Text sx={{ fontWeight: 'heading', color: 'dark_600' }}>
                       {row.original.members.name}
                     </Text>
@@ -210,9 +206,10 @@ const TeamList = () => {
                     }}>
                     {row.original.roles.map(
                       (role: { roleName: string; roleId: string }) => (
-                        <>
+                        <Box
+                          sx={{ display: 'flex', alignItems: 'center' }}
+                          key={role.roleId}>
                           <Flex
-                            key={role.roleId}
                             sx={{
                               fontWeight: 'body',
                               px: '12px',
@@ -221,6 +218,7 @@ const TeamList = () => {
                               borderRadius: '60px',
                               gap: '6px',
                               alignItems: 'center',
+                              my: 'auto',
                             }}>
                             {role.roleName}
                             <Button
@@ -253,19 +251,19 @@ const TeamList = () => {
                                 <Close width={30} color="black" />
                               </Box>
                             </Button>
+                            <ModalCustom
+                              varient="center"
+                              isOpen={isRemoveRole === role.roleId}
+                              setOpen={setIsRemoveRole}>
+                              <ConfirmDelete
+                                title="Delete role"
+                                text={`Are you sure you want to delete ${role.roleName} ?`}
+                                setOpen={setIsRemoveRole}
+                                onConfirmDelete={onConfirmDelete}
+                              />
+                            </ModalCustom>
                           </Flex>
-                          <ModalCustom
-                            varient="center"
-                            isOpen={isRemoveRole === role.roleId}
-                            setOpen={setIsRemoveRole}>
-                            <ConfirmDelete
-                              title="Delete role"
-                              text={`Are you sure you want to delete ${role.roleName} ?`}
-                              setOpen={setIsRemoveRole}
-                              onConfirmDelete={onConfirmDelete}
-                            />
-                          </ModalCustom>
-                        </>
+                        </Box>
                       ),
                     )}
                     <Box
@@ -328,6 +326,8 @@ const TeamList = () => {
                         sx={{ display: 'flex', alignItems: 'center' }}>
                         <Button
                           sx={{
+                            display: 'flex',
+                            alignItems: 'center',
                             position: 'relative',
                             cursor: 'pointer',
                             margin: '0px',
@@ -364,55 +364,18 @@ const TeamList = () => {
                         open={isOpen == row.index}
                         onClose={() => setIsOpen(null)}>
                         <MenuItem>
-                          <Text variant="">Delete</Text>
-                        </MenuItem>
-                      </Menu>
-                      {/* <MenuItem variant="layout.menuItemHeading" as={Box}>
-                          Switch Workspace
-                        </MenuItem>
-                        <MenuItem variant="layout.menuItemHeading" as={Box}>
                           <Button
                             variant="base"
-                            sx={{ cursor: 'pointer' }}
-                            onClick={() => setIsOpen(true)}>
-                            Create a workspace
+                            onClick={() => {
+                              setIsOpen(null);
+                              setIsRemoveUser(row.index);
+                            }}>
+                            <Text variant="" sx={{ cursor: 'pointer' }}>
+                              Delete
+                            </Text>
                           </Button>
-                        </MenuItem> */}
-                      {/* Delete */}
-                      {/* {isOpen === row.index && (
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          bg: 'bgWhite',
-                          // p: 3,
-                          right: 0,
-                          top: 0,
-                          zIndex: 10,
-                          border: '1px solid',
-                          borderColor: 'neutral.1',
-                          width: '155px',
-                        }}>
-                        <Button
-                          onClick={() => {
-                            setIsOpen(null);
-                            setIsRemoveUser(row.index);
-                          }}
-                          variant="text.pM"
-                          sx={{
-                            cursor: 'pointer',
-                            textAlign: 'left',
-                            width: '100%',
-                            bg: 'bgWhite',
-                            color: 'gray.6',
-                            p: 3,
-                            ':disabled': {
-                              color: 'gray.2',
-                            },
-                          }}>
-                          Remove User
-                        </Button>
-                      </Box>
-                    )} */}
+                        </MenuItem>
+                      </Menu>
                       <ModalCustom
                         varient="center"
                         isOpen={isRemoveUser === row.index}
@@ -425,7 +388,10 @@ const TeamList = () => {
                             ]?.members.name}’?`}
                             setOpen={setIsRemoveUser}
                             onConfirmDelete={async () => {
-                              postAPI(`organisations/remove_user/123`, {})
+                              postAPI(
+                                `organisations/remove_user/${row.original.members.memberId}`,
+                                {},
+                              )
                                 .then((data) => {
                                   console.log(data);
                                   toast.success('User removed Successfully', {
