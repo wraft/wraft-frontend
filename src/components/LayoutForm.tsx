@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import Router, { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -15,15 +15,16 @@ import {
   Image,
   Link,
 } from 'theme-ui';
+import * as z from 'zod';
 
-import { useAuth } from '../contexts/AuthContext';
 import {
-  updateEntityFile,
-  createEntityFile,
   API_HOST,
   fetchAPI,
   deleteAPI,
+  postAPI,
+  putAPI,
 } from '../utils/models';
+import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
 
 import AssetForm from './AssetForm';
@@ -73,9 +74,46 @@ export interface IEngine {
 
 interface Props {
   setOpen: any;
+  setRerender?: any;
+  cId?: string;
 }
 
-const Form = ({ setOpen }: Props) => {
+type FormValues = {
+  name: string;
+  slug: string;
+  height: number;
+  width: number;
+  description: string;
+  engine_uuid: string;
+  screenshot: any;
+  unit: string;
+};
+
+const schema = z.object({
+  name: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
+  slug: z
+    .string()
+    .refine((value) => value === 'pletter' || value === 'contract', {
+      message: 'Value must be either "pletter" or "contract"',
+    }),
+  description: z
+    .string()
+    .min(5, { message: 'Minimum 5 characters required' })
+    .max(255, { message: 'Maximum 255 characters allowed' }),
+  engine_uuid: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Engine',
+  }),
+  screenshot: z.any(),
+  assets: z.any(),
+  height: z.any(),
+  width: z.any(),
+  unit: z.any(),
+});
+
+const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   const {
     register,
     control,
@@ -83,37 +121,14 @@ const Form = ({ setOpen }: Props) => {
     formState: { errors, isValid },
     setValue,
     trigger,
-  } = useForm<{
-    name: string;
-    slug: string;
-    height: number;
-    width: number;
-    description: string;
-    engine_uuid: string;
-    screenshot: any;
-    unit: string;
-  }>({ mode: 'all' });
+  } = useForm<FormValues>({ mode: 'all', resolver: zodResolver(schema) });
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
 
-  const { accessToken } = useAuth();
+  // const { accessToken } = useAuth();
 
   const [isEdit, setEdit] = useState<boolean>(false);
-
-  // determine edit state based on URL
-  const router = useRouter();
-  const cId: string = (router.query.id as string) || '';
-
-  const onImageUploaded = (data: any) => {
-    console.log('data', data);
-    setOpen(false);
-  };
-  const onUpdate = (data: any) => {
-    console.log('updated', data);
-    setOpen(false);
-    Router.push('/manage/layouts');
-  };
 
   /**
    * Form Submit
@@ -145,29 +160,38 @@ const Form = ({ setOpen }: Props) => {
     formData.append('screenshot', data.screenshot[0]);
 
     if (isEdit) {
-      updateEntityFile(
-        `layouts/${cId}`,
-        formData,
-        accessToken as string,
-        onUpdate,
-      );
-
-      toast.success(`Updated Layout ${data.name}`, {
-        duration: 1000,
-        position: 'top-right',
-      });
+      //update
+      putAPI(`layouts/${cId}`, formData)
+        .then(() => {
+          setOpen(false);
+          toast.success(`Updated Layout ${data.name}`, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch((error) => {
+          toast.error(`Failed to Updated Layout ${data.name} ${error}`, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     } else {
-      createEntityFile(
-        formData,
-        accessToken as string,
-        'layouts',
-        onImageUploaded,
-      );
-
-      toast.success(`Created Layout ${data.name}`, {
-        duration: 1000,
-        position: 'top-right',
-      });
+      //create
+      postAPI(`layouts`, formData)
+        .then(() => {
+          setRerender((prev: boolean) => !prev);
+          setOpen(false);
+          toast.success(`Updated Layout ${data.name}`, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error(`Failed to Updated Layout ${data.name}`, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     }
   };
 
@@ -192,9 +216,6 @@ const Form = ({ setOpen }: Props) => {
       setLayout(res);
     });
   };
-  // const loadAssets = (id: string, token: string) => {
-  //   loadEntity(token, `assets/${id}`, loadAssetSuccess);
-  // };
 
   useEffect(() => {
     if (layout) {
@@ -242,15 +263,24 @@ const Form = ({ setOpen }: Props) => {
   const deleteAsset = (lid: string, id: string) => {
     const indexOf = assets.findIndex((e) => e.id === id);
     assets.splice(indexOf, 1);
+    setAssets(assets.splice(indexOf, 1));
     if (layout?.assets.some((asset) => asset.id === id)) {
-      deleteAPI(`/layouts/${lid}/assets/${id}`);
+      deleteAPI(`layouts/${lid}/assets/${id}`)
+        .then(() => {
+          toast.success('Deleted Asset', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error('Delete Asset Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     }
-
-    toast.success('Deleted Asset', {
-      duration: 1000,
-      position: 'top-right',
-    });
   };
+
   const [formStep, setFormStep] = useState(0);
   function next() {
     setFormStep((i) => i + 1);
@@ -542,7 +572,6 @@ const Form = ({ setOpen }: Props) => {
                 </Flex>
               </Container>
             )}
-            {/* <Flex sx={{ position: 'absolute', bottom: '48px' }}> */}
             <Flex>
               {formStep === 0 && (
                 <Button
@@ -574,7 +603,7 @@ const Form = ({ setOpen }: Props) => {
                     </Text>
                   </Button>
                   <Button
-                    // disabled={!isValid || !isAssetValid}
+                    disabled={!isValid || assets.length < 1}
                     variant="buttonPrimary"
                     type="submit"
                     ml={2}

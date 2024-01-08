@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
 import { DotsVerticalRounded } from './Icons';
-import Link from './NavLink';
+import LayoutForm from './LayoutForm';
+import ModalCustom from './ModalCustom';
 
 /**
  * Page Heading Section
@@ -29,13 +30,15 @@ interface IItemField {
 const LayoutCard = ({
   id,
   name,
-  model = 'content-types',
+  // model = 'content-types',
   // prefix,
   decription,
   screenshot,
   onDelete,
 }: IItemField) => {
   // const menu = useMenuState();
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
     <Box variant="layout.m" sx={{ mb: 4, mr: 3, minWidth: '20ch' }}>
@@ -103,17 +106,22 @@ const LayoutCard = ({
                     Delete
                   </MenuItem>
                   <MenuItem as={Box} sx={{ width: '100%', px: 3, py: 1 }}>
-                    <Link
-                      href={`/manage/${model}/edit/[id]`}
-                      path={`/manage/${model}/edit/${id}`}>
+                    <Button
+                      variant="base"
+                      onClick={() => {
+                        setIsOpen(true);
+                      }}>
                       <Text
                         sx={{ fontSize: 3, fontWeight: 500, color: 'gray.8' }}>
                         Edit
                       </Text>
-                    </Link>
+                    </Button>
                   </MenuItem>
                 </Menu>
               </MenuProvider>
+              <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+                <LayoutForm setOpen={setIsOpen} cId={id} />
+              </ModalCustom>
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>

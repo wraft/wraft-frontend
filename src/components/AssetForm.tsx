@@ -1,7 +1,16 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
-import { Box, Flex, Button, Label, Input, Select, Spinner } from 'theme-ui';
+import {
+  Box,
+  Flex,
+  Button,
+  Label,
+  Input,
+  Select,
+  Spinner,
+  Text,
+} from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 import { createEntityFile } from '../utils/models';
@@ -113,16 +122,17 @@ const AssetForm = ({
             id="file"
             type="file"
             accept=".ttf, .otf"
-            {...register('file')}
+            {...register('file', { required: true })}
           />
         ) : (
           <Input
             id="file"
             type="file"
             accept="application/pdf"
-            {...register('file')}
+            {...register('file', { required: true })}
           />
         )}
+        {errors.file && <Text variant="error">{errors.file.message}</Text>}
       </Box>
       <Flex>
         <Button
