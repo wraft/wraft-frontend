@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
@@ -31,7 +31,11 @@ export interface IFieldItem {
   type: string;
 }
 
-const LayoutList: FC = () => {
+interface Props {
+  rerender?: boolean;
+}
+
+const LayoutList = ({ rerender }: Props) => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
   const [contents, setContents] = useState<Array<IField>>([]);
@@ -64,7 +68,7 @@ const LayoutList: FC = () => {
 
   useEffect(() => {
     loadLayout();
-  }, []);
+  }, [rerender]);
 
   return (
     <Box py={3} mt={4}>
