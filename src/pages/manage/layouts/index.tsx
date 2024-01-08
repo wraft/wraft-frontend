@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
@@ -12,7 +12,8 @@ import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
   return (
     <>
       <Head>
@@ -29,14 +30,14 @@ const Index: FC = () => {
           </Button>
         </PageHeader>
         <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
-          <LayoutForm setOpen={setIsOpen} />
+          <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </ModalCustom>
 
         <Box variant="layout.pageFrame" pt={0}>
           <Container>
             <Flex>
               <ManageSidebar items={menuLinks} />
-              <LayoutList />
+              <LayoutList rerender={rerender} />
             </Flex>
           </Container>
         </Box>
