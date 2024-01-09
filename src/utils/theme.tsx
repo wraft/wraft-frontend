@@ -767,7 +767,7 @@ const theme: Theme & CustomVariantGroups = {
     newPageFrame: {
       p: 0,
       height: '100%',
-      maxHeight: 'calc(100vh - 140px)',
+      maxHeight: 'calc(100vh - 72px)',
       overflow: 'auto',
       bg: 'background',
     },
