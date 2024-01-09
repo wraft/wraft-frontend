@@ -40,8 +40,8 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
               flexBasis: ['auto', 245],
               minHeight: '100vh',
               borderRight: 'solid 1px',
-              borderColor: 'neutral.1',
-              bg: 'bgWhite',
+              borderColor: 'border',
+              bg: 'backgroundWhite',
             }}>
             <Sidebar showFull={shouldShow} />
           </Box>
@@ -49,7 +49,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
         <Box
           sx={{
             flex: 1,
-            bg: 'bgWhite',
+            bg: 'backgroundWhite',
             minWidth: 0,
           }}>
           {children}

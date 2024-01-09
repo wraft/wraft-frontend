@@ -73,7 +73,7 @@ const Dropdown: FC<Props> = ({ imageUrl, children }) => {
             width: '100%',
             borderRadius: '50%',
             border: '1px solid',
-            borderColor: 'gray.4',
+            borderColor: 'border',
           }}
         />
       </Box>

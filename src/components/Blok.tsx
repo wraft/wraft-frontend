@@ -65,7 +65,7 @@ const Blok = () => {
   }, []);
 
   return (
-    <Box bg="gray.0" sx={{ border: 'solid 1px', borderColor: 'gray.2' }}>
+    <Box bg="gray.0" sx={{ border: 'solid 1px', borderColor: 'border' }}>
       <Box>{loading && <></>}</Box>
       {/* <Flex>
         <Input placeholder="Search eg: Offer Letter" sx={{ fontSize: 0, mb: 0 }} />
@@ -73,18 +73,18 @@ const Blok = () => {
           <SearchIcon />
         </Button>
       </Flex> */}
-      <Box sx={{ p: 0, borderTop: 'solid 1px', borderColor: 'gray.2' }}>
+      <Box sx={{ p: 0, borderTop: 'solid 1px', borderColor: 'border' }}>
         <Box
           variant="caps"
           sx={{
             // fontSize: 0,
-            bg: 'gray.1',
+            bg: 'gray.200',
             py: 1,
             pl: 3,
-            color: 'gray.6',
+            color: 'text',
             width: '100%',
             borderBottom: 'solid 1px',
-            borderColor: 'neutral.2',
+            borderColor: 'border',
           }}>
           <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
             Select a variant
@@ -111,9 +111,9 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         px: 3,
         py: 2,
         borderBottom: 'solid 1px',
-        bg: 'neutral.0',
-        borderColor: 'neutral.1',
-        '&:hover': { bg: 'neutral.1' },
+        bg: 'neutral.100',
+        borderColor: 'border',
+        '&:hover': { bg: 'neutral.200' },
       }}>
       <Box
         sx={{
@@ -121,14 +121,14 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           borderRadius: 4,
           mr: 2,
           mt: 1,
-          borderColor: 'neutral.2',
+          borderColor: 'border',
           height: '16px',
           bg: color,
         }}
       />
 
       <Link href={`/content-types/${id}`}>{name}</Link>
-      {/* <Text as="h4" sx={{ m: 0, color: 'gray.7', fontWeight: 500 }}>
+      {/* <Text as="h4" sx={{ m: 0, color: 'gray.800', fontWeight: 500 }}>
         
       </Text> */}
       <Text
@@ -137,7 +137,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
           fontSize: 0,
           m: 0,
           ml: 'auto',
-          color: 'gray.7',
+          color: 'text',
           fontWeight: 300,
         }}>
         {prefix}

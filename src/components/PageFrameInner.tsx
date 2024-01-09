@@ -41,7 +41,7 @@ IPage) => {
           <Box
             sx={{
               flex: 1,
-              // bg: 'gray.1',
+              // bg: 'gray.200',
               minWidth: 0,
             }}>
             {children}

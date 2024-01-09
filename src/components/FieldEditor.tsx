@@ -92,7 +92,7 @@ const FieldForm = (props: FieldFormProps) => {
           px: 3,
           alignItems: 'flex-start',
           borderBottom: 'solid 1px',
-          borderColor: 'gray.1',
+          borderColor: 'border',
         }}>
         <Text as="h4" mb={0} pt={1}>
           Fields
@@ -120,7 +120,7 @@ const FieldForm = (props: FieldFormProps) => {
           fieldsArr.map((f: any) => (
             <Flex
               key={f?.id}
-              sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
+              sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'border' }}>
               <Text as="h4">{(f && f.value && f.value.name) || ''}</Text>
               <Text
                 variant="caps"
@@ -141,13 +141,13 @@ const FieldForm = (props: FieldFormProps) => {
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ bg: 'neutral.0' }}>
+          sx={{ bg: 'neutral.100' }}>
           <Box
             sx={{
               py: 3,
               px: 4,
               borderBottom: 'solid 1px',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
             }}>
             <Text as="p" sx={{ fontSize: 2 }}>
               Manage Fields
@@ -157,7 +157,7 @@ const FieldForm = (props: FieldFormProps) => {
           {fields.length < 1 && fieldsArr.length < 1 && (
             <Box
               sx={{
-                bg: 'neutral.1',
+                bg: 'neutral.200',
                 pt: 4,
                 pb: 4,
                 px: 4,
@@ -166,7 +166,7 @@ const FieldForm = (props: FieldFormProps) => {
               <Text as="h3" sx={{ mb: 0 }}>
                 Empty State
               </Text>
-              <Text as="p" sx={{ fontSize: 1, color: 'gray.6', mb: 3, pr: 3 }}>
+              <Text as="p" sx={{ fontSize: 1, color: 'text', mb: 3, pr: 3 }}>
                 You have no fields added, start adding fields to `field` up your
                 Variant
               </Text>
@@ -184,15 +184,15 @@ const FieldForm = (props: FieldFormProps) => {
           <Box
             sx={{
               borderTop: 'solid 1px',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
             }}>
             {fields.map((field, index) => (
               <Box
                 key={field.id}
                 sx={{
                   borderBottom: 'solid 1px',
-                  borderColor: 'neutral.1',
-                  '&:hover': { bg: 'gray.1' },
+                  borderColor: 'border',
+                  '&:hover': { bg: 'gray.200' },
                   py: 3,
                   px: 4,
                 }}>
@@ -272,7 +272,7 @@ const FieldForm = (props: FieldFormProps) => {
           {(fields?.length > 0 || fieldsArr.length > 0) && (
             <Box
               sx={{
-                bg: 'neutral.1',
+                bg: 'neutral.200',
                 pt: 4,
                 pb: 4,
                 px: 4,

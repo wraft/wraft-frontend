@@ -114,13 +114,13 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
         <Flex
           sx={{
             position: 'relative',
-            color: 'gray.3',
+            color: 'text',
             p: 3,
-            bg: 'gray.1',
+            bg: 'gray.200',
             width: '100%',
             borderTop: 'solid 1px',
             borderBottom: 'solid 1px',
-            borderColor: 'gray.4',
+            borderColor: 'border',
           }}>
           <Slider
             value={zoom}
@@ -133,15 +133,15 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
           />
         </Flex>
       </Box>
-      <Flex sx={{ bg: 'neutral.0', p: 3 }}>
+      <Flex sx={{ bg: 'neutral.100', p: 3 }}>
         <Box sx={{ ml: 'auto' }}>
           {/* <Button
             type="button"
             sx={{
               border: 'solid 1px',
-              borderColor: 'gray.4',
+              borderColor: 'border',
               bg: 'background',
-              color: 'gray.7',
+              color: 'gray.800',
               mr: 1,
             }}>
             Clear

@@ -184,13 +184,13 @@ const SignUpPage = () => {
               Continue with Google
             </Button>
 
-            <Text as="p" sx={{ mt: 4, color: 'dark_600', mb: '4px' }}>
+            <Text as="p" sx={{ mt: 4, color: 'dark.600', mb: '4px' }}>
               Already a member?
               <Link
                 href="/login"
                 sx={{
                   textDecoration: 'none',
-                  color: 'dark_600',
+                  color: 'dark.600',
                   fontWeight: 'bold',
                   pl: 0,
                 }}>

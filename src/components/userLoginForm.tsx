@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Router from 'next/router';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { Label, Input, Heading, Checkbox } from 'theme-ui';
 import { Box, Flex, Text, Button } from 'theme-ui';
@@ -78,7 +79,7 @@ const UserLoginForm = () => {
         </Heading>
 
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email" sx={{ mb: '4px', color: 'dark_600' }}>
+          <Label htmlFor="email" sx={{ mb: '4px', color: 'dark.600' }}>
             Email
           </Label>
           <Input
@@ -90,7 +91,7 @@ const UserLoginForm = () => {
             color={'nuetral_nuetral'}
           />
 
-          <Label htmlFor="password" sx={{ mb: '4px', color: 'dark_600' }}>
+          <Label htmlFor="password" sx={{ mb: '4px', color: 'dark.600' }}>
             Password
           </Label>
           <Input
@@ -107,12 +108,12 @@ const UserLoginForm = () => {
               justifyContent: 'space-between',
             }}>
             {error ? (
-              <Text sx={{ color: 'warning_300' }}>{error}</Text>
+              <Text sx={{ color: 'orange.300' }}>{error}</Text>
             ) : (
               <Flex>
                 <Label
                   sx={{
-                    color: 'dark_900',
+                    color: 'dark.900',
                     fontWeight: 'body',
                     display: 'flex',
                     alignItems: 'center',
@@ -121,7 +122,7 @@ const UserLoginForm = () => {
                     checked={showPassword}
                     onChange={() => setShowPassword(!showPassword)}
                     sx={{
-                      color: 'dark_900',
+                      color: 'dark.900',
                       width: '18px',
                       backgroundColor: 'white',
                       border: 'none',
@@ -135,7 +136,7 @@ const UserLoginForm = () => {
               <Text
                 sx={{
                   textDecoration: 'none',
-                  color: 'dark_900',
+                  color: 'dark.900',
                   fontWeight: 'heading',
                 }}>
                 Forgot Password?
@@ -160,17 +161,18 @@ const UserLoginForm = () => {
           }}
         />
 
-        <Button onClick={handleGoogleSignIn} variant="googleLogin">
+        <Button onClick={() => signIn('gmail')} variant="googleLogin">
           <img src={GoogleLogo} alt="" />
           Continue with Google
         </Button>
+        {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
 
-        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'dark_600' }}>
+        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'dark.600' }}>
           Not a user yet? {''}
           <Link href="/signup">
             <Text
               sx={{
-                color: 'dark_600',
+                color: 'dark.600',
                 fontWeight: 'bold',
               }}>
               Request invite

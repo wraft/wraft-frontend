@@ -141,8 +141,8 @@ const AssetForm = ({
           disabled={!isValid || isLoading}
           sx={{
             ':disabled': {
-              bg: 'gray.0',
-              color: 'gray.5',
+              bg: 'gray.100',
+              color: 'gray.500',
             },
           }}>
           Upload {''}
@@ -189,9 +189,9 @@ export default AssetForm;
 //         flexDirection: 'column',
 //         alignItems: 'center',
 //         border: '1px dashed',
-//         borderColor: 'neutral.0',
+//         borderColor: 'border',
 //         p: '18px',
-//         // bg: dragging ? 'green.0' : 'bgWhite',
+//         // bg: dragging ? 'gray.100' : 'backgroundWhite',
 //       }}>
 //       <input {...getInputProps({ ...register('file') })} />
 //       <p>Drag 'n' drop some files here, or click to select files</p>
@@ -213,8 +213,8 @@ export default AssetForm;
 //         disabled={!isValid}
 //         sx={{
 //           ':disabled': {
-//             bg: 'gray.0',
-//             color: 'gray.5',
+//             bg: 'gray.100',
+//             color: 'gray.500',
 //           },
 //         }}>
 //         Upload
@@ -277,9 +277,9 @@ export default AssetForm;
           flexDirection: 'column',
           alignItems: 'center',
           border: '1px dashed',
-          borderColor: 'neutral.0',
+          borderColor: 'border',
           p: '18px',
-          bg: dragging ? 'green.0' : 'bgWhite',
+          bg: dragging ? 'gray.100' : 'backgroundWhite',
         }}>
         <Box mb="12px">
           <CloudUploadIcon />

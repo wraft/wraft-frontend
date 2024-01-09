@@ -62,14 +62,14 @@ const UserNav = () => {
       sx={{
         bg: 'background',
         // borderBottom: 'solid 1px',
-        // borderColor: 'gray.3',
+        // borderColor: 'border',
         py: 2,
       }}>
       <Container>
         <Flex sx={{ py: 3, px: 4, alignItems: 'center' }}>
           <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
             <Link href={token ? '/user-profile' : '/'}>
-              <Box sx={{ color: `gray.0`, fill: 'gray.9' }}>
+              <Box sx={{ color: `gray.0`, fill: 'gray.1000' }}>
                 <BrandLogo width="6rem" height="2rem" />
               </Box>
             </Link>

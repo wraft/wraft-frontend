@@ -7,7 +7,7 @@ interface props {
 
 const HR = ({ my, color }: props) => {
   const margin = my ? `${my}` : '200px';
-  const colorSelected = color ? `${color}` : 'neutral.0';
+  const colorSelected = color ? `${color}` : 'neutral.100';
   return (
     <Box
       sx={{

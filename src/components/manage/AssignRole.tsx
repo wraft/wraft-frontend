@@ -107,12 +107,12 @@ const AssignRole = ({
         textDecoration: 'none',
         flexDirection: 'column',
       }}>
-      <Text sx={{ color: 'dark_300' }}>Choose role</Text>
+      <Text sx={{ color: 'dark.300' }}>Choose role</Text>
       <Flex sx={{ listStyleType: 'none', flexDirection: 'column' }}>
         {roleList.map((role) => (
           <Flex
             key={role.roleId}
-            sx={{ py: '10px', color: 'dark_600', fontWeight: 'heading' }}>
+            sx={{ py: '10px', color: 'dark.600', fontWeight: 'heading' }}>
             <Button
               onClick={() => assignRoleFunction(role.roleId)}
               sx={{

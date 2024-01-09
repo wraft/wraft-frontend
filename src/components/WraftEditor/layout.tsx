@@ -54,7 +54,7 @@ import { RemirrorJSON } from 'remirror';
 //         '.remirror-theme h3': {
 //           fontSize: 1,
 //           m: 0,
-//           color: 'red.3',
+//           color: 'red.400',
 //           margin: '0 !important',
 //         },
 //       }}>
@@ -362,11 +362,11 @@ const EditorWraft: FC<EditorProps> = ({
         m: 0,
         px: inline ? 0 : 1,
         '.remirror-toolbar': {
-          bg: 'gray.0',
+          bg: 'gray.100',
         },
         '.remirror-role': {
-          bg: 'gray.0',
-          color: 'gray.9',
+          bg: 'gray.100',
+          color: 'gray.1000',
         },
         '&.remirror-editor': {
           bg: 'blue',
@@ -374,7 +374,7 @@ const EditorWraft: FC<EditorProps> = ({
         },
         '.remirror-editor': {
           p: inline ? 0 : 0,
-          bg: 'red.2',
+          bg: 'red.300',
         },
         '.hidden': {
           display: 'none',
@@ -395,8 +395,8 @@ const EditorWraft: FC<EditorProps> = ({
                   mr: 1,
                   ml: 'auto',
                   border: 'solid 1px',
-                  borderColor: 'gray.3',
-                  // color: 'gray.6',
+                  borderColor: 'border',
+                  // color: 'text',
                 }}
                 onClick={() => setShowOutline(!showoutline)}>
                 <CloseIcon width={12} />
@@ -469,8 +469,8 @@ const EditorWraft: FC<EditorProps> = ({
                   //   mr: 1,
                   //   px: 2,
                   //   border: 'solid 1px',
-                  //   borderColor: 'gray.3',
-                  //   // color: 'gray.6',
+                  //   borderColor: 'border',
+                  //   // color: 'gray.700',
                   // }}
                   onClick={() => setShowOutline(!showoutline)}>
                   <TaskListLtr width={16} />
@@ -483,8 +483,8 @@ const EditorWraft: FC<EditorProps> = ({
                   //   mr: 1,
                   //   ml: 'auto',
                   //   border: 'solid 1px',
-                  //   borderColor: 'gray.3',
-                  //   // color: 'gray.6',
+                  //   borderColor: 'border',
+                  //   // color: 'gray.700',
                   // }}
                   // sx={{ py: 0 }}
                   onClick={() => toggleView()}>

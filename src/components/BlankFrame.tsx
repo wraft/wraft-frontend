@@ -39,10 +39,10 @@ export const Page = ({ children, inner }: IPage) => {
           <Box
             sx={{
               flex: 1,
-              bg: 'neutral.1',
+              bg: 'neutral.200',
               minWidth: 0,
               '.ProseMirror p': {
-                // bg: 'bgWhite',
+                // bg: 'backgroundWhite',
                 mb: 1,
                 pb: 4,
               },
@@ -51,7 +51,7 @@ export const Page = ({ children, inner }: IPage) => {
 
             {children}
             <Flex sx={{ pt: 0 }}>
-              <Text sx={{ fontSize: '12px', p: 4, color: 'gray.3' }}>
+              <Text sx={{ fontSize: '12px', p: 4, color: 'text' }}>
                 (c) Wraft Docs Inc 2021 . All Rights Reserved
               </Text>
               <Box
@@ -59,7 +59,7 @@ export const Page = ({ children, inner }: IPage) => {
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
                 }}>
-                <Text sx={{ fontSize: 0, p: 4, color: 'gray.5' }}>
+                <Text sx={{ fontSize: 0, p: 4, color: 'text' }}>
                   Support | Contact Us
                 </Text>
               </Box>

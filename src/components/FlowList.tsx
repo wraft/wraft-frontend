@@ -159,12 +159,12 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                                 <Box
                                   sx={{
                                     position: 'absolute',
-                                    bg: 'bgWhite',
+                                    bg: 'backgroundWhite',
                                     right: 0,
                                     top: 0,
                                     zIndex: 10,
                                     border: '1px solid',
-                                    borderColor: 'neutral.1',
+                                    borderColor: 'border',
                                     width: '155px',
                                   }}>
                                   <Button
@@ -186,11 +186,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                                       cursor: 'pointer',
                                       textAlign: 'left',
                                       width: '100%',
-                                      bg: 'bgWhite',
-                                      color: 'red.5',
+                                      bg: 'backgroundWhite',
+                                      color: 'red.600',
                                       p: 3,
                                       ':disabled': {
-                                        color: 'gray.2',
+                                        color: 'gray.300',
                                       },
                                     }}>
                                     Delete

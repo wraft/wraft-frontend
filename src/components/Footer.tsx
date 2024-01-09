@@ -20,32 +20,32 @@ const Footer = () => {
           <Flex sx={{ ml: 6, gap: `6ch` }}>
             <Box sx={{ maxWidth: `12ch`, flex: 1 }}>
               <Box as="ul" sx={{ listStyle: `none` }}>
-                <Box as="li" sx={{ color: `gray.6`, pb: 2, fontWeight: `500` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `500` }}>
                   About
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Features
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Team
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Pricing
                 </Box>
               </Box>
             </Box>
             <Box sx={{ maxWidth: `12ch`, flex: 1 }}>
               <Box as="ul" sx={{ listStyle: `none` }}>
-                <Box as="li" sx={{ color: `gray.6`, pb: 2, fontWeight: `500` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `500` }}>
                   Comparison
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Team
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Features
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Pricing
                 </Box>
               </Box>
@@ -53,16 +53,16 @@ const Footer = () => {
 
             <Box sx={{ maxWidth: `12ch`, flex: 1 }}>
               <Box as="ul" sx={{ listStyle: `none` }}>
-                <Box as="li" sx={{ color: `gray.6`, pb: 2, fontWeight: `500` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `500` }}>
                   Industries
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Finance
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   HR
                 </Box>
-                <Box as="li" sx={{ color: `gray.9`, pb: 2, fontWeight: `700` }}>
+                <Box as="li" sx={{ color: `text`, pb: 2, fontWeight: `700` }}>
                   Law
                 </Box>
               </Box>
@@ -129,10 +129,10 @@ const Footer = () => {
                 </a>
               </Flex>
               <Flex sx={{ gap: `20px` }}>
-                <Text as="p" sx={{ color: `gray.6`, fontWeight: `500` }}>
+                <Text as="p" sx={{ color: `text`, fontWeight: `500` }}>
                   Privacy
                 </Text>
-                <Text as="p" sx={{ color: `gray.6`, fontWeight: `500` }}>
+                <Text as="p" sx={{ color: `text`, fontWeight: `500` }}>
                   Contact
                 </Text>
               </Flex>

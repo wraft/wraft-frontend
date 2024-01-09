@@ -68,10 +68,10 @@ const BlockTemplateListFrame: FC = () => {
                 as={Button}
                 sx={{
                   border: 'solid 1px',
-                  color: 'gray.6',
-                  borderColor: 'neutral.1',
+                  color: 'text',
+                  borderColor: 'border',
                   p: 0,
-                  bg: 'neutral.0',
+                  bg: 'neutral.100',
                   pb: 1,
                   mt: 2,
                 }}>
@@ -82,20 +82,20 @@ const BlockTemplateListFrame: FC = () => {
                 aria-label="Manage Block"
                 sx={{
                   border: 'solid 1px',
-                  borderColor: 'gray.1',
+                  borderColor: 'border',
                   borderRadius: 4,
-                  bg: 'neutral.0',
-                  color: 'gray.9',
+                  bg: 'neutral.100',
+                  color: 'text',
                 }}>
                 <MenuItem
                   as={Button}
                   sx={{
                     p: 0,
-                    color: 'red.7',
-                    bg: 'neutral.0',
+                    color: 'red.800',
+                    bg: 'neutral.100',
                     px: 3,
                     borderBottom: 'solid 1px',
-                    borderColor: 'gray.1',
+                    borderColor: 'border',
                   }}
                   onClick={() => {
                     // onDelete(id);
@@ -148,14 +148,14 @@ const BlockTemplateListFrame: FC = () => {
           {loading && blocks.length === 0 && (
             <Box>
               <Flex>
-                <Box sx={{ color: 'gray.5', width: 'auto' }}>
+                <Box sx={{ color: 'gray.500', width: 'auto' }}>
                   <EmptyForm />
                 </Box>
                 <Box sx={{ m: 2, pb: 0 }}>
                   <Text as="h2" sx={{ fontWeight: 300 }}>
                     Blocks are empty
                   </Text>
-                  <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                  <Text as="h3" sx={{ fontWeight: 200, color: 'gray.700' }}>
                     You havent created a block yet, click below to create one
                   </Text>
                   <Box sx={{ mt: 3, pb: 0 }}>

@@ -49,9 +49,9 @@ const Index: FC = () => {
               <Box
                 sx={{
                   width: '100%',
-                  bg: 'bgWhite',
+                  bg: 'backgroundWhite',
                   border: '1px solid',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   borderRadius: 4,
                   m: 4,
                 }}>

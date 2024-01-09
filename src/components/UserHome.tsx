@@ -41,11 +41,11 @@ const TextBlock = ({ title, body, icon }: TextBlockProps) => {
           fontFamily: 'satoshi',
           fontSize: 3,
           fontWeight: 600,
-          color: 'green.5',
+          color: 'text',
         }}>
         {title}
       </Text>
-      <Text as="p" sx={{ fontSize: 2, color: 'gray.3', textWrap: 'balance' }}>
+      <Text as="p" sx={{ fontSize: 2, color: 'gray.400', textWrap: 'balance' }}>
         {body}
       </Text>
     </Box>
@@ -91,7 +91,7 @@ const UserHome = () => {
                       fontWeight: 700,
                       pb: 0,
                       m: 0,
-                      color: 'gray.8',
+                      color: 'text',
                       lineHeight: '1.20',
                     }}>
                     Documents for Humans
@@ -102,7 +102,7 @@ const UserHome = () => {
                       fontWeight: 400,
                       fontSize: [2, 2, 3],
                       my: 4,
-                      color: 'gray.8',
+                      color: 'text',
                       lineHeight: '1.25',
                     }}>
                     <span style={{ fontWeight: 700 }}>Automate</span>{' '}
@@ -171,7 +171,7 @@ const UserHome = () => {
                       fontWeight: 700,
                       pb: 0,
                       m: 0,
-                      color: 'gray.8',
+                      color: 'text',
                       lineHeight: '1.20',
                     }}>
                     For teams
@@ -182,7 +182,7 @@ const UserHome = () => {
                       fontWeight: 400,
                       fontSize: [2, 2, 3],
                       my: 4,
-                      color: 'gray.8',
+                      color: 'text',
                       lineHeight: '1.25',
                     }}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed

@@ -169,7 +169,7 @@ const TeamList = () => {
                         height={32}
                       />
                     </Box>
-                    <Text sx={{ fontWeight: 'heading', color: 'dark_600' }}>
+                    <Text sx={{ fontWeight: 'heading', color: 'dark.600' }}>
                       {row.original.members.name}
                     </Text>
                   </Flex>
@@ -188,7 +188,7 @@ const TeamList = () => {
                 return (
                   <Flex
                     sx={{
-                      color: 'dark_500',
+                      color: 'dark.500',
                       gap: '12px',
                       alignItems: 'center',
                     }}>
@@ -322,13 +322,13 @@ const TeamList = () => {
                       <Box
                         sx={{
                           position: 'absolute',
-                          bg: 'bgWhite',
+                          bg: 'backgroundWhite',
                           // p: 3,
                           right: 0,
                           top: 0,
                           zIndex: 10,
                           border: '1px solid',
-                          borderColor: 'neutral.1',
+                          borderColor: 'border',
                           width: '155px',
                         }}>
                         <Button
@@ -341,11 +341,11 @@ const TeamList = () => {
                             cursor: 'pointer',
                             textAlign: 'left',
                             width: '100%',
-                            bg: 'bgWhite',
-                            color: 'gray.6',
+                            bg: 'backgroundWhite',
+                            color: 'text',
                             p: 3,
                             ':disabled': {
-                              color: 'gray.2',
+                              color: 'gray.300',
                             },
                           }}>
                           Remove User

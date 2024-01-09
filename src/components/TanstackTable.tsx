@@ -39,8 +39,8 @@ export const Table = ({ data, columns }: TableProps) => {
           fontSize: 0,
           textTransform: 'uppercase',
           border: '1px solid',
-          borderColor: 'neutral.1',
-          color: 'gray.3',
+          borderColor: 'border',
+          color: 'gray.400',
         }}>
         {table.getHeaderGroups().map((headerGroup) => (
           <Box as="tr" key={headerGroup.id}>
