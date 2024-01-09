@@ -302,7 +302,7 @@ const TeamList = () => {
                         <Menu
                           as={Box}
                           variant="layout.menu"
-                          sx={{ top: 16, left: -4 }}
+                          sx={{ top: 16, left: 0 }}
                           open={isAssignRole === row.index}
                           onClose={() => {
                             setCurrentRoleList([]);
