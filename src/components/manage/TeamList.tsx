@@ -60,10 +60,10 @@ const TeamList = () => {
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [isRemoveUser, setIsRemoveUser] = useState<number | null>(null);
   const [sort, setSort] = useState('joined_at');
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const profile = useStoreState((state) => state.profile.profile);
   const organisationId = profile?.organisation_id;
-  console.log(organisationId);
 
   const loadData = (id: string) => {
     fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
@@ -80,8 +80,7 @@ const TeamList = () => {
     if (organisationId) {
       loadData(organisationId);
     }
-  }, [organisationId]);
-  // }, [organisationId, isRemoveRole, isRemoveUser, isAssignRole, sort]);
+  }, [organisationId, sort, rerender]);
 
   useEffect(() => {
     if (contents) {
@@ -103,7 +102,7 @@ const TeamList = () => {
     }
   }, [contents]);
 
-  const data = useMemo(() => tableList, [contents]);
+  const data = useMemo(() => tableList, [tableList]);
 
   const onConfirmDelete = () => {
     deleteAPI(`users/${userId}/roles/${isRemoveRole}`)
@@ -112,16 +111,25 @@ const TeamList = () => {
           duration: 1000,
           position: 'top-center',
         });
-        console.log('success', response);
+        setRerender((prev) => !prev);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(`Failed to Delete!`, {
           duration: 1000,
           position: 'top-center',
         });
-        console.log('failed', error);
       });
     setIsRemoveRole(null);
+  };
+
+  const AssignRoleFunc = (row: any) => {
+    setIsAssignRole(row.index);
+    setUserID(tableList[row.index].members.memberId);
+    setUpdatedRoleList(
+      tableList[row.index].roles.map(
+        (role: { roleName: string; roleId: string }) => role.roleId,
+      ),
+    );
   };
 
   return (
@@ -227,10 +235,6 @@ const TeamList = () => {
                             <Button
                               onClick={() => {
                                 setIsRemoveRole(role.roleId);
-                                console.log(tableList[row.index].members.name);
-                                console.log(
-                                  tableList[row.index].members.memberId,
-                                );
                                 setUserID(
                                   tableList[row.index].members.memberId,
                                 );
@@ -278,41 +282,42 @@ const TeamList = () => {
                         lineHeight: '0px',
                         height: 'fit-content',
                       }}>
-                      <Button
-                        onClick={() => {
-                          setIsAssignRole(row.index);
-                          setUserID(tableList[row.index].members.memberId);
-                          setUpdatedRoleList(
-                            tableList[row.index].roles.map(
-                              (role: { roleName: string; roleId: string }) =>
-                                role.roleId,
-                            ),
-                          );
-                          console.log(currentRoleList);
-                        }}
-                        sx={{
-                          cursor: 'pointer',
-                          margin: '0px',
-                          padding: '0px',
-                          bg: 'transparent',
-                          ':disabled': {
-                            display: 'none',
-                          },
-                        }}>
-                        <AddIcon />
-                      </Button>
+                      <MenuProvider>
+                        <MenuButton
+                          as={Button}
+                          onClick={() => {
+                            AssignRoleFunc(row);
+                          }}
+                          sx={{
+                            cursor: 'pointer',
+                            margin: '0px',
+                            padding: '0px',
+                            bg: 'transparent',
+                            ':disabled': {
+                              display: 'none',
+                            },
+                          }}>
+                          <AddIcon />
+                        </MenuButton>
+                        <Menu
+                          as={Box}
+                          variant="layout.menu"
+                          sx={{ top: 16, left: -4 }}
+                          open={isAssignRole === row.index}
+                          onClose={() => {
+                            setCurrentRoleList([]);
+                            setIsAssignRole(null);
+                          }}>
+                          <AssignRole
+                            setRerender={setRerender}
+                            currentRoleList={currentRoleList}
+                            setCurrentRoleList={setCurrentRoleList}
+                            setIsAssignRole={setIsAssignRole}
+                            userId={userId}
+                          />
+                        </Menu>
+                      </MenuProvider>
                     </Box>
-                    <ModalCustom
-                      varient="center"
-                      isOpen={isAssignRole === row.index}
-                      setOpen={setIsAssignRole}>
-                      <AssignRole
-                        currentRoleList={currentRoleList}
-                        setCurrentRoleList={setCurrentRoleList}
-                        setIsAssignRole={setIsAssignRole}
-                        userId={userId}
-                      />
-                    </ModalCustom>
                   </Flex>
                 );
               },
@@ -383,15 +388,14 @@ const TeamList = () => {
                                 `organisations/remove_user/${row.original.members.memberId}`,
                                 {},
                               )
-                                .then((data) => {
-                                  console.log(data);
+                                .then(() => {
                                   toast.success('User removed Successfully', {
                                     duration: 2000,
                                     position: 'top-center',
                                   });
+                                  setRerender((prev) => !prev);
                                 })
-                                .catch((error) => {
-                                  console.log(error);
+                                .catch(() => {
                                   toast.error('User removed Failed', {
                                     duration: 2000,
                                     position: 'top-center',
