@@ -178,30 +178,19 @@ const Index: FC = () => {
         <PageHeader title="Workspace management" desc="Manage  >  Workspace">
           <div></div>
         </PageHeader>
-        <Container
-          sx={{
-            px: 4,
-            pt: 0,
-            maxHeight: '90vh',
-            overflow: 'auto',
-            bg: 'background',
-          }}>
+        <Container variant="layout.newPageFrame">
           <Flex>
             {(currentOrg?.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
             )}
-            <Box>
+            <Flex sx={{ flexDirection: 'column' }}>
               <Box
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
+                variant="layout.contentFrame"
                 sx={{
-                  minWidth: '556px',
-                  bg: 'bgWhite',
-                  border: '1px solid',
-                  borderColor: 'neutral.1',
-                  borderRadius: 4,
+                  maxWidth: '556px',
                   p: 4,
-                  m: 4,
                 }}>
                 <Image
                   variant="profile"
@@ -240,13 +229,11 @@ const Index: FC = () => {
               </Box>
               {(currentOrg?.name !== 'Personal' || '') && (
                 <Box
+                  variant="layout.contentFrame"
                   sx={{
-                    bg: 'bgWhite',
-                    border: '1px solid',
-                    borderColor: 'neutral.1',
-                    borderRadius: 4,
+                    maxWidth: '556px',
+                    mb: 0,
                     p: 4,
-                    m: 4,
                   }}>
                   <Text variant="pR" sx={{ display: 'inline-block', mb: 2 }}>
                     Delete workspace
@@ -318,7 +305,6 @@ const Index: FC = () => {
                         </Text>
                         <Box sx={{ mt: '24px' }}>
                           <Label variant="text.pR" sx={{ color: 'gray.8' }}>
-                            {/* Enter the deletion code */}
                             <span>Enter the deletion code to confirm</span>
                           </Label>
                           <Input ref={inputRef}></Input>
@@ -370,7 +356,7 @@ const Index: FC = () => {
                   </ModalCustom>
                 </Box>
               )}
-            </Box>
+            </Flex>
           </Flex>
         </Container>
       </Page>
