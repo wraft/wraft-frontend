@@ -57,7 +57,7 @@ export const StepBlock = ({
       sx={{
         flex: 1,
         borderRight: `solid 1px`,
-        borderColor: 'gray.1',
+        borderColor: 'border',
         p: 0,
         '&:last-child': { borderRight: 0 },
       }}>
@@ -73,8 +73,8 @@ export const StepBlock = ({
           sx={{
             fontFamily: 'body',
             fontSize: 1,
-            color: 'gray.8',
-            // color: tab.selectedId === 'view' ? 'teal.1' : 'gray.9',
+            color: 'text',
+            // color: tab.selectedId === 'view' ? 'teal.200' : 'gray.1000',
             mb: 0,
             // pt: 1,
           }}>
@@ -82,7 +82,7 @@ export const StepBlock = ({
         </Text>
         {/* <Text
           as="h5"
-          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.5' }}>
+          sx={{ fontFamily: 'body', fontWeight: 100, color: 'gray.500' }}>
           {desc}
         </Text> */}
       </Box>
@@ -96,20 +96,20 @@ interface NumberBlockProps {
 }
 
 const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
-  const activeBorder = active ? 'gray.1' : 'gray.2';
+  const activeBorder = active ? 'gray.200' : 'gray.300';
   const defaultSize = 'small';
   const size = blockTypes.find((b: any) => b.name === defaultSize);
 
   return (
     <Box
       sx={{
-        bg: 'neutral.1',
+        bg: 'neutral.200',
         textAlign: 'center',
         mr: 2,
         // mt: `-7px`,
         pb: `3px`,
         pt: `2px`,
-        color: `gray.9`,
+        color: `text`,
         display: `block`,
         verticalAlign: 'middle',
         borderRadius: '99rem',
@@ -155,13 +155,13 @@ export const ProfileCard = ({
     <Flex
       sx={{
         fontSize: 0,
-        color: 'gray.8',
+        color: 'text',
         my: 2,
       }}>
       <Avatar
         width={18}
         height={18}
-        sx={{ mr: 2, borderColor: 'gray.1', border: 0 }}
+        sx={{ mr: 2, borderColor: 'border', border: 0 }}
         src={finalImage} // image
       />
       <Text as="h3" sx={{ mr: 3, fontSize: 1, fontWeight: 600 }}>
@@ -358,9 +358,9 @@ const ContentDetail = () => {
                   pb: 1,
                   // pl: '115px',
                   borderBottom: 'solid 1px',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   // mb: 3,
-                  bg: 'neutral.0',
+                  bg: 'neutral.100',
                 }}>
                 <Box>
                   <Text
@@ -383,10 +383,10 @@ const ContentDetail = () => {
                       px: 2,
                       fontSize: 0,
                       ml: 'auto',
-                      color: 'gray.9',
+                      color: 'text',
                       border: 'solid 1px #ddd',
                       svg: {
-                        fill: 'gray.6',
+                        fill: 'gray.700',
                       },
                     }}>
                     <MenuItem
@@ -413,7 +413,7 @@ const ContentDetail = () => {
               <Box
                 sx={{
                   mb: 0,
-                  '.tabPanel': { border: 0, bg: 'neutral.1' },
+                  '.tabPanel': { border: 0, bg: 'neutral.200' },
                   button: {
                     border: 0,
                     bg: 'transparent',
@@ -422,14 +422,14 @@ const ContentDetail = () => {
                     borderRadius: 6,
                   },
                   '.tabGroup': {
-                    bg: 'neutral.1',
+                    bg: 'neutral.200',
                     // border: 'solid 1px blue',
                     px: 3,
                     py: 2,
                   },
                   'button[aria-selected=true]': {
                     border: 0,
-                    bg: 'neutral.0',
+                    bg: 'neutral.100',
                     px: 3,
                     py: 2,
                   },
@@ -469,7 +469,7 @@ const ContentDetail = () => {
                       sx={{
                         mt: 4,
                         border: 'solid 1px',
-                        borderColor: 'neutral.0',
+                        borderColor: 'border',
                       }}>
                       {contents.content.build && (
                         <PdfViewer
@@ -487,11 +487,11 @@ const ContentDetail = () => {
             <Box
               variant="plateRightBar"
               sx={{
-                bg: 'neutral.0',
+                bg: 'neutral.100',
                 py: 0,
                 width: '30%',
                 borderLeft: 'solid 1px',
-                borderColor: 'neutral.1',
+                borderColor: 'border',
                 minHeight: '100vh',
                 pt: 3,
               }}>
@@ -518,9 +518,9 @@ const ContentDetail = () => {
                           sx={{
                             display: 'inline-flex',
                             fontWeight: 500,
-                            bg: 'green.0',
+                            bg: 'gray.100',
                             ml: 2,
-                            color: 'green.9',
+                            color: 'text',
                             px: 1,
                             py: 0,
                             borderRadius: '3px',
@@ -560,7 +560,7 @@ const ContentDetail = () => {
                             <Flex>
                               <Text
                                 as="h3"
-                                sx={{ fontSize: 1, mb: 0, color: 'gray.8' }}>
+                                sx={{ fontSize: 1, mb: 0, color: 'text' }}>
                                 {contents.content.instance_id}
                               </Text>
                               <Text
@@ -569,7 +569,7 @@ const ContentDetail = () => {
                                   fontSize: '12px',
                                   mb: 0,
                                   mt: 1,
-                                  color: 'gray.6',
+                                  color: 'gray.700',
                                   fontWeight: 500,
                                   ml: 2,
                                 }}>
@@ -579,7 +579,7 @@ const ContentDetail = () => {
                             <Flex>
                               <Text
                                 as="h4"
-                                sx={{ fontSize: 0, mb: 0, color: 'gray.6' }}>
+                                sx={{ fontSize: 0, mb: 0, color: 'gray.700' }}>
                                 {contents.content_type?.layout?.name} /{' '}
                                 {contents.content_type?.name}
                               </Text>
@@ -595,10 +595,10 @@ const ContentDetail = () => {
                             sx={{
                               p: 2,
                               pt: 1,
-                              // bg: 'green.8',
+                              // bg: 'gray.900',
                               borderRadius: 4,
                               border: 'solid 1px',
-                              borderColor: 'gray.4',
+                              borderColor: 'border',
                               ml: 4,
                             }}>
                             <Download height={18} width={18} color="gray.3" />
@@ -617,7 +617,7 @@ const ContentDetail = () => {
                     Discuss
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: 'neutral.0' }}>
+                <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
                   {contents && contents.content && (
                     <Box mt={0}>
                       <CommentForm
@@ -636,8 +636,8 @@ const ContentDetail = () => {
                   flexGrow: 1,
                   mr: 4,
                   borderTop: 'solid 1px',
-                  borderColor: 'neutral.1',
-                  bg: 'neutral.0',
+                  borderColor: 'border',
+                  bg: 'neutral.100',
                 }}>
                 <Flex
                   sx={{

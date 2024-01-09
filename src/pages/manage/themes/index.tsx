@@ -22,7 +22,7 @@ const Index: FC = () => {
         <PageHeader
           title="Themes"
           desc={
-            <Flex sx={{ alignItems: 'center', gap: '6px', color: 'gray.3' }}>
+            <Flex sx={{ alignItems: 'center', gap: '6px', color: 'gray.400' }}>
               Manage <GraterThanIcon /> Themes
             </Flex>
           }>

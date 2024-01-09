@@ -68,7 +68,7 @@ export enum Gender {
  */
 
 const ActivityCard = (props: any) => (
-  <Flex sx={{ borderBottom: 'solid 1px', borderColor: 'gray.3', mb: 2, p: 2 }}>
+  <Flex sx={{ borderBottom: 'solid 1px', borderColor: 'border', mb: 2, p: 2 }}>
     <Box as="span">
       <Avatar
         width="32px"

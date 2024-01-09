@@ -40,10 +40,10 @@ const Index: FC = () => {
                 sx={{
                   width: '347px',
                   display: 'flex',
-                  background: 'bgWhite',
+                  background: 'backgroundWhite',
                   alignItems: 'center',
                   border: '1px solid',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   borderRadius: '6px',
                   mr: 2,
                 }}>
@@ -61,7 +61,7 @@ const Index: FC = () => {
                 />
                 <Box
                   sx={{
-                    color: 'gray.2',
+                    color: 'gray.300',
                     pr: 3,
                     display: 'flex',
                     alignItems: 'center',
@@ -95,9 +95,9 @@ const Index: FC = () => {
               <Box
                 sx={{
                   width: '100%',
-                  bg: 'bgWhite',
+                  bg: 'backgroundWhite',
                   border: '1px solid',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   borderRadius: 4,
                   m: 4,
                 }}>

@@ -303,7 +303,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 99,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                               src={`${profile?.profile_pic}`}
                             />
@@ -325,7 +325,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 99,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                               src={`${profile?.profile_pic}`}
                             />
@@ -352,7 +352,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 3,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                             />
                           </>

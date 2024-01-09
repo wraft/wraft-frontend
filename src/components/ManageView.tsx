@@ -59,7 +59,7 @@ const listMenu = [
 
 const ManageHomePage = () => {
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Manage" desc="Manage Variants">
         <Box
           sx={{
@@ -71,8 +71,8 @@ const ManageHomePage = () => {
             mt: 1,
           }}>
           {/* <NavLink href="/content-types/new" variant="btnSmall"> */}
-          {/* <Text as="h5" sx={{ color: 'gray.7' }}>Functionary Labs</Text>
-            <Text as="p" sx={{ color: 'gray.4', fontSize: 0 }}>Bengaluru, India</Text> */}
+          {/* <Text as="h5" sx={{ color: 'gray.800' }}>Functionary Labs</Text>
+            <Text as="p" sx={{ color: 'gray.500', fontSize: 0 }}>Bengaluru, India</Text> */}
           {/* </NavLink> */}
         </Box>
       </PageHeader>
@@ -86,18 +86,18 @@ const ManageHomePage = () => {
                 width: '33%',
                 mr: 4,
                 border: 'solid 1px',
-                borderColor: 'neutral.1',
-                bg: 'bgWhite',
+                borderColor: 'border',
+                bg: 'backgroundWhite',
                 // width: '240px',
-                // borderColor: 'teal.7',
+                // borderColor: 'teal.800',
                 borderRadius: 4,
                 py: 4,
                 mb: 4,
                 px: 4,
-                ':hover': { bg: 'teal.0', borderColor: 'teal.0' },
-                color: 'teal.8',
+                ':hover': { bg: 'teal.100', borderColor: 'border' },
+                color: 'teal.900',
                 svg: {
-                  fill: 'teal.2',
+                  fill: 'teal.300',
                 },
               }}>
               <NavLink href={l.path} locale={''}>
@@ -108,9 +108,9 @@ const ManageHomePage = () => {
                       height: '4rem',
                       mb: 1,
                       mr: 1,
-                      color: 'gray.7',
+                      color: 'gray.800',
                       svg: {
-                        fill: 'teal.6',
+                        fill: 'teal.700',
                       },
                     }}>
                     {l.logo}
@@ -120,7 +120,7 @@ const ManageHomePage = () => {
                       as="h5"
                       sx={{
                         fontSize: 2,
-                        color: 'gray.7',
+                        color: 'gray.800',
                         fontWeight: 'heading',
                         mb: 0,
                       }}>
@@ -130,7 +130,7 @@ const ManageHomePage = () => {
                       sx={{
                         fontSize: 2,
                         fontWeight: 'body',
-                        color: 'gray.4',
+                        color: 'gray.500',
                         mb: 1,
                       }}>
                       {l.desc}

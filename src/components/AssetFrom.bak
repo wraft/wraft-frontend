@@ -91,9 +91,9 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
           flexDirection: 'column',
           alignItems: 'center',
           border: '1px dashed',
-          borderColor: 'neutral.0',
+          borderColor: 'border',
           p: '18px',
-          bg: dragging ? 'green.0' : 'bgWhite',
+          bg: dragging ? 'gray.100' : 'backgroundWhite',
         }}>
         <Box mb="12px">
           <CloudUploadIcon />
@@ -125,8 +125,8 @@ const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
           disabled={!isValid}
           sx={{
             ':disabled': {
-              bg: 'gray.0',
-              color: 'gray.5',
+              bg: 'gray.100',
+              color: 'gray.500',
             },
           }}>
           Upload

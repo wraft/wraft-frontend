@@ -32,7 +32,7 @@ const BreadLinks = (props: any) => {
     <Flex sx={{ py: 2 }}>
       {props?.links &&
         props?.links.map((l: any) => (
-          <Link key={l?.name} sx={{ color: 'gray.6', fontSize: 0, mr: 2 }}>
+          <Link key={l?.name} sx={{ color: 'text', fontSize: 0, mr: 2 }}>
             <Text sx={{ pr: 1 }}>{l.name}</Text>
             <ArrowBack width={10} />
           </Link>
@@ -50,14 +50,19 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
           <Text
             as="h1"
             variant="pageheading"
-            sx={{ color: 'gray.9', mb: 0, fontSize: 2, fontWeight: 'heading' }}>
+            sx={{
+              color: 'text',
+              mb: 0,
+              fontSize: 2,
+              fontWeight: 'heading',
+            }}>
             {title}
           </Text>
           {desc && (
             <Text
               as="h4"
               variant="pageheading"
-              sx={{ fontSize: 1, mt: 0, color: 'gray.4', fontWeight: 400 }}>
+              sx={{ fontSize: 1, mt: 0, color: 'gray.500', fontWeight: 400 }}>
               {desc}
             </Text>
           )}

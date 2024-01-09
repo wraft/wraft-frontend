@@ -100,14 +100,14 @@ const FormList: FC = () => {
         {contents.length < 1 && (
           <Box>
             <Flex>
-              <Box sx={{ color: 'gray.5', width: 'auto' }}>
+              <Box sx={{ color: 'gray.500', width: 'auto' }}>
                 <EmptyForm />
               </Box>
               <Box sx={{ m: 2, pb: 0 }}>
                 <Text as="h2" sx={{ fontWeight: 300 }}>
                   No Forms present
                 </Text>
-                <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
                   You have not created a collection form yet, click below to
                   create one
                 </Text>

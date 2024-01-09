@@ -120,7 +120,7 @@ const FieldForm = ({
   // };
 
   return (
-    <Box sx={{ p: 3, borderColor: 'gray.1', bg: 'neutral.0' }}>
+    <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
       <Box>
         <Text as="h6" variant="labelcaps">
           Fields
@@ -134,23 +134,23 @@ const FieldForm = ({
           mt: 1,
           mb: 3,
           border: 'solid 1px',
-          borderColor: 'red.3',
+          borderColor: 'border',
         }}>
         {fieldMap &&
           fieldMap.map((x: any) => (
             <Flex
               key={x.id}
               sx={{
-                // bg: 'red.3',
+                // bg: 'red.400',
                 py: 2,
                 px: 3,
                 borderBottom: 'solid 0.5px',
-                borderColor: 'red.2',
+                borderColor: 'border',
                 // mb: 2,
               }}>
               <Text
                 sx={{
-                  color: 'red.1',
+                  color: 'red.200',
                   fontSize: '16px',
                   fontWeight: 300,
                 }}>
@@ -159,9 +159,9 @@ const FieldForm = ({
               <Text
                 sx={{
                   fontSize: '16px',
-                  // color: 'green.9',
+                  // color: 'green.1000',
                   ml: 'auto',
-                  color: '#363E49',
+                  color: 'text',
                   fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
                 }}>
@@ -180,7 +180,7 @@ const FieldForm = ({
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           // py={2}
-          sx={{ p: 4, bg: 'bgWhite' }}
+          sx={{ p: 4, bg: 'backgroundWhite' }}
           // mt={2}
         >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>

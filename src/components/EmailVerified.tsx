@@ -29,7 +29,7 @@ const EmailVerified: React.FC<ChildProps> = ({ setVerified }) => {
         <Heading
           as="h3"
           variant="styles.h3Medium"
-          sx={{ mt: '88px', mb: '32px', color: '#363E49' }}>
+          sx={{ mt: '88px', mb: '32px', color: 'text' }}>
           Your email is verified
         </Heading>
         <Button

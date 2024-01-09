@@ -62,10 +62,10 @@ interface PersonCardProps {
 
 const PersonCard = ({ name, phone }: PersonCardProps) => (
   <Box>
-    <Text as="h5" sx={{ fontWeight: 500, color: 'gray.8' }}>
+    <Text as="h5" sx={{ fontWeight: 500, color: 'text' }}>
       {name}
     </Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.5' }}>
+    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.500' }}>
       {phone}
     </Text>
   </Box>
@@ -110,7 +110,7 @@ const VendorListBlock: FC = () => {
           col2: (
             <Box>
               <Text as="h4">{r.name}</Text>
-              <Text sx={{ color: 'gray.6' }}>{r.address}</Text>
+              <Text sx={{ color: 'text' }}>{r.address}</Text>
             </Box>
           ),
           col3: <PersonCard name={r.contact_person} phone={r.phone} />,

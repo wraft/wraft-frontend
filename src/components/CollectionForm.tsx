@@ -210,7 +210,7 @@ const CollectionForm = () => {
                   </Flex>
 
                   {theme?.file && (
-                    <Box sx={{ p: 3, bg: 'teal.6' }}>
+                    <Box sx={{ p: 3, bg: 'teal.700' }}>
                       <Text>{theme?.file}</Text>
                     </Box>
                   )}

@@ -56,7 +56,9 @@ const Paginate = ({ total_pages, changePage, info }: IPageMeta) => {
         breakLabel="..."
         breakClassName="break-me"
       />
-      <Box sx={{ ml: 'auto', mr: 3, fontSize: 2, color: 'gray.2' }}>{info}</Box>
+      <Box sx={{ ml: 'auto', mr: 3, fontSize: 2, color: 'gray.300' }}>
+        {info}
+      </Box>
     </StyledPaginateContainer>
   );
 };

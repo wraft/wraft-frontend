@@ -87,7 +87,7 @@ const Index = () => {
           as="p"
           sx={{
             fontWeight: 'heading',
-            color: 'dark_400',
+            color: 'dark.400',
             mb: '48px',
           }}>
           We will send you a verification link to your registered email.

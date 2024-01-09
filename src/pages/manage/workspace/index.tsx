@@ -196,9 +196,9 @@ const Index: FC = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 sx={{
                   minWidth: '556px',
-                  bg: 'bgWhite',
+                  bg: 'backgroundWhite',
                   border: '1px solid',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   borderRadius: 4,
                   p: 4,
                   m: 4,
@@ -241,9 +241,9 @@ const Index: FC = () => {
               {(currentOrg?.name !== 'Personal' || '') && (
                 <Box
                   sx={{
-                    bg: 'bgWhite',
+                    bg: 'backgroundWhite',
                     border: '1px solid',
-                    borderColor: 'neutral.1',
+                    borderColor: 'border',
                     borderRadius: 4,
                     p: 4,
                     m: 4,
@@ -303,7 +303,7 @@ const Index: FC = () => {
                         pt: 3,
                         pb: 4,
                         borderTop: '1px solid',
-                        borderColor: 'neutral.1',
+                        borderColor: 'border',
                       }}>
                       <Box sx={{ px: 4 }}>
                         <Text
@@ -317,7 +317,7 @@ const Index: FC = () => {
                           , please enter the deletion code sent to your email.
                         </Text>
                         <Box sx={{ mt: '24px' }}>
-                          <Label variant="text.pR" sx={{ color: 'gray.8' }}>
+                          <Label variant="text.pR" sx={{ color: 'text' }}>
                             {/* Enter the deletion code */}
                             <span>Enter the deletion code to confirm</span>
                           </Label>

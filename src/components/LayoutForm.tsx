@@ -309,7 +309,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
       <Text
         sx={{
           fontSize: 2,
-          color: 'gray.8',
+          color: 'text',
           letterSpacing: '-0.2px',
           fontWeight: 700,
         }}>
@@ -324,8 +324,8 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                 height: '24px',
                 justifyContent: 'center',
                 alignItems: 'center',
-                color: 'green.5',
-                // bg: transparentize('green.0', 0.4),
+                color: 'gray.600',
+                // bg: transparentize('gray.100', 0.4),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
@@ -343,7 +343,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
             sx={{
               fontSize: 2,
               fontWeight: 400,
-              color: formStep === 0 ? 'gray.8' : 'green.5',
+              color: formStep === 0 ? 'text' : 'gray.600',
             }}>
             Basic details
           </Text>
@@ -362,9 +362,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                 height: '24px',
                 justifyContent: 'center',
                 alignItems: 'center',
-                color: formStep === 0 ? 'gray.5' : 'green.5',
+                color: formStep === 0 ? 'gray.500' : 'gray.600',
                 // bg:
-                // formStep === 0 ? 'neutral.0' : transparentize('green.0', 0.7),
+                // formStep === 0 ? 'neutral.100' : transparentize('gray.100', 0.7),
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
@@ -377,7 +377,11 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
               fontSize: 2,
               fontWeight: 400,
               color:
-                formStep === 0 ? 'gray.5' : isAssetValid ? 'green.5' : 'gray.8',
+                formStep === 0
+                  ? 'gray.500'
+                  : isAssetValid
+                    ? 'gray.600'
+                    : 'gray.900',
             }}>
             Set Background
           </Text>
@@ -402,14 +406,14 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                         key={m.id}
                         sx={{
                           border: 'solid 1px',
-                          borderColor: 'gray.3',
+                          borderColor: 'border',
                           bg: 'base',
                         }}>
                         <Box
                           sx={{
                             mt: 4,
                             border: 'solid 1px',
-                            borderColor: 'gray.3',
+                            borderColor: 'border',
                           }}>
                           <Box
                             sx={{
@@ -439,9 +443,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                               px: 1,
                               py: 1,
                               bg: 'white',
-                              color: 'red.4',
+                              color: 'red.500',
                               border: 'solid 1px',
-                              borderColor: 'red.9',
+                              borderColor: 'red.1000',
                             }}
                             onClick={() => deleteAsset(cId, m.id)}>
                             Delete
@@ -581,7 +585,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                   variant="buttonPrimary"
                   sx={{
                     ':disabled': {
-                      bg: 'gray.4',
+                      bg: 'gray.500',
                     },
                   }}>
                   Next
@@ -595,8 +599,8 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                     type="button"
                     onClick={prev}
                     sx={{
-                      bg: 'neutral.0',
-                      color: 'gray.8',
+                      bg: 'neutral.100',
+                      color: 'gray.900',
                     }}>
                     <Text as={'p'} variant="pm">
                       Prev
@@ -609,7 +613,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                     ml={2}
                     sx={{
                       ':disabled': {
-                        bg: 'gray.4',
+                        bg: 'gray.500',
                       },
                     }}>
                     {isEdit ? 'Update' : 'Create'}

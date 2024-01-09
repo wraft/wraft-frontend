@@ -142,7 +142,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       as={'form'}
       onSubmit={handleSubmit(onSubmit)}
       sx={{
-        bg: 'bgWhite',
+        bg: 'backgroundWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
         maxHeight: '100dvh',
@@ -153,7 +153,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
             px: 4,
             py: 3,
             borderBottom: '1px solid',
-            borderColor: 'gray.0',
+            borderColor: 'border',
           }}>
           <Text variant="pB">Create new role</Text>
         </Box>
@@ -181,13 +181,13 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                 flexDirection: 'column',
                 mt: '18px',
                 border: '1px solid',
-                borderColor: 'neutral.1',
+                borderColor: 'border',
                 borderRadius: 4,
                 maxHeight: '400px',
                 overflowX: 'hidden',
                 overflowY: 'scroll',
                 scrollbarWidth: 'none',
-                scrollbarColor: 'red.5',
+                scrollbarColor: 'red.600',
               }}>
               <Box>
                 {filteredPermissionKeys.map((key, index) => {
@@ -202,14 +202,14 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                           }}
                           sx={{
                             width: '100%',
-                            bg: 'bgWhite',
+                            bg: 'backgroundWhite',
                             py: '12px',
                             px: '16px',
                             borderTop: 'none',
                             borderLeft: 'none',
                             borderRight: 'none',
                             borderBottom: '1px solid',
-                            borderColor: 'neutral.2',
+                            borderColor: 'border',
                             ':last-of-type': {
                               borderBottom: 'none',
                             },
@@ -244,7 +244,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                 sx={{
                                   pl: 1,
                                   textTransform: 'capitalize',
-                                  color: 'gray.7',
+                                  color: 'text',
                                 }}>
                                 {permissions[key].name}
                               </Text>
@@ -256,7 +256,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 transform: dropped && 'rotate(180deg)',
-                                color: 'gray.2',
+                                color: 'gray.300',
                               }}>
                               <ArrowDropdown />
                             </Flex>
@@ -271,7 +271,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     borderBottom: '1px solid',
-                                    borderColor: 'neutral.1',
+                                    borderColor: 'border',
                                     bg: 'background',
                                     py: '12px',
                                     px: '16px',
@@ -304,7 +304,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                     sx={{
                                       pl: 1,
                                       textTransform: 'capitalize',
-                                      color: 'gray.4',
+                                      color: 'gray.500',
                                     }}>
                                     {sub.action}
                                   </Text>

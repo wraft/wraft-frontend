@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+// import { useTour } from '@reactour/tour';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -36,6 +37,11 @@ const listMenu = [
     section: 'content',
     menus: [
       {
+        name: 'Dashboard',
+        logo: <Note width={20} />,
+        path: '/',
+      },
+      {
         name: 'Documents',
         logo: <Note width={20} />,
         path: '/contents',
@@ -45,17 +51,16 @@ const listMenu = [
         logo: <Like width={20} />,
         path: '/approvals',
       },
-
-      {
-        name: 'Templates',
-        logo: <Carousel width={20} height={20} />,
-        path: '/templates',
-      },
     ],
   },
   {
     section: 'structure',
     menus: [
+      {
+        name: 'Templates',
+        logo: <Carousel width={20} height={20} />,
+        path: '/templates',
+      },
       {
         name: 'Variants',
         logo: <BookOpen width={20} />,
@@ -84,9 +89,15 @@ export interface INav {
   showFull: boolean;
 }
 
+// type StepType = {
+//   selector: string;
+//   content: string;
+// };
+
 const Nav = (props: any) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIssOpen] = useState<boolean>(false);
+  // const { setIsOpen, setSteps, setCurrentStep } = useTour();
   // const [rerender, setRerender] = useState<boolean>(false);
 
   const [mode, setMode] = useColorMode();
@@ -146,6 +157,25 @@ const Nav = (props: any) => {
     router.push('/login');
   };
 
+  // const steps: StepType[] = [
+  //   {
+  //     selector: '.first-step',
+  //     content: 'This is the first element on the page.',
+  //   },
+  // ];
+
+  // React.useEffect(() => {
+  //   setCurrentStep(0);
+  //   if (steps) {
+  //     setSteps!(steps);
+  //   }
+  //   setIsOpen(() => {
+  //     return true;
+  //   });
+  //   // setSteps(steps);
+  //   // setIsOpen(true);
+  // }, []);
+
   return (
     <>
       <Flex
@@ -160,7 +190,7 @@ const Nav = (props: any) => {
             py: 3,
             px: 3,
             borderBottom: 'solid 1px',
-            borderColor: 'neutral.1',
+            borderColor: 'border',
             mb: 3,
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -188,13 +218,13 @@ const Nav = (props: any) => {
                           as="p"
                           sx={{
                             fontWeight: `bold`,
-                            color: 'gray.9',
+                            color: 'gray.1000',
                             lineHeight: 1,
                             fontSize: 1,
                           }}>
                           {userProfile?.currentOrganisation?.name}
                         </Text>
-                        <Text as="p" sx={{ fontSize: 1, color: 'gray.3' }}>
+                        <Text as="p" sx={{ fontSize: 1, color: 'gray.400' }}>
                           3 members
                         </Text>
                       </Box>
@@ -234,15 +264,15 @@ const Nav = (props: any) => {
                   <Button
                     variant="base"
                     sx={{ cursor: 'pointer' }}
-                    onClick={() => setIsOpen(true)}>
+                    onClick={() => setIssOpen(true)}>
                     Create a workspace
                   </Button>
                   <ModalCustom
                     isOpen={isOpen}
-                    setOpen={setIsOpen}
+                    setOpen={setIssOpen}
                     varient="center">
                     <WorkspaceCreate
-                      setOpen={setIsOpen}
+                      setOpen={setIssOpen}
                       // setRerender={setRerender}
                     />
                   </ModalCustom>
@@ -274,9 +304,9 @@ const Nav = (props: any) => {
                         as={Box}
                         sx={{
                           border: 'solid 1px',
-                          borderColor: 'neutral.1',
+                          borderColor: 'border',
                           minWidth: '20ch',
-                          bg: 'neutral.0',
+                          bg: 'neutral.100',
                           zIndex: 1000,
                         }}
                         aria-label="Preferences">
@@ -285,9 +315,7 @@ const Nav = (props: any) => {
                             <Text as="h4">{userProfile?.name}</Text>
 
                             {userProfile?.roles?.size > 0 && (
-                              <Text
-                                as="p"
-                                sx={{ fontSize: 0, color: 'gray.6' }}>
+                              <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
                                 {userProfile?.roles[0]?.name}
                               </Text>
                             )}
@@ -342,18 +370,19 @@ const Nav = (props: any) => {
               pt: 1,
               pb: 1,
               border: 'solid 1px',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
               borderRadius: '4px',
               mx: 3,
               alignItems: 'center',
-              bg: 'dimGray',
+              bg: 'neutral.100',
+              // bg: 'backgroundGray',
               my: 1,
               mb: 3,
               input: {
                 border: 'none',
                 outline: 'none',
                 '::placeholder': {
-                  color: 'gray.4',
+                  color: 'gray.500',
                 },
               },
             }}>
@@ -364,7 +393,7 @@ const Nav = (props: any) => {
                 top: 0,
                 bottom: 0,
                 svg: {
-                  fill: 'gray.0',
+                  fill: 'gray.100',
                   pr: 2,
                 },
               }}>
@@ -378,7 +407,7 @@ const Nav = (props: any) => {
                 width: '130% !important',
                 fontSize: 2,
                 pl: 2,
-                color: 'gray.4',
+                color: 'gray.500',
               }}
             />
           </Flex>
@@ -391,7 +420,7 @@ const Nav = (props: any) => {
                   fontWeight: '500',
                   px: 3,
                   mb: '12px',
-                  color: 'gray.1',
+                  color: 'gray.200',
                 }}>
                 {m.section}
               </Box>
@@ -409,14 +438,16 @@ const Nav = (props: any) => {
                     <Box
                       sx={{
                         mr: 2,
-                        color: checkActive(pathname, m) ? 'teal.2' : 'gray.3',
+                        color: checkActive(pathname, m)
+                          ? 'teal.300'
+                          : 'gray.400',
                       }}>
                       {menu.logo}
                     </Box>
                     {showFull && (
                       <Text
                         sx={{
-                          color: 'gray.8',
+                          color: 'text',
                           fontWeight: checkActive(pathname, m) ? 600 : 500,
                           fontSize: 2,
                         }}>
@@ -432,11 +463,10 @@ const Nav = (props: any) => {
 
         <Box>
           <Box
+            className="first-step"
             sx={{
-              pl: 3,
-              pr: 3,
-              mb: 2,
-              pb: 3,
+              px: 3,
+              py: 3,
             }}>
             <Button
               variant="btnPrimary"

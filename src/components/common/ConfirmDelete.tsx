@@ -22,7 +22,7 @@ const ConfirmDelete = ({
       <Text variant="pB" sx={{ display: 'inline-block', py: 3, px: 4 }}>
         {title}
       </Text>
-      <Box sx={{ borderTop: '1px solid', borderColor: 'neutral.1' }}>
+      <Box sx={{ borderTop: '1px solid', borderColor: 'border' }}>
         <Box sx={{ px: 4 }}>
           <Text variant="pM" sx={{ display: 'inline-block', pt: 3 }}>
             {text}
