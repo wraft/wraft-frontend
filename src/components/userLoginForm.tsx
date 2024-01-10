@@ -112,6 +112,7 @@ const UserLoginForm = () => {
               <Flex>
                 <Label
                   sx={{
+                    cursor: 'pointer',
                     color: 'dark_900',
                     fontWeight: 'body',
                     display: 'flex',
@@ -121,22 +122,22 @@ const UserLoginForm = () => {
                     checked={showPassword}
                     onChange={() => setShowPassword(!showPassword)}
                     sx={{
+                      cursor: 'pointer',
                       color: 'dark_900',
                       width: '18px',
                       backgroundColor: 'white',
                       border: 'none',
                     }}
                   />
-                  Show Password
+                  <Text variant="pM">Show Password</Text>
                 </Label>
               </Flex>
             )}
             <Link href="/resetpassword">
               <Text
+                variant="pM"
                 sx={{
-                  textDecoration: 'none',
-                  color: 'dark_900',
-                  fontWeight: 'heading',
+                  cursor: 'pointer',
                 }}>
                 Forgot Password?
               </Text>
@@ -165,14 +166,16 @@ const UserLoginForm = () => {
           Continue with Google
         </Button>
 
-        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'dark_600' }}>
-          Not a user yet? {''}
-          <Link href="/signup">
-            <Text
-              sx={{
-                color: 'dark_600',
-                fontWeight: 'bold',
-              }}>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            mt: '24px',
+            color: 'dark_600',
+            gap: '8px',
+          }}>
+          <Text variant="pR">Not a user yet? {''}</Text>
+          <Link href="/signup" variant="none">
+            <Text variant="pB" sx={{ cursor: 'pointer' }}>
               Request invite
             </Text>
           </Link>

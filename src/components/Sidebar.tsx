@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useRouter } from 'next/router';
@@ -87,7 +87,7 @@ export interface INav {
 const Nav = (props: any) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [rerender, setRerender] = useState<boolean>(false);
+  const [createdId, setCreatedId] = useState<string | undefined>(undefined);
 
   const [mode, setMode] = useColorMode();
 
@@ -140,6 +140,10 @@ const Nav = (props: any) => {
       error: <b>Could not switch workspace.</b>,
     });
   };
+
+  useEffect(() => {
+    if (createdId) onSwitchOrganization(createdId);
+  }, [createdId]);
 
   const onUserlogout = () => {
     logout();
@@ -243,7 +247,7 @@ const Nav = (props: any) => {
                     varient="center">
                     <WorkspaceCreate
                       setOpen={setIsOpen}
-                      // setRerender={setRerender}
+                      setCreatedId={setCreatedId}
                     />
                   </ModalCustom>
                 </MenuItem>

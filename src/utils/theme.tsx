@@ -328,8 +328,9 @@ const theme: Theme & CustomVariantGroups = {
     },
     h3Medium: {
       fontWeight: 'heading',
-      lineHeight: '38.88px',
       fontSize: '29.3px',
+      lineHeight: '132.696%',
+      letterSpacing: '0.2px',
     },
     h1Medium: {
       fontSize: '45.78px',
@@ -561,6 +562,7 @@ const theme: Theme & CustomVariantGroups = {
       // pb: 0,
     },
     base: {
+      cursor: 'pointer',
       width: '100%',
       color: 'gray.8',
       textDecoration: 'none',
@@ -602,6 +604,22 @@ const theme: Theme & CustomVariantGroups = {
     },
   },
   layout: {
+    menu: {
+      height: 'auto',
+      width: 'fit-content',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: '50',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+      borderRadius: '5px',
+      backgroundColor: 'hsl(204 20% 100%)',
+      padding: '8px',
+      color: 'hsl(204 10% 10%)',
+      boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+    },
     dialog: {
       bg: 'neutral.0',
       position: 'fixed',
@@ -750,7 +768,7 @@ const theme: Theme & CustomVariantGroups = {
     newPageFrame: {
       p: 0,
       height: '100%',
-      maxHeight: 'calc(100vh - 140px)',
+      maxHeight: 'calc(100vh - 72px)',
       overflow: 'auto',
       bg: 'background',
     },
@@ -1293,6 +1311,7 @@ const theme: Theme & CustomVariantGroups = {
       padding: '80px',
       backgroundColor: 'background',
       justifyContent: 'center',
+      alignItems: 'center',
     },
   },
 };
