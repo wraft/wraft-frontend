@@ -99,7 +99,7 @@ const FieldForm = (props: FieldFormProps) => {
         </Text>
         <Button
           variant="btnSmall"
-          sx={{ ml: 'auto' }}
+          sx={{ ml: 'auto', px: 4, bg: 'gray.300' }}
           onClick={() => {
             toggleModal();
             append({ name: '', type: '' });
