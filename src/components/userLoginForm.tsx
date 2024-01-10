@@ -145,6 +145,7 @@ const UserLoginForm = () => {
               <Flex>
                 <Label
                   sx={{
+                    cursor: 'pointer',
                     color: 'gray.900',
                     fontWeight: 'body',
                     display: 'flex',
@@ -154,22 +155,22 @@ const UserLoginForm = () => {
                     checked={showPassword}
                     onChange={() => setShowPassword(!showPassword)}
                     sx={{
+                      cursor: 'pointer',
                       color: 'gray.900',
                       width: '18px',
                       backgroundColor: 'white',
                       border: 'none',
                     }}
                   />
-                  Show Password
+                  <Text variant="pM">Show Password</Text>
                 </Label>
               </Flex>
             )}
             <Link href="/resetpassword">
               <Text
+                variant="pM"
                 sx={{
-                  textDecoration: 'none',
-                  color: 'gray.900',
-                  fontWeight: 'heading',
+                  cursor: 'pointer',
                 }}>
                 Forgot Password?
               </Text>
@@ -199,14 +200,16 @@ const UserLoginForm = () => {
         </Button>
         {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
 
-        <Flex sx={{ alignItems: 'center', mt: '24px', color: 'gray.600' }}>
-          <Box mr={2}>Not a user yet?</Box>
-          <Link href="/signup">
-            <Text
-              sx={{
-                color: 'gray.600',
-                fontWeight: 'bold',
-              }}>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            mt: '24px',
+            color: 'gray.600',
+            gap: '8px',
+          }}>
+          <Text variant="pR">Not a user yet? {''}</Text>
+          <Link href="/signup" variant="none">
+            <Text variant="pB" sx={{ cursor: 'pointer' }}>
               Request invite
             </Text>
           </Link>

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import { MenuItem } from '@ariakit/react';
+import toast from 'react-hot-toast';
 import { Flex, Text, Button } from 'theme-ui';
 
-import { fetchAPI } from '../../utils/models';
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { fetchAPI, postAPI } from '../../utils/models';
 
 interface RoleList {
   roleName: string;
@@ -24,21 +24,22 @@ type AssignRoleProps = {
   setCurrentRoleList: any;
   setIsAssignRole: any;
   userId: string | null;
+  setRerender: any;
 };
 
 const AssignRole = ({
   currentRoleList,
   setCurrentRoleList,
   setIsAssignRole, // userId,
+  userId,
+  setRerender,
 }: AssignRoleProps) => {
   const [response, setResponse] = useState<ResponseData>();
   const [roleList, setRoleList] = useState<Array<any>>([]);
 
   const loadDataSuccess = (data: any) => {
     setResponse(data);
-    console.log(data);
   };
-  console.log(currentRoleList);
 
   const loadData = () => {
     fetchAPI('roles').then((data: any) => {
@@ -70,83 +71,46 @@ const AssignRole = ({
 
   const assignRoleFunction = async (roleId: string) => {
     if (roleId) {
-      // try {
-
-      //   // postAPI(`users/${userId}/roles/${roleId}`)
-      //   const response = await fetch(
-      //     `${API_HOST}/api/v1/users/${userId}/roles/${roleId}`,
-      //     {
-      //       method: 'POST',
-      //       headers: {
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //     },
-      //   );
-
-      //   if (!response.ok) {
-      //     const errorData = await response.json();
-      //     console.error('Errorq:', errorData);
-      //     throw new Error('Team joining failed');
-      //   } else {
-      //     const responseData = response;
-      //     console.log(responseData);
-      //   }
-      // } catch (error) {
-      //   console.error('Network error:', error);
-      // }
+      postAPI(`users/${userId}/roles/${roleId}`, {})
+        .then(() => {
+          toast.success('Assigned Role Successfully', {
+            duration: 2000,
+            position: 'top-center',
+          });
+          setRerender((prev: boolean) => !prev);
+        })
+        .catch(() => {
+          toast.error('Assigning Role Failed!', {
+            duration: 2000,
+            position: 'top-center',
+          });
+        });
       setCurrentRoleList(null);
       setIsAssignRole(null);
     }
   };
 
   return (
-    <Flex
-      sx={{
-        width: '205px',
-        padding: '15px',
-        textDecoration: 'none',
-        flexDirection: 'column',
-      }}>
-      <Text sx={{ color: 'gray.300' }}>Choose role</Text>
-      <Flex sx={{ listStyleType: 'none', flexDirection: 'column' }}>
-        {roleList.map((role) => (
-          <Flex
-            key={role.roleId}
-            sx={{ py: '10px', color: 'gray.600', fontWeight: 'heading' }}>
-            <Button
-              onClick={() => assignRoleFunction(role.roleId)}
-              sx={{
-                cursor: 'pointer',
-                margin: '0px',
-                padding: '0px',
-                color: '#000',
-                bg: 'transparent',
-                ':disabled': {
-                  display: 'none',
-                },
-              }}>
-              {role.roleName}
-            </Button>
-          </Flex>
-        ))}
-      </Flex>
-      <Button
-        onClick={() => {
-          setCurrentRoleList(null);
-          setIsAssignRole(null);
-        }}
-        sx={{
-          cursor: 'pointer',
-          margin: '0px',
-          padding: '0px',
-          bg: '#000',
-          color: '#fff',
-          ':disabled': {
-            display: 'none',
-          },
-        }}>
-        Close
-      </Button>
+    <Flex sx={{ flexDirection: 'column', gap: 2, py: 2 }}>
+      {roleList.length < 1 && (
+        <Button disabled variant="base" sx={{ color: 'gray.200' }}>
+          No more roles to add.
+        </Button>
+      )}
+      {roleList.map((role) => (
+        <MenuItem key={role.roleId}>
+          <Button
+            onClick={() => assignRoleFunction(role.roleId)}
+            variant="base"
+            sx={{
+              cursor: 'pointer',
+              my: 2,
+              ':hover': { color: 'green.600' },
+            }}>
+            <Text variant="pL">{role.roleName}</Text>
+          </Button>
+        </MenuItem>
+      ))}
     </Flex>
   );
 };

@@ -45,13 +45,20 @@ const LayoutList = ({ rerender }: Props) => {
    * @param _id  layout_id
    */
   const onDelete = (_id: string) => {
-    deleteAPI(`layouts/${_id}`).then(() => {
-      toast.success('Deleted Theme', {
-        duration: 1000,
-        position: 'top-right',
+    deleteAPI(`layouts/${_id}`)
+      .then(() => {
+        toast.success('Deleted Layout', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        loadLayout();
+      })
+      .catch(() => {
+        toast.error('Failed to delete Layout', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-      loadLayout();
-    });
   };
 
   /**

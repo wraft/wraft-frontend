@@ -82,25 +82,10 @@ const Index: FC = () => {
           <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
             <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
           </ModalCustom>
-          <Container
-            sx={{
-              pt: 0,
-              height: '100%',
-              maxHeight: '90vh',
-              overflow: 'auto',
-              bg: 'background',
-            }}>
+          <Container variant="layout.newPageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
-              <Box
-                sx={{
-                  width: '100%',
-                  bg: 'backgroundWhite',
-                  border: '1px solid',
-                  borderColor: 'border',
-                  borderRadius: 4,
-                  m: 4,
-                }}>
+              <Box variant="layout.contentFrame">
                 <RolesList
                   render={render}
                   setRender={setRender}
