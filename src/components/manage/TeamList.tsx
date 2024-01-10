@@ -8,10 +8,10 @@ import { Flex, Box, Text, Button, Image } from 'theme-ui';
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
 import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
+import Modal from '../Modal';
 import { Table } from '../Table';
 
 import AssignRole from './AssignRole';
-import Modal from '../Modal';
 
 interface Role {
   id: string;
@@ -259,9 +259,8 @@ const TeamList = () => {
                               </Box>
                             </Button>
                             <Modal
-          
                               isOpen={isRemoveRole === role.roleId}
-                              onClose={()=>setIsRemoveRole(null)}>
+                              onClose={() => setIsRemoveRole(null)}>
                               <ConfirmDelete
                                 title="Delete role"
                                 text={`Are you sure you want to delete ${role.roleName} ?`}
@@ -373,9 +372,8 @@ const TeamList = () => {
                         </MenuItem>
                       </Menu>
                       <Modal
-          
                         isOpen={isRemoveUser === row.index}
-                        onClose={()=>setIsRemoveUser(null)}>
+                        onClose={() => setIsRemoveUser(null)}>
                         {
                           <ConfirmDelete
                             title="Delete role"

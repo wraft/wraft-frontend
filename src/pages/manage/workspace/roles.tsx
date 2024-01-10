@@ -11,6 +11,7 @@ import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { workspaceLinks } from '../../../utils';
 import { fetchAPI } from '../../../utils/models';
+
 import { Drawer } from '@wraft-ui/Drawer';
 
 const Index: FC = () => {
@@ -79,7 +80,7 @@ const Index: FC = () => {
               </Button>
             </Flex>
           </PageHeader>
-          <Drawer  open={isOpen} setOpen={setIsOpen}>
+          <Drawer open={isOpen} setOpen={setIsOpen}>
             <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
           </Drawer>
           <Container variant="layout.newPageFrame">

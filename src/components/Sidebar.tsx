@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
-import { Drawer } from '@wraft-ui/Drawer';
+
 import {
   Note,
   Like,
@@ -29,6 +29,7 @@ import Modal from './Modal';
 import ModeToggle from './ModeToggle';
 
 import Btn from '@wraft-ui/Button';
+import { Drawer } from '@wraft-ui/Drawer';
 
 /**
  * Sidebar Static Items
@@ -271,10 +272,7 @@ const Nav = (props: any) => {
                     onClick={() => setIsOpen(true)}>
                     Create a workspace
                   </Button>
-                  <Modal
-                    isOpen={isOpen}
-                    onClose={()=>setIsOpen(false)}
-                    >
+                  <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <WorkspaceCreate
                       setOpen={setIsOpen}
                       setCreatedId={setCreatedId}

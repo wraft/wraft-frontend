@@ -6,10 +6,10 @@ import { Flex, Container, Button } from 'theme-ui';
 import FlowForm from '../../../components/FlowForm';
 import FlowList from '../../../components/FlowList';
 import ManageSidebar from '../../../components/ManageSidebar';
+import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
-import Modal from '../../../components/Modal';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -32,7 +32,7 @@ const Index: FC = () => {
             Add Flow
           </Button>
         </PageHeader>
-        <Modal isOpen={isOpen} onClose={()=>setIsOpen(false)}>
+        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
         </Modal>
         <Container sx={{ pl: 4, pt: 4 }}>

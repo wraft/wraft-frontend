@@ -39,7 +39,7 @@ const layout: Theme['layout'] = {
     transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
     transitionDuration: '150ms',
     transform: 'scale(0.95)',
-    maxWidth:'fit-content'
+    maxWidth: 'fit-content',
   },
   backdrop: {
     bg: 'hsl(204 10% 10% / 0.8)',
