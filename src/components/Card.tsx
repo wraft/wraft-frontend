@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
+import { Drawer } from './common/Drawer';
 import { DotsVerticalRounded } from './Icons';
 import LayoutForm from './LayoutForm';
-import ModalCustom from './ModalCustom';
 
 /**
  * Page Heading Section
@@ -123,9 +123,9 @@ const LayoutCard = ({
                   </MenuItem>
                 </Menu>
               </MenuProvider>
-              <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+              <Drawer open={isOpen} setOpen={setIsOpen}>
                 <LayoutForm setOpen={setIsOpen} cId={id} />
-              </ModalCustom>
+              </Drawer>
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>
