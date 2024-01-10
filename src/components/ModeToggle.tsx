@@ -13,7 +13,7 @@ const ModeToggle = (props: any) => {
         border: 0,
         mt: 0,
         svg: {
-          fill: 'gray.5',
+          fill: 'gray.500',
         },
       }}
       onClick={() => {

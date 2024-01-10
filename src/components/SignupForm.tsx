@@ -137,6 +137,7 @@ const SignUpPage = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    color="border"
                   />
                 </Box>
                 <Box sx={{ flex: '1 1 auto' }}>
@@ -147,6 +148,7 @@ const SignUpPage = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
+                    color="border"
                   />
                 </Box>
               </Flex>
@@ -158,6 +160,7 @@ const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  color="border"
                 />
               </Box>
               <Button type="submit">

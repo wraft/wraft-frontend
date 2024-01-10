@@ -4,9 +4,9 @@ import { useStoreState } from 'easy-peasy';
 import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { Text, Box, Flex, Container, Button } from 'theme-ui';
+import { Text, Box, Flex, Button } from 'theme-ui';
 
-import ContentTypeDashboard from '../components/ContentTypeDashboard';
+import Dashboard from '../components/Dashboard';
 import Page from '../components/PageFrame';
 import UserNav from '../components/UserNav';
 
@@ -95,28 +95,7 @@ const Index: FC = () => {
       )}
       {token && (
         <Page>
-          <Container variant="layout.pageFrame">
-            <Box pb={3} pt={1} sx={{}}>
-              {/* <Text variant="pagetitle" pb={0} mb={1}>
-              Quick Start s
-            </Text> */}
-              <Text
-                sx={{
-                  color: 'gray.7',
-                  fontSize: 2,
-                  fontWeight: 'heading',
-                  pt: 0,
-                }}>
-                Get started with templates
-              </Text>
-            </Box>
-
-            <Box sx={{ mb: 3 }}>
-              <Flex>
-                <ContentTypeDashboard />
-              </Flex>
-            </Box>
-          </Container>
+          <Dashboard />
         </Page>
       )}
       {token && isTeamInvite && (
@@ -142,7 +121,7 @@ const Index: FC = () => {
               mb: '18px',
               textAlign: 'center',
               fontWeight: 'heading',
-              color: 'dark_600',
+              color: 'gray.600',
             }}>
             {organisationName !== null
               ? `you have a team invite from ${organisationName}. Accept?`

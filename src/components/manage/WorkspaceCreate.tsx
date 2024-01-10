@@ -58,7 +58,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
       <Text variant="pB" sx={{ display: 'inline-block', py: 3, px: 4 }}>
         Create workspace
       </Text>
-      <Box sx={{ borderTop: '1px solid', borderColor: 'neutral.1' }}>
+      <Box sx={{ borderTop: '1px solid', borderColor: 'border' }}>
         <Box sx={{ px: 4, pt: 3 }}>
           <Field
             name="name"

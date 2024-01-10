@@ -141,7 +141,7 @@ const InviteTeam = ({ setOpen }: Props) => {
       as={'form'}
       onSubmit={handleSubmit(onSubmit)}
       sx={{
-        bg: 'bgWhite',
+        bg: 'backgroundWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100%',
@@ -154,7 +154,7 @@ const InviteTeam = ({ setOpen }: Props) => {
             px: 4,
             py: 3,
             borderBottom: '1px solid',
-            borderColor: 'gray.0',
+            borderColor: 'border',
           }}>
           <Text variant="pB">Invite people</Text>
         </Box>
@@ -228,7 +228,7 @@ const InviteTeam = ({ setOpen }: Props) => {
               flexDirection: 'column',
               mt: '18px',
               border: '1px solid',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
               borderRadius: 4,
             }}>
             {filteredRoles.map((role: any, index: number) => {
@@ -239,7 +239,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                     display: 'flex',
                     alignItems: 'center',
                     borderBottom: '1px solid',
-                    borderColor: 'neutral.1',
+                    borderColor: 'border',
                     py: '12px',
                     px: '16px',
                     ':last-of-type': {
@@ -256,7 +256,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                   />
                   <Text
                     variant="pR"
-                    sx={{ textTransform: 'capitalize', color: 'green.5' }}>
+                    sx={{ textTransform: 'capitalize', color: 'text' }}>
                     {role.name}
                   </Text>
                 </Label>

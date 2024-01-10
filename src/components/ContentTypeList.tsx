@@ -36,7 +36,7 @@ interface ContentTypeList {
 
 const ContentTypeList = ({ isEdit }: ContentTypeList) => {
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
           <NavLink href="/content-types/new" variant="btnSecondary" locale={''}>
@@ -50,7 +50,7 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
           py: 1,
           pb: 4,
           borderBottom: 'solid 1px',
-          borderColor: 'neutral.0',
+          borderColor: 'border',
           mb: 3,
           mt: 3,
         }}>

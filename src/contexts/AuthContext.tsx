@@ -8,6 +8,7 @@ import React, {
 
 import { useStoreActions } from 'easy-peasy';
 import cookie from 'js-cookie';
+import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
 import { fetchUserInfo, fetchAPI } from '../utils/models';
@@ -91,8 +92,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         (og: any) => og.id == user.organisation_id,
       );
 
-      console.log('currentOrg', currentOrg);
-
       const body = {
         ...userProfile,
         ...user,
@@ -106,7 +105,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     cookie.set('refreshToken', refresh_token);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut({ redirect: false });
     setAccessToken(null);
     setRefreshToken(null);
     setUserProfile(null);

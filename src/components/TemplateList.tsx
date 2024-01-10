@@ -103,7 +103,7 @@ const TemplateList = () => {
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
               <Text as="h5">{r.title}</Text>
-              <Text sx={{ color: 'gray.6' }}></Text>
+              <Text sx={{ color: 'text' }}></Text>
             </Box>
           ),
         };
@@ -116,7 +116,7 @@ const TemplateList = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
           <Link href="/templates/new" variant="btnSecondary" locale={''}>

@@ -55,7 +55,7 @@ const Nav = ({ navtitle }: INav) => {
         p: 0,
         bg: 'white',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.0',
+        borderColor: 'border',
         pt: 0,
         pb: 2,
       }}>
@@ -71,8 +71,8 @@ const Nav = ({ navtitle }: INav) => {
               pt: 1,
               pl: 3,
               borderRight: 'solid 1px',
-              borderColor: 'gray.0',
-              color: 'gray.8',
+              borderColor: 'border',
+              color: 'text',
               pb: 1,
             }}>
             <Flex sx={{ minWidth: '80ch' }}>
@@ -114,9 +114,9 @@ const Nav = ({ navtitle }: INav) => {
                       pt: 1,
                       bottom: 0,
                       borderLeft: 'solid 1px',
-                      borderColor: 'gray.3',
+                      borderColor: 'border',
                       svg: {
-                        fill: 'gray.8',
+                        fill: 'gray.900',
                         pr: 2,
                       },
                     }}>
@@ -130,12 +130,12 @@ const Nav = ({ navtitle }: INav) => {
         <Box ml="auto" mr={3}>
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
           <Flex>
-            <Flex sx={{ ':hover': { bg: 'gray.1' } }}>
+            <Flex sx={{ ':hover': { bg: 'gray.200' } }}>
               <Box as="span" sx={{ mt: 2 }}></Box>
 
               <Box
                 variant="button"
-                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
+                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.700' } }}>
                 <Link href="/activities">
                   <Bell width={20} height={20} />
                 </Link>
@@ -175,10 +175,10 @@ const Nav = ({ navtitle }: INav) => {
                             sx={{
                               p: 3,
                               py: 2,
-                              bg: 'gray.0',
+                              bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.1',
+                                bg: 'gray.200',
                               },
                             }}>
                             <Box>
@@ -187,7 +187,7 @@ const Nav = ({ navtitle }: INav) => {
                               {userProfile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
-                                  sx={{ fontSize: 0, color: 'gray.6' }}>
+                                  sx={{ fontSize: 0, color: 'text' }}>
                                   {userProfile?.roles[0]?.name}
                                 </Text>
                               )}
@@ -198,10 +198,10 @@ const Nav = ({ navtitle }: INav) => {
                             sx={{
                               p: 3,
                               py: 2,
-                              bg: 'gray.0',
+                              bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.1',
+                                bg: 'gray.200',
                               },
                             }}>
                             Settings
@@ -211,10 +211,10 @@ const Nav = ({ navtitle }: INav) => {
                             sx={{
                               p: 3,
                               py: 2,
-                              bg: 'gray.0',
+                              bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.1',
+                                bg: 'gray.200',
                               },
                             }}>
                             Profile
@@ -222,7 +222,7 @@ const Nav = ({ navtitle }: INav) => {
                           <MenuItem
                             as={Box}
                             onClick={userLogout}
-                            sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
+                            sx={{ p: 3, bg: 'gray.100', borderBottom: 0 }}>
                             Signout
                           </MenuItem>
                         </Menu>

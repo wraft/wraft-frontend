@@ -189,7 +189,7 @@ const StatesForm = ({
         <Text
           as="p"
           variant="sectiontitle"
-          sx={{ color: 'gray.6', mb: 2, mt: 0 }}>
+          sx={{ color: 'text', mb: 2, mt: 0 }}>
           Manage your flows
         </Text>
       </Box>
@@ -198,7 +198,7 @@ const StatesForm = ({
           mb={0}
           sx={{
             borderBottom: 'solid 1px',
-            borderColor: 'gray.2',
+            borderColor: 'border',
           }}>
           <ReactSortable list={state} setList={setOrder}>
             {state.map((c: ItemType, index) => (
@@ -206,18 +206,18 @@ const StatesForm = ({
                 key={index}
                 sx={{
                   p: 3,
-                  bg: 'gray.0',
+                  bg: 'gray.100',
                   border: 'solid 1px',
                   borderBottom: 0,
-                  borderColor: 'gray.4',
+                  borderColor: 'border',
                   h6: { opacity: 1 },
                   ':hover': { h6: { opacity: 1 } },
                 }}>
-                <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
+                <Text mr={2} sx={{ color: 'text', fontWeight: 300 }}>
                   {index + 1}
                 </Text>
                 <Text
-                  sx={{ fontWeight: 'heading', color: 'gray.9' }}
+                  sx={{ fontWeight: 'heading', color: 'text' }}
                   key={c.id}
                   data-rel={c.id}>
                   {c.name}

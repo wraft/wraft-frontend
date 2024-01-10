@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Router from 'next/router';
+import { useRouter } from 'next/router';
+import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Label, Input, Heading, Checkbox } from 'theme-ui';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { Spinner } from 'theme-ui';
@@ -20,17 +23,54 @@ export interface IField {
 }
 
 const UserLoginForm = () => {
-  const { register, handleSubmit } = useForm();
-
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, accessToken } = useAuth();
+  const { data, status } = useSession();
+  const { register, handleSubmit } = useForm();
+  const router = useRouter();
+
+  const { session, error } = router.query;
+
+  useEffect(() => {
+    const handleSignOut = async () => {
+      if (session) {
+        try {
+          if (status === 'authenticated') {
+            await signOut({ redirect: false });
+          }
+
+          router.push('/login');
+        } catch (error) {
+          console.error('Error during sign out:', error);
+        }
+      }
+    };
+
+    handleSignOut();
+  }, [session]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error((error as string) || 'somthing wrong', {
+        duration: 3000,
+        position: 'top-right',
+      });
+      router.push('/login');
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (status === 'authenticated' && data?.user && !session) {
+      login(data?.user);
+    }
+  }, [data, status]);
 
   const onSubmit = async (data: any): Promise<void> => {
     setLoading(true);
-    setError(null);
+    setLoginError(null);
     try {
       const res = await userLogin(data);
       if (res) {
@@ -39,7 +79,7 @@ const UserLoginForm = () => {
       setLoading(false);
     } catch (err) {
       console.error('Login error: vb', err);
-      setError(err?.errors || 'something wrong');
+      setLoginError(err?.errors || 'something wrong');
       setLoading(false);
     }
   };
@@ -49,14 +89,6 @@ const UserLoginForm = () => {
       Router.push('/');
     }
   }, [accessToken]);
-
-  // const handlePasswordToggle = () => {
-  //   setShowPassword(!showPassword);
-  // };
-
-  const handleGoogleSignIn = () => {
-    // Perform Google sign-in logic here
-  };
 
   return (
     <Flex variant="onboardingFormPage">
@@ -78,7 +110,7 @@ const UserLoginForm = () => {
         </Heading>
 
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email" sx={{ mb: '4px', color: 'dark_600' }}>
+          <Label htmlFor="email" sx={{ mb: '4px', color: 'gray.600' }}>
             Email
           </Label>
           <Input
@@ -87,10 +119,10 @@ const UserLoginForm = () => {
             defaultValue=""
             {...register('email', { required: true })}
             mb={'24px'}
-            color={'nuetral_nuetral'}
+            color="border"
           />
 
-          <Label htmlFor="password" sx={{ mb: '4px', color: 'dark_600' }}>
+          <Label htmlFor="password" sx={{ mb: '4px', color: 'gray.600' }}>
             Password
           </Label>
           <Input
@@ -99,6 +131,7 @@ const UserLoginForm = () => {
             type={showPassword ? 'text' : 'password'}
             {...register('password', { required: true })}
             mb={'12px'}
+            color={'border'}
           />
           <Flex
             sx={{
@@ -106,14 +139,14 @@ const UserLoginForm = () => {
               mb: '28px',
               justifyContent: 'space-between',
             }}>
-            {error ? (
-              <Text sx={{ color: 'warning_300' }}>{error}</Text>
+            {loginError ? (
+              <Text sx={{ color: 'orange.300' }}>{loginError}</Text>
             ) : (
               <Flex>
                 <Label
                   sx={{
                     cursor: 'pointer',
-                    color: 'dark_900',
+                    color: 'gray.900',
                     fontWeight: 'body',
                     display: 'flex',
                     alignItems: 'center',
@@ -123,7 +156,7 @@ const UserLoginForm = () => {
                     onChange={() => setShowPassword(!showPassword)}
                     sx={{
                       cursor: 'pointer',
-                      color: 'dark_900',
+                      color: 'gray.900',
                       width: '18px',
                       backgroundColor: 'white',
                       border: 'none',
@@ -161,16 +194,17 @@ const UserLoginForm = () => {
           }}
         />
 
-        <Button onClick={handleGoogleSignIn} variant="googleLogin">
+        <Button onClick={() => signIn('gmail')} variant="googleLogin">
           <img src={GoogleLogo} alt="" />
           Continue with Google
         </Button>
+        {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
 
         <Flex
           sx={{
             alignItems: 'center',
             mt: '24px',
-            color: 'dark_600',
+            color: 'gray.600',
             gap: '8px',
           }}>
           <Text variant="pR">Not a user yet? {''}</Text>

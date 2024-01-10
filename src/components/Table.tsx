@@ -10,28 +10,28 @@ export const styles = {
     borderCollapse: 'collapse',
     width: '100%',
     border: '1px solid',
-    borderColor: 'neutral.1',
+    borderColor: 'border',
     textAlign: 'left',
-    bg: 'bgWhite',
+    bg: 'backgroundWhite',
   } as ThemeUIStyleObject,
   thead: {
-    bg: 'gray.0',
+    bg: 'gray.100',
     fontSize: 0,
     textTransform: 'uppercase',
     border: '1px solid',
-    borderColor: 'neutral.1',
-    color: 'gray.1',
+    borderColor: 'border',
+    color: 'gray.200',
   },
   tr: {
     verticalAlign: 'top',
-    // bg: 'gray.0',
+    // bg: 'gray.100',
     borderBottom: '1px solid',
-    borderBottomColor: 'neutral.1',
+    borderBottomColor: 'neutral.200',
     '&:last-child': {
       border: '0',
     },
     '&:hover': {
-      // bg: 'neutral.1',
+      // bg: 'neutral.200',
       bg: 'background',
     },
   },
@@ -60,8 +60,8 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
           fontSize: 0,
           textTransform: 'uppercase',
           border: '1px solid',
-          borderColor: 'neutral.1',
-          color: 'gray.3',
+          borderColor: 'border',
+          color: 'gray.400',
         }}>
         {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (

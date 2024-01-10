@@ -87,16 +87,16 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
   return (
     <Flex
       sx={{
-        bg: 'bgWhite',
+        bg: 'backgroundWhite',
         cursor: 'pointer',
         ':hover': {
-          bg: 'neutral.1',
+          bg: 'neutral.200',
           fontWeight: 400,
-          color: 'gray.8',
+          color: 'text',
         },
         p: 1,
         borderBottom: 'solid 1px',
-        borderColor: 'neutral.1',
+        borderColor: 'border',
         alignItems: 'flex-start',
         pl: 2,
       }}>
@@ -106,7 +106,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
           height: '12px',
           width: '12px',
           border: 'solid 1px',
-          borderColor: 'neutral.0',
+          borderColor: 'border',
           bg: color,
           mr: 2,
           // ml: 2,
@@ -120,12 +120,12 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
           sx={{
             ml: 1,
             // pl: 2,
-            bg: 'neutral.1',
+            bg: 'neutral.200',
             fontSize: '10px',
             fontWeight: 'heading',
-            color: 'gray.7',
+            color: 'text',
             // border: 'solid 0.5px',
-            borderColor: 'gray.5',
+            borderColor: 'border',
             p: 1,
             pt: '4px',
             pb: '4px',
@@ -158,7 +158,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
         <Text
           sx={{
             fontSize: 0,
-            color: 'gray.6',
+            color: 'text',
             fontWeight: 300,
             cursor: 'pointer',
           }}>
@@ -168,7 +168,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
           as="h4"
           p={0}
           sx={{
-            color: 'gray.9',
+            color: 'text',
             m: 0,
             fontSize: 2,
             fontWeight: 500,
@@ -200,7 +200,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
         variant="labelSmall"
         sx={{
           bg: color ? color : 'red',
-          color: '#005517',
+          color: 'text',
           borderRadius: '3rem',
           pl: '8px',
           pt: '2px',

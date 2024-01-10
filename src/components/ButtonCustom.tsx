@@ -19,10 +19,10 @@ const ButtonCustom = ({ text, price, dark }: props) => {
           borderRadius: '4px',
           py: [2, 1, 2],
           px: [4, 1, 3],
-          color: `${dark ? 'gray.8' : 'bgWhite'}`,
-          bg: `${dark ? 'bgWhite' : 'gray.8'}`,
+          color: `${dark ? 'text' : 'backgroundWhite'}`,
+          bg: `${dark ? 'backgroundWhite' : 'gray.900'}`,
           '&:hover': {
-            bg: `${dark ? 'gray.1' : 'gray.6'}`,
+            bg: `${dark ? 'gray.200' : 'gray.700'}`,
           },
         }}>
         {text}
@@ -38,14 +38,14 @@ const ButtonCustom = ({ text, price, dark }: props) => {
           fontSize: [2, 2, 2],
           border: '1px solid',
           borderRadius: '4px',
-          borderColor: 'green.5',
+          borderColor: 'border',
           py: [2, 1, 2],
           px: [4, 1, 3],
-          color: 'green.5',
+          color: 'text',
           bg: 'transparent',
           '&:hover': {
-            bg: 'green.5',
-            color: 'bgWhite',
+            bg: 'gray.600',
+            color: 'backgroundWhite',
           },
         }}>
         {text}

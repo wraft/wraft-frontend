@@ -60,12 +60,12 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
       contents.map((r: any) => {
         const rFormated = {
           name: (
-            <Text variant="text.pM" sx={{ color: 'gray.5' }}>
+            <Text variant="text.pM" sx={{ color: 'gray.500' }}>
               {r.name}
             </Text>
           ),
           users: (
-            <Text variant="pM" sx={{ color: 'gray.5' }}>
+            <Text variant="pM" sx={{ color: 'gray.500' }}>
               {r.user_count}
             </Text>
           ),
@@ -85,9 +85,9 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
         <Box
           sx={{
             p: 4,
-            bg: 'gray.0',
+            bg: 'gray.100',
             border: 'solid 1px',
-            borderColor: 'gray.2',
+            borderColor: 'border',
           }}>
           <Text>Nothing to approve</Text>
         </Box>
@@ -155,13 +155,13 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                           <Box
                             sx={{
                               position: 'absolute',
-                              bg: 'bgWhite',
+                              bg: 'backgroundWhite',
                               // p: 3,
                               right: 0,
                               top: 0,
                               zIndex: 10,
                               border: '1px solid',
-                              borderColor: 'neutral.1',
+                              borderColor: 'border',
                               width: '155px',
                             }}>
                             <Button
@@ -177,11 +177,11 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                                 cursor: 'pointer',
                                 textAlign: 'left',
                                 width: '100%',
-                                bg: 'bgWhite',
-                                color: 'gray.6',
+                                bg: 'backgroundWhite',
+                                color: 'text',
                                 p: 3,
                                 ':disabled': {
-                                  color: 'gray.2',
+                                  color: 'gray.300',
                                 },
                               }}>
                               Edit
@@ -199,11 +199,11 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                                 cursor: 'pointer',
                                 textAlign: 'left',
                                 width: '100%',
-                                bg: 'bgWhite',
-                                color: 'red.5',
+                                bg: 'backgroundWhite',
+                                color: 'red.600',
                                 p: 3,
                                 ':disabled': {
-                                  color: 'gray.2',
+                                  color: 'gray.300',
                                 },
                               }}>
                               Delete
@@ -239,7 +239,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                               gap: 3,
                             }}>
                             <BigErrorIcon />
-                            <Text variant="pR" sx={{ color: 'gray.8' }}>
+                            <Text variant="pR" sx={{ color: 'text' }}>
                               You cannot remove a role that is in use
                             </Text>
                             <Button

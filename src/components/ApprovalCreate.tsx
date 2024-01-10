@@ -171,11 +171,11 @@ const ApprovalFormBase = ({
             <Box
               key={x?.name}
               sx={{
-                bg: 'gray.0',
+                bg: 'gray.100',
                 p: 2,
                 px: 3,
                 border: 'solid 1px',
-                borderColor: 'gray.3',
+                borderColor: 'border',
               }}
               onClick={() => onUserSelect(x)}>
               <Text as="h4" color="gray.9">

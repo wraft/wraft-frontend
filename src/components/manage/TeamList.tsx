@@ -186,13 +186,13 @@ const TeamList = () => {
                         maxWidth: 'auto',
                         borderRadius: 99,
                         border: 'solid 1px',
-                        borderColor: 'gray.3',
+                        borderColor: 'gray.300',
                         overflow: 'hidden',
                         objectFit: 'cover',
                         flexShrink: 0,
                       }}
                     />
-                    <Text sx={{ fontWeight: 'heading', color: 'dark_600' }}>
+                    <Text sx={{ fontWeight: 'heading', color: 'gray.600' }}>
                       {row.original.members.name}
                     </Text>
                   </Flex>
@@ -211,7 +211,7 @@ const TeamList = () => {
                 return (
                   <Flex
                     sx={{
-                      color: 'dark_500',
+                      color: 'gray.500',
                       gap: '12px',
                       alignItems: 'center',
                     }}>
@@ -250,7 +250,7 @@ const TeamList = () => {
                               }}>
                               <Box
                                 sx={{
-                                  color: 'gray.9',
+                                  color: 'gray.900',
                                   display: 'flex',
                                   alignItems: 'center',
                                   objectFit: 'contain',
@@ -366,7 +366,7 @@ const TeamList = () => {
                             }}>
                             <Text
                               variant=""
-                              sx={{ cursor: 'pointer', color: 'red.6' }}>
+                              sx={{ cursor: 'pointer', color: 'red.600' }}>
                               Delete
                             </Text>
                           </Button>

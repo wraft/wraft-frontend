@@ -265,7 +265,7 @@ const Form = () => {
   // }, [imageTemp]);
 
   return (
-    <Box py={3} mt={4} pl={4} variant="w50">
+    <Box py={3} mt={4} pl={4} sx={{ width: '50%' }}>
       {/* <Box sx={{ pb: 5 }}>
         <Text variant="pagetitle" sx={{ mb: 0 }}>
           My Account
@@ -303,7 +303,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 99,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                               src={`${profile?.profile_pic}`}
                             />
@@ -325,7 +325,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 99,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                               src={`${profile?.profile_pic}`}
                             />
@@ -352,7 +352,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 3,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                             />
                           </>

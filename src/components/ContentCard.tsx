@@ -51,7 +51,7 @@ export interface IFieldItem {
 }
 
 // const Tablet = (props: any) => (
-//   <Badge sx={{ bg: 'transparent', color: 'gray.6', p: 0, pt: 1 }}>
+//   <Badge sx={{ bg: 'transparent', color: 'gray.700', p: 0, pt: 1 }}>
 //     <Text sx={{ fontWeight: 'body' }}>{props.type}</Text>
 //   </Badge>
 // );
@@ -61,11 +61,11 @@ const ContentCardBase = (props: IField) => {
     <Flex
       sx={{
         pl: 3,
-        bg: 'gray.0',
+        bg: 'gray.100',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'border',
         ':hover': {
-          bg: 'blue.0',
+          bg: 'blue.100',
         },
       }}>
       <Box
@@ -80,7 +80,7 @@ const ContentCardBase = (props: IField) => {
         }}
       />
       <Box sx={{ p: 3 }}>
-        <Text sx={{ fontSize: 0, color: 'gray.6' }}>
+        <Text sx={{ fontSize: 0, color: 'text' }}>
           {props.content.instance_id}
         </Text>
         <MenuItem
@@ -104,13 +104,13 @@ const ContentCardBase = (props: IField) => {
           pt={1}
           sx={{
             pl: 1,
-            color: 'green.8',
+            color: 'text',
             display: 'inline-block',
             textTransform: 'uppercase',
             fontSize: '11px',
-            bg: 'green.0',
+            bg: 'gray.100',
             border: 'solid 1px',
-            borderColor: 'green.3',
+            borderColor: 'border',
             paddingTop: 0,
             paddingRight: 1,
             paddingLeft: 1,
@@ -146,13 +146,13 @@ const ContentCardBase = (props: IField) => {
 //             pt={1}
 //             sx={{
 //               pl: 1,
-//               color: 'gray.7',
+//               color: 'text',
 //               display: 'inline-block',
 //               textTransform: 'uppercase',
 //               fontSize: '11px',
-//               bg: 'green.0',
+//               bg: 'gray.100',
 //               border: 'solid 1px',
-//               borderColor: 'green.1',
+//               borderColor: 'border',
 //               paddingTop: 0,
 //               paddingRight: 1,
 //               paddingLeft: 1,

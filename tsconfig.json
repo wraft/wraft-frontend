@@ -22,7 +22,10 @@
     "incremental": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "paths": {
+      "@wraft-ui/*": ["./src/components/common/*"],
+    }
   },
   "exclude": ["node_modules", "__tests__"],
   "include": [

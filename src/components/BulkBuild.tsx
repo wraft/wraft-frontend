@@ -97,7 +97,7 @@ const BulkBuild = (props: CommentFormProps) => {
               mb={1}
               sx={{
                 borderBottom: 'solid 1px',
-                borderColor: 'gray.2',
+                borderColor: 'border',
                 pb: 3,
                 mb: 2,
               }}>
@@ -108,9 +108,9 @@ const BulkBuild = (props: CommentFormProps) => {
                       // ml: -4,
                       pt: 0,
                       width: 'auto',
-                      // bg: 'red.1',
+                      // bg: 'red.200',
                       // border: 'solid 1px',
-                      // borderColor: 'red.3',
+                      // borderColor: 'red.400',
                       borderRadius: 99,
                       pr: 2,
                       alignItems: 'flex-start',
@@ -119,7 +119,7 @@ const BulkBuild = (props: CommentFormProps) => {
                       alt=""
                       sx={{
                         // border: 'solid 2px',
-                        // borderColor: 'red.5',
+                        // borderColor: 'red.600',
                         borderRadius: 99,
                         mr: 2,
                         width: '24px',
