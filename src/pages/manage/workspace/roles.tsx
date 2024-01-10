@@ -82,7 +82,7 @@ const Index: FC = () => {
           <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
             <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
           </ModalCustom>
-          <Container variant="layout.newPageFrame">
+          <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">
