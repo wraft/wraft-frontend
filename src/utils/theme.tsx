@@ -328,8 +328,9 @@ const theme: Theme & CustomVariantGroups = {
     },
     h3Medium: {
       fontWeight: 'heading',
-      lineHeight: '38.88px',
       fontSize: '29.3px',
+      lineHeight: '132.696%',
+      letterSpacing: '0.2px',
     },
     h1Medium: {
       fontSize: '45.78px',
@@ -1310,6 +1311,7 @@ const theme: Theme & CustomVariantGroups = {
       padding: '80px',
       backgroundColor: 'background',
       justifyContent: 'center',
+      alignItems: 'center',
     },
   },
 };
