@@ -39,15 +39,8 @@ export function Drawer({ open, setOpen, children, heading, footer }: Props) {
     <>
       <Dialog
         store={dialog}
-        backdrop={
-          <div
-            style={{
-              backgroundColor: 'rgba(0, 0, 0, 0.40)',
-              opacity: 10,
-              transitionDuration: '150ms',
-            }}
-          />
-        }>
+        as={Box}
+        backdrop={<Box variant="layout.drawerBackdrop" />}>
         <motion.div
           variants={drawerVariants}
           initial="closed"
