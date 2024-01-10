@@ -6,10 +6,11 @@ import { Flex, Container, Button, Box } from 'theme-ui';
 import LayoutForm from '../../../components/LayoutForm';
 import LayoutList from '../../../components/LayoutList';
 import ManageSidebar from '../../../components/ManageSidebar';
-import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
+
+import { Drawer } from '@wraft-ui/Drawer';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -29,9 +30,9 @@ const Index: FC = () => {
             Add Layout
           </Button>
         </PageHeader>
-        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+        <Drawer open={isOpen} setOpen={setIsOpen}>
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
-        </ModalCustom>
+        </Drawer>
 
         <Box variant="layout.pageFrame" pt={0}>
           <Container>

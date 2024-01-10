@@ -1,6 +1,11 @@
 import type { Theme } from 'theme-ui';
 
 const layout: Theme['layout'] = {
+  drawerBackdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.40)',
+    opacity: 10,
+    transitionDuration: '150ms',
+  },
   menu: {
     height: 'auto',
     width: 'fit-content',
@@ -29,7 +34,7 @@ const layout: Theme['layout'] = {
     flexDirection: 'column',
     gap: '1rem',
     overflow: 'auto',
-    borderRadius: '0.75rem',
+    borderRadius: '4px',
     padding: 0,
     color: 'hsl(204 10% 10%)',
     boxShadow: '0 25px 50px -12px rgb(0 0 0 / 0.25)',
@@ -39,6 +44,7 @@ const layout: Theme['layout'] = {
     transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
     transitionDuration: '150ms',
     transform: 'scale(0.95)',
+    maxWidth: 'fit-content',
   },
   backdrop: {
     bg: 'hsl(204 10% 10% / 0.8)',

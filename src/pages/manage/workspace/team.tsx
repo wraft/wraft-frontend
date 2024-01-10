@@ -8,10 +8,11 @@ import { InviteUserIcon } from '../../../components/Icons';
 import { InviteTeam } from '../../../components/manage';
 import TeamList from '../../../components/manage/TeamList';
 import ManageSidebar from '../../../components/ManageSidebar';
-import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { workspaceLinks } from '../../../utils';
+
+import { Drawer } from '@wraft-ui/Drawer';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +34,9 @@ const Index: FC = () => {
               Invite people
             </Button>
           </PageHeader>
-          <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+          <Drawer open={isOpen} setOpen={setIsOpen}>
             <InviteTeam setOpen={setIsOpen} />
-          </ModalCustom>
+          </Drawer>
           <Container variant="layout.newPageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
