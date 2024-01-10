@@ -1,67 +1,44 @@
 import { useState } from 'react';
 
 import Image from 'next/image';
-import { Flex, Box, Heading, Label, Input, Button, Text } from 'theme-ui';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 
 import Logo from '../../../public/Logo.svg';
+import CountdownTimer from '../../components/common/CountDownTimer';
+import Field from '../../components/Field';
 import Link from '../../components/NavLink';
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { postAPI } from '../../utils/models';
+
+type FormValues = {
+  email: string;
+};
 
 const Index = () => {
-  const [email, setEmail] = useState('');
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-  const handleForgot = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(JSON.stringify({ email: email }));
-    try {
-      const response = await fetch(`${API_HOST}/api/v1/user/password/forgot`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+  const onSubmit = (data: FormValues) => {
+    toast.promise(
+      postAPI('user/password/forgot', {
+        email: data.email,
+        first_time_setup: false,
+      }),
+      {
+        loading: 'Loading...',
+        success: () => {
+          setIsSent(true);
+          return 'Operation completed successfully';
         },
-        body: JSON.stringify({ email: email, first_time_setup: false }),
-      });
-
-      if (!response.ok) {
-        // Handle non-2xx status codes
-        const errorData = await response.json(); // Parse error response
-        // Handle the error data as needed (e.g., display an error message to the user)
-        console.error('Error:q', errorData);
-        // You can also throw a custom error if needed
-        throw new Error('Password reset request failed');
-      } else {
-        // Handle a successful response (if needed)
-        const responseData = await response.json();
-        console.log('Response:', responseData);
-      }
-    } catch (error) {
-      // Handle network errors or other exceptions
-      console.error('Network error:', error);
-      // You can display a generic error message to the user
-      // or perform other error-handling actions.
-    }
+        error: 'An error occurred',
+      },
+    );
   };
-
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   // if (isValidEmail(email)) {
-  //   //   if (email === email1) {
-  //   //     setShowFirstSection(false);
-  //   //   } else {
-  //   //     alert('wrong email');
-  //   //   }
-  //   // }
-  // };
-  // console.log(email);
-
-  // const isValidEmail = (email: string): boolean => {
-  //   // Simple email validation using regular expression
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   return emailRegex.test(email);
-  // };
 
   return (
     <Flex variant="onboardingFormPage">
@@ -79,30 +56,37 @@ const Index = () => {
       </Box>
 
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-        <Heading as="h3" variant="styles.h3" sx={{ mb: '18px' }}>
+        <Heading
+          as="h3"
+          variant="styles.h3Medium"
+          sx={{ color: 'green.6', mb: '18px' }}>
           Reset password
         </Heading>
 
         <Text
           as="p"
+          variant="pM"
           sx={{
-            fontWeight: 'heading',
             color: 'dark_400',
             mb: '48px',
           }}>
           We will send you a verification link to your registered email.
         </Text>
-        <Box as="form" onSubmit={handleForgot}>
-          <Label htmlFor="email">Enter your email</Label>
-          <Input
+        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+          <Field
+            name="email"
+            label="Enter your email"
+            register={register}
+            error={errors.email}
             type="email"
-            id="email1"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            mb={'24px'}
           />
 
-          <Button type="submit">Next</Button>
+          <Flex sx={{ justifyContent: 'space-between', mt: '24px' }}>
+            <Button variant="buttonPrimary" disabled={isSent} type="submit">
+              {isSent ? 'Resend Link' : 'Send Verification Link'}
+            </Button>
+            {isSent && <CountdownTimer setIsCounter={setIsSent} />}
+          </Flex>
         </Box>
       </Flex>
     </Flex>
