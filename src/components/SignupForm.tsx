@@ -137,6 +137,7 @@ const SignUpPage = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
+                    color="border"
                   />
                 </Box>
                 <Box sx={{ flex: '1 1 auto' }}>
@@ -147,6 +148,7 @@ const SignUpPage = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
+                    color="border"
                   />
                 </Box>
               </Flex>
@@ -158,6 +160,7 @@ const SignUpPage = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  color="border"
                 />
               </Box>
               <Button type="submit">
@@ -184,13 +187,13 @@ const SignUpPage = () => {
               Continue with Google
             </Button>
 
-            <Text as="p" sx={{ mt: 4, color: 'dark.600', mb: '4px' }}>
+            <Text as="p" sx={{ mt: 4, color: 'gray.600', mb: '4px' }}>
               Already a member?
               <Link
                 href="/login"
                 sx={{
                   textDecoration: 'none',
-                  color: 'dark.600',
+                  color: 'gray.600',
                   fontWeight: 'bold',
                   pl: 0,
                 }}>

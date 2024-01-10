@@ -11,10 +11,6 @@ const buttons: Theme['buttons'] = {
       color: 'gray.900',
       bg: 'neutral.300',
     },
-    // Uncomment the next line if needed
-    //, ":hover": {
-    //   "bg": "green.8"
-    // }
   },
   buttonPrimarySmall: {
     variant: 'buttons.buttonPrimary',
@@ -31,7 +27,7 @@ const buttons: Theme['buttons'] = {
   },
   googleLogin: {
     fontWeight: 'body',
-    color: 'dark.600',
+    color: 'gray.600',
     bg: 'backgroundWhite',
     border: '1px solid',
     borderColor: 'border',
@@ -53,41 +49,6 @@ const buttons: Theme['buttons'] = {
   download: {
     bg: 'gray.200',
     textTransform: 'capitalize',
-  },
-  contentButton: {
-    bg: 'transparent',
-    border: 0,
-    borderColor: 'border',
-    color: 'gray.900',
-    textAlign: 'left',
-  },
-  btnPrimaryIcon: {
-    bg: 'gray.100',
-    border: 'solid 1px',
-    borderColor: 'border',
-    color: 'gray.900',
-    borderRadius: 4,
-    display: 'inline-flex',
-    alignItems: 'stretch',
-    pt: 2,
-    pr: 3,
-    pl: 2,
-    ':hover': {
-      bg: 'gray.200',
-      borderColor: 'border',
-    },
-  },
-  btnBig: {
-    variant: 'buttons.buttonPrimary',
-    p: 1,
-    px: 2,
-    m: 0,
-    border: 'solid 1px',
-    borderRadius: 4,
-    fontWeight: 'bold',
-    fontSize: 0,
-    fontFamily: 'inherit',
-    cursor: 'pointer',
   },
   btnPrimary: {
     variant: 'buttons.btnBig',
@@ -124,9 +85,6 @@ const buttons: Theme['buttons'] = {
       color: 'gray.100',
     },
   },
-  btnMain: {
-    variant: 'buttons.btnSecondary',
-  },
   btnSmall: {
     variant: 'buttons.btnSecondary',
     fontSize: 0,
@@ -139,12 +97,6 @@ const buttons: Theme['buttons'] = {
     p: 2,
     px: 3,
     border: 0,
-  },
-  btnPrimarySmall: {
-    variant: 'buttons.btnPrimary',
-    fontSize: 0,
-    p: 1,
-    px: 2,
   },
   base: {
     bg: 'transparent',
@@ -167,10 +119,6 @@ const buttons: Theme['buttons'] = {
     color: 'blue.1000',
     bg: 'blue.300',
     fontFamily: 'body',
-  },
-  tertiary: {
-    color: 'blue.1000',
-    bg: 'blue.300',
   },
 };
 

@@ -139,7 +139,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               Invitation to join
             </Heading>
 
-            <Text sx={{ color: 'dark.900', mb: '24px' }}>
+            <Text sx={{ color: 'gray.900', mb: '24px' }}>
               You have been invited by{' '}
               <Text sx={{ fontWeight: 'bold' }}> ‘Litmus Blue’</Text> software
               company to join the team to improve the workflow
@@ -150,7 +150,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                 <Box sx={{ flex: '1 1 264px' }}>
                   <Label
                     htmlFor="firstName"
-                    sx={{ mb: '4px', color: 'dark.300' }}>
+                    sx={{ mb: '4px', color: 'gray.300' }}>
                     First Name
                   </Label>
                   <Input
@@ -159,14 +159,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    color={'nuetral_nuetral'}
+                    color={'border'}
                     mb={'0px'}
                   />
                 </Box>
                 <Box sx={{ flex: '1 1 auto' }}>
                   <Label
                     htmlFor="lastName"
-                    sx={{ mb: '4px', color: 'dark.300' }}>
+                    sx={{ mb: '4px', color: 'gray.300' }}>
                     Last Name
                   </Label>
                   <Input
@@ -175,13 +175,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    color={'nuetral_nuetral'}
+                    color={'border'}
                     mb={'0px'}
                   />
                 </Box>
               </Flex>
 
-              <Label htmlFor="email" sx={{ mb: '4px', color: 'dark.300' }}>
+              <Label htmlFor="email" sx={{ mb: '4px', color: 'gray.300' }}>
                 Email
               </Label>
               <Input
@@ -192,10 +192,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                 value={formData.email}
                 onChange={handleChange}
                 mb={'24px'}
-                color={'nuetral_nuetral'}
+                color={'border'}
               />
 
-              <Label htmlFor="password" sx={{ mb: '4px', color: 'dark.300' }}>
+              <Label htmlFor="password" sx={{ mb: '4px', color: 'gray.300' }}>
                 Create Password
               </Label>
               <Input
@@ -219,12 +219,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                     )}
                   </Flex>
                 </Button>
-                <Flex sx={{ alignItems: 'center', color: 'dark.600' }}>
+                <Flex sx={{ alignItems: 'center', color: 'gray.600' }}>
                   <Text>Already joined?</Text>
                   <Link href="/login">
                     <Text
                       sx={{
-                        color: 'dark.600',
+                        color: 'gray.600',
                         fontWeight: 'bold',
                       }}>
                       Sign In
@@ -234,10 +234,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               </Flex>
             </Box>
 
-            <Text as="p" sx={{ color: 'dark.300', mb: '24px' }}>
+            <Text as="p" sx={{ color: 'gray.300', mb: '24px' }}>
               By Joining the waiting list, I agree to Wraf&apos;s{' '}
               <Link href="">
-                <Text sx={{ color: 'dark.300', textDecoration: 'underline' }}>
+                <Text sx={{ color: 'gray.300', textDecoration: 'underline' }}>
                   Privacy Policy.
                 </Text>
               </Link>

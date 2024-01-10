@@ -169,7 +169,7 @@ const TeamList = () => {
                         height={32}
                       />
                     </Box>
-                    <Text sx={{ fontWeight: 'heading', color: 'dark.600' }}>
+                    <Text sx={{ fontWeight: 'heading', color: 'gray.600' }}>
                       {row.original.members.name}
                     </Text>
                   </Flex>
@@ -188,7 +188,7 @@ const TeamList = () => {
                 return (
                   <Flex
                     sx={{
-                      color: 'dark.500',
+                      color: 'gray.500',
                       gap: '12px',
                       alignItems: 'center',
                     }}>

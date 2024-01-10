@@ -121,7 +121,7 @@ const Index: FC = () => {
               mb: '18px',
               textAlign: 'center',
               fontWeight: 'heading',
-              color: 'dark.600',
+              color: 'gray.600',
             }}>
             {organisationName !== null
               ? `you have a team invite from ${organisationName}. Accept?`

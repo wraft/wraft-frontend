@@ -29,6 +29,8 @@ import Modal from './Modal';
 import ModalCustom from './ModalCustom';
 import ModeToggle from './ModeToggle';
 
+import Btn from '@wraft-ui/Button';
+
 /**
  * Sidebar Static Items
  */
@@ -115,7 +117,7 @@ const Nav = (props: any) => {
       return true;
     }
 
-    return pathname === m.path ? true : false;
+    return m.path === pathname;
   };
 
   const toggleSearch = () => {
@@ -429,27 +431,23 @@ const Nav = (props: any) => {
                   href={menu.path}
                   key={menu.path}
                   variant="layout.menuWrapper">
-                  <Flex
-                    variant={
-                      checkActive(pathname, m)
-                        ? 'layout.menuLinkActive'
-                        : 'layout.menuLink'
-                    }>
-                    <Box
+                  <Flex>
+                    <Flex
                       sx={{
                         mr: 2,
                         color: checkActive(pathname, m)
-                          ? 'teal.300'
+                          ? '#004A0F'
                           : 'gray.400',
                       }}>
                       {menu.logo}
-                    </Box>
+                    </Flex>
                     {showFull && (
                       <Text
                         sx={{
                           color: 'text',
-                          fontWeight: checkActive(pathname, m) ? 600 : 500,
-                          fontSize: 2,
+                          fontWeight: 500,
+                          fontSize: '14px',
+                          lineHeight: '18.8px',
                         }}>
                         {menu.name}
                       </Text>
@@ -461,19 +459,22 @@ const Nav = (props: any) => {
           ))}
         </Box>
 
-        <Box>
+        <Box sx={{ mt: 'auto', mb: 4 }}>
           <Box
             className="first-step"
             sx={{
               px: 3,
               py: 3,
             }}>
-            <Button
+            {/* <Button
               variant="btnPrimary"
               onClick={() => toggleSearch()}
               sx={{ width: '100%', borderRadius: 6, py: 2 }}>
               + New Document
-            </Button>
+            </Button> */}
+            <Btn variant="primary" onClick={toggleSearch}>
+              + New Document
+            </Btn>
           </Box>
         </Box>
       </Flex>

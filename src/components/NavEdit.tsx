@@ -63,6 +63,9 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         borderColor: 'border',
         pt: 1,
         pb: 3,
+        position: 'sticky',
+        top: 0,
+        zIndex: 111,
       }}>
       <Flex>
         <Box

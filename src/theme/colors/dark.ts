@@ -4,7 +4,7 @@ const dark = {
   border: '#2C3641',
   background: '#1D252F',
   backgroundGray: '#f5f7fa0f',
-  bgWhite: '#1D252F',
+  backgroundWhite: '#1D252F',
 
   neutral: {
     100: '#1D252F',

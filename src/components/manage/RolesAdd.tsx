@@ -13,7 +13,6 @@ import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 
 import { loadEntity, createEntity } from '../../utils/models';
-import theme from '../../utils/theme';
 import Field from '../Field';
 import { ArrowDropdown } from '../Icons';
 
@@ -230,9 +229,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                 sx={{
                                   width: '14px',
                                   height: '14px',
-                                  accentColor:
-                                    theme?.colors &&
-                                    ((theme?.colors?.gray ?? [])[9] as string),
+                                  accentColor: 'gray.900',
                                 }}
                                 onChange={(e: any) => {
                                   checkParent(e, permissions[key].name);
@@ -283,10 +280,7 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
                                     sx={{
                                       width: '12px',
                                       height: '12px',
-                                      accentColor:
-                                        theme?.colors &&
-                                        ((theme?.colors?.gray ??
-                                          [])[9] as string),
+                                      accentColor: 'gray.900',
                                     }}
                                     {...register('permissions')}
                                     // value={sub.name}
