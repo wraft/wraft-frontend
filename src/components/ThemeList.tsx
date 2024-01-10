@@ -33,7 +33,7 @@ const ItemField = (props: any) => {
       sx={{
         position: 'relative',
         borderBottom: 'solid 1px',
-        borderBottomColor: 'gray.0',
+        borderBottomColor: 'gray.100',
         borderRadius: '3px',
         ':hover': {
           '.merry': {

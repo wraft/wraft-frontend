@@ -92,7 +92,7 @@ const StatesForm = (props: StateFormProps) => {
 
   return (
     <Box p={2}>
-      <Text variant="caps" sx={{ color: 'gray.7' }} pb={3}>
+      <Text variant="caps" sx={{ color: 'text' }} pb={3}>
         All States
       </Text>
       {props.content && (
@@ -100,23 +100,23 @@ const StatesForm = (props: StateFormProps) => {
           mb={4}
           sx={{
             borderBottom: 'solid 1px',
-            borderColor: 'blue.2',
+            borderColor: 'border',
           }}>
           {props.content.map((c: StateElement, index) => (
             <Flex
               key={index + 1}
               sx={{
                 p: 3,
-                bg: 'blue.0',
+                bg: 'blue.100',
                 border: 'solid 1px',
                 borderBottom: 0,
-                borderColor: 'blue.2',
+                borderColor: 'border',
               }}>
-              <Text mr={2} sx={{ color: 'blue.6' }}>
+              <Text mr={2} sx={{ color: 'blue.700' }}>
                 {index + 1}
               </Text>
               <Text
-                sx={{ fontWeight: 'heading', color: 'blue.9' }}
+                sx={{ fontWeight: 'heading', color: 'blue.1000' }}
                 key={c.state.id}>
                 {c.state.state}
               </Text>
@@ -237,7 +237,7 @@ const ApprovalForm = () => {
                 defaultValue="Standard Approval Flow (Offer Letter)"
                 register={register}
               />
-              <Flex sx={{ p: 2, bg: 'gray.2', my: 4 }}>
+              <Flex sx={{ p: 2, bg: 'gray.300', my: 4 }}>
                 <Select>
                   <option></option>
                 </Select>
@@ -259,7 +259,7 @@ const ApprovalForm = () => {
                 Save
               </Button>
             </Box>
-            <Divider sx={{ color: 'gray.3', my: 4 }} />
+            <Divider sx={{ color: 'border', my: 4 }} />
             <Box mt={2}>
               {edit && content && (
                 <StatesForm

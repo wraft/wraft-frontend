@@ -30,7 +30,9 @@ const createAxiosInstance = (): AxiosInstance => {
       if (error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         await cookie.remove('token');
-        window.location.pathname = '/login';
+
+        const url = `/login?session=expired`;
+        window.location.href = decodeURI(url);
       }
       return Promise.reject(error);
     },

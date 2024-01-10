@@ -16,11 +16,11 @@ const PasswordCreated = () => {
         }}>
         <Heading
           variant="styles.h3Mediun"
-          sx={{ mb: '64px', color: 'dark_900' }}>
+          sx={{ mb: '64px', color: 'gray.900' }}>
           Password Created
         </Heading>
         <img alt="" src={CheckSuccess} className="" />
-        <Text sx={{ my: '40px', color: 'dark_400', fontWeight: 'heading' }}>
+        <Text sx={{ my: '40px', color: 'gray.400', fontWeight: 'heading' }}>
           Awesome! You are ready to access your Wraft account Login your account
           and enjoy your workplace
         </Text>

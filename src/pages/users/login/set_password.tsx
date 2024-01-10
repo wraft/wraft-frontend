@@ -151,7 +151,7 @@ const Index = () => {
                 <Flex sx={{ mb: '28px' }}>
                   <Label
                     sx={{
-                      color: 'dark_900',
+                      color: 'gray.900',
                       fontWeight: 'body',
                       display: 'flex',
                       alignItems: 'center',
@@ -160,7 +160,7 @@ const Index = () => {
                       checked={showPassword}
                       onChange={() => setShowPassword(!showPassword)}
                       sx={{
-                        color: 'dark_900',
+                        color: 'gray.900',
                         width: '18px',
                         backgroundColor: 'white',
                         border: 'none',

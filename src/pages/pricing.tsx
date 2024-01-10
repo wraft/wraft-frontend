@@ -29,8 +29,8 @@ const Card = ({
   users,
   storage,
 }: cardProps) => {
-  const bgColor: string = dark ? 'gray.8' : 'bgWhite';
-  const text: string = dark ? 'bgWhite' : 'gray.8';
+  const bgColor: string = dark ? 'gray.900' : 'backgroundWhite';
+  const text: string = dark ? 'backgroundWhite' : 'gray.900';
   const iconYes = dark ? <IconCorrectDark /> : <IconCorrect />;
   const iconNo = dark ? (
     <Close size={16} m={0} color="white" />
@@ -47,7 +47,7 @@ const Card = ({
         width: '315px',
         p: 4,
         border: '1px solid',
-        borderColor: 'neutral.2',
+        borderColor: 'border',
         borderRadius: '12px',
         display: 'flex',
         flexDirection: 'column',
@@ -64,7 +64,7 @@ const Card = ({
         }}>
         {title}
       </Text>
-      <HR my="28px" color={`${dark ? 'gray.5' : 'gray.0'}`} />
+      <HR my="28px" color={`${dark ? 'gray.500' : 'gray.100'}`} />
       <Text
         as="h1"
         sx={{
@@ -76,7 +76,7 @@ const Card = ({
         ${price}
         <Text
           as="span"
-          sx={{ fontSize: 2, color: `${dark ? 'gray.5' : 'gray.3'}` }}>
+          sx={{ fontSize: 2, color: `${dark ? 'gray.500' : 'gray.400'}` }}>
           /monthly
         </Text>
       </Text>
@@ -156,7 +156,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <UserNav />
-      <Container sx={{ bg: 'bgWhite' }}>
+      <Container sx={{ bg: 'backgroundWhite' }}>
         <Box
           sx={{
             maxWidth: '1041px',
@@ -173,7 +173,7 @@ const Index: FC = () => {
               lineHeight: '1.25',
               maxWidth: '410px',
               textAlign: 'center',
-              color: 'gray.8',
+              color: 'text',
               mt: 5,
               mb: '80px',
             }}>
@@ -221,7 +221,7 @@ const Index: FC = () => {
               maxWidth: '652px',
               fontSize: 3,
               fontWeight: 400,
-              color: 'gray.8',
+              color: 'text',
               textAlign: 'center',
               textWrap: 'balance',
             }}>

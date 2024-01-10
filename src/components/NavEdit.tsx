@@ -58,11 +58,14 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
       variant="header"
       sx={{
         p: 0,
-        bg: 'neutral.0',
+        bg: 'neutral.100',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.0',
+        borderColor: 'border',
         pt: 1,
         pb: 3,
+        position: 'sticky',
+        top: 0,
+        zIndex: 111,
       }}>
       <Flex>
         <Box
@@ -76,8 +79,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               pt: 1,
               pl: 3,
               borderRight: 'solid 1px',
-              borderColor: 'neutral.1',
-              color: 'gray.8',
+              borderColor: 'border',
+              color: 'gray.900',
             }}>
             <Flex>
               <Link href="/contents">
@@ -150,7 +153,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                               {profile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
-                                  sx={{ fontSize: 0, color: 'gray.6' }}>
+                                  sx={{ fontSize: 0, color: 'text' }}>
                                   {profile?.roles[0]?.name}
                                 </Text>
                               )}

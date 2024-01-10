@@ -243,7 +243,7 @@ const ThemeForm = () => {
           </Flex>
 
           {theme?.file && (
-            <Box sx={{ p: 3, bg: 'teal.6' }}>
+            <Box sx={{ p: 3, bg: 'teal.700' }}>
               <Text>{theme?.file}</Text>
             </Box>
           )}
@@ -266,7 +266,7 @@ const ThemeForm = () => {
                 sx={{
                   p: 3,
                   border: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'border',
                   mb: 1,
                 }}>
                 <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
@@ -280,9 +280,9 @@ const ThemeForm = () => {
                       py: 1,
                       ml: 3,
                       bg: 'white',
-                      color: 'red.4',
+                      color: 'red.500',
                       border: 'solid 1px',
-                      borderColor: 'red.9',
+                      borderColor: 'red.1000',
                     }}
                     onClick={() => deleteAsset(m.id)}>
                     Delete

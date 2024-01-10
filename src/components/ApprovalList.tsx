@@ -90,7 +90,7 @@ const Approvals = () => {
                 height: '40px',
                 width: '5px',
                 border: 'solid 1px',
-                borderColor: 'gray.1',
+                borderColor: 'border',
                 mr: 0,
                 // ml: 2,
                 mt: 2,
@@ -140,7 +140,7 @@ const Approvals = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Approvals" desc="All Approvals across your feeds">
         <Box sx={{ ml: 'auto' }}></Box>
       </PageHeader>
@@ -152,9 +152,9 @@ const Approvals = () => {
               <Box
                 sx={{
                   p: 4,
-                  bg: 'gray.0',
+                  bg: 'gray.100',
                   border: 'solid 1px',
-                  borderColor: 'gray.2',
+                  borderColor: 'border',
                 }}>
                 <Text>Nothing to approve</Text>
               </Box>
@@ -201,11 +201,11 @@ const Approvals = () => {
           </Box>
           <Box
             sx={{
-              bg: 'bgWhite',
+              bg: 'backgroundWhite',
               minHeight: '100vh',
               width: '25%',
               borderLeft: 'solid 1px',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
             }}></Box>
         </Flex>
       </Box>

@@ -324,7 +324,7 @@ const PipelineView = () => {
                 {activePipeline.name}
               </Text>
               {/* <Box>
-                <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2 }}>
+                <Text sx={{ fontSize: 0, color: 'text', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
@@ -335,11 +335,11 @@ const PipelineView = () => {
                     variant="btnPrimary"
                     onClick={() => runPipeline(activePipeline.id)}
                     sx={{
-                      bg: 'green.7',
+                      bg: 'gray.800',
                       border: 'solid 1px',
-                      borderColor: 'green.8',
+                      borderColor: 'border',
                       ':hover': {
-                        bg: 'green.8',
+                        bg: 'gray.900',
                       },
                     }}>
                     <Flex>
@@ -353,10 +353,10 @@ const PipelineView = () => {
                     variant="btnPrimary"
                     sx={{
                       ml: 2,
-                      bg: 'gray.0',
+                      bg: 'gray.100',
                       border: 'solid 1px',
-                      borderColor: 'gray.3',
-                      color: 'gray.8',
+                      borderColor: 'border',
+                      color: 'gray.900',
                     }}
                     onClick={() => pipelineCollect()}>
                     <Flex>
@@ -372,13 +372,13 @@ const PipelineView = () => {
                 sx={{
                   // p: 2,
                   fontSize: 0,
-                  color: 'gray.7',
+                  color: 'text',
                   letterSpacing: '-0.2',
                   fontWeight: 100,
                   // bg: 'white',
                   borderRadius: 0,
                   // border: 'solid 1px',
-                  // borderColor: 'gray.3',
+                  // borderColor: 'border',
                 }}>
                 {state === 'running' ? `Running` : ''}
               </Text>
@@ -396,7 +396,7 @@ const PipelineView = () => {
                   <Box
                     sx={{
                       p: 3,
-                      bg: 'gray.0',
+                      bg: 'gray.100',
                       borderLeft: 'solid 1px #eee',
                       my: 3,
                     }}>
@@ -448,9 +448,9 @@ const PipelineView = () => {
                     sx={{
                       borderRadius: 3,
                       // borderColor: 'red',
-                      bg: 'gray.1',
+                      bg: 'gray.200',
                       border: 'solid 1px',
-                      borderColor: 'gray.4',
+                      borderColor: 'border',
                       width: '100%',
                     }}
                     my={4}
@@ -469,7 +469,7 @@ const PipelineView = () => {
 
                             // bg: 'blue',
                             borderBottom: 'solid 1px',
-                            borderColor: 'gray.4',
+                            borderColor: 'border',
                             // background: '#fff',
                             borderLeft: 0,
                           }}>
@@ -493,7 +493,7 @@ const PipelineView = () => {
                               sx={{
                                 fontSize: 2,
                                 fontWeight: 600,
-                                color: 'gray.8',
+                                color: 'text',
                               }}
                               mt={0}
                               // color="#111"
@@ -527,7 +527,7 @@ const PipelineView = () => {
                             key={m?.id}
                             sx={{
                               p: 4,
-                              bg: 'gray.1',
+                              bg: 'gray.200',
                               borderBottom: 'solid 1px #ddd',
                             }}>
                             <Box
@@ -545,9 +545,9 @@ const PipelineView = () => {
                             <Box
                               as="pre"
                               sx={{
-                                bg: 'gray.2',
+                                bg: 'gray.300',
                                 p: 0,
-                                color: 'gray.7',
+                                color: 'gray.800',
                                 height: '30px',
                                 overflow: 'hidden',
                                 width: '60%',
@@ -561,10 +561,10 @@ const PipelineView = () => {
                               sx={{
                                 // ml: 4,
                                 ml: 'auto',
-                                bg: 'gray.0',
-                                color: 'gray.8',
+                                bg: 'gray.100',
+                                color: 'gray.900',
                                 border: 'solid 1px',
-                                borderColor: 'gray.5',
+                                borderColor: 'border',
                               }}>
                               Re-run
                             </Button>

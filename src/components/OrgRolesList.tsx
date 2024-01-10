@@ -85,18 +85,18 @@ const OrgRolesList = () => {
           {contents &&
             contents?.permissions?.length > 0 &&
             contents?.permissions?.map((r: any) => (
-              <Box key={r?.id} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+              <Box key={r?.id} sx={{ p: 1, bg: 'gray.300', mb: 1 }}>
                 <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
               </Box>
             ))}
         </Flex>
 
         {contents?.length < 1 && (
-          <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'neutral.1' }}>
-            <Text as="h5" sx={{ fontSize: 1, color: 'gray.8' }}>
+          <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'border' }}>
+            <Text as="h5" sx={{ fontSize: 1, color: 'text' }}>
               No Roles?
             </Text>
-            <Text as="p" sx={{ fontSize: 0, color: 'gray.6' }}>
+            <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
               Are you kidding?
             </Text>
           </Box>

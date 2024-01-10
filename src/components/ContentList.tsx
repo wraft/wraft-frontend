@@ -141,7 +141,7 @@ const ContentList = () => {
                 height: '40px',
                 width: '5px',
                 border: 'solid 1px',
-                borderColor: 'gray.1',
+                borderColor: 'border',
                 bg: r.content_type.color,
                 mr: 0,
                 // ml: 2,
@@ -175,7 +175,7 @@ const ContentList = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.0' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Documents" desc="Manage all documents" />
       <Container variant="layout.pageFrame">
         <Flex>
@@ -232,7 +232,7 @@ const ContentList = () => {
                   mb: 2,
                   fontWeight: 'body',
                   fontSize: 2,
-                  color: 'gray.6',
+                  color: 'text',
                 }}>
                 Filter by Variant
               </Text>
@@ -241,7 +241,7 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   '&:last-child': {
                     borderBottom: 0,
                   },
@@ -260,7 +260,7 @@ const ContentList = () => {
                   mb: 2,
                   fontSize: 2,
                   fontWeight: 'body',
-                  color: 'gray.6',
+                  color: 'text',
                 }}>
                 Filter by State
               </Text>
@@ -269,7 +269,7 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'neutral.1',
+                  borderColor: 'border',
                   borderRadius: '5px',
                   '&:last-child': {
                     borderBottom: 0,

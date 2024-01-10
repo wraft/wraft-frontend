@@ -133,7 +133,7 @@ const OrgPermissionList = () => {
             {contents &&
               contents?.permissions?.length > 0 &&
               contents?.permissions?.map((r: any) => (
-                <Box key={r} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+                <Box key={r} sx={{ p: 1, bg: 'gray.300', mb: 1 }}>
                   <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
                 </Box>
               ))}
@@ -145,7 +145,7 @@ const OrgPermissionList = () => {
           {resources &&
             resources?.resources?.length > 0 &&
             resources?.resources?.map((r: any) =>
-              <Box sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+              <Box sx={{ p: 1, bg: 'gray.300', mb: 1 }}>
                 <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
               </Box>
             )}

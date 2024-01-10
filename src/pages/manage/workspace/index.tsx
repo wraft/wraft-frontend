@@ -290,7 +290,7 @@ const Index: FC = () => {
                         pt: 3,
                         pb: 4,
                         borderTop: '1px solid',
-                        borderColor: 'neutral.1',
+                        borderColor: 'border',
                       }}>
                       <Box sx={{ px: 4 }}>
                         <Text
@@ -304,7 +304,7 @@ const Index: FC = () => {
                           , please enter the deletion code sent to your email.
                         </Text>
                         <Box sx={{ mt: '24px' }}>
-                          <Label variant="text.pR" sx={{ color: 'gray.8' }}>
+                          <Label variant="text.pR" sx={{ color: 'gray.800' }}>
                             <span>Enter the deletion code to confirm</span>
                           </Label>
                           <Input ref={inputRef}></Input>

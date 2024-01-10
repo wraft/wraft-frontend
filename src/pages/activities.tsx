@@ -31,7 +31,7 @@ const Index: FC = () => {
           <Container variant="layout.pageFrame">
             <Flex sx={{ width: '100%' }}>
               <Box sx={{ pb: 4, width: '45%', pl: 4 }}>
-                <Box sx={{ py: 3, color: 'gray.5', fontSize: 1 }}>
+                <Box sx={{ py: 3, color: 'gray.500', fontSize: 1 }}>
                   <Text color="gray.7">Activities</Text>
                 </Box>
                 <ActivityFeed />

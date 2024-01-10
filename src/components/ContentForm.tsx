@@ -132,7 +132,7 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
         width: '20px',
         height: '20px',
         borderRadius: '9rem',
-        bg: 'green.1',
+        bg: 'gray.200',
         textAlign: 'center',
         mr: 2,
       }}>
@@ -778,9 +778,9 @@ const Form = (props: IContentForm) => {
             <Box
               sx={{
                 // position: 'relative',
-                bg: 'neutral.0',
+                bg: 'neutral.100',
                 borderBottom: 'solid 1px',
-                borderBottomColor: 'neutral.1',
+                borderBottomColor: 'neutral.200',
                 p: 4,
                 display: showTitleEdit ? 'block' : 'block',
                 flexGrow: 1,
@@ -790,7 +790,7 @@ const Form = (props: IContentForm) => {
               }}>
               <Flex
                 sx={{
-                  bg: 'neutral.0',
+                  bg: 'neutral.100',
                   // position: 'absolute',
                   top: 0,
                   right: 1,
@@ -865,14 +865,14 @@ const Form = (props: IContentForm) => {
                 <Box
                   sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
                   {body && body?.md && raw && (
-                    <Box sx={{ color: 'green.4' }}>
+                    <Box sx={{ color: 'text' }}>
                       <TickIcon />
                     </Box>
                   )}
 
                   {!raw ||
                     (!body?.md && (
-                      <Box sx={{ color: 'red.4' }}>
+                      <Box sx={{ color: 'red.500' }}>
                         <ErrorIcon />
                       </Box>
                     ))}
@@ -914,11 +914,11 @@ const Form = (props: IContentForm) => {
           <Box
             variant="plateRightBar"
             sx={{
-              bg: 'neutral.0',
+              bg: 'neutral.100',
               ml: 0,
               width: '30%',
               borderLeft: 'solid 1px',
-              borderColor: 'neutral.1',
+              borderColor: 'border',
               pt: 3,
             }}>
             <Box sx={{ px: 3 }}>
@@ -942,9 +942,9 @@ const Form = (props: IContentForm) => {
                       as="h6"
                       sx={{
                         fontWeight: 500,
-                        bg: 'green.1',
+                        bg: 'gray.200',
                         ml: 2,
-                        color: 'green.9',
+                        color: 'green.1000',
                         px: 1,
                         py: 1,
                         borderRadius: '3px',
@@ -958,7 +958,7 @@ const Form = (props: IContentForm) => {
                 </Box>
                 <Flex sx={{ ml: 'auto' }}>
                   {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button> */}
-                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'green.0', color: 'green.8', borderColor: 'green.4', border: 'solid 1px' }} type="submit">Send</Button> */}
+                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'gray.100', color: 'gray.900', borderColor: 'border', border: 'solid 1px' }} type="submit">Send</Button> */}
                   {/* <Button ref={refSubmitButtom} sx={{ ml: 'auto', fontWeight: 600 }} type="submit">Publish</Button> */}
                 </Flex>
               </Flex>
@@ -1014,7 +1014,7 @@ const Form = (props: IContentForm) => {
             <Modal isOpen={showTemplate} onClose={closeModal}>
               <Box sx={{ px: 3, py: 3 }}>
                 <Box sx={{ pb: 2 }}>
-                  <Text sx={{ fontSize: 2, color: 'gray.6', pb: 3, mb: 3 }}>
+                  <Text sx={{ fontSize: 2, color: 'gray.700', pb: 3, mb: 3 }}>
                     Templates
                   </Text>
                 </Box>
@@ -1024,10 +1024,10 @@ const Form = (props: IContentForm) => {
                       <Box
                         key={n.id}
                         sx={{
-                          bg: 'neutral.0',
+                          bg: 'neutral.100',
                           pl: 3,
                           border: 'solid 0.5px',
-                          borderColor: 'neutral.1',
+                          borderColor: 'border',
                           mb: 1,
                           pt: 2,
                           pb: 3,
@@ -1035,7 +1035,7 @@ const Form = (props: IContentForm) => {
                           cursor: 'pointer',
                           width: '100%',
                           ':hover': {
-                            bg: 'neutral.1',
+                            bg: 'neutral.200',
                           },
                         }}
                         onClick={() => changeText(n)}>
@@ -1077,7 +1077,7 @@ const Form = (props: IContentForm) => {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
-                    sx={{ bg: 'teal.0', pb: 2, borderTop: 0 }}>
+                    sx={{ bg: 'teal.100', pb: 2, borderTop: 0 }}>
                     <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
@@ -1086,7 +1086,7 @@ const Form = (props: IContentForm) => {
                     </Text>
                   </Box>
 
-                  <Box sx={{ pt: 2, px: 3, bg: 'teal.0' }}>
+                  <Box sx={{ pt: 2, px: 3, bg: 'teal.100' }}>
                     <Box>
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
@@ -1102,7 +1102,7 @@ const Form = (props: IContentForm) => {
                     </Box>
                   </Box>
 
-                  {/* <Box sx={{ bg: 'neutral.0', p: 3 }}>
+                  {/* <Box sx={{ bg: 'neutral.100', p: 3 }}>
                     <Button
                       variant="btnPrimary"
                       form="hook-form"

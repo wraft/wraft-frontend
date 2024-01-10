@@ -92,10 +92,10 @@ export function HolderAtomPopupComponent<
                 )}
                 // sx={{
                 //   border: 'solid 0.5px',
-                //   borderColor: 'gray.3',
+                //   borderColor: 'border',
                 //   fontSize: 1,
                 //   fontWeight: 500,
-                //   color: 'green.8',
+                //   color: 'text',
                 //   px: 0,
                 //   py: 0,
                 // }}

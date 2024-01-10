@@ -93,7 +93,7 @@ const AssignRole = ({
   return (
     <Flex sx={{ flexDirection: 'column', gap: 2, py: 2 }}>
       {roleList.length < 1 && (
-        <Button disabled variant="base" sx={{ color: 'gray.2' }}>
+        <Button disabled variant="base" sx={{ color: 'gray.200' }}>
           No more roles to add.
         </Button>
       )}
@@ -105,7 +105,7 @@ const AssignRole = ({
             sx={{
               cursor: 'pointer',
               my: 2,
-              ':hover': { color: 'green.6' },
+              ':hover': { color: 'green.600' },
             }}>
             <Text variant="pL">{role.roleName}</Text>
           </Button>

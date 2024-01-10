@@ -312,7 +312,7 @@ const Form = () => {
               // onSubmit={handleSubmit(onSubmit)}
               sx={{
                 minWidth: '70%',
-                bg: 'neutral.0',
+                bg: 'neutral.100',
                 maxWidth: '83ch',
                 m: 0,
                 pt: 4,
@@ -376,10 +376,10 @@ const Form = () => {
               px={4}
               variant="plateRightBar"
               sx={{
-                bg: 'neutral.0',
+                bg: 'neutral.100',
                 width: '100%',
                 borderLeft: 'solid 1px',
-                borderColor: 'neutral.1',
+                borderColor: 'border',
               }}>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
@@ -416,19 +416,19 @@ const Form = () => {
                             fontSize: 2,
                             border: 'solid 1px',
                             borderBottom: 0,
-                            borderColor: 'teal.1',
-                            bg: 'teal.0',
+                            borderColor: 'teal.200',
+                            bg: 'teal.100',
                             px: 3,
                             ':last-child': {
                               borderBottom: 'solid 1px',
-                              borderColor: 'teal.1',
+                              borderColor: 'teal.200',
                             },
                           }}
                           as="p"
                           key={k.id}
                           onClick={() => insertToken(k)}>
                           {k.name}
-                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7' } }}>
+                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
                             <BracesVariable width={16} />
                           </Box>
                         </Flex>
@@ -449,8 +449,8 @@ const Form = () => {
                       sx={{
                         pl: 3,
                         border: 'solid 0.5px',
-                        borderColor: 'gray.0',
-                        bg: 'neutral.1',
+                        borderColor: 'border',
+                        bg: 'neutral.200',
                         mb: 1,
                         pt: 2,
                         pb: 3,

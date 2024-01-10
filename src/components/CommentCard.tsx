@@ -33,9 +33,9 @@ const CommentCard = (comment: Comment) => {
         <Box
           key={comment?.id}
           sx={{
-            // bg: 'blue.0',
+            // bg: 'blue.100',
             borderBottom: 'solid 1px',
-            borderColor: 'gray.3',
+            borderColor: 'border',
             pb: 3,
             mb: 2,
           }}>
@@ -53,7 +53,7 @@ const CommentCard = (comment: Comment) => {
               as="p"
               sx={{
                 mt: 0,
-                color: 'gray.7',
+                color: 'text',
                 fontSize: 1,
                 pt: 0,
                 lineHeight: 1.35,

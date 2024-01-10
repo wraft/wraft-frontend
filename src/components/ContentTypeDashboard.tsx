@@ -33,16 +33,16 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
       }>
       <Box
         sx={{
-          bg: 'neutral.0',
+          bg: 'neutral.100',
           minWidth: '220px',
           // maxHeight: '200px',
           border: 'solid 1px',
-          borderColor: 'neutral.1',
+          borderColor: 'border',
           borderRadius: 6,
           cursor: 'pointer',
           mr: 3,
           ':hover': {
-            bg: 'neutral.1',
+            bg: 'neutral.200',
           },
         }}>
         <Box sx={{ height: '79px', pt: '12px', pl: '12px' }}>
@@ -58,10 +58,10 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
         <Box px={3} py={2} sx={{ borderTop: '1px solid #E4E9EF' }}>
           <Text
             sx={{
-              fontFamily: 'inter',
+              fontFamily: 'body',
               fontSize: 2,
               pt: 1,
-              color: '#656E78',
+              color: 'text',
               fontWeight: 500,
             }}>
             {name}
@@ -71,7 +71,7 @@ export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
 
       {/* {isEdit ? 'yes' : 'no'} */}
       {/* <Box pl={3} pt={1} pb={2} bg="">
-          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.8' }}>{name}</Text>
+          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.900' }}>{name}</Text>
         </Box> */}
     </Link>
   );
@@ -152,14 +152,14 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
       {!loading && contents && contents.length === 0 && (
         <Box>
           <Flex>
-            <Box sx={{ color: 'gray.5', width: 'auto' }}>
+            <Box sx={{ color: 'gray.500', width: 'auto' }}>
               <EmptyForm />
             </Box>
             <Box sx={{ m: 2, pb: 0 }}>
               <Text as="h2" sx={{ fontWeight: 300 }}>
                 Templates are empty
               </Text>
-              <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+              <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
                 You havent created a templates yet
               </Text>
             </Box>
