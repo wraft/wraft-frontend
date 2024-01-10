@@ -309,10 +309,7 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
                                       sx={{
                                         width: '12px',
                                         height: '12px',
-                                        accentColor:
-                                          theme?.colors &&
-                                          ((theme?.colors?.gray ??
-                                            [])[9] as string),
+                                        accentColor: 'gray.900',
                                       }}
                                       {...register('permissions')}
                                       // value={sub.name}

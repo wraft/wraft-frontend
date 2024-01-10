@@ -128,6 +128,7 @@ const layout: Theme['layout'] = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    position: 'sticky',
   },
   button: {
     border: 'solid 1px',
@@ -143,14 +144,15 @@ const layout: Theme['layout'] = {
   },
   pageFrame: {
     p: 4,
-    height: 'calc(100vh - 140px)',
+    // height: 'calc(100vh - 140px)',
+    height: '100vh',
     overflow: 'scroll',
   },
   newPageFrame: {
     p: 0,
     height: '100%',
-    maxHeight: 'calc(100vh - 140px)',
-    overflow: 'auto',
+    maxHeight: '100vh',
+    overflow: 'scroll',
     bg: 'background',
   },
   contentFrame: {
@@ -162,7 +164,6 @@ const layout: Theme['layout'] = {
     m: 4,
   },
   menuWrapper: {
-    // bg: 'red.300',
     px: 2,
     py: 0,
     color: 'text',
@@ -170,6 +171,7 @@ const layout: Theme['layout'] = {
       color: 'gray.1000',
     },
     cursor: 'pointer',
+    mb: 1,
   },
   menuLink: {
     cursor: 'pointer',
@@ -177,7 +179,7 @@ const layout: Theme['layout'] = {
     p: 1,
     px: 2,
     borderRadius: 3,
-    fontWeight: 600,
+    fontWeight: 500,
     width: '100%',
     color: '#343E49',
     a: {
