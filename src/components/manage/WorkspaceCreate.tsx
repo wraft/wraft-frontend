@@ -10,14 +10,14 @@ import Field from '../Field';
 
 interface props {
   setOpen: any;
-  setRerender?: any;
+  setCreatedId?: any;
 }
 interface FormInputs {
   name: string;
   url: string;
 }
 
-const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
+const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
   const { userProfile } = useAuth();
   const {
     register,
@@ -33,14 +33,21 @@ const WorkspaceCreate = ({ setOpen, setRerender }: props) => {
       url: data.url,
       email: userProfile.email,
     };
-    postAPI('organisations', body).then(() => {
-      setOpen(false);
-      toast.success('Created new workspace', {
-        duration: 1000,
-        position: 'top-right',
+    postAPI('organisations', body)
+      .then((data: any) => {
+        setOpen(false);
+        toast.success('Created new workspace', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setCreatedId(data.id);
+      })
+      .catch(() => {
+        toast.error('Workspace creation failed!', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-      setRerender((prev: any) => !prev);
-    });
   };
 
   return (

@@ -187,23 +187,20 @@ const SignUpPage = () => {
               Continue with Google
             </Button>
 
-            <Text as="p" sx={{ mt: 4, color: 'gray.600', mb: '4px' }}>
-              Already a member?
-              <Link
-                href="/login"
-                sx={{
-                  textDecoration: 'none',
-                  color: 'gray.600',
-                  fontWeight: 'bold',
-                  pl: 0,
-                }}>
-                Sign in
+            <Flex sx={{ gap: '8px', mt: 4, mb: '4px', alignItems: 'center' }}>
+              <Text as="p" variant="pR">
+                Already a member?
+              </Text>
+              <Link href="/login" variant="none">
+                <Text variant="pB">Sign in</Text>
               </Link>
-            </Text>
-            <Text as="p">
+            </Flex>
+            <Text as="p" variant="pR">
               By Joining the waiting list, I agree to Wraf&apos;s{' '}
-              <Link href="" sx={{ color: 'text' }}>
-                Privacy Policy.
+              <Link href="" variant="none" sx={{ color: 'text' }}>
+                <Text variant="pB" sx={{ cursor: 'pointer' }}>
+                  Privacy Policy.
+                </Text>
               </Link>
             </Text>
           </Flex>
