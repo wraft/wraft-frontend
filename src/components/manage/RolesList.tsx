@@ -7,10 +7,11 @@ import { Box, Text, Flex, Button } from 'theme-ui';
 import { deleteEntity, fetchAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
 import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
-import ModalCustom from '../ModalCustom';
 import { Table } from '../Table';
 
 import { RolesEdit } from '.';
+import { Drawer } from '@wraft-ui/Drawer';
+import Modal from '../Modal';
 
 export interface RolesItem {
   id: string;
@@ -213,21 +214,19 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                           <Box />
                         )}
                       </Box>
-                      <ModalCustom
-                        varient="right"
-                        isOpen={isEdit === row.index}
-                        setOpen={setIsEdit}>
+                      <Drawer
+                        open={isEdit === row.index}
+                        setOpen={()=>setIsEdit(null)}>
                         <RolesEdit
                           setRender={setRender}
                           setOpen={setIsEdit}
                           roleId={contents[row.index]?.id}
                         />
-                      </ModalCustom>
+                      </Drawer>
 
-                      <ModalCustom
-                        varient="center"
+                      <Modal
                         isOpen={isDelete === row.index}
-                        setOpen={setIsDelete}>
+                        onClose={()=>setIsDelete(null)}>
                         {contents[row.index] &&
                         contents[row.index].user_count > 0 ? (
                           <Flex
@@ -269,7 +268,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                             }}
                           />
                         )}
-                      </ModalCustom>
+                      </Modal>
                     </>
                   );
                 },

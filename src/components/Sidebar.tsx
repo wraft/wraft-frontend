@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
-import { Drawer } from './Drawer';
+import { Drawer } from '@wraft-ui/Drawer';
 import {
   Note,
   Like,
@@ -26,7 +26,6 @@ import Blok from './Blok';
 import { Search } from './Icons';
 import WorkspaceCreate from './manage/WorkspaceCreate';
 import Modal from './Modal';
-import ModalCustom from './ModalCustom';
 import ModeToggle from './ModeToggle';
 
 import Btn from '@wraft-ui/Button';
@@ -272,15 +271,15 @@ const Nav = (props: any) => {
                     onClick={() => setIsOpen(true)}>
                     Create a workspace
                   </Button>
-                  <ModalCustom
+                  <Modal
                     isOpen={isOpen}
-                    setOpen={setIsOpen}
-                    varient="center">
+                    onClose={()=>setIsOpen(false)}
+                    >
                     <WorkspaceCreate
                       setOpen={setIsOpen}
                       setCreatedId={setCreatedId}
                     />
-                  </ModalCustom>
+                  </Modal>
                 </MenuItem>
               </Menu>
             </MenuProvider>

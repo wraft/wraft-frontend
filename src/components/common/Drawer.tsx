@@ -1,4 +1,4 @@
-import { Dialog, DialogHeading, useDialogStore, MenuButton, DialogDismiss } from "@ariakit/react";
+import { Dialog, DialogHeading, useDialogStore, DialogDismiss } from "@ariakit/react";
 import { Box } from "theme-ui";
 import { motion } from "framer-motion";
 
