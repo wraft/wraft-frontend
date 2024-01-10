@@ -1,11 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Spinner } from 'theme-ui';
-import MenuItem from './NavLink';
-import { fetchAPI } from '../utils/models';
-import Paginate, { IPageMeta } from './Paginate';
 
+import toast from 'react-hot-toast';
+import { Box, Text, Spinner, Button } from 'theme-ui';
+
+import { deleteAPI, fetchAPI } from '../utils/models';
+
+import { TimeAgo } from './Atoms';
+import { OptionsIcon } from './Icons';
+import MenuItem from './NavLink';
+import Paginate, { IPageMeta } from './Paginate';
 import { Table } from './Table';
-// import PageHeader from './PageHeader';
 
 export interface ILayout {
   width: number;
@@ -34,6 +38,9 @@ export interface ICreator {
 }
 
 export interface IField {
+  user_count: number;
+  id: string;
+  name: string;
   flow: IFlow;
   creator: ICreator;
 }
@@ -51,25 +58,28 @@ const ItemField: FC<any> = ({ flow }) => {
         path={`/manage/flows/edit/${flow.id}`}>
         <Box>
           <Text as="h4">{flow.name}</Text>
-          <Text sx={{ fontSize: 0 }} color="gray.6">
-            {flow.id}
-          </Text>
         </Box>
       </MenuItem>
     </Box>
   );
 };
 
-const Form: FC = () => {
+interface Props {
+  rerender: boolean;
+  setRerender: any;
+}
+
+const Form: FC<Props> = ({ rerender, setRerender }) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(1);
   const [flows, setFlows] = useState<Array<any>>([]);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
 
   const loadData = (page: number) => {
-    const pageNo = page > 0 ? `?page=${page}` : '';
+    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`flows${pageNo}`)
       .then((data: any) => {
         setLoading(true);
@@ -89,16 +99,15 @@ const Form: FC = () => {
 
   useEffect(() => {
     loadData(page);
-  }, []);
+  }, [page, rerender]);
 
   useEffect(() => {
     if (contents && contents.length > 0) {
       const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col1: <Text>~</Text>,
-          col2: <ItemField {...r} />,
-          col3: <Box>{r.flow.updated_at}</Box>,
+          col1: <ItemField {...r} />,
+          col2: <TimeAgo time={r.flow.updated_at} />,
         };
 
         row.push(rFormated);
@@ -106,63 +115,108 @@ const Form: FC = () => {
 
       setFlows(row);
     }
-  }, [contents]);
+  }, [contents, rerender]);
 
   return (
-    <Box py={3} mt={4} variant="layout.pageFrame">
-      <Box mx={0} mb={3}>
+    <Box py={3} mt={4} sx={{ width: '100%' }}>
+      <Box mx={0} mb={3} sx={{ width: '100%' }}>
         {!loading && (
           <Box>
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
-        {/* <Box>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => <ItemField key={m.flow.id} {...m} />)}
-        </Box> */}
 
-        <Box variant="layout.contentFrame">
-          <Box mx={0} mb={3}>
+        <Box pr={4} sx={{ width: '100%' }}>
+          <Box mx={0} mb={3} sx={{ width: '100%' }}>
             {flows && (
               <Table
                 options={{
                   columns: [
                     {
-                      Header: 'Id',
-                      accessor: 'col1', // accessor is the "key" in the data
-                      width: '15%',
+                      Header: 'Name',
+                      accessor: 'col1',
+                      width: '50%',
                     },
                     {
-                      Header: 'Name',
+                      Header: 'Updated',
                       accessor: 'col2',
                       width: '45%',
                     },
                     {
-                      Header: 'Updated',
+                      Header: '',
                       accessor: 'col3',
-                      width: '40%',
+                      Cell: ({ row }) => {
+                        return (
+                          <>
+                            <Box
+                              sx={{ cursor: 'pointer', position: 'relative' }}
+                              onClick={() => {
+                                setIsOpen(row.index);
+                              }}
+                              onMouseLeave={() => setIsOpen(null)}>
+                              <OptionsIcon />
+                              {isOpen === row.index ? (
+                                <Box
+                                  sx={{
+                                    position: 'absolute',
+                                    bg: 'backgroundWhite',
+                                    right: 0,
+                                    top: 0,
+                                    zIndex: 10,
+                                    border: '1px solid',
+                                    borderColor: 'border',
+                                    width: '155px',
+                                  }}>
+                                  <Button
+                                    variant="text.pM"
+                                    onClick={async () => {
+                                      setIsOpen(null);
+                                      await deleteAPI(
+                                        `flows/${contents[row.index].flow.id}`,
+                                      );
+                                      setTimeout(() => {
+                                        setRerender((prev: boolean) => !prev);
+                                        toast.success('Deleted a flow', {
+                                          duration: 1000,
+                                          position: 'top-right',
+                                        });
+                                      }, 1000);
+                                    }}
+                                    sx={{
+                                      cursor: 'pointer',
+                                      textAlign: 'left',
+                                      width: '100%',
+                                      bg: 'backgroundWhite',
+                                      color: 'red.600',
+                                      p: 3,
+                                      ':disabled': {
+                                        color: 'gray.300',
+                                      },
+                                    }}>
+                                    Delete
+                                  </Button>
+                                </Box>
+                              ) : (
+                                <Box />
+                              )}
+                            </Box>
+                          </>
+                        );
+                      },
+                      width: '3%',
                     },
                   ],
                   data: flows,
                 }}
               />
             )}
-            {/* <Styles>
-            {contents && contents.length > 0 && (
-              <Table columns={columns} data={contents} />
-            )}
-          </Styles> */}
-
-            {/* <Box>
-            {contents &&
-              contents.length > 0 &&
-              contents.map((m: any) => <ItemField key={m.id} {...m} />)}
-          </Box> */}
           </Box>
+          <Paginate
+            changePage={changePage}
+            {...pageMeta}
+            info={`${page} of ${total} pages`}
+          />
         </Box>
-        <Paginate changePage={changePage} {...pageMeta} />
-        {total}
       </Box>
     </Box>
   );

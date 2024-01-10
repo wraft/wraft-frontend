@@ -1,21 +1,30 @@
 import React from 'react';
+
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
 
-// import { Input } from "@chakra-ui/core";
-
 interface Props {
+  onChange?: any;
+  bg?: string;
+  type?: 'text' | 'email' | 'number' | 'password' | 'search' | 'date';
+  error?: any;
   register: any;
-  label: string;
+  label?: string;
   name: string;
   defaultValue?: string;
   mr?: number;
   placeholder?: string;
   sub?: string;
   variant?: string;
+  disable?: boolean;
 }
 
 const Field: React.FC<Props> = ({
+  onChange,
+  bg,
+  type,
+  error,
+  disable,
   name,
   label,
   placeholder,
@@ -34,12 +43,24 @@ const Field: React.FC<Props> = ({
         {label}
       </Label>
       <Input
+        onChange={onChange}
+        sx={{ bg: bg ? bg : 'transparent', mb: error ? '24px' : '' }}
+        type={type ? type : 'text'}
+        disabled={disable}
         placeholder={placeholder ? placeholder : ''}
         id={name}
-        name={name}
         defaultValue={defaultValue || ''}
-        ref={register({ required: true })}
+        {...register(name, {
+          required: `${label ? label : name} is required`,
+        })}
       />
+      {error && (
+        <Text
+          sx={{ position: 'absolute', bottom: '-22px', left: '4px' }}
+          variant="error">
+          {error.message}
+        </Text>
+      )}
     </Box>
   );
 };

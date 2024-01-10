@@ -1,33 +1,61 @@
 import React, { useCallback, useState } from 'react';
+
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
 import { getCroppedImg } from '../utils/imgCrop';
+import { updateEntityFile } from '../utils/models';
 
 interface IImageCopperProps {
   image?: any;
   onUpdate: any;
+  hideModal?: boolean;
+  onSavable?: any;
 }
 
 // const EmptyArea:Area = {}
 
-const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
+const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   const [crop, setCrop] = useState<any>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState<any>(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area>();
   const [croppedImg, setCroppedImg] = useState<File>();
 
-  const onCropComplete = useCallback((croppedArea: any, croppedAreaPixels: React.SetStateAction<Area | undefined>): any => {
-    setCroppedAreaPixels(croppedAreaPixels);
-    console.log('croppedArea', croppedArea);
-  }, []);
+  const { accessToken } = useAuth();
+
+  /**
+   * Submit profile image individually
+   * @param _file Image File
+   */
+  const submitImage = (_file: any) => {
+    const formData = new FormData();
+    formData.append('profile_pic', _file);
+    updateEntityFile(`profiles`, formData, accessToken as string, onUpdate);
+  };
+
+  const onCropComplete = useCallback(
+    (
+      croppedArea: any,
+      croppedAreaPixels: React.SetStateAction<Area | undefined>,
+    ): any => {
+      setCroppedAreaPixels(croppedAreaPixels);
+      console.log('croppedArea', croppedArea);
+    },
+    [],
+  );
 
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImage = await getCroppedImg(image, croppedAreaPixels, 0);
       console.log('donee', { croppedImage });
+      onSavable(croppedImage);
       setCroppedImg(croppedImage);
       onUpdate(croppedImage);
+
+      // extra
+      submitImage(croppedImage);
     } catch (e) {
       console.error(e);
     }
@@ -48,7 +76,8 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
         p: 0,
         width: '100%',
       }}>
-      {croppedImg && <Image src={String(croppedImg)} />}
+      {croppedImg && <Image alt="" src={String(croppedImg)} />}
+      <Box sx={{ px: 3, py: 2 }}>Edit Profile Image</Box>
       <Box
         sx={{
           position: 'relative',
@@ -58,13 +87,13 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
           // bg: "black",
           // p: 4,
         }}>
-        <Box bg="gray.4">
+        <Box>
           {image && (
             <Box
               sx={{
                 // bg: "gray.2",
-                width: '180px',
-                height: '180px',
+                width: '280px',
+                height: '280px',
                 minHeight: '100%',
                 top: '0%',
                 position: 'relative',
@@ -85,13 +114,13 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
         <Flex
           sx={{
             position: 'relative',
-            color: 'gray.3',
+            color: 'text',
             p: 3,
-            bg: 'gray.1',
+            bg: 'gray.200',
             width: '100%',
             borderTop: 'solid 1px',
             borderBottom: 'solid 1px',
-            borderColor: 'gray.4',
+            borderColor: 'border',
           }}>
           <Slider
             value={zoom}
@@ -104,21 +133,25 @@ const ImageEdit = ({ image, onUpdate }: IImageCopperProps) => {
           />
         </Flex>
       </Box>
-      <Flex sx={{ bg: 'gray.1', p: 3 }}>
+      <Flex sx={{ bg: 'neutral.100', p: 3 }}>
         <Box sx={{ ml: 'auto' }}>
-          <Button
+          {/* <Button
             type="button"
             sx={{
               border: 'solid 1px',
-              borderColor: 'gray.4',
+              borderColor: 'border',
               bg: 'background',
-              color: 'gray.7',
+              color: 'gray.800',
               mr: 1,
             }}>
             Clear
-          </Button>
-          <Button type="button" onClick={showCroppedImage}>
-            Save
+          </Button> */}
+          <Button
+            variant="btnSecondary"
+            sx={{ width: '100%', fontSize: 1 }}
+            type="button"
+            onClick={showCroppedImage}>
+            Done
           </Button>
         </Box>
       </Flex>

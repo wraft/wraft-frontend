@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
+
+import { useForm, Controller } from 'react-hook-form';
 import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-import { useForm } from 'react-hook-form';
+
+import { postAPI, fetchAPI } from '../utils/models';
 
 import Field from './Field';
-// import styled from 'styled-components';
-import { createEntity, loadEntity } from '../utils/models';
-// import { useDialogState } from 'reakit/Dialog';
-// import { defaultModalStyle } from '../utils';
-
-// import Modal from 'react-modal';
-
 interface ApprovalFormBaseProps {
   states?: Array<any>;
   isOpen?: boolean;
@@ -40,23 +35,19 @@ const ApprovalFormBase = ({
   dialog,
   parent,
 }: ApprovalFormBaseProps) => {
-  const { register, handleSubmit, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const { register, control, handleSubmit, setValue } = useForm();
   const [users, setUsers] = useState<any>();
   const [user, setUser] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
+
+  // const { accessToken } = useAuth();
 
   /**
    * Submit Form
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
-    createEntity(data, 'approval_systems', token);
-  };
-
-  const loadSearchSuccess = (d: any) => {
-    const usr = d.users;
-    setUsers(usr);
+    postAPI('approval_systems', data);
   };
 
   const onUserSelect = (e: User) => {
@@ -70,14 +61,14 @@ const ApprovalFormBase = ({
    * Search User
    * @param data
    */
+
   const onChangeInput = (e: any) => {
     console.log('search', e.currentTarget.value);
     setShowSearch(true);
-    loadEntity(
-      token,
-      `users/search?key=${e.currentTarget.value}`,
-      loadSearchSuccess,
-    );
+    fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
+      const usr = data.users;
+      setUsers(usr);
+    });
   };
 
   return (
@@ -90,9 +81,10 @@ const ApprovalFormBase = ({
       {showSearch && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
-        name="flow_id"
+        // name="flow_id"
         defaultValue={parent}
-        ref={register({ required: true })}
+        // ref={register({ required: true })}
+        {...register('flow_id', { required: true })}
       />
       <Field
         name="name"
@@ -103,7 +95,23 @@ const ApprovalFormBase = ({
       <Flex mt={0}>
         <Box sx={{ width: '50%', p: 2, my: 4 }}>
           <Label>Before</Label>
-          <Select
+          <Controller
+            control={control}
+            name="pre_state_id"
+            defaultValue=""
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Select {...field}>
+                {states &&
+                  states.map((s: any) => (
+                    <option key={s.state.id} value={s.state.id}>
+                      {s.state.state}
+                    </option>
+                  ))}
+              </Select>
+            )}
+          />
+          {/* <Select
             id="pre_state_id"
             name="pre_state_id"
             defaultValue=""
@@ -114,12 +122,28 @@ const ApprovalFormBase = ({
                   {s.state.state}
                 </option>
               ))}
-          </Select>
+          </Select> */}
         </Box>
 
         <Box sx={{ width: '50%', p: 2, my: 4 }}>
           <Label>After</Label>
-          <Select
+          <Controller
+            control={control}
+            name="post_state_id"
+            defaultValue=""
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Select {...field}>
+                {states &&
+                  states.map((s: any) => (
+                    <option key={s.state.id} value={s.state.id}>
+                      {s.state.state}
+                    </option>
+                  ))}
+              </Select>
+            )}
+          />
+          {/* <Select
             id="post_state_id"
             name="post_state_id"
             defaultValue=""
@@ -130,26 +154,28 @@ const ApprovalFormBase = ({
                   {s.state.state}
                 </option>
               ))}
-          </Select>
+          </Select> */}
         </Box>
       </Flex>
       <Box sx={{ p: 2 }}>
         <Label>Search</Label>
         <Input
-          name="approver_id"
+          // name="approver_id"
+          defaultValue={''}
+          // ref={register({ required: true })}
+          {...register('approver_id', { required: true })}
           onChange={onChangeInput}
-          ref={register({ required: true })}
         />
         {users &&
           users.map((x: any) => (
             <Box
               key={x?.name}
               sx={{
-                bg: 'gray.0',
+                bg: 'gray.100',
                 p: 2,
                 px: 3,
                 border: 'solid 1px',
-                borderColor: 'gray.3',
+                borderColor: 'border',
               }}
               onClick={() => onUserSelect(x)}>
               <Text as="h4" color="gray.9">

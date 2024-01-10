@@ -1,4 +1,3 @@
-import { createPopper, Instance, Placement, State } from '@popperjs/core';
 import {
   CSSProperties,
   Dispatch,
@@ -10,11 +9,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { isUA } from 'reakit-utils/dom';
-import { shallowEqual } from 'reakit-utils/shallowEqual';
-import useLayoutEffect from 'use-isomorphic-layout-effect';
 
-const isSafari = isUA('Mac') && !isUA('Chrome') && isUA('Safari');
+import { shallowEqual } from '@ariakit/core/utils/misc';
+import { isSafari } from '@ariakit/core/utils/platform';
+import { createPopper, Instance, Placement, State } from '@popperjs/core';
+import useLayoutEffect from 'use-isomorphic-layout-effect';
 
 export interface PopperState {
   /**
@@ -163,7 +162,7 @@ export function usePopper(props: UsePopperProps = {}): PopperStateReturn {
         // Safari needs styles to be applied in the first render, otherwise
         // hovering over the popover when it gets visible for the first time
         // will change its dimensions unexpectedly.
-        onFirstUpdate: isSafari ? updateState : undefined,
+        onFirstUpdate: isSafari() ? updateState : undefined,
         modifiers: [
           {
             // https://popper.js.org/docs/v2/modifiers/event-listeners/

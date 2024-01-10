@@ -1,33 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Box,
-  Container,
-  Button,
-  Text,
-  Input,
-  Label,
-  Flex,
-  // Select,
-} from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
+
+import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { ReactSortable } from 'react-sortablejs';
+import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
-import { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
-
-import {
-  createEntity,
-  deleteEntity,
-  loadEntity,
-  updateEntity,
-} from '../utils/models';
+import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
 
 import ApprovalFormBase from './ApprovalCreate';
 import Field from './Field';
 import Modal from './Modal';
-import PageHeader from './PageHeader';
-
-import { ReactSortable } from 'react-sortablejs';
 
 export interface States {
   total_pages: number;
@@ -84,9 +67,10 @@ export interface StateFormProps {
 
 interface StateStateFormProps {
   onSave: any;
+  setAddState: any;
 }
 
-const StateStateForm = ({ onSave }: StateStateFormProps) => {
+const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
   const [newState, setNewState] = useState<string | any>(null);
 
   const onChangeInput = (e: any) => {
@@ -107,7 +91,10 @@ const StateStateForm = ({ onSave }: StateStateFormProps) => {
         type="button"
         variant="btnPrimary"
         sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
-        onClick={() => onSave(newState)}>
+        onClick={() => {
+          onSave(newState);
+          setAddState(false);
+        }}>
         Add State
       </Button>
     </Box>
@@ -202,7 +189,7 @@ const StatesForm = ({
         <Text
           as="p"
           variant="sectiontitle"
-          sx={{ color: 'gray.6', mb: 2, mt: 0 }}>
+          sx={{ color: 'text', mb: 2, mt: 0 }}>
           Manage your flows
         </Text>
       </Box>
@@ -211,7 +198,7 @@ const StatesForm = ({
           mb={0}
           sx={{
             borderBottom: 'solid 1px',
-            borderColor: 'gray.2',
+            borderColor: 'border',
           }}>
           <ReactSortable list={state} setList={setOrder}>
             {state.map((c: ItemType, index) => (
@@ -219,20 +206,21 @@ const StatesForm = ({
                 key={index}
                 sx={{
                   p: 3,
-                  bg: 'gray.0',
+                  bg: 'gray.100',
                   border: 'solid 1px',
                   borderBottom: 0,
-                  borderColor: 'gray.4',
+                  borderColor: 'border',
                   h6: { opacity: 1 },
                   ':hover': { h6: { opacity: 1 } },
                 }}>
-                <Text mr={2} sx={{ color: 'gray.6', fontWeight: 300 }}>
+                <Text mr={2} sx={{ color: 'text', fontWeight: 300 }}>
                   {index + 1}
                 </Text>
                 <Text
-                  sx={{ fontWeight: 'heading', color: 'gray.9' }}
-                  key={c.id}>
-                  {c.name} | {c.id}
+                  sx={{ fontWeight: 'heading', color: 'text' }}
+                  key={c.id}
+                  data-rel={c.id}>
+                  {c.name}
                 </Text>
                 <Flex sx={{ ml: 'auto' }}>
                   <Button
@@ -269,17 +257,24 @@ const StatesForm = ({
   );
 };
 
-const FlowForm = () => {
-  const { register, handleSubmit, setValue, errors } = useForm();
+interface Props {
+  setOpen?: any;
+  setRerender?: any;
+}
+
+const FlowForm = ({ setOpen, setRerender }: Props) => {
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);
   const [content, setContent] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
-
-  const token = useStoreState((state) => state.auth.token);
-
-  const { addToast } = useToasts();
+  const errorRef = React.useRef<HTMLDivElement | null>(null);
 
   // determine edit state based on URL
   const router = useRouter();
@@ -291,18 +286,15 @@ const FlowForm = () => {
   };
 
   /**
-   * Map states to types, and states
-   * @param data
+   * Load all states for a particular Flow
+   * @param id flow id
+   * @param t  token
    */
-  const loadStatesSuccess = (data: any) => {
-    const res: States = data;
-    setContent(res.states);
-  };
-
-  const loadFlowSuccess = (data: any) => {
-    const res: Flow = data.flow;
-    setFlow(res);
-    setValue('name', res?.name);
+  const loadStates = (id: string) => {
+    fetchAPI(`flows/${id}/states`).then((data: any) => {
+      const res: States = data;
+      setContent(res.states);
+    });
   };
 
   /**
@@ -310,19 +302,12 @@ const FlowForm = () => {
    * @param id flow id
    * @param t  token
    */
-  const loadStates = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntity(tok, `flows/${id}/states`, loadStatesSuccess);
-  };
-
-  /**
-   * Load all states for a particular Flow
-   * @param id flow id
-   * @param t  token
-   */
-  const loadFlow = (fId: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntity(tok, `flows/${fId}`, loadFlowSuccess);
+  const loadFlow = (fId: string) => {
+    fetchAPI(`flows/${fId}`).then((data: any) => {
+      const res: Flow = data.flow;
+      setFlow(res);
+      setValue('name', res?.name);
+    });
   };
 
   /**
@@ -330,7 +315,11 @@ const FlowForm = () => {
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    createEntity(data, `flows/${cId}/states`, token, onCreateState);
+    postAPI(`flows/${cId}/states`, data).then(() => {
+      if (cId) {
+        loadStates(cId);
+      }
+    });
   };
 
   /**
@@ -338,34 +327,59 @@ const FlowForm = () => {
    * @param data Form Data
    */
   const deleteState = (fId: any) => {
-    deleteEntity(`states/${fId}`, token);
-
-    addToast('Deleted a flow', { appearance: 'error' });
-
-    loadStates(cId, token);
+    deleteAPI(`states/${fId}`).then(() => {
+      toast.success('Deleted a flow', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      loadStates(cId);
+    });
   };
 
-  const onCreateState = () => {
-    if (cId && token) {
-      loadStates(cId, token);
+  const onSubmit = async (data: any) => {
+    if (edit) {
+      putAPI(`flows/${cId}`, data).then(() => {
+        toast.success('flow updated', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        Router.push('/manage/flows');
+      });
+    } else {
+      await postAPI('flows', data)
+        .then(() => {
+          toast.success('Flow created', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          setOpen(false);
+          setRerender((prev: boolean) => !prev);
+        })
+        .then((error: any) => {
+          toast.error(
+            error?.response?.data?.errors?.name[0] || 'Flow created',
+            {
+              duration: 1000,
+              position: 'top-right',
+            },
+          );
+          if (errorRef.current) {
+            const errorElement = errorRef.current;
+            if (errorElement) {
+              errorElement.innerText = error.response.data.errors.name[0];
+            }
+          }
+        });
     }
-  };
-
-  /**
-   * Submit Form
-   * @param data Form Data
-   */
-  const onSubmit = (data: any) => {
-    createEntity(data, 'flows', token);
   };
 
   useEffect(() => {
     if (cId && cId.length > 0) {
       setEdit(true);
-      loadStates(cId, token);
-      loadFlow(cId, token);
+      loadStates(cId);
+      loadFlow(cId);
     }
-  }, [cId, token]);
+  }, [cId]);
 
   /**
    *
@@ -380,10 +394,6 @@ const FlowForm = () => {
     CreateState(newState);
   };
 
-  const onSortSuccess = () => {
-    addToast('Sorted flow state', { appearance: 'success' });
-  };
-
   /**
    * Update Flow Order
    * @param data Form Data
@@ -393,56 +403,31 @@ const FlowForm = () => {
       states: data,
     };
 
-    token &&
-      updateEntity(
-        `/flows/${cId}/align-states`,
-        formative,
-        token,
-        onSortSuccess,
-      );
+    putAPI(`/flows/${cId}/align-states`, formative).then(() => {
+      toast.success('Sorted flow state', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
   };
 
   return (
-    <Box>
-      <PageHeader
-        title={cId ? 'Edit Flows' : 'Create Flows'}
-        desc="Mange document flows"
-        breads={true}
-      />
-
+    <Box sx={{ px: 4, py: 3 }}>
       <Box
         sx={{
           mt: 4,
-          borderRadius: 5,
-          maxWidth: '80ch',
-          mx: 'auto',
-          border: 'solid 1px',
-          borderColor: 'gray.4',
         }}>
-        <Container
-          variant="layout.pageFrame"
-          sx={{ p: 0 }}
-          data-flow={flow?.id}>
-          <Box
-            as="form"
-            sx={{ flexWrap: 'wrap', alignContent: 'flex-start' }}
-            onSubmit={handleSubmit(onSubmit)}>
-            <Flex
-              variant="layout.pageFrame"
-              sx={{
-                flexWrap: 'wrap',
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.4',
-                flexGrow: 1,
-              }}>
-              {/* <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}> */}
-              <Box sx={{ flexGrow: 1 }}>
+        <Container sx={{ p: 0 }} data-flow={flow?.id}>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex>
+              <Box>
                 <Field
                   name="name"
                   label="Name"
                   defaultValue=""
                   register={register}
                 />
+                <Text variant="error" ref={errorRef} />
               </Box>
               <Box sx={{ pt: '12px', ml: 3 }}>
                 <Button variant="btnPrimaryBig" type="submit" mt={3}>
@@ -450,7 +435,7 @@ const FlowForm = () => {
                 </Button>
               </Box>
             </Flex>
-            <Box variant="layout.pageFrame" sx={{ pt: 3 }}>
+            <Box sx={{ pt: 3 }}>
               <Box mt={0}>
                 <Modal isOpen={approval} onClose={() => setAddState(false)}>
                   <ApprovalFormBase
@@ -465,25 +450,13 @@ const FlowForm = () => {
                   <StatesForm
                     onAttachApproval={onAttachApproval}
                     content={content}
-                    // dialog={dialog2}
                     onSave={CreateState}
                     onDelete={deleteState}
                     onSorted={onSortDone}
                   />
                 )}
 
-                <Flex
-                  sx={{
-                    px: 3,
-                    py: 3,
-                    bg: 'gray.2',
-                    borderTop: 'solid 1px',
-                    borderLeft: 'solid 1px',
-                    borderBottom: 'solid 1px',
-                    borderColor: 'gray.4',
-                    h6: { opacity: 1 },
-                    ':hover': { h6: { opacity: 1 } },
-                  }}>
+                <Flex>
                   <Button
                     variant="btnPrimary"
                     sx={{ fontSize: 1, p: 2, px: 3 }}
@@ -497,7 +470,10 @@ const FlowForm = () => {
                   onClose={() => setAddState(false)}
                   label="ModalX"
                   aria-label="Add New State">
-                  <StateStateForm onSave={updateState} />
+                  <StateStateForm
+                    onSave={updateState}
+                    setAddState={setAddState}
+                  />
                 </Modal>
               </Box>
             </Box>

@@ -1,34 +1,44 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
+
 import Head from 'next/head';
-import { Flex, Box, Container } from 'theme-ui';
+import { Flex, Container, Button } from 'theme-ui';
 
+import FlowForm from '../../../components/FlowForm';
 import FlowList from '../../../components/FlowList';
-import Page from '../../../components/PageFrame';
-import Link from '../../../components/NavLink';
-
 import ManageSidebar from '../../../components/ManageSidebar';
+import ModalCustom from '../../../components/ModalCustom';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [rerender, setRerender] = React.useState(false);
+  console.log('render state', rerender);
   return (
     <>
       <Head>
         <title>Manage Flows - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-
       <Page>
+        <PageHeader
+          title="Manage Flows"
+          desc="Manage Configurations for your workspace">
+          <Button
+            onClick={() => {
+              setIsOpen(true);
+            }}>
+            Add Flow
+          </Button>
+        </PageHeader>
+        <ModalCustom varient="center" isOpen={isOpen} setOpen={setIsOpen}>
+          <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
+        </ModalCustom>
         <Container sx={{ pl: 4, pt: 4 }}>
-          <Box>
-            <Box sx={{ ml: 'auto' }}>
-              <Link variant="btnPrimary" href="/manage/flows/new">
-                Add Flow
-              </Link>
-            </Box>
-          </Box>
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowList />
+            <FlowList rerender={rerender} setRerender={setRerender} />
           </Flex>
         </Container>
       </Page>

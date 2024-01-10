@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Label, Input, Text, Box } from 'theme-ui';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 
+import { format, parse } from 'date-fns';
 import { DateUtils } from 'react-day-picker';
-import dateFnsFormat from 'date-fns/format';
-import dateFnsParse from 'date-fns/parse';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import { Label, Input, Text, Box } from 'theme-ui';
 
-import { Calendar } from '@styled-icons/boxicons-regular';
+import { Calendar } from './Icons';
+import 'react-day-picker/lib/style.css';
 
 interface Props {
   register: any;
@@ -63,14 +63,14 @@ const Field: React.FC<Props> = ({
     // // onChange(date);
   };
 
-  const formatDate = (date: any, format: string, locale: any) => {
+  const formatDate = (date: any, formatStr: string, locale: any) => {
     // console.log('frm', date);
-    return dateFnsFormat(date, format, { locale });
+    return format(date, formatStr, { locale });
   };
 
   const parseDate = (str: string, format: string, locale: any) => {
     // console.log('str', str);
-    const parsed = dateFnsParse(str, format, new Date(), { locale });
+    const parsed = parse(str, format, new Date(), { locale });
     if (DateUtils.isDate(parsed)) {
       return parsed;
     }
@@ -115,9 +115,10 @@ const Field: React.FC<Props> = ({
           component={(_props: any) => (
             <Box sx={{ position: 'relative' }}>
               <Input
-                name={name}
+                // name={name}
                 // placeholder={placeholder ? placeholder: ''}
-                ref={register({ required })}
+                // ref={register({ required })}
+                {...register(name, { required: required })}
                 {..._props}
                 // value={value || selected}
               />
@@ -125,7 +126,7 @@ const Field: React.FC<Props> = ({
                 <Text
                   color="gray.4"
                   sx={{ position: 'absolute', right: 2, top: 2 }}>
-                  <Calendar width="20" />
+                  <Calendar width={20} height={20} />
                 </Text>
               )}
             </Box>

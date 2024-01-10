@@ -1,15 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
+
 import { Box, Text, Container } from 'theme-ui';
+
 import { fetchAPI } from '../utils/models';
 
-// import { useToasts } from 'react-toast-notifications';
-import PageHeader from './PageHeader';
+import { Collection, LayoutAlt, Style, FlowBranch, UserAlt } from './Icons';
 import ManageSidebar from './ManageSidebar';
-
-import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
-
-import { Style } from '@styled-icons/material-sharp/Style';
-import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
+import PageHeader from './PageHeader';
 
 // const ICON_COLOR = '#999';
 interface menuLinksProps {
@@ -21,33 +18,33 @@ interface menuLinksProps {
 const menuLinks: menuLinksProps[] = [
   {
     name: 'Role Groups',
-    logo: <Layout width="20px" />,
+    logo: <LayoutAlt width={20} height={20} />,
     path: '/super/roles',
   },
   {
     name: 'Resources',
-    logo: <FlowBranch width="20px" />,
+    logo: <FlowBranch width={20} height={20} />,
     path: '/super/resources',
   },
 
   {
     name: 'Oranganization Fields',
-    logo: <Style width="20px" />,
+    logo: <Style width={20} height={20} />,
     path: '/super/fields',
   },
   {
     name: 'Permissions',
-    logo: <User width="20px" />,
+    logo: <UserAlt width={20} height={20} />,
     path: '/super/roles',
   },
   {
     name: 'Fields',
-    logo: <User width="20px" />,
+    logo: <UserAlt width={20} height={20} />,
     path: '/super/fields',
   },
   {
     name: 'Pipelines',
-    logo: <Collection width={20} />,
+    logo: <Collection width={20} height={20} />,
     path: '/super/pipelines',
   },
 ];
@@ -65,10 +62,10 @@ interface PersonCardProps {
 
 const PersonCard = ({ name, phone }: PersonCardProps) => (
   <Box>
-    <Text as="h5" sx={{ fontWeight: 500, color: 'gray.8' }}>
+    <Text as="h5" sx={{ fontWeight: 500, color: 'text' }}>
       {name}
     </Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.5' }}>
+    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.500' }}>
       {phone}
     </Text>
   </Box>
@@ -113,7 +110,7 @@ const VendorListBlock: FC = () => {
           col2: (
             <Box>
               <Text as="h4">{r.name}</Text>
-              <Text sx={{ color: 'gray.6' }}>{r.address}</Text>
+              <Text sx={{ color: 'text' }}>{r.address}</Text>
             </Box>
           ),
           col3: <PersonCard name={r.contact_person} phone={r.phone} />,

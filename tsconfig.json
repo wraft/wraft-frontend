@@ -22,7 +22,10 @@
     "incremental": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "paths": {
+      "@wraft-ui/*": ["./src/components/common/*"],
+    }
   },
   "exclude": ["node_modules", "__tests__"],
   "include": [
@@ -30,6 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     "server.js",
-    "src/components/WraftEditor"
+    "src/components/WraftEditor",
+    "src/pages/manage/layouts/new.tsx.bak"
   ]
 }

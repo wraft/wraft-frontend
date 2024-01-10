@@ -1,7 +1,8 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import { Flex, Box, Text } from 'theme-ui';
 import Link from 'next/link';
+import { Flex, Box, Text } from 'theme-ui';
 
 import ContentTypeList from '../../components/ContentTypeList';
 import Page from '../../components/PageFrame';
@@ -16,9 +17,7 @@ const Index: FC = () => {
       <Page>
         x
         <Flex>
-          <Link href="/content-types/new">
-            <a>New Content Type</a>
-          </Link>
+          <Link href="/content-types/new">New Content Type</Link>
           <ContentTypeList />
           <Box>
             <Text>Dashboard</Text>

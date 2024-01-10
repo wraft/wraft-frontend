@@ -1,14 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Container } from 'theme-ui';
-// import Link from './NavLink';
-import { Table } from './Table';
-// import { Plus } from './Icons';
-import { fetchAPI } from '../utils/models';
-// import { useStoreState } from 'easy-peasy';
-import { Button } from 'theme-ui';
 
-// import { useToasts } from 'react-toast-notifications';
+import { Box, Text, Container } from 'theme-ui';
+
+import { fetchAPI } from '../utils/models';
+
+import ContentLoader from './ContentLoader';
+import Link from './NavLink';
 import PageHeader from './PageHeader';
+import { Table } from './Table';
 
 export interface VendorTypes {
   vendors: Vendor[];
@@ -23,10 +22,10 @@ interface PersonCardProps {
 
 const PersonCard = ({ name, phone }: PersonCardProps) => (
   <Box>
-    <Text as="h5" sx={{ fontWeight: 500, color: 'gray.8' }}>
+    <Text as="h5" sx={{ fontWeight: 500, color: 'text' }}>
       {name}
     </Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.5' }}>
+    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.500' }}>
       {phone}
     </Text>
   </Box>
@@ -48,6 +47,7 @@ const VendorListBlock: FC = () => {
   // const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Vendor>>([]);
   const [vendors, setVendors] = useState<Array<Vendor>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   // const { addToast } = useToasts();
 
   const loadData = () => {
@@ -55,6 +55,7 @@ const VendorListBlock: FC = () => {
       .then((data: any) => {
         const res: Vendor[] = data.vendors;
         setContents(res);
+        setLoading(true);
       })
       .catch();
   };
@@ -71,7 +72,7 @@ const VendorListBlock: FC = () => {
           col2: (
             <Box>
               <Text as="h4">{r.name}</Text>
-              <Text sx={{ color: 'gray.6' }}>{r.address}</Text>
+              <Text sx={{ color: 'text' }}>{r.address}</Text>
             </Box>
           ),
           col3: <PersonCard name={r.contact_person} phone={r.phone} />,
@@ -87,14 +88,17 @@ const VendorListBlock: FC = () => {
   return (
     <Box>
       <PageHeader title="Vendors" desc="Manage your vendors">
-        <Box sx={{ ml: 'auto', mr: 5 }}>
-          <Button variant="btnPrimary">+ New Vendor</Button>
+        <Box sx={{ ml: 'auto', mr: 0, pt: 2 }}>
+          <Link href="/vendor/new" variant="btnSecondary" locale={''}>
+            + Add Vendor
+          </Link>
         </Box>
       </PageHeader>
       <Container sx={{ pl: 5, pr: 5, pt: 4 }}>
         <Box mx={0} mb={3}>
+          {!loading && <ContentLoader />}
           <Box sx={{ maxWidth: '70ch' }}>
-            {vendors && (
+            {loading && vendors && (
               <Table
                 options={{
                   columns: [

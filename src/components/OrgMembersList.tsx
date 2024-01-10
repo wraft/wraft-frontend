@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+
 import { Button, Box, Text, Flex, Image } from 'theme-ui';
-import { API_HOST } from '../utils/models';
+
 import { Member } from './OrgMemberForm';
 
 export interface Theme {
@@ -108,12 +109,13 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                       border: 'solid 1px',
                       pl: 4,
                       pr: 4,
-                      borderColor: '#ddd',
+                      borderColor: 'border',
                       borderRadius: 3,
                     }}>
                     <Box pt={3}>
                       <Image
-                        src={`${API_HOST}/` + _m.profile_pic}
+                        src={_m.profile_pic}
+                        alt=""
                         sx={{
                           borderRadius: '99rem',
                           width: '40px',
@@ -126,7 +128,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                       <Text as="h4" sx={{ fontWeight: 600 }}>
                         {_m.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.6' }}>
+                      <Text as="p" sx={{ fontSize: 1, color: 'text' }}>
                         {_m.email}
                       </Text>
                     </Box>
@@ -135,7 +137,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                         fontSize: 0,
                         pl: 3,
                         pt: 3,
-                        color: 'blue.5',
+                        color: 'blue.600',
                         ml: 'auto',
                         textTransform: 'uppercase',
                       }}>

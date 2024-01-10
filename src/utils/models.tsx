@@ -1,42 +1,49 @@
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import axios, { AxiosInstance } from 'axios';
 import cookie from 'js-cookie';
-import axios from 'axios';
 
-//Base URL config
-const httpClient = axios.create({
-  baseURL: `${API_HOST}/api/v1`, // ---temp hard code ---
-});
+const createAxiosInstance = (): AxiosInstance => {
+  const instance = axios.create({
+    baseURL: `${API_HOST}/api/v1`,
+  });
 
-// Request interceptor for API calls
-httpClient.interceptors.request.use(
-  async (config) => {
-    const token = (await cookie.get('token')) || false;
-    // eslint-disable-next-line no-param-reassign
-    config.headers = {
-      Authorization: `Bearer ${token}`,
-    };
-    return config;
-  },
-  (error) => {
-    Promise.reject(error);
-  },
-);
+  instance.interceptors.request.use(
+    async (config) => {
+      const token = (await cookie.get('token')) || false;
 
-httpClient.interceptors.response.use(
-  (response) => response,
-  async function (error) {
-    const originalRequest = error.config;
-    // eslint-disable-next-line no-underscore-dangle
-    if (error.response.status === 401 && !originalRequest._retry) {
-      // eslint-disable-next-line no-underscore-dangle
-      originalRequest._retry = true;
-      await cookie.remove('token');
-      window.location.pathname = '/login';
-    }
-    return Promise.reject(error);
-  },
-);
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      return config;
+    },
+    (error) => {
+      Promise.reject(error);
+    },
+  );
+
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      if (error.response.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        await cookie.remove('token');
+
+        const url = `/login?session=expired`;
+        window.location.href = decodeURI(url);
+      }
+      return Promise.reject(error);
+    },
+  );
+
+  return instance;
+};
+
+const api = createAxiosInstance();
+
+export default api;
 
 /**
  * Load fetchAPI
@@ -44,14 +51,93 @@ httpClient.interceptors.response.use(
  */
 export const fetchAPI = (path: any, query = '') =>
   new Promise((resolve, reject) => {
-    httpClient
+    api
       .get(`/${path}${query}`)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        const res = err.response.data;
-        if (err.response.status === 400) {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+/**
+ * Load postAPI
+ */
+export const postAPI = (path: string, body: any) =>
+  new Promise((resolve, reject) => {
+    api
+      .post(`/${path}`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+/**
+ * Load postAPI
+ */
+export const putAPI = (path: string, body: any = {}) =>
+  new Promise((resolve, reject) => {
+    api
+      .put(`/${path}`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
+          resolve(res);
+        }
+
+        reject(err);
+      });
+  });
+
+export const postEntityFile = (path: string, formData: any, token: string) =>
+  new Promise((resolve, reject) => {
+    api
+      .post(path, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          token: token,
+        },
+      })
+      .then(async (resp) => {
+        if (resp.status === 204) {
+          resolve(resp);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+
+/**
+ * delete API
+ */
+export const deleteAPI = (path: any) =>
+  new Promise((resolve, reject) => {
+    api
+      .delete(`/${path}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (err?.response?.data) {
+          const res = err.response.data;
           resolve(res);
         }
 
@@ -62,16 +148,16 @@ export const fetchAPI = (path: any, query = '') =>
 /**
  * delete API
  */
-export const deleteAPI = (path: any) =>
+export const fetchUserInfo = () =>
   new Promise((resolve, reject) => {
-    httpClient
-      .delete(`/${path}`)
+    api
+      .get(`${API_HOST}/api/v1/users/me`)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        const res = err.response.data;
-        if (err.response.status === 400) {
+        if (err?.response?.data) {
+          const res = err.response.data;
           resolve(res);
         }
 
@@ -135,56 +221,75 @@ export const loadEntityDetail = (
  * @param path
  * @param token
  */
-export const createEntity = (
+
+export const createEntity = async (
   data: any,
   path: string,
   token: string,
   onSuccess?: any,
+  onFailed?: any,
 ) => {
   console.log('🥷', API_HOST, data);
 
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      if (onSuccess) {
-        console.log(`Created a model ${path} with Pass`, data);
-        onSuccess(data);
-      } else {
-        console.log(`Created a model ${path}`, data);
-      }
+  try {
+    const response = await axios.post(`${API_HOST}/api/v1/${path}`, data, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Created a model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Created a model ${path}`, response.data);
+    }
+  } catch (error) {
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
+  }
 };
 
 /**
  * Delete an Entity
  * @param path
  * @param token
+ * @param data
  */
-export const deleteEntity = (path: string, token: string) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'DELETE',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(`Created a model ${path}`, data);
+
+export const deleteEntity = async (
+  path: string,
+  token: string,
+  onSuccess?: any,
+  onFailed?: any,
+  data?: any,
+) => {
+  try {
+    const response = await axios.delete(`${API_HOST}/api/v1/${path}`, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Deleted model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Deleted model ${path}`, response.data);
+    }
+  } catch (error) {
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
+  }
 };
 
 /**
@@ -192,27 +297,35 @@ export const deleteEntity = (path: string, token: string) => {
  * @param path
  * @param token
  */
-export const updateEntity = (
+
+export const updateEntity = async (
   path: string,
   data: any,
   token: string,
   onSuccess?: any,
+  onFailed?: any,
 ) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      onSuccess(data);
+  try {
+    const response = await axios.put(`${API_HOST}/api/v1/${path}`, data, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
     });
+
+    console.log(response);
+
+    if (onSuccess) {
+      console.log(`Updated model ${path} with Pass`, response.data);
+      onSuccess(response.data);
+    } else {
+      console.log(`Updated model ${path}`, response.data);
+    }
+  } catch (error) {
+    if (onFailed) onFailed(error);
+    console.error('🐞Error', error);
+  }
 };
 
 // interface IapiWrapper {
@@ -324,7 +437,7 @@ export const registerUser = (data: any, onSuccess?: any) => {
       onSuccess(data);
     });
 };
-export const checkUser = (token: any, onSuccess?: any) => {
+export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
   fetch(`${API_HOST}/api/v1/users/me`, {
     method: 'GET',
     headers: {
@@ -338,6 +451,11 @@ export const checkUser = (token: any, onSuccess?: any) => {
     })
     .then(function (data) {
       onSuccess(data);
+    })
+    .catch(function (error) {
+      if (onError) {
+        onError(error);
+      }
     });
 };
 
@@ -346,24 +464,51 @@ export const checkUser = (token: any, onSuccess?: any) => {
  * @param data
  * @param onSucces ref to handle
  */
-export const userLogin = (data: any, onSuccess?: any) => {
-  fetch(`${API_HOST}/api/v1/users/signin`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      const { token } = data;
-      cookie.set('token', token);
-      onSuccess(token);
-    });
-};
+
+export const userLogin = async (body: any) =>
+  new Promise((resolve, reject) => {
+    axios
+      .post(`${API_HOST}/api/v1/users/signin`, body)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (!err.response) {
+          reject('Unable to process request. Please try again later');
+        }
+        if (err?.response?.data) {
+          reject(err.response.data);
+        }
+        reject(err);
+      });
+  });
+// export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
+//   fetch(`${API_HOST}/api/v1/users/signin`, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify(data),
+//   })
+//     .then(function (response) {
+//       if (!response.ok) {
+//         throw new Error();
+//       }
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       const { access_token } = data;
+//       cookie.set('token', access_token);
+//       onSuccess(access_token);
+//     })
+//     .catch(function (error) {
+//       // console.error('Error:', error);
+//       if (onError) {
+//         onError(error);
+//       }
+//     });
+// };
 
 /**
  * Login a user
@@ -387,4 +532,36 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
       cookie.set('token', token);
       onSuccess(token);
     });
+};
+
+/**
+ * Set User , Switch Workpace for tokens
+ */
+
+export const switchProfile = (data: any) => {
+  // fetch(`${API_HOST}/api/v1/users/signin`, {
+  //   method: 'POST',
+  //   headers: {
+  //     Accept: 'application/json',
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify(data),
+  // })
+  //   .then(function (response) {
+  //     if (!response.ok) {
+  //       throw new Error();
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(function (data) {
+  const { access_token } = data;
+  cookie.set('token', access_token);
+  // onSuccess(access_token);
+  // })
+  // .catch(function (error) {
+  //   // console.error('Error:', error);
+  //   if (onError) {
+  //     onError(error);
+  //   }
+  // });
 };

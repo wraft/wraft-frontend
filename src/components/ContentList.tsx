@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 
-import { Table } from './Table';
-
 import { fetchAPI } from '../utils/models';
+
 import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
-import Paginate from './Paginate';
-import PageHeader from './PageHeader';
 import ContentLoader from './ContentLoader';
+import PageHeader from './PageHeader';
+import Paginate from './Paginate';
+import { Table } from './Table';
 
 export interface ILayout {
   width: number;
@@ -109,7 +110,7 @@ const ContentList = () => {
    * @param page
    */
   const loadData = (page: number) => {
-    const pageNo = page > 0 ? `?page=${page}` : '';
+    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`contents${pageNo}`)
       .then((data: any) => {
         setLoading(true);
@@ -140,7 +141,7 @@ const ContentList = () => {
                 height: '40px',
                 width: '5px',
                 border: 'solid 1px',
-                borderColor: 'gray.1',
+                borderColor: 'border',
                 bg: r.content_type.color,
                 mr: 0,
                 // ml: 2,
@@ -161,7 +162,9 @@ const ContentList = () => {
             </Box>
           ),
           col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
-          status: <StateBadge name={r.state.state} color="green.3" />,
+          status: (
+            <StateBadge name={r.state && r.state.state} color="#E2F7EA" />
+          ),
         };
 
         row.push(rFormated);
@@ -172,15 +175,14 @@ const ContentList = () => {
   }, [contents]);
 
   return (
-    <Box sx={{ bg: 'gray.1', pl: 0, minHeight: '100%' }}>
-      <PageHeader title="Documents" desc="All Official Documents" />
-      {/* <HeadingFrame btn="Add Content" title="Contents"/> */}
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
+      <PageHeader title="Documents" desc="Manage all documents" />
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
             {!loading && <ContentLoader />}
             <Box mx={0} mb={3} sx={{}}>
-              {vendors && (
+              {loading && vendors && (
                 <Table
                   options={{
                     columns: [
@@ -215,19 +217,22 @@ const ContentList = () => {
                 />
               )}
             </Box>
-            <Paginate changePage={changePage} {...pageMeta} />
-            {total}
+            <Paginate
+              changePage={changePage}
+              {...pageMeta}
+              info={`${total} of ${total} pages`}
+            />
           </Box>
           <Box variant="layout.plateSidebar">
-            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 0,
                   fontWeight: 'body',
-                  color: 'gray.6',
+                  fontSize: 2,
+                  color: 'text',
                 }}>
                 Filter by Variant
               </Text>
@@ -236,26 +241,26 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'border',
                   '&:last-child': {
                     borderBottom: 0,
                   },
                 }}>
                 {variants &&
                   variants.map((v: any) => (
-                    <FilterBlock key={v?.name} title={v?.name} no={32} {...v} />
+                    <FilterBlock key={v?.name} title={v?.name} no={0} {...v} />
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ bg: 'gray.1', border: 0 }}>
+            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
               <Text
                 as="h4"
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 0,
+                  fontSize: 2,
                   fontWeight: 'body',
-                  color: 'gray.6',
+                  color: 'text',
                 }}>
                 Filter by State
               </Text>
@@ -264,7 +269,8 @@ const ContentList = () => {
                   borderRight: 'solid 1px',
                   borderLeft: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.3',
+                  borderColor: 'border',
+                  borderRadius: '5px',
                   '&:last-child': {
                     borderBottom: 0,
                   },

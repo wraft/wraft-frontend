@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
+
 import { useForm } from 'react-hook-form';
-
-import { useStoreState } from 'easy-peasy';
-
-import { Button, Alert, Close, Spinner, Box } from 'theme-ui';
+import { Button, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
+import { putAPI, fetchAPI, fetchUserInfo } from '../utils/models';
+
 import Field from './Field';
-import { checkUser, createEntity, loadEntity } from '../utils/models';
 
 export interface Profile {
   allergies?: string[];
@@ -86,8 +85,12 @@ const formList = [
 ];
 
 const OrgForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [profile, setProfile] = useState<any>();
@@ -95,7 +98,7 @@ const OrgForm = () => {
 
   const onCreate = (d: any) => {
     setSuccess(true);
-    console.log('__d', d);
+    console.log('__d', d, success);
     // if (d && d.id) {
     //   // Router.push(`/user-profile`);
     // }
@@ -104,8 +107,11 @@ const OrgForm = () => {
   /** Update Form */
 
   const onSubmit = (data: any) => {
-    createEntity(data, 'organisations', token, onCreate);
-    // updateEntity('organisations', data, token, onCreate);
+    putAPI(`organisations/${profile.organisation_id}`, data).then(
+      (data: any) => {
+        onCreate(data);
+      },
+    );
   };
 
   useEffect(() => {
@@ -121,11 +127,13 @@ const OrgForm = () => {
     // check if token is there
     // const tokenInline = cookie.get('token') || false;
     //
-    if (token) {
-      checkUser(token, onProfileLoad);
-      // loadEntity(token, 'macros', loadDataSuccess);
-    }
-  }, [token]);
+
+    fetchUserInfo().then((data: any) => {
+      onProfileLoad(data);
+    });
+
+    // loadEntity(token, 'macros', loadDataSuccess);
+  }, []);
 
   /**
    * When Org data is load
@@ -171,12 +179,18 @@ const OrgForm = () => {
       console.log('profile', profile);
       // setValue('')
       // checkUser(token, onProfileLoad);
-      loadEntity(token, `organisations/${profile.organisation_id}`, onOrgLoad);
-      loadEntity(token, `organisations`, onOrgLoadAll);
-      loadEntity(
-        token,
-        `organisations/${profile.organisation_id}/memberships`,
-        onOrgMembLoad,
+      fetchAPI(`organisations/${profile.organisation_id}`).then((data: any) => {
+        onOrgLoad(data);
+      });
+
+      fetchAPI(`organisations`).then((data: any) => {
+        onOrgLoadAll(data);
+      });
+
+      fetchAPI(`organisations/${profile.organisation_id}/memberships`).then(
+        (data: any) => {
+          onOrgMembLoad(data);
+        },
       );
     }
 
@@ -193,14 +207,8 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box>
+    <Box sx={{ pt: 4 }}>
       {!ready && <Spinner />}
-      {success && (
-        <Alert>
-          Category created succesfully!
-          <Close ml="auto" mr={-2} />
-        </Alert>
-      )}
 
       <Box>
         {ready && (

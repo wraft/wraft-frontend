@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
-import { useForm } from 'react-hook-form';
 
+import { useStoreState } from 'easy-peasy';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import Modal, { Styles } from 'react-modal';
+import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
-import Field from './Field';
-import FieldDate from './FieldDate';
-import { API_HOST, loadEntity, updateEntityFile } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+import { loadEntity, updateEntityFile } from '../utils/models';
 
-import Modal, { Styles } from 'react-modal';
+import Field from './Field';
+import ImageCropper from './ImageCropper';
 // import NavLink from './NavLink';
-import { useToasts } from 'react-toast-notifications';
-// import ImageCropper from './ImageCropper';
 
 export const defaultStyle: Styles = {
   overlay: {
@@ -46,7 +45,7 @@ export interface Profile {
   profile_pic: null;
   name: string;
   gender: null;
-  dob: null;
+  dob: string;
 }
 
 export interface User {
@@ -74,7 +73,12 @@ export interface IAccount {
 // }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
@@ -84,12 +88,12 @@ const Form = () => {
   // const [imageSaved, setImageSaved] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
-
-  const { addToast } = useToasts();
+  const [profileImageModal, setProfileImageModal] = useState<boolean>(false);
 
   const [showModal, setModal] = useState<boolean>(false);
   function closeModal() {
     setModal(false);
+    setProfileImageModal(false);
   }
 
   function toggleModal() {
@@ -108,7 +112,7 @@ const Form = () => {
     setMe(m);
   }
 
-  // const [cropImage, setCroppedImage] = useState<File>(); // for file submit
+  const [cropImage, setCroppedImage] = useState<File>(); // for file submit
   // const [editing, setEditing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -139,7 +143,10 @@ const Form = () => {
     console.log('Updated', d);
     console.log('me', me);
 
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
   };
 
   // const toggleDate = () => {
@@ -153,7 +160,7 @@ const Form = () => {
   const onSubmit = (data: any) => {
     // const id: string = me && me.id;
 
-    console.log('data.profile_pic', data);
+    console.log('🔥🔥🔥data.profile_pic🔥', data);
 
     setSaving(true);
 
@@ -161,9 +168,9 @@ const Form = () => {
     formData.append('name', data.name);
     formData.append('dob', data.dob);
 
-    // if (cropImage) {
-    //   formData.append('profile_pic', cropImage);
-    // }
+    if (cropImage) {
+      formData.append('profile_pic', cropImage);
+    }
 
     formData.append('gender', data.gender);
 
@@ -180,10 +187,6 @@ const Form = () => {
   //   setPreviewImage(_cp);
   // };
 
-  const dateChange = (_p: any) => {
-    console.log('dateChange', _p);
-  };
-
   const onOrg = (data: Profile) => {
     setProfile(data);
 
@@ -196,9 +199,41 @@ const Form = () => {
         setValue('dob', data.dob);
       }
       setValue('gender', data.gender);
-      const img = API_HOST + data?.profile_pic;
+      const img = data?.profile_pic;
       setImage(img);
     }
+  };
+
+  /**
+   * Catch update response
+   * @param respo
+   */
+  const onUpdated = (respo: any) => {
+    console.log('response', respo);
+    toast.success('Image Updated', {
+      duration: 1000,
+      position: 'top-right',
+    });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onCroppedImage = (e: any, f: any) => {
+    console.log('cropped', e, f);
+    setCroppedImage(f);
+
+    // setProfileImageModal(!profileImageModal);
+
+    // setSaving(true);
+
+    const formData = new FormData();
+    // formData.append('name', 'Tx');
+    // formData.append('dob', data.dob);
+
+    if (f) {
+      formData.append('profile_pic', f);
+    }
+
+    updateEntityFile(`profiles`, formData, token, onUpdated);
   };
 
   useEffect(() => {
@@ -230,7 +265,7 @@ const Form = () => {
   // }, [imageTemp]);
 
   return (
-    <Box py={3} mt={4} pl={4} variant="w50">
+    <Box py={3} mt={4} pl={4} sx={{ width: '50%' }}>
       {/* <Box sx={{ pb: 5 }}>
         <Text variant="pagetitle" sx={{ mb: 0 }}>
           My Account
@@ -261,33 +296,55 @@ const Form = () => {
                           <>
                             <Image
                               onClick={() => toggleEdit()}
+                              alt=""
                               sx={{
                                 width: '80px',
                                 maxWidth: 'auto',
                                 height: '80px',
                                 borderRadius: 99,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
-                              src={`${API_HOST}${profile?.profile_pic}`}
+                              src={`${profile?.profile_pic}`}
                             />
                           </>
                         )}
                         {isEdit && (
-                          <Modal
-                            style={defaultStyle}
-                            isOpen={true}
-                            onRequestClose={closeModal}
-                            ariaHideApp={false}
-                            contentLabel="Profile Image">
-                            <Text>Editor</Text>
-                            {/* <ImageCropper /> */}
-                          </Modal>
+                          <Box>
+                            {/* onClick={() =>
+                                setProfileImageModal(!profileImageModal)
+                              } */}
+                            <Image
+                              onClick={() =>
+                                setProfileImageModal(!profileImageModal)
+                              }
+                              alt=""
+                              sx={{
+                                width: '80px',
+                                maxWidth: 'auto',
+                                height: '80px',
+                                borderRadius: 99,
+                                border: 'solid 1px',
+                                borderColor: 'border',
+                              }}
+                              src={`${profile?.profile_pic}`}
+                            />
+                            <Modal
+                              style={defaultStyle}
+                              isOpen={profileImageModal}
+                              onRequestClose={closeModal}
+                              ariaHideApp={false}
+                              contentLabel="Profile Image">
+                              {/* <Text>Editor</Text> */}
+                              <ImageCropper onFileSubmit={onCroppedImage} />
+                            </Modal>
+                          </Box>
                         )}
                         {imagePreview && (
                           <>
                             <Image
                               src={imagePreview}
+                              alt=""
                               sx={{
                                 width: '80px',
                                 mr: 3,
@@ -295,7 +352,7 @@ const Form = () => {
                                 height: '80px',
                                 borderRadius: 3,
                                 border: 'solid 1px',
-                                borderColor: 'gray.3',
+                                borderColor: 'border',
                               }}
                             />
                           </>
@@ -311,25 +368,29 @@ const Form = () => {
                     name="name"
                     label="Name"
                     variant="baseInput"
-                    defaultValue="Your Full Name"
+                    placeholder="Your Full Name"
                     register={register}
+                    error={errors.name}
                   />
-                  <FieldDate
+                  <Field
                     name="dob"
                     label="Birthday"
+                    variant="baseInput"
+                    type="date"
                     register={register}
-                    sub="Date"
-                    // defaultValue={profile?.dob}
-                    onChange={dateChange}
+                    error={errors.dob}
                   />
-                  {errors.dob && <Text>This field is required</Text>}
                   <Label>Gender</Label>
-                  <Select name="gender" ref={register({ required: true })}>
+                  <Select {...register('gender', { required: true })}>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                   </Select>
                   {errors.gender && <Text>This field is required</Text>}
-                  <Button type="submit" ml={0} mt={3}>
+                  <Button
+                    type="submit"
+                    ml={0}
+                    mt={3}
+                    sx={{ borderRadius: '6px' }}>
                     {saving && <Spinner width={16} height={16} color="white" />}
                     {!saving && <Text>Save</Text>}
                   </Button>

@@ -3,3 +3,6 @@ build
 .next
 .DS_Store
 out
+*.swp
+*.swo
+.nvmrc

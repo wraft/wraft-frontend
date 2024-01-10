@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text, Divider, Spinner } from 'theme-ui';
-import { useForm } from 'react-hook-form';
 
-import Field from './Field';
-import FieldText from './FieldText';
+import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
+import { Select } from 'theme-ui';
+
+import { putAPI, postAPI, fetchAPI } from '../utils/models';
 import {
   IContentType,
   ContentTypes,
@@ -12,25 +15,11 @@ import {
   DataTemplates,
 } from '../utils/types';
 
-import { Select } from 'theme-ui';
-
-import { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-
-import { useToasts } from 'react-toast-notifications';
-
-import { BracesVariable } from '@styled-icons/fluentui-system-regular/BracesVariable';
-
-import MarkdownEditor from './WraftEditor';
-
-import {
-  loadEntity,
-  loadEntityDetail,
-  createEntity,
-  updateEntity,
-} from '../utils/models';
-
+import Field from './Field';
+import FieldText from './FieldText';
+import { BracesVariable } from './Icons';
 import NavEdit from './NavEdit';
+import MarkdownEditor from './WraftEditor';
 
 export interface BlockTemplate {
   id: string;
@@ -40,8 +29,12 @@ export interface BlockTemplate {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
@@ -53,14 +46,13 @@ const Form = () => {
 
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
 
-  const { addToast } = useToasts();
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
 
   const onCreated = () => {
     console.log('[onCreated]');
+    Router.push('/templates');
   };
 
   /**
@@ -84,17 +76,25 @@ const Form = () => {
 
     // if edit is live
     if (cId) {
-      updateEntity(`data_templates/${cId}`, formValues, token, onCreated);
-      addToast('Updated Successfully', { appearance: 'success' });
-      setLoading(false);
+      putAPI(`data_templates/${cId}`, formValues).then(() => {
+        onCreated();
+        toast.success('Updated Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+      });
     } else {
-      createEntity(
-        formValues,
-        `content_types/${data.parent}/data_templates`,
-        token,
-        onCreated,
+      postAPI(`content_types/${data.parent}/data_templates`, formValues).then(
+        () => {
+          onCreated();
+          toast.success('Created Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        },
       );
-      addToast('Created Successfully', { appearance: 'success' });
+
       setLoading(false);
     }
   };
@@ -105,7 +105,9 @@ const Form = () => {
   };
 
   const loadTypes = () => {
-    loadEntity(token, 'content_types', loadTypesSuccess);
+    fetchAPI('content_types').then((data: any) => {
+      loadTypesSuccess(data);
+    });
   };
 
   const loadContentTypeSuccess = (data: any) => {
@@ -120,7 +122,9 @@ const Form = () => {
    * @param id
    */
   const loadContentType = (id: string) => {
-    loadEntityDetail(token, 'content_types', id, loadContentTypeSuccess);
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      loadContentTypeSuccess(data);
+    });
   };
 
   /**
@@ -128,7 +132,9 @@ const Form = () => {
    * @param id
    */
   const loadBlocks = () => {
-    loadEntity(token, 'block_templates', loadBlocksSuccess);
+    fetchAPI(`block_templates`).then((data: any) => {
+      loadBlocksSuccess(data);
+    });
   };
 
   const loadBlocksSuccess = (data: any) => {
@@ -140,9 +146,11 @@ const Form = () => {
    * Load Content Type Details
    * @param id
    */
-  const loadTemplate = (id: string, token: string) => {
+  const loadTemplate = (id: string) => {
     setLoading(true);
-    loadEntityDetail(token, 'data_templates', id, loadTemplateSuccess);
+    fetchAPI(`data_templates/${id}`).then((data: any) => {
+      loadTemplateSuccess(data);
+    });
   };
 
   const loadTemplateSuccess = (data: DataTemplates) => {
@@ -158,7 +166,6 @@ const Form = () => {
       if (mm) {
         console.log('has serials', mm);
         setCleanInsert(false);
-        setToken(mm);
       }
     }
     setDataTemplate(data);
@@ -218,11 +225,10 @@ const Form = () => {
 
   useEffect(() => {
     setBody('Loading ...');
-    if (token) {
-      loadTypes();
-      loadBlocks();
-    }
-  }, [token]);
+
+    loadTypes();
+    loadBlocks();
+  }, []);
 
   useEffect(() => {
     // find the first element
@@ -232,10 +238,10 @@ const Form = () => {
   }, [ctypes]);
 
   useEffect(() => {
-    if (token && cId) {
-      loadTemplate(cId, token);
+    if (cId) {
+      loadTemplate(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   /**
    * On Template Load
@@ -296,7 +302,7 @@ const Form = () => {
 
   return (
     <Box>
-      <NavEdit />
+      <NavEdit navtitle="Hello" />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
           <Flex>
@@ -304,7 +310,16 @@ const Form = () => {
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '83ch', m: 0, pt: 4 }}>
+              sx={{
+                minWidth: '70%',
+                bg: 'neutral.100',
+                maxWidth: '83ch',
+                m: 0,
+                pt: 4,
+                input: {
+                  bg: 'white',
+                },
+              }}>
               <Box sx={{ px: 4 }}>
                 <Field
                   name="title"
@@ -312,7 +327,7 @@ const Form = () => {
                   defaultValue=""
                   register={register}
                 />
-                <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} />
+                {/* <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} /> */}
                 <Field
                   name="title_template"
                   label="Title Template"
@@ -334,7 +349,14 @@ const Form = () => {
                   register={register}
                 />
               </Box>
-              <Box py={4}>
+              <Box
+                py={4}
+                sx={{
+                  px: 4,
+                  '.remirror-editor-wrapper .remirror-theme .ProseMirror': {
+                    py: '5rem !important',
+                  },
+                }}>
                 {editorReady && (
                   <MarkdownEditor
                     onUpdate={doUpdate}
@@ -354,22 +376,24 @@ const Form = () => {
               px={4}
               variant="plateRightBar"
               sx={{
-                bg: '#FAFBFC',
+                bg: 'neutral.100',
                 width: '100%',
-                borderLeft: 'solid 1px #ddd',
+                borderLeft: 'solid 1px',
+                borderColor: 'border',
               }}>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 1 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
                       Content Type
                     </Text>
                     <Select
                       id="parent"
-                      name="parent"
+                      // name="parent"
                       defaultValue="Parent ID"
-                      onChange={(e) => ctypeChange(e)}
-                      ref={register({ required: true })}>
+                      // ref={register({ required: true })}
+                      {...register('parent', { required: true })}
+                      onChange={(e) => ctypeChange(e)}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (
@@ -381,7 +405,7 @@ const Form = () => {
                   </Box>
 
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 3 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
                       Variables
                     </Text>
                     {varias.fields &&
@@ -389,21 +413,22 @@ const Form = () => {
                         <Flex
                           sx={{
                             p: 1,
+                            fontSize: 2,
                             border: 'solid 1px',
                             borderBottom: 0,
-                            borderColor: 'gray.2',
-                            bg: 'teal.8',
+                            borderColor: 'teal.200',
+                            bg: 'teal.100',
                             px: 3,
                             ':last-child': {
                               borderBottom: 'solid 1px',
-                              borderColor: 'gray.2',
+                              borderColor: 'teal.200',
                             },
                           }}
                           as="p"
                           key={k.id}
                           onClick={() => insertToken(k)}>
                           {k.name}
-                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.7' } }}>
+                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
                             <BracesVariable width={16} />
                           </Box>
                         </Flex>
@@ -412,7 +437,7 @@ const Form = () => {
                 </Box>
               )}
 
-              <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 2 }}>
+              <Box sx={{ borderBottom: 'solid 1px red', mb: 3, pb: 2 }}>
                 <Text as="h4" mb={2} sx={{ mb: 3 }}>
                   Blocks
                 </Text>
@@ -424,17 +449,14 @@ const Form = () => {
                       sx={{
                         pl: 3,
                         border: 'solid 0.5px',
-                        borderColor: 'gray.3',
-                        bg: 'gray.1',
+                        borderColor: 'border',
+                        bg: 'neutral.200',
                         mb: 1,
                         pt: 2,
                         pb: 3,
                       }}>
-                      <Text sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                      <Text sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
                         {k.title}
-                      </Text>
-                      <Text as="p" sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                        Template Bio
                       </Text>
                     </Box>
                   ))}
@@ -445,7 +467,7 @@ const Form = () => {
         </Box>
 
         {/* <WraftEditor/> */}
-        <Box variant="primary">
+        <Box>
           <Flex sx={{ px: 4, py: 1 }}>
             {loading && <Spinner color="white" size={24} />}
             {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}

@@ -1,10 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
-// import { TrashAlt } from '@styled-icons/boxicons-regular';
-import { deleteEntity, fetchAPI } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
+
+import { fetchAPI, deleteAPI } from '../utils/models';
+
 import LayoutCard from './Card';
-import { useToasts } from 'react-toast-notifications';
 
 export interface ILayout {
   width: number;
@@ -30,29 +31,41 @@ export interface IFieldItem {
   type: string;
 }
 
-const LayoutList: FC = () => {
+interface Props {
+  rerender?: boolean;
+}
+
+const LayoutList = ({ rerender }: Props) => {
   // const token = useSelector(({ login }: any) => login.token);
   // const dispatch = useDispatch();
-  const token = useStoreState((state) => state.auth.token);
-
   const [contents, setContents] = useState<Array<IField>>([]);
-  const { addToast } = useToasts();
 
   /**
    * Delete a Layout
    * @param _id  layout_id
    */
   const onDelete = (_id: string) => {
-    deleteEntity(`layouts/${_id}`, token);
-    addToast('Deleted Theme', { appearance: 'error' });
-    loadLayout();
+    deleteAPI(`layouts/${_id}`)
+      .then(() => {
+        toast.success('Deleted Layout', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        loadLayout();
+      })
+      .catch(() => {
+        toast.error('Failed to delete Layout', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
   };
 
   /**
    * Load all Engines
    */
   const loadLayout = () => {
-    fetchAPI('layouts')
+    fetchAPI('layouts?sort=inserted_at_desc')
       .then((data: any) => {
         const res: IField[] = data.layouts;
         setContents(res);
@@ -62,7 +75,7 @@ const LayoutList: FC = () => {
 
   useEffect(() => {
     loadLayout();
-  }, []);
+  }, [rerender]);
 
   return (
     <Box py={3} mt={4}>
@@ -70,7 +83,7 @@ const LayoutList: FC = () => {
         Layouts
       </Text>
       <Box mx={0} mb={3}>
-        <Flex>
+        <Flex sx={{ flexWrap: 'wrap' }}>
           {contents &&
             contents.length > 0 &&
             contents.map((m: any) => (

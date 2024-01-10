@@ -1,11 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Button } from 'theme-ui';
-import { Plus } from '@styled-icons/boxicons-regular';
+
+import { useStoreActions } from 'easy-peasy';
 import Modal from 'react-modal';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import { loadEntity } from '../utils/models';
+import { Box, Button } from 'theme-ui';
+
 import { modalStyle } from '../utils';
+import { fetchAPI } from '../utils/models';
+
 import ImagesForm from './AssetForm';
+import { PlusAlt as Plus } from './Icons';
 
 // const CategoryCard = (props: any) => (
 //   <Flex variant="tableItem" width={1}>
@@ -29,8 +32,6 @@ interface IImageList {
 }
 
 const Form: FC<IImageList> = ({ onSuccess }) => {
-  const token = useStoreState((state) => state.auth.token);
-
   // const getThemes = useStoreActions((actions: any) => actions.themes.fetch);
   const setCats = useStoreActions((actions: any) => actions.images.set);
   // const addCats = useStoreActions((actions: any) => actions.images.add);
@@ -47,23 +48,17 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
     setShowModal(!showModal);
   }
 
-  const loadDataSuccess = (data: any) => {
-    // console.log('loadDataSuccess', data);
-    const res: any = data.images;
-    setCats(res);
-  };
-
-  const loadData = (t: string) => {
-    loadEntity(t, 'assets', loadDataSuccess);
+  const loadData = () => {
+    fetchAPI('assets').then((data: any) => {
+      const res: any = data.images;
+      setCats(res);
+    });
     return;
   };
 
   useEffect(() => {
-    if (token) {
-      // getThemes();
-      loadData(token);
-    }
-  }, [token]);
+    loadData();
+  }, []);
 
   // useEffect(() => {}, [allCats])
 
@@ -96,7 +91,7 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
       </PageHeader> */}
 
       <Button type="button" onClick={toggleModal}>
-        <Plus width={20} />
+        <Plus width={20} height={20} />
         New Image
       </Button>
       {/* <Box mx={0} mb={3} width={1}>

@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
-import Link from './NavLink';
-import { fetchAPI, deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
-import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+import toast from 'react-hot-toast';
+import { Box, Text } from 'theme-ui';
+
+import { fetchAPI, deleteAPI } from '../utils/models';
+
+import Link from './NavLink';
+// import { Button } from 'theme-ui';
 
 export interface Theme {
   total_pages: number;
@@ -31,8 +32,8 @@ const ItemField = (props: any) => {
       p={3}
       sx={{
         position: 'relative',
-        bg: '#fff',
-        borderBottom: 'solid 1px #eee',
+        borderBottom: 'solid 1px',
+        borderBottomColor: 'gray.100',
         borderRadius: '3px',
         ':hover': {
           '.merry': {
@@ -46,9 +47,6 @@ const ItemField = (props: any) => {
             {props.name}
           </Text>
         </Link>
-        <Text as="p" sx={{ mt: 0, p: 0 }} pt={0} color="grey">
-          Sample Field Description
-        </Text>
       </Box>
       <Box
         className="merry"
@@ -60,21 +58,19 @@ const ItemField = (props: any) => {
           mt: 3,
           mr: 3,
         }}>
-        <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
+        {/* <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
           Delete
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );
 };
 
 const Form: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
-  const { addToast } = useToasts();
 
   const loadData = () => {
-    fetchAPI('themes')
+    fetchAPI('themes?sort=inserted_at_desc')
       .then((data: any) => {
         const res: ThemeElement[] = data.themes;
         setContents(res);
@@ -83,8 +79,12 @@ const Form: FC = () => {
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token);
-    addToast('Deleted Theme', { appearance: 'success' });
+    deleteAPI(`themes/${id}`).then(() => {
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
   };
 
   useEffect(() => {

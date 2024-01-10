@@ -1,15 +1,17 @@
 import React, { useEffect, Fragment } from 'react';
-import { Box, Flex, Text, Container } from 'theme-ui';
-import { Avatar } from 'theme-ui';
-import cookie from 'js-cookie';
 
 import { useStoreState, useStoreActions } from 'easy-peasy';
+import cookie from 'js-cookie';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Container } from 'theme-ui';
+import { Avatar } from 'theme-ui';
+
 // import Container from '../../src/components/Container';
 // relative
-import Link from './NavLink';
-import { UserIcon, BrandLogo } from './Icons';
 import { checkUser } from '../utils/models';
-import { useRouter } from 'next/router';
+
+import { UserIcon, BrandLogo } from './Icons';
+import Link from './NavLink';
 
 export interface IUser {
   name: string;
@@ -58,32 +60,16 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        bg: 'gray.0',
-        borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        bg: 'background',
+        // borderBottom: 'solid 1px',
+        // borderColor: 'border',
         py: 2,
       }}>
       <Container>
-        <Flex sx={{ py: 3, px: 4 }}>
-          <Box>
-            <Link
-              href={token ? '/user-profile' : '/'}
-            // sx={{
-            //   p: 0,
-            //   color: 'gray.0',
-            //   fill: 'red',
-            //   bg: 'red',
-            //   display: 'block',
-            //   svg: {
-            //     color: 'green',
-            //     display: 'block',
-            //     path: { fill: 'yellow' },
-            //     // fill: 'gray.9'
-            //   },
-            // }}
-
-            >
-              <Box sx={{ color: `gray.0`, fill: 'gray.9' }}>
+        <Flex sx={{ py: 3, px: 4, alignItems: 'center' }}>
+          <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
+            <Link href={token ? '/user-profile' : '/'}>
+              <Box sx={{ color: `gray.0`, fill: 'gray.1000' }}>
                 <BrandLogo width="6rem" height="2rem" />
               </Box>
             </Link>
@@ -94,18 +80,39 @@ const UserNav = () => {
               {!token && (
                 <Fragment>
                   <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Join Wraft
                     </Text>
                   </Link>
-                  <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                  <Link href="/pricing">
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Pricing
                     </Text>
                   </Link>
 
                   <Link href="/signup">
-                    <Text sx={{ px: 4, py: 2, fontSize: 2, fontWeight: 900 }}>
+                    <Text
+                      sx={{
+                        px: 4,
+                        py: 2,
+                        fontSize: 2,
+                        fontWeight: 900,
+                        color: '#343E49',
+                      }}>
                       Features
                     </Text>
                   </Link>

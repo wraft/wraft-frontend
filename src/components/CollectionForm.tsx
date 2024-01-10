@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
-import Router, { useRouter } from 'next/router';
 
+import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text } from 'theme-ui';
 import { Input } from 'theme-ui';
 
-import Field from './Field';
-import {
-  createEntity,
-  loadEntity,
-  loadEntityDetail,
-  updateEntity,
-} from '../utils/models';
-
-import PageHeader from './PageHeader';
-import FieldEditor from './FieldEditor';
-import { FieldType, FieldTypeList } from './ContentTypeForm';
 import { isNumeric } from '../utils';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+
+import { FieldType, FieldTypeList } from './ContentTypeForm';
+import Field from './Field';
+import FieldEditor from './FieldEditor';
+import PageHeader from './PageHeader';
 
 export interface FieldTypeItem {
   key: string;
@@ -27,8 +21,12 @@ export interface FieldTypeItem {
 }
 
 const CollectionForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
-  const { addToast } = useToasts();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
@@ -36,22 +34,15 @@ const CollectionForm = () => {
   const [fields, setFields] = useState([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
 
-  const token = useStoreState((state) => state.auth.token);
-
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  /**
-   * All Available Field Types
-   */
-  const loadFieldTypesSuccess = (data: any) => {
-    const res: FieldTypeList = data;
-    setFieldtypes(res.field_types);
-  };
-
-  const loadFieldTypes = (token: string) => {
-    loadEntity(token, 'field_types', loadFieldTypesSuccess);
+  const loadFieldTypes = () => {
+    fetchAPI('field_types').then((data: any) => {
+      const res: FieldTypeList = data;
+      setFieldtypes(res.field_types);
+    });
   };
 
   const formatFields = (fields: any) => {
@@ -74,15 +65,14 @@ const CollectionForm = () => {
     return fieldsMap;
   };
 
-  const onSuccess = (d: any) => {
-    onDone(d);
-  };
-
   /**
    * On Form Created
    */
   const onDone = (_d: any) => {
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
     Router.push(`/forms/edit/${_d?.id}`);
   };
 
@@ -96,23 +86,22 @@ const CollectionForm = () => {
     const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
       console.log('[isUpdate]', isUpdate);
-      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
+      putAPI(`content_types/${data.edit}`, sampleD).then((d: any) => {
+        onDone(d);
+      });
     } else {
       console.log('[isUpdate]', sampleD);
-      createEntity(sampleD, 'content_types', token, onSuccess);
+      postAPI('content_types', sampleD).then((d: any) => {
+        onDone(d);
+      });
     }
-  };
-
-  const onLoadForms = () => {
-    return false;
   };
 
   /**
    * Entity Loader
    */
-  const loadDataDetalis = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntityDetail(tok, `collection_forms?page=1`, id, onLoadForms);
+  const loadDataDetalis = (id: string) => {
+    fetchAPI(`collection_forms/${id}?page=1`);
     return false;
   };
 
@@ -123,11 +112,11 @@ const CollectionForm = () => {
   useEffect(() => {
     if (cId) {
       setIsEdit(true);
-      loadDataDetalis(cId, token);
+      loadDataDetalis(cId);
       setValue('edit', cId);
       setTheme('x');
     }
-  }, [cId, token]);
+  }, [cId]);
 
   /**
    * On Change Color
@@ -185,11 +174,8 @@ const CollectionForm = () => {
   };
 
   useEffect(() => {
-    // if token
-    if (token) {
-      loadFieldTypes(token);
-    }
-  }, [token]);
+    loadFieldTypes();
+  }, []);
 
   return (
     <Box>
@@ -206,7 +192,12 @@ const CollectionForm = () => {
                 <Box mx={0} mb={3}>
                   <Flex>
                     <Box>
-                      <Input name="edit" type="hidden" ref={register} />
+                      <Input
+                        // name="edit"
+                        type="hidden"
+                        // ref={register}
+                        {...register('edit', { required: true })}
+                      />
                       <Field
                         name="title"
                         label="Name"
@@ -219,7 +210,7 @@ const CollectionForm = () => {
                   </Flex>
 
                   {theme?.file && (
-                    <Box sx={{ p: 3, bg: 'teal.6' }}>
+                    <Box sx={{ p: 3, bg: 'teal.700' }}>
                       <Text>{theme?.file}</Text>
                     </Box>
                   )}

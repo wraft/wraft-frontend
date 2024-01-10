@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-// import styled from 'styled-components';
+
 import { useRouter } from 'next/router';
-
-import { useStoreState } from 'easy-peasy';
-
-import { PlayCircle } from '@styled-icons/boxicons-regular';
 import { useForm } from 'react-hook-form';
-
 import Modal, { Styles } from 'react-modal';
+import { Box, Flex, Text, Button } from 'theme-ui';
 
-import { loadEntity, deleteEntity, createEntity } from '../utils/models';
-import { Pipeline } from './PipelineList';
-import Link from './NavLink';
+import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
+
 import Field from './Field';
+import { PlayCircle } from './Icons';
+import Link from './NavLink';
 import PageHeader from './PageHeader';
-
-// import { Form } from '@theme-ui/form';
+import { Pipeline } from './PipelineList';
 
 export interface ITriggers {
   triggers: Trigger[];
@@ -137,28 +132,25 @@ const PipelineForm = (fields: any) => {
 };
 
 const PipelineView = () => {
-  const token = useStoreState((state) => state.auth.token);
-
   const [stages, addStage] = useState<Array<IStage>>([]);
   const [state, setState] = useState<string>('nostart');
-
   const [activePipeline, setActivePipeline] = useState<Pipeline>();
   const [triggers, setTriggers] = useState<ITriggers>();
-
   const [fields, setFields] = useState<any>();
 
   const { register, handleSubmit } = useForm();
-
-  // determine edit state based on URL
   const router = useRouter();
+
   const cId: string = router.query.id as string;
 
   /**
    * Load Layout Edit Details
    * @param token
    */
-  const loadPipeline = (cid: string, token: string) => {
-    loadEntity(token, `pipelines/${cid}`, loadPipelineSuccess);
+  const loadPipeline = (cid: string) => {
+    fetchAPI(`pipelines/${cid}`).then((data: any) => {
+      loadPipelineSuccess(data);
+    });
   };
 
   const loadPipelineSuccess = (data: any) => {
@@ -182,11 +174,11 @@ const PipelineView = () => {
 
   // if we have a route param, load pipeline
   useEffect(() => {
-    if (cId && token) {
-      loadPipeline(cId, token);
+    if (cId) {
+      loadPipeline(cId);
       loadTriggers(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   // if we have a route param, load pipeline
   useEffect(() => {
@@ -240,23 +232,16 @@ const PipelineView = () => {
   };
 
   /**
-   * Set Trigger log list
-   * @param data
-   */
-  const loadTriggerSuccess = (data: any) => {
-    const res: ITriggers = data;
-    setTriggers(res);
-  };
-
-  /**
    * Load trigger history
    * @param id pipline_id
    */
   const loadTriggers = (id: string) => {
     console.log('loading triggers for ', id);
     // setState('running');
-
-    loadEntity(token, `/pipelines/${id}/triggers`, loadTriggerSuccess);
+    fetchAPI(`/pipelines/${id}/triggers`).then((data: any) => {
+      const res: ITriggers = data;
+      setTriggers(res);
+    });
   };
 
   const closeRunning = () => {
@@ -293,7 +278,7 @@ const PipelineView = () => {
       },
     };
 
-    createEntity(dataPost, path, token);
+    postAPI(path, dataPost);
     // create(token, `pipelines/${cid}`, loadPipelineSuccess);
   };
 
@@ -310,7 +295,7 @@ const PipelineView = () => {
       data,
     };
     const path = `/pipelines/${cId}/triggers`;
-    createEntity(dataPost, path, token);
+    postAPI(path, dataPost);
     // updateEntity('organisations', data, token, onCreate);
   };
 
@@ -318,7 +303,7 @@ const PipelineView = () => {
    * Delete this pipeline
    */
   const deletePipeline = (id: any) => {
-    deleteEntity(`pipelines/${id}`, token);
+    deleteAPI(`pipelines/${id}`);
   };
 
   return (
@@ -339,7 +324,7 @@ const PipelineView = () => {
                 {activePipeline.name}
               </Text>
               {/* <Box>
-                <Text sx={{ fontSize: 0, color: 'gray.6', mb: 2 }}>
+                <Text sx={{ fontSize: 0, color: 'text', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
@@ -350,16 +335,16 @@ const PipelineView = () => {
                     variant="btnPrimary"
                     onClick={() => runPipeline(activePipeline.id)}
                     sx={{
-                      bg: 'green.7',
+                      bg: 'gray.800',
                       border: 'solid 1px',
-                      borderColor: 'green.8',
+                      borderColor: 'border',
                       ':hover': {
-                        bg: 'green.8',
+                        bg: 'gray.900',
                       },
                     }}>
                     <Flex>
                       <Box sx={{ mr: 2 }}>
-                        <PlayCircle width={16}/>
+                        <PlayCircle width={16} />
                       </Box>
                       <Text>Run</Text>
                     </Flex>
@@ -368,10 +353,10 @@ const PipelineView = () => {
                     variant="btnPrimary"
                     sx={{
                       ml: 2,
-                      bg: 'gray.0',
+                      bg: 'gray.100',
                       border: 'solid 1px',
-                      borderColor: 'gray.3',
-                      color: 'gray.8',
+                      borderColor: 'border',
+                      color: 'gray.900',
                     }}
                     onClick={() => pipelineCollect()}>
                     <Flex>
@@ -387,13 +372,13 @@ const PipelineView = () => {
                 sx={{
                   // p: 2,
                   fontSize: 0,
-                  color: 'gray.7',
+                  color: 'text',
                   letterSpacing: '-0.2',
                   fontWeight: 100,
                   // bg: 'white',
                   borderRadius: 0,
                   // border: 'solid 1px',
-                  // borderColor: 'gray.3',
+                  // borderColor: 'border',
                 }}>
                 {state === 'running' ? `Running` : ''}
               </Text>
@@ -411,7 +396,7 @@ const PipelineView = () => {
                   <Box
                     sx={{
                       p: 3,
-                      bg: 'gray.0',
+                      bg: 'gray.100',
                       borderLeft: 'solid 1px #eee',
                       my: 3,
                     }}>
@@ -463,9 +448,9 @@ const PipelineView = () => {
                     sx={{
                       borderRadius: 3,
                       // borderColor: 'red',
-                      bg: 'gray.1',
+                      bg: 'gray.200',
                       border: 'solid 1px',
-                      borderColor: 'gray.4',
+                      borderColor: 'border',
                       width: '100%',
                     }}
                     my={4}
@@ -484,7 +469,7 @@ const PipelineView = () => {
 
                             // bg: 'blue',
                             borderBottom: 'solid 1px',
-                            borderColor: 'gray.4',
+                            borderColor: 'border',
                             // background: '#fff',
                             borderLeft: 0,
                           }}>
@@ -508,7 +493,7 @@ const PipelineView = () => {
                               sx={{
                                 fontSize: 2,
                                 fontWeight: 600,
-                                color: 'gray.8',
+                                color: 'text',
                               }}
                               mt={0}
                               // color="#111"
@@ -542,7 +527,7 @@ const PipelineView = () => {
                             key={m?.id}
                             sx={{
                               p: 4,
-                              bg: 'gray.1',
+                              bg: 'gray.200',
                               borderBottom: 'solid 1px #ddd',
                             }}>
                             <Box
@@ -560,9 +545,9 @@ const PipelineView = () => {
                             <Box
                               as="pre"
                               sx={{
-                                bg: 'gray.2',
+                                bg: 'gray.300',
                                 p: 0,
-                                color: 'gray.7',
+                                color: 'gray.800',
                                 height: '30px',
                                 overflow: 'hidden',
                                 width: '60%',
@@ -576,10 +561,10 @@ const PipelineView = () => {
                               sx={{
                                 // ml: 4,
                                 ml: 'auto',
-                                bg: 'gray.0',
-                                color: 'gray.8',
+                                bg: 'gray.100',
+                                color: 'gray.900',
                                 border: 'solid 1px',
-                                borderColor: 'gray.5',
+                                borderColor: 'border',
                               }}>
                               Re-run
                             </Button>

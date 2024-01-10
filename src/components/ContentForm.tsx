@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react';
+
 import Router, { useRouter } from 'next/router';
-
-import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
-import { useToasts } from 'react-toast-notifications';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
+import { Input } from 'theme-ui';
 
-import Field from './Field';
-import FieldText from './FieldText';
-import FieldForm from './FieldForm';
-import EditorWraft from './WraftEditor';
-import NavEdit from './NavEdit';
-import { Template, ContentState } from '../../src/utils/types';
 import {
   cleanName,
   findVars,
   replaceTitles,
   updateVars,
 } from '../../src/utils';
+import { Template, ContentState } from '../../src/utils/types';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { Field as FieldT, FieldInstance } from '../utils/types';
 
+// import { isString } from 'util';
+// import { Spinner } from 'theme-ui';
+// import RichEditorWraft from './EditWraft';
+
+import Field from './Field';
+import FieldForm from './FieldForm';
+import FieldText from './FieldText';
 import { ErrorIcon, TickIcon } from './Icons';
-
 import Modal from './Modal';
+import NavEdit from './NavEdit';
+import EditorWraft from './WraftEditor';
 
 export interface ILayout {
   width: number;
@@ -88,14 +94,6 @@ export interface IFieldTypeValue {
   type: string;
 }
 
-import { Field as FieldT, FieldInstance } from '../utils/types';
-import { createEntity, loadEntity, updateEntity } from '../utils/models';
-// import { isString } from 'util';
-import { Input } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-// import { Spinner } from 'theme-ui';
-// import RichEditorWraft from './EditWraft';
-
 export interface IContentForm {
   id: any;
   edit?: boolean;
@@ -134,7 +132,7 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
         width: '20px',
         height: '20px',
         borderRadius: '9rem',
-        bg: 'green.1',
+        bg: 'gray.200',
         textAlign: 'center',
         mr: 2,
       }}>
@@ -159,8 +157,13 @@ const Form = (props: IContentForm) => {
   // Base
   // -------
   const router = useRouter();
-  const { register, getValues, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
 
   // Content Specific
   // -------
@@ -196,9 +199,10 @@ const Form = (props: IContentForm) => {
 
   // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { addToast } = useToasts();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
+
+  const [pageTitle, setPageTitle] = useState<string>('');
 
   // const refSubmitButtom = useRef<HTMLButtonElement>(null);
 
@@ -281,7 +285,10 @@ const Form = (props: IContentForm) => {
     }
 
     if (data?.content?.id) {
-      addToast('Saved Successfully', { appearance: 'success' });
+      toast.success('Saved Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
       Router.push(`/content/${data.content.id}`);
     }
   };
@@ -315,13 +322,24 @@ const Form = (props: IContentForm) => {
     };
 
     if (edit) {
-      updateEntity(`contents/${id}`, template, token, onCreate);
+      putAPI(`contents/${id}`, template).then((data: any) => {
+        onCreate(data);
+      });
     } else {
-      createEntity(
-        template,
-        `content_types/${data.ttype}/contents`,
-        token,
-        onCreate,
+      postAPI(`content_types/${data.ttype}/contents`, template).then(
+        (data: any) => {
+          if (data?.info) {
+            console.log('Failed Build', data.info);
+          }
+
+          if (data?.content?.id) {
+            toast.success('Saved Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            Router.push(`/content/${data.content.id}`);
+          }
+        },
       );
     }
   };
@@ -334,9 +352,13 @@ const Form = (props: IContentForm) => {
     // console.log('🎃 refresh {', id, '}')
 
     if (edit) {
-      loadEntity(token, `contents/${id}`, onLoadContent);
+      fetchAPI(`contents/${id}`).then((data: any) => {
+        onLoadContent(data);
+      });
     } else {
-      loadEntity(token, `content_types/${id}`, onLoadData);
+      fetchAPI(`content_types/${id}`).then((data: any) => {
+        onLoadData(data);
+      });
       loadTemplates(id);
     }
   };
@@ -382,13 +404,17 @@ const Form = (props: IContentForm) => {
       const content_title = serialbody?.title || undefined;
 
       // fields and templates
-      loadEntity(token, `content_types/${ctypeId}`, onLoadData);
+      fetchAPI(`content_types/${ctypeId}`).then((data: any) => {
+        onLoadData(data);
+      });
       loadTemplates(ctypeId);
 
       console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
 
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
+      setPageTitle(serialbody.title);
+
       const rawraw = serialbody.serialized;
 
       /**
@@ -450,13 +476,10 @@ const Form = (props: IContentForm) => {
    */
   const loadTemplates = (id: string) => {
     setActiveTemplate(id);
-    token &&
-      loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
-  };
-
-  const onLoadTemplate = (data: any) => {
-    const res: Template[] = data.data_templates;
-    setTemplates(res);
+    fetchAPI(`content_types/${id}/data_templates`).then((data: any) => {
+      const res: Template[] = data.data_templates;
+      setTemplates(res);
+    });
   };
 
   // const setDefaultState = (content: IField) => {
@@ -497,11 +520,8 @@ const Form = (props: IContentForm) => {
   // );
 
   useEffect(() => {
-    if (token && token.length > 0) {
-      console.log('🧶 [content] `token` check refresh', token);
-      loadData(id);
-    }
-  }, [token]);
+    loadData(id);
+  }, []);
 
   useEffect(() => {
     // getSummary();
@@ -600,9 +620,10 @@ const Form = (props: IContentForm) => {
    */
 
   const changeText = (x: any) => {
-    setShowForm(!showForm);
+    setShowForm(true);
 
     setActiveTemplate(x.id);
+    setTemplate(false);
 
     textOperation(x);
 
@@ -726,7 +747,7 @@ const Form = (props: IContentForm) => {
 
   return (
     <Box sx={{ p: 0 }}>
-      <NavEdit navtitle={title} onToggleEdit={toggleEdit} />
+      <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
         {/* {status && <Box sx={{ display: 'none' }} />} */}
         {insertable && status && <Box sx={{ display: 'none' }} />}
@@ -756,8 +777,10 @@ const Form = (props: IContentForm) => {
 
             <Box
               sx={{
-                bg: 'gray.0',
-                borderBottom: 'solid 1px #ddd',
+                // position: 'relative',
+                bg: 'neutral.100',
+                borderBottom: 'solid 1px',
+                borderBottomColor: 'neutral.200',
                 p: 4,
                 display: showTitleEdit ? 'block' : 'block',
                 flexGrow: 1,
@@ -765,8 +788,16 @@ const Form = (props: IContentForm) => {
                 pl: 2,
                 pt: 2,
               }}>
-              <Flex>
-                <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
+              <Flex
+                sx={{
+                  bg: 'neutral.100',
+                  // position: 'absolute',
+                  top: 0,
+                  right: 1,
+                  left: 1,
+                  zIndex: 9000,
+                }}>
+                <Box sx={{ width: '90%', pl: 3, pt: 2, display: 'none' }}>
                   <Field
                     name="title"
                     label=""
@@ -788,13 +819,13 @@ const Form = (props: IContentForm) => {
                     register={register}
                   />
                 </Box>
-                <Box sx={{ width: '10%', pt: 2 }}>
+                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
                   <Button
                     // ref={refSubmitButtom}
                     variant="btnPrimary"
                     type="submit"
                     sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>
-                    Publish
+                    Save
                   </Button>
                 </Box>
               </Flex>
@@ -808,7 +839,12 @@ const Form = (props: IContentForm) => {
                   p: 0,
                   position: 'relative',
                   lineHeight: 1.5,
+                  py: 3,
                   fontFamily: 'body',
+                  '.remirror-editor-wrapper ': {
+                    pl: '2rem',
+                    pr: '2rem',
+                  },
                 }}>
                 <Button
                   variant="secondary"
@@ -829,14 +865,14 @@ const Form = (props: IContentForm) => {
                 <Box
                   sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
                   {body && body?.md && raw && (
-                    <Box sx={{ color: 'green.4' }}>
+                    <Box sx={{ color: 'text' }}>
                       <TickIcon />
                     </Box>
                   )}
 
                   {!raw ||
                     (!body?.md && (
-                      <Box sx={{ color: 'red.4' }}>
+                      <Box sx={{ color: 'red.500' }}>
                         <ErrorIcon />
                       </Box>
                     ))}
@@ -858,10 +894,11 @@ const Form = (props: IContentForm) => {
                   <Label>Edit </Label>
                   <Input
                     id="edit"
-                    name="edit"
+                    // name="edit"
                     defaultValue={id}
                     // hidden={true}
-                    ref={register({ required: true })}
+                    // ref={register({ required: true })}
+                    {...register('edit', { required: true })}
                   />
                 </Box>
               )}
@@ -877,10 +914,11 @@ const Form = (props: IContentForm) => {
           <Box
             variant="plateRightBar"
             sx={{
-              bg: '#FAFBFC',
+              bg: 'neutral.100',
               ml: 0,
               width: '30%',
-              borderLeft: 'solid 1px #ddd',
+              borderLeft: 'solid 1px',
+              borderColor: 'border',
               pt: 3,
             }}>
             <Box sx={{ px: 3 }}>
@@ -904,9 +942,9 @@ const Form = (props: IContentForm) => {
                       as="h6"
                       sx={{
                         fontWeight: 500,
-                        bg: 'green.1',
+                        bg: 'gray.200',
                         ml: 2,
-                        color: 'green.9',
+                        color: 'green.1000',
                         px: 1,
                         py: 1,
                         borderRadius: '3px',
@@ -920,7 +958,7 @@ const Form = (props: IContentForm) => {
                 </Box>
                 <Flex sx={{ ml: 'auto' }}>
                   {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button> */}
-                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'green.0', color: 'green.8', borderColor: 'green.4', border: 'solid 1px' }} type="submit">Send</Button> */}
+                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'gray.100', color: 'gray.900', borderColor: 'border', border: 'solid 1px' }} type="submit">Send</Button> */}
                   {/* <Button ref={refSubmitButtom} sx={{ ml: 'auto', fontWeight: 600 }} type="submit">Publish</Button> */}
                 </Flex>
               </Flex>
@@ -974,9 +1012,9 @@ const Form = (props: IContentForm) => {
             </Box>
 
             <Modal isOpen={showTemplate} onClose={closeModal}>
-              <Box sx={{ p: 4 }}>
+              <Box sx={{ px: 3, py: 3 }}>
                 <Box sx={{ pb: 2 }}>
-                  <Text sx={{ fontSize: 1, color: 'gray.6', pb: 3, mb: 3 }}>
+                  <Text sx={{ fontSize: 2, color: 'gray.700', pb: 3, mb: 3 }}>
                     Templates
                   </Text>
                 </Box>
@@ -986,26 +1024,25 @@ const Form = (props: IContentForm) => {
                       <Box
                         key={n.id}
                         sx={{
-                          bg: 'gray.0',
+                          bg: 'neutral.100',
                           pl: 3,
                           border: 'solid 0.5px',
-                          borderColor: 'gray.2',
+                          borderColor: 'border',
                           mb: 1,
                           pt: 2,
                           pb: 3,
                           pr: 3,
+                          cursor: 'pointer',
                           width: '100%',
+                          ':hover': {
+                            bg: 'neutral.200',
+                          },
                         }}
                         onClick={() => changeText(n)}>
                         <Text
                           as="h6"
-                          sx={{ fontSize: 1, mb: 0, fontWeight: 600 }}>
+                          sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
                           {n.title}
-                        </Text>
-                        <Text
-                          as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
-                          Description
                         </Text>
                       </Box>
                     ))}
@@ -1040,7 +1077,7 @@ const Form = (props: IContentForm) => {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
-                    sx={{ bg: '#F5F7FE', pb: 2, borderTop: 0 }}>
+                    sx={{ bg: 'teal.100', pb: 2, borderTop: 0 }}>
                     <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
@@ -1049,7 +1086,7 @@ const Form = (props: IContentForm) => {
                     </Text>
                   </Box>
 
-                  <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                  <Box sx={{ pt: 2, px: 3, bg: 'teal.100' }}>
                     <Box>
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
@@ -1065,21 +1102,18 @@ const Form = (props: IContentForm) => {
                     </Box>
                   </Box>
 
-                  <Box sx={{ bg: 'white', p: 3 }}>
+                  {/* <Box sx={{ bg: 'neutral.100', p: 3 }}>
                     <Button
+                      variant="btnPrimary"
                       form="hook-form"
                       sx={{
                         fontWeight: 600,
                         mr: 2,
-                        bg: 'primary',
-                        color: 'green.0',
-                        borderColor: 'green.9',
-                        border: 'solid 1px',
                       }}
                       type="submit">
                       Publish
                     </Button>
-                  </Box>
+                  </Box> */}
                 </Box>
               )}
             </Box>

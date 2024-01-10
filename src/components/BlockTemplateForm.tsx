@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
+
+import Router, { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
 
-import { useForm } from 'react-hook-form';
-
-import Field from './Field';
-import FieldText from './FieldText';
-import { BlockTemplates } from '../utils/types';
-// import styled from 'styled-components';
-import EditorWraft from './EditorWraft';
+import { useAuth } from '../contexts/AuthContext';
 import {
   API_HOST,
-  createEntity,
-  deleteEntity,
-  loadEntityDetail,
-  updateEntity,
+  postAPI,
+  putAPI,
+  fetchAPI,
+  deleteAPI,
 } from '../utils/models';
-import Router, { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+import { BlockTemplates } from '../utils/types';
 
+import EditorWraft from './EditorWraft';
+import Field from './Field';
+import FieldText from './FieldText';
 import ImagesList from './ImagesList';
 
 // const Tag = styled(Box)`
@@ -59,8 +58,12 @@ const EMPTY_MARKDOWN_NODE = {
 };
 
 const Form = () => {
-  const token = useStoreState((state) => state.auth.token);
-  const { register, handleSubmit, errors, setValue } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   // const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
@@ -70,6 +73,7 @@ const Form = () => {
   // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
 
+  const { accessToken } = useAuth();
   const [insertable, setInsertable] = useState<any>(EMPTY_MARKDOWN_NODE);
   const [status, setStatus] = useState<number>(0);
   // const [loaded, setLoaded] = useState<boolean>(false);
@@ -78,8 +82,6 @@ const Form = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [saved, setSaved] = useState<boolean>(false);
-
-  const { addToast } = useToasts();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -125,17 +127,6 @@ const Form = () => {
     setInsertable(imageNode);
   };
 
-  /**
-   * Form Submit
-   * @param data
-   */
-
-  const onSuccess = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    setLoading(false);
-    setSaved(true);
-  };
-
   /** Editor Submit */
 
   const onSubmit = (data: any) => {
@@ -149,9 +140,23 @@ const Form = () => {
 
     // if edit is live
     if (cId) {
-      updateEntity(`block_templates/${cId}`, formValues, token, onSuccess);
+      putAPI(`block_templates/${cId}`, formValues).then(() => {
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+        setSaved(true);
+      });
     } else {
-      createEntity(formValues, `block_templates`, token, onSuccess);
+      postAPI(`block_templates`, formValues).then(() => {
+        toast.success('Saved Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        setLoading(false);
+        setSaved(true);
+      });
     }
   };
 
@@ -159,12 +164,10 @@ const Form = () => {
    * Load Content Type Details
    * @param id
    */
-  const loadTemplate = (id: string, token: string) => {
-    loadEntityDetail(token, 'block_templates', id, loadTemplateSuccess);
-  };
-
-  const loadTemplateSuccess = (data: BlockTemplates) => {
-    setDataTemplate(data);
+  const loadTemplate = (id: string) => {
+    fetchAPI(`block_templates/${id}`).then((data: BlockTemplates) => {
+      setDataTemplate(data);
+    });
   };
 
   const doUpdate = (state: any) => {
@@ -190,7 +193,7 @@ const Form = () => {
 
       setInsertable(contentBody);
     }
-  }, [token, dataTemplate]);
+  }, [accessToken, dataTemplate]);
 
   useEffect(() => {
     if (saved) {
@@ -209,10 +212,10 @@ const Form = () => {
     if (cId === 'xd') {
       setCleanInsert(false);
     }
-    if (token && cId) {
-      loadTemplate(cId, token);
+    if (cId) {
+      loadTemplate(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   useEffect(() => {
     if (dataTemplate) {
@@ -224,10 +227,14 @@ const Form = () => {
    * Delete a block
    */
   const deleteBlock = () => {
-    if (cId && token) {
-      deleteEntity(`block_templates/${cId}`, token);
-      Router.push(`/block_templates`);
-      addToast('Deleted Block Successfully', { appearance: 'error' });
+    if (cId) {
+      deleteAPI(`block_templates/${cId}`).then(() => {
+        Router.push(`/block_templates`);
+        toast.success('Deleted Block Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
     }
   };
 
@@ -239,7 +246,8 @@ const Form = () => {
       mt={4}
       mx={4}
       mb={3}
-      variant="w100">
+      // variant="w100"
+    >
       <Box>
         <Text mb={3} variant="pagetitle">
           Create Block
@@ -283,6 +291,7 @@ const Form = () => {
                 editable={true}
                 cleanInsert={cleanInsert}
                 insertable={insertable}
+                inline={true}
               />
             )}
             {/* <Box pt={2} mb={3}>

@@ -1,19 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import { AxiosRequestConfig, AxiosError } from 'axios';
 import produce from 'immer';
+import cookie from 'js-cookie';
+
+import { Layout, User, Style, FlowBranch } from '../components/Icons';
+
 import { ContentState } from './types';
-// import { Flat } from "lodash";
 
-import { Layout, User, Collection } from '@styled-icons/boxicons-regular';
-
-import { Style } from '@styled-icons/material-sharp/Style';
-import { FlowBranch } from '@styled-icons/entypo/FlowBranch';
-
-// dayjs.extend(dayjsTwitter)
-
-// export function shortDate(date:any) {
-//   return dayjs(date)?.twitter();
-// }
+/**
+ *  @TODO Icons: Convert to local files
+ */
 
 // util fns here!
 export interface IField {
@@ -57,7 +54,6 @@ export const updateVars = (data: ContentState, fields: any) => {
                 attrs: { name },
               } = c;
               const ff = fields.find((e: any) => e.name === name);
-              // console.log('updateStuff ' + name, ff);
               draft['content'][k]['content'][y]['attrs']['named'] =
                 ff && ff.value;
             }
@@ -83,7 +79,7 @@ export const replaceBoy = (
   maps: IField[],
   escaped: boolean,
 ): string => {
-  const localBody: string = body;
+  let localBody: string = body;
 
   if (localBody && localBody.length > 1) {
     // loop through variables
@@ -116,7 +112,7 @@ export const replaceBoy = (
 
 export const findVars = (body: string, escaped: boolean): string[] => {
   // find vars in this form
-  const regexp = /\[\w+\]/gm;
+  let regexp = /\[\w+\]/gm;
   if (escaped) {
     regexp = /\\\[\w+\\\]/gm;
   }
@@ -301,7 +297,7 @@ export const isNumeric = (str: any) => {
 export interface menuLinksProps {
   name: string;
   path: string;
-  logo: any;
+  logo?: any;
 }
 
 export const menuLinks: menuLinksProps[] = [
@@ -322,24 +318,64 @@ export const menuLinks: menuLinksProps[] = [
     path: '/manage/themes',
   },
   {
-    name: 'Roles',
-    logo: <User width="20px" />,
-    path: '/manage/roles',
-  },
-  {
     name: 'Fields',
     logo: <User width="20px" />,
     path: '/manage/fields',
   },
+];
+
+{
+  /* <NavLink href={'/account'} variant="btnNavLink">
+        My Profile
+      </NavLink>
+      <NavLink href={'/account/company'} variant="btnSecondary">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
+      </NavLink>
+      <NavLink href={'/account/roles'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Roles</Text>
+      </NavLink>
+      <NavLink href={'/account/members'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>
+      </NavLink>
+      <NavLink href={'/account/checks'} variant="btnNavLink">
+        <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
+      </NavLink> */
+}
+
+export const workspaceLinks: menuLinksProps[] = [
   {
-    name: 'Pipelines',
-    logo: <Collection width={20} />,
-    path: '/manage/pipelines',
+    name: 'Workspace',
+    path: '/manage/workspace',
+  },
+  {
+    name: 'Team',
+    path: '/manage/workspace/team',
+  },
+
+  {
+    name: 'Roles',
+    path: '/manage/workspace/roles',
+  },
+  {
+    name: 'Permissions',
+    path: '/manage/workspace/permissions',
   },
 ];
 
-import cookie from 'js-cookie';
-import { AxiosRequestConfig, AxiosError } from 'axios';
+export const profileLinks: menuLinksProps[] = [
+  {
+    name: 'My Account',
+    path: '/account',
+  },
+  {
+    name: 'Manage Workspace',
+    path: '/account/company',
+  },
+  // {
+  //   name: 'Checks',
+  //   path: '/account/checks',
+  // },
+];
 
 export const removeProtocol = (link: string) =>
   link.replace(/^https?:\/\//, '');

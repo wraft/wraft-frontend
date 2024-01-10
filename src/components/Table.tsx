@@ -1,35 +1,38 @@
 /* eslint react/jsx-key: 0 */
 import React from 'react';
-import { ThemeUIStyleObject, Box } from 'theme-ui';
+
 import { PluginHook, useTable, UseTableOptions } from 'react-table';
+import { ThemeUIStyleObject, Box } from 'theme-ui';
 export * from 'react-table';
 
-const styles = {
+export const styles = {
   table: {
     borderCollapse: 'collapse',
     width: '100%',
     border: '1px solid',
-    borderColor: 'gray.3',
+    borderColor: 'border',
     textAlign: 'left',
+    bg: 'backgroundWhite',
   } as ThemeUIStyleObject,
   thead: {
-    bg: 'gray.0',
+    bg: 'gray.100',
     fontSize: 0,
     textTransform: 'uppercase',
     border: '1px solid',
-    borderColor: 'gray.3',
-    color: 'gray.6',
+    borderColor: 'border',
+    color: 'gray.200',
   },
   tr: {
     verticalAlign: 'top',
-    bg: 'gray.0',
+    // bg: 'gray.100',
     borderBottom: '1px solid',
-    borderBottomColor: 'gray.2',
+    borderBottomColor: 'neutral.200',
     '&:last-child': {
       border: '0',
     },
     '&:hover': {
-      bg: 'gray.1',
+      // bg: 'neutral.200',
+      bg: 'background',
     },
   },
   th: { p: 2, textAlign: 'left', fontWeight: 'normal' },
@@ -54,12 +57,11 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
       <Box
         as="thead"
         sx={{
-          bg: 'gray.0',
           fontSize: 0,
           textTransform: 'uppercase',
           border: '1px solid',
-          borderColor: 'gray.3',
-          color: 'gray.6',
+          borderColor: 'border',
+          color: 'gray.400',
         }}>
         {/* sx={{...styles.thead}} */}
         {headerGroups.map((headerGroup) => (

@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
+
+import toast from 'react-hot-toast';
 import { Box, Text, Flex } from 'theme-ui';
-import Link from './NavLink';
-import { EmptyForm } from './Icons';
-import { fetchAPI, deleteEntity } from '../utils/models';
-import { useStoreState } from 'easy-peasy';
 import { Button } from 'theme-ui';
 
-import { useToasts } from 'react-toast-notifications';
+import { fetchAPI, deleteAPI } from '../utils/models';
+
+import { EmptyForm } from './Icons';
+import Link from './NavLink';
 
 export interface Theme {
   total_pages: number;
@@ -69,9 +70,7 @@ const ItemField = (props: any) => {
 };
 
 const FormList: FC = () => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<FormElement>>([]);
-  const { addToast } = useToasts();
 
   const loadData = () => {
     fetchAPI('collection_forms')
@@ -83,8 +82,12 @@ const FormList: FC = () => {
   };
 
   const onDelete = (id: string) => {
-    deleteEntity(`themes/${id}`, token);
-    addToast('Deleted Theme', { appearance: 'success' });
+    deleteAPI(`themes/${id}`).then(() => {
+      toast.success('Deleted Theme', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
   };
 
   useEffect(() => {
@@ -97,14 +100,14 @@ const FormList: FC = () => {
         {contents.length < 1 && (
           <Box>
             <Flex>
-              <Box sx={{ color: 'gray.5', width: 'auto' }}>
+              <Box sx={{ color: 'gray.500', width: 'auto' }}>
                 <EmptyForm />
               </Box>
               <Box sx={{ m: 2, pb: 0 }}>
                 <Text as="h2" sx={{ fontWeight: 300 }}>
                   No Forms present
                 </Text>
-                <Text as="h3" sx={{ fontWeight: 200, color: 'gray.6' }}>
+                <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
                   You have not created a collection form yet, click below to
                   create one
                 </Text>

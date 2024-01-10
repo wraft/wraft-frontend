@@ -1,47 +1,35 @@
 import React, { FC, useCallback, useState, useEffect, useMemo } from 'react';
-import { RemirrorJSON } from 'remirror';
-import { BlockquoteExtension } from '@remirror/extension-blockquote';
-import { BoldExtension } from '@remirror/extension-bold';
-import { ItalicExtension } from '@remirror/extension-italic';
-import { ParagraphExtension } from '@remirror/extension-paragraph';
-import { StrikeExtension } from '@remirror/extension-strike';
-import { UnderlineExtension } from '@remirror/extension-underline';
-import { HeadingExtension } from '@remirror/extension-heading';
-import { HardBreakExtension } from '@remirror/extension-hard-break';
-import { TableExtension } from '@remirror/extension-tables';
-import { ImageExtension } from '@remirror/extension-image';
-import { MarkdownExtension } from '@remirror/extension-markdown';
-
-// import { CountExtension } from '@remirror/extension-count';
 
 import { css } from '@emotion/css';
-
 import { isBoolean, Cast } from '@remirror/core';
-
-import { ResolvedPos } from 'prosemirror-model';
-
-// import { ArrowsAngleContract } from '@styled-icons/bootstrap/ArrowsAngleContract';
-// import { ArrowsAngleExpand } from '@styled-icons/bootstrap/ArrowsAngleExpand';
-import { ArrowMinimize as ArrowsAngleContract } from '@styled-icons/fluentui-system-filled/ArrowMinimize';
-import { ArrowMaximize as ArrowsAngleExpand } from '@styled-icons/fluentui-system-filled/ArrowMaximize';
-// import { ListOl } from '@styled-icons/boxicons-regular/ListOl';
-import { Close as CloseIcon } from '@styled-icons/evil/Close';
-import { TaskListLtr } from '@styled-icons/fluentui-system-filled/TaskListLtr';
+import { BlockquoteExtension } from '@remirror/extension-blockquote';
+import { BoldExtension } from '@remirror/extension-bold';
+import { HardBreakExtension } from '@remirror/extension-hard-break';
+import { HeadingExtension } from '@remirror/extension-heading';
+import { ImageExtension } from '@remirror/extension-image';
+// eslint-disable-next-line import/order
+import { ItalicExtension } from '@remirror/extension-italic';
+// import { CountExtension } from '@remirror/extension-count';
+/**
+ *  @TODO Icons: Convert to local files
+ */
 
 import {
   BulletListExtension,
   ListItemExtension,
   OrderedListExtension,
 } from '@remirror/extension-list';
+import { MarkdownExtension } from '@remirror/extension-markdown';
+import { ParagraphExtension } from '@remirror/extension-paragraph';
+import { StrikeExtension } from '@remirror/extension-strike';
+import { TableExtension } from '@remirror/extension-tables';
+// eslint-disable-next-line import/order
+import { UnderlineExtension } from '@remirror/extension-underline';
 
 import 'remirror/styles/all.css';
 // import { AllStyledComponent } from '@remirror/styles/emotion';
-import { HolderAtomExtension } from './holder/holder-atom';
 
 // import { IdentifierSchemaAttributes } from 'remirror';
-
-
-import { HolderAtomPopupComponent } from './holder/holder-popover';
 
 import {
   EditorComponent,
@@ -49,8 +37,9 @@ import {
   ThemeProvider,
   useRemirror,
 } from '@remirror/react';
-
-import { Box, Button } from 'theme-ui';
+import { ResolvedPos } from 'prosemirror-model';
+// eslint-disable-next-line import/order
+import { RemirrorJSON } from 'remirror';
 
 // const WordsCounter = () => {
 //   const { getWordCount } = useHelpers(true);
@@ -65,7 +54,7 @@ import { Box, Button } from 'theme-ui';
 //         '.remirror-theme h3': {
 //           fontSize: 1,
 //           m: 0,
-//           color: 'red.3',
+//           color: 'red.400',
 //           margin: '0 !important',
 //         },
 //       }}>
@@ -93,13 +82,25 @@ import { Box, Button } from 'theme-ui';
 //         }}>
 //         {count}
 //       </Text>
-//     </Div>
+//     </div>
 //   );
 // };
 // import { HolderExtension } from "./holder";
 
 // import toolbarItems from './toolbar';
 import { MentionAtomExtension } from 'remirror/extensions';
+import { Box, Button } from 'theme-ui';
+
+import {
+  ArrowMinimize as ArrowsAngleContract,
+  ArrowMaximize as ArrowsAngleExpand,
+  TaskListLtr,
+  Close as CloseIcon,
+} from '../Icons';
+
+import { HolderAtomExtension } from './holder/holder-atom';
+import { HolderAtomPopupComponent } from './holder/holder-popover';
+
 // import { HolderPopupComponent  } from "./holder/holderPopup";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -125,6 +126,7 @@ interface EditorProps {
   cleanInsert?: boolean;
   showToolbar?: boolean;
   searchables?: any;
+  inline?: boolean;
 }
 
 /**
@@ -173,6 +175,7 @@ const EditorWraft: FC<EditorProps> = ({
   onUpdate,
   editable,
   // ready,
+  inline = false,
   showToolbar = false,
   searchables,
 }) => {
@@ -357,27 +360,31 @@ const EditorWraft: FC<EditorProps> = ({
         lineHeight: 1.5,
         fontSize: 2,
         m: 0,
-        px: 4,
+        px: inline ? 0 : 1,
         '.remirror-toolbar': {
-          bg: 'gray.0',
+          bg: 'gray.100',
         },
         '.remirror-role': {
-          bg: 'gray.0',
-          color: 'gray.9',
+          bg: 'gray.100',
+          color: 'gray.1000',
         },
         '&.remirror-editor': {
           bg: 'blue',
-          p: 5,
+          p: inline ? 0 : 0,
         },
         '.remirror-editor': {
-          p: 5,
-          bg: 'blue',
+          p: inline ? 0 : 0,
+          bg: 'red.300',
+        },
+        '.hidden': {
+          display: 'none',
         },
       }}>
-        <div>{showToolbar}</div>
+      <div>{showToolbar}</div>
+
       <div>
         <div>
-          <div>
+          <div className="hidden">
             <div>
               {/* <Text variant="labelcaps">Outline</Text> */}
               <Button
@@ -388,8 +395,8 @@ const EditorWraft: FC<EditorProps> = ({
                   mr: 1,
                   ml: 'auto',
                   border: 'solid 1px',
-                  borderColor: 'gray.3',
-                  // color: 'gray.6',
+                  borderColor: 'border',
+                  // color: 'text',
                 }}
                 onClick={() => setShowOutline(!showoutline)}>
                 <CloseIcon width={12} />
@@ -400,7 +407,7 @@ const EditorWraft: FC<EditorProps> = ({
               outline.length > 0 &&
               outline.map((o: outlineP, index: any) => (
                 <div key={index}>
-                  <div onClick={o.onGo}>{o.body}</div>
+                  <Box onClick={o.onGo}>{o.body}</Box>
                 </div>
               ))}
           </div>
@@ -412,43 +419,40 @@ const EditorWraft: FC<EditorProps> = ({
             editable={editable}
             classNames={[
               css`
-              &.ProseMirror { 
-                width: 100%;
-                
-                padding: 100px;
-                box-shadow: none !important;
-                .remirror-role {
-                  background: #000 !important;
-                }
+                &.ProseMirror {
+                  width: 100%;
 
-                .holder {
-                  border-bottom:solid 2px #39bf3f;
-                  // background-color: #f1f7d498;
-                  font-style: normal;
-                  color: #022203;  
-                  font-weight: 900;
-                  margin-right: 4px;
-                  margin-left: 4px;
+                  padding: 100px;
+                  box-shadow: none !important;
+                  .remirror-role {
+                    background: #000 !important;
+                  }
+
+                  .holder {
+                    border-bottom: solid 2px #39bf3f;
+                    // background-color: #f1f7d498;
+                    font-style: normal;
+                    color: #022203;
+                    font-weight: 900;
+                    margin-right: 4px;
+                    margin-left: 4px;
+                  }
+
+                  .no-holder {
+                    border-bottom: solid 2px #926666;
+                    margin-right: 6px;
+                    font-style: normal;
+                    color: #9e0909;
+                  }
+                  p,
+                  h3,
+                  h4 {
+                  }
+                  h1,
+                  h2 {
+                  }
                 }
-                
-                .no-holder {
-                  border-bottom:solid 2px #926666;
-                  margin-right: 6px; */
-                  // background-color: #f1f7d4;
-                  font-style: normal;
-                  color: #9e0909;  
-                }
-                p,
-                h3,
-                h4 {
-                  
-                }
-                h1,
-                h2 {
-                  
-                }
-              }
-            `,
+              `,
             ]}>
             {/* {showToolbar ? (
               <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
@@ -456,7 +460,7 @@ const EditorWraft: FC<EditorProps> = ({
               ''
             )} */}
             <div>
-              <div>
+              <div className="hidden">
                 <button
                   type="button"
                   // variant="btnSecondary"
@@ -465,8 +469,8 @@ const EditorWraft: FC<EditorProps> = ({
                   //   mr: 1,
                   //   px: 2,
                   //   border: 'solid 1px',
-                  //   borderColor: 'gray.3',
-                  //   // color: 'gray.6',
+                  //   borderColor: 'border',
+                  //   // color: 'gray.700',
                   // }}
                   onClick={() => setShowOutline(!showoutline)}>
                   <TaskListLtr width={16} />
@@ -479,8 +483,8 @@ const EditorWraft: FC<EditorProps> = ({
                   //   mr: 1,
                   //   ml: 'auto',
                   //   border: 'solid 1px',
-                  //   borderColor: 'gray.3',
-                  //   // color: 'gray.6',
+                  //   borderColor: 'border',
+                  //   // color: 'gray.700',
                   // }}
                   // sx={{ py: 0 }}
                   onClick={() => toggleView()}>
@@ -491,7 +495,6 @@ const EditorWraft: FC<EditorProps> = ({
                   )}
                 </button>
               </div>
-              <div>{/* <WordsCounter /> */}</div>
             </div>
             <div>
               <EditorComponent />

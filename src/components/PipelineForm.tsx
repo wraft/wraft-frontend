@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
 
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import Modal from 'react-modal';
+import { Box, Flex, Button, Text } from 'theme-ui';
+import { Label, Select } from 'theme-ui';
+
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { IContentType, Template } from '../utils/types';
 
 import Field from './Field';
-import {
-  createEntity,
-  loadEntity,
-  loadEntityDetail,
-  updateEntity,
-} from '../utils/models';
 import PageHeader from './PageHeader';
+import { Pipeline } from './PipelineList';
 
 const customStyles = {
   content: {
@@ -25,13 +26,6 @@ const customStyles = {
     overflow: 'scroll',
   },
 };
-
-import { IContentType, Template } from '../utils/types';
-import { Label, Select } from 'theme-ui';
-import styled from 'styled-components';
-import { useRouter } from 'next/router';
-import { Pipeline } from './PipelineList';
-import { useStoreState } from 'easy-peasy';
 
 export interface IStage {
   name: string;
@@ -53,8 +47,13 @@ const ListGroup = styled(Box)`
 `;
 
 const PipelineForm = () => {
-  const { register, handleSubmit, errors, getValues, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue,
+  } = useForm();
   const [templates, setTemplates] = useState<Array<Template>>([]);
   //
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
@@ -89,28 +88,24 @@ const PipelineForm = () => {
 
     if (isEdit) {
       const aId = activePipeline && activePipeline.id;
-      updateEntity(`/pipelines/${aId}`, submitt, token);
+      putAPI(`/pipelines/${aId}`, submitt);
     } else {
-      createEntity(submitt, 'pipelines', token);
+      postAPI('pipelines', submitt);
     }
   };
 
-  const loadTypesSuccess = (data: any) => {
-    const res: IContentType[] = data.content_types;
-    setContentTypes(res);
-  };
-
   const loadTypes = () => {
-    loadEntity(token, 'content_types', loadTypesSuccess);
+    fetchAPI('content_types').then((data: any) => {
+      const res: IContentType[] = data.content_types;
+      setContentTypes(res);
+    });
   };
 
-  const loadDetailSuccess = (data: any) => {
-    const res: IContentType = data.content_type;
-    setCtypeActive(res);
-  };
-
-  const loadDetail = (token: string, id: string) => {
-    loadEntityDetail(token, 'content_types', id, loadDetailSuccess);
+  const loadDetail = (id: string) => {
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      const res: IContentType = data.content_type;
+      setCtypeActive(res);
+    });
   };
 
   /**
@@ -118,31 +113,25 @@ const PipelineForm = () => {
    * @param id
    */
   const loadTemplates = (id: string) => {
-    loadEntity(token, `content_types/${id}/data_templates`, onLoadTemplate);
-  };
-
-  const onLoadTemplate = (data: any) => {
-    const res: Template[] = data.data_templates;
-    setTemplates(res);
+    fetchAPI(`content_types/${id}/data_templates`).then((data: any) => {
+      const res: Template[] = data.data_templates;
+      setTemplates(res);
+    });
   };
 
   useEffect(() => {
-    if (token) {
-      loadTypes();
-    }
-  }, [token]);
+    loadTypes();
+  }, []);
 
   /**
    * Load Layout Edit Details
    * @param token
    */
-  const loadPipeline = (cid: string, token: string) => {
-    loadEntity(token, `pipelines/${cid}`, loadPipelineSuccess);
-  };
-
-  const loadPipelineSuccess = (data: any) => {
-    const res: Pipeline = data;
-    setActivePipeline(res);
+  const loadPipeline = (cid: string) => {
+    fetchAPI(`pipelines/${cid}`).then((data: any) => {
+      const res: Pipeline = data;
+      setActivePipeline(res);
+    });
   };
 
   useEffect(() => {
@@ -175,9 +164,9 @@ const PipelineForm = () => {
 
   useEffect(() => {
     if (cId) {
-      loadPipeline(cId, token);
+      loadPipeline(cId);
     }
-  }, [token, cId]);
+  }, [cId]);
 
   // const LoadContentType = (props:any) => {
   //   console.log('x', props);
@@ -187,7 +176,7 @@ const PipelineForm = () => {
     const eId = e.target.value;
 
     if (eId) {
-      loadDetail(token, eId);
+      loadDetail(eId);
       loadTemplates(eId);
     }
   };
@@ -309,10 +298,11 @@ const PipelineForm = () => {
                   <Box>
                     <Select
                       id="content_type_id"
-                      name="content_type_id"
-                      onChange={LoadContentType}
+                      // name="content_type_id"
                       defaultValue="Parent ID"
-                      ref={register({ required: true })}>
+                      // ref={register({ required: true })}
+                      {...register('content_type_id', { required: true })}
+                      onChange={LoadContentType}>
                       {ctypes &&
                         ctypes.length > 0 &&
                         ctypes.map((m: any) => (
@@ -329,9 +319,10 @@ const PipelineForm = () => {
                         </Label>
                         <Select
                           id="data_template_id"
-                          name="data_template_id"
+                          // name="data_template_id"
                           defaultValue="Parent ID"
-                          ref={register({ required: true })}>
+                          // ref={register({ required: true })}
+                          {...register('data_template_id', { required: true })}>
                           {templates &&
                             templates.length > 0 &&
                             templates.map((m: any) => (
@@ -350,9 +341,10 @@ const PipelineForm = () => {
                         </Label>
                         <Select
                           id="state_id"
-                          name="state_id"
+                          // name="state_id"
                           defaultValue="Default State"
-                          ref={register({ required: true })}>
+                          // ref={register({ required: true })}
+                          {...register('state_id', { required: true })}>
                           {ctypeActive.flow.states &&
                             ctypeActive.flow.states.length > 0 &&
                             ctypeActive.flow.states.map((m: any) => (

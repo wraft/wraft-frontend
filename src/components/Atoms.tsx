@@ -1,37 +1,26 @@
 import React, { FC } from 'react';
+
+import { formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
 
-import { parseISO, formatDistanceStrict } from 'date-fns';
 import MenuItem from './NavLink';
 
 /**
  * Convert UTC date to local date
  */
-export function convertUTCDateToLocalDate(date: Date) {
-  const newDate = new Date(
-    date.getTime() + date.getTimezoneOffset() * 60 * 1000,
-  );
-
-  const offset = date.getTimezoneOffset() / 60;
-  const hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
-}
 interface TimeAgoProps {
   time?: any;
   ago?: boolean;
 }
 
-export const TimeAgo = (time: TimeAgoProps) => {
-  const timetime = parseISO(time.time);
-  const nw = Date.now();
-  const timed = formatDistanceStrict(timetime, nw, { addSuffix: true });
-
-  // let timed1 = timed.replace(' hours ago', 'hrs');
-  // timed1 = timed1.replace(' days ago', 'd');
-  // timed1 = timed1.replace(' years ago', 'y');
+export const TimeAgo = (props: TimeAgoProps) => {
+  const utc_time = new Date(props.time);
+  const offset_time_minutes = utc_time.getTimezoneOffset();
+  const local_time = new Date(
+    utc_time.getTime() - offset_time_minutes * 60 * 1000,
+  );
+  const now = new Date();
+  const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
     <Text
@@ -98,15 +87,16 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
   return (
     <Flex
       sx={{
-        bg: 'gray.0',
+        bg: 'backgroundWhite',
+        cursor: 'pointer',
         ':hover': {
-          bg: 'gray.1',
+          bg: 'neutral.200',
           fontWeight: 400,
-          color: '#000',
+          color: 'text',
         },
         p: 1,
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'border',
         alignItems: 'flex-start',
         pl: 2,
       }}>
@@ -116,26 +106,26 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
           height: '12px',
           width: '12px',
           border: 'solid 1px',
-          borderColor: 'gray.1',
+          borderColor: 'border',
           bg: color,
           mr: 2,
           // ml: 2,
           mt: 2,
         }}
       />
-      <Text as="h4" sx={{ fontSize: 1, mt: 1, fontWeight: 300 }}>
+      <Text as="h4" sx={{ fontSize: 2, mt: 1, fontWeight: 500 }}>
         {title}
         <Text
           as="span"
           sx={{
             ml: 1,
             // pl: 2,
-            bg: 'gray.3',
-            fontSize: '11px',
+            bg: 'neutral.200',
+            fontSize: '10px',
             fontWeight: 'heading',
-            color: 'gray.7',
+            color: 'text',
             // border: 'solid 0.5px',
-            borderColor: 'gray.5',
+            borderColor: 'border',
             p: 1,
             pt: '4px',
             pb: '4px',
@@ -167,14 +157,23 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
         <Text
           sx={{
-            fontSize: '12px',
-            color: 'gray.6',
+            fontSize: 0,
+            color: 'text',
             fontWeight: 300,
-            cursor: 'pointer'
+            cursor: 'pointer',
           }}>
           {id}
         </Text>
-        <Text as="h4" p={0} sx={{ m: 0, fontSize: 1, fontWeight: 500, cursor: 'pointer' }}>
+        <Text
+          as="h4"
+          p={0}
+          sx={{
+            color: 'text',
+            m: 0,
+            fontSize: 2,
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}>
           {name}
         </Text>
       </MenuItem>
@@ -195,18 +194,19 @@ interface StateBadgeProps {
 
 export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
   return (
-    <Flex sx={{ mr: 1, p: 2, pt: 3, pl: 0 }}>
-      <Box
+    <Flex sx={{ pt: 2 }}>
+      <Text
+        pt={0}
+        variant="labelSmall"
         sx={{
-          width: '10px',
-          height: '10px',
           bg: color ? color : 'red',
-          mt: 1,
-          mr: 1,
+          color: 'text',
           borderRadius: '3rem',
-        }}
-      />
-      <Text pt={0} variant="labelSmall">
+          pl: '8px',
+          pt: '2px',
+          pb: '2px',
+          fontWeight: '600',
+        }}>
         {name}
       </Text>
     </Flex>

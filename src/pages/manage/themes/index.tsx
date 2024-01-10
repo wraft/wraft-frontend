@@ -1,11 +1,14 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import { Container, Flex } from 'theme-ui';
-import ThemeList from '../../../components/ThemeList';
-import Page from '../../../components/PageFrame';
-import Link from '../../../components/NavLink';
+import { Box, Button, Container, Flex } from 'theme-ui';
+
+import { AddIcon, GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
-import { HeadingFrame } from '../../../components/Card';
+import Link from '../../../components/NavLink';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
+import ThemeList from '../../../components/ThemeList';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
@@ -16,18 +19,29 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
-          title="Manage"
-          side={
-            <Link variant="btnPrimary" href="/manage/themes/new">
+        <PageHeader
+          title="Themes"
+          desc={
+            <Flex sx={{ alignItems: 'center', gap: '6px', color: 'gray.400' }}>
+              Manage <GraterThanIcon /> Themes
+            </Flex>
+          }>
+          <Link href="themes/new" variant="none">
+            <Button
+              as={Button}
+              variant="btnPrimary"
+              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <AddIcon />
               Add Theme
-            </Link>
-          }
-        />
-        <Container variant="layout.pageFrame">
+            </Button>
+          </Link>
+        </PageHeader>
+        <Container variant="layout.newPageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <ThemeList />
+            <Box variant="layout.contentFrame">
+              <ThemeList />
+            </Box>
           </Flex>
         </Container>
       </Page>

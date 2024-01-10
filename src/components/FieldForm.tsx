@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
+
 import { useForm } from 'react-hook-form';
+import { Box, Flex, Button, Text } from 'theme-ui';
+
+import { Field as FieldT, FieldInstance } from '../utils/types';
 
 import Field from './Field';
-import { Field as FieldT, FieldInstance } from '../utils/types';
 import FieldDate from './FieldDate';
 import Modal from './Modal';
 // import { constants } from 'buffer';
@@ -43,6 +45,7 @@ const FieldForm = ({
 }: FieldFormProps) => {
   const { register, handleSubmit, getValues } = useForm();
   const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
+  const [submitting, setSubmitting] = useState<boolean>(false);
   // const [isReady, setIsReady] = useState<Boolean>(false);
 
   /**
@@ -81,6 +84,7 @@ const FieldForm = ({
    * @param _data
    */
   const onSubmit = () => {
+    setSubmitting(true);
     const f: any = mapFields(fields);
 
     console.log('🌿🎃🎃🌿 Submitted [1]', f);
@@ -111,8 +115,12 @@ const FieldForm = ({
   //   onRefresh(fieldMap);
   // };
 
+  // const updateForm = () => {
+  //   console.log('done', fieldMap);
+  // };
+
   return (
-    <Box sx={{ p: 3, borderColor: 'gray.1', bg: '#F5F7FE' }}>
+    <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
       <Box>
         <Text as="h6" variant="labelcaps">
           Fields
@@ -126,23 +134,23 @@ const FieldForm = ({
           mt: 1,
           mb: 3,
           border: 'solid 1px',
-          borderColor: 'gray.3',
+          borderColor: 'border',
         }}>
         {fieldMap &&
           fieldMap.map((x: any) => (
             <Flex
               key={x.id}
               sx={{
-                // bg: 'red.3',
+                // bg: 'red.400',
                 py: 2,
                 px: 3,
                 borderBottom: 'solid 0.5px',
-                borderColor: 'gray.2',
+                borderColor: 'border',
                 // mb: 2,
               }}>
               <Text
                 sx={{
-                  color: '#363e4980',
+                  color: 'red.200',
                   fontSize: '16px',
                   fontWeight: 300,
                 }}>
@@ -151,9 +159,9 @@ const FieldForm = ({
               <Text
                 sx={{
                   fontSize: '16px',
-                  // color: 'green.9',
+                  // color: 'green.1000',
                   ml: 'auto',
-                  color: '#363E49',
+                  color: 'text',
                   fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
                 }}>
@@ -172,7 +180,7 @@ const FieldForm = ({
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           // py={2}
-          sx={{ p: 4, bg: 'gray.0' }}
+          sx={{ p: 4, bg: 'backgroundWhite' }}
           // mt={2}
         >
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
@@ -203,7 +211,9 @@ const FieldForm = ({
             </Box>
           )}
           <Flex sx={{ pt: 3 }}>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={submitting ? true : false}>
+              Save
+            </Button>
             <Text onClick={closeModal} pl={2} pt={1}>
               Close
             </Text>

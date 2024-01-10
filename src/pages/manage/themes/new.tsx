@@ -1,9 +1,11 @@
 import { FC } from 'react';
+
 import Head from 'next/head';
-import Theme from '../../../components/ThemeForm';
-import Page from '../../../components/PageFrame';
-import { Flex } from 'theme-ui';
 import Link from 'next/link';
+import { Flex } from 'theme-ui';
+
+import Page from '../../../components/PageFrame';
+import Theme from '../../../components/ThemeForm';
 
 const Index: FC = () => {
   return (
@@ -14,9 +16,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/themes">
-            <a>Back</a>
-          </Link>
+          <Link href="/manage/themes">Back</Link>
           <Theme />
         </Flex>
       </Page>

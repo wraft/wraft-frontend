@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { useForm } from 'react-hook-form';
-
-import { useStoreState } from 'easy-peasy';
-
-import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
-// import { Label, Select, Textarea } from 'theme-ui';
-
-import OrgMembersList from './OrgMembersList';
-import Field from './Field';
-import { checkUser, createEntity, loadEntity } from '../utils/models';
-
-// import { defaultModalStyle } from '../utils';
 import Modal from 'react-modal';
+import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
+
+import { useAuth } from '../contexts/AuthContext';
+import { fetchAPI, postAPI } from '../utils/models';
+
+import Field from './Field';
+import OrgMembersList from './OrgMembersList';
 
 export interface Members {
   total_pages: number;
@@ -52,14 +49,19 @@ export interface ProfileClass {
 }
 
 const OrgMemberForm = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm();
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
-  const [profile, setProfile] = useState<any>();
   const [members, setMembers] = useState<Member | undefined>();
   const [organ, setOrgan] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
+
+  const { userProfile } = useAuth();
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
@@ -81,7 +83,9 @@ const OrgMemberForm = () => {
 
   const onInviteSubmit = (data: any) => {
     console.log('data', data);
-    createEntity(data, `organisations/${organ?.id}/invite`, token, onCreate);
+    postAPI(`organisations/${organ?.id}/invite`, data).then((data: any) => {
+      onCreate(data);
+    });
   };
 
   /** Update Form */
@@ -95,21 +99,6 @@ const OrgMemberForm = () => {
   useEffect(() => {
     console.log('errors', errors);
   }, [errors]);
-
-  const onProfileLoad = (data: any) => {
-    const res: any[] = data;
-    setProfile(res);
-  };
-
-  useEffect(() => {
-    // check if token is there
-    // const tokenInline = cookie.get('token') || false;
-    //
-    if (token) {
-      checkUser(token, onProfileLoad);
-      // loadEntity(token, 'macros', loadDataSuccess);
-    }
-  }, [token]);
 
   /**
    * When Org data is load
@@ -140,15 +129,20 @@ const OrgMemberForm = () => {
    */
 
   useEffect(() => {
-    if (profile) {
-      loadEntity(token, `organisations/${profile?.organisation_id}`, onOrgLoad);
-      loadEntity(
-        token,
-        `organisations/${profile?.organisation_id}/members`,
-        loadDataSuccess,
+    if (userProfile) {
+      fetchAPI(`organisations/${userProfile?.organisation_id}`).then(
+        (data: any) => {
+          onOrgLoad(data);
+        },
+      );
+
+      fetchAPI(`organisations/${userProfile?.organisation_id}/members`).then(
+        (data: any) => {
+          loadDataSuccess(data);
+        },
       );
     }
-  }, [profile]);
+  }, []);
 
   return (
     <Box px={0} variant="w70" mt={4}>

@@ -1,14 +1,19 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+
 import Head from 'next/head';
-import { Flex, Container } from 'theme-ui';
+import { Flex, Container, Button, Box } from 'theme-ui';
+
+import LayoutForm from '../../../components/LayoutForm';
 import LayoutList from '../../../components/LayoutList';
-import Page from '../../../components/PageFrame';
 import ManageSidebar from '../../../components/ManageSidebar';
-import { HeadingFrame } from '../../../components/Card';
-import Link from '../../../components/NavLink';
+import ModalCustom from '../../../components/ModalCustom';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
   return (
     <>
       <Head>
@@ -16,20 +21,26 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame
-          title="Manage"
-          side={
-            <Link variant="btnPrimary" href="/manage/layouts/new">
-              Add Layout
-            </Link>
-          }
-        />
-        <Container sx={{ px: 4, pt: 0 }}>
-          <Flex>
-            <ManageSidebar items={menuLinks} />
-            <LayoutList />
-          </Flex>
-        </Container>
+        <PageHeader title="Manage Layouts" desc="Document Layouts">
+          <Button
+            variant="btnSecondary"
+            sx={{ fontSize: 1 }}
+            onClick={() => setIsOpen(true)}>
+            Add Layout
+          </Button>
+        </PageHeader>
+        <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+          <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
+        </ModalCustom>
+
+        <Box variant="layout.pageFrame" pt={0}>
+          <Container>
+            <Flex>
+              <ManageSidebar items={menuLinks} />
+              <LayoutList rerender={rerender} />
+            </Flex>
+          </Container>
+        </Box>
       </Page>
     </>
   );

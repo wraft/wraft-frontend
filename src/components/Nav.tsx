@@ -1,84 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Flex, Image, Text, Input } from 'theme-ui';
-import cookie from 'js-cookie';
+import React, { useState } from 'react';
 
-import { useStoreState, useStoreActions } from 'easy-peasy';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import { useRouter } from 'next/router';
 import { useHotkeys } from 'react-hotkeys-hook';
-// relative
+import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
-import { checkUser } from '../utils/models';
-import { Bell, Search } from '@styled-icons/boxicons-regular';
-import { Plus as Add } from '@styled-icons/boxicons-regular/Plus';
-
-import { useMenuState, Menu, MenuItem, MenuButton } from 'reakit/Menu';
-import { Clickable } from 'reakit/Clickable';
+import { useAuth } from '../contexts/AuthContext';
 
 import Blok from './Blok';
-import Link from './NavLink';
+import { Bell, Search } from './Icons';
 import Modal from './Modal';
-
-/**
- * Reakit Button
- */
-
-interface ButtonLinkProps {
-  onToggleSearch?: any;
-}
-
-const ButtonLink = ({ onToggleSearch }: ButtonLinkProps) => {
-  return (
-    <Clickable
-      as={Box}
-      onClick={() => onToggleSearch()}
-      sx={{
-        // pt: 0,
-        // bg: 'gray.2',
-        fontSize: 1,
-        color: '#111',
-        border: 'solid 1px',
-        verticleAlign: 'top',
-        borderColor: 'gray.4',
-        // bg: 'green.8',
-        borderRight: 0,
-        width: '8ch',
-        pl: 2,
-        pt: 1,
-        // mr: 2,
-        // px: 2,
-        // py: 1,
-        // mb: 2,
-        borderRadius: '4px 0 0 4px',
-        '&:hover': {
-          bg: 'gray.8',
-          color: 'gray.0',
-          border: 'solid 1px',
-          borderColor: 'gray.2',
-          cursor: 'pointer',
-          svg: {
-            fill: 'gray.0',
-          },
-        },
-        svg: {
-          fill: 'gray.8',
-        },
-        // borderRadius: 4,
-      }}>
-      {/* <Search width="16px" /> */}
-
-      <Text
-        sx={{
-          display: 'display-inline',
-          ml: 1,
-          fontWeight: 900,
-          letterSpacing: '-0.15px',
-          fontSize: '14px',
-        }}>
-        <Add width={18} />
-        <Text sx={{ ml: 1, pt: 1, fontSize: '14px' }}>New</Text>
-      </Text>
-    </Clickable>
-  );
-};
+import Link from './NavLink';
 
 export interface IUser {
   name: string;
@@ -88,22 +20,19 @@ interface INav {
   navtitle?: string;
 }
 
+/**
+ *  Nav Component
+ * @param param0
+ * @returns
+ */
 const Nav = ({ navtitle }: INav) => {
-  // const [user, setUser] = useState<IUser>();
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const { userProfile, accessToken, logout } = useAuth();
+  const router = useRouter();
 
-  const menu = useMenuState();
-
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
+  const userLogout = () => {
+    logout();
+    router.push('/');
   };
 
   const toggleSearch = () => {
@@ -113,16 +42,6 @@ const Nav = ({ navtitle }: INav) => {
   const closeSearch = () => {
     setShowSearch(false);
   };
-
-  useEffect(() => {
-    // check if token is there
-    const t = cookie.get('token') || false;
-    // login to check
-    if (t) {
-      checkUser(t, onProfileLoad);
-      setToken(t);
-    }
-  }, []);
 
   useHotkeys('/', () => {
     toggleSearch();
@@ -134,9 +53,9 @@ const Nav = ({ navtitle }: INav) => {
       // onClick={() =>closeSearch}
       sx={{
         p: 0,
-        bg: 'gray.0',
+        bg: 'white',
         borderBottom: 'solid 1px',
-        borderColor: 'gray.3',
+        borderColor: 'border',
         pt: 0,
         pb: 2,
       }}>
@@ -152,8 +71,8 @@ const Nav = ({ navtitle }: INav) => {
               pt: 1,
               pl: 3,
               borderRight: 'solid 1px',
-              borderColor: 'gray.0',
-              color: 'gray.8',
+              borderColor: 'border',
+              color: 'text',
               pb: 1,
             }}>
             <Flex sx={{ minWidth: '80ch' }}>
@@ -168,7 +87,7 @@ const Nav = ({ navtitle }: INav) => {
               </Box> */}
 
               <Flex variant="button" sx={{ mt: 0, pt: 0, ml: 3 }}>
-                <ButtonLink onToggleSearch={toggleSearch} />
+                {/* <ButtonLink onToggleSearch={toggleSearch} /> */}
                 <Flex
                   sx={{
                     position: 'relative',
@@ -195,19 +114,13 @@ const Nav = ({ navtitle }: INav) => {
                       pt: 1,
                       bottom: 0,
                       borderLeft: 'solid 1px',
-                      borderColor: 'gray.3',
+                      borderColor: 'border',
                       svg: {
-                        fill: 'gray.8',
+                        fill: 'gray.900',
                         pr: 2,
                       },
                     }}>
-                    <Search
-                      // sx={{
-                      //   borderLeft: 'solid 1px',
-                      //   borderColor: 'gray.4',
-                      // }}
-                      width={28}
-                    />
+                    <Search width={28} height={28} />
                   </Box>
                 </Flex>
               </Flex>
@@ -216,26 +129,26 @@ const Nav = ({ navtitle }: INav) => {
         </Box>
         <Box ml="auto" mr={3}>
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
-          <Flex sx={{ bg: 'gray.0' }}>
-            <Flex sx={{ bg: 'gray.0', ':hover': { bg: 'gray.1' } }}>
+          <Flex>
+            <Flex sx={{ ':hover': { bg: 'gray.200' } }}>
               <Box as="span" sx={{ mt: 2 }}></Box>
 
               <Box
                 variant="button"
-                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.6' } }}>
+                sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.700' } }}>
                 <Link href="/activities">
-                  <Bell width="20px" />
+                  <Bell width={20} height={20} />
                 </Link>
               </Box>
             </Flex>
-            {!token && (
+            {!accessToken && (
               <Link href="/login">
                 <Text>Login</Text>
               </Link>
             )}
-            {token && token !== '' && (
+            {accessToken && accessToken !== '' && (
               <Flex ml={1}>
-                {profile && (
+                {userProfile && (
                   <Flex
                     sx={{
                       alignContent: 'top',
@@ -243,80 +156,77 @@ const Nav = ({ navtitle }: INav) => {
                       mt: 2,
                     }}>
                     <Box>
-                      <MenuButton as={Box} {...menu}>
-                        <Image
-                          sx={{ borderRadius: '3rem' }}
-                          width="30px"
-                          // src={API_HOST + '/' + profile?.profile_pic}
-                          src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
-                        />
-                      </MenuButton>
-                      <Menu
-                        as={Box}
-                        // sx={{ border: 'solid 1px #eee' }}
-                        {...menu}
-                        sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
-                        aria-label="Preferences">
-                        <MenuItem
+                      <MenuProvider>
+                        <MenuButton as={Box}>
+                          <Image
+                            alt=""
+                            sx={{ borderRadius: '3rem' }}
+                            width="30px"
+                            // src={API_HOST + '/' + userProfile?.profile_pic}
+                            src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
+                          />
+                        </MenuButton>
+                        <Menu
                           as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
-                          <Box>
-                            <Text as="h4">{profile?.name}</Text>
+                          sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
+                          aria-label="Preferences">
+                          <MenuItem
+                            as={Box}
+                            sx={{
+                              p: 3,
+                              py: 2,
+                              bg: 'gray.100',
+                              borderBottom: 'solid 1px #eee',
+                              '&:hover': {
+                                bg: 'gray.200',
+                              },
+                            }}>
+                            <Box>
+                              <Text as="h4">{userProfile?.name}</Text>
 
-                            {profile?.roles?.size > 0 && (
-                              <Text
-                                as="p"
-                                sx={{ fontSize: 0, color: 'gray.6' }}>
-                                {profile?.roles[0]?.name}
-                              </Text>
-                            )}
-                          </Box>
-                        </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
-                          Settings
-                        </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          sx={{
-                            p: 3,
-                            py: 2,
-                            bg: 'gray.0',
-                            borderBottom: 'solid 1px #eee',
-                            '&:hover': {
-                              bg: 'gray.1',
-                            },
-                          }}
-                          {...menu}>
-                          Profile
-                        </MenuItem>
-                        <MenuItem
-                          as={Box}
-                          onClick={userLogout}
-                          {...menu}
-                          sx={{ p: 3, bg: 'gray.0', borderBottom: 0 }}>
-                          Signout
-                        </MenuItem>
-                      </Menu>
+                              {userProfile?.roles?.size > 0 && (
+                                <Text
+                                  as="p"
+                                  sx={{ fontSize: 0, color: 'text' }}>
+                                  {userProfile?.roles[0]?.name}
+                                </Text>
+                              )}
+                            </Box>
+                          </MenuItem>
+                          <MenuItem
+                            as={Box}
+                            sx={{
+                              p: 3,
+                              py: 2,
+                              bg: 'gray.100',
+                              borderBottom: 'solid 1px #eee',
+                              '&:hover': {
+                                bg: 'gray.200',
+                              },
+                            }}>
+                            Settings
+                          </MenuItem>
+                          <MenuItem
+                            as={Box}
+                            sx={{
+                              p: 3,
+                              py: 2,
+                              bg: 'gray.100',
+                              borderBottom: 'solid 1px #eee',
+                              '&:hover': {
+                                bg: 'gray.200',
+                              },
+                            }}>
+                            Profile
+                          </MenuItem>
+                          <MenuItem
+                            as={Box}
+                            onClick={userLogout}
+                            sx={{ p: 3, bg: 'gray.100', borderBottom: 0 }}>
+                            Signout
+                          </MenuItem>
+                        </Menu>
+                      </MenuProvider>
                     </Box>
                   </Flex>
                 )}

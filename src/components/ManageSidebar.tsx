@@ -1,14 +1,16 @@
 import React from 'react';
-import { Flex, Box, Text } from 'theme-ui';
+
 import styled from '@emotion/styled';
+import { Flex, Box, Text } from 'theme-ui';
 
 export const IconStyleWrapper = styled.div`
   color: #444;
   margin-right: 12px;
 `;
 
-import NavLink from './NavLink';
 import { menuLinksProps } from '../utils';
+
+import NavLink from './NavLink';
 
 export interface INav {
   showFull?: boolean;
@@ -19,31 +21,50 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
   return (
     <Box
       sx={{
-        pt: 4,
+        mt: 4,
+        ml: 4,
         pl: 0,
-        mr: 4,
-        borderRight: 'solid 1px',
-        borderColor: 'gray.3',
+        // mr: 4,
+        flexShrink: 0,
+        maxHeight: '90vh',
+        // borderRight: 'solid 1px',
+        borderColor: 'border',
+        // minHeight: '90vh',
       }}>
       {items &&
         items.map((l: any) => (
-          <Box sx={{ mr: 4 }} key={l.name}>
-            <NavLink href={l.path} variant="base1">
+          <Box
+            sx={{
+              // mr: 4,
+              width: '100%',
+            }}
+            key={l.name}>
+            <NavLink href={l.path} variant="links.base">
               <Flex
                 sx={{
-                  borderBottom: 'solid 1px',
-                  borderColor: 'gray.3',
-                  pb: 1,
-                  mb: 2,
+                  py: '6px',
+                  px: '12px',
+                  minWidth: '135px',
+                  width: '100%',
+                  color: 'gray.900',
+                  borderRadius: '4px',
+                  alignItems: 'center',
+                  ':hover': { bg: 'neutral.200' },
                 }}>
-                <Box sx={{ mr: 2, pt: 1, color: 'gray.5' }}>{l.logo}</Box>
+                {l.lgoo && (
+                  <Box
+                    sx={{
+                      color: 'gray.500',
+                      mr: '12px',
+                    }}>
+                    {l.logo}
+                  </Box>
+                )}
                 <Text
+                  variant="pM"
                   sx={{
-                    fontSize: 1,
-                    color: 'gray.7',
-                    fontWeight: 'body',
-                    mb: 1,
-                    pt: 1,
+                    width: '100%',
+                    color: 'inherit',
                   }}>
                   {l.name}
                 </Text>

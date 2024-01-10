@@ -1,9 +1,8 @@
 import React from 'react';
+
 import { usePositioner, useSuggest, UseSuggestReturn } from '@remirror/react';
 import { AnimatePresence } from 'framer-motion';
-
 import { Box } from 'theme-ui';
-// import { Portal } from 'reakit/ts'
 
 export const FloatingActionsMenu = ({ options }: any) => {
   // const { commands } = useRemirrorContext();
@@ -22,7 +21,7 @@ export const FloatingActionsMenu = ({ options }: any) => {
         <Box
           sx={{
             border: 'solid 1px',
-            borderColor: 'gray.1',
+            borderColor: 'border',
             borderRadius: '4px',
             boxShadow: '0px 0px 6px #44444463',
           }}>
@@ -37,8 +36,8 @@ export const FloatingActionsMenu = ({ options }: any) => {
                   fontSize: 1,
                   borderBottom: 'solid 1px',
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.1',
-                  ':hover': { bg: 'gray.2' },
+                  borderColor: 'border',
+                  ':hover': { bg: 'gray.300' },
                 }}>
                 {opt.label}
               </Box>
@@ -62,7 +61,7 @@ export const FloatingBubble: React.FC<{
       {active && (
         <Box>
           <Box
-            sx={{ position: 'fixed', bg: 'gray.0' }}
+            sx={{ position: 'fixed', bg: 'gray.100' }}
             // initial={{ opacity: 0 }}
             // animate={{ opacity: 1 }}
             // exit={{ opacity: 0 }}

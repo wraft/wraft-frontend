@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+
 import { Flex, Box, Text } from 'theme-ui';
-import { useStoreState } from 'easy-peasy';
-import { loadEntity } from '../utils/models';
+
+import { fetchAPI } from '../utils/models';
 
 export interface PermissionGroupList {
   total_pages: number;
@@ -22,55 +23,39 @@ export interface ResourceGroupList {
 }
 
 const OrgRolesList = () => {
-  const token = useStoreState((state) => state.auth.token);
-  // const profile = useStoreState((state) => state.profile?.profile);
   const [contents, setContents] = useState<any>();
   const [resources, setResources] = useState<ResourceGroupList>();
 
   /**
-   * On Loading done
-   * @param token
-   */
-  const loadDataSuccess = (data: any) => {
-    console.log('roles', data);
-    setContents(data.role_groups);
-  };
-
-  /**
    * Load all Engines
    * @param token
    */
-  const loadLayout = (token: string) => {
+  const loadLayout = () => {
     // console.log(profile)
     // const org_id = profile?.organisation_id
-    loadEntity(token, `role_groups`, loadDataSuccess);
-  };
-
-  /**
-   * On Loading done
-   * @param token
-   */
-  const loadResourceDataSuccess = (data: any) => {
-    const res: ResourceGroupList = data;
-    setResources(res);
+    fetchAPI(`role_groups`).then((data: any) => {
+      console.log('roles', data);
+      setContents(data.role_groups);
+    });
   };
 
   /**
    * Load all Engines
    * @param token
    */
-  const loadResources = (token: string) => {
-    loadEntity(token, 'role_groups', loadResourceDataSuccess);
+  const loadResources = () => {
+    fetchAPI('role_groups').then((data: any) => {
+      const res: ResourceGroupList = data;
+      setResources(res);
+    });
   };
 
   /** Trigger Load on Init */
 
   useEffect(() => {
-    if (token) {
-      loadLayout(token);
-      loadResources(token);
-    }
-  }, [token]);
+    loadLayout();
+    loadResources();
+  }, []);
 
   /**
    *
@@ -93,27 +78,25 @@ const OrgRolesList = () => {
   };
 
   return (
-    <Box py={3} mt={4}>
+    <Box py={3} mt={4} sx={{ width: '100%' }}>
       <Box mx={0} mb={3}>
-        <Text as="h3" mb={3}>
-          All Roles
-        </Text>
+        <Text mb={5}>All Roles</Text>
         <Flex>
           {contents &&
             contents?.permissions?.length > 0 &&
             contents?.permissions?.map((r: any) => (
-              <Box key={r?.id} sx={{ p: 1, bg: 'gray.2', mb: 1 }}>
+              <Box key={r?.id} sx={{ p: 1, bg: 'gray.300', mb: 1 }}>
                 <Text sx={{ fontFamily: 'monospace' }}>{ky(r)}</Text>
               </Box>
             ))}
         </Flex>
 
         {contents?.length < 1 && (
-          <Box>
-            <Text as="h5" sx={{ fontSize: 1, color: 'gray.8' }}>
+          <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'border' }}>
+            <Text as="h5" sx={{ fontSize: 1, color: 'text' }}>
               No Roles?
             </Text>
-            <Text as="p" sx={{ fontSize: 0, color: 'gray.6' }}>
+            <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
               Are you kidding?
             </Text>
           </Box>

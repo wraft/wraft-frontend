@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Box, Flex, Text } from 'theme-ui';
+import React, { useEffect, useMemo, useState } from 'react';
+
+import { useFieldArray, useForm } from 'react-hook-form';
+import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
+
+import { Trash } from './Icons';
 import Modal from './Modal';
-import { useForm } from 'react-hook-form';
-import { Trash } from '@styled-icons/boxicons-regular';
 
 interface FieldFormProps {
   fields?: any;
+  content?: any;
   fieldtypes?: any;
   addField?: any;
   removeField?: any;
@@ -14,27 +17,66 @@ interface FieldFormProps {
   onClose?: any;
 }
 
-const FieldForm = (props: FieldFormProps) => {
-  const { register, handleSubmit, getValues } = useForm();
-  const [showModal, setModal] = useState<boolean>(false);
+type FieldValues = {
+  fields: {
+    name: string;
+    type: string;
+  }[];
+};
 
-  const onSubmit = (data: any) => {
+const FieldForm = (props: FieldFormProps) => {
+  const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    control,
+    setValue,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    mode: 'onBlur',
+  });
+  const { fields, append, remove } = useFieldArray({
+    name: 'fields',
+    control,
+  });
+
+  useEffect(() => {
+    props.content?.content_type?.fields?.forEach((field: any, index: any) => {
+      setValue(`fields.${index}.name`, field.name);
+      setValue(`fields.${index}.type`, field.field_type.id);
+    });
+  }, [props.content, setValue]);
+
+  const [showModal, setModal] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const onSubmit = (data: FieldValues) => {
+    setSubmitting(true);
     const vals = getValues();
+
+    const filteredVals = vals.fields.filter(
+      (val: any) => val.name !== undefined || null || '',
+    );
+
     const results = {
-      count: props.fields.size,
-      values: vals,
+      count: fieldsArr.size,
+      values: filteredVals,
       data: data,
     };
 
     props.onSave(results);
+    setModal(false);
+    setSubmitting(false);
   };
 
   function toggleModal() {
-    setModal(!showModal);
+    setModal((prev) => !prev);
   }
 
   function closeModal() {
-    // setModal(false);
+    setModal(false);
   }
 
   return (
@@ -42,8 +84,6 @@ const FieldForm = (props: FieldFormProps) => {
       pl={4}
       sx={{
         p: 0,
-        border: 'solid 1px',
-        borderColor: 'gray.3',
         maxWidth: '40ch',
       }}>
       <Flex
@@ -51,58 +91,73 @@ const FieldForm = (props: FieldFormProps) => {
           py: 2,
           px: 3,
           alignItems: 'flex-start',
-          borderBottom: 'solid 1px #ddd',
+          borderBottom: 'solid 1px',
+          borderColor: 'border',
         }}>
         <Text as="h4" mb={0} pt={1}>
           Fields
         </Text>
-        <Button variant="btnSmall" sx={{ ml: 'auto' }} onClick={toggleModal}>
-          Edit
+        <Button
+          variant="btnSmall"
+          sx={{ ml: 'auto' }}
+          onClick={() => {
+            toggleModal();
+            append({ name: '', type: '' });
+            remove(-1);
+          }}>
+          {fieldsArr.length > 0 ? 'Edit' : 'Add'}
         </Button>
       </Flex>
       <Box
         sx={{
-          bg: 'gray.0',
           py: 2,
           px: 3,
           pt: 3,
           pb: 3,
           alignItems: 'flex-start',
         }}>
-        {props.fields.map((f: any) => (
-          <Flex
-            key={f?.id}
-            sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'gray.3' }}>
-            <Text as="h4">{(f && f.value.name) || ''}</Text>
-            <Text
-              variant="caps"
-              pt={1}
-              pb={1}
-              sx={{ opacity: '0.5', ml: 'auto' }}>
-              {(f && f.value.field_type.name) || 'X'}
-            </Text>
-          </Flex>
-        ))}
+        {fieldsArr &&
+          fieldsArr.map((f: any) => (
+            <Flex
+              key={f?.id}
+              sx={{ py: 2, p: 2, border: 'solid 1px', borderColor: 'border' }}>
+              <Text as="h4">{(f && f.value && f.value.name) || ''}</Text>
+              <Text
+                variant="caps"
+                pt={1}
+                pb={1}
+                sx={{ opacity: '0.5', ml: 'auto' }}>
+                {(f &&
+                  f.value &&
+                  f.value.field_type &&
+                  f.value.field_type.name) ||
+                  'X'}
+              </Text>
+            </Flex>
+          ))}
       </Box>
 
       <Modal isOpen={showModal} onClose={closeModal}>
-        <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ bg: 'neutral.100' }}>
           <Box
             sx={{
               py: 3,
               px: 4,
               borderBottom: 'solid 1px',
-              borderColor: 'gray.3',
+              borderColor: 'border',
             }}>
-            <Text as="h4" sx={{ fontSize: 1 }}>
-              Edit Fields
+            <Text as="p" sx={{ fontSize: 2 }}>
+              Manage Fields
             </Text>
           </Box>
 
-          {props.fields?.length < 1 && (
+          {fields.length < 1 && fieldsArr.length < 1 && (
             <Box
               sx={{
-                bg: 'gray.1',
+                bg: 'neutral.200',
                 pt: 4,
                 pb: 4,
                 px: 4,
@@ -111,14 +166,17 @@ const FieldForm = (props: FieldFormProps) => {
               <Text as="h3" sx={{ mb: 0 }}>
                 Empty State
               </Text>
-              <Text as="p" sx={{ fontSize: 1, color: 'gray.6', mb: 3, pr: 3 }}>
+              <Text as="p" sx={{ fontSize: 1, color: 'text', mb: 3, pr: 3 }}>
                 You have no fields added, start adding fields to `field` up your
                 Variant
               </Text>
               <Button
                 type="button"
                 variant="btnPrimary"
-                onClick={props.addField}>
+                onClick={(e) => {
+                  e.preventDefault();
+                  append({ name: '', type: '' });
+                }}>
                 Add Field
               </Button>
             </Box>
@@ -126,14 +184,15 @@ const FieldForm = (props: FieldFormProps) => {
           <Box
             sx={{
               borderTop: 'solid 1px',
-              borderColor: 'gray.3',
+              borderColor: 'border',
             }}>
-            {props.fields.map((f: any, idx: number) => (
+            {fields.map((field, index) => (
               <Box
-                key={idx}
+                key={field.id}
                 sx={{
-                  borderBottom: 'solid 1px #ddd',
-                  '&:hover': { bg: 'gray.1' },
+                  borderBottom: 'solid 1px',
+                  borderColor: 'border',
+                  '&:hover': { bg: 'gray.200' },
                   py: 3,
                   px: 4,
                 }}>
@@ -143,11 +202,24 @@ const FieldForm = (props: FieldFormProps) => {
                       Field Name
                     </Label>
                     <Input
+                      disabled={
+                        props.content &&
+                        field &&
+                        !props.content?.content_type.fields.every(
+                          (f: any) => f.name !== field.name,
+                        )
+                      }
+                      defaultValue={(field && field.name) || ''}
                       type="text"
-                      ref={register}
-                      defaultValue={(f && f.value.name) || ''}
-                      name={`fields[${idx}][name]`}
+                      {...register(`fields.${index}.name` as const, {
+                        required: true,
+                      })}
                     />
+                    {errors.fields && errors.fields?.[index]?.name && (
+                      <Text variant="error">
+                        {errors.fields?.[index]?.name?.message}
+                      </Text>
+                    )}
                   </Box>
                   <Box sx={{ flexGrow: 1, px: 3 }}>
                     <Label
@@ -157,9 +229,20 @@ const FieldForm = (props: FieldFormProps) => {
                       Type
                     </Label>
                     <Select
-                      name={`fields[${idx}][type]`}
-                      ref={register}
-                      defaultValue={(f && f.value.field_type.id) || ''}>
+                      disabled={
+                        props.content &&
+                        field &&
+                        !props.content?.content_type.fields.every(
+                          (f: any) => f.name !== field.name,
+                        )
+                      }
+                      defaultValue={(field && field.type) || ''}
+                      {...register(`fields.${index}.type` as const, {
+                        required: true,
+                      })}>
+                      <option disabled selected value={''}>
+                        select an option
+                      </option>
                       {props.fieldtypes &&
                         props.fieldtypes.length > 0 &&
                         props.fieldtypes.map((m: any) => (
@@ -175,19 +258,21 @@ const FieldForm = (props: FieldFormProps) => {
                       variant="btnSecondary"
                       type="button"
                       sx={{ py: 1, px: 2, mt: 2 }}
-                      onClick={() => props.removeField(idx)}>
-                      <Trash color="red" width="24px" />
+                      onClick={() => {
+                        props.removeField(index);
+                        remove(index);
+                      }}>
+                      <Trash color="red" width={24} height={24} />
                     </Button>
                   </Box>
                 </Flex>
               </Box>
             ))}
           </Box>
-
-          {props.fields?.length > 0 && (
+          {(fields?.length > 0 || fieldsArr.length > 0) && (
             <Box
               sx={{
-                bg: 'gray.1',
+                bg: 'neutral.200',
                 pt: 4,
                 pb: 4,
                 px: 4,
@@ -196,23 +281,26 @@ const FieldForm = (props: FieldFormProps) => {
               <Button
                 variant="btnPrimary"
                 type="button"
-                onClick={props.addField}>
+                onClick={(e) => {
+                  e.preventDefault();
+                  append({ name: '', type: '' });
+                }}>
                 Add Field
               </Button>
             </Box>
           )}
-
-          {props.fields?.length > 0 && (
+          {(fields?.length > 0 || fields?.length > 0) && (
             <Flex sx={{ py: 3, px: 4, mb: 0 }}>
               <Box sx={{ ml: 'auto' }}>
                 <Button
-                  variant="btnSecondary"
+                  variant="btnPrimaryLarge"
                   sx={{ mr: 2 }}
                   type="button"
                   onClick={closeModal}>
                   Cancel
                 </Button>
                 <Button variant="btnPrimaryLarge" sx={{ ml: 1 }} type="submit">
+                  {submitting && <Spinner color="white" width={24} />}
                   Save
                 </Button>
               </Box>

@@ -1,24 +1,29 @@
 import React from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { useForm } from 'react-hook-form';
-import { useStoreState } from 'easy-peasy';
-import { useToasts } from 'react-toast-notifications';
+
 import Router from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text } from 'theme-ui';
+
+import { postAPI } from '../utils/models';
 
 import Field from './Field';
-import { createEntity } from '../utils/models';
 
 const VendorForm = () => {
-  const { register, handleSubmit, errors } = useForm();
-  const { addToast } = useToasts();
-
-  const token = useStoreState((state) => state.auth.token);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   /**
    * On Theme Created
    */
   const onDone = () => {
-    addToast('Saved Successfully', { appearance: 'success' });
+    toast.success('Saved Successfully', {
+      duration: 1000,
+      position: 'top-right',
+    });
     Router.push(`/vendors`);
   };
 
@@ -34,7 +39,9 @@ const VendorForm = () => {
       contact_person: data.contact_person,
       address: data.address,
     };
-    createEntity(submitter, 'vendors', token, onDone);
+    postAPI('vendors', submitter).then(() => {
+      onDone();
+    });
   };
 
   return (

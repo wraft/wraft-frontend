@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Button, Text } from 'theme-ui';
 
-import { Label, Input, Select } from 'theme-ui';
-
-import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { useStoreState } from 'easy-peasy';
-
-import { IFlow, ICreator } from './FlowList';
-import { ContentType } from '../utils/types';
-import PageHeader from './PageHeader';
-
-import { useToasts } from 'react-toast-notifications';
-
+import { zodResolver } from '@hookform/resolvers/zod';
 import Router from 'next/router';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Label, Select } from 'theme-ui';
+import { useImmer } from 'use-immer';
+import * as z from 'zod';
 
-import {
-  loadEntity,
-  createEntity,
-  loadEntityDetail,
-  updateEntity,
-  deleteEntity,
-} from '../utils/models';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
+import { hexColorRegex, uuidRegex } from '../utils/regex';
+import { ContentType } from '../utils/types';
 
 import Field from './Field';
 import FieldColor from './FieldColor';
-import FieldText from './FieldText';
 import FieldEditor from './FieldEditor';
+import FieldText from './FieldText';
+import { IFlow, ICreator } from './FlowList';
+import PageHeader from './PageHeader';
 
 export interface IFlowItem {
   flow: IFlow;
@@ -110,37 +103,95 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
-const Form = () => {
-  const { register, handleSubmit, errors, setValue } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+const schema = z.object({
+  name: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
+  prefix: z
+    .string()
+    .min(2, { message: 'Minimum 2 characters required' })
+    .max(6, { message: 'Maximum 6 characters allowed' })
+    .refine((value) => !/\d/.test(value), {
+      message: 'Prefix cannot contain numbers',
+    }),
+  color: z.string().refine((value) => hexColorRegex.test(value), {
+    message: 'Invalid hexadecimal color',
+  }),
+  description: z.string().min(5, { message: 'Minimum 5 characters required' }),
+  fields: z.any(),
+  layout_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Layout',
+  }),
+  flow_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Flow',
+  }),
+  theme_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Theme',
+  }),
+  edit: z.any(),
+});
 
+const Form = () => {
   const [fields, setFields] = useState([]);
-  // const [contents, setContents] = useState<Array<IField>>([]);
-  const [content, setContent] = useState<ContentType>();
+  const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
   const [themes, setThemes] = useState<Array<any>>([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
+  const [newFields, setNewFields] = useState<any>([]);
 
-  const { addToast } = useToasts();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const router = useRouter();
+
   const cId: string = router.query.id as string;
 
   const addField = () => {
-    console.log('[addField]', fields);
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
+
       outputState.push('');
+
       return outputState;
     });
   };
 
+  const [initialFields, setInitialFields] = useState<any>([]);
+  useEffect(() => {
+    const convertedArray = content?.content_type.fields.map((item: any) => {
+      return {
+        name: item.name,
+        value: item,
+      };
+    });
+    setInitialFields(convertedArray);
+    setFields(convertedArray);
+  }, [content]);
+
   const addFieldVal = (val: any) =>
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
+      fields = fields || [];
       const outputState: any = fields.slice(0);
-      outputState.push({ name: val.name, value: val.value });
+      if (val.name !== undefined || null) {
+        outputState.push({ name: val.value.name, value: val.value });
+
+        const newVal = { name: val.value.name, value: val.value.field_type };
+        if (newFields !== undefined || null) {
+          const newSet = Object.assign(newFields, [newVal]);
+          setNewFields(newSet);
+        } else setNewFields([newVal]);
+      }
+
       return outputState;
     });
 
@@ -150,93 +201,105 @@ const Form = () => {
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
-      return outputState;
+
+      const idToRemove = (fields[did] as { id: string })?.id;
+      const popedNewArr = newFields.filter(
+        (item: any) => item.id !== idToRemove,
+      );
+      setNewFields(popedNewArr);
+
+      const final = outputState.filter(Boolean);
+
+      return final;
     });
-
-  // const onContentTypeSuccess = (data: any) => {
-  //   const res: IField[] = data.content_types;
-  //   setContents(res);
-  // };
-
-  // const loadData = (token: string) => {
-  //   loadEntity(token, 'content_types', onContentTypeSuccess);
-  // };
 
   const deleteField = (id: number, fields: any) => {
     const deletable = fields[id];
-    const deletableId = deletable.value.id;
-    deleteEntity(`/content_type_fields/${deletableId}`, token);
+    if (deletable && deletable.value && deletable.value.id) {
+      const deletableId = deletable.value.id;
+      const contentypeId = content?.content_type.id;
+
+      deleteAPI(`content_type/${contentypeId}/field/${deletableId}`)
+        .then(() => {
+          if (cId) loadDataDetails(cId);
+          toast.success('Deleted Field' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error('Deleted Field Faile' + deletableId, {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
+    }
   };
 
   const deleteMe = (deletableId: string) => {
-    deleteEntity(`content_types/${deletableId}`, token);
-
-    addToast('Deleted Successfully', { appearance: 'success' });
-    Router.push(`/content-types`);
+    deleteAPI(`content_types/${deletableId}`).then(() => {
+      toast.success('Deleted Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      Router.push(`/content-types`);
+    });
   };
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
-    setContent(res);
+    setContent((draft) => {
+      if (draft) {
+        Object.assign(draft, res);
+      } else {
+        return res;
+      }
+    });
     if (res && res.content_type) {
-      console.log('content_type', res);
-
       setValue('name', res.content_type.name);
-      setValue('desc', res.content_type?.decription);
+      setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
+      setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
+      setValue('theme_id', res.content_type.theme.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
   };
 
-  const loadDataDetalis = (id: string, t: string) => {
-    const tok = token ? token : t;
-    loadEntityDetail(tok, `content_types`, id, setContentDetails);
+  const loadDataDetails = (id: string) => {
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      setContentDetails(data);
+    });
     return false;
   };
 
-  // Layouts
-  const loadLayoutsSuccess = (data: any) => {
-    const res: ILayout[] = data.layouts;
-    setLayouts(res);
+  const loadLayouts = () => {
+    fetchAPI('layouts').then((data: any) => {
+      const res: ILayout[] = data.layouts;
+      setLayouts(res);
+    });
   };
 
-  const loadLayouts = (t: string) => {
-    loadEntity(t, 'layouts', loadLayoutsSuccess);
-    loadFieldTypesSuccess;
+  const loadFieldTypes = () => {
+    fetchAPI('field_types?page_size=200').then((data: any) => {
+      const res: FieldTypeList = data;
+      setFieldtypes(res.field_types);
+    });
   };
 
-  /**
-   * All Available Field Types
-   */
-  const loadFieldTypesSuccess = (data: any) => {
-    const res: FieldTypeList = data;
-    setFieldtypes(res.field_types);
+  const loadFlows = () => {
+    fetchAPI('flows').then((data: any) => {
+      const res: IFlowItem[] = data.flows;
+      setFlows(res);
+    });
   };
 
-  const loadFieldTypes = (token: string) => {
-    loadEntity(token, 'field_types', loadFieldTypesSuccess);
-  };
-
-  const loadFlowsSuccess = (data: any) => {
-    const res: IFlowItem[] = data.flows;
-    setFlows(res);
-  };
-
-  const loadFlows = (token: string) => {
-    loadEntity(token, 'flows', loadFlowsSuccess);
-  };
-
-  // Themes
-
-  const loadThemeSuccess = (data: any) => {
-    const res: any = data.themes;
-    setThemes(res);
-  };
-
-  const loadThemes = (token: string) => {
-    loadEntity(token, 'themes', loadThemeSuccess);
+  const loadThemes = () => {
+    fetchAPI('themes?page_size=50').then((data: any) => {
+      const res: any = data.themes;
+      setThemes(res);
+    });
   };
 
   const formatFields = (fields: any) => {
@@ -245,120 +308,125 @@ const Form = () => {
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
-        // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
+          name: item.name,
           key: item.name,
           field_type_id: fid,
         };
 
-        if (!Number(item.name)) {
+        if (
+          !Number(item.name) &&
+          item.name !== '0' &&
+          item.name !== '' &&
+          item.name !== null &&
+          item.name !== undefined &&
+          content?.content_type.fields.every(
+            (field: any) => field.name !== item.name,
+          )
+        ) {
           fieldsMap.push(it);
         }
       });
     return fieldsMap;
   };
 
-  const onSuccess = (d: any) => {
-    onDone(d);
-  };
-
   /**
    * On Theme Created
    */
-  const onDone = (_d: any) => {
-    addToast('Saved Successfully', { appearance: 'success' });
-    Router.push(`/content-types/edit/${_d?.id}`);
-  };
+
+  const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
       fields: formatFields(fields),
-      description: data.desc,
+      description: data.description,
       prefix: data.prefix,
       flow_id: data.flow_id,
       color: data.color,
       theme_id: data.theme_id,
     };
 
-    const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
-      console.log('[isUpdate]', isUpdate);
-      updateEntity(`content_types/${data.edit}`, sampleD, token, onSuccess);
+      putAPI(`content_types/${data.edit}`, sampleD)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          Router.push(`/content-types`);
+        })
+        .catch(() => {
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     } else {
-      console.log('[isUpdate]', sampleD);
-      createEntity(sampleD, 'content_types', token, onSuccess);
+      postAPI('content_types', sampleD)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          Router.push(`/content-types`);
+        })
+        .catch(() => {
+          toast.error('Save Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
     }
   };
-
-  const loadFields = () => {
-    if (content && content.content_type) {
-      dataFiller(content.content_type.fields);
-    }
-  };
-
-  const dataFiller = (entries: any) => {
-    const keys = Object.entries(entries);
-    keys.forEach((m: any) => {
-      addFieldVal({ name: m[0], value: m[1] });
-    });
-  };
-
-  useEffect(() => {
-    loadFields();
-  }, [content]);
-
-  // cId
 
   useEffect(() => {
     if (cId) {
       setValue('edit', cId);
-      loadDataDetalis(cId, token);
-      loadThemes(token);
+      loadDataDetails(cId);
+      loadThemes();
     }
-  }, [cId, token]);
+  }, [cId]);
 
   useEffect(() => {
-    if (token) {
-      loadThemes(token);
-    }
-  }, [token]);
+    loadThemes();
+  }, []);
 
-  const onFieldsSave = (fds: any) => {
-    console.log('saved fields', fds, fields);
-    setFields([]);
-    // let newFields:any = []
+  /**
+   * When form is submitted from Forms Editor
+   * @param fileds
+   */
+  const onFieldsSave = (fieldsNew: any) => {
+    initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
-    fds?.data?.fields?.forEach((el: any) => {
-      // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
-      const ff = fieldtypes.find((f: any) => f.id === el.type);
-      const fff = { field_type: ff, name: el.name };
-      const fieldType = { value: fff, name: el.name };
-      addFieldVal(fieldType);
+    fieldsNew?.data?.fields?.forEach((el: any) => {
+      const fieldType = fieldtypes.find((f: any) => f.id === el.type);
+      const value = { field_type: fieldType, name: el.name };
+      const fieldValue = { value: value, name: el.name };
+      if (
+        initialFields &&
+        initialFields.every(
+          (initialField: any) => initialField.name !== el.name,
+        )
+      ) {
+        addFieldVal(fieldValue);
+      } else if (!initialFields) {
+        addFieldVal(fieldValue);
+      }
     });
   };
 
   const onChangeFields = (_e: any, _name: string) => {
-    console.log('updating ', _name, _e);
     setValue(_name, _e);
-    // const sampleTheme: themeObject = {
-    //   ...theme,
-    //   [_name]: _e,
-    // };
-    // // setTheme(sampleTheme);
   };
 
   useEffect(() => {
-    // if token
-    if (token) {
-      // loadData(token);
-      loadLayouts(token);
-      loadFlows(token);
-      loadFieldTypes(token);
-    }
-  }, [token]);
+    loadLayouts();
+    loadFlows();
+    loadFieldTypes();
+  }, []);
 
   return (
     <Box>
@@ -367,7 +435,7 @@ const Form = () => {
         desc="Manage Variants">
         <Box />
       </PageHeader>
-      <Flex>
+      <Flex sx={{ maxWidth: '100ch', mx: `auto` }}>
         <Box sx={{ minWidth: '60ch' }}>
           <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
             <Flex variant="layout.pageFrame">
@@ -375,6 +443,7 @@ const Form = () => {
                 <Box>
                   <Field
                     register={register}
+                    error={errors.name}
                     label="Name"
                     name="name"
                     defaultValue=""
@@ -385,13 +454,19 @@ const Form = () => {
                   <FieldText
                     register={register}
                     label="Description"
-                    name="desc"
+                    name="description"
                     defaultValue="Something to guide the user here"
                   />
+                  {errors.description && errors.description.message && (
+                    <Text variant="error">
+                      {errors.description.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box>
                   <Field
                     register={register}
+                    error={errors.prefix}
                     label="Prefix"
                     name="prefix"
                     defaultValue=""
@@ -402,9 +477,16 @@ const Form = () => {
                     register={register}
                     label="Color"
                     name="color"
-                    defaultValue=""
+                    defaultValue={
+                      (content && content?.content_type.color) || ''
+                    }
                     onChangeColor={onChangeFields}
                   />
+                  {errors.color && errors.color.message && (
+                    <Text variant="error">
+                      {errors.color.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="layout_id" mb={1}>
@@ -412,8 +494,12 @@ const Form = () => {
                   </Label>
                   <Select
                     id="layout_id"
-                    name="layout_id"
-                    ref={register({ required: true })}>
+                    {...register('layout_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {layouts &&
                       layouts.length > 0 &&
                       layouts.map((m: any) => (
@@ -422,6 +508,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.layout_id && errors.layout_id.message && (
+                    <Text variant="error">
+                      {errors.layout_id.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box px={0} pb={3}>
                   <Label htmlFor="flow_id" mb={1}>
@@ -429,9 +520,13 @@ const Form = () => {
                   </Label>
                   <Select
                     id="flow_id"
-                    name="flow_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    {...register('flow_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {flows &&
                       flows.length > 0 &&
                       flows.map((m: any) => (
@@ -440,15 +535,19 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.flow_id && errors.flow_id.message && (
+                    <Text variant="error">
+                      {errors.flow_id.message as string}
+                    </Text>
+                  )}
                 </Box>
 
                 <Box sx={{ display: 'none' }}>
                   <Input
                     id="edit"
-                    name="edit"
                     defaultValue={0}
                     hidden={true}
-                    ref={register({ required: true })}
+                    {...register('edit', { required: true })}
                   />
                 </Box>
 
@@ -458,9 +557,13 @@ const Form = () => {
                   </Label>
                   <Select
                     id="theme_id"
-                    name="theme_id"
                     defaultValue=""
-                    ref={register({ required: true })}>
+                    {...register('theme_id', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {themes &&
                       themes.length > 0 &&
                       themes.map((m: any) => (
@@ -469,6 +572,11 @@ const Form = () => {
                         </option>
                       ))}
                   </Select>
+                  {errors.theme_id && errors.theme_id.message && (
+                    <Text variant="error">
+                      {errors.theme_id.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
               {errors.exampleRequired && <Text>This field is required</Text>}
@@ -480,16 +588,9 @@ const Form = () => {
           </Box>
         </Box>
         <Box sx={{ flexGrow: 1 }} variant="layout.pageFrame">
-          {cId && (
-            <Box mb={2}>
-              <Text as="h4" variant="sectionTitle">
-                Manage
-              </Text>
-            </Box>
-          )}
-
           <FieldEditor
             fields={fields}
+            content={content}
             fieldtypes={fieldtypes}
             removeField={removeField}
             addField={addField}

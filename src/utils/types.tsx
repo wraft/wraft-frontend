@@ -19,12 +19,20 @@ export interface ContentType {
   prefix: string;
   name: string;
   layout: Layout;
+  theme: Theme;
   inserted_at: Date;
   id: string;
   flow: Flow | null;
   fields: any;
   decription: string;
   color: null;
+}
+
+export interface Theme {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
 }
 
 export interface Flow {
@@ -67,12 +75,14 @@ export interface ContentTypeClass {
   prefix: string;
   name: string;
   layout: Layout;
+  theme: Theme;
   inserted_at: string;
   id: string;
   flow: ContentTypeFlow;
+  theme_id: string;
   fields: any;
-  decription: string;
-  color: null;
+  description: string;
+  color: string;
 }
 
 export interface ContentTypeFlow {
@@ -122,6 +132,7 @@ export interface Asset {
   updated_at: string;
   inserted_at: string;
   file: string;
+  type?: string;
 }
 
 /**
@@ -272,6 +283,7 @@ export enum Action {
   Update = 'update',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Meta {}
 
 export interface ObjectDetails {

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import Router from 'next/router';
 
 import { useStoreActions, useStoreState } from 'easy-peasy';
-
-import { Label, Input } from 'theme-ui';
-
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
-import Link from './NavLink';
-import { userLogin } from '../utils/models';
+import { Box, Flex, Text, Button } from 'theme-ui';
+import { Label, Input } from 'theme-ui';
 import { Spinner } from 'theme-ui';
+
+import { userLogin } from '../utils/models';
+
+import Link from './NavLink';
 
 export interface IField {
   name: string;
@@ -17,19 +17,21 @@ export interface IField {
 }
 
 const Form = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const token = useStoreState((state) => state.auth.token);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
   const [ready, setReady] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
     setReady(true);
-    userLogin(data, ProxyToken);
-  };
-
-  const ProxyToken = (t: string) => {
-    setToken(t);
-    setReady(false);
+    userLogin(data).then((res: any) => {
+      setToken(res?.access_token);
+      setReady(false);
+    });
   };
 
   useEffect(() => {
@@ -48,9 +50,10 @@ const Form = () => {
           </Label>
           <Input
             id="email"
-            name="email"
+            // name="email"
             defaultValue="admin@dieture.com"
-            ref={register({ required: true })}
+            // ref={register({ required: true })}
+            {...register('email', { required: true })}
           />
         </Box>
         <Box px={2}>
@@ -59,10 +62,11 @@ const Form = () => {
           </Label>
           <Input
             id="password"
-            name="password"
+            // name="password"
             defaultValue="dieture123"
             type="password"
-            ref={register({ required: true })}
+            // ref={register({ required: true })}
+            {...register('password', { required: true })}
           />
         </Box>
         {errors.exampleRequired && <Text>This field is required</Text>}
