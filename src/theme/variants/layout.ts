@@ -221,12 +221,9 @@ const layout: Theme['layout'] = {
     py: 2,
     fontSize: 2,
     cursor: 'pointer',
-    borderBottom: 'solid 1px',
-    bg: 'neutral.100',
     color: 'text',
-    borderBottomColor: 'neutral.200',
     '&:hover': {
-      bg: 'neutral.200',
+      color: 'green.600',
     },
   },
   menuItemHeading: {
