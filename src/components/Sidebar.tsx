@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
-
+import { Drawer } from './Drawer';
 import {
   Note,
   Like,
@@ -481,9 +481,9 @@ const Nav = (props: any) => {
           </Box>
         </Box>
       </Flex>
-      <Modal isOpen={showSearch} onClose={closeSearch}>
+      <Drawer open={showSearch} setOpen={closeSearch}>
         <Blok />
-      </Modal>
+      </Drawer>
     </>
   );
 };
