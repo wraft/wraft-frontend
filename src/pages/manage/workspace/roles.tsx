@@ -6,12 +6,13 @@ import { Flex, Container, Button, Box, Input } from 'theme-ui';
 import { AddIcon, SearchIcon } from '../../../components/Icons';
 import { RolesAdd, RolesList } from '../../../components/manage';
 import ManageSidebar from '../../../components/ManageSidebar';
-import ModalCustom from '../../../components/ModalCustom';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { workspaceLinks } from '../../../utils';
 import { fetchAPI } from '../../../utils/models';
+
+import { Drawer } from '@wraft-ui/Drawer';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,10 +80,10 @@ const Index: FC = () => {
               </Button>
             </Flex>
           </PageHeader>
-          <ModalCustom varient="right" isOpen={isOpen} setOpen={setIsOpen}>
+          <Drawer open={isOpen} setOpen={setIsOpen}>
             <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
-          </ModalCustom>
-          <Container variant="layout.pageFrame">
+          </Drawer>
+          <Container variant="layout.newPageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">
