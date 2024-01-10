@@ -53,4 +53,5 @@ export default NextAuth({
   pages: {
     error: '/login',
   },
+  secret: process.env.SECRET,
 });
