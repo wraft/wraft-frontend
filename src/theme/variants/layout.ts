@@ -1,6 +1,11 @@
 import type { Theme } from 'theme-ui';
 
 const layout: Theme['layout'] = {
+  drawerBackdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.40)',
+    opacity: 10,
+    transitionDuration: '150ms',
+  },
   menu: {
     height: 'auto',
     width: 'fit-content',
