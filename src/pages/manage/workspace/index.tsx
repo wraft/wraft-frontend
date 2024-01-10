@@ -178,7 +178,7 @@ const Index: FC = () => {
         <PageHeader title="Workspace management" desc="Manage  >  Workspace">
           <div></div>
         </PageHeader>
-        <Container variant="layout.newPageFrame">
+        <Container variant="layout.pageFrame">
           <Flex>
             {(currentOrg?.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
