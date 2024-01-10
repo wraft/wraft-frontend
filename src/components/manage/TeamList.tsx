@@ -8,10 +8,10 @@ import { Flex, Box, Text, Button, Image } from 'theme-ui';
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
 import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
-import ModalCustom from '../ModalCustom';
 import { Table } from '../Table';
 
 import AssignRole from './AssignRole';
+import Modal from '../Modal';
 
 interface Role {
   id: string;
@@ -258,17 +258,17 @@ const TeamList = () => {
                                 <Close width={30} color="black" />
                               </Box>
                             </Button>
-                            <ModalCustom
-                              varient="center"
+                            <Modal
+          
                               isOpen={isRemoveRole === role.roleId}
-                              setOpen={setIsRemoveRole}>
+                              onClose={()=>setIsRemoveRole(null)}>
                               <ConfirmDelete
                                 title="Delete role"
                                 text={`Are you sure you want to delete ${role.roleName} ?`}
                                 setOpen={setIsRemoveRole}
                                 onConfirmDelete={onConfirmDelete}
                               />
-                            </ModalCustom>
+                            </Modal>
                           </Flex>
                         </Box>
                       ),
@@ -372,10 +372,10 @@ const TeamList = () => {
                           </Button>
                         </MenuItem>
                       </Menu>
-                      <ModalCustom
-                        varient="center"
+                      <Modal
+          
                         isOpen={isRemoveUser === row.index}
-                        setOpen={setIsRemoveUser}>
+                        onClose={()=>setIsRemoveUser(null)}>
                         {
                           <ConfirmDelete
                             title="Delete role"
@@ -405,7 +405,7 @@ const TeamList = () => {
                             }}
                           />
                         }
-                      </ModalCustom>
+                      </Modal>
                     </MenuProvider>
                   </Box>
                 );
