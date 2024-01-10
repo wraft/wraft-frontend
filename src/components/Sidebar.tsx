@@ -307,13 +307,7 @@ const Nav = (props: any) => {
                       </MenuButton>
                       <Menu
                         as={Box}
-                        sx={{
-                          border: 'solid 1px',
-                          borderColor: 'border',
-                          minWidth: '20ch',
-                          bg: 'neutral.100',
-                          zIndex: 1000,
-                        }}
+                        variant="layout.menuBlockWrapper"
                         aria-label="Preferences">
                         <MenuItem as={Box} variant="layout.menuItem">
                           <Box>
