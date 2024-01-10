@@ -16,7 +16,7 @@ type ModalProps = {
   disclosure?: React.ReactElement;
   onClose?: () => void;
   children: any;
-  width?:string;
+  width?: string;
 };
 
 const Modal: React.FC<ModalProps> = ({
@@ -25,7 +25,7 @@ const Modal: React.FC<ModalProps> = ({
   label = '',
   // className,
   disclosure,
-  width
+  width,
 }) => {
   const dialog = useDialogStore({ animated: true });
 
@@ -45,9 +45,9 @@ const Modal: React.FC<ModalProps> = ({
         </DialogDisclosure>
       )}
       <Dialog
-      sx={{
-        width:width
-      }}
+        sx={{
+          width: width,
+        }}
         as={Box}
         store={dialog}
         variant="layout.dialog"

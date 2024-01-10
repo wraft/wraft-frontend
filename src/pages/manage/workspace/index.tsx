@@ -19,6 +19,7 @@ import {
 import { ConfirmDelete } from '../../../components/common';
 import Field from '../../../components/Field';
 import ManageSidebar from '../../../components/ManageSidebar';
+import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -29,7 +30,6 @@ import {
   createEntity,
   fetchAPI,
 } from '../../../utils/models';
-import Modal from '../../../components/Modal';
 
 export interface Organisation {
   id: string;
@@ -275,7 +275,10 @@ const Index: FC = () => {
                     }}>
                     Delete Workspace
                   </Button>
-                  <Modal width='556px' isOpen={isDelete} onClose={()=>setDelete(false)}>
+                  <Modal
+                    width="556px"
+                    isOpen={isDelete}
+                    onClose={() => setDelete(false)}>
                     <Text
                       variant="pB"
                       sx={{
@@ -345,7 +348,7 @@ const Index: FC = () => {
                   </Modal>
                   <Modal
                     isOpen={isConfirmDelete}
-                    onClose={()=>setConfirmDelete(false)}>
+                    onClose={() => setConfirmDelete(false)}>
                     <ConfirmDelete
                       inputValue={inputValue}
                       title="Delete workspace"
