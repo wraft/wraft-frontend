@@ -148,13 +148,6 @@ const layout: Theme['layout'] = {
     height: '100vh',
     overflow: 'scroll',
   },
-  newPageFrame: {
-    p: 0,
-    height: '100%',
-    // maxHeight: '100vh',
-    overflow: 'scroll',
-    bg: 'background',
-  },
   contentFrame: {
     width: '100%',
     bg: 'backgroundWhite',
