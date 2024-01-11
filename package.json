@@ -12,7 +12,8 @@
     "version-packages": "changeset version",
     "postinstall": "husky install && turbo run post-install",
     "release": "turbo run build --filter=docs^... && changeset publish",
-    "prettier": "prettier --check ."
+    "prettier": "prettier --check .",
+    "pre-commit": "lint-staged"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
