@@ -1,0 +1,1 @@
+{"v":4,"entries":{"button--docs":{"id":"button--docs","title":"button","name":"Docs","importPath":"./stories/button.stories.tsx","type":"docs","tags":["docs","autodocs"],"storiesImports":[]},"button--primary":{"type":"story","id":"button--primary","name":"Button","title":"button","importPath":"./stories/button.stories.tsx","tags":["story"]}}}
