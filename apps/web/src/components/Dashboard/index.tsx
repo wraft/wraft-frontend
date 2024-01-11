@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button as Wbt } from '@acme/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
@@ -61,8 +60,6 @@ const Dashboard = () => {
         sx={{ fontSize: '29.3px', fontWeight: 'heading', fontFamily: 'body' }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
-
-      <Wbt>dmmmd</Wbt>
 
       <Flex
         mt="64px"

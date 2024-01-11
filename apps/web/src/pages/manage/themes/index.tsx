@@ -36,7 +36,7 @@ const Index: FC = () => {
             </Button>
           </Link>
         </PageHeader>
-        <Container variant="layout.newPageFrame">
+        <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
             <Box variant="layout.contentFrame">
