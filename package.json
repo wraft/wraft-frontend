@@ -10,11 +10,14 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
+    "postinstall": "husky install && turbo run post-install",
     "release": "turbo run build --filter=docs^... && changeset publish",
     "prettier": "prettier --check ."
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
     "turbo": "latest"
   },
@@ -27,5 +30,14 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "lint-staged": {
+    "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  }
 }
