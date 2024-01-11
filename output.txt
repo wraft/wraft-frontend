@@ -1,6 +1,0 @@
-yarn run v1.22.11
-$ next build && next export
-info  - Loaded env from /Users/muneef/Sites/products/wraft/front-v2/.env.local
-info  - Loaded env from /Users/muneef/Sites/products/wraft/front-v2/.env.production
-info  - Checking validity of types...
-info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
