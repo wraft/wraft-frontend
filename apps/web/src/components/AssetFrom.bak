@@ -1,0 +1,147 @@
+import React from 'react';
+import { Box, Flex, Button, Text, Label, Input } from 'theme-ui';
+
+import { useForm } from 'react-hook-form';
+import { Asset } from '../utils/types';
+import { useStoreState } from 'easy-peasy';
+import { createEntityFile } from '../utils/models';
+import { CloudUploadIcon } from './Icons';
+
+interface AssetFormProps {
+  setAsset?: any;
+  onUpload?: any;
+}
+
+const AssetForm = ({ onUpload, setAsset }: AssetFormProps) => {
+  const {
+    setValue,
+    watch,
+    register,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm<{ file: any }>({ mode: 'all' });
+  const token = useStoreState((state) => state.auth.token);
+  const [contents, setContents] = React.useState<Asset>();
+
+  const onImageUploaded = (data: any) => {
+    const mData: Asset = data;
+    onUpload(mData);
+    setContents(data);
+  };
+
+  const onSubmit = (data: any) => {
+    console.log('file:', data);
+    const formData = new FormData();
+    formData.append('file', data.file[0]);
+    formData.append('name', data.file[0].name);
+    formData.append('type', 'layout');
+
+    // const formData = new FormData();
+    // formData.append('image', data.file[0]);
+    // formData.append('tag', 'file');
+    createEntityFile(formData, token, 'assets', onImageUploaded);
+    setAsset(true);
+
+    // fetch(`${env.api_dev}/api/v1/assets`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     // 'Content-Type': 'multipart/form-data',
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    //   // headers: {'Content-Type':'multipart/form-data'},
+    //   body: formData,
+    // })
+    //   .then(function(response) {
+    //     return response.json();
+    //   })
+    //   .then(function(data) {
+    //     const mData: Asset = data;
+    //     console.log('Created Asset', mData);
+    //     props.onUpload(mData);
+    //     setContents(mData);
+    //   });
+  };
+
+  const [file, setFile] = React.useState(null);
+  const [dragging, setDragging] = React.useState(false);
+
+  const handleDragOver = (event: any) => {
+    setDragging(true);
+    event?.preventDefault();
+  };
+  const handleDrop = (event: any) => {
+    setDragging(false);
+    event?.preventDefault();
+    const droppedFile = event.dataTransfer.files[0];
+    setFile(droppedFile);
+    console.log(droppedFile);
+    setValue('file', droppedFile);
+    console.log(setValue('file', droppedFile));
+  };
+  // const { ref, ...rest } = register('file');
+  return (
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
+      <Box
+        onDragOver={handleDragOver}
+        onDragLeave={() => setDragging(false)}
+        onDrop={handleDrop}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          border: '1px dashed',
+          borderColor: 'border',
+          p: '18px',
+          bg: dragging ? 'gray.100' : 'backgroundWhite',
+        }}>
+        <Box mb="12px">
+          <CloudUploadIcon />
+        </Box>
+        <Box>
+          <Label
+            htmlFor="file"
+            sx={{ color: 'primary', display: 'inline-block' }}>
+            <Text variant="pM" mb="4px">
+              Drag & drop or{' '}
+              <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
+                upload files
+              </Text>
+            </Text>
+          </Label>
+          <Input
+            // sx={{ display: 'none' }}
+            id="file"
+            type="file"
+            accept="application/pdf"
+            {...register('file', { required: true })}
+          />
+        </Box>
+        <Text variant="capM">PDF - Max file size 5MB</Text>
+      </Box>
+      <Flex>
+        <Button
+          type="submit"
+          disabled={!isValid}
+          sx={{
+            ':disabled': {
+              bg: 'gray.100',
+              color: 'gray.500',
+            },
+          }}>
+          Upload
+        </Button>
+      </Flex>
+      {/* <Text mb={3}>Upload Files</Text>
+      {contents && (
+        <Box>
+          <Text>{contents.name}</Text>
+          <Text>{contents.id}</Text>
+          <Text>{contents.file}</Text>
+        </Box>
+      )} */}
+      <pre>{JSON.stringify(watch())}</pre>
+    </Box>
+  );
+};
+export default AssetForm;
