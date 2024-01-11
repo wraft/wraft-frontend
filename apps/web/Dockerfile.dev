@@ -1,0 +1,10 @@
+FROM node:alpine
+WORKDIR '/app'
+
+RUN apk add --no-cache bash
+SHELL [ "/bin/bash", "-c"]
+COPY package.json .
+RUN yarn install
+COPY . .
+
+CMD ["yarn", "dev"]

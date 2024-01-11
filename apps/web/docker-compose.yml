@@ -1,0 +1,14 @@
+# Version of the docker compose
+version: '3.8'
+
+# Containers we are going to run
+services:
+  # frontend
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: web
+    restart: always    
+    ports:
+      - 3000:3000
