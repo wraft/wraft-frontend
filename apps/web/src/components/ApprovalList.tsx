@@ -43,6 +43,7 @@ const Approvals = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
+
   const { accessToken } = useAuth();
 
   const loadData = () => {

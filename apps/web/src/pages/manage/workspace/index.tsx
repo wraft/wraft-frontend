@@ -19,7 +19,7 @@ import {
 import { ConfirmDelete } from '../../../components/common';
 import Field from '../../../components/Field';
 import ManageSidebar from '../../../components/ManageSidebar';
-import ModalCustom from '../../../components/ModalCustom';
+import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -178,7 +178,7 @@ const Index: FC = () => {
         <PageHeader title="Workspace management" desc="Manage  >  Workspace">
           <div></div>
         </PageHeader>
-        <Container variant="layout.newPageFrame">
+        <Container variant="layout.pageFrame">
           <Flex>
             {(currentOrg?.name !== 'Personal' || '') && (
               <ManageSidebar items={workspaceLinks} />
@@ -275,7 +275,10 @@ const Index: FC = () => {
                     }}>
                     Delete Workspace
                   </Button>
-                  <ModalCustom isOpen={isDelete} setOpen={setDelete}>
+                  <Modal
+                    width="556px"
+                    isOpen={isDelete}
+                    onClose={() => setDelete(false)}>
                     <Text
                       variant="pB"
                       sx={{
@@ -342,10 +345,10 @@ const Index: FC = () => {
                         </Flex>
                       </Box>
                     </Box>
-                  </ModalCustom>
-                  <ModalCustom
+                  </Modal>
+                  <Modal
                     isOpen={isConfirmDelete}
-                    setOpen={setConfirmDelete}>
+                    onClose={() => setConfirmDelete(false)}>
                     <ConfirmDelete
                       inputValue={inputValue}
                       title="Delete workspace"
@@ -353,7 +356,7 @@ const Index: FC = () => {
                       onConfirmDelete={onConfirmDelete}
                       setOpen={setConfirmDelete}
                     />
-                  </ModalCustom>
+                  </Modal>
                 </Box>
               )}
             </Flex>

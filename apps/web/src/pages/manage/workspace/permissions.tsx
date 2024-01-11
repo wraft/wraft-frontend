@@ -23,7 +23,7 @@ const Index: FC = () => {
           <PageHeader
             title="Manage Permissions"
             desc="Manage > Workspace"></PageHeader>
-          <Container variant="layout.newPageFrame">
+          <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">

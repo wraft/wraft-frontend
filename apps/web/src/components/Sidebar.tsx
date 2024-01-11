@@ -26,10 +26,10 @@ import Blok from './Blok';
 import { Search } from './Icons';
 import WorkspaceCreate from './manage/WorkspaceCreate';
 import Modal from './Modal';
-import ModalCustom from './ModalCustom';
 import ModeToggle from './ModeToggle';
 
 import Btn from '@wraft-ui/Button';
+import { Drawer } from '@wraft-ui/Drawer';
 
 /**
  * Sidebar Static Items
@@ -272,15 +272,12 @@ const Nav = (props: any) => {
                     onClick={() => setIsOpen(true)}>
                     Create a workspace
                   </Button>
-                  <ModalCustom
-                    isOpen={isOpen}
-                    setOpen={setIsOpen}
-                    varient="center">
+                  <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <WorkspaceCreate
                       setOpen={setIsOpen}
                       setCreatedId={setCreatedId}
                     />
-                  </ModalCustom>
+                  </Modal>
                 </MenuItem>
               </Menu>
             </MenuProvider>
@@ -307,13 +304,7 @@ const Nav = (props: any) => {
                       </MenuButton>
                       <Menu
                         as={Box}
-                        sx={{
-                          border: 'solid 1px',
-                          borderColor: 'border',
-                          minWidth: '20ch',
-                          bg: 'neutral.100',
-                          zIndex: 1000,
-                        }}
+                        variant="layout.menuBlockWrapper"
                         aria-label="Preferences">
                         <MenuItem as={Box} variant="layout.menuItem">
                           <Box>
@@ -481,9 +472,9 @@ const Nav = (props: any) => {
           </Box>
         </Box>
       </Flex>
-      <Modal isOpen={showSearch} onClose={closeSearch}>
+      <Drawer open={showSearch} setOpen={closeSearch}>
         <Blok />
-      </Modal>
+      </Drawer>
     </>
   );
 };
