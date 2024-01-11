@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 import { format } from 'date-fns';
-
 import Image from 'next/image';
 import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
+
 import { ApproveTick, DocumentCountIcon } from '../Icons';
+.
 
 import PendingDocumentBlock from './PendingDocument';
 
