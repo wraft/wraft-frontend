@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import {
   Box,
   Flex,
@@ -12,12 +13,10 @@ import {
   Text,
 } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { createEntityFile } from '../utils/models';
+import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
 // import { CloudUploadIcon } from './Icons';
-import Error from './Error';
 
 // import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
@@ -45,20 +44,19 @@ const AssetForm = ({
     formState: { isValid, errors },
   } = useForm<FormInputs>({ mode: 'all' });
   const [isLoading, setLoading] = React.useState<boolean>(false);
+  const [fileError, setFileError] = React.useState<string | null>(null);
   // const [contents, setContents] = React.useState<Asset>();
-
-  const { accessToken } = useAuth();
 
   const onImageUploaded = (data: any) => {
     setLoading(false);
     console.log('📸', data);
     const mData: Asset = data;
     onUpload(mData);
-    // setContents(data);
   };
 
   const onSubmit = async (data: any) => {
     setLoading(true);
+    setFileError(null);
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
@@ -69,13 +67,20 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    await createEntityFile(
-      formData,
-      accessToken as string,
-      'assets',
-      onImageUploaded,
-    );
-    setAsset(true);
+    toast.promise(postAPI(`assets`, formData), {
+      loading: 'Loading',
+      success: (data) => {
+        onImageUploaded(data);
+        return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
+      },
+      error: (error) => {
+        setLoading(false);
+        setFileError(error.errors.file[0]);
+        return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
+      },
+    });
+
+    if (filetype === 'layout') setAsset(true);
   };
 
   return (
@@ -100,7 +105,7 @@ const AssetForm = ({
                 Bold
               </option>
             </Select>
-            {errors.name && <Error text={errors.name.message} />}
+            {errors.name && <Text variant="error">{errors.name.message} </Text>}
           </Box>
         )}
         {/* {filetype !== 'theme' && (
@@ -133,6 +138,20 @@ const AssetForm = ({
           />
         )}
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
+        {fileError && (
+          <Box sx={{ maxWidth: '300px' }}>
+            <Text variant="error">{fileError}</Text>
+            <br />
+            {filetype == 'theme' && (
+              <Text variant="subR">
+                Your font file should follow the naming convention like
+                filename-filetype.ttf . Currenty the supported filetypes are
+                Bold, Regular and Italic. Other filetypes like Light, Black,
+                etc. are not supported as of now.
+              </Text>
+            )}
+          </Box>
+        )}
       </Box>
       <Flex>
         <Button
