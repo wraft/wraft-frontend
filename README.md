@@ -22,6 +22,9 @@ Run the following command:
 ```sh
 npx create-turbo@latest -e design-system
 ```
+```sh
+npx create-turbo@latest -e design-system
+```
 
 ### Useful Commands
 
