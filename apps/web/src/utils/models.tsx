@@ -59,7 +59,7 @@ export const fetchAPI = (path: any, query = '') =>
       .catch((err) => {
         if (err?.response?.data) {
           const res = err.response.data;
-          resolve(res);
+          reject(res);
         }
 
         reject(err);
@@ -79,7 +79,7 @@ export const postAPI = (path: string, body: any) =>
       .catch((err) => {
         if (err?.response?.data) {
           const res = err.response.data;
-          resolve(res);
+          reject(res);
         }
 
         reject(err);
@@ -99,7 +99,7 @@ export const putAPI = (path: string, body: any = {}) =>
       .catch((err) => {
         if (err?.response?.data) {
           const res = err.response.data;
-          resolve(res);
+          reject(res);
         }
 
         reject(err);
@@ -138,7 +138,7 @@ export const deleteAPI = (path: any) =>
       .catch((err) => {
         if (err?.response?.data) {
           const res = err.response.data;
-          resolve(res);
+          reject(res);
         }
 
         reject(err);
@@ -158,7 +158,7 @@ export const fetchUserInfo = () =>
       .catch((err) => {
         if (err?.response?.data) {
           const res = err.response.data;
-          resolve(res);
+          reject(res);
         }
 
         reject(err);
