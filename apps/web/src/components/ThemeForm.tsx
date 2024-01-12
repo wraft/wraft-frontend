@@ -37,7 +37,13 @@ const ThemeForm = () => {
    * @param data
    */
   const addUploads = (data: Asset) => {
-    setAssets((prevArray) => [...prevArray, data]);
+    setAssets((prevArray) => {
+      if (!Array.isArray(prevArray)) {
+        console.error('prevArray is not an array:', prevArray);
+        return [data]; // or handle this case appropriately
+      }
+      return [...prevArray, data];
+    });
   };
 
   /**
@@ -45,12 +51,32 @@ const ThemeForm = () => {
    * @param id
    */
   const deleteAsset = (id: string) => {
-    deleteAPI(`/assets/${id}`).then(() => {
-      toast.success('Deleting Asset', {
-        duration: 1000,
-        position: 'top-right',
-      });
-    });
+    toast.promise(
+      deleteAPI(`assets/${id}`),
+      {
+        loading: 'Loading',
+        success: (data: any) => {
+          console.log(data);
+          setAssets((prev) => prev.filter((item) => item.id !== data.id));
+          return `Successfully deleted `;
+        },
+        error: (err) => `This just happened: ${err.toString()}`,
+      },
+      {
+        success: {
+          duration: 1000,
+        },
+        error: {
+          duration: 1000,
+        },
+      },
+    );
+    // deleteAPI(`/assets/${id}`).then(() => {
+    //   toast.success('Deleting Asset', {
+    //     duration: 1000,
+    //     position: 'top-right',
+    //   });
+    // });
   };
 
   // determine edit state based on URL
@@ -291,7 +317,11 @@ const ThemeForm = () => {
               </Box>
             ))}
         </Box>
-        <AssetForm onUpload={addUploads} filetype="theme" />
+        <AssetForm
+          setAsset={setAssets}
+          onUpload={addUploads}
+          filetype="theme"
+        />
       </Box>
     </Flex>
   );
