@@ -1,166 +1,195 @@
-<!--
-*** Thanks for checking out this README Template. If you have a suggestion that would
-*** make this better, please fork the repo and create a pull request or simply open
-*** an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
+# Turborepo Design System Starter
 
-<!-- PROJECT SHIELDS -->
+This guide explains how to use a React design system starter powered by:
 
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
+- 🏎 [Turborepo](https://turbo.build/repo) — High-performance build system for Monorepos
+- 🚀 [React](https://reactjs.org/) — JavaScript library for user interfaces
+- 🛠 [Tsup](https://github.com/egoist/tsup) — TypeScript bundler powered by esbuild
+- 📖 [Storybook](https://storybook.js.org/) — UI component environment powered by Vite
 
-<br />
-<p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="public/demo.png" alt="Logo" width="100%" height="auto">
-  </a>
+As well as a few others tools preconfigured:
 
-<h3 align="center">Wraft Docs [Frontend]</h3>    
-<p>Version: v0.1.1</p>
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+- [Changesets](https://github.com/changesets/changesets) for managing versioning and changelogs
+- [GitHub Actions](https://github.com/changesets/action) for fully automated package publishing
 
-<p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
-</p>
+## Using this example
 
-<!-- TABLE OF CONTENTS -->
+Run the following command:
 
-## Table of Contents
-
-- [About the Project](#about-the-project)
-  - [Built With](#built-with)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-- [Acknowledgements](#acknowledgements)
-
-<!-- ABOUT THE PROJECT -->
-
-## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://wraft.app)
-
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need.
-
-Here's why:
-
-- Your time should be focused on creating something amazing. A project that solves a problem and helps others
-- You shouldn't be doing the same tasks over and over like creating a README from scratch
-- You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue.
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
-
-### Built With
-
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-- [Typescript](https://pandoc.org)
-- [React](https://react.com)
-- [Theme-UI](https://react.com)
-
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-
-- npm
-  
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Features
-
-- ▲ Uses the latest [Next.js](https://github.com/zeit/next.js) along with [typescript](https://www.typescriptlang.org/)
-- 🔮 State management with [redux](https://github.com/reactjs/redux) & [react-redux](https://github.com/reactjs/react-redux)
-- 💅 Styling with [styled-components](https://github.com/styled-components/styled-components)
-- 🐐 Unit testing with [react-testing-library](https://github.com/testing-library/react-testing-library)
-- 🖥 Custom reverse proxy server using [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware)
-- ✏️ Static code analysis with [eslint](https://eslint.org/)
-
-### Getting started
-
+```sh
+npx create-turbo@latest -e design-system
 ```
-git clone https://gitlab.com/wraft-docs/front-v2 front-v2
-cd front-v2
-yarn install
-yarn dev
+```sh
+npx create-turbo@latest -e design-system
 ```
 
-The app will run at `http://localhost:3000`
+### Useful Commands
 
-<!-- USAGE EXAMPLES -->
+- `pnpm build` - Build all packages, including the Storybook site
+- `pnpm dev` - Run all packages locally and preview with Storybook
+- `pnpm lint` - Lint all packages
+- `pnpm changeset` - Generate a changeset
+- `pnpm clean` - Clean up all `node_modules` and `dist` folders (runs each package's clean script)
 
-## Usage
+## Turborepo
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+[Turborepo](https://turbo.build/repo) is a high-performance build system for JavaScript and TypeScript codebases. It was designed after the workflows used by massive software engineering organizations to ship code at scale. Turborepo abstracts the complex configuration needed for monorepos and provides fast, incremental builds with zero-configuration remote caching.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+Using Turborepo simplifies managing your design system monorepo, as you can have a single lint, build, test, and release process for all packages. [Learn more](https://vercel.com/blog/monorepos-are-changing-how-teams-build-software) about how monorepos improve your development workflow.
 
-<!-- ROADMAP -->
+## Apps & Packages
 
-## Roadmap
+This Turborepo includes the following packages and applications:
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+- `apps/docs`: Component documentation site with Storybook
+- `packages/ui`: Core React components
+- `packages/utils`: Shared React utilities
+- `packages/typescript-config`: Shared `tsconfig.json`s used throughout the Turborepo
+- `packages/eslint-config`: ESLint preset
 
-<!-- CONTRIBUTING -->
+Each package and app is 100% [TypeScript](https://www.typescriptlang.org/). Workspaces enables us to "hoist" dependencies that are shared between packages to the root `package.json`. This means smaller `node_modules` folders and a better local dev experience. To install a dependency for the entire monorepo, use the `-w` workspaces flag with `pnpm add`.
 
-## Contributing
+This example sets up your `.gitignore` to exclude all generated files, other folders like `node_modules` used to store your dependencies.
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Compilation
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+To make the core library code work across all browsers, we need to compile the raw TypeScript and React code to plain JavaScript. We can accomplish this with `tsup`, which uses `esbuild` to greatly improve performance.
 
-<!-- LICENSE -->
+Running `pnpm build` from the root of the Turborepo will run the `build` command defined in each package's `package.json` file. Turborepo runs each `build` in parallel and caches & hashes the output to speed up future builds.
 
-## License
+For `acme-core`, the `build` command is the following:
 
-Distributed under the MIT License. See `LICENSE` for more information.
+```bash
+tsup src/index.tsx --format esm,cjs --dts --external react
+```
 
-<!-- CONTACT -->
+`tsup` compiles `src/index.tsx`, which exports all of the components in the design system, into both ES Modules and CommonJS formats as well as their TypeScript types. The `package.json` for `acme-core` then instructs the consumer to select the correct format:
 
-## Contact
+```json:acme-core/package.json
+{
+  "name": "@acme/core",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+}
+```
 
-Muneef Hameed - [@muneef](https://twitter.com/muneef) - muneef@aurut.com
+Run `pnpm build` to confirm compilation is working correctly. You should see a folder `acme-core/dist` which contains the compiled output.
 
-Project Link: [https://gitlab.com/wraft-docs/front-v2](https://gitlab.com/wraft-docs/front-v2)
+```bash
+acme-core
+└── dist
+    ├── index.d.ts  <-- Types
+    ├── index.js    <-- CommonJS version
+    └── index.mjs   <-- ES Modules version
+```
 
-<!-- ACKNOWLEDGEMENTS -->
+## Components
 
-## Acknowledgements
+Each file inside of `acme-core/src` is a component inside our design system. For example:
 
-- [Pandoc](https://www.pandoc.org)
+```tsx:acme-core/src/Button.tsx
+import * as React from 'react';
 
-<!-- MARKDOWN LINKS & IMAGES -->
+export interface ButtonProps {
+  children: React.ReactNode;
+}
+
+export function Button(props: ButtonProps) {
+  return <button>{props.children}</button>;
+}
+
+Button.displayName = 'Button';
+```
+
+When adding a new file, ensure the component is also exported from the entry `index.tsx` file:
+
+```tsx:acme-core/src/index.tsx
+import * as React from "react";
+export { Button, type ButtonProps } from "./Button";
+// Add new component exports here
+```
+
+## Storybook
+
+Storybook provides us with an interactive UI playground for our components. This allows us to preview our components in the browser and instantly see changes when developing locally. This example preconfigures Storybook to:
+
+- Use Vite to bundle stories instantly (in milliseconds)
+- Automatically find any stories inside the `stories/` folder
+- Support using module path aliases like `@acme-core` for imports
+- Write MDX for component documentation pages
+
+For example, here's the included Story for our `Button` component:
+
+```js:apps/docs/stories/button.stories.mdx
+import { Button } from '@acme-core/src';
+import { Meta, Story, Preview, Props } from '@storybook/addon-docs/blocks';
+
+<Meta title="Components/Button" component={Button} />
+
+# Button
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl eget consectetur tempor, nisl nunc egestas nisi, euismod aliquam nisl nunc euismod.
+
+## Props
+
+<Props of={Box} />
+
+## Examples
+
+<Preview>
+  <Story name="Default">
+    <Button>Hello</Button>
+  </Story>
+</Preview>
+```
+
+This example includes a few helpful Storybook scripts:
+
+- `pnpm dev`: Starts Storybook in dev mode with hot reloading at `localhost:6006`
+- `pnpm build`: Builds the Storybook UI and generates the static HTML files
+- `pnpm preview-storybook`: Starts a local server to view the generated Storybook UI
+
+## Versioning & Publishing Packages
+
+This example uses [Changesets](https://github.com/changesets/changesets) to manage versions, create changelogs, and publish to npm. It's preconfigured so you can start publishing packages immediately.
+
+You'll need to create an `NPM_TOKEN` and `GITHUB_TOKEN` and add it to your GitHub repository settings to enable access to npm. It's also worth installing the [Changesets bot](https://github.com/apps/changeset-bot) on your repository.
+
+### Generating the Changelog
+
+To generate your changelog, run `pnpm changeset` locally:
+
+1. **Which packages would you like to include?** – This shows which packages and changed and which have remained the same. By default, no packages are included. Press `space` to select the packages you want to include in the `changeset`.
+1. **Which packages should have a major bump?** – Press `space` to select the packages you want to bump versions for.
+1. If doing the first major version, confirm you want to release.
+1. Write a summary for the changes.
+1. Confirm the changeset looks as expected.
+1. A new Markdown file will be created in the `changeset` folder with the summary and a list of the packages included.
+
+### Releasing
+
+When you push your code to GitHub, the [GitHub Action](https://github.com/changesets/action) will run the `release` script defined in the root `package.json`:
+
+```bash
+turbo run build --filter=docs^... && changeset publish
+```
+
+Turborepo runs the `build` script for all publishable packages (excluding docs) and publishes the packages to npm. By default, this example includes `acme` as the npm organization. To change this, do the following:
+
+- Rename folders in `packages/*` to replace `acme` with your desired scope
+- Search and replace `acme` with your desired scope
+- Re-run `pnpm install`
+
+To publish packages to a private npm organization scope, **remove** the following from each of the `package.json`'s
+
+```diff
+- "publishConfig": {
+-  "access": "public"
+- },
+```
