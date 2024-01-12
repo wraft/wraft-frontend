@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import {
   Box,
   Flex,
@@ -12,12 +13,10 @@ import {
   Text,
 } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { createEntityFile } from '../utils/models';
+import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
 // import { CloudUploadIcon } from './Icons';
-import Error from './Error';
 
 // import Field from './Field';
 // import { useDropzone } from 'react-dropzone';
@@ -45,20 +44,19 @@ const AssetForm = ({
     formState: { isValid, errors },
   } = useForm<FormInputs>({ mode: 'all' });
   const [isLoading, setLoading] = React.useState<boolean>(false);
+  const [fileError, setFileError] = React.useState<string | null>(null);
   // const [contents, setContents] = React.useState<Asset>();
-
-  const { accessToken } = useAuth();
 
   const onImageUploaded = (data: any) => {
     setLoading(false);
     console.log('📸', data);
     const mData: Asset = data;
     onUpload(mData);
-    // setContents(data);
   };
 
   const onSubmit = async (data: any) => {
     setLoading(true);
+    setFileError(null);
     console.log('file:', data);
     const formData = new FormData();
     formData.append('file', data.file[0]);
@@ -69,13 +67,20 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    await createEntityFile(
-      formData,
-      accessToken as string,
-      'assets',
-      onImageUploaded,
-    );
-    setAsset(true);
+    toast.promise(postAPI(`assets`, formData), {
+      loading: 'Loading',
+      success: (data) => {
+        onImageUploaded(data);
+        return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
+      },
+      error: (error) => {
+        setLoading(false);
+        setFileError(error.errors.file[0]);
+        return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
+      },
+    });
+
+    if (filetype === 'layout') setAsset(true);
   };
 
   return (
@@ -100,7 +105,7 @@ const AssetForm = ({
                 Bold
               </option>
             </Select>
-            {errors.name && <Error text={errors.name.message} />}
+            {errors.name && <Text variant="error">{errors.name.message} </Text>}
           </Box>
         )}
         {/* {filetype !== 'theme' && (
@@ -133,6 +138,20 @@ const AssetForm = ({
           />
         )}
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
+        {fileError && (
+          <Box sx={{ maxWidth: '300px' }}>
+            <Text variant="error">{fileError}</Text>
+            <br />
+            {filetype == 'theme' && (
+              <Text variant="subR">
+                Your font file should follow the naming convention like
+                filename-filetype.ttf . Currenty the supported filetypes are
+                Bold, Regular and Italic. Other filetypes like Light, Black,
+                etc. are not supported as of now.
+              </Text>
+            )}
+          </Box>
+        )}
       </Box>
       <Flex>
         <Button
@@ -153,138 +172,3 @@ const AssetForm = ({
   );
 };
 export default AssetForm;
-
-// const [file, setFile] = React.useState([]);
-// const [dragging, setDragging] = React.useState(false);
-
-// const handleDragOver = (event: any) => {
-//   setDragging(true);
-//   event?.preventDefault();
-// };
-// const handleDrop = (event: any) => {
-//   setDragging(false);
-//   event?.preventDefault();
-//   const droppedFile = event.dataTransfer.files[0];
-//   setFile(droppedFile);
-//   console.log(droppedFile);
-// };
-
-// React.useEffect(() => {
-//   console.log(file);
-// }, [file]);
-
-// const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-
-// const files = acceptedFiles.map((file) => (
-//   <li key={file.name}>
-//     {file.name} - {file.size} bytes
-//   </li>
-// ));
-// return (
-//   <Box as="form" onSubmit={handleSubmit(onSubmit)} mt={4}>
-//     <Box
-//       {...getRootProps({})}
-//       sx={{
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//         border: '1px dashed',
-//         borderColor: 'border',
-//         p: '18px',
-//         // bg: dragging ? 'gray.100' : 'backgroundWhite',
-//       }}>
-//       <input {...getInputProps({ ...register('file') })} />
-//       <p>Drag 'n' drop some files here, or click to select files</p>
-//     </Box>
-//     {/* <p>
-//         Drag & drop or{' '}
-//         <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
-//           upload files
-//         </Text>
-//       </p> */}
-//     {/* <Box mb="12px">
-//         <CloudUploadIcon />
-//       </Box>
-//       <Text variant="capM">PDF - Max file size 5MB</Text>
-//     */}
-//     <Flex>
-//       <Button
-//         type="submit"
-//         disabled={!isValid}
-//         sx={{
-//           ':disabled': {
-//             bg: 'gray.100',
-//             color: 'gray.500',
-//           },
-//         }}>
-//         Upload
-//       </Button>
-//     </Flex>
-//     <pre>{JSON.stringify(watch())}</pre>
-//     <ul>{files}</ul>
-//   </Box>
-// );
-
-{
-  /*current */
-}
-{
-  /* <Box>
-          <Label
-            htmlFor="file"
-            sx={{ color: 'primary', display: 'inline-block' }}>
-            <Text variant="pM" mb="4px">
-              Drag & drop or{' '}
-              <Text as="span" sx={{ color: 'primary', cursor: 'pointer' }}>
-                upload files
-              </Text>
-            </Text>
-          </Label>
-          <Controller
-            name="file"
-            control={control}
-            defaultValue={null}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Input
-                id="fileInput"
-                type="file"
-                accept="application/pdf"
-                {...field}
-              />
-            )}
-          />
-        </Box>
-        <Text variant="capM">PDF - Max file size 5MB</Text> */
-}
-{
-  /*//inside upper box
-           <Input
-            // sx={{ display: 'none' }}
-            id="fileInput"
-            type="file"
-            accept="application/pdf"
-            {...register('file', { required: true })}
-          /> */
-}
-{
-  /* <Box
-        onDragOver={handleDragOver}
-        onDragLeave={() => setDragging(false)}
-        onDrop={handleDrop}
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          border: '1px dashed',
-          borderColor: 'border',
-          p: '18px',
-          bg: dragging ? 'gray.100' : 'backgroundWhite',
-        }}>
-        <Box mb="12px">
-          <CloudUploadIcon />
-        </Box> */
-}
-{
-  /* <pre>{JSON.stringify(watch())}</pre> */
-}
