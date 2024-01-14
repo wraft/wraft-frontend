@@ -20,7 +20,7 @@ import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../components/NavLink';
 import { useAuth } from '../contexts/AuthContext';
 import { Organisation } from '../store/profile';
-import { postAPI } from '../utils/models';
+import { postAPI, fetchAPI } from '../utils/models';
 
 import Blok from './Blok';
 import { Search } from './Icons';
@@ -100,6 +100,9 @@ const Nav = (props: any) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string | undefined>(undefined);
+  const [membersCount, setMembersCount] = useState<number | undefined>(
+    undefined,
+  );
 
   const [mode, setMode] = useColorMode();
 
@@ -181,6 +184,19 @@ const Nav = (props: any) => {
   //   // setIsOpen(true);
   // }, []);
 
+  useEffect(() => {
+    if (
+      userProfile &&
+      userProfile.currentOrganisation &&
+      userProfile.currentOrganisation.id
+    )
+      fetchAPI(`organisations/${userProfile.currentOrganisation.id}`).then(
+        (data: any) => {
+          setMembersCount(data.members_count);
+        },
+      );
+  }, [onSwitchOrganization]);
+
   return (
     <>
       <Flex
@@ -230,7 +246,7 @@ const Nav = (props: any) => {
                           {userProfile?.currentOrganisation?.name}
                         </Text>
                         <Text as="p" sx={{ fontSize: 1, color: 'gray.400' }}>
-                          3 members
+                          {membersCount && `${membersCount} members`}
                         </Text>
                       </Box>
                     </Flex>
