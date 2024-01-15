@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import { useStoreState } from 'easy-peasy';
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
@@ -11,8 +12,6 @@ import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { workspaceLinks } from '../../../utils';
-
-import { Drawer } from '@wraft-ui/Drawer';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
