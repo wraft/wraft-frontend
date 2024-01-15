@@ -45,6 +45,8 @@ const Form = () => {
   // const [keys, setKeys] = useState<Array<string>>();
 
   const [cleanInsert, setCleanInsert] = useState<boolean>(false);
+  const [token, setToken] = useState<any>();
+  const [insertable, setInsertable] = useState<any>();
 
   // determine edit state based on URL
   const router = useRouter();
@@ -76,24 +78,37 @@ const Form = () => {
 
     // if edit is live
     if (cId) {
-      putAPI(`data_templates/${cId}`, formValues).then(() => {
-        onCreated();
-        toast.success('Updated Successfully', {
-          duration: 1000,
-          position: 'top-right',
+      putAPI(`data_templates/${cId}`, formValues)
+        .then(() => {
+          onCreated();
+          toast.success('Updated Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          setLoading(false);
+        })
+        .catch(() => {
+          toast.error('Failed to update!', {
+            duration: 1000,
+            position: 'top-right',
+          });
         });
-        setLoading(false);
-      });
     } else {
-      postAPI(`content_types/${data.parent}/data_templates`, formValues).then(
-        () => {
+      postAPI(`content_types/${data.parent}/data_templates`, formValues)
+        .then(() => {
           onCreated();
           toast.success('Created Successfully', {
             duration: 1000,
             position: 'top-right',
           });
-        },
-      );
+          setLoading(false);
+        })
+        .catch(() => {
+          toast.error('Failed to Create!', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
 
       setLoading(false);
     }
@@ -166,6 +181,7 @@ const Form = () => {
       if (mm) {
         console.log('has serials', mm);
         setCleanInsert(false);
+        setToken(mm);
       }
     }
     setDataTemplate(data);
@@ -272,9 +288,6 @@ const Form = () => {
     console.log('errors', errors);
   }, [errors]);
 
-  const [tokens, setToken] = useState<any>();
-  const [insertable, setInsertable] = useState<any>();
-
   const insertToken = (token: any) => {
     const test = {
       type: 'holder',
@@ -360,9 +373,9 @@ const Form = () => {
                 {editorReady && (
                   <MarkdownEditor
                     onUpdate={doUpdate}
-                    starter={tokens}
+                    starter={token}
                     cleanInsert={cleanInsert}
-                    token={tokens}
+                    token={token}
                     editable={true}
                     variables={varias}
                     searchables={varias}
