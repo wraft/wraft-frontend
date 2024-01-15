@@ -1,6 +1,9 @@
 import type { Theme } from 'theme-ui';
 
 const forms: Theme['forms'] = {
+  input: {
+    borderColor: 'border',
+  },
   checkbox: {
     MozAppearance: 'none',
     WebkitAppearance: 'none',
