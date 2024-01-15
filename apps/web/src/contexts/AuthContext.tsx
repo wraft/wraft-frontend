@@ -56,10 +56,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         try {
           const userinfo: any = await fetchUserInfo();
           const userOrg: any = await fetchAPI('users/organisations');
-          const currentOrg: any =
-            userinfo &&
-            userinfo.organisation_id &&
-            (await fetchAPI(`organisations/${userinfo?.organisation_id}`));
+          const currentOrg = userOrg?.organisations.find(
+            (og: any) => og.id == userinfo?.organisation_id,
+          );
 
           const body = {
             ...userProfile,
@@ -78,6 +77,23 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (userProfile?.organisation_id) {
+      fetchAPI(`organisations/${userProfile.organisation_id}`).then((res) => {
+        const body = {
+          ...userProfile,
+          // ...user,
+          // organisations: res.organisations || [],
+          currentOrganisation: res || {},
+        };
+        console.log('inside', userProfile, body);
+        updateUserData(body);
+      });
+    }
+  }, [userProfile?.organisation_id]);
+
+  console.log('user profile', userProfile);
+
   const login = (data: any) => {
     const { access_token, refresh_token, user }: any = data;
     setAccessToken(access_token);
@@ -88,10 +104,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     updateUserData(user);
 
     fetchAPI('users/organisations').then(async (res: any) => {
-      const currentOrg: any =
-        user &&
-        user.organisation_id &&
-        (await fetchAPI(`organisations/${user?.organisation_id}`));
+      const currentOrg = res?.organisations.find(
+        (og: any) => og.id == user.organisation_id,
+      );
 
       const body = {
         ...userProfile,
