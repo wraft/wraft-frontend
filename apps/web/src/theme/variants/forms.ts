@@ -4,6 +4,12 @@ const forms: Theme['forms'] = {
   input: {
     borderColor: 'border',
   },
+  select: {
+    borderColor: 'border',
+  },
+  textarea: {
+    borderColor: 'border',
+  },
   checkbox: {
     MozAppearance: 'none',
     WebkitAppearance: 'none',
