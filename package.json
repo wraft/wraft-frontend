@@ -4,17 +4,24 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "changeset": "changeset",
+    "clean": "rm -rf node_modules && turbo run clean",
     "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint:fix": "turbo run lint:fix",
     "lint": "turbo run lint",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "postinstall": "husky install && turbo run post-install",
-    "release": "turbo run build --filter=docs^... && changeset publish",
+    "post-install": "husky install && turbo run post-install",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
     "prettier": "prettier --check .",
-    "pre-commit": "lint-staged"
+    "release": "turbo run build --filter=docs^... && changeset publish",
+    "version-packages": "changeset version"
+  },
+  "lint-staged": {
+    "(apps|packages)/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix" 
+    ]
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
@@ -32,14 +39,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "lint-staged": {
-    "(apps|packages)/**/*.{js,ts,jsx,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.json": [
-      "prettier --write"
-    ]
-  }
+  ]
 }
