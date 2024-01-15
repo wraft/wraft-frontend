@@ -12,7 +12,8 @@
     "prettier": "prettier --write --ignore-unknown",
     "test": "jest --watchAll",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
-    "lint": "eslint --fix --ext js,jsx,ts,tsx",
+    "lint": "eslint . --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .ts,.js,.tsx,.jsx --fix",
     "lint-test": "next lint --fix",
     "start-prod": "next start -H 0.0.0.0 -p ${PORT:-8080}",
     "clean": "rm -rf .turbo && rm -rf node_modules"

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import { useStoreState } from 'easy-peasy';
 import ContentLoader from 'react-content-loader';
 import { Box, Text, Flex, Button } from 'theme-ui';
@@ -11,8 +12,6 @@ import Modal from '../Modal';
 import { Table } from '../Table';
 
 import { RolesEdit } from '.';
-
-import { Drawer } from '@wraft-ui/Drawer';
 
 export interface RolesItem {
   id: string;
