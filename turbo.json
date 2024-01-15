@@ -16,7 +16,8 @@
       "persistent": true
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "outputs": ["dist/**", "build/**"]
     }
   }
 }
