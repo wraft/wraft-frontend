@@ -18,6 +18,7 @@ interface IUserContextProps {
   accessToken: string | null;
   refreshToken: string | null;
   userProfile: any;
+  organisations: any;
   login: (data: any) => void;
   logout: () => void;
 }
@@ -30,6 +31,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any | null>(null);
+  const [organisations, setOrganisations] = useState<any | null>(null);
 
   const [isUserLoading, setIsUserLoading] = useState(false);
   const setToken = useStoreActions((actions: any) => actions.auth.addToken);
@@ -56,17 +58,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         try {
           const userinfo: any = await fetchUserInfo();
           const userOrg: any = await fetchAPI('users/organisations');
-          const currentOrg = userOrg?.organisations.find(
-            (og: any) => og.id == userinfo?.organisation_id,
-          );
+          setOrganisations(userOrg.organisations);
 
-          const body = {
-            ...userProfile,
-            ...userinfo,
-            organisations: userOrg.organisations || [],
-            currentOrganisation: currentOrg || {},
-          };
-          await updateUserData(body);
+          await updateUserData(userinfo);
           setIsUserLoading(false);
         } catch {
           setIsUserLoading(false);
@@ -82,11 +76,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
       fetchAPI(`organisations/${userProfile.organisation_id}`).then((res) => {
         const body = {
           ...userProfile,
-          // ...user,
-          // organisations: res.organisations || [],
           currentOrganisation: res || {},
         };
-        console.log('inside', userProfile, body);
         updateUserData(body);
       });
     }
@@ -99,23 +90,14 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setAccessToken(access_token);
     setRefreshToken(refresh_token);
     setToken(access_token);
-    setProfile(user);
 
     updateUserData(user);
 
-    fetchAPI('users/organisations').then(async (res: any) => {
-      const currentOrg = res?.organisations.find(
-        (og: any) => og.id == user.organisation_id,
-      );
-
-      const body = {
-        ...userProfile,
-        ...user,
-        organisations: res.organisations || [],
-        currentOrganisation: currentOrg || {},
-      };
-      updateUserData(body);
-    });
+    if (!organisations) {
+      fetchAPI('users/organisations').then(async (res: any) => {
+        setOrganisations(res.organisations);
+      });
+    }
 
     cookie.set('token', access_token);
     cookie.set('refreshToken', refresh_token);
@@ -126,6 +108,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUserProfile(null);
+    setOrganisations(null);
     setProfile(null);
 
     cookie.remove('token');
@@ -156,6 +139,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         refreshToken,
         accessToken,
         userProfile,
+        organisations,
         login,
         logout,
       }}>

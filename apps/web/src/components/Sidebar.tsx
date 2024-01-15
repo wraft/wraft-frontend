@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 // import { useTour } from '@reactour/tour';
+import Btn from '@wraft-ui/Button';
+import { Drawer } from '@wraft-ui/Drawer';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -27,9 +29,6 @@ import { Search } from './Icons';
 import WorkspaceCreate from './manage/WorkspaceCreate';
 import Modal from './Modal';
 import ModeToggle from './ModeToggle';
-
-import Btn from '@wraft-ui/Button';
-import { Drawer } from '@wraft-ui/Drawer';
 
 /**
  * Sidebar Static Items
@@ -103,7 +102,7 @@ const Nav = (props: any) => {
 
   const [mode, setMode] = useColorMode();
 
-  const { userProfile, accessToken, login, logout } = useAuth();
+  const { organisations, userProfile, accessToken, login, logout } = useAuth();
   const router = useRouter();
 
   console.log('userProfile', userProfile);
@@ -245,27 +244,28 @@ const Nav = (props: any) => {
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   Switch Workspace
                 </MenuItem>
-                {userProfile?.organisations?.map((org: Organisation) => (
-                  <MenuItem
-                    key={org.id}
-                    variant="layout.menuItem"
-                    onClick={() => onSwitchOrganization(org?.id)}
-                    as={Box}>
-                    <Image
-                      src={org?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `18px`,
-                        width: `18px`,
-                        mr: 2,
-                      }}
-                    />
-                    {org.name}
-                  </MenuItem>
-                ))}
+                {organisations &&
+                  organisations.map((org: Organisation) => (
+                    <MenuItem
+                      key={org.id}
+                      variant="layout.menuItem"
+                      onClick={() => onSwitchOrganization(org?.id)}
+                      as={Box}>
+                      <Image
+                        src={org?.logo}
+                        width={24}
+                        height={24}
+                        alt="Workspace"
+                        sx={{
+                          borderRadius: '99rem',
+                          height: `18px`,
+                          width: `18px`,
+                          mr: 2,
+                        }}
+                      />
+                      {org.name}
+                    </MenuItem>
+                  ))}
                 <MenuItem variant="layout.menuItemHeading" as={Box}>
                   <Button
                     variant="base"
