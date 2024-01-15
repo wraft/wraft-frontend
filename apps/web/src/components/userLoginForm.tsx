@@ -195,7 +195,7 @@ const UserLoginForm = () => {
         />
 
         <Button onClick={() => signIn('gmail')} variant="googleLogin">
-          <img src={GoogleLogo} alt="" />
+          <Image src={GoogleLogo} alt="" width={32} height={32} />
           Continue with Google
         </Button>
         {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
