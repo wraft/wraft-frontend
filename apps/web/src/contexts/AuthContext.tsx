@@ -56,10 +56,10 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         try {
           const userinfo: any = await fetchUserInfo();
           const userOrg: any = await fetchAPI('users/organisations');
-
-          const currentOrg = userOrg?.organisations.find(
-            (og: any) => og.id == userinfo?.organisation_id,
-          );
+          const currentOrg: any =
+            userinfo &&
+            userinfo.organisation_id &&
+            (await fetchAPI(`organisations/${userinfo?.organisation_id}`));
 
           const body = {
             ...userProfile,
@@ -87,10 +87,11 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
     updateUserData(user);
 
-    fetchAPI('users/organisations').then((res: any) => {
-      const currentOrg = res?.organisations.find(
-        (og: any) => og.id == user.organisation_id,
-      );
+    fetchAPI('users/organisations').then(async (res: any) => {
+      const currentOrg: any =
+        user &&
+        user.organisation_id &&
+        (await fetchAPI(`organisations/${user?.organisation_id}`));
 
       const body = {
         ...userProfile,
