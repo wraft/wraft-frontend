@@ -23,7 +23,7 @@ import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
-import { workspaceLinks } from '../../../utils';
+import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
 import {
   updateEntityFile,
   deleteEntity,
@@ -180,9 +180,13 @@ const Index: FC = () => {
         </PageHeader>
         <Container variant="layout.pageFrame">
           <Flex>
-            {(currentOrg?.name !== 'Personal' || '') && (
-              <ManageSidebar items={workspaceLinks} />
-            )}
+            <ManageSidebar
+              items={
+                currentOrg?.name !== 'Personal' || ''
+                  ? workspaceLinks
+                  : PersonalWorkspaceLinks
+              }
+            />
             <Flex sx={{ flexDirection: 'column' }}>
               <Box
                 as="form"

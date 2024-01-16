@@ -341,6 +341,12 @@ export const menuLinks: menuLinksProps[] = [
         <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
       </NavLink> */
 }
+export const PersonalWorkspaceLinks: menuLinksProps[] = [
+  {
+    name: 'Workspace',
+    path: '/manage/workspace',
+  },
+];
 
 export const workspaceLinks: menuLinksProps[] = [
   {
