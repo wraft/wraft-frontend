@@ -5,3 +5,4 @@ export const specialCharacterRegex = /[-._!"`'#%&,:;<>=@{}~$()*+/\\?[\]^|]+/;
 export const lowercaseRegex = /[a-z]/;
 export const uppercaseRegex = /[A-Z]/;
 export const numberRegex = /.*[0-9].*/;
+export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
