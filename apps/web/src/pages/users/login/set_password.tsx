@@ -13,12 +13,12 @@ import Field from '../../../components/Field';
 import Link from '../../../components/NavLink';
 import PasswordCreated from '../../../components/PasswordCreated';
 import { postAPI } from '../../../utils/models';
-import { addFieldIssue, passwordPatterns } from '../../../utils/zodPatterns';
+import { addFieldIssue, passwordPattern } from '../../../utils/zodPatterns';
 
 const schema = z
   .object({
-    newPassword: passwordPatterns,
-    confirmPassword: passwordPatterns,
+    newPassword: passwordPattern,
+    confirmPassword: passwordPattern,
   })
   .superRefine(({ confirmPassword, newPassword }, ctx) => {
     if (confirmPassword !== newPassword) {
