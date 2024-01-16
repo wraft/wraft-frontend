@@ -1,26 +1,40 @@
 import { useEffect, useState } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Label, Input, Heading, Checkbox } from 'theme-ui';
+import { Label, Heading, Checkbox } from 'theme-ui';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { Spinner } from 'theme-ui';
+import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
 import Logo from '../../public/Logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
+import { emailPattern, passwordPattern } from '../utils/zodPatterns';
 
+import Field from './Field';
 import Link from './NavLink';
 
 export interface IField {
   name: string;
   value: string;
 }
+
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+const schema = z.object({
+  email: emailPattern,
+  password: passwordPattern,
+});
 
 const UserLoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,7 +43,11 @@ const UserLoginForm = () => {
 
   const { login, accessToken } = useAuth();
   const { data, status } = useSession();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: 'onBlur', resolver: zodResolver(schema) });
   const router = useRouter();
 
   const { session, error } = router.query;
@@ -41,7 +59,6 @@ const UserLoginForm = () => {
           if (status === 'authenticated') {
             await signOut({ redirect: false });
           }
-
           router.push('/login');
         } catch (error) {
           console.error('Error during sign out:', error);
@@ -110,28 +127,21 @@ const UserLoginForm = () => {
         </Heading>
 
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email" sx={{ mb: '4px', color: 'gray.600' }}>
-            Email
-          </Label>
-          <Input
-            type="text"
-            id="email"
-            defaultValue=""
-            {...register('email', { required: true })}
-            mb={'24px'}
-            color="border"
+          <Field
+            name="email"
+            label="Email"
+            register={register}
+            type={'email'}
+            error={errors.email}
+            mb={5}
           />
-
-          <Label htmlFor="password" sx={{ mb: '4px', color: 'gray.600' }}>
-            Password
-          </Label>
-          <Input
-            id="password"
-            defaultValue=""
+          <Field
+            name="password"
+            label="Password"
+            register={register}
             type={showPassword ? 'text' : 'password'}
-            {...register('password', { required: true })}
-            mb={'12px'}
-            color={'border'}
+            error={errors.password}
+            mb={3}
           />
           <Flex
             sx={{
@@ -198,7 +208,6 @@ const UserLoginForm = () => {
           <Image src={GoogleLogo} alt="" width={32} height={32} />
           Continue with Google
         </Button>
-        {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
 
         <Flex
           sx={{
