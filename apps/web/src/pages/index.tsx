@@ -4,16 +4,14 @@ import { useStoreState } from 'easy-peasy';
 import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 
 import Dashboard from '../components/Dashboard';
+import Modal from '../components/Modal';
 import Page from '../components/PageFrame';
 import UserNav from '../components/UserNav';
-
-// import UserHome from '../components/UserHome';
-
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { postAPI } from '../utils/models';
 
 const UserHome = dynamic(() => import('../components/UserHome'), {
   ssr: false,
@@ -42,40 +40,19 @@ const Index: FC = () => {
       const formData = new FormData();
       formData.append('token', retrievedObject.inviteToken);
 
-      try {
-        // Create a new FormData object
-        const formData = new FormData();
-        formData.append('token', retrievedObject.inviteToken);
-
-        // Send the FormData object in the POST request
-        const response = await fetch(`${API_HOST}/api/v1/join_organisation`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`, // Add your authorization token here
-          },
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Errorq:', errorData);
-          // You can also throw a custom error if needed
-          throw new Error('Team joining failed');
-        } else {
-          // Handle a successful response (if needed)
-          const responseData = await response;
-          console.log(responseData);
+      toast.promise(postAPI(`join_organisation`, formData), {
+        loading: 'Loading',
+        success: () => {
           setIsTeamInvite(false);
           cookie.remove('inviteCookie');
-          // setResetPasswordSuccess(responseData);
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error('Network error:', error);
-        cookie.remove('inviteCookie');
-        // setResetPasswordSuccess(undefined);
-      }
+          return `Successfully joined`;
+        },
+        error: () => {
+          setIsTeamInvite(false);
+          cookie.remove('inviteCookie');
+          return `Failed to join`;
+        },
+      });
     }
   };
   return (
@@ -98,7 +75,11 @@ const Index: FC = () => {
           <Dashboard />
         </Page>
       )}
-      {token && isTeamInvite && (
+      <Modal
+        isOpen={token && isTeamInvite}
+        onClose={() => {
+          setIsTeamInvite(false);
+        }}>
         <Flex
           sx={{
             flexDirection: 'column',
@@ -108,10 +89,6 @@ const Index: FC = () => {
             height: '205px',
             border: '1px solid #E4E9EF',
             borderRadius: '4px',
-            position: 'absolute',
-            top: '38%',
-            left: '38%',
-            zIndex: '10',
             background: '#FFF',
             alignItems: 'center',
           }}>
@@ -140,7 +117,7 @@ const Index: FC = () => {
             </Button>
           </Flex>
         </Flex>
-      )}
+      </Modal>
     </>
   );
 };
