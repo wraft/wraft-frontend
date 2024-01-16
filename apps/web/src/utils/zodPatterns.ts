@@ -34,3 +34,12 @@ export const passwordPatterns = z
   .refine(FIELD_VALIDATION.TEST.LOWERCASE, FIELD_VALIDATION.MSG.LOWERCASE)
   .refine(FIELD_VALIDATION.TEST.UPPERCASE, FIELD_VALIDATION.MSG.UPPERCASE)
   .refine(FIELD_VALIDATION.TEST.NUMBER, FIELD_VALIDATION.MSG.NUMBER);
+
+export const addFieldIssue = (field: string, ctx: z.RefinementCtx) => {
+  ctx.addIssue({
+    code: 'custom',
+    message: FIELD_VALIDATION.MSG.MATCH,
+    path: [field],
+    fatal: true,
+  });
+};
