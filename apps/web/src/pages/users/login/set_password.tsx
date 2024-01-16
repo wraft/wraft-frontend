@@ -53,13 +53,13 @@ const Index = () => {
           confirmPassword: data.confirmPassword,
         }),
         {
-          loading: 'loading',
+          loading: 'Loading...',
           success: () => {
-            return 'success';
+            return 'Successfully setted new Password';
             setVerified(true);
           },
           error: () => {
-            return 'error';
+            return 'Failed to set new Password';
           },
         },
       );
