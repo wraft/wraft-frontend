@@ -12,7 +12,8 @@ interface Props {
   label?: string;
   name: string;
   defaultValue?: string;
-  mr?: number;
+  mr?: string | number;
+  mb?: string | number;
   placeholder?: string;
   sub?: string;
   variant?: string;
@@ -31,15 +32,16 @@ const Field: React.FC<Props> = ({
   register,
   defaultValue,
   mr,
+  mb,
   sub,
   variant = 'baseForm',
 }) => {
   return (
-    <Box mr={mr} variant={variant} sx={{ position: 'relative' }}>
+    <Box mr={mr} mb={mb} variant={variant} sx={{ position: 'relative' }}>
       {sub && (
         <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
       )}
-      <Label htmlFor="description" mb={1}>
+      <Label htmlFor="description" mb={1} sx={{ color: 'gray.600' }}>
         {label}
       </Label>
       <Input
