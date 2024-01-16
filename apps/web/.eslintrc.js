@@ -54,6 +54,10 @@ module.exports = {
                 "pattern": "react",
                 "group": "builtin",
                 "position": "before"
+              },
+              {
+                "pattern": "@wraft-ui/**",
+                "group": "external",
               }
             ],
             "pathGroupsExcludedImportTypes": ["react"]
