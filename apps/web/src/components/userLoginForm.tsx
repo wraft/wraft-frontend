@@ -122,7 +122,10 @@ const UserLoginForm = () => {
         </Link>
       </Box>
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-        <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
+        <Heading
+          as="h3"
+          variant="styles.h3Medium"
+          sx={{ mb: '48px', color: 'green.700' }}>
           Sign in
         </Heading>
 
@@ -133,7 +136,7 @@ const UserLoginForm = () => {
             register={register}
             type={'email'}
             error={errors.email}
-            mb={5}
+            mb={'24px'}
           />
           <Field
             name="password"
@@ -181,6 +184,7 @@ const UserLoginForm = () => {
                 variant="pM"
                 sx={{
                   cursor: 'pointer',
+                  color: 'gray.400',
                 }}>
                 Forgot Password?
               </Text>
@@ -197,16 +201,17 @@ const UserLoginForm = () => {
 
         <Box
           sx={{
-            minHeight: '1px',
-            maxHeight: '1px',
-            margin: '48px 0',
-            backgroundColor: 'border',
+            borderBottom: '1px solid',
+            borderColor: 'border',
+            whidth: '100%',
+            mt: '63px',
+            mb: '56px',
           }}
         />
 
         <Button onClick={() => signIn('gmail')} variant="googleLogin">
-          <Image src={GoogleLogo} alt="" width={32} height={32} />
-          Continue with Google
+          <Image src={GoogleLogo} alt="" width={24} height={24} />
+          Login using Google
         </Button>
 
         <Flex
@@ -215,6 +220,7 @@ const UserLoginForm = () => {
             mt: '24px',
             color: 'gray.600',
             gap: '8px',
+            mb: '48px',
           }}>
           <Text variant="pR">Not a user yet? {''}</Text>
           <Link href="/signup" variant="none">

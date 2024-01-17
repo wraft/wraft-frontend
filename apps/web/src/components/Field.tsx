@@ -41,7 +41,7 @@ const Field: React.FC<Props> = ({
       {sub && (
         <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
       )}
-      <Label htmlFor="description" mb={1} sx={{ color: 'gray.600' }}>
+      <Label htmlFor="description" mb={1}>
         {label}
       </Label>
       <Input
