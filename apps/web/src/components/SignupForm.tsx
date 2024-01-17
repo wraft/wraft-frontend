@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Box, Heading, Button, Text, Link, Divider } from 'theme-ui';
+import { Flex, Box, Heading, Button, Text, Link } from 'theme-ui';
 import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
