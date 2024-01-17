@@ -117,7 +117,7 @@ const theme: Theme & CustomVariantGroups = {
     onboardingFormPage: {
       height: '100vh',
       padding: '80px',
-      backgroundColor: 'backgroundWhite',
+      backgroundColor: 'background',
       justifyContent: 'center',
     },
   },
