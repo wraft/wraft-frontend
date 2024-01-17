@@ -6,12 +6,10 @@ import { useRouter } from 'next/router';
 import { Flex, Box, Heading, Button } from 'theme-ui';
 
 import Verified from '../../../../../public/Social 01 1.svg';
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { fetchAPI } from '../../../../utils/models';
 
 const EmailVerified: React.FC = () => {
   const router = useRouter();
-  // const { verifyToken } = router.query;
 
   const [show, setShow] = useState(false);
 
@@ -19,13 +17,12 @@ const EmailVerified: React.FC = () => {
 
   useEffect(() => {
     if (emailToken) {
-      fetch(`${API_HOST}/api/v1/user/verify_email_token/${emailToken}`)
-        .then((response) => {
+      fetchAPI(`user/verify_email_token/${emailToken}`)
+        .then(() => {
           setShow(true);
-          console.log(response);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          setShow(false);
         });
     }
   }, [emailToken]);

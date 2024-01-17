@@ -67,7 +67,9 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    toast.promise(postAPI(`assets`, formData), {
+    const assetsRequest = postAPI(`assets`, formData);
+
+    toast.promise(assetsRequest, {
       loading: 'Loading',
       success: (data) => {
         onImageUploaded(data);

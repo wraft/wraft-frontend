@@ -24,20 +24,19 @@ const Index = () => {
   } = useForm<FormValues>();
 
   const onSubmit = (data: FormValues) => {
-    toast.promise(
-      postAPI('user/password/forgot', {
-        email: data.email,
-        first_time_setup: false,
-      }),
-      {
-        loading: 'Loading...',
-        success: () => {
-          setIsSent(true);
-          return 'Operation completed successfully';
-        },
-        error: 'An error occurred',
+    const forgotPasswordRequest = postAPI('user/password/forgot', {
+      email: data.email,
+      first_time_setup: false,
+    });
+
+    toast.promise(forgotPasswordRequest, {
+      loading: 'Loading...',
+      success: () => {
+        setIsSent(true);
+        return 'Operation completed successfully';
       },
-    );
+      error: 'An error occurred',
+    });
   };
 
   return (
