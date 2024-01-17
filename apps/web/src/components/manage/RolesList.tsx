@@ -251,9 +251,9 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                         ) : (
                           <ConfirmDelete
                             title="Delete role"
-                            text={`Are you sure you want to delete ‘${contents[
-                              row.index
-                            ]?.name}’?`}
+                            text={`Are you sure you want to delete ‘${
+                              contents[row.index]?.name
+                            }’?`}
                             setOpen={setIsDelete}
                             setRender={setRender}
                             onConfirmDelete={() => {

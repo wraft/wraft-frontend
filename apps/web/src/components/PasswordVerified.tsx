@@ -1,4 +1,5 @@
 // import Image from 'next/image';
+import Image from 'next/image';
 import { Flex, Box, Heading, Button, Link } from 'theme-ui';
 
 import CheckSuccess from '../../public/check-success.svg';
@@ -14,7 +15,7 @@ const PasswordVerified = () => {
           pt: '170px',
           px: '228px',
         }}>
-        <img src={CheckSuccess} alt="" className="" />
+        <Image src={CheckSuccess} alt="" className="" width={32} height={32} />
         <Heading
           as="h3"
           variant="styles.h3Medium"
