@@ -75,13 +75,15 @@ const SignUpPage = () => {
             </Link>
           </Box>
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-            <Heading as="h3" variant="styles.h3" sx={{ mb: '48px' }}>
+            <Heading
+              as="h3"
+              variant="styles.h3Medium"
+              sx={{ mb: '48px', color: 'green.700' }}>
               Join Wraft
             </Heading>
-
             <Box as="form" onSubmit={handleSubmit(onSubmit)}>
               <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
-                <Box sx={{ flex: '1 1 264px' }}>
+                <Box sx={{ flexGrow: 1 }}>
                   <Field
                     label="First Name"
                     name="firstName"
@@ -89,7 +91,7 @@ const SignUpPage = () => {
                     error={errors.firstName}
                   />
                 </Box>
-                <Box sx={{ flex: '1 1 auto' }}>
+                <Box sx={{ flexGrow: 1 }}>
                   <Field
                     label="Last Name"
                     name="lastName"
@@ -109,37 +111,36 @@ const SignUpPage = () => {
               </Box>
               <Button type="submit">Join waitlist</Button>
             </Box>
-
-            <Divider
+            <Box
               sx={{
-                margin: '56px 0',
-                color: 'rgba(0.141, 0.243, 0.286, 0.1)',
+                borderBottom: '1px solid',
+                borderColor: 'border',
+                my: '36px',
               }}
             />
-
             <Button onClick={handleGoogleSignIn} variant="googleLogin">
               <Image
                 src={GoogleLogo}
                 alt="Google Logo"
-                width={23}
+                width={24}
                 height={24}
                 className=""
               />
-              Continue with Google
+              Continue using Google
             </Button>
-
-            <Flex sx={{ gap: '8px', mt: 4, mb: '4px', alignItems: 'center' }}>
+            <Flex
+              sx={{ gap: '8px', mt: '36px', mb: '4px', alignItems: 'center' }}>
               <Text as="p" variant="pR">
-                Already a member?
+                Already joined?
               </Text>
               <Link href="/login" variant="none">
                 <Text variant="pB">Sign in</Text>
               </Link>
             </Flex>
-            <Text as="p" variant="pR">
-              By Joining the waiting list, I agree to Wraf&apos;s{' '}
+            <Text as="p" variant="pR" mt={2}>
+              By Joining the waiting list, I agree to Wraft&apos;s{' '}
               <Link href="" variant="none" sx={{ color: 'text' }}>
-                <Text variant="pB" sx={{ cursor: 'pointer' }}>
+                <Text sx={{ cursor: 'pointer', textDecoration: 'underline' }}>
                   Privacy Policy.
                 </Text>
               </Link>
