@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text, Link, Divider } from 'theme-ui';
@@ -22,7 +23,7 @@ type FormValues = {
 };
 const schema = z.object({
   firstName: z.string().min(1, { message: 'Please enter your first name' }),
-  lastName: z.string().min(1, { message: 'Please enter your first name' }),
+  lastName: z.string().min(1, { message: 'Please enter your last name' }),
   email: emailPattern,
 });
 
@@ -52,7 +53,7 @@ const SignUpPage = () => {
   };
 
   const handleGoogleSignIn = () => {
-    // Perform Google sign-in logic here
+    signIn('gmail');
   };
 
   return (
