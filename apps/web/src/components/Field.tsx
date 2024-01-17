@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
+
+import { EyeIcon } from './Icons';
 
 interface Props {
   onChange?: any;
@@ -36,6 +38,7 @@ const Field: React.FC<Props> = ({
   sub,
   variant = 'baseForm',
 }) => {
+  const [passwordType, setPasswordType] = useState('password');
   return (
     <Box mr={mr} mb={mb} variant={variant} sx={{ position: 'relative' }}>
       {sub && (
@@ -44,18 +47,40 @@ const Field: React.FC<Props> = ({
       <Label htmlFor="description" mb={1}>
         {label}
       </Label>
-      <Input
-        onChange={onChange}
-        sx={{ bg: bg ? bg : 'transparent', mb: error ? '24px' : '' }}
-        type={type ? type : 'text'}
-        disabled={disable}
-        placeholder={placeholder ? placeholder : ''}
-        id={name}
-        defaultValue={defaultValue || ''}
-        {...register(name, {
-          required: `${label ? label : name} is required`,
-        })}
-      />
+      <Box sx={{ position: 'relative' }}>
+        <Input
+          onChange={onChange}
+          sx={{ bg: bg ? bg : 'transparent', mb: error ? '24px' : '' }}
+          type={type ? (type === 'password' ? passwordType : type) : 'text'}
+          disabled={disable}
+          placeholder={placeholder ? placeholder : ''}
+          id={name}
+          defaultValue={defaultValue || ''}
+          {...register(name, {
+            required: `${label ? label : name} is required`,
+          })}
+        />
+        {type === 'password' && (
+          <Box
+            sx={{
+              cursor: 'pointer',
+              position: 'absolute',
+              right: '4px',
+              top: '4px',
+              zIndex: 100,
+              color: 'gray.200',
+              p: 2,
+              ':hover': { color: 'gray.800' },
+            }}
+            onClick={() => {
+              setPasswordType((prev) =>
+                prev === 'password' ? 'text' : 'password',
+              );
+            }}>
+            <EyeIcon />
+          </Box>
+        )}
+      </Box>
       {error && (
         <Text
           sx={{ position: 'absolute', bottom: '-22px', left: '4px' }}
