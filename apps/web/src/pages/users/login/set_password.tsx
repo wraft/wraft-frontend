@@ -46,23 +46,22 @@ const Index = () => {
 
   const onSubmit = (data: FormValues) => {
     if (data.newPassword === data.confirmPassword) {
-      toast.promise(
-        postAPI('users/set_password', {
-          token: token,
-          password: data.newPassword,
-          confirmPassword: data.confirmPassword,
-        }),
-        {
-          loading: 'Loading...',
-          success: () => {
-            return 'Successfully setted new Password';
-            setVerified(true);
-          },
-          error: () => {
-            return 'Failed to set new Password';
-          },
+      const setPasswordRequest = postAPI('users/set_password', {
+        token: token,
+        password: data.newPassword,
+        confirmPassword: data.confirmPassword,
+      });
+
+      toast.promise(setPasswordRequest, {
+        loading: 'Loading...',
+        success: () => {
+          return 'Successfully setted new Password';
+          setVerified(true);
         },
-      );
+        error: () => {
+          return 'Failed to set new Password';
+        },
+      });
     }
   };
 
