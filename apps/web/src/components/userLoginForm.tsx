@@ -16,7 +16,7 @@ import GoogleLogo from '../../public/GoogleLogo.svg';
 import Logo from '../../public/Logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
-import { emailPattern, passwordPattern } from '../utils/zodPatterns';
+import { emailPattern } from '../utils/zodPatterns';
 
 import Field from './Field';
 import Link from './NavLink';
@@ -33,7 +33,7 @@ type FormValues = {
 
 const schema = z.object({
   email: emailPattern,
-  password: passwordPattern,
+  password: z.string().min(1, { message: 'Please enter password' }),
 });
 
 const UserLoginForm = () => {
