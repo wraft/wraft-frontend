@@ -20,24 +20,15 @@
   "lint-staged": {
     "(apps|packages)/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint --fix" 
+      "eslint --fix"
     ]
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
-    "prettier": "^3.1.1",
+    "prettier": "^3.2.3",
     "turbo": "latest"
   },
-  "engines": {
-    "node": ">=18.x",
-    "npm": ">=7.0.0",
-    "yarn": ">=1.19.0 < 2.0.0"
-  },
-  "packageManager": "npm@9.6.7",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@8.9.0"
 }
