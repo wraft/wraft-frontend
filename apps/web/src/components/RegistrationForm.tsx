@@ -53,7 +53,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
     formData.append('name', data.firstName + ' ' + data.lastName);
     formData.append('email', data.email);
     formData.append('password', data.password);
-    toast.promise(postAPI(`users/signup/?token=${inviteToken}`, formData), {
+
+    const signupRequest = postAPI(
+      `users/signup/?token=${inviteToken}`,
+      formData,
+    );
+
+    toast.promise(signupRequest, {
       loading: 'Loading...',
       success: () => {
         setSuccess(true);

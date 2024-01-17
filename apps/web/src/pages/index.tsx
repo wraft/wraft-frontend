@@ -36,11 +36,12 @@ const Index: FC = () => {
     // Parse the JSON string back into an object
     if (inviteCookie) {
       const retrievedObject = JSON.parse(inviteCookie);
-      console.log(retrievedObject.inviteToken);
       const formData = new FormData();
       formData.append('token', retrievedObject.inviteToken);
 
-      toast.promise(postAPI(`join_organisation`, formData), {
+      const joinOrganisationRequest = postAPI(`join_organisation`, formData);
+
+      toast.promise(joinOrganisationRequest, {
         loading: 'Loading',
         success: () => {
           setIsTeamInvite(false);

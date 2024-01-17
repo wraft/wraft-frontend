@@ -51,8 +51,10 @@ const ThemeForm = () => {
    * @param id
    */
   const deleteAsset = (id: string) => {
+    const deleteAssetRequest = deleteAPI(`assets/${id}`);
+
     toast.promise(
-      deleteAPI(`assets/${id}`),
+      deleteAssetRequest,
       {
         loading: 'Loading',
         success: (data: any) => {
