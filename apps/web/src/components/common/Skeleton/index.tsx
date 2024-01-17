@@ -1,6 +1,5 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
 import { ThemeUIStyleObject } from 'theme-ui';
 import { Box } from 'theme-ui';
 
@@ -39,12 +38,6 @@ const Skeleton: React.FC<SkeletonProps> = ({
   };
 
   return <Box className="skeleton" sx={{ ...keyframes, ...style }}></Box>;
-};
-
-Skeleton.propTypes = {
-  width: PropTypes.string,
-  height: PropTypes.string.isRequired,
-  borderRadius: PropTypes.string,
 };
 
 export default Skeleton;
