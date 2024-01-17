@@ -64,6 +64,12 @@ const styles: Theme['styles'] = {
     fontSize: '29.3px',
     letterSpacing: '0.2px',
   },
+  h3Bold: {
+    fontWeight: 'bold',
+    lineHeight: '38.88px',
+    fontSize: '29.3px',
+    letterSpacing: '0.2px',
+  },
   h1Medium: {
     fontSize: '45.78px',
     fontWeight: 'heading',
