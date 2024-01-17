@@ -1,103 +1,54 @@
-import { useState, ChangeEvent } from 'react';
+import { useState } from 'react';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
-import {
-  Flex,
-  Box,
-  Heading,
-  Label,
-  Input,
-  Button,
-  Text,
-  Link,
-  Divider,
-  Spinner,
-} from 'theme-ui';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Flex, Box, Heading, Button, Text, Link, Divider } from 'theme-ui';
+import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
 import Logo from '../../public/Logo.svg';
 import WaitlistPrompt from '../components/WaitlistPrompt';
+import { postAPI } from '../utils/models';
+import { emailPattern } from '../utils/zodPatterns';
 
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import Field from './Field';
+
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
+const schema = z.object({
+  firstName: z.string().min(1, { message: 'Please enter your first name' }),
+  lastName: z.string().min(1, { message: 'Please enter your first name' }),
+  email: emailPattern,
+});
 
 const SignUpPage = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-  });
-
-  // State variable for conditional rendering
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
   const [showSuccess, setShowSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    // console.log(formData)
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(formData.email);
-    if (
-      isValidEmail(formData.email) &&
-      formData.firstName.length !== 0 &&
-      formData.lastName.length !== 0
-    ) {
-      // setFormData({
-      //   firstName: formData.firstName,
-      //   lastName: formData.lastName,
-      //   email: formData.email,
-      // });
-
-      try {
-        setLoading(true);
-        const response = await fetch(`${API_HOST}/api/v1/waiting_list`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            last_name: formData.lastName,
-            first_name: formData.firstName,
-            email: formData.email,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error:q', errorData);
-
-          alert(errorData.errors.email[0]);
-
-          // You can also throw a custom error if needed
-          throw new Error('Password reset request failed');
-        } else {
-          setShowSuccess(true);
-          // Handle a successful response (if needed)
-          const responseData = await response;
-          console.log(responseData);
-          // setResetPasswordSuccess(responseData);
-          setLoading(false);
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error('Network error1:', error);
-        setLoading(false);
-        // setResetPasswordSuccess(undefined);
-      }
-    } else {
-      alert('fill the inputs currectly');
-    }
-  };
-
-  const isValidEmail = (email: string): boolean => {
-    // Simple email validation using regular expression
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const onSubmit = (data: FormValues) => {
+    const body = {
+      last_name: data.lastName,
+      first_name: data.firstName,
+      email: data.email,
+    };
+    const waitingListRequest = postAPI('waiting_list', body);
+    toast.promise(waitingListRequest, {
+      loading: 'Loading...',
+      success: () => {
+        setShowSuccess(true);
+        return 'Successfully added to waiting list';
+      },
+      error: 'Failed to add to waiting list',
+    });
   };
 
   const handleGoogleSignIn = () => {
@@ -127,46 +78,35 @@ const SignUpPage = () => {
               Join Wraft
             </Heading>
 
-            <Box as="form" onSubmit={handleSubmit}>
+            <Box as="form" onSubmit={handleSubmit(onSubmit)}>
               <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
                 <Box sx={{ flex: '1 1 264px' }}>
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input
-                    type="text"
-                    id="firstName"
+                  <Field
+                    label="First Name"
                     name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    color="border"
+                    register={register}
+                    error={errors.firstName}
                   />
                 </Box>
                 <Box sx={{ flex: '1 1 auto' }}>
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input
-                    type="text"
-                    id="lastName"
+                  <Field
+                    label="Last Name"
                     name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    color="border"
+                    register={register}
+                    error={errors.lastName}
                   />
                 </Box>
               </Flex>
               <Box sx={{ marginBottom: '32px' }}>
-                <Label htmlFor="email">Email</Label>
-                <Input
+                <Field
                   type="email"
-                  id="email"
+                  label="Email"
                   name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  color="border"
+                  register={register}
+                  error={errors.email}
                 />
               </Box>
-              <Button type="submit">
-                Join waitlist {''}
-                {loading && <Spinner color="white" width={18} height={18} />}
-              </Button>
+              <Button type="submit">Join waitlist</Button>
             </Box>
 
             <Divider
