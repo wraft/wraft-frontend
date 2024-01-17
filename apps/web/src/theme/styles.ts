@@ -76,14 +76,14 @@ const styles: Theme['styles'] = {
     lineHeight: ' 59.24px',
   },
   h5Bold: {
-    fontSize: '18.75px',
+    fontSize: '19px',
     fontWeight: 'bold',
-    lineHeight: ' 30px',
+    lineHeight: ' 22.8px',
   },
   h5Medium: {
-    fontSize: '18.75px',
+    fontSize: '19px',
     fontWeight: 'heading',
-    lineHeight: ' 30px',
+    lineHeight: ' 22.8px',
   },
   a: {
     color: 'primary',
