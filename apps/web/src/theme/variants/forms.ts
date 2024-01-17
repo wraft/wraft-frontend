@@ -1,6 +1,14 @@
 import type { Theme } from 'theme-ui';
 
 const forms: Theme['forms'] = {
+  label: {
+    color: 'gray.400',
+    fontFamily: 'body',
+    fontSize: '15px',
+    fontWeight: 400,
+    lineHeight: '24px',
+    letterSpacing: '0.2px',
+  },
   input: {
     borderColor: 'border',
   },
