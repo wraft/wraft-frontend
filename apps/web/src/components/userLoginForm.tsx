@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Label, Heading, Checkbox } from 'theme-ui';
+import { Heading } from 'theme-ui';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 import { z } from 'zod';
@@ -39,7 +39,6 @@ const schema = z.object({
 const UserLoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
 
   const { login, accessToken } = useAuth();
   const { data, status } = useSession();
@@ -142,7 +141,7 @@ const UserLoginForm = () => {
             name="password"
             label="Password"
             register={register}
-            type={showPassword ? 'text' : 'password'}
+            type="password"
             error={errors.password}
             mb={3}
           />
@@ -152,33 +151,8 @@ const UserLoginForm = () => {
               mb: '28px',
               justifyContent: 'space-between',
             }}>
-            {loginError ? (
-              <Text sx={{ color: 'orange.300' }}>{loginError}</Text>
-            ) : (
-              <Flex>
-                <Label
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'gray.900',
-                    fontWeight: 'body',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  <Checkbox
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
-                    sx={{
-                      cursor: 'pointer',
-                      color: 'gray.900',
-                      width: '18px',
-                      backgroundColor: 'white',
-                      border: 'none',
-                    }}
-                  />
-                  <Text variant="pM">Show Password</Text>
-                </Label>
-              </Flex>
-            )}
+            {loginError && <Text variant="error">{loginError}</Text>}
+            <Box />
             <Link href="/resetpassword">
               <Text
                 variant="pM"
