@@ -18,11 +18,10 @@ import { addFieldIssue, passwordPattern } from '../../../utils/zodPatterns';
 const schema = z
   .object({
     newPassword: passwordPattern,
-    confirmPassword: passwordPattern,
+    confirmPassword: z.string().min(1, { message: 'Enter confirm password' }),
   })
   .superRefine(({ confirmPassword, newPassword }, ctx) => {
     if (confirmPassword !== newPassword) {
-      addFieldIssue('password', ctx);
       addFieldIssue('confirmPassword', ctx);
     }
   });
