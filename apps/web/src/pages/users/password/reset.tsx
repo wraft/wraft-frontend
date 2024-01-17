@@ -33,7 +33,7 @@ const Index = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ mode: 'onBlur', resolver: zodResolver(schema) });
+  } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');

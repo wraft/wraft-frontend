@@ -43,7 +43,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ mode: 'onBlur', resolver: zodResolver(schema) });
+  } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
 
   const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState(false);
