@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
 import { Flex, Container, Button, Box, Input } from 'theme-ui';
@@ -34,7 +35,16 @@ const Index: FC = () => {
           <meta name="description" content="a nextjs starter boilerplate" />
         </Head>
         <Page>
-          <PageHeader title="Manage roles" desc="Document Layouts">
+          <PageHeader
+            title="Workspace"
+            desc={
+              <DescriptionLinker
+                data={[
+                  { name: 'Manage', path: '/manage' },
+                  { name: 'General' },
+                ]}
+              />
+            }>
             <Flex sx={{ alignItems: 'center' }}>
               <Box
                 sx={{

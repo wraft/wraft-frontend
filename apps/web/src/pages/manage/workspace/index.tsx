@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -14,12 +15,10 @@ import {
   Text,
   Image,
   Checkbox,
-  Link,
 } from 'theme-ui';
 
 import { ConfirmDelete } from '../../../components/common';
 import Field from '../../../components/Field';
-import { GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
@@ -180,12 +179,9 @@ const Index: FC = () => {
         <PageHeader
           title="Workspace"
           desc={
-            <Box>
-              <Link href={'/manage'} variant="none">
-                Manage
-              </Link>{' '}
-              <GraterThanIcon /> General
-            </Box>
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
+            />
           }
         />
         <Container variant="layout.pageFrame">
