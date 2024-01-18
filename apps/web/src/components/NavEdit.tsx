@@ -65,7 +65,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         pb: 3,
         position: 'sticky',
         top: 0,
-        zIndex: 111,
+        zIndex: 0,
       }}>
       <Flex>
         <Box

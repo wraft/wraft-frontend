@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -20,7 +21,6 @@ import Editor from './common/Editor';
 import Field from './Field';
 import FieldForm from './FieldForm';
 import FieldText from './FieldText';
-import Modal from './Modal';
 import NavEdit from './NavEdit';
 
 export interface ILayout {
@@ -170,7 +170,7 @@ const Form = (props: IContentForm) => {
   // const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
 
-  const [insertable, setInsertable] = useState<any>();
+  const [insertable, setInsertable] = useState<any>(null);
   const [showDev, setShowDev] = useState<boolean>(false);
   const [showTemplate, setTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
@@ -227,13 +227,10 @@ const Form = (props: IContentForm) => {
     const obj: any = [];
     if (fields && fields.length > 0) {
       fields.forEach(function (value: any) {
-        // console.log('field', value)
         const name = vals[`${value.name}`];
         const x: FieldInstance = { ...value, value: name };
-        // console.log('x', x);
         obj.push(x);
       });
-      // obj.push({ })
     }
     return obj;
   };
@@ -441,7 +438,7 @@ const Form = (props: IContentForm) => {
 
   useEffect(() => {
     // getSummary();
-  }, []);
+  }, [cId]);
   // syncable field
 
   useEffect(() => {
@@ -531,8 +528,6 @@ const Form = (props: IContentForm) => {
 
     // store template obj
     setSelectedTemplate(x);
-
-    console.log('changeText', x);
 
     changeTitle(x, maps);
     updateStuff(x, maps);
@@ -645,9 +640,6 @@ const Form = (props: IContentForm) => {
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
       <Box sx={{ p: 0 }}>
-        {/* {status && <Box sx={{ display: 'none' }} />} */}
-        {insertable && status && <Box sx={{ display: 'none' }} />}
-
         <Flex>
           <Box
             as="form"
@@ -740,13 +732,11 @@ const Form = (props: IContentForm) => {
                   editable
                   onUpdate={doUpdate}
                   tokens={[]}
-                  insertable={[]}
+                  insertable={insertable}
                   onceInserted={doNothing}
                 />
               </Box>
             )}
-
-            {/* <Button>Publish</Button> */}
             <Box sx={{ display: 'none' }}>
               <Field
                 name="state"
@@ -760,10 +750,7 @@ const Form = (props: IContentForm) => {
                   <Label>Edit </Label>
                   <Input
                     id="edit"
-                    // name="edit"
                     defaultValue={id}
-                    // hidden={true}
-                    // ref={register({ required: true })}
                     {...register('edit', { required: true })}
                   />
                 </Box>
@@ -822,11 +809,6 @@ const Form = (props: IContentForm) => {
                     </Text>
                   </Flex>
                 </Box>
-                <Flex sx={{ ml: 'auto' }}>
-                  {/* <Button ref={refSubmitButtom} variant="btnPrimary" type="submit">Publish</Button> */}
-                  {/* <Button sx={{ fontWeight: 600, mr: 2, bg: 'gray.100', color: 'gray.900', borderColor: 'border', border: 'solid 1px' }} type="submit">Send</Button> */}
-                  {/* <Button ref={refSubmitButtom} sx={{ ml: 'auto', fontWeight: 600 }} type="submit">Publish</Button> */}
-                </Flex>
               </Flex>
             </Box>
 
@@ -836,9 +818,6 @@ const Form = (props: IContentForm) => {
                   Content
                 </Text>
               </Box>
-
-              {/* { console.log('templates', templates)} */}
-
               <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
                 {selectedTemplate?.id && (
                   <Box>
@@ -876,8 +855,7 @@ const Form = (props: IContentForm) => {
                 )}
               </Box>
             </Box>
-
-            <Modal isOpen={showTemplate} onClose={closeModal}>
+            <Drawer open={showTemplate} setOpen={closeModal}>
               <Box sx={{ px: 3, py: 3 }}>
                 <Box sx={{ pb: 2 }}>
                   <Text sx={{ fontSize: 2, color: 'gray.700', pb: 3, mb: 3 }}>
@@ -917,7 +895,7 @@ const Form = (props: IContentForm) => {
                   )}
                 </Box>
               </Box>
-            </Modal>
+            </Drawer>
 
             <FieldForm
               activeTemplate={activeTemplate}
