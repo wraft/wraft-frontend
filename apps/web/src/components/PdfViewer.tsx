@@ -41,7 +41,7 @@ const PdfViewer = ({ url }: PdfViewerProps) => {
           <Page key={`page_${index + 1}`} pageNumber={index + 1} />
         ))}
       </Document>
-      <Text>{pageNumber}</Text>
+      <Text sx={{ display: 'none' }}>{pageNumber}</Text>
     </React.Fragment>
   );
 };

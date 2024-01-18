@@ -125,7 +125,7 @@ const BlockTemplateListFrame: FC = () => {
 
   return (
     <Box>
-      <PageHeader title="Blocks">
+      <PageHeader title="Blocks" desc="Re-usable Content blocks">
         <Box sx={{ ml: 'auto' }}>
           <Link href="/blocks/new" variant="btnSecondary">
             + New Block

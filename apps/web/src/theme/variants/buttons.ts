@@ -66,6 +66,7 @@ const buttons: Theme['buttons'] = {
   btnSecondary: {
     variant: 'buttons.btnPrimary',
     bg: 'neutral.100',
+    cursor: 'pointer',
     color: 'gray.1000',
     fontSize: 2,
     borderRadius: 6,
@@ -86,6 +87,7 @@ const buttons: Theme['buttons'] = {
     },
   },
   btnSmall: {
+    cursor: 'pointer',
     variant: 'buttons.btnSecondary',
     fontSize: 0,
     p: 1,

@@ -53,3 +53,4 @@ yarn-error.log*
 
 #Storybook
 apps/storybook/build-storybook.log
+apps/docs/storybook-static/project.json
