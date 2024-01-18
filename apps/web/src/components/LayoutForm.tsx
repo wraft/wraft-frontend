@@ -28,7 +28,6 @@ import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
 
 import AssetForm from './AssetForm';
-import Error from './Error';
 import Field from './Field';
 import FieldText from './FieldText';
 import { TickIcon } from './Icons';
@@ -497,7 +496,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                         </Select>
                       )}
                     />
-                    {errors.slug && <Error text={errors.slug.message} />}
+                    {errors.slug && (
+                      <Text variant="error">{errors.slug.message}</Text>
+                    )}
                   </Box>
                   <Box>
                     <FieldText
@@ -543,7 +544,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                       )}
                     />
                     {errors.engine_uuid && (
-                      <Error text={errors.engine_uuid.message} />
+                      <Text variant="error"> {errors.engine_uuid.message}</Text>
                     )}
                   </Box>
                   <Box mt={3}>

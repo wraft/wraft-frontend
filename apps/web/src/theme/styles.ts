@@ -64,20 +64,26 @@ const styles: Theme['styles'] = {
     fontSize: '29.3px',
     letterSpacing: '0.2px',
   },
+  h3Bold: {
+    fontWeight: 'bold',
+    lineHeight: '38.88px',
+    fontSize: '29.3px',
+    letterSpacing: '0.2px',
+  },
   h1Medium: {
     fontSize: '45.78px',
     fontWeight: 'heading',
     lineHeight: ' 59.24px',
   },
   h5Bold: {
-    fontSize: '18.75px',
+    fontSize: '19px',
     fontWeight: 'bold',
-    lineHeight: ' 30px',
+    lineHeight: ' 22.8px',
   },
   h5Medium: {
-    fontSize: '18.75px',
+    fontSize: '19px',
     fontWeight: 'heading',
-    lineHeight: ' 30px',
+    lineHeight: ' 22.8px',
   },
   a: {
     color: 'primary',
