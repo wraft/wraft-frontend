@@ -24,18 +24,15 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         mt: 4,
         ml: 4,
         pl: 0,
-        // mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
-        // borderRight: 'solid 1px',
         borderColor: 'border',
-        // minHeight: '90vh',
       }}>
       {items &&
         items.map((l: any) => (
           <Box
             sx={{
-              // mr: 4,
+              cursor: 'pointer',
               width: '100%',
             }}
             key={l.name}>
