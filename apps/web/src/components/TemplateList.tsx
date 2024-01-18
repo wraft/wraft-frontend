@@ -3,37 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
+import { IField } from '../utils/types/content';
 
 import ContentLoader from './ContentLoader';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
 import Paginate, { IPageMeta } from './Paginate';
 import { Table } from './Table';
-
-export interface ILayout {
-  width: number;
-  updated_at: string;
-  unit: string;
-  slug: string;
-  name: string;
-  id: string;
-  height: number;
-  description: string;
-}
-
-export interface IField {
-  id: string;
-  title: string;
-  title_template: string;
-  layout_id: string;
-  layout: ILayout;
-  description: string;
-}
-
-export interface IFieldItem {
-  name: string;
-  type: string;
-}
 
 const TemplateList = () => {
   // const [contents, setContents] = useState<Array<IField>>([]);
@@ -102,7 +78,12 @@ const TemplateList = () => {
           ),
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
-              <Text as="h5">{r.title}</Text>
+              <Link
+                href={`/templates/edit/${r.id}`}
+                variant="btnSmall"
+                locale={''}>
+                <Text as="h4">{r.title}</Text>
+              </Link>
               <Text sx={{ color: 'text' }}></Text>
             </Box>
           ),
