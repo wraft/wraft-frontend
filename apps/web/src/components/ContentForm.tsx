@@ -443,11 +443,11 @@ const Form = (props: IContentForm) => {
     });
   };
 
-  const setDefaultState = (content: IField) => {
-    const defaultState =
-      content.content_type && content.content_type.flow.states[0].id;
-    setValue('state', defaultState);
-  };
+  // const setDefaultState = (content: IField) => {
+  //   const defaultState =
+  //     content.content_type && content.content_type.flow.states[0].id;
+  //   setValue('state', defaultState);
+  // };
 
   const getSummary = () => {
     // const res =
