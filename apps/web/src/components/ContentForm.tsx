@@ -636,6 +636,11 @@ const Form = (props: IContentForm) => {
 
   const doNothing = () => {};
 
+  const onceInserted = (e: any) => {
+    setInsertable(null);
+    console.log('e', e);
+  };
+
   return (
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
@@ -732,8 +737,8 @@ const Form = (props: IContentForm) => {
                   editable
                   onUpdate={doUpdate}
                   tokens={[]}
-                  insertable={insertable}
-                  onceInserted={doNothing}
+                  insertable={null}
+                  onceInserted={onceInserted}
                 />
               </Box>
             )}
