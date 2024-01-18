@@ -15,12 +15,8 @@ export interface INav {
 const ManageSidebar = ({ items, showFull = true }: INav) => {
   const router = useRouter();
   const pathname: string = router.pathname as any;
-  const checkActive = (pathname: string, m: any) => {
-    if (pathname === '/content/[id]' && m.path === '/contents') {
-      return true;
-    }
-
-    return m.path === pathname;
+  const checkActive = (pathname: string, l: any) => {
+    return l.path === pathname;
   };
   return (
     <Flex
@@ -51,9 +47,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   color: 'gray.900',
                   borderRadius: '4px',
                   alignItems: 'center',
-                  bg: checkActive(pathname, l.path)
-                    ? 'neutral.200'
-                    : 'transparent',
+                  bg: checkActive(pathname, l) ? 'neutral.200' : 'transparent',
                   ':hover': { bg: 'neutral.200' },
                 }}>
                 {l.lgoo && (
