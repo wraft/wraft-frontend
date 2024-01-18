@@ -1,8 +1,10 @@
 import React from 'react';
 
+import Back from '@wraft-ui/Back';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
 import { ArrowBack } from './Icons';
+
 interface PageHeaderProps {
   children?: any;
   title: string;
@@ -43,7 +45,10 @@ const BreadLinks = (props: any) => {
 const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
   return (
     <Box variant="layout.frameHeading">
-      <Flex>
+      <Flex sx={{ alignItems: 'center' }}>
+        <Box sx={{ mr: '18px' }}>
+          <Back />
+        </Box>
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
           <Text variant="pB" sx={{ color: 'gray.900' }}>
