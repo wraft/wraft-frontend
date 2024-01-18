@@ -46,22 +46,11 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
       <Flex>
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
-          <Text
-            as="h1"
-            variant="pageheading"
-            sx={{
-              color: 'text',
-              mb: 0,
-              fontSize: 2,
-              fontWeight: 'heading',
-            }}>
+          <Text variant="pB" sx={{ color: 'gray.900' }}>
             {title}
           </Text>
           {desc && (
-            <Text
-              as="h4"
-              variant="pageheading"
-              sx={{ fontSize: 1, mt: 0, color: 'gray.500', fontWeight: 400 }}>
+            <Text variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
               {desc}
             </Text>
           )}
