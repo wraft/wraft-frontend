@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
 import { Drawer } from '@wraft-ui/Drawer';
+import { usePathname } from 'next/navigation';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner, Label } from 'theme-ui';
-import { Input } from 'theme-ui';
+import { RemirrorJSON } from 'remirror';
+import { Box, Flex, Button, Text, Spinner, Label, Input } from 'theme-ui';
 
 import {
   cleanName,
@@ -16,6 +17,14 @@ import {
 import { Template, ContentState } from '../../src/utils/types';
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
 import { Field as FieldT, FieldInstance } from '../utils/types';
+import {
+  IContentForm,
+  IFieldField,
+  IFieldType,
+  IVariantDetail,
+  EMPTY_MARKDOWN_NODE,
+  FlowStateBlock,
+} from '../utils/types/content';
 
 import Editor from './common/Editor';
 import Field from './Field';
@@ -23,100 +32,12 @@ import FieldForm from './FieldForm';
 import FieldText from './FieldText';
 import NavEdit from './NavEdit';
 
-export interface ILayout {
-  width: number;
-  updated_at: string;
-  unit: string;
-  slug: string;
-  name: string;
-  id: string;
-  height: number;
-  description: string;
-}
-
-export interface IContentType {
-  name: string;
-  id: string;
-  layout: any;
-  fields: any;
-  description: string;
-  flow: any;
-}
-
-export interface IContent {
-  id: string;
-  updated_at: string;
-  instance_id: string;
-  serialized: any;
-}
-
-export interface ICreator {
-  name: string;
-  email: string;
-}
-
-export interface IField {
-  creator: ICreator;
-  content_type: IContentType;
-}
-
-export interface IVariantDetail {
-  creator: ICreator;
-  content_type: IContentType;
-}
-
-export interface IFieldItem {
-  name: string;
-  type: string;
-}
-
-export interface IFieldField {
-  name: string;
-  value: string;
-  id?: string;
-}
-
-export interface IFieldType {
-  name: string;
-  value: string;
-  type: string;
-}
-
-export interface IFieldTypeValue {
-  name: string;
-  id: string;
-  value: string;
-  type: string;
-}
-
-export interface IContentForm {
-  id: any;
-  edit?: boolean;
-}
-
-export interface IFieldModel {
-  name: string;
-  id: string;
-  field_type: any;
-  value?: string;
-}
-
-export const EMPTY_MARKDOWN_NODE = {
-  type: 'doc',
-  content: [
-    {
-      type: 'paragraph',
-      content: [],
-    },
-  ],
-};
-
-interface FlowStateBlock {
-  state?: string;
-  order?: number;
-  id?: any;
-}
-
+/**
+ * Atom Component to show Flow State
+ * @TODO move to atoms or ui
+ * @param param0
+ * @returns
+ */
 const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
   <Flex
     sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
@@ -136,11 +57,10 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
     <Text variant="labelcaps" sx={{ pt: 2 }}>
       {state}
     </Text>
-    {/* <Text>{id}</Text> */}
   </Flex>
 );
 
-const Form = (props: IContentForm) => {
+const ContentForm = (props: IContentForm) => {
   // Base
   // -------
   const router = useRouter();
@@ -159,28 +79,24 @@ const Form = (props: IContentForm) => {
   const [activeTemplate, setActiveTemplate] = useState('');
 
   const cId: string = router.query.id as string;
-  const [def, setDef] = useState<any>(EMPTY_MARKDOWN_NODE);
+  const pathname = usePathname();
+
+  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
 
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
-
-  // const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
-
-  const [insertable, setInsertable] = useState<any>(null);
   const [showDev, setShowDev] = useState<boolean>(false);
-  const [showTemplate, setTemplate] = useState<boolean>(false);
+  const [showTemplate, setShowTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
   const [pageTitle, setPageTitle] = useState<string>('');
-
-  // const refSubmitButtom = useRef<HTMLButtonElement>(null);
 
   /**
    * Toggle Title Edit
@@ -189,24 +105,12 @@ const Form = (props: IContentForm) => {
   const toggleEdit = () => {
     setTitleEdit(!showTitleEdit);
   };
-
   /**
-   * pass
-   * @param map
-   */
-  const passMe = () => {
-    // setActive('');
-    // setBody('');
-  };
-  /**
-   *
+   * Update mapping of users inputs from fields to an internal array with fields
    * @param data
    */
   const updateMaps = (map: any) => {
-    console.debug('🌿🎃🎃🌿 updateMaps [4]', map);
     setMaps(map);
-
-    passMe();
   };
 
   /**
@@ -217,11 +121,13 @@ const Form = (props: IContentForm) => {
     setShowForm(data);
   };
 
-  const mapFields = (fields: any, maps = null) => {
-    // console.log('mapFields', fields)
+  /**
+   * Handle form mapping from the form for templates
+   * @param fields
+   * @returns
+   */
+  const mapFields = (fields: any) => {
     const vals = getValues();
-
-    console.log('vals 🌿🌿🌿🌿🌿', vals, maps);
 
     // for all fields
     const obj: any = [];
@@ -259,8 +165,6 @@ const Form = (props: IContentForm) => {
    */
 
   const onSubmit = (data: any) => {
-    // console.log('🧶 [content] Creating Content', data, '');
-
     const obj: any = {};
 
     maps &&
@@ -293,7 +197,6 @@ const Form = (props: IContentForm) => {
               duration: 1000,
               position: 'top-right',
             });
-            // console.log('Failed Build', data.info);
           }
 
           if (data?.content?.id) {
@@ -328,41 +231,18 @@ const Form = (props: IContentForm) => {
   };
 
   /**
-   * Load values from content meta
-   */
-  // const getFieldValus = (body: any) => {
-  //   // internal field names to exclude
-  //   const commonFields = ['body', 'title', 'serialized'];
-  //   // Extract Fields from API response
-  //   const tFields: IFieldModel[] = [];
-  //   for (const [key, value] of Object.entries(body)) {
-  //     if (!commonFields.includes(`${key}`)) {
-  //       const sval = `${value}`;
-  //       const fieldItem: IFieldModel = {
-  //         id: key,
-  //         name: key,
-  //         value: sval,
-  //         field_type: 'base',
-  //       };
-  //       tFields.push(fieldItem);
-  //     }
-  //   }
-  //   return tFields;
-  // };
-
-  /**
    * Load content data from a doc
    * @param data
    */
   const onLoadContent = (data: any) => {
-    // console.log('[🌿] [0]', data);
-
+    // map loaded state to corresponding form value
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
 
     if (data && data.content && data.content.serialized) {
       const serialbody = data?.content?.serialized;
       const ctypeId = data?.content_type?.id;
+      setValue('ttype', ctypeId);
 
       // middle wares
       const content_title = serialbody?.title || undefined;
@@ -371,20 +251,20 @@ const Form = (props: IContentForm) => {
       fetchAPI(`content_types/${ctypeId}`).then((data: any) => {
         onLoadData(data);
       });
+      // load all templates for the content type
       loadTemplates(ctypeId);
 
-      // console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
-
+      // map loaded content to states
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
       setPageTitle(content_title);
 
-      const rawraw = serialbody.serialized;
+      const jsonBody = serialbody.serialized;
 
-      if (rawraw) {
-        const df = JSON.parse(rawraw);
+      if (jsonBody) {
+        const df = JSON.parse(jsonBody);
         if (df) {
-          setDef(df);
+          setBody(df);
         }
       }
     }
@@ -432,13 +312,27 @@ const Form = (props: IContentForm) => {
     // console.log('remirror-editor', res);
   };
 
+  /**
+   * Load date on dom ready
+   */
   useEffect(() => {
     loadData(id);
   }, []);
 
+  /**
+   * Watch out for changes in Content ID, and URL Paths
+   */
   useEffect(() => {
+    if (pathname) {
+      const pathGroup = pathname.split('/');
+      // validate if its a edit page
+      if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
+        console.log('[red]', pathGroup);
+        setShowForm(false);
+      }
+    }
     // getSummary();
-  }, [cId]);
+  }, [cId, pathname]);
   // syncable field
 
   useEffect(() => {
@@ -449,7 +343,7 @@ const Form = (props: IContentForm) => {
   }, [fields]);
 
   /**
-   * Title
+   * Update Document  Title
    */
   const updateTitle = () => {
     setTitle(selectedTemplate?.title_template);
@@ -461,40 +355,33 @@ const Form = (props: IContentForm) => {
    */
   const updateFields = (f: any) => {
     setFieldMap(f);
-
-    const newty = replaceTitles(selectedTemplate?.title_template, f);
-    console.log('🐴🐴  [updateFields] fields', newty);
     updateTitle();
   };
 
+  /**
+   * When form errors appear
+   */
   useEffect(() => {
     if (errors) {
-      console.log('errors', errors);
+      // items = errors.keys();
+      const items = Object.keys(errors);
+      items.map((i: any) => {
+        // @ts-expect-error temporary solution here
+        const msg: string = errors[i]['message'];
+        toast.error(msg, {
+          duration: 1000,
+          position: 'bottom-center',
+        });
+      });
+      // console.log('errors', errors);
     }
   }, [errors]);
 
   useEffect(() => {
-    if (def) {
-      console.log('🎃🎃 ue [def]', def);
-    }
-  }, [def]);
-
-  useEffect(() => {
     if (activeTemplate.length < 1) {
-      setTemplate(true);
+      setShowTemplate(true);
     }
   }, [activeTemplate]);
-
-  /**
-   * @param x
-   */
-  const textOperation = (piece: any) => {
-    const _dat = piece?.serialized;
-    console.log('🧶 [content] [textOperation]', _dat);
-    if (_dat) {
-      setInsertable(_dat);
-    }
-  };
 
   /**
    * Change Title on Fields change
@@ -522,9 +409,9 @@ const Form = (props: IContentForm) => {
     setShowForm(true);
 
     setActiveTemplate(x.id);
-    setTemplate(false);
+    setShowTemplate(false);
 
-    textOperation(x);
+    // textOperation(x);
 
     // store template obj
     setSelectedTemplate(x);
@@ -534,14 +421,8 @@ const Form = (props: IContentForm) => {
   };
 
   const passUpdates = (content: any, mappings: any) => {
-    // setStatus(0);
     const updatedCont = updateVars(content, mappings);
-    // setCleanInsert(isClean);
-
-    // console.log('[updateStuff] passUpdates ', updatedCont);
-    setDef(updatedCont);
-    // setStatus(1);
-
+    setBody(updatedCont);
     getSummary();
   };
 
@@ -606,14 +487,15 @@ const Form = (props: IContentForm) => {
     return initials;
   };
 
+  /**
+   * Update Page Title
+   * @param x
+   */
   const updatePageTitle = (x: any) => {
     const tempTitle = selectedTemplate?.title_template;
-    // console.log('🐴🐴 title upate', x, tempTitle);
 
     const m = replaceTitles(tempTitle, x);
-
     const actState = activeFlow?.states[0]?.id;
-    console.log('🐴🐴  🧶 [activeFlow] x', activeFlow);
 
     setValue('state', actState);
     setValue('title', m);
@@ -626,18 +508,19 @@ const Form = (props: IContentForm) => {
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-    updateStuff(def, resx);
+    updateStuff(body, resx);
     updatePageTitle(resx);
   };
 
   const closeModal = () => {
-    setTemplate(false);
+    setShowTemplate(false);
   };
 
-  const doNothing = () => {};
-
+  /**
+   * @TODO to remove
+   * @param e
+   */
   const onceInserted = (e: any) => {
-    setInsertable(null);
     console.log('e', e);
   };
 
@@ -710,9 +593,9 @@ const Form = (props: IContentForm) => {
               </Flex>
             </Box>
 
-            {!def && <Spinner />}
+            {!body && <Spinner />}
 
-            {def && (
+            {body && (
               <Box
                 sx={{
                   p: 0,
@@ -733,11 +616,11 @@ const Form = (props: IContentForm) => {
                   Dev
                 </Button>
                 <Editor
-                  defaultValue={def}
+                  defaultValue={body}
                   editable
                   onUpdate={doUpdate}
                   tokens={[]}
-                  insertable={null}
+                  insertable={null} // this is not so a good idea
                   onceInserted={onceInserted}
                 />
               </Box>
@@ -839,7 +722,7 @@ const Form = (props: IContentForm) => {
                           border: '1px solid #E9ECEF',
                         }}>
                         <Text
-                          onClick={() => setTemplate(true)}
+                          onClick={() => setShowTemplate(true)}
                           as="h6"
                           sx={{
                             fontSize: 1,
@@ -895,9 +778,6 @@ const Form = (props: IContentForm) => {
                         </Text>
                       </Box>
                     ))}
-                  {errors.exampleRequired && (
-                    <Text>This field is required</Text>
-                  )}
                 </Box>
               </Box>
             </Drawer>
@@ -957,4 +837,4 @@ const Form = (props: IContentForm) => {
     </Box>
   );
 };
-export default Form;
+export default ContentForm;

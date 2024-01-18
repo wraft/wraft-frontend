@@ -470,6 +470,13 @@ const ContentDetail = () => {
                         mt: 4,
                         border: 'solid 1px',
                         borderColor: 'border',
+                        '.react-pdf__Document': {
+                          mx: 2,
+                        },
+                        '.pdf__Page__textContent': {
+                          border: 'solid 1px',
+                          borderColor: 'grey.100',
+                        },
                       }}>
                       {contents.content.build && (
                         <PdfViewer

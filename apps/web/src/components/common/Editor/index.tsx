@@ -55,10 +55,18 @@ const NoEditorWrapper = ({
           display: 'none',
         },
         '.holder': {
-          bg: 'blue.3',
+          bg: '#9df5e366',
+          padding: '2px 4px',
+          borderBottom: 'solid 2px #70d4bf',
+          borderRadius: '3px',
+          color: '#0b2e27',
         },
         '.no-holder': {
-          bg: 'green',
+          padding: '2px 4px',
+          borderBottom: 'solid 2px #70d4bf',
+          borderRadius: '3px',
+          bg: '#f3781261',
+          color: '#5f3614e6',
         },
       }}>
       <Editor

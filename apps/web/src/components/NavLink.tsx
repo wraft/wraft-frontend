@@ -2,16 +2,7 @@
 import React, { ReactElement, memo } from 'react';
 
 import NextLink from 'next/link';
-import { Box } from 'theme-ui';
-
-// interface Props {
-//   children: React.ReactNode;
-//   href: string;
-//   icon?: ReactElement;
-//   variant?: string;
-//   path?: string;
-
-// }
+import { Box, Link } from 'theme-ui';
 
 interface AnchorType {
   href: string;
@@ -21,20 +12,6 @@ interface AnchorType {
   variant?: string;
   icon?: ReactElement;
 }
-
-// const StyledLink = styled.a`
-//   text-decoration: none;
-//   color: ${theme.colors.white};
-// `;
-
-// const NavLink: React.FC<Props> = ({ href, children, icon, path }) => {
-//   return (
-//     <NextLink href={href} as={path || ''} passHref>
-//       {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
-//       {children}
-//     </NextLink>
-//   );
-// };
 
 export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
   ({
@@ -55,10 +32,10 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         passHref
         legacyBehavior>
         {/* <Link href="" target={target} variant={variant}> */}
-        <Box>
+        <Link sx={{ color: 'gray.900' }}>
           {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
           {children}
-        </Box>
+        </Link>
         {/* </Link> */}
       </NextLink>
     );
