@@ -6,7 +6,6 @@ import { ArrowBack } from './Icons';
 interface PageHeaderProps {
   children?: any;
   title: string;
-  // desc?: string;
   desc?: any;
   breads?: boolean;
 }
@@ -68,9 +67,6 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
           )}
         </Box>
         <Box sx={{ ml: 'auto', pt: 1 }}>{children}</Box>
-        {/* <Box sx={{ py: 2 }}>
-          <DotsVerticalRounded width={22} />
-        </Box> */}
       </Flex>
     </Box>
   );
