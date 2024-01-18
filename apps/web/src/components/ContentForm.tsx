@@ -16,17 +16,13 @@ import { Template, ContentState } from '../../src/utils/types';
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
 import { Field as FieldT, FieldInstance } from '../utils/types';
 
-// import { isString } from 'util';
-// import { Spinner } from 'theme-ui';
-// import RichEditorWraft from './EditWraft';
-
+import Editor from './common/Editor';
 import Field from './Field';
 import FieldForm from './FieldForm';
 import FieldText from './FieldText';
-import { ErrorIcon, TickIcon } from './Icons';
+import { TickIcon } from './Icons';
 import Modal from './Modal';
 import NavEdit from './NavEdit';
-import EditorWraft from './WraftEditor';
 
 export interface ILayout {
   width: number;
@@ -145,13 +141,7 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
   </Flex>
 );
 
-const ALL_USERS = [
-  { id: 'joe', label: 'Joe' },
-  { id: 'sue', label: 'Sue' },
-  { id: 'pat', label: 'Pat' },
-  { id: 'tom', label: 'Tom' },
-  { id: 'jim', label: 'Jim' },
-];
+const ALL_USERS = [];
 
 const Form = (props: IContentForm) => {
   // Base
@@ -180,22 +170,22 @@ const Form = (props: IContentForm) => {
   // -------
 
   const [fields, setField] = useState<Array<FieldT>>([]);
-  const [active, setActive] = useState('');
+  // const [active, setActive] = useState('');
   const [body, setBody] = useState<any>();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
 
-  const [status, setStatus] = useState<number>(0);
+  // const [status, setStatus] = useState<number>(0);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
 
   const [insertable, setInsertable] = useState<any>();
   const [showDev, setShowDev] = useState<boolean>(false);
   const [showTemplate, setTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
-  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-  const [raw, setRaw] = useState<any>(null);
+  // const [cleanInsert, setCleanInsert] = useState<boolean>(false);
+  // const [raw, setRaw] = useState<any>(null);
 
   // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -235,7 +225,7 @@ const Form = (props: IContentForm) => {
     passMe();
 
     if (raw && raw.length > 0) {
-      setCleanInsert(true);
+      // setCleanInsert(true);
       const xr: ContentState = JSON.parse(raw);
       updateStuff(xr, maps);
     }
@@ -247,11 +237,6 @@ const Form = (props: IContentForm) => {
    */
   const makeInsert = (data: any) => {
     setShowForm(data);
-    if (raw && raw.length > 0) {
-      setCleanInsert(true);
-      const xr: ContentState = JSON.parse(raw);
-      updateStuff(xr, maps);
-    }
   };
 
   const mapFields = (fields: any, maps = null) => {
@@ -281,7 +266,7 @@ const Form = (props: IContentForm) => {
    */
   const onCreate = (data: any) => {
     if (data?.info) {
-      console.log('Failed Build', data.info);
+      // console.log('Failed Build', data.info);
     }
 
     if (data?.content?.id) {
@@ -329,7 +314,11 @@ const Form = (props: IContentForm) => {
       postAPI(`content_types/${data.ttype}/contents`, template).then(
         (data: any) => {
           if (data?.info) {
-            console.log('Failed Build', data.info);
+            toast.success('Build Failed', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            // console.log('Failed Build', data.info);
           }
 
           if (data?.content?.id) {
@@ -366,32 +355,32 @@ const Form = (props: IContentForm) => {
   /**
    * Load values from content meta
    */
-  const getFieldValus = (body: any) => {
-    // internal field names to exclude
-    const commonFields = ['body', 'title', 'serialized'];
-    // Extract Fields from API response
-    const tFields: IFieldModel[] = [];
-    for (const [key, value] of Object.entries(body)) {
-      if (!commonFields.includes(`${key}`)) {
-        const sval = `${value}`;
-        const fieldItem: IFieldModel = {
-          id: key,
-          name: key,
-          value: sval,
-          field_type: 'base',
-        };
-        tFields.push(fieldItem);
-      }
-    }
-    return tFields;
-  };
+  // const getFieldValus = (body: any) => {
+  //   // internal field names to exclude
+  //   const commonFields = ['body', 'title', 'serialized'];
+  //   // Extract Fields from API response
+  //   const tFields: IFieldModel[] = [];
+  //   for (const [key, value] of Object.entries(body)) {
+  //     if (!commonFields.includes(`${key}`)) {
+  //       const sval = `${value}`;
+  //       const fieldItem: IFieldModel = {
+  //         id: key,
+  //         name: key,
+  //         value: sval,
+  //         field_type: 'base',
+  //       };
+  //       tFields.push(fieldItem);
+  //     }
+  //   }
+  //   return tFields;
+  // };
 
   /**
    * Load content data from a doc
    * @param data
    */
   const onLoadContent = (data: any) => {
-    console.log('[🌿] [0]', data);
+    // console.log('[🌿] [0]', data);
 
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -409,36 +398,20 @@ const Form = (props: IContentForm) => {
       });
       loadTemplates(ctypeId);
 
-      console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
+      // console.log('[🌿🎃🌿🎃] [serialbody]', content_title);
 
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
-      setPageTitle(serialbody.title);
+      setPageTitle(content_title);
 
       const rawraw = serialbody.serialized;
-
-      /**
-       * Extract field data from `content.serialized`
-       * 001
-       */
-
-      if (serialbody) {
-        const tResult: IFieldModel[] = getFieldValus(serialbody);
-        console.log('[🌿🎃🎃] [results]', tResult);
-        // setField(tResult);
-        // setFoeld(tResult);
-      }
 
       if (rawraw) {
         const df = JSON.parse(rawraw);
         if (df) {
-          console.log('[🌿🎃🎃] [rawraw]', df);
-          setCleanInsert(true);
           setDef(df);
         }
       }
-    } else {
-      console.log('[🌿] [1] aara ?? entha ??? - refresh');
     }
   };
 
@@ -448,26 +421,14 @@ const Form = (props: IContentForm) => {
    * */
   const onLoadData = (data: any) => {
     const res: IVariantDetail = data;
-    console.log('🧶🧶🧶 🌿🌿🌿  [xx]  🎃 onLoadData', res);
-
     setContent(res);
 
     const tFields = res?.content_type?.fields;
     if (tFields) {
       setField(tFields);
-      console.log('🧶🧶🧶 🌿🌿🌿 🎃 fields', tFields);
     }
-
     const tFlow = res?.content_type?.flow;
-
-    // const [activeFlow, setActiveFlow] = useState<any>(null);
-
     setActiveFlow(tFlow);
-
-    // if (tFields) {
-    //   setField(tFields);
-    //   console.log('🧶🧶🧶 🌿🌿🌿 🎃 fields', tFields);
-    // }
   };
 
   /**
@@ -482,42 +443,19 @@ const Form = (props: IContentForm) => {
     });
   };
 
-  // const setDefaultState = (content: IField) => {
-  //   const defaultState =
-  //     content.content_type && content.content_type.flow.states[0].id;
-  //   setValue('state', defaultState);
-  // };
-
-  // const [summary, setSummary] = useState<
-  //   {
-  //     type: string;
-  //     title: string;
-  //     visibility: boolean;
-  //     onClick: () => void;
-  //   }[]
-  // >([]);
+  const setDefaultState = (content: IField) => {
+    const defaultState =
+      content.content_type && content.content_type.flow.states[0].id;
+    setValue('state', defaultState);
+  };
 
   const getSummary = () => {
-    const res =
-      document
-        .querySelector('.remirror-editor')
-        ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
-
-    console.log('remirror-editor', res);
+    // const res =
+    //   document
+    //     .querySelector('.remirror-editor')
+    //     ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
+    // console.log('remirror-editor', res);
   };
-  // setSummary(
-  //   Array.from(
-  //     document
-  //       .querySelector('.ProseMirror')
-  //       ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [],
-  //     (seção) => ({
-  //       tipo: seção.tagName.toLowerCase(),
-  //       título: seção.textContent,
-  //       vista: scrollY + innerHeight >= seção.offsetTop,
-  //       irAté: () => scrollTo({ top: seção.offsetTop - 74 }),
-  //     }),
-  //   ),
-  // );
 
   useEffect(() => {
     loadData(id);
@@ -535,8 +473,10 @@ const Form = (props: IContentForm) => {
     }
   }, [fields]);
 
+  /**
+   * Title
+   */
   const updateTitle = () => {
-    // console.log('🐴  [updateTitle] tm', selectedTemplate);
     setTitle(selectedTemplate?.title_template);
     setValue('title', selectedTemplate?.title_template);
   };
@@ -571,17 +511,6 @@ const Form = (props: IContentForm) => {
   }, [activeTemplate]);
 
   /**
-   * Load Field data
-   */
-  // const loadFields = () => {
-  //   if (content && content.content_type) {
-  //     const m: FieldT[] = content.content_type.fields;
-  //     console.log('🎃🎃🎃 [fields]', m);
-  //     setField(m);
-  //   }
-  // };
-
-  /**
    * @param x
    */
   const textOperation = (piece: any) => {
@@ -602,13 +531,8 @@ const Form = (props: IContentForm) => {
       // lazy matching
       const tempTitle = piece.title_template;
       const m = findVars(tempTitle, false);
-
-      // let namesList = [];
-      // let newTitle = tempTitle;
       m.map((x: any) => {
         const cName = cleanName(x);
-        // localBody = localBody.replace(`[${cleanNames}]`, m.value);
-        // newTitle = tempTitle.replace(`[${cName}]`, '')
         console.log('🐴🐴  [changeTitle] ', cName, maps);
       });
     }
@@ -636,14 +560,14 @@ const Form = (props: IContentForm) => {
     updateStuff(x, maps);
   };
 
-  const passUpdates = (content: any, mappings: any, isClean: any) => {
-    setStatus(0);
+  const passUpdates = (content: any, mappings: any) => {
+    // setStatus(0);
     const updatedCont = updateVars(content, mappings);
-    setCleanInsert(isClean);
+    // setCleanInsert(isClean);
 
-    console.log('[updateStuff] passUpdates ', updatedCont);
+    // console.log('[updateStuff] passUpdates ', updatedCont);
     setDef(updatedCont);
-    setStatus(1);
+    // setStatus(1);
 
     getSummary();
   };
@@ -662,44 +586,36 @@ const Form = (props: IContentForm) => {
         respx = data?.serialized;
       } else {
         const res = JSON.parse(data?.serialized?.data);
-        // console.log('🎃🎃🎃 [updateStuff] ????', res);
         respx = res;
       }
 
       const xr: any = respx;
-      passUpdates(xr, mapx, true);
+      passUpdates(xr, mapx);
     }
 
     if (data.serialized?.data && mapx) {
       const xr: ContentState = JSON.parse(data.serialized.data);
-      passUpdates(xr, mapx, true);
+      passUpdates(xr, mapx);
     }
 
     if (data?.type === 'doc') {
       const contentliv: ContentState = data;
-      passUpdates(contentliv, mapx, false);
+      passUpdates(contentliv, mapx);
     }
   };
 
+  /**
+   * silently sync editor values to hidden fields... shh...
+   * @param state object with md, and json representation
+   */
+
   const doUpdate = (state: any) => {
-    // turn OFF appending blocks
-    setCleanInsert(false);
-
-    if (state.body) {
-      // setDef(state.body)
-      setValue('body', state.md);
-      setValue('serialized', 'xx');
-    }
-
-    if (state.serialized) {
-      setStatus(1);
-      setRaw(state.serialized);
-    }
-
     if (state.md) {
       setValue('body', state.md);
-      // console.log('state 2', state.body)
-      setValue('serialized', JSON.stringify(state.body));
+    }
+
+    if (state.json) {
+      setValue('serialized', JSON.stringify(state.json));
     }
   };
 
@@ -853,14 +769,11 @@ const Form = (props: IContentForm) => {
                   onClick={() => setShowDev(!showDev)}>
                   Dev
                 </Button>
-                <EditorWraft
-                  value={active}
-                  editable={true}
+                <Editor
+                  defaultValue={def}
+                  editable
+                  tokens={ALL_USERS}
                   onUpdate={doUpdate}
-                  starter={def}
-                  cleanInsert={cleanInsert}
-                  token={def}
-                  searchables={ALL_USERS}
                 />
                 <Box
                   sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
@@ -870,12 +783,12 @@ const Form = (props: IContentForm) => {
                     </Box>
                   )}
 
-                  {!raw ||
+                  {/* {!raw ||
                     (!body?.md && (
                       <Box sx={{ color: 'red.500' }}>
                         <ErrorIcon />
                       </Box>
-                    ))}
+                    ))} */}
                 </Box>
               </Box>
             )}
