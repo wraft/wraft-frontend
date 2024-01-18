@@ -1,4 +1,4 @@
-import { Editor } from '@acme/editor';
+import { Editor } from '@wraft/editor';
 import dynamic from 'next/dynamic';
 import { Box } from 'theme-ui';
 

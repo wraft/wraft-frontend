@@ -84,11 +84,11 @@ importers:
 <<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
-      '@acme/editor':
+      '@wraft/editor':
         specifier: workspace:^
         version: link:../../packages/editor
 >>>>>>> 6f2df77 (feat: editor package)
-      '@acme/ui':
+      '@wraft/ui':
         specifier: '*'
         version: link:../../packages/ui
 =======

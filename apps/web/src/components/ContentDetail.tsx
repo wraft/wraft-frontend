@@ -322,7 +322,7 @@ const ContentDetail = () => {
     }
   }, [contents]);
 
-  const doUpdate = () => {
+  const doNothing = () => {
     //
   };
 
@@ -456,7 +456,9 @@ const ContentDetail = () => {
                             defaultValue={contentBody}
                             editable={false}
                             tokens={[]}
-                            onUpdate={doUpdate}
+                            onUpdate={doNothing}
+                            insertable={null}
+                            onceInserted={doNothing}
                           />
                         )}
                       </PreTag>
