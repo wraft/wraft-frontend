@@ -26,7 +26,7 @@ importers:
 
   apps/docs:
     dependencies:
-      '@acme/ui':
+      '@wraft/ui':
         specifier: '*'
         version: link:../../packages/ui
       react:
@@ -36,12 +36,6 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@repo/eslint-config':
-        specifier: '*'
-        version: link:../../packages/eslint-config
-      '@repo/typescript-config':
-        specifier: '*'
-        version: link:../../packages/typescript-config
       '@storybook/addon-actions':
         specifier: ^7.6.7
         version: 7.6.8
@@ -63,6 +57,12 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.11)
+      '@wraft/eslint-config':
+        specifier: '*'
+        version: link:../../packages/eslint-config
+      '@wraft/typescript-config':
+        specifier: '*'
+        version: link:../../packages/typescript-config
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
@@ -81,9 +81,12 @@ importers:
 
   apps/web:
     dependencies:
+<<<<<<< Updated upstream
       '@acme/ui':
         specifier: '*'
         version: link:../../packages/ui
+=======
+>>>>>>> Stashed changes
       '@ariakit/core':
         specifier: ^0.3.11
         version: 0.3.11
@@ -201,6 +204,12 @@ importers:
       '@types/react-pdf':
         specifier: 5.7.2
         version: 5.7.2
+      '@wraft/editor':
+        specifier: workspace:^
+        version: link:../../packages/editor
+      '@wraft/ui':
+        specifier: '*'
+        version: link:../../packages/ui
       '@zeit/next-css':
         specifier: ^1.0.1
         version: 1.0.1(webpack@4.47.0)
@@ -449,6 +458,103 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+<<<<<<< Updated upstream
+=======
+  packages/editor:
+    dependencies:
+      '@babel/runtime':
+        specifier: ^7.22.3
+        version: 7.23.8
+      '@floating-ui/react':
+        specifier: ^0.26.5
+        version: 0.26.6(react-dom@18.2.0)(react@18.2.0)
+      '@remirror/core':
+        specifier: ^2.0.19
+        version: 2.0.19(@remirror/pm@2.0.8)(@types/node@20.11.5)
+      '@remirror/extension-events':
+        specifier: ^2.1.17
+        version: 2.1.17(@remirror/pm@2.0.8)(@types/node@20.11.5)
+      '@remirror/extension-positioner':
+        specifier: ^2.1.8
+        version: 2.1.8(@remirror/pm@2.0.8)(@types/node@20.11.5)
+      '@remirror/messages':
+        specifier: ^2.0.6
+        version: 2.0.6
+      '@remirror/pm':
+        specifier: ^2.0.8
+        version: 2.0.8
+      '@remirror/react':
+        specifier: ^2.0.35
+        version: 2.0.35(@remirror/pm@2.0.8)(@types/node@20.11.5)(@types/react-dom@18.2.18)(@types/react@18.2.48)(prettier@3.2.3)(react-dom@18.2.0)(react@18.2.0)
+      '@remirror/react-core':
+        specifier: ^2.0.21
+        version: 2.0.21(@remirror/pm@2.0.8)(@types/node@20.11.5)(@types/react-dom@18.2.18)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
+      '@remirror/react-editors':
+        specifier: ^1.0.40
+        version: 1.0.40(@emotion/react@11.11.3)(@types/node@20.11.5)(@types/react-dom@18.2.18)(@types/react@18.2.48)(prettier@3.2.3)(react-dom@18.2.0)(react@18.2.0)
+      '@remirror/react-hooks':
+        specifier: ^2.0.25
+        version: 2.0.25(@remirror/pm@2.0.8)(@types/node@20.11.5)(@types/react-dom@18.2.18)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
+      '@remirror/styles':
+        specifier: ^2.0.7
+        version: 2.0.7(@emotion/css@11.11.2)(@emotion/react@11.11.3)(@emotion/styled@11.11.0)(@types/react@18.2.48)(react@18.2.0)(styled-components@6.1.8)
+      '@remirror/theme':
+        specifier: ^2.0.9
+        version: 2.0.9(@remirror/pm@2.0.8)
+      '@seznam/compose-react-refs':
+        specifier: ^1.0.6
+        version: 1.0.6
+      escape-string-regexp:
+        specifier: ^4.0.0
+        version: 4.0.0
+      immer:
+        specifier: ^10.0.3
+        version: 10.0.3
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      react-dom:
+        specifier: ^18.2.0
+        version: 18.2.0(react@18.2.0)
+      remirror:
+        specifier: ^2.0.38
+        version: 2.0.38(@remirror/pm@2.0.8)(@types/node@20.11.5)(prettier@3.2.3)
+    devDependencies:
+      '@turbo/gen':
+        specifier: ^1.11.3
+        version: 1.11.3(@types/node@20.11.5)(typescript@5.3.3)
+      '@types/eslint':
+        specifier: ^8.56.1
+        version: 8.56.2
+      '@types/node':
+        specifier: ^20.10.6
+        version: 20.11.5
+      '@types/react':
+        specifier: ^18.2.46
+        version: 18.2.48
+      '@types/react-dom':
+        specifier: ^18.2.18
+        version: 18.2.18
+      '@wraft/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@wraft/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      eslint:
+        specifier: ^8.56.0
+        version: 8.56.0
+      theme-ui:
+        specifier: ^0.16.1
+        version: 0.16.1(@emotion/react@11.11.3)(react@18.2.0)
+      tsup:
+        specifier: ^8.0.1
+        version: 8.0.1(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+>>>>>>> Stashed changes
   packages/eslint-config:
     devDependencies:
       '@vercel/style-guide':
@@ -471,18 +577,18 @@ importers:
 
   packages/ui:
     devDependencies:
-      '@repo/eslint-config':
-        specifier: '*'
-        version: link:../eslint-config
-      '@repo/typescript-config':
-        specifier: '*'
-        version: link:../typescript-config
       '@types/react':
         specifier: ^18.2.46
         version: 18.2.48
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.2.18
+      '@wraft/eslint-config':
+        specifier: '*'
+        version: link:../eslint-config
+      '@wraft/typescript-config':
+        specifier: '*'
+        version: link:../typescript-config
       eslint:
         specifier: ^8.56.0
         version: 8.56.0
