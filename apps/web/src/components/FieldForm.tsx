@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
@@ -7,7 +8,6 @@ import { Field as FieldT, FieldInstance } from '../utils/types';
 
 import Field from './Field';
 import FieldDate from './FieldDate';
-import Modal from './Modal';
 // import { constants } from 'buffer';
 
 export interface IFieldField {
@@ -175,7 +175,7 @@ const FieldForm = ({
       {/* <Box sx={{ display: 'block' }}>
         
       </Box> */}
-      <Modal isOpen={showForm} onClose={closeModal}>
+      <Drawer open={showForm} setOpen={closeModal}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -219,7 +219,7 @@ const FieldForm = ({
             </Text>
           </Flex>
         </Box>
-      </Modal>
+      </Drawer>
     </Box>
   );
 };

@@ -461,19 +461,16 @@ const Nav = (props: any) => {
               px: 3,
               py: 3,
             }}>
-            {/* <Button
-              variant="btnPrimary"
-              onClick={() => toggleSearch()}
-              sx={{ width: '100%', borderRadius: 6, py: 2 }}>
-              + New Document
-            </Button> */}
             <Btn variant="primary" onClick={toggleSearch}>
               + New Document
             </Btn>
           </Box>
         </Box>
       </Flex>
-      <Drawer open={showSearch} setOpen={closeSearch}>
+      <Drawer
+        open={showSearch}
+        setOpen={closeSearch}
+        heading="Select a variant">
         <Blok />
       </Drawer>
     </>
