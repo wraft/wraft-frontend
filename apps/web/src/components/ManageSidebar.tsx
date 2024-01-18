@@ -1,12 +1,7 @@
 import React from 'react';
 
-import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { Flex, Box, Text } from 'theme-ui';
-
-export const IconStyleWrapper = styled.div`
-  color: #444;
-  margin-right: 12px;
-`;
 
 import { menuLinksProps } from '../utils';
 
@@ -18,6 +13,15 @@ export interface INav {
 }
 
 const ManageSidebar = ({ items, showFull = true }: INav) => {
+  const router = useRouter();
+  const pathname: string = router.pathname as any;
+  const checkActive = (pathname: string, m: any) => {
+    if (pathname === '/content/[id]' && m.path === '/contents') {
+      return true;
+    }
+
+    return m.path === pathname;
+  };
   return (
     <Flex
       sx={{
@@ -27,15 +31,12 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
-        // borderRight: 'solid 1px',
         borderColor: 'border',
-        // minHeight: '90vh',
       }}>
       {items &&
         items.map((l: any) => (
           <Box
             sx={{
-              // mr: 4,
               width: '100%',
             }}
             key={l.name}>
@@ -50,6 +51,9 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   color: 'gray.900',
                   borderRadius: '4px',
                   alignItems: 'center',
+                  bg: checkActive(pathname, l.path)
+                    ? 'neutral.200'
+                    : 'transparent',
                   ':hover': { bg: 'neutral.200' },
                 }}>
                 {l.lgoo && (
