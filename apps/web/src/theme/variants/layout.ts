@@ -130,11 +130,11 @@ const layout: Theme['layout'] = {
     borderBottom: 'solid 1px',
     borderColor: 'border',
     mb: 0,
-    // minHeight: '80px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     position: 'sticky',
+    height: '72px',
   },
   button: {
     border: 'solid 1px',
