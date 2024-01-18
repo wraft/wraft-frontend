@@ -343,18 +343,18 @@ export const menuLinks: menuLinksProps[] = [
 }
 export const PersonalWorkspaceLinks: menuLinksProps[] = [
   {
-    name: 'Workspace',
+    name: 'General',
     path: '/manage/workspace',
   },
 ];
 
 export const workspaceLinks: menuLinksProps[] = [
   {
-    name: 'Workspace',
+    name: 'General',
     path: '/manage/workspace',
   },
   {
-    name: 'Team',
+    name: 'Members',
     path: '/manage/workspace/team',
   },
 
