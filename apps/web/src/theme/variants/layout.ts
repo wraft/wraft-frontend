@@ -149,6 +149,7 @@ const layout: Theme['layout'] = {
     bg: 'gray.100',
   },
   pageFrame: {
+    bg: 'background',
     p: 4,
     // height: 'calc(100vh - 140px)',
     height: '100vh',
@@ -160,7 +161,6 @@ const layout: Theme['layout'] = {
     border: '1px solid',
     borderColor: 'border',
     borderRadius: 4,
-    m: 4,
   },
   menuWrapper: {
     px: 2,

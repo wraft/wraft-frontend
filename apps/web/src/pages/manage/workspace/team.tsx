@@ -36,7 +36,7 @@ const Index: FC = () => {
           <Drawer open={isOpen} setOpen={setIsOpen}>
             <InviteTeam setOpen={setIsOpen} />
           </Drawer>
-          <Container variant="layout.newPageFrame">
+          <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">
