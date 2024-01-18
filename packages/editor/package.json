@@ -1,0 +1,57 @@
+{
+  "name": "@wraft/editor",
+  "type": "module",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "lint": "eslint . --max-warnings 0",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@wraft/eslint-config": "workspace:*",
+    "@wraft/typescript-config": "workspace:*",
+    "@turbo/gen": "^1.11.3",
+    "@types/eslint": "^8.56.1",
+    "@types/node": "^20.10.6",
+    "@types/react": "^18.2.46",
+    "@types/react-dom": "^18.2.18",
+    "eslint": "^8.56.0",
+    "theme-ui": "^0.16.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@remirror/core": "^2.0.19",
+    "@remirror/extension-events": "^2.1.17",
+    "@remirror/extension-positioner": "^2.1.8",
+    "@remirror/messages": "^2.0.6",
+    "@remirror/pm": "^2.0.8",
+    "@remirror/react": "^2.0.35",
+    "@remirror/react-core": "^2.0.21",
+    "@remirror/react-editors": "^1.0.40",
+    "@remirror/react-hooks": "^2.0.25",
+    "@remirror/styles": "^2.0.7",
+    "@remirror/theme": "^2.0.9",
+    "immer": "^10.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "remirror": "^2.0.38"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.22.3",
+    "@floating-ui/react": "^0.26.5",
+    "@seznam/compose-react-refs": "^1.0.6",
+    "escape-string-regexp": "^4.0.0"
+  }
+}
