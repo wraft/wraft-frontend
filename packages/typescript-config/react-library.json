@@ -3,9 +3,13 @@
   "display": "React Library",
   "extends": "./base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
     "lib": ["dom", "ES2015"],
     "module": "ESNext",
-    "target": "es6"
+    "jsx": "react-jsx",
+    "target": "esnext",
+    "experimentalDecorators": true,
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true
   }
 }

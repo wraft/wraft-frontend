@@ -19,7 +19,8 @@
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "@acme/ui": "*",
+    "@wraft/editor": "workspace:^",
+    "@wraft/ui": "*",
     "@ariakit/core": "^0.3.11",
     "@ariakit/react": "^0.3.12",
     "@babel/plugin-proposal-decorators": "^7.23.7",
