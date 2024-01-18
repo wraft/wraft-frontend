@@ -20,7 +20,6 @@ import Editor from './common/Editor';
 import Field from './Field';
 import FieldForm from './FieldForm';
 import FieldText from './FieldText';
-import { TickIcon } from './Icons';
 import Modal from './Modal';
 import NavEdit from './NavEdit';
 
@@ -141,8 +140,6 @@ const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
   </Flex>
 );
 
-const ALL_USERS = [];
-
 const Form = (props: IContentForm) => {
   // Base
   // -------
@@ -164,14 +161,7 @@ const Form = (props: IContentForm) => {
   const cId: string = router.query.id as string;
   const [def, setDef] = useState<any>(EMPTY_MARKDOWN_NODE);
 
-  // Testing
-  // -------
-  // const [foelds, setFoeld] = useState<Array<IFieldModel>>([]);
-  // -------
-
   const [fields, setField] = useState<Array<FieldT>>([]);
-  // const [active, setActive] = useState('');
-  const [body, setBody] = useState<any>();
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
@@ -184,10 +174,6 @@ const Form = (props: IContentForm) => {
   const [showDev, setShowDev] = useState<boolean>(false);
   const [showTemplate, setTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
-  // const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-  // const [raw, setRaw] = useState<any>(null);
-
-  // const [varias, setVarias] = useState<IContentType>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
@@ -209,8 +195,8 @@ const Form = (props: IContentForm) => {
    * @param map
    */
   const passMe = () => {
-    setActive('');
-    setBody('');
+    // setActive('');
+    // setBody('');
   };
   /**
    *
@@ -218,17 +204,9 @@ const Form = (props: IContentForm) => {
    */
   const updateMaps = (map: any) => {
     console.debug('🌿🎃🎃🌿 updateMaps [4]', map);
-
-    setStatus(1);
     setMaps(map);
 
     passMe();
-
-    if (raw && raw.length > 0) {
-      // setCleanInsert(true);
-      const xr: ContentState = JSON.parse(raw);
-      updateStuff(xr, maps);
-    }
   };
 
   /**
@@ -661,6 +639,8 @@ const Form = (props: IContentForm) => {
     setTemplate(false);
   };
 
+  const doNothing = () => {};
+
   return (
     <Box sx={{ p: 0 }}>
       <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
@@ -718,20 +698,6 @@ const Form = (props: IContentForm) => {
                     name="title"
                     label=""
                     placeholder="Document Name"
-                    // sx={{
-                    //   '&': {
-                    //     width: '100%',
-                    //     display: 'block',
-                    //     bg: 'red',
-                    //   },
-                    //   div: {
-                    //     width: '100%',
-                    //   },
-                    //   button: {
-                    //     fontSize: 3,
-                    //   },
-                    // }}
-                    // defaultValue={body?.title}
                     register={register}
                   />
                 </Box>
@@ -772,24 +738,11 @@ const Form = (props: IContentForm) => {
                 <Editor
                   defaultValue={def}
                   editable
-                  tokens={ALL_USERS}
                   onUpdate={doUpdate}
+                  tokens={[]}
+                  insertable={[]}
+                  onceInserted={doNothing}
                 />
-                <Box
-                  sx={{ pt: '10px', position: 'absolute', right: 3, top: 0 }}>
-                  {body && body?.md && raw && (
-                    <Box sx={{ color: 'text' }}>
-                      <TickIcon />
-                    </Box>
-                  )}
-
-                  {/* {!raw ||
-                    (!body?.md && (
-                      <Box sx={{ color: 'red.500' }}>
-                        <ErrorIcon />
-                      </Box>
-                    ))} */}
-                </Box>
               </Box>
             )}
 
@@ -984,8 +937,6 @@ const Form = (props: IContentForm) => {
                 </Text>
               </Box>
 
-              {/* { console.log('templates', templates)} */}
-
               {activeFlow && (
                 <Box sx={{ position: 'relative' }}>
                   <Box
@@ -1014,19 +965,6 @@ const Form = (props: IContentForm) => {
                       </Box>
                     </Box>
                   </Box>
-
-                  {/* <Box sx={{ bg: 'neutral.100', p: 3 }}>
-                    <Button
-                      variant="btnPrimary"
-                      form="hook-form"
-                      sx={{
-                        fontWeight: 600,
-                        mr: 2,
-                      }}
-                      type="submit">
-                      Publish
-                    </Button>
-                  </Box> */}
                 </Box>
               )}
             </Box>
