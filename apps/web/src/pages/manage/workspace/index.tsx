@@ -14,10 +14,12 @@ import {
   Text,
   Image,
   Checkbox,
+  Link,
 } from 'theme-ui';
 
 import { ConfirmDelete } from '../../../components/common';
 import Field from '../../../components/Field';
+import { GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
@@ -175,9 +177,17 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Workspace management" desc="Manage  >  Workspace">
-          <div></div>
-        </PageHeader>
+        <PageHeader
+          title="Workspace"
+          desc={
+            <Box>
+              <Link href={'/manage'} variant="none">
+                Manage
+              </Link>{' '}
+              <GraterThanIcon /> General
+            </Box>
+          }
+        />
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar
