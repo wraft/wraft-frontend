@@ -22,7 +22,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
     <Flex
       sx={{
         flexDirection: 'column',
-        gap: '12px',
+        gap: '8px',
         pl: 0,
         mr: 4,
         flexShrink: 0,
