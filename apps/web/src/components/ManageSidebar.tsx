@@ -19,12 +19,12 @@ export interface INav {
 
 const ManageSidebar = ({ items, showFull = true }: INav) => {
   return (
-    <Box
+    <Flex
       sx={{
-        mt: 4,
-        ml: 4,
+        flexDirection: 'column',
+        gap: '12px',
         pl: 0,
-        // mr: 4,
+        mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
         // borderRight: 'solid 1px',
@@ -42,6 +42,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
             <NavLink href={l.path} variant="links.base">
               <Flex
                 sx={{
+                  cursor: 'pointer',
                   py: '6px',
                   px: '12px',
                   minWidth: '135px',
@@ -73,7 +74,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
             {showFull && <Box />}
           </Box>
         ))}
-    </Box>
+    </Flex>
   );
 };
 

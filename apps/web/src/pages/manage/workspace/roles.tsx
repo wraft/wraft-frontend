@@ -82,7 +82,7 @@ const Index: FC = () => {
           <Drawer open={isOpen} setOpen={setIsOpen}>
             <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
           </Drawer>
-          <Container variant="layout.newPageFrame">
+          <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">
