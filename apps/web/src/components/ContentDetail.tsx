@@ -11,10 +11,10 @@ import { fetchAPI, postAPI } from '../utils/models';
 
 import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
+import Editor from './common/Editor';
 import { File, Download } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
-import WraftEditor from './WraftEditor';
 
 // import { right } from '@popperjs/core';
 
@@ -322,7 +322,7 @@ const ContentDetail = () => {
     }
   }, [contents]);
 
-  const doUpdate = () => {
+  const doNothing = () => {
     //
   };
 
@@ -452,13 +452,13 @@ const ContentDetail = () => {
                     <Box sx={{ mt: 0, px: 6, pb: 6 }}>
                       <PreTag pt={4} pb={6}>
                         {contentBody && (
-                          <WraftEditor
-                            // value={active}
+                          <Editor
+                            defaultValue={contentBody}
                             editable={false}
-                            onUpdate={doUpdate}
-                            starter={contentBody}
-                            cleanInsert={true}
-                            token={contentBody}
+                            tokens={[]}
+                            onUpdate={doNothing}
+                            insertable={null}
+                            onceInserted={doNothing}
                           />
                         )}
                       </PreTag>

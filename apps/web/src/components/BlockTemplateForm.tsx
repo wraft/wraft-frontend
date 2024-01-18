@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
+// import { useAuth } from '../contexts/AuthContext';
 import {
-  API_HOST,
+  // API_HOST,
   postAPI,
   putAPI,
   fetchAPI,
@@ -15,10 +15,11 @@ import {
 } from '../utils/models';
 import { BlockTemplates } from '../utils/types';
 
-import EditorWraft from './EditorWraft';
+import Editor from './common/Editor';
+// import EditorWraft from './EditorWraft';
 import Field from './Field';
 import FieldText from './FieldText';
-import ImagesList from './ImagesList';
+// import ImagesList from './ImagesList';
 
 // const Tag = styled(Box)`
 //   padding: 5px;
@@ -64,23 +65,9 @@ const Form = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  // const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
-  // const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
-  // const [body, setBody] = useState('');
-  // const [formData, setFormData] = useState<IFormTemplate>(dummyFormTemplate);
-  // const [keys, setKeys] = useState<Array<string>>();
-  // const [raw, setRaw] = useState<any>();
   const [def, setDef] = useState<any>();
-
-  const { accessToken } = useAuth();
-  const [insertable, setInsertable] = useState<any>(EMPTY_MARKDOWN_NODE);
-  const [status, setStatus] = useState<number>(0);
-  // const [loaded, setLoaded] = useState<boolean>(false);
-  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-
   const [loading, setLoading] = useState<boolean>(false);
-
   const [saved, setSaved] = useState<boolean>(false);
 
   // determine edit state based on URL
@@ -95,37 +82,37 @@ const Form = () => {
     setAddAsset(!addAsset);
   };
 
-  const formatImageNode = (src: string) => {
-    // image object
-    const imageNode = {
-      type: 'doc',
-      content: [
-        {
-          type: 'paragraph',
-          attrs: {},
-          content: [
-            {
-              type: 'image',
-              attrs: {
-                src: `${API_HOST}/${src}`,
-              },
-            },
-          ],
-        },
-      ],
-    };
-    return imageNode;
-  };
+  // const formatImageNode = (src: string) => {
+  //   // image object
+  //   const imageNode = {
+  //     type: 'doc',
+  //     content: [
+  //       {
+  //         type: 'paragraph',
+  //         attrs: {},
+  //         content: [
+  //           {
+  //             type: 'image',
+  //             attrs: {
+  //               src: `${API_HOST}/${src}`,
+  //             },
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   };
+  //   return imageNode;
+  // };
 
-  /**
-   *
-   * @param _data
-   */
-  const imageAdded = (_m: any) => {
-    console.log('imaged', _m);
-    const imageNode = formatImageNode(_m?.file);
-    setInsertable(imageNode);
-  };
+  // /**
+  //  *
+  //  * @param _data
+  //  */
+  // const imageAdded = (_m: any) => {
+  //   console.log('imaged', _m);
+  //   const imageNode = formatImageNode(_m?.file);
+  //   setInsertable(imageNode);
+  // };
 
   /** Editor Submit */
 
@@ -170,30 +157,22 @@ const Form = () => {
     });
   };
 
+  /**
+   * Handle editor's serialized state
+   * @param state Prosemirror Node
+   */
   const doUpdate = (state: any) => {
-    console.log('[block] [doUpdate]', state.body);
-    if (state.md) {
-      setValue('body', state.md);
-      setValue('serialized', state.serialized);
-    }
-
-    if (state.body) {
-      const castBody = state.body;
-      console.log('ASHT', JSON.stringify(castBody));
-      setValue('serialized', JSON.stringify(castBody));
-    }
+    setValue('serialized', JSON.stringify(state.json));
+    setValue('body', state.md);
   };
 
   useEffect(() => {
     if (dataTemplate) {
+      setValue('title', dataTemplate.title);
       const contentBody = JSON.parse(dataTemplate.serialized);
-      console.log('contentBody', contentBody);
       setDef(contentBody);
-      setStatus(3);
-
-      setInsertable(contentBody);
     }
-  }, [accessToken, dataTemplate]);
+  }, [dataTemplate]);
 
   useEffect(() => {
     if (saved) {
@@ -203,25 +182,12 @@ const Form = () => {
 
   useEffect(() => {
     if (!cId) {
-      setStatus(3);
       setDef(EMPTY_MARKDOWN_NODE);
-    }
-
-    // dummy
-
-    if (cId === 'xd') {
-      setCleanInsert(false);
     }
     if (cId) {
       loadTemplate(cId);
     }
   }, [cId]);
-
-  useEffect(() => {
-    if (dataTemplate) {
-      setValue('title', dataTemplate.title);
-    }
-  }, [dataTemplate]);
 
   /**
    * Delete a block
@@ -237,6 +203,9 @@ const Form = () => {
       });
     }
   };
+
+  const onceInserted = () => {};
+  const tokens: any = [];
 
   return (
     <Box
@@ -257,7 +226,7 @@ const Form = () => {
       <Button variant="secondary" onClick={() => toggleAssetForm()}>
         + Image
       </Button>
-      {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />}
+      {/* {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />} */}
       <Box variant="w50">
         <Flex>
           <Box variant="w100">
@@ -283,30 +252,14 @@ const Form = () => {
                 register={register}
               />
             </Box>
-            {/* <EditorWraft autoFocus defaultValue="Heading"/> */}
-            {def && status > 2 && (
-              <EditorWraft
-                onUpdate={doUpdate}
-                document={def}
-                editable={true}
-                cleanInsert={cleanInsert}
-                insertable={insertable}
-                inline={true}
-              />
-            )}
-            {/* <Box pt={2} mb={3}>
-              <Label sx={{ mb: 0, pb: 1 }}>Block Content</Label>
-              <EditorWraft
-                editable={true}
-                onUpdate={doUpdate}
-                value={body}
-                editor="wysiwyg"
-                mt={1}
-                initialValue={EMPTY_MARKDOWN_NODE}
-                insertable={false}
-              />
-            </Box> */}
-            {/* {body} */}
+            <Editor
+              editable
+              defaultValue={def}
+              onUpdate={doUpdate}
+              tokens={tokens}
+              insertable={undefined}
+              onceInserted={onceInserted}
+            />
           </Box>
           {errors.serialized && <Text>This field is required</Text>}
         </Flex>

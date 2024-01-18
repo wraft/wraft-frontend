@@ -1,5 +1,5 @@
 {
-  "name": "@acme/ui",
+  "name": "@wraft/ui",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -16,12 +16,12 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
+    "@wraft/eslint-config": "*",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
     "eslint": "^8.56.0",
     "react": "^18.2.0",
-    "@repo/typescript-config": "*",
+    "@wraft/typescript-config": "*",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
