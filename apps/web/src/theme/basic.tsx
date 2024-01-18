@@ -83,7 +83,7 @@ const theme: Theme & CustomVariantGroups = {
   },
   initialColorModeName: 'light',
   useColorSchemeMediaQuery: true,
-  fontSizes: [10, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48],
+  fontSizes: [10, 12, 14, 16, 19, 23, 29, 37, 46],
   fontWeights: {
     body: 400,
     heading: 500,
