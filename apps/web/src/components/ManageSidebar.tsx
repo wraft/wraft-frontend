@@ -33,6 +33,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         items.map((l: any) => (
           <Box
             sx={{
+              cursor: 'pointer',
               width: '100%',
             }}
             key={l.name}>
