@@ -186,8 +186,12 @@ const styles: Theme['styles'] = {
       h2: { color: 'text', fontFamily: 'editor2', pt: 2, pb: 1 },
       h3: { color: 'text', fontFamily: 'editor2', pt: 2, pb: 1 },
       '.holder': {
-        bg: 'gray.200',
+        bg: '#9df5e366',
         color: 'text',
+      },
+      '.no-holder': {
+        bg: '#f3781261',
+        color: '#5f3614e6',
       },
     },
     p: { color: 'text', fontFamily: 'editor2', pt: 2, pb: 1 },

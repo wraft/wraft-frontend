@@ -41,7 +41,7 @@ export const findDefault = (needle: string, stack: any) => {
  * @param fields
  * @todo - Limited to 2 level deep arrays
  */
-export const updateVars = (data: ContentState, fields: any) => {
+export const updateVars = (data: ContentState, fields: any): RemirrorJSON => {
   // cut it short if it map has no values
   if (fields && fields[0] && fields[0].value) {
     console.log('UPDATED_BODY updateStuff', fields);

@@ -33,7 +33,7 @@ const links: Theme['links'] = {
     fontSize: 2,
     px: 3,
     py: 2,
-    bg: 'neutral.200',
+    bg: 'neutral.300',
     color: 'text',
     fontWeight: 600,
     textDecoration: 'none',
@@ -47,6 +47,7 @@ const links: Theme['links'] = {
     bg: 'gray.100',
     borderColor: 'border',
     textDecoration: 'none',
+    cursor: 'pointer',
     fontSize: 1,
   },
   btnPrimarySmall: {

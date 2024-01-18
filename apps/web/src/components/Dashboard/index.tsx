@@ -53,16 +53,14 @@ const Dashboard = () => {
 
   return (
     <Container variant="layout.pageFrame">
-      <Box sx={{ fontSize: '18px' }}>
+      <Box sx={{ fontSize: 2, color: 'gray.400' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
-      <Box
-        sx={{ fontSize: '29.3px', fontWeight: 'heading', fontFamily: 'body' }}>
+      <Box sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body' }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
-
       <Flex
-        mt="64px"
+        mt={4}
         mb="32px"
         sx={{ border: '1px solid', borderColor: 'border' }}>
         <Flex sx={{ width: '70%', alignItems: 'center' }}>
