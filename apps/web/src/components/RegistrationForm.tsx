@@ -5,7 +5,7 @@ import cookie from 'js-cookie';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Button, Heading, Label, Checkbox } from 'theme-ui';
+import { Box, Flex, Text, Button, Heading } from 'theme-ui';
 import { z } from 'zod';
 
 import Logo from '../../public/Logo.svg';
@@ -45,7 +45,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
 
-  const [showPassword, setShowPassword] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const onSubmit = (data: FormValues) => {
@@ -137,33 +136,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               <Field
                 name="password"
                 label="Create Password"
-                type={showPassword ? 'text' : 'password'}
+                type="password"
                 register={register}
                 error={errors}
               />
-              <Flex>
-                <Label
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'gray.900',
-                    fontWeight: 'body',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  <Checkbox
-                    checked={showPassword}
-                    onChange={() => setShowPassword((prev) => !prev)}
-                    sx={{
-                      cursor: 'pointer',
-                      color: 'gray.900',
-                      width: '18px',
-                      backgroundColor: 'white',
-                      border: 'none',
-                    }}
-                  />
-                  <Text variant="pM">Show Password</Text>
-                </Label>
-              </Flex>
               <Flex sx={{ width: '100%', gap: '39px', mb: '24px' }}>
                 <Button type="submit" variant="buttonPrimary">
                   <Flex sx={{ alignItems: 'center', gap: '4px' }}>

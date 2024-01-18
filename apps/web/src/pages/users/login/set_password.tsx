@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Box, Heading, Label, Button, Text, Checkbox } from 'theme-ui';
+import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import { z } from 'zod';
 
 import Logo from '../../../../public/Logo.svg';
@@ -37,7 +37,6 @@ const Index = () => {
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
   const [verified, setVerified] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -105,31 +104,9 @@ const Index = () => {
                   error={errors.confirmPassword}
                   name="confirmPassword"
                   label="Confirm Password"
-                  type={showPassword ? 'text' : 'password'}
+                  type="password"
                   mb={'12px'}
                 />
-                <Flex sx={{ mb: '28px' }}>
-                  <Label
-                    sx={{
-                      color: 'gray.900',
-                      fontWeight: 'body',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}>
-                    <Checkbox
-                      checked={showPassword}
-                      onChange={() => setShowPassword(!showPassword)}
-                      sx={{
-                        color: 'gray.900',
-                        width: '18px',
-                        backgroundColor: 'white',
-                        border: 'none',
-                      }}
-                    />
-                    Show Password
-                  </Label>
-                </Flex>
-
                 <Button type="submit">Create Password</Button>
               </Box>
             </Flex>
