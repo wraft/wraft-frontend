@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "@wraft/editor",
+=======
+  "name": "@acme/editor",
+>>>>>>> 6f2df77 (feat: editor package)
   "type": "module",
   "version": "0.0.1",
   "main": "./dist/index.js",

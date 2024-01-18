@@ -15,11 +15,11 @@ import {
   DataTemplates,
 } from '../utils/types';
 
+import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
 import { BracesVariable } from './Icons';
 import NavEdit from './NavEdit';
-import MarkdownEditor from './WraftEditor';
 
 export interface BlockTemplate {
   id: string;
@@ -39,22 +39,24 @@ const Form = () => {
   const [varias, setVarias] = useState<IContentType>();
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
   const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
-  const [body, setBody] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [editorReady, setEditorReady] = useState<boolean>(false);
-  // const [keys, setKeys] = useState<Array<string>>();
-
-  const [cleanInsert, setCleanInsert] = useState<boolean>(false);
-  const [token, setToken] = useState<any>();
   const [insertable, setInsertable] = useState<any>();
+  const [tokkans, setTokkans] = useState<any>('');
+  const [insertions, setInsertions] = useState<any | null>(null);
 
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
 
   const onCreated = () => {
-    console.log('[onCreated]');
     Router.push('/templates');
+  };
+
+  /**
+   * Cleanup Inserts
+   */
+  const onceInserted = () => {
+    setInsertions(null);
   };
 
   /**
@@ -62,7 +64,6 @@ const Form = () => {
    * @param data
    */
   const onSubmit = (data: any) => {
-    console.log('data', data);
     setLoading(true);
 
     const formValues = {
@@ -73,8 +74,6 @@ const Form = () => {
         data: data.serialized,
       },
     };
-
-    console.log('Create/Update Template', formValues);
 
     // if edit is live
     if (cId) {
@@ -129,7 +128,6 @@ const Form = () => {
     const formed: ContentTypes = data;
     setVarias(formed.content_type);
     dataFiller(formed.content_type.fields || {});
-    console.log('Loaded Content Type: 🎃', formed);
   };
 
   /**
@@ -179,13 +177,10 @@ const Form = () => {
     if (insert) {
       const mm = JSON.parse(insert);
       if (mm) {
-        console.log('has serials', mm);
-        setCleanInsert(false);
-        setToken(mm);
+        // setToken(mm);
       }
     }
     setDataTemplate(data);
-    setCleanInsert(true);
   };
 
   const dataFiller = (entries: any) => {
@@ -193,6 +188,26 @@ const Form = () => {
     const k: any = keys;
     return k;
   };
+
+  /**
+   * Document variables
+   */
+  useEffect(() => {
+    if (varias?.fields) {
+      const { fields } = varias;
+
+      if (fields.length > 0) {
+        const results = fields.map((sr: any) => {
+          return {
+            id: `${sr.id}`,
+            label: `${sr.name}`,
+            name: `${sr.name}`,
+          };
+        });
+        setTokkans(results);
+      }
+    }
+  }, [varias]);
 
   /**
    * When Content Type is Changed
@@ -206,42 +221,21 @@ const Form = () => {
   };
 
   /**
-   * When Editor is updated
+   * When Editor is updated, sync values to
+   * the hidden fields
    * @param data
    */
   const doUpdate = (data: any) => {
-    console.log('[When Editor is updated]', data);
-
     if (data.md) {
-      setValue('body', data.md);
+      setValue('data', data.md);
     }
-
-    // body
-
-    if (data.body) {
-      const body = data.body;
+    if (data.json) {
+      const body = data.json;
       setValue('serialized', JSON.stringify(body));
-      setValue('data', JSON.stringify(body));
     }
-
-    // if (data.body) {
-    //   setValue('serialized', data.body);
-    // }
-
-    if (data.serialized) {
-      setValue('serialized', data.serialized);
-    }
-    // // console.log('data', data);
-    // // setValue('body', data);
-    // if (data.content) {
-    //   console.log('[When Editor is content]', data)
-    //   setValue('data', data.content);
-    // }
   };
 
   useEffect(() => {
-    setBody('Loading ...');
-
     loadTypes();
     loadBlocks();
   }, []);
@@ -270,46 +264,24 @@ const Form = () => {
       setValue('parent', dataTemplate.content_type.id);
 
       loadContentType(dataTemplate.content_type.id);
+      const insertReady = (d && d.serialized && d.serialized.data) || false;
 
-      //
-      const insert = (d && d.serialized && d.serialized.data) || false;
-
-      if (insert) {
-        setValue('serialized', insert);
-        const mm = JSON.parse(insert);
-        console.log('mm', mm);
+      if (insertReady) {
+        setValue('serialized', insertReady);
+        const mm = JSON.parse(insertReady);
         setInsertable(mm);
       }
-      setBody(d.data);
     }
   }, [dataTemplate]);
 
-  useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
-
-  const insertToken = (token: any) => {
-    const test = {
-      type: 'holder',
-      attrs: {
-        name: token.name,
-      },
-    };
-    setToken(test);
-  };
-
-  useEffect(() => {
-    setEditorReady(true);
-  }, []);
-
-  useEffect(() => {
-    console.log('body', body);
-  }, [body]);
-
-  const insertBlock = (b: any) => {
-    const n = JSON.parse(b.serialized);
+  /**
+   * Insert a block at pointer
+   * @param block
+   */
+  const insertBlock = (block: any) => {
+    const n = JSON.parse(block.serialized);
     if (n && n.content) {
-      setToken(n);
+      setInsertions(n);
     }
   };
 
@@ -370,18 +342,14 @@ const Form = () => {
                     py: '5rem !important',
                   },
                 }}>
-                {editorReady && (
-                  <MarkdownEditor
-                    onUpdate={doUpdate}
-                    starter={token}
-                    cleanInsert={cleanInsert}
-                    token={token}
-                    editable={true}
-                    variables={varias}
-                    searchables={varias}
-                    showToolbar={true}
-                  />
-                )}
+                <Editor
+                  editable
+                  defaultValue={insertable}
+                  onUpdate={doUpdate}
+                  tokens={tokkans}
+                  onceInserted={onceInserted}
+                  insertable={insertions}
+                />
               </Box>
               {/* <Counter /> */}
             </Box>
@@ -439,7 +407,7 @@ const Form = () => {
                           }}
                           as="p"
                           key={k.id}
-                          onClick={() => insertToken(k)}>
+                          onClick={() => insertBlock(k)}>
                           {k.name}
                           <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
                             <BracesVariable width={16} />
