@@ -113,6 +113,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         borderBottom: 'solid 1px',
         bg: 'neutral.100',
         borderColor: 'border',
+        cursor: 'pointer',
         '&:hover': { bg: 'neutral.200' },
       }}>
       <Box
@@ -127,10 +128,7 @@ export const BlockItem = ({ id, name, color, prefix }: BlockItemProps) => {
         }}
       />
 
-      <Link href={`/content-types/${id}`}>{name}</Link>
-      {/* <Text as="h4" sx={{ m: 0, color: 'gray.800', fontWeight: 500 }}>
-        
-      </Text> */}
+      <Link href={`/new?template=${id}`}>{name}</Link>
       <Text
         as="h4"
         sx={{
