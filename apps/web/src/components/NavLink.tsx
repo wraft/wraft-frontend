@@ -55,7 +55,7 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         passHref
         legacyBehavior>
         {/* <Link href="" target={target} variant={variant}> */}
-        <Box>
+        <Box sx={{ cursor: 'pointer' }}>
           {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
           {children}
         </Box>
