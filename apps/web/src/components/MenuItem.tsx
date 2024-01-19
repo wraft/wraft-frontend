@@ -28,6 +28,10 @@ const MenuItem = (props: IMenuItem) => {
           width: '100%',
           '&.active': {
             background: '#E2F7EA',
+            color: 'green.800',
+            svg: {
+              fill: 'green.300',
+            },
           },
           ':hover': {
             background: '#E2F7EA',
