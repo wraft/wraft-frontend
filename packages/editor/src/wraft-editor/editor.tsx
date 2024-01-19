@@ -66,7 +66,7 @@ export function ContentEditor({
     },
   };
 
-  console.log('[tokens 2]', tokens);
+  console.log('[ContentEditor]', tokens);
 
   return (
     <Box>
