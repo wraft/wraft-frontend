@@ -527,8 +527,8 @@ const ContentForm = (props: IContentForm) => {
    * @TODO to remove
    * @param e
    */
-  const onceInserted = (e: any) => {
-    console.log('e', e);
+  const onceInserted = () => {
+    setTrigger(null);
   };
 
   return (
@@ -627,7 +627,7 @@ const ContentForm = (props: IContentForm) => {
                   editable
                   onUpdate={doUpdate}
                   tokens={[]}
-                  insertable={trigger} // this is not so a good idea
+                  insertable={trigger}
                   onceInserted={onceInserted}
                 />
               </Box>

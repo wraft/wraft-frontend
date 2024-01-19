@@ -296,7 +296,11 @@ const Nav = (props: any) => {
                     <Box>
                       <MenuButton as={Box}>
                         <Image
-                          sx={{ borderRadius: '3rem', bg: 'red' }}
+                          sx={{
+                            borderRadius: '3rem',
+                            bg: 'red',
+                            cursor: 'pointer',
+                          }}
                           alt=""
                           width="24px"
                           height="24px"
