@@ -192,6 +192,7 @@ const layout: Theme['layout'] = {
   },
   menu: {
     height: 'auto',
+    minWidth: '155px',
     width: 'fit-content',
     position: 'absolute',
     top: 0,
