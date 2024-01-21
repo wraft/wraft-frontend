@@ -78,11 +78,11 @@ const LayoutList = ({ rerender }: Props) => {
   }, [rerender]);
 
   return (
-    <Box py={3} mt={4}>
+    <Box sx={{ p: 4 }}>
       <Text as="h3" variant="pagetitle">
         Layouts
       </Text>
-      <Box mx={0} mb={3}>
+      <Box>
         <Flex sx={{ flexWrap: 'wrap' }}>
           {contents &&
             contents.length > 0 &&
