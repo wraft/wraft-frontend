@@ -207,7 +207,7 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box sx={{ pt: 4 }}>
+    <Box>
       {!ready && <Spinner />}
 
       <Box>

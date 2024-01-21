@@ -22,7 +22,9 @@ const Contents: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <OrgSidebar />
-            <ProfileForm />
+            <Box sx={{ bg: 'white', width: '100%' }} pl={4} pt={4}>
+              <ProfileForm />
+            </Box>
           </Flex>
         </Container>
       </Page>
