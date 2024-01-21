@@ -151,8 +151,7 @@ const layout: Theme['layout'] = {
   pageFrame: {
     bg: 'background',
     p: 4,
-    // height: 'calc(100vh - 140px)',
-    height: '100vh',
+    height: 'calc(100vh - 72px)',
     overflow: 'scroll',
   },
   contentFrame: {
