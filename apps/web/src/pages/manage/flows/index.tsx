@@ -35,7 +35,7 @@ const Index: FC = () => {
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
         </Modal>
-        <Container sx={{ pl: 4, pt: 4 }}>
+        <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
             <FlowList rerender={rerender} setRerender={setRerender} />
