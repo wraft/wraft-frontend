@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 
-import LayoutCard from './Card';
+import { Button, ConfirmDelete, Table } from './common';
+import { Drawer } from './common/Drawer';
+import { OptionsIcon } from './Icons';
+import LayoutForm from './LayoutForm';
+import Modal from './Modal';
 
 export interface ILayout {
   width: number;
@@ -36,9 +41,10 @@ interface Props {
 }
 
 const LayoutList = ({ rerender }: Props) => {
-  // const token = useSelector(({ login }: any) => login.token);
-  // const dispatch = useDispatch();
   const [contents, setContents] = useState<Array<IField>>([]);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
+  const [isEdit, setIsEdit] = useState<number | boolean>(false);
 
   /**
    * Delete a Layout
@@ -52,6 +58,7 @@ const LayoutList = ({ rerender }: Props) => {
           position: 'top-right',
         });
         loadLayout();
+        setDeleteLayout(null);
       })
       .catch(() => {
         toast.error('Failed to delete Layout', {
@@ -77,25 +84,103 @@ const LayoutList = ({ rerender }: Props) => {
     loadLayout();
   }, [rerender]);
 
+  const columns = [
+    {
+      id: 'content.name',
+      header: 'NAME',
+      accessorKey: 'content.name',
+      cell: ({ row }: any) => (
+        <Button
+          variant="text"
+          onClick={() => {
+            setIsEdit(row.index);
+          }}>
+          <Box>
+            <Box>{row.original?.name}</Box>
+          </Box>
+          <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
+            <LayoutForm setOpen={setIsOpen} cId={row.original.id} />
+          </Drawer>
+        </Button>
+      ),
+      size: 700,
+      enableSorting: false,
+    },
+    {
+      id: 'content.id',
+      header: '',
+      accessor: 'content.id',
+      cell: ({ row }: any) => {
+        return (
+          <Box>
+            <MenuProvider>
+              <MenuButton
+                as={Box}
+                sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    margin: '0px',
+                    padding: '0px',
+                    bg: 'transparent',
+                    ':disabled': {
+                      display: 'none',
+                    },
+                  }}
+                  onClick={() => {
+                    setIsOpen(row.index);
+                  }}>
+                  <OptionsIcon />
+                </Box>
+              </MenuButton>
+              <Menu
+                as={Box}
+                variant="layout.menu"
+                open={isOpen == row.index}
+                onClose={() => setIsOpen(null)}>
+                <MenuItem>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteLayout(row.index);
+                    }}>
+                    <Text
+                      variant=""
+                      sx={{ cursor: 'pointer', color: 'red.600' }}>
+                      Delete
+                    </Text>
+                  </Button>
+                </MenuItem>
+              </Menu>
+              <Modal
+                isOpen={deleteLayout === row.index}
+                onClose={() => setDeleteLayout(null)}>
+                {
+                  <ConfirmDelete
+                    title="Delete Layout"
+                    text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                    setOpen={setDeleteLayout}
+                    onConfirmDelete={async () => {
+                      onDelete(row.original.id);
+                    }}
+                  />
+                }
+              </Modal>
+            </MenuProvider>
+          </Box>
+        );
+      },
+      size: 50,
+    },
+  ];
+
   return (
-    <Box sx={{ p: 4 }}>
-      <Text as="h3" variant="pagetitle">
-        Layouts
-      </Text>
-      <Box>
-        <Flex sx={{ flexWrap: 'wrap' }}>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => (
-              <LayoutCard
-                model="layouts"
-                key={m.id}
-                {...m}
-                onDelete={onDelete}
-              />
-            ))}
-        </Flex>
-      </Box>
+    <Box>
+      <Table data={contents} columns={columns} />
     </Box>
   );
 };
