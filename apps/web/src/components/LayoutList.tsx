@@ -116,6 +116,7 @@ const LayoutList = ({ rerender }: Props) => {
             <MenuProvider>
               <MenuButton
                 as={Box}
+                variant="none"
                 sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
                   sx={{
