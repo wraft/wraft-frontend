@@ -95,3 +95,78 @@ export const EMPTY_MARKDOWN_NODE = {
     },
   ],
 };
+
+export interface ContentInstance {
+  state: State;
+  creator: Creator;
+  content_type: ContentType;
+  content: Content;
+  versions?: any;
+}
+
+export interface Content {
+  updated_at: any;
+  serialized: Serialized;
+  raw: string;
+  instance_id: string;
+  inserted_at: any;
+  id: string;
+  build: string;
+  title: string;
+}
+
+export interface Serialized {
+  title: string;
+  body: string;
+  serialized: any;
+}
+
+export interface ContentType {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
+  fields: Fields;
+  description: string;
+  layout?: any;
+}
+
+export interface Fields {
+  position: string;
+  name: string;
+  joining_date: string;
+  approved_by: string;
+}
+
+export interface Creator {
+  updated_at: Date;
+  name: string;
+  inserted_at: Date;
+  id: string;
+  email_verify: boolean;
+  email: string;
+}
+
+export interface State {
+  updated_at: Date;
+  state: string;
+  order: number;
+  inserted_at: Date;
+  id: string;
+}
+
+export interface IBuild {
+  updated_at: string;
+  serialized: Serialized;
+  raw: string;
+  instance_id: string;
+  inserted_at: string;
+  id: string;
+  build: string;
+}
+
+export interface Serialized {
+  title: string;
+  serialized: any;
+  body: string;
+}

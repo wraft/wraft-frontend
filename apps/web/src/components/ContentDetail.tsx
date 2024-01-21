@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react';
 
-import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
+import {
+  Menu,
+  MenuButton,
+  MenuItem as AriaMenuItem,
+  MenuProvider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabProvider,
+} from '@ariakit/react';
 import styled from '@emotion/styled';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../utils/models';
+import { deleteAPI, fetchAPI, postAPI } from '../utils/models';
+import { ContentInstance, IBuild } from '../utils/types/content';
 
 import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';
-import { File, Download } from './Icons';
+import { File, Download, DotsVerticalRounded } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
-
-// import { right } from '@popperjs/core';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -87,6 +96,58 @@ export const StepBlock = ({
         </Text> */}
       </Box>
     </Flex>
+  );
+};
+
+/**
+ * Sidebar
+ */
+
+interface EditMenuProps {
+  id: string;
+}
+
+const EditMenus = ({ id }: EditMenuProps) => {
+  /**
+   * Delete content
+   * @param id
+   */
+  const deleteContent = (id: string) => {
+    deleteAPI(`contents/${id}`).then(() => {
+      toast.success('Deleted a content', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
+  };
+  return (
+    <MenuProvider>
+      <MenuButton
+        as={Button}
+        sx={{
+          border: 'solid 1px',
+          color: 'text',
+          borderColor: 'border',
+          p: 0,
+          bg: 'neutral.100',
+          pb: 1,
+          mt: 2,
+        }}>
+        <DotsVerticalRounded width={16} height={16} />
+      </MenuButton>
+      <Menu
+        as={Box}
+        aria-label="Manage Content"
+        sx={{
+          border: 'solid 1px',
+          borderColor: 'border',
+          borderRadius: 4,
+          bg: 'neutral.100',
+          color: 'text',
+        }}>
+        <AriaMenuItem onClick={() => deleteContent(id)}>Delete</AriaMenuItem>
+      </Menu>
+    </MenuProvider>
   );
 };
 
@@ -179,81 +240,6 @@ const PreTag = styled(Box)`
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
 `;
-
-export interface ContentInstance {
-  state: State;
-  creator: Creator;
-  content_type: ContentType;
-  content: Content;
-  versions?: any;
-}
-
-export interface Content {
-  updated_at: any;
-  serialized: Serialized;
-  raw: string;
-  instance_id: string;
-  inserted_at: any;
-  id: string;
-  build: string;
-  title: string;
-}
-
-export interface Serialized {
-  title: string;
-  body: string;
-  serialized: any;
-}
-
-export interface ContentType {
-  updated_at: Date;
-  name: string;
-  inserted_at: Date;
-  id: string;
-  fields: Fields;
-  description: string;
-  layout?: any;
-}
-
-export interface Fields {
-  position: string;
-  name: string;
-  joining_date: string;
-  approved_by: string;
-}
-
-export interface Creator {
-  updated_at: Date;
-  name: string;
-  inserted_at: Date;
-  id: string;
-  email_verify: boolean;
-  email: string;
-}
-
-export interface State {
-  updated_at: Date;
-  state: string;
-  order: number;
-  inserted_at: Date;
-  id: string;
-}
-
-export interface IBuild {
-  updated_at: string;
-  serialized: Serialized;
-  raw: string;
-  instance_id: string;
-  inserted_at: string;
-  id: string;
-  build: string;
-}
-
-export interface Serialized {
-  title: string;
-  serialized: any;
-  body: string;
-}
 
 const ContentDetail = () => {
   const router = useRouter();
@@ -502,9 +488,8 @@ const ContentDetail = () => {
                 minHeight: '100vh',
                 pt: 3,
               }}>
-              <Box sx={{ px: 3 }}>
-                {/* {contents.content.build} */}
-                <Flex sx={{ mb: 3 }}>
+              <Flex sx={{ px: 3 }}>
+                <Flex sx={{ mb: 3, mr: 'auto' }}>
                   <Box sx={{ mr: 3 }}>
                     <Text as="h6" variant="labelcaps">
                       Version
@@ -541,7 +526,10 @@ const ContentDetail = () => {
                     </Flex>
                   </Box>
                 </Flex>
-              </Box>
+                <Box sx={{ ml: 'auto' }}>
+                  <EditMenus id={cId} />
+                </Box>
+              </Flex>
 
               <Box>
                 <Box variant="layout.boxHeading">

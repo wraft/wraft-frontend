@@ -98,6 +98,9 @@ const ContentForm = (props: IContentForm) => {
 
   const [pageTitle, setPageTitle] = useState<string>('');
 
+  // triggers
+  const [trigger, setTrigger] = useState<any>(null);
+
   /**
    * Toggle Title Edit
    * @param map
@@ -167,6 +170,8 @@ const ContentForm = (props: IContentForm) => {
   const onSubmit = (data: any) => {
     const obj: any = {};
 
+    console.log('data', data);
+
     maps &&
       maps.forEach((f: any) => {
         obj[f.name] = f.value;
@@ -216,8 +221,6 @@ const ContentForm = (props: IContentForm) => {
    * @param id
    */
   const loadData = (id: string) => {
-    // console.log('🎃 refresh {', id, '}')
-
     if (edit) {
       fetchAPI(`contents/${id}`).then((data: any) => {
         onLoadContent(data);
@@ -298,12 +301,6 @@ const ContentForm = (props: IContentForm) => {
     });
   };
 
-  // const setDefaultState = (content: IField) => {
-  //   const defaultState =
-  //     content.content_type && content.content_type.flow.states[0].id;
-  //   setValue('state', defaultState);
-  // };
-
   const getSummary = () => {
     // const res =
     //   document
@@ -333,8 +330,8 @@ const ContentForm = (props: IContentForm) => {
     }
     // getSummary();
   }, [cId, pathname]);
-  // syncable field
 
+  // syncable field
   useEffect(() => {
     if (fields) {
       const f: any = mapFields(fields);
@@ -377,6 +374,7 @@ const ContentForm = (props: IContentForm) => {
     }
   }, [errors]);
 
+  // when template selection modal is active
   useEffect(() => {
     if (activeTemplate.length < 1) {
       setShowTemplate(true);
@@ -420,6 +418,11 @@ const ContentForm = (props: IContentForm) => {
     updateStuff(x, maps);
   };
 
+  /**
+   * Mapping Form values to content and updating it
+   * @param content
+   * @param mappings
+   */
   const passUpdates = (content: any, mappings: any) => {
     const updatedCont = updateVars(content, mappings);
     setBody(updatedCont);
@@ -464,6 +467,8 @@ const ContentForm = (props: IContentForm) => {
    */
 
   const doUpdate = (state: any) => {
+    console.log('[doUpdate]', state);
+
     if (state.md) {
       setValue('body', state.md);
     }
@@ -503,13 +508,15 @@ const ContentForm = (props: IContentForm) => {
   };
 
   /**
-   * onSaved fields
+   * When use saves variant form names
    * @param defx
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
     updateStuff(body, resx);
     updatePageTitle(resx);
+    // we are inserting an empty node, so that the editor is triggered
+    setTrigger(EMPTY_MARKDOWN_NODE);
   };
 
   const closeModal = () => {
@@ -520,8 +527,8 @@ const ContentForm = (props: IContentForm) => {
    * @TODO to remove
    * @param e
    */
-  const onceInserted = (e: any) => {
-    console.log('e', e);
+  const onceInserted = () => {
+    setTrigger(null);
   };
 
   return (
@@ -620,7 +627,7 @@ const ContentForm = (props: IContentForm) => {
                   editable
                   onUpdate={doUpdate}
                   tokens={[]}
-                  insertable={null} // this is not so a good idea
+                  insertable={trigger}
                   onceInserted={onceInserted}
                 />
               </Box>
@@ -646,7 +653,7 @@ const ContentForm = (props: IContentForm) => {
               <Field
                 name="ttype"
                 label="Content Type"
-                defaultValue={cId}
+                defaultValue={cId || id}
                 register={register}
               />
             </Box>
