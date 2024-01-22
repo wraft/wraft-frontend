@@ -14,15 +14,7 @@ interface AnchorType {
 }
 
 export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
-  ({
-    children,
-    href,
-    locale = 'en',
-    // target,
-    path,
-    icon,
-    // variant = 'btnNavLink',
-  }) => {
+  ({ children, href, locale = 'en', path, icon }) => {
     if (!href) return <>{children}</>;
     return (
       <NextLink
@@ -31,12 +23,10 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         locale={locale}
         passHref
         legacyBehavior>
-        {/* <Link href="" target={target} variant={variant}> */}
-        <Link sx={{ color: 'gray.900' }}>
+        <Link sx={{ color: 'gray.900', cursor: 'pointer' }}>
           {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
           {children}
         </Link>
-        {/* </Link> */}
       </NextLink>
     );
   },
