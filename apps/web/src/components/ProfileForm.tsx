@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Modal, { Styles } from 'react-modal';
 import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
+import { useAuth } from '../contexts/AuthContext';
 import { loadEntity, updateEntityFile } from '../utils/models';
 
 import Field from './Field';
@@ -79,7 +79,8 @@ const Form = () => {
     formState: { errors },
     setValue,
   } = useForm();
-  const token = useStoreState((state) => state.auth.token);
+
+  const { accessToken } = useAuth();
   const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
   const [image, setImage] = useState<any>();
@@ -174,7 +175,7 @@ const Form = () => {
 
     formData.append('gender', data.gender);
 
-    updateEntityFile(`profiles`, formData, token, onUpdate);
+    updateEntityFile(`profiles`, formData, accessToken as string, onUpdate);
   };
 
   // const _onMe = (data: any) => {
@@ -233,14 +234,14 @@ const Form = () => {
       formData.append('profile_pic', f);
     }
 
-    updateEntityFile(`profiles`, formData, token, onUpdated);
+    updateEntityFile(`profiles`, formData, accessToken as string, onUpdated);
   };
 
   useEffect(() => {
-    if (token) {
-      loadEntity(token, `profiles`, onOrg);
+    if (accessToken) {
+      loadEntity(accessToken as string, `profiles`, onOrg);
     }
-  }, [token]);
+  }, [accessToken]);
 
   // const getBase64 = (file: any) => {
   //   return new Promise((resolve, reject) => {
@@ -263,6 +264,8 @@ const Form = () => {
   //     console.log('errr', error);
   //   }
   // }, [imageTemp]);
+
+  console.log('imagessss');
 
   return (
     <Box sx={{ width: '50%' }}>

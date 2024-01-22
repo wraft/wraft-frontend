@@ -7,12 +7,11 @@ import {
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
-import { useStoreState } from 'easy-peasy';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 
-import { loadEntity, createEntity } from '../../utils/models';
+import { fetchAPI, postAPI } from '../../utils/models';
 import Field from '../Field';
 import { ArrowDropdown } from '../Icons';
 
@@ -27,28 +26,28 @@ interface FormInputs {
 }
 
 const RolesAdd = ({ setOpen, setRender }: Props) => {
-  const token = useStoreState((state) => state.auth.token);
-  const { register, trigger, handleSubmit } = useForm<FormInputs>({
-    mode: 'onChange',
-  });
-
   const [initialPermissions, setInitialPermissions] = useState<any>({});
   const [permissions, setPermissions] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isExpanded, setExpanded] = useState<number | null>(null);
 
-  const loadPermissionsSuccess = (data: any) => {
-    setInitialPermissions(data);
-  };
-
-  const loadPermissions = (token: string) => {
-    loadEntity(token, 'permissions', loadPermissionsSuccess);
-  };
+  const { register, trigger, handleSubmit } = useForm<FormInputs>({
+    mode: 'onChange',
+  });
 
   useEffect(() => {
-    if (token) loadPermissions(token);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+    loadPermissions();
+  }, []);
+
+  useEffect(() => {
+    setPermissions(newFormatPermissions);
+  }, [initialPermissions]);
+
+  const loadPermissions = () => {
+    fetchAPI('permissions').then((data: any) => {
+      setInitialPermissions(data);
+    });
+  };
 
   const newFormatPermissions = Object.fromEntries(
     Object.entries(initialPermissions).map(
@@ -62,11 +61,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       ],
     ),
   );
-
-  useEffect(() => {
-    setPermissions(newFormatPermissions);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, initialPermissions]);
 
   const filteredPermissionKeys = Object.keys(permissions).filter((e: any) =>
     e.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -107,15 +101,6 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
     setPermissions({ ...data });
   };
 
-  function onSuccess() {
-    setOpen(false);
-    setRender((prev: boolean) => !prev);
-    toast.success('Role Added', {
-      duration: 1000,
-      position: 'top-right',
-    });
-  }
-
   const checkedValuesFunc = (permissionsList: string[]) => {
     filteredPermissionKeys.forEach((key: any) => {
       permissions[key].children.forEach((e: any) => {
@@ -133,7 +118,16 @@ const RolesAdd = ({ setOpen, setRender }: Props) => {
       name: data.name,
       permissions: permissionsList,
     };
-    createEntity(body, 'roles', token, onSuccess);
+
+    postAPI('roles', body).then(() => {
+      setOpen(false);
+      setRender((prev: boolean) => !prev);
+      toast.success('Role Added', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
+    // createEntity(body, 'roles', token, onSuccess);
   }
 
   return (

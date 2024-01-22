@@ -1,20 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import cookie from 'js-cookie';
 import { Box, Flex, Text, Image } from 'theme-ui';
 
-// import { useHotkeys } from 'react-hotkeys-hook';
-// relative
-import { checkUser } from '../utils/models';
+import { useAuth } from '../contexts/AuthContext';
 
 import { Bell, ArrowBack } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
-// import Dropdown from './common/Dropdown';
-
-// import { usePopper } from 'react-popper';
 
 export interface IUser {
   name: string;
@@ -26,32 +19,7 @@ interface INav {
 }
 
 const Nav = ({ navtitle, onToggleEdit }: INav) => {
-  // const [user, setUser] = useState<IUser>();
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
-  // const menu = useMenuState();
-
-  // const [showSearch, setShowSearch] = useState<boolean>(false);
-
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
-  };
-
-  useEffect(() => {
-    // check if token is there
-    const t = cookie.get('token') || false;
-    // login to check
-    if (t) {
-      checkUser(t, onProfileLoad);
-      setToken(t);
-    }
-  }, []);
+  const { accessToken, userProfile, logout } = useAuth();
 
   return (
     <Box
@@ -115,14 +83,14 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                 <Bell width={22} />
               </Box>
             </Flex>
-            {!token && (
+            {!accessToken && (
               <Link href="/login">
                 <Text>Login</Text>
               </Link>
             )}
-            {token && token !== '' && (
+            {accessToken && accessToken !== '' && (
               <Flex ml={1}>
-                {profile && (
+                {userProfile && (
                   <Flex
                     sx={{
                       alignContent: 'top',
@@ -137,7 +105,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                             sx={{ borderRadius: '3rem', bg: 'red' }}
                             width="32px"
                             height="32px"
-                            src={profile?.profile_pic}
+                            src={userProfile?.profile_pic}
                             // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                           />
                         </MenuButton>
@@ -148,13 +116,13 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                           aria-label="Preferences">
                           <MenuItem as={Box} variant="layout.menuItem">
                             <Box>
-                              <Text as="h4">{profile?.name}</Text>
+                              <Text as="h4">{userProfile?.name}</Text>
 
-                              {profile?.roles?.size > 0 && (
+                              {userProfile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
                                   sx={{ fontSize: 0, color: 'text' }}>
-                                  {profile?.roles[0]?.name}
+                                  {userProfile?.roles[0]?.name}
                                 </Text>
                               )}
                             </Box>
@@ -182,7 +150,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                           </MenuItem>
                           <MenuItem
                             as={Box}
-                            onClick={userLogout}
+                            onClick={logout}
                             variant="layout.menuItem">
                             Signout
                           </MenuItem>

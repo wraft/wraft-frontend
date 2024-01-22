@@ -6,17 +6,17 @@ import React, {
   useContext,
 } from 'react';
 
-import { useStoreActions } from 'easy-peasy';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
-import { fetchUserInfo, fetchAPI } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 
 interface IUserContextProps {
   isUserLoading: boolean;
   accessToken: string | null;
   refreshToken: string | null;
+  permissions: string | null;
   userProfile: any;
   organisations: any;
   login: (data: any) => void;
@@ -32,12 +32,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any | null>(null);
   const [organisations, setOrganisations] = useState<any | null>(null);
+  const [permissions, setPermissions] = useState<any>(null);
 
   const [isUserLoading, setIsUserLoading] = useState(false);
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
 
   useEffect(() => {
     const refreshToken = cookie.get('refreshToken') || false;
@@ -48,26 +45,9 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
     const token = cookie.get('token') || false;
     if (token) {
-      setAccessToken(token);
-      setToken(token);
       setIsUserLoading(true);
-
-      console.log('accessToken', token);
-
-      const fetchData = async () => {
-        try {
-          const userinfo: any = await fetchUserInfo();
-          const userOrg: any = await fetchAPI('users/organisations');
-          setOrganisations(userOrg.organisations);
-
-          await updateUserData(userinfo);
-          setIsUserLoading(false);
-        } catch {
-          setIsUserLoading(false);
-        }
-      };
-
-      fetchData();
+      fetchUserBasicInfo();
+      setAccessToken(token);
     }
   }, []);
 
@@ -83,24 +63,35 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     }
   }, [userProfile?.organisation_id]);
 
+  const fetchUserBasicInfo = async () => {
+    try {
+      const [userinfo, userOrg, permissionOrg]: any = await Promise.all([
+        fetchAPI('users/me'),
+        fetchAPI('users/organisations'),
+        fetchAPI('organisations/users/permissions'),
+      ]);
+
+      setOrganisations(userOrg.organisations);
+      setPermissions(permissionOrg.permissions);
+      updateUserData(userinfo);
+      setIsUserLoading(false);
+    } catch {
+      setIsUserLoading(false);
+    }
+  };
+
   console.log('user profile', userProfile);
 
-  const login = (data: any) => {
-    const { access_token, refresh_token, user }: any = data;
+  const login = async (data: any) => {
+    // setIsUserLoading(true);
+    const { access_token, refresh_token }: any = data;
+    await cookie.set('token', access_token);
+    await cookie.set('refreshToken', refresh_token);
+
+    await fetchUserBasicInfo();
+
     setAccessToken(access_token);
     setRefreshToken(refresh_token);
-    setToken(access_token);
-
-    updateUserData(user);
-
-    if (!organisations) {
-      fetchAPI('users/organisations').then(async (res: any) => {
-        setOrganisations(res.organisations);
-      });
-    }
-
-    cookie.set('token', access_token);
-    cookie.set('refreshToken', refresh_token);
   };
 
   const logout = async () => {
@@ -109,14 +100,12 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setRefreshToken(null);
     setUserProfile(null);
     setOrganisations(null);
-    setProfile(null);
 
     cookie.remove('token');
     cookie.remove('refreshToken');
   };
 
   const updateUserData = (userdata: any) => {
-    setProfile(userdata);
     setUserProfile(userdata);
   };
 
@@ -140,6 +129,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         accessToken,
         userProfile,
         organisations,
+        permissions,
         login,
         logout,
       }}>
