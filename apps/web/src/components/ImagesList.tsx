@@ -1,11 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { useStoreActions } from 'easy-peasy';
 import Modal from 'react-modal';
 import { Box, Button } from 'theme-ui';
 
 import { modalStyle } from '../utils';
-import { fetchAPI } from '../utils/models';
+// import { fetchAPI } from '../utils/models';
 
 import ImagesForm from './AssetForm';
 import { PlusAlt as Plus } from './Icons';
@@ -32,12 +31,6 @@ interface IImageList {
 }
 
 const Form: FC<IImageList> = ({ onSuccess }) => {
-  // const getThemes = useStoreActions((actions: any) => actions.themes.fetch);
-  const setCats = useStoreActions((actions: any) => actions.images.set);
-  // const addCats = useStoreActions((actions: any) => actions.images.add);
-  // const delCats = useStoreActions((actions: any) => actions.images.remove);
-  // const allCats = useStoreState((state) => state.images.items);
-
   const [showModal, setShowModal] = useState<boolean>(false);
 
   function closeModal() {
@@ -48,16 +41,16 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
     setShowModal(!showModal);
   }
 
-  const loadData = () => {
-    fetchAPI('assets').then((data: any) => {
-      const res: any = data.images;
-      setCats(res);
-    });
-    return;
-  };
+  // const loadData = () => {
+  //   fetchAPI('assets').then((data: any) => {
+  //     // const res: any = data.images;
+  //     // setCats(res);
+  //   });
+  //   return;
+  // };
 
   useEffect(() => {
-    loadData();
+    // loadData();
   }, []);
 
   // useEffect(() => {}, [allCats])

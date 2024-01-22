@@ -19,8 +19,6 @@
     "clean": "rm -rf .turbo && rm -rf node_modules"
   },
   "dependencies": {
-    "@wraft/editor": "workspace:^",
-    "@wraft/ui": "*",
     "@ariakit/core": "^0.3.11",
     "@ariakit/react": "^0.3.12",
     "@babel/plugin-proposal-decorators": "^7.23.7",
@@ -60,11 +58,12 @@
     "@tanstack/react-table": "^8.11.2",
     "@theme-ui/color": "^0.16.1",
     "@types/react-pdf": "5.7.2",
+    "@wraft/editor": "workspace:^",
+    "@wraft/ui": "*",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-source-maps": "^0.0.3",
     "axios": "^1.6.3",
     "date-fns": "^3.0.6",
-    "easy-peasy": "^3.3.1",
     "express": "^4.15.3",
     "framer-motion": "^10.17.0",
     "immer": "^10.0.3",

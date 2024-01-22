@@ -1,5 +1,4 @@
 import { TourProvider, components } from '@reactour/tour';
-import { StoreProvider } from 'easy-peasy';
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
@@ -7,11 +6,8 @@ import { ThemeUIProvider } from 'theme-ui';
 
 import { UserProvider } from '../contexts/AuthContext';
 import ToasterNewProvider from '../contexts/ToasterProvider';
-import withReduxStore from '../lib/with-redux-store';
 import theme from '../theme';
 // import theme from '../utils/theme';
-
-const StoreProviderOverride = StoreProvider as any;
 
 interface AppPropsWithRedux extends AppProps {
   reduxStore: any;
@@ -19,7 +15,6 @@ interface AppPropsWithRedux extends AppProps {
 
 const MyApp = ({
   Component,
-  reduxStore,
   pageProps: { session, ...pageProps },
 }: AppPropsWithRedux) => {
   const Badge = ({ children }: any) => {
@@ -40,21 +35,19 @@ const MyApp = ({
   return (
     // <TourProvider steps={steps}>
     <TourProvider steps={[]} components={{ Badge }} padding={{ mask: 0 }}>
-      <StoreProviderOverride store={reduxStore}>
-        <SessionProvider session={session}>
-          <ToasterNewProvider />
-          <ThemeUIProvider theme={theme}>
-            <UserProvider>
-              <Component {...pageProps} />
-            </UserProvider>
-          </ThemeUIProvider>
-        </SessionProvider>
-      </StoreProviderOverride>
+      <SessionProvider session={session}>
+        <ToasterNewProvider />
+        <ThemeUIProvider theme={theme}>
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
+        </ThemeUIProvider>
+      </SessionProvider>
     </TourProvider>
   );
 };
 
-export default withReduxStore(MyApp);
+export default MyApp;
 
 MyApp.getInitialProps = async (context: AppContext) => {
   const appProps = await App.getInitialProps(context);

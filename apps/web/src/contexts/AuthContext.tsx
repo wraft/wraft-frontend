@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from 'react';
 
-import { useStoreActions } from 'easy-peasy';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
@@ -36,10 +35,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [permissions, setPermissions] = useState<any | null>(null);
 
   const [isUserLoading, setIsUserLoading] = useState(false);
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
 
   useEffect(() => {
     const refreshToken = cookie.get('refreshToken') || false;
@@ -53,7 +48,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
       setIsUserLoading(true);
       fetchUserBasicInfo();
       setAccessToken(token);
-      setToken(token);
     }
   }, []);
 
@@ -98,7 +92,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
     setAccessToken(access_token);
     setRefreshToken(refresh_token);
-    setToken(access_token);
   };
 
   const logout = async () => {
@@ -107,14 +100,12 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setRefreshToken(null);
     setUserProfile(null);
     setOrganisations(null);
-    setProfile(null);
 
     cookie.remove('token');
     cookie.remove('refreshToken');
   };
 
   const updateUserData = (userdata: any) => {
-    setProfile(userdata);
     setUserProfile(userdata);
   };
 
