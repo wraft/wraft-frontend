@@ -31,7 +31,6 @@ import { Asset, Engine } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';
-import { TickIcon } from './Icons';
 import PdfViewer from './PdfViewer';
 
 export interface Layouts {
@@ -295,108 +294,26 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
 
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
 
-  const [isAssetValid, setAssetValid] = React.useState(false);
-
   return (
     <Flex
       sx={{
-        p: 4,
-        pb: '44px',
+        // pb: '44px',
         height: '100%',
         flexDirection: 'column',
-        gap: '28px',
       }}>
       <Text
+        variant="pB"
         sx={{
-          fontSize: 2,
-          color: 'text',
-          letterSpacing: '-0.2px',
-          fontWeight: 700,
+          p: 4,
         }}>
         {isEdit ? 'Edit layout' : 'Create new layout'}
       </Text>
-      <Flex>
-        <StepsIndicator
-          data={[
-            { title: 'Basic Details', valid: false },
-            { title: 'Set Background', valid: true },
-          ]}
-          formStep={formStep}
-        />
-      </Flex>
-      <Flex>
-        <Flex sx={{ alignItems: 'center' }}>
-          {formStep === 0 ? (
-            <Flex
-              sx={{
-                width: '24px',
-                height: '24px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: 'gray.600',
-                // bg: transparentize('gray.100', 0.4),
-                borderRadius: '50%',
-              }}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
-            </Flex>
-          ) : (
-            <Flex
-              sx={{ justifyItems: 'center', alignItems: 'center' }}
-              color="green.5">
-              <TickIcon fontSize={'24px'} color="inherit" />
-            </Flex>
-          )}
-          <Text
-            ml={'10px'}
-            onClick={() => goTo(0)}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color: formStep === 0 ? 'text' : 'gray.600',
-            }}>
-            Basic details
-          </Text>
-        </Flex>
-        <Flex ml={4} sx={{ alignItems: 'center' }}>
-          {isAssetValid ? (
-            <Flex
-              sx={{ justifyItems: 'center', alignItems: 'center' }}
-              color="green.5">
-              <TickIcon fontSize={'24px'} color="inherit" />
-            </Flex>
-          ) : (
-            <Flex
-              sx={{
-                width: '24px',
-                height: '24px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: formStep === 0 ? 'gray.500' : 'gray.600',
-                // bg:
-                // formStep === 0 ? 'neutral.100' : transparentize('gray.100', 0.7),
-                borderRadius: '50%',
-              }}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
-            </Flex>
-          )}
-          <Text
-            onClick={() => goTo(1)}
-            ml={'10px'}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color:
-                formStep === 0
-                  ? 'gray.500'
-                  : isAssetValid
-                    ? 'gray.600'
-                    : 'gray.900',
-            }}>
-            Set Background
-          </Text>
-        </Flex>
-      </Flex>
-      <Container sx={{ styleEl }}>
+      <StepsIndicator
+        titles={['Basic Details', 'Set Background']}
+        formStep={formStep}
+        goTo={goTo}
+      />
+      <Container sx={{ styleEl, px: 4 }}>
         <Box>
           {formStep >= 1 && (
             <section>
@@ -463,7 +380,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                       </Box>
                     ))}
                 </Box>
-                <AssetForm setAsset={setAssetValid} onUpload={addUploads} />
+                <AssetForm onUpload={addUploads} />
               </Box>
             </section>
           )}
@@ -603,7 +520,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                 </Button>
               )}
               {formStep === 1 && (
-                <>
+                <Box>
                   <Button
                     variant="disabled"
                     // variant=""
@@ -629,7 +546,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                     }}>
                     {isEdit ? 'Update' : 'Create'}
                   </Button>
-                </>
+                </Box>
               )}
             </Flex>
           </Box>
