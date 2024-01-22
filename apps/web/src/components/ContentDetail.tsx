@@ -30,6 +30,7 @@ import { IconWrapper, TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';
 import styles from './common/Tab/tab.module.css';
+import { LinkIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
@@ -250,11 +251,6 @@ interface NumberBlockProps {
   active?: boolean;
 }
 
-interface BreadCrumpSampleProps {
-  name: string;
-  state: string;
-}
-
 function IconArrow() {
   return (
     <svg
@@ -267,75 +263,6 @@ function IconArrow() {
     </svg>
   );
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const BreadCrum = ({ name, state }: BreadCrumpSampleProps) => {
-  // const activeBorder = active ? 'gray.200' : 'gray.300';
-  const defaultSize = 'small';
-  const size = blockTypes.find((b: any) => b.name === defaultSize);
-
-  const switchColor = (state: string) => {
-    switch (state) {
-      case 'completed':
-        return 'green.100';
-        break;
-      case 'todo':
-        return 'gray.100';
-        break;
-      case 'pending':
-        return 'blue.100';
-      default:
-        return 'blue.100';
-        break;
-    }
-  };
-
-  return (
-    <Flex
-      sx={{
-        bg: `${switchColor(state)}`,
-        borderRadius: '5px',
-        textAlign: 'center',
-        mr: 2,
-        // mt: `-7px`,
-        pb: 1,
-        pt: 1,
-        pl: 2,
-        pr: 3,
-        color: `text`,
-        '::after': {
-          right: '-22px',
-          borderWidth: '11px',
-          borderColor: 'transparent transparent transparent #0d5287',
-        },
-      }}>
-      <Text
-        as="span"
-        sx={{
-          lineHeight: 'auto',
-          m: 0,
-          p: 0,
-          fontSize: size?.fontSize,
-        }}>
-        {name}
-      </Text>
-      <Box sx={{ display: 'none', width: '16px', ml: 'auto', mr: 2, mt: -1 }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="w-4 h-4">
-          <path
-            fillRule="evenodd"
-            d="M6.22 4.22a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 0 1-1.06-1.06L8.94 8 6.22 5.28a.75.75 0 0 1 0-1.06Z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </Box>
-      <IconArrow />
-    </Flex>
-  );
-};
 
 const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
   const activeBorder = active ? 'gray.200' : 'gray.300';
@@ -559,7 +486,7 @@ const ContentDetail = () => {
                 </Box>
                 <Flex sx={{ ml: 'auto' }}>
                   <MenuItem
-                    variant="iconCircle"
+                    variant="btnMenu"
                     href={`/content/edit/[id]`}
                     path={`/content/edit/${contents.content.id}`}>
                     <Box
@@ -590,35 +517,11 @@ const ContentDetail = () => {
                     </Box>
                   </MenuItem>
                   <MenuItem
-                    variant="iconCircle"
+                    variant="btnMenu"
                     href={`/content/edit/[id]`}
                     path={`/content/edit/${contents.content.id}`}>
-                    <Box
-                      sx={{
-                        svg: {
-                          cursor: 'pointer',
-                          width: '32px',
-                          height: '32px',
-                          p: '8px',
-                          borderRadius: '9rem',
-                          // bg: 'green.100',
-                          // bg: 'green.100',
-                          // border: 'solid 1px',
-                          bg: 'gray.200',
-                          borderColor: 'green.200',
-                          color: 'gray.800',
-                          ':hover': {
-                            bg: 'gray.100',
-                            color: 'gray.900',
-                          },
-                        },
-                      }}>
-                      <IconWrapper>
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M9 15l6 -6" />
-                        <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
-                        <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
-                      </IconWrapper>
+                    <Box>
+                      <LinkIcon width={20} />
                     </Box>
                   </MenuItem>
                 </Flex>

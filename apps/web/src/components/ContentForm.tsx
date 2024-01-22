@@ -101,15 +101,15 @@ const ContentForm = (props: IContentForm) => {
   // triggers
   const [trigger, setTrigger] = useState<any>(null);
 
-  /**
-   * Toggle Title Edit
-   * @param map
-   */
-  const toggleEdit = () => {
-    console.log('hi');
-    setTitleEdit(!showTitleEdit);
-    setShowTemplate(!showTemplate);
-  };
+  // /**
+  //  * Toggle Title Edit
+  //  * @param map
+  //  */
+  // const toggleEdit = () => {
+  //   console.log('hi');
+  //   setTitleEdit(!showTitleEdit);
+  //   setShowTemplate(!showTemplate);
+  // };
   /**
    * Update mapping of users inputs from fields to an internal array with fields
    * @param data

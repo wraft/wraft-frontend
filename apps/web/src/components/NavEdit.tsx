@@ -1,13 +1,14 @@
 import React from 'react';
 
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { Box, Flex, Text, Image } from 'theme-ui';
+import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 
-import { Bell, ArrowBack } from './Icons';
+import { BackIcon, NotifyIcon, EditIcon, LinkIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
+// import { Button } from './common';
 
 export interface IUser {
   name: string;
@@ -16,9 +17,10 @@ export interface IUser {
 interface INav {
   navtitle: string;
   onToggleEdit?: any;
+  backLink?: string;
 }
 
-const Nav = ({ navtitle, onToggleEdit }: INav) => {
+const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
   const { accessToken, userProfile, logout } = useAuth();
 
   return (
@@ -30,7 +32,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         borderBottom: 'solid 1px',
         borderColor: 'border',
         pt: 1,
-        pb: 3,
+        pb: 0,
         position: 'sticky',
         top: 0,
         zIndex: 1,
@@ -44,22 +46,27 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
           <Box
             sx={{
               p: 0,
-              pt: 1,
-              pl: 3,
-              borderRight: 'solid 1px',
-              borderColor: 'border',
+              pt: 0,
+              pl: 2,
+              // borderRight: 'solid 1px',
+              // borderColor: 'border',
               color: 'gray.900',
             }}>
             <Flex>
-              <Link href="/contents">
-                <ArrowBack width={22} />
+              <Link href={backLink ? backLink : '/contents'}>
+                <BackIcon width={20} />
               </Link>
               {navtitle && (
-                <Text
+                <Flex
                   onClick={onToggleEdit}
                   variant="navtitle"
-                  sx={{ p: 2, pt: 1, fontWeight: 'heading' }}>
-                  <Text
+                  sx={{
+                    p: 0,
+                    pt: 1,
+                    fontWeight: 'heading',
+                    verticalAlign: 'middle',
+                  }}>
+                  {/* <Text
                     as="span"
                     sx={{
                       fontSize: '10.24px',
@@ -68,19 +75,41 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                       display: 'block',
                     }}>
                     OFFLET
-                  </Text>
+                  </Text> */}
                   <Text sx={{ fontSize: 2, fontWeight: 500 }}>{navtitle}</Text>
-                </Text>
+                  <EditIcon width={16} />
+                </Flex>
               )}
             </Flex>
           </Box>
         </Box>
 
-        <Box ml="auto" mr={3}>
-          <Flex>
+        <Flex ml="auto" mr={3}>
+          <Flex ml={2}>
+            <ButtonBase
+              variant="btnSecondary"
+              sx={{
+                p: 0,
+                height: 32,
+                width: 32,
+                border: 0,
+                mr: 3,
+                bg: 'transparent',
+                ':hover': {
+                  bg: 'transparent',
+                },
+              }}>
+              <LinkIcon width={20} />
+            </ButtonBase>
+          </Flex>
+          <Flex
+            sx={{
+              borderLeft: 'solid 1px',
+              borderColor: 'border',
+            }}>
             <Flex>
-              <Box variant="button" sx={{ mt: 1, pt: 2, ml: 3 }}>
-                <Bell width={22} />
+              <Box variant="button" sx={{ mt: 0, pt: 0, ml: 3, mr: 2 }}>
+                <NotifyIcon width={22} />
               </Box>
             </Flex>
             {!accessToken && (
@@ -95,7 +124,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                     sx={{
                       alignContent: 'top',
                       verticalAlign: 'top',
-                      mt: 2,
+                      mt: 0,
                     }}>
                     <Box>
                       <MenuProvider>
@@ -103,8 +132,8 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                           <Image
                             alt=""
                             sx={{ borderRadius: '3rem', bg: 'red' }}
-                            width="32px"
-                            height="32px"
+                            width="28px"
+                            height="28px"
                             src={userProfile?.profile_pic}
                             // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                           />
@@ -162,7 +191,7 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
               </Flex>
             )}
           </Flex>
-        </Box>
+        </Flex>
       </Flex>
     </Box>
   );

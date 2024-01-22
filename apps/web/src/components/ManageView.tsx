@@ -89,14 +89,7 @@ const ManageHomePage = () => {
                 borderColor: 'border',
                 bg: 'backgroundWhite',
                 borderRadius: 4,
-<<<<<<< HEAD
                 mb: 4,
-=======
-                py: 4,
-                pb: 3,
-                mb: 3,
-                px: 4,
->>>>>>> 4ca736e (chores: generic)
                 ':hover': { bg: 'teal.100', borderColor: 'border' },
                 color: 'teal.1000',
                 svg: {
