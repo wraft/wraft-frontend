@@ -28,14 +28,7 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>{index + 1}</Text>
             </Flex>
-            <Text
-              ml={'10px'}
-              onClick={() => goTo(index)}
-              sx={{
-                fontSize: 2,
-                fontWeight: 400,
-                color: 'text',
-              }}>
+            <Text ml={'10px'} onClick={() => goTo(index)} variant="pM" sx={{}}>
               {item}
             </Text>
             {titles.length !== index + 1 && (
