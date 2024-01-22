@@ -96,17 +96,18 @@ function CropContainer({
 
   return (
     <Box>
-      <Box sx={{ position: 'relative', width: '240px', height: '240px' }}>
+      <Box sx={{ position: 'relative', width: '300px', height: '300px' }}>
         {/* @ts-expect-error overload  */}
         <Cropper
           image={imageSrc}
           crop={crop}
           zoom={zoom}
           aspect={1}
-          showGrid={false}
+          showGrid={true}
           cropShape="round"
           onCropChange={setCrop}
-          onCropComplete={(croppedAreaPixels) =>
+          // @ts-expect-error unused vars
+          onCropComplete={(croppedArea, croppedAreaPixels) =>
             onCropComplete(croppedAreaPixels)
           }
           onZoomChange={setZoom}
@@ -191,8 +192,6 @@ export default function ImageUploader({
                 width: '100%',
                 height: '100%',
                 padding: '1.5rem',
-              },
-              '.reactEasyCrop_CropArea': {
                 borderRadius: '99rem',
               },
               '.x': {
@@ -201,9 +200,9 @@ export default function ImageUploader({
                 pr: 1,
                 pt: 2,
               },
-              //   width: '5rem',
-              //   height: '5rem',
-              //   maxHeight: '5rem',
+              // width: '5rem',
+              // height: '5rem',
+              // maxHeight: '5rem',
             }}>
             {!imageSrc ? (
               <Box

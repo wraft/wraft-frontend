@@ -18,7 +18,7 @@ import {
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
-import { BracesVariable, DotsVerticalRounded } from './Icons';
+import { BracesVariable, ThreeDots } from './Icons';
 import NavEdit from './NavEdit';
 
 export interface BlockTemplate {
@@ -57,15 +57,21 @@ const EditMenus = ({ id }: EditMenuProps) => {
       <MenuButton
         as={Button}
         sx={{
+          mt: 2,
+          ml: 'auto',
           border: 'solid 1px',
+          borderRadius: '9rem',
           color: 'text',
           borderColor: 'border',
           p: 0,
           bg: 'neutral.100',
-          pb: 1,
-          mt: 2,
+          pb: 0,
+          height: '33px',
+          // pb: 1,
+          // mt: 2,
+          // border: 0,
         }}>
-        <DotsVerticalRounded width={24} />
+        <ThreeDots width={24} height={24} />
       </MenuButton>
       <Menu
         as={Box}

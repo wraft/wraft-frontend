@@ -6,11 +6,11 @@ import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
+import { base64ToFile } from '../utils/imgCrop';
 import { loadEntity, updateEntityFile } from '../utils/models';
 
 import Field from './Field';
 import ImageUploader from './ImageUploader';
-import { base64ToFile } from '../utils/imgCrop';
 
 export interface Profile {
   uuid: null;
@@ -47,7 +47,6 @@ const Form = () => {
   } = useForm();
 
   const { accessToken } = useAuth();
-  const [me, setMe] = useState<IAccount>();
   const [profile, setProfile] = useState<Profile>();
   // const [image, setImage] = useState<any>();
   // const [imagePreview, setImagePreview] = useState<string>();

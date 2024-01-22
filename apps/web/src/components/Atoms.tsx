@@ -219,17 +219,25 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
 interface TableWrapperProps {
   content?: string;
   children: any;
+  p?: any;
+  size?: any;
 }
 
-export const IconWrapper = ({ children }: TableWrapperProps) => {
+export const IconWrapper = ({
+  children,
+  p = 'in',
+  size = '32',
+  ...props
+}: TableWrapperProps) => {
   return (
     <Box
+      {...props}
       sx={{
         svg: {
           cursor: 'pointer',
-          width: '32px',
-          height: '32px',
-          p: '8px',
+          width: `${size}px`,
+          height: `${size}px`,
+          p: p === 'out' ? 0 : '8px',
           borderRadius: '9rem',
           bg: 'transparent',
           color: 'gray.400',
@@ -241,11 +249,10 @@ export const IconWrapper = ({ children }: TableWrapperProps) => {
       }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="icon icon-tabler icon-tabler-arrow-down"
-        width="24"
-        height="24"
+        width="1rem"
+        height="1rem"
         viewBox="0 0 24 24"
-        strokeWidth="2"
+        strokeWidth="2.5"
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"
