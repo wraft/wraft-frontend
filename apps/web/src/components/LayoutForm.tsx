@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -314,6 +315,15 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
         }}>
         {isEdit ? 'Edit layout' : 'Create new layout'}
       </Text>
+      <Flex>
+        <StepsIndicator
+          data={[
+            { title: 'Basic Details', valid: false },
+            { title: 'Set Background', valid: true },
+          ]}
+          formStep={formStep}
+        />
+      </Flex>
       <Flex>
         <Flex sx={{ alignItems: 'center' }}>
           {formStep === 0 ? (
