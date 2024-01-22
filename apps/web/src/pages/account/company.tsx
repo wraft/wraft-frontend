@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import Head from 'next/head';
-import { Box, Flex } from 'theme-ui';
+import { Box, Container, Flex } from 'theme-ui';
 
 import OrgForm from '../../components/OrgForm';
 import OrgSidebar from '../../components/OrgSidebar';
@@ -19,12 +19,16 @@ const CompanyForm: FC = () => {
         <PageHeader title="Settings" desc="">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
-        <Flex sx={{ px: 4 }}>
-          <OrgSidebar />
-          <Box pl={4}>
-            <OrgForm />
-          </Box>
-        </Flex>
+        <Container variant="layout.pageFrame">
+          <Flex>
+            <OrgSidebar />
+            <Box sx={{ bg: 'white', width: '100%' }} p={4}>
+              <Box sx={{ width: '526px' }}>
+                <OrgForm />
+              </Box>
+            </Box>
+          </Flex>
+        </Container>
       </Page>
     </>
   );

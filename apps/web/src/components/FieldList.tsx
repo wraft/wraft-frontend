@@ -4,9 +4,6 @@ import { Box, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 
-import Link from './NavLink';
-// import { Plus } from './Icons';
-import PageHeader from './PageHeader';
 import Table from './Table';
 
 export interface FieldTypeList {
@@ -78,34 +75,25 @@ const FieldList: FC = () => {
 
   return (
     <Box mt={0}>
-      <PageHeader title="Fields Types" desc="Manage System Level fields">
-        <Box sx={{ ml: 'auto', mr: 0, mt: 2 }}>
-          <Link href="/manage/fields/new" variant="btnSecondary">
-            + New Field
-          </Link>
-        </Box>
-      </PageHeader>
-      <Box variant="layout.pageFrame" mx={0} mb={3}>
-        {fields && (
-          <Table
-            options={{
-              columns: [
-                {
-                  Header: 'Name',
-                  accessor: 'col2',
-                  width: '45%',
-                },
-                {
-                  Header: 'Updated',
-                  accessor: 'col3',
-                  width: '40%',
-                },
-              ],
-              data: fields,
-            }}
-          />
-        )}
-      </Box>
+      {fields && (
+        <Table
+          options={{
+            columns: [
+              {
+                Header: 'Name',
+                accessor: 'col2',
+                width: '45%',
+              },
+              {
+                Header: 'Updated',
+                accessor: 'col3',
+                width: '40%',
+              },
+            ],
+            data: fields,
+          }}
+        />
+      )}
     </Box>
   );
 };
