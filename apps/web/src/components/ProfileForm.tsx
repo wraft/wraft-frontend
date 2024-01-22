@@ -265,6 +265,8 @@ const Form = () => {
   //   }
   // }, [imageTemp]);
 
+  console.log('imagessss');
+
   return (
     <Box sx={{ width: '50%' }}>
       {/* <Box sx={{ pb: 5 }}>
