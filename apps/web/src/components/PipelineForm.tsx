@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import Modal from 'react-modal';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
@@ -11,21 +10,9 @@ import { postAPI, fetchAPI, putAPI } from '../utils/models';
 import { IContentType, Template } from '../utils/types';
 
 import Field from './Field';
+import Modal from './Modal';
 import PageHeader from './PageHeader';
 import { Pipeline } from './PipelineList';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    width: '60%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    overflow: 'scroll',
-  },
-};
 
 export interface IStage {
   name: string;
@@ -57,7 +44,7 @@ const PipelineForm = () => {
   const [templates, setTemplates] = useState<Array<Template>>([]);
   //
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
-  const [showModal, setModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [ctypeActive, setCtypeActive] = useState<IContentType>();
 
   const [stages, addStage] = useState<Array<IStage>>([]);
@@ -70,12 +57,12 @@ const PipelineForm = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
 
-  function closeModal() {
-    setModal(false);
-  }
+  // function closeModal() {
+  //   setModal(false);
+  // }
 
   function toggleModal() {
-    setModal(!showModal);
+    setShowModal(!showModal);
   }
 
   const onSubmit = (data: any) => {
@@ -283,13 +270,8 @@ const PipelineForm = () => {
               </Box>
             </ListGroup>
 
-            <Modal
-              isOpen={showModal}
-              onRequestClose={closeModal}
-              style={customStyles}
-              ariaHideApp={false}
-              contentLabel="Pipeline Form">
-              <Box>
+            <Modal isOpen={showModal} onClose={() => setShowModal(!showModal)}>
+              <Box sx={{ p: 4, width: '60ch' }}>
                 <Text mb={3}>Add Stages</Text>
                 <Label htmlFor="parent" mb={1}>
                   Content Type

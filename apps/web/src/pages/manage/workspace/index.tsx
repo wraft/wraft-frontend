@@ -25,6 +25,7 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
+// import { base64ToFile } from '../../../utils/imgCrop';
 import {
   updateEntityFile,
   deleteEntity,
@@ -119,6 +120,37 @@ const Index: FC = () => {
     }
   };
 
+  /**
+   * Upload a Logo
+   */
+
+  // /**
+  //  * Upload Cropped Image
+  //  * @param f blob string
+  //  */
+  const onBlobReady = (f: File) => {
+    // const file: File = base64ToFile(f, 'file_232.jpg');
+    const formData = new FormData();
+
+    if (f) {
+      formData.append('logo', f);
+    }
+
+    if (orgId) {
+      updateEntityFile(
+        `organisations/${orgId}`,
+        formData,
+        accessToken as string,
+        onUpdate,
+      );
+
+      toast.success(`Updated Workspace logo`, {
+        duration: 1000,
+        position: 'top-right',
+      });
+    }
+  };
+
   useEffect(() => {
     const data = inputRef.current?.value;
     setInputValue(parseInt(data ?? '0', 10));
@@ -153,6 +185,7 @@ const Index: FC = () => {
   >(undefined);
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
+    onBlobReady(file);
     previewFile(file);
   };
   const previewFile = (file: any) => {
@@ -214,7 +247,7 @@ const Index: FC = () => {
                   sx={{ display: 'none' }}
                   type="file"
                   {...register('logo')}
-                  accept=".jpg,.jepg,.png,.gif"
+                  accept=".jpg,.jpeg,.png"
                   ref={fileRef}
                   onChange={handleImageUpload}
                 />

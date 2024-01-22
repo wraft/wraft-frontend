@@ -16,11 +16,6 @@ import {
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
-// import { CloudUploadIcon } from './Icons';
-
-// import Field from './Field';
-// import { useDropzone } from 'react-dropzone';
-
 interface AssetFormProps {
   setAsset?: any;
   onUpload?: any;

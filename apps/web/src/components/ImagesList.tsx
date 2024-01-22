@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import Modal from 'react-modal';
 import { Box, Button } from 'theme-ui';
 
-import { modalStyle } from '../utils';
-// import { fetchAPI } from '../utils/models';
+// import { modalStyle } from '../utils';
 
 import ImagesForm from './AssetForm';
 import { PlusAlt as Plus } from './Icons';
+import Modal from './Modal';
 
 // const CategoryCard = (props: any) => (
 //   <Flex variant="tableItem" width={1}>
@@ -33,9 +32,9 @@ interface IImageList {
 const Form: FC<IImageList> = ({ onSuccess }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  function closeModal() {
-    setShowModal(false);
-  }
+  // function closeModal() {
+  //   setShowModal(false);
+  // }
 
   function toggleModal() {
     setShowModal(!showModal);
@@ -69,10 +68,11 @@ const Form: FC<IImageList> = ({ onSuccess }) => {
     <Box py={3} mt={4}>
       <Modal
         isOpen={showModal}
-        onRequestClose={closeModal}
-        style={modalStyle}
-        ariaHideApp={false}
-        contentLabel="FileUploader">
+        // onRequestClose={closeModal}
+        // style={modalStyle}
+        // ariaHideApp={false}
+        // contentLabel="FileUploader"
+      >
         <ImagesForm onUpload={(_m: any) => onDone(_m)} />
       </Modal>
       {}

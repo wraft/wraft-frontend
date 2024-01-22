@@ -291,7 +291,7 @@ const Nav = (props: any) => {
                     sx={{
                       alignContent: 'top',
                       verticalAlign: 'top',
-                      mt: 2,
+                      // mt: 2,
                     }}>
                     <Box>
                       <MenuButton as={Box}>
@@ -302,8 +302,8 @@ const Nav = (props: any) => {
                             cursor: 'pointer',
                           }}
                           alt=""
-                          width="24px"
-                          height="24px"
+                          width="28px"
+                          height="28px"
                           src={userProfile?.profile_pic}
                         />
                       </MenuButton>

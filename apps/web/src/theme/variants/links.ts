@@ -42,7 +42,7 @@ const links: Theme['links'] = {
     borderColor: 'border',
     a: {
       textDecoration: 'none',
-    }
+    },
   },
   btnSmall: {
     variant: 'buttons.btnSmall',
@@ -82,6 +82,17 @@ const links: Theme['links'] = {
     // mt: -1,
     // color: 'gray.100',
     // pb: 0,
+  },
+  iconCircle: {
+    p: 0,
+    a: {
+      color: 'blue',
+      bg: 'transparent !important',
+    },
+    bg: 'transparent',
+    ':hover': {
+      bg: 'transparent',
+    },
   },
   base: {
     width: '100%',

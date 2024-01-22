@@ -106,7 +106,9 @@ const ContentForm = (props: IContentForm) => {
    * @param map
    */
   const toggleEdit = () => {
+    console.log('hi');
     setTitleEdit(!showTitleEdit);
+    setShowTemplate(!showTemplate);
   };
   /**
    * Update mapping of users inputs from fields to an internal array with fields
@@ -258,6 +260,7 @@ const ContentForm = (props: IContentForm) => {
       loadTemplates(ctypeId);
 
       // map loaded content to states
+      console.log('title', serialbody.title);
       setValue('title', serialbody.title);
       setTitle(serialbody.title);
       setPageTitle(content_title);
@@ -531,16 +534,24 @@ const ContentForm = (props: IContentForm) => {
     setTrigger(null);
   };
 
+  const toggleTitleEdit = () => {
+    // setPageTitle(pageTitle);
+    setTitleEdit(!showTitleEdit);
+  };
+
   return (
     <Box sx={{ p: 0 }}>
-      <NavEdit navtitle={pageTitle || title} onToggleEdit={toggleEdit} />
+      <NavEdit
+        navtitle={pageTitle || title}
+        onToggleEdit={() => toggleTitleEdit()}
+      />
       <Box sx={{ p: 0 }}>
         <Flex>
           <Box
             as="form"
             id="hook-form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
+            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0, bg: 'neutral.200' }}>
             <Box sx={{ display: showDev ? 'block' : 'none' }}>
               <FieldText
                 name="body"
@@ -565,11 +576,12 @@ const ContentForm = (props: IContentForm) => {
                 borderBottom: 'solid 1px',
                 borderBottomColor: 'neutral.200',
                 p: 4,
-                display: showTitleEdit ? 'block' : 'block',
+                display: showTitleEdit ? 'block' : 'none',
                 flexGrow: 1,
                 width: '100%',
                 pl: 2,
                 pt: 2,
+                // display: 'none',
               }}>
               <Flex
                 sx={{
@@ -580,12 +592,13 @@ const ContentForm = (props: IContentForm) => {
                   left: 1,
                   zIndex: 9000,
                 }}>
-                <Box sx={{ width: '90%', pl: 3, pt: 2, display: 'none' }}>
+                <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
                   <Field
                     name="title"
                     label=""
                     placeholder="Document Name"
                     register={register}
+                    defaultValue={pageTitle}
                   />
                 </Box>
                 <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
@@ -593,7 +606,15 @@ const ContentForm = (props: IContentForm) => {
                     // ref={refSubmitButtom}
                     variant="btnPrimary"
                     type="submit"
-                    sx={{ width: '100%', p: 0, my: 2, px: 3, py: 2, ml: 3 }}>
+                    sx={{
+                      width: '100%',
+                      p: 0,
+                      my: 2,
+                      px: 3,
+                      py: 2,
+                      ml: 3,
+                      mt: 0,
+                    }}>
                     Save
                   </Button>
                 </Box>
@@ -622,14 +643,29 @@ const ContentForm = (props: IContentForm) => {
                   onClick={() => setShowDev(!showDev)}>
                   Dev
                 </Button>
-                <Editor
-                  defaultValue={body}
-                  editable
-                  onUpdate={doUpdate}
-                  tokens={[]}
-                  insertable={trigger}
-                  onceInserted={onceInserted}
-                />
+                <Box
+                  sx={{
+                    mt: 0,
+                    px: 4,
+                    pb: 6,
+                    // pl: '9rem !important',
+                    // pr: '9rem !important',
+                    // pt: '7rem !important',
+                    '.remirror-theme .ProseMirror': {
+                      pl: '9rem !important',
+                      pr: '9rem !important',
+                      pt: '7rem !important',
+                    },
+                  }}>
+                  <Editor
+                    defaultValue={body}
+                    editable
+                    onUpdate={doUpdate}
+                    tokens={[]}
+                    insertable={trigger}
+                    onceInserted={onceInserted}
+                  />
+                </Box>
               </Box>
             )}
             <Box sx={{ display: 'none' }}>
@@ -720,7 +756,7 @@ const ContentForm = (props: IContentForm) => {
                       Template
                     </Text>
                     <Box sx={{ px: 0, py: 1 }}>
-                      <Box
+                      <Flex
                         sx={{
                           pl: 3,
                           pt: 2,
@@ -732,19 +768,26 @@ const ContentForm = (props: IContentForm) => {
                           onClick={() => setShowTemplate(true)}
                           as="h6"
                           sx={{
-                            fontSize: 1,
+                            fontSize: 2,
                             mb: 0,
-                            fontWeight: 500,
+                            fontWeight: 600,
                             letterSpacing: '0.2px',
                           }}>
                           {selectedTemplate?.title}
                         </Text>
                         <Text
                           as="p"
-                          sx={{ fontSize: 0, fontWeight: 200, pt: 0 }}>
+                          sx={{
+                            ml: 'auto',
+                            mr: 3,
+                            fontSize: 1,
+                            fontWeight: 600,
+                            pt: 0,
+                            color: 'gray.600',
+                          }}>
                           {selectedTemplate?.content_type?.prefix}
                         </Text>
-                      </Box>
+                      </Flex>
                     </Box>
                   </Box>
                 )}
@@ -824,13 +867,12 @@ const ContentForm = (props: IContentForm) => {
                     <Box>
                       <Box sx={{ px: 0, py: 1 }}>
                         {activeFlow?.states.map((x: any) => (
-                          <>
-                            <FlowStateBlock
-                              state={x?.state}
-                              order={x?.order}
-                              id={x?.id}
-                            />
-                          </>
+                          <FlowStateBlock
+                            key={x?.id}
+                            state={x?.state}
+                            order={x?.order}
+                            id={x?.id}
+                          />
                         ))}
                       </Box>
                     </Box>
