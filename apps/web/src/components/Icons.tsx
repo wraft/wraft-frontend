@@ -196,13 +196,14 @@ export const FilterArrowDown = () => (
   </svg>
 );
 
-export const GraterThanIcon = () => (
+export const GraterThanIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="8"
     height="7"
     viewBox="0 0 8 7"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
     <g id="Icons/24/Arrow_Right">
       <path
         id="Vector (Stroke)"
