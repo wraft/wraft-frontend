@@ -21,7 +21,6 @@ import {
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../components/NavLink';
 import { useAuth } from '../contexts/AuthContext';
-import { Organisation } from '../store/profile';
 import { postAPI } from '../utils/models';
 
 import Blok from './Blok';
@@ -245,7 +244,7 @@ const Nav = (props: any) => {
                   Switch Workspace
                 </MenuItem>
                 {organisations &&
-                  organisations.map((org: Organisation) => (
+                  organisations.map((org: any) => (
                     <MenuItem
                       key={org.id}
                       variant="layout.menuItem"
