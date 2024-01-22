@@ -1,36 +1,56 @@
 import React from 'react';
 
-import { Box, Flex, Text } from 'theme-ui';
+import { Flex, Text } from 'theme-ui';
 
-type Data = {
-  title: string;
-  valid: boolean;
+import { GraterThanIcon } from '../../Icons';
+
+type Props = {
+  formStep: number;
+  goTo: (arg: any) => void;
+  titles: string[];
 };
 
-type Props = { data: Data[]; formStep: number };
-
-const StepsIndicator = ({ data, formStep }: Props) => {
+const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
   return (
-    <Flex>
-      {data.map((item, index) => {
+    <Flex sx={{ bg: 'grayA35', py: '14px', px: 4, alignItems: 'center' }}>
+      {titles.map((item, index) => {
         return (
-          <Flex key={index}>
+          <Flex key={index} sx={{ alignItems: 'center' }}>
             <Flex
               sx={{
                 width: '24px',
                 height: '24px',
                 justifyContent: 'center',
                 alignItems: 'center',
-                color: 'gray.600',
-                bg: formStep && formStep <= index + 1 ? 'green.600' : 'white',
+                color: formStep >= index ? 'white' : 'gray.900',
+                bg: formStep >= index ? 'green.600' : 'white',
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>{index + 1}</Text>
             </Flex>
-            {item.title}
+            <Text
+              ml={'10px'}
+              onClick={() => goTo(index)}
+              sx={{
+                fontSize: 2,
+                fontWeight: 400,
+                color: 'text',
+              }}>
+              {item}
+            </Text>
+            {titles.length !== index + 1 && (
+              <Flex
+                mx={'12px'}
+                sx={{ alignItems: 'center', px: '5.25px', py: '3.25px' }}>
+                <GraterThanIcon height={12} width={12} />
+              </Flex>
+            )}
           </Flex>
         );
       })}
+      <Text variant="subM" sx={{ ml: 'auto', color: 'gray.900' }}>
+        {formStep + 1}/{titles.length}
+      </Text>
     </Flex>
   );
 };
