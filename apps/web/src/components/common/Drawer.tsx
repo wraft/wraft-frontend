@@ -57,9 +57,11 @@ export function Drawer({ open, setOpen, children, heading, footer }: Props) {
             borderLeft: '1px solid #E4E9EF',
           }}>
           <Box>
-            <DialogHeading className="font-medium text-xl">
-              {heading}
-            </DialogHeading>
+            {heading && (
+              <DialogHeading className="font-medium text-xl">
+                {heading}
+              </DialogHeading>
+            )}
             {children}
             <Box sx={{ display: 'none' }}>
               <DialogDismiss>{footer}</DialogDismiss>
