@@ -35,4 +35,4 @@ const CompanyForm: FC = () => {
   );
 };
 
-export default authorize(CompanyForm, 'organisations');
+export default authorize(CompanyForm, 'organisation');
