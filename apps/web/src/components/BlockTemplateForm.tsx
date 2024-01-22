@@ -210,56 +210,53 @@ const Form = () => {
   return (
     <Box
       as="form"
+      sx={{ mx: 'auto' }}
       onSubmit={handleSubmit(onSubmit)}
       py={3}
       mt={4}
       mx={4}
-      mb={3}
-      // variant="w100"
-    >
-      <Box>
-        <Text mb={3} variant="pagetitle">
-          Create Block
-        </Text>
-      </Box>
-
-      <Button variant="secondary" onClick={() => toggleAssetForm()}>
-        + Image
-      </Button>
+      mb={3}>
       {/* {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />} */}
-      <Box variant="w50">
+      <Box>
         <Flex>
-          <Box variant="w100">
-            <Field
-              name="title"
-              label="Name"
-              defaultValue=""
-              register={register}
-            />
-            <Box variant="hidden" sx={{ display: 'none' }}>
+          <Box variant="w100" sx={{ minWidth: '70ch' }}>
+            <Box>
               <Field
-                name="body"
-                label="Body"
-                defaultValue={''}
+                name="title"
+                label="Name"
+                defaultValue=""
                 register={register}
               />
-            </Box>
-            <Box variant="hidden" sx={{ display: 'none' }}>
-              <FieldText
-                name="serialized"
-                label="Serialized"
-                defaultValue={'{}'}
-                register={register}
+              <Box variant="hidden" sx={{ display: 'none' }}>
+                <Field
+                  name="body"
+                  label="Body"
+                  defaultValue={''}
+                  register={register}
+                />
+              </Box>
+              <Box variant="hidden" sx={{ display: 'none' }}>
+                <FieldText
+                  name="serialized"
+                  label="Serialized"
+                  defaultValue={'{}'}
+                  register={register}
+                />
+              </Box>
+              <Editor
+                editable
+                defaultValue={def}
+                onUpdate={doUpdate}
+                tokens={tokens}
+                insertable={undefined}
+                onceInserted={onceInserted}
               />
             </Box>
-            <Editor
-              editable
-              defaultValue={def}
-              onUpdate={doUpdate}
-              tokens={tokens}
-              insertable={undefined}
-              onceInserted={onceInserted}
-            />
+          </Box>
+          <Box>
+            <Button variant="btnSecondary" onClick={() => toggleAssetForm()}>
+              + Image
+            </Button>
           </Box>
           {errors.serialized && <Text>This field is required</Text>}
         </Flex>

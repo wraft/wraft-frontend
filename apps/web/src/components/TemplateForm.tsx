@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
-import { Select } from 'theme-ui';
+import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
 
-import { putAPI, postAPI, fetchAPI } from '../utils/models';
+import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
 import {
   IContentType,
   ContentTypes,
@@ -18,7 +18,7 @@ import {
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
-import { BracesVariable } from './Icons';
+import { BracesVariable, DotsVerticalRounded } from './Icons';
 import NavEdit from './NavEdit';
 
 export interface BlockTemplate {
@@ -27,6 +27,61 @@ export interface BlockTemplate {
   body: string;
   serialized: string;
 }
+
+/**
+ * Sidebar
+ */
+
+interface EditMenuProps {
+  id: string;
+}
+
+const EditMenus = ({ id }: EditMenuProps) => {
+  // const router = useRouter();
+  /**
+   * Delete content
+   * @param id
+   */
+  const deleteContent = (id: string) => {
+    deleteAPI(`data_templates/${id}`).then(() => {
+      toast.success('Deleted the Template', {
+        duration: 1000,
+        position: 'top-right',
+      });
+
+      Router.push('/templates');
+    });
+  };
+  return (
+    <MenuProvider>
+      <MenuButton
+        as={Button}
+        sx={{
+          border: 'solid 1px',
+          color: 'text',
+          borderColor: 'border',
+          p: 0,
+          bg: 'neutral.100',
+          pb: 1,
+          mt: 2,
+        }}>
+        <DotsVerticalRounded width={24} />
+      </MenuButton>
+      <Menu
+        as={Box}
+        aria-label="Manage Content"
+        sx={{
+          border: 'solid 1px',
+          borderColor: 'border',
+          borderRadius: 4,
+          bg: 'neutral.100',
+          color: 'text',
+        }}>
+        <MenuItem onClick={() => deleteContent(id)}>Delete</MenuItem>
+      </Menu>
+    </MenuProvider>
+  );
+};
 
 const Form = () => {
   const {
@@ -287,7 +342,10 @@ const Form = () => {
 
   return (
     <Box>
-      <NavEdit navtitle="Hello" />
+      <NavEdit
+        navtitle={cId ? 'Edit Template' : 'New Template'}
+        backLink="/templates"
+      />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
           <Flex>
@@ -361,7 +419,9 @@ const Form = () => {
                 width: '100%',
                 borderLeft: 'solid 1px',
                 borderColor: 'border',
+                minHeight: '100vh',
               }}>
+              <Box>{cId && <EditMenus id={cId} />}</Box>
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
@@ -405,7 +465,7 @@ const Form = () => {
                               borderColor: 'teal.200',
                             },
                           }}
-                          as="p"
+                          // as="p"
                           key={k.id}
                           onClick={() => insertBlock(k)}>
                           {k.name}

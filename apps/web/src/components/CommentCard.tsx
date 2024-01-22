@@ -42,7 +42,7 @@ const CommentCard = (comment: Comment) => {
           <Flex sx={{ display: 'inline-flex' }}>
             <Box sx={{ pl: 0 }}>
               <ProfileCard
-                image={`${API_HOST}${comment?.profile?.profile_pic}`}
+                image={`${comment?.profile?.profile_pic}`}
                 name={comment?.profile?.name}
                 time={comment?.updated_at}
               />
