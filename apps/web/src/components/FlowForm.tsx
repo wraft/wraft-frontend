@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-// import { ReactSortable } from 'react-sortablejs';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
@@ -117,16 +116,16 @@ const StatesForm = ({
   content,
   onDelete,
   onAttachApproval,
-  onSorted,
+  // onSorted,
 }: StateFormProps) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
+  // const [showModal, setShowModal] = useState<boolean>(false);
   const [showApproval, setShowApproval] = useState<boolean>(false);
 
   const [state, setState] = useState<ItemType[]>([]);
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
+  // const toggleModal = () => {
+  //   setShowModal(!showModal);
+  // };
 
   const changeForm = (data: any) => {
     console.log('showing form');
@@ -139,31 +138,31 @@ const StatesForm = ({
     onDelete(_id);
   };
 
-  const setOrder = (content: any) => {
-    console.log('e', content);
+  // const setOrder = (content: any) => {
+  //   console.log('e', content);
 
-    // new order
+  //   // new order
 
-    if (content.size > 0) {
-      const listItems: ItemType[] = [];
+  //   if (content.size > 0) {
+  //     const listItems: ItemType[] = [];
 
-      content.map((c: any) => {
-        const newItemx: ItemType = { id: c?.id, name: c?.name };
-        listItems.push(newItemx);
-      });
+  //     content.map((c: any) => {
+  //       const newItemx: ItemType = { id: c?.id, name: c?.name };
+  //       listItems.push(newItemx);
+  //     });
 
-      setState(listItems);
+  //     setState(listItems);
 
-      const dbitems: any = [];
+  //     const dbitems: any = [];
 
-      listItems.map((dbi: any, index) => {
-        dbitems.push({ id: dbi.id, order: index });
-      });
+  //     listItems.map((dbi: any, index) => {
+  //       dbitems.push({ id: dbi.id, order: index });
+  //     });
 
-      // send updates to server
-      onSorted(dbitems);
-    }
-  };
+  //     // send updates to server
+  //     onSorted(dbitems);
+  //   }
+  // };
 
   useEffect(() => {
     if (content) {

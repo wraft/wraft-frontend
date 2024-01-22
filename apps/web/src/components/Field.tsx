@@ -50,7 +50,11 @@ const Field: React.FC<Props> = ({
       <Box sx={{ position: 'relative' }}>
         <Input
           onChange={onChange}
-          sx={{ bg: bg ? bg : 'transparent', mb: error ? '24px' : '' }}
+          sx={{
+            bg: bg ? bg : 'transparent',
+            mb: error ? '24px' : '',
+            fontFamily: 'body',
+          }}
           type={type ? (type === 'password' ? passwordType : type) : 'text'}
           disabled={disable}
           placeholder={placeholder ? placeholder : ''}

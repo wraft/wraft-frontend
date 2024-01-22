@@ -89,9 +89,16 @@ const ManageHomePage = () => {
                 borderColor: 'border',
                 bg: 'backgroundWhite',
                 borderRadius: 4,
+<<<<<<< HEAD
                 mb: 4,
+=======
+                py: 4,
+                pb: 3,
+                mb: 3,
+                px: 4,
+>>>>>>> 4ca736e (chores: generic)
                 ':hover': { bg: 'teal.100', borderColor: 'border' },
-                color: 'teal.900',
+                color: 'teal.1000',
                 svg: {
                   fill: 'teal.300',
                 },
@@ -117,7 +124,7 @@ const ManageHomePage = () => {
                       sx={{
                         fontSize: 2,
                         color: 'gray.800',
-                        fontWeight: 'heading',
+                        fontWeight: 'bold',
                         mb: 0,
                       }}>
                       {l.name}

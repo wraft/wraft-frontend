@@ -103,7 +103,7 @@ const BlockTemplateListFrame: FC = () => {
                 <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
                   <Link
                     href={`/manage/blocks/edit/[id]`}
-                    variables="buttons.btnSecondary">
+                    variant="buttons.btnSecondary">
                     <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
                   </Link>
                 </MenuItem>

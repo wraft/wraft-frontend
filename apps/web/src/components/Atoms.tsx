@@ -212,3 +212,46 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
     </Flex>
   );
 };
+
+/**
+ * Temporary Wrapper for Icons
+ */
+interface TableWrapperProps {
+  content?: string;
+  children: any;
+}
+
+export const IconWrapper = ({ children }: TableWrapperProps) => {
+  return (
+    <Box
+      sx={{
+        svg: {
+          cursor: 'pointer',
+          width: '32px',
+          height: '32px',
+          p: '8px',
+          borderRadius: '9rem',
+          bg: 'transparent',
+          color: 'gray.400',
+          ':hover': {
+            bg: 'gray.100',
+            color: 'gray.900',
+          },
+        },
+      }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="icon icon-tabler icon-tabler-arrow-down"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        strokeWidth="2"
+        stroke="currentColor"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round">
+        <>{children}</>
+      </svg>
+    </Box>
+  );
+};

@@ -171,8 +171,6 @@ export const fetchUserInfo = () =>
  */
 
 export const loadEntity = (token: string, path: string, onSuccess: any) => {
-  console.log('API_HOST', API_HOST);
-
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'GET',
     headers: {

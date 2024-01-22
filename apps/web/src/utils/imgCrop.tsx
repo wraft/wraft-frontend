@@ -72,3 +72,34 @@ export const getCroppedImg = async (
     });
   });
 };
+
+/**
+ * Convert file from base64 to File
+ */
+
+export function base64ToFile(base64String: string, fileName: string): File {
+  // Extract the content type and base64 data from the input string
+  const matches = base64String.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+
+  if (!matches || matches.length !== 3) {
+    throw new Error('Invalid base64 string format');
+  }
+
+  // Create a Blob from the base64 data
+  const contentType = matches[1];
+  const base64Data = matches[2];
+  const byteCharacters = atob(base64Data);
+  const byteNumbers = new Array(byteCharacters.length);
+
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: contentType });
+
+  // Create a File from the Blob
+  const file = new File([blob], fileName, { type: contentType });
+
+  return file;
+}

@@ -67,6 +67,9 @@ const buttons: Theme['buttons'] = {
       borderColor: 'border',
     },
   },
+  iconButton: {
+    bg: 'red.100',
+  },
   btnSecondary: {
     variant: 'buttons.btnPrimary',
     bg: 'neutral.100',
