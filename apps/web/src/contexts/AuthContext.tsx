@@ -32,7 +32,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any | null>(null);
   const [organisations, setOrganisations] = useState<any | null>(null);
-  const [permissions, setPermissions] = useState<any | null>(null);
+  const [permissions, setPermissions] = useState<any>(null);
 
   const [isUserLoading, setIsUserLoading] = useState(false);
 
@@ -72,7 +72,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
       ]);
 
       setOrganisations(userOrg.organisations);
-      setPermissions(permissionOrg);
+      setPermissions(permissionOrg.permissions);
       updateUserData(userinfo);
       setIsUserLoading(false);
     } catch {
