@@ -61,7 +61,9 @@ export function Drawer({ open, setOpen, children, heading, footer }: Props) {
               {heading}
             </DialogHeading>
             {children}
-            <DialogDismiss>{footer}</DialogDismiss>
+            <Box sx={{ display: 'none' }}>
+              <DialogDismiss>{footer}</DialogDismiss>
+            </Box>
           </Box>
         </motion.div>
       </Dialog>
