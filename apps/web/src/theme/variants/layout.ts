@@ -229,6 +229,7 @@ const layout: Theme['layout'] = {
     color: 'gray.400',
     p: 2,
     py: 2,
+    bg: 'grey.100',
   },
   menuLinkActive: {
     bg: 'gray.200',

@@ -52,16 +52,16 @@ export const Page = ({ children, inner }: IPage) => {
             {children}
             <Flex sx={{ pt: 0 }}>
               <Text sx={{ fontSize: '12px', p: 4, color: 'text' }}>
-                (c) Wraft Docs Inc 2021 . All Rights Reserved
+                Wraft v0.3.0
               </Text>
               <Box
                 sx={{
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
                 }}>
-                <Text sx={{ fontSize: 0, p: 4, color: 'text' }}>
+                {/* <Text sx={{ fontSize: 0, p: 4, color: 'text' }}>
                   Support | Contact Us
-                </Text>
+                </Text> */}
               </Box>
             </Flex>
           </Box>

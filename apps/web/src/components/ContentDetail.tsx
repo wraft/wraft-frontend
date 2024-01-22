@@ -133,7 +133,7 @@ const EditMenus = ({ id }: EditMenuProps) => {
           pb: 1,
           mt: 2,
         }}>
-        <DotsVerticalRounded width={16} height={16} />
+        <DotsVerticalRounded width={24} height={24} />
       </MenuButton>
       <Menu
         as={Box}
@@ -250,10 +250,6 @@ const ContentDetail = () => {
   const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
 
-  // const tab = useTabState({ selectedId: 'edit' });
-
-  // const defaultSelectedId = 'edit';
-  // const tab = useTabState({ defaultSelectedId });
   const defaultSelectedId = 'edit';
 
   const loadData = (id: string) => {
@@ -291,18 +287,14 @@ const ContentDetail = () => {
   }, []);
 
   useEffect(() => {
-    console.log('contentBody', contentBody);
-  }, [contentBody]);
-
-  useEffect(() => {
     if (contents && contents.content && contents.content.serialized) {
       const contentBodyAct = contents.content.serialized;
-      console.log('🧶 [content]', contents.content);
+      // console.log('🧶 [content]', contents.content);
       setPageTitle(contents.content.serialized?.title);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
-        console.log('contentBodyAct2', contentBodyAct2);
+        // console.log('contentBodyAct2', contentBodyAct2);
         setContentBody(contentBodyAct2);
       }
     }
@@ -360,40 +352,22 @@ const ContentDetail = () => {
                   />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>
-                  <Box
-                    sx={{
-                      pt: 1,
-                      pb: 0,
-                      mb: 0,
-                      borderRadius: 99,
-                      px: 2,
-                      fontSize: 0,
-                      ml: 'auto',
-                      color: 'text',
-                      border: 'solid 1px #ddd',
-                      svg: {
-                        fill: 'gray.700',
-                      },
-                    }}>
-                    <MenuItem
-                      variant="btnPrimary"
-                      href={`/content/edit/[id]`}
-                      path={`/content/edit/${contents.content.id}`}>
-                      <Box>
-                        {/* <Pencil width={22} height={22} /> */}
-                        <Text
-                          // as="span"
-                          sx={{
-                            mx: 2,
-                            mt: 0,
-                            fontWeight: 'bold',
-                            fontSize: 1,
-                          }}>
-                          Edit
-                        </Text>
-                      </Box>
-                    </MenuItem>
-                  </Box>
+                  <MenuItem
+                    variant="btnPrimary"
+                    href={`/content/edit/[id]`}
+                    path={`/content/edit/${contents.content.id}`}>
+                    {/* <Pencil width={22} height={22} /> */}
+                    <Text
+                      // as="span"
+                      sx={{
+                        mx: 2,
+                        mt: 0,
+                        fontWeight: 'bold',
+                        fontSize: 1,
+                      }}>
+                      Edit
+                    </Text>
+                  </MenuItem>
                 </Box>
               </Flex>
               <Box
@@ -466,10 +440,8 @@ const ContentDetail = () => {
                       }}>
                       {contents.content.build && (
                         <PdfViewer
-                          // url={contents.content.build}
                           url={`${contents.content.build}`}
                           pageNumber={1}
-                          // sx={{ width: '100%' }}
                         />
                       )}
                     </Box>
@@ -597,7 +569,6 @@ const ContentDetail = () => {
                               ml: 4,
                             }}>
                             <Download height={18} width={18} color="gray.3" />
-                            {/* <Text as="p" sx={{ ml: 2 }}>Download</Text> */}
                           </Flex>
                         </Link>
                       </Flex>
@@ -655,17 +626,6 @@ const ContentDetail = () => {
                       )}
                     </>
                   </Button>
-
-                  {/*
-
-                  DELETE CONTENT
-
-                  <Button
-                    sx={{ ml: 2 }}
-                    variant="btnSecondary"
-                    onClick={() => delData(contents.content.id)}>
-                    <Text>Delete</Text>
-                  </Button> */}
                 </Flex>
               </Box>
             </Box>

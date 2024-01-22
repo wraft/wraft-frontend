@@ -29,7 +29,8 @@ const links: Theme['links'] = {
     borderRadius: 4,
   },
   btnSecondary: {
-    variant: 'buttons.btnSecondary',
+    variant: 'buttons.btnPrimary',
+    border: 'solid 1px #ddd',
     fontSize: 2,
     px: 3,
     py: 2,
@@ -39,6 +40,9 @@ const links: Theme['links'] = {
     textDecoration: 'none',
     borderRadius: 6,
     borderColor: 'border',
+    a: {
+      textDecoration: 'none',
+    }
   },
   btnSmall: {
     variant: 'buttons.btnSmall',

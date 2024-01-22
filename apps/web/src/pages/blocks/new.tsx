@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import Head from 'next/head';
-import Link from 'next/link';
-import { Flex } from 'theme-ui';
+import { Container } from 'theme-ui';
 
+import Page from '../../components/BlankFrame';
 import BlockTemplateForm from '../../components/BlockTemplateForm';
-import Page from '../../components/PageFrame';
+import NavEdit from '../../components/NavEdit';
 
 export const Index: FC = () => {
   return (
@@ -15,10 +15,10 @@ export const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <Link href="/blocks">Back</Link>
+        <NavEdit navtitle="Manage Blocks" backLink="/blocks" />
+        <Container sx={{ maxWidth: '90ch', mx: 'auto' }}>
           <BlockTemplateForm />
-        </Flex>
+        </Container>
       </Page>
     </>
   );

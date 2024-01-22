@@ -29,7 +29,7 @@ const Index: FC = () => {
           <Link href="themes/new" variant="none">
             <Button
               as={Button}
-              variant="btnPrimary"
+              variant="btnSecondary"
               sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <AddIcon />
               Add Theme

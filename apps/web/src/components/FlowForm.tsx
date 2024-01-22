@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { ReactSortable } from 'react-sortablejs';
+// import { ReactSortable } from 'react-sortablejs';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
@@ -129,9 +129,10 @@ const StatesForm = ({
   };
 
   const changeForm = (data: any) => {
+    console.log('showing form');
     onAttachApproval(data);
     setShowApproval(true);
-    toggleModal();
+    // toggleModal();
   };
 
   const onDeleteFlow = (_id: any) => {
@@ -200,7 +201,7 @@ const StatesForm = ({
             borderBottom: 'solid 1px',
             borderColor: 'border',
           }}>
-          <ReactSortable list={state} setList={setOrder}>
+          <Box>
             {state.map((c: ItemType, index) => (
               <Flex
                 key={index}
@@ -250,7 +251,7 @@ const StatesForm = ({
                 </Flex>
               </Flex>
             ))}
-          </ReactSortable>
+          </Box>
         </Box>
       )}
     </Box>
@@ -281,7 +282,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const onAttachApproval = (_d: any) => {
-    setApproval(!approval);
+    // setApproval(!approval);
     console.log('onAttachApproval', _d);
   };
 
@@ -337,13 +338,15 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
+    alert('submited');
+
     if (edit) {
       putAPI(`flows/${cId}`, data).then(() => {
         toast.success('flow updated', {
           duration: 1000,
           position: 'top-right',
         });
-        Router.push('/manage/flows');
+        // Router.push('/manage/flows');
       });
     } else {
       await postAPI('flows', data)
@@ -364,10 +367,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             },
           );
           if (errorRef.current) {
-            const errorElement = errorRef.current;
-            if (errorElement) {
-              errorElement.innerText = error.response.data.errors.name[0];
-            }
+            // const errorElement = errorRef.current;
+            // if (errorElement) {
+            //   errorElement.innerText = error.response.data.errors.name[0];
+            // }
           }
         });
     }
@@ -418,8 +421,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           mt: 4,
         }}>
         <Container sx={{ p: 0 }} data-flow={flow?.id}>
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <Flex>
+          <Box>
+            <Flex as="form" onSubmit={handleSubmit(onSubmit)}>
               <Box>
                 <Field
                   name="name"
@@ -437,7 +440,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             </Flex>
             <Box sx={{ pt: 3 }}>
               <Box mt={0}>
-                <Modal isOpen={approval} onClose={() => setAddState(false)}>
+                <Modal isOpen={true} onClose={() => setAddState(!addState)}>
                   <ApprovalFormBase
                     closeModal={() => setApproval(false)}
                     isOpen={approval}
@@ -466,7 +469,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 </Flex>
 
                 <Modal
-                  isOpen={addState}
+                  isOpen={true}
                   onClose={() => setAddState(false)}
                   label="ModalX"
                   aria-label="Add New State">
