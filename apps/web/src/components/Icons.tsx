@@ -122,6 +122,30 @@ export const EyeIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
+export const CloseIcon = () => {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M9 3L3 9"
+        stroke="#8E969E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 3L9 9"
+        stroke="#8E969E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const DocumentCountIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg

@@ -52,7 +52,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Container variant="layout.pageFrame">
+    <Container variant="layout.pageFrame" sx={{ height: '100vh', bg: 'white' }}>
       <Box sx={{ fontSize: 2, color: 'gray.400' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>

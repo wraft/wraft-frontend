@@ -118,7 +118,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   }, [contents, rerender]);
 
   return (
-    <Box py={3} mt={4} sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%' }}>
       <Box mx={0} mb={3} sx={{ width: '100%' }}>
         {!loading && (
           <Box>
@@ -126,7 +126,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
           </Box>
         )}
 
-        <Box pr={4} sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%' }}>
           <Box mx={0} mb={3} sx={{ width: '100%' }}>
             {flows && (
               <Table

@@ -1,12 +1,7 @@
 import React from 'react';
 
-import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { Flex, Box, Text } from 'theme-ui';
-
-export const IconStyleWrapper = styled.div`
-  color: #444;
-  margin-right: 12px;
-`;
 
 import { menuLinksProps } from '../utils';
 
@@ -18,12 +13,18 @@ export interface INav {
 }
 
 const ManageSidebar = ({ items, showFull = true }: INav) => {
+  const router = useRouter();
+  const pathname: string = router.pathname as any;
+  const checkActive = (pathname: string, l: any) => {
+    return l.path === pathname;
+  };
   return (
-    <Box
+    <Flex
       sx={{
-        mt: 4,
-        ml: 4,
+        flexDirection: 'column',
+        gap: '8px',
         pl: 0,
+        mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
         borderColor: 'border',
@@ -39,6 +40,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
             <NavLink href={l.path} variant="links.base">
               <Flex
                 sx={{
+                  cursor: 'pointer',
                   py: '6px',
                   px: '12px',
                   minWidth: '135px',
@@ -46,6 +48,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   color: 'gray.900',
                   borderRadius: '4px',
                   alignItems: 'center',
+                  bg: checkActive(pathname, l) ? 'neutral.200' : 'transparent',
                   ':hover': { bg: 'neutral.200' },
                 }}>
                 {l.lgoo && (
@@ -70,7 +73,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
             {showFull && <Box />}
           </Box>
         ))}
-    </Box>
+    </Flex>
   );
 };
 

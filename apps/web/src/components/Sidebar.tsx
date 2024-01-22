@@ -197,6 +197,7 @@ const Nav = (props: any) => {
             mb: 3,
             justifyContent: 'space-between',
             alignItems: 'center',
+            height: '72px',
           }}>
           <Box>
             <MenuProvider>

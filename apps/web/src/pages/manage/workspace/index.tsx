@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -175,9 +176,14 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Workspace management" desc="Manage  >  Workspace">
-          <div></div>
-        </PageHeader>
+        <PageHeader
+          title="Workspace"
+          desc={
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
+            />
+          }
+        />
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar

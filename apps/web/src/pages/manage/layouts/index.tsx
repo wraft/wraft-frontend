@@ -33,14 +33,14 @@ const Index: FC = () => {
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </Drawer>
 
-        <Box variant="layout.pageFrame" pt={0}>
-          <Container>
-            <Flex>
-              <ManageSidebar items={menuLinks} />
+        <Container variant="layout.pageFrame">
+          <Flex>
+            <ManageSidebar items={menuLinks} />
+            <Box variant="layout.contentFrame">
               <LayoutList rerender={rerender} />
-            </Flex>
-          </Container>
-        </Box>
+            </Box>
+          </Flex>
+        </Container>
       </Page>
     </>
   );

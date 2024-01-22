@@ -130,11 +130,11 @@ const layout: Theme['layout'] = {
     borderBottom: 'solid 1px',
     borderColor: 'border',
     mb: 0,
-    // minHeight: '80px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     position: 'sticky',
+    height: '72px',
   },
   button: {
     border: 'solid 1px',
@@ -149,9 +149,9 @@ const layout: Theme['layout'] = {
     bg: 'gray.100',
   },
   pageFrame: {
+    bg: 'background',
     p: 4,
-    // height: 'calc(100vh - 140px)',
-    height: '100vh',
+    height: 'calc(100vh - 72px)',
     overflow: 'scroll',
   },
   contentFrame: {
@@ -160,7 +160,6 @@ const layout: Theme['layout'] = {
     border: '1px solid',
     borderColor: 'border',
     borderRadius: 4,
-    m: 4,
   },
   menuWrapper: {
     px: 2,
@@ -193,6 +192,7 @@ const layout: Theme['layout'] = {
   },
   menu: {
     height: 'auto',
+    minWidth: '155px',
     width: 'fit-content',
     position: 'absolute',
     top: 0,
