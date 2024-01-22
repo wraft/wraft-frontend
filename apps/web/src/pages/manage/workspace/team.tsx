@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import { useStoreState } from 'easy-peasy';
 import Head from 'next/head';
@@ -24,7 +25,16 @@ const Index: FC = () => {
           <meta name="description" content="a nextjs starter boilerplate" />
         </Head>
         <Page>
-          <PageHeader title="Manage Layouts" desc="Document Layouts">
+          <PageHeader
+            title="Workspace"
+            desc={
+              <DescriptionLinker
+                data={[
+                  { name: 'Manage', path: '/manage' },
+                  { name: 'Members' },
+                ]}
+              />
+            }>
             <Button
               variant="btnPrimary"
               onClick={() => setIsOpen(true)}
@@ -36,7 +46,7 @@ const Index: FC = () => {
           <Drawer open={isOpen} setOpen={setIsOpen}>
             <InviteTeam setOpen={setIsOpen} />
           </Drawer>
-          <Container variant="layout.newPageFrame">
+          <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />
               <Box variant="layout.contentFrame">

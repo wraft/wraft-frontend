@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import { Flex, Container, Box } from 'theme-ui';
 
@@ -21,8 +22,16 @@ const Index: FC = () => {
         </Head>
         <Page>
           <PageHeader
-            title="Manage Permissions"
-            desc="Manage > Workspace"></PageHeader>
+            title="Workspace"
+            desc={
+              <DescriptionLinker
+                data={[
+                  { name: 'Manage', path: '/manage' },
+                  { name: 'Permissions' },
+                ]}
+              />
+            }
+          />
           <Container variant="layout.pageFrame">
             <Flex>
               <ManageSidebar items={workspaceLinks} />

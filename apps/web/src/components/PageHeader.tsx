@@ -1,12 +1,13 @@
 import React from 'react';
 
+import Back from '@wraft-ui/Back';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
 import { ArrowBack } from './Icons';
+
 interface PageHeaderProps {
   children?: any;
   title: string;
-  // desc?: string;
   desc?: any;
   breads?: boolean;
 }
@@ -44,33 +45,24 @@ const BreadLinks = (props: any) => {
 const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
   return (
     <Box variant="layout.frameHeading">
-      <Flex>
+      <Flex sx={{ alignItems: 'center' }}>
+        <Box sx={{ mr: '18px' }}>
+          <Back />
+        </Box>
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
-          <Text
-            as="h1"
-            variant="pageheading"
-            sx={{
-              color: 'text',
-              mb: 0,
-              fontSize: 2,
-              fontWeight: 'heading',
-            }}>
+          <Text variant="pB" sx={{ color: 'gray.900' }}>
             {title}
           </Text>
           {desc && (
-            <Text
-              as="h4"
-              variant="pageheading"
-              sx={{ fontSize: 1, mt: 0, color: 'gray.500', fontWeight: 400 }}>
-              {desc}
-            </Text>
+            <Box>
+              <Text variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
+                {desc}
+              </Text>
+            </Box>
           )}
         </Box>
         <Box sx={{ ml: 'auto', pt: 1 }}>{children}</Box>
-        {/* <Box sx={{ py: 2 }}>
-          <DotsVerticalRounded width={22} />
-        </Box> */}
       </Flex>
     </Box>
   );

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import Head from 'next/head';
-import { Flex, Box } from 'theme-ui';
+import { Flex, Box, Container } from 'theme-ui';
 
 import OrgSidebar from '../../components/OrgSidebar';
 import Page from '../../components/PageFrame';
@@ -19,10 +19,14 @@ const Contents: FC = () => {
         <PageHeader title="My Account" desc="Manage your account">
           <Box sx={{ ml: 'auto' }} />
         </PageHeader>
-        <Flex sx={{ px: 4 }}>
-          <OrgSidebar />
-          <ProfileForm />
-        </Flex>
+        <Container variant="layout.pageFrame">
+          <Flex>
+            <OrgSidebar />
+            <Box sx={{ bg: 'white', width: '100%' }} pl={4} pt={4}>
+              <ProfileForm />
+            </Box>
+          </Flex>
+        </Container>
       </Page>
     </>
   );

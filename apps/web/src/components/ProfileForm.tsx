@@ -265,7 +265,7 @@ const Form = () => {
   // }, [imageTemp]);
 
   return (
-    <Box py={3} mt={4} pl={4} sx={{ width: '50%' }}>
+    <Box sx={{ width: '50%' }}>
       {/* <Box sx={{ pb: 5 }}>
         <Text variant="pagetitle" sx={{ mb: 0 }}>
           My Account
