@@ -298,6 +298,7 @@ export interface menuLinksProps {
   name: string;
   path: string;
   logo?: any;
+  role?: any;
 }
 
 export const menuLinks: menuLinksProps[] = [
@@ -402,4 +403,24 @@ export const getAxiosConfig = (
 export const errorMessage = (err: AxiosError, defaultMessage?: string) => {
   const data = err?.response?.data;
   return data?.message || data?.error || defaultMessage || '';
+};
+
+export const checkSubRoutePermission = (routes: any, permissions: any) => {
+  const routeList = routes.filter((data: any) => {
+    if (!data.permissionName) {
+      return data;
+    }
+    if (permissions && permissions[data.permissionName]) {
+      const permissionList = permissions[data.permissionName];
+      if (
+        data.permissions.some((permission: any) =>
+          permissionList.includes(permission),
+        )
+      ) {
+        return data;
+      }
+    }
+  });
+
+  return routeList;
 };

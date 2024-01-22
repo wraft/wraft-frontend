@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import { useStoreState } from 'easy-peasy';
 import toast from 'react-hot-toast';
 import { Flex, Box, Text, Button, Image } from 'theme-ui';
 
+import { useAuth } from '../../contexts/AuthContext';
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
 import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
@@ -62,8 +62,9 @@ const TeamList = () => {
   const [sort, setSort] = useState('joined_at');
   const [rerender, setRerender] = useState<boolean>(false);
 
-  const profile = useStoreState((state) => state.profile.profile);
-  const organisationId = profile?.organisation_id;
+  const { userProfile } = useAuth();
+
+  const organisationId = userProfile?.organisation_id;
 
   const loadData = (id: string) => {
     fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
