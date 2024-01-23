@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-// import { useTour } from '@reactour/tour';
 import Btn from '@wraft-ui/Button';
 import { Drawer } from '@wraft-ui/Drawer';
 import { useRouter } from 'next/router';
+// import { useTour } from '@reactour/tour';
 import toast from 'react-hot-toast';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, Button, Input, Image, useColorMode } from 'theme-ui';
@@ -21,7 +21,6 @@ import {
 import DefaultMenuItem from '../../src/components/MenuItem';
 import Link from '../components/NavLink';
 import { useAuth } from '../contexts/AuthContext';
-import { Organisation } from '../store/profile';
 import { postAPI } from '../utils/models';
 
 import Blok from './Blok';
@@ -246,7 +245,7 @@ const Nav = (props: any) => {
                   Switch Workspace
                 </MenuItem>
                 {organisations &&
-                  organisations.map((org: Organisation) => (
+                  organisations.map((org: any) => (
                     <MenuItem
                       key={org.id}
                       variant="layout.menuItem"
@@ -292,7 +291,7 @@ const Nav = (props: any) => {
                     sx={{
                       alignContent: 'top',
                       verticalAlign: 'top',
-                      mt: 2,
+                      // mt: 2,
                     }}>
                     <Box>
                       <MenuButton as={Box}>
@@ -303,8 +302,8 @@ const Nav = (props: any) => {
                             cursor: 'pointer',
                           }}
                           alt=""
-                          width="24px"
-                          height="24px"
+                          width="28px"
+                          height="28px"
                           src={userProfile?.profile_pic}
                         />
                       </MenuButton>

@@ -88,20 +88,16 @@ const ManageHomePage = () => {
                 border: 'solid 1px',
                 borderColor: 'border',
                 bg: 'backgroundWhite',
-                // width: '240px',
-                // borderColor: 'teal.800',
                 borderRadius: 4,
-                py: 4,
                 mb: 4,
-                px: 4,
                 ':hover': { bg: 'teal.100', borderColor: 'border' },
-                color: 'teal.900',
+                color: 'teal.1000',
                 svg: {
                   fill: 'teal.300',
                 },
               }}>
               <NavLink href={l.path} locale={''}>
-                <Flex>
+                <Flex sx={{ py: 4, px: 4 }}>
                   <Box
                     sx={{
                       width: '4rem',
@@ -121,7 +117,7 @@ const ManageHomePage = () => {
                       sx={{
                         fontSize: 2,
                         color: 'gray.800',
-                        fontWeight: 'heading',
+                        fontWeight: 'bold',
                         mb: 0,
                       }}>
                       {l.name}

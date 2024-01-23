@@ -162,6 +162,23 @@ const layout: Theme['layout'] = {
     borderRadius: 4,
   },
   menuWrapper: {
+    a: {
+      textDecoration: 'none',
+      color: 'text',
+      py: 2,
+      px: 1,
+      width: '100%',
+      '&.active': {
+        background: '#E2F7EA',
+        color: 'green.800',
+        svg: {
+          fill: 'green.300',
+        },
+      },
+      ':hover': {
+        background: '#E2F7EA',
+      },
+    },
     px: 2,
     py: 0,
     color: 'text',
@@ -229,6 +246,7 @@ const layout: Theme['layout'] = {
     color: 'gray.400',
     p: 2,
     py: 2,
+    bg: 'grey.100',
   },
   menuLinkActive: {
     bg: 'gray.200',

@@ -122,7 +122,7 @@ const FieldForm = ({
   return (
     <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
       <Box>
-        <Text as="h6" variant="labelcaps">
+        <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
           Fields
         </Text>
       </Box>
@@ -150,19 +150,20 @@ const FieldForm = ({
               }}>
               <Text
                 sx={{
-                  color: 'red.200',
-                  fontSize: '16px',
+                  color: 'neutral.800',
+                  fontSize: 2,
                   fontWeight: 300,
                 }}>
                 {x.name}
               </Text>
               <Text
                 sx={{
-                  fontSize: '16px',
+                  fontSize: 2,
+                  fontWeight: 'bold',
                   // color: 'green.1000',
                   ml: 'auto',
                   color: 'text',
-                  fontWeight: 300,
+                  // fontWeight: 300,
                   // fontFamily: 'Menlo, monospace',
                 }}>
                 {x.value}

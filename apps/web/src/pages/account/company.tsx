@@ -7,6 +7,7 @@ import OrgForm from '../../components/OrgForm';
 import OrgSidebar from '../../components/OrgSidebar';
 import Page from '../../components/PageFrame';
 import PageHeader from '../../components/PageHeader';
+import { authorize } from '../../middleware/authorize';
 
 const CompanyForm: FC = () => {
   return (
@@ -34,4 +35,4 @@ const CompanyForm: FC = () => {
   );
 };
 
-export default CompanyForm;
+export default authorize(CompanyForm, 'organisation');

@@ -5,6 +5,7 @@ const dark = {
   background: '#1D252F',
   backgroundGray: '#f5f7fa0f',
   backgroundWhite: '#1D252F',
+  white: '#000',
 
   neutral: {
     100: '#1D252F',

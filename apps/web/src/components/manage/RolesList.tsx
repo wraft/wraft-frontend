@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Drawer } from '@wraft-ui/Drawer';
-import { useStoreState } from 'easy-peasy';
 import ContentLoader from 'react-content-loader';
 import { Box, Text, Flex, Button } from 'theme-ui';
 
-import { deleteEntity, fetchAPI } from '../../utils/models';
+import { fetchAPI, deleteAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
 import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
 import Modal from '../Modal';
@@ -27,7 +26,6 @@ interface Props {
 }
 
 const RolesList = ({ render, setRender, searchTerm }: Props) => {
-  const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<RolesItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -257,10 +255,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                             setOpen={setIsDelete}
                             setRender={setRender}
                             onConfirmDelete={() => {
-                              deleteEntity(
-                                `roles/${contents[row.index].id}`,
-                                token,
-                              );
+                              deleteAPI(`roles/${contents[row.index].id}`);
                               setIsDelete(null);
                               if (setRender) {
                                 setRender((prev: boolean) => !prev);

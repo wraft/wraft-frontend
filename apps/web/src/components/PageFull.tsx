@@ -22,9 +22,8 @@ export interface IAlert {
 }
 
 export const PageFull = (props: any) => {
-  // const showFull: boolean = props && props.showFull ? true : false;
-
   const { accessToken } = useAuth();
+
   return (
     <>
       <Head>

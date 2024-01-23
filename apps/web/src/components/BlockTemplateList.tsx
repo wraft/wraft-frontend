@@ -5,6 +5,7 @@ import { Box, Button, Flex, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 
+import { TimeAgo } from './Atoms';
 import ContentLoader from './ContentLoader';
 import { EmptyForm, DotsVerticalRounded } from './Icons';
 import Link from './NavLink';
@@ -48,17 +49,14 @@ const BlockTemplateListFrame: FC = () => {
         const rFormated = {
           col2: (
             <Box>
-              <Link
-                variant="rel"
-                href={`/blocks/edit/[id]`}
-                path={`blocks/edit/${r.id}`}>
+              <Link href={`/blocks/edit/[id]`} path={`blocks/edit/${r.id}`}>
                 {r?.title}
               </Link>
             </Box>
           ),
           col3: (
             <Box>
-              <Text as="span">{r.updated_at}</Text>
+              <TimeAgo time={r.updated_at} />
             </Box>
           ),
           col4: (
@@ -105,8 +103,7 @@ const BlockTemplateListFrame: FC = () => {
                 <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
                   <Link
                     href={`/manage/blocks/edit/[id]`}
-                    // path={`/manage/${model}/edit/${id}`}
-                  >
+                    variant="buttons.btnSecondary">
                     <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
                   </Link>
                 </MenuItem>
@@ -127,7 +124,7 @@ const BlockTemplateListFrame: FC = () => {
     <Box>
       <PageHeader title="Blocks" desc="Re-usable Content blocks">
         <Box sx={{ ml: 'auto' }}>
-          <Link href="/blocks/new" variant="btnSecondary">
+          <Link href="/blocks/new" variant="buttons.btnSecondary">
             + New Block
           </Link>
         </Box>

@@ -1,6 +1,9 @@
 import type { Theme } from 'theme-ui';
 
 const buttons: Theme['buttons'] = {
+  btnBig: {
+    cursor: 'pointer',
+  },
   buttonPrimary: {
     cursor: 'pointer',
     color: 'white',
@@ -56,11 +59,35 @@ const buttons: Theme['buttons'] = {
     color: 'primary.1',
     fontSize: 2,
     borderRadius: 6,
+    cursor: 'pointer',
     px: 3,
     py: 2,
     ':hover': {
-      bg: 'gray.500',
+      bg: 'green.800',
       borderColor: 'border',
+    },
+  },
+  iconButton: {
+    bg: 'red.100',
+  },
+  btnMenu: {
+    mr: 2,
+    a: {
+      textDecoration: 'none',
+      color: 'text',
+      py: 2,
+      px: 1,
+      width: '100%',
+      '&.active': {
+        background: '#E2F7EA',
+        color: 'green.800',
+        svg: {
+          fill: 'green.300',
+        },
+      },
+      ':hover': {
+        background: '#E2F7EA',
+      },
     },
   },
   btnSecondary: {
@@ -70,6 +97,7 @@ const buttons: Theme['buttons'] = {
     color: 'gray.1000',
     fontSize: 2,
     borderRadius: 6,
+    border: 'solid 1px',
     borderColor: 'border',
     ':hover': {
       bg: 'gray.200',

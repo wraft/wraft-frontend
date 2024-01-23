@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 
-import { useStoreState } from 'easy-peasy';
 import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -11,6 +10,7 @@ import Dashboard from '../components/Dashboard';
 import Modal from '../components/Modal';
 import Page from '../components/PageFrame';
 import UserNav from '../components/UserNav';
+import { useAuth } from '../contexts/AuthContext';
 import { postAPI } from '../utils/models';
 
 const UserHome = dynamic(() => import('../components/UserHome'), {
@@ -19,9 +19,10 @@ const UserHome = dynamic(() => import('../components/UserHome'), {
 
 const Index: FC = () => {
   const [isTeamInvite, setIsTeamInvite] = useState(false);
-  const token = useStoreState((state) => state.auth.token);
   const [organisationName, setOrganisationName] = useState<string | null>(null);
   const inviteCookie = cookie.get('inviteCookie');
+
+  const { accessToken } = useAuth();
 
   useEffect(() => {
     if (inviteCookie) {
@@ -65,19 +66,19 @@ const Index: FC = () => {
           content="Wraft is a document automation and pipelining tools for businesses"
         />
       </Head>
-      {!token && (
+      {!accessToken && (
         <Box>
           <UserNav />
           <UserHome />
         </Box>
       )}
-      {token && (
+      {accessToken && (
         <Page>
           <Dashboard />
         </Page>
       )}
       <Modal
-        isOpen={token && isTeamInvite}
+        isOpen={isTeamInvite}
         onClose={() => {
           setIsTeamInvite(false);
         }}>

@@ -5,6 +5,7 @@ import { Box, Text } from 'theme-ui';
 import { fetchAPI } from '../utils/models';
 import { IField } from '../utils/types/content';
 
+import { TimeAgo } from './Atoms';
 import ContentLoader from './ContentLoader';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
@@ -61,28 +62,46 @@ const TemplateList = () => {
       const row: any = [];
       contents.map((r: any) => {
         const rFormated = {
-          col2: (
-            <Text sx={{ fontSize: 1, fontWeight: 'body', py: 2 }}>
-              {r.updated_at}
-            </Text>
-          ),
+          col2: <TimeAgo time={r.updated_at} />,
           col3: (
-            <Box sx={{ px: 3, py: 2 }}>
+            <Box sx={{ px: 3 }}>
               <Link
                 href={`/templates/edit/${r.id}`}
-                variant="btnSmall"
+                variant="buttons.btnSecondary"
                 locale={''}>
                 Edit
               </Link>
+            </Box>
+          ),
+          col4: (
+            <Box sx={{ px: 3, py: 2 }}>
+              <Text sx={{ fontSize: 1, fontWeight: 'body', display: 'flex' }}>
+                <Box
+                  as="span"
+                  sx={{
+                    display: 'block',
+                    borderRadius: '4px',
+                    height: '12px',
+                    width: '12px',
+                    border: 'solid 1px',
+                    borderColor: 'border',
+                    bg: r.content_type.color,
+                    mr: 2,
+                    // ml: 2,
+                    mt: 2,
+                  }}
+                />
+                {r?.content_type?.name}
+              </Text>
             </Box>
           ),
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
               <Link
                 href={`/templates/edit/${r.id}`}
-                variant="btnSmall"
+                // variant=""
                 locale={''}>
-                <Text as="h4">{r.title}</Text>
+                <Text sx={{ fontSize: 2 }}>{r.title}</Text>
               </Link>
               <Text sx={{ color: 'text' }}></Text>
             </Box>
@@ -100,7 +119,10 @@ const TemplateList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="btnSecondary" locale={''}>
+          <Link
+            href="/templates/new"
+            variant="buttons.btnSecondary"
+            locale={''}>
             + New Template
           </Link>
         </Box>
@@ -115,6 +137,11 @@ const TemplateList = () => {
                   {
                     Header: 'Name',
                     accessor: 'col1', // accessor is the "key" in the data
+                    width: '30%',
+                  },
+                  {
+                    Header: 'Variant',
+                    accessor: 'col4',
                     width: '30%',
                   },
                   {

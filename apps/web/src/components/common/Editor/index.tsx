@@ -68,6 +68,15 @@ const NoEditorWrapper = ({
           bg: '#f3781261',
           color: '#5f3614e6',
         },
+        '.remirror-mention-atom-popup-wrapper': {
+          boxShadow: '2px 3px 14px 0px rgba(0, 0, 0, 0.16)',
+          border: 'solid 1px',
+          borderColor: 'gray.100',
+          bg: 'gray.200',
+        },
+        '.remirror-mention-atom-popup-highlight': {
+          bg: 'white',
+        },
       }}>
       <Editor
         editable={editable}
