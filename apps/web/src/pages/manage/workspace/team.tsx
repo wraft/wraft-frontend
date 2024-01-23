@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
-import { useStoreState } from 'easy-peasy';
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
@@ -12,11 +11,15 @@ import TeamList from '../../../components/manage/TeamList';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
+import { useAuth } from '../../../contexts/AuthContext';
 import { workspaceLinks } from '../../../utils';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const currentOrg = useStoreState((state) => state.currentOrg.name);
+
+  const { userProfile } = useAuth();
+  const currentOrg = userProfile?.currentOrganisation?.name;
+
   return (
     (currentOrg !== 'Personal' || '') && (
       <>

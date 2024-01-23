@@ -4,6 +4,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Image } from 'theme-ui';
 
+import { IconWrapper } from './Atoms';
 import abstract from './icon/abstract.svg';
 import del from './icon/bin.svg';
 import flow from './icon/bolt.svg';
@@ -798,7 +799,96 @@ const Close = (props: PlIconProps) => {
 
 const Plusx = '';
 
+// updated Icon design
+// @TODO remove or modularize
+
+const ThreeDots = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+    </IconWrapper>
+  );
+};
+
+const BackIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+    </IconWrapper>
+  );
+};
+
+const NotifyIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path
+        d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z"
+        strokeWidth="0"
+        fill="currentColor"
+      />
+      <path
+        d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004z"
+        strokeWidth="0"
+        fill="currentColor"
+      />
+    </IconWrapper>
+  );
+};
+
+const BackArroqIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M5 12l14 0" />
+      <path d="M5 12l4 4" />
+      <path d="M5 12l4 -4" />
+    </IconWrapper>
+  );
+};
+
+const EditIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+    </IconWrapper>
+  );
+};
+
+const ApprovalIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3" />
+    </IconWrapper>
+  );
+};
+
+const LinkIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 15l6 -6" />
+      <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
+      <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
+    </IconWrapper>
+  );
+};
+
 export {
+  LinkIcon,
+  ApprovalIcon,
+  BackArroqIcon,
+  EditIcon,
+  NotifyIcon,
+  BackIcon,
+  ThreeDots,
   DotsVerticalRounded,
   Pencil,
   Download,

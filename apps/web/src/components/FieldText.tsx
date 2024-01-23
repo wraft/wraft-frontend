@@ -24,6 +24,10 @@ const FieldText: React.FC<Props> = ({
         {label}
       </Label>
       <Textarea
+        sx={{
+          fontFamily: 'body',
+          fontSize: 1,
+        }}
         rows={3}
         id={name}
         // name={name}

@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Box, Flex, Text } from 'theme-ui';
 
-import { API_HOST } from '../utils/models';
-
 import { ProfileCard } from './ContentDetail';
 
 export interface Comment {
@@ -42,19 +40,19 @@ const CommentCard = (comment: Comment) => {
           <Flex sx={{ display: 'inline-flex' }}>
             <Box sx={{ pl: 0 }}>
               <ProfileCard
-                image={`${API_HOST}${comment?.profile?.profile_pic}`}
+                image={`${comment?.profile?.profile_pic}`}
                 name={comment?.profile?.name}
                 time={comment?.updated_at}
               />
             </Box>
           </Flex>
-          <Box sx={{ pl: 3 }}>
+          <Box sx={{ pl: 3, pr: 2 }}>
             <Text
               as="p"
               sx={{
                 mt: 0,
                 color: 'text',
-                fontSize: 1,
+                fontSize: 2,
                 pt: 0,
                 lineHeight: 1.35,
                 pl: 2,
