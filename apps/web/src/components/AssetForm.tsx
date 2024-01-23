@@ -7,12 +7,13 @@ import {
   Flex,
   Button,
   Label,
-  Input,
+  // Input,
   Select,
   Spinner,
   Text,
 } from 'theme-ui';
 
+import DragAndDropFileInput from '../components/common/DragAndDropFileInput';
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
@@ -124,7 +125,8 @@ const AssetForm = ({
         <Label htmlFor="file" mb={1}>
           File
         </Label>
-        {filetype === 'theme' ? (
+        <DragAndDropFileInput />
+        {/* {filetype === 'theme' ? (
           <Input
             id="file"
             type="file"
@@ -138,7 +140,7 @@ const AssetForm = ({
             accept="application/pdf"
             {...register('file', { required: true })}
           />
-        )}
+        )} */}
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
         {fileError && (
           <Box sx={{ maxWidth: '300px' }}>
