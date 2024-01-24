@@ -11,6 +11,12 @@ const forms: Theme['forms'] = {
   },
   input: {
     borderColor: 'border',
+    "&[type=text]":{
+      color:"#656E78",
+      fontWeight:"500",
+      fontSize:"15px",
+      p:"8px 16px",
+    }
   },
   select: {
     borderColor: 'border',

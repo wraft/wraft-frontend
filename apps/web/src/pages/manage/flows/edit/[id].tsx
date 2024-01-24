@@ -3,7 +3,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 // import FlowForm from '../../../../components/FlowForm';
-import FlowForm from '../../../../components/FlowForm1';
+import FlowForm from '../../../../components/FlowForm';
 import Page from '../../../../components/PageFrame';
 import ManageSidebar from '../../../../components/ManageSidebar';
 import { menuLinks } from '../../../../utils';
