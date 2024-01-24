@@ -1,14 +1,28 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDropzone } from 'react-dropzone';
 import { Box, Text } from 'theme-ui';
 
-type PhotoWidgetDropzoneProps = {
+type DropzoneProps = {
   files: File[] | null;
   setFiles: (f: any) => void;
+  filetype?: 'layout' | 'theme';
 };
 
-const PhotoWidgetDropzone = ({ files, setFiles }: PhotoWidgetDropzoneProps) => {
+const Dropzone = ({ files, setFiles, filetype }: DropzoneProps) => {
+  const [accept, setAccept] = useState<any>({ '*': [] });
+  useEffect(() => {
+    if (filetype === 'layout') {
+      setAccept({
+        'application/pdf': [],
+      });
+    } else if (filetype === 'theme') {
+      setAccept({
+        'font/ttf': ['.ttf'],
+        'font/otf': ['.otf'],
+      });
+    }
+  }, []);
   const onDrop = useCallback(
     (acceptedFiles: any[]) => {
       const updatedFiles = acceptedFiles.map((file) => {
@@ -41,10 +55,9 @@ const PhotoWidgetDropzone = ({ files, setFiles }: PhotoWidgetDropzoneProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxFiles: 1,
-    maxSize: 5 * 1024 * 1024, //5MB in bytes
-    accept: {
-      'application/pdf': [],
-    },
+    maxSize: 1 * 1024 * 1024, //1MB in bytes
+    multiple: false,
+    accept: accept, //based on acceptedFormat
   });
 
   return (
@@ -75,18 +88,21 @@ const PhotoWidgetDropzone = ({ files, setFiles }: PhotoWidgetDropzoneProps) => {
           </Box>
         )}
       </Box>
-      <embed
-        id="pdfPreview"
-        type="application/pdf"
-        width="500"
-        height="375"
-        style={{
-          border: 'none',
-          overflow: 'hidden',
-          objectFit: 'contain',
-        }}></embed>
+      {filetype && filetype === 'layout' && (
+        <embed
+          id="pdfPreview"
+          type="application/pdf"
+          width="500"
+          height="375"
+          style={{
+            border: 'none',
+            overflow: 'hidden',
+            objectFit: 'contain',
+          }}
+        />
+      )}
     </Box>
   );
 };
 
-export default PhotoWidgetDropzone;
+export default Dropzone;
