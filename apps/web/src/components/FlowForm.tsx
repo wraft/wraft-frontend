@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { Droppable } from './Droppable';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
@@ -116,53 +117,53 @@ const StatesForm = ({
   content,
   onDelete,
   onAttachApproval,
-  // onSorted,
+  onSorted,
 }: StateFormProps) => {
-  // const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   const [showApproval, setShowApproval] = useState<boolean>(false);
 
   const [state, setState] = useState<ItemType[]>([]);
+  console.log(state);
 
-  // const toggleModal = () => {
-  //   setShowModal(!showModal);
-  // };
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
   const changeForm = (data: any) => {
-    console.log('showing form');
     onAttachApproval(data);
     setShowApproval(true);
-    // toggleModal();
+    toggleModal();
   };
 
   const onDeleteFlow = (_id: any) => {
     onDelete(_id);
   };
 
-  // const setOrder = (content: any) => {
-  //   console.log('e', content);
+  const setOrder = (content: any) => {
+    console.log('e', content);
 
-  //   // new order
+    // new order
 
-  //   if (content.size > 0) {
-  //     const listItems: ItemType[] = [];
+    if (content.size > 0) {
+      const listItems: ItemType[] = [];
 
-  //     content.map((c: any) => {
-  //       const newItemx: ItemType = { id: c?.id, name: c?.name };
-  //       listItems.push(newItemx);
-  //     });
+      content.map((c: any) => {
+        const newItemx: ItemType = { id: c?.id, name: c?.name };
+        listItems.push(newItemx);
+      });
 
-  //     setState(listItems);
+      setState(listItems);
 
-  //     const dbitems: any = [];
+      const dbitems: any = [];
 
-  //     listItems.map((dbi: any, index) => {
-  //       dbitems.push({ id: dbi.id, order: index });
-  //     });
+      listItems.map((dbi: any, index) => {
+        dbitems.push({ id: dbi.id, order: index });
+      });
 
-  //     // send updates to server
-  //     onSorted(dbitems);
-  //   }
-  // };
+      // send updates to server
+      onSorted(dbitems);
+    }
+  };
 
   useEffect(() => {
     if (content) {
@@ -182,77 +183,44 @@ const StatesForm = ({
 
   return (
     <Box p={0}>
-      <Box sx={{ pb: 3 }}>
-        <Text as="h4" variant="sectiontitle" sx={{ mb: 0, mt: 0 }}>
-          All States {showApproval}
-        </Text>
-        <Text
-          as="p"
-          variant="sectiontitle"
-          sx={{ color: 'text', mb: 2, mt: 0 }}>
-          Manage your flows
+      <Box sx={{ pb: '12px', pt: '32px' }}>
+        <Text variant="sectiontitle" sx={{ mb: 0, mt: 0, color: 'grey' }}>
+          Flow states
         </Text>
       </Box>
       {content && (
         <Box
           mb={0}
           sx={{
-            borderBottom: 'solid 1px',
-            borderColor: 'border',
+            border: '1px solid #E4E9EF',
+            borderRadius: '4px 4px 4px 4px',
           }}>
-          <Box>
-            {state.map((c: ItemType, index) => (
-              <Flex
-                key={index}
-                sx={{
-                  p: 3,
-                  bg: 'gray.100',
-                  border: 'solid 1px',
-                  borderBottom: 0,
-                  borderColor: 'border',
-                  h6: { opacity: 1 },
-                  ':hover': { h6: { opacity: 1 } },
-                }}>
-                <Text mr={2} sx={{ color: 'text', fontWeight: 300 }}>
-                  {index + 1}
-                </Text>
-                <Text
-                  sx={{ fontWeight: 'heading', color: 'text' }}
-                  key={c.id}
-                  data-rel={c.id}>
-                  {c.name}
-                </Text>
-                <Flex sx={{ ml: 'auto' }}>
-                  <Button
-                    sx={{
-                      mx: 3,
-                      fontSize: 0,
-                      fontWeight: 600,
-                      fontFamily: 'heading',
-                      textTransform: 'uppercase',
-                    }}
-                    variant="btnSecondary"
-                    onClick={() => changeForm(c)}>
-                    Add Approval
-                  </Button>
-                  <Button
-                    variant="btnSecondary"
-                    onClick={() => onDeleteFlow(c.id)}
-                    sx={{
-                      ml: 'auto',
-                      fontSize: 0,
-                      fontWeight: 600,
-                      fontFamily: 'heading',
-                      textTransform: 'uppercase',
-                    }}>
-                    Delete
-                  </Button>
-                </Flex>
-              </Flex>
-            ))}
-          </Box>
+          <Droppable
+            list={state}
+            setList={setOrder}
+            onAttachApproval={changeForm}
+            onDeleteFlow={onDeleteFlow}></Droppable>
         </Box>
       )}
+      <Box
+        sx={{
+          p: '18px 0px 37px',
+        }}>
+        <Button
+          sx={{
+            border: '1px solid #E4E9EF',
+            borderRadius: '4px',
+            background: '#fff',
+            color: '#004A0F',
+            fontSize: '12px',
+            fontWeight: 700,
+            py: '8px',
+            px: '16px',
+            lineHeight: '14.4px',
+          }}>
+          + Add flow step
+        </Button>
+      </Box>
     </Box>
   );
 };
@@ -281,7 +249,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const onAttachApproval = (_d: any) => {
-    // setApproval(!approval);
+    setApproval(!approval);
     console.log('onAttachApproval', _d);
   };
 
@@ -337,15 +305,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
-    alert('submited');
-
     if (edit) {
       putAPI(`flows/${cId}`, data).then(() => {
         toast.success('flow updated', {
           duration: 1000,
           position: 'top-right',
         });
-        // Router.push('/manage/flows');
+        Router.push('/manage/flows');
       });
     } else {
       await postAPI('flows', data)
@@ -366,10 +332,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             },
           );
           if (errorRef.current) {
-            // const errorElement = errorRef.current;
-            // if (errorElement) {
-            //   errorElement.innerText = error.response.data.errors.name[0];
-            // }
+            const errorElement = errorRef.current;
+            if (errorElement) {
+              errorElement.innerText = error.response.data.errors.name[0];
+            }
           }
         });
     }
@@ -414,15 +380,12 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   };
 
   return (
-    <Box sx={{ px: 4, py: 3 }}>
-      <Box
-        sx={{
-          mt: 4,
-        }}>
+    <Box sx={{ px: '32px', pb: 3, backgroundColor: 'white', width: '556px' }}>
+      <Box>
         <Container sx={{ p: 0 }} data-flow={flow?.id}>
-          <Box>
-            <Flex as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Box>
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex>
+              <Box sx={{ pt: '30px', width: '492px' }}>
                 <Field
                   name="name"
                   label="Name"
@@ -431,53 +394,57 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 />
                 <Text variant="error" ref={errorRef} />
               </Box>
-              <Box sx={{ pt: '12px', ml: 3 }}>
+              {/* <Box sx={{ pt: '12px', ml: 3 }}>
                 <Button variant="btnPrimaryBig" type="submit" mt={3}>
                   Save
                 </Button>
-              </Box>
+              </Box> */}
             </Flex>
-            <Box sx={{ pt: 3 }}>
-              <Box mt={0}>
-                <Modal isOpen={true} onClose={() => setAddState(!addState)}>
-                  <ApprovalFormBase
-                    closeModal={() => setApproval(false)}
-                    isOpen={approval}
-                    states={content}
-                    parent={cId}
-                  />
-                </Modal>
+            <Box mt={0}>
+              <Modal isOpen={approval} onClose={() => setAddState(false)}>
+                <ApprovalFormBase
+                  closeModal={() => setApproval(false)}
+                  isOpen={approval}
+                  states={content}
+                  parent={cId}
+                />
+              </Modal>
 
-                {edit && content && (
-                  <StatesForm
-                    onAttachApproval={onAttachApproval}
-                    content={content}
-                    onSave={CreateState}
-                    onDelete={deleteState}
-                    onSorted={onSortDone}
-                  />
-                )}
+              {edit && content && (
+                <StatesForm
+                  onAttachApproval={onAttachApproval}
+                  content={content}
+                  onSave={CreateState}
+                  onDelete={deleteState}
+                  onSorted={onSortDone}
+                />
+              )}
 
-                <Flex>
-                  <Button
-                    variant="btnPrimary"
-                    sx={{ fontSize: 1, p: 2, px: 3 }}
-                    onClick={() => setAddState(true)}>
-                    Add State
-                  </Button>
-                </Flex>
+              <Flex>
+                <Button
+                  variant="btnPrimary"
+                  sx={{
+                    fontSize: '15px',
+                    fontWeight: 500,
+                    lineHeight: '24px',
+                    py: '8px',
+                    px: '16px',
+                  }}
+                  onClick={() => setAddState(true)}>
+                  Save
+                </Button>
+              </Flex>
 
-                <Modal
-                  isOpen={true}
-                  onClose={() => setAddState(false)}
-                  label="ModalX"
-                  aria-label="Add New State">
-                  <StateStateForm
-                    onSave={updateState}
-                    setAddState={setAddState}
-                  />
-                </Modal>
-              </Box>
+              <Modal
+                isOpen={addState}
+                onClose={() => setAddState(false)}
+                label="ModalX"
+                aria-label="Add New State">
+                <StateStateForm
+                  onSave={updateState}
+                  setAddState={setAddState}
+                />
+              </Modal>
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
           </Box>
