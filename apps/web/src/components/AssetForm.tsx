@@ -1,19 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import Dropzone from '@wraft-ui/Dropzone';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-  Box,
-  Flex,
-  Button,
-  Label,
-  // Input,
-  Select,
-  Spinner,
-  Text,
-} from 'theme-ui';
+import { Box, Flex, Button, Label, Select, Spinner, Text } from 'theme-ui';
 
-import DragAndDropFileInput from '../components/common/DragAndDropFileInput';
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
@@ -33,15 +24,21 @@ const AssetForm = ({
   setAsset,
   filetype = 'layout',
 }: AssetFormProps) => {
-  const {
-    // watch,
-    register,
-    handleSubmit,
-    formState: { isValid, errors },
-  } = useForm<FormInputs>({ mode: 'all' });
+  const [files, setFiles] = useState<File[] | null>(null);
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const [fileError, setFileError] = React.useState<string | null>(null);
-  // const [contents, setContents] = React.useState<Asset>();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputs>({ mode: 'all' });
+
+  useEffect(() => {
+    if (files && files.length > 0) {
+      handleSubmit(onSubmit)();
+    }
+  }, [files]);
 
   const onImageUploaded = (data: any) => {
     setLoading(false);
@@ -54,12 +51,17 @@ const AssetForm = ({
     setLoading(true);
     setFileError(null);
     console.log('file:', data);
+
+    if (!files || files === undefined) {
+      setFileError('Please select a file');
+      return;
+    }
+
     const formData = new FormData();
-    formData.append('file', data.file[0]);
-    // formData.append('name', data.name);
+    formData.append('file', files[0]);
     formData.append(
       'name',
-      data.file[0].name.substring(0, data.file[0].name.lastIndexOf('.')),
+      files[0].name.substring(0, files[0].name.lastIndexOf('.')),
     );
     formData.append('type', filetype);
 
@@ -73,12 +75,13 @@ const AssetForm = ({
       },
       error: (error) => {
         setLoading(false);
-        setFileError(error.errors.file[0]);
+        console.log(error);
+        setFileError(error.message || 'There is an error');
         return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
       },
     });
 
-    if (filetype === 'layout') setAsset(true);
+    if (filetype === 'theme') setAsset();
   };
 
   return (
@@ -106,36 +109,7 @@ const AssetForm = ({
             {errors.name && <Text variant="error">{errors.name.message} </Text>}
           </Box>
         )}
-        {/* {filetype !== 'theme' && (
-          <Box>
-            <Field
-              name="name"
-              label="Asset Name"
-              defaultValue=""
-              register={register}
-              error={errors.name}
-            />
-          </Box>
-        )} */}
-        <Label htmlFor="file" mb={1}>
-          File
-        </Label>
-        <DragAndDropFileInput />
-        {/* {filetype === 'theme' ? (
-          <Input
-            id="file"
-            type="file"
-            accept=".ttf, .otf"
-            {...register('file', { required: true })}
-          />
-        ) : (
-          <Input
-            id="file"
-            type="file"
-            accept="application/pdf"
-            {...register('file', { required: true })}
-          />
-        )} */}
+        <Dropzone files={files} setFiles={setFiles} />
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
         {fileError && (
           <Box sx={{ maxWidth: '300px' }}>
@@ -156,8 +130,9 @@ const AssetForm = ({
         <Button
           type="submit"
           variant="buttonPrimary"
-          disabled={!isValid || isLoading}
+          disabled={!!(isLoading && files && files.length > 0)}
           sx={{
+            display: 'none',
             ':disabled': {
               bg: 'gray.100',
               color: 'gray.500',
