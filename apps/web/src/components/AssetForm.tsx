@@ -11,7 +11,7 @@ import { Asset } from '../utils/types';
 interface AssetFormProps {
   setAsset?: any;
   onUpload?: any;
-  filetype?: string;
+  filetype?: 'layout' | 'theme';
 }
 
 type FormInputs = {
@@ -76,7 +76,9 @@ const AssetForm = ({
       error: (error) => {
         setLoading(false);
         console.log(error);
-        setFileError(error.message || 'There is an error');
+        setFileError(
+          error.errors.file[0] || error.message || 'There is an error',
+        );
         return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
       },
     });
@@ -109,7 +111,7 @@ const AssetForm = ({
             {errors.name && <Text variant="error">{errors.name.message} </Text>}
           </Box>
         )}
-        <Dropzone files={files} setFiles={setFiles} />
+        <Dropzone files={files} setFiles={setFiles} filetype={filetype} />
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
         {fileError && (
           <Box sx={{ maxWidth: '300px' }}>

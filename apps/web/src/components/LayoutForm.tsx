@@ -129,6 +129,12 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
 
   const [isEdit, setEdit] = useState<boolean>(false);
 
+  // useEffect(() => {
+  //   if (assets && assets.length > 0) {
+  //     assets.forEach((m: Asset) => m.file);
+  //   }
+  // }, [assets]);
+
   /**
    * Form Submit
    * @param data
@@ -298,7 +304,8 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
     <Flex
       sx={{
         // pb: '44px',
-        height: '100%',
+        height: '100vh',
+        overflow: 'scroll',
         flexDirection: 'column',
       }}>
       <Text
