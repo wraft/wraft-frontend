@@ -92,19 +92,27 @@ const SortableItem = (props: {
   });
 
   return (
-    <Flex>
+    <Flex
+      sx={{
+        button: {
+          display: 'none',
+        },
+        ':hover button': {
+          display: 'block',
+        },
+      }}>
       <Box
         as="div"
-        ref={setNodeRef}
-        className={`w-20 h-20 ${getColor(Number(props.id))} ${isDragging ? 'z-10' : ''}`}
         style={{
           transform: CSS.Transform.toString(transform),
           transition: transition,
           display: 'flex',
           padding: '0px 16px',
         }}
+        ref={setNodeRef}
         {...attributes}
-        {...listeners}>
+        {...listeners}
+        className={`w-20 h-20 ${getColor(Number(props.id))} ${isDragging ? 'z-10' : ''}`}>
         <Box
           sx={{
             display: 'flex',
@@ -135,12 +143,21 @@ const SortableItem = (props: {
           </Box>
         </Box>
       </Box>
-      <Flex sx={{ ml: 'auto', alignItems: 'center', zIndex: 900, gap: 0 }}>
+      <Flex
+        data-no-dnd="true"
+        sx={{
+          ml: 'auto',
+          alignItems: 'center',
+          cursor: 'pointer',
+          zIndex: 900,
+          gap: 0,
+        }}>
         <Button
           type="button"
+          data-no-dnd="true"
           variant="btnDelete"
           sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
-          onClick={() => console.log('xx', props)}>
+          onClick={() => props.onAttachApproval(props)}>
           <IconWrapper stroke={2}>
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
@@ -151,7 +168,9 @@ const SortableItem = (props: {
           </IconWrapper>
         </Button>
         <Button
+          type="button"
           variant="btnDelete"
+          data-no-dnd="true"
           sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
           onClick={() => props.onDeleteFlow(props.id)}>
           <IconWrapper stroke={2}>
