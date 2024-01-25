@@ -216,7 +216,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
 /**
  * Temporary Wrapper for Icons
  */
-interface TableWrapperProps {
+interface IconWrapperProps {
   content?: string;
   children: any;
   p?: any;
@@ -228,9 +228,9 @@ export const IconWrapper = ({
   children,
   p = 'in',
   size = '32',
-  stroke = 2.5,
+  stroke = 2,
   ...props
-}: TableWrapperProps) => {
+}: IconWrapperProps) => {
   return (
     <Box
       {...props}

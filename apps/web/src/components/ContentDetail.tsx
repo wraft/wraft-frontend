@@ -325,7 +325,7 @@ const ContentDetail = () => {
                   <ProfileCard
                     time={contents.content?.inserted_at}
                     name={contents.creator?.name}
-                    image={`/uploads/default.jpg`}
+                    image={contents?.creator?.profile_pic}
                   />
                 </Box>
                 <Box sx={{ ml: 'auto' }}>

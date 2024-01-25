@@ -3,14 +3,15 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Droppable } from './Droppable';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
 
 import ApprovalFormBase from './ApprovalCreate';
+import { Droppable } from './Droppable';
 import Field from './Field';
 import Modal from './Modal';
+import { IconWrapper } from './Atoms';
 
 export interface States {
   total_pages: number;
@@ -52,9 +53,9 @@ export interface StateState {
 export interface StateFormProps {
   content: StateElement[];
   onSave: any;
-  onDelete: any;
+  onDelete: React.MouseEventHandler;
   hidden?: boolean;
-  onAttachApproval?: any;
+  onAttachApproval?: React.MouseEventHandler;
   dialog?: any;
   onSorted?: any;
 }
@@ -130,9 +131,8 @@ const StatesForm = ({
   };
 
   const changeForm = (data: any) => {
-    onAttachApproval(data);
-    setShowApproval(true);
-    toggleModal();
+    console.log('ch', data);
+    // onAttachApproval(data);
   };
 
   const onDeleteFlow = (_id: any) => {
@@ -198,29 +198,10 @@ const StatesForm = ({
           <Droppable
             list={state}
             setList={setOrder}
-            onAttachApproval={changeForm}
+            onAttachApproval={onAttachApproval}
             onDeleteFlow={onDeleteFlow}></Droppable>
         </Box>
       )}
-      <Box
-        sx={{
-          p: '18px 0px 37px',
-        }}>
-        <Button
-          sx={{
-            border: '1px solid #E4E9EF',
-            borderRadius: '4px',
-            background: '#fff',
-            color: '#004A0F',
-            fontSize: '12px',
-            fontWeight: 700,
-            py: '8px',
-            px: '16px',
-            lineHeight: '14.4px',
-          }}>
-          + Add flow step
-        </Button>
-      </Box>
     </Box>
   );
 };
@@ -249,7 +230,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const onAttachApproval = (_d: any) => {
-    setApproval(!approval);
+    // setApproval(true);
     console.log('onAttachApproval', _d);
   };
 
@@ -420,6 +401,29 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 />
               )}
 
+              <Box
+                sx={{
+                  p: '18px 0px 37px',
+                }}>
+                <Button
+                  type="button"
+                  variant="btnSecondary"
+                  onClick={() => setAddState(true)}
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: 2,
+                    display: 'flex',
+                    gap: 2,
+                  }}>
+                  <IconWrapper p="out" size={16}>
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 5l0 14" />
+                    <path d="M5 12l14 0" />
+                  </IconWrapper>
+                  Add State
+                </Button>
+              </Box>
+
               <Flex>
                 <Button
                   variant="btnPrimary"
@@ -438,7 +442,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Modal
                 isOpen={addState}
                 onClose={() => setAddState(false)}
-                label="ModalX"
+                label="Add State"
                 aria-label="Add New State">
                 <StateStateForm
                   onSave={updateState}
