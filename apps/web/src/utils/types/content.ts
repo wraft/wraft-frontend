@@ -76,10 +76,11 @@ export interface IFieldModel {
   value?: string;
 }
 
-export interface FlowStateBlock {
+export interface FlowStateBlockProps {
   state?: string;
   order?: number;
   id?: any;
+  activeFlow?: any;
 }
 
 /**
