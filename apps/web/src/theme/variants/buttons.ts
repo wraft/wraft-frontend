@@ -152,23 +152,27 @@ const buttons: Theme['buttons'] = {
   },
   buttonApproval: {
     ml: 3,
-    background: '#F0F2F5',
+    bg: 'neutral.100',
     fontSize: 0,
     fontWeight: 600,
-    lineHeight: '19.2px',
-    color: '#656E78',
-    width: '138px',
-    height: '30px',
+    color: 'gray.800',
+    border: 'solid 1px ',
+    borderRadius: '6px',
+    borderColor: 'gray.100',
     fontFamily: 'heading',
     textTransform: 'uppercase',
-    cursor:'pointer'
+    cursor: 'pointer',
+    '&:hover': {
+      color: 'gray.900',
+      bg: 'neutral.200',
+    },
   },
-  btnDelete:{
-    background:'none',
-    cursor:'pointer',
-    pr:'0px',
-    pl:'28px',
-    display:'flex'
+  btnDelete: {
+    background: 'none',
+    cursor: 'pointer',
+    pr: '0px',
+    pl: '28px',
+    display: 'flex',
   },
 };
 
