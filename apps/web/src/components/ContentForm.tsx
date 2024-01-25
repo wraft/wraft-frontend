@@ -50,6 +50,7 @@ const ContentForm = (props: IContentForm) => {
 
   // Content Specific
   // -------
+  // @ts-expect-error unsed variable tto
   const [content, setContent] = useState<IVariantDetail>();
   const [contents, setContents] = useState<ContentInstance>();
   const [templates, setTemplates] = useState<Array<Template>>([]);

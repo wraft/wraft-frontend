@@ -146,6 +146,7 @@ export interface Creator {
   id: string;
   email_verify: boolean;
   email: string;
+  profile_pic?: string;
 }
 
 export interface State {
