@@ -8,10 +8,10 @@ import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
 
 import ApprovalFormBase from './ApprovalCreate';
+import { IconWrapper } from './Atoms';
 import { Droppable } from './Droppable';
 import Field from './Field';
 import Modal from './Modal';
-import { IconWrapper } from './Atoms';
 
 export interface States {
   total_pages: number;
@@ -120,20 +120,20 @@ const StatesForm = ({
   onAttachApproval,
   onSorted,
 }: StateFormProps) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showApproval, setShowApproval] = useState<boolean>(false);
+  // const [showModal, setShowModal] = useState<boolean>(false);
+  // const [showApproval, setShowApproval] = useState<boolean>(false);
 
   const [state, setState] = useState<ItemType[]>([]);
   console.log(state);
 
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
+  // const toggleModal = () => {
+  //   setShowModal(!showModal);
+  // };
 
-  const changeForm = (data: any) => {
-    console.log('ch', data);
-    // onAttachApproval(data);
-  };
+  // const changeForm = (data: any) => {
+  //   console.log('ch', data);
+  //   // onAttachApproval(data);
+  // };
 
   const onDeleteFlow = (_id: any) => {
     onDelete(_id);

@@ -7,6 +7,7 @@ import ContentSidebar, {
 } from '@wraft-ui/content/ContentSidebar';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 
@@ -24,7 +25,6 @@ import styles from './common/Tab/tab.module.css';
 import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
-import toast from 'react-hot-toast';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
