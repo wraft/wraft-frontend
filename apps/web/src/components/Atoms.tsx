@@ -221,12 +221,14 @@ interface TableWrapperProps {
   children: any;
   p?: any;
   size?: any;
+  stroke?: number;
 }
 
 export const IconWrapper = ({
   children,
   p = 'in',
   size = '32',
+  stroke = 2.5,
   ...props
 }: TableWrapperProps) => {
   return (
@@ -252,7 +254,7 @@ export const IconWrapper = ({
         width="1rem"
         height="1rem"
         viewBox="0 0 24 24"
-        strokeWidth="2.5"
+        strokeWidth={stroke}
         stroke="currentColor"
         fill="none"
         strokeLinecap="round"

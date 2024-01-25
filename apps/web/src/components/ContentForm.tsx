@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 
+import ContentSidebar, {
+  FlowStateBlock,
+} from '@wraft-ui/content/ContentSidebar';
 import { Drawer } from '@wraft-ui/Drawer';
 import { usePathname } from 'next/navigation';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { RemirrorJSON } from 'remirror';
-import { Box, Flex, Button, Text, Spinner, Label, Input } from 'theme-ui';
+import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
 
 import {
   cleanName,
@@ -23,7 +27,7 @@ import {
   IFieldType,
   IVariantDetail,
   EMPTY_MARKDOWN_NODE,
-  FlowStateBlock,
+  ContentInstance,
 } from '../utils/types/content';
 
 import Editor from './common/Editor';
@@ -31,34 +35,6 @@ import Field from './Field';
 import FieldForm from './FieldForm';
 import FieldText from './FieldText';
 import NavEdit from './NavEdit';
-
-/**
- * Atom Component to show Flow State
- * @TODO move to atoms or ui
- * @param param0
- * @returns
- */
-const FlowStateBlock = ({ state, order }: FlowStateBlock) => (
-  <Flex
-    sx={{ borderTop: 'solid 1px #eee', borderBottom: 'solid 1px #eee', pb: 2 }}>
-    <Box
-      sx={{
-        mt: 2,
-        fontSize: 0,
-        width: '20px',
-        height: '20px',
-        borderRadius: '9rem',
-        bg: 'gray.200',
-        textAlign: 'center',
-        mr: 2,
-      }}>
-      {order}
-    </Box>
-    <Text variant="labelcaps" sx={{ pt: 2 }}>
-      {state}
-    </Text>
-  </Flex>
-);
 
 const ContentForm = (props: IContentForm) => {
   // Base
@@ -75,6 +51,7 @@ const ContentForm = (props: IContentForm) => {
   // Content Specific
   // -------
   const [content, setContent] = useState<IVariantDetail>();
+  const [contents, setContents] = useState<ContentInstance>();
   const [templates, setTemplates] = useState<Array<Template>>([]);
   const [activeTemplate, setActiveTemplate] = useState('');
 
@@ -88,6 +65,7 @@ const ContentForm = (props: IContentForm) => {
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [saving, setSaving] = useState<boolean>(false);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const [showDev, setShowDev] = useState<boolean>(false);
   const [showTemplate, setShowTemplate] = useState<boolean>(false);
@@ -96,7 +74,7 @@ const ContentForm = (props: IContentForm) => {
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
-  const [pageTitle, setPageTitle] = useState<string>('');
+  const [pageTitle, setPageTitle] = useState<string>('New Title');
 
   // triggers
   const [trigger, setTrigger] = useState<any>(null);
@@ -172,7 +150,7 @@ const ContentForm = (props: IContentForm) => {
   const onSubmit = (data: any) => {
     const obj: any = {};
 
-    console.log('data', data);
+    setSaving(true);
 
     maps &&
       maps.forEach((f: any) => {
@@ -195,6 +173,7 @@ const ContentForm = (props: IContentForm) => {
     if (edit) {
       putAPI(`contents/${id}`, template).then((data: any) => {
         onCreate(data);
+        setSaving(false);
       });
     } else {
       postAPI(`content_types/${data.ttype}/contents`, template).then(
@@ -204,6 +183,7 @@ const ContentForm = (props: IContentForm) => {
               duration: 1000,
               position: 'top-right',
             });
+            setSaving(false);
           }
 
           if (data?.content?.id) {
@@ -212,6 +192,7 @@ const ContentForm = (props: IContentForm) => {
               position: 'top-right',
             });
             Router.push(`/content/${data.content.id}`);
+            setSaving(false);
           }
         },
       );
@@ -240,6 +221,8 @@ const ContentForm = (props: IContentForm) => {
    * @param data
    */
   const onLoadContent = (data: any) => {
+    // set master contents
+    setContents(data);
     // map loaded state to corresponding form value
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -260,10 +243,12 @@ const ContentForm = (props: IContentForm) => {
       loadTemplates(ctypeId);
 
       // map loaded content to states
-      console.log('title', serialbody.title);
-      setValue('title', serialbody.title);
-      setTitle(serialbody.title);
+      // console.log('[onLoadContent] title: ', content_title);
+      setValue('title', content_title);
+      setTitle(content_title);
       setPageTitle(content_title);
+
+      // console.log('[onLoadContent]', content_title);
 
       const jsonBody = serialbody.serialized;
 
@@ -317,7 +302,7 @@ const ContentForm = (props: IContentForm) => {
    */
   useEffect(() => {
     loadData(id);
-  }, []);
+  }, [id]);
 
   /**
    * Watch out for changes in Content ID, and URL Paths
@@ -329,6 +314,7 @@ const ContentForm = (props: IContentForm) => {
       if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
         console.log('[red]', pathGroup);
         setShowForm(false);
+        setShowTemplate(false);
       }
     }
     // getSummary();
@@ -389,7 +375,6 @@ const ContentForm = (props: IContentForm) => {
    * @param piece
    */
   const changeTitle = (piece: any, maps: any) => {
-    console.log('🐴🐴  [maps] ', maps);
     if (maps) {
       // lazy matching
       const tempTitle = piece.title_template;
@@ -549,7 +534,7 @@ const ContentForm = (props: IContentForm) => {
         <Flex>
           <Box
             as="form"
-            id="hook-form"
+            id="content-form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{ minWidth: '70%', maxWidth: '85ch', m: 0, bg: 'neutral.200' }}>
             <Box sx={{ display: showDev ? 'block' : 'none' }}>
@@ -592,7 +577,7 @@ const ContentForm = (props: IContentForm) => {
                   left: 1,
                   zIndex: 9000,
                 }}>
-                <Box sx={{ width: '90%', pl: 3, pt: 2 }}>
+                <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
                   <Field
                     name="title"
                     label=""
@@ -603,25 +588,14 @@ const ContentForm = (props: IContentForm) => {
                 </Box>
                 <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
                   <Button
-                    // ref={refSubmitButtom}
-                    variant="btnPrimary"
+                    variant="btnSecondary"
                     type="submit"
-                    sx={{
-                      width: '100%',
-                      p: 0,
-                      my: 2,
-                      px: 3,
-                      py: 2,
-                      ml: 3,
-                      mt: 0,
-                    }}>
+                    sx={{ fontWeight: 600 }}>
                     Save
                   </Button>
                 </Box>
               </Flex>
             </Box>
-
-            {!body && <Spinner />}
 
             {body && (
               <Box
@@ -648,13 +622,14 @@ const ContentForm = (props: IContentForm) => {
                     mt: 0,
                     px: 4,
                     pb: 6,
-                    // pl: '9rem !important',
-                    // pr: '9rem !important',
-                    // pt: '7rem !important',
                     '.remirror-theme .ProseMirror': {
                       pl: '9rem !important',
                       pr: '9rem !important',
                       pt: '7rem !important',
+                      boxShadow: '#eee 0px 0px 0px 1px',
+                      ':focus': {
+                        boxShadow: '#ddd 0px 0px 0px 1px',
+                      },
                     },
                   }}>
                   <Editor
@@ -705,45 +680,46 @@ const ContentForm = (props: IContentForm) => {
               borderColor: 'border',
               pt: 3,
             }}>
-            <Box sx={{ px: 3 }}>
-              <Flex sx={{ mb: 3 }}>
-                {content && <Box sx={{ display: 'none' }} />}
-                <Box sx={{ mr: 3 }}>
-                  <Text as="h6" variant="labelcaps">
-                    Version
-                  </Text>
-                  <Flex>
-                    <Text
-                      as="h3"
-                      sx={{
-                        fontWeight: 'heading',
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                      }}>
-                      v1.0
-                    </Text>
-                    <Text
-                      as="h6"
-                      sx={{
-                        fontWeight: 500,
-                        bg: 'gray.200',
-                        ml: 2,
-                        color: 'green.1000',
-                        px: 1,
-                        py: 1,
-                        borderRadius: '3px',
-                        letterSpacing: '0.2px',
-                        textTransform: 'uppercase',
-                        fontSize: '10.24px',
-                      }}>
-                      Draft
-                    </Text>
-                  </Flex>
-                </Box>
-              </Flex>
+            <Box sx={{ px: 0 }}>
+              {contents && <ContentSidebar content={contents} />}
             </Box>
 
             <Box>
+              {activeFlow && (
+                <Flex
+                  sx={{
+                    bg: '#d9deda57',
+                    px: 3,
+                  }}>
+                  {activeFlow?.states.map((x: any) => (
+                    <FlowStateBlock
+                      key={x?.id}
+                      state={x?.state}
+                      order={x?.order}
+                      id={x?.id}
+                    />
+                  ))}
+                </Flex>
+              )}
+              <Box variant="layout.boxHeading" sx={{}}>
+                <Box sx={{ pt: 2, pb: 3 }}>
+                  <Flex sx={{ gap: 0 }}>
+                    <Button
+                      form="content-form"
+                      type="submit"
+                      variant="btnPrimary">
+                      <>
+                        {saving && <Spinner color="white" size={24} />}
+                        {!saving && (
+                          <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
+                            Save
+                          </Text>
+                        )}
+                      </>
+                    </Button>
+                  </Flex>
+                </Box>
+              </Box>
               <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Content
@@ -844,13 +820,13 @@ const ContentForm = (props: IContentForm) => {
             />
 
             <Box>
-              <Box variant="layout.boxHeading">
+              {/* <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Flow
                 </Text>
-              </Box>
+              </Box> */}
 
-              {activeFlow && (
+              {/* {activeFlow && (
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
@@ -878,7 +854,7 @@ const ContentForm = (props: IContentForm) => {
                     </Box>
                   </Box>
                 </Box>
-              )}
+              )} */}
             </Box>
           </Box>
         </Flex>
