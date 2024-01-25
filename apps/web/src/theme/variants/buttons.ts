@@ -150,6 +150,26 @@ const buttons: Theme['buttons'] = {
     bg: 'blue.300',
     fontFamily: 'body',
   },
+  buttonApproval: {
+    ml: 3,
+    background: '#F0F2F5',
+    fontSize: 0,
+    fontWeight: 600,
+    lineHeight: '19.2px',
+    color: '#656E78',
+    width: '138px',
+    height: '30px',
+    fontFamily: 'heading',
+    textTransform: 'uppercase',
+    cursor:'pointer'
+  },
+  btnDelete:{
+    background:'none',
+    cursor:'pointer',
+    pr:'0px',
+    pl:'28px',
+    display:'flex'
+  },
 };
 
 export default buttons;
