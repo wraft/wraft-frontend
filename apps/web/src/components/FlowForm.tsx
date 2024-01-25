@@ -230,7 +230,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const onAttachApproval = (_d: any) => {
-    // setApproval(true);
+    setApproval(!approval);
     console.log('onAttachApproval', _d);
   };
 
