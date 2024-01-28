@@ -77,6 +77,8 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
           alignItems: 'center',
           borderRadius: '4px',
           height: '100%',
+          py: '18px',
+          px: 3,
         }}>
         <Input sx={{ display: 'none' }} {...getInputProps()} />
         <Box
