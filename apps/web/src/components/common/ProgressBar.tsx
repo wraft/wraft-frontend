@@ -10,18 +10,18 @@ const ProgressBar = ({ progress }: Props) => {
   return (
     <Box
       sx={{
+        flexShrink: 0,
         position: 'relative',
-        height: '20px',
-        width: '100%',
+        height: '4px',
+        width: '48px',
         borderRadius: '50px',
-        border: '1px solid #333',
-        bg: 'gray.400',
+        bg: 'neutral.200',
       }}>
       <Box
         sx={{
           height: '100%',
           width: `${progress}%`,
-          backgroundColor: 'green.500',
+          backgroundColor: 'green.700',
           borderRadius: 'inherit',
           textAlign: 'right',
           transition: 'width 1s ease-in-out',
