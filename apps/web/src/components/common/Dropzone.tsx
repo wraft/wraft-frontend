@@ -7,6 +7,7 @@ import { Box, Flex, Input, Text } from 'theme-ui';
 import { Close, CloudUploadIcon } from '../Icons';
 
 import ProgressBar from './ProgressBar';
+import Button from './Button';
 
 type DropzoneProps = {
   files: File[] | null;
@@ -65,12 +66,46 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
   });
 
   return (
-    <Box>
+    <Box
+      sx={{
+        width: '100%',
+        border: '1px dashed',
+        borderColor: 'neutral.200',
+        borderRadius: '4px',
+      }}>
+      {previewResult && (
+        <Box
+          sx={{
+            width: '100%',
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            bg: 'background',
+            py: '24px',
+          }}>
+          <Box
+            onClick={() => {
+              setFiles(null);
+              setPreviewResult(undefined);
+            }}
+            sx={{
+              position: 'absolute',
+              top: 3,
+              right: 3,
+              cursor: 'pointer',
+            }}>
+            <Close width={24} height={24} />
+          </Box>
+          <Document file={previewResult}>
+            <Page pageNumber={1} width={251} />
+          </Document>
+        </Box>
+      )}
       <Box
         {...getRootProps()}
         sx={{
-          border: '1px dashed',
-          borderColor: isDragActive ? 'green.500' : 'neutral.300',
+          widows: '100%',
           bg: isDragActive ? 'grayA35' : 'white',
           display: 'flex',
           flexDirection: 'column',
@@ -82,20 +117,26 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
           px: 3,
         }}>
         <Input sx={{ display: 'none' }} {...getInputProps()} />
-        <Box
-          sx={{
-            height: '52px',
-            width: '52px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '4px',
-          }}>
-          <CloudUploadIcon width={32} height={32} />
-        </Box>
+        {!previewResult && (
+          <Box
+            sx={{
+              height: '52px',
+              width: '52px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '4px',
+            }}>
+            <CloudUploadIcon width={32} height={32} />
+          </Box>
+        )}
         {!files && (
           <Flex
-            sx={{ flexDirection: 'column', alignItems: 'center', mt: '12px' }}>
+            sx={{
+              flexDirection: 'column',
+              alignItems: 'center',
+              mt: '12px',
+            }}>
             <Text variant="pM" sx={{ mb: 1 }}>
               Drag & drop or upload files
             </Text>
@@ -103,7 +144,21 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
           </Flex>
         )}
         {files && files[0] ? (
-          <Text variant="pM">{files[0].name}</Text>
+          <Flex
+            sx={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <Text variant="pM" sx={{ flexShrink: 0 }}>
+              {files[0].name}
+            </Text>
+            {previewResult && (
+              <Box>
+                <Button>Re-upload</Button>
+              </Box>
+            )}
+          </Flex>
         ) : (
           <div />
         )}
@@ -114,14 +169,6 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
         ) : (
           <div />
         )}
-      </Box>
-      <Box sx={{ objectFit: 'contain', position: 'relative' }}>
-        <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
-          <Close width={24} height={24} />
-        </Box>
-        <Document file={previewResult}>
-          <Page pageNumber={1} />
-        </Document>
       </Box>
     </Box>
   );
