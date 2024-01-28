@@ -20,6 +20,10 @@ interface Props {
   sub?: string;
   variant?: string;
   disable?: boolean;
+  p?: string | number;
+  color?: string | number;
+  fontWeight?: string | number;
+  fontSize?: string | number;
 }
 
 const Field: React.FC<Props> = ({
@@ -37,6 +41,10 @@ const Field: React.FC<Props> = ({
   mb,
   sub,
   variant = 'baseForm',
+  p,
+  color,
+  fontWeight,
+  fontSize,
 }) => {
   const [passwordType, setPasswordType] = useState('password');
   return (
@@ -44,7 +52,7 @@ const Field: React.FC<Props> = ({
       {sub && (
         <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
       )}
-      <Label htmlFor="description" mb={1}>
+      <Label htmlFor="description" mb={1} sx={{ fontSize: 2 }}>
         {label}
       </Label>
       <Box sx={{ position: 'relative' }}>
@@ -53,7 +61,10 @@ const Field: React.FC<Props> = ({
           sx={{
             bg: bg ? bg : 'transparent',
             mb: error ? '24px' : '',
-            fontFamily: 'body',
+            p: p,
+            color: color,
+            fontWeight: fontWeight,
+            fontSize: fontSize,
           }}
           type={type ? (type === 'password' ? passwordType : type) : 'text'}
           disabled={disable}

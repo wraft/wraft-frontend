@@ -881,7 +881,40 @@ const LinkIcon = (props: PlIconProps) => {
   );
 };
 
+const SendIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 14l11 -11" />
+      <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+    </IconWrapper>
+  );
+};
+
+const BackArrowIcon = (props: any) => {
+  return (
+    <IconWrapper {...props} p="out">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 6l6 6l-6 6" />
+    </IconWrapper>
+  );
+};
+
+const DownloadIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 5l0 14" />
+      <path d="M18 13l-6 6" />
+      <path d="M6 13l6 6" />
+    </IconWrapper>
+  );
+};
+
 export {
+  DownloadIcon,
+  BackArrowIcon,
+  SendIcon,
   LinkIcon,
   ApprovalIcon,
   BackArroqIcon,
