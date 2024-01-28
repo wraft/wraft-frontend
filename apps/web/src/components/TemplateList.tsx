@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { IField } from '../utils/types/content';
@@ -74,7 +74,7 @@ const TemplateList = () => {
             </Box>
           ),
           col4: (
-            <Box sx={{ px: 3, py: 2 }}>
+            <Flex sx={{ px: 3, py: 2 }}>
               <Text sx={{ fontSize: 1, fontWeight: 'body', display: 'flex' }}>
                 <Box
                   as="span"
@@ -93,7 +93,7 @@ const TemplateList = () => {
                 />
                 {r?.content_type?.name}
               </Text>
-            </Box>
+            </Flex>
           ),
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
@@ -103,7 +103,6 @@ const TemplateList = () => {
                 locale={''}>
                 <Text sx={{ fontSize: 2 }}>{r.title}</Text>
               </Link>
-              <Text sx={{ color: 'text' }}></Text>
             </Box>
           ),
         };
@@ -119,10 +118,7 @@ const TemplateList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link
-            href="/templates/new"
-            variant="buttons.btnSecondary"
-            locale={''}>
+          <Link href="/templates/new" variant="btnSecondary" locale={''}>
             + New Template
           </Link>
         </Box>

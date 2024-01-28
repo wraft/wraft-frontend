@@ -26,7 +26,7 @@ const FieldText: React.FC<Props> = ({
       <Textarea
         sx={{
           fontFamily: 'body',
-          fontSize: 1,
+          fontSize: 2,
         }}
         rows={3}
         id={name}
