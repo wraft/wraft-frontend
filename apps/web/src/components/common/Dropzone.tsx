@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDropzone } from 'react-dropzone';
+import { Document, Page } from 'react-pdf';
 import { Box, Flex, Input, Text } from 'theme-ui';
 
-import { CloudUploadIcon } from '../Icons';
+import { Close, CloudUploadIcon } from '../Icons';
+
 import ProgressBar from './ProgressBar';
 
 type DropzoneProps = {
@@ -15,6 +17,9 @@ type DropzoneProps = {
 
 const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
   const [accept, setAccept] = useState<any>({ '*': [] });
+  const [previewResult, setPreviewResult] = useState<string | undefined>(
+    undefined,
+  );
   useEffect(() => {
     if (filetype === 'layout') {
       setAccept({
@@ -33,12 +38,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
         return new Promise((resolve) => {
           const fileReader = new FileReader();
           fileReader.onloadend = () => {
-            const pdfPreview = document.getElementById(
-              'pdfPreview',
-            ) as HTMLImageElement;
-            if (pdfPreview) {
-              pdfPreview.src = fileReader.result as string;
-            }
+            setPreviewResult(fileReader.result as string);
             resolve(
               Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -71,6 +71,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
         sx={{
           border: '1px dashed',
           borderColor: isDragActive ? 'green.500' : 'neutral.300',
+          bg: isDragActive ? 'grayA35' : 'white',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -101,38 +102,27 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
             <Text variant="capM">PDF - Max file size 1MB</Text>
           </Flex>
         )}
-        {files && files[0] ? <Text>{files[0].name}</Text> : <div />}
+        {files && files[0] ? (
+          <Text variant="pM">{files[0].name}</Text>
+        ) : (
+          <div />
+        )}
         {progress && progress > 0 ? (
-          <ProgressBar progress={progress} />
+          <Box mt={3}>
+            <ProgressBar progress={progress} />
+          </Box>
         ) : (
           <div />
         )}
       </Box>
-      {/* <Box>
-        {files && files?.length > 0 && (
-          <Box>
-            <Text>Accepted Files</Text>
-            <ul>
-              {files.map((file, index) => (
-                <li key={index}>{file.name}</li>
-              ))}
-            </ul>
-          </Box>
-        )}
-      </Box> */}
-      {/* {filetype && filetype === 'layout' && (
-        <embed
-          id="pdfPreview"
-          type="application/pdf"
-          width="500"
-          height="375"
-          style={{
-            border: 'none',
-            overflow: 'hidden',
-            objectFit: 'contain',
-          }}
-        />
-      )} */}
+      <Box sx={{ objectFit: 'contain', position: 'relative' }}>
+        <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+          <Close width={24} height={24} />
+        </Box>
+        <Document file={previewResult}>
+          <Page pageNumber={1} />
+        </Document>
+      </Box>
     </Box>
   );
 };
