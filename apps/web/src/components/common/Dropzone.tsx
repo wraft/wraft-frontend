@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDropzone } from 'react-dropzone';
-import { Box, Text } from 'theme-ui';
+import { Box, Flex, Input, Text } from 'theme-ui';
 
+import { CloudUploadIcon } from '../Icons';
 import ProgressBar from './ProgressBar';
 
 type DropzoneProps = {
@@ -68,7 +69,8 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
       <Box
         {...getRootProps()}
         sx={{
-          border: isDragActive ? 'dashed 3px green' : 'dashed 2px #ccc',
+          border: '1px dashed',
+          borderColor: isDragActive ? 'green.500' : 'neutral.300',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -76,11 +78,35 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
           borderRadius: '4px',
           height: '100%',
         }}>
-        <input {...getInputProps()} />
-        {progress && <ProgressBar progress={progress} />}
-        <Text>Click here to choose file</Text>
+        <Input sx={{ display: 'none' }} {...getInputProps()} />
+        <Box
+          sx={{
+            height: '52px',
+            width: '52px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+          }}>
+          <CloudUploadIcon width={32} height={32} />
+        </Box>
+        {!files && (
+          <Flex
+            sx={{ flexDirection: 'column', alignItems: 'center', mt: '12px' }}>
+            <Text variant="pM" sx={{ mb: 1 }}>
+              Drag & drop or upload files
+            </Text>
+            <Text variant="capM">PDF - Max file size 1MB</Text>
+          </Flex>
+        )}
+        {files && files[0] ? <Text>{files[0].name}</Text> : <div />}
+        {progress && progress > 0 ? (
+          <ProgressBar progress={progress} />
+        ) : (
+          <div />
+        )}
       </Box>
-      <Box>
+      {/* <Box>
         {files && files?.length > 0 && (
           <Box>
             <Text>Accepted Files</Text>
@@ -91,8 +117,8 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
             </ul>
           </Box>
         )}
-      </Box>
-      {filetype && filetype === 'layout' && (
+      </Box> */}
+      {/* {filetype && filetype === 'layout' && (
         <embed
           id="pdfPreview"
           type="application/pdf"
@@ -104,7 +130,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
             objectFit: 'contain',
           }}
         />
-      )}
+      )} */}
     </Box>
   );
 };
