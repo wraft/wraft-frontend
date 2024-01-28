@@ -27,6 +27,7 @@ const AssetForm = ({
   const [files, setFiles] = useState<File[] | null>(null);
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const [fileError, setFileError] = React.useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const {
     register,
@@ -65,12 +66,15 @@ const AssetForm = ({
     );
     formData.append('type', filetype);
 
-    const assetsRequest = postAPI(`assets`, formData);
+    const assetsRequest = postAPI(`assets`, formData, (progress) => {
+      setUploadProgress(progress);
+    });
 
     toast.promise(assetsRequest, {
-      loading: 'Loading',
+      loading: 'Loading...',
       success: (data) => {
         onImageUploaded(data);
+        setUploadProgress(0);
         return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
       },
       error: (error) => {
@@ -111,7 +115,12 @@ const AssetForm = ({
             {errors.name && <Text variant="error">{errors.name.message} </Text>}
           </Box>
         )}
-        <Dropzone files={files} setFiles={setFiles} filetype={filetype} />
+        <Dropzone
+          files={files}
+          setFiles={setFiles}
+          filetype={filetype}
+          progress={uploadProgress}
+        />
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
         {fileError && (
           <Box sx={{ maxWidth: '300px' }}>

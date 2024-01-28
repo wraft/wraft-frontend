@@ -3,13 +3,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Box, Text } from 'theme-ui';
 
+import ProgressBar from './ProgressBar';
+
 type DropzoneProps = {
   files: File[] | null;
   setFiles: (f: any) => void;
   filetype?: 'layout' | 'theme';
+  progress?: number;
 };
 
-const Dropzone = ({ files, setFiles, filetype }: DropzoneProps) => {
+const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
   const [accept, setAccept] = useState<any>({ '*': [] });
   useEffect(() => {
     if (filetype === 'layout') {
@@ -74,6 +77,7 @@ const Dropzone = ({ files, setFiles, filetype }: DropzoneProps) => {
           height: '100%',
         }}>
         <input {...getInputProps()} />
+        {progress && <ProgressBar progress={progress} />}
         <Text>Click here to choose file</Text>
       </Box>
       <Box>
