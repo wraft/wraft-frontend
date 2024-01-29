@@ -12,6 +12,8 @@ interface AssetFormProps {
   setAsset?: any;
   onUpload?: any;
   filetype?: 'layout' | 'theme';
+  pdfPreview?: string | undefined;
+  setPdfPreview?: any;
 }
 
 type FormInputs = {
@@ -23,6 +25,8 @@ const AssetForm = ({
   onUpload,
   setAsset,
   filetype = 'layout',
+  pdfPreview,
+  setPdfPreview,
 }: AssetFormProps) => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [isLoading, setLoading] = React.useState<boolean>(false);
@@ -120,6 +124,8 @@ const AssetForm = ({
           setFiles={setFiles}
           filetype={filetype}
           progress={uploadProgress}
+          pdfPreview={pdfPreview}
+          setPdfPreview={setPdfPreview}
         />
         {errors.file && <Text variant="error">{errors.file.message}</Text>}
         {fileError && (
