@@ -234,8 +234,8 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
 
       setValue('name', layout.name);
       setValue('slug', layout.slug);
-      setValue('height', layout.height);
-      setValue('width', layout?.width);
+      setValue('height', layout.height || 40);
+      setValue('width', layout?.width || 40);
       setValue('description', layout?.description);
       setValue('engine_uuid', layout?.engine?.id);
 
