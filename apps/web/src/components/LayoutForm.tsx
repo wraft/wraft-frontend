@@ -124,16 +124,17 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
+  const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
 
   // const { accessToken } = useAuth();
 
   const [isEdit, setEdit] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   if (assets && assets.length > 0) {
-  //     assets.forEach((m: Asset) => m.file);
-  //   }
-  // }, [assets]);
+  useEffect(() => {
+    if (assets && assets.length > 0) {
+      setPdfPreview(assets[0].file);
+    }
+  }, [assets]);
 
   /**
    * Form Submit
@@ -387,7 +388,11 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                       </Box>
                     ))}
                 </Box>
-                <AssetForm onUpload={addUploads} />
+                <AssetForm
+                  onUpload={addUploads}
+                  pdfPreview={pdfPreview}
+                  setPdfPreview={setPdfPreview}
+                />
               </Box>
             </section>
           )}

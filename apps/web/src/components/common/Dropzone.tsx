@@ -14,13 +14,23 @@ type DropzoneProps = {
   setFiles: (f: any) => void;
   filetype?: 'layout' | 'theme';
   progress?: number;
+  pdfPreview: string | undefined;
+  setPdfPreview: (e: any) => void;
 };
 
-const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
+const Dropzone = ({
+  files,
+  setFiles,
+  filetype,
+  progress,
+  pdfPreview,
+  setPdfPreview,
+}: DropzoneProps) => {
   const [accept, setAccept] = useState<any>({ '*': [] });
-  const [previewResult, setPreviewResult] = useState<string | undefined>(
-    undefined,
-  );
+  useEffect(() => {
+    console.log('🥋', pdfPreview);
+  }, [pdfPreview]);
+
   useEffect(() => {
     if (filetype === 'layout') {
       setAccept({
@@ -39,7 +49,6 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
         return new Promise((resolve) => {
           const fileReader = new FileReader();
           fileReader.onloadend = () => {
-            setPreviewResult(fileReader.result as string);
             resolve(
               Object.assign(file, {
                 preview: URL.createObjectURL(file),
@@ -73,7 +82,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
         borderColor: 'neutral.200',
         borderRadius: '4px',
       }}>
-      {previewResult && (
+      {pdfPreview && (
         <Box
           sx={{
             width: '100%',
@@ -87,7 +96,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
           <Box
             onClick={() => {
               setFiles(null);
-              setPreviewResult(undefined);
+              setPdfPreview(undefined);
             }}
             sx={{
               position: 'absolute',
@@ -97,7 +106,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
             }}>
             <Close width={24} height={24} />
           </Box>
-          <Document file={previewResult}>
+          <Document file={pdfPreview}>
             <Page pageNumber={1} width={251} />
           </Document>
         </Box>
@@ -153,7 +162,7 @@ const Dropzone = ({ files, setFiles, filetype, progress }: DropzoneProps) => {
             <Text variant="pM" sx={{ flexShrink: 0 }}>
               {files[0].name}
             </Text>
-            {previewResult && (
+            {pdfPreview && (
               <Box>
                 <Button>Re-upload</Button>
               </Box>
