@@ -1,32 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDropzone } from 'react-dropzone';
+import { useFormContext } from 'react-hook-form';
 import { Document, Page } from 'react-pdf';
 import { Box, Flex, Input, Text } from 'theme-ui';
 
 import { Close, CloudUploadIcon } from '../Icons';
 
-import ProgressBar from './ProgressBar';
 import Button from './Button';
+import ProgressBar from './ProgressBar';
 
 type DropzoneProps = {
-  files: File[] | null;
-  setFiles: (f: any) => void;
   filetype?: 'layout' | 'theme';
   progress?: number;
-  pdfPreview: string | undefined;
-  setPdfPreview: (e: any) => void;
+  pdfPreview?: string | undefined;
+  setPdfPreview?: (e: any) => void;
+  deleteAsset?: any;
+  onChange?: any;
 };
 
 const Dropzone = ({
-  files,
-  setFiles,
   filetype,
   progress,
   pdfPreview,
   setPdfPreview,
+  // deleteAsset,
+  onChange,
 }: DropzoneProps) => {
   const [accept, setAccept] = useState<any>({ '*': [] });
+  const { setValue, watch, register } = useFormContext();
+
+  const files = watch('file');
+
   useEffect(() => {
     console.log('🥋', pdfPreview);
   }, [pdfPreview]);
@@ -43,27 +48,12 @@ const Dropzone = ({
       });
     }
   }, []);
-  const onDrop = useCallback(
-    (acceptedFiles: any[]) => {
-      const updatedFiles = acceptedFiles.map((file) => {
-        return new Promise((resolve) => {
-          const fileReader = new FileReader();
-          fileReader.onloadend = () => {
-            resolve(
-              Object.assign(file, {
-                preview: URL.createObjectURL(file),
-              }),
-            );
-          };
-          fileReader.readAsDataURL(file);
-        });
-      });
 
-      Promise.all(updatedFiles).then((files) => {
-        setFiles(files);
-      });
+  const onDrop = useCallback(
+    (droppedFiles: any) => {
+      setValue('file', droppedFiles, { shouldValidate: true });
     },
-    [setFiles],
+    [setValue],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -73,6 +63,8 @@ const Dropzone = ({
     multiple: false,
     accept: accept, //based on acceptedFormat
   });
+
+  register('file', { required: 'File is required' });
 
   return (
     <Box
@@ -95,8 +87,8 @@ const Dropzone = ({
           }}>
           <Box
             onClick={() => {
-              setFiles(null);
-              setPdfPreview(undefined);
+              setValue('file', undefined);
+              setPdfPreview && setPdfPreview(undefined);
             }}
             sx={{
               position: 'absolute',
@@ -125,8 +117,14 @@ const Dropzone = ({
           py: '18px',
           px: 3,
         }}>
-        <Input sx={{ display: 'none' }} {...getInputProps()} />
-        {!previewResult && (
+        <Input
+          type="file"
+          name="file"
+          sx={{ display: 'none' }}
+          {...getInputProps({ onChange })}
+          onChange={onChange}
+        />
+        {!pdfPreview && (
           <Box
             sx={{
               height: '52px',
