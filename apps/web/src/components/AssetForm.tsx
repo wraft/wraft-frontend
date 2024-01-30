@@ -14,7 +14,7 @@ interface AssetFormProps {
   filetype?: 'layout' | 'theme';
   pdfPreview?: string | undefined;
   setPdfPreview?: any;
-  deleteAsset?: any;
+  setDeleteAssets?: any;
 }
 
 type FormProps = {
@@ -32,6 +32,7 @@ const AssetForm = ({
   filetype = 'layout',
   pdfPreview,
   setPdfPreview,
+  setDeleteAssets,
 }: AssetFormProps) => {
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const [fileError, setFileError] = React.useState<string | null>(null);
@@ -57,7 +58,7 @@ const AssetForm = ({
     console.log('file: 🔥', data);
 
     if (!data.file || data.file === undefined || data.file.length < 1) {
-      setFileError('Please select a file');
+      // setFileError('Please select a file');
       setLoading(false);
       return;
     }
@@ -105,6 +106,7 @@ const AssetForm = ({
             pdfPreview={pdfPreview}
             setPdfPreview={setPdfPreview}
             setIsSubmit={setIsSubmit}
+            setDeleteAssets={setDeleteAssets}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
