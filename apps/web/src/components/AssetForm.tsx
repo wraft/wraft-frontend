@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
@@ -32,13 +32,17 @@ const AssetForm = ({
   filetype = 'layout',
   pdfPreview,
   setPdfPreview,
-  // deleteAsset,
 }: AssetFormProps) => {
   const [isLoading, setLoading] = React.useState<boolean>(false);
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   const methods = useForm<FormValues>({ mode: 'onBlur' });
+
+  useEffect(() => {
+    methods.handleSubmit(onSubmit)();
+  }, [isSubmit]);
 
   const onImageUploaded = (data: any) => {
     setLoading(false);
@@ -96,16 +100,11 @@ const AssetForm = ({
         <Box mx={-2} mb={3}>
           <Form filetype={filetype} />
           <Dropzone
-            onChange={(e: any) => {
-              e.target.value;
-              console.log('onChange 😇', e.target.value);
-              methods.handleSubmit(onSubmit);
-            }}
             filetype={filetype}
             progress={uploadProgress}
             pdfPreview={pdfPreview}
             setPdfPreview={setPdfPreview}
-            // deleteAsset={deleteAsset}
+            setIsSubmit={setIsSubmit}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
@@ -126,9 +125,9 @@ const AssetForm = ({
           <Button
             type="submit"
             variant="buttonPrimary"
-            // disabled={!!(isLoading && files && files.length > 0)}
+            // disabled={!!(isLoading && asset && files.length > 0)}
             sx={{
-              // display: 'none',
+              display: 'none',
               ':disabled': {
                 bg: 'gray.100',
                 color: 'gray.500',

@@ -15,8 +15,7 @@ type DropzoneProps = {
   progress?: number;
   pdfPreview?: string | undefined;
   setPdfPreview?: (e: any) => void;
-  deleteAsset?: any;
-  onChange?: any;
+  setIsSubmit: any;
 };
 
 const Dropzone = ({
@@ -24,13 +23,19 @@ const Dropzone = ({
   progress,
   pdfPreview,
   setPdfPreview,
-  // deleteAsset,
-  onChange,
+  setIsSubmit,
 }: DropzoneProps) => {
   const [accept, setAccept] = useState<any>({ '*': [] });
   const { setValue, watch, register } = useFormContext();
 
   const files = watch('file');
+
+  useEffect(() => {
+    if (files.length > 0) {
+      setIsSubmit((prev: boolean) => !prev);
+    }
+    console.log('🍿files....', files);
+  }, [files]);
 
   useEffect(() => {
     console.log('🥋', pdfPreview);
@@ -121,8 +126,7 @@ const Dropzone = ({
           type="file"
           name="file"
           sx={{ display: 'none' }}
-          {...getInputProps({ onChange })}
-          onChange={onChange}
+          {...getInputProps({})}
         />
         {!pdfPreview && (
           <Box
