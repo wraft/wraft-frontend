@@ -221,6 +221,8 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
         },
       });
     }
+    setAssets([]);
+    setPdfPreview(undefined);
   };
 
   function next() {
