@@ -436,13 +436,14 @@ const Form = () => {
         <Box />
       </PageHeader>
       <Flex variant="layout.pageFrame">
-        <Flex sx={{ maxWidth: '100ch', mx: `auto` }}>
+        <Flex sx={{ maxWidth: '100ch', mx: `auto`, pb: 5 }}>
           <Box sx={{ minWidth: '60ch' }}>
-            <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Flex>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Box>
+            <Box mx={0} mb={6} as="form" onSubmit={handleSubmit(onSubmit)}>
+              <Flex sx={{ mb: 0 }}>
+                <Box sx={{ flexGrow: 1, pb: 3 }}>
+                  <Box sx={{ py: 2 }}>
                     <Field
+                      fontSize={1}
                       register={register}
                       error={errors.name}
                       label="Name"
@@ -451,7 +452,7 @@ const Form = () => {
                       placeholder="Variant Name"
                     />
                   </Box>
-                  <Box>
+                  <Box sx={{ py: 2 }}>
                     <FieldText
                       register={register}
                       label="Description"
@@ -464,7 +465,7 @@ const Form = () => {
                       </Text>
                     )}
                   </Box>
-                  <Box>
+                  <Box sx={{ py: 2 }}>
                     <Field
                       register={register}
                       error={errors.prefix}
@@ -473,7 +474,7 @@ const Form = () => {
                       defaultValue=""
                     />
                   </Box>
-                  <Box>
+                  <Box sx={{ py: 2 }}>
                     <FieldColor
                       register={register}
                       label="Color"
@@ -489,7 +490,7 @@ const Form = () => {
                       </Text>
                     )}
                   </Box>
-                  <Box px={0} pb={3}>
+                  <Box sx={{ py: 2 }}>
                     <Label htmlFor="layout_id" mb={1}>
                       Layout
                     </Label>
@@ -515,7 +516,7 @@ const Form = () => {
                       </Text>
                     )}
                   </Box>
-                  <Box px={0} pb={3}>
+                  <Box sx={{ py: 2 }}>
                     <Label htmlFor="flow_id" mb={1}>
                       Flow
                     </Label>
@@ -552,7 +553,7 @@ const Form = () => {
                     />
                   </Box>
 
-                  <Box px={0} pb={3}>
+                  <Box sx={{ py: 2 }}>
                     <Label htmlFor="theme_id" mb={1}>
                       Themes
                     </Label>
