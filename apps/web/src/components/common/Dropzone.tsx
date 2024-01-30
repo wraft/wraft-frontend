@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { Document, Page } from 'react-pdf';
 import { Box, Flex, Input, Text } from 'theme-ui';
 
-import { Close, CloudUploadIcon } from '../Icons';
+import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 
 import Button from './Button';
 import ProgressBar from './ProgressBar';
@@ -155,13 +155,27 @@ const Dropzone = ({
         {files && files[0] ? (
           <Flex
             sx={{
-              width: '100%',
+              width: pdfPreview ? '100%' : '',
               alignItems: 'center',
               justifyContent: 'space-between',
             }}>
-            <Text variant="pM" sx={{ flexShrink: 0 }}>
-              {files[0].name}
-            </Text>
+            <Flex sx={{ alignItems: 'center' }}>
+              <Text variant="pM" sx={{ flexShrink: 0 }}>
+                {files[0].name}
+              </Text>
+              {pdfPreview && (
+                <Box
+                  sx={{
+                    color: 'green.700',
+                    ml: '12px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                  }}>
+                  <ApproveTick />
+                </Box>
+              )}
+            </Flex>
             {pdfPreview && (
               <Box>
                 <Button>Re-upload</Button>
