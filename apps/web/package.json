@@ -59,6 +59,7 @@
     "@types/react-pdf": "5.7.2",
     "@wraft/editor": "workspace:^",
     "@wraft/ui": "*",
+    "@wraft/icon": "*",
     "@zeit/next-css": "^1.0.1",
     "@zeit/next-source-maps": "^0.0.3",
     "axios": "^1.6.3",
