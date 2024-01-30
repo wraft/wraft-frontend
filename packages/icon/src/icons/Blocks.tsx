@@ -1,8 +1,9 @@
 import * as React from 'react';
-const SvgBlocks = (props) => (
+import type { SVGProps } from 'react';
+const SvgBlocks = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width="1em"
-    height="1em"
+    width={props.width || 25}
+    height={props.height || 25}
     fill="currentColor"
     data-color="red"
     viewBox="0 0 20 24"
