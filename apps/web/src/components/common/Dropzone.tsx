@@ -31,7 +31,7 @@ const Dropzone = ({
   const files = watch('file');
 
   useEffect(() => {
-    if (files.length > 0) {
+    if (files && files.length > 0) {
       setIsSubmit((prev: boolean) => !prev);
     }
     console.log('🍿files....', files);
