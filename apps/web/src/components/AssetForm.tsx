@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Label, Select, Spinner, Text } from 'theme-ui';
+import { Box, Button, Label, Select, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -32,7 +32,6 @@ const AssetForm = ({
   setPdfPreview,
   setDeleteAssets,
 }: AssetFormProps) => {
-  const [isLoading, setLoading] = React.useState<boolean>(false);
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -44,20 +43,16 @@ const AssetForm = ({
   }, [isSubmit]);
 
   const onAssetUploaded = (data: any) => {
-    setLoading(false);
     console.log('uploading asset from AssetForm', data);
     const mData: Asset = data;
     onUpload(mData);
   };
 
   const onSubmit = async (data: FormValues) => {
-    setLoading(true);
     setFileError(null);
     console.log('file: 🔥', data);
 
     if (!data.file || data.file === undefined || data.file.length < 1) {
-      // setFileError('Please select a file');
-      setLoading(false);
       return;
     }
 
@@ -82,7 +77,6 @@ const AssetForm = ({
       },
       error: (error) => {
         setUploadProgress(0);
-        setLoading(false);
         console.log(error);
         setFileError(
           error.errors.file[0] || error.message || 'There is an error',
@@ -90,7 +84,6 @@ const AssetForm = ({
         return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
       },
     });
-
   };
 
   return (
@@ -134,22 +127,7 @@ const AssetForm = ({
             </Box>
           )}
         </Box>
-        <Flex>
-          <Button
-            type="submit"
-            variant="buttonPrimary"
-            // disabled={!!(isLoading && asset && files.length > 0)}
-            sx={{
-              display: 'none',
-              ':disabled': {
-                bg: 'gray.100',
-                color: 'gray.500',
-              },
-            }}>
-            Upload {''}
-            {isLoading && <Spinner color="white" width={18} height={18} />}
-          </Button>
-        </Flex>
+        <Button type="submit" sx={{ display: 'none' }} />
       </Box>
     </FormProvider>
   );
