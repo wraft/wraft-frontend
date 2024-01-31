@@ -337,33 +337,35 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
       />
       <Container sx={{ styleEl, px: 4 }}>
         <Box>
-          {formStep >= 1 && (
-            <section>
-              <Box>
-                <AssetForm
-                  onUpload={addUploads}
-                  pdfPreview={pdfPreview}
-                  setPdfPreview={setPdfPreview}
-                  setDeleteAssets={setDeleteAssets}
-                />
-              </Box>
-            </section>
-          )}
-
           {/* form start */}
           <Box
             sx={{
               height: 'calc(100vh - 200px)',
-              pt: 4,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
             }}
             as="form"
             onSubmit={handleSubmit(onSubmit)}>
+            {formStep >= 1 && (
+              <section>
+                <Box>
+                  <AssetForm
+                    onUpload={addUploads}
+                    pdfPreview={pdfPreview}
+                    setPdfPreview={setPdfPreview}
+                    setDeleteAssets={setDeleteAssets}
+                  />
+                </Box>
+              </section>
+            )}
             {formStep >= 0 && (
               <Container
-                sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
+                sx={
+                  formStep > 0
+                    ? { display: 'none' }
+                    : { display: 'block', pt: 4 }
+                }>
                 <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
                   <Box>
                     <Field
