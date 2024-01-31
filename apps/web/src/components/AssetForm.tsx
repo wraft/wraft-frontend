@@ -9,7 +9,6 @@ import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
 interface AssetFormProps {
-  setAsset?: any;
   onUpload?: any;
   filetype?: 'layout' | 'theme';
   pdfPreview?: string | undefined;
@@ -28,7 +27,6 @@ type FormValues = {
 
 const AssetForm = ({
   onUpload,
-  setAsset,
   filetype = 'layout',
   pdfPreview,
   setPdfPreview,
@@ -93,7 +91,6 @@ const AssetForm = ({
       },
     });
 
-    if (filetype === 'theme') setAsset();
   };
 
   return (

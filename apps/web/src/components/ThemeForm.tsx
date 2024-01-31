@@ -73,12 +73,6 @@ const ThemeForm = () => {
         },
       },
     );
-    // deleteAPI(`/assets/${id}`).then(() => {
-    //   toast.success('Deleting Asset', {
-    //     duration: 1000,
-    //     position: 'top-right',
-    //   });
-    // });
   };
 
   // determine edit state based on URL
@@ -276,7 +270,15 @@ const ThemeForm = () => {
             </Box>
           )}
         </Box>
-        <Button variant="buttonPrimary" ml={2}>
+        <Button
+          disabled={!assets || (assets && assets.length < 1)}
+          variant="buttonPrimary"
+          sx={{
+            ':disabled': {
+              bg: 'gray.100',
+            },
+          }}
+          ml={2}>
           {isEdit ? 'Update' : 'Create Theme'}
         </Button>
       </Box>
@@ -311,6 +313,7 @@ const ThemeForm = () => {
                       color: 'red.500',
                       border: 'solid 1px',
                       borderColor: 'red.1000',
+                      cursor: 'pointer',
                     }}
                     onClick={() => deleteAsset(m.id)}>
                     Delete
@@ -319,11 +322,7 @@ const ThemeForm = () => {
               </Box>
             ))}
         </Box>
-        <AssetForm
-          setAsset={setAssets}
-          onUpload={addUploads}
-          filetype="theme"
-        />
+        <AssetForm onUpload={addUploads} filetype="theme" />
       </Box>
     </Flex>
   );
