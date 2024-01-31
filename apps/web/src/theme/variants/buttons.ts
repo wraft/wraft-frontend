@@ -4,16 +4,25 @@ const buttons: Theme['buttons'] = {
   btnBig: {
     cursor: 'pointer',
   },
-  buttonPrimary: {
+  common: {
     cursor: 'pointer',
-    color: 'white',
-    backgroundColor: '#004A0F',
-    borderRadius: '6px',
+    borderRadius: '4px',
     p: '8px 16px',
     ':disabled': {
-      color: 'gray.900',
-      bg: 'neutral.300',
+      cursor: 'default',
+      color: 'gray.200',
+      bg: 'neutral.200',
     },
+  },
+  buttonPrimary: {
+    variant: 'buttons.common',
+    color: 'white',
+    backgroundColor: 'green.700',
+  },
+  buttonSecondary: {
+    variant: 'buttons.common',
+    color: 'text',
+    bg: 'neutral.200',
   },
   buttonPrimarySmall: {
     variant: 'buttons.buttonPrimary',
