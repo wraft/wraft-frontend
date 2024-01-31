@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgNotificationOff = (props: SVGProps<SVGSVGElement>) => (
+const SvgNotificationOffIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width || 25}
@@ -22,4 +22,4 @@ const SvgNotificationOff = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 );
-export default SvgNotificationOff;
+export default SvgNotificationOffIcon;

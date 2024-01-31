@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgEllipsisH = (props: SVGProps<SVGSVGElement>) => (
+const SvgEllipsisHIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width || 25}
@@ -13,4 +13,4 @@ const SvgEllipsisH = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default SvgEllipsisH;
+export default SvgEllipsisHIcon;

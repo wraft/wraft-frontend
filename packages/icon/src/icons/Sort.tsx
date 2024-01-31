@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgSort = (props: SVGProps<SVGSVGElement>) => (
+const SvgSortIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width || 25}
@@ -13,4 +13,4 @@ const SvgSort = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default SvgSort;
+export default SvgSortIcon;
