@@ -8,78 +8,78 @@ export const Icons = () => {
   return (
     <>
       <div style={{display: 'flex', alignItems: 'center', paddingBottom: '20px',gap:'5px'}}>
-        <Icon.Add />
+        <Icon.AddIcon />
         <span>Add</span>
-        <Icon.AddPeople />
+        <Icon.AddPeopleIcon />
         <span>AddPeople</span>
-        <Icon.ArrowDown />
+        <Icon.ArrowDownIcon />
         <span>ArrowDown</span>
-        <Icon.ArrowLeft />
+        <Icon.ArrowLeftIcon />
         <span>ArrowLeft</span>
-        <Icon.ArrowRight />
+        <Icon.ArrowRightIcon />
         <span>ArrowRight</span>
-        <Icon.ArrowUp />
+        <Icon.ArrowUpIcon />
         <span>ArrowUp</span>
-        <Icon.Bold />
+        <Icon.BoldIcon />
         <span>Bold</span>
-        <Icon.BulletList />
+        <Icon.BulletListIcon />
         <span>BulletList</span>
-        <Icon.Close />
+        <Icon.CloseIcon />
         <span>Close</span>
-        <Icon.Delete />
+        <Icon.DeleteIcon />
         <span>Delete</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', paddingBottom:'20px', gap:'7px' }}>
         
-        <Icon.Down />
+        <Icon.DownIcon />
         <span>Down</span>
-        <Icon.Edit />
+        <Icon.EditIcon />
         <span>Edit</span>
-        <Icon.EllipsisH />
+        <Icon.EllipsisHIcon />
         <span>EllipsisH</span>
-        <Icon.EllipsisV />
+        <Icon.EllipsisVIcon />
         <span>EllipsisV</span>
-        <Icon.Eye />
+        <Icon.EyeIcon />
         <span>Eye</span>
-        <Icon.EyeClosed />
+        <Icon.EyeClosedIcon />
         <span>EyeClosed</span>
-        <Icon.Filter />
+        <Icon.FilterIcon />
         <span>Filter</span>
-        <Icon.H1 />
+        <Icon.H1Icon />
         <span>H1</span>
-        <Icon.H2 />
+        <Icon.H2Icon />
         <span>H2</span>
-        <Icon.H3 />
+        <Icon.H3Icon />
         <span>H3</span>
-        <Icon.Home/>
+        <Icon.HomeIcon/>
         <span>Home</span>
-        <Icon.Up/>
+        <Icon.UpIcon />
         <span>Up</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center',gap:'5px' }}>
-        <Icon.Italics />
+        <Icon.ItalicsIcon />
         <span>Italics</span>
-        <Icon.Left />
+        <Icon.LeftIcon />
         <span>Left</span>
-        <Icon.Notification />
+        <Icon.NotificationIcon />
         <span>Notification</span>
-        <Icon.NotificationOff />
+        <Icon.NotificationOffIcon />
         <span>NotificationOff</span>
-        <Icon.Play />
+        <Icon.PlayIcon />
         <span>Play</span>
-        <Icon.Redo />
+        <Icon.RedoIcon />
         <span>Redo</span>
-        <Icon.Right />
+        <Icon.RightIcon />
         <span>Right</span>
-        <Icon.Search />
+        <Icon.SearchIcon />
         <span>Search</span>
-        <Icon.Sort />
+        <Icon.SortIcon />
         <span>Sort</span>
-        <Icon.Table />
+        <Icon.TableIcon />
         <span>Table</span>
-        <Icon.Underline />
+        <Icon.UnderlineIcon />
         <span>Underline</span>
-        <Icon.Undo/>
+        <Icon.UndoIcon />
         <span>Undo</span>
         
       </div>
@@ -88,7 +88,7 @@ export const Icons = () => {
 };
 
 const meta: Meta = {
-  component: Icon.Add,
+  component: Icon.AddIcon,
 };
 
 export default meta;

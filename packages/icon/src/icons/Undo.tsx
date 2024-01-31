@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgUndo = (props: SVGProps<SVGSVGElement>) => (
+const SvgUndoIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width || 25}
@@ -13,4 +13,4 @@ const SvgUndo = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default SvgUndo;
+export default SvgUndoIcon;
