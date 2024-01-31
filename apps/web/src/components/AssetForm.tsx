@@ -83,6 +83,7 @@ const AssetForm = ({
         return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
       },
       error: (error) => {
+        setUploadProgress(0);
         setLoading(false);
         console.log(error);
         setFileError(
