@@ -138,6 +138,14 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   }, [isDeleteAssets]);
 
   useEffect(() => {
+    console.log('🥋🐼', engines);
+    if (engines && engines.length > 0) {
+      const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
+      pandocEngine && setValue('engine_uuid', pandocEngine?.id);
+    }
+  }, [engines]);
+
+  useEffect(() => {
     if (layout) {
       setEdit(true);
       const assetsList: Asset[] = layout.assets;
@@ -305,7 +313,6 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   return (
     <Flex
       sx={{
-        // pb: '44px',
         height: '100vh',
         overflow: 'scroll',
         flexDirection: 'column',
@@ -475,7 +482,6 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                 <Box>
                   <Button
                     variant="disabled"
-                    // variant=""
                     type="button"
                     onClick={prev}
                     sx={{
