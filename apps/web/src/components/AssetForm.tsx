@@ -45,9 +45,9 @@ const AssetForm = ({
     methods.handleSubmit(onSubmit)();
   }, [isSubmit]);
 
-  const onImageUploaded = (data: any) => {
+  const onAssetUploaded = (data: any) => {
     setLoading(false);
-    console.log('📸', data);
+    console.log('uploading asset from AssetForm', data);
     const mData: Asset = data;
     onUpload(mData);
   };
@@ -78,7 +78,7 @@ const AssetForm = ({
     toast.promise(assetsRequest, {
       loading: 'Loading...',
       success: (data) => {
-        onImageUploaded(data);
+        onAssetUploaded(data);
         setUploadProgress(0);
         return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
       },
