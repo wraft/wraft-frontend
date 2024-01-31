@@ -20,19 +20,11 @@ const FieldText: React.FC<Props> = ({
 }) => {
   return (
     <Box pb={2}>
-      <Label htmlFor="description" mb={1}>
-        {label}
-      </Label>
+      <Label htmlFor="description">{label}</Label>
       <Textarea
-        sx={{
-          fontFamily: 'body',
-          fontSize: 2,
-        }}
         rows={3}
         id={name}
-        // name={name}
         defaultValue={defaultValue}
-        // ref={register({ required: true })}
         {...register(name, { required: `${label} is required` })}
       />
       {error && <Text variant="error"> {error.message}</Text>}
