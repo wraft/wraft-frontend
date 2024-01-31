@@ -1,17 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
-import { useDropzone } from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { Document, Page } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Flex, Input, Text } from 'theme-ui';
 
 import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 
-import Button from './Button';
 import ProgressBar from './ProgressBar';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 type DropzoneProps = {
-  filetype?: 'layout' | 'theme';
+  accept?: Accept;
   progress?: number;
   pdfPreview?: string | undefined;
   setPdfPreview?: (e: any) => void;
@@ -20,14 +21,13 @@ type DropzoneProps = {
 };
 
 const Dropzone = ({
-  filetype,
+  accept,
   progress,
   pdfPreview,
   setPdfPreview,
   setIsSubmit,
   setDeleteAssets,
 }: DropzoneProps) => {
-  const [accept, setAccept] = useState<any>({ '*': [] });
   const { setValue, watch, register } = useFormContext();
 
   const files = watch('file');
@@ -37,19 +37,6 @@ const Dropzone = ({
       setIsSubmit((prev: boolean) => !prev);
     }
   }, [files]);
-
-  useEffect(() => {
-    if (filetype === 'layout') {
-      setAccept({
-        'application/pdf': [],
-      });
-    } else if (filetype === 'theme') {
-      setAccept({
-        'font/ttf': ['.ttf'],
-        'font/otf': ['.otf'],
-      });
-    }
-  }, []);
 
   const onDrop = useCallback(
     (droppedFiles: any) => {
@@ -63,7 +50,7 @@ const Dropzone = ({
     maxFiles: 1,
     maxSize: 1 * 1024 * 1024, //1MB in bytes
     multiple: false,
-    accept: accept, //based on acceptedFormat
+    accept: accept || { '*': [] },
   });
 
   register('file');
@@ -152,38 +139,24 @@ const Dropzone = ({
             <Text variant="capM">PDF - Max file size 1MB</Text>
           </Flex>
         )}
-        {files && files[0] ? (
-          <Flex
-            sx={{
-              width: pdfPreview ? '100%' : '',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Flex sx={{ alignItems: 'center' }}>
-              <Text variant="pM" sx={{ flexShrink: 0 }}>
-                {files[0].name}
-              </Text>
-              {pdfPreview && (
-                <Box
-                  sx={{
-                    color: 'green.700',
-                    ml: '12px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                  }}>
-                  <ApproveTick />
-                </Box>
-              )}
-            </Flex>
+        {files && files[0] && (
+          <Flex sx={{ alignItems: 'center' }}>
+            <Text variant="pM" sx={{ flexShrink: 0 }}>
+              {files[0].name}
+            </Text>
             {pdfPreview && (
-              <Box>
-                <Button>Re-upload</Button>
+              <Box
+                sx={{
+                  color: 'green.700',
+                  ml: '12px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                }}>
+                <ApproveTick />
               </Box>
             )}
           </Flex>
-        ) : (
-          <div />
         )}
         {progress && progress > 0 ? (
           <Box mt={3}>
