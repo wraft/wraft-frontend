@@ -101,7 +101,20 @@ const AssetForm = ({
         <Box mx={-2} mb={3}>
           <Form filetype={filetype} />
           <Dropzone
-            filetype={filetype}
+            accept={
+              filetype === 'layout'
+                ? {
+                    'application/pdf': [],
+                  }
+                : filetype === 'theme'
+                  ? {
+                      'font/ttf': ['.ttf'],
+                      'font/otf': ['.otf'],
+                    }
+                  : {
+                      '*': [],
+                    }
+            }
             progress={uploadProgress}
             pdfPreview={pdfPreview}
             setPdfPreview={setPdfPreview}
