@@ -271,13 +271,8 @@ const ThemeForm = () => {
           )}
         </Box>
         <Button
-          disabled={!assets || (assets && assets.length < 1)}
+          disabled={assets && assets.length < 2}
           variant="buttonPrimary"
-          sx={{
-            ':disabled': {
-              bg: 'gray.100',
-            },
-          }}
           ml={2}>
           {isEdit ? 'Update' : 'Create Theme'}
         </Button>
