@@ -104,8 +104,6 @@ const Nav = (props: any) => {
   const { organisations, userProfile, accessToken, login, logout } = useAuth();
   const router = useRouter();
 
-  console.log('userProfile', userProfile);
-
   const showFull = props && props.showFull ? true : true;
   const pathname: string = router.pathname as any;
 
