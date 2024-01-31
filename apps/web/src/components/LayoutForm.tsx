@@ -391,6 +391,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                     {errors.slug && (
                       <Text variant="error">{errors.slug.message}</Text>
                     )}
+                    <Text as="p" variant="subR" mt={2}>
+                      Slugs are layout templates used for rendering documents
+                    </Text>
                   </Box>
                   <Box>
                     <FieldText
