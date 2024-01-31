@@ -452,9 +452,6 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                           rules={{ required: 'Please select a Engine ID' }}
                           render={({ field }) => (
                             <Select {...field}>
-                              <option disabled selected>
-                                select an option
-                              </option>
                               {engines &&
                                 engines.length > 0 &&
                                 engines.map((m: any) => (
