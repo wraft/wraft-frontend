@@ -510,39 +510,23 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                   disabled={!isValid}
                   type="button"
                   onClick={next}
-                  variant="buttonPrimary"
-                  sx={{
-                    ':disabled': {
-                      bg: 'gray.500',
-                    },
-                  }}>
+                  variant="buttonPrimary">
                   Next
                 </Button>
               )}
               {formStep === 1 && (
                 <Box>
                   <Button
-                    variant="disabled"
+                    variant="buttonSecondary"
                     type="button"
-                    onClick={prev}
-                    sx={{
-                      bg: 'neutral.100',
-                      color: 'gray.900',
-                    }}>
-                    <Text as={'p'} variant="pm">
-                      Prev
-                    </Text>
+                    onClick={prev}>
+                    Prev
                   </Button>
                   <Button
                     disabled={!isValid || assets.length < 1}
                     variant="buttonPrimary"
                     type="submit"
-                    ml={2}
-                    sx={{
-                      ':disabled': {
-                        bg: 'gray.500',
-                      },
-                    }}>
+                    ml={2}>
                     {isEdit ? 'Update' : 'Create'}
                   </Button>
                 </Box>
