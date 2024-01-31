@@ -21,6 +21,7 @@ const forms: Theme['forms'] = {
   },
   textarea: {
     variant: 'forms.common',
+    resize: 'none',
   },
   checkbox: {
     MozAppearance: 'none',
