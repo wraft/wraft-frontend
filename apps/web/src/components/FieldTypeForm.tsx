@@ -34,10 +34,7 @@ const FieldTypeForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} py={3} mt={4}>
-      <Box>
-        <Text mb={3}>Create Field Types</Text>
-      </Box>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} p={4}>
       <Box mx={0} mb={3}>
         <Flex>
           <Box>
@@ -46,18 +43,20 @@ const FieldTypeForm = () => {
               label="Name"
               defaultValue="name"
               register={register}
+              mb={3}
             />
             <Field
               name="description"
               label="Description"
               defaultValue="desc"
               register={register}
+              mb={3}
             />
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}
         </Flex>
       </Box>
-      <Button ml={2}>Create</Button>
+      <Button>Create</Button>
     </Box>
   );
 };
