@@ -6,14 +6,20 @@ const buttons: Theme['buttons'] = {
   },
   buttonPrimary: {
     cursor: 'pointer',
-    color: 'white',
-    backgroundColor: '#004A0F',
-    borderRadius: '6px',
+    borderRadius: '4px',
     p: '8px 16px',
     ':disabled': {
-      color: 'gray.900',
-      bg: 'neutral.300',
+      cursor: 'default',
+      color: 'gray.200',
+      bg: 'neutral.200',
     },
+    color: 'white',
+    backgroundColor: 'green.700',
+  },
+  buttonSecondary: {
+    variant: 'buttons.buttonPrimary',
+    color: 'text',
+    bg: 'neutral.200',
   },
   buttonPrimarySmall: {
     variant: 'buttons.buttonPrimary',
