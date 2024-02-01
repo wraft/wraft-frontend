@@ -99,7 +99,7 @@ const LayoutList = ({ rerender }: Props) => {
             <Box>{row.original?.name}</Box>
           </Box>
           <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
-            <LayoutForm setOpen={setIsOpen} cId={row.original.id} />
+            <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
           </Drawer>
         </Button>
       ),

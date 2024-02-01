@@ -69,10 +69,22 @@ export const fetchAPI = (path: any, query = '') =>
 /**
  * Load postAPI
  */
-export const postAPI = (path: string, body: any) =>
+export const postAPI = (
+  path: string,
+  body: any,
+  onProgress?: (percentage: number) => void,
+) =>
   new Promise((resolve, reject) => {
     api
-      .post(`/${path}`, body)
+      .post(`/${path}`, body, {
+        onUploadProgress: (progressEvent) => {
+          if (onProgress) {
+            const total = progressEvent.total || 1;
+            const percentage = Math.round((progressEvent.loaded * 100) / total);
+            onProgress(percentage);
+          }
+        },
+      })
       .then((response) => {
         resolve(response.data);
       })
