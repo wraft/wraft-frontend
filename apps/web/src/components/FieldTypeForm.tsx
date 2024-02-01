@@ -1,6 +1,8 @@
 import React from 'react';
 
+import Router from 'next/router';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
@@ -30,7 +32,18 @@ const FieldTypeForm = () => {
       description: data.description,
     };
 
-    postAPI('field_types', item);
+    const request = postAPI('field_types', item);
+
+    toast.promise(request, {
+      loading: 'Loading...',
+      success: () => {
+        Router.push('/manage/fields');
+        return 'Added Field Type Successfully';
+      },
+      error: () => {
+        return 'Failed To Add Field Type';
+      },
+    });
   };
 
   return (
