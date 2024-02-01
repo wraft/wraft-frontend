@@ -53,15 +53,19 @@ export function Drawer({ open, setOpen, children, heading, footer }: Props) {
             width: '582px',
             height: '100%',
             background: '#FFF',
-            padding: '0px 32px',
+            padding: '0px',
             borderLeft: '1px solid #E4E9EF',
           }}>
           <Box>
-            <DialogHeading className="font-medium text-xl">
-              {heading}
-            </DialogHeading>
+            {heading && (
+              <DialogHeading className="font-medium text-xl">
+                {heading}
+              </DialogHeading>
+            )}
             {children}
-            <DialogDismiss>{footer}</DialogDismiss>
+            <Box sx={{ display: 'none' }}>
+              <DialogDismiss>{footer}</DialogDismiss>
+            </Box>
           </Box>
         </motion.div>
       </Dialog>

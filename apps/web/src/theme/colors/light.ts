@@ -13,6 +13,7 @@ const light = {
   backgroundWhite: '#fff',
   border: '#E4E9EF',
   white: '#fff',
+  grayA35: '#d4d7da59',
 
   neutral: {
     100: '#FAFBFD',
