@@ -1,12 +1,6 @@
 import type { Theme } from 'theme-ui';
 
 const forms: Theme['forms'] = {
-  inputsCommonStyle: {
-    borderColor: 'border',
-    p: '8px 16px',
-    variant: 'text.pM',
-    bg: 'transparent',
-  },
   label: {
     fontFamily: 'body',
     variant: 'text.pR',
@@ -14,13 +8,22 @@ const forms: Theme['forms'] = {
     mb: 2,
   },
   input: {
-    variant: 'forms.inputsCommonStyle',
+    borderColor: 'border',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
   },
   select: {
-    variant: 'forms.inputsCommonStyle',
+    borderColor: 'border',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
   },
   textarea: {
-    variant: 'forms.inputsCommonStyle',
+    borderColor: 'border',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
     resize: 'none',
   },
   checkbox: {
