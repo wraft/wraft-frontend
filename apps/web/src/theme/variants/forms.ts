@@ -1,7 +1,7 @@
 import type { Theme } from 'theme-ui';
 
 const forms: Theme['forms'] = {
-  common: {
+  inputsCommonStyle: {
     borderColor: 'border',
     p: '8px 16px',
     variant: 'text.pM',
@@ -14,13 +14,13 @@ const forms: Theme['forms'] = {
     mb: 2,
   },
   input: {
-    variant: 'forms.common',
+    variant: 'forms.inputsCommonStyle',
   },
   select: {
-    variant: 'forms.common',
+    variant: 'forms.inputsCommonStyle',
   },
   textarea: {
-    variant: 'forms.common',
+    variant: 'forms.inputsCommonStyle',
     resize: 'none',
   },
   checkbox: {

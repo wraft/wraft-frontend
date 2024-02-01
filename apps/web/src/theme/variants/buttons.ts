@@ -4,7 +4,7 @@ const buttons: Theme['buttons'] = {
   btnBig: {
     cursor: 'pointer',
   },
-  common: {
+  ButtonsCommonStyle: {
     cursor: 'pointer',
     borderRadius: '4px',
     p: '8px 16px',
@@ -15,12 +15,12 @@ const buttons: Theme['buttons'] = {
     },
   },
   buttonPrimary: {
-    variant: 'buttons.common',
+    variant: 'buttons.ButtonsCommonStyle',
     color: 'white',
     backgroundColor: 'green.700',
   },
   buttonSecondary: {
-    variant: 'buttons.common',
+    variant: 'buttons.ButtonsCommonStyle',
     color: 'text',
     bg: 'neutral.200',
   },
