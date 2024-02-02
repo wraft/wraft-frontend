@@ -49,6 +49,13 @@ interface MemberData {
   }[];
 }
 
+export type RoleType = {
+  id: string;
+  name: string;
+  permissions: string[];
+  user_count: number;
+};
+
 const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
   const [tableList, setTableList] = useState<Array<any>>([]);
@@ -61,10 +68,17 @@ const TeamList = () => {
   const [isRemoveUser, setIsRemoveUser] = useState<number | null>(null);
   const [sort, setSort] = useState('joined_at');
   const [rerender, setRerender] = useState<boolean>(false);
+  const [roles, setRoles] = useState<RoleType[]>([]);
 
   const { userProfile } = useAuth();
 
   const organisationId = userProfile?.organisation_id;
+
+  useEffect(() => {
+    fetchAPI('roles').then((data: any) => {
+      setRoles(data);
+    });
+  }, []);
 
   const loadData = (id: string) => {
     fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
@@ -309,10 +323,9 @@ const TeamList = () => {
                             setIsAssignRole(null);
                           }}>
                           <AssignRole
+                            roles={roles}
                             setRerender={setRerender}
                             currentRoleList={currentRoleList}
-                            setCurrentRoleList={setCurrentRoleList}
-                            setIsAssignRole={setIsAssignRole}
                             userId={userId}
                           />
                         </Menu>
