@@ -5,24 +5,22 @@ const text: Theme['text'] = {
     variant: 'text.subR',
     color: 'red.600',
   },
+  //paragraph
   pR: {
-    color: 'gray.500',
+    color: 'text',
     fontSize: 2,
     fontWeight: 400,
     lineHeight: '1.6',
   },
   pM: {
-    color: 'text',
-    fontSize: 2,
+    variant: 'text.pR',
     fontWeight: 500,
-    lineHeight: '1.6',
   },
   pB: {
-    color: 'text',
-    fontSize: 2,
+    variant: 'text.pR',
     fontWeight: 700,
-    lineHeight: '1.6',
   },
+  //sub heading
   subR: {
     color: 'gray.500',
     fontSize: 1,
@@ -30,16 +28,27 @@ const text: Theme['text'] = {
     lineHeight: '1.6',
   },
   subM: {
+    variant: 'text.subR',
+    fontWeight: 500,
+  },
+  subB: {
+    variant: 'text.subR',
+    fontWeight: 700,
+  },
+  // caption
+  capR: {
     color: 'gray.500',
     fontSize: 1,
     fontWeight: 400,
     lineHeight: '1.6',
   },
   capM: {
-    color: 'gray.500',
-    fontSize: 1,
+    variant: 'text.capR',
     fontWeight: 500,
-    lineHeight: '1.6',
+  },
+  capB: {
+    variant: 'text.capR',
+    fontWeight: 700,
   },
   labelSmall: {
     pl: 1,

@@ -4,6 +4,7 @@ import { Box, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 
+import { TimeAgo } from './Atoms';
 import Table from './Table';
 
 export interface FieldTypeList {
@@ -62,7 +63,7 @@ const FieldList: FC = () => {
           col2: <ItemField {...r} />,
           col3: (
             <Text as="span" sx={{ pt: 3, fontSize: 1 }}>
-              {r.updated_at}
+              <TimeAgo time={r.updated_at} />
             </Text>
           ),
         };
