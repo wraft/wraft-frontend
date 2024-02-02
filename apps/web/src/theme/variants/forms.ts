@@ -12,12 +12,18 @@ const forms: Theme['forms'] = {
     p: '8px 16px',
     variant: 'text.pM',
     bg: 'transparent',
+    ':disabled': {
+      color: 'gray.200',
+    },
   },
   select: {
     borderColor: 'border',
     p: '8px 16px',
     variant: 'text.pM',
     bg: 'transparent',
+    ':disabled': {
+      color: 'gray.200',
+    },
   },
   textarea: {
     borderColor: 'border',
@@ -25,6 +31,9 @@ const forms: Theme['forms'] = {
     variant: 'text.pM',
     bg: 'transparent',
     resize: 'none',
+    ':disabled': {
+      color: 'gray.200',
+    },
   },
   checkbox: {
     MozAppearance: 'none',
