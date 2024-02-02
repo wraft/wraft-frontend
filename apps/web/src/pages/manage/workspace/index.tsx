@@ -82,33 +82,24 @@ const Index: FC = () => {
     setLogoSrc(logo);
   }, [org]);
 
-  const onSubmit = (data: any) => {
-    const formData = new FormData();
-    if (data.logo && data.logo.length > 0) {
-      formData.append('logo', data.logo[0]);
-    }
-    if (data.name !== 'Personal' && data.name !== '') {
-      formData.append('name', data.name);
-    }
-    if (data.url !== '') {
-      formData.append('url', data.url);
-    }
+  useEffect(() => {
+    const data = inputRef.current?.value;
+    setInputValue(parseInt(data ?? '0', 10));
+  }, [inputRef.current?.value]);
 
-    if (orgId) {
-      const updateRequest = putAPI(`organisations/${orgId}`, formData);
-      toast.promise(
-        updateRequest,
-        {
-          loading: 'Loading...',
-          success: `Updated Workspace ${data.name}`,
-          error: `Failed to Update Workspace ${data.name}`,
-        },
-        {
-          duration: 1000,
-          position: 'top-right',
-        },
-      );
-    }
+  const onConfirmDelete = async (inputValue: any) => {
+    const body = { code: `${inputValue}` };
+    const deleteRequest = deleteAPI('organisations', body);
+    toast.promise(deleteRequest, {
+      loading: 'Loading...',
+      success: () => {
+        setConfirmDelete(false);
+        logout();
+        Router.push('/login');
+        return 'Deleted workspace successfully';
+      },
+      error: (error) => error?.message || 'Failed to deleted workspace',
+    });
   };
 
   /**
@@ -148,26 +139,6 @@ const Index: FC = () => {
     });
   };
 
-  useEffect(() => {
-    const data = inputRef.current?.value;
-    setInputValue(parseInt(data ?? '0', 10));
-  }, [inputRef.current?.value]);
-
-  const onConfirmDelete = async (inputValue: any) => {
-    const body = { code: `${inputValue}` };
-    const deleteRequest = deleteAPI('organisations', body);
-    toast.promise(deleteRequest, {
-      loading: 'Loading...',
-      success: () => {
-        setConfirmDelete(false);
-        logout();
-        Router.push('/login');
-        return 'Deleted workspace successfully';
-      },
-      error: (error) => error?.message || 'Failed to deleted workspace',
-    });
-  };
-
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     onBlobReady(file);
@@ -185,6 +156,35 @@ const Index: FC = () => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+  };
+
+  const onSubmit = (data: any) => {
+    const formData = new FormData();
+    if (data.logo && data.logo.length > 0) {
+      formData.append('logo', data.logo[0]);
+    }
+    if (data.name !== 'Personal' && data.name !== '') {
+      formData.append('name', data.name);
+    }
+    if (data.url !== '') {
+      formData.append('url', data.url);
+    }
+
+    if (orgId) {
+      const updateRequest = putAPI(`organisations/${orgId}`, formData);
+      toast.promise(
+        updateRequest,
+        {
+          loading: 'Loading...',
+          success: `Updated Workspace ${data.name}`,
+          error: `Failed to Update Workspace ${data.name}`,
+        },
+        {
+          duration: 1000,
+          position: 'top-right',
+        },
+      );
+    }
   };
 
   return (
