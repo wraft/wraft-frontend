@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import Head from 'next/head';
-import Link from 'next/link';
-import { Flex } from 'theme-ui';
+import { Box, Container } from 'theme-ui';
 
 import FieldTypeForm from '../../../components/FieldTypeForm';
 import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
 
 const Index: FC = () => {
   return (
@@ -15,10 +15,12 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <Flex>
-          <Link href="/fields">Back</Link>
-          <FieldTypeForm />
-        </Flex>
+        <PageHeader title="Create Field Type" />
+        <Container variant="layout.pageFrame">
+          <Box variant="layout.contentFrame">
+            <FieldTypeForm />
+          </Box>
+        </Container>
       </Page>
     </>
   );

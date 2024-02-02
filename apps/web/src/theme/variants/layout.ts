@@ -220,7 +220,7 @@ const layout: Theme['layout'] = {
     gap: '8px',
     borderRadius: '4px',
     backgroundColor: 'white',
-    padding: '8px',
+    // padding: '8px',
     color: 'hsl(204 10% 10%)',
     boxShadow: `2px 3px 14px 0px rgba(0, 0, 0, 0.16)`,
   },
