@@ -129,7 +129,7 @@ const Index: FC = () => {
     }
   };
 
-  const sendCode = () => {
+  const onSendCode = () => {
     setDelete(true);
     const deleteRequest = postAPI('organisations/request_deletion', {});
     toast.promise(deleteRequest, {
@@ -248,7 +248,10 @@ const Index: FC = () => {
                   name="url"
                   register={register}
                 />
-                <Button variant="btnPrimary" sx={{ mt: '18px' }} type="submit">
+                <Button
+                  variant="buttonPrimary"
+                  sx={{ mt: '24px' }}
+                  type="submit">
                   Update
                 </Button>
                 {(currentOrg?.name !== 'Personal' || '') && (
@@ -267,15 +270,7 @@ const Index: FC = () => {
                     <Text as={'p'} variant="pM" sx={{ mb: '24px' }}>
                       This workspace will be permanently removed from Wraft
                     </Text>
-                    <Button
-                      onClick={sendCode}
-                      type="button"
-                      variant="delete"
-                      sx={{
-                        borderRadius: 6,
-                        fontSize: 2,
-                        fontWeight: 'heading',
-                      }}>
+                    <Button onClick={onSendCode} type="button" variant="delete">
                       Delete Workspace
                     </Button>
                     <Modal
