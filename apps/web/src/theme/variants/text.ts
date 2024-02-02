@@ -5,6 +5,22 @@ const text: Theme['text'] = {
     variant: 'text.subR',
     color: 'red.600',
   },
+  //headings
+  h6Regular: {
+    fontSize: 3,
+    fontWeight: 400,
+    lineHeight: '19px',
+    letterSpacing: '0.1599999964237213px',
+    color: 'text',
+  },
+  h6Medium: {
+    variant: 'text.h6Regular',
+    fontWeight: 500,
+  },
+  h6Bold: {
+    variant: 'text.h6Regular',
+    fontWeight: 500,
+  },
   //paragraph
   pR: {
     color: 'text',
