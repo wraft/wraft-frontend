@@ -22,14 +22,14 @@ const links: Theme['links'] = {
   },
   btnPrimary: {
     textDecoration: 'none',
-    variant: 'buttons.btnPrimary',
+    variant: 'buttons.buttonPrimary',
     color: 'backgroundWhite',
     fontWeight: 500,
     px: 3,
     borderRadius: 4,
   },
   btnSecondary: {
-    variant: 'buttons.btnPrimary',
+    variant: 'buttons.buttonPrimary',
     border: 'solid 1px #ddd',
     fontSize: 2,
     px: 3,
@@ -60,9 +60,6 @@ const links: Theme['links'] = {
     p: 2,
     px: 2,
     color: 'gray.100',
-    '&:hover': {
-      bg: 'teal.900',
-    },
   },
   btnPrimaryIcon: {
     bg: 'gray.100',
