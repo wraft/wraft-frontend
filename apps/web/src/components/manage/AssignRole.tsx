@@ -168,12 +168,22 @@ const AssignRole = ({
             </Box>
           ))}
       </Box>
-      <Flex
-        sx={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-        <Button type="submit" variant="base">
+      <Button
+        type="submit"
+        variant="base"
+        sx={{
+          mt: 'auto',
+          width: '100%',
+          height: '46px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderTop: '1px solid',
+          borderColor: 'neutral.200',
+        }}>
+        <Text variant="pB" sx={{ color: 'green.700' }}>
           Save
-        </Button>
-      </Flex>
+        </Text>
+      </Button>
     </Flex>
   );
 };
