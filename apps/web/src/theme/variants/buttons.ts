@@ -135,6 +135,7 @@ const buttons: Theme['buttons'] = {
     border: 0,
   },
   base: {
+    cursor: 'pointer',
     bg: 'transparent',
     color: 'gray.500',
   },

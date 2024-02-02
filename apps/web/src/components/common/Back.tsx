@@ -3,7 +3,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'theme-ui';
 
-import { ArrowBack } from '../Icons';
+import { BackIcon } from '../Icons';
 
 const Back = () => {
   const { pathname } = useRouter();
@@ -18,7 +18,7 @@ const Back = () => {
         router.push(backRoute);
       }}
       sx={{ color: 'gray.400', cursor: 'pointer' }}>
-      <ArrowBack width={20} />
+      <BackIcon width={24} />
     </Button>
   );
 };
