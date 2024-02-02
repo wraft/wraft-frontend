@@ -1,14 +1,19 @@
 import { TourProvider, components } from '@reactour/tour';
+import { theme } from '@wraft/ui';
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
+// import { Theme } from 'theme-ui';
 
 import { UserProvider } from '../contexts/AuthContext';
 import ToasterNewProvider from '../contexts/ToasterProvider';
-import theme from '../theme';
-// import theme from '../utils/theme';
+// import theme from '../theme';
 
+// import theme from '../utils/theme';
+// theme
+// const makeTheme = <T extends Theme>(t: T): T => t;
+// const themes = makeTheme(theme);
 interface AppPropsWithRedux extends AppProps {
   reduxStore: any;
 }

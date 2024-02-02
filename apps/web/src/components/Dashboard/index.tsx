@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { Button as TestButton } from '@wraft/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
@@ -91,6 +92,7 @@ const Dashboard = () => {
               sx={{ fontWeight: 'heading' }}>
               Watch demo
             </Button>
+            <TestButton variant="primary">Watch demo two</TestButton>
           </Box>
         </Flex>
         <Flex

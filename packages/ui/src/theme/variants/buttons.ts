@@ -1,8 +1,35 @@
-import type { Theme } from 'theme-ui';
-
-const buttons: Theme['buttons'] = {
+const buttons = {
   btnBig: {
     cursor: 'pointer',
+  },
+  primary: {
+    backgroundColor: 'primary',
+    color: 'white',
+    border: '1px solid',
+    borderColor: 'primary',
+    borderRadius: '4px',
+    padding: '8px 16px',
+    ':hover': {
+      backgroundColor: '#197231',
+      borderColor: '#197231',
+    },
+    ':disabled': {
+      color: 'gray.900',
+      bg: 'neutral.300',
+    },
+  },
+
+  secondary: {
+    backgroundColor: '#E4E9EF',
+    color: 'gray.900',
+    border: '1px solid',
+    borderColor: '#E4E9EF',
+    borderRadius: '4px',
+    padding: '8px 16px',
+    ':hover': {
+      backgroundColor: '#C1C6DB',
+      borderColor: '#C1C6DB',
+    },
   },
   buttonPrimary: {
     cursor: 'pointer',
@@ -141,14 +168,6 @@ const buttons: Theme['buttons'] = {
     svg: { fill: 'text' },
     bg: 'gray.200',
     cursor: 'pointer',
-  },
-  primary: {
-    variant: 'button.btnPrimary',
-  },
-  secondary: {
-    color: 'blue.1000',
-    bg: 'blue.300',
-    fontFamily: 'body',
   },
   buttonApproval: {
     ml: 3,

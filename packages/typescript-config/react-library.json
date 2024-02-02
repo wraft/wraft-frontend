@@ -10,6 +10,6 @@
     "experimentalDecorators": true,
     "declaration": true,
     "noEmit": false,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
   }
 }
