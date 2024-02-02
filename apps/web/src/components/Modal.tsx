@@ -27,6 +27,7 @@ const Modal: React.FC<ModalProps> = ({
   // className,
   disclosure,
   width,
+  onClose,
 }) => {
   const dialog = useDialogStore({ animated: true });
 
@@ -49,6 +50,7 @@ const Modal: React.FC<ModalProps> = ({
         sx={{
           width: width,
         }}
+        onClose={onClose}
         as={Box}
         store={dialog}
         variant="layout.dialog"
