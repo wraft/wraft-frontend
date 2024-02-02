@@ -1,59 +1,49 @@
+/** @jsxImportSource theme-ui */
+
 import { useState, useEffect } from 'react';
 
-import { MenuItem } from '@ariakit/react';
+import { Checkbox } from '@ariakit/react';
+import { svgDataUriTickWhiteProped } from '@wraft-ui/UriSvgs';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Text, Button } from 'theme-ui';
+import { Flex, Text, Button, Box, Label } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../../utils/models';
+import { postAPI } from '../../utils/models';
+
+import { RoleType } from './TeamList';
 
 interface RoleList {
   roleName: string;
   roleId: string;
 }
-type Role = {
-  id: string;
-  name: string;
-  permissions: string[];
-  user_count: number;
-};
-
-type ResponseData = Role[];
 
 type AssignRoleProps = {
+  roles: RoleType[];
   currentRoleList: string[];
-  setCurrentRoleList: any;
-  setIsAssignRole: any;
   userId: string | null;
   setRerender: any;
 };
 
+type FormInputs = {
+  roles: string[];
+};
+
 const AssignRole = ({
+  roles,
   currentRoleList,
-  setCurrentRoleList,
-  setIsAssignRole, // userId,
   userId,
   setRerender,
 }: AssignRoleProps) => {
-  const [response, setResponse] = useState<ResponseData>();
-  const [roleList, setRoleList] = useState<Array<any>>([]);
+  const [roleList, setRoleList] = useState<Array<RoleList> | undefined>(
+    undefined,
+  );
+  const [selectedRolesId, setSelectedRolesId] = useState<string[]>([]);
 
-  const loadDataSuccess = (data: any) => {
-    setResponse(data);
-  };
-
-  const loadData = () => {
-    fetchAPI('roles').then((data: any) => {
-      loadDataSuccess(data);
-    });
-  };
+  const { handleSubmit } = useForm<FormInputs>();
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    if (response) {
-      const roleData: (RoleList | undefined)[] = response.map((role) => {
+    if (roles) {
+      const roleData: (RoleList | undefined)[] = roles.map((role) => {
         if (!currentRoleList.includes(role.id)) {
           return {
             roleName: role.name,
@@ -67,50 +57,123 @@ const AssignRole = ({
 
       setRoleList(filteredRoleData as RoleList[]);
     }
-  }, [response]);
+  }, [roles]);
 
-  const assignRoleFunction = async (roleId: string) => {
-    if (roleId) {
-      postAPI(`users/${userId}/roles/${roleId}`, {})
-        .then(() => {
-          toast.success('Assigned Role Successfully', {
-            duration: 2000,
-            position: 'top-center',
-          });
-          setRerender((prev: boolean) => !prev);
-        })
-        .catch(() => {
-          toast.error('Assigning Role Failed!', {
-            duration: 2000,
-            position: 'top-center',
-          });
-        });
-      setCurrentRoleList(null);
-      setIsAssignRole(null);
+  const updateSelectedRoles = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    const { checked } = e.target;
+    if (checked) {
+      setSelectedRolesId((ids) => [...ids, id]);
+    } else {
+      setSelectedRolesId((prev) => prev.filter((roleId) => roleId !== id));
     }
   };
 
+  const onSubmit = (data: FormInputs) => {
+    console.log(data);
+    const assignPromises = selectedRolesId.map((role) => {
+      return postAPI(`users/${userId}/roles/${role}`, {});
+    });
+    toast.promise(Promise.all(assignPromises), {
+      loading: 'Loading...',
+      success: () => {
+        setRerender((prev: boolean) => !prev);
+        close();
+        return `Successfully assigned all roles`;
+      },
+      error: () => {
+        return `Failed to assign all roles`;
+      },
+    });
+  };
+
   return (
-    <Flex sx={{ flexDirection: 'column', gap: 2, py: 2 }}>
-      {roleList.length < 1 && (
-        <Button disabled variant="base" sx={{ color: 'gray.200' }}>
-          No more roles to add.
-        </Button>
+    <Flex
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '205px',
+        height: '295px',
+        overflow: 'hidden',
+      }}>
+      <Box
+        p={3}
+        sx={{
+          borderBottom: '1px solid',
+          borderColor: 'neutral.200',
+          width: '100%',
+        }}>
+        <Text variant="subB" sx={{ color: 'text' }}>
+          Choose roles
+        </Text>
+      </Box>
+      {roleList && roleList.length < 1 && (
+        <Text variant="pR">No more roles to add.</Text>
       )}
-      {roleList.map((role) => (
-        <MenuItem key={role.roleId}>
-          <Button
-            onClick={() => assignRoleFunction(role.roleId)}
-            variant="base"
-            sx={{
-              cursor: 'pointer',
-              my: 2,
-              ':hover': { color: 'green.600' },
-            }}>
-            <Text variant="pL">{role.roleName}</Text>
-          </Button>
-        </MenuItem>
-      ))}
+      <Box sx={{ width: '100%', minHeight: '180px', overflow: 'scroll' }}>
+        {roleList &&
+          roleList.map((role) => (
+            <Box key={role.roleId} as={Box} sx={{ width: '100%' }}>
+              <Flex>
+                <Label
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    borderBottom: '1px solid',
+                    borderColor: 'border',
+                    py: '12px',
+                    px: '16px',
+                    ':last-of-type': {
+                      borderBottom: 'none',
+                    },
+                  }}>
+                  <Checkbox
+                    sx={{
+                      appearance: 'none',
+                      border: '1px solid #D4D7DA',
+                      borderRadius: '4px',
+                      height: '14px',
+                      width: '14px',
+                      '&:checked': {
+                        display: 'flex',
+                        justifyContent: 'center',
+                        borderColor: '#343E49',
+                        backgroundColor: '#343E49',
+                        alignItems: 'center',
+                        '&:after': {
+                          display: 'block',
+                          mt: '2px',
+                          content: `url("data:image/svg+xml,${svgDataUriTickWhiteProped(10)}")`,
+                        },
+                      },
+                    }}
+                    type="checkbox"
+                    onChange={(e) => updateSelectedRoles(e, role.roleId)}
+                  />
+                  <Text
+                    variant="subR"
+                    sx={{
+                      pl: 1,
+                      textTransform: 'capitalize',
+                      color: 'text',
+                    }}>
+                    {role.roleName}
+                  </Text>
+                </Label>
+              </Flex>
+            </Box>
+          ))}
+      </Box>
+      <Flex
+        sx={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <Button type="submit" variant="base">
+          Save
+        </Button>
+      </Flex>
     </Flex>
   );
 };
