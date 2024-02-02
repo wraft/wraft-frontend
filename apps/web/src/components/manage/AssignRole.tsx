@@ -19,6 +19,7 @@ interface RoleList {
 
 type AssignRoleProps = {
   roles: RoleType[];
+  setIsAssignRole: any;
   currentRoleList: string[];
   userId: string | null;
   setRerender: any;
@@ -30,6 +31,7 @@ type FormInputs = {
 
 const AssignRole = ({
   roles,
+  setIsAssignRole,
   currentRoleList,
   userId,
   setRerender,
@@ -80,6 +82,7 @@ const AssignRole = ({
       loading: 'Loading...',
       success: () => {
         setRerender((prev: boolean) => !prev);
+        setIsAssignRole(null);
         return `Successfully assigned all roles`;
       },
       error: () => {
