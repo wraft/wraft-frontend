@@ -25,12 +25,7 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
-import {
-  updateEntityFile,
-  deleteEntity,
-  createEntity,
-  fetchAPI,
-} from '../../../utils/models';
+import { fetchAPI, putAPI, deleteAPI, postAPI } from '../../../utils/models';
 
 export interface Organisation {
   id: string;
@@ -65,16 +60,14 @@ const Index: FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState<number>(0);
 
-  const { userProfile, accessToken, logout } = useAuth();
+  const { userProfile, logout } = useAuth();
 
   const orgId = userProfile?.organisation_id || null;
   const currentOrg = userProfile?.currentOrganisation || null;
 
-  console.log('userProfile', userProfile);
-
-  const onUpdate = (data: any) => {
-    console.log(data);
-  };
+  const [previewSource, setPreviewSource] = useState<string | undefined | null>(
+    undefined,
+  );
 
   useEffect(() => {
     if (orgId) {
@@ -102,17 +95,19 @@ const Index: FC = () => {
     }
 
     if (orgId) {
-      updateEntityFile(
-        `organisations/${orgId}`,
-        formData,
-        accessToken as string,
-        onUpdate,
+      const updateRequest = putAPI(`organisations/${orgId}`, formData);
+      toast.promise(
+        updateRequest,
+        {
+          loading: 'Loading...',
+          success: `Updated Workspace ${data.name}`,
+          error: `Failed to Update Workspace ${data.name}`,
+        },
+        {
+          duration: 1000,
+          position: 'top-right',
+        },
       );
-
-      toast.success(`Updated Workspace ${data.name}`, {
-        duration: 1000,
-        position: 'top-right',
-      });
     }
   };
 
@@ -133,18 +128,24 @@ const Index: FC = () => {
     }
 
     if (orgId) {
-      updateEntityFile(
-        `organisations/${orgId}`,
-        formData,
-        accessToken as string,
-        onUpdate,
-      );
+      const updateRequest = putAPI(`organisations/${orgId}`, formData);
 
-      toast.success(`Updated Workspace logo`, {
-        duration: 1000,
-        position: 'top-right',
+      toast.promise(updateRequest, {
+        loading: 'Loading...',
+        success: `Updated Workspace Image`,
+        error: `Failed to Update Workspace Image`,
       });
     }
+  };
+
+  const sendCode = () => {
+    setDelete(true);
+    const deleteRequest = postAPI('organisations/request_deletion', {});
+    toast.promise(deleteRequest, {
+      loading: 'Loading...',
+      success: 'Deleted workspace scuccessfully',
+      error: 'Failed to delete workspace',
+    });
   };
 
   useEffect(() => {
@@ -153,32 +154,20 @@ const Index: FC = () => {
   }, [inputRef.current?.value]);
 
   const onConfirmDelete = async (inputValue: any) => {
-    deleteEntity(
-      `/organisations`,
-      accessToken as string,
-      () => {
-        toast.success(`Deleted workspace successfully`, {
-          duration: 1000,
-          position: 'top-right',
-        });
+    const body = { code: `${inputValue}` };
+    const deleteRequest = deleteAPI('organisations', body);
+    toast.promise(deleteRequest, {
+      loading: 'Loading...',
+      success: () => {
+        setConfirmDelete(false);
+        logout();
+        Router.push('/login');
+        return 'Deleted workspace successfully';
       },
-      (error: any) => {
-        toast.success(error?.message || 'failed', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      },
-      { code: `${inputValue}` },
-    );
-
-    setConfirmDelete(false);
-    logout();
-    Router.push('/login');
+      error: (error) => error?.message || 'Failed to deleted workspace',
+    });
   };
 
-  const [previewSource, setPreviewSource] = React.useState<
-    string | undefined | null
-  >(undefined);
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     onBlobReady(file);
@@ -284,26 +273,7 @@ const Index: FC = () => {
                   </Text>
                   <br />
                   <Button
-                    onClick={() => {
-                      setDelete(true);
-                      createEntity(
-                        {},
-                        '/organisations/request_deletion',
-                        accessToken as string,
-                        (data: any) => {
-                          toast.success(data.info, {
-                            duration: 1000,
-                            position: 'top-right',
-                          });
-                        },
-                        (error: any) => {
-                          toast.success(error, {
-                            duration: 1000,
-                            position: 'top-right',
-                          });
-                        },
-                      );
-                    }}
+                    onClick={sendCode}
                     type="button"
                     variant="delete"
                     sx={{
