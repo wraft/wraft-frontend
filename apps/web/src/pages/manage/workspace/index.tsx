@@ -50,7 +50,9 @@ type FormInputs = {
 };
 
 const Index: FC = () => {
-  const { register, handleSubmit } = useForm<FormInputs>({ mode: 'all' });
+  const { register, handleSubmit } = useForm<FormInputs>({
+    mode: 'all',
+  });
   const [isDelete, setDelete] = useState(false);
   const [isConfirmDelete, setConfirmDelete] = useState(false);
   const [org, setOrg] = useState<Organisation>();
@@ -59,6 +61,7 @@ const Index: FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState<number>(0);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const { userProfile, logout } = useAuth();
 
@@ -176,8 +179,14 @@ const Index: FC = () => {
         updateRequest,
         {
           loading: 'Loading...',
-          success: `Updated Workspace ${data.name}`,
-          error: `Failed to Update Workspace ${data.name}`,
+          success: () => {
+            setIsEdit(false);
+            return `Updated Workspace ${data.name}`;
+          },
+          error: () => {
+            setIsEdit(false);
+            return `Failed to Update Workspace ${data.name}`;
+          },
         },
         {
           duration: 1000,
@@ -238,7 +247,7 @@ const Index: FC = () => {
                   defaultValue={org?.name}
                   name="name"
                   register={register}
-                  disable={org?.name === 'Personal'}
+                  disable={org?.name === 'Personal' || !isEdit}
                   mb={'24px'}
                 />
                 <Field
@@ -247,13 +256,24 @@ const Index: FC = () => {
                   defaultValue={org?.url}
                   name="url"
                   register={register}
+                  disable={!isEdit}
                 />
-                <Button
-                  variant="buttonPrimary"
-                  sx={{ mt: '24px' }}
-                  type="submit">
-                  Update
-                </Button>
+                <Box mt={'24px'}>
+                  {isEdit ? (
+                    <Button variant="buttonPrimary" type="submit">
+                      Update
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsEdit(true);
+                      }}
+                      variant="buttonSecondary">
+                      Edit
+                    </Button>
+                  )}
+                </Box>
                 {(currentOrg?.name !== 'Personal' || '') && (
                   <Box
                     sx={{
