@@ -51,7 +51,7 @@ type FormInputs = {
 
 const Index: FC = () => {
   const { register, handleSubmit } = useForm<FormInputs>({
-    mode: 'all',
+    mode: 'onSubmit',
   });
   const [isDelete, setDelete] = useState(false);
   const [isConfirmDelete, setConfirmDelete] = useState(false);
@@ -158,7 +158,7 @@ const Index: FC = () => {
   };
 
   const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+    setIsChecked((prev) => !prev);
   };
 
   const onSubmit = (data: any) => {
@@ -226,13 +226,14 @@ const Index: FC = () => {
                 onSubmit={handleSubmit(onSubmit)}
                 variant="layout.contentFrame"
                 p={4}>
-                <Image
-                  variant="profile"
-                  src={previewSource ? previewSource : logoSrc}
-                  alt="logo"
-                  onClick={() => fileRef.current?.click()}
-                  sx={{ mb: 4 }}
-                />
+                <Box sx={{ height: '128px', mb: 4 }}>
+                  <Image
+                    variant="profile"
+                    src={previewSource ? previewSource : logoSrc}
+                    alt="logo"
+                    onClick={() => fileRef.current?.click()}
+                  />
+                </Box>
                 <Input
                   sx={{ display: 'none' }}
                   type="file"
