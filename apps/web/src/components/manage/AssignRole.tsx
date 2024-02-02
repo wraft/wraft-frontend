@@ -80,7 +80,6 @@ const AssignRole = ({
       loading: 'Loading...',
       success: () => {
         setRerender((prev: boolean) => !prev);
-        close();
         return `Successfully assigned all roles`;
       },
       error: () => {

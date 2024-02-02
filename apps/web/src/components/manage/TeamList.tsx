@@ -392,7 +392,7 @@ const TeamList = () => {
                           <ConfirmDelete
                             title="Delete role"
                             text={`Are you sure you want to delete ‘${
-                              tableList[row.index]?.members.name
+                              tableList[row.index]?.members?.name
                             }’?`}
                             setOpen={setIsRemoveUser}
                             onConfirmDelete={async () => {
