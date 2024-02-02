@@ -323,6 +323,7 @@ const TeamList = () => {
                             setIsAssignRole(null);
                           }}>
                           <AssignRole
+                            setIsAssignRole={setIsAssignRole}
                             roles={roles}
                             setRerender={setRerender}
                             currentRoleList={currentRoleList}
