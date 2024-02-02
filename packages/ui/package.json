@@ -10,11 +10,10 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react",
+    "dev": "tsup src/index.ts --format esm,cjs --watch --dts --external react",
     "lint": "eslint . --max-warnings 0",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "svgr": "svgr icons -d components/icons --icon --ext tsx --template src/template.tsx"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "@types/react": "^18.2.46",
@@ -22,7 +21,6 @@
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
     "eslint": "^8.56.0",
-    "react": "^18.2.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
@@ -30,8 +28,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@svgr/cli": "^8.1.0",
-    "@svgr/webpack": "^8.1.0",
-    "@types/node": "^20.10.6"
+    "@ariakit/react": "^0.3.12",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@xstyled/emotion": "^3.8.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

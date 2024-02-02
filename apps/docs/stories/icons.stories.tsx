@@ -18,7 +18,6 @@ export const Icons = () => {
             <Icon />
             <div style={{paddingTop: '6px', paddingBottom: '6px'}}>{key}</div>
           </div>
-         
         )
       })}
       </div>
@@ -27,7 +26,12 @@ export const Icons = () => {
 };
 
 const meta: Meta = {
+  title: 'Design System/Icons',
   component: Icon.AddIcon,
+  parameters: {
+    layout: 'centered',
+    // docs: { page: null },
+  },
 };
 
 export default meta;
