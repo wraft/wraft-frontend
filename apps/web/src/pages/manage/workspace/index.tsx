@@ -25,7 +25,6 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
-// import { base64ToFile } from '../../../utils/imgCrop';
 import {
   updateEntityFile,
   deleteEntity,
@@ -85,11 +84,8 @@ const Index: FC = () => {
     }
   }, [orgId]);
 
-  const backupLogo =
-    'https://imagedelivery.net/5MYSbk45M80qAwecrlKzdQ/2dab3411-8db4-4673-6e4b-f3a9aa5b0900/preview';
-
   useEffect(() => {
-    const logo = org?.logo || backupLogo;
+    const logo = org?.logo;
     setLogoSrc(logo);
   }, [org]);
 
@@ -239,7 +235,6 @@ const Index: FC = () => {
                   variant="profile"
                   src={previewSource ? previewSource : logoSrc}
                   alt="logo"
-                  onError={() => setLogoSrc(backupLogo)}
                   onClick={() => fileRef.current?.click()}
                   sx={{ mb: 4 }}
                 />
