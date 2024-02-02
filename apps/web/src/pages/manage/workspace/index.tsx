@@ -110,12 +110,12 @@ const Index: FC = () => {
   //  * Upload Cropped Image
   //  * @param f blob string
   //  */
-  const onBlobReady = (f: File) => {
+  const onBlobReady = (file: File) => {
     // const file: File = base64ToFile(f, 'file_232.jpg');
     const formData = new FormData();
 
-    if (f) {
-      formData.append('logo', f);
+    if (file) {
+      formData.append('logo', file);
     }
 
     if (orgId) {
