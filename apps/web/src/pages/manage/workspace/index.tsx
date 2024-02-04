@@ -248,7 +248,7 @@ const Index: FC = () => {
                   defaultValue={org?.name}
                   name="name"
                   register={register}
-                  disable={org?.name === 'Personal' || !isEdit}
+                  disable={!isEdit}
                   mb={'24px'}
                 />
                 <Field
