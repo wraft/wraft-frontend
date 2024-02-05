@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
@@ -12,7 +12,6 @@ import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { workspaceLinks } from '../../../utils';
-import { fetchAPI } from '../../../utils/models';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,12 +19,6 @@ const Index: FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { userProfile } = useAuth();
-
-  useEffect(() => {
-    fetchAPI('roles').then(() => {
-      console.log('success');
-    });
-  }, []);
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
@@ -59,7 +52,9 @@ const Index: FC = () => {
                 }}>
                 <Input
                   placeholder="Search by role names"
-                  onChange={(e: any) => setSearchTerm(e.target.value)}
+                  onChange={(e: any) =>
+                    setTimeout(() => setSearchTerm(e.target.value), 1000)
+                  }
                   sx={{
                     bg: 'transparent',
                     mb: 0,
@@ -90,12 +85,7 @@ const Index: FC = () => {
             </Flex>
           </PageHeader>
           <Drawer open={isOpen} setOpen={setIsOpen}>
-            <RolesForm
-              key={1}
-              setOpen={setIsOpen}
-              setRender={setRender}
-              roleId=""
-            />
+            <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
           </Drawer>
           <Container variant="layout.pageFrame">
             <Flex>
