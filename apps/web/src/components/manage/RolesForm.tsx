@@ -27,7 +27,7 @@ interface FormInputs {
 }
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
-  const isEdit = roleId !== (null || undefined || '');
+  const isEdit = roleId && roleId !== (null || undefined || '');
   const { register, trigger, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
   });
@@ -196,7 +196,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
               borderBottom: '1px solid',
               borderColor: 'border',
             }}>
-            <Text variant="pB">{}Edit role</Text>
+            <Text variant="pB">{isEdit ? 'Edit Role' : 'Create new role'}</Text>
           </Box>
           <Box sx={{ p: 4, pt: 3 }}>
             <div>
