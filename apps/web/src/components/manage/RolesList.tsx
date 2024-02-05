@@ -149,75 +149,71 @@ const RolesList = ({
                 Cell: ({ row }) => {
                   return (
                     <>
-                      <Box
-                        sx={{ cursor: 'pointer', position: 'relative' }}
-                        onClick={() => {
-                          setIsOpen(row.index);
-                        }}
-                        onMouseLeave={() => setIsOpen(null)}>
-                        <OptionsIcon />
-                        {isOpen === row.index ? (
-                          <Box
-                            sx={{
-                              position: 'absolute',
-                              bg: 'backgroundWhite',
-                              // p: 3,
-                              right: 0,
-                              top: 0,
-                              zIndex: 10,
-                              border: '1px solid',
-                              borderColor: 'border',
-                              width: '155px',
-                            }}>
-                            <Button
-                              disabled={
-                                contents[row.index]?.name === 'superadmin'
-                              }
-                              onClick={() => {
-                                setIsOpen(null);
-                                setIsEdit(row.index);
-                              }}
-                              variant="text.pM"
+                      {contents[row.index]?.name !== 'superadmin' && (
+                        <Box
+                          sx={{ cursor: 'pointer', position: 'relative' }}
+                          onClick={() => {
+                            setIsOpen(row.index);
+                          }}
+                          onMouseLeave={() => setIsOpen(null)}>
+                          <OptionsIcon />
+                          {isOpen === row.index ? (
+                            <Box
                               sx={{
-                                cursor: 'pointer',
-                                textAlign: 'left',
-                                width: '100%',
+                                position: 'absolute',
                                 bg: 'backgroundWhite',
-                                color: 'text',
-                                p: 3,
-                                ':disabled': {
-                                  color: 'gray.300',
-                                },
+                                // p: 3,
+                                right: 0,
+                                top: 0,
+                                zIndex: 10,
+                                border: '1px solid',
+                                borderColor: 'border',
+                                width: '155px',
                               }}>
-                              Edit
-                            </Button>
-                            <Button
-                              disabled={
-                                contents[row.index]?.name === 'superadmin'
-                              }
-                              variant="text.pM"
-                              onClick={() => {
-                                setIsOpen(null);
-                                setIsDelete(row.index);
-                              }}
-                              sx={{
-                                cursor: 'pointer',
-                                textAlign: 'left',
-                                width: '100%',
-                                bg: 'backgroundWhite',
-                                color: 'red.600',
-                                p: 3,
-                                ':disabled': {
-                                  color: 'gray.300',
-                                },
-                              }}>
-                              Delete
-                            </Button>
-                          </Box>
-                        ) : (
-                          <Box />
-                        )}
-                      </Box>
+                              <Button
+                                onClick={() => {
+                                  setIsOpen(null);
+                                  setIsEdit(row.index);
+                                }}
+                                variant="text.pM"
+                                sx={{
+                                  cursor: 'pointer',
+                                  textAlign: 'left',
+                                  width: '100%',
+                                  bg: 'backgroundWhite',
+                                  color: 'text',
+                                  p: 3,
+                                  ':disabled': {
+                                    color: 'gray.300',
+                                  },
+                                }}>
+                                Edit
+                              </Button>
+                              <Button
+                                variant="text.pM"
+                                onClick={() => {
+                                  setIsOpen(null);
+                                  setIsDelete(row.index);
+                                }}
+                                sx={{
+                                  cursor: 'pointer',
+                                  textAlign: 'left',
+                                  width: '100%',
+                                  bg: 'backgroundWhite',
+                                  color: 'red.600',
+                                  p: 3,
+                                  ':disabled': {
+                                    color: 'gray.300',
+                                  },
+                                }}>
+                                Delete
+                              </Button>
+                            </Box>
+                          ) : (
+                            <Box />
+                          )}
+                        </Box>
+                      )}
                       <Drawer
                         open={isEdit === row.index}
                         setOpen={() => setIsEdit(null)}>
