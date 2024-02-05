@@ -135,7 +135,15 @@ const RolesList = ({
                 accessor: 'name',
                 width: '50%',
                 Cell: ({ row }) => {
-                  return <Box sx={{ ml: '24px' }}>{row.original.name}</Box>;
+                  return (
+                    <Box
+                      sx={{ ml: '24px', cursor: 'pointer' }}
+                      onClick={() => {
+                        setIsEdit(row.index);
+                      }}>
+                      {row.original.name}
+                    </Box>
+                  );
                 },
               },
               {
@@ -170,7 +178,7 @@ const RolesList = ({
                                 borderColor: 'border',
                                 width: '155px',
                               }}>
-                              <Button
+                              {/* <Button
                                 onClick={() => {
                                   setIsOpen(null);
                                   setIsEdit(row.index);
@@ -188,7 +196,7 @@ const RolesList = ({
                                   },
                                 }}>
                                 Edit
-                              </Button>
+                              </Button> */}
                               <Button
                                 variant="text.pM"
                                 onClick={() => {
