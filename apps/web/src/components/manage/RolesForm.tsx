@@ -11,14 +11,14 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 
-import { putAPI, fetchAPI } from '../../utils/models';
+import { putAPI, fetchAPI, postAPI } from '../../utils/models';
 import Field from '../Field';
 import { ArrowDropdown } from '../Icons';
 
 interface Props {
   setOpen: any;
   setRender: any;
-  roleId: string;
+  roleId?: string;
 }
 
 interface FormInputs {
@@ -26,11 +26,12 @@ interface FormInputs {
   permissions: string[];
 }
 
-const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
+const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
   const {
     register,
     trigger,
     handleSubmit,
+    // setValue,
     // formState: { isValid },
   } = useForm<FormInputs>({ mode: 'onChange' });
 
@@ -47,9 +48,10 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
   };
 
   const loadRole = () => {
-    fetchAPI(`roles/${roleId}`).then((data: any) => {
-      setRole(data);
-    });
+    if (roleId)
+      fetchAPI(`roles/${roleId}`).then((data: any) => {
+        setRole(data);
+      });
   };
 
   useEffect(() => {
@@ -150,14 +152,25 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
       name: data.name,
       permissions: permissionsList,
     };
-    putAPI(`roles/${role.id}`, body).then(() => {
-      setOpen(null);
-      setRender((prev: boolean) => !prev);
-      toast.success('Role Edited', {
-        duration: 1000,
-        position: 'top-right',
+    if (roleId && roleId !== ('' || null || undefined)) {
+      putAPI(`roles/${role.id}`, body).then(() => {
+        setOpen(null);
+        setRender((prev: boolean) => !prev);
+        toast.success('Role Edited', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-    });
+    } else {
+      postAPI('roles', body).then(() => {
+        setOpen(null);
+        setRender((prev: boolean) => !prev);
+        toast.success('Role Added', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
+    }
   }
 
   return (
@@ -357,4 +370,4 @@ const RolesAdd = ({ setOpen, setRender, roleId }: Props) => {
     </Flex>
   );
 };
-export default RolesAdd;
+export default RolesForm;

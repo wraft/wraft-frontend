@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { Flex, Container, Button, Box, Input } from 'theme-ui';
 
 import { AddIcon, SearchIcon } from '../../../components/Icons';
-import { RolesAdd, RolesList } from '../../../components/manage';
+import { RolesForm, RolesList } from '../../../components/manage';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -90,7 +90,12 @@ const Index: FC = () => {
             </Flex>
           </PageHeader>
           <Drawer open={isOpen} setOpen={setIsOpen}>
-            <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
+            <RolesForm
+              key={1}
+              setOpen={setIsOpen}
+              setRender={setRender}
+              roleId=""
+            />
           </Drawer>
           <Container variant="layout.pageFrame">
             <Flex>

@@ -10,7 +10,7 @@ import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
 import Modal from '../Modal';
 import { Table } from '../Table';
 
-import { RolesEdit } from '.';
+import { RolesForm } from '.';
 
 export interface RolesItem {
   id: string;
@@ -215,7 +215,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
                       <Drawer
                         open={isEdit === row.index}
                         setOpen={() => setIsEdit(null)}>
-                        <RolesEdit
+                        <RolesForm
                           setRender={setRender}
                           setOpen={setIsEdit}
                           roleId={contents[row.index]?.id}
