@@ -27,6 +27,7 @@ interface FormInputs {
 }
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
+  const isEdit = roleId !== (null || undefined || '');
   const { register, trigger, handleSubmit } = useForm<FormInputs>({
     mode: 'onChange',
   });
@@ -44,7 +45,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
   };
 
   const loadRole = () => {
-    if (roleId) {
+    if (isEdit) {
       fetchAPI(`roles/${roleId}`).then((data: any) => {
         setRole(data);
       });
@@ -149,7 +150,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       name: data.name,
       permissions: permissionsList,
     };
-    if (roleId && roleId !== ('' || null || undefined)) {
+    if (isEdit) {
       //update
       putAPI(`roles/${role.id}`, body).then(() => {
         setOpen(null);
@@ -195,7 +196,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
               borderBottom: '1px solid',
               borderColor: 'border',
             }}>
-            <Text variant="pB">Edit role</Text>
+            <Text variant="pB">{}Edit role</Text>
           </Box>
           <Box sx={{ p: 4, pt: 3 }}>
             <div>
