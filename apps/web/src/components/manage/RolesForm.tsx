@@ -181,11 +181,13 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       {
         loading: 'Loading...',
         success: () => {
-          if (formStep === 1) {
+          if (formStep === 0) {
+            next();
+          } else {
             setOpen(null);
             setFormStep(0);
-            setRender((prev: boolean) => !prev);
           }
+          setRender((prev: boolean) => !prev);
           return `Role ${text}ed`;
         },
         error: () => {
@@ -411,11 +413,6 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
         <Button
           disabled={!isValid}
           onMouseOver={() => trigger()}
-          onClick={() => {
-            if (formStep === 0) {
-              next();
-            }
-          }}
           type="submit"
           variant="buttonPrimarySmall">
           {isEdit ? 'Update' : 'Create'}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { MenuProvider, MenuButton, Menu, MenuItem } from '@ariakit/react';
 import { Drawer } from '@wraft-ui/Drawer';
 import ContentLoader from 'react-content-loader';
 import { Box, Text, Flex, Button } from 'theme-ui';
@@ -83,6 +84,14 @@ const RolesList = ({
     }
   }, [contents]);
 
+  const onDelete = (row: any) => {
+    deleteAPI(`roles/${contents[row.index].id}`);
+    setIsDelete(null);
+    if (setRender) {
+      setRender((prev: boolean) => !prev);
+    }
+  };
+
   return (
     <Flex sx={{ width: '100%' }}>
       {!loading && <ContentLoader />}
@@ -156,82 +165,57 @@ const RolesList = ({
                 accessor: 'col3',
                 Cell: ({ row }) => {
                   return (
-                    <>
+                    <Box>
                       {contents[row.index]?.name !== 'superadmin' && (
-                        <Box
-                          sx={{ cursor: 'pointer', position: 'relative' }}
-                          onClick={() => {
-                            setIsOpen(row.index);
-                          }}
-                          onMouseLeave={() => setIsOpen(null)}>
-                          <OptionsIcon />
-                          {isOpen === row.index ? (
+                        <MenuProvider>
+                          <MenuButton
+                            as={Box}
+                            variant="none"
+                            sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box
                               sx={{
-                                position: 'absolute',
-                                bg: 'backgroundWhite',
-                                // p: 3,
-                                right: 0,
-                                top: 0,
-                                zIndex: 10,
-                                border: '1px solid',
-                                borderColor: 'border',
-                                width: '155px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                position: 'relative',
+                                cursor: 'pointer',
+                                margin: '0px',
+                                padding: '0px',
+                                bg: 'transparent',
+                                ':disabled': {
+                                  display: 'none',
+                                },
+                              }}
+                              onClick={() => {
+                                setIsOpen(row.index);
                               }}>
-                              {/* <Button
-                                onClick={() => {
-                                  setIsOpen(null);
-                                  setIsEdit(row.index);
-                                }}
-                                variant="text.pM"
-                                sx={{
-                                  cursor: 'pointer',
-                                  textAlign: 'left',
-                                  width: '100%',
-                                  bg: 'backgroundWhite',
-                                  color: 'text',
-                                  p: 3,
-                                  ':disabled': {
-                                    color: 'gray.300',
-                                  },
-                                }}>
-                                Edit
-                              </Button> */}
+                              <OptionsIcon />
+                            </Box>
+                          </MenuButton>
+                          <Menu
+                            as={Box}
+                            variant="layout.menu"
+                            open={isOpen == row.index}
+                            onClose={() => setIsOpen(null)}>
+                            <MenuItem>
                               <Button
-                                variant="text.pM"
+                                variant="text"
                                 onClick={() => {
                                   setIsOpen(null);
                                   setIsDelete(row.index);
-                                }}
-                                sx={{
-                                  cursor: 'pointer',
-                                  textAlign: 'left',
-                                  width: '100%',
-                                  bg: 'backgroundWhite',
-                                  color: 'red.600',
-                                  p: 3,
-                                  ':disabled': {
-                                    color: 'gray.300',
-                                  },
                                 }}>
-                                Delete
+                                <Text
+                                  variant=""
+                                  sx={{
+                                    cursor: 'pointer',
+                                    color: 'red.600',
+                                  }}>
+                                  Delete
+                                </Text>
                               </Button>
-                            </Box>
-                          ) : (
-                            <Box />
-                          )}
-                        </Box>
+                            </MenuItem>
+                          </Menu>
+                        </MenuProvider>
                       )}
-                      <Drawer
-                        open={isEdit === row.index}
-                        setOpen={() => setIsEdit(null)}>
-                        <RolesForm
-                          setRender={setRender}
-                          setOpen={setIsEdit}
-                          roleId={contents[row.index]?.id}
-                        />
-                      </Drawer>
-
                       <Modal
                         isOpen={isDelete === row.index}
                         onClose={() => setIsDelete(null)}>
@@ -264,17 +248,20 @@ const RolesList = ({
                             }’?`}
                             setOpen={setIsDelete}
                             setRender={setRender}
-                            onConfirmDelete={() => {
-                              deleteAPI(`roles/${contents[row.index].id}`);
-                              setIsDelete(null);
-                              if (setRender) {
-                                setRender((prev: boolean) => !prev);
-                              }
-                            }}
+                            onConfirmDelete={() => onDelete(row)}
                           />
                         )}
                       </Modal>
-                    </>
+                      <Drawer
+                        open={isEdit === row.index}
+                        setOpen={() => setIsEdit(null)}>
+                        <RolesForm
+                          setRender={setRender}
+                          setOpen={setIsEdit}
+                          roleId={contents[row.index]?.id}
+                        />
+                      </Drawer>
+                    </Box>
                   );
                 },
                 width: '3%',
