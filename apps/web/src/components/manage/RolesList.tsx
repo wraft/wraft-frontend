@@ -33,9 +33,10 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
   const [isDelete, setIsDelete] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | null>(null);
   const [sort, setSort] = useState('');
+  // const [filter, setFilter] = useState('');
 
   const loadData = () => {
-    fetchAPI(`roles?sort=${sort}`).then((data: any) => {
+    fetchAPI(`roles?name=${searchTerm}&sort=${sort}`).then((data: any) => {
       setLoading(true);
       setContents(data);
     });
@@ -43,15 +44,7 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
 
   useEffect(() => {
     loadData();
-  }, [render, sort]);
-
-  useEffect(() => {
-    const contentCopy = [...contents];
-    const filteredContents = contentCopy.filter((e: any) =>
-      e.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
-    setContents([...filteredContents]);
-  }, [searchTerm]);
+  }, [render, sort, searchTerm]);
 
   useEffect(() => {
     if (contents && contents.length > 0) {
