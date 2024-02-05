@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
-import { Flex, Container, Button, Box, Input } from 'theme-ui';
+import { Flex, Container, Button, Box, Input, Spinner } from 'theme-ui';
 
 import { AddIcon, SearchIcon } from '../../../components/Icons';
 import { RolesForm, RolesList } from '../../../components/manage';
@@ -17,6 +17,7 @@ const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterLoading, setFilterLoading] = useState<boolean>(false);
 
   const { userProfile } = useAuth();
 
@@ -52,9 +53,10 @@ const Index: FC = () => {
                 }}>
                 <Input
                   placeholder="Search by role names"
-                  onChange={(e: any) =>
-                    setTimeout(() => setSearchTerm(e.target.value), 1000)
-                  }
+                  onChange={(e: any) => {
+                    setFilterLoading(true);
+                    setTimeout(() => setSearchTerm(e.target.value), 1000);
+                  }}
                   sx={{
                     bg: 'transparent',
                     mb: 0,
@@ -62,8 +64,7 @@ const Index: FC = () => {
                     ':focus': {
                       outline: 'none',
                     },
-                  }}
-                />
+                  }}></Input>
                 <Box
                   sx={{
                     color: 'gray.300',
@@ -71,7 +72,11 @@ const Index: FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                   }}>
-                  <SearchIcon className="searchIcon" />
+                  {filterLoading ? (
+                    <Spinner width={14} />
+                  ) : (
+                    <SearchIcon className="searchIcon" />
+                  )}
                 </Box>
               </Box>
 
@@ -95,6 +100,7 @@ const Index: FC = () => {
                   render={render}
                   setRender={setRender}
                   searchTerm={searchTerm}
+                  setFilterLoading={setFilterLoading}
                 />
               </Box>
             </Flex>

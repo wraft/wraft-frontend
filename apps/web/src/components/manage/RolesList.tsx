@@ -23,9 +23,15 @@ interface Props {
   searchTerm: string;
   render: boolean;
   setRender: any;
+  setFilterLoading: (e: boolean) => void;
 }
 
-const RolesList = ({ render, setRender, searchTerm }: Props) => {
+const RolesList = ({
+  render,
+  setRender,
+  searchTerm,
+  setFilterLoading,
+}: Props) => {
   const [contents, setContents] = useState<Array<RolesItem>>([]);
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,18 +39,25 @@ const RolesList = ({ render, setRender, searchTerm }: Props) => {
   const [isDelete, setIsDelete] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | null>(null);
   const [sort, setSort] = useState('');
-  // const [filter, setFilter] = useState('');
 
-  const loadData = () => {
-    fetchAPI(`roles?name=${searchTerm}&sort=${sort}`).then((data: any) => {
-      setLoading(true);
-      setContents(data);
-    });
+  const loadData = async () => {
+    await fetchAPI(`roles?name=${searchTerm}&sort=${sort}`).then(
+      (data: any) => {
+        setLoading(true);
+        setContents(data);
+      },
+    );
   };
 
   useEffect(() => {
+    loadData()
+      .then(() => setFilterLoading(false))
+      .catch(() => setFilterLoading(false));
+  }, [searchTerm]);
+
+  useEffect(() => {
     loadData();
-  }, [render, sort, searchTerm]);
+  }, [render, sort]);
 
   useEffect(() => {
     if (contents && contents.length > 0) {

@@ -27,13 +27,9 @@ interface FormInputs {
 }
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
-  const {
-    register,
-    trigger,
-    handleSubmit,
-    // setValue,
-    // formState: { isValid },
-  } = useForm<FormInputs>({ mode: 'onChange' });
+  const { register, trigger, handleSubmit } = useForm<FormInputs>({
+    mode: 'onChange',
+  });
 
   const [initialPermissions, setInitialPermissions] = useState<any>({});
   const [role, setRole] = useState<any>({});
@@ -48,10 +44,11 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
   };
 
   const loadRole = () => {
-    if (roleId)
+    if (roleId) {
       fetchAPI(`roles/${roleId}`).then((data: any) => {
         setRole(data);
       });
+    }
   };
 
   useEffect(() => {
@@ -153,6 +150,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       permissions: permissionsList,
     };
     if (roleId && roleId !== ('' || null || undefined)) {
+      //update
       putAPI(`roles/${role.id}`, body).then(() => {
         setOpen(null);
         setRender((prev: boolean) => !prev);
@@ -162,6 +160,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
         });
       });
     } else {
+      //create
       postAPI('roles', body).then(() => {
         setOpen(null);
         setRender((prev: boolean) => !prev);
