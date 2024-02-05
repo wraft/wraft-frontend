@@ -7,6 +7,7 @@ import {
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
@@ -28,7 +29,12 @@ interface FormInputs {
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
   const isEdit = roleId && roleId !== (null || undefined || '');
-  const { register, trigger, handleSubmit } = useForm<FormInputs>({
+  const {
+    register,
+    trigger,
+    formState: { isValid },
+    handleSubmit,
+  } = useForm<FormInputs>({
     mode: 'onChange',
   });
 
@@ -37,6 +43,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
   const [permissions, setPermissions] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isExpanded, setExpanded] = useState<number | null>(null);
+  const [formStep, setFormStep] = useState(0);
 
   const loadPermissions = () => {
     fetchAPI('permissions').then((data: any) => {
@@ -79,7 +86,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       const data = { ...permissions };
       filteredPermissionKeys.map((key) => {
         data[key].children.map((sub: any) => {
-          if (role.permissions.includes(sub.name)) sub.isChecked = true;
+          if (role.permissions && role.permissions.includes(sub.name))
+            sub.isChecked = true;
         });
         const isAllSelected = data[key].children.every(
           (child: any) => child.isChecked === true,
@@ -143,34 +151,52 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       });
     });
   };
+
+  function next() {
+    setFormStep((i) => i + 1);
+  }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
+
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
+
   function onSubmit(data: any) {
     const permissionsList: string[] = [];
     checkedValuesFunc(permissionsList);
+
     const body = {
       name: data.name,
       permissions: permissionsList,
     };
-    if (isEdit) {
-      //update
-      putAPI(`roles/${role.id}`, body).then(() => {
-        setOpen(null);
-        setRender((prev: boolean) => !prev);
-        toast.success('Role Edited', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      });
-    } else {
-      //create
-      postAPI('roles', body).then(() => {
-        setOpen(null);
-        setRender((prev: boolean) => !prev);
-        toast.success('Role Added', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      });
-    }
+    const text = isEdit ? 'Edit' : 'Create';
+    const Request = isEdit
+      ? putAPI(`roles/${role.id}`, body)
+      : postAPI('roles', body);
+
+    toast.promise(
+      Request,
+      {
+        loading: 'Loading...',
+        success: () => {
+          if (formStep === 1) {
+            setOpen(null);
+            setFormStep(0);
+            setRender((prev: boolean) => !prev);
+          }
+          return `Role ${text}ed`;
+        },
+        error: () => {
+          return `Failed to ${text} role`;
+        },
+      },
+      {
+        duration: 1000,
+        position: 'top-right',
+      },
+    );
   }
 
   return (
@@ -181,8 +207,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
         bg: 'backgroundWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        maxHeight: '100dvh',
-        height: '100%',
+        minHeight: '100dvh',
       }}>
       <Flex
         sx={{
@@ -198,8 +223,13 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
             }}>
             <Text variant="pB">{isEdit ? 'Edit Role' : 'Create new role'}</Text>
           </Box>
+          <StepsIndicator
+            titles={['Details', 'Permissions']}
+            formStep={formStep}
+            goTo={goTo}
+          />
           <Box sx={{ p: 4, pt: 3 }}>
-            <div>
+            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
               <Field
                 label="Role Name"
                 name="name"
@@ -207,17 +237,17 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                 defaultValue={role.name}
                 register={register}
               />
-            </div>
-            <Box sx={{ pt: 2 }}>
-              <Label htmlFor="search">Permissions</Label>
-              <Input
-                type="search"
-                placeholder="Search by"
-                onChange={(e: any) => setSearchTerm(e.target.value)}
-                sx={{ bg: 'background' }}
-              />
             </Box>
-            <Box>
+            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+              <Box>
+                <Label htmlFor="search">Permissions</Label>
+                <Input
+                  type="search"
+                  placeholder="Search by"
+                  onChange={(e: any) => setSearchTerm(e.target.value)}
+                  sx={{ bg: 'background' }}
+                />
+              </Box>
               <Flex
                 sx={{
                   flexDirection: 'column',
@@ -359,14 +389,38 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
           </Box>
         </Box>
       </Flex>
-      <Box sx={{ p: 4, pt: 2 }}>
+      <Flex sx={{ p: 4, pt: 2, gap: 2, mt: 'auto' }}>
         <Button
+          sx={{ display: formStep === 0 ? 'block' : 'none' }}
+          variant="buttonPrimary"
+          onClick={(e) => {
+            e.preventDefault();
+            next();
+          }}>
+          Next
+        </Button>
+        <Button
+          sx={{ display: formStep === 1 ? 'block' : 'none' }}
+          variant="buttonSecondary"
+          onClick={(e) => {
+            e.preventDefault();
+            prev();
+          }}>
+          Prev
+        </Button>
+        <Button
+          disabled={!isValid}
           onMouseOver={() => trigger()}
+          onClick={() => {
+            if (formStep === 0) {
+              next();
+            }
+          }}
           type="submit"
           variant="buttonPrimarySmall">
-          Save
+          {isEdit ? 'Update' : 'Create'}
         </Button>
-      </Box>
+      </Flex>
     </Flex>
   );
 };
