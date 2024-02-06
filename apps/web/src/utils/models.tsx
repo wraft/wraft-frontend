@@ -140,10 +140,10 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
 /**
  * delete API
  */
-export const deleteAPI = (path: any) =>
+export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
     api
-      .delete(`/${path}`)
+      .delete(`/${path}`, body || {})
       .then((response) => {
         resolve(response.data);
       })
