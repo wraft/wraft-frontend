@@ -186,8 +186,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
           setRender((prev: boolean) => !prev);
           return `Role ${text}ed`;
         },
-        error: () => {
-          return `Failed to ${text} role`;
+        error: (error) => {
+          return error.errors.name[0] || `Failed to ${text} role`;
         },
       },
       {
