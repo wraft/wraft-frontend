@@ -181,12 +181,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       {
         loading: 'Loading...',
         success: () => {
-          if (formStep === 0) {
-            next();
-          } else {
-            setOpen(null);
-            setFormStep(0);
-          }
+          setFormStep(0);
+          setOpen(null);
           setRender((prev: boolean) => !prev);
           return `Role ${text}ed`;
         },
@@ -411,6 +407,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
           Prev
         </Button>
         <Button
+          sx={{ display: formStep === 0 ? 'none' : 'block' }}
           disabled={!isValid}
           onMouseOver={() => trigger()}
           type="submit"
