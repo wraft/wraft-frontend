@@ -342,6 +342,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                       bg: 'background',
                                       py: '12px',
                                       px: '16px',
+                                      mb: 0,
                                       ':last-of-type': {
                                         borderBottom: 'none',
                                       },
