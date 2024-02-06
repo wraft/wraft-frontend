@@ -198,13 +198,12 @@ const RolesList = ({
                             onClose={() => setIsOpen(null)}>
                             <MenuItem>
                               <Button
-                                variant="text"
+                                variant="base"
                                 onClick={() => {
                                   setIsOpen(null);
                                   setIsDelete(row.index);
                                 }}>
                                 <Text
-                                  variant=""
                                   sx={{
                                     cursor: 'pointer',
                                     color: 'red.600',
