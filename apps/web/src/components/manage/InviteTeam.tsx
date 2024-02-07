@@ -1,18 +1,10 @@
 import React from 'react';
 
+import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Creatable from 'react-select/creatable';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  Input,
-  Label,
-  Text,
-  useThemeUI,
-} from 'theme-ui';
+import { Box, Button, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 
 import { fetchAPI, postAPI } from '../../utils/models';
 
@@ -246,8 +238,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       borderBottom: 'none',
                     },
                   }}>
-                  <Checkbox
-                    sx={{ width: '16px', height: '16px' }}
+                  <IndeterminateCheckbox
                     {...register('role', { required: true })}
                     value={role.id}
                     onChange={(e: any) => {
@@ -256,7 +247,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                   />
                   <Text
                     variant="pR"
-                    sx={{ textTransform: 'capitalize', color: 'text' }}>
+                    sx={{ ml: 2, textTransform: 'capitalize', color: 'text' }}>
                     {role.name}
                   </Text>
                 </Label>

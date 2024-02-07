@@ -2,14 +2,12 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Checkbox } from '@ariakit/react';
 import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { Box, Button, Flex, Text } from 'theme-ui';
 
 import { putAPI, fetchAPI } from '../../utils/models';
-import { svgDataUriTick, svgDataUriTickWhite } from '../common/UriSvgs';
 import { ArrowDropdown } from '../Icons';
 import Table from '../TanstackTable';
 
@@ -173,31 +171,11 @@ const PermissionsList = () => {
                     (child: any) => child[role.name] === true,
                   ),
                 onChange: (e: any) => onChangeParent(e, role, row.index),
-                svgDataUriWhite: svgDataUriTickWhite,
               }}
+              variant={row.getCanExpand() ? 'dark' : 'white'}
             />
           ) : (
-            <Checkbox
-              sx={{
-                appearance: 'none',
-                border: '1px solid #D4D7DA',
-                borderRadius: '4px',
-                height: '20px',
-                width: '20px',
-                '&:checked': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderColor: '#343E49',
-                  '&:after': {
-                    display: 'block',
-                    mt: '4px',
-                    content: `url("data:image/svg+xml,${svgDataUriTick}")`,
-                  },
-                },
-              }}
-              type="checkbox"
+            <IndeterminateCheckbox
               name="child"
               checked={
                 permissions[row.parentId]?.children[row.index][role.name]
@@ -205,6 +183,7 @@ const PermissionsList = () => {
               onChange={(e: any) =>
                 onChangeChild(e, role, row.index, row.parentId)
               }
+              variant="white"
             />
           )}
         </Box>
