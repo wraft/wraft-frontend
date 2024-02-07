@@ -8,6 +8,8 @@ import {
   DisclosureContent,
 } from '@ariakit/react';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
+import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
+import { svgDataUriTick } from '@wraft-ui/UriSvgs';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
@@ -295,15 +297,18 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                   maxWidth: 'max-content',
                                   alignItems: 'center',
                                 }}>
-                                <Checkbox
-                                  sx={{
-                                    width: '14px',
-                                    height: '14px',
-                                    accentColor: 'gray.1000',
-                                  }}
-                                  checked={permissions[key].isChecked}
-                                  onChange={(e: any) => {
-                                    checkParent(e, permissions[key].name);
+                                <IndeterminateCheckbox
+                                  {...{
+                                    checked: permissions[key].isChecked,
+                                    indeterminate:
+                                      !permissions[key].children.every(
+                                        (child: any) => child.isChecked,
+                                      ) &&
+                                      permissions[key].children.some(
+                                        (child: any) => child.isChecked,
+                                      ),
+                                    onChange: (e: any) =>
+                                      checkParent(e, permissions[key].name),
                                   }}
                                 />
                                 <Text
@@ -349,12 +354,26 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                     }}>
                                     <Checkbox
                                       sx={{
-                                        width: '12px',
-                                        height: '12px',
-                                        accentColor: 'gray.900',
+                                        appearance: 'none',
+                                        border: '1px solid #D4D7DA',
+                                        borderRadius: '4px',
+                                        height: '20px',
+                                        width: '20px',
+                                        '&:checked': {
+                                          display: 'flex',
+                                          flexDirection: 'column',
+                                          justifyContent: 'center',
+                                          alignItems: 'center',
+                                          borderColor: '#343E49',
+                                          '&:after': {
+                                            display: 'block',
+                                            mt: '4px',
+                                            content: `url("data:image/svg+xml,${svgDataUriTick}")`,
+                                          },
+                                        },
                                       }}
+                                      type="checkbox"
                                       {...register('permissions')}
-                                      // value={sub.name}
                                       checked={sub.isChecked}
                                       onChange={(e: any) => {
                                         checkChild(
