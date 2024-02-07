@@ -323,10 +323,7 @@ const Form = () => {
 
         if (
           !Number(item.name) &&
-          item.name !== '0' &&
-          item.name !== '' &&
-          item.name !== null &&
-          item.name !== undefined &&
+          item.name !== ('0' || '' || null || undefined) &&
           notInContent
         ) {
           fieldsMap.push(it);
