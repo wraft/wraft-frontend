@@ -9,17 +9,22 @@ interface IndeterminateCheckboxProps extends CheckboxOptions<'input'> {
   indeterminate?: boolean;
   className?: string;
   variant?: 'dark' | 'white';
-  size?: number;
+  size?: 'small' | 'medium' | 'large';
 }
 
 const IndeterminateCheckbox = ({
   indeterminate,
   className = '',
   variant = 'dark',
-  size = 20,
+  size = 'medium',
   ...rest
 }: IndeterminateCheckboxProps) => {
   const ref = useRef<HTMLInputElement>(null!);
+  const checkboxSize = size === 'large' ? 24 : size === 'small' ? 16 : 20;
+  const tickSize = size === 'large' ? 20 : size === 'small' ? 12 : 16;
+  const dashSize = size === 'large' ? 20 : size === 'small' ? 12 : 16;
+  const paddingTop =
+    size === 'large' ? '4.5px' : size === 'small' ? '3.5px' : '4px';
 
   useEffect(() => {
     if (typeof indeterminate === 'boolean') {
@@ -34,17 +39,29 @@ const IndeterminateCheckbox = ({
         border: `1px solid #D4D7DA`,
         backgroundColor: 'transparent',
         borderRadius: '4px',
-        height: `${size}px`,
-        width: `${size}px`,
+        height: `${checkboxSize}px`,
+        width: `${checkboxSize}px`,
         '&:checked': {
           display: 'flex',
           justifyContent: 'center',
-          borderColor: variant === 'dark' ? '#343E49' : '#D4D7DA',
+          borderColor: variant === 'dark' ? '#343E49' : '#343E49',
           backgroundColor: variant === 'dark' ? '#343E49' : 'transparent',
           alignItems: 'center',
           '&:after': {
-            display: 'block',
-            content: `url("data:image/svg+xml,${encodeURIComponent(renderToString(<TickIcon color={variant === 'dark' ? '#FFFFFF' : '#343E49'} width={'16px'} height={'16px'} />))}")`,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            mt: paddingTop,
+            content: `url("data:image/svg+xml,${encodeURIComponent(
+              renderToString(
+                <TickIcon
+                  color={variant === 'dark' ? '#FFFFFF' : '#343E49'}
+                  width={tickSize}
+                  height={tickSize}
+                  viewBox="0 0 24 24"
+                />,
+              ),
+            )}")`,
           },
         },
         '&:indeterminate': {
@@ -54,8 +71,18 @@ const IndeterminateCheckbox = ({
           alignItems: 'center',
           '&:after': {
             display: 'block',
-            mb: '5px',
-            content: `url("data:image/svg+xml,${encodeURIComponent(renderToString(<DashIcon color={'#343E49'} />))}")`,
+            mt: paddingTop,
+            content: `url("data:image/svg+xml,${encodeURIComponent(
+              renderToString(
+                <DashIcon
+                  sx={{ my: 'auto' }}
+                  width={dashSize}
+                  height={dashSize}
+                  color={'#343E49'}
+                  viewBox="0 0 24 24"
+                />,
+              ),
+            )}")`,
           },
         },
       }}
