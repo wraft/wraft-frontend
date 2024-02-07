@@ -1,7 +1,7 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useRef } from 'react';
 
-import { Checkbox, CheckboxOptions } from '@ariakit/react';
+import { Checkbox as AriakitCheckbox, CheckboxOptions } from '@ariakit/react';
 import { TickIcon, DashIcon } from '@wraft/icon';
 import { renderToString } from 'react-dom/server';
 
@@ -12,7 +12,7 @@ interface IndeterminateCheckboxProps extends CheckboxOptions<'input'> {
   size?: 'small' | 'medium' | 'large';
 }
 
-const IndeterminateCheckbox = ({
+const Checkbox = ({
   indeterminate,
   className = '',
   variant = 'dark',
@@ -33,7 +33,7 @@ const IndeterminateCheckbox = ({
   }, [ref, indeterminate, rest.checked]);
 
   return (
-    <Checkbox
+    <AriakitCheckbox
       sx={{
         appearance: 'none',
         border: `1px solid #D4D7DA`,
@@ -95,4 +95,4 @@ const IndeterminateCheckbox = ({
   );
 };
 
-export default IndeterminateCheckbox;
+export default Checkbox;

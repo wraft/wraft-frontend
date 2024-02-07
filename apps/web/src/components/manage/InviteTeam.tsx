@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
+import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Creatable from 'react-select/creatable';
@@ -238,7 +238,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       borderBottom: 'none',
                     },
                   }}>
-                  <IndeterminateCheckbox
+                  <Checkbox
                     size={'small'}
                     {...register('role', { required: true })}
                     value={role.id}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
+import Checkbox from '@wraft-ui/Checkbox';
 import { svgDataUriTickWhiteProped } from '@wraft-ui/UriSvgs';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -133,7 +133,7 @@ const AssignRole = ({
                       borderBottom: 'none',
                     },
                   }}>
-                  <IndeterminateCheckbox
+                  <Checkbox
                     size={'small'}
                     sx={{
                       height: '14px',

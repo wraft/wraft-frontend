@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
+import Checkbox from '@wraft-ui/Checkbox';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -253,7 +253,7 @@ const ThemeForm = () => {
               </Box>
               <Box>
                 <Label mb={1}>
-                  <IndeterminateCheckbox
+                  <Checkbox
                     size={'small'}
                     defaultChecked={true}
                     {...register('default_theme')}
