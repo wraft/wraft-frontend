@@ -196,22 +196,23 @@ const RolesList = ({
                             variant="layout.menu"
                             open={isOpen == row.index}
                             onClose={() => setIsOpen(null)}>
-                            <MenuItem>
-                              <Button
-                                variant="base"
-                                onClick={() => {
-                                  setIsOpen(null);
-                                  setIsDelete(row.index);
-                                }}>
+                            <Button
+                              variant="base"
+                              onClick={() => {
+                                setIsOpen(null);
+                                setIsDelete(row.index);
+                              }}>
+                              <MenuItem as={Box} sx={{ width: 'fit-content' }}>
                                 <Text
                                   sx={{
                                     cursor: 'pointer',
                                     color: 'red.600',
+                                    textAlign: 'left',
                                   }}>
                                   Delete
                                 </Text>
-                              </Button>
-                            </MenuItem>
+                              </MenuItem>
+                            </Button>
                           </Menu>
                         </MenuProvider>
                       )}
