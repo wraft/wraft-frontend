@@ -151,6 +151,17 @@ const RolesList = ({
                         setIsEdit(row.index);
                       }}>
                       {row.original.name}
+                      <Drawer
+                        open={isEdit === row.index}
+                        setOpen={() => setIsEdit(null)}>
+                        {isEdit === row.index && (
+                          <RolesForm
+                            setRender={setRender}
+                            setOpen={setIsEdit}
+                            roleId={contents[row.index]?.id}
+                          />
+                        )}
+                      </Drawer>
                     </Box>
                   );
                 },
@@ -252,15 +263,6 @@ const RolesList = ({
                           />
                         )}
                       </Modal>
-                      <Drawer
-                        open={isEdit === row.index}
-                        setOpen={() => setIsEdit(null)}>
-                        <RolesForm
-                          setRender={setRender}
-                          setOpen={setIsEdit}
-                          roleId={contents[row.index]?.id}
-                        />
-                      </Drawer>
                     </Box>
                   );
                 },
