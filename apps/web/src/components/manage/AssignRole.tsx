@@ -134,6 +134,7 @@ const AssignRole = ({
                     },
                   }}>
                   <IndeterminateCheckbox
+                    size={'small'}
                     sx={{
                       height: '14px',
                       width: '14px',

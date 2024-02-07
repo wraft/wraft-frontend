@@ -239,6 +239,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                     },
                   }}>
                   <IndeterminateCheckbox
+                    size={'small'}
                     {...register('role', { required: true })}
                     value={role.id}
                     onChange={(e: any) => {

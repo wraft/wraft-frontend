@@ -254,7 +254,7 @@ const ThemeForm = () => {
               <Box>
                 <Label mb={1}>
                   <IndeterminateCheckbox
-                    size={16}
+                    size={'small'}
                     defaultChecked={true}
                     {...register('default_theme')}
                   />
