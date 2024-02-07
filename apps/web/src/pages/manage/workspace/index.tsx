@@ -343,7 +343,7 @@ const Index: FC = () => {
                             <IndeterminateCheckbox
                               checked={isChecked}
                               onChange={handleCheckboxChange}
-                              size={16}
+                              size={'small'}
                             />
                             <Text variant="subM" ml={2}>
                               I acknowledge I understand that all of the data

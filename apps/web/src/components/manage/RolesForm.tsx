@@ -286,6 +286,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                               alignItems: 'center',
                             }}>
                             <IndeterminateCheckbox
+                              size={'small'}
                               {...{
                                 checked: permissions[key].isChecked,
                                 indeterminate:
@@ -341,6 +342,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                   },
                                 }}>
                                 <IndeterminateCheckbox
+                                  size={'small'}
                                   checked={sub.isChecked}
                                   onChange={(e) => {
                                     checkChild(
