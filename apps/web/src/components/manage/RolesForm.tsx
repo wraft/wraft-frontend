@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useState } from 'react';
 
-import { Checkbox } from '@ariakit/react';
 import {
   Disclosure,
   DisclosureProvider,
@@ -9,7 +8,6 @@ import {
 } from '@ariakit/react';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
-import { svgDataUriTick } from '@wraft-ui/UriSvgs';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
@@ -342,36 +340,16 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                     borderBottom: 'none',
                                   },
                                 }}>
-                                <Checkbox
-                                  sx={{
-                                    appearance: 'none',
-                                    border: '1px solid #D4D7DA',
-                                    borderRadius: '4px',
-                                    height: '20px',
-                                    width: '20px',
-                                    '&:checked': {
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      justifyContent: 'center',
-                                      alignItems: 'center',
-                                      borderColor: '#343E49',
-                                      '&:after': {
-                                        display: 'block',
-                                        mt: '4px',
-                                        content: `url("data:image/svg+xml,${svgDataUriTick}")`,
-                                      },
-                                    },
-                                  }}
-                                  type="checkbox"
-                                  // {...register('permissions')}
+                                <IndeterminateCheckbox
                                   checked={sub.isChecked}
-                                  onChange={(e: any) => {
+                                  onChange={(e) => {
                                     checkChild(
                                       e,
                                       permissions[key].name,
                                       sub.id,
                                     );
                                   }}
+                                  variant="white"
                                 />
                                 <Text
                                   variant="subR"

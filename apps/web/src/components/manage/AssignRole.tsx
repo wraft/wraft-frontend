@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { Checkbox } from '@ariakit/react';
+import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import { svgDataUriTickWhiteProped } from '@wraft-ui/UriSvgs';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -133,27 +133,17 @@ const AssignRole = ({
                       borderBottom: 'none',
                     },
                   }}>
-                  <Checkbox
+                  <IndeterminateCheckbox
                     sx={{
-                      appearance: 'none',
-                      border: '1px solid #D4D7DA',
-                      borderRadius: '4px',
                       height: '14px',
                       width: '14px',
                       '&:checked': {
-                        display: 'flex',
-                        justifyContent: 'center',
-                        borderColor: '#343E49',
-                        backgroundColor: '#343E49',
-                        alignItems: 'center',
                         '&:after': {
-                          display: 'block',
-                          mt: '2px',
-                          content: `url("data:image/svg+xml,${svgDataUriTickWhiteProped(10)}")`,
+                          mt: '1px',
+                          content: `url("data:image/svg+xml,${svgDataUriTickWhiteProped(9)}")`,
                         },
                       },
                     }}
-                    type="checkbox"
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
                   <Text
