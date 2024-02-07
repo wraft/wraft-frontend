@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 
+import Checkbox from '@wraft-ui/Checkbox';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import Head from 'next/head';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -340,7 +340,7 @@ const Index: FC = () => {
                               display: 'flex',
                               alignItems: 'flex-start',
                             }}>
-                            <IndeterminateCheckbox
+                            <Checkbox
                               checked={isChecked}
                               onChange={handleCheckboxChange}
                               size={'small'}

@@ -6,8 +6,8 @@ import {
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
+import Checkbox from '@wraft-ui/Checkbox';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
@@ -291,7 +291,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                               alignItems: 'center',
                               mb: 0,
                             }}>
-                            <IndeterminateCheckbox
+                            <Checkbox
                               size={'small'}
                               {...{
                                 checked: permissions[key].isChecked,
@@ -347,7 +347,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                     borderBottom: 'none',
                                   },
                                 }}>
-                                <IndeterminateCheckbox
+                                <Checkbox
                                   size={'small'}
                                   checked={sub.isChecked}
                                   onChange={(e) => {

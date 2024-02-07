@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
+import Checkbox from '@wraft-ui/Checkbox';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { Box, Button, Flex, Text } from 'theme-ui';
@@ -160,7 +160,7 @@ const PermissionsList = () => {
       cell: ({ row }: any) => (
         <Box>
           {row.getCanExpand() ? (
-            <IndeterminateCheckbox
+            <Checkbox
               {...{
                 checked: permissions[row.index][role.name] === true,
                 indeterminate:
@@ -175,7 +175,7 @@ const PermissionsList = () => {
               variant={row.getCanExpand() ? 'dark' : 'white'}
             />
           ) : (
-            <IndeterminateCheckbox
+            <Checkbox
               name="child"
               checked={
                 permissions[row.parentId]?.children[row.index][role.name]
