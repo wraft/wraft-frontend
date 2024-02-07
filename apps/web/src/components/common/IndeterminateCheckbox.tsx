@@ -3,16 +3,22 @@ import { useEffect, useRef } from 'react';
 
 import { Checkbox, CheckboxOptions } from '@ariakit/react';
 
-import { svgDataUriDash, svgDataUriTickWhite } from './UriSvgs';
+import { svgDataUriDash, svgDataUriTick, svgDataUriTickWhite } from './UriSvgs';
+
+interface IndeterminateCheckboxProps extends CheckboxOptions<'input'> {
+  indeterminate?: boolean;
+  className?: string;
+  variant?: 'dark' | 'white';
+  size?: number;
+}
 
 const IndeterminateCheckbox = ({
   indeterminate,
   className = '',
+  variant = 'dark',
+  size = 20,
   ...rest
-}: {
-  indeterminate?: boolean;
-  className?: string;
-} & CheckboxOptions<'input'>) => {
+}: IndeterminateCheckboxProps) => {
   const ref = useRef<HTMLInputElement>(null!);
 
   useEffect(() => {
@@ -23,36 +29,70 @@ const IndeterminateCheckbox = ({
 
   return (
     <Checkbox
-      sx={{
-        appearance: 'none',
-        border: '1px solid #D4D7DA',
-        borderRadius: '4px',
-        height: '20px',
-        width: '20px',
-        '&:checked': {
-          display: 'flex',
-          justifyContent: 'center',
-          borderColor: '#343E49',
-          backgroundColor: '#343E49',
-          alignItems: 'center',
-          '&:after': {
-            display: 'block',
-            mt: '4px',
-            content: `url("data:image/svg+xml,${svgDataUriTickWhite}")`,
-          },
-        },
-        '&:indeterminate': {
-          display: 'flex',
-          justifyContent: 'center',
-          backgroundColor: 'transparent',
-          alignItems: 'center',
-          '&:after': {
-            display: 'block',
-            mb: '5px',
-            content: `url("data:image/svg+xml,${svgDataUriDash}")`,
-          },
-        },
-      }}
+      sx={
+        variant === 'dark'
+          ? {
+              appearance: 'none',
+              border: '1px solid #D4D7DA',
+              borderRadius: '4px',
+              height: `${size}px`,
+              width: `${size}px`,
+              '&:checked': {
+                display: 'flex',
+                justifyContent: 'center',
+                borderColor: '#343E49',
+                backgroundColor: '#343E49',
+                alignItems: 'center',
+                '&:after': {
+                  display: 'block',
+                  mt: '4px',
+                  content: `url("data:image/svg+xml,${svgDataUriTickWhite}")`,
+                },
+              },
+              '&:indeterminate': {
+                display: 'flex',
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                alignItems: 'center',
+                '&:after': {
+                  display: 'block',
+                  mb: '5px',
+                  content: `url("data:image/svg+xml,${svgDataUriDash}")`,
+                },
+              },
+            }
+          : {
+              appearance: 'none',
+              border: '1px solid #D4D7DA',
+              backgroundColor: 'transparent',
+              borderRadius: '4px',
+              height: '20px',
+              width: '20px',
+              '&:checked': {
+                display: 'flex',
+                justifyContent: 'center',
+                borderColor: '#D4D7DA',
+                backgroundColor: 'transparent',
+                alignItems: 'center',
+                '&:after': {
+                  display: 'block',
+                  mt: '4px',
+                  content: `url("data:image/svg+xml,${svgDataUriTick}")`,
+                },
+              },
+              '&:indeterminate': {
+                display: 'flex',
+                justifyContent: 'center',
+                backgroundColor: 'transparent',
+                alignItems: 'center',
+                '&:after': {
+                  display: 'block',
+                  mb: '5px',
+                  content: `url("data:image/svg+xml,${svgDataUriDash}")`,
+                },
+              },
+            }
+      }
       type="checkbox"
       name="parent"
       ref={ref}
