@@ -2,8 +2,8 @@
 import { useEffect, useRef } from 'react';
 
 import { Checkbox, CheckboxOptions } from '@ariakit/react';
-
-import { svgDataUriDash, svgDataUriTick, svgDataUriTickWhite } from './UriSvgs';
+import { TickIcon, DashIcon } from '@wraft/icon';
+import { renderToString } from 'react-dom/server';
 
 interface IndeterminateCheckboxProps extends CheckboxOptions<'input'> {
   indeterminate?: boolean;
@@ -29,70 +29,36 @@ const IndeterminateCheckbox = ({
 
   return (
     <Checkbox
-      sx={
-        variant === 'dark'
-          ? {
-              appearance: 'none',
-              border: '1px solid #D4D7DA',
-              borderRadius: '4px',
-              height: `${size}px`,
-              width: `${size}px`,
-              '&:checked': {
-                display: 'flex',
-                justifyContent: 'center',
-                borderColor: '#343E49',
-                backgroundColor: '#343E49',
-                alignItems: 'center',
-                '&:after': {
-                  display: 'block',
-                  mt: '4px',
-                  content: `url("data:image/svg+xml,${svgDataUriTickWhite}")`,
-                },
-              },
-              '&:indeterminate': {
-                display: 'flex',
-                justifyContent: 'center',
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                '&:after': {
-                  display: 'block',
-                  mb: '5px',
-                  content: `url("data:image/svg+xml,${svgDataUriDash}")`,
-                },
-              },
-            }
-          : {
-              appearance: 'none',
-              border: '1px solid #D4D7DA',
-              backgroundColor: 'transparent',
-              borderRadius: '4px',
-              height: '20px',
-              width: '20px',
-              '&:checked': {
-                display: 'flex',
-                justifyContent: 'center',
-                borderColor: '#D4D7DA',
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                '&:after': {
-                  display: 'block',
-                  mt: '4px',
-                  content: `url("data:image/svg+xml,${svgDataUriTick}")`,
-                },
-              },
-              '&:indeterminate': {
-                display: 'flex',
-                justifyContent: 'center',
-                backgroundColor: 'transparent',
-                alignItems: 'center',
-                '&:after': {
-                  display: 'block',
-                  mb: '5px',
-                  content: `url("data:image/svg+xml,${svgDataUriDash}")`,
-                },
-              },
-            }
-      }
+      sx={{
+        appearance: 'none',
+        border: `1px solid #D4D7DA`,
+        backgroundColor: 'transparent',
+        borderRadius: '4px',
+        height: `${size}px`,
+        width: `${size}px`,
+        '&:checked': {
+          display: 'flex',
+          justifyContent: 'center',
+          borderColor: variant === 'dark' ? '#343E49' : '#D4D7DA',
+          backgroundColor: variant === 'dark' ? '#343E49' : 'transparent',
+          alignItems: 'center',
+          '&:after': {
+            display: 'block',
+            content: `url("data:image/svg+xml,${encodeURIComponent(renderToString(<TickIcon color={variant === 'dark' ? '#FFFFFF' : '#343E49'} width={'16px'} height={'16px'} />))}")`,
+          },
+        },
+        '&:indeterminate': {
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: 'transparent',
+          alignItems: 'center',
+          '&:after': {
+            display: 'block',
+            mb: '5px',
+            content: `url("data:image/svg+xml,${encodeURIComponent(renderToString(<DashIcon color={'#343E49'} />))}")`,
+          },
+        },
+      }}
       type="checkbox"
       name="parent"
       ref={ref}
