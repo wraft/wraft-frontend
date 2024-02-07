@@ -273,9 +273,14 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                           py: '12px',
                           px: '16px',
                           border: 'none',
+                          borderBottom: '1px solid',
+                          borderColor: 'neutral.200',
+                          display: 'flex',
+                          alignItems: 'center',
                         }}>
                         <Flex
                           sx={{
+                            width: '100%',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                           }}>
@@ -284,6 +289,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                               display: 'flex',
                               maxWidth: 'max-content',
                               alignItems: 'center',
+                              mb: 0,
                             }}>
                             <IndeterminateCheckbox
                               size={'small'}
