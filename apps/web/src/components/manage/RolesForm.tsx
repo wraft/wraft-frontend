@@ -207,207 +207,195 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
         bg: 'backgroundWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: '100dvh',
+        height: '100dvh',
       }}>
-      <Flex
+      <Box
         sx={{
-          flexDirection: 'column',
+          px: 4,
+          py: 3,
+          borderBottom: '1px solid',
+          borderColor: 'border',
         }}>
-        <Box>
-          <Box
-            sx={{
-              px: 4,
-              py: 3,
-              borderBottom: '1px solid',
-              borderColor: 'border',
-            }}>
-            <Text variant="pB">{isEdit ? 'Edit Role' : 'Create new role'}</Text>
-          </Box>
-          <StepsIndicator
-            titles={['Details', 'Permissions']}
-            formStep={formStep}
-            goTo={goTo}
+        <Text variant="pB">{isEdit ? 'Edit Role' : 'Create new role'}</Text>
+      </Box>
+      <StepsIndicator
+        titles={['Details', 'Permissions']}
+        formStep={formStep}
+        goTo={goTo}
+      />
+      <Box sx={{ p: 4, pt: 3, height: '100%', overflowY: 'hidden' }}>
+        <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+          <Field
+            label="Role Name"
+            name="name"
+            placeholder="Role Name"
+            defaultValue={role.name}
+            register={register}
           />
-          <Box sx={{ p: 4, pt: 3 }}>
-            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-              <Field
-                label="Role Name"
-                name="name"
-                placeholder="Role Name"
-                defaultValue={role.name}
-                register={register}
-              />
-            </Box>
-            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
-              <Box>
-                <Label htmlFor="search">Permissions</Label>
-                <Input
-                  type="search"
-                  placeholder="Search by"
-                  onChange={(e: any) => setSearchTerm(e.target.value)}
-                  sx={{ bg: 'background' }}
-                />
-              </Box>
-              <Flex
-                sx={{
-                  flexDirection: 'column',
-                  mt: '18px',
-                  border: '1px solid',
-                  borderColor: 'border',
-                  borderRadius: 4,
-                  maxHeight: '400px',
-                  overflowX: 'hidden',
-                  overflowY: 'scroll',
-                  scrollbarWidth: 'none',
-                  scrollbarColor: 'red.600',
-                }}>
-                <Box>
-                  {filteredPermissionKeys.map((key, index) => {
-                    const dropped = isExpanded === index;
-                    return (
-                      <DisclosureProvider key={index}>
-                        <Box>
-                          <Disclosure
-                            onClick={() => {
-                              if (isExpanded === index) setExpanded(null);
-                              else setExpanded(index);
-                            }}
+        </Box>
+        <Box
+          sx={{
+            display: formStep === 1 ? 'block' : 'none',
+            height: '100%',
+            overflowY: 'hidden',
+          }}>
+          <Box>
+            <Label htmlFor="search">Permissions</Label>
+            <Input
+              type="search"
+              placeholder="Search by"
+              onChange={(e: any) => setSearchTerm(e.target.value)}
+              sx={{ bg: 'background' }}
+            />
+          </Box>
+          <Flex
+            sx={{
+              flexDirection: 'column',
+              my: '18px',
+              border: '1px solid',
+              borderColor: 'border',
+              borderRadius: 4,
+              height: '100%',
+              overflowY: 'auto',
+            }}>
+            <Box sx={{ mb: '82px' }}>
+              {filteredPermissionKeys.map((key, index) => {
+                const dropped = isExpanded === index;
+                return (
+                  <DisclosureProvider key={index}>
+                    <Box>
+                      <Disclosure
+                        onClick={() => {
+                          if (isExpanded === index) setExpanded(null);
+                          else setExpanded(index);
+                        }}
+                        sx={{
+                          width: '100%',
+                          bg: 'backgroundWhite',
+                          py: '12px',
+                          px: '16px',
+                          border: 'none',
+                        }}>
+                        <Flex
+                          sx={{
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                          }}>
+                          <Label
                             sx={{
-                              width: '100%',
-                              bg: 'backgroundWhite',
-                              py: '12px',
-                              px: '16px',
-                              borderTop: 'none',
-                              borderLeft: 'none',
-                              borderRight: 'none',
-                              borderBottom: '1px solid',
-                              borderColor: 'border',
-                              ':last-of-type': {
-                                borderBottom: 'none',
-                              },
+                              display: 'flex',
+                              maxWidth: 'max-content',
+                              alignItems: 'center',
                             }}>
-                            <Flex
+                            <IndeterminateCheckbox
+                              {...{
+                                checked: permissions[key].isChecked,
+                                indeterminate:
+                                  !permissions[key].children.every(
+                                    (child: any) => child.isChecked,
+                                  ) &&
+                                  permissions[key].children.some(
+                                    (child: any) => child.isChecked,
+                                  ),
+                                onChange: (e: any) =>
+                                  checkParent(e, permissions[key].name),
+                              }}
+                            />
+                            <Text
+                              variant="pR"
                               sx={{
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
+                                pl: 1,
+                                textTransform: 'capitalize',
+                                color: 'text',
                               }}>
+                              {permissions[key].name}
+                            </Text>
+                          </Label>
+                          <Flex
+                            as={'div'}
+                            className="icon"
+                            sx={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              transform: dropped && 'rotate(180deg)',
+                              color: 'gray.300',
+                            }}>
+                            <ArrowDropdown />
+                          </Flex>
+                        </Flex>
+                      </Disclosure>
+                      <DisclosureContent>
+                        <Box>
+                          {permissions[key].children.map((sub: any) => (
+                            <Box key={sub.id}>
                               <Label
                                 sx={{
                                   display: 'flex',
-                                  maxWidth: 'max-content',
                                   alignItems: 'center',
+                                  borderBottom: '1px solid',
+                                  borderColor: 'border',
+                                  bg: 'background',
+                                  py: '12px',
+                                  px: '16px',
+                                  mb: 0,
+                                  ':last-of-type': {
+                                    borderBottom: 'none',
+                                  },
                                 }}>
-                                <IndeterminateCheckbox
-                                  {...{
-                                    checked: permissions[key].isChecked,
-                                    indeterminate:
-                                      !permissions[key].children.every(
-                                        (child: any) => child.isChecked,
-                                      ) &&
-                                      permissions[key].children.some(
-                                        (child: any) => child.isChecked,
-                                      ),
-                                    onChange: (e: any) =>
-                                      checkParent(e, permissions[key].name),
+                                <Checkbox
+                                  sx={{
+                                    appearance: 'none',
+                                    border: '1px solid #D4D7DA',
+                                    borderRadius: '4px',
+                                    height: '20px',
+                                    width: '20px',
+                                    '&:checked': {
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      borderColor: '#343E49',
+                                      '&:after': {
+                                        display: 'block',
+                                        mt: '4px',
+                                        content: `url("data:image/svg+xml,${svgDataUriTick}")`,
+                                      },
+                                    },
+                                  }}
+                                  type="checkbox"
+                                  // {...register('permissions')}
+                                  checked={sub.isChecked}
+                                  onChange={(e: any) => {
+                                    checkChild(
+                                      e,
+                                      permissions[key].name,
+                                      sub.id,
+                                    );
                                   }}
                                 />
                                 <Text
-                                  variant="pR"
+                                  variant="subR"
                                   sx={{
                                     pl: 1,
                                     textTransform: 'capitalize',
-                                    color: 'text',
+                                    color: 'gray.500',
                                   }}>
-                                  {permissions[key].name}
+                                  {sub.action}
                                 </Text>
                               </Label>
-                              <Flex
-                                as={'div'}
-                                className="icon"
-                                sx={{
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                  transform: dropped && 'rotate(180deg)',
-                                  color: 'gray.300',
-                                }}>
-                                <ArrowDropdown />
-                              </Flex>
-                            </Flex>
-                          </Disclosure>
-                          <DisclosureContent>
-                            <Box>
-                              {permissions[key].children.map((sub: any) => (
-                                <Box key={sub.id}>
-                                  <Label
-                                    sx={{
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      borderBottom: '1px solid',
-                                      borderColor: 'border',
-                                      bg: 'background',
-                                      py: '12px',
-                                      px: '16px',
-                                      mb: 0,
-                                      ':last-of-type': {
-                                        borderBottom: 'none',
-                                      },
-                                    }}>
-                                    <Checkbox
-                                      sx={{
-                                        appearance: 'none',
-                                        border: '1px solid #D4D7DA',
-                                        borderRadius: '4px',
-                                        height: '20px',
-                                        width: '20px',
-                                        '&:checked': {
-                                          display: 'flex',
-                                          flexDirection: 'column',
-                                          justifyContent: 'center',
-                                          alignItems: 'center',
-                                          borderColor: '#343E49',
-                                          '&:after': {
-                                            display: 'block',
-                                            mt: '4px',
-                                            content: `url("data:image/svg+xml,${svgDataUriTick}")`,
-                                          },
-                                        },
-                                      }}
-                                      type="checkbox"
-                                      {...register('permissions')}
-                                      checked={sub.isChecked}
-                                      onChange={(e: any) => {
-                                        checkChild(
-                                          e,
-                                          permissions[key].name,
-                                          sub.id,
-                                        );
-                                      }}
-                                    />
-                                    <Text
-                                      variant="subR"
-                                      sx={{
-                                        pl: 1,
-                                        textTransform: 'capitalize',
-                                        color: 'gray.500',
-                                      }}>
-                                      {sub.action}
-                                    </Text>
-                                  </Label>
-                                </Box>
-                              ))}
                             </Box>
-                          </DisclosureContent>
+                          ))}
                         </Box>
-                      </DisclosureProvider>
-                    );
-                  })}
-                </Box>
-              </Flex>
+                      </DisclosureContent>
+                    </Box>
+                  </DisclosureProvider>
+                );
+              })}
             </Box>
-          </Box>
+          </Flex>
         </Box>
-      </Flex>
-      <Flex sx={{ p: 4, pt: 2, gap: 2, mt: 'auto' }}>
+      </Box>
+      <Flex sx={{ p: 4, pt: 2, gap: 2 }}>
         <Button
           sx={{ display: formStep === 0 ? 'block' : 'none' }}
           variant="buttonPrimary"
