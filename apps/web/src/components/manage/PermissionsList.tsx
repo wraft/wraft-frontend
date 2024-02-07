@@ -2,17 +2,14 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Checkbox, CheckboxOptions } from '@ariakit/react';
+import { Checkbox } from '@ariakit/react';
+import IndeterminateCheckbox from '@wraft-ui/IndeterminateCheckbox';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { Box, Button, Flex, Text } from 'theme-ui';
 
 import { putAPI, fetchAPI } from '../../utils/models';
-import {
-  svgDataUriDash,
-  svgDataUriTick,
-  svgDataUriTickWhite,
-} from '../common/UriSvgs';
+import { svgDataUriTick, svgDataUriTickWhite } from '../common/UriSvgs';
 import { ArrowDropdown } from '../Icons';
 import Table from '../TanstackTable';
 
@@ -271,57 +268,3 @@ const PermissionsList = () => {
   );
 };
 export default PermissionsList;
-
-function IndeterminateCheckbox({
-  indeterminate,
-  className = '',
-  ...rest
-}: { indeterminate?: boolean; className?: string } & CheckboxOptions<'input'>) {
-  const ref = React.useRef<HTMLInputElement>(null!);
-
-  React.useEffect(() => {
-    if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate;
-    }
-  }, [ref, indeterminate, rest.checked]);
-
-  return (
-    <Checkbox
-      sx={{
-        appearance: 'none',
-        border: '1px solid #D4D7DA',
-        borderRadius: '4px',
-        height: '20px',
-        width: '20px',
-        '&:checked': {
-          display: 'flex',
-          justifyContent: 'center',
-          borderColor: '#343E49',
-          backgroundColor: '#343E49',
-          alignItems: 'center',
-          '&:after': {
-            display: 'block',
-            mt: '4px',
-            content: `url("data:image/svg+xml,${svgDataUriTickWhite}")`,
-          },
-        },
-        '&:indeterminate': {
-          display: 'flex',
-          justifyContent: 'center',
-          backgroundColor: 'transparent',
-          alignItems: 'center',
-          '&:after': {
-            display: 'block',
-            mb: '5px',
-            content: `url("data:image/svg+xml,${svgDataUriDash}")`,
-          },
-        },
-      }}
-      type="checkbox"
-      name="parent"
-      ref={ref}
-      className={className + ' cursor-pointer'}
-      {...rest}
-    />
-  );
-}
