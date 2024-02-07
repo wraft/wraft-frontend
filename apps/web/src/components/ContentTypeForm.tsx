@@ -315,15 +315,19 @@ const Form = () => {
           field_type_id: fid,
         };
 
+        const notInContent = content?.content_type?.fields
+          ? content?.content_type?.fields?.every(
+              (field: any) => field.name !== item.name,
+            )
+          : true;
+
         if (
           !Number(item.name) &&
           item.name !== '0' &&
           item.name !== '' &&
           item.name !== null &&
           item.name !== undefined &&
-          content?.content_type.fields.every(
-            (field: any) => field.name !== item.name,
-          )
+          notInContent
         ) {
           fieldsMap.push(it);
         }
