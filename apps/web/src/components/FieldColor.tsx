@@ -86,7 +86,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
                 handleHexInputChange(e);
               }}
             />
-            <Box sx={{ pt: 0 }}>
+            <Box sx={{ pt: 0, zIndex: 1000 }}>
               <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
                 <Box
                   id="colorBox"
