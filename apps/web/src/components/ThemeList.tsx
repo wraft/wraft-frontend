@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { EllipsisHIcon } from '@wraft/icon';
+import { EllipsisHIcon, FontIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Box, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 
@@ -86,13 +86,40 @@ const Form: FC = () => {
       cell: ({ row }: any) => (
         <Box key={row.index}>
           <Link href={`/manage/themes/edit/${row.original.id}`}>
-            <Text as="p" sx={{ mb: 0, p: 0, pb: 0 }}>
+            <Text as="p" variant="pM">
               {row.original.name}
             </Text>
+            {row.original.primary && <Box sx={{ bg: 'red' }}>Primary</Box>}
           </Link>
         </Box>
       ),
-      size: 700,
+      size: 50,
+      enableSorting: false,
+    },
+    {
+      id: 'content.font',
+      header: 'FONT',
+      accessorKey: 'content.font',
+      cell: ({ row }: any) => (
+        <Flex key={row.index} sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              bg: 'neutral.200',
+              height: '14px',
+              width: '14px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '2px',
+            }}>
+            <FontIcon height={12} width={12} viewBox="0 0 24 24" />
+          </Box>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+            {row.original.font}
+          </Text>
+        </Flex>
+      ),
+      size: 50,
       enableSorting: false,
     },
     {
