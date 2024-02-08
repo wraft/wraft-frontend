@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import Checkbox from '@wraft-ui/Checkbox';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
-import { Label, Input, Checkbox } from 'theme-ui';
+import { Label, Input } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -251,13 +252,14 @@ const ThemeForm = () => {
                 />
               </Box>
               <Box>
-                <Label htmlFor="default_theme" mb={1}>
-                  Default Theme?
+                <Label mb={1}>
+                  <Checkbox
+                    size={'small'}
+                    defaultChecked={true}
+                    {...register('default_theme')}
+                  />
+                  <Text ml={2}>Default Theme?</Text>
                 </Label>
-                <Checkbox
-                  defaultChecked={true}
-                  {...register('default_theme')}
-                />
               </Box>
             </Box>
 

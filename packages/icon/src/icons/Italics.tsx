@@ -3,13 +3,13 @@ import type { SVGProps } from 'react';
 const SvgItalicsIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={props.width || 25}
-    height={props.height || 25}
+    width={props.width || 24}
+    height={props.height || 24}
     fill="none"
     {...props}>
     <path
-      fill="#2C3641"
-      d="M17 6h-6a1 1 0 1 0 0 2h1.52l-3.2 8H7a1 1 0 0 0 0 2h6a1 1 0 0 0 0-2h-1.52l3.2-8H17a1 1 0 1 0 0-2"
+      fill={props.color || `#2C3641`}
+      d="M18.667 4h-8a1.333 1.333 0 1 0 0 2.667h2.026L8.427 17.333H5.333a1.333 1.333 0 0 0 0 2.667h8a1.333 1.333 0 1 0 0-2.667h-2.026l4.266-10.666h3.094a1.333 1.333 0 0 0 0-2.667"
     />
   </svg>
 );

@@ -1,4 +1,4 @@
 # Dependencies
 node_modules
-storybook-static/assets
+storybook-static
 project.json

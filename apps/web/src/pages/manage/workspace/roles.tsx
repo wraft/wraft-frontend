@@ -1,31 +1,25 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
-import { Flex, Container, Button, Box, Input } from 'theme-ui';
+import { Flex, Container, Button, Box, Input, Spinner } from 'theme-ui';
 
 import { AddIcon, SearchIcon } from '../../../components/Icons';
-import { RolesAdd, RolesList } from '../../../components/manage';
+import { RolesForm, RolesList } from '../../../components/manage';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { useAuth } from '../../../contexts/AuthContext';
 import { workspaceLinks } from '../../../utils';
-import { fetchAPI } from '../../../utils/models';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [render, setRender] = useState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterLoading, setFilterLoading] = useState<boolean>(false);
 
   const { userProfile } = useAuth();
-
-  useEffect(() => {
-    fetchAPI('roles').then(() => {
-      console.log('success');
-    });
-  }, []);
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
@@ -59,7 +53,10 @@ const Index: FC = () => {
                 }}>
                 <Input
                   placeholder="Search by role names"
-                  onChange={(e: any) => setSearchTerm(e.target.value)}
+                  onChange={(e: any) => {
+                    setFilterLoading(true);
+                    setTimeout(() => setSearchTerm(e.target.value), 1000);
+                  }}
                   sx={{
                     bg: 'transparent',
                     mb: 0,
@@ -67,8 +64,7 @@ const Index: FC = () => {
                     ':focus': {
                       outline: 'none',
                     },
-                  }}
-                />
+                  }}></Input>
                 <Box
                   sx={{
                     color: 'gray.300',
@@ -76,7 +72,11 @@ const Index: FC = () => {
                     display: 'flex',
                     alignItems: 'center',
                   }}>
-                  <SearchIcon className="searchIcon" />
+                  {filterLoading ? (
+                    <Spinner width={14} />
+                  ) : (
+                    <SearchIcon className="searchIcon" />
+                  )}
                 </Box>
               </Box>
 
@@ -90,7 +90,7 @@ const Index: FC = () => {
             </Flex>
           </PageHeader>
           <Drawer open={isOpen} setOpen={setIsOpen}>
-            <RolesAdd key={1} setOpen={setIsOpen} setRender={setRender} />
+            <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
           </Drawer>
           <Container variant="layout.pageFrame">
             <Flex>
@@ -100,6 +100,7 @@ const Index: FC = () => {
                   render={render}
                   setRender={setRender}
                   searchTerm={searchTerm}
+                  setFilterLoading={setFilterLoading}
                 />
               </Box>
             </Flex>
