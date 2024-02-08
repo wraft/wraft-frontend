@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import Head from 'next/head';
-import { Box, Button, Container, Flex } from 'theme-ui';
+import Router from 'next/router';
+import { Box, Button, Container, Flex, Text } from 'theme-ui';
 
-import { AddIcon, GraterThanIcon } from '../../../components/Icons';
+import { GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
-import Link from '../../../components/NavLink';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import ThemeList from '../../../components/ThemeList';
@@ -26,16 +26,14 @@ const Index: FC = () => {
               Manage <GraterThanIcon /> Themes
             </Flex>
           }>
-          <Link href="themes/new" variant="none">
-            <Button
-              as={Button}
-              variant="btnSecondary"
-              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <AddIcon />
-              Add Theme
-            </Button>
-          </Link>
+          <Button
+            as={Button}
+            variant="buttonSecondary"
+            onClick={() => Router.push('themes/new')}>
+            <Text variant="pM">Add Theme</Text>
+          </Button>
         </PageHeader>
+
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
