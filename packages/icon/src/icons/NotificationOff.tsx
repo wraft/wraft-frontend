@@ -3,12 +3,12 @@ import type { SVGProps } from 'react';
 const SvgNotificationOffIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={props.width || 25}
-    height={props.height || 25}
+    width={props.width || 24}
+    height={props.height || 24}
     fill="none"
     {...props}>
     <g
-      stroke="#2C3641"
+      stroke={props.color || `#2C3641`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
