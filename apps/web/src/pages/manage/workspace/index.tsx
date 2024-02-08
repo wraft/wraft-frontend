@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 
+import Checkbox from '@wraft-ui/Checkbox';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import Router from 'next/router';
@@ -14,7 +15,6 @@ import {
   Label,
   Text,
   Image,
-  Checkbox,
 } from 'theme-ui';
 
 import { ConfirmDelete } from '../../../components/common';
@@ -338,13 +338,14 @@ const Index: FC = () => {
                             sx={{
                               mt: '18px',
                               display: 'flex',
-                              alignItems: 'center',
+                              alignItems: 'flex-start',
                             }}>
                             <Checkbox
                               checked={isChecked}
                               onChange={handleCheckboxChange}
+                              size={'small'}
                             />
-                            <Text variant="subM">
+                            <Text variant="subM" ml={2}>
                               I acknowledge I understand that all of the data
                               will be deleted and want to proceed
                             </Text>
