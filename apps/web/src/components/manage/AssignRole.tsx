@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-import { Checkbox } from '@ariakit/react';
-import { svgDataUriTickWhiteProped } from '@wraft-ui/UriSvgs';
+import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Text, Button, Box, Label } from 'theme-ui';
@@ -134,26 +133,7 @@ const AssignRole = ({
                     },
                   }}>
                   <Checkbox
-                    sx={{
-                      appearance: 'none',
-                      border: '1px solid #D4D7DA',
-                      borderRadius: '4px',
-                      height: '14px',
-                      width: '14px',
-                      '&:checked': {
-                        display: 'flex',
-                        justifyContent: 'center',
-                        borderColor: '#343E49',
-                        backgroundColor: '#343E49',
-                        alignItems: 'center',
-                        '&:after': {
-                          display: 'block',
-                          mt: '2px',
-                          content: `url("data:image/svg+xml,${svgDataUriTickWhiteProped(10)}")`,
-                        },
-                      },
-                    }}
-                    type="checkbox"
+                    size={'small'}
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
                   <Text
