@@ -11,7 +11,7 @@
   "removeViewBox": false,
 
   "svgProps": {
-    "width": "{ props.width || props.fontSize || 24}",
-    "height": "{props.height || props.fontSize || 24}"
+    "width": "{ props.width || 24}",
+    "height": "{props.height || 24}"
   }
 }
