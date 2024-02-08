@@ -1,14 +1,20 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgApprovals = (props: SVGProps<SVGSVGElement>) => (
+const SvgApprovalsIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
-    width={props.width || 25}
-    height={props.height || 25}
-    fill="currentColor"
-    data-color="red"
-    viewBox="0 0 20 24"
+    xmlns="http://www.w3.org/2000/svg"
+    width={props.width || 24}
+    height={props.height || 24}
+    fill="none"
     {...props}>
-    <path d="M20 8h-5.612l1.123-3.367c.202-.608.1-1.282-.275-1.802S14.253 2 13.612 2H12c-.297 0-.578.132-.769.36L6.531 8H4c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h13.307a2.01 2.01 0 0 0 1.873-1.298l2.757-7.351A1 1 0 0 0 22 12v-2c0-1.103-.897-2-2-2M4 10h2v9H4zm16 1.819L17.307 19H8V9.362L12.468 4h1.146l-1.562 4.683A.998.998 0 0 0 13 10h7z" />
+    <path
+      stroke={props.color || `#2C3641`}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeMiterlimit={10}
+      strokeWidth={1.5}
+      d="m11.984 10.4 5.628.035m-5.628 6.535 5.628.036m-5.6-3.102 5.627.036M6.325 9.69l1.622 1.622 2.266-2.264M6.325 12.98l1.622 1.62 2.266-2.263m-3.698 3.794 1.623 1.622 2.265-2.264m4.705-10.5h3.894c.551 0 .998.447.998.998v14.016c0 .55-.447.997-.998.997H4.998A1 1 0 0 1 4 20.003V5.987c0-.551.447-.998.998-.998h3.955M9.024 3H15v4.065H9.024z"
+    />
   </svg>
 );
-export default SvgApprovals;
+export default SvgApprovalsIcon;

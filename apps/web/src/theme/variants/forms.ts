@@ -2,27 +2,38 @@ import type { Theme } from 'theme-ui';
 
 const forms: Theme['forms'] = {
   label: {
-    color: 'gray.400',
     fontFamily: 'body',
-    fontSize: '15px',
-    fontWeight: 400,
-    lineHeight: '24px',
-    letterSpacing: '0.2px',
+    variant: 'text.pR',
+    color: 'gray.600',
+    mb: 2,
   },
   input: {
     borderColor: 'border',
-    '&[type=text]': {
-      color: '#656E78',
-      fontWeight: '500',
-      fontSize: '15px',
-      p: '8px 16px',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
+    ':disabled': {
+      color: 'gray.200',
     },
   },
   select: {
     borderColor: 'border',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
+    ':disabled': {
+      color: 'gray.200',
+    },
   },
   textarea: {
     borderColor: 'border',
+    p: '8px 16px',
+    variant: 'text.pM',
+    bg: 'transparent',
+    resize: 'none',
+    ':disabled': {
+      color: 'gray.200',
+    },
   },
   checkbox: {
     MozAppearance: 'none',

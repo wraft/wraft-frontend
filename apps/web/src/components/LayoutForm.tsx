@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureProvider,
+} from '@ariakit/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { Controller, useForm } from 'react-hook-form';
@@ -30,6 +35,7 @@ import { Asset, Engine } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';
+import { ArrowDropdown } from './Icons';
 
 export interface Layouts {
   layout: Layout;
@@ -136,6 +142,14 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   useEffect(() => {
     deleteAllAsset();
   }, [isDeleteAssets]);
+
+  useEffect(() => {
+    console.log('🥋🐼', engines);
+    if (engines && engines.length > 0) {
+      const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
+      pandocEngine && setValue('engine_uuid', pandocEngine?.id);
+    }
+  }, [engines]);
 
   useEffect(() => {
     if (layout) {
@@ -305,7 +319,6 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   return (
     <Flex
       sx={{
-        // pb: '44px',
         height: '100vh',
         overflow: 'scroll',
         flexDirection: 'column',
@@ -324,33 +337,35 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
       />
       <Container sx={{ styleEl, px: 4 }}>
         <Box>
-          {formStep >= 1 && (
-            <section>
-              <Box>
-                <AssetForm
-                  onUpload={addUploads}
-                  pdfPreview={pdfPreview}
-                  setPdfPreview={setPdfPreview}
-                  setDeleteAssets={setDeleteAssets}
-                />
-              </Box>
-            </section>
-          )}
-
           {/* form start */}
           <Box
             sx={{
               height: 'calc(100vh - 200px)',
-              pt: 4,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
             }}
             as="form"
             onSubmit={handleSubmit(onSubmit)}>
+            {formStep >= 1 && (
+              <section>
+                <Box>
+                  <AssetForm
+                    onUpload={addUploads}
+                    pdfPreview={pdfPreview}
+                    setPdfPreview={setPdfPreview}
+                    setDeleteAssets={setDeleteAssets}
+                  />
+                </Box>
+              </section>
+            )}
             {formStep >= 0 && (
               <Container
-                sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
+                sx={
+                  formStep > 0
+                    ? { display: 'none' }
+                    : { display: 'block', pt: 4 }
+                }>
                 <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
                   <Box>
                     <Field
@@ -378,6 +393,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                     {errors.slug && (
                       <Text variant="error">{errors.slug.message}</Text>
                     )}
+                    <Text as="p" variant="subR" mt={2}>
+                      Slugs are layout templates used for rendering documents
+                    </Text>
                   </Box>
                   <Box>
                     <FieldText
@@ -401,31 +419,63 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                       {...register('screenshot')}
                     />
                   </Box>
-                  <Box>
-                    <Label htmlFor="engine_uuid">Engine ID</Label>
-                    <Controller
-                      control={control}
-                      name="engine_uuid"
-                      rules={{ required: 'Please select a Engine ID' }}
-                      render={({ field }) => (
-                        <Select {...field}>
-                          <option disabled selected>
-                            select an option
-                          </option>
-                          {engines &&
-                            engines.length > 0 &&
-                            engines.map((m: any) => (
-                              <option key={m.id} value={m.id}>
-                                {m.name}
-                              </option>
-                            ))}
-                        </Select>
-                      )}
-                    />
-                    {errors.engine_uuid && (
-                      <Text variant="error"> {errors.engine_uuid.message}</Text>
-                    )}
-                  </Box>
+                  <DisclosureProvider>
+                    <Disclosure
+                      as={Box}
+                      sx={{
+                        border: 'none',
+                        bg: 'none',
+                        cursor: 'pointer',
+                        width: 'fit-content',
+                        color: 'green.700',
+                        '&[aria-expanded="true"]': {
+                          '& svg': {
+                            transform: 'rotate(-180deg)',
+                            transition: 'transform 0.3s ease',
+                          },
+                        },
+                        '&[aria-expanded="false"]': {
+                          '& svg': {
+                            transform: 'rotate(0deg)',
+                            transition: 'transform 0.3s ease',
+                          },
+                        },
+                      }}>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Text variant="pM" mr={2}>
+                          Advanced
+                        </Text>
+                        <ArrowDropdown />
+                      </Flex>
+                    </Disclosure>
+                    <DisclosureContent>
+                      <Box>
+                        <Label htmlFor="engine_uuid">Engine ID</Label>
+                        <Controller
+                          control={control}
+                          name="engine_uuid"
+                          rules={{ required: 'Please select a Engine ID' }}
+                          render={({ field }) => (
+                            <Select {...field}>
+                              {engines &&
+                                engines.length > 0 &&
+                                engines.map((m: any) => (
+                                  <option key={m.id} value={m.id}>
+                                    {m.name}
+                                  </option>
+                                ))}
+                            </Select>
+                          )}
+                        />
+                        {errors.engine_uuid && (
+                          <Text variant="error">
+                            {' '}
+                            {errors.engine_uuid.message}
+                          </Text>
+                        )}
+                      </Box>
+                    </DisclosureContent>
+                  </DisclosureProvider>
                   <Box mt={3}>
                     <Flex sx={{ display: 'none' }}>
                       <Field
@@ -462,40 +512,23 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                   disabled={!isValid}
                   type="button"
                   onClick={next}
-                  variant="buttonPrimary"
-                  sx={{
-                    ':disabled': {
-                      bg: 'gray.500',
-                    },
-                  }}>
+                  variant="buttonPrimary">
                   Next
                 </Button>
               )}
               {formStep === 1 && (
                 <Box>
                   <Button
-                    variant="disabled"
-                    // variant=""
+                    variant="buttonSecondary"
                     type="button"
-                    onClick={prev}
-                    sx={{
-                      bg: 'neutral.100',
-                      color: 'gray.900',
-                    }}>
-                    <Text as={'p'} variant="pm">
-                      Prev
-                    </Text>
+                    onClick={prev}>
+                    Prev
                   </Button>
                   <Button
                     disabled={!isValid || assets.length < 1}
                     variant="buttonPrimary"
                     type="submit"
-                    ml={2}
-                    sx={{
-                      ':disabled': {
-                        bg: 'gray.500',
-                      },
-                    }}>
+                    ml={2}>
                     {isEdit ? 'Update' : 'Create'}
                   </Button>
                 </Box>
