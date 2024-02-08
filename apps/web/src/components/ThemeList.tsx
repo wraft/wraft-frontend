@@ -34,6 +34,10 @@ const Form: FC = () => {
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
   const [rerender, setRerender] = useState<boolean>(false);
 
+  useEffect(() => {
+    console.log('.........contennt', contents);
+  }, [contents]);
+
   const loadData = () => {
     const getRequest = fetchAPI('themes?sort=inserted_at_desc');
     toast.promise(
@@ -89,11 +93,10 @@ const Form: FC = () => {
             <Text as="p" variant="pM">
               {row.original.name}
             </Text>
-            {row.original.primary && <Box sx={{ bg: 'red' }}>Primary</Box>}
           </Link>
         </Box>
       ),
-      size: 50,
+      size: 200,
       enableSorting: false,
     },
     {
@@ -119,7 +122,42 @@ const Form: FC = () => {
           </Text>
         </Flex>
       ),
-      size: 50,
+      size: 180,
+      enableSorting: false,
+    },
+    {
+      id: 'content.state',
+      header: 'STATE',
+      accessorKey: 'content.state',
+      cell: ({ row }: any) => (
+        <Flex key={row.index} sx={{ alignItems: 'center', gap: 1 }}>
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.primary_color}`,
+            }}
+          />
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.secondary_color}`,
+            }}
+          />
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.body_color}`,
+            }}
+          />
+        </Flex>
+      ),
+      size: 180,
       enableSorting: false,
     },
     {
@@ -128,7 +166,7 @@ const Form: FC = () => {
       accessor: 'content.id',
       cell: ({ row }: any) => {
         return (
-          <Box>
+          <Box ml={'auto'}>
             <MenuProvider>
               <MenuButton
                 as={Box}
