@@ -6,6 +6,8 @@ const SvgCloseIcon = (props: SVGProps<SVGSVGElement>) => (
     width={props.width || 24}
     height={props.height || 24}
     fill="none"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
     {...props}>
     <path
       stroke={props.color || `#2C3641`}
