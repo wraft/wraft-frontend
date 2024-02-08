@@ -78,15 +78,12 @@ const FieldColor: React.FC<FieldColorProps> = ({
             <Input
               placeholder={placeholder ? placeholder : ''}
               id={name}
-              // name={name}
               type={ftype}
               defaultValue={valx || defaultValue || ''}
               sx={{ pl: '40px' }}
-              // ref={register({ required: required })}
               {...register(name, { required: required })}
               onChange={(e) => {
                 handleHexInputChange(e);
-                // changeColor(e.target.value);
               }}
             />
             <Box sx={{ pt: 0 }}>
