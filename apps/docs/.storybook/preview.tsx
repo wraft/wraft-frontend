@@ -8,6 +8,11 @@ import { Preview } from '@storybook/react';
 
 const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ['Introduction', 'Colors', 'Icons', 'Typography', ['Home', 'Login', 'Admin'], 'Components', '*', 'WIP'],
+      },
+    },
     actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {

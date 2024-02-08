@@ -4,7 +4,7 @@ import { Button } from "@wraft/ui";
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Button",
+  title: "Compontent/Button",
   argTypes: {
     variant: {
       control: "select",

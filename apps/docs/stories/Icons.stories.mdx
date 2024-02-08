@@ -1,0 +1,31 @@
+import { Meta, Title } from '@storybook/blocks'
+import * as Icons from '@wraft/icon'
+
+
+
+<Meta title='Icons' />
+
+
+<Title>Icons</Title>
+
+<br />
+
+## Overview
+
+Wraft icons are simple, single-color glyphs that identify labels and actions across Audius. They can be paired with text or used alone. They are vector based and should consistent on a single vector layer framed in a 24x24 container. They have no background shape or fill.
+
+<br />
+
+<div style={{display: 'flex', gap:'18px', flexWrap: 'wrap'}}>
+    {Object.keys(Icons).map(key => {
+    const Icon = Icons[key]
+    return (
+      <div key={key} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <Icon />
+        <div style={{paddingTop: '6px', paddingBottom: '6px'}}>{key}</div>
+      </div>
+    )
+  })}
+</div>
+
+
