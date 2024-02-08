@@ -3,24 +3,113 @@ const text = {
     variant: 'text.subR',
     color: 'red.600',
   },
+  //headings
+  h1Regular: {
+    fontSize: 8,
+    fontWeight: 400,
+    lineHeight: '55.2px',
+    letterSpacing: '0.2px',
+    color: 'text',
+  },
+  h1Medium: {
+    variant: 'text.h1Regular',
+    fontWeight: 500,
+  },
+  h1Bold: {
+    variant: 'text.h1Regular',
+    fontWeight: 700,
+  },
+  h2Regular: {
+    fontSize: 7,
+    fontWeight: 400,
+    lineHeight: '44.4px',
+    letterSpacing: '0.2px',
+    color: 'text',
+  },
+  h2Medium: {
+    variant: 'text.h2Regular',
+    fontWeight: 500,
+  },
+  h2Bold: {
+    variant: 'text.h2Regular',
+    fontWeight: 700,
+  },
+  h3Regular: {
+    fontSize: 6,
+    fontWeight: 400,
+    lineHeight: '34.8px',
+    letterSpacing: '0.2px',
+    color: 'text',
+  },
+  h3Medium: {
+    variant: 'text.h3Regular',
+    fontWeight: 500,
+  },
+  h3Bold: {
+    variant: 'text.h3Regular',
+    fontWeight: 700,
+  },
+  h4Regular: {
+    fontSize: 5,
+    fontWeight: 400,
+    lineHeight: '27.6px',
+    letterSpacing: '0.19px',
+    color: 'text',
+  },
+  h4Medium: {
+    variant: 'text.h4Regular',
+    fontWeight: 500,
+  },
+  h4Bold: {
+    variant: 'text.h4Regular',
+    fontWeight: 700,
+  },
+  h5Regular: {
+    fontSize: 4,
+    fontWeight: 400,
+    lineHeight: '22.8px',
+    letterSpacing: '0.18px',
+    color: 'text',
+  },
+  h5Medium: {
+    variant: 'text.h5Regular',
+    fontWeight: 500,
+  },
+  h5Bold: {
+    variant: 'text.h5Regular',
+    fontWeight: 700,
+  },
+  h6Regular: {
+    fontSize: 3,
+    fontWeight: 400,
+    lineHeight: '19px',
+    letterSpacing: '0.16px',
+    color: 'text',
+  },
+  h6Medium: {
+    variant: 'text.h6Regular',
+    fontWeight: 500,
+  },
+  h6Bold: {
+    variant: 'text.h6Regular',
+    fontWeight: 500,
+  },
+  //paragraph
   pR: {
-    color: 'gray.500',
+    color: 'text',
     fontSize: 2,
     fontWeight: 400,
     lineHeight: '1.6',
   },
   pM: {
-    color: 'text',
-    fontSize: 2,
+    variant: 'text.pR',
     fontWeight: 500,
-    lineHeight: '1.6',
   },
   pB: {
-    color: 'text',
-    fontSize: 2,
+    variant: 'text.pR',
     fontWeight: 700,
-    lineHeight: '1.6',
   },
+  //sub heading
   subR: {
     color: 'gray.500',
     fontSize: 1,
@@ -28,16 +117,27 @@ const text = {
     lineHeight: '1.6',
   },
   subM: {
+    variant: 'text.subR',
+    fontWeight: 500,
+  },
+  subB: {
+    variant: 'text.subR',
+    fontWeight: 700,
+  },
+  // caption
+  capR: {
     color: 'gray.500',
-    fontSize: 1,
+    fontSize: 0,
     fontWeight: 400,
     lineHeight: '1.6',
   },
   capM: {
-    color: 'gray.500',
-    fontSize: 1,
+    variant: 'text.capR',
     fontWeight: 500,
-    lineHeight: '1.6',
+  },
+  capB: {
+    variant: 'text.capR',
+    fontWeight: 700,
   },
   labelSmall: {
     pl: 1,
@@ -121,3 +221,4 @@ const text = {
 };
 
 export default text;
+
