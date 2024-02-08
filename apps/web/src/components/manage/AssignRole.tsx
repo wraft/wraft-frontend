@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 
 import Checkbox from '@wraft-ui/Checkbox';
-import { svgDataUriTickWhiteProped } from '@wraft-ui/UriSvgs';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Text, Button, Box, Label } from 'theme-ui';
@@ -135,16 +134,6 @@ const AssignRole = ({
                   }}>
                   <Checkbox
                     size={'small'}
-                    sx={{
-                      height: '14px',
-                      width: '14px',
-                      '&:checked': {
-                        '&:after': {
-                          mt: '1px',
-                          content: `url("data:image/svg+xml,${svgDataUriTickWhiteProped(9)}")`,
-                        },
-                      },
-                    }}
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
                   <Text
