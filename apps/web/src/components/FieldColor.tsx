@@ -91,7 +91,23 @@ const FieldColor: React.FC<FieldColorProps> = ({
             />
             <Box sx={{ pt: 0 }}>
               <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
-                <Box id="colorBox" bg={valx} variant="layout.squareButton" />
+                <Box
+                  id="colorBox"
+                  bg={valx}
+                  sx={{
+                    width: '24px',
+                    height: '24px',
+                    border: 'solid 1px',
+                    borderColor: 'border',
+                    position: 'absolute',
+                    top: '8px',
+                    left: '10px',
+                    padding: '5px',
+                    borderRadius: '4px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                />
               </Box>
               <Popover aria-label="Edit color">
                 <ChromePicker
