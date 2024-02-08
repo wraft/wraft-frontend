@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import Checkbox from '@wraft-ui/Checkbox';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text } from 'theme-ui';
-import { Label, Input } from 'theme-ui';
+import { Box, Flex, Button, Text, Input } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -19,7 +17,19 @@ interface ThemeElement {
   file?: string;
   font?: string;
   assets?: any;
+  primary_color: string;
+  secondary_color: string;
+  body_color: string;
 }
+
+type FormValues = {
+  edit: string;
+  name: string;
+  font: string;
+  primary_color: string;
+  secondary_color: string;
+  body_color: string;
+};
 
 const ThemeForm = () => {
   const {
@@ -27,7 +37,7 @@ const ThemeForm = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<FormValues>({ mode: 'onSubmit' });
 
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
@@ -92,10 +102,8 @@ const ThemeForm = () => {
   };
 
   const onSubmit = (data: any) => {
-    // const formData = new FormData();
-
     let assetsList;
-    //
+
     if (assets.length > 0) {
       const a: any = [];
       assets.forEach((e: any) => {
@@ -109,28 +117,7 @@ const ThemeForm = () => {
 
     console.log('assetsList', assetsList);
 
-    // @TODO - do what ?
-    // const stat = 'f67d779f-3b55-4428-99f1-1efe84305f93';
-
-    // only if files's presetn
-    // if(data.file?.size > 0) {
-    //   formData.append('file', data.file[0]);
-    // }
-
-    // const typeScaleValue: any = {
-    //   p: 6,
-    //   h2: 8,
-    //   h1: 10,
-    // };
-
     const themeData: any = {
-      // @TODO
-      // remove static def, connect with right API
-      // typescale: {
-      //   p: 6,
-      //   h2: 8,
-      //   h1: 10,
-      // },
       secondary_color: data?.secondary_color,
       primary_color: data?.primary_color,
       name: data.name,
@@ -159,7 +146,10 @@ const ThemeForm = () => {
       const currTheme: ThemeElement = res?.theme;
       setTheme(currTheme);
       setValue('name', currTheme?.name);
-      setValue('font', currTheme?.font);
+      setValue('font', currTheme?.font || '');
+      setValue('body_color', currTheme.body_color || '');
+      setValue('primary_color', currTheme.primary_color || '');
+      setValue('secondary_color', currTheme.secondary_color || '');
       setAssets(currTheme?.assets);
     }
   };
@@ -191,8 +181,11 @@ const ThemeForm = () => {
    * On Change Color
    */
 
-  const onChangeField = (name: string, value: any) => {
-    setValue(name, value);
+  const onChangeField = (
+    _name: 'primary_color' | 'secondary_color' | 'body_color',
+    value: any,
+  ) => {
+    setValue(_name, value);
   };
 
   return (
@@ -223,47 +216,39 @@ const ThemeForm = () => {
               <Box>
                 <Text>Colors</Text>
                 <FieldColor
+                  register={register}
                   name="primary_color"
                   label="Primary Color"
-                  defaultValue="#000"
-                  register={register}
+                  defaultValue={theme?.primary_color || ''}
                   onChangeColor={(value: string) =>
                     onChangeField('primary_color', value)
                   }
                 />
                 <FieldColor
+                  register={register}
                   name="secondary_color"
                   label="Secondary Color"
-                  defaultValue="#111"
-                  register={register}
+                  defaultValue={theme?.secondary_color || ''}
                   onChangeColor={(value: string) =>
                     onChangeField('secondary_color', value)
                   }
                 />
 
                 <FieldColor
+                  register={register}
                   name="body_color"
                   label="Body Color"
-                  defaultValue="#111"
-                  register={register}
+                  defaultValue={theme?.body_color || ''}
                   onChangeColor={(value: string) =>
                     onChangeField('body_color', value)
                   }
                 />
               </Box>
-              <Box>
-                <Label mb={1}>
-                  <Checkbox
-                    size={'small'}
-                    defaultChecked={true}
-                    {...register('default_theme')}
-                  />
-                  <Text ml={2}>Default Theme?</Text>
-                </Label>
-              </Box>
             </Box>
 
-            {errors.exampleRequired && <Text>This field is required</Text>}
+            {errors.root?.message && (
+              <Text variant="error">This field is required</Text>
+            )}
           </Flex>
 
           {theme?.file && (
