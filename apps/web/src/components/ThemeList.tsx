@@ -67,6 +67,7 @@ const Form: FC = () => {
         loading: 'Loading...',
         success: () => {
           setRerender((prev) => !prev);
+          setDeleteTheme(null);
           return 'Successfully deleted theme';
         },
         error: 'Failed to delete theme',
