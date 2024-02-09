@@ -71,9 +71,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
           {sub && (
             <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
           )}
-          <Label htmlFor="description" sx={{ color: 'text', pb: 1 }}>
-            {label}
-          </Label>
+          <Label htmlFor="description">{label}</Label>
           <Flex sx={{ position: 'relative' }}>
             <Input
               placeholder={placeholder ? placeholder : ''}
