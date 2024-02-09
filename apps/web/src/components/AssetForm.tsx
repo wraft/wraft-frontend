@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import Dropzone from '@wraft-ui/Dropzone';
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Button, Label, Select, Text } from 'theme-ui';
+import { Box, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -15,10 +15,6 @@ interface AssetFormProps {
   setPdfPreview?: any;
   setDeleteAssets?: any;
 }
-
-type FormProps = {
-  filetype: 'layout' | 'theme';
-};
 
 type FormValues = {
   file: FileList;
@@ -89,8 +85,7 @@ const AssetForm = ({
   return (
     <FormProvider {...methods}>
       <Box as="form" onSubmit={methods.handleSubmit(onSubmit)} mt={4}>
-        <Box mx={-2} mb={3}>
-          <Form filetype={filetype} />
+        <Box mb={3}>
           <Dropzone
             accept={
               filetype === 'layout'
@@ -133,39 +128,3 @@ const AssetForm = ({
   );
 };
 export default AssetForm;
-
-const Form = ({ filetype }: FormProps) => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<FormValues>();
-  return (
-    <Box>
-      {filetype === 'theme' && (
-        <Box>
-          <Label htmlFor="name" mb={1}>
-            Font Weight
-          </Label>
-          <Select
-            id="flow_id"
-            defaultValue=""
-            {...register('name', { required: true })}>
-            <option value="Regular" key="regular">
-              Regular
-            </option>
-            <option value="Italic" key="italic">
-              Italic
-            </option>
-            <option value="Bold" key="bold">
-              Bold
-            </option>
-          </Select>
-          {errors.name && errors.name.message && (
-            <Text variant="error">{errors.name.message} </Text>
-          )}
-        </Box>
-      )}
-      {errors.file && <Text variant="error">{errors.file.message}</Text>}
-    </Box>
-  );
-};

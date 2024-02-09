@@ -11,6 +11,7 @@ import { Asset } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
+import Modal from './Modal';
 
 interface ThemeElement {
   name: string;
@@ -42,6 +43,7 @@ const ThemeAddForm = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
+  const [isFontOpen, setIsFontOpen] = useState<boolean>(false);
 
   /**
    * Upload Assets
@@ -76,12 +78,7 @@ const ThemeAddForm = () => {
         error: (err) => `This just happened: ${err.toString()}`,
       },
       {
-        success: {
-          duration: 1000,
-        },
-        error: {
-          duration: 1000,
-        },
+        duration: 1000,
       },
     );
   };
@@ -189,23 +186,30 @@ const ThemeAddForm = () => {
   };
 
   return (
-    <Flex sx={{ maxWidth: '90ch', margin: 'auto' }}>
-      <Box
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        py={3}
-        mt={4}
-        pr={4}
-        sx={{ width: '50ch' }}>
+    <Flex
+      sx={{
+        height: '100vh',
+        overflow: 'scroll',
+        flexDirection: 'column',
+      }}>
+      <Text
+        variant="pB"
+        sx={{
+          p: 4,
+        }}>
+        Create new theme
+      </Text>
+      <Box as="form" onSubmit={handleSubmit(onSubmit)} px={4}>
         <Box mx={0} mb={3}>
-          <Flex sx={{ width: '90%' }}>
+          <Flex>
             <Box sx={{ width: '100%' }}>
               <Input type="hidden" {...register('edit')} />
               <Field
                 name="name"
                 label="Name"
-                defaultValue="New Theme"
+                placeholder="Theme name"
                 register={register}
+                mb={'28px'}
               />
               <Field
                 name="font"
@@ -213,7 +217,13 @@ const ThemeAddForm = () => {
                 defaultValue=""
                 register={register}
               />
-              <Box>
+              <Button
+                mt={3}
+                onClick={() => setIsFontOpen(true)}
+                variant="buttonSecondary">
+                Add Fonts
+              </Button>
+              <Box mt={'28px'}>
                 <Text>Colors</Text>
                 <FieldColor
                   register={register}
@@ -264,48 +274,46 @@ const ThemeAddForm = () => {
           {isEdit ? 'Update' : 'Create Theme'}
         </Button>
       </Box>
-      <Box>
-        <Box pt={3}>
-          <Text as="h3" mb={2} pb={1}>
-            Fonts
-          </Text>
-
-          {assets &&
-            assets.length > 0 &&
-            assets.map((m: any) => (
-              <Box
-                key={m.id}
-                sx={{
-                  p: 3,
-                  border: 'solid 1px',
-                  borderColor: 'border',
-                  mb: 1,
-                }}>
-                <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                  {m.name}
-                </Text>
-                <Box>
-                  <Button
-                    sx={{
-                      fontSize: 1,
-                      px: 1,
-                      py: 1,
-                      ml: 3,
-                      bg: 'white',
-                      color: 'red.500',
-                      border: 'solid 1px',
-                      borderColor: 'red.1000',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => deleteAsset(m.id)}>
-                    Delete
-                  </Button>
+      <Modal isOpen={isFontOpen} onClose={() => setIsFontOpen(false)}>
+        <Box sx={{ minWidth: '518px' }}>
+          <AssetForm onUpload={addUploads} filetype="theme" />
+          <Box>
+            {assets &&
+              assets.length > 0 &&
+              assets.map((m: any) => (
+                <Box
+                  key={m.id}
+                  sx={{
+                    p: 3,
+                    border: 'solid 1px',
+                    borderColor: 'border',
+                    mb: 1,
+                  }}>
+                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                    {m.name}
+                  </Text>
+                  <Box>
+                    <Button
+                      sx={{
+                        fontSize: 1,
+                        px: 1,
+                        py: 1,
+                        ml: 3,
+                        bg: 'white',
+                        color: 'red.500',
+                        border: 'solid 1px',
+                        borderColor: 'red.1000',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => deleteAsset(m.id)}>
+                      Delete
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))}
+          </Box>
         </Box>
-        <AssetForm onUpload={addUploads} filetype="theme" />
-      </Box>
+      </Modal>
     </Flex>
   );
 };
