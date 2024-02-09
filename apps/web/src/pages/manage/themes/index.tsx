@@ -1,17 +1,19 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
-import Router from 'next/router';
 import { Box, Button, Container, Flex, Text } from 'theme-ui';
 
 import { GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
+import ThemeAddForm from '../../../components/ThemeAddForm';
 import ThemeList from '../../../components/ThemeList';
 import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <>
       <Head>
@@ -29,9 +31,12 @@ const Index: FC = () => {
           <Button
             as={Button}
             variant="buttonSecondary"
-            onClick={() => Router.push('themes/new')}>
+            onClick={() => setIsOpen(true)}>
             <Text variant="pM">Add Theme</Text>
           </Button>
+          <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+            {isOpen && <ThemeAddForm />}
+          </Drawer>
         </PageHeader>
 
         <Container variant="layout.pageFrame">
