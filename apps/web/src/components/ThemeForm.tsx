@@ -76,12 +76,7 @@ const ThemeForm = () => {
         error: (err) => `This just happened: ${err.toString()}`,
       },
       {
-        success: {
-          duration: 1000,
-        },
-        error: {
-          duration: 1000,
-        },
+        duration: 1000,
       },
     );
   };
@@ -96,7 +91,6 @@ const ThemeForm = () => {
   const onDone = () => {
     toast.success(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
       duration: 1000,
-      position: 'top-right',
     });
     Router.push(`/manage/themes`);
   };
