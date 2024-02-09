@@ -53,7 +53,6 @@ const Form: FC = () => {
         error: 'Failed to load theme',
       },
       {
-        position: 'top-right',
         duration: 1000,
       },
     );
@@ -73,7 +72,6 @@ const Form: FC = () => {
         error: 'Failed to delete theme',
       },
       {
-        position: 'top-right',
         duration: 1000,
       },
     );
