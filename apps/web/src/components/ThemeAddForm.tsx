@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { CloseIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -275,7 +276,15 @@ const ThemeAddForm = () => {
         </Button>
       </Box>
       <Modal isOpen={isFontOpen} onClose={() => setIsFontOpen(false)}>
-        <Box sx={{ minWidth: '518px' }}>
+        <Box sx={{ minWidth: '518px', borderRadius: '8px', p: 4 }}>
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Text variant="pB">Upload font</Text>
+            <Box
+              sx={{ cursor: 'pointer' }}
+              onClick={() => setIsFontOpen(false)}>
+              <CloseIcon color="#2C3641" />
+            </Box>
+          </Flex>
           <AssetForm onUpload={addUploads} filetype="theme" />
           <Box>
             {assets &&
