@@ -10,7 +10,6 @@ interface FieldColorProps {
   label: string;
   name: string;
   defaultValue: string;
-  mr?: number;
   placeholder?: string;
   sub?: string;
   required?: boolean;
@@ -32,7 +31,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
   placeholder,
   register,
   defaultValue,
-  mr,
   sub,
   ftype = 'text',
   onChangeColor,
@@ -65,7 +63,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
   };
 
   useEffect(() => {
-    const vX: string = defaultValue || '#fff';
+    const vX: string = defaultValue || '#000000';
     setVal(vX);
   }, [defaultValue]);
 
@@ -73,7 +71,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
 
   return (
     <PopoverProvider>
-      <Box mr={mr} sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative' }}>
         <Box sx={{ ml: 0 }}>
           {sub && (
             <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
