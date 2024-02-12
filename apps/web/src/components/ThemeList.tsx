@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon, FontIcon } from '@wraft/icon';
@@ -27,16 +27,16 @@ export interface ThemeElement {
   file: null;
 }
 
-const Form: FC = () => {
+type Props = {
+  rerender: any;
+  setRerender: (e: any) => void;
+};
+
+const Form = ({ rerender, setRerender }: Props) => {
   const { theme } = useThemeUI();
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
-  const [rerender, setRerender] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log('.........contennt', contents);
-  }, [contents]);
 
   const loadData = () => {
     const getRequest = fetchAPI('themes?sort=inserted_at_desc');
@@ -65,7 +65,7 @@ const Form: FC = () => {
       {
         loading: 'Loading...',
         success: () => {
-          setRerender((prev) => !prev);
+          setRerender((prev: boolean) => !prev);
           setDeleteTheme(null);
           return 'Successfully deleted theme';
         },

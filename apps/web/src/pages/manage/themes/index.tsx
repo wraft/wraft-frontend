@@ -14,6 +14,7 @@ import { menuLinks } from '../../../utils';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<any>(false);
   return (
     <>
       <Head>
@@ -35,7 +36,9 @@ const Index: FC = () => {
             <Text variant="pM">Add Theme</Text>
           </Button>
           <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-            {isOpen && <ThemeAddForm />}
+            {isOpen && (
+              <ThemeAddForm setIsOpen={setIsOpen} setRerender={setRerender} />
+            )}
           </Drawer>
         </PageHeader>
 
@@ -43,7 +46,7 @@ const Index: FC = () => {
           <Flex>
             <ManageSidebar items={menuLinks} />
             <Box variant="layout.contentFrame">
-              <ThemeList />
+              <ThemeList rerender={rerender} setRerender={setRerender} />
             </Box>
           </Flex>
         </Container>
