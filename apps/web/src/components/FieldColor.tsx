@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
+import { InkIcon } from '@wraft/icon';
 import { ChromePicker } from 'react-color';
-import { Text, Box, Label, Input, Flex } from 'theme-ui';
+import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
 
 interface FieldColorProps {
   register: any;
@@ -78,7 +79,12 @@ const FieldColor: React.FC<FieldColorProps> = ({
               id={name}
               type={ftype}
               defaultValue={valx || defaultValue || ''}
-              sx={{ pl: '40px' }}
+              sx={{
+                pl: '44px',
+                variant: 'texts.subR',
+                textTransform: 'uppercase',
+                color: 'gray.900',
+              }}
               {...register(name, { required: required })}
               onChange={(e) => {
                 handleHexInputChange(e);
@@ -98,11 +104,28 @@ const FieldColor: React.FC<FieldColorProps> = ({
                     top: '8px',
                     left: '10px',
                     padding: '5px',
-                    borderRadius: '4px',
+                    borderRadius: '99px',
                     display: 'inline-block',
                     cursor: 'pointer',
                   }}
                 />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '7px',
+                    right: '18px',
+                    padding: '4px',
+                    borderRadius: '4px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}>
+                  <InkIcon
+                    width={18}
+                    height={18}
+                    viewBox="0 0 24 24"
+                    color={useThemeUI().theme?.colors?.gray?.[600]}
+                  />
+                </Box>
               </Box>
               <Popover aria-label="Edit color">
                 <ChromePicker
