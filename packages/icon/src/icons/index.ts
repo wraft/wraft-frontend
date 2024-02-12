@@ -23,6 +23,7 @@ export { default as H1Icon } from './H1';
 export { default as H2Icon } from './H2';
 export { default as H3Icon } from './H3';
 export { default as HomeIcon } from './Home';
+export { default as InkIcon } from './Ink';
 export { default as ItalicsIcon } from './Italics';
 export { default as LeftIcon } from './Left';
 export { default as ManageIcon } from './Manage';
