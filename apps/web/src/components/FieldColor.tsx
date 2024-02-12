@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-import { Chrome } from '@uiw/react-color';
+import { Chrome } from '@uiw/react-color/src/index';
 import { InkIcon } from '@wraft/icon';
 import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
 
@@ -65,7 +65,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
   };
 
   useEffect(() => {
-    const vX: string = defaultValue || '';
+    const vX: string = defaultValue || '#fff';
     setVal(vX);
   }, [defaultValue]);
 
@@ -159,11 +159,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
               <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
                 <Box>
                   <Chrome color={valx} onChange={(e: any) => changeColor(e)} />
-                  {/* <ChromePicker
-                    color={valx}
-                    disableAlpha
-                    onChangeComplete={(e: any) => changeColor(e)}
-                  /> */}
                 </Box>
               </Popover>
             </Box>
