@@ -142,13 +142,11 @@ const ThemeAddForm = () => {
 
   const setContentDetails = (data: any) => {
     const res: any = data;
-    // setContent(res);
 
     if (res && res?.theme) {
       const currTheme: ThemeElement = res?.theme;
       setTheme(currTheme);
       setValue('name', currTheme?.name);
-      // setValue('font', currTheme?.font || '');
       setValue('body_color', currTheme.body_color || '');
       setValue('primary_color', currTheme.primary_color || '');
       setValue('secondary_color', currTheme.secondary_color || '');
@@ -286,7 +284,7 @@ const ThemeAddForm = () => {
                 </Text>
               </Button>
               <Box mt={'28px'}>
-                <Text>Colors</Text>
+                <Label>Colors</Label>
                 <FieldColor
                   register={register}
                   name="primary_color"
