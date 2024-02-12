@@ -209,34 +209,61 @@ const ThemeForm = () => {
               />
               <Box>
                 <Text>Colors</Text>
-                <FieldColor
-                  register={register}
-                  name="primary_color"
-                  label="Primary Color"
-                  defaultValue={theme?.primary_color || ''}
-                  onChangeColor={(value: string) =>
-                    onChangeField('primary_color', value)
-                  }
-                />
-                <FieldColor
-                  register={register}
-                  name="secondary_color"
-                  label="Secondary Color"
-                  defaultValue={theme?.secondary_color || ''}
-                  onChangeColor={(value: string) =>
-                    onChangeField('secondary_color', value)
-                  }
-                />
-
-                <FieldColor
-                  register={register}
-                  name="body_color"
-                  label="Body Color"
-                  defaultValue={theme?.body_color || ''}
-                  onChangeColor={(value: string) =>
-                    onChangeField('body_color', value)
-                  }
-                />
+                <Flex
+                  sx={{
+                    flexDirection: 'column',
+                    border: '1px solid',
+                    borderColor: 'neutral.200',
+                    borderRadius: 4,
+                  }}>
+                  <Box
+                    sx={{
+                      borderBottom: '1px solid',
+                      borderColor: 'neutral.200',
+                    }}>
+                    <FieldColor
+                      register={register}
+                      name="primary_color"
+                      label="Primary Color"
+                      defaultValue={theme?.primary_color || ''}
+                      onChangeColor={(value: string) =>
+                        onChangeField('primary_color', value)
+                      }
+                      variant="inside"
+                      border="none"
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      borderBottom: '1px solid',
+                      borderColor: 'neutral.200',
+                    }}>
+                    <FieldColor
+                      register={register}
+                      name="secondary_color"
+                      label="Secondary Color"
+                      defaultValue={theme?.secondary_color || ''}
+                      onChangeColor={(value: string) =>
+                        onChangeField('secondary_color', value)
+                      }
+                      variant="inside"
+                      border="none"
+                    />
+                  </Box>
+                  <Box>
+                    <FieldColor
+                      register={register}
+                      name="body_color"
+                      label="Body Color"
+                      defaultValue={theme?.body_color || ''}
+                      onChangeColor={(value: string) =>
+                        onChangeField('body_color', value)
+                      }
+                      variant="inside"
+                      border="none"
+                    />
+                  </Box>
+                </Flex>
               </Box>
             </Box>
 
