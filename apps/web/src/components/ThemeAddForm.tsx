@@ -197,13 +197,22 @@ const ThemeAddForm = () => {
           flexDirection: 'column',
         }}>
         <Text
+          as={'p'}
           variant="pB"
           sx={{
             p: 4,
           }}>
           Create new theme
         </Text>
-        <Box as="form" onSubmit={handleSubmit(onSubmit)} px={4}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: '100%',
+          }}
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          px={4}>
           <Box mx={0} mb={3}>
             <Flex>
               <Box sx={{ width: '100%' }}>
@@ -355,13 +364,15 @@ const ThemeAddForm = () => {
               </Box>
             )}
           </Box>
-          <Button
-            disabled={(assets && assets.length < 2) || !isValid}
-            variant="buttonPrimary"
-            ml={2}>
-            {isEdit ? 'Update' : 'Create'}
-          </Button>
-        </Box>
+          <Box pb={4}>
+            <Button
+              disabled={(assets && assets.length < 2) || !isValid}
+              variant="buttonPrimary"
+              ml={2}>
+              {isEdit ? 'Update' : 'Create'}
+            </Button>
+          </Box>
+        </Flex>
       </Flex>
       <Modal isOpen={isFontOpen} onClose={() => setIsFontOpen(false)}>
         <Box sx={{ width: '518px', borderRadius: '8px', p: 4, bg: 'white' }}>
