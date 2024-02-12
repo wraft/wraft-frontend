@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { CloseIcon, DeleteIcon } from '@wraft/icon';
+import { CloseIcon, DeleteIcon, DocumentIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -12,7 +12,6 @@ import { Asset } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
-import { DocumentIcon } from './Icons';
 import Modal from './Modal';
 
 interface ThemeElement {
@@ -240,8 +239,7 @@ const ThemeAddForm = () => {
                       }}>
                       <Flex sx={{ alignItems: 'center' }}>
                         <DocumentIcon
-                          width={28}
-                          height={28}
+                          viewBox="0 0 24 24"
                           color={
                             themeui?.theme?.colors?.gray?.[200] || '#2C3641'
                           }
@@ -372,14 +370,13 @@ const ThemeAddForm = () => {
                   }}>
                   <Flex sx={{ alignItems: 'center' }}>
                     <DocumentIcon
-                      width={28}
-                      height={28}
+                      viewBox="0 0 24 24"
                       color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
                     />
                     <Text
                       as="p"
                       variant="pM"
-                      sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                      sx={{ ml: 2, fontSize: 1, m: 0, p: 0, mb: 0 }}>
                       {m.name.match(/(.+?)(?=-|$)/)?.[1]}
                     </Text>
                   </Flex>
