@@ -356,7 +356,7 @@ const ThemeAddForm = () => {
             )}
           </Box>
           <Button
-            disabled={assets && assets.length < 2 && !isValid}
+            disabled={(assets && assets.length < 2) || !isValid}
             variant="buttonPrimary"
             ml={2}>
             {isEdit ? 'Update' : 'Create'}
