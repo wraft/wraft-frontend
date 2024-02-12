@@ -125,9 +125,9 @@ const Form: FC = () => {
       enableSorting: false,
     },
     {
-      id: 'content.state',
-      header: 'STATE',
-      accessorKey: 'content.state',
+      id: 'content.color',
+      header: 'COLOR',
+      accessorKey: 'content.color',
       cell: ({ row }: any) => (
         <Flex key={row.index} sx={{ alignItems: 'center', gap: 1 }}>
           <Box
