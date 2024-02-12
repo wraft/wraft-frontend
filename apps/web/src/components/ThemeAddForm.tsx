@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import { CloseIcon, DeleteIcon, DocumentIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
@@ -37,7 +37,7 @@ const ThemeAddForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
@@ -189,180 +189,181 @@ const ThemeAddForm = () => {
   };
 
   return (
-    <Flex
-      sx={{
-        height: '100vh',
-        overflow: 'scroll',
-        flexDirection: 'column',
-      }}>
-      <Text
-        variant="pB"
+    <Fragment>
+      <Flex
         sx={{
-          p: 4,
+          height: '100vh',
+          overflow: 'scroll',
+          flexDirection: 'column',
         }}>
-        Create new theme
-      </Text>
-      <Box as="form" onSubmit={handleSubmit(onSubmit)} px={4}>
-        <Box mx={0} mb={3}>
-          <Flex>
-            <Box sx={{ width: '100%' }}>
-              <Input type="hidden" {...register('edit')} />
-              <Field
-                name="name"
-                label="Name"
-                placeholder="Theme name"
-                register={register}
-                mb={'28px'}
-              />
-              <Label>Font</Label>
-              {assets && assets.length > 0 && (
-                <Box
-                  sx={{
-                    borderRadius: '6px',
-                    overflow: 'hidden',
-                    border: 'solid 1px',
-                    borderColor: 'neutral.200',
-                  }}>
-                  {assets.map((m: any, index: number) => (
-                    <Flex
-                      key={m.id}
+        <Text
+          variant="pB"
+          sx={{
+            p: 4,
+          }}>
+          Create new theme
+        </Text>
+        <Box as="form" onSubmit={handleSubmit(onSubmit)} px={4}>
+          <Box mx={0} mb={3}>
+            <Flex>
+              <Box sx={{ width: '100%' }}>
+                <Input type="hidden" {...register('edit')} />
+                <Field
+                  name="name"
+                  label="Name"
+                  placeholder="Theme name"
+                  register={register}
+                  mb={'28px'}
+                />
+                <Label>Font</Label>
+                {assets && assets.length > 0 && (
+                  <Box
+                    sx={{
+                      borderRadius: '6px',
+                      overflow: 'hidden',
+                      border: 'solid 1px',
+                      borderColor: 'neutral.200',
+                    }}>
+                    {assets.map((m: any, index: number) => (
+                      <Flex
+                        key={m.id}
+                        sx={{
+                          py: 2,
+                          px: 3,
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderBottom:
+                            index < assets.length ? '1px solid' : 'none',
+                          borderColor: 'neutral.200',
+                        }}>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <DocumentIcon
+                            viewBox="0 0 24 24"
+                            color={
+                              themeui?.theme?.colors?.gray?.[200] || '#2C3641'
+                            }
+                          />
+                          <Text
+                            as="p"
+                            variant="pM"
+                            sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                            {m.name.match(/(.+?)(?=-|$)/)?.[1]}
+                          </Text>
+                        </Flex>
+                        <Flex
+                          sx={{
+                            alignItems: 'center',
+                            width: '80px',
+                            justifyContent: 'space-between',
+                            textTransform: 'uppercase',
+                          }}>
+                          <Text variant="capM" sx={{ color: 'gray.400' }}>
+                            {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}{' '}
+                          </Text>
+                          <Button
+                            variant="base"
+                            sx={{ p: 0, m: 0 }}
+                            onClick={() => deleteAsset(m.id)}>
+                            <DeleteIcon
+                              width={16}
+                              height={16}
+                              viewBox="0 0 24 24"
+                              color="#2C3641"
+                            />
+                          </Button>
+                        </Flex>
+                      </Flex>
+                    ))}
+                  </Box>
+                )}
+                <Button
+                  mt={3}
+                  onClick={() => setIsFontOpen(true)}
+                  variant="buttonSecondary">
+                  <Text variant="pM">
+                    {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
+                  </Text>
+                </Button>
+                <Box mt={'28px'}>
+                  <Label>Colors</Label>
+                  <Flex
+                    sx={{
+                      flexDirection: 'column',
+                      border: '1px solid',
+                      borderColor: 'neutral.200',
+                      borderRadius: 4,
+                    }}>
+                    <Box
                       sx={{
-                        py: 2,
-                        px: 3,
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        borderBottom:
-                          index < assets.length ? '1px solid' : 'none',
+                        borderBottom: '1px solid',
                         borderColor: 'neutral.200',
                       }}>
-                      <Flex sx={{ alignItems: 'center' }}>
-                        <DocumentIcon
-                          viewBox="0 0 24 24"
-                          color={
-                            themeui?.theme?.colors?.gray?.[200] || '#2C3641'
-                          }
-                        />
-                        <Text
-                          as="p"
-                          variant="pM"
-                          sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                          {m.name.match(/(.+?)(?=-|$)/)?.[1]}
-                        </Text>
-                      </Flex>
-                      <Flex
-                        sx={{
-                          alignItems: 'center',
-                          width: '80px',
-                          justifyContent: 'space-between',
-                          textTransform: 'uppercase',
-                        }}>
-                        <Text variant="capM" sx={{ color: 'gray.400' }}>
-                          {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}{' '}
-                        </Text>
-                        <Button
-                          variant="base"
-                          sx={{ p: 0, m: 0 }}
-                          onClick={() => deleteAsset(m.id)}>
-                          <DeleteIcon
-                            width={16}
-                            height={16}
-                            viewBox="0 0 24 24"
-                            color="#2C3641"
-                          />
-                        </Button>
-                      </Flex>
-                    </Flex>
-                  ))}
+                      <FieldColor
+                        register={register}
+                        name="primary_color"
+                        label="Primary Color"
+                        defaultValue={theme?.primary_color || ''}
+                        onChangeColor={(value: string) =>
+                          onChangeField('primary_color', value)
+                        }
+                        variant="inside"
+                        border="none"
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        borderBottom: '1px solid',
+                        borderColor: 'neutral.200',
+                      }}>
+                      <FieldColor
+                        register={register}
+                        name="secondary_color"
+                        label="Secondary Color"
+                        defaultValue={theme?.secondary_color || ''}
+                        onChangeColor={(value: string) =>
+                          onChangeField('secondary_color', value)
+                        }
+                        variant="inside"
+                        border="none"
+                      />
+                    </Box>
+                    <Box>
+                      <FieldColor
+                        register={register}
+                        name="body_color"
+                        label="Body Color"
+                        defaultValue={theme?.body_color || ''}
+                        onChangeColor={(value: string) =>
+                          onChangeField('body_color', value)
+                        }
+                        variant="inside"
+                        border="none"
+                      />
+                    </Box>
+                  </Flex>
                 </Box>
-              )}
-              <Button
-                mt={3}
-                onClick={() => setIsFontOpen(true)}
-                variant="buttonSecondary">
-                <Text variant="pM">
-                  {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
-                </Text>
-              </Button>
-              <Box mt={'28px'}>
-                <Label>Colors</Label>
-                <Flex
-                  sx={{
-                    flexDirection: 'column',
-                    border: '1px solid',
-                    borderColor: 'neutral.200',
-                    borderRadius: 4,
-                  }}>
-                  <Box
-                    sx={{
-                      borderBottom: '1px solid',
-                      borderColor: 'neutral.200',
-                    }}>
-                    <FieldColor
-                      register={register}
-                      name="primary_color"
-                      label="Primary Color"
-                      defaultValue={theme?.primary_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('primary_color', value)
-                      }
-                      variant="inside"
-                      border="none"
-                    />
-                  </Box>
-                  <Box
-                    sx={{
-                      borderBottom: '1px solid',
-                      borderColor: 'neutral.200',
-                    }}>
-                    <FieldColor
-                      register={register}
-                      name="secondary_color"
-                      label="Secondary Color"
-                      defaultValue={theme?.secondary_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('secondary_color', value)
-                      }
-                      variant="inside"
-                      border="none"
-                    />
-                  </Box>
-                  <Box>
-                    <FieldColor
-                      register={register}
-                      name="body_color"
-                      label="Body Color"
-                      defaultValue={theme?.body_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('body_color', value)
-                      }
-                      variant="inside"
-                      border="none"
-                    />
-                  </Box>
-                </Flex>
               </Box>
-            </Box>
 
-            {errors.root?.message && (
-              <Text variant="error">This field is required</Text>
+              {errors.root?.message && (
+                <Text variant="error">This field is required</Text>
+              )}
+            </Flex>
+
+            {theme?.file && (
+              <Box sx={{ p: 3, bg: 'teal.700' }}>
+                <Text>{theme?.file}</Text>
+              </Box>
             )}
-          </Flex>
-
-          {theme?.file && (
-            <Box sx={{ p: 3, bg: 'teal.700' }}>
-              <Text>{theme?.file}</Text>
-            </Box>
-          )}
+          </Box>
+          <Button
+            disabled={assets && assets.length < 2 && !isValid}
+            variant="buttonPrimary"
+            ml={2}>
+            {isEdit ? 'Update' : 'Create'}
+          </Button>
         </Box>
-        <Button
-          disabled={assets && assets.length < 2}
-          variant="buttonPrimary"
-          ml={2}>
-          {isEdit ? 'Update' : 'Create Theme'}
-        </Button>
-      </Box>
+      </Flex>
       <Modal isOpen={isFontOpen} onClose={() => setIsFontOpen(false)}>
-        {' '}
         <Box sx={{ width: '518px', borderRadius: '8px', p: 4, bg: 'white' }}>
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Text variant="pB">Upload font</Text>
@@ -413,7 +414,7 @@ const ThemeAddForm = () => {
                       textTransform: 'uppercase',
                     }}>
                     <Text variant="capM" sx={{ color: 'gray.400' }}>
-                      {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}{' '}
+                      {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}
                     </Text>
                     <Button
                       variant="base"
@@ -433,7 +434,7 @@ const ThemeAddForm = () => {
           )}
         </Box>
       </Modal>
-    </Flex>
+    </Fragment>
   );
 };
 export default ThemeAddForm;
