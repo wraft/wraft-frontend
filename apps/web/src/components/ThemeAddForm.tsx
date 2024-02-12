@@ -122,11 +122,13 @@ const ThemeAddForm = () => {
       secondary_color: data?.secondary_color,
       primary_color: data?.primary_color,
       name: data.name,
-      font: data.font,
+      font: assets[0]?.name?.match(/(.+?)(?=-|$)/)?.[1], // sets font name from asset
       default_theme: data?.default_theme,
       body_color: data?.body_color,
       assets: assetsList,
     };
+
+    console.log('🍿.....', themeData);
 
     if (data?.edit) {
       putAPI(`themes/${data?.edit}`, themeData).then(() => {
@@ -147,7 +149,7 @@ const ThemeAddForm = () => {
       const currTheme: ThemeElement = res?.theme;
       setTheme(currTheme);
       setValue('name', currTheme?.name);
-      setValue('font', currTheme?.font || '');
+      // setValue('font', currTheme?.font || '');
       setValue('body_color', currTheme.body_color || '');
       setValue('primary_color', currTheme.primary_color || '');
       setValue('secondary_color', currTheme.secondary_color || '');
