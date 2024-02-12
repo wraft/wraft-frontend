@@ -10,6 +10,7 @@ export { default as BulletListIcon } from './BulletList';
 export { default as CloseIcon } from './Close';
 export { default as DashIcon } from './Dash';
 export { default as DeleteIcon } from './Delete';
+export { default as DocumentIcon } from './Document';
 export { default as DownIcon } from './Down';
 export { default as EditIcon } from './Edit';
 export { default as EllipsisHIcon } from './EllipsisH';
