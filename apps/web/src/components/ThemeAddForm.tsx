@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { CloseIcon } from '@wraft/icon';
+import { CloseIcon, DeleteIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Box, Flex, Button, Text, Input, useThemeUI } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -12,6 +12,7 @@ import { Asset } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
+import { DocumentIcon } from './Icons';
 import Modal from './Modal';
 
 interface ThemeElement {
@@ -45,6 +46,8 @@ const ThemeAddForm = () => {
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [isFontOpen, setIsFontOpen] = useState<boolean>(false);
+
+  const themeui = useThemeUI();
 
   /**
    * Upload Assets
@@ -276,51 +279,62 @@ const ThemeAddForm = () => {
         </Button>
       </Box>
       <Modal isOpen={isFontOpen} onClose={() => setIsFontOpen(false)}>
-        <Box sx={{ minWidth: '518px', borderRadius: '8px', p: 4 }}>
+        {' '}
+        <Box sx={{ width: '518px', borderRadius: '8px', p: 4, bg: 'white' }}>
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Text variant="pB">Upload font</Text>
-            <Box
-              sx={{ cursor: 'pointer' }}
+            <Button
+              variant="base"
+              sx={{ p: 0, m: 0 }}
               onClick={() => setIsFontOpen(false)}>
               <CloseIcon color="#2C3641" />
-            </Box>
+            </Button>
           </Flex>
           <AssetForm onUpload={addUploads} filetype="theme" />
-          <Box>
-            {assets &&
-              assets.length > 0 &&
-              assets.map((m: any) => (
-                <Box
+          {assets && assets.length > 0 && (
+            <Box
+              sx={{
+                borderRadius: '6px',
+                overflow: 'hidden',
+                border: 'solid 1px',
+                borderColor: 'neutral.200',
+              }}>
+              {assets.map((m: any, index: number) => (
+                <Flex
                   key={m.id}
                   sx={{
-                    p: 3,
-                    border: 'solid 1px',
-                    borderColor: 'border',
-                    mb: 1,
+                    py: 2,
+                    px: 3,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderBottom: index < assets.length ? '1px solid' : 'none',
+                    borderColor: 'neutral.200',
                   }}>
-                  <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                    {m.name}
-                  </Text>
-                  <Box>
-                    <Button
-                      sx={{
-                        fontSize: 1,
-                        px: 1,
-                        py: 1,
-                        ml: 3,
-                        bg: 'white',
-                        color: 'red.500',
-                        border: 'solid 1px',
-                        borderColor: 'red.1000',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => deleteAsset(m.id)}>
-                      Delete
-                    </Button>
-                  </Box>
-                </Box>
+                  <Flex sx={{ alignItems: 'center' }}>
+                    <DocumentIcon
+                      width={28}
+                      height={28}
+                      color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
+                    />
+                    <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                      {m.name}
+                    </Text>
+                  </Flex>
+                  <Button
+                    variant="base"
+                    sx={{ p: 0, m: 0 }}
+                    onClick={() => deleteAsset(m.id)}>
+                    <DeleteIcon
+                      width={16}
+                      height={16}
+                      viewBox="0 0 24 24"
+                      color="#2C3641"
+                    />
+                  </Button>
+                </Flex>
               ))}
-          </Box>
+            </Box>
+          )}
         </Box>
       </Modal>
     </Flex>
