@@ -33,7 +33,11 @@ type FormValues = {
   body_color: string;
 };
 
-const ThemeAddForm = () => {
+type Props = {
+  setIsOpen: (e: any) => void;
+  setRerender: (e: any) => void;
+};
+const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
   const {
     register,
     handleSubmit,
@@ -98,7 +102,10 @@ const ThemeAddForm = () => {
       duration: 1000,
       position: 'top-right',
     });
+
     Router.push(`/manage/themes`);
+    setIsOpen(false);
+    setRerender((prev: boolean) => !prev);
   };
 
   const onSubmit = (data: any) => {
