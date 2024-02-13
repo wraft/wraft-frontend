@@ -213,7 +213,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
           sx={{
             p: 4,
           }}>
-          Create new theme
+          {isEdit ? 'Edit theme' : 'Create new theme'}
         </Text>
         <Flex
           sx={{
