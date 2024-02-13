@@ -18,6 +18,7 @@ type DropzoneProps = {
   setPdfPreview?: (e: any) => void;
   setIsSubmit: any;
   setDeleteAssets?: any;
+  multiple?: boolean;
 };
 
 const Dropzone = ({
@@ -27,6 +28,7 @@ const Dropzone = ({
   setPdfPreview,
   setIsSubmit,
   setDeleteAssets,
+  multiple = false,
 }: DropzoneProps) => {
   const { setValue, watch, register } = useFormContext();
 
@@ -49,7 +51,7 @@ const Dropzone = ({
     onDrop,
     maxFiles: 1,
     maxSize: 1 * 1024 * 1024, //1MB in bytes
-    multiple: false,
+    multiple: multiple,
     accept: accept || { '*': [] },
   });
 
