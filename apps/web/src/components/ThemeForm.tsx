@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import Router, { useRouter } from 'next/router';
+import { DocumentIcon, TickIcon } from '@wraft/icon';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Box, Flex, Button, Text, Input, Label, useThemeUI } from 'theme-ui';
 
-import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 import { Asset } from '../utils/types';
 
-import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
 
@@ -39,98 +38,13 @@ const ThemeForm = () => {
     setValue,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
-  const [isEdit, setIsEdit] = useState(false);
+  // const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
-
-  /**
-   * Upload Assets
-   * @param data
-   */
-  const addUploads = (data: Asset) => {
-    setAssets((prevArray) => {
-      if (!Array.isArray(prevArray)) {
-        console.error('prevArray is not an array:', prevArray);
-        return [data]; // or handle this case appropriately
-      }
-      return [...prevArray, data];
-    });
-  };
-
-  /**
-   * Delete Asset from Theme
-   * @param id
-   */
-  const deleteAsset = (id: string) => {
-    const deleteAssetRequest = deleteAPI(`assets/${id}`);
-
-    toast.promise(
-      deleteAssetRequest,
-      {
-        loading: 'Loading',
-        success: (data: any) => {
-          console.log(data);
-          setAssets((prev) => prev.filter((item) => item.id !== data.id));
-          return `Successfully deleted `;
-        },
-        error: (err) => `This just happened: ${err.toString()}`,
-      },
-      {
-        duration: 1000,
-      },
-    );
-  };
 
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
-
-  /**
-   * On Theme Created
-   */
-  const onDone = () => {
-    toast.success(`${isEdit ? 'Updated' : 'Saved'} Successfully`, {
-      duration: 1000,
-    });
-    Router.push(`/manage/themes`);
-  };
-
-  const onSubmit = (data: any) => {
-    let assetsList;
-
-    if (assets.length > 0) {
-      const a: any = [];
-      assets.forEach((e: any) => {
-        a.push(e.id);
-      });
-
-      // Remove comma in the end
-      // assetsList = a; //a.join(',');
-      assetsList = a.join(',');
-    }
-
-    console.log('assetsList', assetsList);
-
-    const themeData: any = {
-      secondary_color: data?.secondary_color,
-      primary_color: data?.primary_color,
-      name: data.name,
-      font: data.font,
-      default_theme: data?.default_theme,
-      body_color: data?.body_color,
-      assets: assetsList,
-    };
-
-    if (data?.edit) {
-      putAPI(`themes/${data?.edit}`, themeData).then(() => {
-        onDone();
-      });
-    } else {
-      postAPI(`themes`, themeData).then(() => {
-        onDone();
-      });
-    }
-  };
 
   const setContentDetails = (data: any) => {
     const res: any = data;
@@ -165,33 +79,21 @@ const ThemeForm = () => {
 
   useEffect(() => {
     if (cId) {
-      setIsEdit(true);
+      // setIsEdit(true);
       loadDataDetalis(cId);
       setValue('edit', cId);
     }
   }, [cId]);
-
-  /**
-   * On Change Color
-   */
-
-  const onChangeField = (
-    _name: 'primary_color' | 'secondary_color' | 'body_color',
-    value: any,
-  ) => {
-    setValue(_name, value);
-  };
+  const themeui = useThemeUI();
 
   return (
     <Flex sx={{ maxWidth: '90ch', margin: 'auto' }}>
       <Box
         as="form"
-        onSubmit={handleSubmit(onSubmit)}
-        py={3}
-        mt={4}
+        onSubmit={handleSubmit(() => console.log('submit'))}
         pr={4}
         sx={{ width: '50ch' }}>
-        <Box mx={0} mb={3}>
+        <Box>
           <Flex sx={{ width: '90%' }}>
             <Box sx={{ width: '100%' }}>
               <Input type="hidden" {...register('edit')} />
@@ -201,14 +103,85 @@ const ThemeForm = () => {
                 defaultValue="New Theme"
                 register={register}
               />
-              <Field
-                name="font"
-                label="Font"
-                defaultValue=""
-                register={register}
-              />
-              <Box>
-                <Text>Colors</Text>
+              <Box mt={3}>
+                <Label>Font</Label>
+                {assets && assets.length > 0 && (
+                  <Box
+                    sx={{
+                      borderRadius: '6px',
+                      overflow: 'hidden',
+                      border: 'solid 1px',
+                      borderColor: 'neutral.200',
+                    }}>
+                    {assets.map((m: any, index: number) => (
+                      <Flex
+                        key={m.id}
+                        sx={{
+                          py: 2,
+                          px: 3,
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          borderBottom:
+                            index < assets.length ? '1px solid' : 'none',
+                          borderColor: 'neutral.200',
+                        }}>
+                        <Flex sx={{ alignItems: 'center' }}>
+                          <Box
+                            mr={2}
+                            sx={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                            <DocumentIcon
+                              viewBox="0 0 24 24"
+                              color={
+                                themeui?.theme?.colors?.gray?.[200] || '#2C3641'
+                              }
+                            />
+                          </Box>
+                          <Text
+                            as="p"
+                            variant="pM"
+                            sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                            {m.name.match(/(.+?)(?=-|$)/)?.[1]}
+                          </Text>
+                        </Flex>
+                        <Flex
+                          sx={{
+                            alignItems: 'center',
+                            width: '80px',
+                            justifyContent: 'space-between',
+                            textTransform: 'uppercase',
+                          }}>
+                          <Text variant="capM" sx={{ color: 'gray.400' }}>
+                            {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}{' '}
+                          </Text>
+                          <Box
+                            sx={{
+                              height: '16px',
+                              width: '16px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              bg: 'green.700',
+                              borderRadius: '44px',
+                            }}>
+                            <TickIcon
+                              color={themeui?.theme?.colors?.white as string}
+                              height={12}
+                              width={12}
+                              viewBox="0 0 24 24"
+                            />
+                          </Box>
+                        </Flex>
+                      </Flex>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+              <Box mt={3}>
+                <Label>Colors</Label>
                 <Flex
                   sx={{
                     flexDirection: 'column',
@@ -226,9 +199,6 @@ const ThemeForm = () => {
                       name="primary_color"
                       label="Primary Color"
                       defaultValue={theme?.primary_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('primary_color', value)
-                      }
                       variant="inside"
                       border="none"
                     />
@@ -243,9 +213,6 @@ const ThemeForm = () => {
                       name="secondary_color"
                       label="Secondary Color"
                       defaultValue={theme?.secondary_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('secondary_color', value)
-                      }
                       variant="inside"
                       border="none"
                     />
@@ -256,9 +223,6 @@ const ThemeForm = () => {
                       name="body_color"
                       label="Body Color"
                       defaultValue={theme?.body_color || ''}
-                      onChangeColor={(value: string) =>
-                        onChangeField('body_color', value)
-                      }
                       variant="inside"
                       border="none"
                     />
@@ -278,54 +242,9 @@ const ThemeForm = () => {
             </Box>
           )}
         </Box>
-        <Button
-          disabled={assets && assets.length < 2}
-          variant="buttonPrimary"
-          ml={2}>
-          {isEdit ? 'Update' : 'Create Theme'}
+        <Button mt={4} variant="buttonSecondary">
+          Edit
         </Button>
-      </Box>
-      <Box>
-        <Box pt={3}>
-          <Text as="h3" mb={2} pb={1}>
-            Fonts
-          </Text>
-
-          {assets &&
-            assets.length > 0 &&
-            assets.map((m: any) => (
-              <Box
-                key={m.id}
-                sx={{
-                  p: 3,
-                  border: 'solid 1px',
-                  borderColor: 'border',
-                  mb: 1,
-                }}>
-                <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                  {m.name}
-                </Text>
-                <Box>
-                  <Button
-                    sx={{
-                      fontSize: 1,
-                      px: 1,
-                      py: 1,
-                      ml: 3,
-                      bg: 'white',
-                      color: 'red.500',
-                      border: 'solid 1px',
-                      borderColor: 'red.1000',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => deleteAsset(m.id)}>
-                    Delete
-                  </Button>
-                </Box>
-              </Box>
-            ))}
-        </Box>
-        <AssetForm onUpload={addUploads} filetype="theme" />
       </Box>
     </Flex>
   );
