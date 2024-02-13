@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Flex } from 'theme-ui';
 
 import Page from '../../../components/PageFrame';
-import Theme from '../../../components/ThemeForm';
+import Theme from '../../../components/ThemeViewForm';
 
 const Index: FC = () => {
   return (
