@@ -142,7 +142,7 @@ const Dropzone = ({
             <Text variant="pM" sx={{ mb: 1 }}>
               Drag & drop or upload files
             </Text>
-            <Text variant="capM">{types} - Max file size 1MB</Text>
+            <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
           </Flex>
         )}
         {files && files[0] && (
