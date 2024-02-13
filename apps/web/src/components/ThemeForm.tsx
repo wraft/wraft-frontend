@@ -297,7 +297,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                 )}
                 <Button
                   mt={3}
-                  onClick={() => setIsFontOpen(true)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsFontOpen(true);
+                  }}
                   variant="buttonSecondary">
                   <Text variant="pM">
                     {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
@@ -378,6 +381,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             <Button
               disabled={(assets && assets.length < 2) || !isValid}
               variant="buttonPrimary"
+              type="submit"
               ml={2}>
               {isEdit ? 'Update' : 'Create'}
             </Button>
@@ -391,7 +395,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             <Button
               variant="base"
               sx={{ p: 0, m: 0 }}
-              onClick={() => setIsFontOpen(false)}>
+              onClick={(e) => {
+                e.preventDefault();
+                setIsFontOpen(false);
+              }}>
               <CloseIcon color="#2C3641" />
             </Button>
           </Flex>
@@ -440,7 +447,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                     <Button
                       variant="base"
                       sx={{ p: 0, m: 0 }}
-                      onClick={() => deleteAsset(m.id)}>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteAsset(m.id);
+                      }}>
                       <DeleteIcon
                         width={16}
                         height={16}
