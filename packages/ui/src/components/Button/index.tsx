@@ -1,48 +1,58 @@
-import type { ButtonProps as AkButtonProps } from '@ariakit/react'
-import { Button as AriakitButton } from '@ariakit/react'
-// import styled from '@emotion/styled'
-import {css} from '@emotion/react';
+import type { ButtonProps as AkButtonProps } from '@ariakit/react';
+import { Button as AriakitButton } from '@ariakit/react';
 import { forwardRef } from 'react';
+import styled, { th, x } from '@xstyled/emotion';
+import { Spinner } from '../Spinner';
 
-import styled, {
-  style,
-  th,
-  system,
-  space,
-  SpaceProps,
-} from '@xstyled/emotion';
+export type Shape = 'circle' | 'square';
+export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'full';
+export type Variant = 'primary' | 'secondary' | 'outlined' | 'disabled' | 'googleLogin' | 'ghost';
 
-
-export type Shape = 'circle' | 'square'
-export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg'
-export type Variant =
-  | 'primary'
-  | 'secondary'
-  | 'outlined'
-  | 'disabled'
-  
 export interface ButtonOptions extends AkButtonProps {
-  disabled?: boolean
-  size?: Size
-  variant?: Variant
-  shape?: Shape
+  disabled?: boolean;
+  children?: React.ReactNode;
+  loading?: boolean;
+  size?: Size;
+  variant?: Variant;
+  shape?: Shape;
 }
 
 const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   cursor: pointer;
   user-select: none;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  
   transition:
     color 0.15s ease-in-out,
     background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
-  ${({variant}) => th(`buttons.${variant}`)};
+  ${({ variant }) => th(`buttons.${variant}`)};
+  color: ${(props) => props.loading && 'transparent'};
+  width: ${({size}) => size === 'full' && '100%'};
+  ${({ size }) => size === 'full' && `
+    padding-top: 12px;
+    padding-bottom: 12px;
+  `}
 `;
 
-
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
-  ({ ...rest }, ref) => {
-    return <ButtonWrapper {...rest} ref={ref} />;
+  ({ variant = 'primary', children, loading = false, ...rest }, ref) => {
+    return (
+      <ButtonWrapper variant={variant} loading={loading} {...rest} ref={ref}>
+        <x.div display="flex">
+          {loading && (
+            <x.div flex="0 1 auto">
+              <Spinner />
+            </x.div>
+          )}
+          <x.div flex="0 1 auto">{children}</x.div>
+        </x.div>
+      </ButtonWrapper>
+    );
   },
 );
 

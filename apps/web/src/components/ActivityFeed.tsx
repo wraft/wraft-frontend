@@ -8,8 +8,6 @@ import { API_HOST } from '../utils/models';
 
 import { TimeAgo } from './Atoms';
 
-// import { Button } from 'theme-ui';
-
 export interface ActivityStream {
   activities: Activity[];
   page_number: number;

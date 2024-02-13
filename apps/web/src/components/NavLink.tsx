@@ -1,20 +1,29 @@
-/* eslint-disable react/display-name */
-import React, { ReactElement, memo } from 'react';
+import React, { memo } from 'react';
 
+import { Link } from '@wraft/ui';
 import NextLink from 'next/link';
-import { Box, Link } from 'theme-ui';
 
 interface AnchorType {
   href: string;
   locale?: string;
   target?: string;
   path?: string;
-  variant?: string;
-  icon?: ReactElement;
+  variant?: any;
+  type?: any;
+  icon?: React.ElementType;
 }
 
+// eslint-disable-next-line react/display-name
 export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
-  ({ children, href, locale = 'en', path, icon, variant }) => {
+  ({
+    children,
+    href,
+    locale = 'en',
+    path,
+    icon,
+    variant = 'default',
+    type,
+  }) => {
     if (!href) return <>{children}</>;
     return (
       <NextLink
@@ -23,10 +32,7 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         locale={locale}
         passHref
         legacyBehavior>
-        <Link
-          sx={{ color: 'gray.900', cursor: 'pointer' }}
-          variant={variant || 'none'}>
-          {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
+        <Link variant={variant} Icon={icon} type={type}>
           {children}
         </Link>
       </NextLink>

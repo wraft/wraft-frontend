@@ -1,6 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
-  extends: ["@wraft/eslint-config/library.js"],
+  extends: ["@wraft/eslint-config/library.js", "plugin:prettier/recommended"],
   rules: {
     "import/order": [
       "error",

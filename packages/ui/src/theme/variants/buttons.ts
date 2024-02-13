@@ -9,6 +9,9 @@ const buttons = {
     borderColor: 'primary',
     borderRadius: '4px',
     padding: '8px 16px',
+    fontWeight: 'heading',
+    fontSize: '14px',
+    fontFamily: 'body',
     ':hover': {
       backgroundColor: '#197231',
       borderColor: '#197231',
@@ -26,9 +29,28 @@ const buttons = {
     borderColor: '#E4E9EF',
     borderRadius: '4px',
     padding: '8px 16px',
+    fontWeight: 'heading',
+    fontSize: '14px',
+    fontFamily: 'body',
     ':hover': {
       backgroundColor: '#C1C6DB',
       borderColor: '#C1C6DB',
+    },
+  },
+  ghost: {
+    background: 'transparent',
+    border: 'none',
+    padding: '8px 16px',
+    fontWeight: 'heading',
+    fontSize: '14px',
+    fontFamily: 'body',
+    color: 'text',
+    ':hover': {
+      backgroundColor: '#F0F2F5',
+    },
+    ':disabled': {
+      color: 'gray.900',
+      bg: 'neutral.300',
     },
   },
   buttonPrimary: {

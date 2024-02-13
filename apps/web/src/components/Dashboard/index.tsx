@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button as TestButton } from '@wraft/ui';
+import { Button } from '@wraft/ui';
 import { format } from 'date-fns';
 import Image from 'next/image';
-import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
+import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
@@ -86,13 +86,7 @@ const Dashboard = () => {
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
-            <Button
-              variant="btnPrimary"
-              // onClick={() => toggleSearch()}
-              sx={{ fontWeight: 'heading' }}>
-              Watch demo
-            </Button>
-            <TestButton variant="primary">Watch demo two</TestButton>
+            <Button variant="primary">Watch demo</Button>
           </Box>
         </Flex>
         <Flex

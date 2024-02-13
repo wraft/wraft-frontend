@@ -65,7 +65,9 @@ export interface IFieldTypeValue {
 }
 
 export interface IContentForm {
-  id: any;
+  id?: any;
+  tid?: any;
+  cid?: any;
   edit?: boolean;
 }
 

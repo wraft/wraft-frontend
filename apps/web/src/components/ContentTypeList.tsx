@@ -39,10 +39,7 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <NavLink
-            href="/content-types/new"
-            variant="buttons.btnSecondary"
-            locale={''}>
+          <NavLink href="/content-types/new" variant="secondary">
             New Variant
           </NavLink>
         </Flex>

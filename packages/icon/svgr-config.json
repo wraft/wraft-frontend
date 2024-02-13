@@ -1,6 +1,7 @@
 {
   "typescript": true,
   "icon": true,
+  "removeXMLNS": true,
   "replaceAttrValues": {
     "#2C3641": "{props.color || `#2C3641`}",
     "#FFFFFF": "{props.color || `#FFFFFF`}",

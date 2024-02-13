@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import NavLink from 'next/link';
 import { Box, Flex, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
@@ -65,10 +66,7 @@ const TemplateList = () => {
           col2: <TimeAgo time={r.updated_at} />,
           col3: (
             <Box sx={{ px: 3 }}>
-              <Link
-                href={`/templates/edit/${r.id}`}
-                variant="buttons.btnSecondary"
-                locale={''}>
+              <Link href={`/templates/edit/${r.id}`} locale={''}>
                 Edit
               </Link>
             </Box>
@@ -97,12 +95,9 @@ const TemplateList = () => {
           ),
           col1: (
             <Box sx={{ px: 3, py: 2 }}>
-              <Link
-                href={`/templates/edit/${r.id}`}
-                // variant=""
-                locale={''}>
+              <NavLink href={`/templates/edit/${r.id}`} locale={''}>
                 <Text sx={{ fontSize: 2 }}>{r.title}</Text>
-              </Link>
+              </NavLink>
             </Box>
           ),
         };
@@ -118,7 +113,7 @@ const TemplateList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="btnSecondary" locale={''}>
+          <Link href="/templates/new" variant="secondary" type="button">
             + New Template
           </Link>
         </Box>

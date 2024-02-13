@@ -13,6 +13,7 @@ const CreateForm = dynamic(() => import('../components/ContentForm'), {
 const Index: FC = () => {
   const searchParams = useSearchParams();
   const templateId = searchParams.get('template');
+  const contentTypeId = searchParams.get('cid');
 
   return (
     <>
@@ -21,7 +22,7 @@ const Index: FC = () => {
         <meta name="description" content="Create a New Document with Wraft" />
       </Head>
       <PageFull id="Modal" showFull={true}>
-        <CreateForm id={templateId} />
+        <CreateForm tid={templateId} cid={contentTypeId} />
       </PageFull>
     </>
   );
