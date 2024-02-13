@@ -1,3 +1,4 @@
+'use client';
 import { FC, useEffect, useState } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
@@ -5,12 +6,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Container, Flex } from 'theme-ui';
 
-import ManageSidebar from '../../../../components/ManageSidebar';
-import Page from '../../../../components/PageFrame';
-import PageHeader from '../../../../components/PageHeader';
-import ThemeForm from '../../../../components/ThemeViewForm';
-import { menuLinks } from '../../../../utils';
-import { fetchAPI } from '../../../../utils/models';
+import ManageSidebar from '../../../components/ManageSidebar';
+import Page from '../../../components/PageFrame';
+import PageHeader from '../../../components/PageHeader';
+import ThemeForm from '../../../components/ThemeViewForm';
+import { menuLinks } from '../../../utils';
+import { fetchAPI } from '../../../utils/models';
 
 const Index: FC = () => {
   const [theme, setTheme] = useState<any>();
