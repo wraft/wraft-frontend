@@ -48,6 +48,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
+  const [loadedAssets, setLoadedAssets] = useState<Array<Asset>>([]);
   const [isFontOpen, setIsFontOpen] = useState<boolean>(false);
 
   const themeui = useThemeUI();
@@ -114,7 +115,9 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     if (assets.length > 0) {
       const a: any = [];
       assets.forEach((e: any) => {
-        a.push(e.id);
+        if (!loadedAssets.some((loadedAsset) => loadedAsset.id === e.id)) {
+          a.push(e.id);
+        }
       });
 
       // Remove comma in the end
