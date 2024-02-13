@@ -5,15 +5,14 @@ export const coreBorders = {
   thick: '4px solid',
 };
 
-
 const theme: any = {
   // printColorModeName: 'wraft',
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
-    body: `sans-serif`,
+    body: `inter, sans-serif`,
     heading: 'inherit',
-    editor1: `sans-serif`,
-    editor2: `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
+    editor1: `inter, sans-serif`,
+    editor2: `inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
     // font-family:
     monospace: 'Menlo, monospace',
     satoshi:

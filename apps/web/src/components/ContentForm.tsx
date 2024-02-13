@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import { Drawer } from '@wraft-ui/Drawer';
 import { usePathname } from 'next/navigation';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -53,7 +52,6 @@ const ContentForm = (props: IContentForm) => {
   // @ts-expect-error unsed variable tto
   const [content, setContent] = useState<IVariantDetail>();
   const [contents, setContents] = useState<ContentInstance>();
-  const [templates, setTemplates] = useState<Array<Template>>([]);
   const [activeTemplate, setActiveTemplate] = useState('');
 
   const cId: string = router.query.id as string;
@@ -69,16 +67,32 @@ const ContentForm = (props: IContentForm) => {
   const [saving, setSaving] = useState<boolean>(false);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const [showDev, setShowDev] = useState<boolean>(false);
-  const [showTemplate, setShowTemplate] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { id, edit } = props;
+  const { id, tid, edit, cid } = props;
   const [title, setTitle] = useState<string>('New Title');
 
   const [pageTitle, setPageTitle] = useState<string>('New Title');
 
   // triggers
   const [trigger, setTrigger] = useState<any>(null);
+
+  /**
+   * Load date on dom ready
+   */
+  useEffect(() => {
+    if (tid && cid) {
+      loadData(tid, cid);
+    }
+  }, [tid, cid]);
+
+  useEffect(() => {
+    if (id && edit) {
+      fetchAPI(`contents/${id}`).then((data: any) => {
+        onLoadContent(data);
+      });
+    }
+  }, [id]);
 
   // /**
   //  * Toggle Title Edit
@@ -172,7 +186,7 @@ const ContentForm = (props: IContentForm) => {
     };
 
     if (edit) {
-      putAPI(`contents/${id}`, template).then((data: any) => {
+      putAPI(`contents/${cid}`, template).then((data: any) => {
         onCreate(data);
         setSaving(false);
       });
@@ -204,17 +218,15 @@ const ContentForm = (props: IContentForm) => {
    * Load Data
    * @param id
    */
-  const loadData = (id: string) => {
-    if (edit) {
-      fetchAPI(`contents/${id}`).then((data: any) => {
-        onLoadContent(data);
-      });
-    } else {
-      fetchAPI(`content_types/${id}`).then((data: any) => {
-        onLoadData(data);
-      });
-      loadTemplates(id);
-    }
+  const loadData = (tid: string, cid: string) => {
+    fetchAPI(`content_types/${cid}`).then((data: any) => {
+      onLoadData(data);
+    });
+    loadTemplates(tid);
+
+    //temp
+    setActiveTemplate(tid);
+    setShowForm(true);
   };
 
   /**
@@ -283,10 +295,9 @@ const ContentForm = (props: IContentForm) => {
    * @param id
    */
   const loadTemplates = (id: string) => {
-    setActiveTemplate(id);
-    fetchAPI(`content_types/${id}/data_templates`).then((data: any) => {
-      const res: Template[] = data.data_templates;
-      setTemplates(res);
+    fetchAPI(`data_templates/${id}`).then((data: any) => {
+      const res: Template[] = data.data_template;
+      changeText(res);
     });
   };
 
@@ -299,13 +310,6 @@ const ContentForm = (props: IContentForm) => {
   };
 
   /**
-   * Load date on dom ready
-   */
-  useEffect(() => {
-    loadData(id);
-  }, [id]);
-
-  /**
    * Watch out for changes in Content ID, and URL Paths
    */
   useEffect(() => {
@@ -315,7 +319,6 @@ const ContentForm = (props: IContentForm) => {
       if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
         console.log('[red]', pathGroup);
         setShowForm(false);
-        setShowTemplate(false);
       }
     }
     // getSummary();
@@ -367,7 +370,7 @@ const ContentForm = (props: IContentForm) => {
   // when template selection modal is active
   useEffect(() => {
     if (activeTemplate.length < 1) {
-      setShowTemplate(true);
+      // setShowTemplate(true);
     }
   }, [activeTemplate]);
 
@@ -396,7 +399,6 @@ const ContentForm = (props: IContentForm) => {
     setShowForm(true);
 
     setActiveTemplate(x.id);
-    setShowTemplate(false);
 
     // textOperation(x);
 
@@ -506,10 +508,6 @@ const ContentForm = (props: IContentForm) => {
     updatePageTitle(resx);
     // we are inserting an empty node, so that the editor is triggered
     setTrigger(EMPTY_MARKDOWN_NODE);
-  };
-
-  const closeModal = () => {
-    setShowTemplate(false);
   };
 
   /**
@@ -652,12 +650,12 @@ const ContentForm = (props: IContentForm) => {
                 register={register}
               />
 
-              {id && (
+              {cid && (
                 <Box>
                   <Label>Edit </Label>
                   <Input
                     id="edit"
-                    defaultValue={id}
+                    defaultValue={cid}
                     {...register('edit', { required: true })}
                   />
                 </Box>
@@ -665,7 +663,7 @@ const ContentForm = (props: IContentForm) => {
               <Field
                 name="ttype"
                 label="Content Type"
-                defaultValue={cId || id}
+                defaultValue={cId || cid}
                 register={register}
               />
             </Box>
@@ -742,7 +740,6 @@ const ContentForm = (props: IContentForm) => {
                           border: '1px solid #E9ECEF',
                         }}>
                         <Text
-                          onClick={() => setShowTemplate(true)}
                           as="h6"
                           sx={{
                             fontSize: 2,
@@ -770,56 +767,15 @@ const ContentForm = (props: IContentForm) => {
                 )}
               </Box>
             </Box>
-            <Drawer open={showTemplate} setOpen={closeModal}>
-              <Box sx={{ px: 3, py: 3 }}>
-                <Box sx={{ pb: 2 }}>
-                  <Text sx={{ fontSize: 2, color: 'gray.700', pb: 3, mb: 3 }}>
-                    Templates
-                  </Text>
-                </Box>
-                <Box mt={2}>
-                  {templates &&
-                    templates.map((n: any) => (
-                      <Box
-                        key={n.id}
-                        sx={{
-                          bg: 'neutral.100',
-                          pl: 3,
-                          border: 'solid 0.5px',
-                          borderColor: 'border',
-                          mb: 1,
-                          pt: 2,
-                          pb: 3,
-                          pr: 3,
-                          cursor: 'pointer',
-                          width: '100%',
-                          ':hover': {
-                            bg: 'neutral.200',
-                          },
-                        }}
-                        onClick={() => changeText(n)}>
-                        <Text
-                          as="h6"
-                          sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
-                          {n.title}
-                        </Text>
-                      </Box>
-                    ))}
-                </Box>
-              </Box>
-            </Drawer>
-
             <FieldForm
               activeTemplate={activeTemplate}
               setMaps={updateMaps}
               fields={fieldMaps}
-              templates={templates}
               showForm={showForm}
               setShowForm={makeInsert}
               onSaved={onSaved}
               onRefresh={onSaved}
             />
-
             <Box>
               {/* <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">

@@ -1,5 +1,5 @@
 import { TourProvider, components } from '@reactour/tour';
-import { theme } from '@wraft/ui';
+import { theme, GlobalStyle } from '@wraft/ui';
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
 import { SessionProvider, getSession } from 'next-auth/react';
@@ -40,6 +40,7 @@ const MyApp = ({
   return (
     // <TourProvider steps={steps}>
     <TourProvider steps={[]} components={{ Badge }} padding={{ mask: 0 }}>
+      <GlobalStyle />
       <SessionProvider session={session}>
         <ToasterNewProvider />
         <ThemeUIProvider theme={theme}>

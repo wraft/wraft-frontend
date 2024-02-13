@@ -1,7 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import { Box, Button, Flex, Text } from 'theme-ui';
+import { MenuProvider, Menu, MenuItem } from '@ariakit/react';
+import { Button } from '@wraft/ui';
+import NextLink from 'next/link';
+import { Box, Flex, NavLink, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 
@@ -49,9 +51,7 @@ const BlockTemplateListFrame: FC = () => {
         const rFormated = {
           col2: (
             <Box>
-              <Link href={`/blocks/edit/[id]`} path={`blocks/edit/${r.id}`}>
-                {r?.title}
-              </Link>
+              <NextLink href={`/blocks/edit/${r.id}`}>{r?.title}</NextLink>
             </Box>
           ),
           col3: (
@@ -62,19 +62,9 @@ const BlockTemplateListFrame: FC = () => {
           col4: (
             <Box as={MenuProvider} sx={{ position: 'relative', px: 3, py: 1 }}>
               {/* <Link href={`/blocks/edit/${r.id}`} variant="btnSecondary"> */}
-              <MenuButton
-                as={Button}
-                sx={{
-                  border: 'solid 1px',
-                  color: 'text',
-                  borderColor: 'border',
-                  p: 0,
-                  bg: 'neutral.100',
-                  pb: 1,
-                  mt: 2,
-                }}>
+              <Button variant="secondary">
                 <DotsVerticalRounded width={16} height={16} />
-              </MenuButton>
+              </Button>
               <Menu
                 as={Box}
                 aria-label="Manage Block"
@@ -85,27 +75,19 @@ const BlockTemplateListFrame: FC = () => {
                   bg: 'neutral.100',
                   color: 'text',
                 }}>
-                <MenuItem
-                  as={Button}
-                  sx={{
-                    p: 0,
-                    color: 'red.800',
-                    bg: 'neutral.100',
-                    px: 3,
-                    borderBottom: 'solid 1px',
-                    borderColor: 'border',
-                  }}
+                <Button
+                  variant="secondary"
                   onClick={() => {
                     // onDelete(id);
                   }}>
                   Delete
-                </MenuItem>
+                </Button>
                 <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
-                  <Link
+                  <NavLink
                     href={`/manage/blocks/edit/[id]`}
-                    variant="buttons.btnSecondary">
+                    variant="secondary">
                     <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
-                  </Link>
+                  </NavLink>
                 </MenuItem>
               </Menu>
               {/* </Link> */}
@@ -124,7 +106,7 @@ const BlockTemplateListFrame: FC = () => {
     <Box>
       <PageHeader title="Blocks" desc="Re-usable Content blocks">
         <Box sx={{ ml: 'auto' }}>
-          <Link href="/blocks/new" variant="buttons.btnSecondary">
+          <Link href="/blocks/new" variant="secondary">
             + New Block
           </Link>
         </Box>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@wraft/ui';
 import Image from 'next/image';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
@@ -8,8 +9,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Heading } from 'theme-ui';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import { Spinner } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
@@ -165,11 +165,8 @@ const UserLoginForm = () => {
             </Link>
           </Flex>
 
-          <Button type="submit" variant="buttonPrimary">
-            <Flex sx={{ alignItems: 'center', gap: '4px' }}>
-              Sign in
-              {loading && <Spinner color="white" width={18} height={18} />}
-            </Flex>
+          <Button type="submit" variant="primary" loading={loading}>
+            Sign in
           </Button>
         </Box>
 

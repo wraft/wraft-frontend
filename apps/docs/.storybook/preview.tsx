@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { defaultTheme, ThemeProvider, Preflight } from '@xstyled/emotion';
-import { theme } from '@wraft/ui';
+import { theme, GlobalStyle } from '@wraft/ui';
 
 import { Preview } from '@storybook/react';
 
@@ -23,10 +23,13 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
- 
-      <ThemeProvider theme={theme}>
-        <Story />
-      </ThemeProvider>
+      <>
+      <GlobalStyle />
+      
+        <ThemeProvider theme={theme}>
+          <Story />
+        </ThemeProvider>
+      </>
      
     ),
   ],

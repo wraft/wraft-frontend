@@ -7,7 +7,7 @@ import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 
-import Blok from './Blok';
+import CreateDocument from './CreateDocument';
 import { Bell, Search } from './Icons';
 import Modal from './Modal';
 import Link from './NavLink';
@@ -236,7 +236,7 @@ const Nav = ({ navtitle }: INav) => {
         </Box>
       </Flex>
       <Modal isOpen={showSearch} onClose={closeSearch}>
-        <Blok />
+        <CreateDocument />
       </Modal>
     </Box>
   );

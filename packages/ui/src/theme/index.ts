@@ -8,6 +8,7 @@ import layout from './variants/layout';
 import links from './variants/links';
 import text from './variants/text';
 
+export { GlobalStyle } from './GlobalStyle';
 
 export const theme = {
   ...basic,
@@ -20,4 +21,3 @@ export const theme = {
   alerts,
   styles,
 };
-
