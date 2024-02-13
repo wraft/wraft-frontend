@@ -88,7 +88,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box key={row.index}>
-          <Link href={`/manage/themes/edit/${row.original.id}`}>
+          <Link href={`/manage/themes/${row.original.id}`}>
             <Text as="p" variant="pM">
               {row.original.name}
             </Text>
