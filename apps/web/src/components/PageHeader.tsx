@@ -54,7 +54,7 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
           </Text>
           {desc && (
             <Box>
-              <Text as={'p'} variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
+              <Text as={Box} variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
                 {desc}
               </Text>
             </Box>
