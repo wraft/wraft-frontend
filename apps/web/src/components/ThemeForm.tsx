@@ -161,6 +161,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       setValue('primary_color', currTheme.primary_color || '');
       setValue('secondary_color', currTheme.secondary_color || '');
       setAssets(currTheme?.assets);
+      setLoadedAssets(currTheme?.assets);
     }
   };
 
