@@ -17,6 +17,7 @@ interface FieldColorProps {
   onChangeColor?: any;
   variant?: 'inside' | 'outside';
   border?: string;
+  disable?: boolean;
 }
 
 /**
@@ -26,6 +27,7 @@ interface FieldColorProps {
  */
 
 const FieldColor: React.FC<FieldColorProps> = ({
+  disable,
   name,
   label,
   placeholder,
@@ -109,10 +111,12 @@ const FieldColor: React.FC<FieldColorProps> = ({
               onChange={(e) => {
                 handleHexInputChange(e);
               }}
+              disabled={disable}
             />
             <Box sx={{ pt: 0 }}>
               <Box
                 as={PopoverDisclosure}
+                aria-disabled={disable}
                 sx={{
                   bg: 'transparent',
                   border: 0,
