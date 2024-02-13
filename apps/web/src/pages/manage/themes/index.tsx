@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
 import { Box, Button, Container, Flex, Text } from 'theme-ui';
 
-import { GraterThanIcon } from '../../../components/Icons';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -25,9 +25,9 @@ const Index: FC = () => {
         <PageHeader
           title="Themes"
           desc={
-            <Flex sx={{ alignItems: 'center', gap: '6px', color: 'gray.400' }}>
-              Manage <GraterThanIcon /> Themes
-            </Flex>
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'Themes' }]}
+            />
           }>
           <Button
             as={Button}
