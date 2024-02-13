@@ -7,7 +7,7 @@ import { Box, Container, Flex } from 'theme-ui';
 import ManageSidebar from '../../../../components/ManageSidebar';
 import Page from '../../../../components/PageFrame';
 import PageHeader from '../../../../components/PageHeader';
-import ThemeForm from '../../../../components/ThemeForm';
+import ThemeForm from '../../../../components/ThemeViewForm';
 import { menuLinks } from '../../../../utils';
 
 const Index: FC = () => {

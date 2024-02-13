@@ -8,7 +8,7 @@ import { Box, Button, Container, Flex, Text } from 'theme-ui';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import ThemeAddForm from '../../../components/ThemeAddForm';
+import ThemeAddForm from '../../../components/ThemeForm';
 import ThemeList from '../../../components/ThemeList';
 import { menuLinks } from '../../../utils';
 
