@@ -113,7 +113,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
               }}
               disabled={disable}
             />
-            <Box sx={{ pt: 0 }}>
+            <Box>
               <Box
                 as={PopoverDisclosure}
                 aria-disabled={disable}
@@ -154,7 +154,9 @@ const FieldColor: React.FC<FieldColorProps> = ({
                     width={18}
                     height={18}
                     viewBox="0 0 24 24"
-                    color={useThemeUI().theme?.colors?.gray?.[600]}
+                    color={
+                      useThemeUI().theme?.colors?.gray?.[disable ? 200 : 600]
+                    }
                   />
                 </Box>
               </Box>
