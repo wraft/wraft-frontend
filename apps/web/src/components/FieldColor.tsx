@@ -100,7 +100,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
               defaultValue={valx || defaultValue || ''}
               sx={{
                 pl: '40px',
-                pr: '70px',
+                pr: '80px',
                 variant: 'texts.subR',
                 textTransform: 'uppercase',
                 color: 'gray.900',
@@ -113,14 +113,11 @@ const FieldColor: React.FC<FieldColorProps> = ({
               }}
               disabled={disable}
             />
-            <Box>
-              <Box
-                as={PopoverDisclosure}
+            <Box sx={{ width: 0, bg: 'transparent' }}>
+              <PopoverDisclosure
                 aria-disabled={disable}
-                sx={{
-                  bg: 'transparent',
-                  border: 0,
-                }}>
+                as={Box}
+                sx={{ bg: 'transparent', border: 'none' }}>
                 <Box
                   id="colorBox"
                   bg={valx}
@@ -145,10 +142,12 @@ const FieldColor: React.FC<FieldColorProps> = ({
                     position: 'absolute',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    right: '20px',
+                    right: '12px',
                     borderRadius: '4px',
-                    display: 'inline-block',
+                    display: 'flex',
                     cursor: 'pointer',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
                   <InkIcon
                     width={18}
@@ -159,7 +158,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
                     }
                   />
                 </Box>
-              </Box>
+              </PopoverDisclosure>
               <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
                 <Box>
                   <Chrome color={valx} onChange={(e: any) => changeColor(e)} />
