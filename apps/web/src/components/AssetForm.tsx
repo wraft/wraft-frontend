@@ -51,6 +51,9 @@ const AssetForm = ({
     if (!data.file || data.file === undefined || data.file.length < 1) {
       return;
     }
+    // const files = [...data.file];
+    const files = Array.from(data.file);
+    files.forEach((f: any) => console.log('eeeeeeeeeeeech', f));
 
     const formData = new FormData();
     formData.append('file', data.file[0]);
@@ -106,6 +109,7 @@ const AssetForm = ({
             setPdfPreview={setPdfPreview}
             setIsSubmit={setIsSubmit}
             setDeleteAssets={setDeleteAssets}
+            multiple={filetype === 'theme'}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
