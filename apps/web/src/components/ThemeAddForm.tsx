@@ -35,7 +35,7 @@ type FormValues = {
 
 type Props = {
   setIsOpen: (e: any) => void;
-  setRerender: (e: any) => void;
+  setRerender?: (e: any) => void;
 };
 const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
   const {
@@ -105,7 +105,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
 
     Router.push(`/manage/themes`);
     setIsOpen(false);
-    setRerender((prev: boolean) => !prev);
+    setRerender && setRerender((prev: boolean) => !prev);
   };
 
   const onSubmit = (data: any) => {
@@ -279,7 +279,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                           <Button
                             variant="base"
                             sx={{ p: 0, m: 0 }}
-                            onClick={() => deleteAsset(m.id)}>
+                            onClick={(e) => {
+                              e.preventDefault();
+                              deleteAsset(m.id);
+                            }}>
                             <DeleteIcon
                               width={16}
                               height={16}
