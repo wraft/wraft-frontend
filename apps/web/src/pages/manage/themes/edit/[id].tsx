@@ -1,11 +1,14 @@
 import { FC } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
-import { Box } from 'theme-ui';
+import { Box, Container, Flex } from 'theme-ui';
 
-import { HeadingFrame } from '../../../../components/Card';
+import ManageSidebar from '../../../../components/ManageSidebar';
 import Page from '../../../../components/PageFrame';
+import PageHeader from '../../../../components/PageHeader';
 import ThemeForm from '../../../../components/ThemeForm';
+import { menuLinks } from '../../../../utils';
 
 const Index: FC = () => {
   return (
@@ -15,10 +18,28 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame title="Edit Theme" />
-        <Box sx={{ pl: 4 }}>
-          <ThemeForm />
-        </Box>
+        <PageHeader
+          title="Themes"
+          desc={
+            <DescriptionLinker
+              data={[
+                { name: 'Manage', path: '/manage' },
+                { name: 'Themes' },
+                { name: 'Themes' },
+              ]}
+            />
+          }
+        />
+        <Container variant="layout.pageFrame">
+          <Flex>
+            <ManageSidebar items={menuLinks} />
+            <Box variant="layout.contentFrame">
+              <Box p={4}>
+                <ThemeForm />
+              </Box>
+            </Box>
+          </Flex>
+        </Container>
       </Page>
     </>
   );
