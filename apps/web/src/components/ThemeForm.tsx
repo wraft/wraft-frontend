@@ -91,14 +91,13 @@ const ThemeForm = () => {
 
   return (
     <Fragment>
-      <Flex sx={{ maxWidth: '90ch', margin: 'auto' }}>
+      <Flex>
         <Box
           as="form"
           onSubmit={handleSubmit(() => console.log('submit'))}
-          pr={4}
           sx={{ width: '50ch' }}>
           <Box>
-            <Flex sx={{ width: '90%' }}>
+            <Flex>
               <Box sx={{ width: '100%' }}>
                 <Input type="hidden" {...register('edit')} />
                 <Field
@@ -244,12 +243,6 @@ const ThemeForm = () => {
                 <Text variant="error">This field is required</Text>
               )}
             </Flex>
-
-            {theme?.file && (
-              <Box sx={{ p: 3, bg: 'teal.700' }}>
-                <Text>{theme?.file}</Text>
-              </Box>
-            )}
           </Box>
           <Button
             mt={4}
