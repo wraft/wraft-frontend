@@ -64,12 +64,40 @@ const FontList = ({ assets, onDelete }: Props) => {
                     {item.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}
                   </Text>
                   {item.success === true ? (
-                    <Box sx={{ p: 1, bg: 'gray.400' }}>
-                      <TickIcon />
+                    <Box
+                      sx={{
+                        height: '16px',
+                        width: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bg: 'green.700',
+                        borderRadius: '44px',
+                      }}>
+                      <TickIcon
+                        color={themeui?.theme?.colors?.white as string}
+                        height={12}
+                        width={12}
+                        viewBox="0 0 24 24"
+                      />
                     </Box>
                   ) : item.success === false ? (
-                    <Box sx={{ p: 1, bg: 'gray.400' }}>
-                      <CloseIcon />
+                    <Box
+                      sx={{
+                        height: '16px',
+                        width: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bg: 'red.700',
+                        borderRadius: '44px',
+                      }}>
+                      <CloseIcon
+                        color={themeui?.theme?.colors?.white as string}
+                        height={12}
+                        width={12}
+                        viewBox="0 0 24 24"
+                      />
                     </Box>
                   ) : (
                     <Box sx={{ display: 'none' }} />
