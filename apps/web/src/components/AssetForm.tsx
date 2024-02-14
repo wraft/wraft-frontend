@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import Dropzone from '@wraft-ui/Dropzone';
+import ProgressBar from '@wraft-ui/ProgressBar';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Button, Text } from 'theme-ui';
@@ -31,6 +32,7 @@ const AssetForm = ({
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [filesList, setFilesList] = useState<any>();
 
   const methods = useForm<FormValues>({ mode: 'onBlur' });
 
@@ -44,6 +46,8 @@ const AssetForm = ({
     onUpload(mData);
   };
 
+  useEffect(() => console.log('✅.....filesList', filesList), [filesList]);
+
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
 
@@ -51,6 +55,14 @@ const AssetForm = ({
       return;
     }
     const files = Array.from(data.file);
+    const updatedFiles = files.map((f: any) => ({
+      ...f,
+      name: f.name,
+      progress: null,
+      success: null,
+    }));
+    setFilesList(updatedFiles);
+    console.log('❌.....files', files);
     files.forEach((f: any) => {
       const formData = new FormData();
       formData.append('file', f);
@@ -59,6 +71,11 @@ const AssetForm = ({
 
       const assetsRequest = postAPI(`assets`, formData, (progress) => {
         setUploadProgress(progress);
+        const progressFiles = updatedFiles.map((f) => ({
+          ...f,
+          progress: progress,
+        }));
+        setFilesList(progressFiles);
       });
 
       toast.promise(
@@ -68,6 +85,11 @@ const AssetForm = ({
           success: (data) => {
             onAssetUploaded(data);
             setUploadProgress(0);
+            const successFiles = updatedFiles.map((f) => ({
+              ...f,
+              success: true,
+            }));
+            setFilesList(successFiles);
             return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
           },
           error: (error) => {
@@ -76,6 +98,11 @@ const AssetForm = ({
             setFileError(
               error.errors.file[0] || error.message || 'There is an error',
             );
+            const failedFiles = updatedFiles.map((f) => ({
+              ...f,
+              success: true,
+            }));
+            setFilesList(failedFiles);
             return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
           },
         },
@@ -127,6 +154,14 @@ const AssetForm = ({
             </Box>
           )}
         </Box>
+        {filesList &&
+          filesList.length > 0 &&
+          filesList.map((f: any, index: number) => (
+            <Box key={index}>
+              {f.name}
+              <ProgressBar progress={f.progress} />
+            </Box>
+          ))}
         <Button type="submit" sx={{ display: 'none' }} />
       </Box>
     </FormProvider>
