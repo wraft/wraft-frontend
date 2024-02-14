@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import { Flex, Container, Button } from 'theme-ui';
 
@@ -23,8 +24,12 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Manage Flows"
-          desc="Manage Configurations for your workspace">
+          title="Flows"
+          desc={
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'Flows' }]}
+            />
+          }>
           <Button
             onClick={() => {
               setIsOpen(true);

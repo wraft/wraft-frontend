@@ -18,6 +18,8 @@ type DropzoneProps = {
   setPdfPreview?: (e: any) => void;
   setIsSubmit: any;
   setDeleteAssets?: any;
+  multiple?: boolean;
+  noChange?: boolean;
 };
 
 const Dropzone = ({
@@ -27,6 +29,8 @@ const Dropzone = ({
   setPdfPreview,
   setIsSubmit,
   setDeleteAssets,
+  multiple = false,
+  noChange = false,
 }: DropzoneProps) => {
   const { setValue, watch, register } = useFormContext();
 
@@ -47,11 +51,14 @@ const Dropzone = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    maxFiles: 1,
     maxSize: 1 * 1024 * 1024, //1MB in bytes
-    multiple: false,
+    multiple: multiple,
     accept: accept || { '*': [] },
   });
+
+  const types = Object.keys(accept || {})
+    .map((type) => type.split('/')[1].toUpperCase())
+    .join(', ');
 
   register('file');
 
@@ -126,7 +133,8 @@ const Dropzone = ({
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
-        {!files && (
+
+        {(!files || noChange) && (
           <Flex
             sx={{
               flexDirection: 'column',
@@ -136,10 +144,10 @@ const Dropzone = ({
             <Text variant="pM" sx={{ mb: 1 }}>
               Drag & drop or upload files
             </Text>
-            <Text variant="capM">PDF - Max file size 1MB</Text>
+            <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
           </Flex>
         )}
-        {files && files[0] && (
+        {files && files[0] && !noChange && (
           <Flex sx={{ alignItems: 'center' }}>
             <Text variant="pM" sx={{ flexShrink: 0 }}>
               {files[0].name}
@@ -158,7 +166,7 @@ const Dropzone = ({
             )}
           </Flex>
         )}
-        {progress && progress > 0 ? (
+        {progress && progress > 0 && !noChange ? (
           <Box mt={3}>
             <ProgressBar progress={progress} />
           </Box>

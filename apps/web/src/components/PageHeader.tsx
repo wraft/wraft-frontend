@@ -49,12 +49,12 @@ const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
         <Back />
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
-          <Text variant="pB" sx={{ color: 'gray.900', pb: 0, mb: 0 }}>
+          <Text as={'p'} variant="pB" sx={{ color: 'gray.900', pb: 0, mb: 0 }}>
             {title}
           </Text>
           {desc && (
             <Box>
-              <Text variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
+              <Text as={Box} variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
                 {desc}
               </Text>
             </Box>

@@ -15,6 +15,9 @@ const forms: Theme['forms'] = {
     ':disabled': {
       color: 'gray.200',
     },
+    '::placeholder': {
+      color: 'gray.200',
+    },
   },
   select: {
     borderColor: 'border',
@@ -32,6 +35,9 @@ const forms: Theme['forms'] = {
     bg: 'transparent',
     resize: 'none',
     ':disabled': {
+      color: 'gray.200',
+    },
+    '::placeholder': {
       color: 'gray.200',
     },
   },
