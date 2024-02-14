@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 import Dropzone from '@wraft-ui/Dropzone';
-import ProgressBar from '@wraft-ui/ProgressBar';
 import { FormProvider, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
+
+import FontList from './FontList';
 
 interface AssetFormProps {
   onUpload?: any;
@@ -154,14 +155,7 @@ const AssetForm = ({
             </Box>
           )}
         </Box>
-        {filesList &&
-          filesList.length > 0 &&
-          filesList.map((f: any, index: number) => (
-            <Box key={index}>
-              {f.name}
-              <ProgressBar progress={f.progress} />
-            </Box>
-          ))}
+        {filetype === 'theme' && <FontList assets={filesList} />}
         <Button type="submit" sx={{ display: 'none' }} />
       </Box>
     </FormProvider>
