@@ -61,22 +61,28 @@ const AssetForm = ({
         setUploadProgress(progress);
       });
 
-      toast.promise(assetsRequest, {
-        loading: 'Loading...',
-        success: (data) => {
-          onAssetUploaded(data);
-          setUploadProgress(0);
-          return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
+      toast.promise(
+        assetsRequest,
+        {
+          loading: 'Loading...',
+          success: (data) => {
+            onAssetUploaded(data);
+            setUploadProgress(0);
+            return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
+          },
+          error: (error) => {
+            setUploadProgress(0);
+            console.log(error);
+            setFileError(
+              error.errors.file[0] || error.message || 'There is an error',
+            );
+            return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
+          },
         },
-        error: (error) => {
-          setUploadProgress(0);
-          console.log(error);
-          setFileError(
-            error.errors.file[0] || error.message || 'There is an error',
-          );
-          return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
+        {
+          position: 'top-left',
         },
-      });
+      );
     });
   };
 
