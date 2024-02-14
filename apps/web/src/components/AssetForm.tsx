@@ -63,7 +63,7 @@ const AssetForm = ({
       success: null,
     }));
     setFilesList(updatedFiles);
-    files.map((f: any) => {
+    files.map((f: any, index: number) => {
       const formData = new FormData();
       formData.append('file', f);
       formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
@@ -71,21 +71,20 @@ const AssetForm = ({
 
       postAPI(`assets`, formData, (progress) => {
         setUploadProgress(progress);
-        const progressFiles = updatedFiles.map((f) => ({
-          ...f,
-          progress: progress,
-        }));
-        setFilesList(progressFiles);
+        setFilesList((prev: any) => [
+          ...prev.slice(0, index),
+          { ...prev[index], progress: progress },
+          ...prev.slice(index + 1),
+        ]);
       })
-        .then(() => {
-          onAssetUploaded(data);
+        .then((res) => {
+          onAssetUploaded(res);
           setUploadProgress(0);
-          const successFiles = updatedFiles.map((f) => ({
-            ...f,
-            success: true,
-          }));
-          setFilesList(successFiles);
-          // setFilesList((prev: any) => [...prev,prev[index]: {...prev[index], {success: true}}]);
+          setFilesList((prev: any) => [
+            ...prev.slice(0, index),
+            { ...prev[index], success: true, progress: null },
+            ...prev.slice(index + 1),
+          ]);
         })
         .catch((error: any) => {
           setUploadProgress(0);
@@ -93,11 +92,11 @@ const AssetForm = ({
           setFileError(
             error.errors.file[0] || error.message || 'There is an error',
           );
-          const failedFiles = updatedFiles.map((f) => ({
-            ...f,
-            success: false,
-          }));
-          setFilesList(failedFiles);
+          setFilesList((prev: any) => [
+            ...prev.slice(0, index),
+            { ...prev[index], success: false, progress: null },
+            ...prev.slice(index + 1),
+          ]);
         });
     });
   };
