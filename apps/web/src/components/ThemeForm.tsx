@@ -344,7 +344,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             </Button>
           </Flex>
           <AssetForm onUpload={addUploads} filetype="theme" />
-          <FontList assets={assets} onDelete={deleteAsset} />
         </Box>
       </Modal>
     </Fragment>
