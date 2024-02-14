@@ -46,7 +46,7 @@ const FontList = ({ assets, onDelete }: Props) => {
                 />
               </Box>
               <Text as="p" variant="pM">
-                {item.name.match(/(.+?)(?=-|$)/)?.[1]}
+                {item.name ? item.name.match(/(.+?)(?=-|$)/)?.[1] : 'Font'}
               </Text>
             </Flex>
             <Flex
@@ -57,11 +57,15 @@ const FontList = ({ assets, onDelete }: Props) => {
                 textTransform: 'uppercase',
               }}>
               {item.progress ? (
-                <ProgressBar progress={item.progress} />
+                <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <ProgressBar progress={item.progress} />
+                </Flex>
               ) : (
                 <>
                   <Text variant="capM" sx={{ color: 'gray.400' }}>
-                    {item.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}
+                    {item.name
+                      ? item.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]
+                      : 'Weight'}
                   </Text>
                   {item.success === true ? (
                     <Box
