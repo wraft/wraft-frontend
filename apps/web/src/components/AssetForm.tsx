@@ -46,42 +46,37 @@ const AssetForm = ({
 
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
-    console.log('file: 🔥', data);
 
     if (!data.file || data.file === undefined || data.file.length < 1) {
       return;
     }
-    // const files = [...data.file];
     const files = Array.from(data.file);
-    files.forEach((f: any) => console.log('eeeeeeeeeeeech', f));
+    files.forEach((f: any) => {
+      const formData = new FormData();
+      formData.append('file', f);
+      formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
+      formData.append('type', filetype);
 
-    const formData = new FormData();
-    formData.append('file', data.file[0]);
-    formData.append(
-      'name',
-      data.file[0].name.substring(0, data.file[0].name.lastIndexOf('.')),
-    );
-    formData.append('type', filetype);
+      const assetsRequest = postAPI(`assets`, formData, (progress) => {
+        setUploadProgress(progress);
+      });
 
-    const assetsRequest = postAPI(`assets`, formData, (progress) => {
-      setUploadProgress(progress);
-    });
-
-    toast.promise(assetsRequest, {
-      loading: 'Loading...',
-      success: (data) => {
-        onAssetUploaded(data);
-        setUploadProgress(0);
-        return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
-      },
-      error: (error) => {
-        setUploadProgress(0);
-        console.log(error);
-        setFileError(
-          error.errors.file[0] || error.message || 'There is an error',
-        );
-        return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
-      },
+      toast.promise(assetsRequest, {
+        loading: 'Loading...',
+        success: (data) => {
+          onAssetUploaded(data);
+          setUploadProgress(0);
+          return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
+        },
+        error: (error) => {
+          setUploadProgress(0);
+          console.log(error);
+          setFileError(
+            error.errors.file[0] || error.message || 'There is an error',
+          );
+          return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
+        },
+      });
     });
   };
 
