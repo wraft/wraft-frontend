@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { Box, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
@@ -47,7 +46,7 @@ const AssetForm = ({
     onUpload(mData);
   };
 
-  useEffect(() => console.log('✅.....filesList', filesList), [filesList]);
+  useEffect(() => console.log('.....filesList', filesList), [filesList]);
 
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
@@ -56,6 +55,7 @@ const AssetForm = ({
       return;
     }
     const files = Array.from(data.file);
+
     const updatedFiles = files.map((f: any) => ({
       ...f,
       name: f.name,
@@ -63,54 +63,42 @@ const AssetForm = ({
       success: null,
     }));
     setFilesList(updatedFiles);
-    console.log('❌.....files', files);
-    files.forEach((f: any) => {
+    files.map((f: any) => {
       const formData = new FormData();
       formData.append('file', f);
       formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
       formData.append('type', filetype);
 
-      const assetsRequest = postAPI(`assets`, formData, (progress) => {
+      postAPI(`assets`, formData, (progress) => {
         setUploadProgress(progress);
         const progressFiles = updatedFiles.map((f) => ({
           ...f,
           progress: progress,
         }));
         setFilesList(progressFiles);
-      });
-
-      toast.promise(
-        assetsRequest,
-        {
-          loading: 'Loading...',
-          success: (data) => {
-            onAssetUploaded(data);
-            setUploadProgress(0);
-            const successFiles = updatedFiles.map((f) => ({
-              ...f,
-              success: true,
-            }));
-            setFilesList(successFiles);
-            return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
-          },
-          error: (error) => {
-            setUploadProgress(0);
-            console.log(error);
-            setFileError(
-              error.errors.file[0] || error.message || 'There is an error',
-            );
-            const failedFiles = updatedFiles.map((f) => ({
-              ...f,
-              success: true,
-            }));
-            setFilesList(failedFiles);
-            return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
-          },
-        },
-        {
-          position: 'top-left',
-        },
-      );
+      })
+        .then(() => {
+          onAssetUploaded(data);
+          setUploadProgress(0);
+          const successFiles = updatedFiles.map((f) => ({
+            ...f,
+            success: true,
+          }));
+          setFilesList(successFiles);
+          // setFilesList((prev: any) => [...prev,prev[index]: {...prev[index], {success: true}}]);
+        })
+        .catch((error: any) => {
+          setUploadProgress(0);
+          console.log(error);
+          setFileError(
+            error.errors.file[0] || error.message || 'There is an error',
+          );
+          const failedFiles = updatedFiles.map((f) => ({
+            ...f,
+            success: false,
+          }));
+          setFilesList(failedFiles);
+        });
     });
   };
 
