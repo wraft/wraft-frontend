@@ -4,9 +4,8 @@ import { AxiosRequestConfig, AxiosError } from 'axios';
 import { produce } from 'immer';
 import cookie from 'js-cookie';
 
-import { Layout, User, Style, FlowBranch } from '../components/Icons';
-
 import { ContentState } from './types';
+import { Layout, User, Style, FlowBranch } from '../components/Icons';
 
 /**
  *  @TODO Icons: Convert to local files

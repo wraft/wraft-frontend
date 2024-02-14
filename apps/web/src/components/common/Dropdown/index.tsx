@@ -1,5 +1,4 @@
 import React, { FC, useRef, useEffect, useState } from 'react';
-
 import styled from '@emotion/styled';
 import { Box, Image } from 'theme-ui';
 

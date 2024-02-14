@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { Avatar, Box, Flex } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';

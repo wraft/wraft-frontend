@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-
 import { formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
 

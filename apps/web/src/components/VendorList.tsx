@@ -1,9 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-
 import { Box, Text, Container } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 import ContentLoader from './ContentLoader';
 import Link from './NavLink';
 import PageHeader from './PageHeader';

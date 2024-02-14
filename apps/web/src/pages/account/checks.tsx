@@ -1,5 +1,4 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 import { Text, Flex, Box } from 'theme-ui';
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { MenuProvider, MenuButton, Menu, MenuItem } from '@ariakit/react';
 import { Drawer } from '@wraft-ui/Drawer';
 import ContentLoader from 'react-content-loader';
@@ -10,7 +9,6 @@ import { ConfirmDelete } from '../common';
 import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
 import Modal from '../Modal';
 import { Table } from '../Table';
-
 import { RolesForm } from '.';
 
 export interface RolesItem {

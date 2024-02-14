@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 import { fetchAPI, postAPI } from '../utils/models';
-
 import Field from './Field';
 import Modal from './Modal';
 import OrgMembersList from './OrgMembersList';

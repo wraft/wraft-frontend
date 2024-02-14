@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
-
-import { Link } from '@wraft/ui';
 import NextLink from 'next/link';
+import { Link } from '@wraft/ui';
 
 interface AnchorType {
   href: string;

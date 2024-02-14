@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-
 import toast from 'react-hot-toast';
 import { Box, Text, Spinner, Button } from 'theme-ui';
 
 import { deleteAPI, fetchAPI } from '../utils/models';
-
 import { TimeAgo } from './Atoms';
 import { OptionsIcon } from './Icons';
 import MenuItem from './NavLink';

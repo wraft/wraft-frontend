@@ -1,5 +1,5 @@
-import { Editor } from '@wraft/editor';
 import dynamic from 'next/dynamic';
+import { Editor } from '@wraft/editor';
 import { Box } from 'theme-ui';
 
 export interface EditorWrapperProps {

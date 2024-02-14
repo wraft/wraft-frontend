@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import Router, { useRouter } from 'next/router';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
@@ -14,7 +13,6 @@ import {
   DataTemplate,
   DataTemplates,
 } from '../utils/types';
-
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';

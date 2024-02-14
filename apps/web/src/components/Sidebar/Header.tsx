@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
-import { Button, DropdownMenu } from '@wraft/ui';
 import { useRouter } from 'next/router';
+import { Button, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
 

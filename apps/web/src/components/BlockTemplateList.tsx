@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-
+import NextLink from 'next/link';
 import { MenuProvider, Menu, MenuItem } from '@ariakit/react';
 import { Button } from '@wraft/ui';
-import NextLink from 'next/link';
 import { Box, Flex, NavLink, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 import { TimeAgo } from './Atoms';
 import ContentLoader from './ContentLoader';
 import { EmptyForm, DotsVerticalRounded } from './Icons';

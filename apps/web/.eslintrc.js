@@ -47,20 +47,33 @@ module.exports = {
         "import/order": [
           "error",
           {
-            "newlines-between": "always",
-            "alphabetize": { "order": "asc", "caseInsensitive": true },
+            "groups": ["builtin", "external", "internal"],
+            // "alphabetize": { "order": "asc", "caseInsensitive": true },
             "pathGroups": [
               {
-                "pattern": "react",
-                "group": "builtin",
-                "position": "before"
+                pattern: "react",
+                group: "external",
+                position: "before",
+              },
+              {
+                pattern: "next/**",
+                group: "external",
+                position: "before",
               },
               {
                 "pattern": "@wraft-ui/**",
                 "group": "external",
+              },
+              {
+                "pattern": "{components,utils,store}/**",
+                "group": "internal",
+                "position": "after"
               }
             ],
-            "pathGroupsExcludedImportTypes": ["react"]
+            "pathGroupsExcludedImportTypes": ["builtin"],
+            "newlines-between": "always",
+            "distinctGroup": false,
+            // pathGroupsExcludedImportTypes: ["react", "next", "next/*"],
           }
         ]
       },

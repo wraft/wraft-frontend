@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';

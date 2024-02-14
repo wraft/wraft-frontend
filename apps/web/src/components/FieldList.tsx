@@ -1,9 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-
 import { Box, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 import { TimeAgo } from './Atoms';
 import Table from './Table';
 

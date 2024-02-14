@@ -1,6 +1,5 @@
 /* eslint react/jsx-key: 0 */
 import React from 'react';
-
 import { PluginHook, useTable, UseTableOptions } from 'react-table';
 import { ThemeUIStyleObject, Box } from 'theme-ui';
 export * from 'react-table';

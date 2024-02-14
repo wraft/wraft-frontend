@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 
 import MailSend from '../../public/Group 164.svg';
-
 import Link from './NavLink';
 
 const WaitlistPrompt: React.FC = () => {

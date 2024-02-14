@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
+import Image from 'next/image';
 import { Button } from '@wraft/ui';
 import { format } from 'date-fns';
-import Image from 'next/image';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
-
 import PendingDocumentBlock from './PendingDocument';
 
 const finishSetup = [

@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
-
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Flex, Container, Box } from 'theme-ui';
 
 import PermissionsList from '../../../components/manage/PermissionsList';

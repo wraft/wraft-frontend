@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Box, Flex, Input } from 'theme-ui';
 
 import { Search } from '../Icons';

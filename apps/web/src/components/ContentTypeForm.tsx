@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
@@ -13,7 +12,6 @@ import * as z from 'zod';
 import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
 import { hexColorRegex, uuidRegex } from '../utils/regex';
 import { ContentType } from '../utils/types';
-
 import Field from './Field';
 import FieldColor from './FieldColor';
 import FieldEditor from './FieldEditor';

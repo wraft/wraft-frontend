@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 import { putAPI, fetchAPI } from '../utils/models';
-
 import { BoxWrap, StateBadge } from './Atoms';
 import ContentLoader from './ContentLoader';
 import PageHeader from './PageHeader';

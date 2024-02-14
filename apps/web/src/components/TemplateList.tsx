@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import NavLink from 'next/link';
 import { Box, Flex, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { IField } from '../utils/types/content';
-
 import { TimeAgo } from './Atoms';
 import ContentLoader from './ContentLoader';
 import Link from './NavLink';

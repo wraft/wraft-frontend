@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -8,7 +7,6 @@ import { Input } from 'theme-ui';
 
 import { isNumeric } from '../utils';
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
-
 import { FieldType, FieldTypeList } from './ContentTypeForm';
 import Field from './Field';
 import FieldEditor from './FieldEditor';

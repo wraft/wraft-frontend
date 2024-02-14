@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
-
+import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
-import Head from 'next/head';
 import { Flex, Container, Button, Box, Input, Spinner } from 'theme-ui';
 
 import { AddIcon, SearchIcon } from '../../../components/Icons';

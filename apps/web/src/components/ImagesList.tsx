@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-
 import { Box, Button } from 'theme-ui';
 
 // import { modalStyle } from '../utils';

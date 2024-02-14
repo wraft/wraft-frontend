@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Image } from 'theme-ui';
 
 import { API_HOST, postAPI, fetchAPI } from '../utils/models';
-
 import { TimeAgo } from './Atoms';
 import Field from './FieldText';
 

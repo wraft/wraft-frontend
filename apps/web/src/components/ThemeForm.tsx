@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-
-import Checkbox from '@wraft-ui/Checkbox';
 import Router, { useRouter } from 'next/router';
+import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
@@ -9,7 +8,6 @@ import { Label, Input } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
-
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';

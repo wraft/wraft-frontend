@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-
 import Cropper from 'react-easy-crop';
 import { Box, Input, Label, Slider, Button } from 'theme-ui';
 

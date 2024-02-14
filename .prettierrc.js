@@ -5,4 +5,10 @@ module.exports = {
   trailingComma: 'all',
   jsxBracketSameLine: true,
   noSemi: false,
+  overrides: [
+    {
+      "files": "**/*.json",
+      "options": { "parser": "json" }
+    }
+  ]
 };

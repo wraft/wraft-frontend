@@ -1,5 +1,4 @@
 import { forwardRef } from 'react';
-
 import {
   Button as AriakitButton,
   ButtonProps as AriakitButtonProps,

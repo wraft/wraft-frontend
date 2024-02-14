@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styled from '@emotion/styled';
 import ReactPaginate from 'react-paginate';
 import { Box, Flex } from 'theme-ui';
