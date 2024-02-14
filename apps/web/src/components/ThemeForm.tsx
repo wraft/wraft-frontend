@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react';
 
-import { CloseIcon, DeleteIcon, DocumentIcon } from '@wraft/icon';
+import { CloseIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Input, useThemeUI, Label } from 'theme-ui';
+import { Box, Flex, Button, Text, Input, Label } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
@@ -12,6 +12,7 @@ import { Asset } from '../utils/types';
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
+import FontList from './FontList';
 import Modal from './Modal';
 
 interface ThemeElement {
@@ -50,8 +51,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [loadedAssets, setLoadedAssets] = useState<Array<Asset>>([]);
   const [isFontOpen, setIsFontOpen] = useState<boolean>(false);
-
-  const themeui = useThemeUI();
 
   /**
    * Upload Assets
@@ -199,72 +198,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     setValue(_name, value);
   };
 
-  const FontList = assets && assets.length > 0 && (
-    <Box
-      sx={{
-        borderRadius: '6px',
-        overflow: 'hidden',
-        border: 'solid 1px',
-        borderColor: 'neutral.200',
-      }}>
-      {assets.map((m: any, index: number) => (
-        <Flex
-          key={m.id}
-          sx={{
-            py: 2,
-            px: 3,
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderBottom: index < assets.length ? '1px solid' : 'none',
-            borderColor: 'neutral.200',
-          }}>
-          <Flex sx={{ alignItems: 'center' }}>
-            <Box
-              mr={2}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <DocumentIcon
-                viewBox="0 0 24 24"
-                color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
-              />
-            </Box>
-            <Text as="p" variant="pM">
-              {m.name.match(/(.+?)(?=-|$)/)?.[1]}
-            </Text>
-          </Flex>
-          <Flex
-            sx={{
-              alignItems: 'center',
-              width: '80px',
-              justifyContent: 'space-between',
-              textTransform: 'uppercase',
-            }}>
-            <Text variant="capM" sx={{ color: 'gray.400' }}>
-              {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}{' '}
-            </Text>
-            <Button
-              variant="base"
-              sx={{ p: 0, m: 0 }}
-              onClick={(e) => {
-                e.preventDefault();
-                deleteAsset(m.id);
-              }}>
-              <DeleteIcon
-                width={16}
-                height={16}
-                viewBox="0 0 24 24"
-                color="#2C3641"
-              />
-            </Button>
-          </Flex>
-        </Flex>
-      ))}
-    </Box>
-  );
-
   return (
     <Fragment>
       <Flex
@@ -302,7 +235,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   mb={'28px'}
                 />
                 <Label>Font</Label>
-                {FontList}
+                <FontList assets={assets} onDelete={deleteAsset} />
                 <Button
                   mt={3}
                   onClick={(e) => {
@@ -411,7 +344,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             </Button>
           </Flex>
           <AssetForm onUpload={addUploads} filetype="theme" />
-          {FontList}
+          <FontList assets={assets} onDelete={deleteAsset} />
         </Box>
       </Modal>
     </Fragment>
