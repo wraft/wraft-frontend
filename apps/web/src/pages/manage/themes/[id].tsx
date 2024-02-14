@@ -8,7 +8,7 @@ import { Box, Container, Flex } from 'theme-ui';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import ThemeForm from '../../../components/ThemeViewForm';
+import ThemeViewForm from '../../../components/ThemeViewForm';
 import { menuLinks } from '../../../utils';
 import { fetchAPI } from '../../../utils/models';
 
@@ -47,7 +47,7 @@ const Index: FC = () => {
             <ManageSidebar items={menuLinks} />
             <Box variant="layout.contentFrame">
               <Box p={4}>
-                <ThemeForm />
+                <ThemeViewForm />
               </Box>
             </Box>
           </Flex>
