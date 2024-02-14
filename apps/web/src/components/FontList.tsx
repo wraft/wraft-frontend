@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { DeleteIcon, DocumentIcon } from '@wraft/icon';
+import { CloseIcon, DeleteIcon, DocumentIcon, TickIcon } from '@wraft/icon';
+import ProgressBar from '@wraft-ui/ProgressBar';
 import { Box, Button, Flex, Text, useThemeUI } from 'theme-ui';
 
 type Props = {
@@ -20,9 +21,9 @@ const FontList = ({ assets, onDelete }: Props) => {
           border: 'solid 1px',
           borderColor: 'neutral.200',
         }}>
-        {assets.map((m: any, index: number) => (
+        {assets.map((item: any, index: number) => (
           <Flex
-            key={m.id}
+            key={item.id}
             sx={{
               py: 2,
               px: 3,
@@ -45,34 +46,51 @@ const FontList = ({ assets, onDelete }: Props) => {
                 />
               </Box>
               <Text as="p" variant="pM">
-                {m.name.match(/(.+?)(?=-|$)/)?.[1]}
+                {item.name.match(/(.+?)(?=-|$)/)?.[1]}
               </Text>
             </Flex>
             <Flex
               sx={{
                 alignItems: 'center',
-                width: '80px',
+                width: '100px',
                 justifyContent: 'space-between',
                 textTransform: 'uppercase',
               }}>
-              <Text variant="capM" sx={{ color: 'gray.400' }}>
-                {m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}
-              </Text>
-              {onDelete && (
-                <Button
-                  variant="base"
-                  sx={{ p: 0, m: 0 }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onDelete(m.id);
-                  }}>
-                  <DeleteIcon
-                    width={16}
-                    height={16}
-                    viewBox="0 0 24 24"
-                    color="#2C3641"
-                  />
-                </Button>
+              {item.progress ? (
+                <ProgressBar progress={item.progress} />
+              ) : (
+                <>
+                  <Text variant="capM" sx={{ color: 'gray.400' }}>
+                    {item.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]}
+                  </Text>
+                  {item.success === true ? (
+                    <Box sx={{ p: 1, bg: 'gray.400' }}>
+                      <TickIcon />
+                    </Box>
+                  ) : item.success === false ? (
+                    <Box sx={{ p: 1, bg: 'gray.400' }}>
+                      <CloseIcon />
+                    </Box>
+                  ) : (
+                    <Box sx={{ display: 'none' }} />
+                  )}
+                  {onDelete && (
+                    <Button
+                      variant="base"
+                      sx={{ p: 0, m: 0 }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onDelete(item.id);
+                      }}>
+                      <DeleteIcon
+                        width={16}
+                        height={16}
+                        viewBox="0 0 24 24"
+                        color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
+                      />
+                    </Button>
+                  )}
+                </>
               )}
             </Flex>
           </Flex>
