@@ -35,7 +35,7 @@ const Index: FC = () => {
             <DescriptionLinker
               data={[
                 { name: 'Manage', path: '/manage' },
-                { name: 'Layout', path: '/manage/layouts' },
+                { name: 'Layouts', path: '/manage/layouts' },
                 { name: `${layout?.layout?.name || ''}` },
               ]}
             />
