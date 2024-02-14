@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import Router from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Text } from 'theme-ui';
 
@@ -93,7 +94,8 @@ const LayoutList = ({ rerender }: Props) => {
         <Button
           variant="text"
           onClick={() => {
-            setIsEdit(row.index);
+            // setIsEdit(row.index);
+            Router.push(`/manage/layouts/${row.original.id}`);
           }}>
           <Box>
             <Box>{row.original?.name}</Box>
