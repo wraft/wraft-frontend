@@ -116,7 +116,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
+const LayoutForm = ({ setOpen, setRerender, cId = '' }: Props) => {
   const {
     register,
     control,
@@ -541,4 +541,4 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
     </Flex>
   );
 };
-export default Form;
+export default LayoutForm;
