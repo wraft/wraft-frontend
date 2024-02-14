@@ -126,6 +126,7 @@ const AssetForm = ({
             setIsSubmit={setIsSubmit}
             setDeleteAssets={setDeleteAssets}
             multiple={filetype === 'theme'}
+            noChange={filetype === 'theme'}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
