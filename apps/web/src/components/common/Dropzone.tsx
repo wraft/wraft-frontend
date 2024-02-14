@@ -19,6 +19,7 @@ type DropzoneProps = {
   setIsSubmit: any;
   setDeleteAssets?: any;
   multiple?: boolean;
+  noChange?: boolean;
 };
 
 const Dropzone = ({
@@ -29,6 +30,7 @@ const Dropzone = ({
   setIsSubmit,
   setDeleteAssets,
   multiple = false,
+  noChange = false,
 }: DropzoneProps) => {
   const { setValue, watch, register } = useFormContext();
 
@@ -131,7 +133,8 @@ const Dropzone = ({
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
-        {!files && (
+
+        {(!files || noChange) && (
           <Flex
             sx={{
               flexDirection: 'column',
@@ -144,7 +147,7 @@ const Dropzone = ({
             <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
           </Flex>
         )}
-        {files && files[0] && (
+        {files && files[0] && !noChange && (
           <Flex sx={{ alignItems: 'center' }}>
             <Text variant="pM" sx={{ flexShrink: 0 }}>
               {files[0].name}
@@ -163,7 +166,7 @@ const Dropzone = ({
             )}
           </Flex>
         )}
-        {progress && progress > 0 ? (
+        {progress && progress > 0 && !noChange ? (
           <Box mt={3}>
             <ProgressBar progress={progress} />
           </Box>
