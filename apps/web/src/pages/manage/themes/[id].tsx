@@ -1,4 +1,3 @@
-'use client';
 import { FC, useEffect, useState } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';

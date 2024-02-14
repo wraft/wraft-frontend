@@ -219,11 +219,19 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             borderColor: 'neutral.200',
           }}>
           <Flex sx={{ alignItems: 'center' }}>
-            <DocumentIcon
-              viewBox="0 0 24 24"
-              color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
-            />
-            <Text as="p" variant="pM" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+            <Box
+              mr={2}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <DocumentIcon
+                viewBox="0 0 24 24"
+                color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
+              />
+            </Box>
+            <Text as="p" variant="pM">
               {m.name.match(/(.+?)(?=-|$)/)?.[1]}
             </Text>
           </Flex>
