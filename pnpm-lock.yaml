@@ -348,12 +348,18 @@ importers:
       use-isomorphic-layout-effect:
         specifier: ^1.1.2
         version: 1.1.2(@types/react@18.2.51)(react@18.2.0)
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       yarn-upgrade-all:
         specifier: ^0.7.2
         version: 0.7.2
       zod:
         specifier: ^3.22.4
         version: 3.22.4
+      zustand:
+        specifier: ^4.5.0
+        version: 4.5.0(@types/react@18.2.51)(immer@10.0.3)(react@18.2.0)
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^6.1.6
@@ -394,12 +400,21 @@ importers:
       '@types/redux-mock-store':
         specifier: ^1.0.6
         version: 1.0.6
+      '@types/uuid':
+        specifier: ^9.0.8
+        version: 9.0.8
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.17.0
         version: 6.20.0(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)(typescript@5.3.3)
       '@typescript-eslint/parser':
         specifier: ^6.17.0
         version: 6.20.0(eslint@8.56.0)(typescript@5.3.3)
+      '@wraft/eslint-config':
+        specifier: '*'
+        version: link:../../packages/eslint-config
+      '@wraft/typescript-config':
+        specifier: '*'
+        version: link:../../packages/typescript-config
       babel-jest:
         specifier: ^29.6.4
         version: 29.7.0(@babel/core@7.23.9)
@@ -19687,7 +19702,6 @@ packages:
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
-    dev: true
 
   /uvu@0.5.6:
     resolution: {integrity: sha512-+g8ENReyr8YsOc6fv/NVJs2vFdHBnBNdfE49rshrTzDWOlUx4Gq7KOS2GD8eqhy2j+Ejq29+SbKH8yjkAqXqoA==}
@@ -20251,6 +20265,27 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false
+
+  /zustand@4.5.0(@types/react@18.2.51)(immer@10.0.3)(react@18.2.0):
+    resolution: {integrity: sha512-zlVFqS5TQ21nwijjhJlx4f9iGrXSL0o/+Dpy4txAP22miJ8Ti6c1Ol1RLNN98BMib83lmDH/2KmLwaNXpjrO1A==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      '@types/react': '>=16.8'
+      immer: '>=9.0.6'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.51
+      immer: 10.0.3
+      react: 18.2.0
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /zwitch@2.0.4:

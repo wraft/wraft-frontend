@@ -1,25 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
 
+import React, { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import Router, { useRouter } from 'next/router';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import { usePathname } from 'next/navigation';
-import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { RemirrorJSON } from 'remirror';
 import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
 
-import {
-  cleanName,
-  findVars,
-  replaceTitles,
-  updateVars,
-} from '../../src/utils';
-import { Template, ContentState } from '../../src/utils/types';
-import { postAPI, fetchAPI, putAPI } from '../utils/models';
-import { Field as FieldT, FieldInstance } from '../utils/types';
 import {
   IContentForm,
   IFieldField,
@@ -27,17 +18,27 @@ import {
   IVariantDetail,
   EMPTY_MARKDOWN_NODE,
   ContentInstance,
-} from '../utils/types/content';
+} from 'utils/types/content';
 
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldForm from './FieldForm';
 import FieldText from './FieldText';
 import NavEdit from './NavEdit';
-
+import {
+  cleanName,
+  findVars,
+  replaceTitles,
+  updateVars,
+} from '../../src/utils';
+import { Template, ContentState } from '../../src/utils/types';
+import contentStore from '../store/content.store';
+import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import { Field as FieldT, FieldInstance } from '../utils/types';
 const ContentForm = (props: IContentForm) => {
   // Base
   // -------
+
   const router = useRouter();
   const {
     register,
@@ -46,6 +47,9 @@ const ContentForm = (props: IContentForm) => {
     formState: { errors },
     setValue,
   } = useForm();
+
+  const lor = contentStore((state: any) => state.variant);
+  console.log('data[lor][3]', lor);
 
   // Content Specific
   // -------

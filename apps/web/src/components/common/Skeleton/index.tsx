@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { ThemeUIStyleObject } from 'theme-ui';
 import { Box } from 'theme-ui';
 

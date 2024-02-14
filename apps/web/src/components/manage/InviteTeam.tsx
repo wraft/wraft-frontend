@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';

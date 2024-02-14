@@ -1,12 +1,10 @@
 import React from 'react';
-
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
-
 import Field from './Field';
 
 const VendorForm = () => {

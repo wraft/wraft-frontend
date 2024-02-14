@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
 import ContentLoader from './ContentLoader';
 import PageHeader from './PageHeader';

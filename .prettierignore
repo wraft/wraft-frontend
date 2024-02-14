@@ -5,6 +5,11 @@ public
 **/**/.next
 **/**/public
 
+pnpm-lock.yaml
+.turbo
+dist
+
+
 *.lock
 *.log
 

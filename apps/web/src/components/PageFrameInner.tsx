@@ -1,5 +1,4 @@
 import React from 'react';
-
 // import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 // import Container from './Container';

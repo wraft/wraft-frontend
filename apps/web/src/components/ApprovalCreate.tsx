@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
 
 import { postAPI, fetchAPI } from '../utils/models';
-
 import Field from './Field';
 interface ApprovalFormBaseProps {
   states?: Array<any>;

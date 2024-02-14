@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
-
 import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
 import { UserIcon, BrandLogo } from './Icons';
 import Link from './NavLink';
 

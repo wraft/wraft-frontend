@@ -1,7 +1,7 @@
-import { TourProvider, components } from '@reactour/tour';
-import { theme, GlobalStyle } from '@wraft/ui';
 import App from 'next/app';
 import type { AppProps, AppContext } from 'next/app';
+import { TourProvider, components } from '@reactour/tour';
+import { theme, GlobalStyle } from '@wraft/ui';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
 // import { Theme } from 'theme-ui';

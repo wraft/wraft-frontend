@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Box, Text } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
-
 import { Button, ConfirmDelete, Table } from './common';
 import { Drawer } from './common/Drawer';
 import { OptionsIcon } from './Icons';

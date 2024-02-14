@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';

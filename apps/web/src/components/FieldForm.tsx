@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
 import { Field as FieldT, FieldInstance } from '../utils/types';
-
 import Field from './Field';
 import FieldDate from './FieldDate';
 // import { constants } from 'buffer';

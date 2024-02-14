@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { Box, Text, Flex, Button } from 'theme-ui';
 import { Input } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 // import CombinationCard from './CombinationCard';
 import Link from './NavLink';
 import PageHeader from './PageHeader';

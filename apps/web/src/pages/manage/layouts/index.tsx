@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
-
-import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
+import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
 import LayoutForm from '../../../components/LayoutForm';

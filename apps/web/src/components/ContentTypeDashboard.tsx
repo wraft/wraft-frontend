@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
 import ContentLoader from 'react-content-loader';
 import { Box, Text, Flex, Grid } from 'theme-ui';
 // import ContentLoader from 'react-content-loader';
 
 import { useAuth } from '../contexts/AuthContext';
 import { fetchAPI, deleteAPI } from '../utils/models';
-
 import { EmptyForm } from './Icons';
 import Link from './NavLink';
 

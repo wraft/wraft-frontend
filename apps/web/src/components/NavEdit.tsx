@@ -1,10 +1,8 @@
 import React from 'react';
-
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
 import { BackIcon, NotifyIcon, EditIcon, LinkIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
-import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
+import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
 import { postAPI, fetchAPI, putAPI } from '../utils/models';
 import { IContentType, Template } from '../utils/types';
-
 import Field from './Field';
 import Modal from './Modal';
 import PageHeader from './PageHeader';

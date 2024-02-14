@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
-
-import Checkbox from '@wraft-ui/Checkbox';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import Router from 'next/router';
+import Checkbox from '@wraft-ui/Checkbox';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {

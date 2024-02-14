@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-
 import toast from 'react-hot-toast';
 import { Box, Text } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
-
 import Link from './NavLink';
 // import { Button } from 'theme-ui';
 

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useRouter } from 'next/router';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
-import CreateDocument from './CreateDocument';
+import { CreateDocument } from './Document';
 import { Bell, Search } from './Icons';
 import Modal from './Modal';
 import Link from './NavLink';

@@ -1,7 +1,6 @@
 /** @jsxImportSource theme-ui */
 
 import React, { useEffect, useMemo, useState } from 'react';
-
 import Checkbox from '@wraft-ui/Checkbox';
 import _ from 'lodash';
 import toast from 'react-hot-toast';

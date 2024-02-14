@@ -1,9 +1,7 @@
 import React from 'react';
-
 import { Box, Flex, Text } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
 import { UserIcon } from './Icons';
 import Link from './NavLink';
 

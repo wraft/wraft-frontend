@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-
-import cookie from 'js-cookie';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import cookie from 'js-cookie';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 

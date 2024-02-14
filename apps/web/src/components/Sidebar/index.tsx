@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-
-import { Button, Drawer, useDrawer } from '@wraft/ui';
 import { useRouter } from 'next/router';
+import { Button, Drawer, useDrawer } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text } from 'theme-ui';
 
 import DefaultMenuItem from '../../../src/components/MenuItem';
-import CreateDocument from '../CreateDocument';
-
+import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
 import SearchBlock from './SearchBlock';

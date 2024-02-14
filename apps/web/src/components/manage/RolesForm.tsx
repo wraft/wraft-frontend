@@ -1,6 +1,5 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useState } from 'react';
-
 import {
   Disclosure,
   DisclosureProvider,

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import toast from 'react-hot-toast';

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
@@ -8,7 +7,6 @@ import { Label, Select } from 'theme-ui';
 import { useAuth } from '../contexts/AuthContext';
 import { base64ToFile } from '../utils/imgCrop';
 import { loadEntity, updateEntityFile } from '../utils/models';
-
 import Field from './Field';
 import ImageUploader from './ImageUploader';
 

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Back from '@wraft-ui/Back';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
