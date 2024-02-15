@@ -19,7 +19,6 @@ import {
 } from 'theme-ui';
 import * as z from 'zod';
 
-import { menuLinks } from '../utils';
 import { fetchAPI } from '../utils/models';
 import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
@@ -28,7 +27,7 @@ import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';
 import { ArrowDropdown } from './Icons';
-import ManageSidebar from './ManageSidebar';
+import MenuStepsIndicator from './MenuStepsIndicator';
 
 export interface Layouts {
   layout: Layout;
@@ -113,7 +112,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
     register,
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     setValue,
     trigger,
   } = useForm<FormValues>({ mode: 'all', resolver: zodResolver(schema) });
@@ -121,7 +120,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
   const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
-  const [isEdit, setEdit] = useState<boolean>(false);
+  // const [isEdit, setEdit] = useState<boolean>(false);
+  const [formStep, setFormStep] = useState<number>(0);
 
   useEffect(() => {
     if (assets && assets.length > 0) {
@@ -139,7 +139,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
 
   useEffect(() => {
     if (layout) {
-      setEdit(true);
+      // setEdit(true);
       const assetsList: Asset[] = layout.assets;
 
       assetsList.forEach((a: Asset) => {
@@ -230,34 +230,36 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
     formData.append('assets', assetsPath);
     formData.append('screenshot', data.screenshot[0]);
   };
+  // function next() {
+  //   setFormStep((i) => i + 1);
+  // }
+  // function prev() {
+  //   setFormStep((i) => i - 1);
+  // }
+
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
 
   return (
     <Flex>
-      <ManageSidebar items={menuLinks} />
-      <Box variant="layout.contentFrame">
+      <MenuStepsIndicator
+        titles={['Basic Details', 'Background']}
+        formStep={formStep}
+        goTo={goTo}
+      />
+      <Box variant="layout.contentFrame" sx={{ maxWidth: '80ch' }}>
         <Box p={4}>
           <Flex
             sx={{
-              height: '100vh',
-              overflow: 'scroll',
               flexDirection: 'column',
             }}>
-            <Text
-              variant="pB"
-              sx={{
-                p: 4,
-              }}>
-              {isEdit ? 'Edit layout' : 'Create new layout'}
-            </Text>
             <Container sx={{ px: 4 }}>
               <Box>
-                {/* form start */}
                 <Box
                   sx={{
-                    height: 'calc(100vh - 200px)',
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'space-between',
                   }}
                   as="form"
                   onSubmit={handleSubmit(onSubmit)}>
@@ -279,6 +281,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           defaultValue="Layout X"
                           register={register}
                           error={errors.name}
+                          disable
                         />
                       </Box>
                       <Box>
@@ -289,7 +292,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           defaultValue="contract"
                           rules={{ required: 'Please select a slug' }}
                           render={({ field }) => (
-                            <Select mb={0} {...field}>
+                            <Select mb={0} {...field} disabled>
                               <option>contract</option>
                               <option>pletter</option>
                             </Select>
@@ -310,6 +313,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           defaultValue=""
                           register={register}
                           error={errors.description}
+                          disabled
                         />
                       </Box>
                       <Box pb={3} sx={{ display: 'none' }}>
@@ -318,6 +322,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           id="screenshot"
                           type="file"
                           {...register('screenshot')}
+                          disabled
                         />
                       </Box>
                       <DisclosureProvider>
@@ -357,7 +362,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                               name="engine_uuid"
                               rules={{ required: 'Please select a Engine ID' }}
                               render={({ field }) => (
-                                <Select {...field}>
+                                <Select {...field} disabled>
                                   {engines &&
                                     engines.length > 0 &&
                                     engines.map((m: any) => (
@@ -370,7 +375,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                             />
                             {errors.engine_uuid && (
                               <Text variant="error">
-                                {' '}
                                 {errors.engine_uuid.message}
                               </Text>
                             )}
@@ -407,17 +411,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                     </Flex>
                   </Container>
                   <Box>
-                    <Button
-                      disabled={!isValid || assets.length < 1}
-                      variant="buttonPrimary"
-                      type="submit"
-                      ml={2}>
-                      {isEdit ? 'Update' : 'Create'}
+                    <Button variant="buttonSecondary" type="submit">
+                      Edit
                     </Button>
                   </Box>
                 </Box>
               </Box>
-              {/* Form End */}
             </Container>
           </Flex>
         </Box>
