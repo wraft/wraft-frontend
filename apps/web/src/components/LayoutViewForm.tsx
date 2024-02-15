@@ -135,10 +135,10 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
    */
 
   useEffect(() => {
-    if (cId) {
+    if (cId && !isOpen) {
       loadLayout(cId);
     }
-  }, [cId]);
+  }, [cId, isOpen]);
 
   /**
    * Load all Engines
