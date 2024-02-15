@@ -3,13 +3,11 @@ import { FC, useEffect, useState } from 'react';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex } from 'theme-ui';
+import { Container } from 'theme-ui';
 
 import LayoutViewForm from '../../../components/LayoutViewForm';
-import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
-import { menuLinks } from '../../../utils';
 import { fetchAPI } from '../../../utils/models';
 
 const Index: FC = () => {
@@ -43,14 +41,7 @@ const Index: FC = () => {
           }
         />
         <Container variant="layout.pageFrame">
-          <Flex>
-            <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
-              <Box p={4}>
-                <LayoutViewForm />
-              </Box>
-            </Box>
-          </Flex>
+          <LayoutViewForm />
         </Container>
       </Page>
     </>

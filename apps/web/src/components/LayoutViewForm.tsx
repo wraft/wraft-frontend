@@ -19,6 +19,7 @@ import {
 } from 'theme-ui';
 import * as z from 'zod';
 
+import { menuLinks } from '../utils';
 import { fetchAPI } from '../utils/models';
 import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
@@ -27,6 +28,7 @@ import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';
 import { ArrowDropdown } from './Icons';
+import ManageSidebar from './ManageSidebar';
 
 export interface Layouts {
   layout: Layout;
@@ -230,196 +232,196 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   };
 
   return (
-    <Flex
-      sx={{
-        height: '100vh',
-        overflow: 'scroll',
-        flexDirection: 'column',
-      }}>
-      <Text
-        variant="pB"
-        sx={{
-          p: 4,
-        }}>
-        {isEdit ? 'Edit layout' : 'Create new layout'}
-      </Text>
-      <Container sx={{ px: 4 }}>
-        <Box>
-          {/* form start */}
-          <Box
+    <Flex>
+      <ManageSidebar items={menuLinks} />
+      <Box variant="layout.contentFrame">
+        <Box p={4}>
+          <Flex
             sx={{
-              height: 'calc(100vh - 200px)',
-              display: 'flex',
+              height: '100vh',
+              overflow: 'scroll',
               flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}>
-            <section>
+            }}>
+            <Text
+              variant="pB"
+              sx={{
+                p: 4,
+              }}>
+              {isEdit ? 'Edit layout' : 'Create new layout'}
+            </Text>
+            <Container sx={{ px: 4 }}>
               <Box>
-                <AssetForm
-                  onUpload={addUploads}
-                  pdfPreview={pdfPreview}
-                  setPdfPreview={setPdfPreview}
-                />
-              </Box>
-            </section>
-            <Container sx={{ display: 'block', pt: 4 }}>
-              <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
-                <Box>
-                  <Field
-                    name="name"
-                    label="Layout Name"
-                    defaultValue="Layout X"
-                    register={register}
-                    error={errors.name}
-                  />
-                </Box>
-                <Box>
-                  <Label htmlFor="slug">Slug</Label>
-                  <Controller
-                    control={control}
-                    name="slug"
-                    defaultValue="contract"
-                    rules={{ required: 'Please select a slug' }}
-                    render={({ field }) => (
-                      <Select mb={0} {...field}>
-                        <option>contract</option>
-                        <option>pletter</option>
-                      </Select>
-                    )}
-                  />
-                  {errors.slug && (
-                    <Text variant="error">{errors.slug.message}</Text>
-                  )}
-                  <Text as="p" variant="subR" mt={2}>
-                    Slugs are layout templates used for rendering documents
-                  </Text>
-                </Box>
-                <Box>
-                  <FieldText
-                    name="description"
-                    label="Description"
-                    defaultValue=""
-                    register={register}
-                    error={errors.description}
-                  />
-                </Box>
-                <Box pb={3} sx={{ display: 'none' }}>
-                  <Label htmlFor="screenshot">Screenshot</Label>
-                  <Input
-                    id="screenshot"
-                    type="file"
-                    {...register('screenshot')}
-                  />
-                </Box>
-                <DisclosureProvider>
-                  <Disclosure
-                    as={Box}
-                    sx={{
-                      border: 'none',
-                      bg: 'none',
-                      cursor: 'pointer',
-                      width: 'fit-content',
-                      color: 'green.700',
-                      '&[aria-expanded="true"]': {
-                        '& svg': {
-                          transform: 'rotate(-180deg)',
-                          transition: 'transform 0.3s ease',
-                        },
-                      },
-                      '&[aria-expanded="false"]': {
-                        '& svg': {
-                          transform: 'rotate(0deg)',
-                          transition: 'transform 0.3s ease',
-                        },
-                      },
-                    }}>
-                    <Flex sx={{ alignItems: 'center' }}>
-                      <Text variant="pM" mr={2}>
-                        Advanced
-                      </Text>
-                      <ArrowDropdown />
-                    </Flex>
-                  </Disclosure>
-                  <DisclosureContent>
+                {/* form start */}
+                <Box
+                  sx={{
+                    height: 'calc(100vh - 200px)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                  as="form"
+                  onSubmit={handleSubmit(onSubmit)}>
+                  <section>
                     <Box>
-                      <Label htmlFor="engine_uuid">Engine ID</Label>
-                      <Controller
-                        control={control}
-                        name="engine_uuid"
-                        rules={{ required: 'Please select a Engine ID' }}
-                        render={({ field }) => (
-                          <Select {...field}>
-                            {engines &&
-                              engines.length > 0 &&
-                              engines.map((m: any) => (
-                                <option key={m.id} value={m.id}>
-                                  {m.name}
-                                </option>
-                              ))}
-                          </Select>
-                        )}
+                      <AssetForm
+                        onUpload={addUploads}
+                        pdfPreview={pdfPreview}
+                        setPdfPreview={setPdfPreview}
                       />
-                      {errors.engine_uuid && (
-                        <Text variant="error">
-                          {' '}
-                          {errors.engine_uuid.message}
-                        </Text>
-                      )}
                     </Box>
-                  </DisclosureContent>
-                </DisclosureProvider>
-                <Box mt={3}>
-                  <Flex sx={{ display: 'none' }}>
-                    <Field
-                      name="width"
-                      label="Width"
-                      defaultValue="40"
-                      register={register}
-                      error={errors.width}
-                      mr={2}
-                    />
-                    <Field
-                      name="height"
-                      label="Height"
-                      defaultValue="40"
-                      register={register}
-                      error={errors.height}
-                      mr={2}
-                    />
-                    <Field
-                      name="unit"
-                      label="Unit"
-                      defaultValue="cm"
-                      register={register}
-                      error={errors.unit}
-                    />
-                  </Flex>
+                  </section>
+                  <Container sx={{ display: 'block', pt: 4 }}>
+                    <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
+                      <Box>
+                        <Field
+                          name="name"
+                          label="Layout Name"
+                          defaultValue="Layout X"
+                          register={register}
+                          error={errors.name}
+                        />
+                      </Box>
+                      <Box>
+                        <Label htmlFor="slug">Slug</Label>
+                        <Controller
+                          control={control}
+                          name="slug"
+                          defaultValue="contract"
+                          rules={{ required: 'Please select a slug' }}
+                          render={({ field }) => (
+                            <Select mb={0} {...field}>
+                              <option>contract</option>
+                              <option>pletter</option>
+                            </Select>
+                          )}
+                        />
+                        {errors.slug && (
+                          <Text variant="error">{errors.slug.message}</Text>
+                        )}
+                        <Text as="p" variant="subR" mt={2}>
+                          Slugs are layout templates used for rendering
+                          documents
+                        </Text>
+                      </Box>
+                      <Box>
+                        <FieldText
+                          name="description"
+                          label="Description"
+                          defaultValue=""
+                          register={register}
+                          error={errors.description}
+                        />
+                      </Box>
+                      <Box pb={3} sx={{ display: 'none' }}>
+                        <Label htmlFor="screenshot">Screenshot</Label>
+                        <Input
+                          id="screenshot"
+                          type="file"
+                          {...register('screenshot')}
+                        />
+                      </Box>
+                      <DisclosureProvider>
+                        <Disclosure
+                          as={Box}
+                          sx={{
+                            border: 'none',
+                            bg: 'none',
+                            cursor: 'pointer',
+                            width: 'fit-content',
+                            color: 'green.700',
+                            '&[aria-expanded="true"]': {
+                              '& svg': {
+                                transform: 'rotate(-180deg)',
+                                transition: 'transform 0.3s ease',
+                              },
+                            },
+                            '&[aria-expanded="false"]': {
+                              '& svg': {
+                                transform: 'rotate(0deg)',
+                                transition: 'transform 0.3s ease',
+                              },
+                            },
+                          }}>
+                          <Flex sx={{ alignItems: 'center' }}>
+                            <Text variant="pM" mr={2}>
+                              Advanced
+                            </Text>
+                            <ArrowDropdown />
+                          </Flex>
+                        </Disclosure>
+                        <DisclosureContent>
+                          <Box>
+                            <Label htmlFor="engine_uuid">Engine ID</Label>
+                            <Controller
+                              control={control}
+                              name="engine_uuid"
+                              rules={{ required: 'Please select a Engine ID' }}
+                              render={({ field }) => (
+                                <Select {...field}>
+                                  {engines &&
+                                    engines.length > 0 &&
+                                    engines.map((m: any) => (
+                                      <option key={m.id} value={m.id}>
+                                        {m.name}
+                                      </option>
+                                    ))}
+                                </Select>
+                              )}
+                            />
+                            {errors.engine_uuid && (
+                              <Text variant="error">
+                                {' '}
+                                {errors.engine_uuid.message}
+                              </Text>
+                            )}
+                          </Box>
+                        </DisclosureContent>
+                      </DisclosureProvider>
+                      <Box mt={3}>
+                        <Flex sx={{ display: 'none' }}>
+                          <Field
+                            name="width"
+                            label="Width"
+                            defaultValue="40"
+                            register={register}
+                            error={errors.width}
+                            mr={2}
+                          />
+                          <Field
+                            name="height"
+                            label="Height"
+                            defaultValue="40"
+                            register={register}
+                            error={errors.height}
+                            mr={2}
+                          />
+                          <Field
+                            name="unit"
+                            label="Unit"
+                            defaultValue="cm"
+                            register={register}
+                            error={errors.unit}
+                          />
+                        </Flex>
+                      </Box>
+                    </Flex>
+                  </Container>
+                  <Box>
+                    <Button
+                      disabled={!isValid || assets.length < 1}
+                      variant="buttonPrimary"
+                      type="submit"
+                      ml={2}>
+                      {isEdit ? 'Update' : 'Create'}
+                    </Button>
+                  </Box>
                 </Box>
-              </Flex>
-            </Container>
-            <Flex>
-              <Button disabled={!isValid} type="button" variant="buttonPrimary">
-                Next
-              </Button>
-              <Box>
-                <Button variant="buttonSecondary" type="button">
-                  Prev
-                </Button>
-                <Button
-                  disabled={!isValid || assets.length < 1}
-                  variant="buttonPrimary"
-                  type="submit"
-                  ml={2}>
-                  {isEdit ? 'Update' : 'Create'}
-                </Button>
               </Box>
-            </Flex>
-          </Box>
+              {/* Form End */}
+            </Container>
+          </Flex>
         </Box>
-        {/* Form End */}
-      </Container>
+      </Box>
     </Flex>
   );
 };
