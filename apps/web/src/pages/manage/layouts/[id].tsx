@@ -41,7 +41,7 @@ const Index: FC = () => {
           }
         />
         <Container variant="layout.pageFrame">
-          <LayoutViewForm />
+          <LayoutViewForm cId={id} />
         </Container>
       </Page>
     </>
