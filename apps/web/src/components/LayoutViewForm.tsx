@@ -5,26 +5,29 @@ import {
   DisclosureContent,
   DisclosureProvider,
 } from '@ariakit/react';
+import { TickIcon } from '@wraft/icon';
 import { Controller, useForm } from 'react-hook-form';
+import { Document, Page, pdfjs } from 'react-pdf';
 import {
   Container,
   Label,
-  Input,
   Select,
   Box,
   Flex,
   Button,
   Text,
+  useThemeUI,
 } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { Asset, Engine } from '../utils/types';
 
-import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';
 import { ArrowDropdown } from './Icons';
 import MenuStepsIndicator from './MenuStepsIndicator';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export interface Layouts {
   layout: Layout;
@@ -90,14 +93,9 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
-  const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
   const [formStep, setFormStep] = useState<number>(0);
 
-  useEffect(() => {
-    if (assets && assets.length > 0) {
-      setPdfPreview(assets[assets.length - 1].file);
-    }
-  }, [assets]);
+  const themeui = useThemeUI();
 
   useEffect(() => {
     console.log('🥋🐼', engines);
@@ -188,20 +186,67 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
             height: '100%',
           }}>
           <Container sx={{ height: '100%' }}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                height: '100%',
-              }}>
-              <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
-                <AssetForm
-                  onUpload={addUploads}
-                  pdfPreview={pdfPreview}
-                  setPdfPreview={setPdfPreview}
-                />
-              </Box>
+            <Box>
+              {assets && assets.length > 0 && (
+                <Box
+                  sx={{
+                    display: formStep === 1 ? 'block' : 'none',
+                    borderRadius: '6px',
+                    border: '1px dotted',
+                    borderColor: 'neutral.200',
+                    overflow: 'hidden',
+                  }}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      position: 'relative',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      bg: 'background',
+                      py: '24px',
+                    }}>
+                    <Document file={assets[assets.length - 1].file}>
+                      <Page pageNumber={1} width={251} />
+                    </Document>
+                  </Box>
+                  <Box
+                    sx={{
+                      py: 3,
+                      px: 4,
+                      bg: 'white',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Flex
+                      sx={{
+                        alignItems: 'center',
+                      }}>
+                      <Text variant="pM">{assets[assets.length - 1].name}</Text>
+                      <Box
+                        sx={{
+                          height: '16px',
+                          width: '16px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          bg: 'green.700',
+                          borderRadius: '44px',
+                          ml: 2,
+                        }}>
+                        <TickIcon
+                          color={themeui?.theme?.colors?.white as string}
+                          height={12}
+                          width={12}
+                          viewBox="0 0 24 24"
+                        />
+                      </Box>
+                    </Flex>
+                    <Button variant="buttonSmall">Edit</Button>
+                  </Box>
+                </Box>
+              )}
               <Container sx={{ display: formStep === 0 ? 'block' : 'none' }}>
                 <Flex
                   sx={{
@@ -246,15 +291,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       defaultValue=""
                       register={register}
                       error={errors.description}
-                      disabled
-                    />
-                  </Box>
-                  <Box pb={3} sx={{ display: 'none' }}>
-                    <Label htmlFor="screenshot">Screenshot</Label>
-                    <Input
-                      id="screenshot"
-                      type="file"
-                      {...register('screenshot')}
                       disabled
                     />
                   </Box>
@@ -316,14 +352,23 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                   </DisclosureProvider>
                 </Flex>
               </Container>
-              <Box mt={4}>
-                <Button
-                  variant="buttonSecondary"
-                  // onClick={() => setIsOpen(true)}
-                >
-                  Edit
-                </Button>
-              </Box>
+              {((assets && assets.length < 1) || formStep === 0) && (
+                <>
+                  {formStep === 1 && (
+                    <Text variant="pR" as={'p'}>
+                      There are no assets present in this layout.
+                    </Text>
+                  )}
+                  <Box mt={4}>
+                    <Button
+                      variant="buttonSecondary"
+                      // onClick={() => setIsOpen(true)}
+                    >
+                      {formStep === 1 ? 'Add' : 'Edit'}
+                    </Button>
+                  </Box>
+                </>
+              )}
             </Box>
           </Container>
         </Flex>
