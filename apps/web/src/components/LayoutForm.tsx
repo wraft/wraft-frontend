@@ -79,6 +79,7 @@ interface Props {
   setOpen: any;
   setRerender?: any;
   cId?: string;
+  step?: number;
 }
 
 type FormValues = {
@@ -116,7 +117,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const LayoutForm = ({ setOpen, setRerender, cId = '' }: Props) => {
+const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const {
     register,
     control,
@@ -129,7 +130,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '' }: Props) => {
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
   const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
-  const [formStep, setFormStep] = useState(0);
+  const [formStep, setFormStep] = useState(step);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [isDeleteAssets, setDeleteAssets] = useState<boolean>(false);
 

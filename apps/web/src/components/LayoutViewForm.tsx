@@ -249,7 +249,11 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           />
                         </Box>
                       </Flex>
-                      <Button variant="buttonSmall">Edit</Button>
+                      <Button
+                        variant="buttonSmall"
+                        onClick={() => setIsOpen(true)}>
+                        Edit
+                      </Button>
                     </Box>
                   </Box>
                 )}
@@ -380,7 +384,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
         </Box>
       </Flex>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        <LayoutForm setOpen={setIsOpen} cId={cId} />
+        {isOpen && <LayoutForm setOpen={setIsOpen} cId={cId} step={formStep} />}
       </Drawer>
     </Fragment>
   );
