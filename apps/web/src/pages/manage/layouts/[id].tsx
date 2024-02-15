@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Container, Flex } from 'theme-ui';
 
+import LayoutViewForm from '../../../components/LayoutViewForm';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -45,7 +46,9 @@ const Index: FC = () => {
           <Flex>
             <ManageSidebar items={menuLinks} />
             <Box variant="layout.contentFrame">
-              <Box p={4}>{/* <ThemeViewForm /> */}</Box>
+              <Box p={4}>
+                <LayoutViewForm />
+              </Box>
             </Box>
           </Flex>
         </Container>
