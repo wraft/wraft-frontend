@@ -5,20 +5,10 @@ import {
   DisclosureContent,
   DisclosureProvider,
 } from '@ariakit/react';
-import { TickIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Controller, useForm } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
-import {
-  Container,
-  Label,
-  Select,
-  Box,
-  Flex,
-  Button,
-  Text,
-  useThemeUI,
-} from 'theme-ui';
+import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { Asset, Engine } from '../utils/types';
@@ -97,8 +87,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [layout, setLayout] = useState<Layout>();
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const themeui = useThemeUI();
 
   useEffect(() => {
     console.log('🥋🐼', engines);
@@ -230,24 +218,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                         <Text variant="pM">
                           {assets[assets.length - 1].name}
                         </Text>
-                        <Box
-                          sx={{
-                            height: '16px',
-                            width: '16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            bg: 'green.700',
-                            borderRadius: '44px',
-                            ml: 2,
-                          }}>
-                          <TickIcon
-                            color={themeui?.theme?.colors?.white as string}
-                            height={12}
-                            width={12}
-                            viewBox="0 0 24 24"
-                          />
-                        </Box>
                       </Flex>
                       <Button
                         variant="buttonSmall"
