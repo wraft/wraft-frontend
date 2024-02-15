@@ -264,7 +264,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                   as="form"
                   onSubmit={handleSubmit(onSubmit)}>
                   <section>
-                    <Box>
+                    <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
                       <AssetForm
                         onUpload={addUploads}
                         pdfPreview={pdfPreview}
@@ -272,7 +272,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       />
                     </Box>
                   </section>
-                  <Container sx={{ display: 'block', pt: 4 }}>
+                  <Container
+                    sx={{ display: formStep === 0 ? 'block' : 'none', pt: 4 }}>
                     <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
                       <Box>
                         <Field
