@@ -5,7 +5,6 @@ import {
   DisclosureContent,
   DisclosureProvider,
 } from '@ariakit/react';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import {
   Container,
@@ -17,10 +16,8 @@ import {
   Button,
   Text,
 } from 'theme-ui';
-import * as z from 'zod';
 
 import { fetchAPI } from '../utils/models';
-import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
 
 import AssetForm from './AssetForm';
@@ -83,37 +80,13 @@ type FormValues = {
   unit: string;
 };
 
-const schema = z.object({
-  name: z
-    .string()
-    .min(4, { message: 'Minimum 4 characters required' })
-    .max(20, { message: 'Maximum 20 characters allowed' }),
-  slug: z
-    .string()
-    .refine((value) => value === 'pletter' || value === 'contract', {
-      message: 'Value must be either "pletter" or "contract"',
-    }),
-  description: z
-    .string()
-    .min(5, { message: 'Minimum 5 characters required' })
-    .max(255, { message: 'Maximum 255 characters allowed' }),
-  engine_uuid: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Engine',
-  }),
-  screenshot: z.any(),
-  assets: z.any(),
-  height: z.any(),
-  width: z.any(),
-  unit: z.any(),
-});
-
 const LayoutViewForm = ({ cId = '' }: Props) => {
   const {
     register,
     control,
     formState: { errors },
     setValue,
-  } = useForm<FormValues>({ mode: 'all', resolver: zodResolver(schema) });
+  } = useForm<FormValues>();
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
@@ -344,7 +317,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                 </Flex>
               </Container>
               <Box mt={4}>
-                <Button variant="buttonSecondary">Edit</Button>
+                <Button
+                  variant="buttonSecondary"
+                  // onClick={() => setIsOpen(true)}
+                >
+                  Edit
+                </Button>
               </Box>
             </Box>
           </Container>
