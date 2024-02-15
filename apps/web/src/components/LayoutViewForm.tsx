@@ -92,6 +92,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [layout, setLayout] = useState<Layout>();
   const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
   const [formStep, setFormStep] = useState<number>(0);
+  const [diable, setDisable] = useState<boolean>(true);
 
   useEffect(() => {
     if (assets && assets.length > 0) {
@@ -121,6 +122,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
       setValue('width', layout?.width || 40);
       setValue('description', layout?.description);
       setValue('engine_uuid', layout?.engine?.id);
+      setDisable(true);
     }
   }, [layout]);
 
@@ -215,7 +217,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       defaultValue="Layout X"
                       register={register}
                       error={errors.name}
-                      disable
+                      disable={diable}
                     />
                   </Box>
                   <Box>
@@ -226,7 +228,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       defaultValue="contract"
                       rules={{ required: 'Please select a slug' }}
                       render={({ field }) => (
-                        <Select mb={0} {...field} disabled>
+                        <Select mb={0} {...field} disabled={diable}>
                           <option>contract</option>
                           <option>pletter</option>
                         </Select>
@@ -246,7 +248,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       defaultValue=""
                       register={register}
                       error={errors.description}
-                      disabled
+                      disabled={diable}
                     />
                   </Box>
                   <Box pb={3} sx={{ display: 'none' }}>
@@ -255,7 +257,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                       id="screenshot"
                       type="file"
                       {...register('screenshot')}
-                      disabled
+                      disabled={diable}
                     />
                   </Box>
                   <DisclosureProvider>
@@ -295,7 +297,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           name="engine_uuid"
                           rules={{ required: 'Please select a Engine ID' }}
                           render={({ field }) => (
-                            <Select {...field} disabled>
+                            <Select {...field} disabled={diable}>
                               {engines &&
                                 engines.length > 0 &&
                                 engines.map((m: any) => (

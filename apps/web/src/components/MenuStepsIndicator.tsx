@@ -2,6 +2,8 @@ import React from 'react';
 
 import { Box, Flex, Text } from 'theme-ui';
 
+import { Button } from './common';
+
 type Props = {
   formStep: number;
   goTo: (arg: any) => void;
@@ -28,29 +30,31 @@ const MenuStepsIndicator = ({ goTo, formStep, titles }: Props) => {
               width: '100%',
             }}
             key={index}>
-            <Flex
-              onClick={() => goTo(index)}
-              sx={{
-                cursor: 'pointer',
-                py: '6px',
-                px: '12px',
-                minWidth: '135px',
-                width: '100%',
-                color: 'gray.900',
-                borderRadius: '4px',
-                alignItems: 'center',
-                bg: formStep === index ? 'neutral.200' : 'transparent',
-                ':hover': { bg: 'neutral.200' },
-              }}>
-              <Text
-                variant="pM"
+            <Button variant="text" onClick={() => goTo(index)}>
+              <Flex
                 sx={{
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  py: '6px',
+                  px: '12px',
+                  minWidth: '135px',
                   width: '100%',
-                  color: 'inherit',
+                  color: 'gray.900',
+                  borderRadius: '4px',
+                  alignItems: 'center',
+                  bg: formStep === index ? 'neutral.200' : 'transparent',
+                  ':hover': { bg: 'neutral.200' },
                 }}>
-                {title}
-              </Text>
-            </Flex>
+                <Text
+                  variant="pM"
+                  sx={{
+                    width: '100%',
+                    color: 'inherit',
+                  }}>
+                  {title}
+                </Text>
+              </Flex>
+            </Button>
           </Box>
         ))}
     </Flex>
