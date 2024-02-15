@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
 
+import { TickIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Box, Flex, Input, Text } from 'theme-ui';
+import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
+import { Asset } from '../../utils/types';
 import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 
 import ProgressBar from './ProgressBar';
@@ -14,7 +16,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 type DropzoneProps = {
   accept?: Accept;
   progress?: number;
-  pdfPreview?: string | undefined;
+  assets?: Asset[];
   setPdfPreview?: (e: any) => void;
   setIsSubmit: any;
   setDeleteAssets?: any;
@@ -25,7 +27,7 @@ type DropzoneProps = {
 const Dropzone = ({
   accept,
   progress,
-  pdfPreview,
+  assets,
   setPdfPreview,
   setIsSubmit,
   setDeleteAssets,
@@ -35,6 +37,7 @@ const Dropzone = ({
   const { setValue, watch, register } = useFormContext();
 
   const files = watch('file');
+  const themeui = useThemeUI();
 
   useEffect(() => {
     if (files && files.length > 0) {
@@ -70,7 +73,7 @@ const Dropzone = ({
         borderColor: 'neutral.200',
         borderRadius: '4px',
       }}>
-      {pdfPreview && (
+      {assets && assets.length > 0 && (
         <Box
           sx={{
             width: '100%',
@@ -95,7 +98,7 @@ const Dropzone = ({
             }}>
             <Close width={24} height={24} />
           </Box>
-          <Document file={pdfPreview}>
+          <Document file={assets[assets.length - 1].file}>
             <Page pageNumber={1} width={251} />
           </Document>
         </Box>
@@ -103,7 +106,7 @@ const Dropzone = ({
       <Box
         {...getRootProps()}
         sx={{
-          widows: '100%',
+          width: '100%',
           bg: isDragActive ? 'grayA35' : 'white',
           display: 'flex',
           flexDirection: 'column',
@@ -120,7 +123,7 @@ const Dropzone = ({
           sx={{ display: 'none' }}
           {...getInputProps({})}
         />
-        {!pdfPreview && (
+        {!assets && (
           <Box
             sx={{
               height: '52px',
@@ -133,38 +136,81 @@ const Dropzone = ({
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
-
-        {(!files || noChange) && (
-          <Flex
+        {assets && assets.length > 0 ? (
+          <Box
             sx={{
-              flexDirection: 'column',
+              width: '100%',
+              display: 'flex',
               alignItems: 'center',
-              mt: '12px',
+              justifyContent: 'space-between',
             }}>
-            <Text variant="pM" sx={{ mb: 1 }}>
-              Drag & drop or upload files
-            </Text>
-            <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
-          </Flex>
-        )}
-        {files && files[0] && !noChange && (
-          <Flex sx={{ alignItems: 'center' }}>
-            <Text variant="pM" sx={{ flexShrink: 0 }}>
-              {files[0].name}
-            </Text>
-            {pdfPreview && (
+            <Flex
+              sx={{
+                alignItems: 'center',
+              }}>
+              <Text variant="pM">{assets[assets.length - 1].name}</Text>
               <Box
                 sx={{
-                  color: 'green.700',
-                  ml: '12px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  height: '16px',
+                  width: '16px',
                   display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bg: 'green.700',
+                  borderRadius: '44px',
+                  ml: 2,
                 }}>
-                <ApproveTick />
+                <TickIcon
+                  color={themeui?.theme?.colors?.white as string}
+                  height={12}
+                  width={12}
+                  viewBox="0 0 24 24"
+                />
               </Box>
+            </Flex>
+            <Button
+              variant="buttonSmall"
+              onClick={(e) => {
+                e.preventDefault();
+              }}>
+              re-upload
+            </Button>
+          </Box>
+        ) : (
+          <>
+            {(!files || noChange) && (
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  mt: '12px',
+                }}>
+                <Text variant="pM" sx={{ mb: 1 }}>
+                  Drag & drop or upload files
+                </Text>
+                <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
+              </Flex>
             )}
-          </Flex>
+            {files && files[0] && !noChange && (
+              <Flex sx={{ alignItems: 'center' }}>
+                <Text variant="pM" sx={{ flexShrink: 0 }}>
+                  {files[0].name}
+                </Text>
+                {assets && assets.length > 0 && (
+                  <Box
+                    sx={{
+                      color: 'green.700',
+                      ml: '12px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                    }}>
+                    <ApproveTick />
+                  </Box>
+                )}
+              </Flex>
+            )}
+          </>
         )}
         {progress && progress > 0 && !noChange ? (
           <Box mt={3}>
