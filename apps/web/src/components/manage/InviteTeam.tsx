@@ -1,4 +1,4 @@
-import React from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import Checkbox from '@wraft-ui/Checkbox';
 import { Controller, useForm } from 'react-hook-form';
@@ -15,11 +15,20 @@ interface FormInputs {
 }
 
 interface Props {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const InviteTeam = ({ setOpen }: Props) => {
-  const { theme } = useThemeUI();
+  const [roles, setRoles] = useState<any>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [checkedValues, setCheckedValues] = useState<any>([]);
+  const [invalidEmails, setInvalidEmails] = useState<any>([]);
+  const [selectedEmails, setSelectedEmails] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const emailErrorRef = useRef<HTMLDivElement>(null);
+
   const {
     register,
     handleSubmit,
@@ -27,7 +36,7 @@ const InviteTeam = ({ setOpen }: Props) => {
     control,
   } = useForm<FormInputs>({ mode: 'onChange' });
 
-  const [roles, setRoles] = React.useState<any>([]);
+  const { theme } = useThemeUI();
 
   const loadRole = () => {
     fetchAPI('roles').then((data: any) => {
@@ -35,19 +44,9 @@ const InviteTeam = ({ setOpen }: Props) => {
     });
   };
 
-  React.useEffect(() => {
-    loadRole();
-  }, []);
-
-  const emailErrorRef = React.useRef<HTMLDivElement>(null);
-
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
-
   const filteredRoles = roles.filter((role: any) =>
     role.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
-
-  const [checkedValues, setCheckedValues] = React.useState<any>([]);
 
   const handleCheckboxChange = (event: any) => {
     const checked = event.target.checked;
@@ -62,20 +61,8 @@ const InviteTeam = ({ setOpen }: Props) => {
     }
   };
 
-  React.useEffect(() => {
-    console.log(checkedValues);
-  }, [checkedValues]);
-
-  const [selectedEmails, setSelectedEmails] = React.useState<
-    { value: string; label: string }[]
-  >([]);
-  const [invalidEmails, setInvalidEmails] = React.useState<any>([]);
-
   const handleChange = (selectedOption: any) => {
     setSelectedEmails(selectedOption);
-  };
-
-  React.useEffect(() => {
     console.log('all emailsc:', selectedEmails);
     for (const email of selectedEmails) {
       console.log('value:', email.value);
@@ -93,7 +80,11 @@ const InviteTeam = ({ setOpen }: Props) => {
     } else if (emailErrorRef.current) emailErrorRef.current.textContent = '';
 
     console.info('invalid', invalidEmails);
-  }, [handleChange]);
+  };
+
+  useEffect(() => {
+    loadRole();
+  }, []);
 
   function onSubmit(data: any) {
     console.log('submitted', data);
@@ -163,7 +154,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       borderColor:
                         theme.colors &&
                         theme.colors.neutral &&
-                        theme.colors.neutral[1],
+                        theme.colors.neutral[200],
                       fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
                       borderRadius: '6px',
                     }),
