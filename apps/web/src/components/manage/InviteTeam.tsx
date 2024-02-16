@@ -34,7 +34,8 @@ const InviteTeam = ({ setOpen }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     control,
-  } = useForm<FormInputs>({ mode: 'onChange' });
+    trigger,
+  } = useForm<FormInputs>({ mode: 'all' });
 
   const { theme } = useThemeUI();
 
@@ -59,27 +60,23 @@ const InviteTeam = ({ setOpen }: Props) => {
       console.log('unchecked', value);
       setCheckedValues(checkedValues.filter((item: any) => item !== value));
     }
+    trigger();
   };
 
-  const handleChange = (selectedOption: any) => {
-    setSelectedEmails(selectedOption);
-    console.log('all emailsc:', selectedEmails);
-    for (const email of selectedEmails) {
-      console.log('value:', email.value);
-    }
-    const invalidEmails = selectedEmails.filter(
-      (emailOption) => !emailRegex.test(emailOption.value),
+  const handleChange = (selectedOptions: any) => {
+    setSelectedEmails(selectedOptions);
+    const failedEmails = selectedOptions.filter(
+      (emailOption: any) => !emailRegex.test(emailOption.value),
     );
-    setInvalidEmails(invalidEmails);
+    setInvalidEmails(failedEmails);
 
-    if (invalidEmails.length > 0) {
-      for (const email of invalidEmails) {
+    if (failedEmails.length > 0) {
+      for (const email of failedEmails) {
         if (emailErrorRef.current)
           emailErrorRef.current.textContent = `Invalid email addresses: ${email.value}`;
       }
     } else if (emailErrorRef.current) emailErrorRef.current.textContent = '';
-
-    console.info('invalid', invalidEmails);
+    trigger();
   };
 
   useEffect(() => {
@@ -152,9 +149,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       backgroundColor:
                         theme.colors && (theme.colors.bgWhite as string),
                       borderColor:
-                        theme.colors &&
-                        theme.colors.neutral &&
-                        theme.colors.neutral[200],
+                        theme.colors && (theme.colors.border as string),
                       fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
                       borderRadius: '6px',
                     }),
@@ -164,15 +159,13 @@ const InviteTeam = ({ setOpen }: Props) => {
                       color:
                         theme.colors &&
                         theme.colors.gray &&
-                        theme?.colors?.gray[2],
+                        theme?.colors?.gray[200],
                     }),
                     multiValue: (baseStyles) => ({
                       ...baseStyles,
                       border: '1px solid',
                       borderColor:
-                        theme.colors &&
-                        theme.colors.neutral &&
-                        theme.colors.neutral[1],
+                        theme.colors && (theme.colors.border as string),
                       backgroundColor:
                         theme.colors && (theme.colors.background as string),
                       padding: '0px 4px 0px 14px',
