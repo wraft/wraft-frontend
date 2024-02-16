@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Checkbox from '@wraft-ui/Checkbox';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Creatable from 'react-select/creatable';
 import { Box, Button, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
@@ -10,7 +10,7 @@ import { fetchAPI, postAPI } from '../../utils/models';
 import { emailRegex } from '../../utils/regex';
 
 interface FormInputs {
-  email: string;
+  emails: string[];
   role: string;
 }
 
@@ -24,7 +24,8 @@ const InviteTeam = ({ setOpen }: Props) => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormInputs>({ mode: 'all' });
+    control,
+  } = useForm<FormInputs>({ mode: 'onChange' });
 
   const [roles, setRoles] = React.useState<any>([]);
 
@@ -68,18 +69,21 @@ const InviteTeam = ({ setOpen }: Props) => {
   const [selectedEmails, setSelectedEmails] = React.useState<
     { value: string; label: string }[]
   >([]);
+  const [invalidEmails, setInvalidEmails] = React.useState<any>([]);
 
   const handleChange = (selectedOption: any) => {
     setSelectedEmails(selectedOption);
   };
 
   React.useEffect(() => {
+    console.log('all emailsc:', selectedEmails);
     for (const email of selectedEmails) {
       console.log('value:', email.value);
     }
     const invalidEmails = selectedEmails.filter(
       (emailOption) => !emailRegex.test(emailOption.value),
     );
+    setInvalidEmails(invalidEmails);
 
     if (invalidEmails.length > 0) {
       for (const email of invalidEmails) {
@@ -132,58 +136,70 @@ const InviteTeam = ({ setOpen }: Props) => {
         </Box>
         <Box sx={{ px: 4 }}>
           <Box sx={{ py: '24px' }}>
-            <Creatable
-              isMulti
-              placeholder="Enter the users email"
-              options={[]}
-              onChange={handleChange}
-              // filterOption={() => false}
-              components={{
-                Menu: () => null,
-                ClearIndicator: () => null,
-                DropdownIndicator: () => null,
+            <Controller
+              name="emails"
+              control={control}
+              rules={{
+                validate: () =>
+                  selectedEmails.length > 0 && invalidEmails.length < 1,
               }}
-              styles={{
-                control: (baseStyles) => ({
-                  ...baseStyles,
-                  backgroundColor:
-                    theme.colors && (theme.colors.bgWhite as string),
-                  borderColor:
-                    theme.colors &&
-                    theme.colors.neutral &&
-                    theme.colors.neutral[1],
-                  fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
-                  borderRadius: '6px',
-                }),
-                placeholder: (baseStyles) => ({
-                  ...baseStyles,
-                  fontSize: 12,
-                  color:
-                    theme.colors && theme.colors.gray && theme?.colors?.gray[2],
-                }),
-                multiValue: (baseStyles) => ({
-                  ...baseStyles,
-                  border: '1px solid',
-                  borderColor:
-                    theme.colors &&
-                    theme.colors.neutral &&
-                    theme.colors.neutral[1],
-                  backgroundColor:
-                    theme.colors && (theme.colors.background as string),
-                  padding: '0px 4px 0px 14px',
-                  borderRadius: '16px',
-                }),
-                multiValueRemove: (styles) => ({
-                  ...styles,
-                  color: 'gray',
-                  ':hover': {
-                    color: 'red',
-                  },
-                }),
-              }}
+              render={({ field }) => (
+                <Creatable
+                  {...field}
+                  isMulti
+                  placeholder="Enter all users email"
+                  options={[]}
+                  onChange={handleChange}
+                  components={{
+                    Menu: () => null,
+                    ClearIndicator: () => null,
+                    DropdownIndicator: () => null,
+                  }}
+                  styles={{
+                    control: (baseStyles) => ({
+                      ...baseStyles,
+                      backgroundColor:
+                        theme.colors && (theme.colors.bgWhite as string),
+                      borderColor:
+                        theme.colors &&
+                        theme.colors.neutral &&
+                        theme.colors.neutral[1],
+                      fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
+                      borderRadius: '6px',
+                    }),
+                    placeholder: (baseStyles) => ({
+                      ...baseStyles,
+                      fontSize: 12,
+                      color:
+                        theme.colors &&
+                        theme.colors.gray &&
+                        theme?.colors?.gray[2],
+                    }),
+                    multiValue: (baseStyles) => ({
+                      ...baseStyles,
+                      border: '1px solid',
+                      borderColor:
+                        theme.colors &&
+                        theme.colors.neutral &&
+                        theme.colors.neutral[1],
+                      backgroundColor:
+                        theme.colors && (theme.colors.background as string),
+                      padding: '0px 4px 0px 14px',
+                      borderRadius: '16px',
+                    }),
+                    multiValueRemove: (styles) => ({
+                      ...styles,
+                      color: 'gray',
+                      ':hover': {
+                        color: 'red',
+                      },
+                    }),
+                  }}
+                />
+              )}
             />
             <Text ref={emailErrorRef} variant="error">
-              {errors.email?.message}
+              {errors.emails?.message}
             </Text>
           </Box>
           <Box>
@@ -220,7 +236,9 @@ const InviteTeam = ({ setOpen }: Props) => {
                   }}>
                   <Checkbox
                     size={'small'}
-                    {...register('role', { required: true })}
+                    {...register('role', {
+                      validate: () => checkedValues.length > 0,
+                    })}
                     value={role.id}
                     onChange={(e: any) => {
                       handleCheckboxChange(e);
@@ -238,10 +256,7 @@ const InviteTeam = ({ setOpen }: Props) => {
         </Box>
       </Box>
       <Box sx={{ p: 4 }}>
-        <Button
-          disabled={true && !isValid}
-          type="submit"
-          variant="buttonPrimarySmall">
+        <Button disabled={!isValid} type="submit" variant="buttonPrimarySmall">
           Invite people
         </Button>
       </Box>
