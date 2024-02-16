@@ -156,7 +156,6 @@ const Form = ({ rerender, setRerender }: Props) => {
           />
         </Flex>
       ),
-      size: 180,
       enableSorting: false,
     },
     {
@@ -165,77 +164,81 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessor: 'content.id',
       cell: ({ row }: any) => {
         return (
-          <Box ml={'auto'}>
-            <MenuProvider>
-              <MenuButton
-                as={Box}
-                variant="none"
-                sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    margin: '0px',
-                    padding: '0px',
-                    bg: 'transparent',
-                    ':disabled': {
-                      display: 'none',
-                    },
-                  }}
-                  onClick={() => {
-                    setIsOpen(row.index);
-                  }}>
-                  <EllipsisHIcon
-                    color={
-                      (theme.colors &&
-                        theme.colors.gray &&
-                        theme.colors.gray[200]) ||
-                      'black'
-                    }
-                  />
-                </Box>
-              </MenuButton>
-              <Menu
-                as={Box}
-                variant="layout.menu"
-                open={isOpen == row.index}
-                onClose={() => setIsOpen(null)}>
-                <Button
-                  variant="text"
-                  onClick={() => {
-                    setIsOpen(null);
-                    setDeleteTheme(row.index);
-                  }}>
-                  <MenuItem as={Box} px={3} py={2}>
-                    <Text
-                      variant="pR"
-                      sx={{
-                        cursor: 'pointer',
-                        color: 'red.600',
-                      }}>
-                      Delete
-                    </Text>
-                  </MenuItem>
-                </Button>
-              </Menu>
-              <Modal
-                isOpen={deleteTheme === row.index}
-                onClose={() => setDeleteTheme(null)}>
-                {
-                  <ConfirmDelete
-                    title="Delete Theme"
-                    text={`Are you sure you want to delete ‘${row.original.name}’?`}
-                    setOpen={setDeleteTheme}
-                    onConfirmDelete={async () => {
-                      onDelete(row.original.id);
+          <Flex>
+            <Box />
+
+            <Box ml={'auto'}>
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
                     }}
-                  />
-                }
-              </Modal>
-            </MenuProvider>
-          </Box>
+                    onClick={() => {
+                      setIsOpen(row.index);
+                    }}>
+                    <EllipsisHIcon
+                      color={
+                        (theme.colors &&
+                          theme.colors.gray &&
+                          theme.colors.gray[200]) ||
+                        'black'
+                      }
+                    />
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  open={isOpen == row.index}
+                  onClose={() => setIsOpen(null)}>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteTheme(row.index);
+                    }}>
+                    <MenuItem as={Box} px={3} py={2}>
+                      <Text
+                        variant="pR"
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'red.600',
+                        }}>
+                        Delete
+                      </Text>
+                    </MenuItem>
+                  </Button>
+                </Menu>
+                <Modal
+                  isOpen={deleteTheme === row.index}
+                  onClose={() => setDeleteTheme(null)}>
+                  {
+                    <ConfirmDelete
+                      title="Delete Theme"
+                      text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                      setOpen={setDeleteTheme}
+                      onConfirmDelete={async () => {
+                        onDelete(row.original.id);
+                      }}
+                    />
+                  }
+                </Modal>
+              </MenuProvider>
+            </Box>
+          </Flex>
         );
       },
       size: 10,

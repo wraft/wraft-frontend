@@ -12,7 +12,7 @@ import FontList from './FontList';
 interface AssetFormProps {
   onUpload?: any;
   filetype?: 'layout' | 'theme';
-  pdfPreview?: string | undefined;
+  assets?: Asset[];
   setPdfPreview?: any;
   setDeleteAssets?: any;
 }
@@ -25,8 +25,7 @@ type FormValues = {
 const AssetForm = ({
   onUpload,
   filetype = 'layout',
-  pdfPreview,
-  setPdfPreview,
+  assets,
   setDeleteAssets,
 }: AssetFormProps) => {
   const [fileError, setFileError] = React.useState<string | null>(null);
@@ -121,8 +120,7 @@ const AssetForm = ({
                     }
             }
             progress={uploadProgress}
-            pdfPreview={pdfPreview}
-            setPdfPreview={setPdfPreview}
+            assets={assets}
             setIsSubmit={setIsSubmit}
             setDeleteAssets={setDeleteAssets}
             multiple={filetype === 'theme'}
