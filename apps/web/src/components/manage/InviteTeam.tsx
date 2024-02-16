@@ -108,8 +108,8 @@ const InviteTeam = ({ setOpen }: Props) => {
         bg: 'backgroundWhite',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: '100%',
-        maxHeight: '100dvh',
+        height: '100vh',
+        MaxHeight: '100vh',
         overflow: 'none',
       }}>
       <Box>
@@ -202,6 +202,9 @@ const InviteTeam = ({ setOpen }: Props) => {
               border: '1px solid',
               borderColor: 'border',
               borderRadius: 4,
+              height: '100%',
+              overflowY: 'scroll',
+              maxHeight: '400px',
             }}>
             {filteredRoles.map((role: any, index: number) => {
               return (
