@@ -7,6 +7,7 @@ import Creatable from 'react-select/creatable';
 import { Box, Button, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 
 import { fetchAPI, postAPI } from '../../utils/models';
+import { emailRegex } from '../../utils/regex';
 
 interface FormInputs {
   email: string;
@@ -14,21 +15,15 @@ interface FormInputs {
 }
 
 interface Props {
-  // setOpen: (value: boolean | ((prevVar: boolean) => boolean)) => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Dispatch<SetStateAction<boolean>>
 const InviteTeam = ({ setOpen }: Props) => {
-  // setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
   const { theme } = useThemeUI();
   const {
-    // watch,
     register,
-    // control,
     handleSubmit,
     formState: { errors, isValid },
-    // setValue,
   } = useForm<FormInputs>({ mode: 'all' });
 
   const [roles, setRoles] = React.useState<any>([]);
@@ -44,7 +39,6 @@ const InviteTeam = ({ setOpen }: Props) => {
   }, []);
 
   const emailErrorRef = React.useRef<HTMLDivElement>(null);
-  const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
 
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
@@ -74,26 +68,12 @@ const InviteTeam = ({ setOpen }: Props) => {
   const [selectedEmails, setSelectedEmails] = React.useState<
     { value: string; label: string }[]
   >([]);
-  // const [emailValidity, setEmailValidity] = React.useState<{
-  //   [key: string]: boolean;
-  // }>({});
 
   const handleChange = (selectedOption: any) => {
     setSelectedEmails(selectedOption);
-
-    // Check the validity of each email option and update emailValidity
-    //   const newEmailValidity: { [key: string]: boolean } = {};
-
-    //   selectedOption.forEach((emailOption: any) => {
-    //     const isValid = emailRegex.test(emailOption.value);
-    //     newEmailValidity[emailOption.value] = isValid;
-    //   });
-
-    //   setEmailValidity(newEmailValidity);
   };
 
   React.useEffect(() => {
-    // console.log('value', selectedEmails.values);
     for (const email of selectedEmails) {
       console.log('value:', email.value);
     }
