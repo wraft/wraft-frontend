@@ -40,30 +40,63 @@ export const findDefault = (needle: string, stack: any) => {
  * @param fields
  * @todo - Limited to 2 level deep arrays
  */
-export const updateVars = (data: ContentState, fields: any): RemirrorJSON => {
-  // cut it short if it map has no values
-  if (fields && fields[0] && fields[0].value) {
-    console.log('UPDATED_BODY updateStuff', fields);
-    const result = produce(data, (draft) => {
-      data.content.forEach((p: any, k: any) => {
-        if (p && p.content && p.content.length > 0) {
-          p.content.forEach((c: any, y: any) => {
-            if (c['type'] === 'holder') {
-              const {
-                attrs: { name },
-              } = c;
-              const ff = fields.find((e: any) => e.name === name);
-              draft['content'][k]['content'][y]['attrs']['named'] =
-                ff && ff.value;
-            }
-          });
-        }
-      });
-    });
-    return result;
-  } else {
+// export const updateVars = (
+//   data: ContentState,
+//   fields: Field[],
+// ): RemirrorJSON => {
+//   // Directly return the original data if fields are empty or the first item has no value
+//   if (!fields?.length || !fields[0]?.value) {
+//     return data;
+//   }
+
+//   console.log('UPDATED_BODY updateStuff', fields);
+
+//   const result = produce(data, (draft) => {
+//     draft.content.forEach((p, k) => {
+//       p.content?.forEach((c, y) => {
+//         if (c.type === 'holder') {
+//           const fieldToUpdate = fields.find(
+//             (field) => field.name === c.attrs.name,
+//           );
+//           if (fieldToUpdate) {
+//             // Using optional chaining to safely access nested properties
+//             draft.content[k].content[y].attrs.named = fieldToUpdate.value;
+//           }
+//         }
+//       });
+//     });
+//   });
+
+//   return result;
+// };
+
+export const updateVars = (data, fields) => {
+  // Directly return the original data if fields are empty or the first item has no value
+  if (!fields?.length || !fields[0]?.value) {
     return data;
   }
+
+  console.log('UPDATED_BODY updateStuff', fields);
+
+  // Create a deep copy of the data to avoid direct mutation
+  const updatedData = JSON.parse(JSON.stringify(data));
+
+  // Iterate over the content to find and update the 'holder' type elements
+  updatedData.content.forEach((p, k) => {
+    p.content?.forEach((c, y) => {
+      if (c.type === 'holder') {
+        const fieldToUpdate = fields.find(
+          (field) => field.name === c.attrs.name,
+        );
+        if (fieldToUpdate) {
+          // Update the named attribute of the holder
+          updatedData.content[k].content[y].attrs.named = fieldToUpdate.value;
+        }
+      }
+    });
+  });
+
+  return updatedData;
 };
 
 /**

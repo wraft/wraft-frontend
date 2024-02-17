@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, forwardRef, useImperativeHandle } from 'react';
 import { ContentEditor } from './editor.js';
 import { useContentEditor } from './useContentEditor.js';
 
@@ -11,25 +11,30 @@ interface EditorProps {
   insertAtPointer?: any;
   insertable?: any;
 }
-const EditorWrapper = ({
+const EditorWrapper = forwardRef(({
   defaultValue,
   editable,
   onUpdate,
   tokens,
   insertable,
   onInserted,
-}: EditorProps) => {
-  const { editor, onChange, insertNow } = useContentEditor(
+}: EditorProps, ref)  => {
+  const { editor, onChange, insertNow, getContext } = useContentEditor(
     defaultValue,
     onUpdate,
     onInserted
   );
 
+  useImperativeHandle(ref, () => editor.getContext(), [editor.getContext]);
+
+  
   useEffect(() => {
     if (insertable) {
       insertNow(insertable);
     }
   }, [insertable]);
+
+  
 
   return (
     <>
@@ -41,6 +46,6 @@ const EditorWrapper = ({
       />
     </>
   );
-};
+});
 
 export default EditorWrapper;

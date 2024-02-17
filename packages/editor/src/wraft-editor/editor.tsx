@@ -50,7 +50,7 @@ const HolderSuggestComponent = ({ tokens }: any) => {
  * @returns
  */
 export function ContentEditor({
-  editor: { manager, state },
+  editor: { manager, state, getContext},
   onChange,
   editable,
   tokens,
@@ -67,6 +67,7 @@ export function ContentEditor({
   };
 
   console.log('[ContentEditor]', tokens);
+
 
   return (
     <Box>

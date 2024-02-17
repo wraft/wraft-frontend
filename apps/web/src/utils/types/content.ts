@@ -12,8 +12,8 @@ export interface ILayout {
 export interface IContentType {
   name: string;
   id: string;
-  layout: any;
-  fields: any;
+  layout?: any;
+  fields?: any;
   description: string;
   flow: any;
 }
@@ -37,7 +37,7 @@ export interface IField {
 
 export interface IVariantDetail {
   creator: ICreator;
-  content_type: IContentType;
+  content_type?: IContentType;
 }
 
 export interface IFieldItem {
@@ -66,8 +66,6 @@ export interface IFieldTypeValue {
 
 export interface IContentForm {
   id?: any;
-  tid?: any;
-  cid?: any;
   edit?: boolean;
 }
 
