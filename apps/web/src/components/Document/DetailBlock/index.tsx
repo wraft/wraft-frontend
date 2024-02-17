@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Router, { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
@@ -9,13 +10,13 @@ import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import { RoutedDialog } from '@wraft-ui/RoutedDialog';
 
-import { cleanName, findVars, replaceTitles, updateVars } from 'utils/index';
 import NavEdit from 'components/NavEdit';
 import FieldText from 'components/FieldText';
-import FieldForm from 'components/FieldForm';
 import Field from 'components/Field';
 import Editor from 'components/common/Editor';
+import { cleanName, findVars, replaceTitles, updateVars } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
@@ -28,6 +29,12 @@ import { postAPI, fetchAPI, putAPI } from 'utils/models';
 import { Template, ContentState } from 'utils/types';
 import { Field as FieldT, FieldInstance } from 'utils/types';
 import contentStore from 'store/content.store';
+
+import FieldForm from './FieldForm';
+
+// const Editor = dynamic(() => import('components/common/Editor'), {
+//   ssr: false, // Set this based on your SSR needs
+// });
 
 const ContentForm = (props: IContentForm) => {
   // Base
@@ -42,9 +49,6 @@ const ContentForm = (props: IContentForm) => {
     setValue,
   } = useForm();
 
-  const lor = contentStore((state: any) => state.variant);
-  console.log('data[lor][3]', lor);
-
   const [_content, setContent] = useState<IVariantDetail>();
   const [contents, setContents] = useState<ContentInstance>();
   const [activeTemplate, setActiveTemplate] = useState('');
@@ -57,6 +61,7 @@ const ContentForm = (props: IContentForm) => {
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(true);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
   const [saving, setSaving] = useState<boolean>(false);
@@ -64,22 +69,16 @@ const ContentForm = (props: IContentForm) => {
   const [showDev, setShowDev] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { id, tid, edit, cid } = props;
+  const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
 
   const [pageTitle, setPageTitle] = useState<string>('New Title');
 
+  const editorRef = useRef<any>();
+
   // triggers
   const [trigger, setTrigger] = useState<any>(null);
-
-  /**
-   * Load date on dom ready
-   */
-  useEffect(() => {
-    if (tid && cid) {
-      loadData(tid, cid);
-    }
-  }, [tid, cid]);
+  const newContent = contentStore((state: any) => state.newContents);
 
   useEffect(() => {
     if (id && edit) {
@@ -87,7 +86,75 @@ const ContentForm = (props: IContentForm) => {
         onLoadContent(data);
       });
     }
-  }, [id]);
+  }, [id, edit]);
+
+  useEffect(() => {
+    if (!id && !edit && newContent) {
+      onInitNewContentCreate(newContent.template);
+    }
+  }, [newContent]);
+
+  // const routeChangeStart = (url: any) => {
+  //   if (
+  //     router.asPath !== url &&
+  //     unsavedChanges &&
+  //     !confirm('You have unsaved changes. Are you sure you want to leave?')
+  //   ) {
+  //     router.events.emit('routeChangeError');
+  //     throw 'Abort route change. Please ignore this error.';
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   router.events.on('routeChangeStart', routeChangeStart);
+
+  //   return () => {
+  //     router.events.off('routeChangeStart', routeChangeStart);
+  //   };
+  // }, []);
+
+  const onInitNewContentCreate = (template: any) => {
+    setSelectedTemplate(template);
+
+    const ctypeId = template?.content_type?.id;
+    const defaultState = template.state?.id;
+    const serialbody = template.content?.serialized;
+    const content_title = serialbody?.title;
+
+    if (ctypeId) {
+      setValue('ttype', ctypeId);
+      fetchContentTypeDetails(ctypeId);
+    }
+
+    setValue('state', defaultState);
+
+    if (content_title) {
+      setValue('title', content_title);
+      setTitle(content_title);
+      setPageTitle(content_title);
+    }
+    // updateStuff(template, maps);
+    // setTrigger(EMPTY_MARKDOWN_NODE);
+  };
+
+  const fetchContentTypeDetails = async (contentTypeId: string) => {
+    try {
+      const data: any = await fetchAPI(`content_types/${contentTypeId}`);
+      setContent(data);
+
+      const tFields = data.content_type?.fields;
+      if (tFields) {
+        setField(tFields);
+      }
+
+      const tFlow = data.content_type?.flow;
+      if (tFlow) {
+        setActiveFlow(tFlow);
+      }
+    } catch (error) {
+      console.error('Failed to fetch content type details:', error);
+    }
+  };
 
   // /**
   //  * Toggle Title Edit
@@ -122,16 +189,10 @@ const ContentForm = (props: IContentForm) => {
   const mapFields = (fields: any) => {
     const vals = getValues();
 
-    // for all fields
-    const obj: any = [];
-    if (fields && fields.length > 0) {
-      fields.forEach(function (value: any) {
-        const name = vals[`${value.name}`];
-        const x: FieldInstance = { ...value, value: name };
-        obj.push(x);
-      });
-    }
-    return obj;
+    return fields.map((field: any) => ({
+      ...field,
+      value: vals[field.name],
+    }));
   };
 
   /**
@@ -160,6 +221,12 @@ const ContentForm = (props: IContentForm) => {
   const onSubmit = (data: any) => {
     const obj: any = {};
 
+    const markdownContent = editorRef.current?.helpers?.getMarkdown();
+
+    const json = editorRef.current?.helpers?.getJSON();
+
+    console.log('onSubmit[1--b]', data);
+
     setSaving(true);
 
     maps &&
@@ -170,15 +237,19 @@ const ContentForm = (props: IContentForm) => {
     const serials: any = {
       ...obj,
       title: data.title,
-      body: data.body,
-      serialized: data.serialized,
+      body: markdownContent,
+      serialized: json,
     };
 
     const template = {
       // state_uuid: data.state,
       serialized: serials,
-      raw: data.body,
+      raw: markdownContent,
     };
+
+    console.log('onSubmit[1--3]', template);
+
+    return;
 
     if (edit) {
       putAPI(`contents/${cid}`, template).then((data: any) => {
@@ -210,21 +281,6 @@ const ContentForm = (props: IContentForm) => {
   };
 
   /**
-   * Load Data
-   * @param id
-   */
-  const loadData = (tid: string, cid: string) => {
-    fetchAPI(`content_types/${cid}`).then((data: any) => {
-      onLoadData(data);
-    });
-    loadTemplates(tid);
-
-    //temp
-    setActiveTemplate(tid);
-    setShowForm(true);
-  };
-
-  /**
    * Load content data from a doc
    * @param data
    */
@@ -244,19 +300,11 @@ const ContentForm = (props: IContentForm) => {
       const content_title = serialbody?.title || undefined;
 
       // fields and templates
-      fetchAPI(`content_types/${ctypeId}`).then((data: any) => {
-        onLoadData(data);
-      });
-      // load all templates for the content type
-      loadTemplates(ctypeId);
+      fetchContentTypeDetails(ctypeId);
 
-      // map loaded content to states
-      // console.log('[onLoadContent] title: ', content_title);
       setValue('title', content_title);
       setTitle(content_title);
       setPageTitle(content_title);
-
-      // console.log('[onLoadContent]', content_title);
 
       const jsonBody = serialbody.serialized;
 
@@ -267,22 +315,6 @@ const ContentForm = (props: IContentForm) => {
         }
       }
     }
-  };
-
-  /**
-   * Cast content_type to `content`
-   * @param data IField compatiable
-   * */
-  const onLoadData = (data: any) => {
-    const res: IVariantDetail = data;
-    setContent(res);
-
-    const tFields = res?.content_type?.fields;
-    if (tFields) {
-      setField(tFields);
-    }
-    const tFlow = res?.content_type?.flow;
-    setActiveFlow(tFlow);
   };
 
   /**
@@ -312,7 +344,7 @@ const ContentForm = (props: IContentForm) => {
       const pathGroup = pathname.split('/');
       // validate if its a edit page
       if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
-        console.log('[red]', pathGroup);
+        // console.log('[red]', pathGroup);
         setShowForm(false);
       }
     }
@@ -380,7 +412,7 @@ const ContentForm = (props: IContentForm) => {
       const m = findVars(tempTitle, false);
       m.map((x: any) => {
         const cName = cleanName(x);
-        console.log('🐴🐴  [changeTitle] ', cName, maps);
+        // console.log('🐴🐴  [changeTitle] ', cName, maps);
       });
     }
   };
@@ -409,9 +441,15 @@ const ContentForm = (props: IContentForm) => {
    * @param content
    * @param mappings
    */
-  const passUpdates = (content: any, mappings: any) => {
-    const updatedCont = updateVars(content, mappings);
+  const passUpdates = async (content: any, mappings: any) => {
+    // console.log('passUpdates', content);
+
+    const updatedCont = await updateVars(content, mappings);
+    // console.log('updatedCont', updatedCont);
+    // console.log('updatedCont[mappings]', mappings);
+
     setBody(updatedCont);
+
     getSummary();
   };
 
@@ -422,6 +460,8 @@ const ContentForm = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any) => {
+    // console.log('updateStuff', mapx);
+    // console.log('updateStuff[data]', data);
     if (data?.data) {
       let respx = '';
 
@@ -436,7 +476,7 @@ const ContentForm = (props: IContentForm) => {
       passUpdates(xr, mapx);
     }
 
-    if (data.serialized?.data && mapx) {
+    if (data?.serialized?.data && mapx) {
       const xr: ContentState = JSON.parse(data.serialized.data);
       passUpdates(xr, mapx);
     }
@@ -453,15 +493,26 @@ const ContentForm = (props: IContentForm) => {
    */
 
   const doUpdate = (state: any) => {
-    console.log('[doUpdate]', state);
+    console.log('[trigger][doUpdate]', state);
+
+    const markdownContent = editorRef.current?.helpers?.getMarkdown();
+
+    const json = editorRef.current?.helpers?.getJSON();
 
     if (state.md) {
-      setValue('body', state.md);
+      setValue('body', markdownContent);
     }
 
     if (state.json) {
-      setValue('serialized', JSON.stringify(state.json));
+      setValue('serialized', JSON.stringify(json));
     }
+    // if (state.md) {
+    //   setValue('body', state.md);
+    // }
+
+    // if (state.json) {
+    //   setValue('serialized', JSON.stringify(state.json));
+    // }
   };
 
   const getInits = (field_maps: any) => {
@@ -499,10 +550,14 @@ const ContentForm = (props: IContentForm) => {
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-    updateStuff(body, resx);
+    console.log('onSaved', defx);
+    // console.log('onSaved[body]', resx);
+
+    updateStuff(selectedTemplate, resx);
+
     updatePageTitle(resx);
+    // setTrigger(EMPTY_MARKDOWN_NODE);
     // we are inserting an empty node, so that the editor is triggered
-    setTrigger(EMPTY_MARKDOWN_NODE);
   };
 
   /**
@@ -519,266 +574,305 @@ const ContentForm = (props: IContentForm) => {
   };
 
   return (
-    <Box sx={{ p: 0 }}>
-      <NavEdit
-        navtitle={pageTitle || title}
-        onToggleEdit={() => toggleTitleEdit()}
+    <>
+      <RoutedDialog
+        unsavedChanges={unsavedChanges}
+        onConfirmLeave={() => setUnsavedChanges(false)}
       />
+
       <Box sx={{ p: 0 }}>
-        <Flex>
-          <Box
-            as="form"
-            id="content-form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '70%', maxWidth: '85ch', m: 0, bg: 'neutral.200' }}>
-            <Box sx={{ display: showDev ? 'block' : 'none' }}>
-              <FieldText
-                name="body"
-                label="Body"
-                // onChange={onChange}
-                defaultValue={''}
-                register={register}
-              />
-              <FieldText
-                name="serialized"
-                label="Serialized State"
-                // onChange={onChange}
-                defaultValue={''}
-                register={register}
-              />
+        <NavEdit
+          navtitle={pageTitle || title}
+          onToggleEdit={() => toggleTitleEdit()}
+        />
+        {/* <Button
+        onClick={
+          () => console.log('Check Json', editorRef.current.helpers?.getRemirrorJSON())
+          // console.log('Check Json', editorRef.current?.helpers?.getJSON())
+        }>
+        Check Json
+      </Button>
+      <Button
+        onClick={
+          () => console.log('Check Json', editorRef.current)
+          // console.log('Check Json', editorRef.current?.helpers?.getJSON())
+        }>
+        Check Json
+      </Button>
+      <Button
+        onClick={() =>
+          console.log('Check Json', editorRef.current?.helpers?.getJSON())
+        }>
+        Check all
+      </Button>
+      <Button
+        onClick={() =>
+          console.log('Check Json', editorRef.current?.helpers.getMarkdown())
+        }>
+        Check text
+      </Button> */}
+        <Box sx={{ p: 0 }}>
+          <Flex>
+            <Box
+              as="form"
+              id="content-form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{
+                minWidth: '70%',
+                maxWidth: '85ch',
+                m: 0,
+                bg: 'neutral.200',
+              }}>
+              <Box sx={{ display: showDev ? 'block' : 'none' }}>
+                <FieldText
+                  name="body"
+                  label="Body"
+                  // onChange={onChange}
+                  defaultValue={''}
+                  register={register}
+                />
+                <FieldText
+                  name="serialized"
+                  label="Serialized State"
+                  // onChange={onChange}
+                  defaultValue={''}
+                  register={register}
+                />
+              </Box>
+
+              <Box
+                sx={{
+                  // position: 'relative',
+                  bg: 'neutral.100',
+                  borderBottom: 'solid 1px',
+                  borderBottomColor: 'neutral.200',
+                  p: 4,
+                  display: showTitleEdit ? 'block' : 'none',
+                  flexGrow: 1,
+                  width: '100%',
+                  pl: 2,
+                  pt: 2,
+                  // display: 'none',
+                }}>
+                <Flex
+                  sx={{
+                    bg: 'neutral.100',
+                    // position: 'absolute',
+                    top: 0,
+                    right: 1,
+                    left: 1,
+                    zIndex: 9000,
+                  }}>
+                  <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
+                    <Field
+                      name="title"
+                      label=""
+                      placeholder="Document Name"
+                      register={register}
+                      defaultValue={pageTitle}
+                    />
+                  </Box>
+                  <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
+                    <Button
+                      variant="btnSecondary"
+                      type="submit"
+                      sx={{ fontWeight: 600 }}>
+                      Save
+                    </Button>
+                  </Box>
+                </Flex>
+              </Box>
+
+              {body && (
+                <Box
+                  sx={{
+                    p: 0,
+                    position: 'relative',
+                    lineHeight: 1.5,
+                    py: 3,
+                    fontFamily: 'body',
+                    '.remirror-editor-wrapper ': {
+                      pl: '2rem',
+                      pr: '2rem',
+                    },
+                  }}>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    sx={{ display: 'none' }}
+                    onClick={() => setShowDev(!showDev)}>
+                    Dev
+                  </Button>
+                  <Box
+                    sx={{
+                      mt: 0,
+                      px: 4,
+                      pb: 6,
+                      '.remirror-theme .ProseMirror': {
+                        pl: '9rem !important',
+                        pr: '9rem !important',
+                        pt: '7rem !important',
+                        boxShadow: '#eee 0px 0px 0px 1px',
+                        ':focus': {
+                          boxShadow: '#ddd 0px 0px 0px 1px',
+                        },
+                      },
+                    }}>
+                    <Editor
+                      defaultValue={body}
+                      editable
+                      onUpdate={doUpdate}
+                      tokens={[]}
+                      insertable={trigger}
+                      ref={editorRef}
+                      onceInserted={onceInserted}
+                    />
+                  </Box>
+                </Box>
+              )}
+              <Box sx={{ display: 'none' }}>
+                <Field
+                  name="state"
+                  label="state"
+                  defaultValue=""
+                  register={register}
+                />
+
+                {id && (
+                  <Box>
+                    <Label>Edit </Label>
+                    <Input
+                      id="edit"
+                      defaultValue={id}
+                      {...register('edit', { required: true })}
+                    />
+                  </Box>
+                )}
+                <Field
+                  name="ttype"
+                  label="Content Type"
+                  defaultValue={cId || id}
+                  register={register}
+                />
+              </Box>
             </Box>
 
             <Box
+              variant="plateRightBar"
               sx={{
-                // position: 'relative',
                 bg: 'neutral.100',
-                borderBottom: 'solid 1px',
-                borderBottomColor: 'neutral.200',
-                p: 4,
-                display: showTitleEdit ? 'block' : 'none',
-                flexGrow: 1,
-                width: '100%',
-                pl: 2,
-                pt: 2,
-                // display: 'none',
+                ml: 0,
+                width: '30%',
+                borderLeft: 'solid 1px',
+                borderColor: 'border',
+                pt: 3,
               }}>
-              <Flex
-                sx={{
-                  bg: 'neutral.100',
-                  // position: 'absolute',
-                  top: 0,
-                  right: 1,
-                  left: 1,
-                  zIndex: 9000,
-                }}>
-                <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
-                  <Field
-                    name="title"
-                    label=""
-                    placeholder="Document Name"
-                    register={register}
-                    defaultValue={pageTitle}
-                  />
-                </Box>
-                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
-                  <Button
-                    variant="btnSecondary"
-                    type="submit"
-                    sx={{ fontWeight: 600 }}>
-                    Save
-                  </Button>
-                </Box>
-              </Flex>
-            </Box>
-
-            {body && (
-              <Box
-                sx={{
-                  p: 0,
-                  position: 'relative',
-                  lineHeight: 1.5,
-                  py: 3,
-                  fontFamily: 'body',
-                  '.remirror-editor-wrapper ': {
-                    pl: '2rem',
-                    pr: '2rem',
-                  },
-                }}>
-                <Button
-                  variant="secondary"
-                  type="button"
-                  sx={{ display: 'none' }}
-                  onClick={() => setShowDev(!showDev)}>
-                  Dev
-                </Button>
-                <Box
-                  sx={{
-                    mt: 0,
-                    px: 4,
-                    pb: 6,
-                    '.remirror-theme .ProseMirror': {
-                      pl: '9rem !important',
-                      pr: '9rem !important',
-                      pt: '7rem !important',
-                      boxShadow: '#eee 0px 0px 0px 1px',
-                      ':focus': {
-                        boxShadow: '#ddd 0px 0px 0px 1px',
-                      },
-                    },
-                  }}>
-                  <Editor
-                    defaultValue={body}
-                    editable
-                    onUpdate={doUpdate}
-                    tokens={[]}
-                    insertable={trigger}
-                    onceInserted={onceInserted}
-                  />
-                </Box>
+              <Box sx={{ px: 0 }}>
+                {contents && <ContentSidebar content={contents} />}
               </Box>
-            )}
-            <Box sx={{ display: 'none' }}>
-              <Field
-                name="state"
-                label="state"
-                defaultValue=""
-                register={register}
-              />
 
-              {cid && (
-                <Box>
-                  <Label>Edit </Label>
-                  <Input
-                    id="edit"
-                    defaultValue={cid}
-                    {...register('edit', { required: true })}
-                  />
-                </Box>
-              )}
-              <Field
-                name="ttype"
-                label="Content Type"
-                defaultValue={cId || cid}
-                register={register}
-              />
-            </Box>
-          </Box>
-
-          <Box
-            variant="plateRightBar"
-            sx={{
-              bg: 'neutral.100',
-              ml: 0,
-              width: '30%',
-              borderLeft: 'solid 1px',
-              borderColor: 'border',
-              pt: 3,
-            }}>
-            <Box sx={{ px: 0 }}>
-              {contents && <ContentSidebar content={contents} />}
-            </Box>
-
-            <Box>
-              {activeFlow && (
-                <Flex
-                  sx={{
-                    bg: '#d9deda57',
-                    px: 3,
-                  }}>
-                  {activeFlow?.states.map((x: any) => (
-                    <FlowStateBlock
-                      key={x?.id}
-                      state={x?.state}
-                      order={x?.order}
-                      id={x?.id}
-                    />
-                  ))}
-                </Flex>
-              )}
-              <Box variant="layout.boxHeading" sx={{}}>
-                <Box sx={{ pt: 2, pb: 3 }}>
-                  <Flex sx={{ gap: 0 }}>
-                    <Button
-                      form="content-form"
-                      type="submit"
-                      variant="btnPrimary">
-                      <>
-                        {saving && <Spinner color="white" size={24} />}
-                        {!saving && (
-                          <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
-                            Save
-                          </Text>
-                        )}
-                      </>
-                    </Button>
+              <Box>
+                {activeFlow && (
+                  <Flex
+                    sx={{
+                      bg: '#d9deda57',
+                      px: 3,
+                    }}>
+                    {activeFlow?.states.map((x: any) => (
+                      <FlowStateBlock
+                        key={x?.id}
+                        state={x?.state}
+                        order={x?.order}
+                        id={x?.id}
+                      />
+                    ))}
                   </Flex>
+                )}
+                <Box variant="layout.boxHeading" sx={{}}>
+                  <Box sx={{ pt: 2, pb: 3 }}>
+                    <Flex sx={{ gap: 0 }}>
+                      <Button
+                        form="content-form"
+                        type="submit"
+                        variant="btnPrimary">
+                        <>
+                          {saving && <Spinner color="white" size={24} />}
+                          {!saving && (
+                            <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
+                              Save
+                            </Text>
+                          )}
+                        </>
+                      </Button>
+                    </Flex>
+                  </Box>
+                </Box>
+                <Box variant="layout.boxHeading">
+                  <Text as="h3" variant="sectionheading">
+                    Content
+                  </Text>
+                </Box>
+                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                  {selectedTemplate?.id && (
+                    <Box>
+                      <Text as="h6" variant="labelcaps">
+                        Template
+                      </Text>
+                      <Box sx={{ px: 0, py: 1 }}>
+                        <Flex
+                          sx={{
+                            pl: 3,
+                            pt: 2,
+                            pb: 2,
+                            background: '#FFFFFF',
+                            border: '1px solid #E9ECEF',
+                          }}>
+                          <Text
+                            as="h6"
+                            sx={{
+                              fontSize: 2,
+                              mb: 0,
+                              fontWeight: 600,
+                              letterSpacing: '0.2px',
+                            }}>
+                            {selectedTemplate?.title}
+                          </Text>
+                          <Text
+                            as="p"
+                            sx={{
+                              ml: 'auto',
+                              mr: 3,
+                              fontSize: 1,
+                              fontWeight: 600,
+                              pt: 0,
+                              color: 'gray.600',
+                            }}>
+                            {selectedTemplate?.content_type?.prefix}
+                          </Text>
+                        </Flex>
+                      </Box>
+                    </Box>
+                  )}
                 </Box>
               </Box>
-              <Box variant="layout.boxHeading">
-                <Text as="h3" variant="sectionheading">
-                  Content
-                </Text>
-              </Box>
-              <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
-                {selectedTemplate?.id && (
-                  <Box>
-                    <Text as="h6" variant="labelcaps">
-                      Template
-                    </Text>
-                    <Box sx={{ px: 0, py: 1 }}>
-                      <Flex
-                        sx={{
-                          pl: 3,
-                          pt: 2,
-                          pb: 2,
-                          background: '#FFFFFF',
-                          border: '1px solid #E9ECEF',
-                        }}>
-                        <Text
-                          as="h6"
-                          sx={{
-                            fontSize: 2,
-                            mb: 0,
-                            fontWeight: 600,
-                            letterSpacing: '0.2px',
-                          }}>
-                          {selectedTemplate?.title}
-                        </Text>
-                        <Text
-                          as="p"
-                          sx={{
-                            ml: 'auto',
-                            mr: 3,
-                            fontSize: 1,
-                            fontWeight: 600,
-                            pt: 0,
-                            color: 'gray.600',
-                          }}>
-                          {selectedTemplate?.content_type?.prefix}
-                        </Text>
-                      </Flex>
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            </Box>
-            <FieldForm
-              activeTemplate={activeTemplate}
-              setMaps={updateMaps}
-              fields={fieldMaps}
-              showForm={showForm}
-              setShowForm={makeInsert}
-              onSaved={onSaved}
-              onRefresh={onSaved}
-            />
-            <Box>
-              {/* <Box variant="layout.boxHeading">
+              <FieldForm
+                activeTemplate={activeTemplate}
+                setMaps={updateMaps}
+                fields={fieldMaps}
+                fieldValues={!edit && newContent?.contentFields}
+                showForm={showForm}
+                setShowForm={makeInsert}
+                onSaved={onSaved}
+                onRefresh={onSaved}
+              />
+              <Box>
+                {/* <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Flow
                 </Text>
               </Box> */}
 
-              {/* {activeFlow && (
+                {/* {activeFlow && (
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
@@ -807,11 +901,12 @@ const ContentForm = (props: IContentForm) => {
                   </Box>
                 </Box>
               )} */}
+              </Box>
             </Box>
-          </Box>
-        </Flex>
+          </Flex>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 export default ContentForm;

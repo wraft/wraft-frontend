@@ -17,8 +17,9 @@ const buttons = {
       borderColor: '#197231',
     },
     ':disabled': {
-      color: 'gray.900',
-      bg: 'neutral.300',
+      backgroundColor: '#E4E9EF',
+      borderColor: '#E4E9EF',
+      color: 'gray.200',
     },
   },
 

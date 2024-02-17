@@ -175,7 +175,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
         ml: 'auto',
       }}>
       <SendIcon width={24} />
-      <EditMenus id={content?.content.id} />
+      <EditMenus id={content?.content?.id} />
     </Flex>
   </Flex>
 );

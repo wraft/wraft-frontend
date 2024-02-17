@@ -3,9 +3,9 @@ import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 
-import { Field as FieldT, FieldInstance } from '../utils/types';
-import Field from './Field';
-import FieldDate from './FieldDate';
+import Field from 'components/Field';
+import FieldDate from 'components/FieldDate';
+import { Field as FieldT, FieldInstance } from 'utils/types';
 // import { constants } from 'buffer';
 
 export interface IFieldField {
@@ -17,7 +17,8 @@ export interface IFieldField {
 export interface IFieldType {
   name: string;
   value: string;
-  type: string;
+  type?: string;
+  id?: any;
 }
 
 interface FieldFormProps {
@@ -29,6 +30,7 @@ interface FieldFormProps {
   setShowForm?: any;
   showForm?: any;
   onRefresh: any;
+  fieldValues?: any;
 }
 
 const FieldForm = ({
@@ -38,72 +40,41 @@ const FieldForm = ({
   // onRefresh,
   // activeTemplate,
   setShowForm,
+  fieldValues,
   // templates,
   showForm,
 }: FieldFormProps) => {
-  const { register, handleSubmit, getValues } = useForm();
-  const [fieldMap, setFieldMap] = useState<Array<IFieldType>>();
+  const { register, handleSubmit } = useForm();
+  const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
-  // const [isReady, setIsReady] = useState<Boolean>(false);
 
-  /**
-   * Map form values to fields
-   * @param fields
-   */
-  const mapFields = (fields: any) => {
-    const vals = getValues();
-    const obj: any = [];
-    if (fields && fields.length > 0) {
-      fields.forEach(function (value: any) {
-        const name = vals[`${value.name}`];
-        const x: FieldInstance = { ...value, value: name };
-        obj.push(x);
-      });
-    }
-    return obj;
+  const mapFields = (
+    fields: any,
+    fieldValues: Record<string, any>,
+  ): FieldInstance[] => {
+    return fields.map((field: any) => ({
+      ...field,
+      value: fieldValues[field.name] || '',
+    }));
   };
 
-  const getInits = (field_maps: any) => {
-    const initials: IFieldField[] = [];
-    field_maps &&
-      field_maps.forEach((i: any) => {
-        const item: IFieldField = {
-          name: i.name,
-          value: i.value,
-          id: i?.field_type?.id,
-        };
-        initials.push(item);
-      });
-    return initials;
-  };
-
-  /**
-   * Form Submit
-   * @param _data
-   */
-  const onSubmit = () => {
+  const onSubmit = (data: Record<string, any>) => {
     setSubmitting(true);
-    const f: any = mapFields(fields);
 
-    console.log('🌿🎃🎃🌿 Submitted [1]', f);
+    const mappedFields = mapFields(fields, data);
+    setMappedFields(mappedFields);
+    onSaved(mappedFields);
 
-    setFieldMap(f);
-    const simpleFieldMap = getInits(f);
-    // console.log('🐴🐴 Submitted [2]', simpleFieldMap);
-
-    onSaved(simpleFieldMap);
     closeModal();
   };
 
   useEffect(() => {
-    // console.log('🐴  fields [3.0]', fields)
-  }, [fields]);
-
-  useEffect(() => {
-    if (fieldMap && fieldMap[0] && fieldMap[0]?.value) {
-      console.log('🐴🐴  fields [4.0]', fieldMap);
+    if (fields) {
+      const mappedFields = mapFields(fields, fieldValues);
+      onSaved(mappedFields);
+      setMappedFields(mappedFields);
     }
-  }, [fieldMap]);
+  }, [fields]);
 
   function closeModal() {
     setShowForm(false);
@@ -134,8 +105,8 @@ const FieldForm = ({
           border: 'solid 1px',
           borderColor: 'border',
         }}>
-        {fieldMap &&
-          fieldMap.map((x: any) => (
+        {mappedFields &&
+          mappedFields.map((x: any) => (
             <Flex
               key={x.id}
               sx={{

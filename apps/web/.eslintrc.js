@@ -61,13 +61,23 @@ module.exports = {
                 position: "before",
               },
               {
-                "pattern": "@wraft-ui/**",
-                "group": "external",
+                pattern: "@wraft-ui/**",
+                group: "external",
               },
               {
-                "pattern": "{components,utils,store}/**",
-                "group": "internal",
-                "position": "after"
+                pattern: "components/**",
+                group: "internal",
+                position: "after"
+              },
+              {
+                pattern: "utils/**",
+                group: "internal",
+                position: "after"
+              },
+              {
+                pattern: "store/**",
+                group: "internal",
+                position: "after"
               }
             ],
             "pathGroupsExcludedImportTypes": ["builtin"],

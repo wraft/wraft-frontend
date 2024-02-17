@@ -1,16 +1,17 @@
-// import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import { Button } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
+// import { steps } from 'framer-motion';
 
-import contentStore from '../../../store/content.store';
-import { fetchAPI } from '../../../utils/models';
-import { Field as FieldT } from '../../../utils/types';
-import Field from '../../Field';
-import FieldDate from '../../FieldDate';
+import Field from 'components/Field';
+import FieldDate from 'components/FieldDate';
+import { fetchAPI } from 'utils/models';
+import { Field as FieldT } from 'utils/types';
+import contentStore from 'store/content.store';
 
 export interface ILayout {
   width: number;
@@ -44,6 +45,7 @@ const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [fields, setField] = useState([]);
+  const [formStep, setFormStep] = useState(0);
 
   // const router = useRouter();
 
@@ -60,8 +62,8 @@ const CreateDocument = () => {
   });
 
   const template = watch('template');
-  const lor = contentStore((state: any) => state.variant);
-  const setUser = contentStore((state: any) => state.setUser);
+  console.log('template', template);
+  const setNewContent = contentStore((state) => state.addNewContent);
 
   useEffect(() => {
     const uuid = uuidv4();
@@ -71,11 +73,11 @@ const CreateDocument = () => {
 
   useEffect(() => {
     // const { tid, cid } = template;
-    if (template?.tid) {
-      resetField('content');
-      getFields(template?.cid);
+    if (template?.id) {
+      resetField('contentFields');
+      getFields(template?.content_type.id);
     }
-  }, [template?.tid]);
+  }, [template?.id]);
 
   const loadData = () => {
     fetchAPI(`data_templates`)
@@ -89,11 +91,20 @@ const CreateDocument = () => {
       });
   };
 
+  const goTo = () => {
+    // setFormStep(step);
+  };
+
   const onSubmit = (data: any) => {
-    console.log('data', data);
-    setUser(data);
-    Router.push(`/new?template=${data.id}`);
-    console.log('data[lor]', lor);
+    if (formStep === 0) {
+      setFormStep(1);
+    }
+    if (formStep === 1) {
+      console.log('data', data);
+      setNewContent(data);
+      Router.push(`/new`);
+      console.log('data[lor]', data);
+    }
   };
 
   const getFields = (cid: string) => {
@@ -114,70 +125,95 @@ const CreateDocument = () => {
   return (
     <Box bg="gray.0">
       <Box>{loading && <></>}</Box>
+      <StepsIndicator
+        titles={['Choose a template', 'Add content']}
+        formStep={formStep}
+        goTo={goTo}
+      />
       <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ p: 0, borderTop: 'solid 1px', borderColor: 'border' }}>
+        <Box
+          sx={{
+            p: '32px',
+            borderTop: 'solid 1px',
+            borderColor: 'border',
+            height: 'calc(100vh - 180px)',
+          }}>
           <Box
             variant="caps"
             sx={{
-              // fontSize: 0,
-              bg: 'gray.200',
-              py: 1,
-              pl: 3,
+              fontSize: 0,
+              py: 2,
               color: 'text',
-              width: '100%',
-              borderBottom: 'solid 1px',
-              borderColor: 'border',
             }}>
             <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
               Select a template
             </Text>
           </Box>
-          {contents && (
-            <Controller
-              control={control}
-              defaultValue=""
-              name="template"
-              // rules={{ required: true }}
-              render={({ field: { onChange } }) => (
-                <>
-                  {contents.map((x: any) => (
-                    <Box key={x.id}>
-                      <BlockItem {...x} onChange={onChange} />
+          {formStep === 0 && (
+            <>
+              {contents && (
+                <Controller
+                  control={control}
+                  defaultValue=""
+                  name="template"
+                  // rules={{ required: true }}
+                  render={({ field: { onChange, value } }) => (
+                    <>
+                      {contents.map((x: any) => (
+                        <BlockItem
+                          key={x.id}
+                          template={x}
+                          selected={value}
+                          onChange={onChange}
+                        />
+                      ))}
+                    </>
+                  )}
+                />
+              )}
+            </>
+          )}
+          {formStep === 1 && (
+            <>
+              {fields && fields.length > 0 && (
+                <Box sx={{ pt: 4 }}>
+                  {fields.map((f: FieldT) => (
+                    <Box key={f.id} sx={{ pb: 2 }}>
+                      {f.field_type.name === 'date' && (
+                        <FieldDate
+                          name={`contentFields[${f.name}]`}
+                          label={f.name}
+                          register={register}
+                          sub="Date"
+                          onChange={() => console.log('x')}
+                        />
+                      )}
+
+                      {f.field_type.name !== 'date' && (
+                        <Field
+                          name={`contentFields[${f.name}]`}
+                          label={f.name}
+                          defaultValue=""
+                          register={register}
+                        />
+                      )}
                     </Box>
                   ))}
-                </>
-              )}
-            />
-          )}
-
-          {fields && fields.length > 0 && (
-            <Box sx={{ pt: 4 }}>
-              {fields.map((f: FieldT) => (
-                <Box key={f.id} sx={{ pb: 2 }}>
-                  {f.field_type.name === 'date' && (
-                    <FieldDate
-                      name={`content[${f.name}]`}
-                      label={f.name}
-                      register={register}
-                      sub="Date"
-                      onChange={() => console.log('x')}
-                    />
-                  )}
-
-                  {f.field_type.name !== 'date' && (
-                    <Field
-                      name={`content[${f.name}]`}
-                      label={f.name}
-                      defaultValue=""
-                      register={register}
-                    />
-                  )}
                 </Box>
-              ))}
-            </Box>
+              )}
+            </>
           )}
         </Box>
-        <Button onClick={handleSubmit(onSubmit)}>Next</Button>
+        <Flex px="32px" sx={{ gap: 2 }}>
+          <Button
+            disabled={formStep === 0}
+            onClick={() => setFormStep((pre) => pre - 1)}>
+            Previous
+          </Button>
+          <Button onClick={handleSubmit(onSubmit)}>
+            {formStep === 1 ? 'create' : 'Next'}
+          </Button>
+        </Flex>
       </Box>
     </Box>
   );
@@ -190,26 +226,29 @@ interface BlockItemProps {
   color: string;
   prefix: string;
   id: string;
-  onChange: any;
 }
 
-export const BlockItem = ({
-  id,
-  title,
-  content_type,
-  onChange,
-}: BlockItemProps) => {
+export const BlockItem = ({ template, onChange, selected }: any) => {
+  const { id, title, content_type }: BlockItemProps = template;
+
   return (
     // <Link href={`/new?template=${id}&cid=${content_type.id}`}>
     <Flex
-      onClick={() => onChange({ tid: id, cid: content_type.id })}
+      onClick={() => onChange(template)}
       sx={{
         px: 3,
         py: 2,
-        borderBottom: 'solid 1px',
-        bg: 'neutral.100',
+        border: 'solid 1px',
+        borderBottom: 'none',
         borderColor: 'border',
         cursor: 'pointer',
+        bg: selected.id === id && 'neutral.200',
+
+        '&:last-child': {
+          borderBottom: 'solid 1px',
+          borderColor: 'border',
+        },
+
         '&:hover': { bg: 'neutral.200' },
       }}>
       <Box
