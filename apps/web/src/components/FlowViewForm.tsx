@@ -9,6 +9,7 @@ import { fetchAPI } from '../utils/models';
 
 import Field from './Field';
 import FlowForm from './FlowForm';
+import PersonCapsule from './PersonCapsule';
 
 export interface States {
   total_pages: number;
@@ -89,6 +90,16 @@ const FlowViewForm = () => {
     }
   }, [cId]);
 
+  const users = [
+    { name: 'Lara', src: 'https://i.pravatar.cc/300?img=1' },
+    { name: 'Cenny', src: 'https://i.pravatar.cc/300?img=2' },
+    { name: 'Rex', src: 'https://i.pravatar.cc/300?img=3' },
+    { name: 'Harry', src: 'https://i.pravatar.cc/300?img=4' },
+    { name: 'Lucy', src: 'https://i.pravatar.cc/300?img=5' },
+    { name: 'Potter', src: 'https://i.pravatar.cc/300?img=6' },
+    { name: 'Jonh', src: 'https://i.pravatar.cc/300?img=7' },
+  ];
+
   return (
     <>
       <Box sx={{ px: 4, pb: 3, backgroundColor: 'white', width: '556px' }}>
@@ -105,46 +116,63 @@ const FlowViewForm = () => {
             </Box>
             <Box pt={4}>
               <Label>Flow states</Label>
-              <Box
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'border',
-                  borderRadius: '4px',
-                }}>
-                {states &&
-                  states.map((item: any, index: number) => {
+              {states && (
+                <Box
+                  sx={{
+                    border: '1px solid',
+                    borderColor: 'border',
+                    borderRadius: '4px',
+                  }}>
+                  {states.map((item: any, index: number) => {
                     return (
-                      <Flex
+                      <Box
                         key={index}
+                        p={3}
                         sx={{
-                          alignItems: 'center',
-                          p: 3,
                           borderBottom:
                             index === states.length - 1 ? 'none' : '1px solid',
                           borderColor: 'border',
                         }}>
-                        <Box
+                        <Flex
                           sx={{
-                            width: '18px',
-                            height: '18px',
-                            display: 'flex',
-                            justifyContent: 'center',
                             alignItems: 'center',
-                            bg: 'neutral.200',
-                            borderRadius: '50%',
-                            flexShrink: 0,
                           }}>
-                          <Text as="p" variant="capM" sx={{ color: 'text' }}>
-                            {item.order}
-                          </Text>
-                        </Box>
-                        <Text sx={{ ml: 2 }} variant="pM">
-                          {item.state}
-                        </Text>
-                      </Flex>
+                          <Flex>
+                            <Box
+                              sx={{
+                                width: '18px',
+                                height: '18px',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                bg: 'neutral.200',
+                                borderRadius: '50%',
+                                flexShrink: 0,
+                              }}>
+                              <Text
+                                as="p"
+                                variant="capM"
+                                sx={{ color: 'text' }}>
+                                {item.order}
+                              </Text>
+                            </Box>
+                            <Text sx={{ ml: 2 }} variant="pM">
+                              {item.state}
+                            </Text>
+                          </Flex>
+                        </Flex>
+                        {users && (
+                          <Flex sx={{ flexWrap: 'wrap', gap: 2, mt: '18px' }}>
+                            {users.map((user: any, index: number) => (
+                              <PersonCapsule person={user} key={index} />
+                            ))}
+                          </Flex>
+                        )}
+                      </Box>
                     );
                   })}
-              </Box>
+                </Box>
+              )}
               <Button
                 variant="buttonSecondary"
                 mt={4}
