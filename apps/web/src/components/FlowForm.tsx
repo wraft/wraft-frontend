@@ -120,20 +120,10 @@ const StatesForm = ({
   onAttachApproval,
   onSorted,
 }: StateFormProps) => {
-  // const [showModal, setShowModal] = useState<boolean>(false);
-  // const [showApproval, setShowApproval] = useState<boolean>(false);
-
   const [state, setState] = useState<ItemType[]>([]);
-  console.log(state);
-
-  // const toggleModal = () => {
-  //   setShowModal(!showModal);
-  // };
-
-  // const changeForm = (data: any) => {
-  //   console.log('ch', data);
-  //   // onAttachApproval(data);
-  // };
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
 
   const onDeleteFlow = (_id: any) => {
     onDelete(_id);
@@ -433,10 +423,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                     py: '8px',
                     px: '16px',
                   }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setAddState(true);
-                  }}>
+                  type="submit">
                   Save
                 </Button>
               </Flex>
