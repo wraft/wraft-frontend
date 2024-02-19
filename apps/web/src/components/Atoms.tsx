@@ -25,7 +25,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
 
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
-      ? format(local_time, 'MMMM dd, yyyy')
+      ? format(local_time, 'MMM dd, yyyy')
       : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
