@@ -116,17 +116,13 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
           <Button
             variant="text"
             onClick={() => {
-              // setIsEdit(row.index);
               Router.push(`/manage/flows/${row.original?.flow?.id}`);
             }}>
             <Box>
               <Box>{row.original?.flow?.name}</Box>
             </Box>
             <Drawer open={false} setOpen={() => {}}>
-              <FlowForm
-                setOpen={() => {}}
-                // cId={row.original.id}
-              />
+              <FlowForm setOpen={() => {}} />
             </Drawer>
           </Button>
         );
