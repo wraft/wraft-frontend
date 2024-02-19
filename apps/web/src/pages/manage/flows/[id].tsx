@@ -3,7 +3,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Container, Flex } from 'theme-ui';
 
-import FlowForm from '../../../components/FlowForm';
+import FlowViewForm from '../../../components/FlowViewForm';
 import ManageSidebar from '../../../components/ManageSidebar';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
@@ -20,7 +20,7 @@ const Index: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowForm />
+            <FlowViewForm />
           </Flex>
         </Container>
       </Page>
