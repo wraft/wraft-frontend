@@ -27,7 +27,7 @@ const PersonCapsule = ({ person, close }: Props) => {
         </Text>
       </Flex>
       {close && (
-        <Button ml={2} variant="base">
+        <Button ml={2} variant="base" onClick={close}>
           <CloseIcon />
         </Button>
       )}
