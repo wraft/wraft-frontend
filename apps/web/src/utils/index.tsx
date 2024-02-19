@@ -356,7 +356,7 @@ export const workspaceLinks: menuLinksProps[] = [
   },
   {
     name: 'Members',
-    path: '/manage/workspace/team',
+    path: '/manage/workspace/members',
   },
 
   {

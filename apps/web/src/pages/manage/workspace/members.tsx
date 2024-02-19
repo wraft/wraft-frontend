@@ -47,7 +47,7 @@ const Index: FC = () => {
             </Button>
           </PageHeader>
           <Drawer open={isOpen} setOpen={setIsOpen}>
-            <InviteTeam setOpen={setIsOpen} />
+            {isOpen && <InviteTeam setOpen={setIsOpen} />}
           </Drawer>
           <Container variant="layout.pageFrame">
             <Flex>

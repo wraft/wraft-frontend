@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 
-import { formatDistanceStrict } from 'date-fns';
+import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
 
 import MenuItem from './NavLink';
@@ -20,7 +20,13 @@ export const TimeAgo = (props: TimeAgoProps) => {
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
   );
   const now = new Date();
-  const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
+
+  const timeDifferenceInMs = now.getTime() - local_time.getTime();
+
+  const timed =
+    timeDifferenceInMs > 24 * 60 * 60 * 1000
+      ? format(local_time, 'MMMM dd, yyyy')
+      : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return <Text variant="subM">{timed}</Text>;
 };
