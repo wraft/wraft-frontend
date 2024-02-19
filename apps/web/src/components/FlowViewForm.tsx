@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import { Drawer } from '@wraft-ui/Drawer';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Box, Container, Label } from 'theme-ui';
+import { Box, Button, Container, Flex, Label, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 
 import Field from './Field';
+import FlowForm from './FlowForm';
 
 export interface States {
   total_pages: number;
@@ -57,26 +59,13 @@ export interface StateFormProps {
 
 const FlowViewForm = () => {
   const { register, setValue } = useForm();
-  // const [edit, setEdit] = useState<boolean>(false);
-  // const [content, setContent] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
   const [states, setStates] = useState<any>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
-
-  // /**
-  //  * Load all states for a particular Flow
-  //  * @param id flow id
-  //  * @param t  token
-  //  */
-  // const loadStates = (id: string) => {
-  //   fetchAPI(`flows/${id}/states`).then((data: any) => {
-  //     const res: States = data;
-  //     setContent(res.states);
-  //   });
-  // };
 
   /**
    * Load all states for a particular Flow
@@ -96,39 +85,83 @@ const FlowViewForm = () => {
 
   useEffect(() => {
     if (cId && cId.length > 0) {
-      // setEdit(true);
-      // loadStates(cId);
       loadFlow(cId);
     }
   }, [cId]);
 
   return (
-    <Box sx={{ px: 4, pb: 3, backgroundColor: 'white', width: '556px' }}>
-      <Container data-flow={flow?.id}>
-        <Box as="form">
-          <Box sx={{ pt: 4, width: '100%' }}>
-            <Field
-              name="name"
-              label="Name"
-              defaultValue=""
-              register={register}
-            />
+    <>
+      <Box sx={{ px: 4, pb: 3, backgroundColor: 'white', width: '556px' }}>
+        <Container data-flow={flow?.id}>
+          <Box as="form">
+            <Box sx={{ pt: 4, width: '100%' }}>
+              <Field
+                name="name"
+                label="Name"
+                defaultValue=""
+                register={register}
+                view
+              />
+            </Box>
+            <Box pt={4}>
+              <Label>Flow states</Label>
+              <Box
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'border',
+                  borderRadius: '4px',
+                }}>
+                {states &&
+                  states.map((item: any, index: number) => {
+                    return (
+                      <Flex
+                        key={index}
+                        sx={{
+                          alignItems: 'center',
+                          p: 3,
+                          borderBottom:
+                            index === states.length - 1 ? 'none' : '1px solid',
+                          borderColor: 'border',
+                        }}>
+                        <Box
+                          sx={{
+                            width: '18px',
+                            height: '18px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            bg: 'neutral.200',
+                            borderRadius: '50%',
+                            flexShrink: 0,
+                          }}>
+                          <Text as="p" variant="capM" sx={{ color: 'text' }}>
+                            {item.order}
+                          </Text>
+                        </Box>
+                        <Text sx={{ ml: 2 }} variant="pM">
+                          {item.state}
+                        </Text>
+                      </Flex>
+                    );
+                  })}
+              </Box>
+              <Button
+                variant="buttonSecondary"
+                mt={4}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(true);
+                }}>
+                Edit
+              </Button>
+            </Box>
           </Box>
-          <Box pt={4}>
-            <Label>Flow states</Label>
-            {states &&
-              states.map((item: any, index: number) => {
-                return <Box key={index}>{item.state}</Box>;
-              })}
-          </Box>
-
-          {/* {edit &&
-            content?.map((item: any, index: number) => (
-              <Box key={index}>{item}</Box>
-            ))} */}
-        </Box>
-      </Container>
-    </Box>
+        </Container>
+      </Box>
+      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+        <FlowForm />
+      </Drawer>
+    </>
   );
 };
 export default FlowViewForm;
