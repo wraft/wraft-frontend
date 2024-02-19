@@ -1,16 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
 
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { EllipsisHIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
-import { Box, Spinner } from 'theme-ui';
+import { Box, Flex, Spinner, Text, useThemeUI } from 'theme-ui';
 
 import { deleteAPI, fetchAPI } from '../utils/models';
 
 import { TimeAgo } from './Atoms';
-import { Button, Table } from './common';
+import { Button, ConfirmDelete, Table } from './common';
 import FlowForm from './FlowForm';
-import { OptionsIcon } from './Icons';
+import Modal from './Modal';
 import Paginate, { IPageMeta } from './Paginate';
 
 export interface ILayout {
@@ -62,12 +64,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(1);
-  // const [flows, setFlows] = useState<Array<any>>([]);
   const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [deleteFlow, setDeleteFlow] = useState<number | null>(null);
 
-  useEffect(() => {
-    console.log('❤️‍🔥......contents', contents);
-  }, [contents]);
+  const { theme } = useThemeUI();
+
   const loadData = (page: number) => {
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`flows${pageNo}`)
@@ -91,12 +92,24 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
     loadData(page);
   }, [page, rerender]);
 
+  const onDelete = (index: number) => {
+    setIsOpen(null);
+    deleteAPI(`flows/${contents[index].flow.id}`).then(() => {
+      setRerender((prev: boolean) => !prev);
+      toast.success('Deleted a flow', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
+  };
+
   const columns = [
     {
       id: 'content.name',
       header: 'Name',
       accessorKey: 'content.name',
       enableSorting: false,
+      size: 250,
       cell: ({ row }: any) => {
         console.log('roooooooooooooooo', row);
         return (
@@ -139,58 +152,78 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       enableSorting: false,
       cell: ({ row }: any) => {
         return (
-          <>
-            <Box
-              sx={{ cursor: 'pointer', position: 'relative' }}
-              onClick={() => {
-                setIsOpen(row.index);
-              }}
-              onMouseLeave={() => setIsOpen(null)}>
-              <OptionsIcon />
-              {isOpen === row.index ? (
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Box />
+            <MenuProvider>
+              <MenuButton
+                as={Box}
+                variant="none"
+                sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box
                   sx={{
-                    position: 'absolute',
-                    bg: 'backgroundWhite',
-                    right: 0,
-                    top: 0,
-                    zIndex: 10,
-                    border: '1px solid',
-                    borderColor: 'border',
-                    width: '155px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    margin: '0px',
+                    padding: '0px',
+                    bg: 'transparent',
+                    ':disabled': {
+                      display: 'none',
+                    },
+                  }}
+                  onClick={() => {
+                    setIsOpen(row.index);
                   }}>
-                  <Button
-                    variant="text"
-                    onClick={async () => {
-                      setIsOpen(null);
-                      await deleteAPI(`flows/${contents[row.index].flow.id}`);
-                      setTimeout(() => {
-                        setRerender((prev: boolean) => !prev);
-                        toast.success('Deleted a flow', {
-                          duration: 1000,
-                          position: 'top-right',
-                        });
-                      }, 1000);
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      width: '100%',
-                      background: 'white',
-                      color: 'red.600',
-                      padding: 3,
-                      // ':disabled': {
-                      //   color: 'gray.300',
-                      // },
-                    }}>
-                    Delete
-                  </Button>
+                  <EllipsisHIcon
+                    color={
+                      (theme.colors &&
+                        theme.colors.gray &&
+                        theme.colors.gray[200]) ||
+                      'black'
+                    }
+                  />
                 </Box>
-              ) : (
-                <Box />
-              )}
-            </Box>
-          </>
+              </MenuButton>
+              <Menu
+                as={Box}
+                variant="layout.menu"
+                open={isOpen == row.index}
+                onClose={() => setIsOpen(null)}>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setIsOpen(null);
+                    setDeleteFlow(row.index);
+                  }}>
+                  <MenuItem as={Box} px={3} py={2}>
+                    <Text
+                      variant="pR"
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'red.600',
+                      }}>
+                      Delete
+                    </Text>
+                  </MenuItem>
+                </Button>
+              </Menu>
+              <Modal
+                isOpen={deleteFlow === row.index}
+                onClose={() => setDeleteFlow(null)}>
+                {
+                  <ConfirmDelete
+                    title="Delete Flow"
+                    text={`Are you sure you want to delete ‘${row.original.flow.name}’?`}
+                    setOpen={setDeleteFlow}
+                    onConfirmDelete={async () => {
+                      onDelete(row.index);
+                    }}
+                  />
+                }
+              </Modal>
+            </MenuProvider>
+          </Flex>
         );
       },
     },
