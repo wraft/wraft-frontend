@@ -8,9 +8,9 @@ import { postAPI, fetchAPI } from '../utils/models';
 import Field from './Field';
 interface ApprovalFormBaseProps {
   states?: Array<any>;
-  isOpen?: boolean;
+  // isOpen?: boolean;
   closeModal?: any;
-  dialog?: any;
+  // dialog?: any;
   parent?: string;
 }
 
@@ -32,21 +32,21 @@ export interface User {
 
 const ApprovalFormBase = ({
   states,
-  dialog,
+  // dialog,
   parent,
+  closeModal,
 }: ApprovalFormBaseProps) => {
   const { register, control, handleSubmit, setValue } = useForm();
   const [users, setUsers] = useState<any>();
   const [user, setUser] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
 
-  // const { accessToken } = useAuth();
-
   /**
    * Submit Form
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
+    console.log('submitted');
     postAPI('approval_systems', data);
   };
 
@@ -81,9 +81,7 @@ const ApprovalFormBase = ({
       {showSearch && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
-        // name="flow_id"
         defaultValue={parent}
-        // ref={register({ required: true })}
         {...register('flow_id', { required: true })}
       />
       <Field
@@ -160,9 +158,7 @@ const ApprovalFormBase = ({
       <Box sx={{ p: 2 }}>
         <Label>Search</Label>
         <Input
-          // name="approver_id"
           defaultValue={''}
-          // ref={register({ required: true })}
           {...register('approver_id', { required: true })}
           onChange={onChangeInput}
         />
@@ -188,11 +184,20 @@ const ApprovalFormBase = ({
           ))}
       </Box>
       <Flex>
-        <Button type="submit" mt={3}>
+        <Button
+          type="submit"
+          mt={3}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSubmit(onSubmit);
+          }}>
           Save
         </Button>
         <Button
-          onClick={() => dialog.hide}
+          onClick={(e) => {
+            e.preventDefault();
+            closeModal();
+          }}
           variant="btnSecondary"
           type="submit"
           mt={3}>
