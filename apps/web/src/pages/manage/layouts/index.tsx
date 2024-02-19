@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
@@ -20,7 +21,13 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Manage Layouts" desc="Document Layouts">
+        <PageHeader
+          title="Layouts"
+          desc={
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
+            />
+          }>
           <Button
             variant="btnSecondary"
             sx={{ fontSize: 1 }}

@@ -1,9 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { AxiosRequestConfig, AxiosError } from 'axios';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { produce } from 'immer';
 import cookie from 'js-cookie';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ContentState } from './types';
 import { Layout, User, Style, FlowBranch } from '../components/Icons';
 
@@ -388,7 +390,7 @@ export const workspaceLinks: menuLinksProps[] = [
   },
   {
     name: 'Members',
-    path: '/manage/workspace/team',
+    path: '/manage/workspace/members',
   },
 
   {

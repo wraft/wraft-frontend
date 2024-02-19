@@ -1,23 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import Dropzone from '@wraft-ui/Dropzone';
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { Box, Button, Label, Select, Text } from 'theme-ui';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Box, Button, Text } from 'theme-ui';
 
 import { postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
+import FontList from './FontList';
 
 interface AssetFormProps {
   onUpload?: any;
   filetype?: 'layout' | 'theme';
-  pdfPreview?: string | undefined;
+  assets?: Asset[];
   setPdfPreview?: any;
   setDeleteAssets?: any;
 }
-
-type FormProps = {
-  filetype: 'layout' | 'theme';
-};
 
 type FormValues = {
   file: FileList;
@@ -27,13 +23,13 @@ type FormValues = {
 const AssetForm = ({
   onUpload,
   filetype = 'layout',
-  pdfPreview,
-  setPdfPreview,
+  assets,
   setDeleteAssets,
 }: AssetFormProps) => {
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [filesList, setFilesList] = useState<any>();
 
   const methods = useForm<FormValues>({ mode: 'onBlur' });
 
@@ -47,49 +43,65 @@ const AssetForm = ({
     onUpload(mData);
   };
 
+  useEffect(() => console.log('.....filesList', filesList), [filesList]);
+
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
-    console.log('file: 🔥', data);
 
     if (!data.file || data.file === undefined || data.file.length < 1) {
       return;
     }
+    const files = Array.from(data.file);
 
-    const formData = new FormData();
-    formData.append('file', data.file[0]);
-    formData.append(
-      'name',
-      data.file[0].name.substring(0, data.file[0].name.lastIndexOf('.')),
-    );
-    formData.append('type', filetype);
+    const updatedFiles = files.map((f: any) => ({
+      ...f,
+      name: f.name,
+      progress: null,
+      success: null,
+    }));
+    setFilesList(updatedFiles);
+    files.map((f: any, index: number) => {
+      const formData = new FormData();
+      formData.append('file', f);
+      formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
+      formData.append('type', filetype);
 
-    const assetsRequest = postAPI(`assets`, formData, (progress) => {
-      setUploadProgress(progress);
-    });
-
-    toast.promise(assetsRequest, {
-      loading: 'Loading...',
-      success: (data) => {
-        onAssetUploaded(data);
-        setUploadProgress(0);
-        return `Successfully created ${filetype == 'theme' ? 'font' : 'field'}`;
-      },
-      error: (error) => {
-        setUploadProgress(0);
-        console.log(error);
-        setFileError(
-          error.errors.file[0] || error.message || 'There is an error',
-        );
-        return `Failed to create ${filetype == 'theme' ? 'font' : 'field'}`;
-      },
+      postAPI(`assets`, formData, (progress) => {
+        setUploadProgress(progress);
+        setFilesList((prev: any) => [
+          ...prev.slice(0, index),
+          { ...prev[index], progress: progress },
+          ...prev.slice(index + 1),
+        ]);
+      })
+        .then((res) => {
+          onAssetUploaded(res);
+          setUploadProgress(0);
+          setFilesList((prev: any) => [
+            ...prev.slice(0, index),
+            { ...prev[index], success: true, progress: null },
+            ...prev.slice(index + 1),
+          ]);
+        })
+        .catch((error: any) => {
+          setUploadProgress(0);
+          console.log(error);
+          setFileError(
+            error.errors.file[0] || error.message || 'There is an error',
+          );
+          setFilesList((prev: any) => [
+            ...prev.slice(0, index),
+            { ...prev[index], success: false, progress: null },
+            ...prev.slice(index + 1),
+          ]);
+        });
     });
   };
 
   return (
     <FormProvider {...methods}>
       <Box as="form" onSubmit={methods.handleSubmit(onSubmit)} mt={4}>
-        <Box mx={-2} mb={3}>
-          <Form filetype={filetype} />
+        <Box mb={3}>
           <Dropzone
             accept={
               filetype === 'layout'
@@ -106,10 +118,11 @@ const AssetForm = ({
                     }
             }
             progress={uploadProgress}
-            pdfPreview={pdfPreview}
-            setPdfPreview={setPdfPreview}
+            assets={assets}
             setIsSubmit={setIsSubmit}
             setDeleteAssets={setDeleteAssets}
+            multiple={filetype === 'theme'}
+            noChange={filetype === 'theme'}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
@@ -126,45 +139,10 @@ const AssetForm = ({
             </Box>
           )}
         </Box>
+        {filetype === 'theme' && <FontList assets={filesList} />}
         <Button type="submit" sx={{ display: 'none' }} />
       </Box>
     </FormProvider>
   );
 };
 export default AssetForm;
-
-const Form = ({ filetype }: FormProps) => {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<FormValues>();
-  return (
-    <Box>
-      {filetype === 'theme' && (
-        <Box>
-          <Label htmlFor="name" mb={1}>
-            Font Weight
-          </Label>
-          <Select
-            id="flow_id"
-            defaultValue=""
-            {...register('name', { required: true })}>
-            <option value="Regular" key="regular">
-              Regular
-            </option>
-            <option value="Italic" key="italic">
-              Italic
-            </option>
-            <option value="Bold" key="bold">
-              Bold
-            </option>
-          </Select>
-          {errors.name && errors.name.message && (
-            <Text variant="error">{errors.name.message} </Text>
-          )}
-        </Box>
-      )}
-      {errors.file && <Text variant="error">{errors.file.message}</Text>}
-    </Box>
-  );
-};

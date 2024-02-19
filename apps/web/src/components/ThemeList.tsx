@@ -1,10 +1,13 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { EllipsisHIcon, FontIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Box, Text } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
+import { Button, ConfirmDelete, Table } from './common';
+import Modal from './Modal';
 import Link from './NavLink';
-// import { Button } from 'theme-ui';
 
 export interface Theme {
   total_pages: number;
@@ -22,84 +25,227 @@ export interface ThemeElement {
   file: null;
 }
 
-const ItemField = (props: any) => {
-  return (
-    <Box
-      variant="boxy"
-      key={props.id}
-      p={3}
-      sx={{
-        position: 'relative',
-        borderBottom: 'solid 1px',
-        borderBottomColor: 'gray.100',
-        borderRadius: '3px',
-        ':hover': {
-          '.merry': {
-            display: 'block',
-          },
-        },
-      }}>
-      <Box sx={{ width: '33ch', mb: 1 }}>
-        <Link href={`/manage/themes/edit/${props.id}`}>
-          <Text as="h4" sx={{ mb: 0, p: 0, pb: 0 }}>
-            {props.name}
-          </Text>
-        </Link>
-      </Box>
-      <Box
-        className="merry"
-        sx={{
-          display: 'none',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          mt: 3,
-          mr: 3,
-        }}>
-        {/* <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
-          Delete
-        </Button> */}
-      </Box>
-    </Box>
-  );
+type Props = {
+  rerender: any;
+  setRerender: (e: any) => void;
 };
 
-const Form: FC = () => {
+const Form = ({ rerender, setRerender }: Props) => {
+  const { theme } = useThemeUI();
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
 
   const loadData = () => {
-    fetchAPI('themes?sort=inserted_at_desc')
-      .then((data: any) => {
-        const res: ThemeElement[] = data.themes;
-        setContents(res);
-      })
-      .catch();
+    const getRequest = fetchAPI('themes?sort=inserted_at_desc');
+    toast.promise(
+      getRequest,
+      {
+        loading: 'Loading...',
+        success: (data: any) => {
+          const res: ThemeElement[] = data.themes;
+          console.log('theme', res);
+          setContents(res);
+          return 'Successfully loaded theme';
+        },
+        error: 'Failed to load theme',
+      },
+      {
+        duration: 1000,
+      },
+    );
   };
 
   const onDelete = (id: string) => {
-    deleteAPI(`themes/${id}`).then(() => {
-      toast.success('Deleted Theme', {
+    const deleteRequest = deleteAPI(`themes/${id}`);
+    toast.promise(
+      deleteRequest,
+      {
+        loading: 'Loading...',
+        success: () => {
+          setRerender((prev: boolean) => !prev);
+          setDeleteTheme(null);
+          return 'Successfully deleted theme';
+        },
+        error: 'Failed to delete theme',
+      },
+      {
         duration: 1000,
-        position: 'top-right',
-      });
-    });
+      },
+    );
   };
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [rerender]);
+
+  const columns = [
+    {
+      id: 'content.name',
+      header: 'NAME',
+      accessorKey: 'content.name',
+      cell: ({ row }: any) => (
+        <Box key={row.index}>
+          <Link href={`/manage/themes/${row.original.id}`}>
+            <Text as="p" variant="pM">
+              {row.original.name}
+            </Text>
+          </Link>
+        </Box>
+      ),
+      size: 200,
+      enableSorting: false,
+    },
+    {
+      id: 'content.font',
+      header: 'FONT',
+      accessorKey: 'content.font',
+      cell: ({ row }: any) => (
+        <Flex key={row.index} sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              bg: 'neutral.200',
+              height: '14px',
+              width: '14px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '2px',
+            }}>
+            <FontIcon height={12} width={12} viewBox="0 0 24 24" />
+          </Box>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+            {row.original.font}
+          </Text>
+        </Flex>
+      ),
+      size: 180,
+      enableSorting: false,
+    },
+    {
+      id: 'content.color',
+      header: 'COLOR',
+      accessorKey: 'content.color',
+      cell: ({ row }: any) => (
+        <Flex key={row.index} sx={{ alignItems: 'center', gap: 1 }}>
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.primary_color}`,
+            }}
+          />
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.secondary_color}`,
+            }}
+          />
+          <Box
+            sx={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              bg: `${row.original.body_color}`,
+            }}
+          />
+        </Flex>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.id',
+      header: '',
+      accessor: 'content.id',
+      cell: ({ row }: any) => {
+        return (
+          <Flex>
+            <Box />
+
+            <Box ml={'auto'}>
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
+                    }}
+                    onClick={() => {
+                      setIsOpen(row.index);
+                    }}>
+                    <EllipsisHIcon
+                      color={
+                        (theme.colors &&
+                          theme.colors.gray &&
+                          theme.colors.gray[200]) ||
+                        'black'
+                      }
+                    />
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  open={isOpen == row.index}
+                  onClose={() => setIsOpen(null)}>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteTheme(row.index);
+                    }}>
+                    <MenuItem as={Box} px={3} py={2}>
+                      <Text
+                        variant="pR"
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'red.600',
+                        }}>
+                        Delete
+                      </Text>
+                    </MenuItem>
+                  </Button>
+                </Menu>
+                <Modal
+                  isOpen={deleteTheme === row.index}
+                  onClose={() => setDeleteTheme(null)}>
+                  {
+                    <ConfirmDelete
+                      title="Delete Theme"
+                      text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                      setOpen={setDeleteTheme}
+                      onConfirmDelete={async () => {
+                        onDelete(row.original.id);
+                      }}
+                    />
+                  }
+                </Modal>
+              </MenuProvider>
+            </Box>
+          </Flex>
+        );
+      },
+      size: 10,
+    },
+  ];
 
   return (
-    <Box py={3} mt={0}>
-      <Box mx={0} mb={3}>
-        <Box>
-          {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => (
-              <ItemField key={m.id} {...m} onDelete={onDelete} />
-            ))}
-        </Box>
-      </Box>
+    <Box>
+      <Table data={contents} columns={columns} />
     </Box>
   );
 };

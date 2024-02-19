@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-import { ChromePicker } from 'react-color';
-import { Text, Box, Label, Input, Flex } from 'theme-ui';
+import { Chrome } from '@uiw/react-color/src/index';
+import { InkIcon } from '@wraft/icon';
+import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
 
 interface FieldColorProps {
   register: any;
   label: string;
   name: string;
   defaultValue: string;
-  mr?: number;
   placeholder?: string;
   sub?: string;
   required?: boolean;
   ftype?: string;
   onChangeColor?: any;
+  variant?: 'inside' | 'outside';
+  border?: string;
+  disable?: boolean;
 }
 
 /**
@@ -23,16 +26,18 @@ interface FieldColorProps {
  */
 
 const FieldColor: React.FC<FieldColorProps> = ({
+  disable,
   name,
   label,
   placeholder,
   register,
   defaultValue,
-  mr,
   sub,
   ftype = 'text',
   onChangeColor,
   required = true,
+  variant = 'outside',
+  border,
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
 
@@ -59,45 +64,104 @@ const FieldColor: React.FC<FieldColorProps> = ({
   };
 
   useEffect(() => {
-    const vX: string = defaultValue || '';
+    const vX: string = defaultValue || '#000000';
     setVal(vX);
   }, [defaultValue]);
 
+  const isInside = variant === 'inside';
+
   return (
     <PopoverProvider>
-      <Box pb={2} mr={mr} sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative' }}>
         <Box sx={{ ml: 0 }}>
           {sub && (
             <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
           )}
-          <Label htmlFor="description" sx={{ color: 'text', pb: 1 }}>
-            {label}
-          </Label>
+          {!isInside && <Label htmlFor="description">{label}</Label>}
           <Flex sx={{ position: 'relative' }}>
+            {isInside && (
+              <Text
+                as={'p'}
+                variant="pR"
+                sx={{
+                  position: 'absolute',
+                  left: 3,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                }}>
+                {label}
+              </Text>
+            )}
             <Input
               placeholder={placeholder ? placeholder : ''}
               id={name}
-              // name={name}
               type={ftype}
               defaultValue={valx || defaultValue || ''}
-              sx={{ pl: '40px' }}
-              // ref={register({ required: required })}
+              sx={{
+                pl: '40px',
+                pr: '80px',
+                variant: 'texts.subR',
+                textTransform: 'uppercase',
+                color: 'gray.900',
+                textAlign: `${isInside ? 'right' : 'left'}`,
+                border: border,
+              }}
               {...register(name, { required: required })}
               onChange={(e) => {
                 handleHexInputChange(e);
-                // changeColor(e.target.value);
               }}
+              disabled={disable}
             />
-            <Box sx={{ pt: 0 }}>
-              <Box as={PopoverDisclosure} sx={{ bg: 'transparent', border: 0 }}>
-                <Box id="colorBox" bg={valx} variant="layout.squareButton" />
-              </Box>
-              <Popover aria-label="Edit color">
-                <ChromePicker
-                  color={valx}
-                  disableAlpha
-                  onChangeComplete={(e: any) => changeColor(e)}
+            <Box sx={{ width: 0, bg: 'transparent' }}>
+              <PopoverDisclosure
+                aria-disabled={disable}
+                as={Box}
+                sx={{ bg: 'transparent', border: 'none' }}>
+                <Box
+                  id="colorBox"
+                  bg={valx}
+                  sx={{
+                    width: '18px',
+                    height: '18px',
+                    border: 'solid 1px',
+                    borderColor: 'border',
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    [isInside ? 'right' : 'left']:
+                      `${isInside ? '50px' : '16px'}`,
+                    padding: '5px',
+                    borderRadius: '99px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
                 />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    right: '12px',
+                    borderRadius: '4px',
+                    display: 'flex',
+                    cursor: 'pointer',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <InkIcon
+                    width={18}
+                    height={18}
+                    viewBox="0 0 24 24"
+                    color={
+                      useThemeUI().theme?.colors?.gray?.[disable ? 200 : 600]
+                    }
+                  />
+                </Box>
+              </PopoverDisclosure>
+              <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
+                <Box>
+                  <Chrome color={valx} onChange={(e: any) => changeColor(e)} />
+                </Box>
               </Popover>
             </Box>
           </Flex>

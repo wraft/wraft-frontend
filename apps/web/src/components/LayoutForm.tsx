@@ -77,6 +77,7 @@ interface Props {
   setOpen: any;
   setRerender?: any;
   cId?: string;
+  step?: number;
 }
 
 type FormValues = {
@@ -114,7 +115,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
+const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const {
     register,
     control,
@@ -126,16 +127,9 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
-  const [pdfPreview, setPdfPreview] = useState<string | undefined>(undefined);
-  const [formStep, setFormStep] = useState(0);
+  const [formStep, setFormStep] = useState(step);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [isDeleteAssets, setDeleteAssets] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (assets && assets.length > 0) {
-      setPdfPreview(assets[assets.length - 1].file);
-    }
-  }, [assets]);
 
   useEffect(() => {
     deleteAllAsset();
@@ -223,18 +217,15 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
         loading: 'Loading...',
         success: () => {
           setAssets([]);
-          setPdfPreview(undefined);
           return `Successfully deleted all assets`;
         },
         error: () => {
           setAssets([]);
-          setPdfPreview(undefined);
           return `Failed to delete all assets`;
         },
       });
     }
     setAssets([]);
-    setPdfPreview(undefined);
   };
 
   function next() {
@@ -350,8 +341,7 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                 <Box>
                   <AssetForm
                     onUpload={addUploads}
-                    pdfPreview={pdfPreview}
-                    setPdfPreview={setPdfPreview}
+                    assets={assets}
                     setDeleteAssets={setDeleteAssets}
                   />
                 </Box>
@@ -539,4 +529,4 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
     </Flex>
   );
 };
-export default Form;
+export default LayoutForm;

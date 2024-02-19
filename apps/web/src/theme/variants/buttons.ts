@@ -21,6 +21,15 @@ const buttons: Theme['buttons'] = {
     color: 'text',
     bg: 'neutral.200',
   },
+  buttonSmall: {
+    variant: 'buttons.buttonPrimary, text.subM',
+    color: 'text',
+    bg: 'white',
+    py: 1,
+    border: '1px solid',
+    borderColor: 'border',
+    cursor: 'pointer',
+  },
   buttonPrimarySmall: {
     variant: 'buttons.buttonPrimary',
     fontSize: 2,
