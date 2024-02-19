@@ -111,7 +111,6 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       enableSorting: false,
       size: 250,
       cell: ({ row }: any) => {
-        console.log('roooooooooooooooo', row);
         return (
           <Button
             variant="text"
@@ -148,78 +147,80 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       enableSorting: false,
       cell: ({ row }: any) => {
         return (
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Box />
-            <MenuProvider>
-              <MenuButton
-                as={Box}
-                variant="none"
-                sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    margin: '0px',
-                    padding: '0px',
-                    bg: 'transparent',
-                    ':disabled': {
-                      display: 'none',
-                    },
-                  }}
-                  onClick={() => {
-                    setIsOpen(row.index);
-                  }}>
-                  <EllipsisHIcon
-                    color={
-                      (theme.colors &&
-                        theme.colors.gray &&
-                        theme.colors.gray[200]) ||
-                      'black'
-                    }
-                  />
-                </Box>
-              </MenuButton>
-              <Menu
-                as={Box}
-                variant="layout.menu"
-                open={isOpen == row.index}
-                onClose={() => setIsOpen(null)}>
-                <Button
-                  variant="text"
-                  onClick={() => {
-                    setIsOpen(null);
-                    setDeleteFlow(row.index);
-                  }}>
-                  <MenuItem as={Box} px={3} py={2}>
-                    <Text
-                      variant="pR"
-                      sx={{
-                        cursor: 'pointer',
-                        color: 'red.600',
-                      }}>
-                      Delete
-                    </Text>
-                  </MenuItem>
-                </Button>
-              </Menu>
-              <Modal
-                isOpen={deleteFlow === row.index}
-                onClose={() => setDeleteFlow(null)}>
-                {
-                  <ConfirmDelete
-                    title="Delete Flow"
-                    text={`Are you sure you want to delete ‘${row.original.flow.name}’?`}
-                    setOpen={setDeleteFlow}
-                    onConfirmDelete={async () => {
-                      onDelete(row.index);
+          <>
+            <Flex sx={{ justifyContent: 'space-between' }}>
+              <Box />
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
                     }}
-                  />
-                }
-              </Modal>
-            </MenuProvider>
-          </Flex>
+                    onClick={() => {
+                      setIsOpen(row.index);
+                    }}>
+                    <EllipsisHIcon
+                      color={
+                        (theme.colors &&
+                          theme.colors.gray &&
+                          theme.colors.gray[200]) ||
+                        'black'
+                      }
+                    />
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  open={isOpen == row.index}
+                  onClose={() => setIsOpen(null)}>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteFlow(row.index);
+                    }}>
+                    <MenuItem as={Box} px={3} py={2}>
+                      <Text
+                        variant="pR"
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'red.600',
+                        }}>
+                        Delete
+                      </Text>
+                    </MenuItem>
+                  </Button>
+                </Menu>
+              </MenuProvider>
+            </Flex>
+            <Modal
+              isOpen={deleteFlow === row.index}
+              onClose={() => setDeleteFlow(null)}>
+              {
+                <ConfirmDelete
+                  title="Delete Flow"
+                  text={`Are you sure you want to delete ‘${row.original.flow.name}’?`}
+                  setOpen={setDeleteFlow}
+                  onConfirmDelete={async () => {
+                    onDelete(row.index);
+                  }}
+                />
+              }
+            </Modal>
+          </>
         );
       },
     },
@@ -227,24 +228,22 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box mx={0} sx={{ width: '100%' }}>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
+      {!loading && (
+        <Box>
+          <Spinner width={40} height={40} color="primary" />
+        </Box>
+      )}
 
-        <Box sx={{ width: '100%' }}>
-          <Box mx={0} mb={3} sx={{ width: '100%' }}>
-            {contents && <Table data={contents} columns={columns} />}
-          </Box>
-          <Box mx={2}>
-            <Paginate
-              changePage={changePage}
-              {...pageMeta}
-              info={`${page} of ${total} pages`}
-            />
-          </Box>
+      <Box sx={{ width: '100%' }}>
+        <Box mx={0} mb={3} sx={{ width: '100%' }}>
+          {contents && <Table data={contents} columns={columns} />}
+        </Box>
+        <Box mx={2}>
+          <Paginate
+            changePage={changePage}
+            {...pageMeta}
+            info={`${page} of ${total} pages`}
+          />
         </Box>
       </Box>
     </Box>
