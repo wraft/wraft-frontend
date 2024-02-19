@@ -385,7 +385,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Modal isOpen={approval} onClose={() => setAddState(false)}>
                 <ApprovalFormBase
                   closeModal={() => setApproval(false)}
-                  isOpen={approval}
                   states={content}
                   parent={cId}
                 />
@@ -434,7 +433,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                     py: '8px',
                     px: '16px',
                   }}
-                  onClick={() => setAddState(true)}>
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setAddState(true);
+                  }}>
                   Save
                 </Button>
               </Flex>
