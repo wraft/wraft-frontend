@@ -22,19 +22,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
   const now = new Date();
   const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
 
-  return (
-    <Text
-      pl={0}
-      sx={{
-        fontSize: '12px',
-        fontWeight: 500,
-        '.hov': { opacity: 0 },
-        ':hover': { '.hov': { opacity: 1 } },
-      }}
-      color="gray.6">
-      {timed}
-    </Text>
-  );
+  return <Text variant="subM">{timed}</Text>;
 };
 
 /**
