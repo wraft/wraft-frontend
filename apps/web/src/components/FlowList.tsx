@@ -106,7 +106,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const columns = [
     {
       id: 'content.name',
-      header: 'Name',
+      header: 'NAME',
       accessorKey: 'content.name',
       enableSorting: false,
       size: 250,
@@ -130,7 +130,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
     },
     {
       id: 'content.updated_at',
-      header: 'Updated',
+      header: 'LAST UPDATED',
       accessorKey: 'content.updated_at',
       enableSorting: false,
       cell: ({ row }: any) => {
