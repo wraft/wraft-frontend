@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
-import { Flex, Container, Button } from 'theme-ui';
+import { Flex, Container, Button, Box } from 'theme-ui';
 
 import FlowForm from '../../../components/FlowForm';
 import FlowList from '../../../components/FlowList';
@@ -43,7 +43,9 @@ const Index: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowList rerender={rerender} setRerender={setRerender} />
+            <Box variant="layout.contentFrame">
+              <FlowList rerender={rerender} setRerender={setRerender} />
+            </Box>
           </Flex>
         </Container>
       </Page>
