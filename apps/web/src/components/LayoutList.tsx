@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Router from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
-import { Box, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 import { Button, ConfirmDelete, Table } from './common';
@@ -91,7 +92,8 @@ const LayoutList = ({ rerender }: Props) => {
         <Button
           variant="text"
           onClick={() => {
-            setIsEdit(row.index);
+            // setIsEdit(row.index);
+            Router.push(`/manage/layouts/${row.original.id}`);
           }}>
           <Box>
             <Box>{row.original?.name}</Box>
@@ -101,7 +103,6 @@ const LayoutList = ({ rerender }: Props) => {
           </Drawer>
         </Button>
       ),
-      size: 700,
       enableSorting: false,
     },
     {
@@ -110,70 +111,72 @@ const LayoutList = ({ rerender }: Props) => {
       accessor: 'content.id',
       cell: ({ row }: any) => {
         return (
-          <Box>
-            <MenuProvider>
-              <MenuButton
-                as={Box}
-                variant="none"
-                sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    position: 'relative',
-                    cursor: 'pointer',
-                    margin: '0px',
-                    padding: '0px',
-                    bg: 'transparent',
-                    ':disabled': {
-                      display: 'none',
-                    },
-                  }}
-                  onClick={() => {
-                    setIsOpen(row.index);
-                  }}>
-                  <OptionsIcon />
-                </Box>
-              </MenuButton>
-              <Menu
-                as={Box}
-                variant="layout.menu"
-                open={isOpen == row.index}
-                onClose={() => setIsOpen(null)}>
-                <MenuItem>
-                  <Button
-                    variant="text"
-                    onClick={() => {
-                      setIsOpen(null);
-                      setDeleteLayout(row.index);
-                    }}>
-                    <Text
-                      variant=""
-                      sx={{ cursor: 'pointer', color: 'red.600' }}>
-                      Delete
-                    </Text>
-                  </Button>
-                </MenuItem>
-              </Menu>
-              <Modal
-                isOpen={deleteLayout === row.index}
-                onClose={() => setDeleteLayout(null)}>
-                {
-                  <ConfirmDelete
-                    title="Delete Layout"
-                    text={`Are you sure you want to delete ‘${row.original.name}’?`}
-                    setOpen={setDeleteLayout}
-                    onConfirmDelete={async () => {
-                      onDelete(row.original.id);
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Box />
+            <Box>
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
                     }}
-                  />
-                }
-              </Modal>
-            </MenuProvider>
-          </Box>
+                    onClick={() => {
+                      setIsOpen(row.index);
+                    }}>
+                    <OptionsIcon />
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  open={isOpen == row.index}
+                  onClose={() => setIsOpen(null)}>
+                  <MenuItem>
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        setIsOpen(null);
+                        setDeleteLayout(row.index);
+                      }}>
+                      <Text
+                        variant=""
+                        sx={{ cursor: 'pointer', color: 'red.600' }}>
+                        Delete
+                      </Text>
+                    </Button>
+                  </MenuItem>
+                </Menu>
+                <Modal
+                  isOpen={deleteLayout === row.index}
+                  onClose={() => setDeleteLayout(null)}>
+                  {
+                    <ConfirmDelete
+                      title="Delete Layout"
+                      text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                      setOpen={setDeleteLayout}
+                      onConfirmDelete={async () => {
+                        onDelete(row.original.id);
+                      }}
+                    />
+                  }
+                </Modal>
+              </MenuProvider>
+            </Box>
+          </Flex>
         );
       },
-      size: 50,
     },
   ];
 
