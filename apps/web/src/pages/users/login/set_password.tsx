@@ -47,7 +47,7 @@ const Index = () => {
       const setPasswordRequest = postAPI('users/set_password', {
         token: token,
         password: data.newPassword,
-        confirmPassword: data.confirmPassword,
+        confirm_password: data.confirmPassword,
       });
 
       toast.promise(setPasswordRequest, {
