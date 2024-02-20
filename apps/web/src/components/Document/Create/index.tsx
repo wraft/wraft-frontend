@@ -9,6 +9,7 @@ import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 
 import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
+import { capitalizeFirst } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
 import contentStore from 'store/content.store';
@@ -102,7 +103,7 @@ const CreateDocument = () => {
     if (formStep === 1) {
       console.log('data', data);
       setNewContent(data);
-      Router.push(`/new`);
+      Router.push(`/content/new`);
       console.log('data[lor]', data);
     }
   };
@@ -138,19 +139,20 @@ const CreateDocument = () => {
             borderColor: 'border',
             height: 'calc(100vh - 180px)',
           }}>
-          <Box
-            variant="caps"
-            sx={{
-              fontSize: 0,
-              py: 2,
-              color: 'text',
-            }}>
-            <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
-              Select a template
-            </Text>
-          </Box>
           {formStep === 0 && (
             <>
+              <Box
+                variant="caps"
+                sx={{
+                  fontSize: 0,
+                  py: 2,
+                  color: 'text',
+                }}>
+                <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
+                  Select a template
+                </Text>
+              </Box>
+
               {contents && (
                 <Controller
                   control={control}
@@ -182,7 +184,7 @@ const CreateDocument = () => {
                       {f.field_type.name === 'date' && (
                         <FieldDate
                           name={`contentFields[${f.name}]`}
-                          label={f.name}
+                          label={capitalizeFirst(f.name)}
                           register={register}
                           sub="Date"
                           onChange={() => console.log('x')}
@@ -192,7 +194,7 @@ const CreateDocument = () => {
                       {f.field_type.name !== 'date' && (
                         <Field
                           name={`contentFields[${f.name}]`}
-                          label={f.name}
+                          label={capitalizeFirst(f.name)}
                           defaultValue=""
                           register={register}
                         />
@@ -211,7 +213,7 @@ const CreateDocument = () => {
             Previous
           </Button>
           <Button onClick={handleSubmit(onSubmit)}>
-            {formStep === 1 ? 'create' : 'Next'}
+            {formStep === 1 ? 'Create' : 'Next'}
           </Button>
         </Flex>
       </Box>

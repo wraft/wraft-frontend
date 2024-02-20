@@ -37,7 +37,7 @@ export const passwordPattern = z
 
 export const emailPattern = z
   .string()
-  .min(1, { message: 'This field has to be filled.' })
+  .min(1, { message: 'Please enter a valid email address.' })
   .email('This is not a valid email.');
 
 export const addFieldIssue = (field: string, ctx: z.RefinementCtx) => {

@@ -149,10 +149,7 @@ const FieldForm = ({
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          // py={2}
-          sx={{ p: 4, bg: 'backgroundWhite' }}
-          // mt={2}
-        >
+          sx={{ p: 4, bg: 'backgroundWhite' }}>
           <Text sx={{ fontSize: 2 }}>Add Content</Text>
           {fields && fields.length > 0 && (
             <Box sx={{ pt: 4 }}>

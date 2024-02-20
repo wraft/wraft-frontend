@@ -320,6 +320,10 @@ export const modalStyle3 = {
   },
 };
 
+export const capitalizeFirst = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
 export const isNumeric = (str: any) => {
   if (typeof str != 'string') return false; // we only process strings!
   return (

@@ -1,6 +1,6 @@
 import React from 'react';
 // import Head from 'next/head';
-import { Box, Flex } from 'theme-ui';
+import { Flex } from 'theme-ui';
 // import Container from './Container';
 // import { Close } from 'theme-ui';
 
@@ -32,20 +32,7 @@ IPage) => {
           flexDirection: 'column',
           minHeight: '100%',
         }}>
-        <Flex
-          sx={{
-            flex: 1,
-            flexDirection: ['column', 'row'],
-          }}>
-          <Box
-            sx={{
-              flex: 1,
-              // bg: 'gray.200',
-              minWidth: 0,
-            }}>
-            {children}
-          </Box>
-        </Flex>
+        {children}
       </Flex>
     </>
   );

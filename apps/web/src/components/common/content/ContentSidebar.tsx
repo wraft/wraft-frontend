@@ -32,8 +32,6 @@ export const FlowStateBlock = ({
     <Flex
       as={Focusable}
       sx={{
-        pb: 2,
-        mr: 1,
         ':last-child': {
           svg: {
             display: 'none',
@@ -132,8 +130,8 @@ interface ContentSidebarProps {
 }
 
 const ContentSidebar = ({ content }: ContentSidebarProps) => (
-  <Flex sx={{ px: 3 }}>
-    <Flex sx={{ mb: 3, width: '70%' }}>
+  <Flex sx={{ px: 3, py: 3 }}>
+    <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
         <Text as="h6" variant="labelcaps">
           {content.content_type?.layout?.name} / {content.content_type?.name}
