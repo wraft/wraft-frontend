@@ -70,6 +70,7 @@ export const coreBorders = {
 
 const theme: Theme & CustomVariantGroups = {
   // printColorModeName: 'wraft',
+  breakpoints: ['30em', '48em', '80em'],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: `${inter.style.fontFamily}, sans-serif`,

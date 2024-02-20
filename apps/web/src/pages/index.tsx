@@ -12,7 +12,7 @@ import UserNav from '../components/UserNav';
 import { useAuth } from '../contexts/AuthContext';
 import { postAPI } from '../utils/models';
 
-const UserHome = dynamic(() => import('../components/UserHome'), {
+const UserHome = dynamic(() => import('../components/LandingBlock'), {
   ssr: false,
 });
 

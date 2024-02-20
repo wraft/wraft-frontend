@@ -384,14 +384,7 @@ importers:
         version: 20.11.16
       '@types/react':
         specifier: ^18.2.46
-<<<<<<< HEAD
         version: 18.2.51
-      '@types/react-color':
-        specifier: ^3.0.11
-        version: 3.0.11
-=======
-        version: 18.2.48
->>>>>>> 81c6dd5115eb7e58451da7a1c87daf1bbf7fd8ee
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.2.18
@@ -7680,12 +7673,8 @@ packages:
   /@types/reactcss@1.2.11:
     resolution: {integrity: sha512-0fFy0ubuPlhksId8r9V8nsLcxBAPQnn15g/ERAElgE9L6rOquMj2CapsxqfyBuHlkp0/ndEUVnkYI7MkTtkGpw==}
     dependencies:
-<<<<<<< HEAD
       '@types/react': 18.2.51
-=======
-      '@types/react': 18.2.48
     dev: false
->>>>>>> 81c6dd5115eb7e58451da7a1c87daf1bbf7fd8ee
 
   /@types/redux-mock-store@1.0.6:
     resolution: {integrity: sha512-eg5RDfhJTXuoJjOMyXiJbaDb1B8tfTaJixscmu+jOusj6adGC0Krntz09Tf4gJgXeCqCrM5bBMd+B7ez0izcAQ==}
