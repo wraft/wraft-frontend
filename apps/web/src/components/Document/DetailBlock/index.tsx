@@ -5,7 +5,7 @@ import Router, { useRouter } from 'next/router';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
+import { Box, Flex, Button, Text, Label, Input, Spinner, Grid } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
@@ -88,25 +88,6 @@ const ContentForm = (props: IContentForm) => {
       onInitNewContentCreate(newContent.template);
     }
   }, [newContent]);
-
-  // const routeChangeStart = (url: any) => {
-  //   if (
-  //     router.asPath !== url &&
-  //     unsavedChanges &&
-  //     !confirm('You have unsaved changes. Are you sure you want to leave?')
-  //   ) {
-  //     router.events.emit('routeChangeError');
-  //     throw 'Abort route change. Please ignore this error.';
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   router.events.on('routeChangeStart', routeChangeStart);
-
-  //   return () => {
-  //     router.events.off('routeChangeStart', routeChangeStart);
-  //   };
-  // }, []);
 
   const onInitNewContentCreate = (template: any) => {
     setSelectedTemplate(template);
@@ -233,7 +214,7 @@ const ContentForm = (props: IContentForm) => {
       ...obj,
       title: data.title,
       body: markdownContent,
-      serialized: json,
+      serialized: JSON.stringify(json),
     };
 
     const template = {
@@ -243,17 +224,20 @@ const ContentForm = (props: IContentForm) => {
     };
 
     console.log('onSubmit[1--3]', template);
+    console.log('onSubmit[1--4]', serials);
 
     // return;
 
     if (edit) {
       putAPI(`contents/${id}`, template).then((data: any) => {
+        setUnsavedChanges(false);
         onCreate(data);
         setSaving(false);
       });
     } else {
       postAPI(`content_types/${data.ttype}/contents`, template).then(
         (data: any) => {
+          setUnsavedChanges(false);
           if (data?.info) {
             toast.success('Build Failed', {
               duration: 1000,
@@ -282,6 +266,7 @@ const ContentForm = (props: IContentForm) => {
   const onLoadContent = (data: any) => {
     // set master contents
     setContents(data);
+    console.log('data[11]', data);
     // map loaded state to corresponding form value
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -367,8 +352,12 @@ const ContentForm = (props: IContentForm) => {
    */
   const updateFields = (f: any) => {
     setFieldMap(f);
-    updateTitle();
+    if (!edit) {
+      updateTitle();
+    }
   };
+
+  console.log('errors', errors);
 
   /**
    * When form errors appear
@@ -488,23 +477,15 @@ const ContentForm = (props: IContentForm) => {
    */
 
   const doUpdate = (state: any) => {
-    console.log('[trigger][doUpdate]', state);
-
-    const markdownContent = editorRef.current?.helpers?.getMarkdown();
-
-    const json = editorRef.current?.helpers?.getJSON();
-
-    if (state.md) {
-      setValue('body', markdownContent);
-    }
-
-    if (state.json) {
-      setValue('serialized', JSON.stringify(json));
-    }
+    // console.log('[trigger][doUpdate]', state);
+    // const markdownContent = editorRef.current?.helpers?.getMarkdown();
+    // const json = editorRef.current?.helpers?.getJSON();
+    // if (state.json) {
+    //   setValue('serialized', JSON.stringify(json));
+    // }
     // if (state.md) {
     //   setValue('body', state.md);
     // }
-
     // if (state.json) {
     //   setValue('serialized', JSON.stringify(state.json));
     // }
@@ -535,7 +516,10 @@ const ContentForm = (props: IContentForm) => {
     const actState = activeFlow?.states[0]?.id;
 
     setValue('state', actState);
-    setValue('title', m);
+    if (!edit) {
+      setValue('title', m);
+    }
+
     setTitle(m);
   };
 
@@ -575,299 +559,264 @@ const ContentForm = (props: IContentForm) => {
         onConfirmLeave={() => setUnsavedChanges(false)}
       />
 
-      <Box sx={{ p: 0 }}>
+      <Box sx={{ height: '100vh' }}>
         <NavEdit
           navtitle={pageTitle || title}
           onToggleEdit={() => toggleTitleEdit()}
         />
-        {/* <Button
-        onClick={
-          () => console.log('Check Json', editorRef.current.helpers?.getRemirrorJSON())
-          // console.log('Check Json', editorRef.current?.helpers?.getJSON())
-        }>
-        Check Json
-      </Button>
-      <Button
-        onClick={
-          () => console.log('Check Json', editorRef.current)
-          // console.log('Check Json', editorRef.current?.helpers?.getJSON())
-        }>
-        Check Json
-      </Button>
-      <Button
-        onClick={() =>
-          console.log('Check Json', editorRef.current?.helpers?.getJSON())
-        }>
-        Check all
-      </Button>
-      <Button
-        onClick={() =>
-          console.log('Check Json', editorRef.current?.helpers.getMarkdown())
-        }>
-        Check text
-      </Button> */}
-        <Box sx={{ p: 0 }}>
-          <Flex>
+
+        <Flex
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 380px',
+            height: 'calc(100% - 47px)',
+          }}>
+          <Box
+            as="form"
+            id="content-form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              // minWidth: '40%',
+              overflowX: 'scroll',
+              // maxWidth: '85ch',
+              m: 0,
+              bg: 'neutral.200',
+            }}>
             <Box
-              as="form"
-              id="content-form"
-              onSubmit={handleSubmit(onSubmit)}
               sx={{
-                minWidth: '70%',
-                maxWidth: '85ch',
-                m: 0,
-                bg: 'neutral.200',
+                // position: 'relative',
+                bg: 'neutral.100',
+                borderBottom: 'solid 1px',
+                borderBottomColor: 'neutral.200',
+                p: 4,
+                display: showTitleEdit ? 'block' : 'none',
+                flexGrow: 1,
+                width: '100%',
+                pl: 2,
+                pt: 2,
+                // display: 'none',
               }}>
-              <Box sx={{ display: showDev ? 'block' : 'none' }}>
-                <FieldText
-                  name="body"
-                  label="Body"
-                  // onChange={onChange}
-                  defaultValue={''}
-                  register={register}
-                />
-                <FieldText
-                  name="serialized"
-                  label="Serialized State"
-                  // onChange={onChange}
-                  defaultValue={''}
-                  register={register}
-                />
-              </Box>
-
-              <Box
+              <Flex
                 sx={{
-                  // position: 'relative',
                   bg: 'neutral.100',
-                  borderBottom: 'solid 1px',
-                  borderBottomColor: 'neutral.200',
-                  p: 4,
-                  display: showTitleEdit ? 'block' : 'none',
-                  flexGrow: 1,
-                  width: '100%',
-                  pl: 2,
-                  pt: 2,
-                  // display: 'none',
+                  // position: 'absolute',
+                  alignItems: 'center',
+                  top: 0,
+                  right: 1,
+                  left: 1,
+                  zIndex: 9000,
                 }}>
-                <Flex
-                  sx={{
-                    bg: 'neutral.100',
-                    // position: 'absolute',
-                    top: 0,
-                    right: 1,
-                    left: 1,
-                    zIndex: 9000,
-                  }}>
-                  <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
-                    <Field
-                      name="title"
-                      label=""
-                      placeholder="Document Name"
-                      register={register}
-                      defaultValue={pageTitle}
-                    />
-                  </Box>
-                  <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
-                    <Button
-                      variant="btnSecondary"
-                      type="submit"
-                      sx={{ fontWeight: 600 }}>
-                      Save
-                    </Button>
-                  </Box>
-                </Flex>
-              </Box>
-
-              {body && (
-                <Box
-                  sx={{
-                    p: 0,
-                    position: 'relative',
-                    lineHeight: 1.5,
-                    py: 3,
-                    fontFamily: 'body',
-                    '.remirror-editor-wrapper ': {
-                      pl: '2rem',
-                      pr: '2rem',
-                    },
-                  }}>
+                <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
+                  <Field
+                    name="title"
+                    label=""
+                    placeholder="Document Name"
+                    register={register}
+                    defaultValue={pageTitle}
+                  />
+                </Box>
+                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
                   <Button
                     variant="secondary"
-                    type="button"
-                    sx={{ display: 'none' }}
-                    onClick={() => setShowDev(!showDev)}>
-                    Dev
+                    type="submit"
+                    sx={{ fontWeight: 600 }}>
+                    Save
                   </Button>
-                  <Box
-                    sx={{
-                      mt: 0,
-                      px: 4,
-                      pb: 6,
-                      '.remirror-theme .ProseMirror': {
-                        pl: '9rem !important',
-                        pr: '9rem !important',
-                        pt: '7rem !important',
-                        boxShadow: '#eee 0px 0px 0px 1px',
-                        ':focus': {
-                          boxShadow: '#ddd 0px 0px 0px 1px',
-                        },
-                      },
-                    }}>
-                    <Editor
-                      defaultValue={body}
-                      editable
-                      onUpdate={doUpdate}
-                      tokens={[]}
-                      insertable={trigger}
-                      ref={editorRef}
-                      onceInserted={onceInserted}
-                    />
-                  </Box>
                 </Box>
-              )}
-              <Box sx={{ display: 'none' }}>
-                <Field
-                  name="state"
-                  label="state"
-                  defaultValue=""
-                  register={register}
-                />
-
-                {id && (
-                  <Box>
-                    <Label>Edit </Label>
-                    <Input
-                      id="edit"
-                      defaultValue={id}
-                      {...register('edit', { required: true })}
-                    />
-                  </Box>
-                )}
-                <Field
-                  name="ttype"
-                  label="Content Type"
-                  defaultValue={cId || id}
-                  register={register}
-                />
-              </Box>
+              </Flex>
             </Box>
 
-            <Box
-              variant="plateRightBar"
-              sx={{
-                bg: 'neutral.100',
-                ml: 0,
-                width: '30%',
-                borderLeft: 'solid 1px',
-                borderColor: 'border',
-                pt: 3,
-              }}>
-              <Box sx={{ px: 0 }}>
-                {contents && <ContentSidebar content={contents} />}
-              </Box>
-
-              <Box>
-                {activeFlow && (
-                  <Flex
-                    sx={{
-                      bg: '#d9deda57',
-                      px: 3,
-                    }}>
-                    {activeFlow?.states.map((x: any) => (
-                      <FlowStateBlock
-                        key={x?.id}
-                        state={x?.state}
-                        order={x?.order}
-                        id={x?.id}
-                      />
-                    ))}
-                  </Flex>
-                )}
-                <Box variant="layout.boxHeading" sx={{}}>
-                  <Box sx={{ pt: 2, pb: 3 }}>
-                    <Flex sx={{ gap: 0 }}>
-                      <Button
-                        form="content-form"
-                        type="submit"
-                        variant="btnPrimary">
-                        <>
-                          {saving && <Spinner color="white" size={24} />}
-                          {!saving && (
-                            <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
-                              Save
-                            </Text>
-                          )}
-                        </>
-                      </Button>
-                    </Flex>
-                  </Box>
-                </Box>
-                <Box variant="layout.boxHeading">
-                  <Text as="h3" variant="sectionheading">
-                    Content
-                  </Text>
-                </Box>
-                <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
-                  {selectedTemplate?.id && (
-                    <Box>
-                      <Text as="h6" variant="labelcaps">
-                        Template
-                      </Text>
-                      <Box sx={{ px: 0, py: 1 }}>
-                        <Flex
-                          sx={{
-                            pl: 3,
-                            pt: 2,
-                            pb: 2,
-                            background: '#FFFFFF',
-                            border: '1px solid #E9ECEF',
-                          }}>
-                          <Text
-                            as="h6"
-                            sx={{
-                              fontSize: 2,
-                              mb: 0,
-                              fontWeight: 600,
-                              letterSpacing: '0.2px',
-                            }}>
-                            {selectedTemplate?.title}
-                          </Text>
-                          <Text
-                            as="p"
-                            sx={{
-                              ml: 'auto',
-                              mr: 3,
-                              fontSize: 1,
-                              fontWeight: 600,
-                              pt: 0,
-                              color: 'gray.600',
-                            }}>
-                            {selectedTemplate?.content_type?.prefix}
-                          </Text>
-                        </Flex>
-                      </Box>
-                    </Box>
-                  )}
+            {body && (
+              <Box
+                sx={{
+                  p: 0,
+                  position: 'relative',
+                  lineHeight: 1.5,
+                  py: 3,
+                  maxWidth: '110ch',
+                  margin: '0 auto',
+                  fontFamily: 'body',
+                  '.remirror-editor-wrapper ': {
+                    pl: '2rem',
+                    pr: '2rem',
+                  },
+                }}>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  sx={{ display: 'none' }}
+                  onClick={() => setShowDev(!showDev)}>
+                  Dev
+                </Button>
+                <Box
+                  sx={{
+                    mt: 0,
+                    px: 4,
+                    pb: 6,
+                    '.remirror-theme .ProseMirror': {
+                      pl: '9rem !important',
+                      pr: '9rem !important',
+                      pt: '7rem !important',
+                      boxShadow: '#eee 0px 0px 0px 1px',
+                      ':focus': {
+                        boxShadow: '#ddd 0px 0px 0px 1px',
+                      },
+                    },
+                  }}>
+                  <Editor
+                    defaultValue={body}
+                    editable
+                    onUpdate={doUpdate}
+                    tokens={[]}
+                    insertable={trigger}
+                    ref={editorRef}
+                    onceInserted={onceInserted}
+                  />
                 </Box>
               </Box>
-              <FieldForm
-                activeTemplate={activeTemplate}
-                setMaps={updateMaps}
-                fields={fieldMaps}
-                fieldValues={!edit && newContent?.contentFields}
-                showForm={showForm}
-                setShowForm={makeInsert}
-                onSaved={onSaved}
-                onRefresh={onSaved}
+            )}
+            <Box sx={{ display: 'none' }}>
+              <Field
+                name="state"
+                label="state"
+                defaultValue=""
+                register={register}
               />
-              <Box>
-                {/* <Box variant="layout.boxHeading">
+
+              {id && (
+                <Box>
+                  <Label>Edit </Label>
+                  <Input
+                    id="edit"
+                    defaultValue={id}
+                    {...register('edit', { required: true })}
+                  />
+                </Box>
+              )}
+              <Field
+                name="ttype"
+                label="Content Type"
+                defaultValue={cId || id}
+                register={register}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            variant="plateRightBar"
+            sx={{
+              bg: 'neutral.100',
+              ml: 0,
+              borderLeft: 'solid 1px',
+              borderColor: 'border',
+            }}>
+            {contents && <ContentSidebar content={contents} />}
+
+            <Box>
+              {activeFlow && (
+                <Flex
+                  sx={{
+                    bg: '#d9deda57',
+                    px: 3,
+                    py: 1,
+                    gap: 2,
+                    alignContent: 'center',
+                  }}>
+                  {activeFlow?.states.map((x: any) => (
+                    <FlowStateBlock
+                      key={x?.id}
+                      state={x?.state}
+                      order={x?.order}
+                      id={x?.id}
+                    />
+                  ))}
+                </Flex>
+              )}
+              <Box variant="layout.boxHeading" sx={{}}>
+                <Box sx={{ pt: 2, pb: 3 }}>
+                  <Flex sx={{ gap: 0 }}>
+                    <Button
+                      form="content-form"
+                      type="submit"
+                      variant="btnPrimary">
+                      <>
+                        {saving && <Spinner color="white" size={24} />}
+                        {!saving && (
+                          <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
+                            Save
+                          </Text>
+                        )}
+                      </>
+                    </Button>
+                  </Flex>
+                </Box>
+              </Box>
+              <Box variant="layout.boxHeading">
+                <Text as="h3" variant="sectionheading">
+                  Content
+                </Text>
+              </Box>
+              <Box sx={{ pt: 2, px: 3, bg: '#F5F7FE' }}>
+                {selectedTemplate?.id && (
+                  <Box>
+                    <Text as="h6" variant="labelcaps">
+                      Template
+                    </Text>
+                    <Box sx={{ px: 0, py: 1 }}>
+                      <Flex
+                        sx={{
+                          pl: 3,
+                          pt: 2,
+                          pb: 2,
+                          background: '#FFFFFF',
+                          border: '1px solid #E9ECEF',
+                        }}>
+                        <Text
+                          as="h6"
+                          sx={{
+                            fontSize: 2,
+                            mb: 0,
+                            fontWeight: 600,
+                            letterSpacing: '0.2px',
+                          }}>
+                          {selectedTemplate?.title}
+                        </Text>
+                        <Text
+                          as="p"
+                          sx={{
+                            ml: 'auto',
+                            mr: 3,
+                            fontSize: 1,
+                            fontWeight: 600,
+                            pt: 0,
+                            color: 'gray.600',
+                          }}>
+                          {selectedTemplate?.content_type?.prefix}
+                        </Text>
+                      </Flex>
+                    </Box>
+                  </Box>
+                )}
+              </Box>
+            </Box>
+            <FieldForm
+              activeTemplate={activeTemplate}
+              setMaps={updateMaps}
+              fields={fieldMaps}
+              fieldValues={!edit && newContent?.contentFields}
+              showForm={showForm}
+              setShowForm={makeInsert}
+              onSaved={onSaved}
+              onRefresh={onSaved}
+            />
+            <Box>
+              {/* <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Flow
                 </Text>
               </Box> */}
 
-                {/* {activeFlow && (
+              {/* {activeFlow && (
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     variant="layout.boxHeading"
@@ -896,10 +845,9 @@ const ContentForm = (props: IContentForm) => {
                   </Box>
                 </Box>
               )} */}
-              </Box>
             </Box>
-          </Flex>
-        </Box>
+          </Box>
+        </Flex>
       </Box>
     </>
   );

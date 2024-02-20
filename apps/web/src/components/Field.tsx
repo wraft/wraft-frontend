@@ -51,7 +51,7 @@ const Field: React.FC<Props> = ({
       {sub && (
         <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
       )}
-      <Label htmlFor="description">{label}</Label>
+      {label && <Label htmlFor="description">{label}</Label>}
       <Box sx={{ position: 'relative' }}>
         <Input
           onChange={onChange}

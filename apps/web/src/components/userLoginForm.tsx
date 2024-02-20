@@ -31,7 +31,7 @@ type FormValues = {
 
 const schema = z.object({
   email: emailPattern,
-  password: z.string().min(1, { message: 'Please enter password' }),
+  password: z.string().min(1, { message: 'Please enter a valid password.' }),
 });
 
 const UserLoginForm = () => {
@@ -44,7 +44,7 @@ const UserLoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ mode: 'onBlur', resolver: zodResolver(schema) });
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
   const router = useRouter();
 
   const { session, error } = router.query;
