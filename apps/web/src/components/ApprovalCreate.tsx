@@ -75,7 +75,7 @@ const ApprovalFormBase = ({
     <Box
       mx={0}
       mb={3}
-      sx={{ p: 4, mt: 0 }}
+      sx={{ p: 4, mt: 0, minWidth: '600px' }}
       as="form"
       onSubmit={handleSubmit(onSubmit)}>
       {showSearch && <h1>Searching</h1>}
@@ -109,18 +109,6 @@ const ApprovalFormBase = ({
               </Select>
             )}
           />
-          {/* <Select
-            id="pre_state_id"
-            name="pre_state_id"
-            defaultValue=""
-            ref={register({ required: true })}>
-            {states &&
-              states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>
-                  {s.state.state}
-                </option>
-              ))}
-          </Select> */}
         </Box>
 
         <Box sx={{ width: '50%', p: 2, my: 4 }}>
@@ -141,18 +129,6 @@ const ApprovalFormBase = ({
               </Select>
             )}
           />
-          {/* <Select
-            id="post_state_id"
-            name="post_state_id"
-            defaultValue=""
-            ref={register({ required: true })}>
-            {states &&
-              states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>
-                  {s.state.state}
-                </option>
-              ))}
-          </Select> */}
         </Box>
       </Flex>
       <Box sx={{ p: 2 }}>
@@ -167,17 +143,17 @@ const ApprovalFormBase = ({
             <Box
               key={x?.name}
               sx={{
-                bg: 'gray.100',
+                bg: 'background',
                 p: 2,
                 px: 3,
                 border: 'solid 1px',
                 borderColor: 'border',
               }}
               onClick={() => onUserSelect(x)}>
-              <Text as="h4" color="gray.9">
+              <Text as="h4" color="text">
                 {x.name}
               </Text>
-              <Text as="em" color="gray.6">
+              <Text as="em" color="gray.600">
                 {x.email}
               </Text>
             </Box>
@@ -200,6 +176,7 @@ const ApprovalFormBase = ({
           }}
           variant="btnSecondary"
           type="submit"
+          ml={2}
           mt={3}>
           Cancel
         </Button>
