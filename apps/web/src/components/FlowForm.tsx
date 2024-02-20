@@ -174,11 +174,7 @@ const StatesForm = ({
 
   return (
     <Box>
-      <Box sx={{ pb: '12px', pt: '32px' }}>
-        <Text variant="sectiontitle" sx={{ mb: 0, mt: 0, color: 'grey' }}>
-          Flow states
-        </Text>
-      </Box>
+      <Label>Flow states</Label>
       {content && (
         <Box
           mb={0}
@@ -387,10 +383,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           goTo={goTo}
         />
         <Container
-          sx={{ px: 4, pt: 3, height: '100%', overflowY: 'hidden' }}
+          sx={{ p: 4, height: '100%', overflowY: 'hidden' }}
           data-flow={flow?.id}>
           <Flex sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-            <Box sx={{ pt: '30px', width: '492px' }}>
+            <Box sx={{ width: '492px' }}>
               <Field
                 name="name"
                 label="Name"
