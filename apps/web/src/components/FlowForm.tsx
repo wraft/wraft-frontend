@@ -80,7 +80,7 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
   };
 
   return (
-    <Box p={4}>
+    <Box p={4} sx={{ minWidth: '400px' }}>
       <Box>
         <Label>State Name</Label>
         <Input
@@ -92,7 +92,7 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
       <Button
         type="button"
         variant="btnPrimary"
-        sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
+        sx={{ p: 2, px: 3, mt: 3 }}
         onClick={() => {
           onSave(newState);
           setAddState(false);
@@ -131,7 +131,7 @@ const StatesForm = ({
   };
 
   const setOrder = (content: any) => {
-    console.log('e', content);
+    console.log('content on setOrder', content);
 
     // new order
 
@@ -157,6 +157,7 @@ const StatesForm = ({
   };
 
   useEffect(() => {
+    console.log('content on effect', content);
     if (content) {
       const listItems: ItemType[] = [];
       content.map((c: any) => {
