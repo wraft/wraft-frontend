@@ -52,7 +52,7 @@ export interface StateState {
 }
 
 export interface StateFormProps {
-  content: StateElement[];
+  states: StateElement[];
   onSave: any;
   onDelete: React.MouseEventHandler;
   hidden?: boolean;
@@ -116,7 +116,7 @@ interface ItemType {
 }
 
 const StatesForm = ({
-  content,
+  states,
   onDelete,
   onAttachApproval,
   onSorted,
@@ -157,10 +157,10 @@ const StatesForm = ({
   };
 
   useEffect(() => {
-    console.log('content on effect', content);
-    if (content) {
+    console.log('content on effect', states);
+    if (states) {
       const listItems: ItemType[] = [];
-      content.map((c: any) => {
+      states.map((c: any) => {
         const newItemx: ItemType = {
           id: c?.state.id,
           name: c?.state.state,
@@ -171,12 +171,12 @@ const StatesForm = ({
 
       setState(listItems);
     }
-  }, [content]);
+  }, [states]);
 
   return (
     <Box>
       <Label>Flow states</Label>
-      {content && (
+      {states && (
         <Box
           mb={0}
           sx={{
@@ -209,7 +209,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);
-  const [content, setContent] = useState<StateElement[]>();
+  const [states, setStates] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
@@ -231,7 +231,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       const res: States = data;
-      setContent(res.states);
+      setStates(res.states);
     });
   };
 
@@ -326,7 +326,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const updateState = (e: any) => {
     const newState = {
       state: e,
-      order: (content?.length && content.length + 1) || 1,
+      order: (states?.length && states.length + 1) || 1,
     };
 
     CreateState(newState);
@@ -398,10 +398,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             </Box>
           </Flex>
           <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
-            {edit && content && (
+            {edit && states && (
               <StatesForm
                 onAttachApproval={onAttachApproval}
-                content={content}
+                states={states}
                 onSave={CreateState}
                 onDelete={deleteState}
                 onSorted={onSortDone}
@@ -454,7 +454,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       <Modal isOpen={approval} onClose={() => setAddState(false)}>
         <ApprovalFormBase
           closeModal={() => setApproval(false)}
-          states={content}
+          states={states}
           parent={cId}
         />
       </Modal>
