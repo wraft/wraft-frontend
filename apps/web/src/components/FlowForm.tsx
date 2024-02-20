@@ -326,7 +326,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const updateState = (e: any) => {
     const newState = {
       state: e,
-      order: 1,
+      order: (content?.length && content.length + 1) || 1,
     };
 
     CreateState(newState);
