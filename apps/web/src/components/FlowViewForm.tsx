@@ -129,7 +129,7 @@ const FlowViewForm = () => {
                           sx={{
                             alignItems: 'center',
                           }}>
-                          <Flex>
+                          <Flex sx={{ alignItems: 'center' }}>
                             <Box
                               sx={{
                                 width: '18px',
