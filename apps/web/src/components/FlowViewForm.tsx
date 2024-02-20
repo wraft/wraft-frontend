@@ -90,15 +90,7 @@ const FlowViewForm = () => {
     }
   }, [cId]);
 
-  const users = [
-    { name: 'Lara', src: 'https://i.pravatar.cc/300?img=1' },
-    { name: 'Cenny', src: 'https://i.pravatar.cc/300?img=2' },
-    { name: 'Rex', src: 'https://i.pravatar.cc/300?img=3' },
-    { name: 'Harry', src: 'https://i.pravatar.cc/300?img=4' },
-    { name: 'Lucy', src: 'https://i.pravatar.cc/300?img=5' },
-    { name: 'Potter', src: 'https://i.pravatar.cc/300?img=6' },
-    { name: 'Jonh', src: 'https://i.pravatar.cc/300?img=7' },
-  ];
+  const users: any[] = [];
 
   return (
     <>
@@ -161,7 +153,7 @@ const FlowViewForm = () => {
                             </Text>
                           </Flex>
                         </Flex>
-                        {users && (
+                        {users && users.length > 0 && (
                           <Flex sx={{ flexWrap: 'wrap', gap: 2, mt: '18px' }}>
                             {users.map((user: any, index: number) => (
                               <PersonCapsule person={user} key={index} />
