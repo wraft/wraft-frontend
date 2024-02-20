@@ -378,7 +378,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           {edit ? 'Edit Flow' : 'Create new Flow'}
         </Text>
         <StepsIndicator
-          titles={['Basic Details', 'Set Background']}
+          titles={['Basic details', 'Flow states']}
           formStep={formStep}
           goTo={goTo}
         />
