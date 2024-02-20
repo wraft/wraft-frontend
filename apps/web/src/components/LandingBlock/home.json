@@ -1,0 +1,130 @@
+{
+  "page_title": "Document Generation for Smart Companies",
+  "page_meta": "",
+  "main_section": {
+    "title": "Document Generation \n for Smart Companies",
+    "sub_title": "Easiest way to create or to automate document production teams"
+  },
+  "case_studies_sections": {
+    "title": "See what you can do with Wraft",
+    "sub_title": "Case studies from some of our amazing customers who are hiring faster.",
+    "case_studies": [
+      {
+        "title": "Proposal",
+        "des": "Untitled has saved us thousands of hours of work. Were able to spin up projects faster."
+      },
+      {
+        "title": "Offer Letter",
+        "des": "“We’ve been using Untitled to kick start every new project and can’t work without it.”"
+      },
+      {
+        "title": "Artist Contract",
+        "des": "“Love the simplicity of the service and the prompt customer support.”"
+      },
+      {
+        "title": "Handbook",
+        "des": "“Untitled has saved us thousands of hours of work. We’re able to spin up projects faster.”"
+      },
+      {
+        "title": "Artist Contract",
+        "des": "“Love the simplicity of the service and the prompt customer support.”"
+      },
+      {
+        "title": "Handbook",
+        "des": "“Untitled has saved us thousands of hours of work. We’re able to spin up projects faster.”"
+      }
+    ]
+  },
+  "features_section": {
+    "title": "See what you can do with Wraft",
+    "sub_title": "Case studies from some of our amazing customers who are hiring faster.",
+    "features": [
+      {
+        "title": "Proposal",
+        "des": "Untitled has saved us thousands of hours of work. Were able to spin up projects faster."
+      },
+      {
+        "title": "Offer Letter",
+        "des": "“We’ve been using Untitled to kick start every new project and can’t work without it.”"
+      },
+      {
+        "title": "Artist Contract",
+        "des": "“Love the simplicity of the service and the prompt customer support.”"
+      },
+      {
+        "title": "Handbook",
+        "des": "“Untitled has saved us thousands of hours of work. We’re able to spin up projects faster.”"
+      }
+    ]
+  },
+  "hosting_section": {
+    "title": "Future-proof Documents \n for ambitious companies",
+    "sub_title": "Self-host or use our cloud platform"
+
+  },
+  "future_proof_sections": {
+    "title": "Open Document Lifecycle",
+    "sub_title": "Future proof way to sustain your companies document, end-to-end.",
+    "section": [
+      {
+        "class": "grid-full",
+        "title": "Document generation",
+        "subtitle": "Easy and Effective",
+        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "image": "",
+        "link": ""
+      },
+      {
+        "class": "grid-half",
+        "title": "Pipeline",
+        "subtitle": "Generate In bulk",
+        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "image": "",
+        "link": ""
+      },
+      {
+        "class": "grid-half",
+        "title": "E-signature",
+        "subtitle": "Secure and Private",
+        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "image": "",
+        "link": ""
+      },
+      {
+        "class": "grid-full",
+        "title": "Approval system",
+        "subtitle": "Build workflows",
+        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "image": "",
+        "link": ""
+      }
+    ]
+  },
+  "more_about_section": {
+    "title": "Be on brand, everytime",
+    "sub_title": "Learn how Wraft features designed to help your team work more effectively.",
+    "tag": "More about wraft",
+    "sections": [
+      {
+        "title": "Branded Pages", 
+        "des": "Bring your brand assets, Letterpads to your corporate fonts. No colour spared.", 
+        "link": ""
+      },
+      {
+        "title": "Shared Templates", 
+        "des": "Maintain your tone with templates, render conditionally. Every department shines.", 
+        "link": ""
+      },
+      {
+        "title": "Use Conditions", 
+        "des": "Not all documents are same. Use custom logic to change templates, or toggle sections to sign your best clients.", 
+        "link": ""
+      },
+      {
+        "title": "Emails", 
+        "des": "Email as attachments. Integrate your favourite provider, use in built templates, or create custom.", 
+        "link": ""
+      }
+    ]
+  }
+}

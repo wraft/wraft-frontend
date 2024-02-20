@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Router, { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
@@ -16,7 +15,7 @@ import NavEdit from 'components/NavEdit';
 import FieldText from 'components/FieldText';
 import Field from 'components/Field';
 import Editor from 'components/common/Editor';
-import { cleanName, findVars, replaceTitles, updateVars } from 'utils/index';
+import { findVars, replaceTitles, updateVars } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
@@ -26,15 +25,11 @@ import {
   ContentInstance,
 } from 'utils/types/content';
 import { postAPI, fetchAPI, putAPI } from 'utils/models';
-import { Template, ContentState } from 'utils/types';
-import { Field as FieldT, FieldInstance } from 'utils/types';
+import { ContentState } from 'utils/types';
+import { Field as FieldT } from 'utils/types';
 import contentStore from 'store/content.store';
 
 import FieldForm from './FieldForm';
-
-// const Editor = dynamic(() => import('components/common/Editor'), {
-//   ssr: false, // Set this based on your SSR needs
-// });
 
 const ContentForm = (props: IContentForm) => {
   // Base
@@ -222,10 +217,10 @@ const ContentForm = (props: IContentForm) => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
-
     const json = editorRef.current?.helpers?.getJSON();
 
     console.log('onSubmit[1--b]', data);
+    console.log('onSubmit[1--b]', editorRef.current);
 
     setSaving(true);
 
@@ -249,10 +244,10 @@ const ContentForm = (props: IContentForm) => {
 
     console.log('onSubmit[1--3]', template);
 
-    return;
+    // return;
 
     if (edit) {
-      putAPI(`contents/${cid}`, template).then((data: any) => {
+      putAPI(`contents/${id}`, template).then((data: any) => {
         onCreate(data);
         setSaving(false);
       });
@@ -321,12 +316,12 @@ const ContentForm = (props: IContentForm) => {
    * Load Templates for the particular content type
    * @param id
    */
-  const loadTemplates = (id: string) => {
-    fetchAPI(`data_templates/${id}`).then((data: any) => {
-      const res: Template[] = data.data_template;
-      changeText(res);
-    });
-  };
+  // const loadTemplates = (id: string) => {
+  //   fetchAPI(`data_templates/${id}`).then((data: any) => {
+  //     const res: Template[] = data.data_template;
+  //     changeText(res);
+  //   });
+  // };
 
   const getSummary = () => {
     // const res =
@@ -410,10 +405,10 @@ const ContentForm = (props: IContentForm) => {
       // lazy matching
       const tempTitle = piece.title_template;
       const m = findVars(tempTitle, false);
-      m.map((x: any) => {
-        const cName = cleanName(x);
-        // console.log('🐴🐴  [changeTitle] ', cName, maps);
-      });
+      // m.map((x: any) => {
+      //   const cName = cleanName(x);
+      //   // console.log('🐴🐴  [changeTitle] ', cName, maps);
+      // });
     }
   };
 
