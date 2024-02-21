@@ -69,16 +69,16 @@ export function Droppable({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        {items.map((id: any, index: number) => {
+        {items.map((name: any, index: number) => {
           return (
             <Box
-              key={id}
+              key={name}
               sx={{
                 borderBottom: '1px solid #E4E9EF;',
               }}>
               <SortableItem
                 index={index + 1}
-                id={id}
+                name={name}
                 onAttachApproval={onAttachApproval}
                 deleteState={deleteState}
               />
@@ -91,7 +91,7 @@ export function Droppable({
 }
 
 const SortableItem = (props: {
-  id: string;
+  name: string;
   index: number;
   onAttachApproval: any;
   deleteState: any;
@@ -104,7 +104,7 @@ const SortableItem = (props: {
     transition,
     isDragging,
   } = useSortable({
-    id: props.id,
+    id: props.name,
   });
 
   return (
@@ -128,7 +128,8 @@ const SortableItem = (props: {
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        className={`w-20 h-20 ${getColor(Number(props.id))} ${isDragging ? 'z-10' : ''}`}>
+        className={`w-20 h-20 ${getColor(Number(props.index))}
+         ${isDragging ? 'z-10' : ''}`}>
         <Box
           sx={{
             display: 'flex',
@@ -155,7 +156,7 @@ const SortableItem = (props: {
               fontWeight: 500,
               color: '#2C3641',
             }}>
-            {props.id}
+            {props.name}
           </Box>
         </Box>
       </Box>
@@ -188,7 +189,9 @@ const SortableItem = (props: {
           variant="btnDelete"
           data-no-dnd="true"
           sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
-          onClick={() => props.deleteState(props.id)}>
+          onClick={() => {
+            props.deleteState(props.name);
+          }}>
           <IconWrapper stroke={2}>
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M4 7l16 0" />

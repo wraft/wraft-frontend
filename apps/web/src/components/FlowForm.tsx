@@ -264,14 +264,18 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * Delete State
    * @param data Form Data
    */
-  const deleteState = (fId: any) => {
-    deleteAPI(`states/${fId}`).then(() => {
-      toast.success('Deleted a flow', {
-        duration: 1000,
-        position: 'top-right',
+  const deleteState = (name: any) => {
+    if (states) {
+      const id = states.filter((state) => state.state.state === name)[0].state
+        .id;
+      deleteAPI(`states/${id}`).then(() => {
+        toast.success('Deleted a flow', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        loadStates(cId);
       });
-      loadStates(cId);
-    });
+    }
   };
 
   const onSubmit = async (data: any) => {
