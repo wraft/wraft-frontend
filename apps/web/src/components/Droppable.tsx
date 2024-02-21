@@ -21,8 +21,24 @@ import { Box, Button, Flex } from 'theme-ui';
 
 import { IconWrapper } from './Atoms';
 
-export function Droppable({ list, onAttachApproval, onDeleteFlow }: any) {
+type Props = {
+  list: any;
+  onAttachApproval: any;
+  onDeleteFlow: any;
+  setOrder: any;
+};
+
+export function Droppable({
+  list,
+  onAttachApproval,
+  onDeleteFlow,
+  setOrder,
+}: Props) {
   const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    setOrder(items);
+  }, [items]);
 
   useEffect(() => {
     // Update items when the list prop changes

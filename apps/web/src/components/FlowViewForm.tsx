@@ -75,7 +75,6 @@ const FlowViewForm = () => {
    */
   const loadFlow = (fId: string) => {
     fetchAPI(`flows/${fId}`).then((data: any) => {
-      console.log('flowwwwwwwwww', data);
       const res: Flow = data.flow;
       setFlow(res);
       const states: States = data.states;

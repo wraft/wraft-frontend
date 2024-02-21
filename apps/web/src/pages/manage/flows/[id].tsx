@@ -18,7 +18,6 @@ const Index: FC = () => {
   const id: string = router.query.id as string;
   useEffect(() => {
     fetchAPI(`flows/${id}`).then((data: any) => {
-      console.log(data);
       setFlow(data);
     });
   }, []);
