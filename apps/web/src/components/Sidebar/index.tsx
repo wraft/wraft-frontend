@@ -5,7 +5,8 @@ import { Button, Drawer, useDrawer } from '@wraft/ui';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text } from 'theme-ui';
 
-import DefaultMenuItem from '../../../src/components/MenuItem';
+import DefaultMenuItem from 'components/MenuItem';
+
 import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
@@ -23,12 +24,12 @@ const Sidebar = (props: any) => {
   const showFull = props && props.showFull ? true : true;
   const pathname: string = router.pathname as any;
 
-  const checkActive = (pathname: string, m: any) => {
-    if (pathname === '/content/[id]' && m.path === '/contents') {
+  const checkActive = (pathname: string, path: any) => {
+    if (pathname === '/content/[id]' && path.path === '/contents') {
       return true;
     }
 
-    return m.path === pathname;
+    return path === pathname;
   };
 
   const toggleSearch = () => {
@@ -84,21 +85,23 @@ const Sidebar = (props: any) => {
                 }}>
                 {m.section}
               </Box>
-              {m.menus.map((menu) => (
+              {m.menus.map(({ name, icon, path }: any) => (
                 <DefaultMenuItem
-                  href={menu.path}
-                  key={menu.path}
+                  href={path}
+                  key={name}
                   variant="layout.menuWrapper">
-                  <Flex>
-                    <Flex
+                  <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+                    <Box
                       sx={{
-                        mr: 2,
-                        color: checkActive(pathname, m)
-                          ? '#004A0F'
-                          : 'gray.400',
+                        display: 'flex',
                       }}>
-                      {menu.icon}
-                    </Flex>
+                      {React.cloneElement(icon, {
+                        color: checkActive(pathname, path)
+                          ? '#006222'
+                          : '#2C3641',
+                      })}
+                      {/* {icon} */}
+                    </Box>
                     {showFull && (
                       <Text
                         sx={{
@@ -107,7 +110,7 @@ const Sidebar = (props: any) => {
                           fontSize: '14px',
                           lineHeight: '18.8px',
                         }}>
-                        {menu.name}
+                        {name}
                       </Text>
                     )}
                   </Flex>

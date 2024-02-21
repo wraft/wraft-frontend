@@ -14,6 +14,7 @@
   "svgProps": {
     "width": "{ props.width || 24}",
     "height": "{props.height || 24}",
-    "aria-hidden": "true"
+    "aria-hidden": "true",
+    "role": "icon"
   }
 }

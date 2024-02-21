@@ -8,6 +8,7 @@ const SvgPipelineIcon = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     viewBox="0 0 24 24"
     aria-hidden="true"
+    role="icon"
     {...props}>
     <path
       stroke={props.color || `#2C3641`}

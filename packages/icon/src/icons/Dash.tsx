@@ -8,6 +8,7 @@ const SvgDashIcon = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     viewBox="0 0 24 24"
     aria-hidden="true"
+    role="icon"
     {...props}>
     <rect
       width={14}
