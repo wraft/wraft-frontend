@@ -154,7 +154,7 @@ const layout = {
   },
   contentFrame: {
     width: '100%',
-    bg: 'backgroundWhite',
+    // bg: 'backgroundWhite',
     border: '1px solid',
     borderColor: 'border',
     borderRadius: 4,

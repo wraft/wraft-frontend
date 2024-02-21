@@ -35,7 +35,7 @@ const theme: any = {
       width: '128px',
       height: '128px',
       borderRadius: '50%',
-      objectFit: 'contain',
+      objectFit: 'cover',
       bg: 'background',
     },
   },
