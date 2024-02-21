@@ -1,59 +1,35 @@
 import React, { useEffect, useState } from 'react';
+import NextLink from 'next/link';
 import { Avatar, Box, Flex } from 'theme-ui';
+import { Table } from '@wraft/ui';
+import { useAuth } from 'contexts/AuthContext';
 
-import { useAuth } from '../../contexts/AuthContext';
-import { fetchAPI } from '../../utils/models';
-import { StateBadge, TimeAgo } from '../Atoms';
-import { Table } from '../common';
-import Skeleton from '../common/Skeleton';
+import { StateBadge, TimeAgo } from 'components/Atoms';
+import { fetchAPI } from 'utils/models';
 
 const columns = [
-  // {
-  //   id: 'select',
-  //   header: ({ table }: any) => (
-  //     <Checkbox
-  //       checked={table.getIsAllPageRowsSelected()}
-  //       onChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }: any) => (
-  //     <Checkbox
-  //       // checked={row.getIsSelected()}
-  //       checked
-  //       onChange={() => console.log}
-  //       // onChange={(value: any) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  //   size: 10,
-  // },
   {
     id: 'content.id',
     header: 'Name',
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
-      <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
-        <Box
-          sx={{
-            width: '3px',
-            bg: row.original?.content_type?.color
-              ? row.original?.content_type?.color
-              : 'blue',
-          }}
-        />
-        <Box ml={3}>
-          <Box>{row.original?.content?.instance_id}</Box>
-          <Box>{row.original?.content?.serialized?.title}</Box>
-        </Box>
-        {/* <Box>{row.getValue('docName')}</Box> */}
-      </Flex>
+      <NextLink href={`/content/${row.original?.content?.id}`}>
+        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+          <Box
+            sx={{
+              width: '3px',
+              bg: row.original?.content_type?.color
+                ? row.original?.content_type?.color
+                : 'blue',
+            }}
+          />
+          <Box ml={3}>
+            <Box>{row.original?.content?.instance_id}</Box>
+            <Box>{row.original?.content?.serialized?.title}</Box>
+          </Box>
+        </Flex>
+      </NextLink>
     ),
-    // cell: ({ row }) => <Box>{console.log('row', row.original)}</Box>,
-    // minSize: 10,
-    // maxSize: 500,
     size: 300,
     enableSorting: false,
   },
@@ -61,23 +37,21 @@ const columns = [
     id: 'content.updated_at',
     header: 'TIME',
     accessorKey: 'TIME',
-    // cell: (info: any) => info.getValue(),
     cell: ({ row }: any) => (
       <Box>
-        <TimeAgo time={row.original?.content.updated_at} />
+        <TimeAgo time={row.original?.content?.updated_at} />
       </Box>
     ),
-    // minSize: 10,
-    // maxSize: 500,
     size: 300,
+    enableSorting: false,
   },
   {
     id: 'creator.profile_pic',
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Box>
-        <Avatar mt={2} width="20px" src={row.original?.creator?.profile_pic} />
+      <Box sx={{ height: '20px' }}>
+        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
       </Box>
     ),
     enableSorting: false,
@@ -129,50 +103,13 @@ const PendingDocumentBlock = () => {
         }}>
         Pending action (3)
       </Box>
-      {loading && (
-        <Box
-          sx={
-            {
-              // border: '1px solid',
-              // borderColor: 'border',
-              // px: 3,
-              // py: 4,
-            }
-          }>
-          <Flex sx={{ justifyContent: 'space-between' }} mb={4}>
-            <Skeleton width="15%" height="25px" />
-            <Skeleton width="30%" height="25px" />
-            <Skeleton width="20%" height="25px" />
-            <Skeleton width="15%" height="25px" />
-          </Flex>
-          <Flex sx={{ justifyContent: 'space-between' }} mb={2}>
-            <Skeleton width="15%" height="20px" />
-            <Skeleton width="30%" height="20px" />
-            <Skeleton width="20%" height="20px" />
-            <Skeleton width="15%" height="20px" />
-          </Flex>
-          <Flex sx={{ justifyContent: 'space-between' }} mb={2}>
-            <Skeleton width="15%" height="20px" />
-            <Skeleton width="30%" height="20px" />
-            <Skeleton width="20%" height="20px" />
-            <Skeleton width="15%" height="20px" />
-          </Flex>
-          <Flex sx={{ justifyContent: 'space-between' }} mb={2}>
-            <Skeleton width="15%" height="20px" />
-            <Skeleton width="30%" height="20px" />
-            <Skeleton width="20%" height="20px" />
-            <Skeleton width="15%" height="20px" />
-          </Flex>
-          <Flex sx={{ justifyContent: 'space-between' }} mb={2}>
-            <Skeleton width="15%" height="20px" />
-            <Skeleton width="30%" height="20px" />
-            <Skeleton width="20%" height="20px" />
-            <Skeleton width="15%" height="20px" />
-          </Flex>
-        </Box>
-      )}
 
-      {!loading && contents && <Table data={contents} columns={columns} />}
+      <Table
+        data={contents}
+        isLoading={loading}
+        columns={columns}
+        skeletonRows={8}
+      />
     </>
   );
 };

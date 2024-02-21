@@ -75,8 +75,11 @@ const Header = () => {
                       alt="Workspace"
                       sx={{
                         borderRadius: '99rem',
-                        height: `24px`,
-                        width: `24px`,
+                        height: `28px`,
+                        width: `28px`,
+                        border: '1px solid',
+                        borderColor: 'gray.100',
+                        p: '1px',
                         mr: 2,
                       }}
                     />
@@ -115,8 +118,11 @@ const Header = () => {
                       alt="Workspace"
                       sx={{
                         borderRadius: '99rem',
-                        height: `24px`,
-                        width: `24px`,
+                        height: `28px`,
+                        width: `28px`,
+                        border: '1px solid',
+                        borderColor: 'gray.100',
+                        p: '1px',
                         mr: 2,
                       }}
                     />
@@ -151,9 +157,12 @@ const Header = () => {
                       height={24}
                       alt="Workspace"
                       sx={{
-                        borderRadius: '99rem',
+                        borderRadius: '50%',
                         height: `18px`,
                         width: `18px`,
+                        border: '1px solid',
+                        borderColor: 'gray.100',
+                        p: '1px',
                         mr: 2,
                       }}
                     />

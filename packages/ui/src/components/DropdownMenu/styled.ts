@@ -8,6 +8,8 @@ export const Inner: any = styled('div')`
 export const Item: any = styled.div`
   cursor: pointer;
   padding: 6px 12px;
+  display: flex;
+  align-items: center;
   &[data-active-item] {
     background: #F0F2F5;
   }

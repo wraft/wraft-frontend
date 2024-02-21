@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import NextLink from 'next/link';
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
+import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../utils/models';
-import { TimeAgo, FilterBlock, BoxWrap, StateBadge } from './Atoms';
-import ContentLoader from './ContentLoader';
+import { TimeAgo, FilterBlock, StateBadge } from './Atoms';
 import PageHeader from './PageHeader';
 import Paginate from './Paginate';
-import { Table } from './Table';
+// import { Table } from './Table';
 
 export interface ILayout {
   width: number;
@@ -60,6 +61,68 @@ export interface IPageMeta {
   contents?: any;
 }
 
+const columns = [
+  {
+    id: 'content.id',
+    header: 'Name',
+    accessorKey: 'content.id',
+    cell: ({ row }: any) => (
+      <NextLink href={`/content/${row.original?.content?.id}`}>
+        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+          <Box
+            sx={{
+              width: '3px',
+              bg: row.original?.content_type?.color
+                ? row.original?.content_type?.color
+                : 'blue',
+            }}
+          />
+          <Box ml={3}>
+            <Box>{row.original?.content?.instance_id}</Box>
+            <Box>{row.original?.content?.serialized?.title}</Box>
+          </Box>
+        </Flex>
+      </NextLink>
+    ),
+    size: 300,
+    enableSorting: false,
+  },
+  {
+    id: 'content.updated_at',
+    header: 'TIME',
+    accessorKey: 'TIME',
+    cell: ({ row }: any) => (
+      <Box>
+        <TimeAgo time={row.original?.content?.updated_at} />
+      </Box>
+    ),
+    size: 300,
+    enableSorting: false,
+  },
+  {
+    id: 'creator.profile_pic',
+    header: 'EDITORS',
+    accessorKey: 'creator.profile_pic',
+    cell: ({ row }: any) => (
+      <Box sx={{ height: '20px' }}>
+        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
+      </Box>
+    ),
+    enableSorting: false,
+  },
+  {
+    header: 'STATUS',
+    accessorKey: 'age',
+    cell: ({ row }: any) => (
+      <Box>
+        <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
+      </Box>
+    ),
+    enableSorting: false,
+    textAlign: 'right',
+  },
+];
+
 /**
  * Content List
  * ============
@@ -69,13 +132,13 @@ export interface IPageMeta {
 const ContentList = () => {
   // const token = useStoreState((state) => state.auth.token);
 
-  const [contents, setContents] = useState<Array<IField>>([]);
+  const [contents, setContents] = useState<any>([]);
   const [variants, setVariants] = useState<Array<any>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [_loading, setLoading] = useState<boolean>(false);
+  const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
   const [total, setTotal] = useState<number>(1);
-  const [vendors, setVendors] = useState<Array<any>>([]);
 
   useEffect(() => {
     loadData(1);
@@ -108,17 +171,18 @@ const ContentList = () => {
    * @param page
    */
   const loadData = (page: number) => {
+    setContenLoading(true);
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`contents${pageNo}`)
       .then((data: any) => {
-        setLoading(true);
-        const res: IField[] = data.contents;
+        setContenLoading(false);
+        const res: any = data.contents;
         setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
       .catch(() => {
-        setLoading(true);
+        setContenLoading(false);
       });
   };
 
@@ -127,93 +191,19 @@ const ContentList = () => {
     setPage(_e?.selected + 1);
   };
 
-  useEffect(() => {
-    if (contents && contents.length > 0) {
-      const row: any = [];
-      contents.map((r: any) => {
-        const rFormated = {
-          col1: (
-            <Box
-              sx={{
-                borderRadius: '4px',
-                height: '40px',
-                width: '5px',
-                border: 'solid 1px',
-                borderColor: 'border',
-                bg: r.content_type.color,
-                mr: 0,
-                // ml: 2,
-                mt: 2,
-              }}
-            />
-          ),
-          col2: (
-            <BoxWrap
-              id={r.content?.instance_id}
-              name={r.content?.serialized?.title}
-              xid={r.content?.id}
-            />
-          ),
-          col3: (
-            <Box pt={1}>
-              <TimeAgo time={r.content.updated_at} />
-            </Box>
-          ),
-          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
-          status: (
-            <StateBadge name={r.state && r.state.state} color="#E2F7EA" />
-          ),
-        };
-
-        row.push(rFormated);
-      });
-
-      setVendors(row);
-    }
-  }, [contents]);
-
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Documents" desc="Manage all documents" />
       <Container variant="layout.pageFrame">
         <Flex>
           <Box sx={{ flexGrow: 1 }}>
-            {!loading && <ContentLoader />}
             <Box mx={0} mb={3} sx={{}}>
-              {loading && vendors && (
-                <Table
-                  options={{
-                    columns: [
-                      {
-                        Header: '',
-                        accessor: 'col1', // accessor is the "key" in the data
-                        width: 'auto',
-                      },
-                      {
-                        Header: 'Name',
-                        accessor: 'col2',
-                        width: '60%',
-                      },
-                      {
-                        Header: 'Time',
-                        accessor: 'col3',
-                        width: '15%',
-                      },
-                      {
-                        Header: 'Editors',
-                        accessor: 'col4',
-                        width: '15%',
-                      },
-                      {
-                        Header: 'Status',
-                        accessor: 'status',
-                        width: '15%',
-                      },
-                    ],
-                    data: vendors,
-                  }}
-                />
-              )}
+              <Table
+                data={contents}
+                isLoading={contenLoading}
+                columns={columns}
+                skeletonRows={7}
+              />
             </Box>
             <Paginate
               changePage={changePage}
