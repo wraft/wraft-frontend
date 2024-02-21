@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { SVGProps } from 'react';
-const SvgEllipsisHIcon = (props: SVGProps<SVGSVGElement>) => (
+const SvgTextIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.width || 24}
@@ -12,8 +12,8 @@ const SvgEllipsisHIcon = (props: SVGProps<SVGSVGElement>) => (
     {...props}>
     <path
       fill={props.color || `#2C3641`}
-      d="M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4"
+      d="M5 8h2V6h3.252L7.68 18H5v2h8v-2h-2.252L13.32 6H17v2h2V4H5z"
     />
   </svg>
 );
-export default SvgEllipsisHIcon;
+export default SvgTextIcon;

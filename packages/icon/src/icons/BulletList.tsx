@@ -8,6 +8,7 @@ const SvgBulletListIcon = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     viewBox="0 0 24 24"
     aria-hidden="true"
+    role="icon"
     {...props}>
     <path
       fill={props.color || `#2C3641`}

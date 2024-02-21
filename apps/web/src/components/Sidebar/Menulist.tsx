@@ -1,13 +1,13 @@
-import { ApprovalsIcon, HomeIcon } from '@wraft/icon';
-
 import {
-  Note,
-  Cabinet as BookOpen,
-  Carousel,
-  Cog,
-  Wrench,
+  ApprovalsIcon,
+  HomeIcon,
+  DocumentIcon,
+  VariantIcon,
+  TemplateIcon,
   TextIcon,
-} from '../../../src/components/Icons';
+  ManageIcon,
+  SettingIcon,
+} from '@wraft/icon';
 
 const Menulist = [
   {
@@ -15,17 +15,17 @@ const Menulist = [
     menus: [
       {
         name: 'Dashboard',
-        icon: <HomeIcon width={20} />,
+        icon: <HomeIcon width={20} color="#2C3641" />,
         path: '/',
       },
       {
         name: 'Documents',
-        icon: <Note width={20} />,
+        icon: <DocumentIcon width={20} color="#2C3641" />,
         path: '/contents',
       },
       {
         name: 'Approvals',
-        icon: <ApprovalsIcon width={20} />,
+        icon: <ApprovalsIcon width={20} color="#2C3641" />,
         path: '/approvals',
       },
     ],
@@ -35,12 +35,12 @@ const Menulist = [
     menus: [
       {
         name: 'Templates',
-        icon: <Carousel width={20} />,
+        icon: <TemplateIcon width={20} color="#2C3641" />,
         path: '/templates',
       },
       {
         name: 'Variants',
-        icon: <BookOpen width={20} />,
+        icon: <VariantIcon width={20} color="#2C3641" />,
         path: '/content-types',
       },
       {
@@ -50,12 +50,12 @@ const Menulist = [
       },
       {
         name: 'Manage',
-        icon: <Wrench width={20} />,
+        icon: <ManageIcon width={20} />,
         path: '/manage',
       },
       {
         name: 'Settings',
-        icon: <Cog width={20} />,
+        icon: <SettingIcon width={20} />,
         path: '/account',
       },
     ],
