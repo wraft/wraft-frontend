@@ -110,7 +110,7 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
  */
 
 interface ItemType {
-  id: number;
+  id: string;
   name?: string;
   meta?: any;
 }
@@ -122,33 +122,37 @@ const StatesForm = ({
   onSorted,
 }: StateFormProps) => {
   const [state, setState] = useState<ItemType[]>([]);
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
 
   const onDeleteFlow = (_id: any) => {
     onDelete(_id);
   };
 
-  const setOrder = (content: any) => {
-    console.log('content on setOrder', content);
-
+  const setOrder = (names: any) => {
     // new order
 
-    if (content.size > 0) {
+    if (names && names.length > 0) {
       const listItems: ItemType[] = [];
 
-      content.map((c: any) => {
-        const newItemx: ItemType = { id: c?.id, name: c?.name };
-        listItems.push(newItemx);
+      names.map((name: any) => {
+        const newItemx: ItemType = {
+          id:
+            (states &&
+              states.filter((state: any) => state.state.state === name)[0]
+                ?.state?.id) ||
+            '',
+          name: name,
+        };
+        if (newItemx.id !== '') {
+          listItems.push(newItemx);
+        }
       });
 
-      setState(listItems);
+      // setState(listItems);
 
       const dbitems: any = [];
 
       listItems.map((dbi: any, index) => {
-        dbitems.push({ id: dbi.id, order: index });
+        dbitems.push({ id: dbi.id, order: index + 1 });
       });
 
       // send updates to server
@@ -157,7 +161,6 @@ const StatesForm = ({
   };
 
   useEffect(() => {
-    console.log('content on effect', states);
     if (states) {
       const listItems: ItemType[] = [];
       states.map((c: any) => {
@@ -185,9 +188,10 @@ const StatesForm = ({
           }}>
           <Droppable
             list={state}
-            setList={setOrder}
+            setOrder={setOrder}
             onAttachApproval={onAttachApproval}
-            onDeleteFlow={onDeleteFlow}></Droppable>
+            onDeleteFlow={onDeleteFlow}
+          />
         </Box>
       )}
     </Box>
@@ -341,7 +345,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       states: data,
     };
 
-    putAPI(`/flows/${cId}/align-states`, formative).then(() => {
+    putAPI(`flows/${cId}/align-states`, formative).then(() => {
       toast.success('Sorted flow state', {
         duration: 1000,
         position: 'top-right',
