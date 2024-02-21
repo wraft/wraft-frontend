@@ -178,7 +178,7 @@ const FlowViewForm = () => {
         </Container>
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        <FlowForm />
+        {isOpen && <FlowForm />}
       </Drawer>
     </>
   );

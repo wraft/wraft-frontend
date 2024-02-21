@@ -24,14 +24,14 @@ import { IconWrapper } from './Atoms';
 type Props = {
   list: any;
   onAttachApproval: any;
-  onDeleteFlow: any;
+  deleteState: any;
   setOrder: any;
 };
 
 export function Droppable({
   list,
   onAttachApproval,
-  onDeleteFlow,
+  deleteState,
   setOrder,
 }: Props) {
   const [items, setItems] = useState([]);
@@ -80,7 +80,7 @@ export function Droppable({
                 index={index + 1}
                 id={id}
                 onAttachApproval={onAttachApproval}
-                onDeleteFlow={onDeleteFlow}
+                deleteState={deleteState}
               />
             </Box>
           );
@@ -94,7 +94,7 @@ const SortableItem = (props: {
   id: string;
   index: number;
   onAttachApproval: any;
-  onDeleteFlow: any;
+  deleteState: any;
 }) => {
   const {
     attributes,
@@ -188,7 +188,7 @@ const SortableItem = (props: {
           variant="btnDelete"
           data-no-dnd="true"
           sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
-          onClick={() => props.onDeleteFlow(props.id)}>
+          onClick={() => props.deleteState(props.id)}>
           <IconWrapper stroke={2}>
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M4 7l16 0" />

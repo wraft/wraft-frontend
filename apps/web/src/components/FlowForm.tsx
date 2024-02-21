@@ -54,7 +54,7 @@ export interface StateState {
 export interface StateFormProps {
   states: StateElement[];
   onSave: any;
-  onDelete: React.MouseEventHandler;
+  deleteState: React.MouseEventHandler;
   hidden?: boolean;
   onAttachApproval?: React.MouseEventHandler;
   dialog?: any;
@@ -117,15 +117,11 @@ interface ItemType {
 
 const StatesForm = ({
   states,
-  onDelete,
+  deleteState,
   onAttachApproval,
   onSorted,
 }: StateFormProps) => {
   const [state, setState] = useState<ItemType[]>([]);
-
-  const onDeleteFlow = (_id: any) => {
-    onDelete(_id);
-  };
 
   const setOrder = (names: any) => {
     // new order
@@ -190,7 +186,7 @@ const StatesForm = ({
             list={state}
             setOrder={setOrder}
             onAttachApproval={onAttachApproval}
-            onDeleteFlow={onDeleteFlow}
+            deleteState={deleteState}
           />
         </Box>
       )}
@@ -407,7 +403,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 onAttachApproval={onAttachApproval}
                 states={states}
                 onSave={CreateState}
-                onDelete={deleteState}
+                deleteState={deleteState}
                 onSorted={onSortDone}
               />
             )}
