@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
@@ -49,9 +50,9 @@ export interface StateState {
 }
 
 export interface StateFormProps {
-  content: StateElement[];
+  states: StateElement[];
   onSave: any;
-  onDelete: React.MouseEventHandler;
+  deleteState: React.MouseEventHandler;
   hidden?: boolean;
   onAttachApproval?: React.MouseEventHandler;
   dialog?: any;
@@ -77,7 +78,7 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
   };
 
   return (
-    <Box p={4}>
+    <Box p={4} sx={{ minWidth: '400px' }}>
       <Box>
         <Label>State Name</Label>
         <Input
@@ -89,7 +90,7 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
       <Button
         type="button"
         variant="btnPrimary"
-        sx={{ mr: 2, p: 2, px: 3, mt: 2 }}
+        sx={{ p: 2, px: 3, mt: 3 }}
         onClick={() => {
           onSave(newState);
           setAddState(false);
@@ -107,55 +108,45 @@ const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
  */
 
 interface ItemType {
-  id: number;
+  id: string;
   name?: string;
   meta?: any;
 }
 
 const StatesForm = ({
-  content,
-  onDelete,
+  states,
+  deleteState,
   onAttachApproval,
   onSorted,
 }: StateFormProps) => {
-  // const [showModal, setShowModal] = useState<boolean>(false);
-  // const [showApproval, setShowApproval] = useState<boolean>(false);
-
   const [state, setState] = useState<ItemType[]>([]);
-  console.log(state);
 
-  // const toggleModal = () => {
-  //   setShowModal(!showModal);
-  // };
-
-  // const changeForm = (data: any) => {
-  //   console.log('ch', data);
-  //   // onAttachApproval(data);
-  // };
-
-  const onDeleteFlow = (_id: any) => {
-    onDelete(_id);
-  };
-
-  const setOrder = (content: any) => {
-    console.log('e', content);
-
+  const setOrder = (names: any) => {
     // new order
 
-    if (content.size > 0) {
+    if (names && names.length > 0) {
       const listItems: ItemType[] = [];
 
-      content.map((c: any) => {
-        const newItemx: ItemType = { id: c?.id, name: c?.name };
-        listItems.push(newItemx);
+      names.map((name: any) => {
+        const newItemx: ItemType = {
+          id:
+            (states &&
+              states.filter((state: any) => state.state.state === name)[0]
+                ?.state?.id) ||
+            '',
+          name: name,
+        };
+        if (newItemx.id !== '') {
+          listItems.push(newItemx);
+        }
       });
 
-      setState(listItems);
+      // setState(listItems);
 
       const dbitems: any = [];
 
       listItems.map((dbi: any, index) => {
-        dbitems.push({ id: dbi.id, order: index });
+        dbitems.push({ id: dbi.id, order: index + 1 });
       });
 
       // send updates to server
@@ -164,9 +155,9 @@ const StatesForm = ({
   };
 
   useEffect(() => {
-    if (content) {
+    if (states) {
       const listItems: ItemType[] = [];
-      content.map((c: any) => {
+      states.map((c: any) => {
         const newItemx: ItemType = {
           id: c?.state.id,
           name: c?.state.state,
@@ -177,17 +168,14 @@ const StatesForm = ({
 
       setState(listItems);
     }
-  }, [content]);
+  }, [states]);
 
   return (
-    <Box p={0}>
-      <Box sx={{ pb: '12px', pt: '32px' }}>
-        <Text variant="sectiontitle" sx={{ mb: 0, mt: 0, color: 'grey' }}>
-          Flow states
-        </Text>
-      </Box>
-      {content && (
+    <Box>
+      <Label>Flow states</Label>
+      {states && (
         <Box
+          ml={3}
           mb={0}
           sx={{
             border: '1px solid #E4E9EF',
@@ -195,9 +183,10 @@ const StatesForm = ({
           }}>
           <Droppable
             list={state}
-            setList={setOrder}
+            setOrder={setOrder}
             onAttachApproval={onAttachApproval}
-            onDeleteFlow={onDeleteFlow}></Droppable>
+            deleteState={deleteState}
+          />
         </Box>
       )}
     </Box>
@@ -214,14 +203,16 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
+    trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
   const [addState, setAddState] = useState<boolean>(false);
-  const [content, setContent] = useState<StateElement[]>();
+  const [states, setStates] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
+  const [formStep, setFormStep] = useState(0);
 
   // determine edit state based on URL
   const router = useRouter();
@@ -240,7 +231,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       const res: States = data;
-      setContent(res.states);
+      setStates(res.states);
     });
   };
 
@@ -262,25 +253,31 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    postAPI(`flows/${cId}/states`, data).then(() => {
-      if (cId) {
+    if (cId) {
+      postAPI(`flows/${cId}/states`, data).then(() => {
         loadStates(cId);
-      }
-    });
+      });
+    } else {
+      console.log('no flow id');
+    }
   };
 
   /**
    * Delete State
    * @param data Form Data
    */
-  const deleteState = (fId: any) => {
-    deleteAPI(`states/${fId}`).then(() => {
-      toast.success('Deleted a flow', {
-        duration: 1000,
-        position: 'top-right',
+  const deleteState = (name: any) => {
+    if (states) {
+      const id = states.filter((state) => state.state.state === name)[0].state
+        .id;
+      deleteAPI(`states/${id}`).then(() => {
+        toast.success('Deleted a flow', {
+          duration: 1000,
+          position: 'top-right',
+        });
+        loadStates(cId);
       });
-      loadStates(cId);
-    });
+    }
   };
 
   const onSubmit = async (data: any) => {
@@ -335,7 +332,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const updateState = (e: any) => {
     const newState = {
       state: e,
-      order: 1,
+      order: (states?.length && states.length + 1) || 1,
     };
 
     CreateState(newState);
@@ -350,7 +347,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       states: data,
     };
 
-    putAPI(`/flows/${cId}/align-states`, formative).then(() => {
+    putAPI(`flows/${cId}/align-states`, formative).then(() => {
       toast.success('Sorted flow state', {
         duration: 1000,
         position: 'top-right',
@@ -358,101 +355,134 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     });
   };
 
+  function next() {
+    setFormStep((i) => i + 1);
+  }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
+
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
+
   return (
-    <Box sx={{ px: '32px', pb: 3, backgroundColor: 'white', width: '556px' }}>
-      <Box>
-        <Container sx={{ p: 0 }} data-flow={flow?.id}>
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <Flex>
-              <Box sx={{ pt: '30px', width: '492px' }}>
-                <Field
-                  name="name"
-                  label="Name"
-                  defaultValue=""
-                  register={register}
-                />
-                <Text variant="error" ref={errorRef} />
-              </Box>
-              {/* <Box sx={{ pt: '12px', ml: 3 }}>
-                <Button variant="btnPrimaryBig" type="submit" mt={3}>
-                  Save
-                </Button>
-              </Box> */}
-            </Flex>
-            <Box mt={0}>
-              <Modal isOpen={approval} onClose={() => setAddState(false)}>
-                <ApprovalFormBase
-                  closeModal={() => setApproval(false)}
-                  isOpen={approval}
-                  states={content}
-                  parent={cId}
-                />
-              </Modal>
-
-              {edit && content && (
-                <StatesForm
-                  onAttachApproval={onAttachApproval}
-                  content={content}
-                  onSave={CreateState}
-                  onDelete={deleteState}
-                  onSorted={onSortDone}
-                />
-              )}
-
-              <Box
-                sx={{
-                  p: '18px 0px 37px',
-                }}>
-                <Button
-                  type="button"
-                  variant="btnSecondary"
-                  onClick={() => setAddState(true)}
-                  sx={{
-                    fontWeight: 'bold',
-                    fontSize: 2,
-                    display: 'flex',
-                    gap: 2,
-                  }}>
-                  <IconWrapper p="out" size={16}>
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 5l0 14" />
-                    <path d="M5 12l14 0" />
-                  </IconWrapper>
-                  Add State
-                </Button>
-              </Box>
-
-              <Flex>
-                <Button
-                  variant="btnPrimary"
-                  sx={{
-                    fontSize: '15px',
-                    fontWeight: 500,
-                    lineHeight: '24px',
-                    py: '8px',
-                    px: '16px',
-                  }}
-                  onClick={() => setAddState(true)}>
-                  Save
-                </Button>
-              </Flex>
-
-              <Modal
-                isOpen={addState}
-                onClose={() => setAddState(false)}
-                label="Add State"
-                aria-label="Add New State">
-                <StateStateForm
-                  onSave={updateState}
-                  setAddState={setAddState}
-                />
-              </Modal>
+    <>
+      <Flex
+        as={'form'}
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{
+          height: '100dvh',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          overflow: 'auto',
+        }}>
+        <Text
+          variant="pB"
+          sx={{
+            p: 4,
+          }}>
+          {edit ? 'Edit Flow' : 'Create new Flow'}
+        </Text>
+        <StepsIndicator
+          titles={['Basic details', 'Flow states']}
+          formStep={formStep}
+          goTo={goTo}
+        />
+        <Container
+          sx={{ p: 4, height: '100%', overflowY: 'hidden' }}
+          data-flow={flow?.id}>
+          <Flex sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+            <Box sx={{ width: '492px' }}>
+              <Field
+                name="name"
+                label="Name"
+                defaultValue=""
+                register={register}
+              />
+              <Text variant="error" ref={errorRef} />
             </Box>
-            {errors.exampleRequired && <Text>This field is required</Text>}
+          </Flex>
+          <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+            {edit && states && (
+              <StatesForm
+                onAttachApproval={onAttachApproval}
+                states={states}
+                onSave={CreateState}
+                deleteState={deleteState}
+                onSorted={onSortDone}
+              />
+            )}
+
+            <Box
+              sx={{
+                p: '18px 0px 37px',
+              }}>
+              <Button
+                type="button"
+                variant="buttonSmall"
+                onClick={() => setAddState(true)}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                }}>
+                <IconWrapper p="out" size={16}>
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 5l0 14" />
+                  <path d="M5 12l14 0" />
+                </IconWrapper>
+                <Text variant="pM" color="green.700">
+                  Add State
+                </Text>
+              </Button>
+            </Box>
           </Box>
+          {errors.exampleRequired && <Text>This field is required</Text>}
         </Container>
-      </Box>
-    </Box>
+        <Flex sx={{ p: 4 }}>
+          {formStep === 0 && (
+            <Button
+              type="button"
+              onClick={() => {
+                next();
+                trigger();
+              }}
+              variant="buttonPrimary">
+              Next
+            </Button>
+          )}
+          {formStep === 1 && (
+            <Box>
+              <Button variant="buttonSecondary" type="button" onClick={prev}>
+                Prev
+              </Button>
+              <Button
+                disabled={!isValid}
+                variant="buttonPrimary"
+                type="submit"
+                ml={2}>
+                {edit ? 'Update' : 'Create'}
+              </Button>
+            </Box>
+          )}
+        </Flex>
+      </Flex>
+      <Modal isOpen={approval} onClose={() => setAddState(false)}>
+        <ApprovalFormBase
+          closeModal={() => setApproval(false)}
+          states={states}
+          parent={cId}
+        />
+      </Modal>
+      <Modal
+        isOpen={addState}
+        onClose={() => setAddState(false)}
+        label="Add State"
+        aria-label="Add New State">
+        <StateStateForm onSave={updateState} setAddState={setAddState} />
+      </Modal>
+    </>
   );
 };
 export default FlowForm;
