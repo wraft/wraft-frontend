@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
+import { Table } from '@wraft/ui';
 
-import { fetchAPI } from '../utils/models';
-import { TimeAgo } from './Atoms';
-import Table from './Table';
+import { TimeAgo } from 'components/Atoms';
+import { fetchAPI } from 'utils/models';
 
 export interface FieldTypeList {
   total_pages: number;
@@ -18,81 +18,70 @@ export interface FieldType {
   id: string;
 }
 
-const ItemField: FC<any> = ({ id, name }) => {
+const ItemField: FC<any> = ({ name }) => {
   return (
-    <Box
-      key={id}
-      p={3}
-      sx={{
-        flexGrow: 1,
-      }}>
-      <Text color="gray.8" sx={{ fontSize: 2, fontWeight: 400 }}>
-        {name}
-      </Text>
-      <Text pt={1} color="gray.5" sx={{ fontSize: 1, fontWeight: 300 }}>
-        Sample Field Description
-      </Text>
-    </Box>
+    <Text color="gray.8" sx={{ fontSize: 2, fontWeight: 400 }}>
+      {name}
+    </Text>
   );
 };
 
+const columns = [
+  {
+    id: 'name',
+    header: 'NAME',
+    accessorKey: 'name',
+    cell: ({ row }: any) => row?.original && <ItemField {...row?.original} />,
+    // size: 200,
+    enableSorting: false,
+  },
+  {
+    id: 'description',
+    header: 'DESCRIPTION',
+    accessorKey: 'description',
+    cell: ({ row }: any) =>
+      row?.original && <Box>{row?.original?.description}</Box>,
+    // size: 200,
+    enableSorting: false,
+  },
+  {
+    id: 'updated_at',
+    header: 'CREATED',
+    accessorKey: 'updated_at',
+    cell: ({ row }: any) => (
+      <Text as="span" sx={{ pt: 3, fontSize: 1 }}>
+        <TimeAgo time={row?.original?.updated_at} />
+      </Text>
+    ),
+    // size: 180,
+    enableSorting: false,
+  },
+];
+
 const FieldList: FC = () => {
-  const [contents, setContents] = useState<Array<FieldType>>([]);
-  const [fields, setFields] = useState<Array<any>>([]);
+  const [contents, setContents] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = () => {
+    setLoading(true);
     fetchAPI('field_types')
       .then((data: any) => {
-        const res: FieldTypeList = data;
+        const res: any = data;
         setContents(res.field_types);
+        setLoading(false);
       })
-      .catch();
-  };
-
-  useEffect(() => {
-    if (contents && contents.length > 0) {
-      const row: any = [];
-      contents.map((r: any) => {
-        const rFormated = {
-          col2: <ItemField {...r} />,
-          col3: (
-            <Text as="span" sx={{ pt: 3, fontSize: 1 }}>
-              <TimeAgo time={r.updated_at} />
-            </Text>
-          ),
-        };
-
-        row.push(rFormated);
+      .catch(() => {
+        setLoading(false);
       });
-      setFields(row);
-    }
-  }, [contents]);
+  };
 
   return (
     <Box mt={0}>
-      {fields && (
-        <Table
-          options={{
-            columns: [
-              {
-                Header: 'Name',
-                accessor: 'col2',
-                width: '45%',
-              },
-              {
-                Header: 'Updated',
-                accessor: 'col3',
-                width: '40%',
-              },
-            ],
-            data: fields,
-          }}
-        />
-      )}
+      <Table data={contents} columns={columns} isLoading={loading} />
     </Box>
   );
 };

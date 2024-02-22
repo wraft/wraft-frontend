@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Box, Container, Flex } from 'theme-ui';
 
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import ThemeViewForm from '../../../components/ThemeViewForm';
-import { menuLinks } from '../../../utils';
-import { fetchAPI } from '../../../utils/models';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import ThemeViewForm from 'components/ThemeViewForm';
+import { menuLinks } from 'utils/index';
+import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
   const [theme, setTheme] = useState<any>();

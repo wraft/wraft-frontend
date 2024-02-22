@@ -5,7 +5,8 @@ import { useFormContext } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
-import { Asset } from '../../utils/types';
+import { Asset } from 'utils/types';
+
 import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 import ProgressBar from './ProgressBar';
 

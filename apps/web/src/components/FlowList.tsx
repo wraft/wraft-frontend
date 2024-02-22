@@ -1,18 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-import Router from 'next/router';
+import NextLink from 'next/link';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
-import { Box, Flex, Spinner, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 
-import { deleteAPI, fetchAPI } from '../utils/models';
-import { TimeAgo } from './Atoms';
-import { ConfirmDelete } from './common';
-import FlowForm from './FlowForm';
-import Modal from './Modal';
-import Paginate, { IPageMeta } from './Paginate';
+import { TimeAgo } from 'components/Atoms';
+import { ConfirmDelete } from 'components/common';
+import FlowForm from 'components/FlowForm';
+import Modal from 'components/Modal';
+import Paginate, { IPageMeta } from 'components/Paginate';
+import { deleteAPI, fetchAPI } from 'utils/models';
 
 export interface ILayout {
   width: number;
@@ -69,17 +69,18 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const { theme } = useThemeUI();
 
   const loadData = (page: number) => {
+    setLoading(true);
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`flows${pageNo}`)
       .then((data: any) => {
-        setLoading(true);
+        setLoading(false);
         const res: IField[] = data.flows;
         setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
       .catch(() => {
-        setLoading(true);
+        setLoading(false);
       });
   };
 
@@ -111,18 +112,16 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       size: 250,
       cell: ({ row }: any) => {
         return (
-          <Button
-            variant="text"
-            onClick={() => {
-              Router.push(`/manage/flows/${row.original?.flow?.id}`);
-            }}>
-            <Box>
-              <Box>{row.original?.flow?.name}</Box>
-            </Box>
+          <>
+            <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
+              <Box>
+                <Box>{row.original?.flow?.name}</Box>
+              </Box>
+            </NextLink>
             <Drawer open={false} setOpen={() => {}}>
               <FlowForm setOpen={() => {}} />
             </Drawer>
-          </Button>
+          </>
         );
       },
     },
@@ -186,7 +185,6 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                   open={isOpen == row.index}
                   onClose={() => setIsOpen(null)}>
                   <Button
-                    variant="text"
                     onClick={() => {
                       setIsOpen(null);
                       setDeleteFlow(row.index);
@@ -227,15 +225,9 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      {!loading && (
-        <Box>
-          <Spinner width={40} height={40} color="primary" />
-        </Box>
-      )}
-
       <Box sx={{ width: '100%' }}>
         <Box mx={0} mb={3} sx={{ width: '100%' }}>
-          {contents && <Table data={contents} columns={columns} />}
+          <Table data={contents} columns={columns} isLoading={loading} />
         </Box>
         <Box mx={2}>
           <Paginate

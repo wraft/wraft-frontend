@@ -15,16 +15,16 @@ import {
   Text,
   Image,
 } from 'theme-ui';
+import { useAuth } from 'contexts/AuthContext';
 
-import { ConfirmDelete } from '../../../components/common';
-import Field from '../../../components/Field';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Modal from '../../../components/Modal';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { useAuth } from '../../../contexts/AuthContext';
-import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
-import { fetchAPI, putAPI, deleteAPI, postAPI } from '../../../utils/models';
+import { ConfirmDelete } from 'components/common';
+import Field from 'components/Field';
+import ManageSidebar from 'components/ManageSidebar';
+import Modal from 'components/Modal';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
+import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
 
 export interface Organisation {
   id: string;

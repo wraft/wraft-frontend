@@ -2,12 +2,12 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
 
-import FieldList from '../../../components/FieldList';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Link from '../../../components/NavLink';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { menuLinks } from '../../../utils';
+import FieldList from 'components/FieldList';
+import ManageSidebar from 'components/ManageSidebar';
+import Link from 'components/NavLink';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   return (

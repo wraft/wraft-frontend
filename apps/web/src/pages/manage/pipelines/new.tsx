@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Flex, Container } from 'theme-ui';
 
-import Page from '../../../components/PageFrame';
-import PipelineForm from '../../../components/PipelineForm';
+import Page from 'components/PageFrame';
+import PipelineForm from 'components/PipelineForm';
 
 const Index: FC = () => {
   return (

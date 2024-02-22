@@ -7,12 +7,13 @@ import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import { z } from 'zod';
 
+import Field from 'components/Field';
+import Link from 'components/NavLink';
+import PasswordCreated from 'components/PasswordCreated';
+import { postAPI } from 'utils/models';
+import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
+
 import Logo from '../../../../public/Logo.svg';
-import Field from '../../../components/Field';
-import Link from '../../../components/NavLink';
-import PasswordCreated from '../../../components/PasswordCreated';
-import { postAPI } from '../../../utils/models';
-import { addFieldIssue, passwordPattern } from '../../../utils/zodPatterns';
 
 const schema = z
   .object({
