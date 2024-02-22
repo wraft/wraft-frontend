@@ -2,10 +2,10 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Box, Container } from 'theme-ui';
 
-import FormList from '../../components/FormList';
-import Link from '../../components/NavLink';
-import Page from '../../components/PageFrame';
-import PageHeader from '../../components/PageHeader';
+import FormList from 'components/FormList';
+import Link from 'components/NavLink';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
 
 const Index: FC = () => {
   return (

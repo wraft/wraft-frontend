@@ -4,8 +4,9 @@ import Router from 'next/router';
 import { useRouter } from 'next/router';
 import { Flex, Box, Heading, Button } from 'theme-ui';
 
+import { fetchAPI } from 'utils/models';
+
 import Verified from '../../../../../public/Social 01 1.svg';
-import { fetchAPI } from '../../../../utils/models';
 
 const EmailVerified: React.FC = () => {
   const router = useRouter();

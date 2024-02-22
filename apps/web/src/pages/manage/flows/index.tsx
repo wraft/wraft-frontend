@@ -43,7 +43,7 @@ const Index: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
+            <Box sx={{ width: '100%' }}>
               <FlowList rerender={rerender} setRerender={setRerender} />
             </Box>
           </Flex>

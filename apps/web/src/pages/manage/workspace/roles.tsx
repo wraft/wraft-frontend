@@ -3,14 +3,14 @@ import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box, Input, Spinner } from 'theme-ui';
+import { useAuth } from 'contexts/AuthContext';
 
-import { AddIcon, SearchIcon } from '../../../components/Icons';
-import { RolesForm, RolesList } from '../../../components/manage';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { useAuth } from '../../../contexts/AuthContext';
-import { workspaceLinks } from '../../../utils';
+import { AddIcon, SearchIcon } from 'components/Icons';
+import { RolesForm, RolesList } from 'components/manage';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
