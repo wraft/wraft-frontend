@@ -35,6 +35,8 @@ module.exports = {
   // add rules configurations here
   rules: {
     "import/no-default-export": "off",
+    "turbo/no-undeclared-env-vars": 'warn',
+    '@typescript-eslint/no-unused-vars': 'warn',
     "import/order": [
       "error",
       {

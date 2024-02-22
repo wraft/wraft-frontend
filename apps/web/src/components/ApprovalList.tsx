@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
 import { Table } from '@wraft/ui';
-import { useAuth } from 'contexts/AuthContext';
 
 import PageHeader from 'components/PageHeader';
 import { StateBadge, TimeAgo } from 'components/Atoms';
+import { useAuth } from 'contexts/AuthContext';
 import { putAPI, fetchAPI } from 'utils/models';
 
 export interface ApprovalList {

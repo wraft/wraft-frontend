@@ -476,7 +476,7 @@ const ContentForm = (props: IContentForm) => {
    * @param state object with md, and json representation
    */
 
-  const doUpdate = (state: any) => {
+  const doUpdate = (_state: any) => {
     // console.log('[trigger][doUpdate]', state);
     // const markdownContent = editorRef.current?.helpers?.getMarkdown();
     // const json = editorRef.current?.helpers?.getJSON();

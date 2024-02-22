@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { Avatar, Box, Flex } from 'theme-ui';
 import { Table } from '@wraft/ui';
-import { useAuth } from 'contexts/AuthContext';
 
 import { StateBadge, TimeAgo } from 'components/Atoms';
+import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
 const columns = [

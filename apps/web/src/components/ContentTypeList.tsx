@@ -33,7 +33,7 @@ interface ContentTypeList {
   isEdit?: boolean;
 }
 
-const ContentTypeList = ({ isEdit }: ContentTypeList) => {
+const ContentTypeList = () => {
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
@@ -53,7 +53,7 @@ const ContentTypeList = ({ isEdit }: ContentTypeList) => {
           mb: 3,
           mt: 3,
         }}>
-        <ContentTypeDashboard isEdit={isEdit} />
+        <ContentTypeDashboard />
       </Box>
     </Box>
   );

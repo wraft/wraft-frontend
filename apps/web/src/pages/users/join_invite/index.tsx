@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Router from 'next/router';
 import cookie from 'js-cookie';
-import { useAuth } from 'contexts/AuthContext';
 
 import RegistrationForm from 'components/RegistrationForm';
+import { useAuth } from 'contexts/AuthContext';
 
 const Index = () => {
   const searchParams = useSearchParams();
