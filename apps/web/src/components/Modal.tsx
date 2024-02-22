@@ -61,9 +61,8 @@ const Modal: React.FC<ModalProps> = ({
                 m: 0,
                 fontSize: 3,
                 py: 2,
-                px: 2,
+                px: 3,
                 borderBottom: 'solid 1px #ddd',
-                mb: 2,
               }}>
               {label}
             </DialogHeading>

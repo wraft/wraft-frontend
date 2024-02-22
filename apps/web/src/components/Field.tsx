@@ -23,6 +23,7 @@ interface Props {
   color?: string | number;
   fontWeight?: string | number;
   fontSize?: string | number;
+  view?: boolean;
 }
 
 const Field: React.FC<Props> = ({
@@ -44,6 +45,7 @@ const Field: React.FC<Props> = ({
   color,
   fontWeight,
   fontSize,
+  view = false,
 }) => {
   const [passwordType, setPasswordType] = useState('password');
   return (
@@ -62,9 +64,12 @@ const Field: React.FC<Props> = ({
             color: color,
             fontWeight: fontWeight,
             fontSize: fontSize,
+            ':disabled': {
+              [view ? 'color' : '']: 'text',
+            },
           }}
           type={type ? (type === 'password' ? passwordType : type) : 'text'}
-          disabled={disable}
+          disabled={disable || view}
           placeholder={placeholder ? placeholder : ''}
           id={name}
           defaultValue={defaultValue || ''}

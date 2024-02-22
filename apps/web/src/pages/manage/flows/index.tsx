@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Flex, Container, Button } from 'theme-ui';
+import { Drawer } from '@wraft-ui/Drawer';
+import { Flex, Container, Button, Box } from 'theme-ui';
 
-import FlowForm from '../../../components/FlowForm';
-import FlowList from '../../../components/FlowList';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Modal from '../../../components/Modal';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { menuLinks } from '../../../utils';
+import FlowForm from 'components/FlowForm';
+import FlowList from 'components/FlowList';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -30,19 +30,22 @@ const Index: FC = () => {
             />
           }>
           <Button
+            variant="buttonSecondary"
             onClick={() => {
               setIsOpen(true);
             }}>
             Add Flow
           </Button>
         </PageHeader>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
-        </Modal>
+        <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+          {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
+        </Drawer>
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <FlowList rerender={rerender} setRerender={setRerender} />
+            <Box variant="layout.contentFrame">
+              <FlowList rerender={rerender} setRerender={setRerender} />
+            </Box>
           </Flex>
         </Container>
       </Page>

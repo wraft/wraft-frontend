@@ -42,7 +42,8 @@ const StyledPaginateContainer = styled(Flex)`
 
 const Paginate = ({ total_pages, changePage, info }: IPageMeta) => {
   return (
-    <StyledPaginateContainer sx={{ fontSize: 2 }}>
+    <StyledPaginateContainer
+      sx={{ fontSize: 2, display: 'flex', alignItems: 'center' }}>
       <ReactPaginate
         pageCount={total_pages || 0}
         pageRangeDisplayed={5}
@@ -55,7 +56,13 @@ const Paginate = ({ total_pages, changePage, info }: IPageMeta) => {
         breakLabel="..."
         breakClassName="break-me"
       />
-      <Box sx={{ ml: 'auto', mr: 3, fontSize: 2, color: 'gray.300' }}>
+      <Box
+        sx={{
+          ml: 'auto',
+          mr: 3,
+          fontSize: 2,
+          color: 'gray.300',
+        }}>
         {info}
       </Box>
     </StyledPaginateContainer>
