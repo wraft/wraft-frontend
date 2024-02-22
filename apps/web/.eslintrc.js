@@ -38,11 +38,16 @@ module.exports = {
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/anchor-is-valid': 'off',
-        '@typescript-eslint/no-unused-vars': ['error'],
+        // '@typescript-eslint/no-unused-vars': ['error'],
+        'no-unused-vars': 0,
+        '@typescript-eslint/no-unused-vars': ['warn', {
+          varsIgnorePattern: '[iI]gnored|createElement',
+        }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         "@typescript-eslint/no-duplicate-enum-values": "off",
         "react-hooks/exhaustive-deps": "off",
+        'turbo/no-undeclared-env-vars': 'off',
         'prettier/prettier': ['error', {}, { usePrettierrc: true }],
         "import/order": [
           "error",
@@ -70,12 +75,27 @@ module.exports = {
                 position: "after"
               },
               {
+                pattern: "contexts/**",
+                group: "internal",
+                position: "after"
+              },
+              {
+                pattern: "utils",
+                group: "internal",
+                position: "after"
+              },
+              {
                 pattern: "utils/**",
                 group: "internal",
                 position: "after"
               },
               {
                 pattern: "store/**",
+                group: "internal",
+                position: "after"
+              },
+              {
+                pattern: "middleware/**",
                 group: "internal",
                 position: "after"
               }

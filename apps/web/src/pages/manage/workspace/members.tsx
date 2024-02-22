@@ -3,7 +3,6 @@ import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
-import { useAuth } from 'contexts/AuthContext';
 
 import { InviteUserIcon } from 'components/Icons';
 import { InviteTeam } from 'components/manage';
@@ -11,6 +10,7 @@ import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
+import { useAuth } from 'contexts/AuthContext';
 import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {

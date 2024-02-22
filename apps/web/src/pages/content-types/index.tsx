@@ -12,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <ContentTypeList isEdit={true} />
+        <ContentTypeList />
       </Page>
     </>
   );

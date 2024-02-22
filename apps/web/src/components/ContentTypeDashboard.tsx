@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { Box, Flex } from 'theme-ui';
 import { Table } from '@wraft/ui';
-import { useAuth } from 'contexts/AuthContext';
 
 import { TimeAgo } from 'components/Atoms';
+import { useAuth } from 'contexts/AuthContext';
 // import { EmptyForm } from 'components/Icons';
 import { fetchAPI, deleteAPI } from 'utils/models';
 
@@ -15,12 +15,12 @@ import { fetchAPI, deleteAPI } from 'utils/models';
  * @returns
  */
 
-interface DocCardProps {
-  id: any;
-  name?: string;
-  color?: string;
-  isEdit?: boolean;
-}
+// interface DocCardProps {
+//   id: any;
+//   name?: string;
+//   color?: string;
+//   isEdit?: boolean;
+// }
 
 export interface ILayout {
   width: number;
@@ -46,9 +46,9 @@ export interface IFieldItem {
   type: string;
 }
 
-interface ContentTypeDashboardProps {
-  isEdit?: boolean;
-}
+// interface ContentTypeDashboardProps {
+//   isEdit?: boolean;
+// }
 
 const columns = [
   {
@@ -95,7 +95,7 @@ const columns = [
   },
 ];
 
-const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
+const ContentTypeDashboard = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
