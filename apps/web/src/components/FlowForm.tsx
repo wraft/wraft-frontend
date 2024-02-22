@@ -205,7 +205,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isValid },
+    trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
@@ -443,7 +444,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         </Container>
         <Flex sx={{ p: 4 }}>
           {formStep === 0 && (
-            <Button type="button" onClick={next} variant="buttonPrimary">
+            <Button
+              type="button"
+              onClick={() => {
+                next();
+                trigger();
+              }}
+              variant="buttonPrimary">
               Next
             </Button>
           )}
@@ -452,7 +459,11 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Button variant="buttonSecondary" type="button" onClick={prev}>
                 Prev
               </Button>
-              <Button variant="buttonPrimary" type="submit" ml={2}>
+              <Button
+                disabled={!isValid}
+                variant="buttonPrimary"
+                type="submit"
+                ml={2}>
                 {edit ? 'Update' : 'Create'}
               </Button>
             </Box>
