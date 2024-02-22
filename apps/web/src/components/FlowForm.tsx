@@ -254,11 +254,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    postAPI(`flows/${cId}/states`, data).then(() => {
-      if (cId) {
+    if (cId) {
+      postAPI(`flows/${cId}/states`, data).then(() => {
         loadStates(cId);
-      }
-    });
+      });
+    } else {
+      console.log('no flow id');
+    }
   };
 
   /**
