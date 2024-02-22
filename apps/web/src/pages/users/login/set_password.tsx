@@ -36,7 +36,7 @@ const Index = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
@@ -53,8 +53,8 @@ const Index = () => {
       toast.promise(setPasswordRequest, {
         loading: 'Loading...',
         success: () => {
-          return 'Successfully setted new Password';
           setVerified(true);
+          return 'Successfully setted new Password';
         },
         error: () => {
           return 'Failed to set new Password';

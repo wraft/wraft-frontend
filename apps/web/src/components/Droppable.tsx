@@ -17,12 +17,29 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Box, Button, Flex } from 'theme-ui';
+import { DragIcon } from '@wraft/icon';
+import { Box, Button, Flex, useThemeUI } from 'theme-ui';
 
 import { IconWrapper } from './Atoms';
 
-export function Droppable({ list, onAttachApproval, onDeleteFlow }: any) {
+type Props = {
+  list: any;
+  onAttachApproval: any;
+  deleteState: any;
+  setOrder: any;
+};
+
+export function Droppable({
+  list,
+  onAttachApproval,
+  deleteState,
+  setOrder,
+}: Props) {
   const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    setOrder(items);
+  }, [items]);
 
   useEffect(() => {
     // Update items when the list prop changes
@@ -53,18 +70,18 @@ export function Droppable({ list, onAttachApproval, onDeleteFlow }: any) {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        {items.map((id: any, index: number) => {
+        {items.map((name: any, index: number) => {
           return (
             <Box
-              key={id}
+              key={name}
               sx={{
                 borderBottom: '1px solid #E4E9EF;',
               }}>
               <SortableItem
                 index={index + 1}
-                id={id}
+                name={name}
                 onAttachApproval={onAttachApproval}
-                onDeleteFlow={onDeleteFlow}
+                deleteState={deleteState}
               />
             </Box>
           );
@@ -75,10 +92,10 @@ export function Droppable({ list, onAttachApproval, onDeleteFlow }: any) {
 }
 
 const SortableItem = (props: {
-  id: string;
+  name: string;
   index: number;
   onAttachApproval: any;
-  onDeleteFlow: any;
+  deleteState: any;
 }) => {
   const {
     attributes,
@@ -88,12 +105,14 @@ const SortableItem = (props: {
     transition,
     isDragging,
   } = useSortable({
-    id: props.id,
+    id: props.name,
   });
+  const themeui = useThemeUI();
 
   return (
     <Flex
       sx={{
+        position: 'relative',
         button: {
           display: 'none',
         },
@@ -102,6 +121,33 @@ const SortableItem = (props: {
         },
       }}>
       <Box
+        sx={{
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          left: '-46px',
+        }}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}>
+        <Box
+          as="div"
+          style={{
+            transform: CSS.Transform.toString(transform),
+            transition: transition,
+            display: 'flex',
+            padding: '0px 16px',
+          }}>
+          <DragIcon
+            color={themeui?.theme?.colors?.gray?.[200] || ''}
+            width={20}
+            height={20}
+            viewBox="0 0 24 24"
+          />
+        </Box>
+      </Box>
+      <Box
         as="div"
         style={{
           transform: CSS.Transform.toString(transform),
@@ -109,10 +155,8 @@ const SortableItem = (props: {
           display: 'flex',
           padding: '0px 16px',
         }}
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
-        className={`w-20 h-20 ${getColor(Number(props.id))} ${isDragging ? 'z-10' : ''}`}>
+        className={`w-20 h-20 ${getColor(Number(props.index))}
+         ${isDragging ? 'z-10' : ''}`}>
         <Box
           sx={{
             display: 'flex',
@@ -139,7 +183,7 @@ const SortableItem = (props: {
               fontWeight: 500,
               color: '#2C3641',
             }}>
-            {props.id}
+            {props.name}
           </Box>
         </Box>
       </Box>
@@ -172,7 +216,9 @@ const SortableItem = (props: {
           variant="btnDelete"
           data-no-dnd="true"
           sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
-          onClick={() => props.onDeleteFlow(props.id)}>
+          onClick={() => {
+            props.deleteState(props.name);
+          }}>
           <IconWrapper stroke={2}>
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M4 7l16 0" />
