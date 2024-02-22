@@ -224,6 +224,7 @@ const Index: FC = () => {
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
                 variant="layout.contentFrame"
+                sx={{ backgroundColor: 'backgroundWhite' }}
                 p={4}>
                 <Box sx={{ height: '128px', mb: 4 }}>
                   <Image
