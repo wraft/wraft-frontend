@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
+import { Drawer } from '@wraft-ui/Drawer';
 import Head from 'next/head';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
 import FlowForm from '../../../components/FlowForm';
 import FlowList from '../../../components/FlowList';
 import ManageSidebar from '../../../components/ManageSidebar';
-import Modal from '../../../components/Modal';
 import Page from '../../../components/PageFrame';
 import PageHeader from '../../../components/PageHeader';
 import { menuLinks } from '../../../utils';
@@ -31,15 +31,16 @@ const Index: FC = () => {
             />
           }>
           <Button
+            variant="buttonSecondary"
             onClick={() => {
               setIsOpen(true);
             }}>
             Add Flow
           </Button>
         </PageHeader>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <FlowForm setOpen={setIsOpen} setRerender={setRerender} />
-        </Modal>
+        <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+          {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
+        </Drawer>
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
