@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import NavLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, Flex, Text } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Pagination, Table } from '@wraft/ui';
 
 import { fetchAPI } from '../utils/models';
 import { IField } from '../utils/types/content';
 import { TimeAgo } from './Atoms';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
-import Paginate, { IPageMeta } from './Paginate';
-// import { Table } from './Table';
+// import Paginate, { IPageMeta } from './Paginate';
 
 const columns = [
   {
@@ -79,13 +79,13 @@ const columns = [
 ];
 
 const TemplateList = () => {
-  // const [contents, setContents] = useState<Array<IField>>([]);
-
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [pageMeta, setPageMeta] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
-  const [total, setTotal] = useState<number>(0);
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
     loadData(1);
@@ -99,12 +99,12 @@ const TemplateList = () => {
 
   const loadData = (page: number) => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}` : '';
-    fetchAPI(`data_templates${pageNo}`)
+
+    const query = `?page=${page}`;
+    fetchAPI(`data_templates${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;
-        setTotal(data.total_pages);
         setContents(res);
 
         setPageMeta(data);
@@ -114,13 +114,22 @@ const TemplateList = () => {
       });
   };
 
-  const changePage = (_e: any) => {
-    console.log('page', _e?.selected);
-    setPage(_e?.selected + 1);
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   useEffect(() => {
-    loadData(total);
+    loadData(currentPage);
   }, []);
 
   return (
@@ -141,7 +150,16 @@ const TemplateList = () => {
             skeletonRows={10}
             emptyMessage="No template has been created yet."
           />
-          {pageMeta && <Paginate changePage={changePage} {...pageMeta} />}
+          <Box mt="16px">
+            {pageMeta && pageMeta?.total_pages > 1 && (
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={changePage}
+                totalEntries={pageMeta?.total_entries}
+              />
+            )}
+          </Box>
         </Box>
       </Box>
     </Box>

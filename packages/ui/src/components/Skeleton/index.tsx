@@ -11,8 +11,14 @@ const Skeleton: React.FC<SkeletonProps> = ({
   height,
   borderRadius = '4px',
 }) => {
-  const keyframes = {
-    '@keyframes loading': {
+
+  const SkeletonWrapper = styled('div')`
+    width: ${width};
+    height: ${height || '4px'};
+    border-radius;
+    background-color: #E4E9EF;
+    animation: skloading 1.5s infinite ease-in-out;
+    @keyframes skloading {
       '0%': {
         opacity: 0.3,
       },
@@ -22,20 +28,10 @@ const Skeleton: React.FC<SkeletonProps> = ({
       '100%': {
         opacity: 0.3,
       },
-    },
-  };
+    }
+  `
 
-  const style = {
-    minWidth: width,
-    minHeight: height,
-    borderRadius,
-    backgroundColor: '#E4E9EF',
-    animation: 'loading 1.5s infinite ease-in-out',
-    mb: '8px',
-    ...keyframes,
-  };
-
-  return <x.div className="skeleton" {...style} />;
+  return <SkeletonWrapper className="skeleton" />;
 };
 
 

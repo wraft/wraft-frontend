@@ -89,7 +89,7 @@
     "react-hot-toast": "^2.4.1",
     "react-hotkeys-hook": "^4.4.1",
     "react-image-crop": "^10.0.0",
-    "react-paginate": "^6.3.2",
+    "react-paginate": "^8.2.0",
     "react-pdf": "5.7.2",
     "react-pdf-highlighter": "^5.3.0",
     "react-select": "^5.8.0",
@@ -106,8 +106,6 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "@wraft/eslint-config": "*",
-    "@wraft/typescript-config": "*",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^14.1.2",
     "@types/js-cookie": "^3.0.6",
@@ -123,6 +121,8 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
     "@typescript-eslint/parser": "^6.17.0",
+    "@wraft/eslint-config": "*",
+    "@wraft/typescript-config": "*",
     "babel-jest": "^29.6.4",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",

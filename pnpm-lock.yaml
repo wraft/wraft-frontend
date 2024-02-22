@@ -316,8 +316,8 @@ importers:
         specifier: ^10.0.0
         version: 10.1.8(react@18.2.0)
       react-paginate:
-        specifier: ^6.3.2
-        version: 6.5.0(react@18.2.0)
+        specifier: ^8.2.0
+        version: 8.2.0(react@18.2.0)
       react-pdf:
         specifier: 5.7.2
         version: 5.7.2(@types/react@18.2.51)(react-dom@18.2.0)(react@18.2.0)(webpack@4.47.0)
@@ -649,6 +649,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-paginate:
+        specifier: ^8.2.0
+        version: 8.2.0(react@18.2.0)
     devDependencies:
       '@storybook/react':
         specifier: ^7.6.12
@@ -17290,10 +17293,10 @@ packages:
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  /react-paginate@6.5.0(react@18.2.0):
-    resolution: {integrity: sha512-H7xSi9jyiJzgfaj+2nNhQcjZfwzJ/Mxb64V2RiyDctjZyCWojwsaGwMqhLBpQ58iAuMVtBMRQ7ECqMcUKG9QSQ==}
+  /react-paginate@8.2.0(react@18.2.0):
+    resolution: {integrity: sha512-sJCz1PW+9PNIjUSn919nlcRVuleN2YPoFBOvL+6TPgrH/3lwphqiSOgdrLafLdyLDxsgK+oSgviqacF4hxsDIw==}
     peerDependencies:
-      react: ^16.0.0
+      react: ^16 || ^17 || ^18
     dependencies:
       prop-types: 15.8.1
       react: 18.2.0
