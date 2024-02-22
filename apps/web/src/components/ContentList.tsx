@@ -202,14 +202,16 @@ const ContentList = () => {
                 data={contents}
                 isLoading={contenLoading}
                 columns={columns}
-                skeletonRows={7}
+                skeletonRows={10}
               />
             </Box>
-            <Paginate
-              changePage={changePage}
-              {...pageMeta}
-              info={`${total} of ${total} pages`}
-            />
+            {pageMeta && (
+              <Paginate
+                changePage={changePage}
+                {...pageMeta}
+                info={`${total} of ${total} pages`}
+              />
+            )}
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>

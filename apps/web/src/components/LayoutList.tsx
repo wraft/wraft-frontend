@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import NextLink from 'next/link';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
+import { Button, Table } from '@wraft/ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
-import { Button, ConfirmDelete, Table } from './common';
+import { ConfirmDelete } from './common';
 import { Drawer } from './common/Drawer';
 import { OptionsIcon } from './Icons';
 import LayoutForm from './LayoutForm';
@@ -44,6 +45,7 @@ const LayoutList = ({ rerender }: Props) => {
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
+  const [loading, setIslLoading] = useState<number | boolean>(false);
 
   /**
    * Delete a Layout
@@ -71,12 +73,16 @@ const LayoutList = ({ rerender }: Props) => {
    * Load all Engines
    */
   const loadLayout = () => {
+    setIslLoading(true);
     fetchAPI('layouts?sort=inserted_at_desc')
       .then((data: any) => {
         const res: IField[] = data.layouts;
         setContents(res);
+        setIslLoading(false);
       })
-      .catch();
+      .catch(() => {
+        setIslLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -89,19 +95,16 @@ const LayoutList = ({ rerender }: Props) => {
       header: 'NAME',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Button
-          variant="text"
-          onClick={() => {
-            // setIsEdit(row.index);
-            Router.push(`/manage/layouts/${row.original.id}`);
-          }}>
-          <Box>
-            <Box>{row.original?.name}</Box>
-          </Box>
+        <>
+          <NextLink href={`/manage/layouts/${row.original.id}`}>
+            <Box>
+              <Box>{row.original?.name}</Box>
+            </Box>
+          </NextLink>
           <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
             <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
           </Drawer>
-        </Button>
+        </>
       ),
       enableSorting: false,
     },
@@ -145,7 +148,7 @@ const LayoutList = ({ rerender }: Props) => {
                   onClose={() => setIsOpen(null)}>
                   <MenuItem>
                     <Button
-                      variant="text"
+                      // variant="text"
                       onClick={() => {
                         setIsOpen(null);
                         setDeleteLayout(row.index);
@@ -182,7 +185,7 @@ const LayoutList = ({ rerender }: Props) => {
 
   return (
     <Box>
-      <Table data={contents} columns={columns} />
+      <Table data={contents} columns={columns} isLoading={loading} />
     </Box>
   );
 };
