@@ -17,7 +17,8 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Box, Button, Flex } from 'theme-ui';
+import { DragIcon } from '@wraft/icon';
+import { Box, Button, Flex, useThemeUI } from 'theme-ui';
 
 import { IconWrapper } from './Atoms';
 
@@ -106,10 +107,12 @@ const SortableItem = (props: {
   } = useSortable({
     id: props.name,
   });
+  const themeui = useThemeUI();
 
   return (
     <Flex
       sx={{
+        position: 'relative',
         button: {
           display: 'none',
         },
@@ -118,6 +121,32 @@ const SortableItem = (props: {
         },
       }}>
       <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          transform: 'translateY(-50%)',
+          left: '-46px',
+        }}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}>
+        <Box
+          as="div"
+          style={{
+            transform: CSS.Transform.toString(transform),
+            transition: transition,
+            display: 'flex',
+            padding: '0px 16px',
+          }}>
+          <DragIcon
+            color={themeui?.theme?.colors?.gray?.[200] || ''}
+            width={20}
+            height={20}
+            viewBox="0 0 24 24"
+          />
+        </Box>
+      </Box>
+      <Box
         as="div"
         style={{
           transform: CSS.Transform.toString(transform),
@@ -125,9 +154,6 @@ const SortableItem = (props: {
           display: 'flex',
           padding: '0px 16px',
         }}
-        ref={setNodeRef}
-        {...attributes}
-        {...listeners}
         className={`w-20 h-20 ${getColor(Number(props.index))}
          ${isDragging ? 'z-10' : ''}`}>
         <Box
