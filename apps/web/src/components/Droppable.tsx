@@ -122,6 +122,7 @@ const SortableItem = (props: {
       }}>
       <Box
         sx={{
+          cursor: 'pointer',
           position: 'absolute',
           top: '50%',
           transform: 'translateY(-50%)',
