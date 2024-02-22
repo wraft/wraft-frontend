@@ -4,12 +4,12 @@ import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
-import LayoutForm from '../../../components/LayoutForm';
-import LayoutList from '../../../components/LayoutList';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { menuLinks } from '../../../utils';
+import LayoutForm from 'components/LayoutForm';
+import LayoutList from 'components/LayoutList';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -42,7 +42,7 @@ const Index: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
+            <Box sx={{ width: '100%' }}>
               <LayoutList rerender={rerender} />
             </Box>
           </Flex>

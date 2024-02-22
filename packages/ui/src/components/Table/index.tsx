@@ -4,9 +4,11 @@ import {
   useReactTable,
   getSortedRowModel,
 } from '@tanstack/react-table';
-import styled, { th, x } from '@xstyled/emotion';
+import { x } from '@xstyled/emotion';
 import * as S from './styled'
 import { Skeleton } from '../Skeleton';
+import { EmptyImage } from './EmptyImage';
+
 
 
 interface TableProps {
@@ -14,10 +16,11 @@ interface TableProps {
   columns: any;
   isLoading?: any;
   skeletonRows?: number;
+  emptyMessage?: string;
   'aria-label'?: string;
 }
 
-const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skeletonRows = 5 }: TableProps) => {
+const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skeletonRows = 5, emptyMessage = "No Data" }: TableProps) => {
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
     data,
     columns,
@@ -25,8 +28,6 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
   });
-
-  console.log('options', options);
 
   return (
     <>
@@ -108,13 +109,16 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
                   <x.td
                     py="14px"
                     px='24px'
+                    borderBottom="1px solid"
+                    borderColor="border"
                     key={`${columnIndex}-${index}`}
                   >
-                    <Skeleton height="24px" />
+                    <Skeleton height="18px" />
                   </x.td>
                 ))}
               </x.tr>
             ))}
+          
           {!isLoading && getRowModel().rows.map((row) => {
             return (
               <x.tr key={row.id}>
@@ -136,6 +140,25 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
           })}
         </S.Tbody>
       </S.Table>
+      {!isLoading && data && data.length === 0 && (
+            <x.div 
+              backgroundColor="backgroundWhite"
+              minHeight="300px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              border="1px solid"
+              borderColor="border"
+              borderTop="none"
+              >
+                <x.div textAlign="center"> 
+                  <EmptyImage />
+                  <x.p m="0"  >
+                      {emptyMessage}
+                    </x.p>
+                </x.div>
+            </x.div>
+          )}
     </>
   );
 };
