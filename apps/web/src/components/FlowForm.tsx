@@ -419,12 +419,11 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               }}>
               <Button
                 type="button"
-                variant="btnSecondary"
+                variant="buttonSmall"
                 onClick={() => setAddState(true)}
                 sx={{
-                  fontWeight: 'bold',
-                  fontSize: 2,
                   display: 'flex',
+                  alignItems: 'center',
                   gap: 2,
                 }}>
                 <IconWrapper p="out" size={16}>
@@ -432,7 +431,9 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   <path d="M12 5l0 14" />
                   <path d="M5 12l14 0" />
                 </IconWrapper>
-                Add State
+                <Text variant="pM" color="green.700">
+                  Add State
+                </Text>
               </Button>
             </Box>
           </Box>

@@ -233,6 +233,8 @@ export const IconWrapper = ({
     <Box
       {...props}
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         svg: {
           cursor: 'pointer',
           width: `${size}px`,
