@@ -177,6 +177,7 @@ const StatesForm = ({
       <Label>Flow states</Label>
       {states && (
         <Box
+          ml={3}
           mb={0}
           sx={{
             border: '1px solid #E4E9EF',
