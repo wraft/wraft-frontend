@@ -25,19 +25,11 @@ export const TimeAgo = (props: TimeAgoProps) => {
 
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
-      ? format(local_time, 'MMMM dd, yyyy')
+      ? format(local_time, 'MMM dd, yyyy')
       : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
-    <Text
-      pl={0}
-      sx={{
-        fontSize: '12px',
-        fontWeight: 500,
-        '.hov': { opacity: 0 },
-        ':hover': { '.hov': { opacity: 1 } },
-      }}
-      color="gray.6">
+    <Text variant="pM" sx={{ color: 'gray.600' }}>
       {timed}
     </Text>
   );
@@ -241,6 +233,8 @@ export const IconWrapper = ({
     <Box
       {...props}
       sx={{
+        display: 'flex',
+        alignItems: 'center',
         svg: {
           cursor: 'pointer',
           width: `${size}px`,
