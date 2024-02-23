@@ -89,7 +89,6 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Link>
         </Box>
       ),
-      size: 200,
       enableSorting: false,
     },
     {
@@ -115,7 +114,6 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Text>
         </Flex>
       ),
-      size: 180,
       enableSorting: false,
     },
     {
