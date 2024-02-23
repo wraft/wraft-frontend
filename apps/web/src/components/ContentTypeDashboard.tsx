@@ -56,7 +56,7 @@ const columns = [
     header: 'Name',
     accessorKey: 'title',
     cell: ({ row }: any) => (
-      <NextLink href={`/content-types/edit/${row?.original?.id}`}>
+      <NextLink href={`/content-types/${row?.original?.id}`}>
         <Flex sx={{ fontSize: '12px', ml: '-16px', py: 2 }}>
           <Box
             sx={{
