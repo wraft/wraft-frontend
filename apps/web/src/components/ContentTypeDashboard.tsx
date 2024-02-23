@@ -73,7 +73,6 @@ const columns = [
         </Flex>
       </NextLink>
     ),
-    size: '350',
     enableSorting: false,
   },
   {
