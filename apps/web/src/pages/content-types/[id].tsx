@@ -1,25 +1,47 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-// import ContentTypeForm from '../../src/components/ContentTypeForm';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
+import { Container, Flex } from 'theme-ui';
 
-// import CreateForm from '../../src/components/ContentForm';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import ContentTypeViewForm from 'components/ContentTypeViewForm';
+import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
+  const [variant, setVariant] = useState<any>();
   const router = useRouter();
-  console.log('router.query', router.query);
-  // const [action, setAction] = useState<any>();
-
-  // const onSave = () => {
-  //   console.log('saved');
-  // }
+  const id: string = router.query.id as string;
+  useEffect(() => {
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      console.log(data);
+      setVariant(data);
+    });
+  }, []);
 
   return (
     <>
       <Head>
-        <title>Create Instance - Wraft Docs</title>
+        <title>Edit Theme - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
+      <Page>
+        <PageHeader
+          title="Variants"
+          desc={
+            <DescriptionLinker
+              data={[
+                // { name: 'Variants', path: '/content-types' },
+                { name: `${variant?.content_type?.name || ''}` },
+              ]}
+            />
+          }
+        />
+        <Container variant="layout.pageFrame">
+          <ContentTypeViewForm />
+        </Container>
+      </Page>
     </>
   );
 };
