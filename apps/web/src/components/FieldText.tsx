@@ -9,6 +9,7 @@ interface Props {
   name: string;
   defaultValue: string;
   disabled?: boolean;
+  view?: boolean;
 }
 
 const FieldText: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const FieldText: React.FC<Props> = ({
   register,
   defaultValue,
   disabled,
+  view = false,
 }) => {
   return (
     <Box>
@@ -27,7 +29,12 @@ const FieldText: React.FC<Props> = ({
         id={name}
         defaultValue={defaultValue}
         {...register(name, { required: `${label} is required` })}
-        disabled={disabled}
+        disabled={disabled || view}
+        sx={{
+          ':disabled': {
+            [view ? 'color' : '']: 'text',
+          },
+        }}
       />
       {error && <Text variant="error"> {error.message}</Text>}
     </Box>
