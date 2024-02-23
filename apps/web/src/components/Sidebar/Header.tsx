@@ -216,7 +216,7 @@ const Header = () => {
                   )}
                 </Box>
 
-                {/* <DropdownMenu.Item>
+                <DropdownMenu.Item>
                   <Flex
                     onClick={() => {
                       const next = mode === 'dark' ? 'light' : 'dark';
@@ -231,7 +231,7 @@ const Header = () => {
                       <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
                     </Box>
                   </Flex>
-                </DropdownMenu.Item> */}
+                </DropdownMenu.Item>
                 <DropdownMenu.Item>
                   <Link href="/account" path="/account">
                     Settings
