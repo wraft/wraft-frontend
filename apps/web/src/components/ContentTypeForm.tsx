@@ -259,7 +259,7 @@ const Form = () => {
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
-      setValue('theme_id', res.content_type.theme.id || undefined);
+      setValue('theme_id', res.content_type?.theme?.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
