@@ -6,6 +6,8 @@ export { DropdownMenu } from './DropdownMenu';
 export { Link } from './Link';
 export { Spinner } from './Spinner';
 export { Button } from './Button';
+export { default as Pagination } from "./Paginate";
+
 
 
 

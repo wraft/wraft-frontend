@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, Flex } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import {
+  // Pagenation,
+  Table,
+} from '@wraft/ui';
 
 import { TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -57,10 +61,10 @@ const columns = [
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NextLink href={`/content-types/${row?.original?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px', py: 2 }}>
+        <Flex sx={{ fontSize: '12px', ml: '-14px', py: 2 }}>
           <Box
             sx={{
-              width: '4px',
+              width: '3px',
               bg: row.original?.color ? row.original?.color : 'blue',
             }}
           />
@@ -98,20 +102,34 @@ const columns = [
 const ContentTypeDashboard = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pageMeta, setPageMeta] = useState<any>();
+  const [page, setPage] = useState<number>();
 
   const { accessToken } = useAuth();
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
+
+  useEffect(() => {
+    if (page) {
+      loadData(page);
+    }
+  }, [page]);
 
   const delData = (id: string) => {
     deleteAPI(`content_types/${id}`);
   };
 
-  const loadData = () => {
+  const loadData = (page: number) => {
     setLoading(true);
-    fetchAPI('content_types?sort=inserted_at_desc')
+
+    const query = `?page=${page}&sort=inserted_at_desc`;
+    fetchAPI(`content_types${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.content_types;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
@@ -119,8 +137,22 @@ const ContentTypeDashboard = () => {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(currentPage);
   }, [accessToken]);
+
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   console.log('loading[ww]', loading);
 
@@ -133,6 +165,16 @@ const ContentTypeDashboard = () => {
         skeletonRows={10}
         emptyMessage="No blocks has been created yet."
       />
+      {/* <Box mt="16px">
+        {pageMeta && pageMeta?.total_pages > 1 && (
+          <Pagination
+            totalPage={pageMeta?.total_pages}
+            initialPage={currentPage}
+            onPageChange={changePage}
+            totalEntries={pageMeta?.total_entries}
+          />
+        )}
+      </Box> */}
     </Box>
   );
 };

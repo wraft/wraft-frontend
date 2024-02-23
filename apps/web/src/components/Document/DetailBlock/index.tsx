@@ -40,7 +40,7 @@ const ContentForm = (props: IContentForm) => {
     register,
     getValues,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
   } = useForm();
 
@@ -56,7 +56,7 @@ const ContentForm = (props: IContentForm) => {
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
-  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(true);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
 
   const [activeFlow, setActiveFlow] = useState<any>(null);
   const [saving, setSaving] = useState<boolean>(false);
@@ -88,6 +88,10 @@ const ContentForm = (props: IContentForm) => {
       onInitNewContentCreate(newContent.template);
     }
   }, [newContent]);
+
+  useEffect(() => {
+    setUnsavedChanges(isDirty);
+  }, [isDirty]);
 
   const onInitNewContentCreate = (template: any) => {
     setSelectedTemplate(template);
@@ -189,12 +193,14 @@ const ContentForm = (props: IContentForm) => {
     }
   };
 
+  console.log('isDirty', isDirty);
+
   /**
    * On Submit
    * @param data
    */
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
@@ -202,6 +208,7 @@ const ContentForm = (props: IContentForm) => {
 
     console.log('onSubmit[1--b]', data);
     console.log('onSubmit[1--b]', editorRef.current);
+    setUnsavedChanges(false);
 
     setSaving(true);
 
@@ -230,14 +237,12 @@ const ContentForm = (props: IContentForm) => {
 
     if (edit) {
       putAPI(`contents/${id}`, template).then((data: any) => {
-        setUnsavedChanges(false);
         onCreate(data);
         setSaving(false);
       });
     } else {
       postAPI(`content_types/${data.ttype}/contents`, template).then(
         (data: any) => {
-          setUnsavedChanges(false);
           if (data?.info) {
             toast.success('Build Failed', {
               duration: 1000,
@@ -344,7 +349,7 @@ const ContentForm = (props: IContentForm) => {
    */
   const updateTitle = () => {
     setTitle(selectedTemplate?.title_template);
-    setValue('title', selectedTemplate?.title_template);
+    setValue('title', selectedTemplate?.title_template, { shouldDirty: true });
   };
   /**
    * Field update eventbus
@@ -356,8 +361,6 @@ const ContentForm = (props: IContentForm) => {
       updateTitle();
     }
   };
-
-  console.log('errors', errors);
 
   /**
    * When form errors appear
@@ -374,7 +377,6 @@ const ContentForm = (props: IContentForm) => {
           position: 'bottom-center',
         });
       });
-      // console.log('errors', errors);
     }
   }, [errors]);
 
@@ -476,16 +478,15 @@ const ContentForm = (props: IContentForm) => {
    * @param state object with md, and json representation
    */
 
-  const doUpdate = (_state: any) => {
-    // console.log('[trigger][doUpdate]', state);
+  const doUpdate = (state: any) => {
     // const markdownContent = editorRef.current?.helpers?.getMarkdown();
     // const json = editorRef.current?.helpers?.getJSON();
     // if (state.json) {
     //   setValue('serialized', JSON.stringify(json));
     // }
-    // if (state.md) {
-    //   setValue('body', state.md);
-    // }
+    if (state.md) {
+      setValue('body', state.md, { shouldDirty: true });
+    }
     // if (state.json) {
     //   setValue('serialized', JSON.stringify(state.json));
     // }
@@ -529,7 +530,6 @@ const ContentForm = (props: IContentForm) => {
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-    console.log('onSaved', defx);
     // console.log('onSaved[body]', resx);
 
     updateStuff(selectedTemplate, resx);
@@ -582,6 +582,7 @@ const ContentForm = (props: IContentForm) => {
               m: 0,
               bg: 'neutral.200',
             }}>
+            <input type="hidden" {...register('hiddenField')} value="body" />
             <Box
               sx={{
                 // position: 'relative',
