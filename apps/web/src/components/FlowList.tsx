@@ -1,17 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
+import { Button, Table, Pagination } from '@wraft/ui';
 
 import { TimeAgo } from 'components/Atoms';
 import { ConfirmDelete } from 'components/common';
 import FlowForm from 'components/FlowForm';
 import Modal from 'components/Modal';
-import Paginate, { IPageMeta } from 'components/Paginate';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -59,14 +59,16 @@ interface Props {
 
 const Form: FC<Props> = ({ rerender, setRerender }) => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [pageMeta, setPageMeta] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [total, setTotal] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteFlow, setDeleteFlow] = useState<number | null>(null);
 
   const { theme } = useThemeUI();
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   const loadData = (page: number) => {
     setLoading(true);
@@ -75,7 +77,6 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.flows;
-        setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
@@ -84,8 +85,18 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       });
   };
 
-  const changePage = (_e: any) => {
-    setPage(_e?.selected + 1);
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   useEffect(() => {
@@ -230,11 +241,14 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
           <Table data={contents} columns={columns} isLoading={loading} />
         </Box>
         <Box mx={2}>
-          <Paginate
-            changePage={changePage}
-            {...pageMeta}
-            info={`${page} of ${total} pages`}
-          />
+          {pageMeta && pageMeta?.total_pages > 1 && (
+            <Pagination
+              totalPage={pageMeta?.total_pages}
+              initialPage={currentPage}
+              onPageChange={changePage}
+              totalEntries={pageMeta?.total_entries}
+            />
+          )}
         </Box>
       </Box>
     </Box>

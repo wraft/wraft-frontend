@@ -10,7 +10,6 @@ import { Skeleton } from '../Skeleton';
 import { EmptyImage } from './EmptyImage';
 
 
-
 interface TableProps {
   data: any;
   columns: any;
@@ -113,7 +112,7 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
                     borderColor="border"
                     key={`${columnIndex}-${index}`}
                   >
-                    <Skeleton height="18px" />
+                    <Skeleton height="22px" />
                   </x.td>
                 ))}
               </x.tr>

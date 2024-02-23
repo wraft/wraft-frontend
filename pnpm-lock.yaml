@@ -315,9 +315,6 @@ importers:
       react-image-crop:
         specifier: ^10.0.0
         version: 10.1.8(react@18.2.0)
-      react-paginate:
-        specifier: ^6.3.2
-        version: 6.5.0(react@18.2.0)
       react-pdf:
         specifier: 5.7.2
         version: 5.7.2(@types/react@18.2.51)(react-dom@18.2.0)(react@18.2.0)(webpack@4.47.0)
@@ -637,6 +634,9 @@ importers:
       '@tanstack/react-table':
         specifier: ^8.11.2
         version: 8.11.8(react-dom@18.2.0)(react@18.2.0)
+      '@wraft/icon':
+        specifier: '*'
+        version: link:../icon
       '@xstyled/emotion':
         specifier: ^3.8.0
         version: 3.8.0(@emotion/react@11.11.3)(@emotion/styled@11.11.0)
@@ -17289,15 +17289,6 @@ packages:
 
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
-
-  /react-paginate@6.5.0(react@18.2.0):
-    resolution: {integrity: sha512-H7xSi9jyiJzgfaj+2nNhQcjZfwzJ/Mxb64V2RiyDctjZyCWojwsaGwMqhLBpQ58iAuMVtBMRQ7ECqMcUKG9QSQ==}
-    peerDependencies:
-      react: ^16.0.0
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.2.0
-    dev: false
 
   /react-pdf-highlighter@5.6.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-3iAbqxA609HyqkWQih80ehFw7ti9chZ32pz7ErqFA3WVMZ1lyjVopi2K9v+3dgmCMW5QaWPHFMdLGbV5rzXGnQ==}

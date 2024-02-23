@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Pagination, Table } from '@wraft/ui';
 
 import { fetchAPI } from '../utils/models';
 import { TimeAgo, FilterBlock, StateBadge } from './Atoms';
 import PageHeader from './PageHeader';
-import Paginate from './Paginate';
-// import { Table } from './Table';
 
 export interface ILayout {
   width: number;
@@ -130,18 +129,18 @@ const columns = [
  * @returns
  */
 const ContentList = () => {
-  // const token = useStoreState((state) => state.auth.token);
-
   const [contents, setContents] = useState<any>([]);
   const [variants, setVariants] = useState<Array<any>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [_loading, setLoading] = useState<boolean>(false);
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
-  const [total, setTotal] = useState<number>(1);
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
-    loadData(1);
+    loadData(currentPage);
     loadVariants();
   }, []);
 
@@ -172,12 +171,11 @@ const ContentList = () => {
    */
   const loadData = (page: number) => {
     setContenLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`contents${pageNo}`)
+    const query = `page=${page}&sort=inserted_at_desc`;
+    fetchAPI(`contents?${query}`)
       .then((data: any) => {
         setContenLoading(false);
         const res: any = data.contents;
-        setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
@@ -186,9 +184,18 @@ const ContentList = () => {
       });
   };
 
-  const changePage = (_e: any) => {
-    console.log('page', _e?.selected);
-    setPage(_e?.selected + 1);
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   return (
@@ -202,14 +209,15 @@ const ContentList = () => {
                 data={contents}
                 isLoading={contenLoading}
                 columns={columns}
-                skeletonRows={10}
+                skeletonRows={12}
               />
             </Box>
-            {pageMeta && (
-              <Paginate
-                changePage={changePage}
-                {...pageMeta}
-                info={`${total} of ${total} pages`}
+            {pageMeta && pageMeta?.total_pages > 1 && (
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={changePage}
+                totalEntries={pageMeta?.total_entries}
               />
             )}
           </Box>

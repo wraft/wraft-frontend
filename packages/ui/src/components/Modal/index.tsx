@@ -1,6 +1,8 @@
 import { forwardRef } from 'react';
 import * as Ariakit from '@ariakit/react'
 import * as S from './styles'
+import { Header } from './Header';
+
 
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'auto'
@@ -38,21 +40,26 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
       hideOnInteractOutside = true,
       size = 'lg',
       store,
+      open,
       ...rest
     },
     ref
   ) => {
+    const dialog = Ariakit.useDialogStore({ animated: true, open });
+    // const dialog = Ariakit.useDialogStore(animated: true,)
     return (
       <Ariakit.Dialog
         aria-label={ariaLabel}
         backdrop={
-          backdrop && <Backdrop backdrop={backdrop} hideOnInteractOutside={hideOnInteractOutside} />
+          backdrop && <S.Backdrop backdrop={backdrop} hideOnInteractOutside={hideOnInteractOutside} />
         }
+        store={dialog}
+        open={open}
         hideOnInteractOutside={hideOnInteractOutside}
         ref={ref}
+        render={<S.Dialog/>}
         // as=
         // render={<As size={size} />}
-        store={store}
         {...(rest as Ariakit.DialogProps<'div'>)}
       >
         {children}
@@ -63,4 +70,4 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
 
 
 // Nested exports
-export const Modal = Object.assign(ModalComponent, {})
+export const Modal = Object.assign(ModalComponent, {Header})
