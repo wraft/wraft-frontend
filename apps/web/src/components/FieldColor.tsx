@@ -17,6 +17,7 @@ interface FieldColorProps {
   variant?: 'inside' | 'outside';
   border?: string;
   disable?: boolean;
+  view?: boolean;
 }
 
 /**
@@ -38,6 +39,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
   required = true,
   variant = 'outside',
   border,
+  view = false,
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
 
@@ -105,16 +107,19 @@ const FieldColor: React.FC<FieldColorProps> = ({
                 color: 'gray.900',
                 textAlign: `${isInside ? 'right' : 'left'}`,
                 border: border,
+                ':disabled': {
+                  [view ? 'color' : '']: 'text',
+                },
               }}
               {...register(name, { required: required })}
               onChange={(e) => {
                 handleHexInputChange(e);
               }}
-              disabled={disable}
+              disabled={disable || view}
             />
             <Box sx={{ width: 0, bg: 'transparent' }}>
               <PopoverDisclosure
-                aria-disabled={disable}
+                aria-disabled={disable || view}
                 as={Box}
                 sx={{ bg: 'transparent', border: 'none' }}>
                 <Box
@@ -153,7 +158,9 @@ const FieldColor: React.FC<FieldColorProps> = ({
                     height={18}
                     viewBox="0 0 24 24"
                     color={
-                      useThemeUI().theme?.colors?.gray?.[disable ? 200 : 600]
+                      useThemeUI().theme?.colors?.gray?.[
+                        disable || view ? 200 : 600
+                      ]
                     }
                   />
                 </Box>
