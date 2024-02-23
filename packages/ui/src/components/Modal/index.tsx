@@ -1,14 +1,15 @@
-import { forwardRef } from 'react';
 import * as Ariakit from '@ariakit/react'
-import * as S from './styles'
+import { forwardRef } from 'react';
+
 import { Header } from './Header';
+import * as S from './styles'
 
 
 
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'auto'
 
 
-export interface ModalOptions extends Omit<Ariakit.DialogOptions<'div'>, 'as'> {
+export interface ModalOptions extends Omit<Ariakit.DialogOptions, 'as'> {
   ariaLabel: string
   children: React.ReactElement
   size?: Size
@@ -24,7 +25,7 @@ const Backdrop = forwardRef<HTMLDivElement, BackdropProps>(
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error
     return cloneElement(backdrop, { hideOnInteractOutside, ref, ...rest })
   }
 )
@@ -60,7 +61,7 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
         render={<S.Dialog/>}
         // as=
         // render={<As size={size} />}
-        {...(rest as Ariakit.DialogProps<'div'>)}
+        {...(rest as Ariakit.DialogProps)}
       >
         {children}
       </Ariakit.Dialog>

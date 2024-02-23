@@ -65,7 +65,7 @@ const columns = [
     enableSorting: false,
   },
   {
-    id: 'content.name',
+    id: 'id',
     header: 'ACTION',
     cell: ({ row }: any) => (
       <Box>

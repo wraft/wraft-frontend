@@ -1,4 +1,4 @@
-import styled, { th, x } from '@xstyled/emotion';
+import styled from '@xstyled/emotion';
 
 export const Table: any = styled('table')`
   width: 100%;
@@ -6,14 +6,9 @@ export const Table: any = styled('table')`
   border: 1px solid;
   border-color: border;
   background-color: backgroundWhite;
-`
-export const Thead: any = styled('thead')`
-`
-export const Tr: any = styled('tr')`
-`
-export const Th: any = styled('th')`
-`
-export const Tbody: any = styled('tbody')`
-`
-export const Td: any = styled('td')`
-`
+`;
+export const Thead: any = styled('thead')``;
+export const Tr: any = styled('tr')``;
+export const Th: any = styled('th')``;
+export const Tbody: any = styled('tbody')``;
+export const Td: any = styled('td')``;

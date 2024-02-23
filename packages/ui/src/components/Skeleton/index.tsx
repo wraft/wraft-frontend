@@ -11,7 +11,6 @@ const Skeleton: React.FC<SkeletonProps> = ({
   height,
   borderRadius = '4px',
 }) => {
-
   const SkeletonWrapper = styled('div')`
     width: ${width};
     height: ${height || '4px'};
@@ -29,11 +28,10 @@ const Skeleton: React.FC<SkeletonProps> = ({
         opacity: 0.3,
       },
     }
-  `
+  `;
 
   return <SkeletonWrapper className="skeleton" />;
 };
-
 
 export { Skeleton };
 // export { Skeleton, SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonContainer };
