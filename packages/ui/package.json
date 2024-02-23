@@ -32,15 +32,14 @@
     "access": "public"
   },
   "dependencies": {
-    "@wraft/icon": "*",
     "@ariakit/react": "^0.3.12",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@tanstack/react-table": "^8.11.2",
+    "@wraft/icon": "*",
     "@xstyled/emotion": "^3.8.0",
     "framer-motion": "^10.17.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-paginate": "^8.2.0"
+    "react-dom": "^18.2.0"
   }
 }
