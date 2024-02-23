@@ -28,11 +28,11 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Variants"
+          title={variant?.content_type?.name || ''}
           desc={
             <DescriptionLinker
               data={[
-                // { name: 'Variants', path: '/content-types' },
+                { name: 'Variants', path: '/content-types' },
                 { name: `${variant?.content_type?.name || ''}` },
               ]}
             />
