@@ -20,7 +20,7 @@ const FieldText: React.FC<Props> = ({
   disabled,
 }) => {
   return (
-    <Box pb={2}>
+    <Box>
       <Label htmlFor="description">{label}</Label>
       <Textarea
         rows={3}
