@@ -9,7 +9,6 @@ import { IField } from '../utils/types/content';
 import { TimeAgo } from './Atoms';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
-// import Paginate, { IPageMeta } from './Paginate';
 
 const columns = [
   {

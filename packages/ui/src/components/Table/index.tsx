@@ -8,9 +8,6 @@ import { x } from '@xstyled/emotion';
 import * as S from './styled'
 import { Skeleton } from '../Skeleton';
 import { EmptyImage } from './EmptyImage';
-// import PaginateUI from '../Paginate';
-
-
 
 
 interface TableProps {
@@ -161,7 +158,6 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
                 </x.div>
             </x.div>
           )}
-          {/* <PaginateUI pageCount={10}/> */}
     </>
   );
 };
