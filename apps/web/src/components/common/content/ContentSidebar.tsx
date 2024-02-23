@@ -9,12 +9,10 @@ import {
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 
-import { deleteAPI } from '../../../utils/models';
-import {
-  FlowStateBlockProps,
-  ContentInstance,
-} from '../../../utils/types/content';
-import { SendIcon, ThreeDots, BackArrowIcon } from '../../Icons';
+import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
+import { deleteAPI } from 'utils/models';
+import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
+
 /**
  * Atom Component to show Flow State
  * @TODO move to atoms or ui

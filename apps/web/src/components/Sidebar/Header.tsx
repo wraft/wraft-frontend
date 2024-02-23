@@ -198,45 +198,54 @@ const Header = () => {
               </Box>
             </DropdownMenu.Trigger>
             <DropdownMenu aria-label="Preferences">
-              <Box py="12px" px="8px">
-                <Text as="h4">{userProfile?.name}</Text>
-
-                {userProfile?.roles?.size > 0 && (
-                  <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
-                    {userProfile?.roles[0]?.name}
-                  </Text>
-                )}
-              </Box>
-
-              <DropdownMenu.Item>
-                <Flex
-                  onClick={() => {
-                    const next = mode === 'dark' ? 'light' : 'dark';
-                    setMode(next);
+              <Box p={2} sx={{ minWidth: '200px' }}>
+                <Box
+                  py="12px"
+                  px="8px"
+                  sx={{
+                    borderBottom: '1px solid',
+                    borderColor: 'border',
+                    marginBottom: '8px',
                   }}>
-                  <Text>Theme</Text>
-                  <Box
-                    sx={{
-                      // mb: 0,
-                      ml: 'auto',
+                  <Text as="h4">{userProfile?.name}</Text>
+
+                  {userProfile?.roles?.size > 0 && (
+                    <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+                      {userProfile?.roles[0]?.name}
+                    </Text>
+                  )}
+                </Box>
+
+                <DropdownMenu.Item>
+                  <Flex
+                    onClick={() => {
+                      const next = mode === 'dark' ? 'light' : 'dark';
+                      setMode(next);
                     }}>
-                    <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
-                  </Box>
-                </Flex>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <Link href="/account" path="/account">
-                  Settings
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <Link href="/account/profile" path="/account/profile">
-                  Profile
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <Box onClick={onUserlogout}>Signout</Box>
-              </DropdownMenu.Item>
+                    <Text>Theme</Text>
+                    <Box
+                      sx={{
+                        // mb: 0,
+                        ml: 'auto',
+                      }}>
+                      <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
+                    </Box>
+                  </Flex>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                  <Link href="/account" path="/account">
+                    Settings
+                  </Link>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                  <Link href="/account/profile" path="/account/profile">
+                    Profile
+                  </Link>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                  <Box onClick={onUserlogout}>Signout</Box>
+                </DropdownMenu.Item>
+              </Box>
             </DropdownMenu>
           </DropdownMenu.Provider>
         )}

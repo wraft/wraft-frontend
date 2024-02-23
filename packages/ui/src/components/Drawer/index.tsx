@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Dialog,
   DialogHeading,
@@ -8,15 +7,16 @@ import {
 import * as Ariakit from '@ariakit/react'
 import styled, { th, x } from '@xstyled/emotion';
 import { motion } from 'framer-motion';
-import { Title } from './Title';
+import React from 'react';
 
+import { Title } from './Title';
 import * as S from './styles'
 
 
 
 export type Placement = 'top' | 'right' | 'bottom' | 'left'
 
-export interface DrawerOptions extends Ariakit.DialogOptions<'div'> {
+export interface DrawerOptions extends Ariakit.DialogOptions {
   children: React.ReactNode;
   placement?: Placement
   withBackdrop?: boolean
@@ -114,7 +114,7 @@ const DrawerComponent = React.forwardRef<HTMLDivElement, DrawerOptions>(
         render={<S.Drawer placement={placement} />}
         store={store}
         open={open}
-        {...(rest as Ariakit.DialogProps<'div'>)}
+        {...(rest as Ariakit.DialogProps)}
       >
         {open && (
         <>

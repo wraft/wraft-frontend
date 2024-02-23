@@ -1,8 +1,13 @@
-import { forwardRef } from 'react';
 import styled, { th, x } from '@xstyled/emotion';
+import { forwardRef } from 'react';
 
 export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'full';
-export type Variant = 'primary' | 'secondary' | 'outlined' | 'disabled' | 'googleLogin';
+export type Variant =
+  | 'primary'
+  | 'secondary'
+  | 'outlined'
+  | 'disabled'
+  | 'googleLogin';
 export type Type = 'button' | 'link';
 
 export interface LinkOptions {
@@ -11,17 +16,22 @@ export interface LinkOptions {
   size?: Size;
   variant?: Variant;
   Icon?: React.ElementType;
-  type: Type,
+  type: Type;
 }
 
-const AnchorStyled = styled.a<LinkOptions>`
+const AnchorStyled =
+  styled.a <
+  LinkOptions >
+  `
   text-decoration: none;
   cursor: pointer;
   user-select: none;
   display: inline-block;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
-  ${({ type }) => type === 'button' && `
+  ${({ type }) =>
+    type === 'button' &&
+    `
     display: flex;
     justify-content: center;
   `}
@@ -33,19 +43,21 @@ const AnchorStyled = styled.a<LinkOptions>`
     box-shadow 0.15s ease-in-out;
   ${({ variant }) => th(`buttons.${variant}`)};
 
-  ${({ size }) => size === 'full' && `
+  ${({ size }) =>
+    size === 'full' &&
+    `
     padding-top: 20px;
   `}
   &:hover {
     color: #fff;
   }
-  width: ${({size}) => size === 'full' && '100%'};
+  width: ${({ size }) => size === 'full' && '100%'};
 `;
 
 export const Link = forwardRef<HTMLAnchorElement, LinkOptions>(
-  ({ variant = 'primary', Icon, type = "link", children, ...rest }, ref) => {
+  ({ variant = 'primary', Icon, type = 'link', children, ...rest }, ref) => {
     return (
-      <AnchorStyled variant={variant} type={type}  {...rest} ref={ref}>
+      <AnchorStyled variant={variant} type={type} {...rest} ref={ref}>
         <x.div display="flex">
           {Icon && (
             <x.div flex="0 1 auto">

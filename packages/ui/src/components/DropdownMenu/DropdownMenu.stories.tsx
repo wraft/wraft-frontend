@@ -1,11 +1,11 @@
-import React from 'react'
-import { Meta } from '@storybook/react'
-import { DropdownMenu } from '.'
+import type { Meta } from '@storybook/react';
+import React from 'react';
 
+import { DropdownMenu } from '.';
 
 const meta: Meta<any> = {
   component: DropdownMenu,
-  title: "Compontent/DropdownMenu",
+  title: 'Compontent/DropdownMenu',
 };
 // export default {
 // 	title: 'Components/DropdownMenu',
@@ -13,22 +13,14 @@ const meta: Meta<any> = {
 // }
 
 export const Basic = () => (
-	<DropdownMenu.Provider>
-    <DropdownMenu.Trigger>
-      menu
-    </DropdownMenu.Trigger>
+  <DropdownMenu.Provider>
+    <DropdownMenu.Trigger>menu</DropdownMenu.Trigger>
     <DropdownMenu aria-label="Switch Workspace">
-      <DropdownMenu.Item>
-        one
-      </DropdownMenu.Item>
-      <DropdownMenu.Item>
-        two
-      </DropdownMenu.Item>
-      <DropdownMenu.Item>
-        three
-      </DropdownMenu.Item>
+      <DropdownMenu.Item>one</DropdownMenu.Item>
+      <DropdownMenu.Item>two</DropdownMenu.Item>
+      <DropdownMenu.Item>three</DropdownMenu.Item>
     </DropdownMenu>
   </DropdownMenu.Provider>
-)
+);
 
 export default meta;

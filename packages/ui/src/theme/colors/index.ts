@@ -4,7 +4,7 @@ import light from './light';
 export const colors = {
   ...light,
   modes: {
-    dark: dark,
+    dark,
   },
 };
 

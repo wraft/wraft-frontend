@@ -5,10 +5,11 @@ import {
   getSortedRowModel,
 } from '@tanstack/react-table';
 import { x } from '@xstyled/emotion';
-import * as S from './styled'
-import { Skeleton } from '../Skeleton';
-import { EmptyImage } from './EmptyImage';
 
+import { Skeleton } from '../Skeleton';
+
+import { EmptyImage } from './EmptyImage';
+import * as S from './styled';
 
 interface TableProps {
   data: any;
@@ -19,7 +20,14 @@ interface TableProps {
   'aria-label'?: string;
 }
 
-const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skeletonRows = 5, emptyMessage = "No Data" }: TableProps) => {
+const Table = ({
+  data,
+  columns,
+  'aria-label': ariaLabel,
+  isLoading = false,
+  skeletonRows = 5,
+  emptyMessage = 'No Data',
+}: TableProps) => {
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
     data,
     columns,
@@ -33,30 +41,24 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
       <S.Table aria-label={ariaLabel}>
         <S.Thead>
           {getHeaderGroups().map((headerGroup: any) => (
-            <x.tr
-              key={headerGroup.id}
-              px="24px"
-              py='12px'
-              textAlign='left'
-              >
+            <x.tr key={headerGroup.id} px="24px" py="12px" textAlign="left">
               {headerGroup.headers.map((header: any) => (
                 <x.th
                   key={header.id}
-                  py='12px'
-                  px='24px'
-                  borderBottom= '1px solid'
-                  borderColor='border'
-                  fontFamily='body'
-                  fontWeight= 'heading'
-                  fontSize='12px'
-                  color= '#A5ABB2'
-                  minWidth={ header.getSize()}>
-
+                  py="12px"
+                  px="24px"
+                  borderBottom="1px solid"
+                  borderColor="border"
+                  fontFamily="body"
+                  fontWeight="heading"
+                  fontSize="12px"
+                  color="#A5ABB2"
+                  minWidth={header.getSize()}>
                   {header.isPlaceholder ? null : (
                     <x.div
-                      cursor={header.column.getCanSort()
-                          ? 'pointer'
-                          : 'default'}
+                      cursor={
+                        header.column.getCanSort() ? 'pointer' : 'default'
+                      }
                       // sx={{
                       //   cursor: header.column.getCanSort()
                       //     ? 'pointer'
@@ -69,16 +71,16 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
                       // }}
                       onClick={header.column.getToggleSortingHandler()}>
                       <x.span
-                        transform={ header.column.getIsResizing()
-                              ? `translateX(${
-                                  (options.columnResizeDirection === 'rtl'
-                                    ? -1
-                                    : 1) *
-                                  (getState().columnSizingInfo.deltaOffset ?? 0)
-                                }px)`
-                              : ''}
-                        
-                        >
+                        transform={
+                          header.column.getIsResizing()
+                            ? `translateX(${
+                                (options.columnResizeDirection === 'rtl'
+                                  ? -1
+                                  : 1) *
+                                (getState().columnSizingInfo.deltaOffset ?? 0)
+                              }px)`
+                            : ''
+                        }>
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
@@ -101,63 +103,61 @@ const Table = ({ data, columns, 'aria-label': ariaLabel, isLoading = false, skel
           ))}
         </S.Thead>
         <S.Tbody>
-          {isLoading
-            && Array.from({ length: skeletonRows }, (_, index) => (
+          {isLoading &&
+            Array.from({ length: skeletonRows }, (_, index) => (
               <x.tr key={index}>
                 {columns.map((column, columnIndex) => (
                   <x.td
                     py="14px"
-                    px='24px'
+                    px="24px"
                     borderBottom="1px solid"
                     borderColor="border"
-                    key={`${columnIndex}-${index}`}
-                  >
+                    key={`${columnIndex}-${index}`}>
                     <Skeleton height="22px" />
                   </x.td>
                 ))}
               </x.tr>
             ))}
-          
-          {!isLoading && getRowModel().rows.map((row) => {
-            return (
-              <x.tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  
-                  <x.td
-                    key={cell.id}
-                    py="14px"
-                    px='24px'
-                    borderBottom='1px solid'
-                    borderColor='border'
-                    minWidth={`${cell.column.getSize()}px`}
-                   >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </x.td>
-                ))}
-              </x.tr>
-            );
-          })}
+
+          {!isLoading &&
+            getRowModel().rows.map((row) => {
+              return (
+                <x.tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <x.td
+                      key={cell.id}
+                      py="14px"
+                      px="24px"
+                      borderBottom="1px solid"
+                      borderColor="border"
+                      minWidth={`${cell.column.getSize()}px`}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </x.td>
+                  ))}
+                </x.tr>
+              );
+            })}
         </S.Tbody>
       </S.Table>
       {!isLoading && data && data.length === 0 && (
-            <x.div 
-              backgroundColor="backgroundWhite"
-              minHeight="300px"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border="1px solid"
-              borderColor="border"
-              borderTop="none"
-              >
-                <x.div textAlign="center"> 
-                  <EmptyImage />
-                  <x.p m="0"  >
-                      {emptyMessage}
-                    </x.p>
-                </x.div>
-            </x.div>
-          )}
+        <x.div
+          backgroundColor="backgroundWhite"
+          minHeight="300px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          border="1px solid"
+          borderColor="border"
+          borderTop="none">
+          <x.div textAlign="center">
+            <EmptyImage />
+            <x.p m="0">{emptyMessage}</x.p>
+          </x.div>
+        </x.div>
+      )}
     </>
   );
 };
