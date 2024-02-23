@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
-import { Drawer } from '@wraft/ui';
+import { Drawer } from '@wraft-ui/Drawer';
 
 import { fetchAPI } from '../utils/models';
 import { ContentType } from '../utils/types';
@@ -104,7 +104,6 @@ const ContentTypeViewForm = () => {
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
   const [flows, setFlows] = useState<Array<IFlowItem>>([]);
   const [themes, setThemes] = useState<Array<any>>([]);
-  const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -117,7 +116,6 @@ const ContentTypeViewForm = () => {
 
   const cId: string = router.query.id as string;
 
-  const [initialFields, setInitialFields] = useState<any>([]);
   useEffect(() => {
     const convertedArray = content?.content_type.fields.map((item: any) => {
       return {
@@ -125,7 +123,6 @@ const ContentTypeViewForm = () => {
         value: item,
       };
     });
-    setInitialFields(convertedArray);
     setFields(convertedArray);
   }, [content]);
 
@@ -144,7 +141,7 @@ const ContentTypeViewForm = () => {
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
-      setValue('theme_id', res.content_type.theme.id || undefined);
+      setValue('theme_id', res.content_type?.theme?.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
     }
@@ -161,13 +158,6 @@ const ContentTypeViewForm = () => {
     fetchAPI('layouts').then((data: any) => {
       const res: ILayout[] = data.layouts;
       setLayouts(res);
-    });
-  };
-
-  const loadFieldTypes = () => {
-    fetchAPI('field_types?page_size=200').then((data: any) => {
-      const res: FieldTypeList = data;
-      setFieldtypes(res.field_types);
     });
   };
 
@@ -202,7 +192,6 @@ const ContentTypeViewForm = () => {
   useEffect(() => {
     loadLayouts();
     loadFlows();
-    loadFieldTypes();
     loadThemes();
   }, []);
 
@@ -210,8 +199,6 @@ const ContentTypeViewForm = () => {
   const goTo = (step: number) => {
     setFormStep(step);
   };
-
-  console.log('................', initialFields);
 
   return (
     <Box>
@@ -370,17 +357,15 @@ const ContentTypeViewForm = () => {
             <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
               <Label>Fields</Label>
               <Box sx={{ border: '1px solid', borderColor: 'border' }}>
-                {initialFields &&
-                  initialFields.map((f: any, index: number) => (
+                {fields &&
+                  fields.map((f: any, index: number) => (
                     <Flex
                       key={f.id}
                       sx={{
                         px: 3,
                         py: 2,
                         borderBottom:
-                          index < initialFields.length - 1
-                            ? '1px solid'
-                            : 'none',
+                          index < fields.length - 1 ? '1px solid' : 'none',
                         borderColor: 'border',
                         justifyContent: 'space-between',
                       }}>
@@ -399,7 +384,7 @@ const ContentTypeViewForm = () => {
             </Box>
 
             <Button
-              variant="buttonSmall"
+              variant="buttonSecondary"
               mt={4}
               onClick={(e) => {
                 e.preventDefault();
@@ -410,12 +395,8 @@ const ContentTypeViewForm = () => {
           </Box>
         </Box>
       </Flex>
-      <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
-        <>
-          <Box />
-          {isOpen && <Form />}
-          {/* setOpen={setIsOpen} cId={cId} step={formStep}  */}
-        </>
+      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+        {isOpen && <Form />}
       </Drawer>
     </Box>
   );
