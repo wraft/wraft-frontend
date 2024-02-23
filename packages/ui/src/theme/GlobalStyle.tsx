@@ -1,4 +1,4 @@
-import { createGlobalStyle } from '@xstyled/emotion'
+import { createGlobalStyle } from '@xstyled/emotion';
 
 export const GlobalStyle = createGlobalStyle`
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
@@ -16,4 +16,4 @@ export const GlobalStyle = createGlobalStyle`
   }
   
   
-`
+`;

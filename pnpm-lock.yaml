@@ -659,6 +659,12 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.18
         version: 18.2.18
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.17.0
+        version: 6.20.0(@typescript-eslint/parser@6.20.0)(eslint@8.56.0)(typescript@5.3.3)
+      '@typescript-eslint/parser':
+        specifier: ^6.17.0
+        version: 6.20.0(eslint@8.56.0)(typescript@5.3.3)
       '@wraft/eslint-config':
         specifier: '*'
         version: link:../eslint-config

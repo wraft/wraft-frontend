@@ -1,6 +1,6 @@
-import { ReactElement } from 'react'
-import styled, { th, x } from '@xstyled/emotion';
 import * as Ariakit from '@ariakit/react'
+import styled, { th, x } from '@xstyled/emotion';
+import type { ReactElement } from 'react'
 
 import * as S from './styles'
 // CloseIcon

@@ -1,5 +1,4 @@
-import styled, { th, x, css, right, useUp, up } from '@xstyled/emotion';
-
+import styled from '@xstyled/emotion';
 
 export const Pagination: any = styled.div`
   margin: auto;
@@ -60,4 +59,4 @@ export const Pagination: any = styled.div`
             
         }
     }
-`
+`;

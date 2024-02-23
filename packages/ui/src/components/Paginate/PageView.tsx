@@ -1,4 +1,4 @@
-import styled, { th, x } from '@xstyled/emotion';
+import { x } from '@xstyled/emotion';
 
 interface IProp {
   page: number
@@ -30,7 +30,7 @@ const PageView: React.FC<IProp> = ({
   const getPageClassName = ()=>{
       let classNames ="";
       if (typeof pageClassName !== 'undefined') {
-          classNames = pageClassName + ' ' + (selected?activeClassName:'');
+          classNames = `${pageClassName  } ${  selected?activeClassName:''}`;
         } else {
           classNames = (selected?activeClassName:'') || '';
         }
@@ -40,7 +40,7 @@ const PageView: React.FC<IProp> = ({
   const getPageLinkClassName = ()=>{
       let classNames ="";
       if (typeof pageLinkClassName !== 'undefined') {
-          classNames = pageLinkClassName + ' '+ (selected? activeLinkClassName:'');
+          classNames = `${pageLinkClassName  } ${ selected? activeLinkClassName:''}`;
         } else {
           classNames = (selected? activeLinkClassName:'') ||'';
         }
@@ -48,7 +48,7 @@ const PageView: React.FC<IProp> = ({
   }
 
   const pageLabelBuilder = (page:number)=>{
-      return ''+page;
+      return `${page}`;
   }
   
   return <>
