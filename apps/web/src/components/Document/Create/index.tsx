@@ -138,6 +138,7 @@ const CreateDocument = () => {
             borderTop: 'solid 1px',
             borderColor: 'border',
             height: 'calc(100vh - 180px)',
+            overflowX: 'scroll',
           }}>
           {formStep === 0 && (
             <>
