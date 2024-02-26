@@ -356,7 +356,12 @@ const ContentTypeViewForm = () => {
             {errors.exampleRequired && <Text>This field is required</Text>}
             <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
               <Label>Fields</Label>
-              <Box sx={{ border: '1px solid', borderColor: 'border' }}>
+              <Box
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'border',
+                  borderRadius: '4px',
+                }}>
                 {fields &&
                   fields.map((f: any, index: number) => (
                     <Flex
@@ -368,13 +373,14 @@ const ContentTypeViewForm = () => {
                           index < fields.length - 1 ? '1px solid' : 'none',
                         borderColor: 'border',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                       }}>
                       <Text as="p" variant="pM">
                         {f.name}
                       </Text>
                       <Text
                         as="p"
-                        variant="pR"
+                        variant="capR"
                         sx={{ textTransform: 'uppercase', color: 'gray.600' }}>
                         {f.value.field_type.name}
                       </Text>
@@ -396,7 +402,7 @@ const ContentTypeViewForm = () => {
         </Box>
       </Flex>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        {isOpen && <Form />}
+        {isOpen && <Form step={formStep} />}
       </Drawer>
     </Box>
   );
