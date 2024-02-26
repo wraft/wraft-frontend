@@ -54,6 +54,7 @@ const Table = ({
                   fontSize="12px"
                   color="#A5ABB2"
                   minWidth={header.getSize()}>
+                  {/* {console.log('header.column.columnDef', header.column.columnDef)} */}
                   {header.isPlaceholder ? null : (
                     <x.div
                       cursor={
@@ -130,7 +131,7 @@ const Table = ({
                       px="24px"
                       borderBottom="1px solid"
                       borderColor="border"
-                      minWidth={`${cell.column.getSize()}px`}>
+                      minWidth={`${cell.column.getSize()}`}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),

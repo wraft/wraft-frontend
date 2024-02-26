@@ -83,7 +83,8 @@ const columns = [
         </Flex>
       </NextLink>
     ),
-    size: 300,
+    // width: '20%',
+    // size: '100',
     enableSorting: false,
   },
   {
@@ -95,7 +96,6 @@ const columns = [
         <TimeAgo time={row.original?.content?.updated_at} />
       </Box>
     ),
-    size: 300,
     enableSorting: false,
   },
   {
@@ -118,6 +118,7 @@ const columns = [
       </Box>
     ),
     enableSorting: false,
+    // maxSize: 90,
     textAlign: 'right',
   },
 ];

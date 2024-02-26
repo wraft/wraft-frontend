@@ -710,6 +710,7 @@ const ContentForm = (props: IContentForm) => {
               ml: 0,
               borderLeft: 'solid 1px',
               borderColor: 'border',
+              overflow: 'scroll',
             }}>
             {contents && <ContentSidebar content={contents} />}
 
