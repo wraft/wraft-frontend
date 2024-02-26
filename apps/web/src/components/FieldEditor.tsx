@@ -99,7 +99,8 @@ const FieldForm = (props: FieldFormProps) => {
         <Button
           variant="btnSmall"
           sx={{ ml: 'auto', px: 4, bg: 'gray.300' }}
-          onClick={() => {
+          onClick={(e) => {
+            e.preventDefault();
             toggleModal();
             append({ name: '', type: '' });
             remove(-1);
@@ -298,7 +299,13 @@ const FieldForm = (props: FieldFormProps) => {
                   onClick={closeModal}>
                   Cancel
                 </Button>
-                <Button variant="btnPrimaryLarge" sx={{ ml: 1 }} type="submit">
+                <Button
+                  variant="btnPrimaryLarge"
+                  sx={{ ml: 1 }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSubmit(onSubmit)();
+                  }}>
                   {submitting && <Spinner color="white" width={24} />}
                   Save
                 </Button>
