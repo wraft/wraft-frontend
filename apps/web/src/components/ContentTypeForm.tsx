@@ -606,6 +606,16 @@ const Form = ({ step = 0 }: Props) => {
                   )}
                 </Box>
               </Box>
+              <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
+                <FieldEditor
+                  fields={fields}
+                  content={content}
+                  fieldtypes={fieldtypes}
+                  removeField={removeField}
+                  addField={addField}
+                  onSave={onFieldsSave}
+                />
+              </Box>
             </Box>
             {errors.exampleRequired && <Text>This field is required</Text>}
           </Flex>
@@ -642,33 +652,14 @@ const Form = ({ step = 0 }: Props) => {
           </Flex>
         </Box>
       </Flex>
-      <Box>
-        <Flex variant="layout.pageFrame">
-          <Flex sx={{ maxWidth: '100ch', mx: `auto`, pb: 5 }}>
-            <Box sx={{ minWidth: '60ch' }}></Box>
-            <Box sx={{ flexGrow: 1, width: '340px' }}>
-              <FieldEditor
-                fields={fields}
-                content={content}
-                fieldtypes={fieldtypes}
-                removeField={removeField}
-                addField={addField}
-                onSave={onFieldsSave}
-              />
-              <Box sx={{ mx: 4 }}>
-                {cId && (
-                  <Button
-                    type="button"
-                    variant="btnPrimaryLarge"
-                    onClick={() => deleteMe(cId)}>
-                    Delete
-                  </Button>
-                )}
-              </Box>
-            </Box>
-          </Flex>
-        </Flex>
-      </Box>
+      {/* {cId && (
+        <Button
+          type="button"
+          variant="btnPrimaryLarge"
+          onClick={() => deleteMe(cId)}>
+          Delete
+        </Button>
+      )} */}
     </Fragment>
   );
 };
