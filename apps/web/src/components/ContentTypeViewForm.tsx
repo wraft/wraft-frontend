@@ -10,7 +10,6 @@ import { fetchAPI } from '../utils/models';
 import { ContentType } from '../utils/types';
 import Field from './Field';
 import FieldColor from './FieldColor';
-// import FieldEditor from './FieldEditor';
 import FieldText from './FieldText';
 import { IFlow, ICreator } from './FlowList';
 import MenuStepsIndicator from './MenuStepsIndicator';
@@ -246,6 +245,7 @@ const ContentTypeViewForm = () => {
                   label="Prefix"
                   name="prefix"
                   defaultValue=""
+                  view
                 />
               </Box>
             </Box>
@@ -268,7 +268,9 @@ const ContentTypeViewForm = () => {
                 </Label>
                 <Select
                   id="layout_id"
-                  {...register('layout_id', { required: true })}>
+                  {...register('layout_id', { required: true })}
+                  sx={{ ':disabled': { color: 'text' } }}
+                  disabled>
                   {!isUpdate && (
                     <option disabled selected>
                       select an option
@@ -295,7 +297,9 @@ const ContentTypeViewForm = () => {
                 <Select
                   id="flow_id"
                   defaultValue=""
-                  {...register('flow_id', { required: true })}>
+                  {...register('flow_id', { required: true })}
+                  sx={{ ':disabled': { color: 'text' } }}
+                  disabled>
                   {!isUpdate && (
                     <option disabled selected>
                       select an option
@@ -323,7 +327,9 @@ const ContentTypeViewForm = () => {
                 <Select
                   id="theme_id"
                   defaultValue=""
-                  {...register('theme_id', { required: true })}>
+                  {...register('theme_id', { required: true })}
+                  sx={{ ':disabled': { color: 'text' } }}
+                  disabled>
                   {!isUpdate && (
                     <option disabled selected>
                       select an option
