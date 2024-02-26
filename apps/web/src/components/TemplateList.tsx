@@ -22,7 +22,6 @@ const columns = [
         </Box>
       </NavLink>
     ),
-    size: 300,
     enableSorting: false,
   },
   {
@@ -50,7 +49,6 @@ const columns = [
         </Text>
       </Flex>
     ),
-    size: 350,
     enableSorting: false,
   },
   {

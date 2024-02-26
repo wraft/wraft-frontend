@@ -58,7 +58,6 @@ const columns = (approveInstance: any) => [
         </Flex>
       </NextLink>
     ),
-    size: 300,
     enableSorting: false,
   },
   {
@@ -70,7 +69,6 @@ const columns = (approveInstance: any) => [
         <TimeAgo time={row.original?.content?.updated_at} />
       </Box>
     ),
-    size: 300,
     enableSorting: false,
   },
   {
