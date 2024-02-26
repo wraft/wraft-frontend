@@ -13,8 +13,11 @@ const MenuItem = (props: IMenuItem) => {
   // const className = clsx(classNameProps, {
   //   [activeClassName]: router.pathname === pathname && activeClassName,
   // });
-  const { pathname } = useRouter();
-  const isActive = props?.href === pathname;
+
+  const router = useRouter();
+  const isActive =
+    router.pathname === props.href ||
+    (router.pathname.startsWith(props.href) && props.href !== '/');
 
   return (
     <Flex

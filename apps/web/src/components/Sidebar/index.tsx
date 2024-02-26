@@ -29,7 +29,10 @@ const Sidebar = (props: any) => {
       return true;
     }
 
-    return path === pathname;
+    return (
+      router.pathname === path ||
+      (router.pathname.startsWith(path) && path !== '/')
+    );
   };
 
   const toggleSearch = () => {
