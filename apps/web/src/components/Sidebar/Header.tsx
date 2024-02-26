@@ -238,11 +238,6 @@ const Header = () => {
                   </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                  <Link href="/account/profile" path="/account/profile">
-                    Profile
-                  </Link>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item>
                   <Box onClick={onUserlogout}>Signout</Box>
                 </DropdownMenu.Item>
               </Box>
