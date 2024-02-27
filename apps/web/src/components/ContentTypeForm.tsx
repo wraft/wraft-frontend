@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -150,6 +150,7 @@ const Form = ({ step = 0, setIsOpen }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm({
     resolver: zodResolver(schema),
   });
@@ -259,6 +260,7 @@ const Form = ({ step = 0, setIsOpen }: Props) => {
       setValue('theme_id', res.content_type?.theme?.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
+      trigger();
     }
   };
 
@@ -442,227 +444,212 @@ const Form = ({ step = 0, setIsOpen }: Props) => {
   const titles = ['Details', 'Configure', 'Fields'];
 
   return (
-    <Fragment>
-      <Flex
+    <Flex
+      sx={{
+        height: '100vh',
+        overflow: 'scroll',
+        flexDirection: 'column',
+      }}>
+      <Text
+        variant="pB"
         sx={{
-          height: '100vh',
-          overflow: 'scroll',
-          flexDirection: 'column',
+          p: 4,
         }}>
-        <Text
-          variant="pB"
-          sx={{
-            p: 4,
-          }}>
-          {isEdit ? 'Edit layout' : 'Create new layout'}
-        </Text>
-        <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
-        <Box
-          sx={{ height: '100%' }}
-          p={4}
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}>
-          <Flex sx={{ flexDirection: 'column', height: 'calc(100% - 80px)' }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-                <Field
-                  fontSize={1}
+        {isEdit ? 'Edit Variant' : 'Create new variant'}
+      </Text>
+      <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
+      <Box
+        sx={{ height: '100%' }}
+        p={4}
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}>
+        <Flex sx={{ flexDirection: 'column', height: 'calc(100% - 80px)' }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+              <Field
+                fontSize={1}
+                register={register}
+                error={errors.name}
+                label="Name"
+                name="name"
+                defaultValue=""
+                placeholder="Variant Name"
+              />
+              <Box mt={3}>
+                <FieldText
                   register={register}
-                  error={errors.name}
-                  label="Name"
-                  name="name"
-                  defaultValue=""
-                  placeholder="Variant Name"
+                  label="Description"
+                  name="description"
+                  defaultValue="Something to guide the user here"
                 />
-                <Box mt={3}>
-                  <FieldText
-                    register={register}
-                    label="Description"
-                    name="description"
-                    defaultValue="Something to guide the user here"
-                  />
-                  {errors.description && errors.description.message && (
-                    <Text variant="error">
-                      {errors.description.message as string}
-                    </Text>
-                  )}
-                </Box>
-                <Box mt={3}>
-                  <Field
-                    register={register}
-                    error={errors.prefix}
-                    label="Prefix"
-                    name="prefix"
-                    defaultValue=""
-                  />
-                </Box>
+                {errors.description && errors.description.message && (
+                  <Text variant="error">
+                    {errors.description.message as string}
+                  </Text>
+                )}
               </Box>
-              <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
-                <Box>
-                  <FieldColor
-                    register={register}
-                    label="Color"
-                    name="color"
-                    defaultValue={
-                      (content && content?.content_type.color) || ''
-                    }
-                    onChangeColor={onChangeFields}
-                  />
-                  {errors.color && errors.color.message && (
-                    <Text variant="error">
-                      {errors.color.message as string}
-                    </Text>
-                  )}
-                </Box>
-                <Box>
-                  <Label htmlFor="layout_id" mb={1}>
-                    Layout
-                  </Label>
-                  <Select
-                    id="layout_id"
-                    {...register('layout_id', { required: true })}>
-                    {!isUpdate && (
-                      <option disabled selected>
-                        select an option
-                      </option>
-                    )}
-                    {layouts &&
-                      layouts.length > 0 &&
-                      layouts.map((m: any) => (
-                        <option value={m.id} key={m.id}>
-                          {m.name}
-                        </option>
-                      ))}
-                  </Select>
-                  {errors.layout_id && errors.layout_id.message && (
-                    <Text variant="error">
-                      {errors.layout_id.message as string}
-                    </Text>
-                  )}
-                </Box>
-                <Box sx={{ py: 2 }}>
-                  <Label htmlFor="flow_id" mb={1}>
-                    Flow
-                  </Label>
-                  <Select
-                    id="flow_id"
-                    defaultValue=""
-                    {...register('flow_id', { required: true })}>
-                    {!isUpdate && (
-                      <option disabled selected>
-                        select an option
-                      </option>
-                    )}
-                    {flows &&
-                      flows.length > 0 &&
-                      flows.map((m: any) => (
-                        <option value={m.flow.id} key={m.flow.id}>
-                          {m.flow.name}
-                        </option>
-                      ))}
-                  </Select>
-                  {errors.flow_id && errors.flow_id.message && (
-                    <Text variant="error">
-                      {errors.flow_id.message as string}
-                    </Text>
-                  )}
-                </Box>
-
-                <Box sx={{ display: 'none' }}>
-                  <Input
-                    id="edit"
-                    defaultValue={0}
-                    hidden={true}
-                    {...register('edit', { required: true })}
-                  />
-                </Box>
-
-                <Box sx={{ py: 2 }}>
-                  <Label htmlFor="theme_id" mb={1}>
-                    Themes
-                  </Label>
-                  <Select
-                    id="theme_id"
-                    defaultValue=""
-                    {...register('theme_id', { required: true })}>
-                    {!isUpdate && (
-                      <option disabled selected>
-                        select an option
-                      </option>
-                    )}
-                    {themes &&
-                      themes.length > 0 &&
-                      themes.map((m: any) => (
-                        <option value={m.id} key={m.id}>
-                          {m.name}
-                        </option>
-                      ))}
-                  </Select>
-                  {errors.theme_id && errors.theme_id.message && (
-                    <Text variant="error">
-                      {errors.theme_id.message as string}
-                    </Text>
-                  )}
-                </Box>
-              </Box>
-              <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
-                <FieldEditor
-                  fields={fields}
-                  content={content}
-                  fieldtypes={fieldtypes}
-                  removeField={removeField}
-                  addField={addField}
-                  onSave={onFieldsSave}
+              <Box mt={3}>
+                <Field
+                  register={register}
+                  error={errors.prefix}
+                  label="Prefix"
+                  name="prefix"
+                  defaultValue=""
                 />
               </Box>
             </Box>
-          </Flex>
+            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+              <Box>
+                <FieldColor
+                  register={register}
+                  label="Color"
+                  name="color"
+                  defaultValue={(content && content?.content_type.color) || ''}
+                  onChangeColor={onChangeFields}
+                />
+                {errors.color && errors.color.message && (
+                  <Text variant="error">{errors.color.message as string}</Text>
+                )}
+              </Box>
+              <Box>
+                <Label htmlFor="layout_id" mb={1}>
+                  Layout
+                </Label>
+                <Select
+                  id="layout_id"
+                  {...register('layout_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {layouts &&
+                    layouts.length > 0 &&
+                    layouts.map((m: any) => (
+                      <option value={m.id} key={m.id}>
+                        {m.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.layout_id && errors.layout_id.message && (
+                  <Text variant="error">
+                    {errors.layout_id.message as string}
+                  </Text>
+                )}
+              </Box>
+              <Box sx={{ py: 2 }}>
+                <Label htmlFor="flow_id" mb={1}>
+                  Flow
+                </Label>
+                <Select
+                  id="flow_id"
+                  defaultValue=""
+                  {...register('flow_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {flows &&
+                    flows.length > 0 &&
+                    flows.map((m: any) => (
+                      <option value={m.flow.id} key={m.flow.id}>
+                        {m.flow.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.flow_id && errors.flow_id.message && (
+                  <Text variant="error">
+                    {errors.flow_id.message as string}
+                  </Text>
+                )}
+              </Box>
 
-          <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
-            <Flex>
-              <Button
-                sx={{
-                  display: formStep >= 1 ? 'block' : 'none',
-                }}
-                variant="buttonSecondary"
-                type="button"
-                onClick={prev}>
-                Prev
-              </Button>
-              <Button
-                ml={2}
-                sx={{
-                  display: formStep !== titles.length - 1 ? 'block' : 'none',
-                }}
-                type="button"
-                onClick={next}
-                variant="buttonPrimary">
-                Next
-              </Button>
-            </Flex>
+              <Box sx={{ display: 'none' }}>
+                <Input
+                  id="edit"
+                  defaultValue={0}
+                  hidden={true}
+                  {...register('edit', { required: true })}
+                />
+              </Box>
+
+              <Box sx={{ py: 2 }}>
+                <Label htmlFor="theme_id" mb={1}>
+                  Themes
+                </Label>
+                <Select
+                  id="theme_id"
+                  defaultValue=""
+                  {...register('theme_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {themes &&
+                    themes.length > 0 &&
+                    themes.map((m: any) => (
+                      <option value={m.id} key={m.id}>
+                        {m.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.theme_id && errors.theme_id.message && (
+                  <Text variant="error">
+                    {errors.theme_id.message as string}
+                  </Text>
+                )}
+              </Box>
+            </Box>
+            <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
+              <FieldEditor
+                fields={fields}
+                content={content}
+                fieldtypes={fieldtypes}
+                removeField={removeField}
+                addField={addField}
+                onSave={onFieldsSave}
+                trigger={trigger}
+              />
+            </Box>
+          </Box>
+        </Flex>
+
+        <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
+          <Flex>
             <Button
-              disabled={
-                !isValid ||
-                fields === undefined ||
-                (fields && fields.length < 1)
-              }
-              variant="buttonPrimary"
-              type="submit"
-              ml={2}>
-              {isEdit ? 'Update' : 'Create'}
+              sx={{
+                display: formStep >= 1 ? 'block' : 'none',
+              }}
+              variant="buttonSecondary"
+              type="button"
+              onClick={prev}>
+              Prev
+            </Button>
+            <Button
+              ml={2}
+              sx={{
+                display: formStep !== titles.length - 1 ? 'block' : 'none',
+              }}
+              type="button"
+              onClick={next}
+              variant="buttonPrimary">
+              Next
             </Button>
           </Flex>
-        </Box>
-      </Flex>
-      {/* {cId && (
-        <Button
-          type="button"
-          variant="btnPrimaryLarge"
-          onClick={() => deleteMe(cId)}>
-          Delete
-        </Button>
-      )} */}
-    </Fragment>
+          <Button
+            disabled={
+              !isValid || fields === undefined || (fields && fields.length < 1)
+            }
+            variant="buttonPrimary"
+            type="submit"
+            ml={2}>
+            {isEdit ? 'Update' : 'Create'}
+          </Button>
+        </Flex>
+      </Box>
+    </Flex>
   );
 };
 export default Form;
