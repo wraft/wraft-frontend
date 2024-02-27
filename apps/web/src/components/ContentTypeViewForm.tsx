@@ -105,6 +105,7 @@ const ContentTypeViewForm = () => {
   const [themes, setThemes] = useState<Array<any>>([]);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const {
     register,
@@ -187,6 +188,10 @@ const ContentTypeViewForm = () => {
       loadThemes();
     }
   }, [cId]);
+
+  useEffect(() => {
+    if (cId) loadDataDetails(cId);
+  }, [rerender]);
 
   useEffect(() => {
     loadLayouts();
@@ -408,7 +413,13 @@ const ContentTypeViewForm = () => {
         </Box>
       </Flex>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        {isOpen && <Form step={formStep} setIsOpen={setIsOpen} />}
+        {isOpen && (
+          <Form
+            step={formStep}
+            setIsOpen={setIsOpen}
+            setRerender={setRerender}
+          />
+        )}
       </Drawer>
     </Box>
   );

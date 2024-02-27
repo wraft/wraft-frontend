@@ -2,16 +2,11 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import {
-  Pagination,
-  // Pagenation,
-  Table,
-} from '@wraft/ui';
+import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 
 import { TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
-// import { EmptyForm } from 'components/Icons';
 import { fetchAPI, deleteAPI } from 'utils/models';
 
 import { OptionsIcon } from './Icons';
@@ -59,8 +54,11 @@ export interface IFieldItem {
 // interface ContentTypeDashboardProps {
 //   isEdit?: boolean;
 // }
+interface Props {
+  rerender: boolean;
+}
 
-const ContentTypeDashboard = () => {
+const ContentTypeDashboard = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<any>();
@@ -77,7 +75,7 @@ const ContentTypeDashboard = () => {
     if (page) {
       loadData(page);
     }
-  }, [page]);
+  }, [page, rerender]);
 
   const onDelete = (id: string) => {
     deleteAPI(`content_types/${id}`);
