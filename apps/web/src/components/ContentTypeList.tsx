@@ -36,6 +36,7 @@ interface ContentTypeList {
 
 const ContentTypeList = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
@@ -55,10 +56,10 @@ const ContentTypeList = () => {
           mb: 3,
           mt: 3,
         }}>
-        <ContentTypeDashboard />
+        <ContentTypeDashboard rerender={rerender} />
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        <ContentTypeForm setIsOpen={setIsOpen} />
+        <ContentTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
       </Drawer>
     </Box>
   );
