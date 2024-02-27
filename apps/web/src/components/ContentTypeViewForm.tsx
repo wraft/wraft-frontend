@@ -408,7 +408,7 @@ const ContentTypeViewForm = () => {
         </Box>
       </Flex>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        {isOpen && <Form step={formStep} />}
+        {isOpen && <Form step={formStep} setIsOpen={setIsOpen} />}
       </Drawer>
     </Box>
   );
