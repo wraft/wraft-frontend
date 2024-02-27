@@ -132,9 +132,10 @@ const schema = z.object({
 
 interface Props {
   step?: number;
+  setIsOpen: (e: any) => void;
 }
 
-const Form = ({ step = 0 }: Props) => {
+const Form = ({ step = 0, setIsOpen }: Props) => {
   const [fields, setFields] = useState([]);
   const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
@@ -359,6 +360,7 @@ const Form = ({ step = 0 }: Props) => {
     if (isUpdate) {
       putAPI(`content_types/${data.edit}`, sampleD)
         .then(() => {
+          setIsOpen && setIsOpen(false);
           toast.success('Saved Successfully', {
             duration: 1000,
             position: 'top-right',
@@ -373,6 +375,7 @@ const Form = ({ step = 0 }: Props) => {
     } else {
       postAPI('content_types', sampleD)
         .then(() => {
+          setIsOpen && setIsOpen(false);
           toast.success('Saved Successfully', {
             duration: 1000,
             position: 'top-right',
