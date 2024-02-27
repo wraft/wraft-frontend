@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Container, Flex } from 'theme-ui';
+import { Container } from 'theme-ui';
 
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';

@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import Router from 'next/router';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -240,16 +239,6 @@ const Form = ({ step = 0, setIsOpen }: Props) => {
           });
         });
     }
-  };
-
-  const deleteMe = (deletableId: string) => {
-    deleteAPI(`content_types/${deletableId}`).then(() => {
-      toast.success('Deleted Successfully', {
-        duration: 1000,
-        position: 'top-right',
-      });
-      Router.push(`/content-types`);
-    });
   };
 
   const setContentDetails = (data: any) => {
