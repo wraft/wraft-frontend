@@ -465,8 +465,12 @@ const Form = ({ step = 0 }: Props) => {
           {isEdit ? 'Edit layout' : 'Create new layout'}
         </Text>
         <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
-        <Box p={4} as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Flex>
+        <Box
+          sx={{ height: '100%' }}
+          p={4}
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}>
+          <Flex sx={{ flexDirection: 'column', height: 'calc(100% - 80px)' }}>
             <Box sx={{ flexGrow: 1 }}>
               <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
                 <Field
@@ -622,7 +626,7 @@ const Form = ({ step = 0 }: Props) => {
             </Box>
           </Flex>
 
-          <Flex pt={4} sx={{ justifyContent: 'space-between' }}>
+          <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
             <Flex>
               <Button
                 sx={{
