@@ -14,7 +14,7 @@ import { hexColorRegex, uuidRegex } from '../utils/regex';
 import { ContentType } from '../utils/types';
 import Field from './Field';
 import FieldColor from './FieldColor';
-import FieldEditor from './FieldEditorNew';
+import FieldEditor from './FieldEditor';
 import FieldText from './FieldText';
 import { IFlow, ICreator } from './FlowList';
 
