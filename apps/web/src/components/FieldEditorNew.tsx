@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
-import { Label, Input, Select } from 'theme-ui';
+import { Label, Select } from 'theme-ui';
 
 import { Trash } from './Icons';
 import Field from './Field';
@@ -24,8 +24,7 @@ type FieldValues = {
 };
 
 const FieldForm = (props: FieldFormProps) => {
-  // const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
-  const fieldsArr = props.fields || [];
+  const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
 
   const {
     register,
@@ -188,7 +187,7 @@ const FieldForm = (props: FieldFormProps) => {
               alignItems: 'flex-start',
             }}>
             <Button
-              variant="btnPrimary"
+              variant="buttonSecondary"
               type="button"
               mt={4}
               onClick={(e) => {

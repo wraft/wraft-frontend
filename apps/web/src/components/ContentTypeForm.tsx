@@ -15,7 +15,7 @@ import { hexColorRegex, uuidRegex } from '../utils/regex';
 import { ContentType } from '../utils/types';
 import Field from './Field';
 import FieldColor from './FieldColor';
-import FieldEditor from './FieldEditor';
+import FieldEditor from './FieldEditorNew';
 import FieldText from './FieldText';
 import { IFlow, ICreator } from './FlowList';
 
@@ -158,6 +158,7 @@ const Form = ({ step = 0 }: Props) => {
   const cId: string = router.query.id as string;
 
   const addField = () => {
+    console.log('addField');
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       fields = fields || [];
@@ -343,6 +344,7 @@ const Form = ({ step = 0 }: Props) => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
+    console.log('onSubmit', data);
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -361,7 +363,6 @@ const Form = ({ step = 0 }: Props) => {
             duration: 1000,
             position: 'top-right',
           });
-          Router.push(`/content-types`);
         })
         .catch(() => {
           toast.error('Save Failed', {
@@ -376,7 +377,6 @@ const Form = ({ step = 0 }: Props) => {
             duration: 1000,
             position: 'top-right',
           });
-          Router.push(`/content-types`);
         })
         .catch(() => {
           toast.error('Save Failed', {
@@ -405,6 +405,7 @@ const Form = ({ step = 0 }: Props) => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
+    console.log('onSave', fieldsNew);
     initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
@@ -417,8 +418,10 @@ const Form = ({ step = 0 }: Props) => {
           (initialField: any) => initialField.name !== el.name,
         )
       ) {
+        console.log(fieldValue);
         addFieldVal(fieldValue);
       } else if (!initialFields) {
+        console.log(fieldValue);
         addFieldVal(fieldValue);
       }
     });
@@ -617,7 +620,6 @@ const Form = ({ step = 0 }: Props) => {
                 />
               </Box>
             </Box>
-            {errors.exampleRequired && <Text>This field is required</Text>}
           </Flex>
 
           <Flex pt={4} sx={{ justifyContent: 'space-between' }}>
@@ -643,7 +645,11 @@ const Form = ({ step = 0 }: Props) => {
               </Button>
             </Flex>
             <Button
-              disabled={!isValid || fields.length < 1}
+              disabled={
+                !isValid ||
+                fields === undefined ||
+                (fields && fields.length < 1)
+              }
               variant="buttonPrimary"
               type="submit"
               ml={2}>
