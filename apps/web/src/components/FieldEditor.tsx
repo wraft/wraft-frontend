@@ -237,17 +237,17 @@ const FieldForm = (props: FieldFormProps) => {
           remove(-1);
         }}
         variant="buttonSecondary">
-        Edit
+        {fieldsArr && fieldsArr.length > 0 ? 'Edit' : 'Add'}
       </Button>
-      <Box
-        sx={{
-          mt: 4,
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: '4px',
-        }}>
-        {fieldsArr &&
-          fieldsArr.map((f: any, index: number) => (
+      {fieldsArr && fieldsArr.length > 0 && (
+        <Box
+          sx={{
+            mt: 4,
+            border: 'solid 1px',
+            borderColor: 'border',
+            borderRadius: '4px',
+          }}>
+          {fieldsArr.map((f: any, index: number) => (
             <Flex
               key={f?.id}
               sx={{
@@ -271,7 +271,8 @@ const FieldForm = (props: FieldFormProps) => {
               </Text>
             </Flex>
           ))}
-      </Box>
+        </Box>
+      )}
     </Box>
   );
 };
