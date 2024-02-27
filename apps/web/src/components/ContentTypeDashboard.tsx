@@ -122,7 +122,7 @@ const ContentTypeDashboard = () => {
   const columns = [
     {
       id: 'title',
-      header: 'Name',
+      header: 'NAME',
       accessorKey: 'title',
       cell: ({ row }: any) => (
         <NextLink href={`/content-types/${row?.original?.id}`}>
@@ -145,7 +145,7 @@ const ContentTypeDashboard = () => {
     },
     {
       id: 'content.updated_at',
-      header: 'CREATE',
+      header: 'CREATED AT',
       accessorKey: 'TIME',
       cell: ({ row }: any) => (
         <Box>
