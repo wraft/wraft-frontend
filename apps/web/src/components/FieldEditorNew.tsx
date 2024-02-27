@@ -183,7 +183,6 @@ const FieldForm = (props: FieldFormProps) => {
                         props.removeField(index);
                         remove(index);
                       }}>
-                      {/* <Trash color="red" width={24} height={24} /> */}{' '}
                       <CloseIcon
                         color={themeui?.theme?.colors?.gray?.[600]}
                         width={18}
@@ -234,6 +233,8 @@ const FieldForm = (props: FieldFormProps) => {
         onClick={(e) => {
           e.preventDefault();
           setIsOpen(true);
+          append({ name: '', type: '' });
+          remove(-1);
         }}
         variant="buttonSecondary">
         Edit
