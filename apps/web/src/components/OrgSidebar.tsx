@@ -25,7 +25,7 @@ export interface menuLinksProps {
 const profileLinks: menuLinksProps[] = [
   {
     name: 'My Account',
-    path: '/account',
+    path: '/account/profile',
   },
   {
     name: 'Manage Workspace',

@@ -12,10 +12,11 @@ export interface INav {
 
 const ManageSidebar = ({ items, showFull = true }: INav) => {
   const router = useRouter();
-  const pathname: string = router.pathname as any;
-  const checkActive = (pathname: string, l: any) => {
-    return l.path === pathname;
+
+  const checkActive = (route: string) => {
+    return router.pathname === route;
   };
+
   return (
     <Flex
       sx={{
@@ -28,14 +29,14 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
         borderColor: 'border',
       }}>
       {items &&
-        items.map((l: any) => (
+        items.map((item: any) => (
           <Box
             sx={{
               cursor: 'pointer',
               width: '100%',
             }}
-            key={l.name}>
-            <NavLink href={l.path} variant="links.base">
+            key={item.name}>
+            <NavLink href={item.path} variant="links.base">
               <Flex
                 sx={{
                   cursor: 'pointer',
@@ -46,16 +47,16 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   color: 'gray.900',
                   borderRadius: '4px',
                   alignItems: 'center',
-                  bg: checkActive(pathname, l) ? 'neutral.200' : 'transparent',
+                  bg: checkActive(item.path) ? 'neutral.200' : 'transparent',
                   ':hover': { bg: 'neutral.200' },
                 }}>
-                {l.lgoo && (
+                {item.lgoo && (
                   <Box
                     sx={{
                       color: 'gray.500',
                       mr: '12px',
                     }}>
-                    {l.logo}
+                    {item.logo}
                   </Box>
                 )}
                 <Text
@@ -64,7 +65,7 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                     width: '100%',
                     color: 'inherit',
                   }}>
-                  {l.name}
+                  {item.name}
                 </Text>
               </Flex>
             </NavLink>
