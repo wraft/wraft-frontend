@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { Button, Box, Flex, Text, Spinner, useThemeUI } from 'theme-ui';
+import { Button, Box, Flex, Text, Spinner, useThemeUI, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { CloseIcon } from '@wraft/icon';
 
@@ -15,6 +15,7 @@ interface FieldFormProps {
   removeField?: any;
   onSave?: any;
   onClose?: any;
+  trigger?: any;
 }
 
 type FieldValues = {
@@ -74,6 +75,7 @@ const FieldForm = (props: FieldFormProps) => {
     props.onSave(results);
     setSubmitting(false);
     setIsOpen(false);
+    props.trigger && props.trigger();
   };
 
   return (
@@ -127,7 +129,7 @@ const FieldForm = (props: FieldFormProps) => {
                     label="Field Name"
                     register={register}
                     defaultValue={(field && field.name) || ''}
-                    onChange={() => handleSubmit(onSubmit)()}
+                    // onChange={() => handleSubmit(onSubmit)()}
                     disable={
                       props.content &&
                       field &&
@@ -138,9 +140,7 @@ const FieldForm = (props: FieldFormProps) => {
                     error={errors.fields?.[index]?.name}
                   />
                   <Box sx={{ flexGrow: 1, ml: 3 }}>
-                    <Label htmlFor="`fields[${idx}][type]`" mb={1}>
-                      Field Type
-                    </Label>
+                    <Label htmlFor="`fields[${idx}][type]`">Field Type</Label>
                     <Select
                       disabled={
                         props.content &&
@@ -153,7 +153,8 @@ const FieldForm = (props: FieldFormProps) => {
                       {...register(`fields.${index}.type` as const, {
                         required: true,
                       })}
-                      onChange={() => handleSubmit(onSubmit)()}>
+                      // onChange={() => handleSubmit(onSubmit)()}
+                    >
                       <option disabled selected value={''}>
                         select an option
                       </option>
@@ -168,7 +169,6 @@ const FieldForm = (props: FieldFormProps) => {
                   </Box>
                   <Box sx={{ ml: 2, textAlign: 'right' }}>
                     <Button
-                      // variant="buttonSecondary"
                       variant="base"
                       type="button"
                       sx={{
