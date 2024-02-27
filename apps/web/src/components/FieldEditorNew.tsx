@@ -4,6 +4,7 @@ import { Button, Box, Flex, Text, Spinner } from 'theme-ui';
 import { Label, Input, Select } from 'theme-ui';
 
 import { Trash } from './Icons';
+import Field from './Field';
 
 interface FieldFormProps {
   fields?: any;
@@ -23,7 +24,8 @@ type FieldValues = {
 };
 
 const FieldForm = (props: FieldFormProps) => {
-  const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
+  // const fieldsArr = useMemo(() => props.fields || [], [props.fields]);
+  const fieldsArr = props.fields || [];
 
   const {
     register,
@@ -50,9 +52,9 @@ const FieldForm = (props: FieldFormProps) => {
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   const onSubmit = (data: FieldValues) => {
-    console.log('submit on FieldEditor');
     setSubmitting(true);
     const vals = getValues();
+    console.log('submit on FieldEditor', vals);
 
     const filteredVals = vals.fields.filter(
       (val: any) => val.name !== undefined || null || '',
@@ -61,8 +63,10 @@ const FieldForm = (props: FieldFormProps) => {
     const results = {
       count: fieldsArr.size,
       values: filteredVals,
-      data: data,
+      data: vals,
     };
+
+    console.log('reslut', results);
 
     props.onSave(results);
     setSubmitting(false);
@@ -100,35 +104,34 @@ const FieldForm = (props: FieldFormProps) => {
         )}
         <Box>
           {fields.map((field, index) => (
-            <Box key={field.id}>
-              <Flex>
-                <Box>
-                  <Label htmlFor="`fields[${idx}][name]`" mb={1}>
-                    Field Name
-                  </Label>
-                  <Input
-                    disabled={
-                      props.content &&
-                      field &&
-                      !props.content?.content_type.fields.every(
-                        (f: any) => f.name !== field.name,
-                      )
-                    }
-                    defaultValue={(field && field.name) || ''}
-                    type="text"
-                    {...register(`fields.${index}.name` as const, {
-                      required: true,
-                    })}
-                  />
-                  {errors.fields && errors.fields?.[index]?.name && (
-                    <Text variant="error">
-                      {errors.fields?.[index]?.name?.message}
-                    </Text>
-                  )}
-                </Box>
-                <Box sx={{ flexGrow: 1, px: 3 }}>
+            <Box
+              key={field.id}
+              sx={{
+                borderBottom:
+                  index === fields.length - 1 ? 'none' : '1px solid',
+                borderColor: 'border',
+                pb: index === fields.length - 1 ? 0 : 4,
+                pt: index === 0 ? 0 : 4,
+              }}>
+              <Flex sx={{ alignItems: 'center' }}>
+                <Field
+                  name={`fields.${index}.name`}
+                  label="Field Name"
+                  register={register}
+                  defaultValue={(field && field.name) || ''}
+                  onChange={() => handleSubmit(onSubmit)()}
+                  disable={
+                    props.content &&
+                    field &&
+                    !props.content?.content_type.fields.every(
+                      (f: any) => f.name !== field.name,
+                    )
+                  }
+                  error={errors.fields?.[index]?.name}
+                />
+                <Box sx={{ flexGrow: 1, ml: 3 }}>
                   <Label htmlFor="`fields[${idx}][type]`" mb={1}>
-                    Type
+                    Field Type
                   </Label>
                   <Select
                     disabled={
@@ -141,7 +144,8 @@ const FieldForm = (props: FieldFormProps) => {
                     defaultValue={(field && field.type) || ''}
                     {...register(`fields.${index}.type` as const, {
                       required: true,
-                    })}>
+                    })}
+                    onChange={() => handleSubmit(onSubmit)()}>
                     <option disabled selected value={''}>
                       select an option
                     </option>
@@ -154,12 +158,19 @@ const FieldForm = (props: FieldFormProps) => {
                       ))}
                   </Select>
                 </Box>
-                <Box pt={0} pl={4} sx={{ textAlign: 'right' }}>
-                  <Label mb={1}>Action</Label>
+                <Box sx={{ ml: 2, textAlign: 'right' }}>
                   <Button
-                    variant="btnSecondary"
+                    // variant="buttonSecondary"
+                    variant="base"
                     type="button"
-                    sx={{ py: 1, px: 2 }}
+                    sx={{
+                      mt: '28px',
+                      p: 2,
+                      flexShrink: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
                     onClick={() => {
                       props.removeField(index);
                       remove(index);
@@ -179,7 +190,7 @@ const FieldForm = (props: FieldFormProps) => {
             <Button
               variant="btnPrimary"
               type="button"
-              mt={2}
+              mt={4}
               onClick={(e) => {
                 e.preventDefault();
                 append({ name: '', type: '' });
@@ -190,7 +201,14 @@ const FieldForm = (props: FieldFormProps) => {
         )}
         {(fields?.length > 0 || fields?.length > 0) && (
           <Flex mt={4}>
-            <Button variant="btnPrimaryLarge" sx={{ ml: 1 }} type="submit">
+            <Button
+              variant="btnPrimaryLarge"
+              sx={{ ml: 1 }}
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                handleSubmit(onSubmit)();
+              }}>
               {submitting && <Spinner color="white" width={24} />}
               Save
             </Button>
