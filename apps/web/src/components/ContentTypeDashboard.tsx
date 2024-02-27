@@ -75,7 +75,11 @@ const ContentTypeDashboard = ({ rerender }: Props) => {
     if (page) {
       loadData(page);
     }
-  }, [page, rerender]);
+  }, [page]);
+
+  useEffect(() => {
+    loadData(1);
+  }, [rerender]);
 
   const onDelete = (id: string) => {
     deleteAPI(`content_types/${id}`);
