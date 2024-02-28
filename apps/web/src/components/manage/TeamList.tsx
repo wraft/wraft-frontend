@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Flex, Box, Text, Button, Image } from 'theme-ui';
@@ -10,7 +9,6 @@ import { ConfirmDelete } from '../common';
 import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
 import Modal from '../Modal';
 import { Table } from '../Table';
-
 import AssignRole from './AssignRole';
 
 interface Role {

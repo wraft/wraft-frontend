@@ -1,34 +1,48 @@
-import { FC } from 'react';
-
-import dynamic from 'next/dynamic';
+import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-// import ContentTypeForm from '../../src/components/ContentTypeForm';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
+import { Container } from 'theme-ui';
 
-import PageFull from '../../components/BlankFrame';
-// import CreateForm from '../../src/components/ContentForm';
-
-const CreateForm = dynamic(() => import('../../components/ContentForm'), {
-  ssr: false,
-});
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import ContentTypeViewForm from 'components/ContentTypeViewForm';
+import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
+  const [variant, setVariant] = useState<any>();
   const router = useRouter();
-  // const [action, setAction] = useState<any>();
+  const id: string = router.query.id as string;
 
-  // const onSave = () => {
-  //   console.log('saved');
-  // }
+  useEffect(() => {
+    fetchAPI(`content_types/${id}`).then((data: any) => {
+      console.log(data);
+      setVariant(data);
+    });
+  }, []);
 
   return (
     <>
       <Head>
-        <title>Create Instance - Wraft Docs</title>
+        <title>Edit Theme - Wraft Docs</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
-      <PageFull id="Modal" showFull={true}>
-        <CreateForm id={router.query.id} />
-      </PageFull>
+      <Page>
+        <PageHeader
+          title={variant?.content_type?.name || ''}
+          desc={
+            <DescriptionLinker
+              data={[
+                { name: 'Variants', path: '/content-types' },
+                { name: `${variant?.content_type?.name || ''}` },
+              ]}
+            />
+          }
+        />
+        <Container variant="layout.pageFrame">
+          <ContentTypeViewForm />
+        </Container>
+      </Page>
     </>
   );
 };

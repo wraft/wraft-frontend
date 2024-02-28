@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
 
 import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-
 import Field from './Field';
 
 export interface States {

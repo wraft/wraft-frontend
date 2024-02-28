@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-
 import {
   Disclosure,
   DisclosureContent,
@@ -12,7 +11,6 @@ import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { Asset, Engine } from '../utils/types';
-
 import Field from './Field';
 import FieldText from './FieldText';
 import { ArrowDropdown } from './Icons';

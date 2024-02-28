@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@wraft/ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Heading } from 'theme-ui';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import { Spinner } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
@@ -17,7 +16,6 @@ import Logo from '../../public/Logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
 import { emailPattern } from '../utils/zodPatterns';
-
 import Field from './Field';
 import Link from './NavLink';
 
@@ -33,7 +31,7 @@ type FormValues = {
 
 const schema = z.object({
   email: emailPattern,
-  password: z.string().min(1, { message: 'Please enter password' }),
+  password: z.string().min(1, { message: 'Please enter a valid password.' }),
 });
 
 const UserLoginForm = () => {
@@ -46,7 +44,7 @@ const UserLoginForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ mode: 'onBlur', resolver: zodResolver(schema) });
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
   const router = useRouter();
 
   const { session, error } = router.query;
@@ -165,11 +163,8 @@ const UserLoginForm = () => {
             </Link>
           </Flex>
 
-          <Button type="submit" variant="buttonPrimary">
-            <Flex sx={{ alignItems: 'center', gap: '4px' }}>
-              Sign in
-              {loading && <Spinner color="white" width={18} height={18} />}
-            </Flex>
+          <Button type="submit" variant="primary" loading={loading}>
+            Sign in
           </Button>
         </Box>
 

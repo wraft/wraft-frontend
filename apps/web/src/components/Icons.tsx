@@ -1,6 +1,4 @@
 import React from 'react';
-
-// import book from './icon/book-opened.svg';
 import styled from '@emotion/styled';
 import { Image } from 'theme-ui';
 

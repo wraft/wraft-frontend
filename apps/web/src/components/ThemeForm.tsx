@@ -1,14 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
-
-import { CloseIcon } from '@wraft/icon';
 import Router, { useRouter } from 'next/router';
+import { CloseIcon } from '@wraft/icon';
+// import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Input, Label } from 'theme-ui';
 
 import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
 import { Asset } from '../utils/types';
-
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldColor from './FieldColor';
@@ -44,6 +43,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
   const [isEdit, setIsEdit] = useState(false);
@@ -161,6 +161,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       setValue('secondary_color', currTheme.secondary_color || '');
       setAssets(currTheme?.assets);
       setLoadedAssets(currTheme?.assets);
+      trigger();
     }
   };
 
@@ -174,6 +175,12 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     });
     return false;
   };
+
+  useEffect(() => {
+    setValue('body_color', '#000000');
+    setValue('primary_color', '#000000');
+    setValue('secondary_color', '#000000');
+  }, []);
 
   /**
    * Load Entity details to prefill form

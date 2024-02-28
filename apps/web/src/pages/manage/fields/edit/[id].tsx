@@ -1,10 +1,9 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 import { Box } from 'theme-ui';
 
-import FieldTypeForm from '../../../../components/FieldTypeForm';
-import Page from '../../../../components/PageFrame';
+import FieldTypeForm from 'components/FieldTypeForm';
+import Page from 'components/PageFrame';
 
 const Index: FC = () => {
   return (

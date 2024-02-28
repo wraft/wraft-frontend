@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
-
-import Checkbox from '@wraft-ui/Checkbox';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import Router from 'next/router';
+import Checkbox from '@wraft-ui/Checkbox';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -17,15 +16,15 @@ import {
   Image,
 } from 'theme-ui';
 
-import { ConfirmDelete } from '../../../components/common';
-import Field from '../../../components/Field';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Modal from '../../../components/Modal';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { useAuth } from '../../../contexts/AuthContext';
-import { PersonalWorkspaceLinks, workspaceLinks } from '../../../utils';
-import { fetchAPI, putAPI, deleteAPI, postAPI } from '../../../utils/models';
+import { ConfirmDelete } from 'components/common';
+import Field from 'components/Field';
+import ManageSidebar from 'components/ManageSidebar';
+import Modal from 'components/Modal';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { useAuth } from 'contexts/AuthContext';
+import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
+import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
 
 export interface Organisation {
   id: string;
@@ -225,6 +224,7 @@ const Index: FC = () => {
                 as="form"
                 onSubmit={handleSubmit(onSubmit)}
                 variant="layout.contentFrame"
+                sx={{ backgroundColor: 'backgroundWhite' }}
                 p={4}>
                 <Box sx={{ height: '128px', mb: 4 }}>
                   <Image

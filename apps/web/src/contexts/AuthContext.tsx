@@ -5,7 +5,6 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
-
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';

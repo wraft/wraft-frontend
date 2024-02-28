@@ -12,6 +12,7 @@ node_modules
 
 # Testing
 coverage
+dist/
 
 # Turbo
 .turbo
@@ -42,6 +43,10 @@ yarn-error.log*
 
 # Webstorm
 .idea
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 ### VisualStudioCode template
 .vscode/*

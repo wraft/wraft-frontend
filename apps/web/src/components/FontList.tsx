@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { CloseIcon, DeleteIcon, DocumentIcon, TickIcon } from '@wraft/icon';
 import ProgressBar from '@wraft-ui/ProgressBar';
 import { Box, Button, Flex, Text, useThemeUI } from 'theme-ui';

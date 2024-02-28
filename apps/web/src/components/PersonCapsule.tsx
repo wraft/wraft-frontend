@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { CloseIcon } from '@wraft/icon';
 import { Avatar, Button, Flex, Text } from 'theme-ui';
 

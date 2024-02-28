@@ -1,12 +1,11 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 import { Flex, Box, Container } from 'theme-ui';
 
-import OrgSidebar from '../../components/OrgSidebar';
-import Page from '../../components/PageFrame';
-import PageHeader from '../../components/PageHeader';
-import ProfileForm from '../../components/ProfileForm';
+import OrgSidebar from 'components/OrgSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import ProfileForm from 'components/ProfileForm';
 
 const Contents: FC = () => {
   return (

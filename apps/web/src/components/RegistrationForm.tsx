@@ -1,8 +1,7 @@
 import { useState } from 'react';
-
+import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import cookie from 'js-cookie';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Button, Heading } from 'theme-ui';
@@ -11,7 +10,6 @@ import { z } from 'zod';
 import Logo from '../../public/Logo.svg';
 import { postAPI } from '../utils/models';
 import { emailPattern, passwordPattern } from '../utils/zodPatterns';
-
 import Field from './Field';
 import Link from './NavLink';
 

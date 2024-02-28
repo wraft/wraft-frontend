@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
-import { format } from 'date-fns';
 import Image from 'next/image';
-import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
+import { Button } from '@wraft/ui';
+import { format } from 'date-fns';
+import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
-
 import PendingDocumentBlock from './PendingDocument';
 
 const finishSetup = [
@@ -85,12 +84,7 @@ const Dashboard = () => {
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
-            <Button
-              variant="btnPrimary"
-              // onClick={() => toggleSearch()}
-              sx={{ fontWeight: 'heading' }}>
-              Watch demo
-            </Button>
+            <Button variant="primary">Watch demo</Button>
           </Box>
         </Flex>
         <Flex

@@ -1,9 +1,8 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 
-import Page from '../../components/PageFrame';
-import UserDetail from '../../components/UserDetail';
+import Page from 'components/PageFrame';
+import UserDetail from 'components/UserDetail';
 
 const Index: FC = () => {
   return (

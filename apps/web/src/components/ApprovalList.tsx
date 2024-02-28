@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import NextLink from 'next/link';
+import { Box, Flex, Avatar, Button } from 'theme-ui';
+import { Table } from '@wraft/ui';
 
-import { Box, Text, Flex, Avatar, Button } from 'theme-ui';
-
-import { useAuth } from '../contexts/AuthContext';
-import { putAPI, fetchAPI } from '../utils/models';
-
-import { BoxWrap, StateBadge } from './Atoms';
-import ContentLoader from './ContentLoader';
-import PageHeader from './PageHeader';
-import { Table } from './Table';
+import PageHeader from 'components/PageHeader';
+import { StateBadge, TimeAgo } from 'components/Atoms';
+import { useAuth } from 'contexts/AuthContext';
+import { putAPI, fetchAPI } from 'utils/models';
 
 export interface ApprovalList {
   pre_state: State;
@@ -37,9 +35,92 @@ export interface State {
   id: string;
 }
 
+const columns = (approveInstance: any) => [
+  {
+    id: 'content.name',
+    header: 'Name',
+    accessorKey: 'content.name',
+    cell: ({ row }: any) => (
+      <NextLink href={`/content/${row.original?.content?.id}`}>
+        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+          <Box
+            sx={{
+              width: '3px',
+              bg: row.original?.content_type?.color
+                ? row.original?.content_type?.color
+                : 'blue',
+            }}
+          />
+          <Box ml={3}>
+            <Box>{row.original?.content?.instance_id}</Box>
+            <Box>{row.original?.content?.serialized?.title}</Box>
+          </Box>
+        </Flex>
+      </NextLink>
+    ),
+    enableSorting: false,
+  },
+  {
+    id: 'content.updated_at',
+    header: 'TIME',
+    accessorKey: 'TIME',
+    cell: ({ row }: any) => (
+      <Box>
+        <TimeAgo time={row.original?.content?.updated_at} />
+      </Box>
+    ),
+    enableSorting: false,
+  },
+  {
+    id: 'creator.profile_pic',
+    header: 'EDITORS',
+    accessorKey: 'creator.profile_pic',
+    cell: ({ row }: any) => (
+      <Box sx={{ height: '20px' }}>
+        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
+      </Box>
+    ),
+    enableSorting: false,
+  },
+  {
+    header: 'STATUS',
+    accessorKey: 'age',
+    cell: ({ row }: any) => (
+      <Box>
+        <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
+      </Box>
+    ),
+    enableSorting: false,
+    textAlign: 'right',
+  },
+  {
+    header: 'ACTION',
+    accessorKey: 'action',
+    cell: ({ row }: any) => (
+      <Flex sx={{ mr: 1, p: 2 }}>
+        <Flex>
+          <Box sx={{ mr: 2 }}>
+            <Button variant="btnSecondary" sx={{ mr: 1 }}>
+              Review
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant="btnAction"
+              onClick={() => approveInstance(row?.original?.instance?.id)}>
+              Approve
+            </Button>
+          </Box>
+        </Flex>
+      </Flex>
+    ),
+    enableSorting: false,
+    textAlign: 'right',
+  },
+];
+
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
-  const [tableList, setTableList] = useState<Array<any>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
@@ -47,14 +128,15 @@ const Approvals = () => {
   const { accessToken } = useAuth();
 
   const loadData = () => {
+    setLoading(true);
     fetchAPI('users/instance-approval-systems')
       .then((data: any) => {
-        setLoading(true);
+        setLoading(false);
         const res: ApprovaSystemItem[] = data.instance_approval_systems;
         setContents(res);
       })
       .catch(() => {
-        setLoading(true);
+        setLoading(false);
       });
   };
 
@@ -74,71 +156,6 @@ const Approvals = () => {
     });
   };
 
-  /**
-   * Table Constructor
-   */
-
-  useEffect(() => {
-    if (contents && contents.length > 0) {
-      const row: any = [];
-      contents.map((r: any) => {
-        const rFormated = {
-          col1: (
-            <Box
-              sx={{
-                borderRadius: '4px',
-                height: '40px',
-                width: '5px',
-                border: 'solid 1px',
-                borderColor: 'border',
-                mr: 0,
-                // ml: 2,
-                mt: 2,
-              }}
-            />
-          ),
-          col2: (
-            <BoxWrap
-              id={r.instance?.instance_id}
-              name={r.instance?.serialized?.title}
-              xid={r.instance?.id}
-            />
-          ),
-          col3: (
-            <Box pt={1}>
-              {r.content?.inserted_at}
-              {/* <TimeAgo time={r.content?.inserted_at} /> */}
-            </Box>
-          ),
-          col4: <Avatar mt={2} width="20px" src={r.creator?.profile_pic} />,
-          state: <StateBadge name={r.state.state} color="green.3" />,
-          status: (
-            <Flex sx={{ mr: 1, p: 2 }}>
-              <Flex>
-                <Box sx={{ mr: 2 }}>
-                  <Button variant="btnSecondary" sx={{ mr: 1 }}>
-                    Review
-                  </Button>
-                </Box>
-                <Box>
-                  <Button
-                    variant="btnAction"
-                    onClick={() => approveInstance(r.instance?.id)}>
-                    Approve
-                  </Button>
-                </Box>
-              </Flex>
-            </Flex>
-          ),
-        };
-
-        row.push(rFormated);
-      });
-
-      setTableList(row);
-    }
-  }, [contents]);
-
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Approvals" desc="All Approvals across your feeds">
@@ -147,57 +164,13 @@ const Approvals = () => {
       <Box mx={0} mb={3} variant="layout.pageFrame">
         <Flex>
           <Box mx={0} mb={3} sx={{ width: '75%' }}>
-            {!loading && <ContentLoader />}
-            {loading && !contents && (
-              <Box
-                sx={{
-                  p: 4,
-                  bg: 'gray.100',
-                  border: 'solid 1px',
-                  borderColor: 'border',
-                }}>
-                <Text>Nothing to approve</Text>
-              </Box>
-            )}
-            {loading && contents && (
-              <Table
-                options={{
-                  columns: [
-                    {
-                      Header: '',
-                      accessor: 'col1', // accessor is the "key" in the data
-                      width: 'auto',
-                    },
-                    {
-                      Header: 'Name',
-                      accessor: 'col2',
-                      width: '50%',
-                    },
-                    {
-                      Header: 'Time',
-                      accessor: 'col3',
-                      width: 'auto',
-                    },
-                    {
-                      Header: 'Sent by',
-                      accessor: 'col4',
-                      width: '10%',
-                    },
-                    {
-                      Header: 'State',
-                      accessor: 'state',
-                      width: '10%',
-                    },
-                    {
-                      Header: 'Action',
-                      accessor: 'status',
-                      width: '15%',
-                    },
-                  ],
-                  data: tableList,
-                }}
-              />
-            )}
+            <Table
+              data={contents}
+              isLoading={loading}
+              columns={columns(approveInstance)}
+              skeletonRows={10}
+              emptyMessage="Nothing to approve"
+            />
           </Box>
           <Box
             sx={{

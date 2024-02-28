@@ -1,6 +1,5 @@
 /** @jsxImportSource theme-ui */
 import { useEffect, useRef } from 'react';
-
 import { Checkbox as AriakitCheckbox, CheckboxOptions } from '@ariakit/react';
 import { TickIcon, DashIcon } from '@wraft/icon';
 import { renderToString } from 'react-dom/server';

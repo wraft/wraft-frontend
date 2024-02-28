@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { Box, Button, Flex, Text } from 'theme-ui';
+import { Pagination, Table } from '@wraft/ui';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import toast from 'react-hot-toast';
 
-import ContentLoader from 'react-content-loader';
-import { Box, Text, Flex, Grid } from 'theme-ui';
-// import ContentLoader from 'react-content-loader';
+import { TimeAgo } from 'components/Atoms';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, deleteAPI } from 'utils/models';
 
-import { useAuth } from '../contexts/AuthContext';
-import { fetchAPI, deleteAPI } from '../utils/models';
-
-import { EmptyForm } from './Icons';
-import Link from './NavLink';
+import { OptionsIcon } from './Icons';
+import Modal from './Modal';
+import { ConfirmDelete } from './common';
 
 /**
  * DocType Cards
@@ -17,65 +21,12 @@ import Link from './NavLink';
  * @returns
  */
 
-interface DocCardProps {
-  id: any;
-  name?: string;
-  color?: string;
-  isEdit?: boolean;
-}
-
-export const DocCard = ({ name, id, color, isEdit }: DocCardProps) => {
-  return (
-    <Link
-      variant="base"
-      href={
-        isEdit ? `/content-types/edit/` + `${id}` : `/content-types/` + `${id}`
-      }>
-      <Box
-        sx={{
-          bg: 'neutral.100',
-          minWidth: '220px',
-          // maxHeight: '200px',
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: 6,
-          cursor: 'pointer',
-          mr: 3,
-          ':hover': {
-            bg: 'neutral.200',
-          },
-        }}>
-        <Box sx={{ height: '79px', pt: '12px', pl: '12px' }}>
-          <Box
-            sx={{
-              width: '53px',
-              height: '10px',
-              bg: color,
-              borderRadius: '2px',
-            }}
-          />
-        </Box>
-        <Box px={3} py={2} sx={{ borderTop: '1px solid #E4E9EF' }}>
-          <Text
-            sx={{
-              fontFamily: 'body',
-              fontSize: 2,
-              pt: 1,
-              color: 'text',
-              fontWeight: 500,
-            }}>
-            {name}
-          </Text>
-        </Box>
-      </Box>
-
-      {/* {isEdit ? 'yes' : 'no'} */}
-      {/* <Box pl={3} pt={1} pb={2} bg="">
-          <Text sx={{ fontSize: 2, pt: 1, color: 'gray.900' }}>{name}</Text>
-        </Box> */}
-    </Link>
-  );
-};
+// interface DocCardProps {
+//   id: any;
+//   name?: string;
+//   color?: string;
+//   isEdit?: boolean;
+// }
 
 export interface ILayout {
   width: number;
@@ -101,27 +52,59 @@ export interface IFieldItem {
   type: string;
 }
 
-interface ContentTypeDashboardProps {
-  isEdit?: boolean;
+// interface ContentTypeDashboardProps {
+//   isEdit?: boolean;
+// }
+interface Props {
+  rerender: boolean;
+  setRerender?: (prev: any) => void;
 }
 
-const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
+const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pageMeta, setPageMeta] = useState<any>();
+  const [page, setPage] = useState<number>();
+  const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [deleteVariant, setDeleteVariant] = useState<number | null>(null);
 
   const { accessToken } = useAuth();
 
-  const delData = (id: string) => {
-    deleteAPI(`content_types/${id}`);
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
+
+  useEffect(() => {
+    if (page) {
+      loadData(page);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadData(1);
+  }, [rerender]);
+
+  const onDelete = (id: string) => {
+    deleteAPI(`content_types/${id}`)
+      .then(() => {
+        setDeleteVariant(null);
+        setRerender && setRerender((prev: boolean) => !prev);
+        toast.success('Deleted Successfully', { duration: 1000 });
+      })
+      .catch(() => {
+        toast.error('Delete Failed', { duration: 1000 });
+      });
   };
 
-  const loadData = () => {
+  const loadData = (page: number) => {
     setLoading(true);
-    fetchAPI('content_types?sort=inserted_at_desc')
+
+    const query = `?page=${page}&sort=inserted_at_desc`;
+    fetchAPI(`content_types${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.content_types;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
@@ -129,70 +112,155 @@ const ContentTypeDashboard = ({ isEdit }: ContentTypeDashboardProps) => {
   };
 
   useEffect(() => {
-    loadData();
+    loadData(currentPage);
   }, [accessToken]);
+
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   console.log('loading[ww]', loading);
 
-  return (
-    <Box>
-      <Box sx={{ width: '100wh', pt: 2 }}>
-        {loading && <RepeatableTableRows />}
-      </Box>
-
-      {!loading && contents && contents.length > 0 && (
-        <Flex sx={{ width: '100%', pt: 2 }}>
-          <Grid columns={3}>
-            {contents.map((m: any) => (
-              <DocCard key={m.id} {...m} isEdit={isEdit} onDelete={delData} />
-            ))}
-          </Grid>
-        </Flex>
-      )}
-      {!loading && contents && contents.length === 0 && (
-        <Box>
-          <Flex>
-            <Box sx={{ color: 'gray.500', width: 'auto' }}>
-              <EmptyForm />
-            </Box>
-            <Box sx={{ m: 2, pb: 0 }}>
-              <Text as="h2" sx={{ fontWeight: 300 }}>
-                Templates are empty
-              </Text>
-              <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
-                You havent created a templates yet
-              </Text>
+  const columns = [
+    {
+      id: 'title',
+      header: 'NAME',
+      accessorKey: 'title',
+      cell: ({ row }: any) => (
+        <NextLink href={`/content-types/${row?.original?.id}`}>
+          <Flex sx={{ fontSize: '12px', ml: '-14px', py: 2 }}>
+            <Box
+              sx={{
+                width: '3px',
+                bg: row.original?.color ? row.original?.color : 'blue',
+              }}
+            />
+            <Box ml={3}>
+              <Box sx={{ fontSize: '15px', fontWeight: 500 }}>
+                {row?.original?.name}
+              </Box>
             </Box>
           </Flex>
+        </NextLink>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.updated_at',
+      header: 'CREATED AT',
+      accessorKey: 'TIME',
+      cell: ({ row }: any) => (
+        <Box>
+          <TimeAgo time={row.original?.updated_at} />
         </Box>
-      )}
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.name',
+      header: '',
+      cell: ({ row }: any) => (
+        <Flex sx={{ justifyContent: 'space-between' }}>
+          <Box />
+          <Box>
+            <MenuProvider>
+              <MenuButton
+                as={Box}
+                variant="none"
+                sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    margin: '0px',
+                    padding: '0px',
+                    bg: 'transparent',
+                    ':disabled': {
+                      display: 'none',
+                    },
+                  }}
+                  onClick={() => {
+                    setIsOpen(row.index);
+                  }}>
+                  <OptionsIcon />
+                </Box>
+              </MenuButton>
+              <Menu
+                as={Box}
+                variant="layout.menu"
+                open={isOpen == row.index}
+                onClose={() => setIsOpen(null)}>
+                <MenuItem>
+                  <Button
+                    variant="base"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteVariant(row.index);
+                    }}>
+                    <Text
+                      variant=""
+                      sx={{ cursor: 'pointer', color: 'red.600' }}>
+                      Delete
+                    </Text>
+                  </Button>
+                </MenuItem>
+              </Menu>
+              <Modal
+                isOpen={deleteVariant === row.index}
+                onClose={() => setDeleteVariant(null)}>
+                {
+                  <ConfirmDelete
+                    title="Delete Variant"
+                    text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                    setOpen={setDeleteVariant}
+                    onConfirmDelete={async () => {
+                      onDelete(row.original.id);
+                    }}
+                  />
+                }
+              </Modal>
+            </MenuProvider>
+          </Box>
+        </Flex>
+      ),
+
+      enableSorting: false,
+      textAlign: 'right',
+    },
+  ];
+
+  return (
+    <Box>
+      <Table
+        data={contents}
+        isLoading={loading}
+        columns={columns}
+        skeletonRows={10}
+        emptyMessage="No blocks has been created yet."
+      />
+      <Box mt="16px">
+        {pageMeta && pageMeta?.total_pages > 1 && (
+          <Pagination
+            totalPage={pageMeta?.total_pages}
+            initialPage={currentPage}
+            onPageChange={changePage}
+            totalEntries={pageMeta?.total_entries}
+          />
+        )}
+      </Box>
     </Box>
   );
 };
 export default ContentTypeDashboard;
-
-const RepeatableTableRows = (props: any) => {
-  return (
-    <ContentLoader
-      width={800}
-      height={575}
-      viewBox="0 0 800 575"
-      backgroundColor="#f3f3f3"
-      foregroundColor="#ecebeb"
-      {...props}>
-      <rect x="12" y="58" rx="2" ry="2" width="211" height="150" />
-      <rect x="240" y="57" rx="2" ry="2" width="211" height="150" />
-      <rect x="467" y="56" rx="2" ry="2" width="211" height="150" />
-      <rect x="12" y="283" rx="2" ry="2" width="211" height="150" />
-      <rect x="240" y="281" rx="2" ry="2" width="211" height="150" />
-      <rect x="468" y="279" rx="2" ry="2" width="211" height="150" />
-    </ContentLoader>
-  );
-};
-RepeatableTableRows.metadata = {
-  name: 'Lukas Werner',
-  github: 'sherpaPSX',
-  description:
-    'Repeatable table rows. You can easily define number of rows in props and generate then in one svg',
-  filename: 'RepeatableTableRows',
-};
