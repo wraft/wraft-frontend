@@ -396,6 +396,7 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   useEffect(() => {
     loadThemes();
+    setValue('color', '#000000');
   }, []);
 
   /**
