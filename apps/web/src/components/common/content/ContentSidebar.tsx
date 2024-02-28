@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Router from 'next/router';
 import {
   Focusable,
   Menu,
@@ -10,8 +11,11 @@ import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 
 import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
+import Modal from 'components/Modal';
 import { deleteAPI } from 'utils/models';
 import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
+
+import { ConfirmDelete } from '..';
 
 /**
  * Atom Component to show Flow State
@@ -75,6 +79,7 @@ interface EditMenuProps {
  * @returns
  */
 export const EditMenus = ({ id }: EditMenuProps) => {
+  const [isDelete, setIsDelete] = useState<boolean>(false);
   /**
    * Delete content
    * @param id
@@ -85,22 +90,12 @@ export const EditMenus = ({ id }: EditMenuProps) => {
         duration: 1000,
         position: 'top-right',
       });
+      Router.push('/contents');
     });
   };
   return (
     <MenuProvider>
-      <MenuButton
-        as={Button}
-        sx={{
-          border: 0,
-          color: 'text',
-          borderColor: 'border',
-          p: 0,
-          bg: 'neutral.100',
-          pb: 1,
-          mt: 0,
-          ml: 1,
-        }}>
+      <MenuButton as={Button} variant="base">
         <ThreeDots width={24} />
       </MenuButton>
       <Menu
@@ -113,8 +108,21 @@ export const EditMenus = ({ id }: EditMenuProps) => {
           bg: 'neutral.100',
           color: 'text',
         }}>
-        <MenuItem onClick={() => deleteContent(id)}>Delete</MenuItem>
+        <MenuItem
+          as={Box}
+          onClick={() => setIsDelete(true)}
+          sx={{ px: 3, py: 2, cursor: 'pointer', color: 'red.700' }}>
+          Delete
+        </MenuItem>
       </Menu>
+      <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
+        <ConfirmDelete
+          onConfirmDelete={() => deleteContent(id)}
+          setOpen={setIsDelete}
+          title="Delete Document"
+          text={`Are you sure you want to delete this document ?`}
+        />
+      </Modal>
     </MenuProvider>
   );
 };
