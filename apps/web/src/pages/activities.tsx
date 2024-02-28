@@ -1,11 +1,10 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 import { Text, Box, Flex, Container } from 'theme-ui';
 
 import ActivityFeed from '../components/ActivityFeed';
 import Page from '../components/PageFrame';
-import UserHome from '../components/UserHome';
+import LandingBlock from '../components/LandingBlock';
 import UserNav from '../components/UserNav';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -23,7 +22,7 @@ const Index: FC = () => {
       {!accessToken && (
         <Box>
           <UserNav />
-          <UserHome />
+          <LandingBlock />
         </Box>
       )}
       {accessToken && (

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { Box, Button, Text } from 'theme-ui';
 
 import { fetchAPI, postAPI } from '../utils/models';
-
 import CommentCard from './CommentCard';
 import Field from './FieldText';
 

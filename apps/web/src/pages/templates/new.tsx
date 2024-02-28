@@ -1,9 +1,8 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 
-import Page from '../../components/PageFrameInner';
-import TemplateForm from '../../components/TemplateForm';
+import Page from 'components/PageFrameInner';
+import TemplateForm from 'components/TemplateForm';
 
 const Index: FC = () => {
   return (

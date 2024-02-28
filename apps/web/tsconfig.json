@@ -1,31 +1,30 @@
 {
+  "extends": "@wraft/typescript-config/react-app.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "jsx": "preserve",
+    "baseUrl": "./src",
+    "esModuleInterop": true,
+    "paths": {
+      "@wraft-ui/*": ["components/common/*"],
+    },
+
     "lib": ["dom", "es2017"],
     "moduleResolution": "node",
-    "allowJs": true,
     "noEmit": true,
     "strict": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "noUnusedLocals": true,
+    // "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "incremental": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
     "noImplicitAny": true,
-    "paths": {
-      "@wraft-ui/*": ["./src/components/common/*"],
-    }
+    "noUnusedLocals": false
   },
   "exclude": ["node_modules", "__tests__"],
   "include": [

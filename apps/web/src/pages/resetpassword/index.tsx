@@ -1,15 +1,15 @@
 import { useState } from 'react';
-
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 
+import CountdownTimer from 'components/common/CountDownTimer';
+import Field from 'components/Field';
+import Link from 'components/NavLink';
+import { postAPI } from 'utils/models';
+
 import Logo from '../../../public/Logo.svg';
-import CountdownTimer from '../../components/common/CountDownTimer';
-import Field from '../../components/Field';
-import Link from '../../components/NavLink';
-import { postAPI } from '../../utils/models';
 
 type FormValues = {
   email: string;

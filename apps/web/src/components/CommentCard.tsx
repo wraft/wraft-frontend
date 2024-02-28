@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Box, Flex, Text } from 'theme-ui';
 
 import { ProfileCard } from './ContentDetail';

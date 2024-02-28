@@ -4,14 +4,23 @@ import {
   ReactExtensions,
   useRemirror,
   UseRemirrorReturn,
+  useRemirrorContext,
 } from '@remirror/react';
 import {
   AnyExtension,
   RemirrorEventListener,
   RemirrorEventListenerProps,
 } from 'remirror';
+import { RemirrorContentType } from "remirror";
 
 import remirrorExtensions from './extensions.js';
+
+const emptyDoc: RemirrorContentType = {
+  type: "doc",
+  content: [],
+};
+
+export default emptyDoc;
 
 export interface UseContentEditorReturnType {
   editor: UseRemirrorReturn<ReactExtensions<AnyExtension>>;
@@ -20,6 +29,8 @@ export interface UseContentEditorReturnType {
   setContent: (content: string) => void;
   insertNow: (content: any) => void;
   onInserted: Function,
+  getContext: any,
+  
 }
 
 export function useContentEditor(
@@ -33,13 +44,14 @@ export function useContentEditor(
   const extensions = remirrorExtensions(args?.placeholder);
 
   // console.log('[useContentEditor][value]', value);
-
+  
   const editor = useRemirror({
     extensions,
     stringHandler: 'markdown',
-    content: value,
+    content: value || emptyDoc,
     selection: 'start',
   });
+
 
   const { onChange, manager, getContext } = editor;
 
@@ -61,6 +73,7 @@ export function useContentEditor(
 
       // @ts-ignore
       const json = getContext()?.helpers.getJSON();
+      console.log('onEditorChange', json);
       const contentObject = {
         json: json,
         md: markdownContent,
@@ -100,12 +113,7 @@ export function useContentEditor(
     },
     [manager]
   );
-
-  useEffect(() => {
-    if (value) {
-      setContent(value);
-    }
-  }, [value]);
+  
 
   // when default value is provided
   useEffect(() => {
@@ -121,5 +129,6 @@ export function useContentEditor(
     content,
     insertNow,
     onInserted,
+    getContext,
   };
 }

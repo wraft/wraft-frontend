@@ -1,14 +1,12 @@
 import React, { Fragment, useEffect, useState } from 'react';
-
+import { useRouter } from 'next/router';
 import { DocumentIcon, TickIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input, Label, useThemeUI } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import { Asset } from '../utils/types';
-
 import Field from './Field';
 import FieldColor from './FieldColor';
 import ThemeAddForm from './ThemeForm';

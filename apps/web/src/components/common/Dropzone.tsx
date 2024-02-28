@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
-
 import { TickIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
-import { Asset } from '../../utils/types';
-import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
+import { Asset } from 'utils/types';
 
+import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 import ProgressBar from './ProgressBar';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;

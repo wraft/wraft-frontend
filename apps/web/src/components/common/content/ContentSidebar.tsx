@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Focusable,
   Menu,
@@ -10,12 +9,10 @@ import {
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 
-import { deleteAPI } from '../../../utils/models';
-import {
-  FlowStateBlockProps,
-  ContentInstance,
-} from '../../../utils/types/content';
-import { SendIcon, ThreeDots, BackArrowIcon } from '../../Icons';
+import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
+import { deleteAPI } from 'utils/models';
+import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
+
 /**
  * Atom Component to show Flow State
  * @TODO move to atoms or ui
@@ -33,8 +30,6 @@ export const FlowStateBlock = ({
     <Flex
       as={Focusable}
       sx={{
-        pb: 2,
-        mr: 1,
         ':last-child': {
           svg: {
             display: 'none',
@@ -133,8 +128,8 @@ interface ContentSidebarProps {
 }
 
 const ContentSidebar = ({ content }: ContentSidebarProps) => (
-  <Flex sx={{ px: 3 }}>
-    <Flex sx={{ mb: 3, width: '70%' }}>
+  <Flex sx={{ px: 3, py: 3 }}>
+    <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
         <Text as="h6" variant="labelcaps">
           {content.content_type?.layout?.name} / {content.content_type?.name}
@@ -176,7 +171,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
         ml: 'auto',
       }}>
       <SendIcon width={24} />
-      <EditMenus id={content?.content.id} />
+      <EditMenus id={content?.content?.id} />
     </Flex>
   </Flex>
 );

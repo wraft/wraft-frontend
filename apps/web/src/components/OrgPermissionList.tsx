@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { Box, Flex, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';

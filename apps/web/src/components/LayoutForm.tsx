@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import {
   Disclosure,
   DisclosureContent,
@@ -31,7 +30,6 @@ import {
 } from '../utils/models';
 import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
-
 import AssetForm from './AssetForm';
 import Field from './Field';
 import FieldText from './FieldText';

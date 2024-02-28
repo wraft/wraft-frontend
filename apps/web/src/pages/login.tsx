@@ -1,5 +1,4 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 
 // import Container from '../src/components/Container';

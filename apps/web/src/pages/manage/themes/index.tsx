@@ -1,16 +1,15 @@
 import { FC, useState } from 'react';
-
+import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
-import Head from 'next/head';
 import { Box, Button, Container, Flex, Text } from 'theme-ui';
 
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import ThemeAddForm from '../../../components/ThemeForm';
-import ThemeList from '../../../components/ThemeList';
-import { menuLinks } from '../../../utils';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import ThemeAddForm from 'components/ThemeForm';
+import ThemeList from 'components/ThemeList';
+import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -45,7 +44,7 @@ const Index: FC = () => {
         <Container variant="layout.pageFrame">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
+            <Box sx={{ width: '100%' }}>
               <ThemeList rerender={rerender} setRerender={setRerender} />
             </Box>
           </Flex>

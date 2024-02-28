@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
 import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-
 import Field from './Field';
 import { PlayCircle } from './Icons';
 import Modal from './Modal';

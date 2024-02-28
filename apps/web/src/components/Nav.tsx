@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useRouter } from 'next/router';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
-import Blok from './Blok';
+import { CreateDocument } from './Document';
 import { Bell, Search } from './Icons';
 import Modal from './Modal';
 import Link from './NavLink';
@@ -76,16 +74,6 @@ const Nav = ({ navtitle }: INav) => {
               pb: 1,
             }}>
             <Flex sx={{ minWidth: '80ch' }}>
-              {/* <Button variant="btnPrimaryIcon" sx={{ fontSize: 0, fontWeight: 600, pt: 1 }} onClick={() => toggleSearch()}>New</Button> */}
-              {/* <Link href="/contents">
-                <Box color="gray.8" sx={{ ml: 3, mt: 2, fill: 'text' }}>
-                  <Search width="20px" />
-                </Box>
-              </Link> */}
-              {/* <Box>
-                <Text as="h4">NDA between Bijoy and Functionary Labs Pvt Ltd</Text>
-              </Box> */}
-
               <Flex variant="button" sx={{ mt: 0, pt: 0, ml: 3 }}>
                 {/* <ButtonLink onToggleSearch={toggleSearch} /> */}
                 <Flex
@@ -236,7 +224,7 @@ const Nav = ({ navtitle }: INav) => {
         </Box>
       </Flex>
       <Modal isOpen={showSearch} onClose={closeSearch}>
-        <Blok />
+        <CreateDocument />
       </Modal>
     </Box>
   );

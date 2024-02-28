@@ -1,7 +1,6 @@
 import { useState } from 'react';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -13,7 +12,6 @@ import Logo from '../../public/Logo.svg';
 import WaitlistPrompt from '../components/WaitlistPrompt';
 import { postAPI } from '../utils/models';
 import { emailPattern } from '../utils/zodPatterns';
-
 import Field from './Field';
 
 type FormValues = {

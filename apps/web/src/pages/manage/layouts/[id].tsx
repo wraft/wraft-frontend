@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
-
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Container } from 'theme-ui';
 
-import LayoutViewForm from '../../../components/LayoutViewForm';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { fetchAPI } from '../../../utils/models';
+import LayoutViewForm from 'components/LayoutViewForm';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
   const [layout, setLayout] = useState<any>();

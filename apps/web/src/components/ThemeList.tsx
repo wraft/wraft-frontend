@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon, FontIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Button, Table } from '@wraft/ui';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
-
-import { Button, ConfirmDelete, Table } from './common';
+import { ConfirmDelete } from './common';
 import Modal from './Modal';
 import Link from './NavLink';
 
@@ -37,25 +36,20 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const loadData = () => {
-    const getRequest = fetchAPI('themes?sort=inserted_at_desc');
-    toast.promise(
-      getRequest,
-      {
-        loading: 'Loading...',
-        success: (data: any) => {
-          const res: ThemeElement[] = data.themes;
-          console.log('theme', res);
-          setContents(res);
-          return 'Successfully loaded theme';
-        },
-        error: 'Failed to load theme',
-      },
-      {
-        duration: 1000,
-      },
-    );
+    setLoading(true);
+
+    fetchAPI('themes?sort=inserted_at_desc')
+      .then((data: any) => {
+        const res: ThemeElement[] = data.themes;
+        setContents(res);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   };
 
   const onDelete = (id: string) => {
@@ -95,7 +89,6 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Link>
         </Box>
       ),
-      size: 200,
       enableSorting: false,
     },
     {
@@ -121,7 +114,6 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Text>
         </Flex>
       ),
-      size: 180,
       enableSorting: false,
     },
     {
@@ -205,7 +197,6 @@ const Form = ({ rerender, setRerender }: Props) => {
                   open={isOpen == row.index}
                   onClose={() => setIsOpen(null)}>
                   <Button
-                    variant="text"
                     onClick={() => {
                       setIsOpen(null);
                       setDeleteTheme(row.index);
@@ -247,7 +238,7 @@ const Form = ({ rerender, setRerender }: Props) => {
 
   return (
     <Box>
-      <Table data={contents} columns={columns} />
+      <Table data={contents} columns={columns} isLoading={loading} />
     </Box>
   );
 };

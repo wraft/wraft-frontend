@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-
 import ContentLoader from 'react-content-loader';
 
 /**

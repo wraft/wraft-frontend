@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-import { Drawer } from '@wraft-ui/Drawer';
 import { useRouter } from 'next/router';
+import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Container, Flex, Label, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
-
 import Field from './Field';
 import FlowForm from './FlowForm';
 import PersonCapsule from './PersonCapsule';

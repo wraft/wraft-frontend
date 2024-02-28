@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 import styled from '@emotion/styled';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
@@ -17,7 +16,6 @@ import {
   IBuild,
   IVariantDetail,
 } from '../utils/types/content';
-
 import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';

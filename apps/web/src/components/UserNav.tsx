@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
-
 import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
 import { UserIcon, BrandLogo } from './Icons';
 import Link from './NavLink';
 
@@ -18,7 +16,7 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        bg: 'background',
+        bg: '#F2F7F4',
         // borderBottom: 'solid 1px',
         // borderColor: 'border',
         py: 2,

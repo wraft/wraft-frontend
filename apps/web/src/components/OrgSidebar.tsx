@@ -1,10 +1,8 @@
 import React from 'react';
-
 import styled from '@emotion/styled';
 
 import { useAuth } from '../contexts/AuthContext';
 import { checkSubRoutePermission } from '../utils';
-
 import ManageSidebar from './ManageSidebar';
 
 export const IconStyleWrapper = styled.div`
@@ -27,7 +25,7 @@ export interface menuLinksProps {
 const profileLinks: menuLinksProps[] = [
   {
     name: 'My Account',
-    path: '/account',
+    path: '/account/profile',
   },
   {
     name: 'Manage Workspace',

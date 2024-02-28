@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
-
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import Head from 'next/head';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Flex, Container, Box } from 'theme-ui';
 
-import PermissionsList from '../../../components/manage/PermissionsList';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { useAuth } from '../../../contexts/AuthContext';
-import { workspaceLinks } from '../../../utils';
+import PermissionsList from 'components/manage/PermissionsList';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { useAuth } from 'contexts/AuthContext';
+import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {
   const { userProfile } = useAuth();
