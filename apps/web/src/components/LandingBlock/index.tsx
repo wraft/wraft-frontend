@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Router from 'next/router';
 import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
 import { Button } from '@wraft/ui';
@@ -8,7 +9,6 @@ import { Button } from '@wraft/ui';
 import Footer from 'components/Footer';
 
 import data from './home.json';
-import Router from 'next/router';
 
 const LandingBlockWrapper = styled(Box)`
   --lp-text-color: 16px;
