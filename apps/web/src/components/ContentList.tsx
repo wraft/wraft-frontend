@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
+import toast from 'react-hot-toast';
 
 import { fetchAPI } from '../utils/models';
 import { TimeAgo, FilterBlock, StateBadge } from './Atoms';
@@ -133,7 +134,6 @@ const ContentList = () => {
   const [contents, setContents] = useState<any>([]);
   const [variants, setVariants] = useState<Array<any>>([]);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
-  const [_loading, setLoading] = useState<boolean>(false);
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
 
@@ -151,12 +151,11 @@ const ContentList = () => {
   const loadVariants = () => {
     fetchAPI('content_types')
       .then((data: any) => {
-        setLoading(true);
         const res: any = data.content_types;
         setVariants(res);
       })
       .catch(() => {
-        setLoading(true);
+        toast.error('Failed to load content types');
       });
   };
 
