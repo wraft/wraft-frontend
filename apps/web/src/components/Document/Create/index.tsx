@@ -58,6 +58,7 @@ const CreateDocument = () => {
     setValue,
     resetField,
     watch,
+    getValues,
   } = useForm<any>({
     mode: 'onSubmit',
   });
@@ -92,8 +93,8 @@ const CreateDocument = () => {
       });
   };
 
-  const goTo = () => {
-    // setFormStep(step);
+  const goTo = (step: number) => {
+    setFormStep(step);
   };
 
   const onSubmit = (data: any) => {
@@ -122,6 +123,8 @@ const CreateDocument = () => {
     // setActiveTemplate(tid);
     // setShowForm(true);
   };
+
+  const vals = getValues();
 
   return (
     <Box bg="gray.0">
@@ -211,9 +214,13 @@ const CreateDocument = () => {
           <Button
             disabled={formStep === 0}
             onClick={() => setFormStep((pre) => pre - 1)}>
-            Previous
+            Prev
           </Button>
-          <Button onClick={handleSubmit(onSubmit)}>
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            disabled={
+              vals === (undefined || null) || (vals && vals.template === '')
+            }>
             {formStep === 1 ? 'Create' : 'Next'}
           </Button>
         </Flex>
