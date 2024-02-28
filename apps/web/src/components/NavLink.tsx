@@ -10,6 +10,7 @@ interface AnchorType {
   variant?: any;
   type?: any;
   icon?: React.ElementType;
+  onClick?: any;
 }
 
 // eslint-disable-next-line react/display-name
@@ -22,6 +23,7 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
     icon,
     variant = 'default',
     type,
+    onClick,
   }) => {
     if (!href) return <>{children}</>;
     return (
@@ -29,6 +31,7 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         href={href}
         as={path || ''}
         locale={locale}
+        onClick={onClick}
         passHref
         legacyBehavior>
         <Link variant={variant} Icon={icon} type={type}>
