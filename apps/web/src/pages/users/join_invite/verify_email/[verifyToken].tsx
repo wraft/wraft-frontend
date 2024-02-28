@@ -6,7 +6,7 @@ import { Flex, Box, Heading, Button } from 'theme-ui';
 
 import { fetchAPI } from 'utils/models';
 
-import Verified from '../../../../../public/Social 01 1.svg';
+import Verified from '../../../../../public/social-handoff.svg';
 
 const EmailVerified: React.FC = () => {
   const router = useRouter();
