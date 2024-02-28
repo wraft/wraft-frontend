@@ -13,6 +13,7 @@ const Index: FC = () => {
   const [variant, setVariant] = useState<any>();
   const router = useRouter();
   const id: string = router.query.id as string;
+
   useEffect(() => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
       console.log(data);

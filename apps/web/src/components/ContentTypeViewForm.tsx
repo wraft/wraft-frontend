@@ -6,14 +6,14 @@ import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
 import { Drawer } from '@wraft-ui/Drawer';
 
-import { fetchAPI } from '../utils/models';
-import { ContentType } from '../utils/types';
-import Field from './Field';
-import FieldColor from './FieldColor';
-import FieldText from './FieldText';
-import { IFlow, ICreator } from './FlowList';
-import MenuStepsIndicator from './MenuStepsIndicator';
-import Form from './ContentTypeForm';
+import Field from 'components/Field';
+import FieldColor from 'components/FieldColor';
+import FieldText from 'components/FieldText';
+import { IFlow, ICreator } from 'components/FlowList';
+import MenuStepsIndicator from 'components/MenuStepsIndicator';
+import Form from 'components/ContentTypeForm';
+import { ContentType } from 'utils/types';
+import { fetchAPI } from 'utils/models';
 
 export interface IFlowItem {
   flow: IFlow;
