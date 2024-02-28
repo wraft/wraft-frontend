@@ -203,6 +203,7 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     });
 
   const removeField = (did: number) =>
+    fields &&
     setFields((fields) => {
       const outputState = fields.slice(0);
       deleteField(did, outputState);
