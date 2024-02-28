@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import Head from 'next/head';
+import Router from 'next/router';
 import { Box, Container, Flex } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import FieldList from 'components/FieldList';
 import ManageSidebar from 'components/ManageSidebar';
-import Link from 'components/NavLink';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
 import { menuLinks } from 'utils/index';
@@ -18,11 +19,11 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Fields Types" desc="Manage System Level fields">
-          <Box sx={{ ml: 'auto', mr: 0, mt: 2 }}>
-            <Link href="/manage/fields/new" variant="btnSecondary">
-              + New Field
-            </Link>
-          </Box>
+          <Button
+            variant="secondary"
+            onClick={() => Router.push('/manage/fields/new')}>
+            + New Field
+          </Button>
         </PageHeader>
         <Container variant="layout.pageFrame">
           <Flex>
