@@ -56,7 +56,7 @@ const ContentTypeList = () => {
           mb: 3,
           mt: 3,
         }}>
-        <ContentTypeDashboard rerender={rerender} />
+        <ContentTypeDashboard rerender={rerender} setRerender={setRerender} />
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
         {isOpen && (
