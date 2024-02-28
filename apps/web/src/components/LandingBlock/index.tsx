@@ -113,7 +113,7 @@ const LandingBlock = () => {
         </Box>
       </MainSection>
 
-      <Box as="section">
+      <Box as="section" id="features">
         <Box sx={{ textAlign: 'center', mb: '90px', mt: '45px' }}>
           <H2>Open Document Lifecycle</H2>
           <Subtitle>

@@ -60,7 +60,7 @@ const UserNav = () => {
                     </Text>
                   </Link>
 
-                  <Link href="/signup">
+                  <Link href="#features">
                     <Text
                       sx={{
                         px: 4,
