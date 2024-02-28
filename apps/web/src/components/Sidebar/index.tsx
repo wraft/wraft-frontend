@@ -137,8 +137,12 @@ const Sidebar = (props: any) => {
         aria-label="Menu backdrop"
         withBackdrop={true}
         onClose={() => setShowSearch(false)}>
-        <Drawer.Title>Create new Document</Drawer.Title>
-        <CreateDocument />
+        {showSearch && (
+          <>
+            <Drawer.Title>Create new Document</Drawer.Title>
+            <CreateDocument />
+          </>
+        )}
       </Drawer>
     </>
   );

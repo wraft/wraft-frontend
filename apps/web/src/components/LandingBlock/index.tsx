@@ -1,9 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import Router from 'next/router';
 import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
-import { Link } from '@wraft/ui';
+import { Button } from '@wraft/ui';
 
 import Footer from 'components/Footer';
 
@@ -105,15 +106,17 @@ const LandingBlock = () => {
           </H1>
           <Subtitle>{data.main_section?.sub_title}</Subtitle>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Link type="button">Sign up</Link>
-            <Link type="button" variant="secondary">
+            <Button variant="primary" onClick={() => Router.push('/signup')}>
+              Sign up
+            </Button>
+            <Button variant="secondary" onClick={() => Router.push('/login')}>
               Demo
-            </Link>
+            </Button>
           </Flex>
         </Box>
       </MainSection>
 
-      <Box as="section">
+      <Box as="section" id="features">
         <Box sx={{ textAlign: 'center', mb: '90px', mt: '45px' }}>
           <H2>Open Document Lifecycle</H2>
           <Subtitle>
@@ -383,10 +386,12 @@ const LandingBlock = () => {
             <Subtitle>{data?.hosting_section?.sub_title}</Subtitle>
           </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Link type="button">Sign up</Link>
-            <Link type="button" variant="secondary">
+            <Button variant="primary" onClick={() => Router.push('/signup')}>
+              Sign up
+            </Button>
+            <Button variant="secondary" onClick={() => Router.push('/login')}>
               Demo
-            </Link>
+            </Button>
           </Flex>
         </Box>
       </Box>
