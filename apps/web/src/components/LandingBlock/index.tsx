@@ -37,7 +37,7 @@ const Subtitle = styled.p`
 
 const MainSection = styled(Flex)`
   background: #f2f7f4;
-  height: 92vh;
+  min-height: 900px;
   flex-direction: column;
   align-items: center;
   position: relative;
