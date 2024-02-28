@@ -43,6 +43,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm<FormValues>({ mode: 'onSubmit' });
 
   const [isEdit, setIsEdit] = useState(false);
@@ -160,6 +161,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       setValue('secondary_color', currTheme.secondary_color || '');
       setAssets(currTheme?.assets);
       setLoadedAssets(currTheme?.assets);
+      trigger();
     }
   };
 
@@ -173,6 +175,12 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
     });
     return false;
   };
+
+  useEffect(() => {
+    setValue('body_color', '#000000');
+    setValue('primary_color', '#000000');
+    setValue('secondary_color', '#000000');
+  }, []);
 
   /**
    * Load Entity details to prefill form
