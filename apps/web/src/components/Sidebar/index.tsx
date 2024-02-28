@@ -139,7 +139,7 @@ const Sidebar = (props: any) => {
         onClose={() => setShowSearch(false)}>
         {showSearch && (
           <>
-            <Drawer.Title>Create new Document</Drawer.Title>
+            <Drawer.Title>Create New Document</Drawer.Title>
             <CreateDocument />
           </>
         )}
