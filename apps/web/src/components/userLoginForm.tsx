@@ -179,8 +179,18 @@ const UserLoginForm = () => {
         />
 
         <Button onClick={() => signIn('gmail')} variant="googleLogin">
-          <Image src={GoogleLogo} alt="" width={24} height={24} />
-          Login using Google
+          <Flex
+            sx={{
+              alignItems: 'center',
+              gap: 2,
+              minWidth: '100%',
+              bg: 'transparent',
+              border: 'none',
+            }}
+            variant="buttons.googleLogin">
+            <Image src={GoogleLogo} alt="" width={24} height={24} />
+            Login using Google
+          </Flex>
         </Button>
 
         <Flex

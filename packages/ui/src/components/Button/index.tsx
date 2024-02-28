@@ -32,6 +32,7 @@ const ButtonWrapper =
   user-select: none;
   display: flex;
   justify-content: center;
+  align-items: center;
   position: relative;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   
