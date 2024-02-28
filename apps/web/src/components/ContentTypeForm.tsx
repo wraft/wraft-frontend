@@ -468,11 +468,15 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
         p={4}
         as="form"
         onSubmit={handleSubmit(onSubmit)}>
-        <Flex sx={{ flexDirection: 'column', height: 'calc(100% - 80px)' }}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            height: 'calc(100% - 80px)',
+            overflowY: 'auto',
+          }}>
           <Box sx={{ flexGrow: 1 }}>
             <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
               <Field
-                fontSize={1}
                 register={register}
                 error={errors.name}
                 label="Name"
@@ -516,10 +520,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   <Text variant="error">{errors.color.message as string}</Text>
                 )}
               </Box>
-              <Box>
-                <Label htmlFor="layout_id" mb={1}>
-                  Layout
-                </Label>
+              <Box mt={3}>
+                <Label htmlFor="layout_id">Layout</Label>
                 <Select
                   id="layout_id"
                   {...register('layout_id', { required: true })}>
@@ -542,10 +544,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   </Text>
                 )}
               </Box>
-              <Box sx={{ py: 2 }}>
-                <Label htmlFor="flow_id" mb={1}>
-                  Flow
-                </Label>
+              <Box sx={{ mt: 3 }}>
+                <Label htmlFor="flow_id">Flow</Label>
                 <Select
                   id="flow_id"
                   defaultValue=""
@@ -579,10 +579,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                 />
               </Box>
 
-              <Box sx={{ py: 2 }}>
-                <Label htmlFor="theme_id" mb={1}>
-                  Themes
-                </Label>
+              <Box sx={{ mt: 3 }}>
+                <Label htmlFor="theme_id">Themes</Label>
                 <Select
                   id="theme_id"
                   defaultValue=""
