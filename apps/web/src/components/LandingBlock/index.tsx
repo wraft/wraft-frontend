@@ -37,7 +37,7 @@ const Subtitle = styled.p`
 
 const MainSection = styled(Flex)`
   background: #f2f7f4;
-  min-height: 900px;
+  // height: 900px;
   flex-direction: column;
   align-items: center;
   position: relative;
@@ -81,7 +81,7 @@ const LandingBlock = () => {
               backgroundSize: 'auto',
             }}
           />
-          <Box
+          {/* <Box
             sx={{
               bottom: 0,
               position: 'absolute',
@@ -98,9 +98,9 @@ const LandingBlock = () => {
               height={400}
               style={{ width: '60%', height: 'auto' }}
             />
-          </Box>
+          </Box> */}
         </Box>
-        <Box sx={{ textAlign: 'center', position: 'absolute' }}>
+        <Box sx={{ textAlign: 'center', position: 'relative' }}>
           <H1 as="h1" pt="124px">
             {data.main_section?.title}
           </H1>
@@ -113,6 +113,15 @@ const LandingBlock = () => {
               Demo
             </Button>
           </Flex>
+          <Box mt="92px">
+            <Image
+              alt="Home page visual representation"
+              src="/home01.png"
+              width={900}
+              height={400}
+              style={{ width: '60%', height: 'auto' }}
+            />
+          </Box>
         </Box>
       </MainSection>
 
