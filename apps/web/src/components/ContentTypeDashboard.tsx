@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Box, Button, Flex, Text } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import toast from 'react-hot-toast';
 
 import { TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -56,9 +57,10 @@ export interface IFieldItem {
 // }
 interface Props {
   rerender: boolean;
+  setRerender?: (prev: any) => void;
 }
 
-const ContentTypeDashboard = ({ rerender }: Props) => {
+const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<any>();
@@ -82,7 +84,15 @@ const ContentTypeDashboard = ({ rerender }: Props) => {
   }, [rerender]);
 
   const onDelete = (id: string) => {
-    deleteAPI(`content_types/${id}`);
+    deleteAPI(`content_types/${id}`)
+      .then(() => {
+        setDeleteVariant(null);
+        setRerender && setRerender((prev: boolean) => !prev);
+        toast.success('Deleted Successfully', { duration: 1000 });
+      })
+      .catch(() => {
+        toast.error('Delete Failed', { duration: 1000 });
+      });
   };
 
   const loadData = (page: number) => {
