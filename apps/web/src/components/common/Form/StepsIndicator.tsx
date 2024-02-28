@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Text } from 'theme-ui';
 
-import { GraterThanIcon } from '../../Icons';
+import { GraterThanIcon } from 'components/Icons';
 
 type Props = {
   formStep: number;
