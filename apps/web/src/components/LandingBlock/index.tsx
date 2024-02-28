@@ -3,11 +3,12 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
-import { Link } from '@wraft/ui';
+import { Button } from '@wraft/ui';
 
 import Footer from 'components/Footer';
 
 import data from './home.json';
+import Router from 'next/router';
 
 const LandingBlockWrapper = styled(Box)`
   --lp-text-color: 16px;
@@ -105,10 +106,12 @@ const LandingBlock = () => {
           </H1>
           <Subtitle>{data.main_section?.sub_title}</Subtitle>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Link type="button">Sign up</Link>
-            <Link type="button" variant="secondary">
+            <Button variant="primary" onClick={() => Router.push('/signup')}>
+              Sign up
+            </Button>
+            <Button variant="secondary" onClick={() => Router.push('/login')}>
               Demo
-            </Link>
+            </Button>
           </Flex>
         </Box>
       </MainSection>
@@ -383,10 +386,12 @@ const LandingBlock = () => {
             <Subtitle>{data?.hosting_section?.sub_title}</Subtitle>
           </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Link type="button">Sign up</Link>
-            <Link type="button" variant="secondary">
+            <Button variant="primary" onClick={() => Router.push('/signup')}>
+              Sign up
+            </Button>
+            <Button variant="secondary" onClick={() => Router.push('/login')}>
               Demo
-            </Link>
+            </Button>
           </Flex>
         </Box>
       </Box>
