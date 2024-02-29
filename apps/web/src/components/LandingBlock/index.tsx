@@ -1,12 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Router from 'next/router';
 import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
-import { Button } from '@wraft/ui';
 
 import Footer from 'components/Footer';
+import NextLinkText from 'components/NavLink';
 
 import data from './home.json';
 
@@ -106,12 +105,12 @@ const LandingBlock = () => {
           </H1>
           <Subtitle>{data.main_section?.sub_title}</Subtitle>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Button variant="primary" onClick={() => Router.push('/signup')}>
+            <NextLinkText variant={'primary'} href="/signup">
               Sign up
-            </Button>
-            <Button variant="secondary" onClick={() => Router.push('/login')}>
+            </NextLinkText>
+            <NextLinkText variant={'secondary'} href="/login">
               Demo
-            </Button>
+            </NextLinkText>
           </Flex>
           <Box mt="92px">
             <Image
@@ -395,12 +394,12 @@ const LandingBlock = () => {
             <Subtitle>{data?.hosting_section?.sub_title}</Subtitle>
           </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <Button variant="primary" onClick={() => Router.push('/signup')}>
+            <NextLinkText variant={'primary'} href="/signup">
               Sign up
-            </Button>
-            <Button variant="secondary" onClick={() => Router.push('/login')}>
+            </NextLinkText>
+            <NextLinkText variant={'secondary'} href="/login">
               Demo
-            </Button>
+            </NextLinkText>
           </Flex>
         </Box>
       </Box>
