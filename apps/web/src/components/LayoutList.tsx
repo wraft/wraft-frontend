@@ -144,22 +144,24 @@ const LayoutList = ({ rerender }: Props) => {
                 <Menu
                   as={Box}
                   variant="layout.menu"
+                  p={0}
                   open={isOpen == row.index}
                   onClose={() => setIsOpen(null)}>
-                  <MenuItem>
-                    <Button
-                      // variant="text"
-                      onClick={() => {
-                        setIsOpen(null);
-                        setDeleteLayout(row.index);
-                      }}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteLayout(row.index);
+                    }}
+                    style={{ justifyContent: 'flex-start' }}>
+                    <MenuItem>
                       <Text
                         variant=""
                         sx={{ cursor: 'pointer', color: 'red.600' }}>
                         Delete
                       </Text>
-                    </Button>
-                  </MenuItem>
+                    </MenuItem>
+                  </Button>
                 </Menu>
                 <Modal
                   isOpen={deleteLayout === row.index}

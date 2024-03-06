@@ -4,9 +4,9 @@ import { Box, Container, Flex } from 'theme-ui';
 
 import FieldList from 'components/FieldList';
 import ManageSidebar from 'components/ManageSidebar';
-import Link from 'components/NavLink';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
+import NextLinkText from 'components/NavLink';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
@@ -18,11 +18,9 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Fields Types" desc="Manage System Level fields">
-          <Box sx={{ ml: 'auto', mr: 0, mt: 2 }}>
-            <Link href="/manage/fields/new" variant="btnSecondary">
-              + New Field
-            </Link>
-          </Box>
+          <NextLinkText variant={'secondary'} href="/manage/fields/new">
+            + New Field
+          </NextLinkText>
         </PageHeader>
         <Container variant="layout.pageFrame">
           <Flex>

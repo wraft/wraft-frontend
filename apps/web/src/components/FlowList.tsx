@@ -193,14 +193,17 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                 <Menu
                   as={Box}
                   variant="layout.menu"
+                  sx={{ p: 0 }}
                   open={isOpen == row.index}
                   onClose={() => setIsOpen(null)}>
                   <Button
+                    variant="ghost"
                     onClick={() => {
                       setIsOpen(null);
                       setDeleteFlow(row.index);
-                    }}>
-                    <MenuItem as={Box} px={3} py={2}>
+                    }}
+                    style={{ justifyContent: 'flex-start' }}>
+                    <MenuItem as={Box}>
                       <Text
                         variant="pR"
                         sx={{
