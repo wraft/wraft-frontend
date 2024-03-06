@@ -1,21 +1,17 @@
-// components/JoinInvitationPage.js
 import { useEffect } from 'react';
-
-import { useStoreState } from 'easy-peasy';
-import cookie from 'js-cookie';
 import { useSearchParams } from 'next/navigation';
 import Router from 'next/router';
+import cookie from 'js-cookie';
 
-import RegistrationForm from '../../../components/RegistrationForm';
-
-// import { isAuthenticated, joinTeam, sendNotification } from '../api/auth'; // Replace with your authentication and notification logic
+import RegistrationForm from 'components/RegistrationForm';
+import { useAuth } from 'contexts/AuthContext';
 
 const Index = () => {
-  const token = useStoreState((state) => state.auth.token);
-
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get('token');
   const inviteOrganisation = searchParams.get('organisation');
+
+  const { accessToken } = useAuth();
 
   const myObject = {
     inviteToken: inviteToken,
@@ -33,7 +29,7 @@ const Index = () => {
   console.log(inviteOrganisation);
 
   useEffect(() => {
-    if (token && token.length > 10) {
+    if (accessToken) {
       Router.push('/');
     }
   }, []);
@@ -52,7 +48,7 @@ const Index = () => {
 
   return (
     <>
-      {!token ? (
+      {!accessToken ? (
         // Display a registration form for users to sign up
         <RegistrationForm inviteToken={inviteToken} />
       ) : (

@@ -1,15 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { EllipsisHIcon } from '@wraft/icon';
+import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
-import { Box, Text, Spinner, Button } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Button, Table, Pagination } from '@wraft/ui';
 
-import { deleteAPI, fetchAPI } from '../utils/models';
-
-import { TimeAgo } from './Atoms';
-import { OptionsIcon } from './Icons';
-import MenuItem from './NavLink';
-import Paginate, { IPageMeta } from './Paginate';
-import { Table } from './Table';
+import { TimeAgo } from 'components/Atoms';
+import { ConfirmDelete } from 'components/common';
+import FlowForm from 'components/FlowForm';
+import Modal from 'components/Modal';
+import { deleteAPI, fetchAPI } from 'utils/models';
 
 export interface ILayout {
   width: number;
@@ -21,7 +24,6 @@ export interface ILayout {
   height: number;
   description: string;
 }
-
 export interface IFlow {
   name: string;
   inserted_at: string;
@@ -50,20 +52,6 @@ export interface IFieldItem {
   type: string;
 }
 
-const ItemField: FC<any> = ({ flow }) => {
-  return (
-    <Box key={flow.id} pb={2} pt={2} sx={{ borderBottom: 'solid 1px #eee' }}>
-      <MenuItem
-        href={`/manage/flows/edit/[id]`}
-        path={`/manage/flows/edit/${flow.id}`}>
-        <Box>
-          <Text as="h4">{flow.name}</Text>
-        </Box>
-      </MenuItem>
-    </Box>
-  );
-};
-
 interface Props {
   rerender: boolean;
   setRerender: any;
@@ -71,151 +59,199 @@ interface Props {
 
 const Form: FC<Props> = ({ rerender, setRerender }) => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [pageMeta, setPageMeta] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [total, setTotal] = useState<number>(1);
-  const [flows, setFlows] = useState<Array<any>>([]);
   const [isOpen, setIsOpen] = useState<number | null>(null);
+  const [deleteFlow, setDeleteFlow] = useState<number | null>(null);
+
+  const { theme } = useThemeUI();
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   const loadData = (page: number) => {
+    setLoading(true);
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`flows${pageNo}`)
       .then((data: any) => {
-        setLoading(true);
+        setLoading(false);
         const res: IField[] = data.flows;
-        setTotal(data.total_pages);
         setContents(res);
         setPageMeta(data);
       })
       .catch(() => {
-        setLoading(true);
+        setLoading(false);
       });
   };
 
-  const changePage = (_e: any) => {
-    setPage(_e?.selected + 1);
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   useEffect(() => {
     loadData(page);
   }, [page, rerender]);
 
-  useEffect(() => {
-    if (contents && contents.length > 0) {
-      const row: any = [];
-      contents.map((r: any) => {
-        const rFormated = {
-          col1: <ItemField {...r} />,
-          col2: <TimeAgo time={r.flow.updated_at} />,
-        };
-
-        row.push(rFormated);
+  const onDelete = (index: number) => {
+    setIsOpen(null);
+    deleteAPI(`flows/${contents[index].flow.id}`).then(() => {
+      setRerender((prev: boolean) => !prev);
+      toast.success('Deleted a flow', {
+        duration: 1000,
+        position: 'top-right',
       });
+    });
+  };
 
-      setFlows(row);
-    }
-  }, [contents, rerender]);
+  const columns = [
+    {
+      id: 'content.name',
+      header: 'NAME',
+      accessorKey: 'content.name',
+      enableSorting: false,
+      size: 250,
+      cell: ({ row }: any) => {
+        return (
+          <>
+            <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
+              <Box>
+                <Box>{row.original?.flow?.name}</Box>
+              </Box>
+            </NextLink>
+            <Drawer open={false} setOpen={() => {}}>
+              <FlowForm setOpen={() => {}} />
+            </Drawer>
+          </>
+        );
+      },
+    },
+    {
+      id: 'content.updated_at',
+      header: 'LAST UPDATED',
+      accessorKey: 'content.updated_at',
+      enableSorting: false,
+      cell: ({ row }: any) => {
+        return (
+          row.original.flow.updated_at && (
+            <TimeAgo time={row.original?.flow?.updated_at} />
+          )
+        );
+      },
+    },
+    {
+      id: 'content.id',
+      header: '',
+      accessor: 'content.id',
+      enableSorting: false,
+      cell: ({ row }: any) => {
+        return (
+          <>
+            <Flex sx={{ justifyContent: 'space-between' }}>
+              <Box />
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
+                    }}
+                    onClick={() => {
+                      setIsOpen(row.index);
+                    }}>
+                    <EllipsisHIcon
+                      color={
+                        (theme.colors &&
+                          theme.colors.gray &&
+                          theme.colors.gray[200]) ||
+                        'black'
+                      }
+                    />
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  sx={{ p: 0 }}
+                  open={isOpen == row.index}
+                  onClose={() => setIsOpen(null)}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setIsOpen(null);
+                      setDeleteFlow(row.index);
+                    }}
+                    style={{ justifyContent: 'flex-start' }}>
+                    <MenuItem as={Box}>
+                      <Text
+                        variant="pR"
+                        sx={{
+                          cursor: 'pointer',
+                          color: 'red.600',
+                        }}>
+                        Delete
+                      </Text>
+                    </MenuItem>
+                  </Button>
+                </Menu>
+              </MenuProvider>
+            </Flex>
+            <Modal
+              isOpen={deleteFlow === row.index}
+              onClose={() => setDeleteFlow(null)}>
+              {
+                <ConfirmDelete
+                  title="Delete Flow"
+                  text={`Are you sure you want to delete ‘${row.original.flow.name}’?`}
+                  setOpen={setDeleteFlow}
+                  onConfirmDelete={async () => {
+                    onDelete(row.index);
+                  }}
+                />
+              }
+            </Modal>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
-    <Box py={3} mt={4} sx={{ width: '100%' }}>
-      <Box mx={0} mb={3} sx={{ width: '100%' }}>
-        {!loading && (
-          <Box>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )}
-
-        <Box pr={4} sx={{ width: '100%' }}>
-          <Box mx={0} mb={3} sx={{ width: '100%' }}>
-            {flows && (
-              <Table
-                options={{
-                  columns: [
-                    {
-                      Header: 'Name',
-                      accessor: 'col1',
-                      width: '50%',
-                    },
-                    {
-                      Header: 'Updated',
-                      accessor: 'col2',
-                      width: '45%',
-                    },
-                    {
-                      Header: '',
-                      accessor: 'col3',
-                      Cell: ({ row }) => {
-                        return (
-                          <>
-                            <Box
-                              sx={{ cursor: 'pointer', position: 'relative' }}
-                              onClick={() => {
-                                setIsOpen(row.index);
-                              }}
-                              onMouseLeave={() => setIsOpen(null)}>
-                              <OptionsIcon />
-                              {isOpen === row.index ? (
-                                <Box
-                                  sx={{
-                                    position: 'absolute',
-                                    bg: 'backgroundWhite',
-                                    right: 0,
-                                    top: 0,
-                                    zIndex: 10,
-                                    border: '1px solid',
-                                    borderColor: 'border',
-                                    width: '155px',
-                                  }}>
-                                  <Button
-                                    variant="text.pM"
-                                    onClick={async () => {
-                                      setIsOpen(null);
-                                      await deleteAPI(
-                                        `flows/${contents[row.index].flow.id}`,
-                                      );
-                                      setTimeout(() => {
-                                        setRerender((prev: boolean) => !prev);
-                                        toast.success('Deleted a flow', {
-                                          duration: 1000,
-                                          position: 'top-right',
-                                        });
-                                      }, 1000);
-                                    }}
-                                    sx={{
-                                      cursor: 'pointer',
-                                      textAlign: 'left',
-                                      width: '100%',
-                                      bg: 'backgroundWhite',
-                                      color: 'red.600',
-                                      p: 3,
-                                      ':disabled': {
-                                        color: 'gray.300',
-                                      },
-                                    }}>
-                                    Delete
-                                  </Button>
-                                </Box>
-                              ) : (
-                                <Box />
-                              )}
-                            </Box>
-                          </>
-                        );
-                      },
-                      width: '3%',
-                    },
-                  ],
-                  data: flows,
-                }}
-              />
-            )}
-          </Box>
-          <Paginate
-            changePage={changePage}
-            {...pageMeta}
-            info={`${page} of ${total} pages`}
-          />
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
+        <Box mx={0} mb={3} sx={{ width: '100%' }}>
+          <Table data={contents} columns={columns} isLoading={loading} />
+        </Box>
+        <Box mx={2}>
+          {pageMeta && pageMeta?.total_pages > 1 && (
+            <Pagination
+              totalPage={pageMeta?.total_pages}
+              initialPage={currentPage}
+              onPageChange={changePage}
+              totalEntries={pageMeta?.total_entries}
+            />
+          )}
         </Box>
       </Box>
     </Box>

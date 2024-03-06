@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
-
-import { formatDistanceStrict } from 'date-fns';
+import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
 
 import MenuItem from './NavLink';
@@ -20,18 +19,16 @@ export const TimeAgo = (props: TimeAgoProps) => {
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
   );
   const now = new Date();
-  const timed = formatDistanceStrict(local_time, now, { addSuffix: true });
+
+  const timeDifferenceInMs = now.getTime() - local_time.getTime();
+
+  const timed =
+    timeDifferenceInMs > 24 * 60 * 60 * 1000
+      ? format(local_time, 'MMM dd, yyyy')
+      : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
-    <Text
-      pl={0}
-      sx={{
-        fontSize: '12px',
-        fontWeight: 500,
-        '.hov': { opacity: 0 },
-        ':hover': { '.hov': { opacity: 1 } },
-      }}
-      color="gray.6">
+    <Text variant="pM" sx={{ color: 'gray.600' }}>
       {timed}
     </Text>
   );
@@ -210,5 +207,59 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
         {name}
       </Text>
     </Flex>
+  );
+};
+
+/**
+ * Temporary Wrapper for Icons
+ */
+interface IconWrapperProps {
+  content?: string;
+  children: any;
+  p?: any;
+  size?: any;
+  stroke?: number;
+}
+
+export const IconWrapper = ({
+  children,
+  p = 'in',
+  size = '32',
+  stroke = 2,
+  ...props
+}: IconWrapperProps) => {
+  return (
+    <Box
+      {...props}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        svg: {
+          cursor: 'pointer',
+          width: `${size}px`,
+          height: `${size}px`,
+          p: p === 'out' ? 0 : '8px',
+          borderRadius: '9rem',
+          bg: 'transparent',
+          color: 'gray.400',
+          ':hover': {
+            bg: 'gray.100',
+            color: 'gray.900',
+          },
+        },
+      }}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1rem"
+        height="1rem"
+        viewBox="0 0 24 24"
+        strokeWidth={stroke}
+        stroke="currentColor"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round">
+        <>{children}</>
+      </svg>
+    </Box>
   );
 };

@@ -1,9 +1,8 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 
-import ContentTypeList from '../../components/ContentTypeList';
-import Page from '../../components/PageFrame';
+import ContentTypeList from 'components/ContentTypeList';
+import Page from 'components/PageFrame';
 
 const Index: FC = () => {
   return (
@@ -13,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <ContentTypeList isEdit={true} />
+        <ContentTypeList />
       </Page>
     </>
   );

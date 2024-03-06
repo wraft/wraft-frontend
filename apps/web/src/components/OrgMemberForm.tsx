@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
-import Modal from 'react-modal';
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 import { fetchAPI, postAPI } from '../utils/models';
-
 import Field from './Field';
+import Modal from './Modal';
 import OrgMembersList from './OrgMembersList';
 
 export interface Members {
@@ -65,10 +63,6 @@ const OrgMemberForm = () => {
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
-  };
-
-  const closeSearch = () => {
-    setShowSearch(false);
   };
 
   const onCreate = (d: any) => {
@@ -166,10 +160,11 @@ const OrgMemberForm = () => {
             <Box>
               <Modal
                 isOpen={showSearch}
-                onRequestClose={closeSearch}
-                // style={defaultModalStyle}
-                ariaHideApp={false}
-                contentLabel="SearchWraft">
+                // onRequestClose={closeSearch}
+                // // style={defaultModalStyle}
+                // ariaHideApp={false}
+                // contentLabel="SearchWraft"
+              >
                 <Box p={4}>
                   <Text variant="blockTitle">Invite Members</Text>
                   <Box as="form" onSubmit={handleSubmit(onInviteSubmit)}>

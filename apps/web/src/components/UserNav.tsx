@@ -1,15 +1,8 @@
-import React, { useEffect, Fragment } from 'react';
-
-import { useStoreState, useStoreActions } from 'easy-peasy';
-import cookie from 'js-cookie';
-import { useRouter } from 'next/router';
+import React, { Fragment } from 'react';
 import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
 
-// import Container from '../../src/components/Container';
-// relative
-import { checkUser } from '../utils/models';
-
+import { useAuth } from '../contexts/AuthContext';
 import { UserIcon, BrandLogo } from './Icons';
 import Link from './NavLink';
 
@@ -18,49 +11,12 @@ export interface IUser {
 }
 
 const UserNav = () => {
-  // const [user, setUser] = useState<IUser>();
-  const router = useRouter();
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
-  const userLogout = useStoreActions((actions: any) => actions.auth.logout);
-  const token = useStoreState((state) => state.auth.token);
-  const profile = useStoreState((state) => state.profile.profile);
-
-  const onProfileLoad = (data: any) => {
-    setProfile(data);
-
-    if (data === 'x') {
-      setProfile(data);
-      // setUser(data);
-    }
-  };
-
-  const onUserLogout = () => {
-    userLogout();
-    router.push('/');
-  };
-
-  useEffect(() => {
-    // check if token is there
-    const t = cookie.get('token') || false;
-    // login to check
-    if (t) {
-      // if(t === '') {
-      //   checkUser(t, onProfileLoad)
-      // }
-      checkUser(t, onProfileLoad);
-      setToken(t);
-    }
-    // check if cooke token is present
-    // if so set it as state, and then call the user object
-  }, []);
+  const { logout, accessToken, userProfile } = useAuth();
 
   return (
     <Box
       sx={{
-        bg: 'background',
+        bg: '#F2F7F4',
         // borderBottom: 'solid 1px',
         // borderColor: 'border',
         py: 2,
@@ -68,7 +24,7 @@ const UserNav = () => {
       <Container>
         <Flex sx={{ py: 3, px: 4, alignItems: 'center' }}>
           <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
-            <Link href={token ? '/user-profile' : '/'}>
+            <Link href={accessToken ? '/user-profile' : '/'}>
               <Box sx={{ color: `gray.0`, fill: 'gray.1000' }}>
                 <BrandLogo width="6rem" height="2rem" />
               </Box>
@@ -77,7 +33,7 @@ const UserNav = () => {
 
           <Box sx={{ ml: 'auto' }}>
             <Flex>
-              {!token && (
+              {!accessToken && (
                 <Fragment>
                   <Link href="/signup">
                     <Text
@@ -104,7 +60,7 @@ const UserNav = () => {
                     </Text>
                   </Link>
 
-                  <Link href="/signup">
+                  <Link href="#features">
                     <Text
                       sx={{
                         px: 4,
@@ -133,21 +89,23 @@ const UserNav = () => {
                   </Link>
                 </Fragment>
               )}
-              {token && token !== '' && (
+              {accessToken && accessToken !== '' && (
                 <Flex ml={2} sx={{ alignContent: 'flex-start' }}>
-                  {profile && (
+                  {userProfile && (
                     <Text ml={2} pt={2} mr={3}>
-                      {profile.name}
+                      {userProfile.name}
                     </Text>
                   )}
-                  {profile && profile.profile_pic?.length > 0 && (
+                  {userProfile && userProfile.profile_pic?.length > 0 && (
                     <Avatar
                       sx={{ height: '64px', width: '64px' }}
-                      onClick={onUserLogout}
-                      src={profile.profile_pic}
+                      onClick={logout}
+                      src={userProfile.profile_pic}
                     />
                   )}
-                  {profile && profile.profile_pic === null && <UserIcon />}
+                  {userProfile && userProfile?.profile_pic === null && (
+                    <UserIcon />
+                  )}
                 </Flex>
               )}
             </Flex>

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import Modal, { Styles } from 'react-modal';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
 import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-
 import Field from './Field';
 import { PlayCircle } from './Icons';
+import Modal from './Modal';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
 import { Pipeline } from './PipelineList';
@@ -54,30 +52,30 @@ export interface Error {
   info: string;
 }
 
-const _customStyles: Styles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  },
-  content: {
-    position: 'absolute',
-    top: '20%',
-    left: '20%',
-    right: '20%',
-    bottom: '20%',
-    border: '1px solid #ccc',
-    background: '#fff',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    padding: '20px',
-  },
-};
+// const _customStyles: Styles = {
+//   overlay: {
+//     position: 'fixed',
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     backgroundColor: 'rgba(0, 0, 0, 0.75)',
+//   },
+//   content: {
+//     position: 'absolute',
+//     top: '20%',
+//     left: '20%',
+//     right: '20%',
+//     bottom: '20%',
+//     border: '1px solid #ccc',
+//     background: '#fff',
+//     overflow: 'auto',
+//     WebkitOverflowScrolling: 'touch',
+//     borderRadius: '4px',
+//     outline: 'none',
+//     padding: '20px',
+//   },
+// };
 
 export interface IStage {
   name: string;
@@ -244,9 +242,9 @@ const PipelineView = () => {
     });
   };
 
-  const closeRunning = () => {
-    setState('nostart');
-  };
+  // const closeRunning = () => {
+  //   setState('nostart');
+  // };
 
   /**
    * Build a pipeline with Data
@@ -386,11 +384,12 @@ const PipelineView = () => {
             {state}
             {state && (state === 'running' || state === 'collect') && (
               <Modal
-                style={_customStyles}
+                // style={_customStyles}
                 isOpen={true}
-                onRequestClose={closeRunning}
-                ariaHideApp={false}
-                contentLabel="Example Modal">
+                // onRequestClose={closeRunning}
+                // ariaHideApp={false}
+                // contentLabel="Example Modal"
+              >
                 <Box>
                   <Text as="h2">Enter Fields</Text>
                   <Box

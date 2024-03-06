@@ -1,10 +1,8 @@
 import React from 'react';
-
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
-
 import Container from './Container';
 // import Sidebar from './Sidebar';
 import Nav from './Nav';
@@ -22,9 +20,8 @@ export interface IAlert {
 }
 
 export const PageFull = (props: any) => {
-  // const showFull: boolean = props && props.showFull ? true : false;
-
   const { accessToken } = useAuth();
+
   return (
     <>
       <Head>

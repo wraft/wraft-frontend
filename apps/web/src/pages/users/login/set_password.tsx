@@ -1,105 +1,66 @@
 import { useState } from 'react';
-
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import {
-  Flex,
-  Box,
-  Heading,
-  Label,
-  Input,
-  Button,
-  Text,
-  Checkbox,
-} from 'theme-ui';
-import { Spinner } from 'theme-ui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Flex, Box, Heading, Button, Text } from 'theme-ui';
+import { z } from 'zod';
+
+import Field from 'components/Field';
+import Link from 'components/NavLink';
+import PasswordCreated from 'components/PasswordCreated';
+import { postAPI } from 'utils/models';
+import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
 
 import Logo from '../../../../public/Logo.svg';
-import Link from '../../../components/NavLink';
-import PasswordCreated from '../../../components/PasswordCreated';
 
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+const schema = z
+  .object({
+    newPassword: passwordPattern,
+    confirmPassword: z.string().min(1, { message: 'Enter confirm password' }),
+  })
+  .superRefine(({ confirmPassword, newPassword }, ctx) => {
+    if (confirmPassword !== newPassword) {
+      addFieldIssue('confirmPassword', ctx);
+    }
+  });
 
+type FormValues = {
+  newPassword: string;
+  confirmPassword: string;
+};
 const Index = () => {
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [verified, setVerified] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
+  const [verified, setVerified] = useState<boolean>(false);
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   console.log(token);
 
-  // const { query } = useRouter();
-  // console.log(query.token);
-  // const router = useRouter();
-  // const userToken1 = query.token;
-  // const userToken: string = (query.token as string).split('token=')[1];
-  // console.log(userToken1);
-  //   const router = useRouter();
-  //   const { token } = router.query;
-  //   console.log(token);
+  const onSubmit = (data: FormValues) => {
+    if (data.newPassword === data.confirmPassword) {
+      const setPasswordRequest = postAPI('users/set_password', {
+        token: token,
+        password: data.newPassword,
+        confirm_password: data.confirmPassword,
+      });
 
-  // Check if 'token' exists before accessing it
-  // if (typeof token === 'string') {
-  //   userToken = token.split('token=')[1];
-  //   console.log('userToken:', userToken);
-  // } else {
-  //   console.log('Token not found in URL.');
-  // }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validatePassword(newPassword, confirmPassword)) {
-      try {
-        setLoading(true);
-        console.log(
-          JSON.stringify({
-            token: token,
-            password: newPassword,
-            confirm_password: newPassword,
-          }),
-        );
-        const response = await fetch(`${API_HOST}/api/v1/users/set_password`, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            token: token,
-            password: newPassword,
-            confirm_password: newPassword,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error:q', errorData);
-          // You can also throw a custom error if needed
-          throw new Error('Password reset request failed');
-        } else {
-          // Handle a successful response (if needed)
-          const responseData = await response.json();
-          console.log(responseData);
-          setLoading(false);
+      toast.promise(setPasswordRequest, {
+        loading: 'Loading...',
+        success: () => {
           setVerified(true);
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error('Network error:', error);
-        setLoading(false);
-      }
+          return 'Successfully setted new Password';
+        },
+        error: () => {
+          return 'Failed to set new Password';
+        },
+      });
     }
-  };
-
-  const validatePassword = (
-    newPassword: string,
-    confirmPassword: string,
-  ): boolean => {
-    return newPassword === confirmPassword;
   };
 
   return (
@@ -130,50 +91,23 @@ const Index = () => {
                 Create a password for your Wraft account
               </Text>
 
-              <Box as="form" onSubmit={handleSubmit}>
-                <Label htmlFor="New password">Enter password</Label>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="newPassword"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
+              <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+                <Field
+                  name="newPassword"
+                  label="Enter Password"
+                  register={register}
+                  error={errors.newPassword}
                   mb={'24px'}
                 />
-
-                <Label htmlFor="Confirm password">Confirm password</Label>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                <Field
+                  register={register}
+                  error={errors.confirmPassword}
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  type="password"
                   mb={'12px'}
                 />
-                <Flex sx={{ mb: '28px' }}>
-                  <Label
-                    sx={{
-                      color: 'gray.900',
-                      fontWeight: 'body',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}>
-                    <Checkbox
-                      checked={showPassword}
-                      onChange={() => setShowPassword(!showPassword)}
-                      sx={{
-                        color: 'gray.900',
-                        width: '18px',
-                        backgroundColor: 'white',
-                        border: 'none',
-                      }}
-                    />
-                    Show Password
-                  </Label>
-                </Flex>
-
-                <Button type="submit">
-                  Create Password{' '}
-                  {loading && <Spinner color="white" width={18} height={18} />}
-                </Button>
+                <Button type="submit">Create Password</Button>
               </Box>
             </Flex>
           </Flex>

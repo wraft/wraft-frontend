@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-
-import { format } from 'date-fns';
 import Image from 'next/image';
-import { Text, Box, Flex, Container, Button, Grid } from 'theme-ui';
+import { Button } from '@wraft/ui';
+import { format } from 'date-fns';
+import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
-
 import PendingDocumentBlock from './PendingDocument';
 
 const finishSetup = [
@@ -52,17 +51,15 @@ const Dashboard = () => {
   };
 
   return (
-    <Container variant="layout.pageFrame">
-      <Box sx={{ fontSize: '18px' }}>
+    <Container variant="layout.pageFrame" sx={{ height: '100vh', bg: 'white' }}>
+      <Box sx={{ fontSize: 2, color: 'gray.400' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
-      <Box
-        sx={{ fontSize: '29.3px', fontWeight: 'heading', fontFamily: 'body' }}>
+      <Box sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body' }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
-
       <Flex
-        mt="64px"
+        mt={4}
         mb="32px"
         sx={{ border: '1px solid', borderColor: 'border' }}>
         <Flex sx={{ width: '70%', alignItems: 'center' }}>
@@ -87,12 +84,7 @@ const Dashboard = () => {
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
-            <Button
-              variant="btnPrimary"
-              // onClick={() => toggleSearch()}
-              sx={{ fontWeight: 'heading' }}>
-              Watch demo
-            </Button>
+            <Button variant="primary">Watch demo</Button>
           </Box>
         </Flex>
         <Flex

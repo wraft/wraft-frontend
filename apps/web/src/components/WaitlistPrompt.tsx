@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 
 import MailSend from '../../public/Group 164.svg';
-
 import Link from './NavLink';
 
 const WaitlistPrompt: React.FC = () => {
@@ -12,39 +11,43 @@ const WaitlistPrompt: React.FC = () => {
         variant="onboardingForms"
         sx={{
           alignItems: 'center',
-          p: '0px',
-          pt: '109px',
-          px: '98px',
+          py: 4,
+          px: 5,
+          // justifyContent: 'space-between',
         }}>
-        <Image
-          src={MailSend}
-          alt=""
-          className=""
-          width={146}
-          height={145}
-          priority
-        />
         <Heading
-          as="h1"
-          variant="styles.h1Medium"
-          sx={{ mt: '40px', mb: '8px', color: 'gray.600' }}>
+          as="h3"
+          variant="styles.h3Bold"
+          sx={{ mt: 4, mb: '8px', color: 'gray.900' }}>
           Hang tight!
         </Heading>
         <Heading
           as="h5"
           variant="styles.h5Bold"
-          sx={{ mb: '28px', textAlign: 'center', color: 'gray.500' }}>
+          sx={{ mb: '28px', textAlign: 'center', color: 'gray.900' }}>
           You have been added to our waitlist
         </Heading>
+        <Box mt={'80px'} mb={'70px'}>
+          <Image
+            src={MailSend}
+            alt=""
+            className=""
+            width={146}
+            height={145}
+            priority
+          />
+        </Box>
         <Text
           variant="styles.h5Medium"
-          sx={{ color: 'gray.300', textAlign: 'center', mb: '24px' }}>
+          sx={{ color: 'gray.900', textAlign: 'center' }}>
           Thanks for showing interest in Wraft, we will reach out to you once
           the availability opens up.
         </Text>
-        <Link href="/">
-          <Button>Okay</Button>
-        </Link>
+        <Box mt={4} mb={4}>
+          <Link href="/">
+            <Button>Okay</Button>
+          </Link>
+        </Box>
       </Flex>
     </Box>
   );

@@ -5,19 +5,19 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
-
-import { useStoreActions } from 'easy-peasy';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
-import { fetchUserInfo, fetchAPI } from '../utils/models';
+import { fetchAPI } from '../utils/models';
 
 interface IUserContextProps {
   isUserLoading: boolean;
   accessToken: string | null;
   refreshToken: string | null;
+  permissions: string | null;
   userProfile: any;
+  organisations: any;
   login: (data: any) => void;
   logout: () => void;
 }
@@ -30,12 +30,10 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any | null>(null);
+  const [organisations, setOrganisations] = useState<any | null>(null);
+  const [permissions, setPermissions] = useState<any>(null);
 
   const [isUserLoading, setIsUserLoading] = useState(false);
-  const setToken = useStoreActions((actions: any) => actions.auth.addToken);
-  const setProfile = useStoreActions(
-    (actions: any) => actions.profile.updateProfile,
-  );
 
   useEffect(() => {
     const refreshToken = cookie.get('refreshToken') || false;
@@ -46,63 +44,53 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
     const token = cookie.get('token') || false;
     if (token) {
-      setAccessToken(token);
-      setToken(token);
       setIsUserLoading(true);
-
-      console.log('accessToken', token);
-
-      const fetchData = async () => {
-        try {
-          const userinfo: any = await fetchUserInfo();
-          const userOrg: any = await fetchAPI('users/organisations');
-
-          const currentOrg = userOrg?.organisations.find(
-            (og: any) => og.id == userinfo?.organisation_id,
-          );
-
-          const body = {
-            ...userProfile,
-            ...userinfo,
-            organisations: userOrg.organisations || [],
-            currentOrganisation: currentOrg || {},
-          };
-          await updateUserData(body);
-          setIsUserLoading(false);
-        } catch {
-          setIsUserLoading(false);
-        }
-      };
-
-      fetchData();
+      fetchUserBasicInfo();
+      setAccessToken(token);
     }
   }, []);
 
-  const login = (data: any) => {
-    const { access_token, refresh_token, user }: any = data;
+  useEffect(() => {
+    if (userProfile?.organisation_id) {
+      fetchAPI(`organisations/${userProfile.organisation_id}`).then((res) => {
+        const body = {
+          ...userProfile,
+          currentOrganisation: res || {},
+        };
+        updateUserData(body);
+      });
+    }
+  }, [userProfile?.organisation_id]);
+
+  const fetchUserBasicInfo = async () => {
+    try {
+      const [userinfo, userOrg, permissionOrg]: any = await Promise.all([
+        fetchAPI('users/me'),
+        fetchAPI('users/organisations'),
+        fetchAPI('organisations/users/permissions'),
+      ]);
+
+      setOrganisations(userOrg.organisations);
+      setPermissions(permissionOrg.permissions);
+      updateUserData(userinfo);
+      setIsUserLoading(false);
+    } catch {
+      setIsUserLoading(false);
+    }
+  };
+
+  console.log('user profile', userProfile);
+
+  const login = async (data: any) => {
+    // setIsUserLoading(true);
+    const { access_token, refresh_token }: any = data;
+    await cookie.set('token', access_token);
+    await cookie.set('refreshToken', refresh_token);
+
+    await fetchUserBasicInfo();
+
     setAccessToken(access_token);
     setRefreshToken(refresh_token);
-    setToken(access_token);
-    setProfile(user);
-
-    updateUserData(user);
-
-    fetchAPI('users/organisations').then((res: any) => {
-      const currentOrg = res?.organisations.find(
-        (og: any) => og.id == user.organisation_id,
-      );
-
-      const body = {
-        ...userProfile,
-        ...user,
-        organisations: res.organisations || [],
-        currentOrganisation: currentOrg || {},
-      };
-      updateUserData(body);
-    });
-
-    cookie.set('token', access_token);
-    cookie.set('refreshToken', refresh_token);
   };
 
   const logout = async () => {
@@ -110,14 +98,13 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setAccessToken(null);
     setRefreshToken(null);
     setUserProfile(null);
-    setProfile(null);
+    setOrganisations(null);
 
     cookie.remove('token');
     cookie.remove('refreshToken');
   };
 
   const updateUserData = (userdata: any) => {
-    setProfile(userdata);
     setUserProfile(userdata);
   };
 
@@ -140,6 +127,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         refreshToken,
         accessToken,
         userProfile,
+        organisations,
+        permissions,
         login,
         logout,
       }}>

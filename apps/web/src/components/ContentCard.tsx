@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 
 import { TimeAgo } from './Atoms';

@@ -1,20 +1,22 @@
 import { useEffect, useState } from 'react';
-
 import Image from 'next/image';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@wraft/ui';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Label, Input, Heading, Checkbox } from 'theme-ui';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import { Spinner } from 'theme-ui';
+import { Heading } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
+import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
 import Logo from '../../public/Logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
-
+import { emailPattern } from '../utils/zodPatterns';
+import Field from './Field';
 import Link from './NavLink';
 
 export interface IField {
@@ -22,14 +24,27 @@ export interface IField {
   value: string;
 }
 
+type FormValues = {
+  email: string;
+  password: string;
+};
+
+const schema = z.object({
+  email: emailPattern,
+  password: z.string().min(1, { message: 'Please enter a valid password.' }),
+});
+
 const UserLoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
 
   const { login, accessToken } = useAuth();
   const { data, status } = useSession();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
   const router = useRouter();
 
   const { session, error } = router.query;
@@ -41,7 +56,6 @@ const UserLoginForm = () => {
           if (status === 'authenticated') {
             await signOut({ redirect: false });
           }
-
           router.push('/login');
         } catch (error) {
           console.error('Error during sign out:', error);
@@ -105,33 +119,29 @@ const UserLoginForm = () => {
         </Link>
       </Box>
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-        <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
+        <Heading
+          as="h3"
+          variant="styles.h3Medium"
+          sx={{ mb: '48px', color: 'green.700' }}>
           Sign in
         </Heading>
 
         <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-          <Label htmlFor="email" sx={{ mb: '4px', color: 'gray.600' }}>
-            Email
-          </Label>
-          <Input
-            type="text"
-            id="email"
-            defaultValue=""
-            {...register('email', { required: true })}
+          <Field
+            name="email"
+            label="Email"
+            register={register}
+            type={'email'}
+            error={errors.email}
             mb={'24px'}
-            color="border"
           />
-
-          <Label htmlFor="password" sx={{ mb: '4px', color: 'gray.600' }}>
-            Password
-          </Label>
-          <Input
-            id="password"
-            defaultValue=""
-            type={showPassword ? 'text' : 'password'}
-            {...register('password', { required: true })}
-            mb={'12px'}
-            color={'border'}
+          <Field
+            name="password"
+            label="Password"
+            register={register}
+            type="password"
+            error={errors.password}
+            mb={3}
           />
           <Flex
             sx={{
@@ -139,66 +149,49 @@ const UserLoginForm = () => {
               mb: '28px',
               justifyContent: 'space-between',
             }}>
-            {loginError ? (
-              <Text sx={{ color: 'orange.300' }}>{loginError}</Text>
-            ) : (
-              <Flex>
-                <Label
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'gray.900',
-                    fontWeight: 'body',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  <Checkbox
-                    checked={showPassword}
-                    onChange={() => setShowPassword(!showPassword)}
-                    sx={{
-                      cursor: 'pointer',
-                      color: 'gray.900',
-                      width: '18px',
-                      backgroundColor: 'white',
-                      border: 'none',
-                    }}
-                  />
-                  <Text variant="pM">Show Password</Text>
-                </Label>
-              </Flex>
-            )}
+            {loginError && <Text variant="error">{loginError}</Text>}
+            <Box />
             <Link href="/resetpassword">
               <Text
                 variant="pM"
                 sx={{
                   cursor: 'pointer',
+                  color: 'gray.400',
                 }}>
                 Forgot Password?
               </Text>
             </Link>
           </Flex>
 
-          <Button type="submit" variant="buttonPrimary">
-            <Flex sx={{ alignItems: 'center', gap: '4px' }}>
-              Sign in
-              {loading && <Spinner color="white" width={18} height={18} />}
-            </Flex>
+          <Button type="submit" variant="primary" loading={loading}>
+            Sign in
           </Button>
         </Box>
 
         <Box
           sx={{
-            minHeight: '1px',
-            maxHeight: '1px',
-            margin: '48px 0',
-            backgroundColor: 'border',
+            borderBottom: '1px solid',
+            borderColor: 'border',
+            whidth: '100%',
+            mt: '63px',
+            mb: '56px',
           }}
         />
 
         <Button onClick={() => signIn('gmail')} variant="googleLogin">
-          <img src={GoogleLogo} alt="" />
-          Continue with Google
+          <Flex
+            sx={{
+              alignItems: 'center',
+              gap: 2,
+              minWidth: '100%',
+              bg: 'transparent',
+              border: 'none',
+            }}
+            variant="buttons.googleLogin">
+            <Image src={GoogleLogo} alt="" width={24} height={24} />
+            Login using Google
+          </Flex>
         </Button>
-        {/* <Button onClick={() => signIn('github')}>Sign in</Button> */}
 
         <Flex
           sx={{
@@ -206,6 +199,7 @@ const UserLoginForm = () => {
             mt: '24px',
             color: 'gray.600',
             gap: '8px',
+            mb: '48px',
           }}>
           <Text variant="pR">Not a user yet? {''}</Text>
           <Link href="/signup" variant="none">

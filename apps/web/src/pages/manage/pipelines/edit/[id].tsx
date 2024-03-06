@@ -1,9 +1,8 @@
 import { FC } from 'react';
-
 import Head from 'next/head';
 
-import Page from '../../../../components/PageFrame';
-import PipelineForm from '../../../../components/PipelineForm';
+import Page from 'components/PageFrame';
+import PipelineForm from 'components/PipelineForm';
 
 const Index: FC = () => {
   return (

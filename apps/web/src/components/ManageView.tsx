@@ -1,10 +1,10 @@
 import React from 'react';
-
+import NavLink from 'next/link';
 import styled from '@emotion/styled';
 import { Flex, Box, Text } from 'theme-ui';
 
 import { LayoutLogo, FlowLogo, ThemeLogo, PermLogo, Layout } from './Icons';
-import NavLink from './NavLink';
+// import NavLink from './NavLink';
 import PageHeader from './PageHeader';
 
 export interface INav {
@@ -77,31 +77,31 @@ const ManageHomePage = () => {
         </Box>
       </PageHeader>
 
-      <Flex sx={{ pt: 5, px: 4, flexWrap: 'wrap' }}>
+      <Flex
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '24px',
+          width: '70%',
+          pt: 4,
+          px: 4,
+        }}>
         {listMenu &&
           listMenu.map((l: any, index: any) => (
-            <Box
-              key={index}
-              sx={{
-                width: '33%',
-                mr: 4,
-                border: 'solid 1px',
-                borderColor: 'border',
-                bg: 'backgroundWhite',
-                // width: '240px',
-                // borderColor: 'teal.800',
-                borderRadius: 4,
-                py: 4,
-                mb: 4,
-                px: 4,
-                ':hover': { bg: 'teal.100', borderColor: 'border' },
-                color: 'teal.900',
-                svg: {
-                  fill: 'teal.300',
-                },
-              }}>
-              <NavLink href={l.path} locale={''}>
-                <Flex>
+            <NavLink href={l.path} key={index}>
+              <Box
+                sx={{
+                  border: 'solid 1px',
+                  borderColor: 'border',
+                  bg: 'backgroundWhite',
+                  borderRadius: 4,
+                  ':hover': { bg: 'teal.100', borderColor: 'border' },
+                  color: 'teal.1000',
+                  svg: {
+                    fill: 'teal.300',
+                  },
+                }}>
+                <Flex sx={{ py: 4, px: 4 }}>
                   <Box
                     sx={{
                       width: '4rem',
@@ -121,7 +121,7 @@ const ManageHomePage = () => {
                       sx={{
                         fontSize: 2,
                         color: 'gray.800',
-                        fontWeight: 'heading',
+                        fontWeight: 'bold',
                         mb: 0,
                       }}>
                       {l.name}
@@ -137,8 +137,8 @@ const ManageHomePage = () => {
                     </Text>
                   </Box>
                 </Flex>
-              </NavLink>
-            </Box>
+              </Box>
+            </NavLink>
           ))}
       </Flex>
     </Box>

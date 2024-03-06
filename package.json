@@ -4,28 +4,31 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "clean": "turbo run clean && rm -rf node_modules",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "clean": "rm -rf node_modules && turbo run clean",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint:fix": "turbo run lint:fix",
+    "lint": "turbo run lint",
+    "post-install": "husky install && turbo run post-install",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "prettier": "prettier --check .",
     "release": "turbo run build --filter=docs^... && changeset publish",
-    "prettier": "prettier --check ."
+    "version-packages": "changeset version"
+  },
+  "lint-staged": {
+    "(apps|packages)/**/*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
-    "prettier": "^3.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.4",
     "turbo": "latest"
   },
-  "engines": {
-    "node": ">=18.x",
-    "npm": ">=7.0.0",
-    "yarn": ">=1.19.0 < 2.0.0"
-  },
-  "packageManager": "npm@9.6.7",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "packageManager": "pnpm@8.15.4"
 }

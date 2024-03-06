@@ -1,19 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/** @jsxImportSource theme-ui */
-
-import { useState, ChangeEvent } from 'react';
-
-import cookie from 'js-cookie';
+import { useState } from 'react';
 import Image from 'next/image';
-import { Box, Flex, Text, Button, Label, Input, Heading } from 'theme-ui';
-import { Spinner } from 'theme-ui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import cookie from 'js-cookie';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { Box, Flex, Text, Button, Heading } from 'theme-ui';
+import { z } from 'zod';
 
 import Logo from '../../public/Logo.svg';
-
+import { postAPI } from '../utils/models';
+import { emailPattern, passwordPattern } from '../utils/zodPatterns';
+import Field from './Field';
 import Link from './NavLink';
-
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
 export interface IField {
   name: string;
@@ -24,92 +22,52 @@ interface RegistrationFormProps {
   inviteToken: string | null;
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
-  const [showPassword, _setShowPassword] = useState(false);
-  // console.log(token1);
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  });
+type FormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
 
-  // State variable for conditional rendering
-  const [loading, setLoading] = useState(false);
+const schema = z.object({
+  firstName: z.string().min(1, { message: 'First Name has to be filled.' }),
+  lastName: z.string().min(1, { message: 'Last Name has to be filled.' }),
+  email: emailPattern,
+  password: passwordPattern,
+});
+
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
+
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-    // console.log(formData)
-  };
+  const onSubmit = (data: FormValues) => {
+    const formData = new FormData();
+    formData.append('name', data.firstName + ' ' + data.lastName);
+    formData.append('email', data.email);
+    formData.append('password', data.password);
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    console.log(formData);
-    if (
-      isValidEmail(formData.email) &&
-      formData.firstName.length !== 0 &&
-      formData.lastName.length !== 0
-    ) {
-      // setFormData({
-      //   firstName: formData.firstName,
-      //   lastName: formData.lastName,
-      //   email: formData.email,
-      // });
+    const signupRequest = postAPI(
+      `users/signup/?token=${inviteToken}`,
+      formData,
+    );
 
-      try {
-        setLoading(true);
-        const apiUrl = `${API_HOST}/api/v1/users/signup/?token=${inviteToken}`;
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            name: formData.firstName,
-            email: formData.email,
-            password: formData.password,
-          }),
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Error:q', errorData);
-
-          alert(errorData.errors.email[0]);
-
-          // You can also throw a custom error if needed
-          throw new Error('Password reset request failed');
-        } else if (response.status === 5000) {
-          setSuccess(true);
-        } else {
-          // Handle a successful response (if needed)
-          const responseData = await response;
-          console.log(responseData);
-          cookie.remove('inviteCookie');
-          // setResetPasswordSuccess(responseData);
-          setLoading(false);
-          setSuccess(true);
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error('Network error1:', error);
-        setLoading(false);
+    toast.promise(signupRequest, {
+      loading: 'Loading...',
+      success: () => {
         setSuccess(true);
         cookie.remove('inviteCookie');
-        // setResetPasswordSuccess(undefined);
-      }
-    } else {
-      alert('fill the inputs currectly');
-    }
-  };
-
-  const isValidEmail = (email: string): boolean => {
-    // Simple email validation using regular expression
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+        return <b>Signed up Successfully</b>;
+      },
+      error: () => {
+        cookie.remove('inviteCookie');
+        return <b>Could not Signup.</b>;
+      },
+    });
   };
 
   return (
@@ -145,78 +103,45 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
               company to join the team to improve the workflow
             </Text>
 
-            <Box as="form" onSubmit={handleSubmit}>
+            <Box as="form" onSubmit={handleSubmit(onSubmit)}>
               <Flex sx={{ gap: '16px', marginBottom: '24px' }}>
                 <Box sx={{ flex: '1 1 264px' }}>
-                  <Label
-                    htmlFor="firstName"
-                    sx={{ mb: '4px', color: 'gray.300' }}>
-                    First Name
-                  </Label>
-                  <Input
-                    type="text"
-                    id="firstName"
+                  <Field
                     name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    color={'border'}
-                    mb={'0px'}
+                    label="First Name"
+                    register={register}
+                    error={errors.firstName}
                   />
                 </Box>
                 <Box sx={{ flex: '1 1 auto' }}>
-                  <Label
-                    htmlFor="lastName"
-                    sx={{ mb: '4px', color: 'gray.300' }}>
-                    Last Name
-                  </Label>
-                  <Input
-                    type="text"
-                    id="lastName"
+                  <Field
                     name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    color={'border'}
-                    mb={'0px'}
+                    label="First Name"
+                    register={register}
+                    error={errors.lastName}
                   />
                 </Box>
               </Flex>
 
-              <Label htmlFor="email" sx={{ mb: '4px', color: 'gray.300' }}>
-                Email
-              </Label>
-              <Input
-                type="text"
-                id="email"
-                defaultValue=""
+              <Field
+                label="Email"
+                type="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
-                mb={'24px'}
-                color={'border'}
+                register={register}
+                error={errors.email}
               />
 
-              <Label htmlFor="password" sx={{ mb: '4px', color: 'gray.300' }}>
-                Create Password
-              </Label>
-              <Input
-                id="password"
-                // name="password"
-                defaultValue=""
-                type={showPassword ? 'text' : 'password'}
-                // ref={register({ required: true })}
+              <Field
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
-                mb={'24px'}
+                label="Create Password"
+                type="password"
+                register={register}
+                error={errors}
               />
-              {/* {errors.exampleRequired && <Text>This field is required</Text>} */}
               <Flex sx={{ width: '100%', gap: '39px', mb: '24px' }}>
                 <Button type="submit" variant="buttonPrimary">
                   <Flex sx={{ alignItems: 'center', gap: '4px' }}>
                     Accept Invitation
-                    {loading && (
-                      <Spinner color="white" width={18} height={18} />
-                    )}
                   </Flex>
                 </Button>
                 <Flex sx={{ alignItems: 'center', color: 'gray.600' }}>

@@ -1,16 +1,15 @@
 import React, { FC, useState } from 'react';
-
 import Head from 'next/head';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
+import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
-import LayoutForm from '../../../components/LayoutForm';
-import LayoutList from '../../../components/LayoutList';
-import ManageSidebar from '../../../components/ManageSidebar';
-import Page from '../../../components/PageFrame';
-import PageHeader from '../../../components/PageHeader';
-import { menuLinks } from '../../../utils';
-
-import { Drawer } from '@wraft-ui/Drawer';
+import LayoutForm from 'components/LayoutForm';
+import LayoutList from 'components/LayoutList';
+import ManageSidebar from 'components/ManageSidebar';
+import Page from 'components/PageFrame';
+import PageHeader from 'components/PageHeader';
+import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -22,7 +21,13 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <PageHeader title="Manage Layouts" desc="Document Layouts">
+        <PageHeader
+          title="Layouts"
+          desc={
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
+            />
+          }>
           <Button
             variant="btnSecondary"
             sx={{ fontSize: 1 }}
@@ -34,14 +39,14 @@ const Index: FC = () => {
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </Drawer>
 
-        <Box variant="layout.pageFrame" pt={0}>
-          <Container>
-            <Flex>
-              <ManageSidebar items={menuLinks} />
+        <Container variant="layout.pageFrame">
+          <Flex>
+            <ManageSidebar items={menuLinks} />
+            <Box sx={{ width: '100%' }}>
               <LayoutList rerender={rerender} />
-            </Flex>
-          </Container>
-        </Box>
+            </Box>
+          </Flex>
+        </Container>
       </Page>
     </>
   );

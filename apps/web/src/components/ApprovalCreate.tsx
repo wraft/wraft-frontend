@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
 
 import { postAPI, fetchAPI } from '../utils/models';
-
 import Field from './Field';
 interface ApprovalFormBaseProps {
   states?: Array<any>;
-  isOpen?: boolean;
+  // isOpen?: boolean;
   closeModal?: any;
-  dialog?: any;
+  // dialog?: any;
   parent?: string;
 }
 
@@ -32,21 +30,21 @@ export interface User {
 
 const ApprovalFormBase = ({
   states,
-  dialog,
+  // dialog,
   parent,
+  closeModal,
 }: ApprovalFormBaseProps) => {
   const { register, control, handleSubmit, setValue } = useForm();
   const [users, setUsers] = useState<any>();
   const [user, setUser] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
 
-  // const { accessToken } = useAuth();
-
   /**
    * Submit Form
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
+    console.log('submitted');
     postAPI('approval_systems', data);
   };
 
@@ -75,15 +73,13 @@ const ApprovalFormBase = ({
     <Box
       mx={0}
       mb={3}
-      sx={{ p: 4, mt: 0 }}
+      sx={{ p: 4, mt: 0, minWidth: '600px' }}
       as="form"
       onSubmit={handleSubmit(onSubmit)}>
       {showSearch && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
-        // name="flow_id"
         defaultValue={parent}
-        // ref={register({ required: true })}
         {...register('flow_id', { required: true })}
       />
       <Field
@@ -111,18 +107,6 @@ const ApprovalFormBase = ({
               </Select>
             )}
           />
-          {/* <Select
-            id="pre_state_id"
-            name="pre_state_id"
-            defaultValue=""
-            ref={register({ required: true })}>
-            {states &&
-              states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>
-                  {s.state.state}
-                </option>
-              ))}
-          </Select> */}
         </Box>
 
         <Box sx={{ width: '50%', p: 2, my: 4 }}>
@@ -143,26 +127,12 @@ const ApprovalFormBase = ({
               </Select>
             )}
           />
-          {/* <Select
-            id="post_state_id"
-            name="post_state_id"
-            defaultValue=""
-            ref={register({ required: true })}>
-            {states &&
-              states.map((s: any) => (
-                <option key={s.state.id} value={s.state.id}>
-                  {s.state.state}
-                </option>
-              ))}
-          </Select> */}
         </Box>
       </Flex>
       <Box sx={{ p: 2 }}>
         <Label>Search</Label>
         <Input
-          // name="approver_id"
           defaultValue={''}
-          // ref={register({ required: true })}
           {...register('approver_id', { required: true })}
           onChange={onChangeInput}
         />
@@ -171,30 +141,40 @@ const ApprovalFormBase = ({
             <Box
               key={x?.name}
               sx={{
-                bg: 'gray.100',
+                bg: 'background',
                 p: 2,
                 px: 3,
                 border: 'solid 1px',
                 borderColor: 'border',
               }}
               onClick={() => onUserSelect(x)}>
-              <Text as="h4" color="gray.9">
+              <Text as="h4" color="text">
                 {x.name}
               </Text>
-              <Text as="em" color="gray.6">
+              <Text as="em" color="gray.600">
                 {x.email}
               </Text>
             </Box>
           ))}
       </Box>
       <Flex>
-        <Button type="submit" mt={3}>
+        <Button
+          type="submit"
+          mt={3}
+          onClick={(e) => {
+            e.preventDefault();
+            handleSubmit(onSubmit);
+          }}>
           Save
         </Button>
         <Button
-          onClick={() => dialog.hide}
+          onClick={(e) => {
+            e.preventDefault();
+            closeModal();
+          }}
           variant="btnSecondary"
           type="submit"
+          ml={2}
           mt={3}>
           Cancel
         </Button>

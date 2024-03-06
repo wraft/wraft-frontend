@@ -13,27 +13,36 @@ const MenuItem = (props: IMenuItem) => {
   // const className = clsx(classNameProps, {
   //   [activeClassName]: router.pathname === pathname && activeClassName,
   // });
-  const { pathname } = useRouter();
-  const isActive = props?.href === pathname;
+
+  const router = useRouter();
+  const isActive =
+    router.pathname === props.href ||
+    (router.pathname.startsWith(props.href) && props.href !== '/');
 
   return (
     <Flex
-      variant={props?.variant || 'button'}
-      sx={{
-        a: {
-          textDecoration: 'none',
-          color: 'text',
-          py: 2,
-          px: 1,
-          width: '100%',
-          '&.active': {
-            background: '#E2F7EA',
-          },
-          ':hover': {
-            background: '#E2F7EA',
-          },
-        },
-      }}>
+      variant={props?.variant || 'btnMenuBlock'}
+      sx={
+        {
+          // a: {
+          //   textDecoration: 'none',
+          //   color: 'text',
+          //   py: 2,
+          //   px: 1,
+          //   width: '100%',
+          //   '&.active': {
+          //     background: '#E2F7EA',
+          //     color: 'green.800',
+          //     svg: {
+          //       fill: 'green.300',
+          //     },
+          //   },
+          //   ':hover': {
+          //     background: '#E2F7EA',
+          //   },
+          // },
+        }
+      }>
       <Link
         href={props.href}
         as={props.path}

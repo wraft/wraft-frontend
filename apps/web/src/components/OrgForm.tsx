@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { Button, Spinner, Box } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
 import { putAPI, fetchAPI, fetchUserInfo } from '../utils/models';
-
 import Field from './Field';
 
 export interface Profile {
@@ -207,7 +205,7 @@ const OrgForm = () => {
   // };
 
   return (
-    <Box sx={{ pt: 4 }}>
+    <Box>
       {!ready && <Spinner />}
 
       <Box>

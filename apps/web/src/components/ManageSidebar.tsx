@@ -1,15 +1,8 @@
 import React from 'react';
-
-import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import { Flex, Box, Text } from 'theme-ui';
 
-export const IconStyleWrapper = styled.div`
-  color: #444;
-  margin-right: 12px;
-`;
-
 import { menuLinksProps } from '../utils';
-
 import NavLink from './NavLink';
 
 export interface INav {
@@ -18,30 +11,35 @@ export interface INav {
 }
 
 const ManageSidebar = ({ items, showFull = true }: INav) => {
+  const router = useRouter();
+
+  const checkActive = (route: string) => {
+    return router.pathname === route;
+  };
+
   return (
-    <Box
+    <Flex
       sx={{
-        mt: 4,
-        ml: 4,
+        flexDirection: 'column',
+        gap: '8px',
         pl: 0,
-        // mr: 4,
+        mr: 4,
         flexShrink: 0,
         maxHeight: '90vh',
-        // borderRight: 'solid 1px',
         borderColor: 'border',
-        // minHeight: '90vh',
       }}>
       {items &&
-        items.map((l: any) => (
+        items.map((item: any) => (
           <Box
             sx={{
-              // mr: 4,
+              cursor: 'pointer',
               width: '100%',
             }}
-            key={l.name}>
-            <NavLink href={l.path} variant="links.base">
+            key={item.name}>
+            <NavLink href={item.path} variant="links.base">
               <Flex
                 sx={{
+                  cursor: 'pointer',
                   py: '6px',
                   px: '12px',
                   minWidth: '135px',
@@ -49,15 +47,16 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                   color: 'gray.900',
                   borderRadius: '4px',
                   alignItems: 'center',
+                  bg: checkActive(item.path) ? 'neutral.200' : 'transparent',
                   ':hover': { bg: 'neutral.200' },
                 }}>
-                {l.lgoo && (
+                {item.lgoo && (
                   <Box
                     sx={{
                       color: 'gray.500',
                       mr: '12px',
                     }}>
-                    {l.logo}
+                    {item.logo}
                   </Box>
                 )}
                 <Text
@@ -66,14 +65,14 @@ const ManageSidebar = ({ items, showFull = true }: INav) => {
                     width: '100%',
                     color: 'inherit',
                   }}>
-                  {l.name}
+                  {item.name}
                 </Text>
               </Flex>
             </NavLink>
             {showFull && <Box />}
           </Box>
         ))}
-    </Box>
+    </Flex>
   );
 };
 

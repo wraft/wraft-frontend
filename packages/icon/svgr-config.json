@@ -1,0 +1,20 @@
+{
+  "typescript": true,
+  "icon": true,
+  "removeXMLNS": true,
+  "replaceAttrValues": {
+    "#2C3641": "{props.color || `#2C3641`}",
+    "#FFFFFF": "{props.color || `#FFFFFF`}",
+    "white": "{props.color || `#FFFFFF`}",
+    "#111111": "{props.color || `#000000`}",
+    "black": "{props.color || `#000000`}",
+    "#000": "{props.color || `#000000`}"
+  },
+  "removeViewBox": false,
+  "svgProps": {
+    "width": "{ props.width || 24}",
+    "height": "{props.height || 24}",
+    "aria-hidden": "true",
+    "role": "icon"
+  }
+}

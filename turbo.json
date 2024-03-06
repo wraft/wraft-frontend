@@ -5,13 +5,19 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**", "storybook-static/**"],
       "dependsOn": ["^build"]
     },
-    "lint": {},
+    "lint": {
+      "cache": false
+    },
+    "lint:fix": {
+      "cache": false
+    },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "clean": {
-      "cache": false
+      "cache": false,
+      "outputs": ["dist/**", "build/**"]
     }
   }
 }

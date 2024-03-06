@@ -1,9 +1,8 @@
 import React from 'react';
-
-// import book from './icon/book-opened.svg';
 import styled from '@emotion/styled';
 import { Image } from 'theme-ui';
 
+import { IconWrapper } from './Atoms';
 import abstract from './icon/abstract.svg';
 import del from './icon/bin.svg';
 import flow from './icon/bolt.svg';
@@ -93,6 +92,58 @@ export const Abstract = () => (
 export const UserIcon = () => (
   <Image alt="" className="x" src={userno} width="32" />
 );
+// #363E49
+
+export const EyeIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}>
+      <path
+        d="M0.666016 7.99935C0.666016 7.99935 3.33268 2.66602 7.99935 2.66602C12.666 2.66602 15.3327 7.99935 15.3327 7.99935C15.3327 7.99935 12.666 13.3327 7.99935 13.3327C3.33268 13.3327 0.666016 7.99935 0.666016 7.99935Z"
+        stroke="currentColor"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+        stroke="currentColor"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const CloseIcon = () => {
+  return (
+    <svg
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M9 3L3 9"
+        stroke="#8E969E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3 3L9 9"
+        stroke="#8E969E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
 
 export const DocumentCountIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -107,6 +158,24 @@ export const DocumentCountIcon = (props: React.SVGProps<SVGSVGElement>) => {
       <path
         d="M26 14.94C25.9896 14.8481 25.9695 14.7576 25.94 14.67V14.58C25.8919 14.4772 25.8278 14.3827 25.75 14.3L19.75 8.3C19.6673 8.22222 19.5728 8.15808 19.47 8.11H19.38L19.06 8H13C12.2044 8 11.4413 8.31607 10.8787 8.87868C10.3161 9.44129 10 10.2044 10 11V25C10 25.7956 10.3161 26.5587 10.8787 27.1213C11.4413 27.6839 12.2044 28 13 28H23C23.7956 28 24.5587 27.6839 25.1213 27.1213C25.6839 26.5587 26 25.7956 26 25V15C26 15 26 15 26 14.94ZM20 11.41L22.59 14H20V11.41ZM24 25C24 25.2652 23.8946 25.5196 23.7071 25.7071C23.5196 25.8946 23.2652 26 23 26H13C12.7348 26 12.4804 25.8946 12.2929 25.7071C12.1054 25.5196 12 25.2652 12 25V11C12 10.7348 12.1054 10.4804 12.2929 10.2929C12.4804 10.1054 12.7348 10 13 10H18V15C18 15.2652 18.1054 15.5196 18.2929 15.7071C18.4804 15.8946 18.7348 16 19 16H24V25Z"
         fill="#004A0F"
+      />
+    </svg>
+  );
+};
+
+export const DocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      {...props}
+      fill="none">
+      <rect width="36" height="36" rx="4" fill="none" />
+      <path
+        d="M26 14.94C25.9896 14.8481 25.9695 14.7576 25.94 14.67V14.58C25.8919 14.4772 25.8278 14.3827 25.75 14.3L19.75 8.3C19.6673 8.22222 19.5728 8.15808 19.47 8.11H19.38L19.06 8H13C12.2044 8 11.4413 8.31607 10.8787 8.87868C10.3161 9.44129 10 10.2044 10 11V25C10 25.7956 10.3161 26.5587 10.8787 27.1213C11.4413 27.6839 12.2044 28 13 28H23C23.7956 28 24.5587 27.6839 25.1213 27.1213C25.6839 26.5587 26 25.7956 26 25V15C26 15 26 15 26 14.94ZM20 11.41L22.59 14H20V11.41ZM24 25C24 25.2652 23.8946 25.5196 23.7071 25.7071C23.5196 25.8946 23.2652 26 23 26H13C12.7348 26 12.4804 25.8946 12.2929 25.7071C12.1054 25.5196 12 25.2652 12 25V11C12 10.7348 12.1054 10.4804 12.2929 10.2929C12.4804 10.1054 12.7348 10 13 10H18V15C18 15.2652 18.1054 15.5196 18.2929 15.7071C18.4804 15.8946 18.7348 16 19 16H24V25Z"
+        fill="currentColor"
       />
     </svg>
   );
@@ -144,13 +213,14 @@ export const FilterArrowDown = () => (
   </svg>
 );
 
-export const GraterThanIcon = () => (
+export const GraterThanIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="8"
     height="7"
     viewBox="0 0 8 7"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}>
     <g id="Icons/24/Arrow_Right">
       <path
         id="Vector (Stroke)"
@@ -343,7 +413,7 @@ export const ApproveTick = (props: React.SVGProps<SVGSVGElement>) => {
       fill="none"
       {...props}
       xmlns="http://www.w3.org/2000/svg">
-      <rect y="0.5" width="14" height="14" rx="7" fill="#E4E9EF" />
+      <rect y="0.5" width="14" height="14" rx="7" fill="currentColor" />
       <path
         d="M9.86256 5.30155C9.82287 5.25876 9.77565 5.22479 9.72362 5.20162C9.6716 5.17844 9.6158 5.1665 9.55944 5.1665C9.50308 5.1665 9.44728 5.17844 9.39525 5.20162C9.34323 5.22479 9.29601 5.25876 9.25632 5.30155L6.0757 8.70741L4.73941 7.27384C4.6982 7.23128 4.64956 7.19781 4.59625 7.17534C4.54295 7.15288 4.48603 7.14186 4.42874 7.14292C4.37146 7.14398 4.31493 7.1571 4.26238 7.18152C4.20983 7.20594 4.1623 7.24119 4.1225 7.28526C4.08269 7.32933 4.05139 7.38135 4.03038 7.43835C4.00938 7.49535 3.99907 7.55622 4.00007 7.61748C4.00106 7.67874 4.01332 7.73919 4.03616 7.79538C4.059 7.85157 4.09196 7.90241 4.13317 7.94497L5.77258 9.69812C5.81227 9.74092 5.85948 9.77488 5.91151 9.79806C5.96353 9.82124 6.01934 9.83317 6.0757 9.83317C6.13206 9.83317 6.18786 9.82124 6.23988 9.79806C6.29191 9.77488 6.33913 9.74092 6.37882 9.69812L9.86256 5.97268C9.90589 5.92993 9.94048 5.87804 9.96413 5.82029C9.98779 5.76253 10 5.70016 10 5.63711C10 5.57406 9.98779 5.5117 9.96413 5.45394C9.94048 5.39619 9.90589 5.3443 9.86256 5.30155Z"
         fill="white"
@@ -745,7 +815,129 @@ const Close = (props: PlIconProps) => {
 
 const Plusx = '';
 
+// updated Icon design
+// @TODO remove or modularize
+
+const ThreeDots = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+      <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
+    </IconWrapper>
+  );
+};
+
+const BackIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+    </IconWrapper>
+  );
+};
+
+const NotifyIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path
+        d="M14.235 19c.865 0 1.322 1.024 .745 1.668a3.992 3.992 0 0 1 -2.98 1.332a3.992 3.992 0 0 1 -2.98 -1.332c-.552 -.616 -.158 -1.579 .634 -1.661l.11 -.006h4.471z"
+        strokeWidth="0"
+        fill="currentColor"
+      />
+      <path
+        d="M12 2c1.358 0 2.506 .903 2.875 2.141l.046 .171l.008 .043a8.013 8.013 0 0 1 4.024 6.069l.028 .287l.019 .289v2.931l.021 .136a3 3 0 0 0 1.143 1.847l.167 .117l.162 .099c.86 .487 .56 1.766 -.377 1.864l-.116 .006h-16c-1.028 0 -1.387 -1.364 -.493 -1.87a3 3 0 0 0 1.472 -2.063l.021 -.143l.001 -2.97a8 8 0 0 1 3.821 -6.454l.248 -.146l.01 -.043a3.003 3.003 0 0 1 2.562 -2.29l.182 -.017l.176 -.004z"
+        strokeWidth="0"
+        fill="currentColor"
+      />
+    </IconWrapper>
+  );
+};
+
+const BackArroqIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M5 12l14 0" />
+      <path d="M5 12l4 4" />
+      <path d="M5 12l4 -4" />
+    </IconWrapper>
+  );
+};
+
+const EditIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+    </IconWrapper>
+  );
+};
+
+const ApprovalIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M7 11v8a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1v-7a1 1 0 0 1 1 -1h3a4 4 0 0 0 4 -4v-1a2 2 0 0 1 4 0v5h3a2 2 0 0 1 2 2l-1 5a2 3 0 0 1 -2 2h-7a3 3 0 0 1 -3 -3" />
+    </IconWrapper>
+  );
+};
+
+const LinkIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 15l6 -6" />
+      <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" />
+      <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" />
+    </IconWrapper>
+  );
+};
+
+const SendIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 14l11 -11" />
+      <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
+    </IconWrapper>
+  );
+};
+
+const BackArrowIcon = (props: any) => {
+  return (
+    <IconWrapper {...props} p="out">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M9 6l6 6l-6 6" />
+    </IconWrapper>
+  );
+};
+
+const DownloadIcon = (props: PlIconProps) => {
+  return (
+    <IconWrapper {...props}>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 5l0 14" />
+      <path d="M18 13l-6 6" />
+      <path d="M6 13l6 6" />
+    </IconWrapper>
+  );
+};
+
 export {
+  DownloadIcon,
+  BackArrowIcon,
+  SendIcon,
+  LinkIcon,
+  ApprovalIcon,
+  BackArroqIcon,
+  EditIcon,
+  NotifyIcon,
+  BackIcon,
+  ThreeDots,
   DotsVerticalRounded,
   Pencil,
   Download,

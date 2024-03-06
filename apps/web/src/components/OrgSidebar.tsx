@@ -1,9 +1,8 @@
 import React from 'react';
-
 import styled from '@emotion/styled';
 
-import { profileLinks } from '../utils';
-
+import { useAuth } from '../contexts/AuthContext';
+import { checkSubRoutePermission } from '../utils';
 import ManageSidebar from './ManageSidebar';
 
 export const IconStyleWrapper = styled.div`
@@ -15,8 +14,38 @@ export interface INav {
   showFull?: boolean;
 }
 
+export interface menuLinksProps {
+  name: string;
+  path: string;
+  permissionName?: string;
+  logo?: any;
+  permissions?: any;
+}
+
+const profileLinks: menuLinksProps[] = [
+  {
+    name: 'My Account',
+    path: '/account/profile',
+  },
+  {
+    name: 'Manage Workspace',
+    path: '/account/company',
+    permissionName: 'organisation',
+    permissions: ['show'],
+  },
+  {
+    name: 'test link',
+    path: '/account/company',
+    permissionName: 'organisation',
+    permissions: [],
+  },
+];
+
 const OrgSidebar = () => {
-  return <ManageSidebar items={profileLinks} />;
+  const { permissions } = useAuth();
+  const routers = checkSubRoutePermission(profileLinks, permissions);
+
+  return <ManageSidebar items={routers} />;
 };
 
 export default OrgSidebar;

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { Box, Button, Text } from 'theme-ui';
 
 import { fetchAPI, postAPI } from '../utils/models';
-
 import CommentCard from './CommentCard';
 import Field from './FieldText';
 
@@ -55,6 +53,7 @@ const CommentForm = (props: CommentFormProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
   const [submiting, setSubmitting] = useState<boolean>(false);
@@ -77,6 +76,8 @@ const CommentForm = (props: CommentFormProps) => {
       fetchAPI(`comments?master_id=${master_id}&page=0`).then((data: any) => {
         if (data.comments) {
           setComments(data.comments);
+          setSubmitting(false);
+          setValue('body', '');
         }
       });
     } catch {
@@ -106,7 +107,7 @@ const CommentForm = (props: CommentFormProps) => {
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="btnSecondary" ml={0} sx={{ mt: 0 }}>
+        <Button variant="btnSecondary" ml={0} sx={{ mt: 0, fontSize: 1 }}>
           {submiting ? 'Saving ... ' : 'Add Comment'}
         </Button>
       </Box>

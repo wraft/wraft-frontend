@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
 import * as z from 'zod';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 
 import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
 import { hexColorRegex, uuidRegex } from '../utils/regex';
 import { ContentType } from '../utils/types';
-
 import Field from './Field';
 import FieldColor from './FieldColor';
 import FieldEditor from './FieldEditor';
 import FieldText from './FieldText';
 import { IFlow, ICreator } from './FlowList';
-import PageHeader from './PageHeader';
 
 export interface IFlowItem {
   flow: IFlow;
@@ -132,7 +129,13 @@ const schema = z.object({
   edit: z.any(),
 });
 
-const Form = () => {
+interface Props {
+  step?: number;
+  setIsOpen?: (e: any) => void;
+  setRerender?: (e: any) => void;
+}
+
+const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const [fields, setFields] = useState([]);
   const [content, setContent] = useImmer<ContentType | undefined>(undefined);
   const [layouts, setLayouts] = useState<Array<ILayout>>([]);
@@ -140,12 +143,15 @@ const Form = () => {
   const [themes, setThemes] = useState<Array<any>>([]);
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [newFields, setNewFields] = useState<any>([]);
+  const [formStep, setFormStep] = useState(step);
+  const [isEdit, setEdit] = useState<boolean>(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
+    trigger,
   } = useForm({
     resolver: zodResolver(schema),
   });
@@ -154,6 +160,7 @@ const Form = () => {
   const cId: string = router.query.id as string;
 
   const addField = () => {
+    console.log('addField');
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       fields = fields || [];
@@ -196,6 +203,7 @@ const Form = () => {
     });
 
   const removeField = (did: number) =>
+    fields &&
     setFields((fields) => {
       const outputState = fields.slice(0);
       deleteField(did, outputState);
@@ -236,16 +244,6 @@ const Form = () => {
     }
   };
 
-  const deleteMe = (deletableId: string) => {
-    deleteAPI(`content_types/${deletableId}`).then(() => {
-      toast.success('Deleted Successfully', {
-        duration: 1000,
-        position: 'top-right',
-      });
-      Router.push(`/content-types`);
-    });
-  };
-
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
     setContent((draft) => {
@@ -261,9 +259,10 @@ const Form = () => {
       setValue('prefix', res.content_type.prefix);
       setValue('layout_id', res.content_type.layout?.id || undefined);
       setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
-      setValue('theme_id', res.content_type.theme.id || undefined);
+      setValue('theme_id', res.content_type?.theme?.id || undefined);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
+      trigger();
     }
   };
 
@@ -315,15 +314,16 @@ const Form = () => {
           field_type_id: fid,
         };
 
+        const notInContent = content?.content_type?.fields
+          ? content?.content_type?.fields?.every(
+              (field: any) => field.name !== item.name,
+            )
+          : true;
+
         if (
           !Number(item.name) &&
-          item.name !== '0' &&
-          item.name !== '' &&
-          item.name !== null &&
-          item.name !== undefined &&
-          content?.content_type.fields.every(
-            (field: any) => field.name !== item.name,
-          )
+          item.name !== ('0' || '' || null || undefined) &&
+          notInContent
         ) {
           fieldsMap.push(it);
         }
@@ -338,6 +338,7 @@ const Form = () => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
+    console.log('onSubmit', data);
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -352,11 +353,12 @@ const Form = () => {
     if (isUpdate) {
       putAPI(`content_types/${data.edit}`, sampleD)
         .then(() => {
+          setIsOpen && setIsOpen(false);
+          setRerender && setRerender((prev: boolean) => !prev);
           toast.success('Saved Successfully', {
             duration: 1000,
             position: 'top-right',
           });
-          Router.push(`/content-types`);
         })
         .catch(() => {
           toast.error('Save Failed', {
@@ -367,11 +369,12 @@ const Form = () => {
     } else {
       postAPI('content_types', sampleD)
         .then(() => {
+          setIsOpen && setIsOpen(false);
+          setRerender && setRerender((prev: boolean) => !prev);
           toast.success('Saved Successfully', {
             duration: 1000,
             position: 'top-right',
           });
-          Router.push(`/content-types`);
         })
         .catch(() => {
           toast.error('Save Failed', {
@@ -384,6 +387,7 @@ const Form = () => {
 
   useEffect(() => {
     if (cId) {
+      setEdit(true);
       setValue('edit', cId);
       loadDataDetails(cId);
       loadThemes();
@@ -392,6 +396,7 @@ const Form = () => {
 
   useEffect(() => {
     loadThemes();
+    setValue('color', '#000000');
   }, []);
 
   /**
@@ -399,6 +404,7 @@ const Form = () => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
+    console.log('onSave', fieldsNew);
     initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
@@ -411,8 +417,10 @@ const Form = () => {
           (initialField: any) => initialField.name !== el.name,
         )
       ) {
+        console.log(fieldValue);
         addFieldVal(fieldValue);
       } else if (!initialFields) {
+        console.log(fieldValue);
         addFieldVal(fieldValue);
       }
     });
@@ -428,187 +436,223 @@ const Form = () => {
     loadFieldTypes();
   }, []);
 
+  function next() {
+    setFormStep((i) => i + 1);
+  }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
+
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
+  const titles = ['Details', 'Configure', 'Fields'];
+
   return (
-    <Box>
-      <PageHeader
-        title={`${cId ? 'Edit' : 'New '} Variant`}
-        desc="Manage Variants">
-        <Box />
-      </PageHeader>
-      <Flex variant="layout.pageFrame">
-        <Flex sx={{ maxWidth: '100ch', mx: `auto` }}>
-          <Box sx={{ minWidth: '60ch' }}>
-            <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
-              <Flex>
-                <Box sx={{ flexGrow: 1 }}>
-                  <Box>
-                    <Field
-                      register={register}
-                      error={errors.name}
-                      label="Name"
-                      name="name"
-                      defaultValue=""
-                      placeholder="Variant Name"
-                    />
-                  </Box>
-                  <Box>
-                    <FieldText
-                      register={register}
-                      label="Description"
-                      name="description"
-                      defaultValue="Something to guide the user here"
-                    />
-                    {errors.description && errors.description.message && (
-                      <Text variant="error">
-                        {errors.description.message as string}
-                      </Text>
-                    )}
-                  </Box>
-                  <Box>
-                    <Field
-                      register={register}
-                      error={errors.prefix}
-                      label="Prefix"
-                      name="prefix"
-                      defaultValue=""
-                    />
-                  </Box>
-                  <Box>
-                    <FieldColor
-                      register={register}
-                      label="Color"
-                      name="color"
-                      defaultValue={
-                        (content && content?.content_type.color) || ''
-                      }
-                      onChangeColor={onChangeFields}
-                    />
-                    {errors.color && errors.color.message && (
-                      <Text variant="error">
-                        {errors.color.message as string}
-                      </Text>
-                    )}
-                  </Box>
-                  <Box px={0} pb={3}>
-                    <Label htmlFor="layout_id" mb={1}>
-                      Layout
-                    </Label>
-                    <Select
-                      id="layout_id"
-                      {...register('layout_id', { required: true })}>
-                      {!isUpdate && (
-                        <option disabled selected>
-                          select an option
-                        </option>
-                      )}
-                      {layouts &&
-                        layouts.length > 0 &&
-                        layouts.map((m: any) => (
-                          <option value={m.id} key={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                    </Select>
-                    {errors.layout_id && errors.layout_id.message && (
-                      <Text variant="error">
-                        {errors.layout_id.message as string}
-                      </Text>
-                    )}
-                  </Box>
-                  <Box px={0} pb={3}>
-                    <Label htmlFor="flow_id" mb={1}>
-                      Flow
-                    </Label>
-                    <Select
-                      id="flow_id"
-                      defaultValue=""
-                      {...register('flow_id', { required: true })}>
-                      {!isUpdate && (
-                        <option disabled selected>
-                          select an option
-                        </option>
-                      )}
-                      {flows &&
-                        flows.length > 0 &&
-                        flows.map((m: any) => (
-                          <option value={m.flow.id} key={m.flow.id}>
-                            {m.flow.name}
-                          </option>
-                        ))}
-                    </Select>
-                    {errors.flow_id && errors.flow_id.message && (
-                      <Text variant="error">
-                        {errors.flow_id.message as string}
-                      </Text>
-                    )}
-                  </Box>
-
-                  <Box sx={{ display: 'none' }}>
-                    <Input
-                      id="edit"
-                      defaultValue={0}
-                      hidden={true}
-                      {...register('edit', { required: true })}
-                    />
-                  </Box>
-
-                  <Box px={0} pb={3}>
-                    <Label htmlFor="theme_id" mb={1}>
-                      Themes
-                    </Label>
-                    <Select
-                      id="theme_id"
-                      defaultValue=""
-                      {...register('theme_id', { required: true })}>
-                      {!isUpdate && (
-                        <option disabled selected>
-                          select an option
-                        </option>
-                      )}
-                      {themes &&
-                        themes.length > 0 &&
-                        themes.map((m: any) => (
-                          <option value={m.id} key={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                    </Select>
-                    {errors.theme_id && errors.theme_id.message && (
-                      <Text variant="error">
-                        {errors.theme_id.message as string}
-                      </Text>
-                    )}
-                  </Box>
-                </Box>
-                {errors.exampleRequired && <Text>This field is required</Text>}
-              </Flex>
-
-              <Button variant="btnPrimaryLarge">Save</Button>
+    <Flex
+      sx={{
+        height: '100vh',
+        overflow: 'scroll',
+        flexDirection: 'column',
+      }}>
+      <Text
+        variant="pB"
+        sx={{
+          p: 4,
+        }}>
+        {isEdit ? 'Edit Variant' : 'Create new variant'}
+      </Text>
+      <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
+      <Box
+        sx={{ height: '100%' }}
+        p={4}
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            height: 'calc(100% - 80px)',
+            overflowY: 'auto',
+          }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+              <Field
+                register={register}
+                error={errors.name}
+                label="Name"
+                name="name"
+                defaultValue=""
+                placeholder="Variant Name"
+              />
+              <Box mt={3}>
+                <FieldText
+                  register={register}
+                  label="Description"
+                  name="description"
+                  defaultValue="Something to guide the user here"
+                />
+                {errors.description && errors.description.message && (
+                  <Text variant="error">
+                    {errors.description.message as string}
+                  </Text>
+                )}
+              </Box>
+              <Box mt={3}>
+                <Field
+                  register={register}
+                  error={errors.prefix}
+                  label="Prefix"
+                  name="prefix"
+                  defaultValue=""
+                />
+              </Box>
             </Box>
-          </Box>
-          <Box sx={{ flexGrow: 1, width: '340px' }}>
-            <FieldEditor
-              fields={fields}
-              content={content}
-              fieldtypes={fieldtypes}
-              removeField={removeField}
-              addField={addField}
-              onSave={onFieldsSave}
-            />
-            <Box sx={{ mx: 4 }}>
-              {cId && (
-                <Button
-                  type="button"
-                  variant="btnPrimaryLarge"
-                  onClick={() => deleteMe(cId)}>
-                  Delete
-                </Button>
-              )}
+            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+              <Box>
+                <FieldColor
+                  register={register}
+                  label="Color"
+                  name="color"
+                  defaultValue={(content && content?.content_type.color) || ''}
+                  onChangeColor={onChangeFields}
+                />
+                {errors.color && errors.color.message && (
+                  <Text variant="error">{errors.color.message as string}</Text>
+                )}
+              </Box>
+              <Box mt={3}>
+                <Label htmlFor="layout_id">Layout</Label>
+                <Select
+                  id="layout_id"
+                  {...register('layout_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {layouts &&
+                    layouts.length > 0 &&
+                    layouts.map((m: any) => (
+                      <option value={m.id} key={m.id}>
+                        {m.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.layout_id && errors.layout_id.message && (
+                  <Text variant="error">
+                    {errors.layout_id.message as string}
+                  </Text>
+                )}
+              </Box>
+              <Box sx={{ mt: 3 }}>
+                <Label htmlFor="flow_id">Flow</Label>
+                <Select
+                  id="flow_id"
+                  defaultValue=""
+                  {...register('flow_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {flows &&
+                    flows.length > 0 &&
+                    flows.map((m: any) => (
+                      <option value={m.flow.id} key={m.flow.id}>
+                        {m.flow.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.flow_id && errors.flow_id.message && (
+                  <Text variant="error">
+                    {errors.flow_id.message as string}
+                  </Text>
+                )}
+              </Box>
+
+              <Box sx={{ display: 'none' }}>
+                <Input
+                  id="edit"
+                  defaultValue={0}
+                  hidden={true}
+                  {...register('edit', { required: true })}
+                />
+              </Box>
+
+              <Box sx={{ mt: 3 }}>
+                <Label htmlFor="theme_id">Themes</Label>
+                <Select
+                  id="theme_id"
+                  defaultValue=""
+                  {...register('theme_id', { required: true })}>
+                  {!isUpdate && (
+                    <option disabled selected>
+                      select an option
+                    </option>
+                  )}
+                  {themes &&
+                    themes.length > 0 &&
+                    themes.map((m: any) => (
+                      <option value={m.id} key={m.id}>
+                        {m.name}
+                      </option>
+                    ))}
+                </Select>
+                {errors.theme_id && errors.theme_id.message && (
+                  <Text variant="error">
+                    {errors.theme_id.message as string}
+                  </Text>
+                )}
+              </Box>
+            </Box>
+            <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
+              <FieldEditor
+                fields={fields}
+                content={content}
+                fieldtypes={fieldtypes}
+                removeField={removeField}
+                addField={addField}
+                onSave={onFieldsSave}
+                trigger={trigger}
+              />
             </Box>
           </Box>
         </Flex>
-      </Flex>
-    </Box>
+
+        <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
+          <Flex>
+            <Button
+              sx={{
+                display: formStep >= 1 ? 'block' : 'none',
+              }}
+              variant="buttonSecondary"
+              type="button"
+              onClick={prev}>
+              Prev
+            </Button>
+            <Button
+              ml={2}
+              sx={{
+                display: formStep !== titles.length - 1 ? 'block' : 'none',
+              }}
+              type="button"
+              onClick={next}
+              variant="buttonPrimary">
+              Next
+            </Button>
+          </Flex>
+          <Button
+            disabled={
+              !isValid || fields === undefined || (fields && fields.length < 1)
+            }
+            variant="buttonPrimary"
+            type="submit"
+            ml={2}>
+            {isEdit ? 'Update' : 'Create'}
+          </Button>
+        </Flex>
+      </Box>
+    </Flex>
   );
 };
 export default Form;

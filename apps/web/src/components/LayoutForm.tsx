@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
-
+import {
+  Disclosure,
+  DisclosureContent,
+  DisclosureProvider,
+} from '@ariakit/react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -13,7 +18,6 @@ import {
   Button,
   Text,
   Image,
-  Link,
 } from 'theme-ui';
 import * as z from 'zod';
 
@@ -26,13 +30,10 @@ import {
 } from '../utils/models';
 import { uuidRegex } from '../utils/regex';
 import { Asset, Engine } from '../utils/types';
-
 import AssetForm from './AssetForm';
-import Error from './Error';
 import Field from './Field';
 import FieldText from './FieldText';
-import { TickIcon } from './Icons';
-import PdfViewer from './PdfViewer';
+import { ArrowDropdown } from './Icons';
 
 export interface Layouts {
   layout: Layout;
@@ -76,6 +77,7 @@ interface Props {
   setOpen: any;
   setRerender?: any;
   cId?: string;
+  step?: number;
 }
 
 type FormValues = {
@@ -113,7 +115,7 @@ const schema = z.object({
   unit: z.any(),
 });
 
-const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
+const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const {
     register,
     control,
@@ -125,10 +127,119 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
   const [engines, setEngines] = useState<Array<Engine>>([]);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [layout, setLayout] = useState<Layout>();
-
-  // const { accessToken } = useAuth();
-
+  const [formStep, setFormStep] = useState(step);
   const [isEdit, setEdit] = useState<boolean>(false);
+  const [isDeleteAssets, setDeleteAssets] = useState<boolean>(false);
+
+  useEffect(() => {
+    deleteAllAsset();
+  }, [isDeleteAssets]);
+
+  useEffect(() => {
+    console.log('🥋🐼', engines);
+    if (engines && engines.length > 0) {
+      const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
+      pandocEngine && setValue('engine_uuid', pandocEngine?.id);
+    }
+  }, [engines]);
+
+  useEffect(() => {
+    if (layout) {
+      setEdit(true);
+      const assetsList: Asset[] = layout.assets;
+
+      assetsList.forEach((a: Asset) => {
+        addUploads(a);
+      });
+
+      setValue('name', layout.name);
+      setValue('slug', layout.slug);
+      setValue('height', layout.height || 40);
+      setValue('width', layout?.width || 40);
+      setValue('description', layout?.description);
+      setValue('engine_uuid', layout?.engine?.id);
+
+      trigger(['name', 'slug', 'description']);
+    }
+  }, [layout]);
+
+  useEffect(() => {
+    loadEngine();
+  }, []);
+
+  /**
+   * If in edit mode
+   * @param data
+   */
+
+  useEffect(() => {
+    if (cId) {
+      loadLayout(cId);
+    }
+  }, [cId]);
+
+  /**
+   * Load all Engines
+   * @param token
+   */
+  const loadEngine = () => {
+    fetchAPI('engines').then((data: any) => {
+      const res: Engine[] = data.engines;
+      setEngines(res);
+    });
+  };
+
+  /**
+   * Load Layout Edit Details
+   * @param token
+   */
+  const loadLayout = (cid: string) => {
+    fetchAPI(`layouts/${cid}`).then((data: any) => {
+      const res: Layout = data.layout;
+      setLayout(res);
+    });
+  };
+
+  /**
+   * Upload Assets
+   * @param data
+   */
+  const addUploads = (data: Asset) => {
+    setAssets((prevArray) => [...prevArray, data]);
+  };
+
+  const deleteAllAsset = () => {
+    if (layout && layout.assets && layout.assets.length > 0) {
+      const deletePromises = layout.assets.map((asset) => {
+        return deleteAPI(`layouts/${layout.id}/assets/${asset.id}`);
+      });
+      toast.promise(Promise.all(deletePromises), {
+        loading: 'Loading...',
+        success: () => {
+          setAssets([]);
+          return `Successfully deleted all assets`;
+        },
+        error: () => {
+          setAssets([]);
+          return `Failed to delete all assets`;
+        },
+      });
+    }
+    setAssets([]);
+  };
+
+  function next() {
+    setFormStep((i) => i + 1);
+  }
+  function prev() {
+    setFormStep((i) => i - 1);
+  }
+
+  const goTo = (step: number) => {
+    setFormStep(step);
+  };
+
+  const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
 
   /**
    * Form Submit
@@ -145,7 +256,6 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
 
       // Remove comma in the end
       assetsPath = a.join(',');
-      console.log('🔥assets path', a.join(','));
     }
 
     const formData = new FormData();
@@ -195,284 +305,55 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
     }
   };
 
-  /**
-   * Load all Engines
-   * @param token
-   */
-  const loadEngine = () => {
-    fetchAPI('engines').then((data: any) => {
-      const res: Engine[] = data.engines;
-      setEngines(res);
-    });
-  };
-
-  /**
-   * Load Layout Edit Details
-   * @param token
-   */
-  const loadLayout = (cid: string) => {
-    fetchAPI(`layouts/${cid}`).then((data: any) => {
-      const res: Layout = data.layout;
-      setLayout(res);
-    });
-  };
-
-  useEffect(() => {
-    if (layout) {
-      setEdit(true);
-      const assetsList: Asset[] = layout.assets;
-
-      assetsList.forEach((a: Asset) => {
-        addUploads(a);
-      });
-
-      setValue('name', layout.name);
-      setValue('slug', layout.slug);
-      setValue('height', layout.height);
-      setValue('width', layout?.width);
-      setValue('description', layout?.description);
-      setValue('engine_uuid', layout?.engine?.id);
-
-      trigger(['name', 'slug', 'description']);
-    }
-  }, [layout]);
-
-  useEffect(() => {
-    loadEngine();
-  }, []);
-
-  /**
-   * If in edit mode
-   * @param data
-   */
-
-  useEffect(() => {
-    if (cId) {
-      loadLayout(cId);
-    }
-  }, [cId]);
-
-  /**
-   * Upload Assets
-   * @param data
-   */
-  const addUploads = (data: Asset) => {
-    setAssets((prevArray) => [...prevArray, data]);
-  };
-
-  const deleteAsset = (lid: string, id: string) => {
-    const indexOf = assets.findIndex((e) => e.id === id);
-    assets.splice(indexOf, 1);
-    setAssets(assets.splice(indexOf, 1));
-    if (layout?.assets.some((asset) => asset.id === id)) {
-      deleteAPI(`layouts/${lid}/assets/${id}`)
-        .then(() => {
-          toast.success('Deleted Asset', {
-            duration: 1000,
-            position: 'top-right',
-          });
-        })
-        .catch(() => {
-          toast.error('Delete Asset Failed', {
-            duration: 1000,
-            position: 'top-right',
-          });
-        });
-    }
-  };
-
-  const [formStep, setFormStep] = useState(0);
-  function next() {
-    setFormStep((i) => i + 1);
-  }
-  function prev() {
-    setFormStep((i) => i - 1);
-  }
-
-  const goTo = (step: number) => {
-    setFormStep(step);
-  };
-
-  const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
-
-  const [isAssetValid, setAssetValid] = React.useState(false);
-
   return (
     <Flex
       sx={{
-        p: 4,
-        pb: '44px',
-        height: '100%',
+        height: '100vh',
+        overflow: 'scroll',
         flexDirection: 'column',
-        gap: '28px',
       }}>
       <Text
+        variant="pB"
         sx={{
-          fontSize: 2,
-          color: 'text',
-          letterSpacing: '-0.2px',
-          fontWeight: 700,
+          p: 4,
         }}>
         {isEdit ? 'Edit layout' : 'Create new layout'}
       </Text>
-      <Flex>
-        <Flex sx={{ alignItems: 'center' }}>
-          {formStep === 0 ? (
-            <Flex
-              sx={{
-                width: '24px',
-                height: '24px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: 'gray.600',
-                // bg: transparentize('gray.100', 0.4),
-                borderRadius: '50%',
-              }}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>1</Text>
-            </Flex>
-          ) : (
-            <Flex
-              sx={{ justifyItems: 'center', alignItems: 'center' }}
-              color="green.5">
-              <TickIcon fontSize={'24px'} color="inherit" />
-            </Flex>
-          )}
-          <Text
-            ml={'10px'}
-            onClick={() => goTo(0)}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color: formStep === 0 ? 'text' : 'gray.600',
-            }}>
-            Basic details
-          </Text>
-        </Flex>
-        <Flex ml={4} sx={{ alignItems: 'center' }}>
-          {isAssetValid ? (
-            <Flex
-              sx={{ justifyItems: 'center', alignItems: 'center' }}
-              color="green.5">
-              <TickIcon fontSize={'24px'} color="inherit" />
-            </Flex>
-          ) : (
-            <Flex
-              sx={{
-                width: '24px',
-                height: '24px',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: formStep === 0 ? 'gray.500' : 'gray.600',
-                // bg:
-                // formStep === 0 ? 'neutral.100' : transparentize('gray.100', 0.7),
-                borderRadius: '50%',
-              }}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>2</Text>
-            </Flex>
-          )}
-          <Text
-            onClick={() => goTo(1)}
-            ml={'10px'}
-            sx={{
-              fontSize: 2,
-              fontWeight: 400,
-              color:
-                formStep === 0
-                  ? 'gray.500'
-                  : isAssetValid
-                    ? 'gray.600'
-                    : 'gray.900',
-            }}>
-            Set Background
-          </Text>
-        </Flex>
-      </Flex>
-      <Container sx={{ styleEl }}>
+      <StepsIndicator
+        titles={['Basic Details', 'Set Background']}
+        formStep={formStep}
+        goTo={goTo}
+      />
+      <Container sx={{ styleEl, px: 4 }}>
         <Box>
-          {formStep >= 1 && (
-            <section>
-              <Box>
-                <Box
-                  pt={3}
-                  sx={{
-                    maxHeight: '400px',
-                    overflow: 'scroll',
-                    objectFit: 'contain',
-                  }}>
-                  {assets &&
-                    assets.length > 0 &&
-                    assets.map((m: Asset) => (
-                      <Box
-                        key={m.id}
-                        sx={{
-                          border: 'solid 1px',
-                          borderColor: 'border',
-                          bg: 'base',
-                        }}>
-                        <Box
-                          sx={{
-                            mt: 4,
-                            border: 'solid 1px',
-                            borderColor: 'border',
-                          }}>
-                          <Box
-                            sx={{
-                              overflow: 'scroll',
-                              maxHeight: '200px',
-                              objectFit: 'contain',
-                            }}>
-                            {m && m.file && (
-                              <PdfViewer
-                                // url={contents.content.build}
-                                url={`${m.file}`}
-                                pageNumber={1}
-                              />
-                            )}
-                          </Box>
-                        </Box>
-                        <Text as="h6" sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
-                          {m.name}
-                        </Text>
-                        <Link target="_blank" href={`${API_HOST}/${m.file}`}>
-                          Download
-                        </Link>
-                        <Box>
-                          <Button
-                            sx={{
-                              fontSize: 1,
-                              px: 1,
-                              py: 1,
-                              bg: 'white',
-                              color: 'red.500',
-                              border: 'solid 1px',
-                              borderColor: 'red.1000',
-                            }}
-                            onClick={() => deleteAsset(cId, m.id)}>
-                            Delete
-                          </Button>
-                        </Box>
-                      </Box>
-                    ))}
-                </Box>
-                <AssetForm setAsset={setAssetValid} onUpload={addUploads} />
-              </Box>
-            </section>
-          )}
-
           {/* form start */}
           <Box
             sx={{
               height: 'calc(100vh - 200px)',
-              pt: 4,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
             }}
             as="form"
             onSubmit={handleSubmit(onSubmit)}>
+            {formStep >= 1 && (
+              <section>
+                <Box>
+                  <AssetForm
+                    onUpload={addUploads}
+                    assets={assets}
+                    setDeleteAssets={setDeleteAssets}
+                  />
+                </Box>
+              </section>
+            )}
             {formStep >= 0 && (
               <Container
-                sx={formStep > 0 ? { display: 'none' } : { display: 'block' }}>
+                sx={
+                  formStep > 0
+                    ? { display: 'none' }
+                    : { display: 'block', pt: 4 }
+                }>
                 <Flex sx={{ flexDirection: 'column', gap: '28px' }}>
                   <Box>
                     <Field
@@ -497,7 +378,12 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                         </Select>
                       )}
                     />
-                    {errors.slug && <Error text={errors.slug.message} />}
+                    {errors.slug && (
+                      <Text variant="error">{errors.slug.message}</Text>
+                    )}
+                    <Text as="p" variant="subR" mt={2}>
+                      Slugs are layout templates used for rendering documents
+                    </Text>
                   </Box>
                   <Box>
                     <FieldText
@@ -521,31 +407,63 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                       {...register('screenshot')}
                     />
                   </Box>
-                  <Box>
-                    <Label htmlFor="engine_uuid">Engine ID</Label>
-                    <Controller
-                      control={control}
-                      name="engine_uuid"
-                      rules={{ required: 'Please select a Engine ID' }}
-                      render={({ field }) => (
-                        <Select {...field}>
-                          <option disabled selected>
-                            select an option
-                          </option>
-                          {engines &&
-                            engines.length > 0 &&
-                            engines.map((m: any) => (
-                              <option key={m.id} value={m.id}>
-                                {m.name}
-                              </option>
-                            ))}
-                        </Select>
-                      )}
-                    />
-                    {errors.engine_uuid && (
-                      <Error text={errors.engine_uuid.message} />
-                    )}
-                  </Box>
+                  <DisclosureProvider>
+                    <Disclosure
+                      as={Box}
+                      sx={{
+                        border: 'none',
+                        bg: 'none',
+                        cursor: 'pointer',
+                        width: 'fit-content',
+                        color: 'green.700',
+                        '&[aria-expanded="true"]': {
+                          '& svg': {
+                            transform: 'rotate(-180deg)',
+                            transition: 'transform 0.3s ease',
+                          },
+                        },
+                        '&[aria-expanded="false"]': {
+                          '& svg': {
+                            transform: 'rotate(0deg)',
+                            transition: 'transform 0.3s ease',
+                          },
+                        },
+                      }}>
+                      <Flex sx={{ alignItems: 'center' }}>
+                        <Text variant="pM" mr={2}>
+                          Advanced
+                        </Text>
+                        <ArrowDropdown />
+                      </Flex>
+                    </Disclosure>
+                    <DisclosureContent>
+                      <Box>
+                        <Label htmlFor="engine_uuid">Engine ID</Label>
+                        <Controller
+                          control={control}
+                          name="engine_uuid"
+                          rules={{ required: 'Please select a Engine ID' }}
+                          render={({ field }) => (
+                            <Select {...field}>
+                              {engines &&
+                                engines.length > 0 &&
+                                engines.map((m: any) => (
+                                  <option key={m.id} value={m.id}>
+                                    {m.name}
+                                  </option>
+                                ))}
+                            </Select>
+                          )}
+                        />
+                        {errors.engine_uuid && (
+                          <Text variant="error">
+                            {' '}
+                            {errors.engine_uuid.message}
+                          </Text>
+                        )}
+                      </Box>
+                    </DisclosureContent>
+                  </DisclosureProvider>
                   <Box mt={3}>
                     <Flex sx={{ display: 'none' }}>
                       <Field
@@ -582,43 +500,26 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
                   disabled={!isValid}
                   type="button"
                   onClick={next}
-                  variant="buttonPrimary"
-                  sx={{
-                    ':disabled': {
-                      bg: 'gray.500',
-                    },
-                  }}>
+                  variant="buttonPrimary">
                   Next
                 </Button>
               )}
               {formStep === 1 && (
-                <>
+                <Box>
                   <Button
-                    variant="disabled"
-                    // variant=""
+                    variant="buttonSecondary"
                     type="button"
-                    onClick={prev}
-                    sx={{
-                      bg: 'neutral.100',
-                      color: 'gray.900',
-                    }}>
-                    <Text as={'p'} variant="pm">
-                      Prev
-                    </Text>
+                    onClick={prev}>
+                    Prev
                   </Button>
                   <Button
                     disabled={!isValid || assets.length < 1}
                     variant="buttonPrimary"
                     type="submit"
-                    ml={2}
-                    sx={{
-                      ':disabled': {
-                        bg: 'gray.500',
-                      },
-                    }}>
+                    ml={2}>
                     {isEdit ? 'Update' : 'Create'}
                   </Button>
-                </>
+                </Box>
               )}
             </Flex>
           </Box>
@@ -628,4 +529,4 @@ const Form = ({ setOpen, setRerender, cId = '' }: Props) => {
     </Flex>
   );
 };
-export default Form;
+export default LayoutForm;

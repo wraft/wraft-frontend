@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-
-import { Document, Page } from 'react-pdf';
-import { pdfjs } from 'react-pdf';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { Text } from 'theme-ui';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -41,7 +39,7 @@ const PdfViewer = ({ url }: PdfViewerProps) => {
           <Page key={`page_${index + 1}`} pageNumber={index + 1} />
         ))}
       </Document>
-      <Text>{pageNumber}</Text>
+      <Text sx={{ display: 'none' }}>{pageNumber}</Text>
     </React.Fragment>
   );
 };

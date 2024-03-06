@@ -1,9 +1,6 @@
 import React from 'react';
-
-import { Box } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 import { Label, Textarea } from 'theme-ui';
-
-import Error from './Error';
 
 interface Props {
   error?: any;
@@ -11,6 +8,8 @@ interface Props {
   label: string;
   name: string;
   defaultValue: string;
+  disabled?: boolean;
+  view?: boolean;
 }
 
 const FieldText: React.FC<Props> = ({
@@ -19,21 +18,25 @@ const FieldText: React.FC<Props> = ({
   label,
   register,
   defaultValue,
+  disabled,
+  view = false,
 }) => {
   return (
-    <Box pb={2}>
-      <Label htmlFor="description" mb={1}>
-        {label}
-      </Label>
+    <Box>
+      <Label htmlFor="description">{label}</Label>
       <Textarea
         rows={3}
         id={name}
-        // name={name}
         defaultValue={defaultValue}
-        // ref={register({ required: true })}
         {...register(name, { required: `${label} is required` })}
+        disabled={disabled || view}
+        sx={{
+          ':disabled': {
+            [view ? 'color' : '']: 'text',
+          },
+        }}
       />
-      {error && <Error text={error.message} />}
+      {error && <Text variant="error"> {error.message}</Text>}
     </Box>
   );
 };

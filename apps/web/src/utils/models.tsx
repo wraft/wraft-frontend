@@ -69,10 +69,22 @@ export const fetchAPI = (path: any, query = '') =>
 /**
  * Load postAPI
  */
-export const postAPI = (path: string, body: any) =>
+export const postAPI = (
+  path: string,
+  body: any,
+  onProgress?: (percentage: number) => void,
+) =>
   new Promise((resolve, reject) => {
     api
-      .post(`/${path}`, body)
+      .post(`/${path}`, body, {
+        onUploadProgress: (progressEvent) => {
+          if (onProgress) {
+            const total = progressEvent.total || 1;
+            const percentage = Math.round((progressEvent.loaded * 100) / total);
+            onProgress(percentage);
+          }
+        },
+      })
       .then((response) => {
         resolve(response.data);
       })
@@ -128,10 +140,10 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
 /**
  * delete API
  */
-export const deleteAPI = (path: any) =>
+export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
     api
-      .delete(`/${path}`)
+      .delete(`/${path}`, body || {})
       .then((response) => {
         resolve(response.data);
       })
@@ -171,8 +183,6 @@ export const fetchUserInfo = () =>
  */
 
 export const loadEntity = (token: string, path: string, onSuccess: any) => {
-  console.log('API_HOST', API_HOST);
-
   fetch(`${API_HOST}/api/v1/${path}`, {
     method: 'GET',
     headers: {

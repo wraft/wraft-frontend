@@ -1,50 +1,29 @@
-/* eslint-disable react/display-name */
-import React, { ReactElement, memo } from 'react';
-
+import React, { memo } from 'react';
 import NextLink from 'next/link';
-import { Box } from 'theme-ui';
-
-// interface Props {
-//   children: React.ReactNode;
-//   href: string;
-//   icon?: ReactElement;
-//   variant?: string;
-//   path?: string;
-
-// }
+import { Link } from '@wraft/ui';
 
 interface AnchorType {
   href: string;
   locale?: string;
   target?: string;
   path?: string;
-  variant?: string;
-  icon?: ReactElement;
+  variant?: any;
+  type?: any;
+  icon?: React.ElementType;
+  onClick?: any;
 }
 
-// const StyledLink = styled.a`
-//   text-decoration: none;
-//   color: ${theme.colors.white};
-// `;
-
-// const NavLink: React.FC<Props> = ({ href, children, icon, path }) => {
-//   return (
-//     <NextLink href={href} as={path || ''} passHref>
-//       {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
-//       {children}
-//     </NextLink>
-//   );
-// };
-
+// eslint-disable-next-line react/display-name
 export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
   ({
     children,
     href,
     locale = 'en',
-    // target,
     path,
     icon,
-    // variant = 'btnNavLink',
+    variant = 'default',
+    type,
+    onClick,
   }) => {
     if (!href) return <>{children}</>;
     return (
@@ -52,14 +31,12 @@ export const NextLinkText: React.FC<React.PropsWithChildren<AnchorType>> = memo(
         href={href}
         as={path || ''}
         locale={locale}
+        onClick={onClick}
         passHref
         legacyBehavior>
-        {/* <Link href="" target={target} variant={variant}> */}
-        <Box>
-          {icon && <Box sx={{ pt: 1 }}>{icon}</Box>}
+        <Link variant={variant} Icon={icon} type={type}>
           {children}
-        </Box>
-        {/* </Link> */}
+        </Link>
       </NextLink>
     );
   },
