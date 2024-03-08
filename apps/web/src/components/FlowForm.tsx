@@ -299,7 +299,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           setOpen(false);
           setRerender((prev: boolean) => !prev);
         })
-        .then((error: any) => {
+        .catch((error: any) => {
           toast.error(
             error?.response?.data?.errors?.name[0] || 'Flow created',
             {
@@ -310,7 +310,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           if (errorRef.current) {
             const errorElement = errorRef.current;
             if (errorElement) {
-              errorElement.innerText = error.response.data.errors.name[0];
+              errorElement.innerText = error.response?.data?.errors?.name?.[0];
             }
           }
         });
