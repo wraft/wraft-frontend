@@ -69,7 +69,7 @@ const columns = [
 
 const PendingDocumentBlock = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [contents, setContents] = useState<any>();
+  const [contents, setContents] = useState<any>([]);
 
   const { userProfile } = useAuth();
 
