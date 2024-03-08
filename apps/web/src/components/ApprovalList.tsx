@@ -129,10 +129,10 @@ const Approvals = () => {
 
   const loadData = () => {
     setLoading(true);
-    fetchAPI('users/instance-approval-systems')
+    fetchAPI('users/list_pending_approvals')
       .then((data: any) => {
         setLoading(false);
-        const res: ApprovaSystemItem[] = data.instance_approval_systems;
+        const res: any[] = data.pending_approvals;
         setContents(res);
       })
       .catch(() => {
