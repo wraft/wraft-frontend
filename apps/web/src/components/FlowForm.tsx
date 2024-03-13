@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
-import ApprovalFormBase from './ApprovalCreate';
 import { IconWrapper } from './Atoms';
 import { Droppable } from './Droppable';
 import Field from './Field';
@@ -174,15 +173,7 @@ const StatesForm = ({
     <Box>
       <Label>Flow states</Label>
       {states && (
-        <Box
-          // ml={3}
-          // mb={0}
-          sx={
-            {
-              // border: '1px solid #E4E9EF',
-              // borderRadius: '4px 4px 4px 4px',
-            }
-          }>
+        <Box>
           <Droppable
             list={state}
             setOrder={setOrder}
@@ -335,6 +326,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     const newState = {
       state: e,
       order: (states?.length && states.length + 1) || 1,
+      approvers: [],
     };
 
     CreateState(newState);
@@ -476,13 +468,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           )}
         </Flex>
       </Flex>
-      <Modal isOpen={approval} onClose={() => setAddState(false)}>
-        <ApprovalFormBase
-          closeModal={() => setApproval(false)}
-          states={states}
-          parent={cId}
-        />
-      </Modal>
       <Modal
         isOpen={addState}
         onClose={() => setAddState(false)}
