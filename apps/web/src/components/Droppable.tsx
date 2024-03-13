@@ -17,8 +17,8 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { DragIcon } from '@wraft/icon';
-import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
+import { DeleteIcon, DragIcon } from '@wraft/icon';
+import { Avatar, Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 import toast from 'react-hot-toast';
 
 import { fetchAPI, putAPI } from 'utils/models';
@@ -127,10 +127,22 @@ const SortableItem = (props: {
         )[0];
         setState(currentState.state);
         console.log(state, data, currentState);
-        // fetchAPI(`states/${currentState.state.id}`).then((data: any) => {
-        //   setApprovers(data.state.approvers);
-        //   console.log('approvers:----->', data.state.approvers);
-        // });
+        if (currentState.approvers) {
+          setApprovers(currentState.approvers);
+        } else {
+          setApprovers([
+            {
+              name: 'Jonny',
+              id: '790cbfab-4a1e-44f0-bb97-6348bfb3ffd7',
+              image: 'https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg',
+            },
+            {
+              name: 'Sony',
+              id: '790cbfab-4a1e-44f0-bb97-6348bfb3ffd7',
+              image: 'https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg',
+            },
+          ]);
+        }
       });
     }
   }, []);
@@ -141,6 +153,22 @@ const SortableItem = (props: {
         state: props.name,
         order: `${props.index}`,
         approvers: { remove: [], add: [e.id] },
+      });
+
+      toast.promise(request, {
+        loading: 'Updating ...',
+        success: 'Updated Successfully',
+        error: 'Update Failed',
+      });
+    }
+  };
+
+  const onRemoveUser = (e: any) => {
+    if (e.id) {
+      const request = putAPI(`states/${state.id}`, {
+        state: props.name,
+        order: `${props.index}`,
+        approvers: { remove: [e.id], add: [] },
       });
 
       toast.promise(request, {
@@ -282,8 +310,21 @@ const SortableItem = (props: {
         </Flex>
       </Flex>
       <Box m={3}>
+        {approvers &&
+          approvers.map((e: any) => (
+            <Flex key={e.id} sx={{ justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
+                <Avatar src={e.image} alt="profile" width={18} height={18} />
+                <Text as={'p'} ml={3} variant="subM" sx={{ color: 'gray.900' }}>
+                  {e.name}
+                </Text>
+              </Box>
+              <Box onClick={() => onRemoveUser(e)} sx={{ cursor: 'pointefr' }}>
+                <DeleteIcon width={12} height={12} />
+              </Box>
+            </Flex>
+          ))}
         <Input onChange={(e) => onChangeInput(e)}></Input>
-        {approvers && approvers.map((e: any) => <div key={e.id}>{e.name}</div>)}
         {users &&
           users.map((x: any) => (
             <Box
