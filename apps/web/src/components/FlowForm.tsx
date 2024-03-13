@@ -175,12 +175,14 @@ const StatesForm = ({
       <Label>Flow states</Label>
       {states && (
         <Box
-          ml={3}
-          mb={0}
-          sx={{
-            border: '1px solid #E4E9EF',
-            borderRadius: '4px 4px 4px 4px',
-          }}>
+          // ml={3}
+          // mb={0}
+          sx={
+            {
+              // border: '1px solid #E4E9EF',
+              // borderRadius: '4px 4px 4px 4px',
+            }
+          }>
           <Droppable
             list={state}
             setOrder={setOrder}
@@ -403,7 +405,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Text variant="error" ref={errorRef} />
             </Box>
           </Flex>
-          <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+          <Box
+            sx={{
+              display: formStep === 1 ? 'block' : 'none',
+              height: 'calc( 100vh - 250px )',
+              overflowY: 'auto',
+              overflowX: 'visible',
+            }}>
             {edit && states && (
               <StatesForm
                 onAttachApproval={onAttachApproval}
