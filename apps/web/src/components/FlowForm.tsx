@@ -3,13 +3,12 @@ import Router, { useRouter } from 'next/router';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
+import { Box, Container, Button, Text, Flex } from 'theme-ui';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
 import { IconWrapper } from './Atoms';
 import { Droppable } from './Droppable';
 import Field from './Field';
-import Modal from './Modal';
 
 export interface States {
   total_pages: number;
@@ -57,54 +56,6 @@ export interface StateFormProps {
   dialog?: any;
   onSorted?: any;
 }
-
-/**
- * Create State
- * @param props
- * @returns
- */
-
-interface StateStateFormProps {
-  onSave: any;
-  setAddState: any;
-}
-
-const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
-  const [newState, setNewState] = useState<string | any>(null);
-
-  const onChangeInput = (e: any) => {
-    setNewState(e.currentTarget.value);
-  };
-
-  return (
-    <Box p={4} sx={{ minWidth: '400px' }}>
-      <Box>
-        <Label>State Name</Label>
-        <Input
-          name="state_name"
-          placeholder="New State Name"
-          onChange={onChangeInput}
-        />
-      </Box>
-      <Button
-        type="button"
-        variant="btnPrimary"
-        sx={{ p: 2, px: 3, mt: 3 }}
-        onClick={() => {
-          onSave(newState);
-          setAddState(false);
-        }}>
-        Add State
-      </Button>
-    </Box>
-  );
-};
-
-/**
- * Big Form
- * @param props
- * @returns
- */
 
 interface ItemType {
   id: string;
@@ -171,16 +122,13 @@ const StatesForm = ({
 
   return (
     <Box>
-      <Label>Flow states</Label>
       {states && (
-        <Box>
-          <Droppable
-            list={state}
-            setOrder={setOrder}
-            onAttachApproval={onAttachApproval}
-            deleteState={deleteState}
-          />
-        </Box>
+        <Droppable
+          list={state}
+          setOrder={setOrder}
+          onAttachApproval={onAttachApproval}
+          deleteState={deleteState}
+        />
       )}
     </Box>
   );
@@ -201,8 +149,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
-  const [addState, setAddState] = useState<boolean>(false);
   const [states, setStates] = useState<StateElement[]>();
+  const [initialStates, setInitialStates] = useState<StateElement[]>();
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
@@ -224,6 +172,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       const res: States = data;
+      setInitialStates(res.states);
       setStates(res.states);
     });
   };
@@ -322,9 +271,9 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    *
    */
 
-  const updateState = (e: any) => {
+  const updateState = (name: string) => {
     const newState = {
-      state: e,
+      state: name,
       order: (states?.length && states.length + 1) || 1,
       approvers: [],
     };
@@ -421,7 +370,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Button
                 type="button"
                 variant="buttonSmall"
-                onClick={() => setAddState(true)}
+                onClick={() => updateState('name')}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -468,13 +417,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           )}
         </Flex>
       </Flex>
-      <Modal
-        isOpen={addState}
-        onClose={() => setAddState(false)}
-        label="Add State"
-        aria-label="Add New State">
-        <StateStateForm onSave={updateState} setAddState={setAddState} />
-      </Modal>
     </>
   );
 };
