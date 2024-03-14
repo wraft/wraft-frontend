@@ -19,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { CloseIcon, DeleteIcon, DragIcon } from '@wraft/icon';
 import { Avatar, Box, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 import toast from 'react-hot-toast';
+import { Button } from '@wraft/ui';
 
 import { fetchAPI, putAPI } from 'utils/models';
 
@@ -309,9 +310,6 @@ const SortableItem = (props: {
                   <Text as="h4" color="text">
                     {x.name}
                   </Text>
-                  <Text as="em" color="gray.600">
-                    {x.email}
-                  </Text>
                 </Box>
               ))}
           </Box>
@@ -319,15 +317,18 @@ const SortableItem = (props: {
       </Box>
       <Box
         sx={{
-          padding: 3,
           mt: '28px',
+
           transform: CSS.Transform.toString(transform),
           transition: transition,
-        }}
-        onClick={() => {
-          props.deleteState(props.name);
         }}>
-        <CloseIcon width={18} height={18} />
+        <Button
+          variant="ghost"
+          onClick={() => {
+            props.deleteState(props.name);
+          }}>
+          <CloseIcon width={18} height={18} />
+        </Button>
       </Box>
     </Flex>
   );
