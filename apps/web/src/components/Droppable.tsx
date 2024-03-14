@@ -168,7 +168,7 @@ const SortableItem = (props: {
   };
 
   return (
-    <Flex>
+    <Flex sx={{ mt: `${props.index === 1 ? 0 : 4}` }}>
       <Box
         ref={setNodeRef}
         {...attributes}
