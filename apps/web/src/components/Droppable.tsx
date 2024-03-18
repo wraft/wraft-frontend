@@ -27,6 +27,7 @@ import { StateState } from './FlowForm';
 
 type Props = {
   states: StateState[];
+  setStates: (e: StateState[]) => void;
   onAttachApproval: any;
   deleteState: any;
   setOrder: any;
@@ -34,6 +35,7 @@ type Props = {
 
 export function Droppable({
   states,
+  setStates,
   onAttachApproval,
   deleteState,
   setOrder,
@@ -78,6 +80,8 @@ export function Droppable({
             <Box key={index}>
               <SortableItem
                 state={item}
+                states={states}
+                setStates={setStates}
                 index={index + 1}
                 onAttachApproval={onAttachApproval}
                 deleteState={deleteState}
@@ -90,12 +94,22 @@ export function Droppable({
   );
 }
 
-const SortableItem = (props: {
+type SortableItemProps = {
   index: number;
   onAttachApproval: any;
   deleteState: any;
   state: StateState;
-}) => {
+  states: StateState[];
+  setStates: (e: StateState[]) => void;
+};
+const SortableItem = ({
+  index,
+  deleteState,
+  onAttachApproval,
+  setStates,
+  state,
+  states,
+}: SortableItemProps) => {
   const {
     attributes,
     listeners,
@@ -104,7 +118,7 @@ const SortableItem = (props: {
     transition,
     isDragging,
   } = useSortable({
-    id: props.state.id,
+    id: state.id,
   });
 
   const router = useRouter();
@@ -138,7 +152,28 @@ const SortableItem = (props: {
   //   }
   // }, []);
 
-  const onUserSelect = (e: any) => {
+  const onUserSelect = (user: any) => {
+    if (states && state) {
+      const userExists = state.approvers.some(
+        (approver: any) => approver.id === user.id,
+      );
+      if (userExists) {
+        toast.error('user already exists');
+      } else {
+        const newState: StateState = {
+          ...state,
+          approvers: [...state.approvers, user],
+        };
+        const newArr = states.map((s: any) => {
+          if (s.id === state.id) {
+            return newState;
+          } else {
+            return s;
+          }
+        });
+        setStates(newArr);
+      }
+    }
     // if (e.id) {
     //   const request = putAPI(`states/${props.state.id}`, {
     //     state: props.item.state,
@@ -153,7 +188,25 @@ const SortableItem = (props: {
     // }
   };
 
-  const onRemoveUser = (e: any) => {
+  const onRemoveUser = (user: any) => {
+    console.log('remove', user);
+    if (states && state) {
+      const filterdApprovers = state.approvers.filter(
+        (a: any) => a.id !== user.id,
+      );
+      const newState: StateState = {
+        ...state,
+        approvers: filterdApprovers,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
     // if (e.id) {
     //   const request = putAPI(`states/${state.id}`, {
     //     state: props.item.state,
@@ -178,7 +231,7 @@ const SortableItem = (props: {
   };
 
   return (
-    <Flex sx={{ mt: `${props.index === 1 ? 0 : 4}` }}>
+    <Flex sx={{ mt: `${index === 1 ? 0 : 4}` }}>
       <Box
         ref={setNodeRef}
         {...attributes}
@@ -247,7 +300,7 @@ const SortableItem = (props: {
                   fontWeight: 500,
                   color: '#2C3641',
                 }}>
-                {props.state.state}
+                {state.state}
               </Box>
             </Box>
           </Box>
@@ -262,7 +315,7 @@ const SortableItem = (props: {
             }}></Flex>
         </Flex>
         <Box>
-          {props.state.approvers && props.state.approvers.length > 0 && (
+          {state.approvers && state.approvers.length > 0 && (
             <Box
               sx={{
                 mt: 3,
@@ -270,7 +323,7 @@ const SortableItem = (props: {
                 borderColor: 'border',
                 borderRadius: '4px',
               }}>
-              {props.state.approvers.map((e: any) => (
+              {state.approvers.map((e: any) => (
                 <Flex
                   key={e.id}
                   sx={{
@@ -334,7 +387,7 @@ const SortableItem = (props: {
         <Button
           variant="ghost"
           onClick={() => {
-            props.deleteState(props.state.id);
+            deleteState(state.id);
           }}>
           <CloseIcon width={18} height={18} />
         </Button>
