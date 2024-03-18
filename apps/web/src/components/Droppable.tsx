@@ -221,6 +221,24 @@ const SortableItem = ({
     // }
   };
 
+  const onNameChange = (e: any) => {
+    const newName = e.target.value;
+    if (states && state) {
+      const newState: StateState = {
+        ...state,
+        state: newName,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
+  };
+
   const onChangeInput = (e: any) => {
     console.log('search', e.currentTarget.value);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
@@ -279,7 +297,14 @@ const SortableItem = ({
             borderColor: 'border',
             borderRadius: '4px',
           }}>
-          <Box
+          <Input
+            className={`${isDragging ? 'z-10' : ''}`}
+            defaultValue={state.state}
+            onChange={(e) => {
+              onNameChange(e);
+            }}
+          />
+          {/* <Box
             as="div"
             style={{
               display: 'flex',
@@ -303,7 +328,7 @@ const SortableItem = ({
                 {state.state}
               </Box>
             </Box>
-          </Box>
+          </Box> */}
           <Flex
             data-no-dnd="true"
             sx={{
