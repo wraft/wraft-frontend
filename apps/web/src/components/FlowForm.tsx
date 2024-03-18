@@ -39,17 +39,23 @@ export interface Flow {
   id: string;
 }
 
+export interface Approver {
+  id: string;
+  name: string;
+  profile_pic: string;
+}
 export interface StateState {
-  updated_at: string;
+  approvers: Approver[];
+  id: string;
   state: string;
   order: number;
   inserted_at: string;
-  id: string;
+  updated_at: string;
 }
 
 export interface StateFormProps {
-  states: StateElement[];
   onSave: any;
+  states: StateState[];
   deleteState: React.MouseEventHandler;
   hidden?: boolean;
   onAttachApproval?: React.MouseEventHandler;
@@ -60,6 +66,7 @@ export interface StateFormProps {
 interface ItemType {
   id: string;
   name?: string;
+  approvers?: any[];
   meta?: any;
 }
 
@@ -69,7 +76,7 @@ const StatesForm = ({
   onAttachApproval,
   onSorted,
 }: StateFormProps) => {
-  const [state, setState] = useState<ItemType[]>([]);
+  // const [state, setState] = useState<ItemType[]>([]);
 
   const setOrder = (names: any) => {
     // new order
@@ -81,8 +88,7 @@ const StatesForm = ({
         const newItemx: ItemType = {
           id:
             (states &&
-              states.filter((state: any) => state.state.state === name)[0]
-                ?.state?.id) ||
+              states.filter((state: any) => state.state === name)[0]?.id) ||
             '',
           name: name,
         };
@@ -104,27 +110,30 @@ const StatesForm = ({
     }
   };
 
-  useEffect(() => {
-    if (states) {
-      const listItems: ItemType[] = [];
-      states.map((c: any) => {
-        const newItemx: ItemType = {
-          id: c?.state.id,
-          name: c?.state.state,
-          meta: state,
-        };
-        listItems.push(newItemx);
-      });
+  // useEffect(() => {
+  //   if (states) {
+  //     const listItems: ItemType[] = [];
+  //     states.map((c: any) => {
+  //       const newItemx: ItemType = {
+  //         id: c?.id,
+  //         name: c?.state,
+  //         approvers: c?.approvers,
+  //         meta: c,
+  //       };
+  //       listItems.push(newItemx);
+  //     });
 
-      setState(listItems);
-    }
-  }, [states]);
+  //     setState(listItems);
+  //   }
+  // }, [states]);
+
+  // console.log('states:', states, '/n state:', state);
 
   return (
     <Box>
       {states && (
         <Droppable
-          list={state}
+          states={states}
           setOrder={setOrder}
           onAttachApproval={onAttachApproval}
           deleteState={deleteState}
@@ -149,8 +158,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
   const [approval, setApproval] = useState<boolean>(false);
-  const [states, setStates] = useState<StateElement[]>();
-  const [initialStates, setInitialStates] = useState<StateElement[]>();
+  const [states, setStates] = useState<StateState[]>();
+  const [initialStates, setInitialStates] = useState<StateState[]>();
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
@@ -171,9 +180,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
+      console.log('👽flows/id/states', data);
       const res: States = data;
-      setInitialStates(res.states);
-      setStates(res.states);
+      const x: StateState[] = res.states.map((s: any) => {
+        return s.state;
+      });
+      setInitialStates(x);
+      setStates(x);
     });
   };
 
@@ -184,24 +197,34 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadFlow = (fId: string) => {
     fetchAPI(`flows/${fId}`).then((data: any) => {
+      console.log('👽flows:', data);
       const res: Flow = data.flow;
       setFlow(res);
       setValue('name', res?.name);
     });
   };
 
+  useEffect(() => {
+    console.log('🐼states:', states);
+  }, [states]);
+
   /**
    * Create State
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    if (cId) {
-      postAPI(`flows/${cId}/states`, data).then(() => {
-        loadStates(cId);
-      });
-    } else {
-      console.log('no flow id');
+    if (states) {
+      const newArr: StateState[] = [...states, data];
+      setStates(newArr);
     }
+    // if (cId) {
+    //   postAPI(`flows/${cId}/states`, data).then(() => {
+    //     console.log('🔥flows/id/states post:', data);
+    //     loadStates(cId);
+    //   });
+    // } else {
+    //   console.log('no flow id');
+    // }
   };
 
   /**
@@ -209,17 +232,17 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * @param data Form Data
    */
   const deleteState = (name: any) => {
-    if (states) {
-      const id = states.filter((state) => state.state.state === name)[0].state
-        .id;
-      deleteAPI(`states/${id}`).then(() => {
-        toast.success('Deleted a flow', {
-          duration: 1000,
-          position: 'top-right',
-        });
-        loadStates(cId);
-      });
-    }
+    // if (states) {
+    //   const id = states.filter((state) => state.state === name)[0].id;
+    //   deleteAPI(`states/${id}`).then(() => {
+    //     console.log('🗑️ delete state/id');
+    //     toast.success('Deleted a flow', {
+    //       duration: 1000,
+    //       position: 'top-right',
+    //     });
+    //     loadStates(cId);
+    //   });
+    // }
   };
 
   const onSubmit = async (data: any) => {
@@ -273,7 +296,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
 
   const updateState = (name: string) => {
     const newState = {
-      state: name,
+      state: name || '',
       order: (states?.length && states.length + 1) || 1,
       approvers: [],
     };
@@ -284,8 +307,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   /**
    * Update Flow Order
    * @param data Form Data
-   */
-  const onSortDone = (data: any) => {
+   */ const onSorted = (data: any) => {
     const formative = {
       states: data,
     };
@@ -359,7 +381,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 states={states}
                 onSave={CreateState}
                 deleteState={deleteState}
-                onSorted={onSortDone}
+                onSorted={onSorted}
               />
             )}
 
@@ -381,9 +403,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   <path d="M12 5l0 14" />
                   <path d="M5 12l14 0" />
                 </IconWrapper>
-                <Text variant="pM" color="green.700">
-                  Add State
-                </Text>
+                <Text variant="pM">Add State</Text>
               </Button>
             </Box>
           </Box>
