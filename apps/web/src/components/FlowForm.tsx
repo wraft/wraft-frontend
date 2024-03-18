@@ -297,9 +297,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    *
    */
 
-  const updateState = (name: string) => {
+  const AddState = () => {
     const newState = {
-      state: name || '',
+      id: undefined,
+      state: '',
       order: (states?.length && states.length + 1) || 1,
       approvers: [],
     };
@@ -396,7 +397,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Button
                 type="button"
                 variant="buttonSmall"
-                onClick={() => updateState('name')}
+                onClick={() => AddState()}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
