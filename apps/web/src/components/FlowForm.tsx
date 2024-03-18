@@ -56,6 +56,7 @@ export interface StateState {
 export interface StateFormProps {
   onSave: any;
   states: StateState[];
+  setStates: (e: StateState[]) => void;
   deleteState: React.MouseEventHandler;
   hidden?: boolean;
   onAttachApproval?: React.MouseEventHandler;
@@ -72,6 +73,7 @@ interface ItemType {
 
 const StatesForm = ({
   states,
+  setStates,
   deleteState,
   onAttachApproval,
   onSorted,
@@ -134,6 +136,7 @@ const StatesForm = ({
       {states && (
         <Droppable
           states={states}
+          setStates={setStates}
           setOrder={setOrder}
           onAttachApproval={onAttachApproval}
           deleteState={deleteState}
@@ -379,6 +382,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <StatesForm
                 onAttachApproval={onAttachApproval}
                 states={states}
+                setStates={setStates}
                 onSave={CreateState}
                 deleteState={deleteState}
                 onSorted={onSorted}
