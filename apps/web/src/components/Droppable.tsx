@@ -23,20 +23,22 @@ import { Button } from '@wraft/ui';
 
 import { fetchAPI, putAPI } from 'utils/models';
 
+import { StateState } from './FlowForm';
+
 type Props = {
-  list: any;
+  states: StateState[];
   onAttachApproval: any;
   deleteState: any;
   setOrder: any;
 };
 
 export function Droppable({
-  list,
+  states,
   onAttachApproval,
   deleteState,
   setOrder,
 }: Props) {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<StateState[]>([]);
 
   useEffect(() => {
     setOrder(items);
@@ -44,10 +46,10 @@ export function Droppable({
 
   useEffect(() => {
     // Update items when the list prop changes
-    if (list && list.length > 0) {
-      setItems(list.map((item: any) => item.name));
+    if (states && states.length > 0) {
+      setItems(states);
     }
-  }, [list]);
+  }, [states]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -71,12 +73,12 @@ export function Droppable({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        {items.map((name: any, index: number) => {
+        {items.map((item: any, index: number) => {
           return (
-            <Box key={name}>
+            <Box key={index}>
               <SortableItem
+                state={item}
                 index={index + 1}
-                name={name}
                 onAttachApproval={onAttachApproval}
                 deleteState={deleteState}
               />
@@ -89,10 +91,10 @@ export function Droppable({
 }
 
 const SortableItem = (props: {
-  name: string;
   index: number;
   onAttachApproval: any;
   deleteState: any;
+  state: StateState;
 }) => {
   const {
     attributes,
@@ -102,67 +104,74 @@ const SortableItem = (props: {
     transition,
     isDragging,
   } = useSortable({
-    id: props.name,
+    id: props.state.id,
   });
 
   const router = useRouter();
   const flowId: string = router.query.id as string;
 
   const [users, setUsers] = useState<any>();
-  const [approvers, setApprovers] = useState<any>();
-  const [state, setState] = useState<any>();
+  // const [approvers, setApprovers] = useState<any>();
+  // const [state, setState] = useState<any>();
   const themeui = useThemeUI();
 
-  useEffect(() => {
-    if (flowId) {
-      fetchAPI(`flows/${flowId}/states`).then((data: any) => {
-        const currentState = data.states.filter(
-          (s: any) => s.state.state === props.name,
-        )[0];
-        setState(currentState.state);
-        console.log(state, data, currentState);
-        if (currentState.state.approvers) {
-          setApprovers(currentState.state.approvers);
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (props.state) {
+  //     set;
+  //   }
+  // }, [props.state]);
+
+  // useEffect(() => {
+  //   if (flowId) {
+  //     console.log('flow id ', flowId);
+  //     fetchAPI(`flows/${flowId}/states`).then((data: any) => {
+  //       console.log('droppable', data);
+  //       const currentState = data.states.filter(
+  //         (s: any) => s.state.state === props.item.state,
+  //       )[0];
+  //       setState(currentState);
+  //       console.log(state, data, currentState);
+  //       if (currentState) {
+  //         setApprovers(currentState.state.approvers);
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   const onUserSelect = (e: any) => {
-    if (e.id) {
-      const request = putAPI(`states/${state.id}`, {
-        state: props.name,
-        order: `${props.index}`,
-        approvers: { remove: [], add: [e.id] },
-      });
-
-      toast.promise(request, {
-        loading: 'Updating ...',
-        success: 'Updated Successfully',
-        error: 'Update Failed',
-      });
-    }
+    // if (e.id) {
+    //   const request = putAPI(`states/${props.state.id}`, {
+    //     state: props.item.state,
+    //     order: `${props.index}`,
+    //     approvers: { remove: [], add: [e.id] },
+    //   });
+    //   toast.promise(request, {
+    //     loading: 'Updating ...',
+    //     success: 'Updated Successfully',
+    //     error: 'Update Failed',
+    //   });
+    // }
   };
 
   const onRemoveUser = (e: any) => {
-    if (e.id) {
-      const request = putAPI(`states/${state.id}`, {
-        state: props.name,
-        order: `${props.index}`,
-        approvers: { remove: [e.id], add: [] },
-      });
-
-      toast.promise(request, {
-        loading: 'Updating ...',
-        success: 'Updated Successfully',
-        error: 'Update Failed',
-      });
-    }
+    // if (e.id) {
+    //   const request = putAPI(`states/${state.id}`, {
+    //     state: props.item.state,
+    //     order: `${props.index}`,
+    //     approvers: { remove: [e.id], add: [] },
+    //   });
+    //   toast.promise(request, {
+    //     loading: 'Updating ...',
+    //     success: 'Updated Successfully',
+    //     error: 'Update Failed',
+    //   });
+    // }
   };
 
   const onChangeInput = (e: any) => {
     console.log('search', e.currentTarget.value);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
+      console.log('👽search', data);
       const usr = data.users;
       setUsers(usr);
     });
@@ -238,7 +247,7 @@ const SortableItem = (props: {
                   fontWeight: 500,
                   color: '#2C3641',
                 }}>
-                {props.name}
+                {props.state.state}
               </Box>
             </Box>
           </Box>
@@ -253,7 +262,7 @@ const SortableItem = (props: {
             }}></Flex>
         </Flex>
         <Box>
-          {approvers && approvers.length > 0 && (
+          {props.state.approvers && props.state.approvers.length > 0 && (
             <Box
               sx={{
                 mt: 3,
@@ -261,7 +270,7 @@ const SortableItem = (props: {
                 borderColor: 'border',
                 borderRadius: '4px',
               }}>
-              {approvers.map((e: any) => (
+              {props.state.approvers.map((e: any) => (
                 <Flex
                   key={e.id}
                   sx={{
@@ -325,7 +334,7 @@ const SortableItem = (props: {
         <Button
           variant="ghost"
           onClick={() => {
-            props.deleteState(props.name);
+            props.deleteState(props.state.id);
           }}>
           <CloseIcon width={18} height={18} />
         </Button>
