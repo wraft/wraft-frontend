@@ -382,7 +382,7 @@ const SortableItem = ({
             </Box>
           )}
           <Box mt={3}>
-            <Input onChange={(e) => onChangeInput(e)}></Input>
+            <Input onChange={(e) => onChangeInput(e)} />
             {users &&
               users.map((x: any) => (
                 <Box
