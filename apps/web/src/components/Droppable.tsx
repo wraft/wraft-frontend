@@ -61,8 +61,8 @@ export function Droppable({
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
     console.log(active, over);
-    const activeState = states.filter((s) => s.state == active.id)[0];
-    const overState = states.filter((s) => s.state == over.id)[0];
+    const activeState = states.filter((s) => s.id == active.id)[0];
+    const overState = states.filter((s) => s.id == over.id)[0];
     const oldIndex = states.indexOf(activeState);
     const newIndex = states.indexOf(overState);
     console.log(oldIndex, newIndex);
@@ -78,10 +78,10 @@ export function Droppable({
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
-      <SortableContext items={states} strategy={rectSortingStrategy}>
-        {items.map((state: any, index: number) => {
+      <SortableContext items={items} strategy={rectSortingStrategy}>
+        {items.map((state: StateState, index: number) => {
           return (
-            <Box key={index}>
+            <Box key={state.id}>
               <SortableItem
                 state={state}
                 states={items}
@@ -122,7 +122,7 @@ const SortableItem = ({
     transition,
     isDragging,
   } = useSortable({
-    id: state.state,
+    id: state.id,
   });
 
   const router = useRouter();
