@@ -54,7 +54,6 @@ export interface StateState {
 }
 
 export interface StateFormProps {
-  onSave: any;
   states: StateState[];
   setStates: (e: StateState[]) => void;
   hidden?: boolean;
@@ -196,10 +195,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    * @param data Form Data
    */
   const CreateState = (data: any) => {
-    if (states) {
-      const newArr: StateState[] = [...states, data];
-      setStates(newArr);
-    }
     // if (cId) {
     //   postAPI(`flows/${cId}/states`, data).then(() => {
     //     console.log('🔥flows/id/states post:', data);
@@ -278,14 +273,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
 
   const AddState = () => {
-    const newState = {
+    const newState: StateState = {
       id: Math.random().toString(),
       state: '',
       order: (states?.length && states.length + 1) || 1,
       approvers: [],
+      inserted_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    CreateState(newState);
+    if (states) {
+      const newArr: StateState[] = [...states, newState];
+      setStates(newArr);
+    }
+    // CreateState(newState);
   };
 
   /**
@@ -363,7 +364,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <StatesForm
                 states={states}
                 setStates={setStates}
-                onSave={CreateState}
                 onSorted={onSorted}
               />
             )}
