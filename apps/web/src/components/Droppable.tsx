@@ -45,9 +45,7 @@ export function Droppable({
   useEffect(() => {
     setOrder(items);
   }, [items]);
-
   useEffect(() => {
-    // Update items when the list prop changes
     if (states && states.length > 0) {
       setItems(states);
     }
@@ -62,11 +60,17 @@ export function Droppable({
 
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
-    setItems((items: any) => {
-      const oldIndex = items.indexOf(active.id);
-      const newIndex = items.indexOf(over.id);
-      return arrayMove(items, oldIndex, newIndex);
-    });
+    console.log(active, over);
+    const activeState = states.filter((s) => s.state == active.id)[0];
+    const overState = states.filter((s) => s.state == over.id)[0];
+    const oldIndex = states.indexOf(activeState);
+    const newIndex = states.indexOf(overState);
+    console.log(oldIndex, newIndex);
+    const newArr = arrayMove(states, oldIndex, newIndex).map((i, index) => ({
+      ...i,
+      order: index + 1,
+    }));
+    setStates(newArr);
   };
 
   return (
@@ -74,13 +78,13 @@ export function Droppable({
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
-      <SortableContext items={items} strategy={rectSortingStrategy}>
-        {items.map((item: any, index: number) => {
+      <SortableContext items={states} strategy={rectSortingStrategy}>
+        {items.map((state: any, index: number) => {
           return (
             <Box key={index}>
               <SortableItem
-                state={item}
-                states={states}
+                state={state}
+                states={items}
                 setStates={setStates}
                 index={index + 1}
                 onAttachApproval={onAttachApproval}
@@ -118,7 +122,7 @@ const SortableItem = ({
     transition,
     isDragging,
   } = useSortable({
-    id: state.id,
+    id: state.state,
   });
 
   const router = useRouter();
