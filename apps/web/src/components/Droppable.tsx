@@ -34,10 +34,10 @@ type Props = {
 
 export function Droppable({ states, setStates, setOrder }: Props) {
   const [items, setItems] = useState<StateState[]>([]);
+  // useEffect(() => {
+  //   setOrder(items);
+  // }, [items]);
 
-  useEffect(() => {
-    setOrder(items);
-  }, [items]);
   useEffect(() => {
     if (states && states.length > 0) {
       setItems(states);
