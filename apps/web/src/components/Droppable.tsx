@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import {
   closestCenter,
   DndContext,
@@ -24,22 +23,16 @@ import { Button } from '@wraft/ui';
 import { fetchAPI, putAPI } from 'utils/models';
 
 import { StateState } from './FlowForm';
+import Modal from './Modal';
+import { ConfirmDelete } from './common';
 
 type Props = {
   states: StateState[];
   setStates: (e: StateState[]) => void;
-  onAttachApproval: any;
-  deleteState: any;
   setOrder: any;
 };
 
-export function Droppable({
-  states,
-  setStates,
-  onAttachApproval,
-  deleteState,
-  setOrder,
-}: Props) {
+export function Droppable({ states, setStates, setOrder }: Props) {
   const [items, setItems] = useState<StateState[]>([]);
 
   useEffect(() => {
@@ -87,8 +80,6 @@ export function Droppable({
                 states={items}
                 setStates={setStates}
                 index={index + 1}
-                onAttachApproval={onAttachApproval}
-                deleteState={deleteState}
               />
             </Box>
           );
@@ -100,20 +91,18 @@ export function Droppable({
 
 type SortableItemProps = {
   index: number;
-  onAttachApproval: any;
-  deleteState: any;
   state: StateState;
   states: StateState[];
   setStates: (e: StateState[]) => void;
 };
 const SortableItem = ({
   index,
-  deleteState,
-  onAttachApproval,
   setStates,
   state,
   states,
 }: SortableItemProps) => {
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
   const {
     attributes,
     listeners,
@@ -125,36 +114,8 @@ const SortableItem = ({
     id: state.id,
   });
 
-  const router = useRouter();
-  const flowId: string = router.query.id as string;
-
   const [users, setUsers] = useState<any>();
-  // const [approvers, setApprovers] = useState<any>();
-  // const [state, setState] = useState<any>();
   const themeui = useThemeUI();
-
-  // useEffect(() => {
-  //   if (props.state) {
-  //     set;
-  //   }
-  // }, [props.state]);
-
-  // useEffect(() => {
-  //   if (flowId) {
-  //     console.log('flow id ', flowId);
-  //     fetchAPI(`flows/${flowId}/states`).then((data: any) => {
-  //       console.log('droppable', data);
-  //       const currentState = data.states.filter(
-  //         (s: any) => s.state.state === props.item.state,
-  //       )[0];
-  //       setState(currentState);
-  //       console.log(state, data, currentState);
-  //       if (currentState) {
-  //         setApprovers(currentState.state.approvers);
-  //       }
-  //     });
-  //   }
-  // }, []);
 
   const onUserSelect = (user: any) => {
     if (states && state) {
@@ -243,6 +204,18 @@ const SortableItem = ({
     }
   };
 
+  const onDeleteState = () => {
+    if (states && state) {
+      const newArr = states.filter((s: any) => s.id !== state.id);
+      const final = newArr.map((s: any, index: number) => ({
+        ...s,
+        order: index + 1,
+      }));
+      setStates(final);
+      setDeleteOpen(false);
+    }
+  };
+
   const onChangeInput = (e: any) => {
     console.log('search', e.currentTarget.value);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
@@ -308,31 +281,6 @@ const SortableItem = ({
               onNameChange(e);
             }}
           />
-          {/* <Box
-            as="div"
-            style={{
-              display: 'flex',
-              padding: '0px 16px',
-            }}
-            className={`w-20 h-20 
-         ${isDragging ? 'z-10' : ''}`}>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                py: '13px',
-                gap: '16px',
-              }}>
-              <Box
-                sx={{
-                  fontSize: '15px',
-                  fontWeight: 500,
-                  color: '#2C3641',
-                }}>
-                {state.state}
-              </Box>
-            </Box>
-          </Box> */}
           <Flex
             data-no-dnd="true"
             sx={{
@@ -416,11 +364,19 @@ const SortableItem = ({
         <Button
           variant="ghost"
           onClick={() => {
-            deleteState(state.id);
+            setDeleteOpen(true);
           }}>
           <CloseIcon width={18} height={18} />
         </Button>
       </Box>
+      <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)}>
+        <ConfirmDelete
+          setOpen={() => setDeleteOpen(false)}
+          onConfirmDelete={() => onDeleteState()}
+          text={`Are you sure you want to remove ${state.state} ?`}
+          title="Delete State"
+        />
+      </Modal>
     </Flex>
   );
 };
