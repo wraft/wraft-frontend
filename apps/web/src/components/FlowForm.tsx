@@ -233,63 +233,75 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       );
     };
 
-    if (cId) {
-      if (states && initialStates) {
-        const existingStates = states.filter((state) =>
-          initialStates.some((s) => s.id === state.id),
+    if (states && initialStates) {
+      const existingStates = states.filter((state) =>
+        initialStates.some((s) => s.id === state.id),
+      );
+      const newStates = states.filter(
+        (state) => !initialStates.some((s) => s.id === state.id),
+      );
+
+      const changedStates = existingStates.filter((state) => {
+        const initialItem = initialStates.find((e) => e.id === state.id);
+        return !initialItem || !itemsAreEqual(state, initialItem);
+      });
+
+      const updateDataArr = changedStates.map((changedItem) => {
+        const initialItem = initialStates.find(
+          (item) => item.id === changedItem.id,
+        ) as StateState;
+        const initialApproversIds = initialItem.approvers.map(
+          (approver) => approver.id,
         );
-        const newStates = states.filter(
-          (state) => !initialStates.some((s) => s.id === state.id),
+        const changedApproversIds = changedItem.approvers.map(
+          (approver) => approver.id,
         );
 
-        const changedStates = existingStates.filter((state) => {
-          const initialItem = initialStates.find((e) => e.id === state.id);
-          return !initialItem || !itemsAreEqual(state, initialItem);
-        });
+        const addedApprovers = changedApproversIds.filter(
+          (id) => !initialApproversIds.includes(id),
+        );
+        const removedApprovers = initialApproversIds.filter(
+          (id) => !changedApproversIds.includes(id),
+        );
 
-        const updateDataArr = changedStates.map((changedItem) => {
-          const initialItem = initialStates.find(
-            (item) => item.id === changedItem.id,
-          ) as StateState;
-          const initialApproversIds = initialItem.approvers.map(
-            (approver) => approver.id,
-          );
-          const changedApproversIds = changedItem.approvers.map(
-            (approver) => approver.id,
-          );
+        return {
+          id: changedItem.id,
+          state: changedItem.state,
+          //used initial order cause backend throws error order already exists
+          order: initialItem.order,
+          approvers: {
+            add: addedApprovers,
+            remove: removedApprovers,
+          },
+        };
+      });
 
-          const addedApprovers = changedApproversIds.filter(
-            (id) => !initialApproversIds.includes(id),
-          );
-          const removedApprovers = initialApproversIds.filter(
-            (id) => !changedApproversIds.includes(id),
-          );
+      const createDataArr = newStates.map((newItem, index) => {
+        return {
+          state: newItem.state,
+          order: initialStates.length + 1 + index,
+          approvers: newItem.approvers.map((approver) => approver.id),
+        };
+      });
 
-          return {
-            id: changedItem.id,
-            state: changedItem.state,
-            //used initial order cause backend throws error order already exists
-            order: initialItem.order,
-            approvers: {
-              add: addedApprovers,
-              remove: removedApprovers,
-            },
-          };
-        });
+      console.log('initial', initialStates);
+      console.log('existing', existingStates);
+      console.log('changed', changedStates);
+      console.log('new', newStates);
+      console.log('update', updateDataArr);
 
-        console.log('initial', initialStates);
-        console.log('existing', existingStates);
-        console.log('changed', changedStates);
-        console.log('new', newStates);
-        console.log('update', updateDataArr);
-
-        updateDataArr.forEach((upadteData) => {
-          const { id, ...data } = upadteData;
-          putAPI(`states/${id}`, data).then(() => {
-            console.log('🔥flows/id/states post:', data);
-            loadStates(cId);
-          });
-        });
+      if (cId) {
+        for (const createData of createDataArr) {
+          await postAPI(`flows/${cId}/states`, createData);
+          console.log('🔥flows/id/states post:', createData);
+          // loadStates(cId);
+        }
+        for (const updateData of updateDataArr) {
+          const { id, ...data } = updateData;
+          await putAPI(`states/${id}`, data);
+          console.log('🔥flows/id/states post:', data);
+          // loadStates(cId);
+        }
       } else {
         console.log('no flow id');
       }
