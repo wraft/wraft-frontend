@@ -299,7 +299,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
 
   const AddState = () => {
     const newState = {
-      id: undefined,
+      id: Math.random().toString(),
       state: '',
       order: (states?.length && states.length + 1) || 1,
       approvers: [],
