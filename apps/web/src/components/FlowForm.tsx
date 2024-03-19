@@ -224,40 +224,110 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
-    if (edit) {
-      putAPI(`flows/${cId}`, data).then(() => {
-        toast.success('flow updated', {
-          duration: 1000,
-          position: 'top-right',
+    console.log('submit', data);
+    const itemsAreEqual = (item1: StateState, item2: StateState) => {
+      return (
+        item1.approvers === item2.approvers &&
+        item1.state === item2.state &&
+        item1.order === item2.order
+      );
+    };
+
+    if (cId) {
+      if (states && initialStates) {
+        const existingStates = states.filter((state) =>
+          initialStates.some((s) => s.id === state.id),
+        );
+        const newStates = states.filter(
+          (state) => !initialStates.some((s) => s.id === state.id),
+        );
+
+        const changedStates = existingStates.filter((state) => {
+          const initialItem = initialStates.find((e) => e.id === state.id);
+          return !initialItem || !itemsAreEqual(state, initialItem);
         });
-        Router.push('/manage/flows');
-      });
-    } else {
-      await postAPI('flows', data)
-        .then(() => {
-          toast.success('Flow created', {
-            duration: 1000,
-            position: 'top-right',
-          });
-          setOpen(false);
-          setRerender((prev: boolean) => !prev);
-        })
-        .catch((error: any) => {
-          toast.error(
-            error?.response?.data?.errors?.name[0] || 'Flow created',
-            {
-              duration: 1000,
-              position: 'top-right',
-            },
+
+        const updateDataArr = changedStates.map((changedItem) => {
+          const initialItem = initialStates.find(
+            (item) => item.id === changedItem.id,
+          ) as StateState;
+          const initialApproversIds = initialItem.approvers.map(
+            (approver) => approver.id,
           );
-          if (errorRef.current) {
-            const errorElement = errorRef.current;
-            if (errorElement) {
-              errorElement.innerText = error.response?.data?.errors?.name?.[0];
-            }
-          }
+          const changedApproversIds = changedItem.approvers.map(
+            (approver) => approver.id,
+          );
+
+          const addedApprovers = changedApproversIds.filter(
+            (id) => !initialApproversIds.includes(id),
+          );
+          const removedApprovers = initialApproversIds.filter(
+            (id) => !changedApproversIds.includes(id),
+          );
+
+          return {
+            id: changedItem.id,
+            state: changedItem.state,
+            //used initial order cause backend throws error order already exists
+            order: initialItem.order,
+            approvers: {
+              add: addedApprovers,
+              remove: removedApprovers,
+            },
+          };
         });
+
+        console.log('initial', initialStates);
+        console.log('existing', existingStates);
+        console.log('changed', changedStates);
+        console.log('new', newStates);
+        console.log('update', updateDataArr);
+
+        updateDataArr.forEach((upadteData) => {
+          const { id, ...data } = upadteData;
+          putAPI(`states/${id}`, data).then(() => {
+            console.log('🔥flows/id/states post:', data);
+            loadStates(cId);
+          });
+        });
+      } else {
+        console.log('no flow id');
+      }
     }
+    // if (edit) {
+    //   putAPI(`flows/${cId}`, data).then(() => {
+    //     toast.success('flow updated', {
+    //       duration: 1000,
+    //       position: 'top-right',
+    //     });
+    //     Router.push('/manage/flows');
+    //   });
+    // } else {
+    //   await postAPI('flows', data)
+    //     .then(() => {
+    //       toast.success('Flow created', {
+    //         duration: 1000,
+    //         position: 'top-right',
+    //       });
+    //       setOpen(false);
+    //       setRerender((prev: boolean) => !prev);
+    //     })
+    //     .catch((error: any) => {
+    //       toast.error(
+    //         error?.response?.data?.errors?.name[0] || 'Flow created',
+    //         {
+    //           duration: 1000,
+    //           position: 'top-right',
+    //         },
+    //       );
+    //       if (errorRef.current) {
+    //         const errorElement = errorRef.current;
+    //         if (errorElement) {
+    //           errorElement.innerText = error.response?.data?.errors?.name?.[0];
+    //         }
+    //       }
+    //     });
+    // }
   };
 
   useEffect(() => {
