@@ -146,7 +146,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
-  const [approval, setApproval] = useState<boolean>(false);
   const [states, setStates] = useState<StateState[]>();
   const [initialStates, setInitialStates] = useState<StateState[]>();
   const [flow, setFlow] = useState<Flow>();
@@ -156,11 +155,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
-
-  const onAttachApproval = (_d: any) => {
-    setApproval(!approval);
-    console.log('onAttachApproval', _d);
-  };
 
   /**
    * Load all states for a particular Flow
