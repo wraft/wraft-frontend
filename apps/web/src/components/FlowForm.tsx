@@ -60,13 +60,6 @@ export interface StateFormProps {
   highestOrder: number;
 }
 
-interface ItemType {
-  id: string;
-  name?: string;
-  approvers?: any[];
-  meta?: any;
-}
-
 const StatesForm = ({ states, setStates, highestOrder }: StateFormProps) => {
   return (
     <Box>
@@ -152,24 +145,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     console.log('🐼states:', states);
   }, [states]);
 
-  /**
-   * Delete State
-   * @param data Form Data
-   */
-  const deleteState = (name: any) => {
-    // if (states) {
-    //   const id = states.filter((state) => state.state === name)[0].id;
-    //   deleteAPI(`states/${id}`).then(() => {
-    //     console.log('🗑️ delete state/id');
-    //     toast.success('Deleted a flow', {
-    //       duration: 1000,
-    //       position: 'top-right',
-    //     });
-    //     loadStates(cId);
-    //   });
-    // }
-  };
-
   const onSubmit = async (data: any) => {
     console.log('submit', data);
     const itemsAreEqual = (item1: StateState, item2: StateState) => {
@@ -200,8 +175,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       const existingStates = states.filter((state) =>
         initialStates.some((s) => s.id === state.id),
       );
+
       const newStates = states.filter(
         (state) => !initialStates.some((s) => s.id === state.id),
+      );
+
+      const removedStates = initialStates.filter(
+        (state) => !existingStates.some((s) => s.id === state.id),
       );
 
       const changedStates = existingStates.filter((state) => {
@@ -261,7 +241,14 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           const { id, ...data } = updateData;
           return putAPI(`states/${id}`, data);
         });
-        const allReqs = Promise.all([...CreateReqs, ...UpdateReqs]);
+        const DeleteReqs = removedStates.map((s) => {
+          deleteAPI(`states/${s.id}`);
+        });
+        const allReqs = Promise.all([
+          ...CreateReqs,
+          ...UpdateReqs,
+          ...DeleteReqs,
+        ]);
         toast.promise(allReqs, {
           loading: 'Updating states',
           success: () => {
@@ -351,10 +338,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     }
   }, [cId]);
 
-  /**
-   *
-   */
-
   const AddState = () => {
     const newState: StateState = {
       id: Math.random().toString(),
@@ -369,23 +352,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       const newArr: StateState[] = [...states, newState];
       setStates(newArr);
     }
-    // CreateState(newState);
-  };
-
-  /**
-   * Update Flow Order
-   * @param data Form Data
-   */ const onSorted = (data: any) => {
-    const formative = {
-      states: data,
-    };
-
-    putAPI(`flows/${cId}/align-states`, formative).then(() => {
-      toast.success('Sorted flow state', {
-        duration: 1000,
-        position: 'top-right',
-      });
-    });
   };
 
   function next() {
