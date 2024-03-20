@@ -134,6 +134,7 @@ const SortableItem = ({
         const newState: StateState = {
           ...state,
           approvers: [...state.approvers, user],
+          error: undefined,
         };
         const newArr = states.map((s: any) => {
           if (s.id === state.id) {
@@ -338,6 +339,11 @@ const SortableItem = ({
                 </Flex>
               ))}
             </Box>
+          )}
+          {state.error && (
+            <Text as={'p'} variant="error">
+              {state.error}
+            </Text>
           )}
           <Box mt={3}>
             <Input onChange={(e) => onChangeInput(e)} />
