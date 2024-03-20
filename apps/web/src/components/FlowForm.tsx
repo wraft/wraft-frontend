@@ -59,6 +59,7 @@ export interface StateFormProps {
   hidden?: boolean;
   dialog?: any;
   onSorted?: any;
+  highestOrder: number;
 }
 
 interface ItemType {
@@ -68,7 +69,12 @@ interface ItemType {
   meta?: any;
 }
 
-const StatesForm = ({ states, setStates, onSorted }: StateFormProps) => {
+const StatesForm = ({
+  states,
+  setStates,
+  onSorted,
+  highestOrder,
+}: StateFormProps) => {
   // const [state, setState] = useState<ItemType[]>([]);
 
   const setOrder = (names: any) => {
@@ -125,7 +131,12 @@ const StatesForm = ({ states, setStates, onSorted }: StateFormProps) => {
   return (
     <Box>
       {states && (
-        <Droppable states={states} setStates={setStates} setOrder={setOrder} />
+        <Droppable
+          states={states}
+          setStates={setStates}
+          setOrder={setOrder}
+          highestOrder={highestOrder}
+        />
       )}
     </Box>
   );
@@ -145,6 +156,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
+  const [highestOrder, setHighestOrder] = useState<number>(0);
   const [states, setStates] = useState<StateState[]>();
   const [initialStates, setInitialStates] = useState<StateState[]>();
   const [flow, setFlow] = useState<Flow>();
@@ -164,9 +176,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       console.log('👽flows/id/states', data);
       const res: States = data;
-      const x: StateState[] = res.states.map((s: any) => {
-        return s.state;
-      });
+      const x: StateState[] = res.states
+        .map((s: any) => {
+          return s.state;
+        })
+        .sort((a, b) => a.order - b.order);
+      const bigOrderItem: StateState = x.reduce(
+        (prev: StateState, current: StateState) => {
+          return prev.order > current.order ? prev : current;
+        },
+      );
+      setHighestOrder(bigOrderItem.order);
+
+      console.log('👽highest order', bigOrderItem.order);
+
       setInitialStates(x);
       setStates(x);
     });
@@ -269,6 +292,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           state: changedItem.state,
           //used initial order cause backend throws error order already exists
           order: initialItem.order,
+          // order: changedItem.order,
           approvers: {
             add: addedApprovers,
             remove: removedApprovers,
@@ -279,7 +303,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       const createDataArr = newStates.map((newItem, index) => {
         return {
           state: newItem.state,
-          order: initialStates.length + 1 + index,
+          order: highestOrder + 1 + index,
           approvers: newItem.approvers.map((approver) => approver.id),
         };
       });
@@ -291,17 +315,63 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       console.log('update', updateDataArr);
 
       if (cId) {
-        for (const createData of createDataArr) {
-          await postAPI(`flows/${cId}/states`, createData);
-          console.log('🔥flows/id/states post:', createData);
-          // loadStates(cId);
-        }
-        for (const updateData of updateDataArr) {
+        const CreateReqs = createDataArr.map((data) => {
+          return postAPI(`flows/${cId}/states`, data);
+        });
+        // for (const createData of createDataArr) {
+        //   await postAPI(`flows/${cId}/states`, createData);
+        //   console.log('🔥create:', createData);
+        //   // loadStates(cId);
+        // }
+        const UpdateReqs = updateDataArr.map((updateData) => {
           const { id, ...data } = updateData;
-          await putAPI(`states/${id}`, data);
-          console.log('🔥flows/id/states post:', data);
-          // loadStates(cId);
-        }
+          return putAPI(`states/${id}`, data);
+        });
+        // for (const updateData of updateDataArr) {
+        //   const { id, ...data } = updateData;
+        //   await putAPI(`states/${id}`, data);
+        //   console.log('🔥update', data);
+        //   // loadStates(cId);
+        // }
+        const allReqs = Promise.all([...CreateReqs, ...UpdateReqs]);
+        toast.promise(allReqs, {
+          loading: 'Updating states',
+          success: () => {
+            fetchAPI(`flows/${cId}/states`).then((data: States) => {
+              const res: States = data;
+              const x: StateState[] = res.states
+                .map((s: any) => {
+                  return s.state;
+                })
+                .sort((a, b) => a.order - b.order);
+              console.log('🔥🔥', x);
+              type Align = {
+                states: {
+                  order: number;
+                  id: string;
+                }[];
+              };
+              const alignData: Align = {
+                states: x.map((state) => {
+                  return {
+                    order:
+                      states.find((s) => s.state === state.state)?.order || 0,
+                    id: state.id,
+                  };
+                }),
+              };
+              console.log('🔥alignData', alignData);
+              putAPI(`flows/${cId}/align-states`, alignData).then(() => {
+                toast.success('Sorted flow state', {
+                  duration: 1000,
+                  position: 'top-right',
+                });
+              });
+            });
+            return 'States updated';
+          },
+          error: 'Error updating states',
+        });
       } else {
         console.log('no flow id');
       }
@@ -358,7 +428,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     const newState: StateState = {
       id: Math.random().toString(),
       state: '',
-      order: (states?.length && states.length + 1) || 1,
+      order: highestOrder + 1,
       approvers: [],
       inserted_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -446,6 +516,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <StatesForm
                 states={states}
                 setStates={setStates}
+                highestOrder={highestOrder}
                 onSorted={onSorted}
               />
             )}
