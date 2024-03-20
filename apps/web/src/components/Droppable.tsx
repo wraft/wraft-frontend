@@ -20,7 +20,7 @@ import { Avatar, Box, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
 
-import { fetchAPI, putAPI } from 'utils/models';
+import { fetchAPI } from 'utils/models';
 
 import { StateState } from './FlowForm';
 import Modal from './Modal';
@@ -29,20 +29,11 @@ import { ConfirmDelete } from './common';
 type Props = {
   states: StateState[];
   setStates: (e: StateState[]) => void;
-  setOrder: any;
   highestOrder: number;
 };
 
-export function Droppable({
-  states,
-  setStates,
-  highestOrder,
-  setOrder,
-}: Props) {
+export function Droppable({ states, setStates, highestOrder }: Props) {
   const [items, setItems] = useState<StateState[]>([]);
-  // useEffect(() => {
-  //   setOrder(items);
-  // }, [items]);
 
   useEffect(() => {
     if (states && states.length > 0) {
@@ -146,18 +137,6 @@ const SortableItem = ({
         setStates(newArr);
       }
     }
-    // if (e.id) {
-    //   const request = putAPI(`states/${props.state.id}`, {
-    //     state: props.item.state,
-    //     order: `${props.index}`,
-    //     approvers: { remove: [], add: [e.id] },
-    //   });
-    //   toast.promise(request, {
-    //     loading: 'Updating ...',
-    //     success: 'Updated Successfully',
-    //     error: 'Update Failed',
-    //   });
-    // }
   };
 
   const onRemoveUser = (user: any) => {
@@ -179,18 +158,6 @@ const SortableItem = ({
       });
       setStates(newArr);
     }
-    // if (e.id) {
-    //   const request = putAPI(`states/${state.id}`, {
-    //     state: props.item.state,
-    //     order: `${props.index}`,
-    //     approvers: { remove: [e.id], add: [] },
-    //   });
-    //   toast.promise(request, {
-    //     loading: 'Updating ...',
-    //     success: 'Updated Successfully',
-    //     error: 'Update Failed',
-    //   });
-    // }
   };
 
   const onNameChange = (e: any) => {

@@ -57,9 +57,6 @@ export interface StateState {
 export interface StateFormProps {
   states: StateState[];
   setStates: (e: StateState[]) => void;
-  hidden?: boolean;
-  dialog?: any;
-  onSorted?: any;
   highestOrder: number;
 }
 
@@ -70,72 +67,13 @@ interface ItemType {
   meta?: any;
 }
 
-const StatesForm = ({
-  states,
-  setStates,
-  onSorted,
-  highestOrder,
-}: StateFormProps) => {
-  // const [state, setState] = useState<ItemType[]>([]);
-
-  const setOrder = (names: any) => {
-    // new order
-
-    if (names && names.length > 0) {
-      const listItems: ItemType[] = [];
-
-      names.map((name: any) => {
-        const newItemx: ItemType = {
-          id:
-            (states &&
-              states.filter((state: any) => state.state === name)[0]?.id) ||
-            '',
-          name: name,
-        };
-        if (newItemx.id !== '') {
-          listItems.push(newItemx);
-        }
-      });
-
-      // setState(listItems);
-
-      const dbitems: any = [];
-
-      listItems.map((dbi: any, index) => {
-        dbitems.push({ id: dbi.id, order: index + 1 });
-      });
-
-      // send updates to server
-      onSorted(dbitems);
-    }
-  };
-
-  // useEffect(() => {
-  //   if (states) {
-  //     const listItems: ItemType[] = [];
-  //     states.map((c: any) => {
-  //       const newItemx: ItemType = {
-  //         id: c?.id,
-  //         name: c?.state,
-  //         approvers: c?.approvers,
-  //         meta: c,
-  //       };
-  //       listItems.push(newItemx);
-  //     });
-
-  //     setState(listItems);
-  //   }
-  // }, [states]);
-
-  // console.log('states:', states, '/n state:', state);
-
+const StatesForm = ({ states, setStates, highestOrder }: StateFormProps) => {
   return (
     <Box>
       {states && (
         <Droppable
           states={states}
           setStates={setStates}
-          setOrder={setOrder}
           highestOrder={highestOrder}
         />
       )}
@@ -213,21 +151,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   useEffect(() => {
     console.log('🐼states:', states);
   }, [states]);
-
-  /**
-   * Create State
-   * @param data Form Data
-   */
-  const CreateState = (data: any) => {
-    // if (cId) {
-    //   postAPI(`flows/${cId}/states`, data).then(() => {
-    //     console.log('🔥flows/id/states post:', data);
-    //     loadStates(cId);
-    //   });
-    // } else {
-    //   console.log('no flow id');
-    // }
-  };
 
   /**
    * Delete State
@@ -309,7 +232,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           state: changedItem.state,
           //used initial order cause backend throws error order already exists
           order: initialItem.order,
-          // order: changedItem.order,
           approvers: {
             add: addedApprovers,
             remove: removedApprovers,
@@ -335,21 +257,10 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         const CreateReqs = createDataArr.map((data) => {
           return postAPI(`flows/${cId}/states`, data);
         });
-        // for (const createData of createDataArr) {
-        //   await postAPI(`flows/${cId}/states`, createData);
-        //   console.log('🔥create:', createData);
-        //   // loadStates(cId);
-        // }
         const UpdateReqs = updateDataArr.map((updateData) => {
           const { id, ...data } = updateData;
           return putAPI(`states/${id}`, data);
         });
-        // for (const updateData of updateDataArr) {
-        //   const { id, ...data } = updateData;
-        //   await putAPI(`states/${id}`, data);
-        //   console.log('🔥update', data);
-        //   // loadStates(cId);
-        // }
         const allReqs = Promise.all([...CreateReqs, ...UpdateReqs]);
         toast.promise(allReqs, {
           loading: 'Updating states',
@@ -537,7 +448,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 states={states}
                 setStates={setStates}
                 highestOrder={highestOrder}
-                onSorted={onSorted}
               />
             )}
 
