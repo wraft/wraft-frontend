@@ -30,9 +30,15 @@ type Props = {
   states: StateState[];
   setStates: (e: StateState[]) => void;
   setOrder: any;
+  highestOrder: number;
 };
 
-export function Droppable({ states, setStates, setOrder }: Props) {
+export function Droppable({
+  states,
+  setStates,
+  highestOrder,
+  setOrder,
+}: Props) {
   const [items, setItems] = useState<StateState[]>([]);
   // useEffect(() => {
   //   setOrder(items);
@@ -61,7 +67,7 @@ export function Droppable({ states, setStates, setOrder }: Props) {
     console.log(oldIndex, newIndex);
     const newArr = arrayMove(states, oldIndex, newIndex).map((i, index) => ({
       ...i,
-      order: index + 1,
+      order: highestOrder + 1 + index,
     }));
     setStates(newArr);
   };
