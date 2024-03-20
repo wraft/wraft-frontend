@@ -51,6 +51,7 @@ export interface StateState {
   order: number;
   inserted_at: string;
   updated_at: string;
+  error?: string | undefined;
 }
 
 export interface StateFormProps {
@@ -152,7 +153,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isDirty },
     trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
@@ -255,6 +256,22 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         item1.order === item2.order
       );
     };
+
+    if (states) {
+      const checkedStates = states.map((e) => {
+        return {
+          ...e,
+          error:
+            e.approvers.length === 0
+              ? 'Please add approvers for this state'
+              : undefined,
+        };
+      });
+      if (checkedStates.some((e) => e.approvers.length === 0)) {
+        setStates(checkedStates);
+        return;
+      }
+    }
 
     if (states && initialStates) {
       const existingStates = states.filter((state) =>
@@ -376,40 +393,43 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         console.log('no flow id');
       }
     }
-    // if (edit) {
-    //   putAPI(`flows/${cId}`, data).then(() => {
-    //     toast.success('flow updated', {
-    //       duration: 1000,
-    //       position: 'top-right',
-    //     });
-    //     Router.push('/manage/flows');
-    //   });
-    // } else {
-    //   await postAPI('flows', data)
-    //     .then(() => {
-    //       toast.success('Flow created', {
-    //         duration: 1000,
-    //         position: 'top-right',
-    //       });
-    //       setOpen(false);
-    //       setRerender((prev: boolean) => !prev);
-    //     })
-    //     .catch((error: any) => {
-    //       toast.error(
-    //         error?.response?.data?.errors?.name[0] || 'Flow created',
-    //         {
-    //           duration: 1000,
-    //           position: 'top-right',
-    //         },
-    //       );
-    //       if (errorRef.current) {
-    //         const errorElement = errorRef.current;
-    //         if (errorElement) {
-    //           errorElement.innerText = error.response?.data?.errors?.name?.[0];
-    //         }
-    //       }
-    //     });
-    // }
+    if (isDirty) {
+      if (edit) {
+        putAPI(`flows/${cId}`, data).then(() => {
+          toast.success('flow updated', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          Router.push('/manage/flows');
+        });
+      } else {
+        await postAPI('flows', data)
+          .then(() => {
+            toast.success('Flow created', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setOpen(false);
+            setRerender((prev: boolean) => !prev);
+          })
+          .catch((error: any) => {
+            toast.error(
+              error?.response?.data?.errors?.name[0] || 'Flow created',
+              {
+                duration: 1000,
+                position: 'top-right',
+              },
+            );
+            if (errorRef.current) {
+              const errorElement = errorRef.current;
+              if (errorElement) {
+                errorElement.innerText =
+                  error.response?.data?.errors?.name?.[0];
+              }
+            }
+          });
+      }
+    }
   };
 
   useEffect(() => {
