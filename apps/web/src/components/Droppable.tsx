@@ -225,7 +225,7 @@ const SortableItem = ({
       const sourceWidth = sourceStyle.width;
       targetRef.current.style.minWidth = sourceWidth;
     }
-  }, []);
+  }, [isOpen]);
 
   return (
     <Flex sx={{ mt: `${index === 1 ? 0 : 4}` }}>
