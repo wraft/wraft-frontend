@@ -4,9 +4,9 @@ import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Flex } from 'theme-ui';
+import { AddIcon } from '@wraft/icon';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
-import { IconWrapper } from './Atoms';
 import { Droppable } from './Droppable';
 import Field from './Field';
 
@@ -453,13 +453,16 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 2,
+                  border: '1px solid',
+                  borderColor: 'border',
+                  bg: 'white',
+                  color: 'green.700',
+                  cursor: 'pointer',
                 }}>
-                <IconWrapper p="out" size={16}>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 5l0 14" />
-                  <path d="M5 12l14 0" />
-                </IconWrapper>
-                <Text variant="pM">Add State</Text>
+                <AddIcon width={14} height={14} />
+                <Text as="p" variant="pM" color="green.700">
+                  Add Flow Step
+                </Text>
               </Button>
             </Box>
           </Box>
