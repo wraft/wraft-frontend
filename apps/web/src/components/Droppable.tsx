@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -22,13 +22,13 @@ import {
   Flex,
   Input,
   Label,
-  MenuButton,
+  Spinner,
   Text,
   useThemeUI,
 } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
-import { MenuProvider, Menu, MenuItem, MenuList } from '@ariakit/react';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
 import { fetchAPI } from 'utils/models';
 
@@ -123,6 +123,10 @@ const SortableItem = ({
 
   const [users, setUsers] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const sourceRef = useRef<HTMLInputElement>(null);
+  const targetRef = useRef<HTMLElement>(null);
   const themeui = useThemeUI();
 
   const onUserSelect = (user: any) => {
@@ -202,6 +206,7 @@ const SortableItem = ({
   };
 
   const onChangeInput = (e: any) => {
+    setLoading(true);
     console.log('search', e.currentTarget.value);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
       console.log('👽search', data);
@@ -210,8 +215,17 @@ const SortableItem = ({
         (u: any) => !state.approvers.some((a) => a.id === u.id),
       );
       setUsers(filtered);
+      setLoading(false);
     });
   };
+
+  useEffect(() => {
+    if (sourceRef.current && targetRef.current) {
+      const sourceStyle = window.getComputedStyle(sourceRef.current);
+      const sourceWidth = sourceStyle.width;
+      targetRef.current.style.minWidth = sourceWidth;
+    }
+  }, []);
 
   return (
     <Flex sx={{ mt: `${index === 1 ? 0 : 4}` }}>
@@ -286,98 +300,88 @@ const SortableItem = ({
             </Text>
           )}
           <Box mt={3}>
-            <Input
-              onChange={(e) => onChangeInput(e)}
-              placeholder="Add assignee"></Input>
             <Box>
-              {/* <MenuProvider>
+              <Input
+                ref={sourceRef}
+                onChange={(e) => {
+                  onChangeInput(e);
+                  setIsOpen(true);
+                }}
+                placeholder="Add assignee"></Input>
+              <MenuProvider>
                 <MenuButton
                   as={Box}
                   variant="none"
-                  sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box
-                    onClick={() => setIsOpen(true)}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      margin: '0px',
-                      padding: '0px',
-                      bg: 'transparent',
-                      ':disabled': {
-                        display: 'none',
-                      },
-                    }}>
-                    <Box sx={{ p: 4, bg: 'red.500', color: 'white' }}>Open</Box>
-                  </Box>
-                </MenuButton>
+                  sx={{ display: 'hidden', alignItems: 'center' }}></MenuButton>
                 <Menu
+                  ref={targetRef}
                   as={Box}
+                  id={'targetElement'}
                   variant="layout.menu"
-                  sx={{ p: 0 }}
+                  sx={{ p: 0, minWidth: '100%' }}
                   open={isOpen}
                   onClose={() => setIsOpen(false)}>
-                  {users &&
-                    users.map((u: any) => (
-                      <Button
-                        variant="ghost"
-                        key={u.id}
-                        onClick={() => onUserSelect(u)}
-                        style={{ justifyContent: 'flex-start' }}>
-                        <MenuItem as={Box}>
-                          <Text
-                            variant="pR"
+                  {users && users.length > 0 && !loading ? (
+                    <Box
+                      sx={{
+                        mt: 1,
+                        border: '1px solid',
+                        borderColor: 'border',
+                        borderRadius: '4px',
+                        minWidth: '100%',
+                      }}>
+                      {users.map((x: any) => (
+                        <MenuItem
+                          as={Flex}
+                          key={x.id}
+                          onClick={() => onUserSelect(x)}
+                          sx={{
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            px: 3,
+                            py: 2,
+                            cursor: 'pointer',
+                          }}>
+                          <Box
                             sx={{
-                              cursor: 'pointer',
-                              color: 'red.600',
+                              display: 'flex',
+                              alignItems: 'center',
+                              py: 2,
                             }}>
-                            {u.name}
-                          </Text>
+                            <Avatar
+                              src={x.profile_pic}
+                              alt="profile"
+                              width={18}
+                              height={18}
+                            />
+                            <Text
+                              as={'p'}
+                              ml={3}
+                              variant="subM"
+                              sx={{ color: 'gray.900' }}>
+                              {x.name}
+                            </Text>
+                          </Box>
                         </MenuItem>
-                      </Button>
-                    ))}
-                </Menu>
-              </MenuProvider> */}
-            </Box>
-            {users && users.length > 0 && (
-              <Box
-                sx={{
-                  mt: 2,
-                  border: '1px solid',
-                  borderColor: 'border',
-                  borderRadius: '4px',
-                }}>
-                {users.map((x: any) => (
-                  <Flex
-                    key={x.id}
-                    onClick={() => onUserSelect(x)}
-                    sx={{
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      px: 3,
-                      py: 2,
-                      cursor: 'pointer',
-                    }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
-                      <Avatar
-                        src={x.profile_pic}
-                        alt="profile"
-                        width={18}
-                        height={18}
-                      />
-                      <Text
-                        as={'p'}
-                        ml={3}
-                        variant="subM"
-                        sx={{ color: 'gray.900' }}>
-                        {x.name}
-                      </Text>
+                      ))}
                     </Box>
-                  </Flex>
-                ))}
-              </Box>
-            )}
+                  ) : (
+                    <MenuItem
+                      as={Box}
+                      sx={{
+                        px: 3,
+                        py: 2,
+                      }}>
+                      {loading ? (
+                        <Spinner color={'gree.500'} size={10} />
+                      ) : (
+                        <Text variant="subM">No user found</Text>
+                      )}
+                    </MenuItem>
+                  )}
+                </Menu>
+              </MenuProvider>
+            </Box>
             {state.approvers && state.approvers.length > 0 && (
               <Box
                 sx={{
