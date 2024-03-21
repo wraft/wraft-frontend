@@ -177,18 +177,16 @@ const FlowViewForm = () => {
                                       alt="profile"
                                       width={18}
                                       height={18}
-                                      sx={{ zIndex: '1' }}
                                     />
                                     <Box
                                       sx={{
                                         display: index === 0 ? 'none' : 'block',
-                                        height: '14px',
+                                        height: '13px',
                                         width: '1px',
                                         bg: 'neutral.200',
                                         position: 'absolute',
                                         left: '9px',
-                                        top: '-14px',
-                                        zIndex: '0',
+                                        top: '-13.3px',
                                       }}
                                     />
                                   </Box>
