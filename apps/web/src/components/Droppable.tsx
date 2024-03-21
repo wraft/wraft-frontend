@@ -195,7 +195,10 @@ const SortableItem = ({
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
       console.log('👽search', data);
       const usr = data.users;
-      setUsers(usr);
+      const filtered = usr.filter(
+        (u: any) => !state.approvers.some((a) => a.id === u.id),
+      );
+      setUsers(filtered);
     });
   };
 
