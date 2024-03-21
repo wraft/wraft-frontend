@@ -61,6 +61,7 @@ const FlowViewForm = () => {
   const [flow, setFlow] = useState<Flow>();
   const [states, setStates] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   // determine edit state based on URL
   const router = useRouter();
@@ -85,7 +86,7 @@ const FlowViewForm = () => {
     if (cId && cId.length > 0) {
       loadFlow(cId);
     }
-  }, [cId]);
+  }, [cId, rerender]);
 
   const users: any[] = [];
 
@@ -176,7 +177,7 @@ const FlowViewForm = () => {
         </Container>
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        {isOpen && <FlowForm />}
+        {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
       </Drawer>
     </>
   );

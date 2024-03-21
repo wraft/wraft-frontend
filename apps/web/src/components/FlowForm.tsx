@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -94,10 +94,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
+  const [done, setDone] = useState<boolean>(false);
+  const [cId, setCId] = useState<string>('');
 
   // determine edit state based on URL
   const router = useRouter();
-  const cId: string = router.query.id as string;
+  const flowId: string = router.query.id as string;
+
+  useEffect(() => {
+    setCId(flowId);
+  }, [flowId]);
+
+  useEffect(() => {
+    console.log('🍉cId', cId);
+  }, [cId]);
 
   /**
    * Load all states for a particular Flow
@@ -233,7 +243,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       console.log('new', newStates);
       console.log('update', updateDataArr);
 
-      if (cId) {
+      if (cId && cId.length > 0) {
         const CreateReqs = createDataArr.map((data) => {
           return postAPI(`flows/${cId}/states`, data);
         });
@@ -281,6 +291,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   duration: 1000,
                   position: 'top-right',
                 });
+                setDone(true);
+                setRerender((pre: boolean) => !pre);
               });
             });
             return 'States updated';
@@ -289,30 +301,41 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         });
       } else {
         console.log('no flow id');
+        setDone(true);
       }
+    } else {
+      setDone(true);
     }
-    if (isDirty) {
+    if (isDirty || done) {
       if (edit) {
         putAPI(`flows/${cId}`, data).then(() => {
           toast.success('flow updated', {
             duration: 1000,
             position: 'top-right',
           });
-          Router.push('/manage/flows');
+          setOpen(false);
+          setRerender((prev: boolean) => !prev);
         });
       } else {
         await postAPI('flows', data)
-          .then(() => {
+          .then((data: any) => {
             toast.success('Flow created', {
               duration: 1000,
               position: 'top-right',
             });
-            setOpen(false);
-            setRerender((prev: boolean) => !prev);
+            setCId(data?.id);
+            if (errorRef.current) {
+              const errorElement = errorRef.current;
+              if (errorElement) {
+                errorElement.innerText = '';
+              }
+            }
+            next();
           })
           .catch((error: any) => {
+            console.log(error);
             toast.error(
-              error?.response?.data?.errors?.name[0] || 'Flow created',
+              error?.response?.data?.errors?.name[0] || 'Failed to create flow',
               {
                 duration: 1000,
                 position: 'top-right',
@@ -322,12 +345,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               const errorElement = errorRef.current;
               if (errorElement) {
                 errorElement.innerText =
-                  error.response?.data?.errors?.name?.[0];
+                  error.response?.data?.errors?.name?.[0] || 'Already exists';
               }
             }
           });
       }
     }
+    setDone(false);
   };
 
   useEffect(() => {
@@ -446,8 +470,12 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             <Button
               type="button"
               onClick={() => {
-                next();
                 trigger();
+                if (!edit) {
+                  handleSubmit(onSubmit)();
+                } else {
+                  next();
+                }
               }}
               variant="buttonPrimary">
               Next
