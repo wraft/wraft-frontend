@@ -16,9 +16,19 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CloseIcon, DeleteIcon, DragIcon } from '@wraft/icon';
-import { Avatar, Box, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Input,
+  Label,
+  MenuButton,
+  Text,
+  useThemeUI,
+} from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
+import { MenuProvider, Menu, MenuItem, MenuList } from '@ariakit/react';
 
 import { fetchAPI } from 'utils/models';
 
@@ -112,6 +122,7 @@ const SortableItem = ({
   });
 
   const [users, setUsers] = useState<any>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const themeui = useThemeUI();
 
   const onUserSelect = (user: any) => {
@@ -269,70 +280,145 @@ const SortableItem = ({
             }}></Flex>
         </Flex>
         <Box>
-          {state.approvers && state.approvers.length > 0 && (
-            <Box
-              sx={{
-                mt: 3,
-                border: '1px solid',
-                borderColor: 'border',
-                borderRadius: '4px',
-              }}>
-              {state.approvers.map((e: any) => (
-                <Flex
-                  key={e.id}
-                  sx={{
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    px: 3,
-                    py: 2,
-                  }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
-                    <Avatar
-                      src={e.profile_pic}
-                      alt="profile"
-                      width={18}
-                      height={18}
-                    />
-                    <Text
-                      as={'p'}
-                      ml={3}
-                      variant="subM"
-                      sx={{ color: 'gray.900' }}>
-                      {e.name}
-                    </Text>
-                  </Box>
-                  <Box
-                    onClick={() => onRemoveUser(e)}
-                    sx={{ cursor: 'pointer' }}>
-                    <DeleteIcon width={12} height={12} />
-                  </Box>
-                </Flex>
-              ))}
-            </Box>
-          )}
           {state.error && (
             <Text as={'p'} variant="error">
               {state.error}
             </Text>
           )}
           <Box mt={3}>
-            <Input onChange={(e) => onChangeInput(e)} />
-            {users &&
-              users.map((x: any) => (
-                <Box
-                  key={x?.name}
-                  onClick={() => onUserSelect(x)}
-                  sx={{
-                    bg: 'background',
-                    p: 2,
-                    px: 3,
-                    cursor: 'pointer',
-                  }}>
-                  <Text as="h4" color="text">
-                    {x.name}
-                  </Text>
-                </Box>
-              ))}
+            <Input
+              onChange={(e) => onChangeInput(e)}
+              placeholder="Add assignee"></Input>
+            <Box>
+              {/* <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Box
+                    onClick={() => setIsOpen(true)}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      position: 'relative',
+                      cursor: 'pointer',
+                      margin: '0px',
+                      padding: '0px',
+                      bg: 'transparent',
+                      ':disabled': {
+                        display: 'none',
+                      },
+                    }}>
+                    <Box sx={{ p: 4, bg: 'red.500', color: 'white' }}>Open</Box>
+                  </Box>
+                </MenuButton>
+                <Menu
+                  as={Box}
+                  variant="layout.menu"
+                  sx={{ p: 0 }}
+                  open={isOpen}
+                  onClose={() => setIsOpen(false)}>
+                  {users &&
+                    users.map((u: any) => (
+                      <Button
+                        variant="ghost"
+                        key={u.id}
+                        onClick={() => onUserSelect(u)}
+                        style={{ justifyContent: 'flex-start' }}>
+                        <MenuItem as={Box}>
+                          <Text
+                            variant="pR"
+                            sx={{
+                              cursor: 'pointer',
+                              color: 'red.600',
+                            }}>
+                            {u.name}
+                          </Text>
+                        </MenuItem>
+                      </Button>
+                    ))}
+                </Menu>
+              </MenuProvider> */}
+            </Box>
+            {users && users.length > 0 && (
+              <Box
+                sx={{
+                  mt: 2,
+                  border: '1px solid',
+                  borderColor: 'border',
+                  borderRadius: '4px',
+                }}>
+                {users.map((x: any) => (
+                  <Flex
+                    key={x.id}
+                    onClick={() => onUserSelect(x)}
+                    sx={{
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      px: 3,
+                      py: 2,
+                      cursor: 'pointer',
+                    }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
+                      <Avatar
+                        src={x.profile_pic}
+                        alt="profile"
+                        width={18}
+                        height={18}
+                      />
+                      <Text
+                        as={'p'}
+                        ml={3}
+                        variant="subM"
+                        sx={{ color: 'gray.900' }}>
+                        {x.name}
+                      </Text>
+                    </Box>
+                  </Flex>
+                ))}
+              </Box>
+            )}
+            {state.approvers && state.approvers.length > 0 && (
+              <Box
+                sx={{
+                  mt: 3,
+                  border: '1px solid',
+                  borderColor: 'border',
+                  borderRadius: '4px',
+                }}>
+                {state.approvers.map((e: any) => (
+                  <Flex
+                    key={e.id}
+                    sx={{
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      px: 3,
+                      py: 2,
+                    }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
+                      <Avatar
+                        src={e.profile_pic}
+                        alt="profile"
+                        width={18}
+                        height={18}
+                      />
+                      <Text
+                        as={'p'}
+                        ml={3}
+                        variant="subM"
+                        sx={{ color: 'gray.900' }}>
+                        {e.name}
+                      </Text>
+                    </Box>
+                    <Box
+                      onClick={() => onRemoveUser(e)}
+                      sx={{ cursor: 'pointer' }}>
+                      <DeleteIcon width={12} height={12} />
+                    </Box>
+                  </Flex>
+                ))}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
