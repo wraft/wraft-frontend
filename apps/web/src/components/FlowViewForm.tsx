@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Container, Flex, Label, Text } from 'theme-ui';
+import { Avatar, Box, Button, Container, Flex, Label, Text } from 'theme-ui';
 
 import { fetchAPI } from '../utils/models';
 import Field from './Field';
 import FlowForm from './FlowForm';
-import PersonCapsule from './PersonCapsule';
 
 export interface States {
   total_pages: number;
@@ -79,6 +78,7 @@ const FlowViewForm = () => {
       const states: States = data.states;
       setStates(states);
       setValue('name', res?.name);
+      console.log('👽flow', res, 'states', states);
     });
   };
 
@@ -87,8 +87,6 @@ const FlowViewForm = () => {
       loadFlow(cId);
     }
   }, [cId, rerender]);
-
-  const users: any[] = [];
 
   return (
     <>
@@ -143,7 +141,7 @@ const FlowViewForm = () => {
                                 as="p"
                                 variant="capM"
                                 sx={{ color: 'text' }}>
-                                {item.order}
+                                {index + 1}
                               </Text>
                             </Box>
                             <Text sx={{ ml: 2 }} variant="pM">
@@ -151,13 +149,61 @@ const FlowViewForm = () => {
                             </Text>
                           </Flex>
                         </Flex>
-                        {users && users.length > 0 && (
-                          <Flex sx={{ flexWrap: 'wrap', gap: 2, mt: '18px' }}>
-                            {users.map((user: any, index: number) => (
-                              <PersonCapsule person={user} key={index} />
-                            ))}
-                          </Flex>
-                        )}
+                        <Flex
+                          sx={{ flexDirection: 'column', gap: '12px', mt: 3 }}>
+                          {item.approvers.map((x: any, index: number) => {
+                            return (
+                              <Flex
+                                key={x.id}
+                                sx={{
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  cursor: 'pointer',
+                                }}>
+                                <Box
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                  }}>
+                                  <Box
+                                    sx={{
+                                      position: 'relative',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                    }}>
+                                    <Avatar
+                                      src={x.profile_pic}
+                                      alt="profile"
+                                      width={18}
+                                      height={18}
+                                      sx={{ zIndex: '1' }}
+                                    />
+                                    <Box
+                                      sx={{
+                                        display: index === 0 ? 'none' : 'block',
+                                        height: '14px',
+                                        width: '1px',
+                                        bg: 'neutral.200',
+                                        position: 'absolute',
+                                        left: '9px',
+                                        top: '-14px',
+                                        zIndex: '0',
+                                      }}
+                                    />
+                                  </Box>
+                                  <Text
+                                    as={'p'}
+                                    ml={3}
+                                    variant="subM"
+                                    sx={{ color: 'gray.900' }}>
+                                    {x.name}
+                                  </Text>
+                                </Box>
+                              </Flex>
+                            );
+                          })}
+                        </Flex>
                       </Box>
                     );
                   })}
