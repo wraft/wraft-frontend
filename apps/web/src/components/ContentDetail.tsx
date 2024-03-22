@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../utils/models';
+import { fetchAPI, postAPI, putAPI } from '../utils/models';
 import {
   ContentInstance,
   IBuild,
@@ -23,6 +23,7 @@ import styles from './common/Tab/tab.module.css';
 import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
+import { StateState } from './FlowForm';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -188,11 +189,13 @@ const ContentDetail = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
+  const [rerender, setRerender] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
   const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [nextState, setNextState] = useState<StateState>();
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
@@ -229,7 +232,7 @@ const ContentDetail = () => {
 
   useEffect(() => {
     loadData(cId);
-  }, [cId]);
+  }, [cId, rerender]);
 
   useEffect(() => {
     if (build) {
@@ -273,11 +276,50 @@ const ContentDetail = () => {
         });
       }
     }
+    console.log('contents:', contents);
   }, [contents]);
 
   const doNothing = () => {
     //
   };
+
+  const onApproveState = () => {
+    if (contents) {
+      const req = putAPI(`contents/${contents.content.id}/approve`);
+      toast.promise(req, {
+        loading: 'Approving...',
+        success: () => {
+          setRerender((prev) => !prev);
+          return 'Approved';
+        },
+        error: 'Failed',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (activeFlow && contents) {
+      const activeState = activeFlow?.states.filter(
+        (a: any) => a.id === contents.state.id,
+      )?.[0];
+      const activeIndex = activeFlow?.states.indexOf(activeState);
+      const nextState = activeFlow.states[activeIndex + 1];
+      if (activeState) {
+        setNextState(nextState);
+      } else {
+        setNextState(activeFlow.states[0]);
+      }
+      console.log(
+        'check',
+        activeState,
+        activeIndex,
+
+        nextState,
+        activeFlow,
+        contents.state,
+      );
+    }
+  }, [activeFlow, contents]);
 
   // const navTitle = contents?.content?.title;
 
@@ -461,6 +503,9 @@ const ContentDetail = () => {
                   sx={{
                     bg: '#d9deda57',
                     px: 3,
+                    py: 2,
+                    alignItems: 'center',
+                    overflowX: 'scroll',
                   }}>
                   {activeFlow?.states.map((x: any) => (
                     <FlowStateBlock
@@ -472,6 +517,15 @@ const ContentDetail = () => {
                     />
                   ))}
                 </Flex>
+                <Box sx={{ p: 3 }}>
+                  {nextState && (
+                    <Button
+                      variant="buttonPrimary"
+                      onClick={() =>
+                        onApproveState()
+                      }>{`Send to ${nextState?.state || ''}`}</Button>
+                  )}
+                </Box>
                 <Flex
                   sx={{
                     pt: 3,
