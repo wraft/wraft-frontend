@@ -60,12 +60,10 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
 
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
-    console.log(active, over);
     const activeState = states.filter((s) => s.id == active.id)[0];
     const overState = states.filter((s) => s.id == over.id)[0];
     const oldIndex = states.indexOf(activeState);
     const newIndex = states.indexOf(overState);
-    console.log(oldIndex, newIndex);
     const newArr = arrayMove(states, oldIndex, newIndex).map((i, index) => ({
       ...i,
       order: highestOrder + 1 + index,
@@ -155,7 +153,6 @@ const SortableItem = ({
   };
 
   const onRemoveUser = (user: any) => {
-    console.log('remove', user);
     if (states && state) {
       const filterdApprovers = state.approvers.filter(
         (a: any) => a.id !== user.id,
@@ -207,9 +204,7 @@ const SortableItem = ({
 
   const onChangeInput = (e: any) => {
     setLoading(true);
-    console.log('search', e.currentTarget.value);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
-      console.log('👽search', data);
       const usr = data.users;
       const filtered = usr.filter(
         (u: any) => !state.approvers.some((a) => a.id === u.id),
