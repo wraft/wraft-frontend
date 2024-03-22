@@ -223,11 +223,17 @@ const ContentDetail = () => {
   const doBuild = () => {
     console.log('Building');
     setLoading(true);
-    postAPI(`contents/${cId}/build`, []).then((data: any) => {
-      setLoading(false);
-      setBuild(data);
-      loadData(cId);
-    });
+    postAPI(`contents/${cId}/build`, [])
+      .then((data: any) => {
+        setLoading(false);
+        setBuild(data);
+        loadData(cId);
+        toast.success('Build Successfully');
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error('Build Failed');
+      });
   };
 
   useEffect(() => {
