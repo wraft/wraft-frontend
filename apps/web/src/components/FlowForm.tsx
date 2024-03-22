@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
@@ -84,7 +84,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isValid, isDirty },
+    formState: { errors, isValid },
     trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
@@ -94,7 +94,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
-  const [done, setDone] = useState<boolean>(false);
   const [cId, setCId] = useState<string>('');
 
   // determine edit state based on URL
@@ -156,7 +155,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   }, [states]);
 
   const onSubmit = async (data: any) => {
-    console.log('submit', data);
     const itemsAreEqual = (item1: StateState, item2: StateState) => {
       return (
         item1.approvers === item2.approvers &&
@@ -181,69 +179,68 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       }
     }
 
-    if (states && initialStates) {
-      const existingStates = states.filter((state) =>
-        initialStates.some((s) => s.id === state.id),
-      );
-
-      const newStates = states.filter(
-        (state) => !initialStates.some((s) => s.id === state.id),
-      );
-
-      const removedStates = initialStates.filter(
-        (state) => !existingStates.some((s) => s.id === state.id),
-      );
-
-      const changedStates = existingStates.filter((state) => {
-        const initialItem = initialStates.find((e) => e.id === state.id);
-        return !initialItem || !itemsAreEqual(state, initialItem);
-      });
-
-      const updateDataArr = changedStates.map((changedItem) => {
-        const initialItem = initialStates.find(
-          (item) => item.id === changedItem.id,
-        ) as StateState;
-        const initialApproversIds = initialItem.approvers.map(
-          (approver) => approver.id,
-        );
-        const changedApproversIds = changedItem.approvers.map(
-          (approver) => approver.id,
+    if (edit) {
+      if (states && initialStates) {
+        const existingStates = states.filter((state) =>
+          initialStates.some((s) => s.id === state.id),
         );
 
-        const addedApprovers = changedApproversIds.filter(
-          (id) => !initialApproversIds.includes(id),
-        );
-        const removedApprovers = initialApproversIds.filter(
-          (id) => !changedApproversIds.includes(id),
+        const newStates = states.filter(
+          (state) => !initialStates.some((s) => s.id === state.id),
         );
 
-        return {
-          id: changedItem.id,
-          state: changedItem.state,
-          //used initial order cause backend throws error order already exists
-          order: initialItem.order,
-          approvers: {
-            add: addedApprovers,
-            remove: removedApprovers,
-          },
-        };
-      });
+        const removedStates = initialStates.filter(
+          (state) => !existingStates.some((s) => s.id === state.id),
+        );
 
-      const createDataArr = newStates.map((newItem, index) => {
-        return {
-          state: newItem.state,
-          order: highestOrder + 1 + index,
-          approvers: newItem.approvers.map((approver) => approver.id),
-        };
-      });
+        const changedStates = existingStates.filter((state) => {
+          const initialItem = initialStates.find((e) => e.id === state.id);
+          return !initialItem || !itemsAreEqual(state, initialItem);
+        });
 
-      console.log('initial', initialStates);
-      console.log('existing', existingStates);
-      console.log('changed', changedStates);
-      console.log('new', newStates);
-      console.log('update', updateDataArr);
+        const updateDataArr = changedStates.map((changedItem) => {
+          const initialItem = initialStates.find(
+            (item) => item.id === changedItem.id,
+          ) as StateState;
+          const initialApproversIds = initialItem.approvers.map(
+            (approver) => approver.id,
+          );
+          const changedApproversIds = changedItem.approvers.map(
+            (approver) => approver.id,
+          );
 
-      if (cId && cId.length > 0) {
+          const addedApprovers = changedApproversIds.filter(
+            (id) => !initialApproversIds.includes(id),
+          );
+          const removedApprovers = initialApproversIds.filter(
+            (id) => !changedApproversIds.includes(id),
+          );
+
+          return {
+            id: changedItem.id,
+            state: changedItem.state,
+            //used initial order cause backend throws error order already exists
+            order: initialItem.order,
+            approvers: {
+              add: addedApprovers,
+              remove: removedApprovers,
+            },
+          };
+        });
+
+        const createDataArr = newStates.map((newItem, index) => {
+          return {
+            state: newItem.state,
+            order: highestOrder + 1 + index,
+            approvers: newItem.approvers.map((approver) => approver.id),
+          };
+        });
+
+        console.log('initial', initialStates);
+        console.log('existing', existingStates);
+        console.log('changed', changedStates);
+        console.log('new', newStates);
+        console.log('update', updateDataArr);
         const CreateReqs = createDataArr.map((data) => {
           return postAPI(`flows/${cId}/states`, data);
         });
@@ -262,7 +259,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         toast.promise(allReqs, {
           loading: 'Updating states',
           success: () => {
-            fetchAPI(`flows/${cId}/states`).then((data: States) => {
+            fetchAPI(`flows/${cId}/states`).then(async (data: States) => {
               const res: States = data;
               const x: StateState[] = res.states
                 .map((s: any) => {
@@ -286,72 +283,63 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 }),
               };
               console.log('🔥alignData', alignData);
-              putAPI(`flows/${cId}/align-states`, alignData).then(() => {
+              await putAPI(`flows/${cId}/align-states`, alignData).then(() => {
                 toast.success('Sorted flow state', {
                   duration: 1000,
                   position: 'top-right',
                 });
-                setDone(true);
                 setRerender((pre: boolean) => !pre);
+              });
+
+              await putAPI(`flows/${cId}`, data).then(() => {
+                toast.success('flow updated', {
+                  duration: 1000,
+                  position: 'top-right',
+                });
+                setOpen(false);
+                setRerender((prev: boolean) => !prev);
               });
             });
             return 'States updated';
           },
           error: 'Error updating states',
         });
-      } else {
-        console.log('no flow id');
-        setDone(true);
       }
     } else {
-      setDone(true);
-    }
-    if (isDirty || done) {
-      if (edit) {
-        putAPI(`flows/${cId}`, data).then(() => {
-          toast.success('flow updated', {
+      console.log('no flow id');
+      await postAPI('flows', data)
+        .then((data: any) => {
+          toast.success('Flow created', {
             duration: 1000,
             position: 'top-right',
           });
-          setOpen(false);
-          setRerender((prev: boolean) => !prev);
-        });
-      } else {
-        await postAPI('flows', data)
-          .then((data: any) => {
-            toast.success('Flow created', {
+          setCId(data?.id);
+          if (errorRef.current) {
+            const errorElement = errorRef.current;
+            if (errorElement) {
+              errorElement.innerText = '';
+            }
+          }
+          next();
+        })
+        .catch((error: any) => {
+          console.log(error);
+          toast.error(
+            error?.response?.data?.errors?.name[0] || 'Failed to create flow',
+            {
               duration: 1000,
               position: 'top-right',
-            });
-            setCId(data?.id);
-            if (errorRef.current) {
-              const errorElement = errorRef.current;
-              if (errorElement) {
-                errorElement.innerText = '';
-              }
+            },
+          );
+          if (errorRef.current) {
+            const errorElement = errorRef.current;
+            if (errorElement) {
+              errorElement.innerText =
+                error.response?.data?.errors?.name?.[0] || 'Already exists';
             }
-            next();
-          })
-          .catch((error: any) => {
-            console.log(error);
-            toast.error(
-              error?.response?.data?.errors?.name[0] || 'Failed to create flow',
-              {
-                duration: 1000,
-                position: 'top-right',
-              },
-            );
-            if (errorRef.current) {
-              const errorElement = errorRef.current;
-              if (errorElement) {
-                errorElement.innerText =
-                  error.response?.data?.errors?.name?.[0] || 'Already exists';
-              }
-            }
-          });
-      }
+          }
+        });
     }
-    setDone(false);
   };
 
   useEffect(() => {
@@ -430,8 +418,19 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             sx={{
               display: formStep === 1 ? 'block' : 'none',
               height: 'calc( 100vh - 250px )',
-              overflowY: 'auto',
-              overflowX: 'visible',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
+              pr: 3,
+              ':-webkit-scrollbar': {
+                width: '5px',
+                '&-track': {
+                  background: 'red.500',
+                },
+                '&-thumb': {
+                  borderColor: 'gray.900',
+                  borderRadius: '6px',
+                },
+              },
             }}>
             {edit && states && (
               <StatesForm
