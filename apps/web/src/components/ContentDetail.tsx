@@ -196,6 +196,7 @@ const ContentDetail = () => {
   const [pageTitle, setPageTitle] = useState<string>('');
   const [activeFlow, setActiveFlow] = useState<any>(null);
   const [nextState, setNextState] = useState<StateState>();
+  const [prevState, setPrevState] = useState<StateState>();
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
@@ -302,6 +303,19 @@ const ContentDetail = () => {
       });
     }
   };
+  const onRejectState = () => {
+    if (contents) {
+      const req = putAPI(`contents/${contents.content.id}/reject`);
+      toast.promise(req, {
+        loading: 'Rejecting...',
+        success: () => {
+          setRerender((prev) => !prev);
+          return 'Rejected';
+        },
+        error: 'Failed',
+      });
+    }
+  };
 
   useEffect(() => {
     if (activeFlow && contents) {
@@ -310,8 +324,10 @@ const ContentDetail = () => {
       )?.[0];
       const activeIndex = activeFlow?.states.indexOf(activeState);
       const nextState = activeFlow.states[activeIndex + 1];
+      const prevState = activeFlow.states[activeIndex - 1];
       if (activeState) {
         setNextState(nextState);
+        setPrevState(prevState);
       } else {
         setNextState(activeFlow.states[0]);
       }
@@ -514,15 +530,23 @@ const ContentDetail = () => {
                     />
                   ))}
                 </Flex>
-                <Box sx={{ p: 3 }}>
+                <Flex sx={{ p: 3, gap: 2 }}>
+                  {prevState && (
+                    <Button
+                      variant="buttonPrimary"
+                      sx={{ bg: 'red.700' }}
+                      onClick={() =>
+                        onRejectState()
+                      }>{`Back to ${prevState.state || ''}`}</Button>
+                  )}
                   {nextState && (
                     <Button
                       variant="buttonPrimary"
                       onClick={() =>
                         onApproveState()
-                      }>{`Send to ${nextState?.state || ''}`}</Button>
+                      }>{`Send to ${nextState.state || ''}`}</Button>
                   )}
-                </Box>
+                </Flex>
                 <Flex
                   sx={{
                     pt: 3,
