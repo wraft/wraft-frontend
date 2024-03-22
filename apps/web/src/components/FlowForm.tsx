@@ -104,10 +104,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     setCId(flowId);
   }, [flowId]);
 
-  useEffect(() => {
-    console.log('🍉cId', cId);
-  }, [cId]);
-
   /**
    * Load all states for a particular Flow
    * @param id flow id
@@ -115,7 +111,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
-      console.log('👽flows/id/states', data);
       const res: States = data;
       const x: StateState[] = res.states
         .map((s: any) => {
@@ -129,8 +124,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       );
       setHighestOrder(bigOrderItem.order);
 
-      console.log('👽highest order', bigOrderItem.order);
-
       setInitialStates(x);
       setStates(x);
     });
@@ -143,16 +136,13 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadFlow = (fId: string) => {
     fetchAPI(`flows/${fId}`).then((data: any) => {
-      console.log('👽flows:', data);
       const res: Flow = data.flow;
       setFlow(res);
       setValue('name', res?.name);
     });
   };
 
-  useEffect(() => {
-    console.log('🐼states:', states);
-  }, [states]);
+  useEffect(() => {}, [states]);
 
   const onSubmit = async (data: any) => {
     const itemsAreEqual = (item1: StateState, item2: StateState) => {
@@ -236,11 +226,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           };
         });
 
-        console.log('initial', initialStates);
-        console.log('existing', existingStates);
-        console.log('changed', changedStates);
-        console.log('new', newStates);
-        console.log('update', updateDataArr);
         const CreateReqs = createDataArr.map((data) => {
           return postAPI(`flows/${cId}/states`, data);
         });
@@ -266,7 +251,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   return s.state;
                 })
                 .sort((a, b) => a.order - b.order);
-              console.log('🔥🔥', x);
               type Align = {
                 states: {
                   order: number;
@@ -282,7 +266,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                   };
                 }),
               };
-              console.log('🔥alignData', alignData);
               await putAPI(`flows/${cId}/align-states`, alignData).then(() => {
                 toast.success('Sorted flow state', {
                   duration: 1000,
@@ -306,7 +289,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         });
       }
     } else {
-      console.log('no flow id');
       await postAPI('flows', data)
         .then((data: any) => {
           toast.success('Flow created', {
@@ -323,7 +305,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           next();
         })
         .catch((error: any) => {
-          console.log(error);
           toast.error(
             error?.response?.data?.errors?.name[0] || 'Failed to create flow',
             {
