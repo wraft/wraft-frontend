@@ -309,15 +309,6 @@ const ContentDetail = () => {
       } else {
         setNextState(activeFlow.states[0]);
       }
-      console.log(
-        'check',
-        activeState,
-        activeIndex,
-
-        nextState,
-        activeFlow,
-        contents.state,
-      );
     }
   }, [activeFlow, contents]);
 
