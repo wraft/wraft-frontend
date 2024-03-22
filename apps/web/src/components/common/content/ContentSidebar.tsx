@@ -9,6 +9,7 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
+import { TickIcon } from '@wraft/icon';
 
 import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
 import Modal from 'components/Modal';
@@ -25,7 +26,6 @@ import { ConfirmDelete } from '..';
  */
 export const FlowStateBlock = ({
   state,
-  order,
   activeFlow,
   id,
 }: FlowStateBlockProps) => {
@@ -34,37 +34,37 @@ export const FlowStateBlock = ({
     <Flex
       as={Focusable}
       sx={{
+        alignItems: 'center',
         ':last-child': {
-          svg: {
+          '.arrowicon': {
             display: 'none',
           },
+          minWidth: 'fit-content',
         },
       }}>
       <Box
         sx={{
-          mt: 2,
           fontSize: 0,
           width: '18px',
           height: '18px',
-          color: isCurrent ? 'green.100' : 'green.500',
           borderRadius: '9rem',
-          bg: isCurrent ? 'green.500' : 'green.100',
+          bg: isCurrent ? 'green.500' : 'gray.100',
           textAlign: 'center',
           mr: 2,
-          pt: '2px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
         }}>
-        {order}
+        <TickIcon width={14} height={20} color={'white'} />
       </Box>
-      <Text sx={{ fontSize: 1, pt: 2, textTransform: 'capitalize' }}>
-        {state}
-      </Text>
+      <Text sx={{ fontSize: 1, textTransform: 'capitalize' }}>{state}</Text>
       <Box
         sx={{
           paddingLeft: 1,
           paddingRight: 0,
-          paddingTop: 2,
         }}>
-        <BackArrowIcon width={20} size={20} stroke={1} />
+        <BackArrowIcon className="arrowicon" width={20} size={20} stroke={1} />
       </Box>
     </Flex>
   );
