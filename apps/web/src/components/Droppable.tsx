@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-// import { Button as BaseButton } from '@ariakit/react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -16,36 +15,41 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { DragIcon } from '@wraft/icon';
-import { Box, Button, Flex, useThemeUI } from 'theme-ui';
+import { CloseIcon, DeleteIcon, DragIcon } from '@wraft/icon';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Input,
+  Label,
+  Spinner,
+  Text,
+  useThemeUI,
+} from 'theme-ui';
+import toast from 'react-hot-toast';
+import { Button } from '@wraft/ui';
+import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
-import { IconWrapper } from './Atoms';
+import { fetchAPI } from 'utils/models';
+
+import { StateState } from './FlowForm';
+import Modal from './Modal';
+import { ConfirmDelete } from './common';
 
 type Props = {
-  list: any;
-  onAttachApproval: any;
-  deleteState: any;
-  setOrder: any;
+  states: StateState[];
+  setStates: (e: StateState[]) => void;
+  highestOrder: number;
 };
 
-export function Droppable({
-  list,
-  onAttachApproval,
-  deleteState,
-  setOrder,
-}: Props) {
-  const [items, setItems] = useState([]);
+export function Droppable({ states, setStates, highestOrder }: Props) {
+  const [items, setItems] = useState<StateState[]>([]);
 
   useEffect(() => {
-    setOrder(items);
-  }, [items]);
-
-  useEffect(() => {
-    // Update items when the list prop changes
-    if (list && list.length > 0) {
-      setItems(list.map((item: any) => item.name));
+    if (states && states.length > 0) {
+      setItems(states);
     }
-  }, [list]);
+  }, [states]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -56,11 +60,15 @@ export function Droppable({
 
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
-    setItems((items: any) => {
-      const oldIndex = items.indexOf(active.id);
-      const newIndex = items.indexOf(over.id);
-      return arrayMove(items, oldIndex, newIndex);
-    });
+    const activeState = states.filter((s) => s.id == active.id)[0];
+    const overState = states.filter((s) => s.id == over.id)[0];
+    const oldIndex = states.indexOf(activeState);
+    const newIndex = states.indexOf(overState);
+    const newArr = arrayMove(states, oldIndex, newIndex).map((i, index) => ({
+      ...i,
+      order: highestOrder + 1 + index,
+    }));
+    setStates(newArr);
   };
 
   return (
@@ -69,18 +77,14 @@ export function Droppable({
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        {items.map((name: any, index: number) => {
+        {items.map((state: StateState, index: number) => {
           return (
-            <Box
-              key={name}
-              sx={{
-                borderBottom: '1px solid #E4E9EF;',
-              }}>
+            <Box key={state.id}>
               <SortableItem
+                state={state}
+                states={items}
+                setStates={setStates}
                 index={index + 1}
-                name={name}
-                onAttachApproval={onAttachApproval}
-                deleteState={deleteState}
               />
             </Box>
           );
@@ -90,12 +94,20 @@ export function Droppable({
   );
 }
 
-const SortableItem = (props: {
-  name: string;
+type SortableItemProps = {
   index: number;
-  onAttachApproval: any;
-  deleteState: any;
-}) => {
+  state: StateState;
+  states: StateState[];
+  setStates: (e: StateState[]) => void;
+};
+const SortableItem = ({
+  index,
+  setStates,
+  state,
+  states,
+}: SortableItemProps) => {
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+
   const {
     attributes,
     listeners,
@@ -104,39 +116,130 @@ const SortableItem = (props: {
     transition,
     isDragging,
   } = useSortable({
-    id: props.name,
+    id: state.id,
   });
+
+  const [users, setUsers] = useState<any>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const sourceRef = useRef<HTMLInputElement>(null);
+  const targetRef = useRef<HTMLElement>(null);
   const themeui = useThemeUI();
 
+  const onUserSelect = (user: any) => {
+    if (states && state) {
+      const userExists = state.approvers.some(
+        (approver: any) => approver.id === user.id,
+      );
+      if (userExists) {
+        toast.error('user already exists');
+      } else {
+        const newState: StateState = {
+          ...state,
+          approvers: [...state.approvers, user],
+          error: undefined,
+        };
+        const newArr = states.map((s: any) => {
+          if (s.id === state.id) {
+            return newState;
+          } else {
+            return s;
+          }
+        });
+        setStates(newArr);
+      }
+    }
+  };
+
+  const onRemoveUser = (user: any) => {
+    if (states && state) {
+      const filterdApprovers = state.approvers.filter(
+        (a: any) => a.id !== user.id,
+      );
+      const newState: StateState = {
+        ...state,
+        approvers: filterdApprovers,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
+  };
+
+  const onNameChange = (e: any) => {
+    const newName = e.target.value;
+    if (states && state) {
+      const newState: StateState = {
+        ...state,
+        state: newName,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
+  };
+
+  const onDeleteState = () => {
+    if (states && state) {
+      const newArr = states.filter((s: any) => s.id !== state.id);
+      const final = newArr.map((s: any, index: number) => ({
+        ...s,
+        order: index + 1,
+      }));
+      setStates(final);
+      setDeleteOpen(false);
+    }
+  };
+
+  const onChangeInput = (e: any) => {
+    setLoading(true);
+    fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
+      const usr = data.users;
+      const filtered = usr.filter(
+        (u: any) => !state.approvers.some((a) => a.id === u.id),
+      );
+      setUsers(filtered);
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    if (sourceRef.current && targetRef.current) {
+      const sourceStyle = window.getComputedStyle(sourceRef.current);
+      const sourceWidth = sourceStyle.width;
+      targetRef.current.style.minWidth = sourceWidth;
+    }
+  }, [isOpen]);
+
   return (
-    <Flex
-      sx={{
-        position: 'relative',
-        button: {
-          display: 'none',
-        },
-        ':hover button': {
-          display: 'block',
-        },
-      }}>
+    <Flex sx={{ mt: `${index === 1 ? 0 : 4}` }}>
       <Box
-        sx={{
-          cursor: 'pointer',
-          position: 'absolute',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          left: '-46px',
-        }}
         ref={setNodeRef}
         {...attributes}
-        {...listeners}>
+        {...listeners}
+        sx={{
+          cursor: 'pointer',
+          flexShrink: 0,
+        }}>
         <Box
           as="div"
           style={{
             transform: CSS.Transform.toString(transform),
             transition: transition,
             display: 'flex',
-            padding: '0px 16px',
+            padding: '16px',
+            marginTop: '28px',
           }}>
           <DragIcon
             color={themeui?.theme?.colors?.gray?.[200] || ''}
@@ -147,104 +250,200 @@ const SortableItem = (props: {
         </Box>
       </Box>
       <Box
-        as="div"
-        style={{
+        sx={{
+          width: '100%',
           transform: CSS.Transform.toString(transform),
           transition: transition,
-          display: 'flex',
-          padding: '0px 16px',
-        }}
-        className={`w-20 h-20 ${getColor(Number(props.index))}
-         ${isDragging ? 'z-10' : ''}`}>
-        <Box
+          bg: 'white',
+          borderRadius: '4px',
+        }}>
+        <Label>Default State</Label>
+        <Flex
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            py: '13px',
-            gap: '16px',
+            position: 'relative',
+            button: {
+              display: 'none',
+            },
+            ':hover button': {
+              display: 'block',
+            },
+            border: '1px solid',
+            borderColor: 'border',
+            borderRadius: '4px',
           }}>
-          <Box
+          <Input
+            className={`${isDragging ? 'z-10' : ''}`}
+            defaultValue={state.state}
+            onChange={(e) => {
+              onNameChange(e);
+            }}
+          />
+          <Flex
+            data-no-dnd="true"
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
+              ml: 'auto',
               alignItems: 'center',
-              width: '18px',
-              height: '18px',
-              fontSize: '9.6px',
-              background: '#E4E9EF',
-              borderRadius: '74px',
-            }}>
-            {props.index}
-          </Box>
-          <Box
-            sx={{
-              fontSize: '15px',
-              fontWeight: 500,
-              color: '#2C3641',
-            }}>
-            {props.name}
+              cursor: 'pointer',
+              zIndex: 900,
+              gap: 0,
+            }}></Flex>
+        </Flex>
+        <Box>
+          {state.error && (
+            <Text as={'p'} variant="error">
+              {state.error}
+            </Text>
+          )}
+          <Box mt={3}>
+            <Box>
+              <Input
+                ref={sourceRef}
+                onChange={(e) => {
+                  onChangeInput(e);
+                  setIsOpen(true);
+                }}
+                placeholder="Add assignee"></Input>
+              <MenuProvider>
+                <MenuButton
+                  as={Box}
+                  variant="none"
+                  sx={{ display: 'hidden', alignItems: 'center' }}></MenuButton>
+                <Menu
+                  ref={targetRef}
+                  as={Box}
+                  id={'targetElement'}
+                  variant="layout.menu"
+                  sx={{ p: 0, minWidth: '100%' }}
+                  open={isOpen}
+                  onClose={() => setIsOpen(false)}>
+                  {users && users.length > 0 && !loading ? (
+                    <Box
+                      sx={{
+                        mt: 1,
+                        border: '1px solid',
+                        borderColor: 'border',
+                        borderRadius: '4px',
+                        minWidth: '100%',
+                      }}>
+                      {users.map((x: any) => (
+                        <MenuItem
+                          as={Flex}
+                          key={x.id}
+                          onClick={() => onUserSelect(x)}
+                          sx={{
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            px: 3,
+                            py: 2,
+                            cursor: 'pointer',
+                          }}>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              py: 2,
+                            }}>
+                            <Avatar
+                              src={x.profile_pic}
+                              alt="profile"
+                              width={18}
+                              height={18}
+                            />
+                            <Text
+                              as={'p'}
+                              ml={3}
+                              variant="subM"
+                              sx={{ color: 'gray.900' }}>
+                              {x.name}
+                            </Text>
+                          </Box>
+                        </MenuItem>
+                      ))}
+                    </Box>
+                  ) : (
+                    <MenuItem
+                      as={Box}
+                      sx={{
+                        px: 3,
+                        py: 2,
+                      }}>
+                      {loading ? (
+                        <Spinner color={'gree.500'} size={10} />
+                      ) : (
+                        <Text variant="subM">No user found</Text>
+                      )}
+                    </MenuItem>
+                  )}
+                </Menu>
+              </MenuProvider>
+            </Box>
+            {state.approvers && state.approvers.length > 0 && (
+              <Box
+                sx={{
+                  mt: 3,
+                  border: '1px solid',
+                  borderColor: 'border',
+                  borderRadius: '4px',
+                }}>
+                {state.approvers.map((e: any) => (
+                  <Flex
+                    key={e.id}
+                    sx={{
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      px: 3,
+                      py: 2,
+                    }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', py: 2 }}>
+                      <Avatar
+                        src={e.profile_pic}
+                        alt="profile"
+                        width={18}
+                        height={18}
+                      />
+                      <Text
+                        as={'p'}
+                        ml={3}
+                        variant="subM"
+                        sx={{ color: 'gray.900' }}>
+                        {e.name}
+                      </Text>
+                    </Box>
+                    <Box
+                      onClick={() => onRemoveUser(e)}
+                      sx={{ cursor: 'pointer' }}>
+                      <DeleteIcon width={12} height={12} />
+                    </Box>
+                  </Flex>
+                ))}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
-      <Flex
-        data-no-dnd="true"
+      <Box
         sx={{
-          ml: 'auto',
-          alignItems: 'center',
-          cursor: 'pointer',
-          zIndex: 900,
-          gap: 0,
+          mt: '28px',
+
+          transform: CSS.Transform.toString(transform),
+          transition: transition,
         }}>
         <Button
-          type="button"
-          data-no-dnd="true"
-          variant="btnDelete"
-          sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
-          onClick={() => props.onAttachApproval(props)}>
-          <IconWrapper stroke={2}>
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M5 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-            <path d="M3 21v-2a4 4 0 0 1 4 -4h4c.96 0 1.84 .338 2.53 .901" />
-            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            <path d="M16 19h6" />
-            <path d="M19 16v6" />
-          </IconWrapper>
-        </Button>
-        <Button
-          type="button"
-          variant="btnDelete"
-          data-no-dnd="true"
-          sx={{ p: 0, border: 0, bg: 'transparent', mr: 1 }}
+          variant="ghost"
           onClick={() => {
-            props.deleteState(props.name);
+            setDeleteOpen(true);
           }}>
-          <IconWrapper stroke={2}>
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M4 7l16 0" />
-            <path d="M10 11l0 6" />
-            <path d="M14 11l0 6" />
-            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-          </IconWrapper>
+          <CloseIcon width={18} height={18} />
         </Button>
-      </Flex>
+      </Box>
+      <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)}>
+        <ConfirmDelete
+          setOpen={() => setDeleteOpen(false)}
+          onConfirmDelete={() => onDeleteState()}
+          text={`Are you sure you want to remove ${state.state} ?`}
+          title="Delete State"
+        />
+      </Modal>
     </Flex>
   );
-};
-
-const getColor = (item: number) => {
-  switch (item) {
-    case 1:
-      return 'bg-red-400';
-    case 2:
-      return 'bg-blue-400';
-    case 3:
-      return 'bg-pink-400';
-    case 4:
-      return 'bg-yellow-400';
-    case 5:
-      return 'bg-purple-400';
-    default:
-      return 'bg-black';
-  }
 };
