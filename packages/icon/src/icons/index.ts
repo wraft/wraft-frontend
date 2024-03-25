@@ -12,6 +12,7 @@ export { default as DashIcon } from './Dash';
 export { default as DeleteIcon } from './Delete';
 export { default as DocumentIcon } from './Document';
 export { default as DownIcon } from './Down';
+export { default as DoxIcon } from './Dox';
 export { default as DragIcon } from './Drag';
 export { default as EditIcon } from './Edit';
 export { default as EllipsisHIcon } from './EllipsisH';
