@@ -319,6 +319,10 @@ const ContentDetail = () => {
 
   useEffect(() => {
     if (activeFlow && contents) {
+      console.log('🔥activeFlow', activeFlow, '🔥contents', contents);
+      fetchAPI(`flows/${activeFlow.id}/states`).then((data: any) => {
+        console.log('data', data);
+      });
       const activeState = activeFlow?.states.filter(
         (a: any) => a.id === contents.state.id,
       )?.[0];
@@ -533,18 +537,17 @@ const ContentDetail = () => {
                 <Flex sx={{ p: 3, gap: 2 }}>
                   {prevState && (
                     <Button
-                      variant="buttonPrimary"
-                      sx={{ bg: 'red.700' }}
-                      onClick={() =>
-                        onRejectState()
-                      }>{`Back to ${prevState.state || ''}`}</Button>
+                      variant="buttonSecondary"
+                      onClick={() => onRejectState()}>
+                      <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                    </Button>
                   )}
                   {nextState && (
                     <Button
                       variant="buttonPrimary"
-                      onClick={() =>
-                        onApproveState()
-                      }>{`Send to ${nextState.state || ''}`}</Button>
+                      onClick={() => onApproveState()}>
+                      <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                    </Button>
                   )}
                 </Flex>
                 <Flex
