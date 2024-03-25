@@ -7,6 +7,7 @@ import {
   TextIcon,
   ManageIcon,
   SettingIcon,
+  DoxIcon,
 } from '@wraft/icon';
 
 const Menulist = [
@@ -42,6 +43,11 @@ const Menulist = [
         name: 'Variants',
         icon: <VariantIcon width={20} color="#2C3641" />,
         path: '/content-types',
+      },
+      {
+        name: 'Forms',
+        icon: <DoxIcon width={20} />,
+        path: '/forms',
       },
       {
         name: 'Blocks',
