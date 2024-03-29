@@ -15,9 +15,9 @@ const Index: FC = () => {
         <meta name="description" content="Manage Forms" />
       </Head>
       <Page>
-        <PageHeader title="Forms" desc="Collect data via Forms">
+        <PageHeader title="Forms">
           <Box sx={{ ml: 'auto', pt: 2 }}>
-            <Link href="/forms/new" variant="btnSmall">
+            <Link href="/forms/new" variant="secondary">
               New Form
             </Link>
           </Box>
