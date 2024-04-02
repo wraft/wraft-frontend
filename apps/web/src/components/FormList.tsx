@@ -9,7 +9,7 @@ import { EllipsisHIcon } from '@wraft/icon';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 import { EmptyForm } from './Icons';
-import Link from './NavLink';
+import Link, { NextLinkText } from './NavLink';
 import { TimeAgo } from './Atoms';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
@@ -170,13 +170,14 @@ const FormList: FC = () => {
       cell: ({ row }: any) => {
         return (
           <>
-            {/* <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
-              <Box> */}
-            <Box>{row.original?.name}</Box>
-            {/* </Box>
-            </NextLink>
-            <Drawer open={false} setOpen={() => {}}>
-              <FlowForm setOpen={() => {}} /> </Drawer> */}
+            <NextLinkText href={`/forms/${row.original?.id}`}>
+              <Box>
+                <Box>{row.original?.name}</Box>
+              </Box>
+            </NextLinkText>
+            {/* <Drawer open={false} setOpen={() => {}}>
+              <FlowForm setOpen={() => {}} />{' '}
+            </Drawer> */}
           </>
         );
       },
