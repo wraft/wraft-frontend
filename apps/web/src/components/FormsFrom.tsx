@@ -1,4 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { Box, Button, Checkbox, Flex, Input, Label, Text } from 'theme-ui';
 
 // type Props = {};
@@ -131,7 +144,11 @@ const FormsFrom = () => {
               {item.type === 'options' && (
                 <Box mt={3}>
                   <Label>Options</Label>
-                  <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+                  <DraggableValues
+                    item={item}
+                    onOptionNameChange={onOptionNameChange}
+                  />
+                  {/* <Flex sx={{ flexDirection: 'column', gap: 2 }}>
                     {item.values.map((value: any, index: number) => (
                       <Box key={index}>
                         <Input
@@ -142,7 +159,7 @@ const FormsFrom = () => {
                           }></Input>
                       </Box>
                     ))}
-                  </Flex>
+                  </Flex> */}
                   <Box mt={3}>
                     <Button
                       variant="secondary"
@@ -209,3 +226,66 @@ const FormsFrom = () => {
 };
 
 export default FormsFrom;
+
+type DraggableValuesProps = {
+  item: any;
+  onOptionNameChange: any;
+};
+
+const DraggableValues = ({
+  item,
+  onOptionNameChange,
+}: DraggableValuesProps) => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = ({ active, over }: any) => {
+    if (!active || !over || active.id === over.id) return;
+    console.log(active, over, active.id, over.id);
+    // const activeState = items.filter((s: any) => s.id == active.id)[0];
+    // const overState = items.filter((s: any) => s.id == over.id)[0];
+    // const oldIndex = items.indexOf(activeState);
+    // const newIndex = items.indexOf(overState);
+    // console.log(activeState, overState, oldIndex, newIndex);
+    // const newArr = arrayMove(items, oldIndex, newIndex).map((i, index) => ({
+    //   ...i,
+    //   order: highestOrder + 1 + index,
+    // }));
+    // setStates(newArr);
+  };
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}>
+      <SortableContext items={item.values} strategy={rectSortingStrategy}>
+        {/* {item.values.map((value: any, index: number) => {
+          return (
+            <Box key={value.id}>
+              <SortableItem
+                state={state}
+                states={values}
+                setStates={setItems}
+                index={index + 1}
+              /> 
+            </Box>
+          );
+        })} */}
+        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+          {item.values.map((value: any, index: number) => (
+            <Box key={index}>
+              <Input
+                defaultValue={value.name}
+                placeholder="Option Name"
+                onChange={(e) => onOptionNameChange(e, item, value)}></Input>
+            </Box>
+          ))}
+        </Flex>
+      </SortableContext>
+    </DndContext>
+  );
+};
