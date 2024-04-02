@@ -11,8 +11,20 @@ import {
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
+  useSortable,
 } from '@dnd-kit/sortable';
-import { Box, Button, Checkbox, Flex, Input, Label, Text } from 'theme-ui';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Input,
+  Label,
+  Text,
+  useThemeUI,
+} from 'theme-ui';
+import { DragIcon } from '@wraft/icon';
+import { CSS } from '@dnd-kit/utilities';
 
 // type Props = {};
 
@@ -146,6 +158,8 @@ const FormsFrom = () => {
                   <Label>Options</Label>
                   <DraggableValues
                     item={item}
+                    items={items}
+                    setItems={setItems}
                     onOptionNameChange={onOptionNameChange}
                   />
                   {/* <Flex sx={{ flexDirection: 'column', gap: 2 }}>
@@ -229,11 +243,15 @@ export default FormsFrom;
 
 type DraggableValuesProps = {
   item: any;
+  items: any;
+  setItems: any;
   onOptionNameChange: any;
 };
 
 const DraggableValues = ({
   item,
+  items,
+  setItems,
   onOptionNameChange,
 }: DraggableValuesProps) => {
   const sensors = useSensors(
@@ -277,15 +295,116 @@ const DraggableValues = ({
         })} */}
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {item.values.map((value: any, index: number) => (
-            <Box key={index}>
-              <Input
-                defaultValue={value.name}
-                placeholder="Option Name"
-                onChange={(e) => onOptionNameChange(e, item, value)}></Input>
-            </Box>
+            // <Box key={index}>
+            //   <Input
+            //     defaultValue={value.name}
+            //     placeholder="Option Name"
+            //     onChange={(e) => onOptionNameChange(e, item, value)}></Input>
+            // </Box>
+            <SortableItem
+              key={index}
+              item={item}
+              items={items}
+              onOptionNameChange={onOptionNameChange}
+              setItems={setItems}
+              value={value}
+              values={item.values}
+            />
           ))}
         </Flex>
       </SortableContext>
     </DndContext>
+  );
+};
+
+type SortableItemProps = {
+  value: any;
+  values: any;
+  item: any;
+  items: any;
+  setItems: any;
+  onOptionNameChange: any;
+};
+const SortableItem = ({
+  value,
+  values,
+  item,
+  items,
+  setItems,
+  onOptionNameChange,
+  //   index,
+}: SortableItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: value.id,
+  });
+  //   const style = {
+  //     transform: CSS.Transform.toString(transform),
+  //     transition,
+  //   };
+  const { theme } = useThemeUI();
+  return (
+    <Flex sx={{ alignItems: 'center' }}>
+      <Box
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        sx={{
+          cursor: 'pointer',
+          flexShrink: 0,
+        }}>
+        <Box
+          as="div"
+          style={{
+            transform: CSS.Transform.toString(transform),
+            transition: transition,
+            display: 'flex',
+            padding: '16px',
+          }}>
+          <DragIcon
+            color={theme?.colors?.gray?.[200] || ''}
+            width={20}
+            height={20}
+            viewBox="0 0 24 24"
+          />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          transform: CSS.Transform.toString(transform),
+          transition: transition,
+          bg: 'white',
+          borderRadius: '4px',
+        }}>
+        <Flex
+          sx={{
+            position: 'relative',
+            button: {
+              display: 'none',
+            },
+            ':hover button': {
+              display: 'block',
+            },
+            border: '1px solid',
+            borderColor: 'border',
+            borderRadius: '4px',
+          }}>
+          <Input
+            className={`${isDragging ? 'z-10' : ''}`}
+            defaultValue={value.name}
+            onChange={(e) => {
+              onOptionNameChange(e, item, value);
+            }}
+          />
+        </Flex>
+      </Box>
+    </Flex>
   );
 };
