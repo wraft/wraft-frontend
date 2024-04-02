@@ -8,30 +8,20 @@ import Page from 'components/PageFrame';
 
 const Index: FC = () => {
   const [items, setItems] = useState<any>();
-  const onAddText = () => {
-    const newItem = {
-      name: '',
-      type: 'text',
-      id: Math.random().toString(),
-      required: false,
-      long: false,
-    };
-    if (items) {
-      setItems([...items, newItem]);
-    } else {
-      setItems([newItem]);
-    }
-  };
 
-  const onAddOptions = () => {
-    const newItem = {
+  const onAddField = (type: 'email' | 'date' | 'time' | 'text' | 'options') => {
+    const newItem: any = {
       name: '',
-      type: 'options',
+      type: type,
       id: Math.random().toString(),
       required: false,
-      multiple: false,
-      values: [],
     };
+    if (type === 'text') {
+      newItem.long = false;
+    } else if (type === 'options') {
+      newItem.multiple = false;
+      newItem.values = [];
+    }
     if (items) {
       setItems([...items, newItem]);
     } else {
@@ -130,6 +120,7 @@ const Index: FC = () => {
   useEffect(() => {
     console.table(items);
   }, [items]);
+
   return (
     <>
       <Head>
@@ -222,9 +213,11 @@ const Index: FC = () => {
               ))}
           </Box>
           <Flex sx={{ gap: 3, mt: 4 }}>
-            <Button onClick={() => onAddText()}>Text</Button>
-            <Button onClick={() => onAddOptions()}>Options</Button>
-            <Button onClick={() => onAddOptions()}>Options</Button>
+            <Button onClick={() => onAddField('text')}>Text</Button>
+            <Button onClick={() => onAddField('options')}>Options</Button>
+            <Button onClick={() => onAddField('date')}>Date</Button>
+            <Button onClick={() => onAddField('time')}>Time</Button>
+            <Button onClick={() => onAddField('email')}>Email</Button>
           </Flex>
         </Box>
       </Page>
