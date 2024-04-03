@@ -8,6 +8,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import {
+  arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
@@ -162,18 +163,6 @@ const FormsFrom = () => {
                     setItems={setItems}
                     onOptionNameChange={onOptionNameChange}
                   />
-                  {/* <Flex sx={{ flexDirection: 'column', gap: 2 }}>
-                    {item.values.map((value: any, index: number) => (
-                      <Box key={index}>
-                        <Input
-                          defaultValue={value.name}
-                          placeholder="Option Name"
-                          onChange={(e) =>
-                            onOptionNameChange(e, item, value)
-                          }></Input>
-                      </Box>
-                    ))}
-                  </Flex> */}
                   <Box mt={3}>
                     <Button
                       variant="secondary"
@@ -264,51 +253,47 @@ const DraggableValues = ({
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
     console.log(active, over, active.id, over.id);
-    // const activeState = items.filter((s: any) => s.id == active.id)[0];
-    // const overState = items.filter((s: any) => s.id == over.id)[0];
-    // const oldIndex = items.indexOf(activeState);
-    // const newIndex = items.indexOf(overState);
-    // console.log(activeState, overState, oldIndex, newIndex);
-    // const newArr = arrayMove(items, oldIndex, newIndex).map((i, index) => ({
-    //   ...i,
-    //   order: highestOrder + 1 + index,
-    // }));
-    // setStates(newArr);
+    const activeValue = item.values.filter((s: any) => s.id == active.id)[0];
+    const overValue = item.values.filter((s: any) => s.id == over.id)[0];
+    const oldIndex = item.values.indexOf(activeValue);
+    const newIndex = item.values.indexOf(overValue);
+    const cpyValues = [...item.values];
+    const newArr = arrayMove(cpyValues, oldIndex, newIndex);
+    const data = items.map((i: any) => {
+      if (i.id === item.id) {
+        return { ...i, values: newArr };
+      } else return { ...i };
+    });
+    console.log(
+      '🔥',
+      activeValue,
+      overValue,
+      oldIndex,
+      newIndex,
+      newArr,
+      data,
+      '🔥',
+    );
+
+    setItems([]);
+    setTimeout(() => {
+      setItems(data);
+    }, 0);
   };
+
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={item.values} strategy={rectSortingStrategy}>
-        {/* {item.values.map((value: any, index: number) => {
-          return (
-            <Box key={value.id}>
-              <SortableItem
-                state={state}
-                states={values}
-                setStates={setItems}
-                index={index + 1}
-              /> 
-            </Box>
-          );
-        })} */}
         <Flex sx={{ flexDirection: 'column', gap: 2 }}>
           {item.values.map((value: any, index: number) => (
-            // <Box key={index}>
-            //   <Input
-            //     defaultValue={value.name}
-            //     placeholder="Option Name"
-            //     onChange={(e) => onOptionNameChange(e, item, value)}></Input>
-            // </Box>
             <SortableItem
               key={index}
               item={item}
-              items={items}
-              onOptionNameChange={onOptionNameChange}
-              setItems={setItems}
               value={value}
-              values={item.values}
+              onOptionNameChange={onOptionNameChange}
             />
           ))}
         </Flex>
@@ -319,20 +304,13 @@ const DraggableValues = ({
 
 type SortableItemProps = {
   value: any;
-  values: any;
   item: any;
-  items: any;
-  setItems: any;
   onOptionNameChange: any;
 };
 const SortableItem = ({
   value,
-  values,
   item,
-  items,
-  setItems,
   onOptionNameChange,
-  //   index,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -344,10 +322,6 @@ const SortableItem = ({
   } = useSortable({
     id: value.id,
   });
-  //   const style = {
-  //     transform: CSS.Transform.toString(transform),
-  //     transition,
-  //   };
   const { theme } = useThemeUI();
   return (
     <Flex sx={{ alignItems: 'center' }}>
