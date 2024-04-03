@@ -137,10 +137,19 @@ const FormsFrom = ({ items, setItems }: Props) => {
     const newArr = [...items];
     if (index < newArr.length) {
       newArr.splice(index + 1, 0, item);
+      setItems(newArr);
     } else {
       newArr.push(item);
+      setItems(newArr);
     }
-    setItems(newArr);
+  };
+
+  const onDeleteField = (index: number) => {
+    const newArr = [...items];
+    if (index < newArr.length) {
+      newArr.splice(index, 1);
+      setItems(newArr);
+    }
   };
 
   useEffect(() => {
@@ -228,7 +237,7 @@ const FormsFrom = ({ items, setItems }: Props) => {
                     onClick={() => onDuplicateField(index, item)}>
                     <Box>copy</Box>
                   </Button>
-                  <Button variant="ghost">
+                  <Button variant="ghost" onClick={() => onDeleteField(index)}>
                     <DeleteIcon width={16} />
                   </Button>
                   <Button variant="ghost">
