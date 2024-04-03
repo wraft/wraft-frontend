@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -27,10 +27,12 @@ import {
 import { DragIcon } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
 
-// type Props = {};
+type Props = {
+  items: any;
+  setItems: any;
+};
 
-const FormsFrom = () => {
-  const [items, setItems] = useState<any>();
+const FormsFrom = ({ items, setItems }: Props) => {
   const onAddField = (type: 'email' | 'date' | 'time' | 'text' | 'options') => {
     const newItem: any = {
       name: '',
