@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DragIcon } from '@wraft/icon';
-import { Box, Flex, Input, useThemeUI } from 'theme-ui';
+import { Box, Flex, Input, Label, useThemeUI } from 'theme-ui';
 
 type Props = { items: any; setItems: any };
 
@@ -115,6 +115,9 @@ const SortableItem = ({ item }: SortableItemProps) => {
           bg: 'white',
           borderRadius: '4px',
         }}>
+        <Label sx={{ textTransform: 'capitalize' }}>
+          {item.type === 'options' ? 'Multiple Choice' : item.type}
+        </Label>
         <Flex
           sx={{
             position: 'relative',
