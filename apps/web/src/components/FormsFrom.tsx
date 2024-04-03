@@ -14,18 +14,10 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  Input,
-  Label,
-  Text,
-  useThemeUI,
-} from 'theme-ui';
-import { DragIcon } from '@wraft/icon';
+import { Box, Checkbox, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
+import { DeleteIcon, DownIcon, DragIcon, UpIcon } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
+import { Button } from '@wraft/ui';
 
 type Props = {
   items: any;
@@ -141,6 +133,16 @@ const FormsFrom = ({ items, setItems }: Props) => {
     setItems(newArr);
   };
 
+  const onDuplicateField = (index: number, item: any) => {
+    const newArr = [...items];
+    if (index < newArr.length) {
+      newArr.splice(index + 1, 0, item);
+    } else {
+      newArr.push(item);
+    }
+    setItems(newArr);
+  };
+
   useEffect(() => {
     console.table(items);
   }, [items]);
@@ -174,47 +176,68 @@ const FormsFrom = ({ items, setItems }: Props) => {
                   </Box>
                 </Box>
               )}
-              <Flex sx={{ gap: 3, mt: 3 }}>
-                <Box>
-                  <Label sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Checkbox
-                      checked={item.required}
-                      onChange={(e) => onRequiredChecked(e, index)}></Checkbox>
-                    <Text> Required</Text>
-                  </Label>
-                </Box>
-                {item.type === 'text' && (
+              <Flex sx={{ justifyContent: 'space-between' }}>
+                <Flex sx={{ gap: 3, mt: 3 }}>
                   <Box>
                     <Label
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                      }}>
+                      sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                       <Checkbox
-                        checked={item.long}
-                        onChange={(e) => onLongChecked(e, index)}></Checkbox>
-                      <Text>Long Answer</Text>
-                    </Label>
-                  </Box>
-                )}
-                {item.type === 'options' && (
-                  <Box>
-                    <Label
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                      }}>
-                      <Checkbox
-                        checked={item.long}
+                        checked={item.required}
                         onChange={(e) =>
-                          onMultipleChecked(e, index)
+                          onRequiredChecked(e, index)
                         }></Checkbox>
-                      <Text>Multiple Answers</Text>
+                      <Text> Required</Text>
                     </Label>
                   </Box>
-                )}
+                  {item.type === 'text' && (
+                    <Box>
+                      <Label
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}>
+                        <Checkbox
+                          checked={item.long}
+                          onChange={(e) => onLongChecked(e, index)}></Checkbox>
+                        <Text>Long Answer</Text>
+                      </Label>
+                    </Box>
+                  )}
+                  {item.type === 'options' && (
+                    <Box>
+                      <Label
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 2,
+                        }}>
+                        <Checkbox
+                          checked={item.long}
+                          onChange={(e) =>
+                            onMultipleChecked(e, index)
+                          }></Checkbox>
+                        <Text>Multiple Answers</Text>
+                      </Label>
+                    </Box>
+                  )}
+                </Flex>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => onDuplicateField(index, item)}>
+                    <Box>copy</Box>
+                  </Button>
+                  <Button variant="ghost">
+                    <DeleteIcon width={16} />
+                  </Button>
+                  <Button variant="ghost">
+                    <DownIcon width={16} />
+                  </Button>
+                  <Button variant="ghost">
+                    <UpIcon width={16} />
+                  </Button>
+                </Flex>
               </Flex>
             </Box>
           ))}
