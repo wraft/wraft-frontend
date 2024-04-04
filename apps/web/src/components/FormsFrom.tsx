@@ -134,12 +134,13 @@ const FormsFrom = ({ items, setItems }: Props) => {
   };
 
   const onDuplicateField = (index: number, item: any) => {
+    const cpyItem = { ...item, id: Math.random().toString() };
     const newArr = [...items];
     if (index < newArr.length) {
-      newArr.splice(index + 1, 0, item);
+      newArr.splice(index + 1, 0, cpyItem);
       setItems(newArr);
     } else {
-      newArr.push(item);
+      newArr.push(cpyItem);
       setItems(newArr);
     }
   };
@@ -149,6 +150,24 @@ const FormsFrom = ({ items, setItems }: Props) => {
     if (index < newArr.length) {
       newArr.splice(index, 1);
       setItems(newArr);
+    }
+  };
+
+  const onMoveUp = (index: number) => {
+    const data = [...items];
+    if (index > 0 && index < data.length) {
+      const itemToMove = data.splice(index, 1)[0];
+      data.splice(index - 1, 0, itemToMove);
+      setItems(data);
+    }
+  };
+
+  const onMoveDown = (index: number) => {
+    const data = [...items];
+    if (index >= 0 && index < data.length) {
+      const itemToMove = data.splice(index, 1)[0];
+      data.splice(index + 1, 0, itemToMove);
+      setItems(data);
     }
   };
 
@@ -240,10 +259,16 @@ const FormsFrom = ({ items, setItems }: Props) => {
                   <Button variant="ghost" onClick={() => onDeleteField(index)}>
                     <DeleteIcon width={16} />
                   </Button>
-                  <Button variant="ghost">
+                  <Button
+                    variant="ghost"
+                    disabled={index + 1 === items.length}
+                    onClick={() => onMoveDown(index)}>
                     <DownIcon width={16} />
                   </Button>
-                  <Button variant="ghost">
+                  <Button
+                    variant="ghost"
+                    disabled={index === 0}
+                    onClick={() => onMoveUp(index)}>
                     <UpIcon width={16} />
                   </Button>
                 </Flex>
