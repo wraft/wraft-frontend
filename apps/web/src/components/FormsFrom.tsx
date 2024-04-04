@@ -171,6 +171,17 @@ const FormsFrom = ({ items, setItems }: Props) => {
     }
   };
 
+  const onDeleteValue = (item: any, value: any) => {
+    const data = [...item.values];
+    const filtered = data.filter((v: any) => v.id !== value.id);
+    const newArr = items.map((i: any) => {
+      if (i.id === item.id) {
+        return { ...i, values: filtered };
+      } else return { ...i };
+    });
+    setItems(newArr);
+  };
+
   useEffect(() => {
     console.table(items);
   }, [items]);
@@ -194,6 +205,7 @@ const FormsFrom = ({ items, setItems }: Props) => {
                     items={items}
                     setItems={setItems}
                     onOptionNameChange={onOptionNameChange}
+                    onDeleteValue={onDeleteValue}
                   />
                   <Box mt={3}>
                     <Button
@@ -294,6 +306,7 @@ type DraggableValuesProps = {
   items: any;
   setItems: any;
   onOptionNameChange: any;
+  onDeleteValue: any;
 };
 
 const DraggableValues = ({
@@ -301,6 +314,7 @@ const DraggableValues = ({
   items,
   setItems,
   onOptionNameChange,
+  onDeleteValue,
 }: DraggableValuesProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -353,6 +367,7 @@ const DraggableValues = ({
               item={item}
               value={value}
               onOptionNameChange={onOptionNameChange}
+              onDeleteValue={onDeleteValue}
             />
           ))}
         </Flex>
@@ -365,11 +380,13 @@ type SortableItemProps = {
   value: any;
   item: any;
   onOptionNameChange: any;
+  onDeleteValue: any;
 };
 const SortableItem = ({
   value,
   item,
   onOptionNameChange,
+  onDeleteValue,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -436,6 +453,9 @@ const SortableItem = ({
               onOptionNameChange(e, item, value);
             }}
           />
+          <Button variant="ghost" onClick={() => onDeleteValue(item, value)}>
+            <DeleteIcon />
+          </Button>
         </Flex>
       </Box>
     </Flex>
