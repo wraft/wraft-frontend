@@ -15,7 +15,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { Box, Checkbox, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
-import { DeleteIcon, DownIcon, DragIcon, UpIcon } from '@wraft/icon';
+import { ArrowDownIcon, ArrowUpIcon, DeleteIcon, DragIcon } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 
@@ -275,13 +275,13 @@ const FormsFrom = ({ items, setItems }: Props) => {
                     variant="ghost"
                     disabled={index + 1 === items.length}
                     onClick={() => onMoveDown(index)}>
-                    <DownIcon width={16} />
+                    <ArrowDownIcon width={16} />
                   </Button>
                   <Button
                     variant="ghost"
                     disabled={index === 0}
                     onClick={() => onMoveUp(index)}>
-                    <UpIcon width={16} />
+                    <ArrowUpIcon width={16} />
                   </Button>
                 </Flex>
               </Flex>
