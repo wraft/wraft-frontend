@@ -13,7 +13,8 @@ export type Variant =
   | 'outlined'
   | 'disabled'
   | 'googleLogin'
-  | 'ghost';
+  | 'ghost'
+  | 'none';
 
 export interface ButtonOptions extends AkButtonProps {
   disabled?: boolean;
@@ -24,10 +25,7 @@ export interface ButtonOptions extends AkButtonProps {
   shape?: Shape;
 }
 
-const ButtonWrapper =
-  styled(AriakitButton) <
-  ButtonOptions >
-  `
+const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -35,7 +33,7 @@ const ButtonWrapper =
   align-items: center;
   position: relative;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  
+
   transition:
     color 0.15s ease-in-out,
     background-color 0.15s ease-in-out,
