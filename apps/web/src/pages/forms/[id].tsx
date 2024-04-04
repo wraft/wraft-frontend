@@ -24,7 +24,7 @@ const Index: FC = () => {
           <Container variant="layout.pageFrame">
             <Flex>
               {/* <ManageSidebar items={menuLinks} /> */}
-              <Box sx={{ width: '100%', bg: 'white', p: 4 }}>
+              <Box sx={{ width: '100%', bg: 'white' }}>
                 <FormsFrom items={items} setItems={setItems} />
               </Box>
             </Flex>
