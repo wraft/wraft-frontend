@@ -11,14 +11,14 @@ const SvgMailIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <path
-      stroke={props.color || `#000000`}
+      stroke={props.color || 'currentColor' || `#000000`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.6}
       d="M5.6 5.6h12.8c.88 0 1.6.72 1.6 1.6v9.6c0 .88-.72 1.6-1.6 1.6H5.6c-.88 0-1.6-.72-1.6-1.6V7.2c0-.88.72-1.6 1.6-1.6"
     />
     <path
-      stroke={props.color || `#000000`}
+      stroke={props.color || 'currentColor' || `#000000`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.6}

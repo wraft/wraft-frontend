@@ -11,7 +11,7 @@ const SvgEllipsisHIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <path
-      fill={props.color || `#2C3641`}
+      fill={props.color || 'currentColor' || `#2C3641`}
       d="M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4"
     />
   </svg>

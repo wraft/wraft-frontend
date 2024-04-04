@@ -11,7 +11,7 @@ const SvgBoldIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <path
-      stroke={props.color || `#2C3641`}
+      stroke={props.color || 'currentColor' || `#2C3641`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
