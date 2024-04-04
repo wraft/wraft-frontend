@@ -14,7 +14,7 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
-import { Box, Flex, Input, Label, Switch, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -48,7 +48,7 @@ const animatedButton = {
   borderRadius: '4px',
   transition: 'all 0.3s ease',
   '& .text': {
-    color: 'gray.600',
+    color: 'green.600',
     minWidth: '0px',
     width: '0px',
     overflow: 'hidden',
@@ -64,7 +64,12 @@ const animatedButton = {
       transition: 'clip-path 0.3s ease-out ',
     },
   },
+  '& .icon': {
+    color: 'gray.400',
+  },
   ':hover': {
+    borderColor: 'green.200',
+    '& .icon': { color: 'green.600' },
     '& .text': {
       ml: 1,
       width: 'fit-content',
@@ -76,7 +81,6 @@ const animatedButton = {
 };
 
 const FormsFrom = ({ items, setItems }: Props) => {
-  const { theme } = useThemeUI();
   const onAddField = (type: 'email' | 'date' | 'time' | 'text' | 'options') => {
     const newItem: any = {
       name: '',
@@ -332,46 +336,31 @@ const FormsFrom = ({ items, setItems }: Props) => {
       <Flex sx={{ gap: 3, p: 4 }}>
         <Button variant="none" onClick={() => onAddField('text')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <DocumentsIcon
-              className="icon"
-              color={theme?.colors?.gray?.[400] || 'gray'}
-            />
+            <DocumentsIcon className="icon" />
             <Text as="p" className="text" data-text="Text" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('options')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <MultipleChoiceIcon
-              className="icon"
-              color={theme?.colors?.gray?.[400] || 'gray'}
-            />
+            <MultipleChoiceIcon className="icon" />
             <Text as="p" className="text" data-text="Multiple Choice" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('date')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <DateIcon
-              className="icon"
-              color={theme?.colors?.gray?.[400] || 'gray'}
-            />
+            <DateIcon className="icon" />
             <Text as="p" className="text" data-text="Date" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('time')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <TimeIcon
-              className="icon"
-              color={theme?.colors?.gray?.[400] || 'gray'}
-            />
+            <TimeIcon className="icon" />
             <Text as="p" className="text" data-text="Time" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('email')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <MailIcon
-              className="icon"
-              color={theme?.colors?.gray?.[400] || 'gray'}
-            />
+            <MailIcon className="icon" />
             <Text as="p" className="text" data-text="Email" />
           </Box>
         </Button>
@@ -479,7 +468,6 @@ const SortableItem = ({
   } = useSortable({
     id: value.id,
   });
-  const { theme } = useThemeUI();
   return (
     <Flex sx={{ alignItems: 'center' }}>
       <Box
@@ -489,6 +477,7 @@ const SortableItem = ({
         sx={{
           cursor: 'pointer',
           flexShrink: 0,
+          color: 'gray.200',
         }}>
         <Box
           as="div"
@@ -498,12 +487,7 @@ const SortableItem = ({
             display: 'flex',
             padding: '16px',
           }}>
-          <DragIcon
-            color={theme?.colors?.gray?.[200] || ''}
-            width={20}
-            height={20}
-            viewBox="0 0 24 24"
-          />
+          <DragIcon width={20} height={20} viewBox="0 0 24 24" />
         </Box>
       </Box>
       <Box
