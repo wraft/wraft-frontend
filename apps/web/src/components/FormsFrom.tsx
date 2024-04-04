@@ -47,7 +47,7 @@ const animatedButton = {
   borderRadius: '4px',
   transition: 'all 0.3s ease',
   '& .text': {
-    color: 'gray.900',
+    color: 'gray.600',
     minWidth: '0px',
     width: '0px',
     overflow: 'hidden',
@@ -65,7 +65,7 @@ const animatedButton = {
   },
   ':hover': {
     '& .text': {
-      ml: 2,
+      ml: 1,
       width: 'fit-content',
       '&::before': {
         clipPath: 'inset(0 0 0 0)',
@@ -342,31 +342,46 @@ const FormsFrom = ({ items, setItems }: Props) => {
       <Flex sx={{ gap: 3, mt: 4 }}>
         <Button variant="none" onClick={() => onAddField('text')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <DocumentsIcon color={theme?.colors?.gray?.[400] || 'gray'} />
+            <DocumentsIcon
+              className="icon"
+              color={theme?.colors?.gray?.[400] || 'gray'}
+            />
             <Text as="p" className="text" data-text="Text" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('options')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <MultipleChoiceIcon color={theme?.colors?.gray?.[400] || 'gray'} />
+            <MultipleChoiceIcon
+              className="icon"
+              color={theme?.colors?.gray?.[400] || 'gray'}
+            />
             <Text as="p" className="text" data-text="Multiple Choice" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('date')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <DateIcon color={theme?.colors?.gray?.[400] || 'gray'} />
+            <DateIcon
+              className="icon"
+              color={theme?.colors?.gray?.[400] || 'gray'}
+            />
             <Text as="p" className="text" data-text="Date" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('time')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <TimeIcon color={theme?.colors?.gray?.[400] || 'gray'} />
+            <TimeIcon
+              className="icon"
+              color={theme?.colors?.gray?.[400] || 'gray'}
+            />
             <Text as="p" className="text" data-text="Time" />
           </Box>
         </Button>
         <Button variant="none" onClick={() => onAddField('email')}>
           <Box sx={{ ...(animatedButton as object) }}>
-            <MailIcon color={theme?.colors?.gray?.[400] || 'gray'} />
+            <MailIcon
+              className="icon"
+              color={theme?.colors?.gray?.[400] || 'gray'}
+            />
             <Text as="p" className="text" data-text="Email" />
           </Box>
         </Button>
