@@ -14,10 +14,15 @@ const SvgMultipleChoiceIcon = (props: SVGProps<SVGSVGElement>) => (
       cx={12}
       cy={12}
       r={7.25}
-      stroke={props.color || `#2C3641`}
+      stroke={props.color || 'currentColor' || `#2C3641`}
       strokeWidth={1.5}
     />
-    <circle cx={12} cy={12} r={5} fill={props.color || `#2C3641`} />
+    <circle
+      cx={12}
+      cy={12}
+      r={5}
+      fill={props.color || 'currentColor' || `#2C3641`}
+    />
   </svg>
 );
 export default SvgMultipleChoiceIcon;
