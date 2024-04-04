@@ -1,19 +1,32 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import { Box, Container, Flex, Input, Label, Text, Textarea } from 'theme-ui';
+import { Box, Container, Flex, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
+import { useForm } from 'react-hook-form';
 
 import FormList from 'components/FormList';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
 import Modal from 'components/Modal';
 import FormsFrom from 'components/FormsFrom';
+import Field from 'components/Field';
+import FieldText from 'components/FieldText';
+
+type FormValues = {
+  name: string;
+  description: string;
+};
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState<any>([]);
+  const { register, handleSubmit } = useForm<FormValues>();
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
   return (
     <>
       <Head>
@@ -34,7 +47,10 @@ const Index: FC = () => {
       </Page>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <Box sx={{ minWidth: '518px' }}>
+          <Box
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ minWidth: '518px' }}>
             <Box
               sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
               <Text as="p" variant="h4Medium">
@@ -42,21 +58,36 @@ const Index: FC = () => {
               </Text>
             </Box>
             <Box sx={{ p: 4 }}>
-              <Label>Name</Label>
-              <Input></Input>
-              <Label pt={3}>Description</Label>
-              <Textarea></Textarea>
+              <Field
+                name="name"
+                label="Name"
+                placeholder="Name"
+                register={register}
+              />
+              <FieldText
+                name="description"
+                label="Description"
+                defaultValue=""
+                register={register}
+              />
             </Box>
             <Flex sx={{ p: 4, gap: 3 }}>
               <Button
+                type="submit"
                 variant="primary"
                 onClick={() => {
+                  handleSubmit(onSubmit)();
                   setDrawerOpen(true);
                   setIsOpen(false);
                 }}>
                 Create
               </Button>
-              <Button variant="secondary" onClick={() => setIsOpen(false)}>
+              <Button
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                }}>
                 Cancel
               </Button>
             </Flex>
