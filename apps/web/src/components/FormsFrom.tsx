@@ -14,7 +14,7 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
-import { Box, Checkbox, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Input, Label, Switch, Text, useThemeUI } from 'theme-ui';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -270,46 +270,31 @@ const FormsFrom = ({ items, setItems }: Props) => {
               <Flex sx={{ justifyContent: 'space-between' }}>
                 <Flex sx={{ gap: 3, mt: 3 }}>
                   <Box>
-                    <Label
-                      sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Checkbox
-                        checked={item.required}
-                        onChange={(e) =>
-                          onRequiredChecked(e, index)
-                        }></Checkbox>
-                      <Text> Required</Text>
-                    </Label>
+                    <Switch
+                      label="Required"
+                      sx={{ bg: 'gray.100' }}
+                      checked={item.required}
+                      onChange={(e) => onRequiredChecked(e, index)}
+                    />
                   </Box>
                   {item.type === 'text' && (
                     <Box>
-                      <Label
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 2,
-                        }}>
-                        <Checkbox
-                          checked={item.long}
-                          onChange={(e) => onLongChecked(e, index)}></Checkbox>
-                        <Text>Long Answer</Text>
-                      </Label>
+                      <Switch
+                        label="Long Answer"
+                        sx={{ bg: 'gray.100' }}
+                        checked={item.long}
+                        onChange={(e) => onLongChecked(e, index)}
+                      />
                     </Box>
                   )}
                   {item.type === 'options' && (
                     <Box>
-                      <Label
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 2,
-                        }}>
-                        <Checkbox
-                          checked={item.long}
-                          onChange={(e) =>
-                            onMultipleChecked(e, index)
-                          }></Checkbox>
-                        <Text>Multiple Answers</Text>
-                      </Label>
+                      <Switch
+                        label="Multiple Answers"
+                        sx={{ bg: 'gray.100' }}
+                        checked={item.long}
+                        onChange={(e) => onMultipleChecked(e, index)}
+                      />
                     </Box>
                   )}
                 </Flex>
