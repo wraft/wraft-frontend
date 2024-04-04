@@ -18,6 +18,7 @@ import { Box, Flex, Input, Label, Switch, Text, useThemeUI } from 'theme-ui';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  CopyIcon,
   DateIcon,
   DeleteIcon,
   DocumentsIcon,
@@ -242,7 +243,9 @@ const FormsFrom = ({ items, setItems }: Props) => {
       <Box>
         {items &&
           items.map((item: any, index: number) => (
-            <Box key={item.id} sx={{ mt: 3 }}>
+            <Box
+              key={item.id}
+              sx={{ mt: 3, p: 4, borderBottom: '1px solid #eee' }}>
               <Label>Field Name</Label>
               <Input
                 defaultValue={item.name}
@@ -272,7 +275,9 @@ const FormsFrom = ({ items, setItems }: Props) => {
                   <Box>
                     <Switch
                       label="Required"
-                      sx={{ bg: 'gray.100' }}
+                      sx={{
+                        bg: 'gray.100',
+                      }}
                       checked={item.required}
                       onChange={(e) => onRequiredChecked(e, index)}
                     />
@@ -298,33 +303,33 @@ const FormsFrom = ({ items, setItems }: Props) => {
                     </Box>
                   )}
                 </Flex>
-                <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center', gap: 3 }}>
                   <Button
-                    variant="ghost"
+                    variant="none"
                     onClick={() => onDuplicateField(index, item)}>
-                    <Box>copy</Box>
+                    <CopyIcon width={16} />
                   </Button>
-                  <Button variant="ghost" onClick={() => onDeleteField(index)}>
+                  <Button variant="none" onClick={() => onDeleteField(index)}>
                     <DeleteIcon width={16} />
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="none"
                     disabled={index + 1 === items.length}
                     onClick={() => onMoveDown(index)}>
-                    <ArrowDownIcon width={16} />
+                    <ArrowDownIcon width={18} />
                   </Button>
                   <Button
-                    variant="ghost"
+                    variant="none"
                     disabled={index === 0}
                     onClick={() => onMoveUp(index)}>
-                    <ArrowUpIcon width={16} />
+                    <ArrowUpIcon width={18} />
                   </Button>
                 </Flex>
               </Flex>
             </Box>
           ))}
       </Box>
-      <Flex sx={{ gap: 3, mt: 4 }}>
+      <Flex sx={{ gap: 3, p: 4 }}>
         <Button variant="none" onClick={() => onAddField('text')}>
           <Box sx={{ ...(animatedButton as object) }}>
             <DocumentsIcon
