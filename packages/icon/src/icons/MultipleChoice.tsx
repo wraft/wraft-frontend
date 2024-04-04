@@ -17,7 +17,7 @@ const SvgMultipleChoiceIcon = (props: SVGProps<SVGSVGElement>) => (
       stroke={props.color || `#2C3641`}
       strokeWidth={1.5}
     />
-    <circle cx={12} cy={12} r={5} fill="#343E49" />
+    <circle cx={12} cy={12} r={5} fill={props.color || `#2C3641`} />
   </svg>
 );
 export default SvgMultipleChoiceIcon;
