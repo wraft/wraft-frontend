@@ -29,8 +29,10 @@ const Index: FC = () => {
               </Box>
             </Flex>
           </Container>
-          <Box sx={{ width: '40ch' }}>
-            <FormFieldDroppable items={items} setItems={setItems} />
+          <Box sx={{ minWidth: '349px' }}>
+            <Box sx={{ p: '24px' }}>
+              <FormFieldDroppable items={items} setItems={setItems} />
+            </Box>
           </Box>
         </Flex>
       </Page>
