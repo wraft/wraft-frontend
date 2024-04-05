@@ -31,7 +31,6 @@ import {
 } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
-import { PlayCircle } from './Icons';
 
 type Props = {
   items: any;

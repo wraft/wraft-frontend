@@ -16,7 +16,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DragIcon } from '@wraft/icon';
-import { Box, Flex, Input, Label, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 type Props = { items: any; setItems: any };
 
@@ -56,9 +56,16 @@ const Draggable = ({ items, setItems }: DraggableValuesProps) => {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        <Flex sx={{ flexDirection: 'column', gap: 2 }}>
+        <Flex sx={{ flexDirection: 'column' }}>
           {items.map((item: any, index: number) => (
-            <SortableItem key={index} item={item} />
+            <Box
+              key={index}
+              sx={{
+                borderTop: index === 0 ? 'none' : '1px solid',
+                borderColor: 'border',
+              }}>
+              <SortableItem item={item} />
+            </Box>
           ))}
         </Flex>
       </SortableContext>
@@ -82,7 +89,14 @@ const SortableItem = ({ item }: SortableItemProps) => {
   });
   const { theme } = useThemeUI();
   return (
-    <Flex sx={{ alignItems: 'center' }}>
+    <Flex
+      sx={{
+        transform: CSS.Transform.toString(transform),
+        transition: transition,
+        alignItems: 'center',
+        bg: 'background',
+        py: 2,
+      }}>
       <Box
         ref={setNodeRef}
         {...attributes}
@@ -94,8 +108,6 @@ const SortableItem = ({ item }: SortableItemProps) => {
         <Box
           as="div"
           style={{
-            transform: CSS.Transform.toString(transform),
-            transition: transition,
             display: 'flex',
             padding: '16px',
           }}>
@@ -110,32 +122,13 @@ const SortableItem = ({ item }: SortableItemProps) => {
       <Box
         sx={{
           width: '100%',
-          transform: CSS.Transform.toString(transform),
-          transition: transition,
-          bg: 'white',
-          borderRadius: '4px',
         }}>
-        <Label sx={{ textTransform: 'capitalize' }}>
+        <Text as="p" variant="capM" sx={{ textTransform: 'capitalize', mb: 0 }}>
           {item.type === 'options' ? 'Multiple Choice' : item.type}
-        </Label>
-        <Flex
-          sx={{
-            position: 'relative',
-            button: {
-              display: 'none',
-            },
-            ':hover button': {
-              display: 'block',
-            },
-            border: '1px solid',
-            borderColor: 'border',
-            borderRadius: '4px',
-          }}>
-          <Input
-            className={`${isDragging ? 'z-10' : ''}`}
-            defaultValue={item.name}
-          />
-        </Flex>
+        </Text>
+        <Text as="p" variant="subB" sx={{ color: 'green.700' }}>
+          {item.name}
+        </Text>
       </Box>
     </Flex>
   );
