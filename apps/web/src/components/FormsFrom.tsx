@@ -16,8 +16,10 @@ import {
 } from '@dnd-kit/sortable';
 import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
 import {
+  AddIcon,
   ArrowDownIcon,
   ArrowUpIcon,
+  CloseIcon,
   CopyIcon,
   DateIcon,
   DeleteIcon,
@@ -29,6 +31,7 @@ import {
 } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
+import { PlayCircle } from './Icons';
 
 type Props = {
   items: any;
@@ -257,7 +260,6 @@ const FormsFrom = ({ items, setItems }: Props) => {
                 onChange={(e) => onNameChange(e, item)}></Input>
               {item.type === 'options' && (
                 <Box mt={3}>
-                  <Label>Options</Label>
                   <DraggableValues
                     item={item}
                     items={items}
@@ -265,13 +267,20 @@ const FormsFrom = ({ items, setItems }: Props) => {
                     onOptionNameChange={onOptionNameChange}
                     onDeleteValue={onDeleteValue}
                   />
-                  <Box mt={3}>
+                  <Flex sx={{ flexDirection: 'column', width: '100%' }} mt={3}>
                     <Button
                       variant="secondary"
                       onClick={() => onAddOption(item.id)}>
-                      Add Option
+                      <Flex
+                        sx={{
+                          alignItems: 'center',
+                          color: 'gray.800',
+                        }}>
+                        <AddIcon width={16} />
+                        <Text sx={{ ml: 2 }}>Add Option</Text>
+                      </Flex>
                     </Button>
-                  </Box>
+                  </Flex>
                 </Box>
               )}
               <Flex sx={{ justifyContent: 'space-between' }}>
@@ -469,7 +478,16 @@ const SortableItem = ({
     id: value.id,
   });
   return (
-    <Flex sx={{ alignItems: 'center' }}>
+    <Flex
+      sx={{
+        transform: CSS.Transform.toString(transform),
+        transition: transition,
+        alignItems: 'center',
+        border: '1px solid',
+        borderColor: 'border',
+        borderRadius: '4px',
+        bg: 'background',
+      }}>
       <Box
         ref={setNodeRef}
         {...attributes}
@@ -482,8 +500,6 @@ const SortableItem = ({
         <Box
           as="div"
           style={{
-            transform: CSS.Transform.toString(transform),
-            transition: transition,
             display: 'flex',
             padding: '16px',
           }}>
@@ -493,34 +509,39 @@ const SortableItem = ({
       <Box
         sx={{
           width: '100%',
-          transform: CSS.Transform.toString(transform),
-          transition: transition,
-          bg: 'white',
           borderRadius: '4px',
         }}>
-        <Flex
-          sx={{
-            position: 'relative',
-            button: {
-              display: 'none',
-            },
-            ':hover button': {
-              display: 'block',
-            },
-            border: '1px solid',
-            borderColor: 'border',
-            borderRadius: '4px',
-          }}>
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box
+            sx={{
+              p: 2,
+              flexShrink: '0',
+              width: '14px',
+              height: '14px',
+              border: '2px solid',
+              borderColor: 'border',
+              borderRadius: '99px',
+            }}
+          />
           <Input
             className={`${isDragging ? 'z-10' : ''}`}
+            sx={{ bg: 'background', border: 'none' }}
+            placeholder="Option Name"
             defaultValue={value.name}
             onChange={(e) => {
               onOptionNameChange(e, item, value);
             }}
           />
-          <Button variant="ghost" onClick={() => onDeleteValue(item, value)}>
-            <DeleteIcon />
-          </Button>
+          <Box
+            sx={{
+              p: 2,
+              px: 3,
+              color: 'gray.900',
+            }}>
+            <Button variant="none" onClick={() => onDeleteValue(item, value)}>
+              <CloseIcon width={16} />
+            </Button>
+          </Box>
         </Flex>
       </Box>
     </Flex>
