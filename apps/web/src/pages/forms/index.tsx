@@ -15,6 +15,7 @@ import FieldText from 'components/FieldText';
 
 type FormValues = {
   name: string;
+  prefix: string;
   description: string;
 };
 
@@ -23,9 +24,11 @@ const Index: FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState<any>([]);
   const { register, handleSubmit } = useForm<FormValues>();
+  const [data, setData] = useState<FormValues>();
 
   const onSubmit = (data: any) => {
     console.log(data);
+    setData(data);
   };
   return (
     <>
@@ -62,6 +65,12 @@ const Index: FC = () => {
                 name="name"
                 label="Name"
                 placeholder="Name"
+                register={register}
+              />
+              <Field
+                name="prefix"
+                label="Prefix"
+                placeholder="PREFIX"
                 register={register}
               />
               <FieldText
