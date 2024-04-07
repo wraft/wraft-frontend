@@ -9,7 +9,7 @@ import { EllipsisHIcon } from '@wraft/icon';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 import { EmptyForm } from './Icons';
-import Link, { NextLinkText } from './NavLink';
+import { NextLinkText } from './NavLink';
 import { TimeAgo } from './Atoms';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
@@ -29,69 +29,15 @@ export interface FormElement {
   description: string;
 }
 
-export interface DummyFormElement {
-  updated_at: string;
-  inserted_at: string;
-  id: string;
-  description: string;
-  status: string;
-  prefix: string;
-  name: string;
-}
 interface Meta {
   total_pages: number;
   total_entries: number;
   page_number: number;
 }
 
-const ItemField = (props: any) => {
-  return (
-    <Box
-      variant="boxy"
-      key={props.id}
-      p={3}
-      sx={{
-        position: 'relative',
-        bg: '#fff',
-        borderBottom: 'solid 1px #eee',
-        borderRadius: '3px',
-        ':hover': {
-          '.merry': {
-            display: 'block',
-          },
-        },
-      }}>
-      <Box sx={{ width: '33ch', mb: 1 }}>
-        <Link href={`/manage/themes/edit/${props.id}`}>
-          <Text as="h4" sx={{ mb: 0, p: 0, pb: 0 }}>
-            {props.name}
-          </Text>
-        </Link>
-        <Text as="p" sx={{ mt: 0, p: 0 }} pt={0} color="grey">
-          Sample Field Description
-        </Text>
-      </Box>
-      <Box
-        className="merry"
-        sx={{
-          display: 'none',
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          mt: 3,
-          mr: 3,
-        }}>
-        <Button variant="secondary" onClick={() => props.onDelete(props.id)}>
-          Delete
-        </Button>
-      </Box>
-    </Box>
-  );
-};
-
 const FormList: FC = () => {
   // const [contents, setContents] = useState<Array<FormElement>>([]);
-  const [contents, setContents] = useState<Array<DummyFormElement>>([]);
+  const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -103,42 +49,12 @@ const FormList: FC = () => {
   const loadData = (page: number) => {
     setLoading(true);
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`collection_forms${pageNo}`)
+    fetchAPI(`forms${pageNo}`)
       .then((data: any) => {
         setLoading(false);
-        const res: FormElement[] = data.collection_forms;
-        const dummy = {
-          total_pages: 2,
-          total_entries: 15,
-          page_number: 1,
-          forms: [
-            {
-              updated_at: '2023-09-05T09:11:52',
-              status: 'active',
-              prefix: 'INSFORM2',
-              name: 'Insurance Form',
-              inserted_at: '2023-09-05T09:11:52',
-              id: 'eac20c0e-a13b-40c9-a89e-d3fa149f22ff',
-              description:
-                'Fill in the details to activate the corporate insurance offered to employees',
-            },
-            {
-              updated_at: '2023-09-05T08:19:55',
-              status: 'active',
-              prefix: 'INSFORM1',
-              name: 'Insurance Form',
-              inserted_at: '2023-09-05T08:19:55',
-              id: '1125413e-a2a4-43ab-9077-c209f48bdb86',
-              description:
-                'Fill in the details to activate the corporate insurance offered to employees',
-            },
-          ],
-        };
-        if (res && res.length > 0) {
-          // setContents(res);
-        }
-        setContents(dummy.forms);
-        setPageMeta(dummy);
+        const res: FormElement[] = data.forms;
+        setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
@@ -175,9 +91,6 @@ const FormList: FC = () => {
                 <Box>{row.original?.name}</Box>
               </Box>
             </NextLinkText>
-            {/* <Drawer open={false} setOpen={() => {}}>
-              <FlowForm setOpen={() => {}} />{' '}
-            </Drawer> */}
           </>
         );
       },
@@ -244,7 +157,6 @@ const FormList: FC = () => {
                     variant="ghost"
                     onClick={() => {
                       setIsOpen(null);
-                      // setDeleteFlow(row.index);
                     }}
                     style={{ justifyContent: 'flex-start' }}>
                     <MenuItem as={Box}>
@@ -334,11 +246,6 @@ const FormList: FC = () => {
               )}
             </Box>
           </Box>
-          {/* {contents &&
-            contents.length > 0 &&
-            contents.map((m: any) => (
-              <ItemField key={m.id} {...m} onDelete={onDelete} />
-            ))} */}
         </Box>
       </Box>
     </Box>
