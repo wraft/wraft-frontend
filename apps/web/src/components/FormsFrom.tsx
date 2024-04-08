@@ -32,11 +32,6 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 
-type Props = {
-  items: any;
-  setItems: any;
-};
-
 const animatedButton = {
   display: 'flex',
   px: 3,
@@ -80,6 +75,11 @@ const animatedButton = {
       },
     },
   },
+};
+
+type Props = {
+  items: any;
+  setItems: any;
 };
 
 const FormsFrom = ({ items, setItems }: Props) => {
