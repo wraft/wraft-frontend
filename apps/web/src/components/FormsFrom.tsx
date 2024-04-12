@@ -323,20 +323,24 @@ const FormsFrom = ({ items, setItems }: Props) => {
         <AnimatedButton text="Text" onClick={() => onAddField('text')}>
           <DocumentsIcon />
         </AnimatedButton>
-        <AnimatedButton
+        <AnimatedButton text="Date" onClick={() => onAddField('date')}>
+          <DateIcon />
+        </AnimatedButton>
+        {/* <AnimatedButton
+          disabled
           text="Multiple Choice"
           onClick={() => onAddField('options')}>
           <MultipleChoiceIcon />
         </AnimatedButton>
-        <AnimatedButton text="Date" onClick={() => onAddField('date')}>
-          <DateIcon />
-        </AnimatedButton>
-        <AnimatedButton text="Time" onClick={() => onAddField('time')}>
+        <AnimatedButton text="Time" onClick={() => onAddField('time')} disabled>
           <TimeIcon />
         </AnimatedButton>
-        <AnimatedButton text="Email" onClick={() => onAddField('email')}>
+        <AnimatedButton
+          text="Email"
+          onClick={() => onAddField('email')}
+          disabled>
           <MailIcon />
-        </AnimatedButton>
+        </AnimatedButton> */}
       </Flex>
     </div>
   );
