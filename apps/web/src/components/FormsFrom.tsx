@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   closestCenter,
   DndContext,
@@ -32,7 +32,10 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 
+import { fetchAPI } from 'utils/models';
+
 import AnimatedButton from './AnimatedButton';
+import tempFieldTypes from './tempFieldTypes.json';
 
 type Props = {
   items: any;
@@ -40,6 +43,8 @@ type Props = {
 };
 
 const FormsFrom = ({ items, setItems }: Props) => {
+  const [fieldTypes, setFieldTypes] = useState<any[]>([]);
+
   const onAddField = (type: 'email' | 'date' | 'time' | 'text' | 'options') => {
     const newItem: any = {
       name: '',
@@ -197,9 +202,25 @@ const FormsFrom = ({ items, setItems }: Props) => {
     setItems(newArr);
   };
 
+  const onFetchFieldTypes = () => {
+    fetchAPI('field_types')
+      .then((data: any) => {
+        if (data && data?.length > 0) {
+          setFieldTypes(data);
+        } else {
+          setFieldTypes(tempFieldTypes);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   useEffect(() => {
     console.table(items);
   }, [items]);
+
+  useEffect(() => {
+    onFetchFieldTypes();
+  }, []);
 
   return (
     <div>
