@@ -2,11 +2,16 @@ import React from 'react';
 import { Button } from '@wraft/ui';
 import { Box, Text } from 'theme-ui';
 
-type Props = { onClick: () => void; text: string; children: React.ReactNode };
+type Props = {
+  onClick: () => void;
+  text: string;
+  children: React.ReactNode;
+  disabled?: boolean;
+};
 
-const AnimatedButton = ({ onClick, text, children }: Props) => {
+const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
   return (
-    <Button variant="none" onClick={onClick}>
+    <Button variant="none" onClick={onClick} disabled={disabled}>
       <Box
         sx={{
           display: 'flex',
