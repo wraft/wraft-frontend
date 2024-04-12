@@ -32,50 +32,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 
-const animatedButton = {
-  display: 'flex',
-  px: 3,
-  alignItems: 'center',
-  justifyContent: 'center',
-  minWidth: '48px',
-  minHeight: '36px',
-  width: 'max-content',
-  border: '1px solid',
-  borderColor: 'border',
-  borderRadius: '4px',
-  transition: 'all 0.3s ease',
-  '& .text': {
-    color: 'green.600',
-    minWidth: '0px',
-    width: '0px',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    transition: 'width 0.3s ease',
-    '&::before': {
-      content: 'attr(data-text)',
-      position: 'relative',
-      left: 0,
-      right: 0,
-      color: 'text',
-      clipPath: 'inset(0 100% 0 0)',
-      transition: 'clip-path 0.3s ease-out ',
-    },
-  },
-  '& .icon': {
-    color: 'gray.400',
-  },
-  ':hover': {
-    borderColor: 'green.200',
-    '& .icon': { color: 'green.600' },
-    '& .text': {
-      ml: 1,
-      width: 'fit-content',
-      '&::before': {
-        clipPath: 'inset(0 0 0 0)',
-      },
-    },
-  },
-};
+import AnimatedButton from './AnimatedButton';
 
 type Props = {
   items: any;
@@ -342,36 +299,23 @@ const FormsFrom = ({ items, setItems }: Props) => {
           ))}
       </Box>
       <Flex sx={{ gap: 3, p: 4 }}>
-        <Button variant="none" onClick={() => onAddField('text')}>
-          <Box sx={{ ...(animatedButton as object) }}>
-            <DocumentsIcon className="icon" />
-            <Text as="p" className="text" data-text="Text" />
-          </Box>
-        </Button>
-        <Button variant="none" onClick={() => onAddField('options')}>
-          <Box sx={{ ...(animatedButton as object) }}>
-            <MultipleChoiceIcon className="icon" />
-            <Text as="p" className="text" data-text="Multiple Choice" />
-          </Box>
-        </Button>
-        <Button variant="none" onClick={() => onAddField('date')}>
-          <Box sx={{ ...(animatedButton as object) }}>
-            <DateIcon className="icon" />
-            <Text as="p" className="text" data-text="Date" />
-          </Box>
-        </Button>
-        <Button variant="none" onClick={() => onAddField('time')}>
-          <Box sx={{ ...(animatedButton as object) }}>
-            <TimeIcon className="icon" />
-            <Text as="p" className="text" data-text="Time" />
-          </Box>
-        </Button>
-        <Button variant="none" onClick={() => onAddField('email')}>
-          <Box sx={{ ...(animatedButton as object) }}>
-            <MailIcon className="icon" />
-            <Text as="p" className="text" data-text="Email" />
-          </Box>
-        </Button>
+        <AnimatedButton text="Text" onClick={() => onAddField('text')}>
+          <DocumentsIcon />
+        </AnimatedButton>
+        <AnimatedButton
+          text="Multiple Choice"
+          onClick={() => onAddField('options')}>
+          <MultipleChoiceIcon />
+        </AnimatedButton>
+        <AnimatedButton text="Date" onClick={() => onAddField('date')}>
+          <DateIcon />
+        </AnimatedButton>
+        <AnimatedButton text="Time" onClick={() => onAddField('time')}>
+          <TimeIcon />
+        </AnimatedButton>
+        <AnimatedButton text="Email" onClick={() => onAddField('email')}>
+          <MailIcon />
+        </AnimatedButton>
       </Flex>
     </div>
   );
