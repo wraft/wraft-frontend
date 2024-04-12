@@ -45,7 +45,9 @@ type Props = {
 const FormsFrom = ({ items, setItems }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
 
-  const onAddField = (type: 'email' | 'date' | 'time' | 'text' | 'options') => {
+  const onAddField = (
+    type: 'email' | 'date' | 'time' | 'text' | 'options' | 'long' | 'image',
+  ) => {
     const newItem: any = {
       name: '',
       type: type,
@@ -322,6 +324,12 @@ const FormsFrom = ({ items, setItems }: Props) => {
       <Flex sx={{ gap: 3, p: 4 }}>
         <AnimatedButton text="Text" onClick={() => onAddField('text')}>
           <DocumentsIcon />
+        </AnimatedButton>
+        <AnimatedButton text="Long Text" onClick={() => onAddField('long')}>
+          <Box sx={{ fontWeight: '700', fontSize: '16px' }}>L</Box>
+        </AnimatedButton>
+        <AnimatedButton text="Image" onClick={() => onAddField('image')}>
+          <Box sx={{ fontWeight: '700', fontSize: '16px' }}>I</Box>
         </AnimatedButton>
         <AnimatedButton text="Date" onClick={() => onAddField('date')}>
           <DateIcon />
