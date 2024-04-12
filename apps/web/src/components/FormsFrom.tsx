@@ -54,9 +54,7 @@ const FormsFrom = ({ items, setItems }: Props) => {
       id: Math.random().toString(),
       required: false,
     };
-    if (type === 'text') {
-      newItem.long = false;
-    } else if (type === 'options') {
+    if (type === 'options') {
       newItem.multiple = false;
       newItem.values = [];
     }
