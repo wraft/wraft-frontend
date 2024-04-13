@@ -51,39 +51,6 @@
     "updated_at": "2023-10-24T10:46:16"
   },
   {
-    "id": "bb3af18e-1490-4da8-aaf0-47929d5a6cad",
-    "meta": {
-      "allowed validations": ["required", "options"]
-    },
-    "name": "Checkbox",
-    "description": "A checkbox field",
-    "validations": [],
-    "inserted_at": "2023-10-24T10:46:16",
-    "updated_at": "2023-10-24T10:46:16"
-  },
-  {
-    "id": "88fd890c-e8ff-49a9-80fd-5d1e3e7fbad7",
-    "meta": {
-      "allowed validations": ["required"]
-    },
-    "name": "Text",
-    "description": "A text field",
-    "validations": [],
-    "inserted_at": "2023-10-24T10:46:16",
-    "updated_at": "2023-10-24T10:46:16"
-  },
-  {
-    "id": "88db1295-2b95-4675-9fb4-7f9734738382",
-    "meta": {
-      "allowed validations": ["required"]
-    },
-    "name": "Time",
-    "description": "A time field",
-    "validations": [],
-    "inserted_at": "2023-10-24T10:46:16",
-    "updated_at": "2023-10-24T10:46:16"
-  },
-  {
     "id": "51a96161-70b9-4636-9f39-0a19c00913b0",
     "meta": {
       "allowed validations": ["required", "date_min", "date_max", "date_range"]
@@ -127,6 +94,28 @@
         }
       }
     ],
+    "inserted_at": "2023-10-24T10:46:16",
+    "updated_at": "2023-10-24T10:46:16"
+  },
+  {
+    "id": "66772389-a075-448b-af53-513ee923ced0",
+    "meta": {
+      "allowed validations": ["required", "options"]
+    },
+    "name": "Radio Button",
+    "description": "A radio button field",
+    "validations": [],
+    "inserted_at": "2023-10-24T10:46:16",
+    "updated_at": "2023-10-24T10:46:16"
+  },
+  {
+    "id": "1082fdfa-fbfc-47c2-83ec-1969d547f00f",
+    "meta": {
+      "allowed validations": ["required", "file_size"]
+    },
+    "name": "File Input",
+    "description": "A file input field",
+    "validations": [],
     "inserted_at": "2023-10-24T10:46:16",
     "updated_at": "2023-10-24T10:46:16"
   }

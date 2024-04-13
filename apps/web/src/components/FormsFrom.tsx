@@ -46,15 +46,30 @@ const FormsFrom = ({ items, setItems }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
 
   const onAddField = (
-    type: 'email' | 'date' | 'time' | 'text' | 'options' | 'long' | 'image',
+    type:
+      | 'Email'
+      | 'Date'
+      | 'Time'
+      | 'Text'
+      | 'Radio Button'
+      | 'String'
+      | 'File Input',
   ) => {
+    const fieldTypeId = fieldTypes.find(
+      (ft: any) => ft.name.toLowerCase() === type.toLowerCase(),
+    ).id;
+    if (!fieldTypeId) {
+      console.log('no field type id found');
+      return;
+    }
     const newItem: any = {
       name: '',
       type: type,
       id: Math.random().toString(),
       required: false,
+      fieldTypeId: fieldTypeId,
     };
-    if (type === 'options') {
+    if (type === 'Radio Button') {
       newItem.multiple = false;
       newItem.values = [];
     }
@@ -320,33 +335,33 @@ const FormsFrom = ({ items, setItems }: Props) => {
           ))}
       </Box>
       <Flex sx={{ gap: 3, p: 4 }}>
-        <AnimatedButton text="Text" onClick={() => onAddField('text')}>
+        <AnimatedButton text="Text" onClick={() => onAddField('String')}>
           <DocumentsIcon />
         </AnimatedButton>
-        <AnimatedButton text="Long Text" onClick={() => onAddField('long')}>
+        <AnimatedButton text="Long Text" onClick={() => onAddField('Text')}>
           <Box sx={{ fontWeight: '700', fontSize: '16px' }}>L</Box>
         </AnimatedButton>
-        <AnimatedButton text="Image" onClick={() => onAddField('image')}>
+        <AnimatedButton text="Image" onClick={() => onAddField('File Input')}>
           <Box sx={{ fontWeight: '700', fontSize: '16px' }}>I</Box>
         </AnimatedButton>
-        <AnimatedButton text="Date" onClick={() => onAddField('date')}>
+        <AnimatedButton text="Date" onClick={() => onAddField('Date')}>
           <DateIcon />
         </AnimatedButton>
-        {/* <AnimatedButton
+        <AnimatedButton
           disabled
           text="Multiple Choice"
-          onClick={() => onAddField('options')}>
+          onClick={() => onAddField('Radio Button')}>
           <MultipleChoiceIcon />
         </AnimatedButton>
-        <AnimatedButton text="Time" onClick={() => onAddField('time')} disabled>
+        <AnimatedButton text="Time" onClick={() => onAddField('Time')} disabled>
           <TimeIcon />
         </AnimatedButton>
         <AnimatedButton
           text="Email"
-          onClick={() => onAddField('email')}
+          onClick={() => onAddField('Email')}
           disabled>
           <MailIcon />
-        </AnimatedButton> */}
+        </AnimatedButton>
       </Flex>
     </div>
   );
