@@ -32,17 +32,19 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 
-import { fetchAPI } from 'utils/models';
+import { fetchAPI, postAPI, putAPI } from 'utils/models';
+import { uuidRegex } from 'utils/regex';
 
 import AnimatedButton from './AnimatedButton';
-import tempFieldTypes from './tempFieldTypes.json';
 
 type Props = {
+  formdata: any;
   items: any;
   setItems: any;
+  isEdit?: boolean;
 };
 
-const FormsFrom = ({ items, setItems }: Props) => {
+const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
 
   const onAddField = (
@@ -72,6 +74,8 @@ const FormsFrom = ({ items, setItems }: Props) => {
     if (type === 'Radio Button') {
       newItem.multiple = false;
       newItem.values = [];
+    } else if (type === 'File Input') {
+      newItem.fileSize = 2000;
     }
     if (items) {
       setItems([...items, newItem]);
@@ -220,13 +224,62 @@ const FormsFrom = ({ items, setItems }: Props) => {
   const onFetchFieldTypes = () => {
     fetchAPI('field_types')
       .then((data: any) => {
-        if (data && data?.length > 0) {
-          setFieldTypes(data);
-        } else {
-          setFieldTypes(tempFieldTypes);
-        }
+        setFieldTypes(data.field_types);
       })
       .catch((err) => console.log(err));
+  };
+
+  const onSave = () => {
+    console.log('onSave', items, formdata);
+    if (isEdit) {
+      const fields = items.map((item: any) => {
+        const validations = [];
+        if (item.required !== undefined) {
+          validations.push({
+            validation: {
+              value: item.required,
+              rule: 'required',
+            },
+            error_message: `can't be blank`,
+          });
+        }
+        if (item.fileSize !== undefined) {
+          validations.push({
+            validation: {
+              value: item.fileSize,
+              rule: 'file_size',
+            },
+            error_message: `can't be more than ${item.fileSize} KB`,
+          });
+        }
+        const data: any = {
+          name: item.name,
+          meta: {},
+          field_type_id: item.fieldTypeId,
+          description: '',
+          validations: validations,
+        };
+
+        console.log('testing..', uuidRegex.test(item.id), item.id);
+        if (uuidRegex.test(item.id)) {
+          data.field_id = item.fieldTypeId;
+        }
+        return data;
+      });
+      const data = {
+        status: formdata.status,
+        prefix: formdata.prefix,
+        pipeline_ids: [],
+        name: formdata.name,
+        fields: fields,
+        description: formdata.description,
+      };
+
+      console.log('ssssssssssssssss', data);
+      putAPI(`forms/${formdata.id}`, data);
+    } else {
+      postAPI(`forms`, {});
+    }
   };
 
   useEffect(() => {
@@ -363,6 +416,9 @@ const FormsFrom = ({ items, setItems }: Props) => {
           <MailIcon />
         </AnimatedButton>
       </Flex>
+      <Box sx={{ p: 4, pt: 0 }}>
+        <Button onClick={onSave}>Save</Button>
+      </Box>
     </div>
   );
 };
