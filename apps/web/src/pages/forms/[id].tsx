@@ -15,7 +15,6 @@ const Index: FC = () => {
   const [initial, setInitial] = useState<any>([]);
   const [form, setForm] = useState<any>();
   const [formStep, setFormStep] = useState<number>(0);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -29,12 +28,12 @@ const Index: FC = () => {
           id: i.id,
           name: i.name,
           type: i.field_type.name,
+          fieldTypeId: i.field_type.id,
           required: i.validations.some(
             (val: any) =>
               val.validation.rule === 'required' &&
               val.validation.value === true,
           ),
-          long: false,
         };
       });
       setInitial(fileds);
@@ -49,7 +48,6 @@ const Index: FC = () => {
   useEffect(() => {
     if (cId && cId.length > 0) {
       loadData(cId);
-      setIsEdit(true);
     }
   }, [cId]);
 
@@ -81,7 +79,12 @@ const Index: FC = () => {
                   width: '100%',
                   bg: 'white',
                 }}>
-                <FormsFrom items={items} setItems={setItems} />
+                <FormsFrom
+                  formdata={form}
+                  items={items}
+                  setItems={setItems}
+                  isEdit
+                />
               </Box>
               <Box
                 sx={{
