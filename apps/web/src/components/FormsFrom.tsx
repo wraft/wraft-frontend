@@ -44,6 +44,8 @@ type Props = {
   setItems: any;
   isEdit?: boolean;
   setRerender?: (e: any) => void;
+  setOpen?: (e: any) => void;
+  trigger?: boolean;
 };
 
 const FormsFrom = ({
@@ -52,6 +54,8 @@ const FormsFrom = ({
   setItems,
   isEdit = false,
   setRerender,
+  setOpen,
+  trigger = false,
 }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
   const [removedFields, setRemovedFields] = useState<string[]>([]);
@@ -244,6 +248,9 @@ const FormsFrom = ({
   };
 
   const onSave = () => {
+    if (formdata === undefined) {
+      return;
+    }
     if (items.some((item: any) => item.name === '')) {
       const data = items.map((item: any) => {
         if (item.name === '') {
@@ -306,14 +313,20 @@ const FormsFrom = ({
       putAPI(`forms/${formdata.id}`, data).then(() => {
         toast.success('Updated Successfully');
         setRerender && setRerender((prev: boolean) => !prev);
+        setOpen && setOpen(false);
       });
     } else {
       postAPI(`forms`, data).then(() => {
         toast.success('Created Successfully');
         setRerender && setRerender((prev: boolean) => !prev);
+        setOpen && setOpen(false);
       });
     }
   };
+
+  useEffect(() => {
+    onSave();
+  }, [trigger]);
 
   useEffect(() => {
     console.table(items);

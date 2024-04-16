@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Text, Flex, useThemeUI } from 'theme-ui';
@@ -35,7 +35,11 @@ interface Meta {
   page_number: number;
 }
 
-const FormList: FC = () => {
+type Props = {
+  rerender: boolean;
+};
+
+const FormList = ({ rerender }: Props) => {
   // const [contents, setContents] = useState<Array<FormElement>>([]);
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
@@ -72,7 +76,7 @@ const FormList: FC = () => {
 
   useEffect(() => {
     loadData(page);
-  }, [page]);
+  }, [page, rerender]);
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
