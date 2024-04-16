@@ -114,7 +114,7 @@ const Index: FC = () => {
             <Text variant="h6Bold">Create new form</Text>
           </Box>
           <Box sx={{ height: '100%', flexGrow: 1, overflow: 'auto', px: 4 }}>
-            <FormsFrom items={items} setItems={setItems} />
+            <FormsFrom items={items} setItems={setItems} formdata={data} />
           </Box>
           <Box p={4}>
             <Button>Create</Button>

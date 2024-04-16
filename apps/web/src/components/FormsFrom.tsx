@@ -31,6 +31,7 @@ import {
 } from '@wraft/icon';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
+import toast from 'react-hot-toast';
 
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
@@ -42,10 +43,18 @@ type Props = {
   items: any;
   setItems: any;
   isEdit?: boolean;
+  setRerender?: (e: any) => void;
 };
 
-const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
+const FormsFrom = ({
+  formdata,
+  items,
+  setItems,
+  isEdit = false,
+  setRerender,
+}: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
+  const [removedFields, setRemovedFields] = useState<string[]>([]);
 
   const onAddField = (
     type:
@@ -135,6 +144,7 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
     const newItem = {
       ...item,
       name: newName,
+      error: newName.length > 0 ? undefined : 'Field Name is required',
     };
     const newArr = items.map((s: any) => {
       if (s.id === item.id) {
@@ -154,6 +164,7 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
     };
     const newItem = {
       ...item,
+      error: newName.length > 0 ? undefined : 'Option Name is required',
       values: item.values.map((s: any) => {
         if (s.id === value.id) {
           return newValue;
@@ -185,6 +196,9 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
   };
 
   const onDeleteField = (index: number) => {
+    if (uuidRegex.test(items[index].id)) {
+      setRemovedFields((prev) => [...prev, items[index].id]);
+    }
     const newArr = [...items];
     if (index < newArr.length) {
       newArr.splice(index, 1);
@@ -230,55 +244,74 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
   };
 
   const onSave = () => {
-    console.log('onSave', items, formdata);
-    if (isEdit) {
-      const fields = items.map((item: any) => {
-        const validations = [];
-        if (item.required !== undefined) {
-          validations.push({
-            validation: {
-              value: item.required,
-              rule: 'required',
-            },
-            error_message: `can't be blank`,
-          });
+    if (items.some((item: any) => item.name === '')) {
+      const data = items.map((item: any) => {
+        if (item.name === '') {
+          return {
+            ...item,
+            error: 'Field Name is required',
+          };
+        } else {
+          return item;
         }
-        if (item.fileSize !== undefined) {
-          validations.push({
-            validation: {
-              value: item.fileSize,
-              rule: 'file_size',
-            },
-            error_message: `can't be more than ${item.fileSize} KB`,
-          });
-        }
-        const data: any = {
-          name: item.name,
-          meta: {},
-          field_type_id: item.fieldTypeId,
-          description: '',
-          validations: validations,
-        };
-
-        console.log('testing..', uuidRegex.test(item.id), item.id);
-        if (uuidRegex.test(item.id)) {
-          data.field_id = item.fieldTypeId;
-        }
-        return data;
       });
-      const data = {
-        status: formdata.status,
-        prefix: formdata.prefix,
-        pipeline_ids: [],
-        name: formdata.name,
-        fields: fields,
-        description: formdata.description,
+      setItems(data);
+      return toast.error('All fields are required');
+    }
+    const fields = items.map((item: any) => {
+      const validations = [];
+      if (item.required !== undefined) {
+        validations.push({
+          validation: {
+            value: item.required,
+            rule: 'required',
+          },
+          error_message: `can't be blank`,
+        });
+      }
+      if (item.fileSize !== undefined) {
+        validations.push({
+          validation: {
+            value: item.fileSize,
+            rule: 'file_size',
+          },
+          error_message: `can't be more than ${item.fileSize} KB`,
+        });
+      }
+      const data: any = {
+        name: item.name,
+        meta: {},
+        field_type_id: item.fieldTypeId,
+        description: '',
+        validations: validations,
       };
 
-      console.log('ssssssssssssssss', data);
-      putAPI(`forms/${formdata.id}`, data);
+      console.log('testing..', uuidRegex.test(item.id), item.id);
+      if (uuidRegex.test(item.id)) {
+        data.field_id = item.fieldTypeId;
+      }
+      return data;
+    });
+    const deletedFields = removedFields.map((id) => ({ field_id: id }));
+    const data = {
+      status: formdata?.status || 'active',
+      prefix: formdata.prefix,
+      pipeline_ids: [],
+      name: formdata.name,
+      fields: [...fields, ...deletedFields],
+      description: formdata.description,
+    };
+
+    if (isEdit) {
+      putAPI(`forms/${formdata.id}`, data).then(() => {
+        toast.success('Updated Successfully');
+        setRerender && setRerender((prev: boolean) => !prev);
+      });
     } else {
-      postAPI(`forms`, {});
+      postAPI(`forms`, data).then(() => {
+        toast.success('Created Successfully');
+        setRerender && setRerender((prev: boolean) => !prev);
+      });
     }
   };
 
@@ -291,7 +324,7 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
   }, []);
 
   return (
-    <div>
+    <Box>
       <Box>
         {items &&
           items.map((item: any, index: number) => (
@@ -303,6 +336,7 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
                 defaultValue={item.name}
                 placeholder="Name"
                 onChange={(e) => onNameChange(e, item)}></Input>
+              {item.error && <Text variant="error">{item.error}</Text>}
               {item.type === 'options' && (
                 <Box mt={3}>
                   <DraggableValues
@@ -416,10 +450,10 @@ const FormsFrom = ({ formdata, items, setItems, isEdit }: Props) => {
           <MailIcon />
         </AnimatedButton>
       </Flex>
-      <Box sx={{ p: 4, pt: 0 }}>
+      <Box sx={{ display: isEdit ? 'block' : 'none', p: 4, pt: 0 }}>
         <Button onClick={onSave}>Save</Button>
       </Box>
-    </div>
+    </Box>
   );
 };
 
