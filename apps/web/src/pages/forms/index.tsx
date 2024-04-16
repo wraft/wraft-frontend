@@ -25,6 +25,8 @@ const Index: FC = () => {
   const [items, setItems] = useState<any>([]);
   const { register, handleSubmit } = useForm<FormValues>();
   const [data, setData] = useState<FormValues>();
+  const [trigger, setTrigger] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
     console.log(data);
@@ -45,7 +47,7 @@ const Index: FC = () => {
           </Box>
         </PageHeader>
         <Container variant="layout.pageFrame">
-          <FormList />
+          <FormList rerender={rerender} />
         </Container>
       </Page>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -114,9 +116,16 @@ const Index: FC = () => {
             <Text variant="h6Bold">Create new form</Text>
           </Box>
           <Box sx={{ height: '100%', flexGrow: 1, overflow: 'auto', px: 4 }}>
-            <FormsFrom items={items} setItems={setItems} formdata={data} />
+            <FormsFrom
+              items={items}
+              setItems={setItems}
+              formdata={data}
+              trigger={trigger}
+              setRerender={setRerender}
+              setOpen={setDrawerOpen}
+            />
           </Box>
-          <Box p={4}>
+          <Box p={4} onClick={() => setTrigger((prev) => !prev)}>
             <Button>Create</Button>
           </Box>
         </Flex>
