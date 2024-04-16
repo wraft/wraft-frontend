@@ -15,6 +15,7 @@ const Index: FC = () => {
   const [initial, setInitial] = useState<any>([]);
   const [form, setForm] = useState<any>();
   const [formStep, setFormStep] = useState<number>(0);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -49,7 +50,7 @@ const Index: FC = () => {
     if (cId && cId.length > 0) {
       loadData(cId);
     }
-  }, [cId]);
+  }, [cId, rerender]);
 
   useEffect(() => {
     console.log('initial:', initial);
@@ -83,6 +84,7 @@ const Index: FC = () => {
                   formdata={form}
                   items={items}
                   setItems={setItems}
+                  setRerender={setRerender}
                   isEdit
                 />
               </Box>
