@@ -29,7 +29,6 @@ const Index: FC = () => {
   const [rerender, setRerender] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
-    console.log(data);
     setData(data);
   };
   return (
@@ -68,12 +67,14 @@ const Index: FC = () => {
                 label="Name"
                 placeholder="Name"
                 register={register}
+                mb={3}
               />
               <Field
                 name="prefix"
                 label="Prefix"
                 placeholder="PREFIX"
                 register={register}
+                mb={3}
               />
               <FieldText
                 name="description"
@@ -82,7 +83,7 @@ const Index: FC = () => {
                 register={register}
               />
             </Box>
-            <Flex sx={{ p: 4, gap: 3 }}>
+            <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
               <Button
                 type="submit"
                 variant="primary"
