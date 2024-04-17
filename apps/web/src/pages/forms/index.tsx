@@ -46,7 +46,7 @@ const Index: FC = () => {
           </Box>
         </PageHeader>
         <Container variant="layout.pageFrame">
-          <FormList rerender={rerender} />
+          <FormList rerender={rerender} setRerender={setRerender} />
         </Container>
       </Page>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
