@@ -41,7 +41,6 @@ type Props = {
 };
 
 const FormList = ({ rerender, setRerender }: Props) => {
-  // const [contents, setContents] = useState<Array<FormElement>>([]);
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(false);

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex, Label, Text } from 'theme-ui';
+import { Box, Container, Flex, Input, Label, Text, Textarea } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { EditIcon } from '@wraft/icon';
 import { useForm } from 'react-hook-form';
@@ -29,6 +29,7 @@ const Index: FC = () => {
   const [formStep, setFormStep] = useState<number>(0);
   const [rerender, setRerender] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isView, setIsView] = useState<boolean>(false);
 
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -84,11 +85,55 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page id="Modal" showFull={true}>
-        <PageHeader
-          title={`${formdata?.name || 'name loading...'}`}
-          desc={`${formdata?.description || 'detatils loading...'}`}
-        />
-        <Flex>
+        {' '}
+        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <PageHeader
+            title={`${formdata?.name || 'name loading...'}`}
+            desc={`${formdata?.description || 'detatils loading...'}`}
+          />
+          <Flex sx={{ alignItems: 'center', gap: '8px', pr: 4 }}>
+            <Button
+              variant="secondary"
+              onClick={() => setIsView((prev) => !prev)}>
+              {isView ? 'Edit' : 'View'}
+            </Button>
+            <Button variant="secondary">Save</Button>
+          </Flex>
+        </Flex>
+        <Flex sx={{ display: isView ? 'block' : 'none' }}>
+          <Container variant="layout.pageFrame">
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  bg: 'white',
+                  width: '100%',
+                  maxHeight: 'calc(100vh - 72px - 72px)',
+                  maxWidth: '80ch',
+                  overflowY: 'auto',
+                }}>
+                {items.map((item: any) => {
+                  <Box
+                    key={item.id}
+                    sx={{
+                      p: 4,
+                      borderBottom: '1px solid',
+                      borderColor: 'border',
+                    }}>
+                    <Label>
+                      {item.name}
+                      <Text sx={{ color: 'red.700' }}>
+                        {item.required && '*'}
+                      </Text>
+                    </Label>
+                    {items.type === 'Text' && <Textarea />}
+                    <Input mb={3} />
+                  </Box>;
+                })}
+              </Box>
+            </Flex>
+          </Container>
+        </Flex>
+        <Flex sx={{ display: isView ? 'none' : 'block' }}>
           <Container variant="layout.pageFrame">
             <Flex>
               <MenuStepsIndicator
@@ -158,7 +203,7 @@ const Index: FC = () => {
                   justifyContent: 'space-between',
                 }}>
                 <Box />
-                <TimeAgo time={formdata?.updated_at} />
+                {formdata?.updated_at && <TimeAgo time={formdata.updated_at} />}
               </Box>
               <Label>{items.length} Fields</Label>
               <FormFieldDroppable items={items} setItems={setItems} />
