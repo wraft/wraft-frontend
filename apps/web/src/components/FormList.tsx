@@ -37,9 +37,10 @@ interface Meta {
 
 type Props = {
   rerender: boolean;
+  setRerender: (e: any) => void;
 };
 
-const FormList = ({ rerender }: Props) => {
+const FormList = ({ rerender, setRerender }: Props) => {
   // const [contents, setContents] = useState<Array<FormElement>>([]);
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
@@ -66,7 +67,8 @@ const FormList = ({ rerender }: Props) => {
   };
 
   const onDelete = (id: string) => {
-    deleteAPI(`themes/${id}`).then(() => {
+    deleteAPI(`forms/${id}`).then(() => {
+      setRerender((prev: boolean) => !prev);
       toast.success('Deleted Theme', {
         duration: 1000,
         position: 'top-right',
@@ -161,6 +163,7 @@ const FormList = ({ rerender }: Props) => {
                     variant="ghost"
                     onClick={() => {
                       setIsOpen(null);
+                      setDeleteOpen(row.index);
                     }}
                     style={{ justifyContent: 'flex-start' }}>
                     <MenuItem as={Box}>
@@ -182,11 +185,11 @@ const FormList = ({ rerender }: Props) => {
               onClose={() => setDeleteOpen(null)}>
               {
                 <ConfirmDelete
-                  title="Delete Flow"
+                  title="Delete Form"
                   text={`Are you sure you want to delete ‘${row.original.name}’?`}
                   setOpen={setDeleteOpen}
                   onConfirmDelete={async () => {
-                    onDelete(row.index);
+                    onDelete(row.original.id);
                   }}
                 />
               }
