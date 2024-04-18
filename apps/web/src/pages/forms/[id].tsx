@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex, Input, Label, Text, Textarea } from 'theme-ui';
+import { Box, Container, Flex, Label, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { EditIcon } from '@wraft/icon';
 import { useForm } from 'react-hook-form';
@@ -15,6 +15,7 @@ import Modal from 'components/Modal';
 import Field from 'components/Field';
 import FieldText from 'components/FieldText';
 import { TimeAgo } from 'components/Atoms';
+import FormViewForm from 'components/FormViewForm';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -100,9 +101,9 @@ const Index: FC = () => {
             <Button variant="secondary">Save</Button>
           </Flex>
         </Flex>
-        <Flex sx={{ display: isView ? 'block' : 'none' }}>
+        <Box sx={{ display: isView ? 'block' : 'none' }}>
           <Container variant="layout.pageFrame">
-            <Flex sx={{ justifyContent: 'center' }}>
+            <Flex sx={{ justifyContent: 'center', width: '100%' }}>
               <Box
                 sx={{
                   bg: 'white',
@@ -111,29 +112,12 @@ const Index: FC = () => {
                   maxWidth: '80ch',
                   overflowY: 'auto',
                 }}>
-                {items.map((item: any) => {
-                  <Box
-                    key={item.id}
-                    sx={{
-                      p: 4,
-                      borderBottom: '1px solid',
-                      borderColor: 'border',
-                    }}>
-                    <Label>
-                      {item.name}
-                      <Text sx={{ color: 'red.700' }}>
-                        {item.required && '*'}
-                      </Text>
-                    </Label>
-                    {items.type === 'Text' && <Textarea />}
-                    <Input mb={3} />
-                  </Box>;
-                })}
+                <FormViewForm items={items} />
               </Box>
             </Flex>
           </Container>
-        </Flex>
-        <Flex sx={{ display: isView ? 'none' : 'block' }}>
+        </Box>
+        <Flex sx={{ display: isView ? 'none' : 'flex' }}>
           <Container variant="layout.pageFrame">
             <Flex>
               <MenuStepsIndicator
@@ -175,7 +159,7 @@ const Index: FC = () => {
           <Box
             sx={{
               minWidth: '349px',
-              display: formStep === 0 ? 'block' : 'none',
+              // display: formStep === 0 ? 'block' : 'none',
             }}>
             <Box sx={{ p: '24px' }}>
               <Flex sx={{ mb: 3 }}>
