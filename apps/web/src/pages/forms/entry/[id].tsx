@@ -20,7 +20,7 @@ const Index = () => {
       .then((data: any) => {
         console.log(data);
         setFormdata(data);
-        const fileds = data.fields.map((i: any) => {
+        const fields = data.fields.map((i: any) => {
           return {
             id: i.id,
             name: i.name,
@@ -34,8 +34,8 @@ const Index = () => {
             value: '',
           };
         });
-        setInitial(fileds);
-        setItems(fileds);
+        setInitial(fields);
+        setItems(fields);
         setLoading(false);
       })
       .catch((err) => {
@@ -54,9 +54,9 @@ const Index = () => {
       ...item,
       value: newVal,
       error:
-        newVal.length > 0 && item.required === true
-          ? undefined
-          : 'This field is required',
+        newVal.length === 0 && item.required
+          ? 'This field is required'
+          : undefined,
     };
     const newArr = items.map((s: any) => {
       if (s.id === item.id) {
@@ -97,7 +97,7 @@ const Index = () => {
         onClear();
       })
       .catch(() => {
-        toast.error('Submition Failed');
+        toast.error('Submission Failed');
       });
   };
 
