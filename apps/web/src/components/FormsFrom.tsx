@@ -441,11 +441,14 @@ const FormsFrom = ({
         <AnimatedButton text="Long Text" onClick={() => onAddField('Text')}>
           <Box sx={{ fontWeight: '700', fontSize: '16px' }}>L</Box>
         </AnimatedButton>
-        <AnimatedButton text="Image" onClick={() => onAddField('File Input')}>
-          <Box sx={{ fontWeight: '700', fontSize: '16px' }}>I</Box>
-        </AnimatedButton>
         <AnimatedButton text="Date" onClick={() => onAddField('Date')}>
           <DateIcon />
+        </AnimatedButton>
+        <AnimatedButton
+          disabled
+          text="Image"
+          onClick={() => onAddField('File Input')}>
+          <Box sx={{ fontWeight: '700', fontSize: '16px' }}>I</Box>
         </AnimatedButton>
         <AnimatedButton
           disabled
