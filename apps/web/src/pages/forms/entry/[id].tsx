@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Spinner, Text } from 'theme-ui';
+import { Box, Flex, Input, Label, Spinner, Text, Textarea } from 'theme-ui';
 import { Button } from '@wraft/ui';
+import toast from 'react-hot-toast';
 
 import { Logo } from 'components/Icons';
-import FormViewForm from 'components/FormViewForm';
-import { fetchAPI } from 'utils/models';
+import { fetchAPI, postAPI } from 'utils/models';
 
-type Props = object;
-
-const Index = (props: Props) => {
+const Index = () => {
   const [items, setItems] = useState<any>([]);
+  const [initial, setInitial] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
-
   const router = useRouter();
   const cId: string = router.query.id as string;
   const loadData = (id: string) => {
     setLoading(true);
-
     fetchAPI(`forms/${id}`)
       .then((data: any) => {
         console.log(data);
@@ -34,9 +31,10 @@ const Index = (props: Props) => {
                 val.validation.rule === 'required' &&
                 val.validation.value === true,
             ),
-            value: undefined,
+            value: '',
           };
         });
+        setInitial(fileds);
         setItems(fileds);
         setLoading(false);
       })
@@ -46,9 +44,70 @@ const Index = (props: Props) => {
       });
   };
 
+  const onClear = () => {
+    setItems(initial);
+  };
+
+  const onValueChange = (e: any, item: any) => {
+    const newVal = e.target.value;
+    const newItem = {
+      ...item,
+      value: newVal,
+      error:
+        newVal.length > 0 && item.required === true
+          ? undefined
+          : 'This field is required',
+    };
+    const newArr = items.map((s: any) => {
+      if (s.id === item.id) {
+        return newItem;
+      } else {
+        return s;
+      }
+    });
+    setItems(newArr);
+  };
+
+  const onSave = () => {
+    console.log(items);
+    if (items.some((i: any) => i.value.length === 0 && i.required)) {
+      const errorsAdded = items.map((i: any) => {
+        if (i.value.length === 0 && i.required === true) {
+          return { ...i, error: 'This field is required' };
+        } else {
+          return i;
+        }
+      });
+
+      setItems(errorsAdded);
+      return;
+    }
+    const fields = items.map((i: any) => {
+      return {
+        value: i.value,
+        field_id: i.id,
+      };
+    });
+    const data = {
+      data: fields,
+    };
+    postAPI(`forms/${cId}/entries`, data)
+      .then(() => {
+        toast.success('Submitted Successfully');
+        onClear();
+      })
+      .catch(() => {
+        toast.error('Submition Failed');
+      });
+  };
+
   useEffect(() => {
     if (cId && cId.length > 0) loadData(cId);
   }, [cId]);
+
+  useEffect(() => {
+    console.table(items);
+  }, [items]);
 
   if (loading) {
     return (
@@ -102,11 +161,53 @@ const Index = (props: Props) => {
               border: '1px solid',
               borderColor: 'border',
             }}>
-            <FormViewForm items={items} />
+            {items.map((item: any) => (
+              <Box
+                key={item.id}
+                sx={{
+                  p: 4,
+                  borderBottom: '1px solid',
+                  borderColor: 'border',
+                }}>
+                <Label>
+                  {item.name}
+                  <Text sx={{ color: 'red.700' }}>{item.required && '*'}</Text>
+                </Label>
+                {item.type === 'Text' && (
+                  <Textarea
+                    value={item.value}
+                    onChange={(e) => onValueChange(e, item)}
+                  />
+                )}
+                {item.type === 'String' && (
+                  <Input
+                    value={item.value}
+                    onChange={(e) => onValueChange(e, item)}
+                  />
+                )}
+                {item.type === 'File Input' && (
+                  <Input
+                    type="file"
+                    value={item.value}
+                    onChange={(e) => onValueChange(e, item)}
+                  />
+                )}
+                {item.type === 'Date' && (
+                  <Input
+                    type="date"
+                    value={item.value}
+                    onChange={(e) => onValueChange(e, item)}
+                  />
+                )}
+                {item.error && <Text variant="error">{item.error}</Text>}
+              </Box>
+            ))}
           </Box>
           <Flex sx={{ p: 4, pl: 0, gap: '16px' }}>
-            <Button>Save</Button>
-            <Button variant="secondary">Cancel</Button>
+            <Button onClick={onSave}>Save</Button>
+            <Button variant="secondary" onClick={onClear}>
+              Clear
+            </Button>
           </Flex>
           <Text as="p" variant="pR" mt={4}>
             This content is created by the owner of the form. The data you
