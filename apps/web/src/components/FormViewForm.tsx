@@ -3,7 +3,7 @@ import { Box, Input, Label, Text, Textarea } from 'theme-ui';
 
 type Props = { items: any[]; view?: boolean };
 
-const FormViewForm = ({ items, view = false }: Props) => {
+const FormViewForm = ({ items }: Props) => {
   return (
     <div>
       {items.map((item: any) => (
