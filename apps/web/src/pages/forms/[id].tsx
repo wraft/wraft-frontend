@@ -16,6 +16,7 @@ import Field from 'components/Field';
 import FieldText from 'components/FieldText';
 import { TimeAgo } from 'components/Atoms';
 import FormViewForm from 'components/FormViewForm';
+import NextLinkText from 'components/NavLink';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -98,7 +99,12 @@ const Index: FC = () => {
               onClick={() => setIsView((prev) => !prev)}>
               {isView ? 'Edit' : 'View'}
             </Button>
-            <Button variant="secondary">Save</Button>
+            <Box>
+              <NextLinkText href={`/forms/entry/${cId}`} variant={'secondary'}>
+                Share
+              </NextLinkText>
+            </Box>
+            {/* <Button variant="secondary">Save</Button> */}
           </Flex>
         </Flex>
         <Box sx={{ display: isView ? 'block' : 'none' }}>
@@ -180,12 +186,15 @@ const Index: FC = () => {
               </Flex>
               <Box
                 sx={{
-                  p: '24px',
-                  bg: 'green.100',
+                  py: 2,
+                  // bg: 'green.100',
                   mb: 3,
                   display: 'flex',
                   justifyContent: 'space-between',
                 }}>
+                <Text as="p" variant="pR" sx={{ color: 'gray.600' }}>
+                  Last Updated
+                </Text>
                 <Box />
                 {formdata?.updated_at && <TimeAgo time={formdata.updated_at} />}
               </Box>
