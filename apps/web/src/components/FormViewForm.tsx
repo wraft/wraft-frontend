@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Input, Label, Text, Textarea } from 'theme-ui';
 
-type Props = { items: any[] };
+type Props = { items: any[]; view?: boolean };
 
-const FormViewForm = ({ items }: Props) => {
+const FormViewForm = ({ items, view = false }: Props) => {
   return (
     <div>
       {items.map((item: any) => (
@@ -18,7 +18,6 @@ const FormViewForm = ({ items }: Props) => {
             {item.name}
             <Text sx={{ color: 'red.700' }}>{item.required && '*'}</Text>
           </Label>
-          {item.type}
           {item.type === 'Text' && <Textarea />}
           {item.type === 'String' && <Input />}
           {item.type === 'File Input' && <Input type="file" />}
