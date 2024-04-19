@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box, Button, Flex, Text } from 'theme-ui';
+import { Drawer } from '@wraft-ui/Drawer';
 
 import { fetchAPI } from '../utils/models';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
+import PipelineTypeForm from './PipelineTypeForm';
 
 export interface Pipelines {
   total_pages: number;
@@ -44,6 +46,7 @@ const ItemField = (props: any) => {
 
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const loadData = () => {
     fetchAPI('pipelines').then((data: any) => {
@@ -56,14 +59,18 @@ const Form = () => {
     loadData();
   }, []);
 
+  function setRerender(e: any): void {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <Box>
       <PageHeader title="Pipelines">
-        <Box sx={{ ml: 'auto' }}>
-          <Link href="/manage/pipelines/new" variant="btnSecondary">
-            + Add Pipeline
-          </Link>
-        </Box>
+        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
+          <Button variant="buttonSecondary" onClick={() => setIsOpen(true)}>
+            New Pipeline
+          </Button>
+        </Flex>
       </PageHeader>
       <Box mx={0} mb={3}>
         <Box px={4} my={3}>
@@ -78,6 +85,11 @@ const Form = () => {
             ))}
         </Box>
       </Box>
+      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+        {isOpen && (
+          <PipelineTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+        )}
+      </Drawer>
     </Box>
   );
 };
