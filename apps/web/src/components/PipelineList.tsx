@@ -47,9 +47,10 @@ const ItemField = (props: any) => {
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [rerender, setRerender] = React.useState(false);
 
   const loadData = () => {
-    fetchAPI('pipelines').then((data: any) => {
+    fetchAPI('pipelines?sort=inserted_at_desc').then((data: any) => {
       const res: Pipeline[] = data.pipelines;
       setContents(res);
     });
@@ -57,11 +58,7 @@ const Form = () => {
 
   useEffect(() => {
     loadData();
-  }, []);
-
-  function setRerender(e: any): void {
-    throw new Error('Function not implemented.');
-  }
+  }, [rerender]);
 
   return (
     <Box>
