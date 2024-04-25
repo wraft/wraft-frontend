@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   Box,
   Flex,
@@ -18,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
 import PipelineLogs from './PipelineLogs';
+import { fetchAPI } from 'utils/models';
 
 const PipelineView = () => {
   const {
@@ -29,10 +31,27 @@ const PipelineView = () => {
   const [rerender, setRerender] = useState<any>(false);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [pipelineData, setPipelineData] = useState<any>([])
+
+  const router = useRouter();
+
+  const cId: string = router.query.id as string;
 
   const goTo = (step: number) => {
     setFormStep(step);
   };
+
+  const loadDetails = () => {
+    fetchAPI(`pipelines/${cId}`).then((data:any) => {
+      setPipelineData(data)
+      console.log(data,"das");
+      
+    });
+  };
+
+  useEffect(() => {
+    loadDetails();
+  }, [cId]);
 
   const titles = ['Steps', 'Configure', 'History', 'Logs'];
 
@@ -74,7 +93,8 @@ const PipelineView = () => {
                   <Field
                     name="name"
                     label="Name"
-                    defaultValue="Pipeline Name"
+                    disabled
+                    defaultValue={pipelineData.name}
                   />
                 </Box>
                 <Box>
