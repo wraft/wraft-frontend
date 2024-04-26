@@ -124,6 +124,8 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         data_template_id: ctemplate.data_template.id,
         content_type_id: ctemplate.content_type.id,
       };
+      console.log(ctemplate,"logsampleD");
+      
       postAPI(`pipelines/${cId}/stages`, sampleD).then((res: any) => {
         setPipeStageDetails(res);
         toast.success('Saved Successfully', {

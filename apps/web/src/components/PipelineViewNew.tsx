@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import {
   Box,
   Flex,
@@ -19,7 +19,8 @@ import { Controller, useForm } from 'react-hook-form';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
 import PipelineLogs from './PipelineLogs';
-import { fetchAPI } from 'utils/models';
+import { deleteAPI, fetchAPI } from 'utils/models';
+import toast from 'react-hot-toast';
 
 const PipelineView = () => {
   const {
@@ -31,7 +32,7 @@ const PipelineView = () => {
   const [rerender, setRerender] = useState<any>(false);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [pipelineData, setPipelineData] = useState<any>([])
+  const [pipelineData, setPipelineData] = useState<any>([]);
 
   const router = useRouter();
 
@@ -42,16 +43,26 @@ const PipelineView = () => {
   };
 
   const loadDetails = () => {
-    fetchAPI(`pipelines/${cId}`).then((data:any) => {
-      setPipelineData(data)
-      console.log(data,"das");
-      
+    fetchAPI(`pipelines/${cId}`).then((data: any) => {
+      setPipelineData(data);
     });
   };
 
   useEffect(() => {
     loadDetails();
   }, [cId]);
+
+  const onDelete = () => {
+    deleteAPI(`pipelines/${cId}`)
+      .then(() => {
+        setRerender && setRerender((prev: boolean) => !prev);
+        toast.success('Deleted Successfully', { duration: 1000 });
+        Router.push('/manage/pipelines');
+      })
+      .catch(() => {
+        toast.error('Delete Failed', { duration: 1000 });
+      });
+  };
 
   const titles = ['Steps', 'Configure', 'History', 'Logs'];
 
@@ -143,8 +154,9 @@ const PipelineView = () => {
           <ConfirmDelete
             title="Delete Pipeline"
             text="Are you sure you want to delete ?"
-            setOpen={isOpen}
+            setOpen={setIsOpen}
             onConfirmDelete={() => {
+              onDelete();
               setIsOpen(false);
             }}
           />
