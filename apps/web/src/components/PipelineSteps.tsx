@@ -32,21 +32,19 @@ type Props = {
   setRerender: (e: any) => void;
 };
 
-const Form = () => {
+const Form = ({ rerender }: Props) => {
   const { theme } = useThemeUI();
   const [loading, setLoading] = useState<boolean>(false);
-  const [pipelineData, setPipelineData] = useState<any>()
+  const [pipelineData, setPipelineData] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
 
   const router = useRouter();
 
   const cId: string = router.query.id as string;
 
   const loadDetails = () => {
-    fetchAPI(`pipelines/${cId}`).then((data:any) => {
-      setPipelineData(data)
-      console.log(data,"das");
+    fetchAPI(`pipelines/${cId}`).then((data: any) => {
+      setPipelineData(data);
     });
   };
 
@@ -61,11 +59,9 @@ const Form = () => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Link href={`/manage/themes/${row.original.id}`}>
             <Text as="p" variant="pM">
-              {row.original.name}
+              {row.original.data_template.title}
             </Text>
-          </Link>
         </Box>
       ),
       enableSorting: false,
@@ -103,11 +99,18 @@ const Form = () => {
 
   return (
     <Box>
- {pipelineData?.stages && (
-        <Table data={pipelineData.stages} columns={columns} isLoading={loading} />
-      )}      <Box mt="auto" mb="4">
+      {pipelineData?.stages && (
+        <Table
+          data={pipelineData.stages}
+          columns={columns}
+          isLoading={loading}
+        />
+      )}{' '}
+      <Box mt="auto" mb="4">
         <Box className="first-step" py={4}>
-          <Button variant="secondary" onClick={() => setIsOpen(true)}>+ Add pipeline step</Button>
+          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+            + Add pipeline step
+          </Button>
         </Box>
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
