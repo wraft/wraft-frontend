@@ -18,20 +18,24 @@ import { CSS } from '@dnd-kit/utilities';
 import { DragIcon } from '@wraft/icon';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
-type Props = { items: any; setItems: any };
+type Props = { items: any; handleDragEnd: any };
 
-const FormFieldDroppable = ({ items, setItems }: Props) => {
-  return <Box>{items && <Draggable items={items} setItems={setItems} />}</Box>;
+const FormFieldDroppable = ({ items, handleDragEnd }: Props) => {
+  return (
+    <Box>
+      {items && <Draggable items={items} handleDragEnd={handleDragEnd} />}
+    </Box>
+  );
 };
 
 export default FormFieldDroppable;
 
 type DraggableValuesProps = {
   items: any;
-  setItems: any;
+  handleDragEnd: any;
 };
 
-const Draggable = ({ items, setItems }: DraggableValuesProps) => {
+const Draggable = ({ items, handleDragEnd }: DraggableValuesProps) => {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -39,16 +43,16 @@ const Draggable = ({ items, setItems }: DraggableValuesProps) => {
     }),
   );
 
-  const handleDragEnd = ({ active, over }: any) => {
-    if (!active || !over || active.id === over.id) return;
-    console.log(active, over, active.id, over.id);
-    const activeValue = items.filter((s: any) => s.id == active.id)[0];
-    const overValue = items.filter((s: any) => s.id == over.id)[0];
-    const oldIndex = items.indexOf(activeValue);
-    const newIndex = items.indexOf(overValue);
-    const newArr = arrayMove(items, oldIndex, newIndex);
-    setItems(newArr);
-  };
+  // const handleDragEnd = ({ active, over }: any) => {
+  //   if (!active || !over || active.id === over.id) return;
+  //   console.log(active, over, active.id, over.id);
+  //   const activeValue = items.filter((s: any) => s.id == active.id)[0];
+  //   const overValue = items.filter((s: any) => s.id == over.id)[0];
+  //   const oldIndex = items.indexOf(activeValue);
+  //   const newIndex = items.indexOf(overValue);
+  //   const newArr = arrayMove(items, oldIndex, newIndex);
+  //   setItems(newArr);
+  // };
 
   return (
     <DndContext
