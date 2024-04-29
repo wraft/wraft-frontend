@@ -59,7 +59,6 @@ const FormsFrom = ({
   isEdit = false,
   setRerender,
   setOpen,
-  trigger = false,
   setIsOpen,
 }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
