@@ -4,12 +4,15 @@ import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 
 import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
 import Field from './Field';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+import { uuidRegex } from 'utils/regex';
 
 export interface IFieldItem {
   name: string;
@@ -48,6 +51,16 @@ interface Props {
   setRerender: any;
 }
 
+const schema = z.object({
+  pipelinename: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
+  pipeline_form: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Invalid Layout',
+  }),
+});
+
 const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   const [formStep, setFormStep] = useState(step);
   const [source, setSource] = useState<any>(['Wraft Form', 'CSV']);
@@ -62,9 +75,12 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
 
   const [destinationData, setDestinationData] = useState<any>([]);
 
-  console.log(pipelineData, 'logpipeda');
-
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    trigger,
+  } = useForm({ mode: 'all', resolver: zodResolver(schema) });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -104,10 +120,8 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       source_id: data.pipeline_form,
       source: data.pipeline_source,
     };
-    console.log(sampleD, 'logsamp');
 
     postAPI(`pipelines`, sampleD).then((data) => {
-      console.log(data, 'logdatacreatepipeline');
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,
@@ -121,7 +135,6 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   // calls when the next button is clicked
 
   function next() {
-    setFormStep((i) => i + 1);
     if (formStep == 0) {
       const sampleD = {
         data_template_id: ctemplate.data_template.id,
@@ -129,16 +142,18 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       };
       postAPI(`pipelines/${cId}/stages`, sampleD)
         .then((res: any) => {
-          console.log(res, 'logpipestage');
-
           setPipeStageDetails(res);
           toast.success('Stage Created Successfully', {
             duration: 1000,
             position: 'top-right',
           });
+          setFormStep((i) => i + 1);
         })
         .catch(() => {
-          setLoading(true);
+          toast.error('stage already exist', {
+            duration: 1000,
+            position: 'top-right',
+          });
         });
     }
   }
@@ -150,9 +165,9 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       pipe_stage_id: pipeStageDetails.id,
       mapping: destinationData,
     };
-    postAPI(`forms/${formId}/mapping`, sampleD).then((data: any) => {
+    postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
       setIsOpen && setIsOpen(false);
-      setRerender((prev: boolean)=> !prev)
+      setRerender((prev: boolean) => !prev);
       toast.success('Mapped Successfully', {
         duration: 1000,
         position: 'top-right',
@@ -249,11 +264,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         Create Pipeline
       </Text>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
-      <Box
-        sx={{ height: '100%' }}
-        p={4}
-        as="form"
-        onSubmit={handleSubmit(onSubmit)}>
+      <Box sx={{ height: '100%' }} p={4} as="form">
         <Flex
           sx={{
             flexDirection: 'column',
@@ -269,6 +280,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                   name="pipelinename"
                   defaultValue={pipelineData ? pipelineData.name : ''}
                   placeholder="Pipeline Name"
+                  error={errors.name}
                 />
                 <Box mt={3}>
                   <Label htmlFor="pipeline_source">Source</Label>
@@ -302,6 +314,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                         </option>
                       ))}
                   </Select>
+                  {errors.pipeline_form && errors.pipeline_form.message && (
+                    <Text variant="error">
+                      {errors.pipeline_form.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
             )}
@@ -322,11 +339,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                     id="template_id"
                     {...register('template_id', { required: true })}
                     onChange={(e) => tempChange(e)}>
-                    {!isUpdate && (
+                    {
                       <option disabled selected>
                         select an option
                       </option>
-                    )}
+                    }
                     {templates &&
                       templates.length > 0 &&
                       templates.map((m: any) => (
@@ -406,12 +423,14 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                     display: formStep >= 1 ? 'block' : 'none',
                   }}
                   variant="buttonPrimary"
-                  type="submit">
+                  type="button"
+                  onClick={onSubmit}>
                   Add
                 </Button>
               </Flex>
             )}
             <Button
+              disabled={pipelineData ? false : !isValid}
               ml={2}
               sx={{
                 display: formStep == 0 ? 'block' : 'none',
