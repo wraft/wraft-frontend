@@ -339,6 +339,13 @@ export interface menuLinksProps {
   role?: any;
 }
 
+export interface pipelineLinksProps {
+  name: string;
+  path: string;
+  logo?: any;
+  role?: any;
+}
+
 export const menuLinks: menuLinksProps[] = [
   {
     name: 'Layouts',
