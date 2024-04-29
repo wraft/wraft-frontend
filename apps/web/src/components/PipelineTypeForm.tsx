@@ -303,7 +303,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                     {...register('pipeline_form', { required: true })}>
                     {!isUpdate && (
                       <option disabled selected>
-                        select an option
+                        Select an option
                       </option>
                     )}
                     {forms &&
@@ -341,7 +341,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                     onChange={(e) => tempChange(e)}>
                     {
                       <option disabled selected>
-                        select an option
+                        Select an option
                       </option>
                     }
                     {templates &&
@@ -384,7 +384,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                             // onChange={() => handleSubmit(onSubmit)()}
                           >
                             <option disabled selected value={''}>
-                              select an option
+                              Select an option
                             </option>
                             {tempField &&
                               tempField.length > 0 &&
