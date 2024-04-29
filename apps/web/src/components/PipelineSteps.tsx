@@ -29,10 +29,10 @@ export interface ThemeElement {
 
 type Props = {
   rerender: any;
-  setRerender: (e: any) => void;
+  setRerender: any;
 };
 
-const Form = ({ rerender }: Props) => {
+const Form = ({ rerender, setRerender }: Props) => {
   const { theme } = useThemeUI();
   const [loading, setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
@@ -50,7 +50,7 @@ const Form = ({ rerender }: Props) => {
 
   useEffect(() => {
     loadDetails();
-  }, [cId]);
+  }, [cId, rerender]);
 
   const columns = [
     {
@@ -59,9 +59,9 @@ const Form = ({ rerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-            <Text as="p" variant="pM">
-              {row.original.data_template.title}
-            </Text>
+          <Text as="p" variant="pM">
+            {row.original.data_template.title}
+          </Text>
         </Box>
       ),
       enableSorting: false,
@@ -115,7 +115,7 @@ const Form = ({ rerender }: Props) => {
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
         {isOpen && (
-          <PipelineTypeForm setIsOpen={setIsOpen} pipelineData={pipelineData} />
+          <PipelineTypeForm setIsOpen={setIsOpen} setRerender={setRerender} pipelineData={pipelineData} />
         )}
       </Drawer>
     </Box>

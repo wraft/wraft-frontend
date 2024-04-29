@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
@@ -45,7 +45,7 @@ interface Props {
   step?: number;
   setIsOpen?: (e: any) => void;
   pipelineData?: any;
-  setRerender?: any;
+  setRerender: any;
 }
 
 const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
@@ -62,13 +62,14 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
 
   const [destinationData, setDestinationData] = useState<any>([]);
 
-  const { register, handleSubmit, watch } = useForm();
+  console.log(pipelineData, 'logpipeda');
+
+  const { register, handleSubmit } = useForm();
   const router = useRouter();
 
   const cId: string = router.query.id as string;
 
   const isUpdate = cId ? true : false;
-  const pipelinename = watch('pipelinename');
 
   const loadTemplate = () => {
     fetchAPI(`data_templates`)
@@ -96,11 +97,15 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
 
   //Pipeline Create API
 
-  const createpipeline = () => {
+  const createpipeline = (data: any) => {
     const sampleD = {
-      name: pipelinename,
+      name: data.pipelinename,
       api_route: 'client.crm.com',
+      source_id: data.pipeline_form,
+      source: data.pipeline_source,
     };
+    console.log(sampleD, 'logsamp');
+
     postAPI(`pipelines`, sampleD).then((data) => {
       console.log(data, 'logdatacreatepipeline');
       setIsOpen && setIsOpen(false);
@@ -109,30 +114,32 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         position: 'top-right',
       });
       setRerender((pre: boolean) => !pre);
-
     });
   };
 
   // Pipeline Stage create Api
   // calls when the next button is clicked
-  // temporarily done need clarification
 
   function next() {
     setFormStep((i) => i + 1);
-    if (formStep == 1) {
+    if (formStep == 0) {
       const sampleD = {
         data_template_id: ctemplate.data_template.id,
         content_type_id: ctemplate.content_type.id,
       };
-      console.log(ctemplate,"logsampleD");
-      
-      postAPI(`pipelines/${cId}/stages`, sampleD).then((res: any) => {
-        setPipeStageDetails(res);
-        toast.success('Saved Successfully', {
-          duration: 1000,
-          position: 'top-right',
+      postAPI(`pipelines/${cId}/stages`, sampleD)
+        .then((res: any) => {
+          console.log(res, 'logpipestage');
+
+          setPipeStageDetails(res);
+          toast.success('Stage Created Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          setLoading(true);
         });
-      });
     }
   }
 
@@ -144,7 +151,12 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       mapping: destinationData,
     };
     postAPI(`forms/${formId}/mapping`, sampleD).then((data: any) => {
-      console.log(data, 'resp');
+      setIsOpen && setIsOpen(false);
+      setRerender((prev: boolean)=> !prev)
+      toast.success('Mapped Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
     });
   };
 
@@ -159,10 +171,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
     });
   };
 
-  const ctypeChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const safeSearchTypeValue: string = event.currentTarget.value;
-    setFormId(safeSearchTypeValue);
-    loadContentType(safeSearchTypeValue);
+  const ctypeChange = () => {
+    if (pipelineData) {
+      setFormId(pipelineData.source_id);
+      loadContentType(pipelineData.source_id);
+    }
   };
 
   const loadTempTypeSuccess = (data: any) => {
@@ -185,6 +198,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   useEffect(() => {
     loadTemplate();
     loadForm();
+    ctypeChange();
   }, []);
 
   function prev() {
@@ -195,7 +209,8 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
     setFormStep(step);
   };
 
-  const titles = ['Details', 'Configure', 'Mapping'];
+  const titles = pipelineData ? ['Configure', 'Mapping'] : ['Details'];
+  // const titles = ['Details', 'Configure', 'Mapping'];
 
   // function to organise the values which needed to for pipeline mappping
 
@@ -231,7 +246,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         sx={{
           p: 4,
         }}>
-        Add Stages
+        Create Pipeline
       </Text>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
       <Box
@@ -246,153 +261,165 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
             overflowY: 'auto',
           }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-              <Field
-                register={register}
-                label="Name"
-                name="pipelinename"
-                defaultValue={pipelineData ? pipelineData.name : ''}
-                placeholder="Pipeline Name"
-              />
-              <Box mt={3}>
-                <Label htmlFor="pipeline_source">Source</Label>
-                <Select
-                  id="pipeline_source"
-                  {...register('pipeline_source', { required: true })}>
-                  {source &&
-                    source.length > 0 &&
-                    source.map((m: any) => (
-                      <option value={m} key={m}>
-                        {m}
-                      </option>
-                    ))}
-                </Select>
-              </Box>
-              <Box mt={3}>
-                <Label htmlFor="pipeline_form">Choose Form</Label>
-                <Select
-                  id="pipeline_form"
-                  {...register('pipeline_form', { required: true })}
-                  onChange={(e) => ctypeChange(e)}>
-                  {!isUpdate && (
-                    <option disabled selected>
-                      select an option
-                    </option>
-                  )}
-                  {forms &&
-                    forms.length > 0 &&
-                    forms.map((m: any) => (
-                      <option value={m.id} key={m.id}>
-                        {m.name}
-                      </option>
-                    ))}
-                </Select>
-              </Box>
-            </Box>
-            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
-              <Box sx={{ display: 'none' }}>
-                <Input
-                  id="edit"
-                  defaultValue={0}
-                  hidden={true}
-                  {...register('edit', { required: true })}
+            {!pipelineData && (
+              <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+                <Field
+                  register={register}
+                  label="Name"
+                  name="pipelinename"
+                  defaultValue={pipelineData ? pipelineData.name : ''}
+                  placeholder="Pipeline Name"
                 />
-              </Box>
-
-              <Box sx={{ mt: 3 }}>
-                <Label htmlFor="template_id">Choose a template</Label>
-                <Select
-                  id="template_id"
-                  {...register('template_id', { required: true })}
-                  onChange={(e) => tempChange(e)}>
-                  {!isUpdate && (
-                    <option disabled selected>
-                      select an option
-                    </option>
-                  )}
-                  {templates &&
-                    templates.length > 0 &&
-                    templates.map((m: any) => (
-                      <option value={m.id} key={m.id}>
-                        {m.title}
+                <Box mt={3}>
+                  <Label htmlFor="pipeline_source">Source</Label>
+                  <Select
+                    id="pipeline_source"
+                    {...register('pipeline_source', { required: true })}>
+                    {source &&
+                      source.length > 0 &&
+                      source.map((m: any) => (
+                        <option value={m} key={m}>
+                          {m}
+                        </option>
+                      ))}
+                  </Select>
+                </Box>
+                <Box mt={3}>
+                  <Label htmlFor="pipeline_form">Choose Form</Label>
+                  <Select
+                    id="pipeline_form"
+                    {...register('pipeline_form', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
                       </option>
-                    ))}
-                </Select>
+                    )}
+                    {forms &&
+                      forms.length > 0 &&
+                      forms.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                  </Select>
+                </Box>
               </Box>
-            </Box>
-            <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
-              <Box>
-                <Label>Field Name</Label>
-                {formField.map((field, index) => (
-                  <Box key={field.id}>
-                    <Flex sx={{ alignItems: 'center', pb: '2' }}>
-                      <Box sx={{ mr: 2 }}>
-                        <Field
-                          name={`fields.${index}.name`}
-                          register={register}
-                          defaultValue={(field && field.name) || ''}
-                        />
-                      </Box>
-                      <ArrowRightIcon />
-                      <Box sx={{ flexGrow: 1, ml: 2 }}>
-                        <Select
-                          {...register(`fields.${index}.destination` as const, {
-                            required: true,
-                          })}
-                          onChange={(e) =>
-                            handleSelectChange(index, e.target.value)
-                          }
-                          // onChange={() => handleSubmit(onSubmit)()}
-                        >
-                          <option disabled selected value={''}>
-                            select an option
-                          </option>
-                          {tempField &&
-                            tempField.length > 0 &&
-                            tempField.map((m: any) => (
-                              <option value={m.id} key={m.id}>
-                                {m.name}
-                              </option>
-                            ))}
-                        </Select>
-                      </Box>
-                    </Flex>
-                  </Box>
-                ))}
+            )}
+            {pipelineData && (
+              <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+                <Box sx={{ display: 'none' }}>
+                  <Input
+                    id="edit"
+                    defaultValue={0}
+                    hidden={true}
+                    {...register('edit', { required: true })}
+                  />
+                </Box>
+
+                <Box sx={{ mt: 3 }}>
+                  <Label htmlFor="template_id">Choose a template</Label>
+                  <Select
+                    id="template_id"
+                    {...register('template_id', { required: true })}
+                    onChange={(e) => tempChange(e)}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
+                    {templates &&
+                      templates.length > 0 &&
+                      templates.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.title}
+                        </option>
+                      ))}
+                  </Select>
+                </Box>
               </Box>
-            </Box>
+            )}
+            {pipelineData && (
+              <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+                <Box>
+                  <Label>Field Name</Label>
+                  {formField.map((field, index) => (
+                    <Box key={field.id}>
+                      <Flex sx={{ alignItems: 'center', pb: '2' }}>
+                        <Box sx={{ mr: 2 }}>
+                          <Field
+                            name={`fields.${index}.name`}
+                            register={register}
+                            defaultValue={(field && field.name) || ''}
+                          />
+                        </Box>
+                        <ArrowRightIcon />
+                        <Box sx={{ flexGrow: 1, ml: 2 }}>
+                          <Select
+                            {...register(
+                              `fields.${index}.destination` as const,
+                              {
+                                required: true,
+                              },
+                            )}
+                            onChange={(e) =>
+                              handleSelectChange(index, e.target.value)
+                            }
+                            // onChange={() => handleSubmit(onSubmit)()}
+                          >
+                            <option disabled selected value={''}>
+                              select an option
+                            </option>
+                            {tempField &&
+                              tempField.length > 0 &&
+                              tempField.map((m: any) => (
+                                <option value={m.id} key={m.id}>
+                                  {m.name}
+                                </option>
+                              ))}
+                          </Select>
+                        </Box>
+                      </Flex>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            )}
           </Box>
         </Flex>
 
         <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
           <Flex>
-            <Button
-              sx={{
-                display: formStep >= 1 ? 'block' : 'none',
-              }}
-              variant="buttonSecondary"
-              type="button"
-              onClick={prev}>
-              Prev
-            </Button>
+            {pipelineData && (
+              <Flex>
+                <Button
+                  sx={{
+                    display: formStep >= 1 ? 'block' : 'none',
+                  }}
+                  variant="buttonSecondary"
+                  type="button"
+                  onClick={prev}>
+                  Prev
+                </Button>
+                <Button
+                  ml={2}
+                  sx={{
+                    display: formStep >= 1 ? 'block' : 'none',
+                  }}
+                  variant="buttonPrimary"
+                  type="submit">
+                  Add
+                </Button>
+              </Flex>
+            )}
             <Button
               ml={2}
               sx={{
-                display: formStep !== titles.length - 1 ? 'block' : 'none',
+                display: formStep == 0 ? 'block' : 'none',
               }}
               type="button"
               onClick={pipelineData ? next : handleSubmit(createpipeline)}
               variant="buttonPrimary">
               {pipelineData ? 'Next' : 'Create'}
-            </Button>
-            <Button
-              ml={2}
-              sx={{
-                display: formStep == 2 ? 'block' : 'none',
-              }}
-              variant="buttonPrimary"
-              type="submit">
-              Add
             </Button>
           </Flex>
         </Flex>
