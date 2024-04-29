@@ -29,7 +29,7 @@ const PipelineView = () => {
     formState: { errors },
     setValue,
   } = useForm<any>();
-  const [rerender, setRerender] = useState<any>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>([]);
