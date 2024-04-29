@@ -11,7 +11,7 @@ const SvgPipelineIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <path
-      stroke={props.color || `#2C3641`}
+      stroke={props.color || 'currentColor' || `#2C3641`}
       strokeLinejoin="round"
       strokeMiterlimit={10}
       strokeWidth={1.5}
