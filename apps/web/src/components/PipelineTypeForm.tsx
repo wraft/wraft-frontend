@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
-
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
-import Field from './Field';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+
 import { uuidRegex } from 'utils/regex';
+
+import Field from './Field';
+import { fetchAPI, postAPI } from '../utils/models';
 
 export interface IFieldItem {
   name: string;
@@ -121,7 +121,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then((data) => {
+    postAPI(`pipelines`, sampleD).then(() => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,

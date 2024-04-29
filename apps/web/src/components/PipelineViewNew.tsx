@@ -10,17 +10,17 @@ import {
   Select,
   Field,
 } from 'theme-ui';
+import { Controller, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+
+import { deleteAPI, fetchAPI } from 'utils/models';
 
 import PageHeader from './PageHeader';
-import ManageSidebar from './ManageSidebar';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from './MenuStepsIndicator';
-import { Controller, useForm } from 'react-hook-form';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
 import PipelineLogs from './PipelineLogs';
-import { deleteAPI, fetchAPI } from 'utils/models';
-import toast from 'react-hot-toast';
 
 const PipelineView = () => {
   const {
