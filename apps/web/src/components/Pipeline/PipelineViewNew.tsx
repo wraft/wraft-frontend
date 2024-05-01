@@ -45,16 +45,20 @@ const PipelineView = () => {
   };
 
   const loadForm = () => {
-    fetchAPI(`forms/${pipelineData.source_id}`).then((data: any) => {
-      setFormData(data);
-    });
+    if (pipelineData.source_id) {
+      fetchAPI(`forms/${pipelineData.source_id}`).then((data: any) => {
+        setFormData(data);
+      });
+    }
   };
-
-  loadForm();
 
   useEffect(() => {
     loadDetails();
   }, [cId]);
+
+  useEffect(() => {
+    loadForm();
+  }, [pipelineData.source_id]);
 
   const onDelete = () => {
     deleteAPI(`pipelines/${cId}`)
