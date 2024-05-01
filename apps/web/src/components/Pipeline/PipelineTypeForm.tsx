@@ -8,8 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
-import Field from './Field';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from '../../utils/models';
+import Field from '../Field';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { uuidRegex } from 'utils/regex';
@@ -57,13 +57,17 @@ const schema = z.object({
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
   pipeline_form: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Layout',
+    message: 'Invalid Form',
   }),
+  pipeline_source: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
 });
 
 const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   const [formStep, setFormStep] = useState(step);
-  const [source, setSource] = useState<any>(['Wraft Form', 'CSV']);
+  const [source, setSource] = useState<any>(['Wraft Form']);
   const [loading, setLoading] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Array<IField>>([]);
   const [forms, setForms] = useState<any>([]);
@@ -114,6 +118,8 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   //Pipeline Create API
 
   const createpipeline = (data: any) => {
+    console.log(data, 'logbefore');
+
     const sampleD = {
       name: data.pipelinename,
       api_route: 'client.crm.com',
@@ -121,7 +127,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then((data) => {
+    console.log(sampleD, 'logsamp');
+
+    postAPI(`pipelines`, sampleD).then((data: any) => {
+      console.log(data, 'logdata');
+
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,
@@ -287,6 +297,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                   <Select
                     id="pipeline_source"
                     {...register('pipeline_source', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {source &&
                       source.length > 0 &&
                       source.map((m: any) => (
@@ -295,6 +310,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                         </option>
                       ))}
                   </Select>
+                  {errors.pipeline_source && errors.pipeline_source.message && (
+                    <Text variant="error">
+                      {errors.pipeline_source.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box mt={3}>
                   <Label htmlFor="pipeline_form">Choose Form</Label>

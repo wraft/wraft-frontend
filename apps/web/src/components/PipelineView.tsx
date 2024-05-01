@@ -9,7 +9,7 @@ import { PlayCircle } from './Icons';
 import Modal from './Modal';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
-import { Pipeline } from './PipelineList';
+import { Pipeline } from './Pipeline/PipelineList';
 
 export interface ITriggers {
   triggers: Trigger[];

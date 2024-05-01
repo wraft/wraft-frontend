@@ -6,8 +6,8 @@ import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import Link from './NavLink';
+import { fetchAPI, deleteAPI } from '../../utils/models';
+import Link from '../NavLink';
 import { useRouter } from 'next/router';
 import PipelineTypeForm from './PipelineTypeForm';
 
@@ -68,12 +68,18 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.status',
-      header: 'STATUS',
+      header: (
+        <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+            STATE
+          </Text>
+        </Flex>
+      ),
       cell: ({ row }: any) => (
         <Flex
           key={row.index}
-          sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+          sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
             Approved
           </Text>
         </Flex>
@@ -82,10 +88,16 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.state',
-      header: 'STATE',
+      header: (
+        <Flex sx={{ display: 'flex' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+            STATE
+          </Text>
+        </Flex>
+      ),
       cell: ({ row }: any) => (
-        <Flex key={row.index} sx={{ justifyContent: 'flex-end', gap: 5 }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+        <Flex key={row.index} sx={{ justifyContent: 'space-between' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
             Published
           </Text>
           <Box>
@@ -115,7 +127,11 @@ const Form = ({ rerender, setRerender }: Props) => {
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
         {isOpen && (
-          <PipelineTypeForm setIsOpen={setIsOpen} setRerender={setRerender} pipelineData={pipelineData} />
+          <PipelineTypeForm
+            setIsOpen={setIsOpen}
+            setRerender={setRerender}
+            pipelineData={pipelineData}
+          />
         )}
       </Drawer>
     </Box>

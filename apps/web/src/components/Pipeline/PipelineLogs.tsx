@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI } from '../../utils/models';
 
 export interface Theme {
   total_pages: number;
