@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Flex, Text } from 'theme-ui';
 import { Drawer } from '@wraft-ui/Drawer';
 
-import { fetchAPI } from '../utils/models';
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import { fetchAPI } from '../../utils/models';
+import Link from '../NavLink';
+import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
 import { Table } from '@wraft/ui';
 
@@ -51,7 +51,7 @@ const Form = () => {
         <Box
           sx={{ display: 'flex', justifyContent: 'flex-start' }}
           key={row.index}>
-           <Link href={`/manage/pipelines/run/${row.original.id}`}>
+          <Link href={`/manage/pipelines/run/${row.original.id}`}>
             <Text as="h4" variant="pM">
               {row.original.name}
             </Text>
@@ -104,9 +104,9 @@ const Form = () => {
         </Flex>
       </PageHeader>
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>
-      <Box mt={0}>
-        <Table data={contents} columns={columns} isLoading={loading} />
-      </Box>
+        <Box mt={0}>
+          <Table data={contents} columns={columns} isLoading={loading} />
+        </Box>
       </Box>
       <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
         {isOpen && (

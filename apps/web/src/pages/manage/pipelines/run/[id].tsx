@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 import Page from 'components/PageFrame';
-import PipelineViewNew from 'components/PipelineViewNew';
+import PipelineViewNew from 'components/Pipeline/PipelineViewNew';
 // import { Box } from 'theme-ui';
 // import BulkBuild from '../../../src/components/Bu';
 
