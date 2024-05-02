@@ -28,7 +28,7 @@ const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);  
 
   const loadData = () => {
     fetchAPI('pipelines?sort=inserted_at_desc').then((data: any) => {
