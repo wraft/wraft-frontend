@@ -3,12 +3,12 @@
   "icon": true,
   "removeXMLNS": true,
   "replaceAttrValues": {
-    "#2C3641": "{props.color || `#2C3641`}",
-    "#FFFFFF": "{props.color || `#FFFFFF`}",
-    "white": "{props.color || `#FFFFFF`}",
-    "#111111": "{props.color || `#000000`}",
-    "black": "{props.color || `#000000`}",
-    "#000": "{props.color || `#000000`}"
+    "#2C3641": "{props.color || 'currentColor' || `#2C3641`}",
+    "#FFFFFF": "{props.color || 'currentColor' || `#FFFFFF`}",
+    "white": "{props.color || 'currentColor' || `#FFFFFF`}",
+    "#111111": "{props.color || 'currentColor' || `#000000`}",
+    "black": "{props.color || 'currentColor' || `#000000`}",
+    "#000": "{props.color || 'currentColor' || `#000000`}"
   },
   "removeViewBox": false,
   "svgProps": {

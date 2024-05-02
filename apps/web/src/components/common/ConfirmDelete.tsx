@@ -41,7 +41,7 @@ const ConfirmDelete = ({
             </Button>
             <Button
               onClick={() => {
-                setOpen(false)
+                setOpen(false);
                 if (setRender) {
                   setRender((prev: boolean) => prev);
                 }
