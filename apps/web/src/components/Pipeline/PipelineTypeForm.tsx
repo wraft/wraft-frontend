@@ -49,6 +49,7 @@ interface Props {
   setIsOpen?: (e: any) => void;
   pipelineData?: any;
   setRerender: any;
+  id?: any;
 }
 
 const schema = z.object({
@@ -65,7 +66,13 @@ const schema = z.object({
     .max(20, { message: 'Maximum 20 characters allowed' }),
 });
 
-const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
+const Form = ({
+  step = 0,
+  setIsOpen,
+  pipelineData,
+  setRerender,
+  id,
+}: Props) => {
   const [formStep, setFormStep] = useState(step);
   const [source, setSource] = useState<any>(['Wraft Form']);
   const [loading, setLoading] = useState<boolean>(false);
@@ -76,6 +83,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   const [ctemplate, setCTemplate] = useState<any>();
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
+  const [pipeMapId, setPipeMapId] = useState<any>()
 
   const [destinationData, setDestinationData] = useState<any>([]);
 
@@ -118,8 +126,6 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   //Pipeline Create API
 
   const createpipeline = (data: any) => {
-    console.log(data, 'logbefore');
-
     const sampleD = {
       name: data.pipelinename,
       api_route: 'client.crm.com',
@@ -127,11 +133,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       source: data.pipeline_source,
     };
 
-    console.log(sampleD, 'logsamp');
-
     postAPI(`pipelines`, sampleD).then((data: any) => {
-      console.log(data, 'logdata');
-
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,
@@ -150,21 +152,42 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         data_template_id: ctemplate.data_template.id,
         content_type_id: ctemplate.content_type.id,
       };
-      postAPI(`pipelines/${cId}/stages`, sampleD)
-        .then((res: any) => {
-          setPipeStageDetails(res);
-          toast.success('Stage Created Successfully', {
-            duration: 1000,
-            position: 'top-right',
+      if (id) {
+        putAPI(`stages/${id}`, sampleD)
+          .then((res) => {
+            console.log(res,"logupd");
+            setPipeStageDetails(res);
+            toast.success('Stage Updated Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setFormStep((i) => i + 1);
+          })
+          .catch(() => {
+            toast.error('Failed to Update Stage', {
+              duration: 1000,
+              position: 'top-right',
+            });
           });
-          setFormStep((i) => i + 1);
-        })
-        .catch(() => {
-          toast.error('stage already exist', {
-            duration: 1000,
-            position: 'top-right',
+      } else {
+        postAPI(`pipelines/${cId}/stages`, sampleD)
+          .then((res: any) => {
+            console.log(res,"logstage");
+            
+            setPipeStageDetails(res);
+            toast.success('Stage Created Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setFormStep((i) => i + 1);
+          })
+          .catch(() => {
+            toast.error('stage already exist', {
+              duration: 1000,
+              position: 'top-right',
+            });
           });
-        });
+      }
     }
   }
 
@@ -175,14 +198,34 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       pipe_stage_id: pipeStageDetails.id,
       mapping: destinationData,
     };
-    postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
-      setIsOpen && setIsOpen(false);
-      setRerender((prev: boolean) => !prev);
-      toast.success('Mapped Successfully', {
-        duration: 1000,
-        position: 'top-right',
+    if (id) {
+      putAPI(`forms/${formId}/mapping`, sampleD)
+        .then(() => {
+          setIsOpen && setIsOpen(false);
+          setRerender((prev: boolean) => !prev);
+          toast.success('Mapping Updated Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error('Mapping Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
+    } else {
+      postAPI(`forms/${formId}/mapping`, sampleD).then((res:any) => {
+        console.log(res,"logmap");
+        
+        setIsOpen && setIsOpen(false);
+        setRerender((prev: boolean) => !prev);
+        toast.success('Mapped Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-    });
+    }
   };
 
   const loadContentTypeSuccess = (data: any) => {

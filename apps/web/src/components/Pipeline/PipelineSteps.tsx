@@ -37,6 +37,12 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
+  
+  const handlePipelineClick = (pipelineId: string) => {
+    setIsOpen(true);
+    setSelectedPipelineId(pipelineId);
+  };
 
   const router = useRouter();
 
@@ -59,7 +65,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text as="p" variant="pM">
+          <Text as="p" variant="pM" onClick={() => handlePipelineClick(row.original.id)}>
             {row.original.data_template.title}
           </Text>
         </Box>
@@ -131,6 +137,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             setIsOpen={setIsOpen}
             setRerender={setRerender}
             pipelineData={pipelineData}
+            id={selectedPipelineId}
           />
         )}
       </Drawer>
