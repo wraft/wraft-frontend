@@ -137,9 +137,6 @@ const ContentList = () => {
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
 
-  console.log(contents,"contents");
-  
-
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 

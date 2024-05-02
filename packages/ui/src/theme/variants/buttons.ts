@@ -1,4 +1,10 @@
 const buttons = {
+  none: {
+    padding: '0px',
+    margin: '0px',
+    border: 'none',
+    background: 'transparent',
+  },
   btnBig: {
     cursor: 'pointer',
   },

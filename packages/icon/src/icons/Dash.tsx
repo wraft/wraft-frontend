@@ -15,7 +15,7 @@ const SvgDashIcon = (props: SVGProps<SVGSVGElement>) => (
       height={2}
       x={5}
       y={11}
-      fill={props.color || `#2C3641`}
+      fill={props.color || 'currentColor' || `#2C3641`}
       rx={1}
     />
   </svg>
