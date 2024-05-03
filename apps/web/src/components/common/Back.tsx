@@ -18,7 +18,8 @@ const Back = () => {
           const index = pathSegments.indexOf('run');
           backRoute = pathSegments.slice(0, index).join('/');
         } else {
-          backRoute = pathSegments.length > 2 ? pathSegments.slice(0, -1).join('/') : '/';
+          backRoute =
+            pathSegments.length > 2 ? pathSegments.slice(0, -1).join('/') : '/';
         }
         router.push(backRoute);
       }}

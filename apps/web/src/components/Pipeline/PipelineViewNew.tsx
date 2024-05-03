@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import {
-  Box,
-  Flex,
-  Text,
-  Button,
-  Container,
-  Label,
-  Select,
-  Field,
-} from 'theme-ui';
+import { Box, Flex, Button, Container, Field } from 'theme-ui';
+import toast from 'react-hot-toast';
+
+import { deleteAPI, fetchAPI } from 'utils/models';
 
 import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
@@ -17,8 +11,6 @@ import MenuStepsIndicator from '../MenuStepsIndicator';
 import Modal from '../Modal';
 import { ConfirmDelete } from '../common';
 import PipelineLogs from './PipelineLogs';
-import { deleteAPI, fetchAPI } from 'utils/models';
-import toast from 'react-hot-toast';
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);
@@ -26,9 +18,6 @@ const PipelineView = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>([]);
   const [formData, setFormData] = useState<any>();
-
-  console.log(pipelineData, 'logpipe');
-  console.log(formData, 'logformdata');
 
   const router = useRouter();
 

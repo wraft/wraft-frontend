@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { DeleteIcon, EllipsisHIcon, FontIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
@@ -8,7 +9,6 @@ import { Drawer } from '@wraft-ui/Drawer';
 
 import { fetchAPI, deleteAPI } from '../../utils/models';
 import Link from '../NavLink';
-import { useRouter } from 'next/router';
 import PipelineTypeForm from './PipelineTypeForm';
 
 export interface Theme {
@@ -38,7 +38,7 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [pipelineData, setPipelineData] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
-  
+
   const handlePipelineClick = (pipelineId: string) => {
     setIsOpen(true);
     setSelectedPipelineId(pipelineId);
@@ -54,6 +54,12 @@ const Form = ({ rerender, setRerender }: Props) => {
     });
   };
 
+  const handleAddPipelineStep = () => {
+    setIsOpen(true);
+    // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
+    setSelectedPipelineId('');
+  };
+
   useEffect(() => {
     loadDetails();
   }, [cId, rerender]);
@@ -65,7 +71,10 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text as="p" variant="pM" onClick={() => handlePipelineClick(row.original.id)}>
+          <Text
+            as="p"
+            variant="pM"
+            onClick={() => handlePipelineClick(row.original.id)}>
             {row.original.data_template.title}
           </Text>
         </Box>
@@ -126,7 +135,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       )}{' '}
       <Box mt="auto" mb="4">
         <Box className="first-step" py={4}>
-          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+          <Button variant="secondary" onClick={handleAddPipelineStep}>
             + Add pipeline step
           </Button>
         </Box>

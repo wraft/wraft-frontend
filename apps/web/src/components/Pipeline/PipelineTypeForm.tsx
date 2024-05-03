@@ -3,16 +3,16 @@ import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
-
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../../utils/models';
-import Field from '../Field';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+
 import { uuidRegex } from 'utils/regex';
+
+import Field from '../Field';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from '../../utils/models';
 
 export interface IFieldItem {
   name: string;
@@ -83,7 +83,7 @@ const Form = ({
   const [ctemplate, setCTemplate] = useState<any>();
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
-  const [pipeMapId, setPipeMapId] = useState<any>()
+  const [pipeMapId, setPipeMapId] = useState<any>();
 
   const [destinationData, setDestinationData] = useState<any>([]);
 
@@ -103,8 +103,20 @@ const Form = ({
     fetchAPI(`data_templates`)
       .then((data: any) => {
         setLoading(true);
-        const res: IField[] = data.data_templates;
-        setTemplates(res);
+        const res: any[] = data.data_templates;
+
+        if (pipelineData) {
+          const contentTypeIds = pipelineData.stages.map(
+            (stage: any) => stage.content_type.id,
+          );
+
+          const filteredTemplates = res.filter((template) => {
+            return !contentTypeIds.includes(template.content_type.id);
+          });
+          setTemplates(filteredTemplates);
+        } else {
+          setTemplates(res);
+        }
       })
       .catch(() => {
         setLoading(true);
@@ -133,7 +145,7 @@ const Form = ({
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then((data: any) => {
+    postAPI(`pipelines`, sampleD).then(() => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,
@@ -152,10 +164,10 @@ const Form = ({
         data_template_id: ctemplate.data_template.id,
         content_type_id: ctemplate.content_type.id,
       };
+
       if (id) {
         putAPI(`stages/${id}`, sampleD)
           .then((res) => {
-            console.log(res,"logupd");
             setPipeStageDetails(res);
             toast.success('Stage Updated Successfully', {
               duration: 1000,
@@ -172,8 +184,6 @@ const Form = ({
       } else {
         postAPI(`pipelines/${cId}/stages`, sampleD)
           .then((res: any) => {
-            console.log(res,"logstage");
-            
             setPipeStageDetails(res);
             toast.success('Stage Created Successfully', {
               duration: 1000,
@@ -199,7 +209,7 @@ const Form = ({
       mapping: destinationData,
     };
     if (id) {
-      putAPI(`forms/${formId}/mapping`, sampleD)
+      putAPI(`forms/${formId}/mapping/${pipeMapId}`, sampleD)
         .then(() => {
           setIsOpen && setIsOpen(false);
           setRerender((prev: boolean) => !prev);
@@ -215,9 +225,7 @@ const Form = ({
           });
         });
     } else {
-      postAPI(`forms/${formId}/mapping`, sampleD).then((res:any) => {
-        console.log(res,"logmap");
-        
+      postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
         setIsOpen && setIsOpen(false);
         setRerender((prev: boolean) => !prev);
         toast.success('Mapped Successfully', {
@@ -264,6 +272,12 @@ const Form = ({
   };
 
   useEffect(() => {
+    if (id) {
+      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
+    }
+  }, [pipeStageDetails, id]);
+
+  useEffect(() => {
     loadTemplate();
     loadForm();
     ctypeChange();
@@ -289,12 +303,12 @@ const Form = ({
         const newData = [...prevData];
         newData[index] = {
           source: {
-            source_id: formField[index].id,
+            id: formField[index].id,
             name: formField[index].name,
           },
           destination: {
-            destination_id: selectedDestination.id,
-            E_name: selectedDestination.name,
+            id: selectedDestination.id,
+            name: selectedDestination.name,
           },
         };
         return newData;

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Flex, Text } from 'theme-ui';
 import { Drawer } from '@wraft-ui/Drawer';
+import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../../utils/models';
 import Link from '../NavLink';
 import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
-import { Table } from '@wraft/ui';
 
 export interface Pipelines {
   total_pages: number;
@@ -28,7 +28,7 @@ const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
-  const [loading, setLoading] = useState<boolean>(true);  
+  const [loading, setLoading] = useState<boolean>(true);
 
   const loadData = () => {
     fetchAPI('pipelines?sort=inserted_at_desc').then((data: any) => {
