@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import { Box, Text, Flex, useThemeUI } from 'theme-ui';
 import { Button } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { EmptyForm } from './Icons';
-import { NextLinkText } from './NavLink';
-import { TimeAgo } from './Atoms';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
+import { NextLinkText } from 'components/NavLink';
+import { TimeAgo, StateBadge } from 'components/Atoms';
+import { fetchAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;
@@ -35,12 +31,7 @@ interface Meta {
   page_number: number;
 }
 
-type Props = {
-  rerender: boolean;
-  setRerender: (e: any) => void;
-};
-
-const FormList = ({ rerender, setRerender }: Props) => {
+const FormResponseList = () => {
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -48,15 +39,19 @@ const FormList = ({ rerender, setRerender }: Props) => {
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<number | null>(null);
 
+  const router = useRouter();
+  const fId: string = router.query.id as string;
+  const currentPage: any = parseInt(router.query.page as string) || 1;
+
   const { theme } = useThemeUI();
 
   const loadData = (page: number) => {
     setLoading(true);
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`forms${pageNo}`)
+    fetchAPI(`forms/${fId}/entries${pageNo}`)
       .then((data: any) => {
         setLoading(false);
-        const res: FormElement[] = data.forms;
+        const res: FormElement[] = data.entries;
         setContents(res);
         setPageMeta(data);
       })
@@ -65,25 +60,13 @@ const FormList = ({ rerender, setRerender }: Props) => {
       });
   };
 
-  const onDelete = (id: string) => {
-    deleteAPI(`forms/${id}`).then(() => {
-      setRerender((prev: boolean) => !prev);
-      toast.success('Deleted Theme', {
-        duration: 1000,
-        position: 'top-right',
-      });
-    });
-  };
-
   useEffect(() => {
     loadData(page);
-  }, [page, rerender]);
+  }, [page]);
 
-  const router: any = useRouter();
-  const currentPage: any = parseInt(router.query.page) || 1;
   const columns = [
     {
-      id: 'content.name',
+      id: 'content.id',
       header: 'NAME',
       accessorKey: 'content.name',
       enableSorting: false,
@@ -93,7 +76,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
           <>
             <NextLinkText href={`/forms/${row.original?.id}`}>
               <Box>
-                <Box>{row.original?.name}</Box>
+                <Box>{row.original?.id}</Box>
               </Box>
             </NextLinkText>
           </>
@@ -102,12 +85,25 @@ const FormList = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.updated_at',
-      header: 'LAST UPDATED',
+      header: 'CREATED',
       accessorKey: 'content.updated_at',
       enableSorting: false,
       cell: ({ row }: any) => {
         return (
           row.original.updated_at && <TimeAgo time={row.original?.updated_at} />
+        );
+      },
+    },
+    {
+      id: 'content.status',
+      header: 'STATUS',
+      accessorKey: 'content.status',
+      enableSorting: false,
+      cell: ({ row }: any) => {
+        return (
+          <Box>
+            <StateBadge name={row.original?.status} color="#E2F7EA" />
+          </Box>
         );
       },
     },
@@ -179,20 +175,6 @@ const FormList = ({ rerender, setRerender }: Props) => {
                 </Menu>
               </MenuProvider>
             </Flex>
-            <Modal
-              isOpen={deleteOpen === row.index}
-              onClose={() => setDeleteOpen(null)}>
-              {
-                <ConfirmDelete
-                  title="Delete Form"
-                  text={`Are you sure you want to delete ‘${row.original.name}’?`}
-                  setOpen={setDeleteOpen}
-                  onConfirmDelete={async () => {
-                    onDelete(row.original.id);
-                  }}
-                />
-              }
-            </Modal>
           </>
         );
       },
@@ -215,27 +197,6 @@ const FormList = ({ rerender, setRerender }: Props) => {
   return (
     <Box py={3} mb={4}>
       <Box mx={0} mb={3}>
-        {!loading && contents.length < 1 && (
-          <Box>
-            <Flex>
-              <Box sx={{ color: 'gray.500', width: 'auto' }}>
-                <EmptyForm />
-              </Box>
-              <Box sx={{ m: 2, pb: 0 }}>
-                <Text as="h2" sx={{ fontWeight: 300 }}>
-                  No Forms present
-                </Text>
-                <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
-                  You have not created a collection form yet, click below to
-                  create one
-                </Text>
-                <Box sx={{ mt: 3, pb: 0 }}>
-                  <Button>Add Form</Button>
-                </Box>
-              </Box>
-            </Flex>
-          </Box>
-        )}
         <Box>
           <Box sx={{ width: '100%' }}>
             <Box mx={0} mb={3} sx={{ width: '100%' }}>
@@ -258,4 +219,4 @@ const FormList = ({ rerender, setRerender }: Props) => {
   );
 };
 
-export default FormList;
+export default FormResponseList;
