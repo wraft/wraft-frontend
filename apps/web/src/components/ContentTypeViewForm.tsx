@@ -278,7 +278,7 @@ const ContentTypeViewForm = () => {
                   disabled>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {layouts &&
@@ -307,7 +307,7 @@ const ContentTypeViewForm = () => {
                   disabled>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {flows &&
@@ -337,7 +337,7 @@ const ContentTypeViewForm = () => {
                   disabled>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {themes &&

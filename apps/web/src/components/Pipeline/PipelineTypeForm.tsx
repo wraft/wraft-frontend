@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
@@ -11,8 +11,8 @@ import toast from 'react-hot-toast';
 
 import { uuidRegex } from 'utils/regex';
 
-import Field from './Field';
-import { fetchAPI, postAPI } from '../utils/models';
+import Field from '../Field';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from '../../utils/models';
 
 export interface IFieldItem {
   name: string;
@@ -49,6 +49,7 @@ interface Props {
   setIsOpen?: (e: any) => void;
   pipelineData?: any;
   setRerender: any;
+  id?: any;
 }
 
 const schema = z.object({
@@ -57,13 +58,23 @@ const schema = z.object({
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
   pipeline_form: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Layout',
+    message: 'Invalid Form',
   }),
+  pipeline_source: z
+    .string()
+    .min(4, { message: 'Minimum 4 characters required' })
+    .max(20, { message: 'Maximum 20 characters allowed' }),
 });
 
-const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
+const Form = ({
+  step = 0,
+  setIsOpen,
+  pipelineData,
+  setRerender,
+  id,
+}: Props) => {
   const [formStep, setFormStep] = useState(step);
-  const [source, setSource] = useState<any>(['Wraft Form', 'CSV']);
+  const [source, setSource] = useState<any>(['Wraft Form']);
   const [loading, setLoading] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Array<IField>>([]);
   const [forms, setForms] = useState<any>([]);
@@ -72,6 +83,7 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   const [ctemplate, setCTemplate] = useState<any>();
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
+  const [pipeMapId, setPipeMapId] = useState<any>();
 
   const [destinationData, setDestinationData] = useState<any>([]);
 
@@ -91,8 +103,20 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
     fetchAPI(`data_templates`)
       .then((data: any) => {
         setLoading(true);
-        const res: IField[] = data.data_templates;
-        setTemplates(res);
+        const res: any[] = data.data_templates;
+
+        if (pipelineData) {
+          const contentTypeIds = pipelineData.stages.map(
+            (stage: any) => stage.content_type.id,
+          );
+
+          const filteredTemplates = res.filter((template) => {
+            return !contentTypeIds.includes(template.content_type.id);
+          });
+          setTemplates(filteredTemplates);
+        } else {
+          setTemplates(res);
+        }
       })
       .catch(() => {
         setLoading(true);
@@ -140,21 +164,40 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         data_template_id: ctemplate.data_template.id,
         content_type_id: ctemplate.content_type.id,
       };
-      postAPI(`pipelines/${cId}/stages`, sampleD)
-        .then((res: any) => {
-          setPipeStageDetails(res);
-          toast.success('Stage Created Successfully', {
-            duration: 1000,
-            position: 'top-right',
+
+      if (id) {
+        putAPI(`stages/${id}`, sampleD)
+          .then((res) => {
+            setPipeStageDetails(res);
+            toast.success('Stage Updated Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setFormStep((i) => i + 1);
+          })
+          .catch(() => {
+            toast.error('Failed to Update Stage', {
+              duration: 1000,
+              position: 'top-right',
+            });
           });
-          setFormStep((i) => i + 1);
-        })
-        .catch(() => {
-          toast.error('stage already exist', {
-            duration: 1000,
-            position: 'top-right',
+      } else {
+        postAPI(`pipelines/${cId}/stages`, sampleD)
+          .then((res: any) => {
+            setPipeStageDetails(res);
+            toast.success('Stage Created Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setFormStep((i) => i + 1);
+          })
+          .catch(() => {
+            toast.error('stage already exist', {
+              duration: 1000,
+              position: 'top-right',
+            });
           });
-        });
+      }
     }
   }
 
@@ -165,14 +208,32 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
       pipe_stage_id: pipeStageDetails.id,
       mapping: destinationData,
     };
-    postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
-      setIsOpen && setIsOpen(false);
-      setRerender((prev: boolean) => !prev);
-      toast.success('Mapped Successfully', {
-        duration: 1000,
-        position: 'top-right',
+    if (id) {
+      putAPI(`forms/${formId}/mapping/${pipeMapId}`, sampleD)
+        .then(() => {
+          setIsOpen && setIsOpen(false);
+          setRerender((prev: boolean) => !prev);
+          toast.success('Mapping Updated Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        })
+        .catch(() => {
+          toast.error('Mapping Failed', {
+            duration: 1000,
+            position: 'top-right',
+          });
+        });
+    } else {
+      postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
+        setIsOpen && setIsOpen(false);
+        setRerender((prev: boolean) => !prev);
+        toast.success('Mapped Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-    });
+    }
   };
 
   const loadContentTypeSuccess = (data: any) => {
@@ -211,6 +272,12 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
   };
 
   useEffect(() => {
+    if (id) {
+      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
+    }
+  }, [pipeStageDetails, id]);
+
+  useEffect(() => {
     loadTemplate();
     loadForm();
     ctypeChange();
@@ -236,12 +303,12 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
         const newData = [...prevData];
         newData[index] = {
           source: {
-            source_id: formField[index].id,
+            id: formField[index].id,
             name: formField[index].name,
           },
           destination: {
-            destination_id: selectedDestination.id,
-            E_name: selectedDestination.name,
+            id: selectedDestination.id,
+            name: selectedDestination.name,
           },
         };
         return newData;
@@ -287,6 +354,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                   <Select
                     id="pipeline_source"
                     {...register('pipeline_source', { required: true })}>
+                    {!isUpdate && (
+                      <option disabled selected>
+                        select an option
+                      </option>
+                    )}
                     {source &&
                       source.length > 0 &&
                       source.map((m: any) => (
@@ -295,6 +367,11 @@ const Form = ({ step = 0, setIsOpen, pipelineData, setRerender }: Props) => {
                         </option>
                       ))}
                   </Select>
+                  {errors.pipeline_source && errors.pipeline_source.message && (
+                    <Text variant="error">
+                      {errors.pipeline_source.message as string}
+                    </Text>
+                  )}
                 </Box>
                 <Box mt={3}>
                   <Label htmlFor="pipeline_form">Choose Form</Label>

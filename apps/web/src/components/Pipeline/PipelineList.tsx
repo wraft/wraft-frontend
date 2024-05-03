@@ -3,10 +3,9 @@ import { Box, Button, Flex, Text } from 'theme-ui';
 import { Drawer } from '@wraft-ui/Drawer';
 import { Table } from '@wraft/ui';
 
-import { fetchAPI } from 'utils/models';
-
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import { fetchAPI } from '../../utils/models';
+import Link from '../NavLink';
+import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
 
 export interface Pipelines {

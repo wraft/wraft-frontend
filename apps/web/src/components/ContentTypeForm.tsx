@@ -527,7 +527,7 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   {...register('layout_id', { required: true })}>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {layouts &&
@@ -552,7 +552,7 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   {...register('flow_id', { required: true })}>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {flows &&
@@ -587,7 +587,7 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   {...register('theme_id', { required: true })}>
                   {!isUpdate && (
                     <option disabled selected>
-                      select an option
+                      Select an option
                     </option>
                   )}
                   {themes &&
