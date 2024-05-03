@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { DeleteIcon } from '@wraft/icon';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { DeleteIcon, EllipsisHIcon, FontIcon } from '@wraft/icon';
+import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI, deleteAPI } from '../../utils/models';
+import Link from '../NavLink';
 import PipelineTypeForm from './PipelineTypeForm';
 
 export interface Theme {
@@ -34,6 +37,12 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
+
+  const handlePipelineClick = (pipelineId: string) => {
+    setIsOpen(true);
+    setSelectedPipelineId(pipelineId);
+  };
 
   const router = useRouter();
 
@@ -43,6 +52,12 @@ const Form = ({ rerender, setRerender }: Props) => {
     fetchAPI(`pipelines/${cId}`).then((data: any) => {
       setPipelineData(data);
     });
+  };
+
+  const handleAddPipelineStep = () => {
+    setIsOpen(true);
+    // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
+    setSelectedPipelineId('');
   };
 
   useEffect(() => {
@@ -56,7 +71,10 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text as="p" variant="pM">
+          <Text
+            as="p"
+            variant="pM"
+            onClick={() => handlePipelineClick(row.original.id)}>
             {row.original.data_template.title}
           </Text>
         </Box>
@@ -65,12 +83,18 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.status',
-      header: 'STATUS',
+      header: (
+        <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+            STATE
+          </Text>
+        </Flex>
+      ),
       cell: ({ row }: any) => (
         <Flex
           key={row.index}
-          sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+          sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
             Approved
           </Text>
         </Flex>
@@ -79,10 +103,16 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.state',
-      header: 'STATE',
+      header: (
+        <Flex sx={{ display: 'flex' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+            STATE
+          </Text>
+        </Flex>
+      ),
       cell: ({ row }: any) => (
-        <Flex key={row.index} sx={{ justifyContent: 'flex-end', gap: 5 }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+        <Flex key={row.index} sx={{ justifyContent: 'space-between' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
             Published
           </Text>
           <Box>
@@ -105,7 +135,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       )}{' '}
       <Box mt="auto" mb="4">
         <Box className="first-step" py={4}>
-          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+          <Button variant="secondary" onClick={handleAddPipelineStep}>
             + Add pipeline step
           </Button>
         </Box>
@@ -116,6 +146,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             setIsOpen={setIsOpen}
             setRerender={setRerender}
             pipelineData={pipelineData}
+            id={selectedPipelineId}
           />
         )}
       </Drawer>

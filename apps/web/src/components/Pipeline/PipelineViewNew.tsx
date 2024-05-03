@@ -1,38 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import {
-  Box,
-  Flex,
-  Text,
-  Button,
-  Container,
-  Label,
-  Select,
-  Field,
-} from 'theme-ui';
-import { Controller, useForm } from 'react-hook-form';
+import { Box, Flex, Button, Container, Field } from 'theme-ui';
 import toast from 'react-hot-toast';
 
 import { deleteAPI, fetchAPI } from 'utils/models';
 
-import PageHeader from './PageHeader';
+import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
-import MenuStepsIndicator from './MenuStepsIndicator';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
+import MenuStepsIndicator from '../MenuStepsIndicator';
+import Modal from '../Modal';
+import { ConfirmDelete } from '../common';
 import PipelineLogs from './PipelineLogs';
 
 const PipelineView = () => {
-  const {
-    register,
-    control,
-    formState: { errors },
-    setValue,
-  } = useForm<any>();
   const [rerender, setRerender] = useState<boolean>(false);
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>([]);
+  const [formData, setFormData] = useState<any>();
 
   const router = useRouter();
 
@@ -48,9 +33,21 @@ const PipelineView = () => {
     });
   };
 
+  const loadForm = () => {
+    if (pipelineData.source_id) {
+      fetchAPI(`forms/${pipelineData.source_id}`).then((data: any) => {
+        setFormData(data);
+      });
+    }
+  };
+
   useEffect(() => {
     loadDetails();
   }, [cId]);
+
+  useEffect(() => {
+    loadForm();
+  }, [pipelineData.source_id]);
 
   const onDelete = () => {
     deleteAPI(`pipelines/${cId}`)
@@ -64,12 +61,12 @@ const PipelineView = () => {
       });
   };
 
-  const titles = ['Steps', 'Configure', 'History', 'Logs'];
+  const titles = ['Steps', 'Configure', 'Logs'];
 
   return (
     <Box>
-      <PageHeader title="Pipelines">
-        <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
+      <PageHeader title={pipelineData.name}>
+        {/* <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
           <Flex>
             <Button variant="buttonSecondary" type="button">
               Run
@@ -78,7 +75,7 @@ const PipelineView = () => {
               Save
             </Button>
           </Flex>
-        </Flex>
+        </Flex> */}
       </PageHeader>
       <Container variant="layout.pageFrame">
         <Flex>
@@ -109,32 +106,29 @@ const PipelineView = () => {
                   />
                 </Box>
                 <Box>
-                  <Label htmlFor="slug">Source</Label>
-                  <Controller
-                    control={control}
-                    name="slug"
-                    defaultValue="contract"
-                    rules={{ required: 'Please select a slug' }}
-                    render={({ field }) => (
-                      <Select mb={0} {...field} disabled>
-                        <option>ERPNext</option>
-                        <option>CSV</option>
-                      </Select>
-                    )}
+                  <Field
+                    name="source"
+                    label="Source"
+                    disabled
+                    defaultValue={pipelineData.source}
                   />
                 </Box>
-
-                <Box sx={{ alignItems: 'center' }}>
-                  <Text variant="pM" mr={2}>
-                    Remove Pipeline
-                  </Text>
-                  <Box mt={3}>
+                <Box>
+                  <Field
+                    name="form"
+                    label="Form"
+                    disabled
+                    defaultValue={formData ? formData.name : ''}
+                  />
+                </Box>
+                <Box sx={{ alignSelf: 'end' }}>
+                  <Box mt={2}>
                     <Button
                       variant="delete"
                       onClick={() => {
                         setIsOpen(true);
                       }}>
-                      Remove
+                      Delete Pipeline
                     </Button>
                   </Box>
                 </Box>
