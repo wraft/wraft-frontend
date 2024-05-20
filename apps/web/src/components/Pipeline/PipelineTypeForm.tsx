@@ -86,7 +86,7 @@ const Form = ({
   const [pipeMapId, setPipeMapId] = useState<any>();
   const [destinationData, setDestinationData] = useState<any>([]);
 
-  console.log(ctemplate, 'logctemplate');
+  console.log(pipeStageDetails.form_mapping[0].mapping, 'logcpipestage');
 
   const {
     register,
@@ -287,6 +287,10 @@ const Form = ({
     loadTemplate();
     loadForm();
     ctypeChange();
+    if (pipelineData && pipelineData.stages[0]) {
+      const defaultTemplateId = pipelineData.stages[0].data_template.id;
+      loadTempType(defaultTemplateId);
+    }
   }, []);
 
   function prev() {
