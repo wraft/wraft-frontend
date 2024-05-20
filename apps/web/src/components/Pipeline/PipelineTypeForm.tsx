@@ -86,8 +86,6 @@ const Form = ({
   const [pipeMapId, setPipeMapId] = useState<any>();
   const [destinationData, setDestinationData] = useState<any>([]);
 
-  console.log(pipeStageDetails.form_mapping[0].mapping, 'logcpipestage');
-
   const {
     register,
     handleSubmit,
