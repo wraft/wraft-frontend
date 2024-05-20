@@ -3,20 +3,18 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Container, Flex, Label, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
-import { EditIcon } from '@wraft/icon';
 import { useForm } from 'react-hook-form';
+import { arrayMove } from '@dnd-kit/sortable';
 
 import Page from 'components/PageFrame';
 import FormsFrom from 'components/FormsFrom';
 import PageHeader from 'components/PageHeader';
-import FormFieldDroppable from 'components/FormFieldDroppable';
 import MenuStepsIndicator from 'components/MenuStepsIndicator';
 import Modal from 'components/Modal';
 import Field from 'components/Field';
 import FieldText from 'components/FieldText';
-import { TimeAgo } from 'components/Atoms';
 import FormViewForm from 'components/FormViewForm';
-import NextLinkText from 'components/NavLink';
+import { FormResponseList } from 'components/WraftForm';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -80,6 +78,7 @@ const Index: FC = () => {
   useEffect(() => {
     console.log('initial:', initial);
   }, [initial]);
+
   return (
     <>
       <Head>
@@ -100,9 +99,14 @@ const Index: FC = () => {
               {isView ? 'Edit' : 'View'}
             </Button>
             <Box>
-              <NextLinkText href={`/forms/entry/${cId}`} variant={'secondary'}>
-                Share
-              </NextLinkText>
+              <Button variant="secondary">
+                <a
+                  href={`/forms/entry/${cId}`}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  Share
+                </a>
+              </Button>
             </Box>
             {/* <Button variant="secondary">Save</Button> */}
           </Flex>
@@ -131,77 +135,32 @@ const Index: FC = () => {
                 goTo={goTo}
                 titles={['Questions', 'Responses']}
               />
-              <Box
-                sx={{
-                  display: formStep === 0 ? 'block' : 'none',
-                  width: '100%',
-                  bg: 'white',
-                }}>
+              {formStep === 0 && (
+                // <Box
+                //   sx={{
+                //     width: '100%',
+                //     bg: 'white',
+                //   }}>
                 <FormsFrom
                   formdata={formdata}
                   items={items}
                   setItems={setItems}
                   setRerender={setRerender}
                   isEdit
+                  setIsOpen={setIsOpen}
                 />
-              </Box>
-              <Box
-                sx={{
-                  display: formStep === 1 ? 'block' : 'none',
-                  width: '100%',
-                  bg: 'white',
-                }}>
-                <Flex
+                // </Box>
+              )}
+              {formStep === 1 && (
+                <Box
                   sx={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100%',
+                    width: '100%',
                   }}>
-                  <Text variant="h4Bold">Analytics</Text>
-                </Flex>
-              </Box>
+                  <FormResponseList />
+                </Box>
+              )}
             </Flex>
           </Container>
-          <Box
-            sx={{
-              minWidth: '349px',
-              // display: formStep === 0 ? 'block' : 'none',
-            }}>
-            <Box sx={{ p: '24px' }}>
-              <Flex sx={{ mb: 3 }}>
-                <Button
-                  variant="none"
-                  onClick={() => {
-                    setIsOpen(true);
-                  }}>
-                  <Box
-                    sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    {' '}
-                    <Text as="p" variant="pM" sx={{ color: 'gray.600' }}>
-                      {formdata?.name || 'name...'}
-                    </Text>
-                    <EditIcon width={16} />
-                  </Box>
-                </Button>
-              </Flex>
-              <Box
-                sx={{
-                  py: 2,
-                  // bg: 'green.100',
-                  mb: 3,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}>
-                <Text as="p" variant="pR" sx={{ color: 'gray.600' }}>
-                  Last Updated
-                </Text>
-                <Box />
-                {formdata?.updated_at && <TimeAgo time={formdata.updated_at} />}
-              </Box>
-              <Label>{items.length} Fields</Label>
-              <FormFieldDroppable items={items} setItems={setItems} />
-            </Box>
-          </Box>
         </Flex>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           {isOpen && (
