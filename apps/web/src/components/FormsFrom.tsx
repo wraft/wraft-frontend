@@ -14,7 +14,6 @@ import {
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
-import { EditIcon } from '@wraft/icon';
 import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
 import {
   AddIcon,
@@ -34,8 +33,6 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { TimeAgo } from 'components/Atoms';
-import FormFieldDroppable from 'components/FormFieldDroppable';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
 
