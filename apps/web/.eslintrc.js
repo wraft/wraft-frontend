@@ -38,11 +38,11 @@ module.exports = {
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/anchor-is-valid': 'off',
-        // '@typescript-eslint/no-unused-vars': ['error'],
-        'no-unused-vars': 0,
-        '@typescript-eslint/no-unused-vars': ['warn', {
-          varsIgnorePattern: '[iI]gnored|createElement',
-        }],
+        "no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": "off",
+        // // '@typescript-eslint/no-unused-vars': ['warn', {
+        // //   varsIgnorePattern: '[iI]gnored|createElement',
+        // // }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         "@typescript-eslint/no-duplicate-enum-values": "off",
