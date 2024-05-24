@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { DeleteIcon } from '@wraft/icon';
+import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { DeleteIcon, EllipsisHIcon, FontIcon } from '@wraft/icon';
+import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
 
-import { fetchAPI } from '../../utils/models';
+import { fetchAPI, deleteAPI } from '../../utils/models';
+import Link from '../NavLink';
 import PipelineTypeForm from './PipelineTypeForm';
 
 export interface Theme {
