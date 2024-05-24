@@ -27,6 +27,7 @@ const Index: FC = () => {
   const [data, setData] = useState<FormValues>();
   const [trigger, setTrigger] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
     setData(data);
@@ -124,10 +125,11 @@ const Index: FC = () => {
               trigger={trigger}
               setRerender={setRerender}
               setOpen={setDrawerOpen}
+              setLoading={setLoading}
             />
           </Box>
           <Box p={4} onClick={() => setTrigger((prev) => !prev)}>
-            <Button>Create</Button>
+            <Button disabled={loading}>Create</Button>
           </Box>
         </Flex>
       </Drawer>

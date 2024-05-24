@@ -84,7 +84,6 @@ const Form = ({
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
   const [pipeMapId, setPipeMapId] = useState<any>();
-
   const [destinationData, setDestinationData] = useState<any>([]);
 
   const {
@@ -145,12 +144,17 @@ const Form = ({
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then(() => {
+    postAPI(`pipelines`, sampleD).then((data: any) => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 1000,
         position: 'top-right',
       });
+      const linkPipeline = {
+        pipeline_ids: [data.id],
+        fields: [],
+      };
+      putAPI(`forms/${data.source_id}`, linkPipeline);
       setRerender((pre: boolean) => !pre);
     });
   };
@@ -281,6 +285,10 @@ const Form = ({
     loadTemplate();
     loadForm();
     ctypeChange();
+    if (pipelineData && pipelineData.stages[0]) {
+      const defaultTemplateId = pipelineData.stages[0].data_template.id;
+      loadTempType(defaultTemplateId);
+    }
   }, []);
 
   function prev() {
@@ -328,7 +336,7 @@ const Form = ({
         sx={{
           p: 4,
         }}>
-        Create Pipeline
+        {pipelineData ? 'Create Stage' : 'Create Pipeline'}
       </Text>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
       <Box sx={{ height: '100%' }} p={4} as="form">
@@ -418,7 +426,9 @@ const Form = ({
                     onChange={(e) => tempChange(e)}>
                     {
                       <option disabled selected>
-                        select an option
+                        {pipelineData.stages[0]
+                          ? pipelineData.stages[0].data_template.title
+                          : 'select an option'}
                       </option>
                     }
                     {templates &&
