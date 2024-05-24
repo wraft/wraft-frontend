@@ -626,9 +626,13 @@ const ContentDetail = () => {
                                     }}>
                                     <Flex as="span">
                                       <Text sx={{ mr: 2 }}>Updated </Text>
-                                      <TimeAgo
-                                        time={contents?.versions[0]?.updated_at}
-                                      />
+                                      {contents.versions.length && (
+                                        <TimeAgo
+                                          time={
+                                            contents?.versions[0]?.updated_at
+                                          }
+                                        />
+                                      )}
                                     </Flex>
                                   </Text>
                                 </Box>
