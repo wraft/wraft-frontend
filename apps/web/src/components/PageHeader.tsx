@@ -9,6 +9,7 @@ interface PageHeaderProps {
   title: string;
   desc?: any;
   breads?: boolean;
+  hasBack?: boolean;
 }
 
 interface breadLinksLink {
@@ -41,19 +42,25 @@ const BreadLinks = (props: any) => {
   );
 };
 
-const PageHeader = ({ title, children, desc, breads }: PageHeaderProps) => {
+const PageHeader = ({
+  title,
+  children,
+  desc,
+  breads,
+  hasBack,
+}: PageHeaderProps) => {
   return (
     <Box variant="layout.frameHeading">
       <Flex sx={{ alignItems: 'center' }}>
-        <Back />
+        {hasBack && <Back />}
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
-          <Text as={'p'} variant="pB" sx={{ color: 'gray.900', pb: 0, mb: 0 }}>
+          <Text as={'p'} variant="pB" sx={{ color: 'gray.1100', pb: 0, mb: 0 }}>
             {title}
           </Text>
           {desc && (
             <Box>
-              <Text as={Box} variant="subR" sx={{ mt: 0, color: 'gray.400' }}>
+              <Text as={Box} variant="subR" sx={{ mt: 0, color: 'gray.900' }}>
                 {desc}
               </Text>
             </Box>

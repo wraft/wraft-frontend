@@ -1,3 +1,5 @@
+import { borderRadius, fontSize, fontWeight } from "@xstyled/emotion";
+
 const buttons = {
   none: {
     padding: '0px',
@@ -8,9 +10,44 @@ const buttons = {
   btnBig: {
     cursor: 'pointer',
   },
+  primaryLarge: {
+    backgroundColor: 'green.1000',
+    fontSize: "1.15rem",
+    fontWeight: 600,
+    color: 'green.100',
+    padding: '0.75rem 1rem',
+    borderRadius: '0.85rem',
+    ':hover': {
+      backgroundColor: 'green.1100',
+      borderColor: 'green.1200',
+    },
+  },
+  secondaryLarge: {
+    backgroundColor: 'gray.100',
+    fontSize: "1.15rem",
+    fontWeight: 600,
+    color: 'green.1200',
+    padding: '0.75rem 1rem',
+    borderRadius: '0.75rem',
+    border: 'solid 1px',
+    borderColor: 'green.900',
+    '&:hover': {
+      backgroundColor: 'green.200',
+      borderColor: 'green.a500',
+      color: 'green.100',
+    },
+  },
+  tertiaryLarge: {
+    backgroundColor: 'gray.100',
+    fontSize: "1.15rem",
+    fontWeight: 600,
+    color: 'gray.1200',
+    padding: '0.75rem 1rem',
+    borderRadius: '0.75rem',
+  },
   primary: {
     backgroundColor: 'primary',
-    color: 'white',
+    color: 'green.100',
     border: '1px solid',
     borderColor: 'primary',
     borderRadius: '4px',
@@ -19,7 +56,7 @@ const buttons = {
     fontSize: '14px',
     fontFamily: 'body',
     ':hover': {
-      backgroundColor: '#197231',
+      backgroundColor: 'green.1000',
       borderColor: '#197231',
     },
     ':disabled': {
@@ -141,14 +178,16 @@ const buttons = {
       px: 1,
       width: '100%',
       '&.active': {
-        background: '#E2F7EA',
+        background: 'green.a200', 
+        // background: '#E2F7EA',
         color: 'green.800',
         svg: {
           fill: 'green.300',
         },
       },
       ':hover': {
-        background: '#E2F7EA',
+        background: 'green.a500',  
+        // background: '#E2F7EA',
       },
     },
   },
@@ -228,6 +267,13 @@ const buttons = {
     pr: '0px',
     pl: '28px',
     display: 'flex',
+  },
+  btnLarge: {
+    // variant: 'buttons.btnBig',
+    fontSize: 3,
+    p: 2,
+    px: 3,
+    border: 0,
   },
 };
 
