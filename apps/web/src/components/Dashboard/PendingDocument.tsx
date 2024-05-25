@@ -10,7 +10,7 @@ import { fetchAPI } from 'utils/models';
 const columns = [
   {
     id: 'content.id',
-    header: 'Name',
+    header: 'NAME',
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
@@ -94,12 +94,12 @@ const PendingDocumentBlock = () => {
     <>
       <Box
         sx={{
-          fontSize: '12px',
+          fontSize: 2,
           fontWeight: 700,
           mb: '18px',
           mt: '36px',
         }}>
-        Pending action (3)
+        Active Documents
       </Box>
 
       <Table

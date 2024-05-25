@@ -48,7 +48,7 @@ export const Page = (props: any) => {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
       </Head>
-      <Container width={100} bg="gray.0">
+      <Container width={100} bg="backgroundWhite">
         {!accessToken && (
           <Box>
             <Nav />
@@ -61,7 +61,7 @@ export const Page = (props: any) => {
             <Box sx={{ width: '100%', minHeight: '100vh' }}>
               <Nav />
               <Box
-                sx={{ minHeight: '100vh', bg: 'red' }}
+                sx={{ minHeight: '100vh' }}
                 // color="#333"
                 p={4}
                 pt={3}>

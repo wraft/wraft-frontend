@@ -9,7 +9,7 @@ const Form = () => {
   const { userProfile } = useAuth();
 
   return (
-    <Box py={3}>
+    <Box>
       {/* <Text fontSize={1} mb={3}>
         My Account
       </Text> */}
@@ -21,7 +21,7 @@ const Form = () => {
             src="https://randomuser.me/api/portraits/men/32.jpg"
           /> */}
         </Box>
-        <Box pt={3} pl={6}>
+        <Box>
           {userProfile && (
             <Box>
               <Text>{userProfile?.name}</Text>

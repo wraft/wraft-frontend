@@ -8,6 +8,43 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
 
+interface BlockCardProps {
+  title: string;
+  desc: string;
+}
+const BlockCard = ({ title, desc }: BlockCardProps) => (
+  <Flex
+    sx={{
+      border: '1px solid',
+      bg: 'gray.100',
+      borderRadius: '4px',
+      borderColor: 'gray.500',
+      py: '22px',
+      px: '18px',
+      svg: {
+        fill: 'gray.800',
+      },
+    }}>
+    <DocumentCountIcon />
+    <Box ml={3}>
+      <Box
+        sx={{
+          fontSize: 2,
+          mb: 1,
+        }}>
+        {title}
+      </Box>
+      <Box
+        sx={{
+          fontSize: 3,
+          fontWeight: 100,
+        }}>
+        {desc}
+      </Box>
+    </Box>
+  </Flex>
+);
+
 const finishSetup = [
   {
     title: 'Create a new template',
@@ -51,17 +88,20 @@ const Dashboard = () => {
   };
 
   return (
-    <Container variant="layout.pageFrame" sx={{ height: '100vh', bg: 'white' }}>
+    <Container
+      variant="layout.pageFrame"
+      sx={{ height: '100vh', bg: 'gray.200' }}>
       <Box sx={{ fontSize: 2, color: 'gray.400' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
-      <Box sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body' }}>
+      <Box
+        sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body', mb: 3 }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
       <Flex
         mt={4}
         mb="32px"
-        sx={{ border: '1px solid', borderColor: 'border' }}>
+        sx={{ display: 'none', border: '1px solid', borderColor: 'border' }}>
         <Flex sx={{ width: '70%', alignItems: 'center' }}>
           <Image
             src="/static/images/dashboardone.png" // Adjust the path accordingly
@@ -122,56 +162,8 @@ const Dashboard = () => {
       </Flex>
 
       <Grid gap={3} columns={2}>
-        <Flex
-          sx={{
-            border: '1px solid',
-            borderColor: 'border',
-            py: '22px',
-            px: '18px',
-          }}>
-          <DocumentCountIcon />
-          <Box ml={2}>
-            <Box
-              sx={{
-                fontSize: '10px',
-                mb: '3px',
-              }}>
-              Total no. of documents
-            </Box>
-            <Box
-              sx={{
-                fontSize: '10px',
-                fontWeight: 700,
-              }}>
-              4
-            </Box>
-          </Box>
-        </Flex>
-        <Flex
-          sx={{
-            border: '1px solid',
-            borderColor: 'border',
-            py: '22px',
-            px: '18px',
-          }}>
-          <DocumentCountIcon />
-          <Box ml={2}>
-            <Box
-              sx={{
-                fontSize: '10px',
-                mb: '3px',
-              }}>
-              Pending approvals
-            </Box>
-            <Box
-              sx={{
-                fontSize: '10px',
-                fontWeight: 700,
-              }}>
-              0
-            </Box>
-          </Box>
-        </Flex>
+        <BlockCard title="Total Documents" desc="4" />
+        <BlockCard title="Pending Approvals" desc="2" />
       </Grid>
 
       <PendingDocumentBlock />
