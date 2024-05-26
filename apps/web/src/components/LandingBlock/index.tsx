@@ -35,8 +35,6 @@ const Subtitle = styled.p`
 `;
 
 const MainSection = styled(Flex)`
-  background: #f2f7f4;
-  // height: 900px;
   flex-direction: column;
   align-items: center;
   position: relative;
@@ -78,6 +76,7 @@ const LandingBlock = () => {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center',
               backgroundSize: 'auto',
+              opacity: 0.25,
             }}
           />
           {/* <Box
@@ -100,16 +99,22 @@ const LandingBlock = () => {
           </Box> */}
         </Box>
         <Box sx={{ textAlign: 'center', position: 'relative' }}>
-          <H1 as="h1" pt="124px">
-            {data.main_section?.title}
-          </H1>
-          <Subtitle>{data.main_section?.sub_title}</Subtitle>
+          <Box sx={{ maxWidth: '80ch', mx: 'auto', mb: 2 }}>
+            <Text as="h1" pt="124px" sx={{ fontSize: 8, lineHeight: 1, mb: 3 }}>
+              {data.main_section?.title}
+            </Text>
+            <Text
+              as="h2"
+              sx={{ fontSize: 6, fontWeight: 400, color: 'gray.1000' }}>
+              {data.main_section?.sub_title}
+            </Text>
+          </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <NextLinkText variant={'primary'} href="/signup">
-              Sign up
+            <NextLinkText variant={'primaryLarge'} href="/signup">
+              Get Started
             </NextLinkText>
-            <NextLinkText variant={'secondary'} href="/login">
-              Demo
+            <NextLinkText variant={'secondaryLarge'} href="/login">
+              Watch Demo
             </NextLinkText>
           </Flex>
           <Box mt="92px">
@@ -125,12 +130,18 @@ const LandingBlock = () => {
       </MainSection>
 
       <Box as="section" id="features">
-        <Box sx={{ textAlign: 'center', mb: '90px', mt: '45px' }}>
-          <H2>Open Document Lifecycle</H2>
-          <Subtitle>
-            Future proof way to sustain your companies document, end-to-end.
-          </Subtitle>
-        </Box>
+        <Container sx={{ maxWidth: '1140px', mx: 'auto', mb: '120px' }}>
+          <Box sx={{ textAlign: 'left', mb: '90px', mt: 6 }}>
+            <Text
+              as="h1"
+              sx={{ fontSize: 6, fontWeight: 600, color: 'gray.1200' }}>
+              Open Document Lifecycle
+            </Text>
+            <Text sx={{ fontSize: 5, fontWeight: 400, color: 'gray.1000' }}>
+              Future proof way to sustain your companies document, end-to-end.
+            </Text>
+          </Box>
+        </Container>
         <Container sx={{ maxWidth: '1140px', mx: 'auto', mb: '120px' }}>
           <Grid
             sx={{
@@ -159,20 +170,20 @@ const LandingBlock = () => {
                 className={item.class}
                 sx={{
                   border: '1px solid',
-                  borderColor: 'gray.200',
+                  borderColor: 'gray.a400',
                   borderRadius: '12px',
                 }}>
                 <Box className="future_block_left">
                   <Box
                     className="future_block_title"
-                    sx={{ fontSize: '16px', color: '#004A0F' }}>
+                    sx={{ fontSize: 3, color: 'gray.900' }}>
                     {item.subtitle}
                   </Box>
-                  <Text as="h3" sx={{ fontSize: '29px' }}>
+                  <Text as="h3" sx={{ fontSize: 5, mb: 2 }}>
                     {item.title}
                   </Text>
 
-                  <Box sx={{ fontSize: '18px' }}>{item.des}</Box>
+                  <Box sx={{ fontSize: 4, mr: 4 }}>{item.des}</Box>
                 </Box>
 
                 <Box className="future_block_right" sx={{ width: '50%' }}>
@@ -321,26 +332,36 @@ const LandingBlock = () => {
                     sx={{
                       width: '384px',
                       height: '504px',
-                      bg: '#002705',
+                      bg: 'green.300',
                       borderRadius: '12px',
                       padding: '24px',
                       display: 'flex',
                       flexShrink: 0,
                       flexDirection: 'column',
                       justifyContent: 'end',
-                      color: '#fff',
+                      color: 'text',
                     }}>
                     <Box
                       sx={{
-                        background: 'rgba(255, 255, 255, 0.3)',
-                        px: '24px',
-                        py: '32px',
+                        // background: 'rgba(255, 255, 255, 0.3)',
+                        px: 3,
+                        py: 3,
+                        height: '250px',
+                        bg: 'green.a300',
+                        borderRadius: '4px',
+                        width: '100%',
+                      }}></Box>
+                    <Box
+                      sx={{
+                        // background: 'rgba(255, 255, 255, 0.3)',
+                        px: 3,
+                        py: 3,
                         height: '250px',
                       }}>
-                      <Box as="h5" sx={{ fontSize: '24px', mb: '16px' }}>
+                      <Box as="h5" sx={{ fontSize: 4, mb: '16px' }}>
                         {item.title}
                       </Box>
-                      <Box>{item.des}</Box>
+                      <Box sx={{ fontSize: 3, mb: '16px' }}>{item.des}</Box>
                     </Box>
                   </Flex>
                 ))}
@@ -388,16 +409,21 @@ const LandingBlock = () => {
         </Container>
       </Box>
       <Box as="section" sx={{ maxWidth: '1140px', mx: 'auto', mb: '90px' }}>
-        <Box sx={{ background: '#F9FAFB', p: '64px' }}>
+        <Box
+          sx={{ background: 'green.300', p: '64px', borderRadius: '0.75rem' }}>
           <Box sx={{ textAlign: 'center' }}>
-            <H2>{data?.hosting_section?.title}</H2>
-            <Subtitle>{data?.hosting_section?.sub_title}</Subtitle>
+            <Text as="h2" sx={{ fontSize: 6 }}>
+              {data?.hosting_section?.title}
+            </Text>
+            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: 5 }}>
+              {data?.hosting_section?.sub_title}
+            </Text>
           </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <NextLinkText variant={'primary'} href="/signup">
+            <NextLinkText variant={'primaryLarge'} href="/signup">
               Sign up
             </NextLinkText>
-            <NextLinkText variant={'secondary'} href="/login">
+            <NextLinkText variant={'secondaryLarge'} href="/login">
               Demo
             </NextLinkText>
           </Flex>

@@ -10,7 +10,7 @@ import { fetchAPI } from 'utils/models';
 const columns = [
   {
     id: 'content.id',
-    header: 'Name',
+    header: 'NAME',
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
@@ -24,8 +24,12 @@ const columns = [
             }}
           />
           <Box ml={3}>
-            <Box>{row.original?.content?.instance_id}</Box>
-            <Box>{row.original?.content?.serialized?.title}</Box>
+            <Box sx={{ color: 'gray.900' }}>
+              {row.original?.content?.instance_id}
+            </Box>
+            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500 }}>
+              {row.original?.content?.serialized?.title}
+            </Box>
           </Box>
         </Flex>
       </NextLink>
@@ -94,12 +98,12 @@ const PendingDocumentBlock = () => {
     <>
       <Box
         sx={{
-          fontSize: '12px',
+          fontSize: 2,
           fontWeight: 700,
           mb: '18px',
           mt: '36px',
         }}>
-        Pending action (3)
+        Active Documents
       </Box>
 
       <Table

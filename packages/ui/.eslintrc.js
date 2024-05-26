@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["@wraft/eslint-config/library.js", 'plugin:@typescript-eslint/recommended','plugin:prettier/recommended'],
+  extends: ["@wraft/eslint-config/library.js", 'plugin:@typescript-eslint/recommended'],
   ignorePatterns: [
     'node_modules',
     '.turbo',

@@ -4,7 +4,7 @@ import { Avatar } from 'theme-ui';
 
 import { useAuth } from '../contexts/AuthContext';
 import { UserIcon, BrandLogo } from './Icons';
-import Link from './NavLink';
+import Link, { NextLinkText } from './NavLink';
 
 export interface IUser {
   name: string;
@@ -16,7 +16,7 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        bg: '#F2F7F4',
+        // bg: '#F2F7F4',
         // borderBottom: 'solid 1px',
         // borderColor: 'border',
         py: 2,
@@ -25,7 +25,7 @@ const UserNav = () => {
         <Flex sx={{ py: 3, px: 4, alignItems: 'center' }}>
           <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
             <Link href={accessToken ? '/user-profile' : '/'}>
-              <Box sx={{ color: `gray.0`, fill: 'gray.1000' }}>
+              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
                 <BrandLogo width="6rem" height="2rem" />
               </Box>
             </Link>
@@ -35,58 +35,18 @@ const UserNav = () => {
             <Flex>
               {!accessToken && (
                 <Fragment>
-                  <Link href="/signup">
-                    <Text
-                      sx={{
-                        px: 4,
-                        py: 2,
-                        fontSize: 2,
-                        fontWeight: 900,
-                        color: '#343E49',
-                      }}>
-                      Join Wraft
-                    </Text>
-                  </Link>
-                  <Link href="/pricing">
-                    <Text
-                      sx={{
-                        px: 4,
-                        py: 2,
-                        fontSize: 2,
-                        fontWeight: 900,
-                        color: '#343E49',
-                      }}>
-                      Pricing
-                    </Text>
-                  </Link>
-
-                  <Link href="#features">
-                    <Text
-                      sx={{
-                        px: 4,
-                        py: 2,
-                        fontSize: 2,
-                        fontWeight: 900,
-                        color: '#343E49',
-                      }}>
-                      Features
-                    </Text>
-                  </Link>
-                  <Link href="/login">
-                    <Text
-                      sx={{
-                        fontSize: 2,
-                        bg: '#087F5B',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        borderRadius: `4px`,
-                        px: 4,
-                        py: 2,
-                        ml: 4,
-                      }}>
-                      Login
-                    </Text>
-                  </Link>
+                  <NextLinkText variant="tertiaryLarge" href="features">
+                    Features
+                  </NextLinkText>
+                  <NextLinkText variant="tertiaryLarge" href="use-cases">
+                    Use Cases
+                  </NextLinkText>
+                  <NextLinkText variant="tertiaryLarge" href="login">
+                    Login
+                  </NextLinkText>
+                  <NextLinkText variant="secondaryLarge" href="signup">
+                    Request Invite
+                  </NextLinkText>
                 </Fragment>
               )}
               {accessToken && accessToken !== '' && (
