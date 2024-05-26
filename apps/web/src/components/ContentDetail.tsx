@@ -372,7 +372,7 @@ const ContentDetail = () => {
                   borderBottom: 'solid 1px',
                   borderColor: 'border',
                   // mb: 3,
-                  bg: 'neutral.100',
+                  bg: 'gray.200',
                 }}>
                 <Box>
                   <Text
@@ -397,8 +397,10 @@ const ContentDetail = () => {
               <Box
                 sx={{
                   mb: 0,
-                  bg: 'neutral.200',
-                  '.tabPanel': { border: 0, bg: 'neutral.200' },
+                  bg: 'gray.400',
+                  // bg: 'gray.a100',
+                  // bg: 'neutral.200',
+                  '.tabPanel': { border: 0, bg: 'gray.200' },
                   button: {
                     border: 0,
                     bg: 'transparent',
@@ -407,14 +409,16 @@ const ContentDetail = () => {
                     borderRadius: 6,
                   },
                   '.tabGroup': {
-                    bg: 'neutral.200',
+                    // bg: 'neutral.200',
+                    bg: 'gray.400',
                     // border: 'solid 1px blue',
                     px: 3,
                     py: 2,
                   },
                   'button[aria-selected=true]': {
                     border: 0,
-                    bg: 'neutral.100',
+                    // bg: 'neutral.100',
+                    bg: 'gray.200',
                     px: 3,
                     py: 2,
                   },
@@ -467,7 +471,8 @@ const ContentDetail = () => {
                   <TabPanel>
                     <Box
                       sx={{
-                        bg: 'neutral.200',
+                        bg: 'gray.100',
+                        // bg: 'neutral.200',
                         mt: 4,
                         border: 'solid 1px',
                         borderColor: 'border',
@@ -493,7 +498,8 @@ const ContentDetail = () => {
             <Box
               variant="plateRightBar"
               sx={{
-                bg: 'neutral.100',
+                // bg: 'neutral.100',
+                bg: 'gray.100',
                 py: 0,
                 width: '30%',
                 borderLeft: 'solid 1px',
@@ -506,6 +512,7 @@ const ContentDetail = () => {
               <Box
                 variant="plateSide"
                 sx={{
+                  bg: 'gray.100',
                   // pl: 3,
                   flexGrow: 1,
                   mr: 0,
@@ -513,12 +520,12 @@ const ContentDetail = () => {
                   pb: 3,
                   // pt: 2,
                   borderTop: 'solid 1px',
-                  borderColor: 'border',
+                  borderColor: 'gray.200',
                   // bg: '#d9deda57',
                 }}>
                 <Flex
                   sx={{
-                    bg: '#d9deda57',
+                    // bg: '#d9deda57',
                     px: 3,
                     py: 2,
                     alignItems: 'center',
