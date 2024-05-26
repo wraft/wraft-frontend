@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { DeleteIcon } from '@wraft/icon';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
+import { Trash } from '@phosphor-icons/react';
 
 import { fetchAPI } from '../../utils/models';
 import PipelineTypeForm from './PipelineTypeForm';
@@ -71,6 +71,7 @@ const Form = ({ rerender, setRerender }: Props) => {
           <Text
             as="p"
             variant="pM"
+            sx={{ color: 'gray.1200' }}
             onClick={() => handlePipelineClick(row.original.id)}>
             {row.original.data_template.title}
           </Text>
@@ -82,8 +83,8 @@ const Form = ({ rerender, setRerender }: Props) => {
       id: 'content.status',
       header: (
         <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
+          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+            Approval
           </Text>
         </Flex>
       ),
@@ -91,7 +92,7 @@ const Form = ({ rerender, setRerender }: Props) => {
         <Flex
           key={row.index}
           sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.1100' }}>
             Approved
           </Text>
         </Flex>
@@ -102,18 +103,18 @@ const Form = ({ rerender, setRerender }: Props) => {
       id: 'content.state',
       header: (
         <Flex sx={{ display: 'flex' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
+          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+            Default State
           </Text>
         </Flex>
       ),
       cell: ({ row }: any) => (
         <Flex key={row.index} sx={{ justifyContent: 'space-between' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+          <Text as="p" variant="pM" sx={{ color: 'gray.1100' }}>
             Published
           </Text>
           <Box>
-            <DeleteIcon />
+            <Trash size={20} />
           </Box>
         </Flex>
       ),

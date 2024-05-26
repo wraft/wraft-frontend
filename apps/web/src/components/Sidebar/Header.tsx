@@ -90,7 +90,7 @@ const Header = () => {
                           fontWeight: `bold`,
                           color: 'gray.1200',
                           lineHeight: 1,
-                          fontSize: 1,
+                          fontSize: 2,
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
@@ -187,7 +187,6 @@ const Header = () => {
                 <Image
                   sx={{
                     borderRadius: '3rem',
-                    bg: 'red',
                     cursor: 'pointer',
                   }}
                   alt=""
@@ -218,11 +217,12 @@ const Header = () => {
 
                 <DropdownMenu.Item>
                   <Flex
+                    sx={{ flex: 1 }}
                     onClick={() => {
                       const next = mode === 'dark' ? 'light' : 'dark';
                       setMode(next);
                     }}>
-                    <Text>Theme</Text>
+                    <Text as="span">Theme</Text>
                     <Box
                       sx={{
                         // mb: 0,

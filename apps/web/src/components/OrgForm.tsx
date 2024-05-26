@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Spinner, Box } from 'theme-ui';
+import { Button, Spinner, Box, Text } from 'theme-ui';
 // import { Label, Select, Textarea } from 'theme-ui';
 
 import { putAPI, fetchAPI, fetchUserInfo } from '../utils/models';
@@ -207,7 +207,7 @@ const OrgForm = () => {
   return (
     <Box>
       {!ready && <Spinner />}
-
+      <Text as="h3">Company Information</Text>
       <Box>
         {ready && (
           <Box
@@ -217,7 +217,7 @@ const OrgForm = () => {
             as="form"
             onSubmit={handleSubmit(onSubmit)}>
             {formList.map((fl: any) => (
-              <Box key={fl?.id}>
+              <Box key={fl?.id} sx={{ mb: 3 }}>
                 <Field
                   name={fl.id}
                   label={fl.label}

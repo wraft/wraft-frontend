@@ -10,7 +10,7 @@ import DefaultMenuItem from 'components/MenuItem';
 import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
-import SearchBlock from './SearchBlock';
+// import SearchBlock from './SearchBlock';
 
 export interface INav {
   showFull: boolean;
@@ -116,7 +116,7 @@ const Sidebar = (props: any) => {
                             ? rawColors?.green?.[1200]
                             : rawColors?.gray?.[1200],
                           fontWeight: 500,
-                          fontSize: '14px',
+                          fontSize: '15px',
                           lineHeight: '18.8px',
                           letterSpacing: '-0.25px',
                         }}>

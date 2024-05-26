@@ -59,7 +59,7 @@ const listMenu = [
 
 const ManageHomePage = () => {
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
+    <Box sx={{ pl: 0, minHeight: '100%', bg: 'gray.100' }}>
       <PageHeader title="Manage" desc="Manage Variants">
         <Box
           sx={{
@@ -92,13 +92,13 @@ const ManageHomePage = () => {
               <Box
                 sx={{
                   border: 'solid 1px',
-                  borderColor: 'border',
-                  bg: 'backgroundWhite',
+                  borderColor: 'gray.400',
+                  bg: 'gray.100',
                   borderRadius: 4,
-                  ':hover': { bg: 'teal.100', borderColor: 'border' },
+                  ':hover': { bg: 'gray.300', borderColor: 'gray.200' },
                   color: 'teal.1000',
                   svg: {
-                    fill: 'teal.300',
+                    fill: 'green.900',
                   },
                 }}>
                 <Flex sx={{ py: 4, px: 4 }}>
@@ -110,7 +110,7 @@ const ManageHomePage = () => {
                       mr: 1,
                       color: 'gray.800',
                       svg: {
-                        fill: 'teal.700',
+                        fill: 'green.700',
                       },
                     }}>
                     {l.logo}
@@ -120,7 +120,7 @@ const ManageHomePage = () => {
                       as="h5"
                       sx={{
                         fontSize: 2,
-                        color: 'gray.800',
+                        color: 'gray.1200',
                         fontWeight: 'bold',
                         mb: 0,
                       }}>
@@ -130,7 +130,7 @@ const ManageHomePage = () => {
                       sx={{
                         fontSize: 2,
                         fontWeight: 'body',
-                        color: 'gray.500',
+                        color: 'gray.1000',
                         mb: 1,
                       }}>
                       {l.desc}

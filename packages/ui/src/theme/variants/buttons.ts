@@ -1,4 +1,4 @@
-import { borderRadius, fontSize, fontWeight } from "@xstyled/emotion";
+import { borderRadius, cursor, fontSize, fontWeight } from "@xstyled/emotion";
 
 const buttons = {
   none: {
@@ -67,18 +67,19 @@ const buttons = {
   },
 
   secondary: {
-    backgroundColor: '#E4E9EF',
-    color: 'gray.900',
+    cursor: 'pointer',
+    bg: 'green.400',
+    color: 'green.1200',
     border: '1px solid',
-    borderColor: '#E4E9EF',
-    borderRadius: '4px',
+    borderColor: 'green.600',
+    borderRadius: '6px',
     padding: '8px 16px',
     fontWeight: 'heading',
-    fontSize: '14px',
+    fontSize: 1,
     fontFamily: 'body',
     ':hover': {
-      backgroundColor: '#C1C6DB',
-      borderColor: '#C1C6DB',
+      backgroundColor: 'gray.400',
+      borderColor: 'gray.600',
     },
   },
   ghost: {
@@ -232,7 +233,7 @@ const buttons = {
   base: {
     cursor: 'pointer',
     bg: 'transparent',
-    color: 'gray.500',
+    color: 'gray.1000',
   },
   button: {
     border: 'solid 1px',

@@ -2,35 +2,39 @@ const forms = {
   label: {
     fontFamily: 'body',
     variant: 'text.pR',
-    color: 'gray.600',
+    color: 'gray.900',
     mb: 2,
   },
   input: {
     borderColor: 'border',
     p: '8px 16px',
     variant: 'text.pM',
-    bg: 'transparent',
+    bg: 'gray.100',
+    color: 'gray.1100',
     ':disabled': {
-      color: 'gray.200',
+      color: 'gray.900',
+      bg: 'gray.100',
     },
   },
   select: {
     borderColor: 'border',
     p: '8px 16px',
     variant: 'text.pM',
-    bg: 'transparent',
+    bg: 'gray.100',
     ':disabled': {
-      color: 'gray.200',
+      color: 'gray.900',
+      bg: 'gray.100',
     },
   },
   textarea: {
     borderColor: 'border',
     p: '8px 16px',
     variant: 'text.pM',
-    bg: 'transparent',
+    bg: 'gray.100',
     resize: 'none',
     ':disabled': {
-      color: 'gray.200',
+      color: 'gray.900',
+      bg: 'gray.100',
     },
   },
   checkbox: {
