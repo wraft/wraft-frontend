@@ -81,7 +81,9 @@ const columns = [
             <Box sx={{ color: 'gray.900' }}>
               {row.original?.content?.instance_id}
             </Box>
-            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500, lineHeight: 1.25 }}>
+            <Box
+              as="h5"
+              sx={{ fontSize: 2, fontWeight: 500, lineHeight: 1.25 }}>
               {row.original?.content?.serialized?.title}
             </Box>
           </Box>
