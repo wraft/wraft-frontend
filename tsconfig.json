@@ -1,0 +1,3 @@
+{
+  "extends": "@wraft/typescript-config/base.json"
+}
