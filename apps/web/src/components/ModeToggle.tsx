@@ -1,6 +1,6 @@
+// import { Moon, Sun } from './Icons';
+import { Moon, Sun } from '@phosphor-icons/react';
 import { Button, useColorMode } from 'theme-ui';
-
-import { Moon, Sun } from './Icons';
 
 const ModeToggle = (props: any) => {
   const [mode, setMode] = useColorMode();
@@ -9,22 +9,18 @@ const ModeToggle = (props: any) => {
       {...props}
       sx={{
         p: 0,
-        bg: 'background',
+        bg: 'transparent',
         border: 0,
         mt: 0,
         svg: {
-          fill: 'gray.500',
+          fill: 'gray.900',
         },
       }}
       onClick={() => {
         const next = mode === 'dark' ? 'light' : 'dark';
         setMode(next);
       }}>
-      {mode === 'dark' ? (
-        <Sun width={22} height={22} />
-      ) : (
-        <Moon width={22} height={22} />
-      )}
+      {mode === 'dark' ? <Moon size={20} /> : <Sun width={20} />}
     </Button>
   );
 };
