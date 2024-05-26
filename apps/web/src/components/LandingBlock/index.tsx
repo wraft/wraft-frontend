@@ -332,26 +332,36 @@ const LandingBlock = () => {
                     sx={{
                       width: '384px',
                       height: '504px',
-                      bg: '#002705',
+                      bg: 'green.300',
                       borderRadius: '12px',
                       padding: '24px',
                       display: 'flex',
                       flexShrink: 0,
                       flexDirection: 'column',
                       justifyContent: 'end',
-                      color: '#fff',
+                      color: 'text',
                     }}>
                     <Box
                       sx={{
-                        background: 'rgba(255, 255, 255, 0.3)',
-                        px: '24px',
-                        py: '32px',
+                        // background: 'rgba(255, 255, 255, 0.3)',
+                        px: 3,
+                        py: 3,
+                        height: '250px',
+                        bg: 'green.a300',
+                        borderRadius: '4px',
+                        width: '100%',
+                      }}></Box>
+                    <Box
+                      sx={{
+                        // background: 'rgba(255, 255, 255, 0.3)',
+                        px: 3,
+                        py: 3,
                         height: '250px',
                       }}>
-                      <Box as="h5" sx={{ fontSize: '24px', mb: '16px' }}>
+                      <Box as="h5" sx={{ fontSize: 4, mb: '16px' }}>
                         {item.title}
                       </Box>
-                      <Box>{item.des}</Box>
+                      <Box sx={{ fontSize: 3, mb: '16px' }}>{item.des}</Box>
                     </Box>
                   </Flex>
                 ))}
@@ -399,16 +409,21 @@ const LandingBlock = () => {
         </Container>
       </Box>
       <Box as="section" sx={{ maxWidth: '1140px', mx: 'auto', mb: '90px' }}>
-        <Box sx={{ background: '#F9FAFB', p: '64px' }}>
+        <Box
+          sx={{ background: 'green.300', p: '64px', borderRadius: '0.75rem' }}>
           <Box sx={{ textAlign: 'center' }}>
-            <H2>{data?.hosting_section?.title}</H2>
-            <Subtitle>{data?.hosting_section?.sub_title}</Subtitle>
+            <Text as="h2" sx={{ fontSize: 6 }}>
+              {data?.hosting_section?.title}
+            </Text>
+            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: 5 }}>
+              {data?.hosting_section?.sub_title}
+            </Text>
           </Box>
           <Flex sx={{ gap: 2, justifyContent: 'center', mt: 3 }}>
-            <NextLinkText variant={'primary'} href="/signup">
+            <NextLinkText variant={'primaryLarge'} href="/signup">
               Sign up
             </NextLinkText>
-            <NextLinkText variant={'secondary'} href="/login">
+            <NextLinkText variant={'secondaryLarge'} href="/login">
               Demo
             </NextLinkText>
           </Flex>

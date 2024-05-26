@@ -122,7 +122,7 @@ const UserLoginForm = () => {
         <Heading
           as="h3"
           variant="styles.h3Medium"
-          sx={{ mb: '48px', color: 'green.700' }}>
+          sx={{ fontSize: 5, mb: '48px', color: 'gray.1200' }}>
           Sign in
         </Heading>
 
