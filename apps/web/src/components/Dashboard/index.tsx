@@ -3,12 +3,11 @@ import Image from 'next/image';
 import { Button } from '@wraft/ui';
 import { format } from 'date-fns';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
+import { File } from '@phosphor-icons/react';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
-
-import { File } from '@phosphor-icons/react';
 
 interface BlockCardProps {
   title: string;

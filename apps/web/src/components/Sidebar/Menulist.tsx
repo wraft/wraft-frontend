@@ -9,8 +9,17 @@ import {
   SettingIcon,
   // DoxIcon,
 } from '@wraft/icon';
-
-import { ThumbsUp, Files,  HouseSimple, Table, Gear, TextColumns, UserFocus , Article, Blueprint} from '@phosphor-icons/react';
+import {
+  ThumbsUp,
+  Files,
+  HouseSimple,
+  Table,
+  Gear,
+  TextColumns,
+  UserFocus,
+  Article,
+  Blueprint,
+} from '@phosphor-icons/react';
 
 const Menulist = [
   {
@@ -23,8 +32,7 @@ const Menulist = [
       },
       {
         name: 'Documents',
-        icon: <Files size={20} />
-        ,
+        icon: <Files size={20} />,
         path: '/contents',
       },
       {
