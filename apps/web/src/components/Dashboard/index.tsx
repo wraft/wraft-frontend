@@ -91,11 +91,17 @@ const Dashboard = () => {
     <Container
       variant="layout.pageFrame"
       sx={{ height: '100vh', bg: 'gray.200' }}>
-      <Box sx={{ fontSize: 2, color: 'gray.400' }}>
+      <Box sx={{ fontSize: 2, color: 'gray.900' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
       <Box
-        sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body', mb: 3 }}>
+        sx={{
+          fontSize: 3,
+          fontWeight: 'heading',
+          fontFamily: 'body',
+          mb: 3,
+          color: 'gray.1200',
+        }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
       <Flex
