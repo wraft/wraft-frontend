@@ -8,6 +8,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { ApproveTick, DocumentCountIcon } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
 
+import { File } from '@phosphor-icons/react';
+
 interface BlockCardProps {
   title: string;
   desc: string;
@@ -25,12 +27,13 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
         fill: 'gray.800',
       },
     }}>
-    <DocumentCountIcon />
+    <File width={40} height={20} />
     <Box ml={3}>
       <Box
         sx={{
           fontSize: 2,
           mb: 1,
+          color: 'gray.a1000',
         }}>
         {title}
       </Box>

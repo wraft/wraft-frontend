@@ -30,6 +30,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.3",
+    "@phosphor-icons/react": "^2.1.5",
     "@reactour/tour": "^3.6.1",
     "@remirror/core": "^2.0.19",
     "@remirror/extension-blockquote": "^2.0.13",

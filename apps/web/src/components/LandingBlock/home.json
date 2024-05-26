@@ -69,16 +69,16 @@
       {
         "class": "grid-full",
         "title": "Document generation",
-        "subtitle": "Easy and Effective",
-        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "subtitle": "Easy and Fast",
+        "des": "Easy and fast document generation for everyone. Our user-friendly platform streamlines the process, empowering you to create professional documents effortlessly with just a few clicks.",        
         "image": "",
         "link": ""
       },
       {
         "class": "grid-half",
-        "title": "Pipeline",
-        "subtitle": "Generate In bulk",
-        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "title": "Pipelines",
+        "subtitle": "Automate complex flows",
+        "des": "Streamline high-volume document creation with our pipeline functionality. Automating repetitive tasks, you can generate tailored documents en masse with unparalleled efficiency.",
         "image": "",
         "link": ""
       },
@@ -86,7 +86,7 @@
         "class": "grid-half",
         "title": "E-signature",
         "subtitle": "Secure and Private",
-        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "des": "Safeguard your documents with our iron-clad e-signature solution. Digitally sign and secure files, ensuring privacy and legal validity with industry-leading encryption protocols.",
         "image": "",
         "link": ""
       },
@@ -94,7 +94,7 @@
         "class": "grid-full",
         "title": "Approval system",
         "subtitle": "Build workflows",
-        "des": "With Wraft's intuitive interface, you can stay organized and on top of your workload with ease, and make document generation and management a breeze.",
+        "des": "Tailor document approval processes to your unique needs. Our flexible workflow system allows you to define multi-level review cycles effortlessly. Co",
         "image": "",
         "link": ""
       }
