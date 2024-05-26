@@ -24,8 +24,12 @@ const columns = [
             }}
           />
           <Box ml={3}>
-            <Box>{row.original?.content?.instance_id}</Box>
-            <Box>{row.original?.content?.serialized?.title}</Box>
+            <Box sx={{ color: 'gray.900' }}>
+              {row.original?.content?.instance_id}
+            </Box>
+            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500 }}>
+              {row.original?.content?.serialized?.title}
+            </Box>
           </Box>
         </Flex>
       </NextLink>
