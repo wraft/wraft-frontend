@@ -6,7 +6,7 @@ import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 import { File } from '@phosphor-icons/react';
 
 import { useAuth } from '../../contexts/AuthContext';
-import { ApproveTick, DocumentCountIcon } from '../Icons';
+import { ApproveTick } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
 
 interface BlockCardProps {
@@ -16,34 +16,37 @@ interface BlockCardProps {
 const BlockCard = ({ title, desc }: BlockCardProps) => (
   <Flex
     sx={{
+      maxWidth: '100%', // max-width: 33%;
       border: '1px solid',
       bg: 'gray.100',
       borderRadius: '4px',
-      borderColor: 'gray.500',
+      borderColor: 'gray.400',
       py: '22px',
       px: '18px',
       svg: {
-        fill: 'gray.800',
+        fill: 'gray.900',
       },
     }}>
-    <File width={40} height={20} />
-    <Box ml={3}>
+    <File width={32} height={20} />
+    <Flex ml={2} sx={{ flex: 1 }}>
       <Box
         sx={{
           fontSize: 2,
+          fontWeight: 500,
           mb: 1,
-          color: 'gray.a1000',
+          color: 'gray.1100',
         }}>
         {title}
       </Box>
       <Box
         sx={{
+          ml: 'auto',
           fontSize: 3,
           fontWeight: 100,
         }}>
         {desc}
       </Box>
-    </Box>
+    </Flex>
   </Flex>
 );
 
@@ -169,8 +172,9 @@ const Dashboard = () => {
         </Flex>
       </Flex>
 
-      <Grid gap={3} columns={2}>
-        <BlockCard title="Total Documents" desc="4" />
+      <Grid gap={3} columns={4}>
+        <BlockCard title="Daily Total" desc="21" />
+        <BlockCard title="Total Documents" desc="34" />
         <BlockCard title="Pending Approvals" desc="2" />
       </Grid>
 

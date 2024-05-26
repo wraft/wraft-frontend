@@ -55,7 +55,7 @@ const PageHeader = ({
         {hasBack && <Back />}
         <Box>
           {breads && <BreadLinks links={breadLinks} />}
-          <Text as={'p'} variant="pB" sx={{ color: 'gray.1100', pb: 0, mb: 0 }}>
+          <Text as={'p'} variant="pB" sx={{ color: 'gray.1200', pb: 0, mb: 0 }}>
             {title}
           </Text>
           {desc && (

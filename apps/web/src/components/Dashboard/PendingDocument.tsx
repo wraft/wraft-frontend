@@ -98,12 +98,12 @@ const PendingDocumentBlock = () => {
     <>
       <Box
         sx={{
-          fontSize: 2,
-          fontWeight: 700,
+          fontSize: 3,
+          fontWeight: 500,
           mb: '18px',
           mt: '36px',
         }}>
-        Active Documents
+        Recent Documents
       </Box>
 
       <Table

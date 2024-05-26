@@ -29,6 +29,7 @@ import {
   MultipleChoiceIcon,
   TimeIcon,
 } from '@wraft/icon';
+import { ArrowDown, ArrowUp, Copy, Plus, Trash } from '@phosphor-icons/react';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
@@ -37,6 +38,7 @@ import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
 
 import AnimatedButton from './AnimatedButton';
+import { ArrowBack } from './Icons';
 
 type Props = {
   formdata: any;
@@ -397,7 +399,7 @@ const FormsFrom = ({
                           alignItems: 'center',
                           color: 'gray.800',
                         }}>
-                        <AddIcon width={16} />
+                        <Plus size={20} />
                         <Text sx={{ ml: 2 }}>Add Option</Text>
                       </Flex>
                     </Button>
@@ -441,22 +443,22 @@ const FormsFrom = ({
                   <Button
                     variant="none"
                     onClick={() => onDuplicateField(index, item)}>
-                    <CopyIcon width={16} />
+                    <Copy size={20} />
                   </Button>
                   <Button variant="none" onClick={() => onDeleteField(index)}>
-                    <DeleteIcon width={16} />
+                    <Trash width={24} />
                   </Button>
                   <Button
                     variant="none"
                     disabled={index + 1 === items.length}
                     onClick={() => onMoveDown(index)}>
-                    <ArrowDownIcon width={18} />
+                    <ArrowDown size={20} />
                   </Button>
                   <Button
                     variant="none"
                     disabled={index === 0}
                     onClick={() => onMoveUp(index)}>
-                    <ArrowUpIcon width={18} />
+                    <ArrowUp width={20} />
                   </Button>
                 </Flex>
               </Flex>
