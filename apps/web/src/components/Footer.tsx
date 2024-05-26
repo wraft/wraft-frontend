@@ -1,8 +1,8 @@
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, Text, useColorMode } from 'theme-ui';
 
 import Container from './Container';
 import { BrandLogo } from './Icons';
-// import ModeToggle from './ModeToggle';
+import ModeToggle from './ModeToggle';
 
 const footerMenu = [
   { name: 'Overview', link: '' },
@@ -28,31 +28,50 @@ const LinkCompontent = ({ name }: any) => {
 };
 
 const Footer = () => {
+  const [mode, setMode] = useColorMode();
   return (
-    <Box sx={{ bg: '#022D11', color: '#94969C', pt: '64px', pb: '48px' }}>
+    <Box
+      sx={{ bg: 'backgroundWhite', color: '#94969C', pt: '64px', pb: '48px' }}>
       <Container width={70} bg="">
         <Flex
           sx={{
-            flexDirection: 'column',
+            flexDirection: 'row',
             gap: '32px',
             alignItems: 'center',
             mb: '64px',
+            svg: {
+              fill: 'gray.1200',
+            },
           }}>
-          <BrandLogo width="6rem" height="2rem" fill="white" />
-          <Flex sx={{ gap: '32px' }}>
+          <BrandLogo width="6rem" height="2rem" fill="gray.1200" />
+          <Flex sx={{ gap: '32px', ml: 'auto' }}>
             {footerMenu.map((item, i) => (
               <LinkCompontent key={i} {...item} />
             ))}
           </Flex>
         </Flex>
         <Flex sx={{ justifyContent: 'space-between', pt: '32px' }}>
-          <Box>© 2024 Wraft. All rights reserved.</Box>
+          <Box>© 2024 Functionary Labs Pvt Ltd. All rights reserved.</Box>
           <Flex sx={{ gap: '32px' }}>
             <LinkCompontent name="Terms" />
             <LinkCompontent name="Privacy" />
             <LinkCompontent name="Cookies" />
           </Flex>
         </Flex>
+        <Box
+          sx={{ mt: 3 }}
+          onClick={() => {
+            const next = mode === 'dark' ? 'light' : 'dark';
+            setMode(next);
+          }}>
+          <Box
+            sx={{
+              // mb: 0,
+              ml: 'auto',
+            }}>
+            <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
+          </Box>
+        </Box>
       </Container>
     </Box>
 

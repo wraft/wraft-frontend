@@ -48,7 +48,7 @@ export const FlowStateBlock = ({
           width: '18px',
           height: '18px',
           borderRadius: '9rem',
-          bg: isCurrent ? 'green.500' : 'gray.100',
+          bg: isCurrent ? 'green.500' : 'gray.1200',
           textAlign: 'center',
           mr: 2,
           display: 'flex',
@@ -56,7 +56,7 @@ export const FlowStateBlock = ({
           justifyContent: 'center',
           flexShrink: 0,
         }}>
-        <TickIcon width={14} height={20} color={'white'} />
+        <TickIcon width={14} height={20} color={'green.1000'} />
       </Box>
       <Text sx={{ fontSize: 1, textTransform: 'capitalize' }}>{state}</Text>
       <Box

@@ -20,29 +20,7 @@ const MenuItem = (props: IMenuItem) => {
     (router.pathname.startsWith(props.href) && props.href !== '/');
 
   return (
-    <Flex
-      variant={props?.variant || 'btnMenuBlock'}
-      sx={
-        {
-          // a: {
-          //   textDecoration: 'none',
-          //   color: 'text',
-          //   py: 2,
-          //   px: 1,
-          //   width: '100%',
-          //   '&.active': {
-          //     background: '#E2F7EA',
-          //     color: 'green.800',
-          //     svg: {
-          //       fill: 'green.300',
-          //     },
-          //   },
-          //   ':hover': {
-          //     background: '#E2F7EA',
-          //   },
-          // },
-        }
-      }>
+    <Flex variant={props?.variant || 'btnMenuBlock'}>
       <Link
         href={props.href}
         as={props.path}

@@ -4,8 +4,8 @@ module.exports = {
     node: true,
     es6: true,
   },
-  // parserOptions: { ecmaVersion: 11 }, // to enable features such as async/await
   parserOptions: {
+    project: 'tsconfig.json',
     sourceType: 'module',
     ecmaVersion: 11,
     ecmaFeatures: {

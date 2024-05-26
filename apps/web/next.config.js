@@ -19,5 +19,8 @@ module.exports = withImages({
   output: 'standalone',
   images: {
     unoptimized: true
-  }
+  },
+  experimental: {
+    optimizePackageImports: ['@phosphor-icons/react'],
+  },
 });

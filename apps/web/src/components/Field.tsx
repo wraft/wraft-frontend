@@ -42,7 +42,7 @@ const Field: React.FC<Props> = ({
   sub,
   variant = 'baseForm',
   p,
-  color,
+  color = 'gray.1200',
   fontWeight,
   fontSize,
   view = false,
@@ -53,7 +53,11 @@ const Field: React.FC<Props> = ({
       {sub && (
         <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
       )}
-      {label && <Label htmlFor="description">{label}</Label>}
+      {label && (
+        <Label htmlFor="description" sx={{ color: 'gray.a1100' }}>
+          {label}
+        </Label>
+      )}
       <Box sx={{ position: 'relative' }}>
         <Input
           onChange={onChange}

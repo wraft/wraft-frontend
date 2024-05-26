@@ -11,10 +11,10 @@ export const styles = {
     border: '1px solid',
     borderColor: 'border',
     textAlign: 'left',
-    bg: 'backgroundWhite',
+    // bg: 'backgroundWhite',
   } as ThemeUIStyleObject,
   thead: {
-    bg: 'gray.100',
+    // bg: 'gray.100',
     fontSize: 0,
     textTransform: 'uppercase',
     border: '1px solid',

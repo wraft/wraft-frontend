@@ -5,6 +5,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     color: var(--theme-ui-colors-text);
     font-family: inter;
+    -webkit-font-smoothing: antialiased;
   }
 
   a{

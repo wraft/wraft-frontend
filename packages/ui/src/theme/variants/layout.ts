@@ -167,11 +167,11 @@ const layout = {
       px: 1,
       width: '100%',
       '&.active': {
-        background: '#E2F7EA',
+        background: 'green.a300',
         color: 'green.800',
       },
       ':hover': {
-        background: '#E2F7EA',
+        background: 'green.100',
       },
     },
     px: 2,

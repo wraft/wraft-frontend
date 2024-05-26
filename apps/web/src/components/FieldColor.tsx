@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-import Chrome from '@uiw/react-color-chrome';
+// import Chrome from '@uiw/react-color-chrome';
+const Chrome = dynamic(() => import('@uiw/react-color-chrome'), { ssr: false });
 import { InkIcon } from '@wraft/icon';
 import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
 
