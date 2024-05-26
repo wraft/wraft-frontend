@@ -78,14 +78,10 @@ const columns = [
             }}
           />
           <Box ml={3}>
-            <Box
-              as="span"
-              sx={{ fontSize: 0, color: 'gray.1000', fontWeight: 400 }}>
+            <Box sx={{ color: 'gray.900' }}>
               {row.original?.content?.instance_id}
             </Box>
-            <Box
-              as="h4"
-              sx={{ fontSize: 1, color: 'gray.1200', fontWeight: 500 }}>
+            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500, lineHeight: 1.25 }}>
               {row.original?.content?.serialized?.title}
             </Box>
           </Box>
