@@ -109,6 +109,7 @@ const PipelineView = () => {
                   <Field
                     name="source"
                     label="Source"
+                    color="gray.1200"
                     disabled
                     defaultValue={pipelineData.source}
                   />

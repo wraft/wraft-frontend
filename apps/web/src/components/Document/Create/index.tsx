@@ -252,7 +252,7 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
         borderBottom: 'none',
         borderColor: 'border',
         cursor: 'pointer',
-        bg: selected.id === id && 'neutral.200',
+        bg: selected.id === id && 'gray.200',
 
         '&:last-child': {
           borderBottom: 'solid 1px',

@@ -44,7 +44,8 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
         <Box
           sx={{
             p: 0,
-            pt: 0,
+            pt: 1,
+            pb: 1,
             pl: 2,
 
             // borderRight: 'solid 1px',
@@ -54,7 +55,9 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
           <Flex>
             <Link href={backLink ? backLink : '/contents'}>
               {/* <BackIcon width={20} color="gray.1200" /> */}
-              <ArrowLeft size={20} />
+              <Box sx={{ pt: 1 }}>
+                <ArrowLeft size={18} />
+              </Box>
             </Link>
             {navtitle && (
               <Flex
@@ -63,6 +66,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                 sx={{
                   p: 0,
                   pt: 1,
+                  ml: 2,
 
                   fontWeight: 'heading',
                   verticalAlign: 'middle',
