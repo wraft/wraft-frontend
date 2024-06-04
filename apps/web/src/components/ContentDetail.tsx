@@ -445,13 +445,20 @@ const ContentDetail = () => {
                         mt: 0,
                         px: 4,
                         pb: 6,
+                        // bg: 'gray.100',
                         // pl: '9rem !important',
                         // pr: '9rem !important',
                         // pt: '7rem !important',
                         '.remirror-theme .ProseMirror': {
+                          bg: 'gray.200',
                           pl: '9rem !important',
                           pr: '9rem !important',
                           pt: '7rem !important',
+                          p: 'gray.1200',
+                          'p mark': {
+                            background: 'transparent !important',
+                            color: 'gray.1200',
+                          },
                         },
                       }}>
                       <PreTag pt={4} pb={6}>
@@ -471,18 +478,19 @@ const ContentDetail = () => {
                   <TabPanel>
                     <Box
                       sx={{
-                        bg: 'gray.100',
+                        bg: 'gray.400',
                         // bg: 'neutral.200',
                         mt: 4,
                         border: 'solid 1px',
-                        borderColor: 'border',
+                        borderColor: 'gray.400',
                         '.react-pdf__Document': {
                           mx: 2,
                         },
                         '.pdf__Page__textContent': {
                           border: 'solid 1px',
-                          borderColor: 'grey.100',
+                          borderColor: 'grey.500',
                         },
+                        pb: 5,
                       }}>
                       {contents.content.build && (
                         <PdfViewer
@@ -520,7 +528,8 @@ const ContentDetail = () => {
                   pb: 3,
                   // pt: 2,
                   borderTop: 'solid 1px',
-                  borderColor: 'gray.200',
+                  // borderBottom: 'solid 1px',
+                  borderColor: 'gray.300',
                   // bg: '#d9deda57',
                 }}>
                 <Flex
@@ -551,7 +560,7 @@ const ContentDetail = () => {
                   )}
                   {nextState && (
                     <Button
-                      variant="buttonPrimary"
+                      variant="secondary"
                       onClick={() => onApproveState()}>
                       <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
                     </Button>
