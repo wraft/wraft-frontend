@@ -36,11 +36,11 @@ const MenuStepsIndicator = ({ goTo, formStep, titles }: Props) => {
                 px: '12px',
                 minWidth: '135px',
                 width: '100%',
-                color: 'gray.900',
+                color: 'gray.1100',
                 borderRadius: '4px',
                 alignItems: 'center',
-                bg: formStep === index ? 'neutral.200' : 'transparent',
-                ':hover': { bg: 'neutral.200' },
+                bg: formStep === index ? 'gray.400' : 'transparent',
+                ':hover': { bg: 'gray.300' },
               }}>
               <Text
                 variant="pM"

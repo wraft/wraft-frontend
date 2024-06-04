@@ -1,15 +1,4 @@
 import {
-  ApprovalsIcon,
-  HomeIcon,
-  DocumentIcon,
-  VariantIcon,
-  TemplateIcon,
-  TextIcon,
-  ManageIcon,
-  SettingIcon,
-  // DoxIcon,
-} from '@wraft/icon';
-import {
   ThumbsUp,
   Files,
   HouseSimple,

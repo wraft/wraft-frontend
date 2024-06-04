@@ -1,7 +1,9 @@
 import React from 'react';
+// eslint-disable-next-line import/order
 import { Flex, Text } from 'theme-ui';
 
-import { GraterThanIcon } from 'components/Icons';
+// import { GraterThanIcon } from 'components/Icons';
+import { CaretRight } from '@phosphor-icons/react';
 
 type Props = {
   formStep: number;
@@ -21,14 +23,14 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
                 height: '24px',
                 justifyContent: 'center',
                 alignItems: 'center',
-                color: formStep >= index ? 'white' : 'gray.900',
-                bg: formStep >= index ? 'green.600' : 'white',
+                color: formStep >= index ? 'green.1200' : 'gray.900',
+                bg: formStep >= index ? 'green.600' : 'gray.100',
                 borderRadius: '50%',
               }}>
               <Text sx={{ fontSize: 1, fontWeight: 500 }}>{index + 1}</Text>
             </Flex>
             <Text
-              sx={{ ml: '10px', cursor: 'pointer' }}
+              sx={{ ml: '10px', cursor: 'pointer', color: 'gray.1100' }}
               onClick={() => goTo(index)}
               variant="pM">
               {item}
@@ -37,7 +39,7 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
               <Flex
                 mx={'12px'}
                 sx={{ alignItems: 'center', px: '5.25px', py: '3.25px' }}>
-                <GraterThanIcon height={12} width={12} />
+                <CaretRight size={20} />
               </Flex>
             )}
           </Flex>
