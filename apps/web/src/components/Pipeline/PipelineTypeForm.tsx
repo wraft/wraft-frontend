@@ -50,6 +50,7 @@ interface Props {
   pipelineData?: any;
   setRerender: any;
   id?: any;
+  pipeStageName?: any;
 }
 
 const schema = z.object({
@@ -72,6 +73,7 @@ const Form = ({
   pipelineData,
   setRerender,
   id,
+  pipeStageName,
 }: Props) => {
   const [formStep, setFormStep] = useState(step);
   const [source, setSource] = useState<any>(['Wraft Form']);
@@ -177,6 +179,7 @@ const Form = ({
               duration: 1000,
               position: 'top-right',
             });
+            setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
@@ -193,6 +196,7 @@ const Form = ({
               duration: 1000,
               position: 'top-right',
             });
+            setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
@@ -276,7 +280,7 @@ const Form = ({
   };
 
   useEffect(() => {
-    if (id) {
+    if (id && pipeStageDetails && pipeStageDetails.form_mapping[0]) {
       setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
     }
   }, [pipeStageDetails, id]);
@@ -427,7 +431,7 @@ const Form = ({
                     {
                       <option disabled selected>
                         {pipelineData.stages[0]
-                          ? pipelineData.stages[0].data_template.title
+                          ? pipeStageName
                           : 'select an option'}
                       </option>
                     }
