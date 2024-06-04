@@ -68,14 +68,16 @@ const Form = ({ rerender }: Props) => {
       header: (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Text as="p" variant="pS">
-            ACTIONS
+            Triggered
           </Text>
         </Box>
       ),
       accessorKey: 'content.name',
       cell: () => (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="secondary">Run</Button>
+          <Text as="p" variant="pM">
+            2
+          </Text>
         </Box>
       ),
       enableSorting: false,
