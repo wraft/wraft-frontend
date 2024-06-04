@@ -137,7 +137,7 @@ const PipelineView = () => {
             </Box>
             <Box
               sx={{
-                display: formStep === 3 ? 'block' : 'none',
+                display: formStep === 2 ? 'block' : 'none',
               }}>
               <PipelineLogs rerender={rerender} setRerender={setRerender} />
             </Box>
