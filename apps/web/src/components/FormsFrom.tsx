@@ -300,7 +300,7 @@ const FormsFrom = ({
 
       console.log('testing..', uuidRegex.test(item.id), item.id);
       if (uuidRegex.test(item.id)) {
-        data.field_id = item.fieldTypeId;
+        data.field_id = item.id;
       }
       return data;
     });
@@ -315,7 +315,9 @@ const FormsFrom = ({
     };
 
     if (isEdit) {
-      putAPI(`forms/${formdata.id}`, data).then(() => {
+      console.log(data, 'logdata');
+      putAPI(`forms/${formdata.id}`, data).then((res: any) => {
+        console.log(res, 'logres');
         toast.success('Updated Successfully');
         setRerender && setRerender((prev: boolean) => !prev);
         setOpen && setOpen(false);
