@@ -44,6 +44,7 @@ const Index: FC = () => {
           name: i.name,
           type: i.field_type.name,
           fieldTypeId: i.field_type.id,
+          order: i.order,
           required: i.validations.some(
             (val: any) =>
               val.validation.rule === 'required' &&
@@ -52,7 +53,8 @@ const Index: FC = () => {
         };
       });
       setInitial(fileds);
-      setItems(fileds);
+      const sortedFields = fileds.slice().sort((a:any, b:any) => a.order - b.order);
+      setItems(sortedFields);
     });
   };
 
