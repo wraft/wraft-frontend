@@ -10,7 +10,7 @@ import { IContentType, Template } from '../utils/types';
 import Field from './Field';
 import Modal from './Modal';
 import PageHeader from './PageHeader';
-import { Pipeline } from './PipelineList';
+import { Pipeline } from './Pipeline/PipelineList';
 
 export interface IStage {
   name: string;

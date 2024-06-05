@@ -156,7 +156,7 @@ const FieldForm = (props: FieldFormProps) => {
                       // onChange={() => handleSubmit(onSubmit)()}
                     >
                       <option disabled selected value={''}>
-                        select an option
+                        Select an option
                       </option>
                       {props.fieldtypes &&
                         props.fieldtypes.length > 0 &&

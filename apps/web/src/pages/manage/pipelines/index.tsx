@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 import Page from 'components/PageFrame';
-import PipelineList from 'components/PipelineList';
+import PipelineList from 'components/Pipeline/PipelineList';
 
 const PipelineIndex: FC = () => {
   return (

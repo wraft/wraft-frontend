@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../utils/models';
+import { fetchAPI, postAPI, putAPI } from '../utils/models';
 import {
   ContentInstance,
   IBuild,
@@ -23,6 +23,7 @@ import styles from './common/Tab/tab.module.css';
 import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
+import { StateState } from './FlowForm';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -188,11 +189,14 @@ const ContentDetail = () => {
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
+  const [rerender, setRerender] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
   const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
   const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [nextState, setNextState] = useState<StateState>();
+  const [prevState, setPrevState] = useState<StateState>();
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
@@ -220,16 +224,22 @@ const ContentDetail = () => {
   const doBuild = () => {
     console.log('Building');
     setLoading(true);
-    postAPI(`contents/${cId}/build`, []).then((data: any) => {
-      setLoading(false);
-      setBuild(data);
-      loadData(cId);
-    });
+    postAPI(`contents/${cId}/build`, [])
+      .then((data: any) => {
+        setLoading(false);
+        setBuild(data);
+        loadData(cId);
+        toast.success('Build Successfully');
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error('Build Failed');
+      });
   };
 
   useEffect(() => {
     loadData(cId);
-  }, [cId]);
+  }, [cId, rerender]);
 
   useEffect(() => {
     if (build) {
@@ -273,11 +283,60 @@ const ContentDetail = () => {
         });
       }
     }
+    console.log('contents:', contents);
   }, [contents]);
 
   const doNothing = () => {
     //
   };
+
+  const onApproveState = () => {
+    if (contents) {
+      const req = putAPI(`contents/${contents.content.id}/approve`);
+      toast.promise(req, {
+        loading: 'Approving...',
+        success: () => {
+          setRerender((prev) => !prev);
+          return 'Approved';
+        },
+        error: 'Failed',
+      });
+    }
+  };
+  const onRejectState = () => {
+    if (contents) {
+      const req = putAPI(`contents/${contents.content.id}/reject`);
+      toast.promise(req, {
+        loading: 'Rejecting...',
+        success: () => {
+          setRerender((prev) => !prev);
+          return 'Rejected';
+        },
+        error: 'Failed',
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (activeFlow && contents) {
+      console.log('🔥activeFlow', activeFlow, '🔥contents', contents);
+      fetchAPI(`flows/${activeFlow.id}/states`).then((data: any) => {
+        console.log('data', data);
+      });
+      const activeState = activeFlow?.states.filter(
+        (a: any) => a.id === contents.state.id,
+      )?.[0];
+      const activeIndex = activeFlow?.states.indexOf(activeState);
+      const nextState = activeFlow.states[activeIndex + 1];
+      const prevState = activeFlow.states[activeIndex - 1];
+      if (activeState) {
+        setNextState(nextState);
+        setPrevState(prevState);
+      } else {
+        setNextState(activeFlow.states[0]);
+      }
+    }
+  }, [activeFlow, contents]);
 
   // const navTitle = contents?.content?.title;
 
@@ -313,7 +372,7 @@ const ContentDetail = () => {
                   borderBottom: 'solid 1px',
                   borderColor: 'border',
                   // mb: 3,
-                  bg: 'neutral.100',
+                  bg: 'gray.200',
                 }}>
                 <Box>
                   <Text
@@ -338,8 +397,10 @@ const ContentDetail = () => {
               <Box
                 sx={{
                   mb: 0,
-                  bg: 'neutral.200',
-                  '.tabPanel': { border: 0, bg: 'neutral.200' },
+                  bg: 'gray.400',
+                  // bg: 'gray.a100',
+                  // bg: 'neutral.200',
+                  '.tabPanel': { border: 0, bg: 'gray.200' },
                   button: {
                     border: 0,
                     bg: 'transparent',
@@ -348,14 +409,16 @@ const ContentDetail = () => {
                     borderRadius: 6,
                   },
                   '.tabGroup': {
-                    bg: 'neutral.200',
+                    // bg: 'neutral.200',
+                    bg: 'gray.400',
                     // border: 'solid 1px blue',
                     px: 3,
                     py: 2,
                   },
                   'button[aria-selected=true]': {
                     border: 0,
-                    bg: 'neutral.100',
+                    // bg: 'neutral.100',
+                    bg: 'gray.200',
                     px: 3,
                     py: 2,
                   },
@@ -382,13 +445,20 @@ const ContentDetail = () => {
                         mt: 0,
                         px: 4,
                         pb: 6,
+                        // bg: 'gray.100',
                         // pl: '9rem !important',
                         // pr: '9rem !important',
                         // pt: '7rem !important',
                         '.remirror-theme .ProseMirror': {
+                          bg: 'gray.200',
                           pl: '9rem !important',
                           pr: '9rem !important',
                           pt: '7rem !important',
+                          p: 'gray.1200',
+                          'p mark': {
+                            background: 'transparent !important',
+                            color: 'gray.1200',
+                          },
                         },
                       }}>
                       <PreTag pt={4} pb={6}>
@@ -408,17 +478,19 @@ const ContentDetail = () => {
                   <TabPanel>
                     <Box
                       sx={{
-                        bg: 'neutral.200',
+                        bg: 'gray.400',
+                        // bg: 'neutral.200',
                         mt: 4,
                         border: 'solid 1px',
-                        borderColor: 'border',
+                        borderColor: 'gray.400',
                         '.react-pdf__Document': {
                           mx: 2,
                         },
                         '.pdf__Page__textContent': {
                           border: 'solid 1px',
-                          borderColor: 'grey.100',
+                          borderColor: 'grey.500',
                         },
+                        pb: 5,
                       }}>
                       {contents.content.build && (
                         <PdfViewer
@@ -434,7 +506,8 @@ const ContentDetail = () => {
             <Box
               variant="plateRightBar"
               sx={{
-                bg: 'neutral.100',
+                // bg: 'neutral.100',
+                bg: 'gray.100',
                 py: 0,
                 width: '30%',
                 borderLeft: 'solid 1px',
@@ -447,6 +520,7 @@ const ContentDetail = () => {
               <Box
                 variant="plateSide"
                 sx={{
+                  bg: 'gray.100',
                   // pl: 3,
                   flexGrow: 1,
                   mr: 0,
@@ -454,13 +528,17 @@ const ContentDetail = () => {
                   pb: 3,
                   // pt: 2,
                   borderTop: 'solid 1px',
-                  borderColor: 'border',
+                  // borderBottom: 'solid 1px',
+                  borderColor: 'gray.300',
                   // bg: '#d9deda57',
                 }}>
                 <Flex
                   sx={{
-                    bg: '#d9deda57',
+                    // bg: '#d9deda57',
                     px: 3,
+                    py: 2,
+                    alignItems: 'center',
+                    overflowX: 'scroll',
                   }}>
                   {activeFlow?.states.map((x: any) => (
                     <FlowStateBlock
@@ -471,6 +549,22 @@ const ContentDetail = () => {
                       id={x?.id}
                     />
                   ))}
+                </Flex>
+                <Flex sx={{ p: 3, gap: 2 }}>
+                  {prevState && (
+                    <Button
+                      variant="buttonSecondary"
+                      onClick={() => onRejectState()}>
+                      <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                    </Button>
+                  )}
+                  {nextState && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => onApproveState()}>
+                      <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                    </Button>
+                  )}
                 </Flex>
                 <Flex
                   sx={{
@@ -548,9 +642,13 @@ const ContentDetail = () => {
                                     }}>
                                     <Flex as="span">
                                       <Text sx={{ mr: 2 }}>Updated </Text>
-                                      <TimeAgo
-                                        time={contents?.versions[0]?.updated_at}
-                                      />
+                                      {contents.versions.length && (
+                                        <TimeAgo
+                                          time={
+                                            contents?.versions[0]?.updated_at
+                                          }
+                                        />
+                                      )}
                                     </Flex>
                                   </Text>
                                 </Box>

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 import Page from 'components/PageFrame';
-import PipelineView from 'components/PipelineView';
+import PipelineViewNew from 'components/Pipeline/PipelineViewNew';
 // import { Box } from 'theme-ui';
 // import BulkBuild from '../../../src/components/Bu';
 
@@ -15,7 +15,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         {/* <Box> */}
-        <PipelineView />
+        <PipelineViewNew />
         {/* <BulkBuild master="" master_id=""/> */}
         {/* </Box> */}
       </Page>

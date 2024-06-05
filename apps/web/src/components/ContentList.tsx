@@ -64,7 +64,7 @@ export interface IPageMeta {
 const columns = [
   {
     id: 'content.id',
-    header: 'Name',
+    header: 'NAME',
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
@@ -78,8 +78,20 @@ const columns = [
             }}
           />
           <Box ml={3}>
-            <Box>{row.original?.content?.instance_id}</Box>
-            <Box>{row.original?.content?.serialized?.title}</Box>
+            <Box sx={{ color: 'gray.1000' }}>
+              {row.original?.content?.instance_id}
+            </Box>
+            <Box
+              as="h5"
+              sx={{
+                fontSize: '13px',
+                color: 'gray.1200',
+                letterSpacing: '-0.15px',
+                fontWeight: 500,
+                lineHeight: 1.25,
+              }}>
+              {row.original?.content?.serialized?.title}
+            </Box>
           </Box>
         </Flex>
       </NextLink>
@@ -115,7 +127,7 @@ const columns = [
     accessorKey: 'age',
     cell: ({ row }: any) => (
       <Box>
-        <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
+        <StateBadge name={row.original?.state?.state} color="green.a400" />
       </Box>
     ),
     enableSorting: false,

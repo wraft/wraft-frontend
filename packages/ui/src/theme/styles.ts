@@ -1,3 +1,5 @@
+import { border, borderRadius } from "@xstyled/emotion";
+
 const styles = {
   root: {
     fontFamily: 'body',
@@ -225,19 +227,21 @@ const styles = {
   btnMenuBlock: {
     a: {
       textDecoration: 'none',
+      borderRadius: 4,
       color: 'text',
       py: 2,
       px: 1,
       width: '100%',
       '&.active': {
-        background: '#E2F7EA',
-        color: 'green.800',
+        background: 'green.a300',
+        // background: '#E2F7EA',
+        color: 'green.1000',
         svg: {
           fill: 'green.300',
         },
       },
       ':hover': {
-        background: '#E2F7EA',
+        background: 'green.a300',
       },
     },
   },

@@ -3,10 +3,52 @@ import Image from 'next/image';
 import { Button } from '@wraft/ui';
 import { format } from 'date-fns';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
+import { File } from '@phosphor-icons/react';
 
 import { useAuth } from '../../contexts/AuthContext';
-import { ApproveTick, DocumentCountIcon } from '../Icons';
+import { ApproveTick } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
+
+interface BlockCardProps {
+  title: string;
+  desc: string;
+}
+const BlockCard = ({ title, desc }: BlockCardProps) => (
+  <Flex
+    sx={{
+      maxWidth: '100%', // max-width: 33%;
+      border: '1px solid',
+      bg: 'gray.100',
+      borderRadius: '4px',
+      borderColor: 'gray.400',
+      py: '22px',
+      px: '18px',
+      svg: {
+        fill: 'gray.900',
+      },
+    }}>
+    <File width={32} height={20} />
+    <Flex ml={2} sx={{ flex: 1 }}>
+      <Box
+        sx={{
+          fontSize: 2,
+          fontWeight: 500,
+          mb: 1,
+          color: 'gray.1100',
+        }}>
+        {title}
+      </Box>
+      <Box
+        sx={{
+          ml: 'auto',
+          fontSize: 3,
+          fontWeight: 100,
+        }}>
+        {desc}
+      </Box>
+    </Flex>
+  </Flex>
+);
 
 const finishSetup = [
   {
@@ -51,17 +93,26 @@ const Dashboard = () => {
   };
 
   return (
-    <Container variant="layout.pageFrame" sx={{ height: '100vh', bg: 'white' }}>
-      <Box sx={{ fontSize: 2, color: 'gray.400' }}>
+    <Container
+      variant="layout.pageFrame"
+      sx={{ height: '100vh', bg: 'gray.200' }}>
+      <Box sx={{ fontSize: 2, color: 'gray.900' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
-      <Box sx={{ fontSize: 3, fontWeight: 'heading', fontFamily: 'body' }}>
+      <Box
+        sx={{
+          fontSize: 3,
+          fontWeight: 'heading',
+          fontFamily: 'body',
+          mb: 3,
+          color: 'gray.1200',
+        }}>
         {getGreeting()}, {userProfile?.name}
       </Box>
       <Flex
         mt={4}
         mb="32px"
-        sx={{ border: '1px solid', borderColor: 'border' }}>
+        sx={{ display: 'none', border: '1px solid', borderColor: 'border' }}>
         <Flex sx={{ width: '70%', alignItems: 'center' }}>
           <Image
             src="/static/images/dashboardone.png" // Adjust the path accordingly
@@ -121,57 +172,10 @@ const Dashboard = () => {
         </Flex>
       </Flex>
 
-      <Grid gap={3} columns={2}>
-        <Flex
-          sx={{
-            border: '1px solid',
-            borderColor: 'border',
-            py: '22px',
-            px: '18px',
-          }}>
-          <DocumentCountIcon />
-          <Box ml={2}>
-            <Box
-              sx={{
-                fontSize: '10px',
-                mb: '3px',
-              }}>
-              Total no. of documents
-            </Box>
-            <Box
-              sx={{
-                fontSize: '10px',
-                fontWeight: 700,
-              }}>
-              4
-            </Box>
-          </Box>
-        </Flex>
-        <Flex
-          sx={{
-            border: '1px solid',
-            borderColor: 'border',
-            py: '22px',
-            px: '18px',
-          }}>
-          <DocumentCountIcon />
-          <Box ml={2}>
-            <Box
-              sx={{
-                fontSize: '10px',
-                mb: '3px',
-              }}>
-              Pending approvals
-            </Box>
-            <Box
-              sx={{
-                fontSize: '10px',
-                fontWeight: 700,
-              }}>
-              0
-            </Box>
-          </Box>
-        </Flex>
+      <Grid gap={3} columns={4}>
+        <BlockCard title="Daily Total" desc="21" />
+        <BlockCard title="Total Documents" desc="34" />
+        <BlockCard title="Pending Approvals" desc="2" />
       </Grid>
 
       <PendingDocumentBlock />

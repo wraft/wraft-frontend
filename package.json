@@ -5,7 +5,7 @@
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
-    "clean": "rm -rf node_modules && turbo run clean",
+    "clean": "rm -rf node_modules && rm -rf pnpm-lock.yaml && turbo run clean",
     "dev": "turbo run dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint:fix": "turbo run lint:fix",

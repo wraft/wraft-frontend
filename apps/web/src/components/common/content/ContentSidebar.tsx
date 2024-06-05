@@ -9,6 +9,7 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
+import { Check, DotsThreeVertical, Share } from '@phosphor-icons/react';
 
 import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
 import Modal from 'components/Modal';
@@ -25,7 +26,6 @@ import { ConfirmDelete } from '..';
  */
 export const FlowStateBlock = ({
   state,
-  order,
   activeFlow,
   id,
 }: FlowStateBlockProps) => {
@@ -34,37 +34,38 @@ export const FlowStateBlock = ({
     <Flex
       as={Focusable}
       sx={{
+        alignItems: 'center',
         ':last-child': {
-          svg: {
+          '.arrowicon': {
             display: 'none',
           },
+          minWidth: 'fit-content',
         },
       }}>
       <Box
         sx={{
-          mt: 2,
           fontSize: 0,
           width: '18px',
           height: '18px',
-          color: isCurrent ? 'green.100' : 'green.500',
           borderRadius: '9rem',
-          bg: isCurrent ? 'green.500' : 'green.100',
+          bg: isCurrent ? 'green.500' : 'gray.500',
           textAlign: 'center',
           mr: 2,
-          pt: '2px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          p: 1,
         }}>
-        {order}
+        <Check size={16} />
       </Box>
-      <Text sx={{ fontSize: 1, pt: 2, textTransform: 'capitalize' }}>
-        {state}
-      </Text>
+      <Text sx={{ fontSize: 1, textTransform: 'capitalize' }}>{state}</Text>
       <Box
         sx={{
           paddingLeft: 1,
           paddingRight: 0,
-          paddingTop: 2,
         }}>
-        <BackArrowIcon width={20} size={20} stroke={1} />
+        <BackArrowIcon className="arrowicon" width={20} size={20} stroke={1} />
       </Box>
     </Flex>
   );
@@ -96,7 +97,7 @@ export const EditMenus = ({ id }: EditMenuProps) => {
   return (
     <MenuProvider>
       <MenuButton as={Button} variant="base">
-        <ThreeDots width={24} />
+        <DotsThreeVertical size={20} />
       </MenuButton>
       <Menu
         as={Box}
@@ -105,8 +106,8 @@ export const EditMenus = ({ id }: EditMenuProps) => {
           border: 'solid 1px',
           borderColor: 'border',
           borderRadius: 4,
-          bg: 'neutral.100',
-          color: 'text',
+          bg: 'gray.100',
+          color: 'gray.900',
         }}>
         <MenuItem
           as={Box}
@@ -136,10 +137,10 @@ interface ContentSidebarProps {
 }
 
 const ContentSidebar = ({ content }: ContentSidebarProps) => (
-  <Flex sx={{ px: 3, py: 3 }}>
+  <Flex sx={{ px: 3, py: 1 }}>
     <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
-        <Text as="h6" variant="labelcaps">
+        <Text as="h6" sx={{ color: 'gray.900', fontSize: 1, fontWeight: 400 }}>
           {content.content_type?.layout?.name} / {content.content_type?.name}
         </Text>
         <Flex>
@@ -158,7 +159,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
               sx={{
                 display: 'inline-flex',
                 fontWeight: 500,
-                bg: 'gray.100',
+                bg: 'gray.500',
                 ml: 2,
                 color: 'text',
                 px: 1,
@@ -178,7 +179,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
       sx={{
         ml: 'auto',
       }}>
-      <SendIcon width={24} />
+      <Share size={20} />
       <EditMenus id={content?.content?.id} />
     </Flex>
   </Flex>

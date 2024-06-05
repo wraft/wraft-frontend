@@ -11,7 +11,7 @@ const SvgSettingIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <g
-      stroke={props.color || `#2C3641`}
+      stroke={props.color || 'currentColor' || `#2C3641`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeMiterlimit={10}

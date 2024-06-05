@@ -122,7 +122,7 @@ const UserLoginForm = () => {
         <Heading
           as="h3"
           variant="styles.h3Medium"
-          sx={{ mb: '48px', color: 'green.700' }}>
+          sx={{ fontSize: 5, mb: '48px', color: 'gray.1200' }}>
           Sign in
         </Heading>
 
@@ -133,7 +133,7 @@ const UserLoginForm = () => {
             register={register}
             type={'email'}
             error={errors.email}
-            mb={'24px'}
+            mb={3}
           />
           <Field
             name="password"
@@ -143,29 +143,37 @@ const UserLoginForm = () => {
             error={errors.password}
             mb={3}
           />
-          <Flex
-            sx={{
-              alignItems: 'center',
-              mb: '28px',
-              justifyContent: 'space-between',
-            }}>
-            {loginError && <Text variant="error">{loginError}</Text>}
-            <Box />
-            <Link href="/resetpassword">
-              <Text
-                variant="pM"
-                sx={{
-                  cursor: 'pointer',
-                  color: 'gray.400',
-                }}>
-                Forgot Password?
-              </Text>
-            </Link>
+          <Flex>
+            <Box>
+              <Button
+                type="submit"
+                variant="primary"
+                // sx={{ fontSize: 3 }}
+                loading={loading}>
+                Sign in
+              </Button>
+            </Box>
+            <Flex
+              sx={{
+                ml: 'auto',
+                alignItems: 'center',
+                mb: '28px',
+                justifyContent: 'space-between',
+              }}>
+              {loginError && <Text variant="error">{loginError}</Text>}
+              <Box />
+              <Link href="/resetpassword">
+                <Text
+                  variant="pM"
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'gray.800',
+                  }}>
+                  Forgot Password?
+                </Text>
+              </Link>
+            </Flex>
           </Flex>
-
-          <Button type="submit" variant="primary" loading={loading}>
-            Sign in
-          </Button>
         </Box>
 
         <Box
@@ -178,7 +186,11 @@ const UserLoginForm = () => {
           }}
         />
 
-        <Button onClick={() => signIn('gmail')} variant="googleLogin">
+        <Button
+          onClick={() => signIn('gmail')}
+          variant="googleLogin"
+          // sx={{ bg: 'gray.1000' }}
+        >
           <Flex
             sx={{
               alignItems: 'center',
@@ -197,7 +209,7 @@ const UserLoginForm = () => {
           sx={{
             alignItems: 'center',
             mt: '24px',
-            color: 'gray.600',
+            color: 'gray.1000',
             gap: '8px',
             mb: '48px',
           }}>

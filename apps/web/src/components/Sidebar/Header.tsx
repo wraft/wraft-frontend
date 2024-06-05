@@ -59,7 +59,7 @@ const Header = () => {
           borderBottom: 'solid 1px',
           borderColor: 'border',
           height: '72px',
-          p: 3,
+          // p: 3,
           mb: 3,
         }}>
         <Box>
@@ -88,13 +88,13 @@ const Header = () => {
                         as="p"
                         sx={{
                           fontWeight: `bold`,
-                          color: 'gray.1000',
+                          color: 'gray.1200',
                           lineHeight: 1,
-                          fontSize: 1,
+                          fontSize: 2,
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.400' }}>
+                      <Text as="p" sx={{ fontSize: 1, color: 'gray.1000' }}>
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -187,7 +187,6 @@ const Header = () => {
                 <Image
                   sx={{
                     borderRadius: '3rem',
-                    bg: 'red',
                     cursor: 'pointer',
                   }}
                   alt=""
@@ -218,11 +217,12 @@ const Header = () => {
 
                 <DropdownMenu.Item>
                   <Flex
+                    sx={{ flex: 1 }}
                     onClick={() => {
                       const next = mode === 'dark' ? 'light' : 'dark';
                       setMode(next);
                     }}>
-                    <Text>Theme</Text>
+                    <Text as="span">Theme</Text>
                     <Box
                       sx={{
                         // mb: 0,

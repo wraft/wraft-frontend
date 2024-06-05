@@ -1,13 +1,14 @@
 import {
-  ApprovalsIcon,
-  HomeIcon,
-  DocumentIcon,
-  VariantIcon,
-  TemplateIcon,
-  TextIcon,
-  ManageIcon,
-  SettingIcon,
-} from '@wraft/icon';
+  ThumbsUp,
+  Files,
+  HouseSimple,
+  Table,
+  Gear,
+  TextColumns,
+  UserFocus,
+  Article,
+  Blueprint,
+} from '@phosphor-icons/react';
 
 const Menulist = [
   {
@@ -15,17 +16,17 @@ const Menulist = [
     menus: [
       {
         name: 'Dashboard',
-        icon: <HomeIcon width={20} color="#2C3641" />,
+        icon: <HouseSimple size={20} />,
         path: '/',
       },
       {
         name: 'Documents',
-        icon: <DocumentIcon width={20} color="#2C3641" />,
+        icon: <Files size={20} />,
         path: '/contents',
       },
       {
         name: 'Approvals',
-        icon: <ApprovalsIcon width={20} color="#2C3641" />,
+        icon: <ThumbsUp size={20} />,
         path: '/approvals',
       },
     ],
@@ -35,27 +36,32 @@ const Menulist = [
     menus: [
       {
         name: 'Templates',
-        icon: <TemplateIcon width={20} color="#2C3641" />,
+        icon: <Article size={20} />,
         path: '/templates',
       },
       {
         name: 'Variants',
-        icon: <VariantIcon width={20} color="#2C3641" />,
+        icon: <Blueprint size={20} />,
         path: '/content-types',
       },
       {
+        name: 'Forms',
+        icon: <Table size={20} />,
+        path: '/forms',
+      },
+      {
         name: 'Blocks',
-        icon: <TextIcon width={20} />,
+        icon: <TextColumns size={20} />,
         path: '/blocks',
       },
       {
         name: 'Manage',
-        icon: <ManageIcon width={20} />,
+        icon: <UserFocus size={20} />,
         path: '/manage',
       },
       {
         name: 'Settings',
-        icon: <SettingIcon width={20} />,
+        icon: <Gear size={20} />,
         path: '/account',
       },
     ],

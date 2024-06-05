@@ -3,14 +3,14 @@ import { useRouter } from 'next/router';
 import { Button, Drawer, useDrawer } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 
 import DefaultMenuItem from 'components/MenuItem';
 
 import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
-import SearchBlock from './SearchBlock';
+// import SearchBlock from './SearchBlock';
 
 export interface INav {
   showFull: boolean;
@@ -20,6 +20,10 @@ const Sidebar = (props: any) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const router = useRouter();
   const mobileMenuDrawer = useDrawer();
+
+  const {
+    theme: { rawColors },
+  } = useThemeUI();
 
   const showFull = props && props.showFull ? true : true;
   const pathname: string = router.pathname as any;
@@ -73,7 +77,7 @@ const Sidebar = (props: any) => {
         }}>
         <Header />
         <Box sx={{ flex: 1 }}>
-          <SearchBlock />
+          {/* <SearchBlock /> */}
 
           {Menulist.map((m, i) => (
             <Box key={i} sx={{ mb: 4 }}>
@@ -84,7 +88,7 @@ const Sidebar = (props: any) => {
                   fontWeight: '500',
                   px: 3,
                   mb: '12px',
-                  color: 'gray.200',
+                  color: 'gray.900',
                 }}>
                 {m.section}
               </Box>
@@ -100,18 +104,21 @@ const Sidebar = (props: any) => {
                       }}>
                       {React.cloneElement(icon, {
                         color: checkActive(pathname, path)
-                          ? '#006222'
-                          : '#2C3641',
+                          ? rawColors?.green?.[900]
+                          : rawColors?.gray?.[900],
                       })}
                       {/* {icon} */}
                     </Box>
                     {showFull && (
                       <Text
                         sx={{
-                          color: 'text',
+                          color: checkActive(pathname, path)
+                            ? rawColors?.green?.[1200]
+                            : rawColors?.gray?.[1200],
                           fontWeight: 500,
-                          fontSize: '14px',
+                          fontSize: '15px',
                           lineHeight: '18.8px',
+                          letterSpacing: '-0.25px',
                         }}>
                         {name}
                       </Text>

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
+import { ArrowLeft, Bell, LinkSimple } from '@phosphor-icons/react';
 
 import { useAuth } from '../contexts/AuthContext';
-import { BackIcon, NotifyIcon, EditIcon, LinkIcon } from './Icons';
+import { EditIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
 // import { Button } from './common';
@@ -26,7 +27,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
       variant="header"
       sx={{
         p: 0,
-        bg: 'neutral.100',
+        bg: 'gray.100',
         borderBottom: 'solid 1px',
         borderColor: 'border',
         pt: 1,
@@ -43,15 +44,20 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
         <Box
           sx={{
             p: 0,
-            pt: 0,
+            pt: 1,
+            pb: 1,
             pl: 2,
+
             // borderRight: 'solid 1px',
             // borderColor: 'border',
-            color: 'gray.900',
+            color: 'gray.1200',
           }}>
           <Flex>
             <Link href={backLink ? backLink : '/contents'}>
-              <BackIcon width={20} />
+              {/* <BackIcon width={20} color="gray.1200" /> */}
+              <Box sx={{ pt: 1 }}>
+                <ArrowLeft size={18} />
+              </Box>
             </Link>
             {navtitle && (
               <Flex
@@ -60,6 +66,8 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                 sx={{
                   p: 0,
                   pt: 1,
+                  ml: 2,
+
                   fontWeight: 'heading',
                   verticalAlign: 'middle',
                 }}>
@@ -96,7 +104,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                 bg: 'transparent',
               },
             }}>
-            <LinkIcon width={20} />
+            <LinkSimple size={20} />
           </ButtonBase>
         </Flex>
         <Flex
@@ -107,7 +115,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
           }}>
           <Flex>
             <Box variant="button" sx={{ mt: 0, pt: 0, ml: 3, mr: 2 }}>
-              <NotifyIcon width={22} />
+              <Bell size={20} />
             </Box>
           </Flex>
           {!accessToken && (

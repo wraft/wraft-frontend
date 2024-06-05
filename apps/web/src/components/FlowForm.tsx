@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Container, Button, Text, Input, Label, Flex } from 'theme-ui';
+import { Box, Container, Button, Text, Flex } from 'theme-ui';
+import { AddIcon } from '@wraft/icon';
 
 import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
-import ApprovalFormBase from './ApprovalCreate';
-import { IconWrapper } from './Atoms';
 import { Droppable } from './Droppable';
 import Field from './Field';
-import Modal from './Modal';
 
 export interface States {
   total_pages: number;
@@ -41,153 +39,36 @@ export interface Flow {
   id: string;
 }
 
+export interface Approver {
+  id: string;
+  name: string;
+  profile_pic: string;
+}
 export interface StateState {
-  updated_at: string;
+  approvers: Approver[];
+  id: string;
   state: string;
   order: number;
   inserted_at: string;
-  id: string;
+  updated_at: string;
+  error?: string | undefined;
 }
 
 export interface StateFormProps {
-  states: StateElement[];
-  onSave: any;
-  deleteState: React.MouseEventHandler;
-  hidden?: boolean;
-  onAttachApproval?: React.MouseEventHandler;
-  dialog?: any;
-  onSorted?: any;
+  states: StateState[];
+  setStates: (e: StateState[]) => void;
+  highestOrder: number;
 }
 
-/**
- * Create State
- * @param props
- * @returns
- */
-
-interface StateStateFormProps {
-  onSave: any;
-  setAddState: any;
-}
-
-const StateStateForm = ({ onSave, setAddState }: StateStateFormProps) => {
-  const [newState, setNewState] = useState<string | any>(null);
-
-  const onChangeInput = (e: any) => {
-    setNewState(e.currentTarget.value);
-  };
-
-  return (
-    <Box p={4} sx={{ minWidth: '400px' }}>
-      <Box>
-        <Label>State Name</Label>
-        <Input
-          name="state_name"
-          placeholder="New State Name"
-          onChange={onChangeInput}
-        />
-      </Box>
-      <Button
-        type="button"
-        variant="btnPrimary"
-        sx={{ p: 2, px: 3, mt: 3 }}
-        onClick={() => {
-          onSave(newState);
-          setAddState(false);
-        }}>
-        Add State
-      </Button>
-    </Box>
-  );
-};
-
-/**
- * Big Form
- * @param props
- * @returns
- */
-
-interface ItemType {
-  id: string;
-  name?: string;
-  meta?: any;
-}
-
-const StatesForm = ({
-  states,
-  deleteState,
-  onAttachApproval,
-  onSorted,
-}: StateFormProps) => {
-  const [state, setState] = useState<ItemType[]>([]);
-
-  const setOrder = (names: any) => {
-    // new order
-
-    if (names && names.length > 0) {
-      const listItems: ItemType[] = [];
-
-      names.map((name: any) => {
-        const newItemx: ItemType = {
-          id:
-            (states &&
-              states.filter((state: any) => state.state.state === name)[0]
-                ?.state?.id) ||
-            '',
-          name: name,
-        };
-        if (newItemx.id !== '') {
-          listItems.push(newItemx);
-        }
-      });
-
-      // setState(listItems);
-
-      const dbitems: any = [];
-
-      listItems.map((dbi: any, index) => {
-        dbitems.push({ id: dbi.id, order: index + 1 });
-      });
-
-      // send updates to server
-      onSorted(dbitems);
-    }
-  };
-
-  useEffect(() => {
-    if (states) {
-      const listItems: ItemType[] = [];
-      states.map((c: any) => {
-        const newItemx: ItemType = {
-          id: c?.state.id,
-          name: c?.state.state,
-          meta: state,
-        };
-        listItems.push(newItemx);
-      });
-
-      setState(listItems);
-    }
-  }, [states]);
-
+const StatesForm = ({ states, setStates, highestOrder }: StateFormProps) => {
   return (
     <Box>
-      <Label>Flow states</Label>
       {states && (
-        <Box
-          ml={3}
-          mb={0}
-          sx={{
-            border: '1px solid #E4E9EF',
-            borderRadius: '4px 4px 4px 4px',
-          }}>
-          <Droppable
-            list={state}
-            setOrder={setOrder}
-            onAttachApproval={onAttachApproval}
-            deleteState={deleteState}
-          />
-        </Box>
+        <Droppable
+          states={states}
+          setStates={setStates}
+          highestOrder={highestOrder}
+        />
       )}
     </Box>
   );
@@ -207,21 +88,21 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     trigger,
   } = useForm();
   const [edit, setEdit] = useState<boolean>(false);
-  const [approval, setApproval] = useState<boolean>(false);
-  const [addState, setAddState] = useState<boolean>(false);
-  const [states, setStates] = useState<StateElement[]>();
+  const [highestOrder, setHighestOrder] = useState<number>(0);
+  const [states, setStates] = useState<StateState[]>();
+  const [initialStates, setInitialStates] = useState<StateState[]>();
   const [flow, setFlow] = useState<Flow>();
   const errorRef = React.useRef<HTMLDivElement | null>(null);
   const [formStep, setFormStep] = useState(0);
+  const [cId, setCId] = useState<string>('');
 
   // determine edit state based on URL
   const router = useRouter();
-  const cId: string = router.query.id as string;
+  const flowId: string = router.query.id as string;
 
-  const onAttachApproval = (_d: any) => {
-    setApproval(!approval);
-    console.log('onAttachApproval', _d);
-  };
+  useEffect(() => {
+    setCId(flowId);
+  }, [flowId]);
 
   /**
    * Load all states for a particular Flow
@@ -231,7 +112,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       const res: States = data;
-      setStates(res.states);
+      const x: StateState[] = res.states
+        .map((s: any) => {
+          return s.state;
+        })
+        .sort((a, b) => a.order - b.order);
+      const bigOrderItem: StateState = x.reduce(
+        (prev: StateState, current: StateState) => {
+          return prev.order > current.order ? prev : current;
+        },
+      );
+      setHighestOrder(bigOrderItem.order);
+
+      setInitialStates(x);
+      setStates(x);
     });
   };
 
@@ -248,60 +142,171 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     });
   };
 
-  /**
-   * Create State
-   * @param data Form Data
-   */
-  const CreateState = (data: any) => {
-    if (cId) {
-      postAPI(`flows/${cId}/states`, data).then(() => {
-        loadStates(cId);
-      });
-    } else {
-      console.log('no flow id');
-    }
-  };
-
-  /**
-   * Delete State
-   * @param data Form Data
-   */
-  const deleteState = (name: any) => {
-    if (states) {
-      const id = states.filter((state) => state.state.state === name)[0].state
-        .id;
-      deleteAPI(`states/${id}`).then(() => {
-        toast.success('Deleted a flow', {
-          duration: 1000,
-          position: 'top-right',
-        });
-        loadStates(cId);
-      });
-    }
-  };
+  useEffect(() => {}, [states]);
 
   const onSubmit = async (data: any) => {
-    if (edit) {
-      putAPI(`flows/${cId}`, data).then(() => {
-        toast.success('flow updated', {
-          duration: 1000,
-          position: 'top-right',
-        });
-        Router.push('/manage/flows');
+    const itemsAreEqual = (item1: StateState, item2: StateState) => {
+      return (
+        item1.approvers === item2.approvers &&
+        item1.state === item2.state &&
+        item1.order === item2.order
+      );
+    };
+
+    if (states) {
+      const checkedStates = states.map((e) => {
+        return {
+          ...e,
+          error:
+            e.approvers.length === 0
+              ? 'Please add approvers for this state'
+              : undefined,
+        };
       });
+      if (checkedStates.some((e) => e.approvers.length === 0)) {
+        setStates(checkedStates);
+        return;
+      }
+    }
+
+    if (edit) {
+      if (states && initialStates) {
+        const existingStates = states.filter((state) =>
+          initialStates.some((s) => s.id === state.id),
+        );
+
+        const newStates = states.filter(
+          (state) => !initialStates.some((s) => s.id === state.id),
+        );
+
+        const removedStates = initialStates.filter(
+          (state) => !existingStates.some((s) => s.id === state.id),
+        );
+
+        const changedStates = existingStates.filter((state) => {
+          const initialItem = initialStates.find((e) => e.id === state.id);
+          return !initialItem || !itemsAreEqual(state, initialItem);
+        });
+
+        const updateDataArr = changedStates.map((changedItem) => {
+          const initialItem = initialStates.find(
+            (item) => item.id === changedItem.id,
+          ) as StateState;
+          const initialApproversIds = initialItem.approvers.map(
+            (approver) => approver.id,
+          );
+          const changedApproversIds = changedItem.approvers.map(
+            (approver) => approver.id,
+          );
+
+          const addedApprovers = changedApproversIds.filter(
+            (id) => !initialApproversIds.includes(id),
+          );
+          const removedApprovers = initialApproversIds.filter(
+            (id) => !changedApproversIds.includes(id),
+          );
+
+          return {
+            id: changedItem.id,
+            state: changedItem.state,
+            //used initial order cause backend throws error order already exists
+            order: initialItem.order,
+            approvers: {
+              add: addedApprovers,
+              remove: removedApprovers,
+            },
+          };
+        });
+
+        const createDataArr = newStates.map((newItem, index) => {
+          return {
+            state: newItem.state,
+            order: highestOrder + 1 + index,
+            approvers: newItem.approvers.map((approver) => approver.id),
+          };
+        });
+
+        const CreateReqs = createDataArr.map((data) => {
+          return postAPI(`flows/${cId}/states`, data);
+        });
+        const UpdateReqs = updateDataArr.map((updateData) => {
+          const { id, ...data } = updateData;
+          return putAPI(`states/${id}`, data);
+        });
+        const DeleteReqs = removedStates.map((s) => {
+          deleteAPI(`states/${s.id}`);
+        });
+        const allReqs = Promise.all([
+          ...CreateReqs,
+          ...UpdateReqs,
+          ...DeleteReqs,
+        ]);
+        toast.promise(allReqs, {
+          loading: 'Updating states',
+          success: () => {
+            fetchAPI(`flows/${cId}/states`).then(async (data: States) => {
+              const res: States = data;
+              const x: StateState[] = res.states
+                .map((s: any) => {
+                  return s.state;
+                })
+                .sort((a, b) => a.order - b.order);
+              type Align = {
+                states: {
+                  order: number;
+                  id: string;
+                }[];
+              };
+              const alignData: Align = {
+                states: x.map((state) => {
+                  return {
+                    order:
+                      states.find((s) => s.state === state.state)?.order || 0,
+                    id: state.id,
+                  };
+                }),
+              };
+              await putAPI(`flows/${cId}/align-states`, alignData).then(() => {
+                toast.success('Sorted flow state', {
+                  duration: 1000,
+                  position: 'top-right',
+                });
+                setRerender((pre: boolean) => !pre);
+              });
+
+              await putAPI(`flows/${cId}`, data).then(() => {
+                toast.success('flow updated', {
+                  duration: 1000,
+                  position: 'top-right',
+                });
+                setOpen(false);
+                setRerender((prev: boolean) => !prev);
+              });
+            });
+            return 'States updated';
+          },
+          error: 'Error updating states',
+        });
+      }
     } else {
       await postAPI('flows', data)
-        .then(() => {
+        .then((data: any) => {
           toast.success('Flow created', {
             duration: 1000,
             position: 'top-right',
           });
-          setOpen(false);
-          setRerender((prev: boolean) => !prev);
+          setCId(data?.id);
+          if (errorRef.current) {
+            const errorElement = errorRef.current;
+            if (errorElement) {
+              errorElement.innerText = '';
+            }
+          }
+          next();
         })
-        .then((error: any) => {
+        .catch((error: any) => {
           toast.error(
-            error?.response?.data?.errors?.name[0] || 'Flow created',
+            error?.response?.data?.errors?.name[0] || 'Failed to create flow',
             {
               duration: 1000,
               position: 'top-right',
@@ -310,7 +315,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           if (errorRef.current) {
             const errorElement = errorRef.current;
             if (errorElement) {
-              errorElement.innerText = error.response.data.errors.name[0];
+              errorElement.innerText =
+                error.response?.data?.errors?.name?.[0] || 'Already exists';
             }
           }
         });
@@ -325,34 +331,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     }
   }, [cId]);
 
-  /**
-   *
-   */
-
-  const updateState = (e: any) => {
-    const newState = {
-      state: e,
-      order: (states?.length && states.length + 1) || 1,
+  const AddState = () => {
+    const newState: StateState = {
+      id: Math.random().toString(),
+      state: '',
+      order: highestOrder + 1,
+      approvers: [],
+      inserted_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
     };
 
-    CreateState(newState);
-  };
-
-  /**
-   * Update Flow Order
-   * @param data Form Data
-   */
-  const onSortDone = (data: any) => {
-    const formative = {
-      states: data,
-    };
-
-    putAPI(`flows/${cId}/align-states`, formative).then(() => {
-      toast.success('Sorted flow state', {
-        duration: 1000,
-        position: 'top-right',
-      });
-    });
+    if (states) {
+      const newArr: StateState[] = [...states, newState];
+      setStates(newArr);
+    }
   };
 
   function next() {
@@ -403,14 +395,29 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Text variant="error" ref={errorRef} />
             </Box>
           </Flex>
-          <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+          <Box
+            sx={{
+              display: formStep === 1 ? 'block' : 'none',
+              height: 'calc( 100vh - 250px )',
+              overflowY: 'scroll',
+              overflowX: 'hidden',
+              pr: 3,
+              ':-webkit-scrollbar': {
+                width: '5px',
+                '&-track': {
+                  background: 'red.500',
+                },
+                '&-thumb': {
+                  borderColor: 'gray.900',
+                  borderRadius: '6px',
+                },
+              },
+            }}>
             {edit && states && (
               <StatesForm
-                onAttachApproval={onAttachApproval}
                 states={states}
-                onSave={CreateState}
-                deleteState={deleteState}
-                onSorted={onSortDone}
+                setStates={setStates}
+                highestOrder={highestOrder}
               />
             )}
 
@@ -421,19 +428,20 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               <Button
                 type="button"
                 variant="buttonSmall"
-                onClick={() => setAddState(true)}
+                onClick={() => AddState()}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 2,
+                  border: '1px solid',
+                  borderColor: 'border',
+                  bg: 'white',
+                  color: 'green.700',
+                  cursor: 'pointer',
                 }}>
-                <IconWrapper p="out" size={16}>
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 5l0 14" />
-                  <path d="M5 12l14 0" />
-                </IconWrapper>
-                <Text variant="pM" color="green.700">
-                  Add State
+                <AddIcon width={14} height={14} />
+                <Text as="p" variant="pM" color="green.700">
+                  Add Flow Step
                 </Text>
               </Button>
             </Box>
@@ -445,8 +453,12 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
             <Button
               type="button"
               onClick={() => {
-                next();
                 trigger();
+                if (!edit) {
+                  handleSubmit(onSubmit)();
+                } else {
+                  next();
+                }
               }}
               variant="buttonPrimary">
               Next
@@ -468,20 +480,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           )}
         </Flex>
       </Flex>
-      <Modal isOpen={approval} onClose={() => setAddState(false)}>
-        <ApprovalFormBase
-          closeModal={() => setApproval(false)}
-          states={states}
-          parent={cId}
-        />
-      </Modal>
-      <Modal
-        isOpen={addState}
-        onClose={() => setAddState(false)}
-        label="Add State"
-        aria-label="Add New State">
-        <StateStateForm onSave={updateState} setAddState={setAddState} />
-      </Modal>
     </>
   );
 };

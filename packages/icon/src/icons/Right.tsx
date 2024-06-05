@@ -11,7 +11,7 @@ const SvgRightIcon = (props: SVGProps<SVGSVGElement>) => (
     role="icon"
     {...props}>
     <path
-      fill={props.color || `#2C3641`}
+      fill={props.color || 'currentColor' || `#2C3641`}
       fillRule="evenodd"
       d="M6.418 2.418a1.43 1.43 0 0 1 2.02 0l8.572 8.572a1.43 1.43 0 0 1 0 2.02L8.44 21.582a1.429 1.429 0 1 1-2.02-2.02L13.978 12 6.42 4.439a1.43 1.43 0 0 1 0-2.02"
       clipRule="evenodd"

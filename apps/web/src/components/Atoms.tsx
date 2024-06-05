@@ -28,7 +28,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
       : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
-    <Text variant="pM" sx={{ color: 'gray.600' }}>
+    <Text variant="pM" sx={{ fontSize: 1, color: 'gray.900' }}>
       {timed}
     </Text>
   );
