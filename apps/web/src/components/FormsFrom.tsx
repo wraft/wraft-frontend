@@ -300,7 +300,7 @@ const FormsFrom = ({
 
       console.log('testing..', uuidRegex.test(item.id), item.id);
       if (uuidRegex.test(item.id)) {
-        data.field_id = Math.random().toString();
+        data.field_id = item.id;
       }
       return data;
     });
