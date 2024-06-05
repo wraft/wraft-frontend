@@ -1,6 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
-import { Box, Flex, Button, Container, Field } from 'theme-ui';
+import {
+  Box,
+  Flex,
+  Button,
+  Container,
+  Field,
+  Text,
+  Label,
+  Input,
+} from 'theme-ui';
 import toast from 'react-hot-toast';
 
 import { deleteAPI, fetchAPI } from 'utils/models';
@@ -9,15 +18,16 @@ import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from '../MenuStepsIndicator';
 import Modal from '../Modal';
-import { ConfirmDelete } from '../common';
 import PipelineLogs from './PipelineLogs';
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);
   const [formStep, setFormStep] = useState<number>(0);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>([]);
   const [formData, setFormData] = useState<any>();
+  const [isDelete, setDelete] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [inputValue, setInputValue] = useState('');
 
   const router = useRouter();
 
@@ -50,15 +60,20 @@ const PipelineView = () => {
   }, [pipelineData.source_id]);
 
   const onDelete = () => {
-    deleteAPI(`pipelines/${cId}`)
-      .then(() => {
+    if (inputValue && inputValue.trim() === pipelineData.name) {
+      deleteAPI(`pipelines/${cId}`).then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
         toast.success('Deleted Successfully', { duration: 1000 });
         Router.push('/manage/pipelines');
-      })
-      .catch(() => {
-        toast.error('Delete Failed', { duration: 1000 });
+        setDelete(false);
       });
+    } else {
+      toast.error('Name does not match', { duration: 2000 });
+    }
+  };
+
+  const onConfirm = () => {
+    setDelete(true);
   };
 
   const titles = ['Steps', 'Configure', 'Logs'];
@@ -124,11 +139,7 @@ const PipelineView = () => {
                 </Box>
                 <Box sx={{ alignSelf: 'end' }}>
                   <Box mt={2}>
-                    <Button
-                      variant="delete"
-                      onClick={() => {
-                        setIsOpen(true);
-                      }}>
+                    <Button variant="delete" onClick={onConfirm}>
                       Delete Pipeline
                     </Button>
                   </Box>
@@ -144,18 +155,45 @@ const PipelineView = () => {
           </Box>
         </Flex>
       </Container>
-      <Modal isOpen={isOpen}>
-        {
-          <ConfirmDelete
-            title="Delete Pipeline"
-            text="Are you sure you want to delete ?"
-            setOpen={setIsOpen}
-            onConfirmDelete={() => {
-              onDelete();
-              setIsOpen(false);
-            }}
-          />
-        }
+      <Modal width="556px" isOpen={isDelete} onClose={() => setDelete(false)}>
+        <Text
+          variant="pB"
+          sx={{
+            py: 3,
+            px: 4,
+            display: 'inline-block',
+          }}>
+          Verify pipeline delete request
+        </Text>
+        <Box
+          sx={{
+            pt: 3,
+            pb: 4,
+            borderTop: '1px solid',
+            borderColor: 'border',
+          }}>
+          <Box sx={{ px: 4 }}>
+            <Box sx={{ mt: '24px' }}>
+              <Label variant="text.pR" sx={{ color: 'black.800' }}>
+                <span>
+                  {`To confirm, type "${pipelineData.name}" in the box below`}
+                </span>
+              </Label>
+              <Input
+                ref={inputRef}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}></Input>
+            </Box>
+            <Flex sx={{ gap: 3, pt: 4 }}>
+              <Button onClick={onDelete} variant="delete">
+                Delete Pipeline
+              </Button>
+              <Button onClick={() => setDelete(false)} variant="cancel">
+                Cancel
+              </Button>
+            </Flex>
+          </Box>
+        </Box>
       </Modal>
     </Box>
   );
