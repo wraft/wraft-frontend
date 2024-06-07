@@ -33,7 +33,7 @@ const BreadLinks = (props: any) => {
     <Flex sx={{ py: 2 }}>
       {props.links &&
         props.links.map((l: any) => (
-          <Link key={l.name} sx={{ color: 'text', fontSize: 0, mr: 2 }}>
+          <Link key={l.name} sx={{ color: 'text', fontSize: 'xxs', mr: 2 }}>
             <Text sx={{ pr: 1 }}>{l.name}</Text>
             <ArrowBack width={10} />
           </Link>

@@ -68,7 +68,7 @@ const columns = [
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
           <Box
             sx={{
               width: '3px',
@@ -84,7 +84,7 @@ const columns = [
             <Box
               as="h5"
               sx={{
-                fontSize: '13px',
+                fontSize: 'xs',
                 color: 'gray.1200',
                 letterSpacing: '-0.15px',
                 fontWeight: 500,
@@ -241,7 +241,7 @@ const ContentList = () => {
                 sx={{
                   mb: 2,
                   fontWeight: 'body',
-                  fontSize: 2,
+                  fontSize: 'sm',
                   color: 'text',
                 }}>
                 Filter by Variant
@@ -268,7 +268,7 @@ const ContentList = () => {
                 variant="blockTitle"
                 sx={{
                   mb: 2,
-                  fontSize: 2,
+                  fontSize: 'sm',
                   fontWeight: 'body',
                   color: 'text',
                 }}>

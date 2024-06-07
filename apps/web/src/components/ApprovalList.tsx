@@ -42,7 +42,7 @@ const columns = (approveInstance: any) => [
     accessorKey: 'content.name',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
           <Box
             sx={{
               width: '3px',

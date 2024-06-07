@@ -146,7 +146,7 @@ const ThemeForm = () => {
                             <Text
                               as="p"
                               variant="pM"
-                              sx={{ fontSize: 1, m: 0, p: 0, mb: 0 }}>
+                              sx={{ fontSize: 'xs', m: 0, p: 0, mb: 0 }}>
                               {m.name.match(/(.+?)(?=-|$)/)?.[1]}
                             </Text>
                           </Flex>

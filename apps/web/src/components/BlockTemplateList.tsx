@@ -29,7 +29,7 @@ const columns = [
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NavLink href={`/blocks/edit/${row?.original?.id}`}>
-        <Box sx={{ fontSize: '15px', fontWeight: 500 }}>
+        <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
           {row?.original?.title}
         </Box>
       </NavLink>
@@ -79,7 +79,7 @@ const columns = [
             </Button>
             <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
               <NavLink href={`/manage/blocks/edit/[id]`}>
-                <Text sx={{ fontSize: 0, fontWeight: 500 }}>Edit</Text>
+                <Text sx={{ fontSize: 'xxs', fontWeight: 500 }}>Edit</Text>
               </NavLink>
             </MenuItem>
           </Menu>

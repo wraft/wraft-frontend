@@ -119,7 +119,7 @@ const ManageHomePage = () => {
                     <Text
                       as="h5"
                       sx={{
-                        fontSize: 2,
+                        fontSize: 'sm',
                         color: 'gray.1200',
                         fontWeight: 'bold',
                         mb: 0,
@@ -128,7 +128,7 @@ const ManageHomePage = () => {
                     </Text>
                     <Text
                       sx={{
-                        fontSize: 2,
+                        fontSize: 'sm',
                         fontWeight: 'body',
                         color: 'gray.1000',
                         mb: 1,

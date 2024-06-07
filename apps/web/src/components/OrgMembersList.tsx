@@ -84,7 +84,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
           <Box mx={0} mb={3}>
             <Flex mb={4}>
               <Box>
-                <Text as="h2" sx={{ pt: 0, mb: 3, fontSize: 2, pb: 1 }}>
+                <Text as="h2" sx={{ pt: 0, mb: 3, fontSize: 'sm', pb: 1 }}>
                   Members
                 </Text>
               </Box>
@@ -127,13 +127,13 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                       <Text as="h4" sx={{ fontWeight: 600 }}>
                         {_m.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'text' }}>
+                      <Text as="p" sx={{ fontSize: 'xs', color: 'text' }}>
                         {_m.email}
                       </Text>
                     </Box>
                     <Text
                       sx={{
-                        fontSize: 0,
+                        fontSize: 'xxs',
                         pl: 3,
                         pt: 3,
                         color: 'blue.600',

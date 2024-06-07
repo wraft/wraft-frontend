@@ -34,12 +34,12 @@ const blockTypes = [
   {
     name: 'medium',
     wh: '32px',
-    fontSize: 1,
+    fontSize: 'xs',
   },
   {
     name: 'small',
     wh: '22px',
-    fontSize: '12px',
+    fontSize: 'xs',
   },
 ];
 
@@ -78,7 +78,7 @@ export const StepBlock = ({
           as="h5"
           sx={{
             fontFamily: 'body',
-            fontSize: 1,
+            fontSize: 'xs',
             color: 'text',
             // color: tab.selectedId === 'view' ? 'teal.200' : 'gray.1000',
             mb: 0,
@@ -159,7 +159,7 @@ export const ProfileCard = ({
   return (
     <Flex
       sx={{
-        fontSize: 0,
+        fontSize: 'xxs',
         color: 'text',
         my: 1,
       }}>
@@ -169,7 +169,7 @@ export const ProfileCard = ({
         sx={{ mr: 2, borderColor: 'border', border: 0 }}
         src={finalImage} // image
       />
-      <Text as="h3" sx={{ mr: 3, fontSize: 2, fontWeight: 600 }}>
+      <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
       <TimeAgo time={time} ago={true} />
@@ -376,7 +376,7 @@ const ContentDetail = () => {
                 }}>
                 <Box>
                   <Text
-                    sx={{ fontSize: 3, fontWeight: 'bold', display: 'none' }}>
+                    sx={{ fontSize: 'base', fontWeight: 'bold', display: 'none' }}>
                     {contents.content.serialized.title}
                   </Text>
                   <ProfileCard
@@ -582,7 +582,7 @@ const ContentDetail = () => {
                     <>
                       {loading && <Spinner color="white" size={24} />}
                       {!loading && (
-                        <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
+                        <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
                           Build
                         </Text>
                       )}
@@ -624,7 +624,7 @@ const ContentDetail = () => {
                                   <Text
                                     as="h3"
                                     sx={{
-                                      fontSize: 1,
+                                      fontSize: 'xs',
                                       mb: 0,
                                       color: 'text',
                                     }}>
@@ -633,7 +633,7 @@ const ContentDetail = () => {
                                   <Text
                                     as="h4"
                                     sx={{
-                                      fontSize: '12px',
+                                      fontSize: 'xs',
                                       mb: 0,
                                       mt: 1,
                                       color: 'gray.700',
@@ -671,7 +671,9 @@ const ContentDetail = () => {
                     <Box sx={{ bg: 'neutral.100' }}>
                       <Box sx={{ pb: 3 }}>
                         <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
-                          <Text as="h3" sx={{ fontSize: 2, fontWeight: 500 }}>
+                          <Text
+                            as="h3"
+                            sx={{ fontSize: 'sm', fontWeight: 500 }}>
                             Discussions
                           </Text>
                         </Box>
@@ -694,7 +696,7 @@ const ContentDetail = () => {
                         <Box>
                           {contents.versions.map((v: any) => (
                             <Flex key={v?.id} sx={{ py: 2 }}>
-                              <Text sx={{ fontSize: 1, fontWeight: 500 }}>
+                              <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>
                                 Version {v?.version_number}
                               </Text>
                               <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>

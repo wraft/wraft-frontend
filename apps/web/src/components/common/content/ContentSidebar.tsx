@@ -44,7 +44,7 @@ export const FlowStateBlock = ({
       }}>
       <Box
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           width: '18px',
           height: '18px',
           borderRadius: '9rem',
@@ -59,7 +59,7 @@ export const FlowStateBlock = ({
         }}>
         <Check size={16} />
       </Box>
-      <Text sx={{ fontSize: 1, textTransform: 'capitalize' }}>{state}</Text>
+      <Text sx={{ fontSize: 'xs', textTransform: 'capitalize' }}>{state}</Text>
       <Box
         sx={{
           paddingLeft: 1,
@@ -140,7 +140,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
     <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
-        <Text as="h6" sx={{ color: 'gray.900', fontSize: 1, fontWeight: 400 }}>
+        <Text as="h6" sx={{ color: 'gray.900', fontSize: 'xs', fontWeight: 400 }}>
           {content.content_type?.layout?.name} / {content.content_type?.name}
         </Text>
         <Flex>
@@ -148,7 +148,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
             as="h3"
             sx={{
               fontWeight: 'heading',
-              fontSize: 2,
+              fontSize: 'sm',
               lineHeight: '24px',
             }}>
             {content.content?.instance_id}
@@ -167,7 +167,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
                 borderRadius: '3px',
                 letterSpacing: '0.2px',
                 textTransform: 'uppercase',
-                fontSize: 0,
+                fontSize: 'xxs',
               }}>
               {content?.state?.state}
             </Text>
