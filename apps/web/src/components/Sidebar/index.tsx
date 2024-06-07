@@ -116,7 +116,7 @@ const Sidebar = (props: any) => {
                             ? rawColors?.green?.[1200]
                             : rawColors?.gray?.[1200],
                           fontWeight: 500,
-                          fontSize: '15px',
+                          fontSize: 'base',
                           lineHeight: '18.8px',
                           letterSpacing: '-0.25px',
                         }}>

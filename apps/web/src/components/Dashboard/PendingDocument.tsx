@@ -14,7 +14,7 @@ const columns = [
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
+        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
           <Box
             sx={{
               width: '3px',
@@ -27,7 +27,7 @@ const columns = [
             <Box sx={{ color: 'gray.900' }}>
               {row.original?.content?.instance_id}
             </Box>
-            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500 }}>
+            <Box as="h5" sx={{ fontSize: 'sm', fontWeight: 500 }}>
               {row.original?.content?.serialized?.title}
             </Box>
           </Box>
@@ -98,7 +98,7 @@ const PendingDocumentBlock = () => {
     <>
       <Box
         sx={{
-          fontSize: 3,
+          fontSize: 'base',
           fontWeight: 500,
           mb: '18px',
           mt: '36px',

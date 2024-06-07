@@ -73,13 +73,13 @@ const ActivityCard = (props: any) => (
       />
     </Box>
     <Box pt={1}>
-      <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+      <Text sx={{ fontSize: 'xxs', display: 'inline-block', fontWeight: 600 }}>
         {props?.actor?.name}
       </Text>{' '}
-      <Text as="em" sx={{ fontSize: 0, display: 'inline-block', mr: 2 }}>
+      <Text as="em" sx={{ fontSize: 'xxs', display: 'inline-block', mr: 2 }}>
         {props?.action}d{' '}
       </Text>
-      {/* <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+      {/* <Text sx={{ fontSize: 'xxs', display: 'inline-block', fontWeight: 600 }}>
         {props?.object_details?.name}
       </Text> */}
     </Box>

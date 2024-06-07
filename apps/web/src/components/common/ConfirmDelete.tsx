@@ -34,7 +34,7 @@ const ConfirmDelete = ({
               }
               variant="delete"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
               }}>
               Confirm
@@ -48,7 +48,7 @@ const ConfirmDelete = ({
               }}
               variant="cancel"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
               }}>
               Cancel

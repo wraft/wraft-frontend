@@ -51,7 +51,7 @@ const CommentCard = (comment: Comment) => {
               sx={{
                 mt: 0,
                 color: 'text',
-                fontSize: 2,
+                fontSize: 'sm',
                 pt: 0,
                 lineHeight: 1.35,
                 pl: 2,

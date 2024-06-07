@@ -178,7 +178,7 @@ const OrgMemberForm = () => {
                       <Text
                         variant="blocktitle"
                         sx={{
-                          fontSize: 1,
+                          fontSize: 'xs',
                           // pl: 3,
                           py: 2,
                           color: 'primary',

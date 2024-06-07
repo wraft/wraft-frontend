@@ -57,7 +57,7 @@ const Card = ({
         sx={{
           fontFamily: 'satoshi',
           fontWeight: 400,
-          fontSize: 6,
+          fontSize: '3xl',
           lineHeight: '1',
           color: text,
         }}>
@@ -68,14 +68,14 @@ const Card = ({
         as="h1"
         sx={{
           fontWeight: 700,
-          fontSize: 6,
+          fontSize: '3xl',
           lineHeight: '1',
           color: text,
         }}>
         ${price}
         <Text
           as="span"
-          sx={{ fontSize: 2, color: `${dark ? 'gray.500' : 'gray.400'}` }}>
+          sx={{ fontSize: 'sm', color: `${dark ? 'gray.500' : 'gray.400'}` }}>
           /monthly
         </Text>
       </Text>
@@ -85,7 +85,7 @@ const Card = ({
         mb="16px"
         sx={{
           color: text,
-          fontSize: 1,
+          fontSize: 'xs',
           fontWeight: 400,
         }}>
         What’s included
@@ -102,7 +102,7 @@ const Card = ({
             }}>
             {fullAccess ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
             Full Access
           </Text>
         </Flex>
@@ -117,7 +117,7 @@ const Card = ({
             }}>
             {users ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
             Upto 10 users
           </Text>
         </Flex>
@@ -132,7 +132,7 @@ const Card = ({
             }}>
             {storage ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 0, fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
             Upto 50GB of cloud storage
           </Text>
         </Flex>
@@ -218,7 +218,7 @@ const Index: FC = () => {
           <Text
             sx={{
               maxWidth: '652px',
-              fontSize: 3,
+              fontSize: 'base',
               fontWeight: 400,
               color: 'text',
               textAlign: 'center',

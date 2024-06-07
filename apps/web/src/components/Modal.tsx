@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
             <DialogHeading
               sx={{
                 m: 0,
-                fontSize: 3,
+                fontSize: 'base',
                 py: 2,
                 px: 3,
                 borderBottom: 'solid 1px #ddd',
