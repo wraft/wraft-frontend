@@ -128,7 +128,7 @@ const BulkBuild = (props: CommentFormProps) => {
                     <Text
                       sx={{
                         pl: 0,
-                        fontSize: '15px',
+                        fontSize: 'base',
                         pb: 0,
                         fontWeight: 600,
                         pt: '1px',
@@ -140,7 +140,7 @@ const BulkBuild = (props: CommentFormProps) => {
                     </Box>
                   </Flex>
 
-                  <Text as="p" sx={{ mt: 0, fontSize: '15px', pt: 1, m: 0 }}>
+                  <Text as="p" sx={{ mt: 0, fontSize: 'base', pt: 1, m: 0 }}>
                     {comment.comment}
                   </Text>
                 </Box>

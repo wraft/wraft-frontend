@@ -148,11 +148,11 @@ const CreateDocument = () => {
               <Box
                 variant="caps"
                 sx={{
-                  fontSize: 0,
+                  fontSize: 'xxs',
                   py: 2,
                   color: 'text',
                 }}>
-                <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
+                <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
                   Select a template
                 </Text>
               </Box>
@@ -276,7 +276,7 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       <Text
         as="h4"
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           m: 0,
           ml: 'auto',
           color: 'text',

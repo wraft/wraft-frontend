@@ -31,7 +31,7 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
     <Flex ml={2} sx={{ flex: 1 }}>
       <Box
         sx={{
-          fontSize: 2,
+          fontSize: 'sm',
           fontWeight: 500,
           mb: 1,
           color: 'gray.1100',
@@ -41,7 +41,7 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
       <Box
         sx={{
           ml: 'auto',
-          fontSize: 3,
+          fontSize: 'base',
           fontWeight: 100,
         }}>
         {desc}
@@ -96,12 +96,12 @@ const Dashboard = () => {
     <Container
       variant="layout.pageFrame"
       sx={{ height: '100vh', bg: 'gray.200' }}>
-      <Box sx={{ fontSize: 2, color: 'gray.900' }}>
+      <Box sx={{ fontSize: 'sm', color: 'gray.900' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
       <Box
         sx={{
-          fontSize: 3,
+          fontSize: 'sm',
           fontWeight: 'heading',
           fontFamily: 'body',
           mb: 3,
@@ -124,14 +124,14 @@ const Dashboard = () => {
           <Box>
             <Box
               sx={{
-                fontSize: '16px',
+                fontSize: 'base',
                 fontWeight: 'heading',
                 lineHeight: '19.2px',
                 mb: 3,
               }}>
               Personalise your experience
             </Box>
-            <Text as="p" sx={{ fontSize: '12px', mb: 3 }}>
+            <Text as="p" sx={{ fontSize: 'xs', mb: 3 }}>
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
@@ -150,7 +150,7 @@ const Dashboard = () => {
           <Box>
             <Box
               sx={{
-                fontSize: '14px',
+                fontSize: 'sm',
                 fontWeight: 'heading',
                 mb: '18px',
               }}>
@@ -162,7 +162,7 @@ const Dashboard = () => {
                 <Box
                   px={2}
                   sx={{
-                    fontSize: '12px',
+                    fontSize: 'xs',
                   }}>
                   {data.title}
                 </Box>

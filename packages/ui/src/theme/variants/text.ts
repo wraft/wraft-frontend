@@ -5,7 +5,7 @@ const text = {
   },
   //headings
   h1Regular: {
-    fontSize: 8,
+    fontSize: '5xl',
     fontWeight: 400,
     lineHeight: '55.2px',
     letterSpacing: '0.2px',
@@ -20,7 +20,7 @@ const text = {
     fontWeight: 700,
   },
   h2Regular: {
-    fontSize: 7,
+    fontSize: '4xl',
     fontWeight: 400,
     lineHeight: '44.4px',
     letterSpacing: '0.2px',
@@ -35,7 +35,7 @@ const text = {
     fontWeight: 700,
   },
   h3Regular: {
-    fontSize: 6,
+    fontSize: '3xl',
     fontWeight: 400,
     lineHeight: '34.8px',
     letterSpacing: '0.2px',
@@ -50,7 +50,7 @@ const text = {
     fontWeight: 700,
   },
   h4Regular: {
-    fontSize: 5,
+    fontSize: '2xl',
     fontWeight: 400,
     lineHeight: '27.6px',
     letterSpacing: '0.19px',
@@ -65,7 +65,7 @@ const text = {
     fontWeight: 700,
   },
   h5Regular: {
-    fontSize: 4,
+    fontSize: 'xl',
     fontWeight: 400,
     lineHeight: '22.8px',
     letterSpacing: '0.18px',
@@ -80,7 +80,7 @@ const text = {
     fontWeight: 700,
   },
   h6Regular: {
-    fontSize: 3,
+    fontSize: 'base',
     fontWeight: 400,
     lineHeight: '19px',
     letterSpacing: '0.16px',
@@ -97,7 +97,7 @@ const text = {
   //paragraph
   pR: {
     color: 'text',
-    fontSize: 2,
+    fontSize: 'sm',
     fontWeight: 400,
     lineHeight: '1.6',
   },
@@ -112,7 +112,7 @@ const text = {
   //sub heading
   subR: {
     color: 'gray.500',
-    fontSize: 1,
+    fontSize: 'xs',
     fontWeight: 400,
     lineHeight: '1.6',
   },
@@ -127,7 +127,7 @@ const text = {
   // caption
   capR: {
     color: 'gray.500',
-    fontSize: 0,
+    fontSize: 'xxs',
     fontWeight: 400,
     lineHeight: '1.6',
   },
@@ -143,7 +143,7 @@ const text = {
     pl: 1,
     pr: 2,
     mr: 3,
-    fontSize: 0,
+    fontSize: 'xxs',
     fontWeight: 400,
     color: 'text',
     display: 'inline-block',
@@ -161,7 +161,7 @@ const text = {
   },
   sectionheading: {
     fontWeight: 300,
-    fontSize: 1,
+    fontSize: 'xs',
     lineHeight: '24px',
     pb: 2,
   },
@@ -169,15 +169,15 @@ const text = {
     pt: 0,
     pb: 1,
     color: 'text',
-    fontSize: 0,
+    fontSize: 'xxs',
     textTransform: 'uppercase',
   },
   menulink: {
-    fontSize: 3,
+    fontSize: 'base',
     fontWeight: 600,
   },
   pagetitle: {
-    fontSize: 4,
+    fontSize: 'xl',
     mb: 3,
     fontWeight: 300,
   },
@@ -186,35 +186,35 @@ const text = {
     fontWeight: 300,
   },
   pagedesc: {
-    fontSize: 1,
+    fontSize: 'xs',
     mb: 4,
     color: 'text',
   },
   pageheading: {
-    fontSize: 1,
+    fontSize: 'xs',
     mb: 2,
     color: 'text',
     fontWeight: 400,
     mt: 2,
   },
   personName: {
-    fontSize: 1,
+    fontSize: 'xs',
     fontWeight: 'heading',
     mb: 0,
   },
   personBio: {
-    fontSize: 1,
+    fontSize: 'xs',
     mb: 0,
     fontWeight: 'body',
     color: 'text',
   },
   personBlock: {
     color: 'text',
-    fontSize: 0,
+    fontSize: 'xxs',
     fontWeight: 'heading',
   },
   personPlace: {
-    fontSize: 0,
+    fontSize: 'xxs',
     mt: 0,
     color: 'gray.500',
   },

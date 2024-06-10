@@ -63,7 +63,7 @@ const PersonCard = ({ name, phone }: PersonCardProps) => (
     <Text as="h5" sx={{ fontWeight: 500, color: 'text' }}>
       {name}
     </Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.500' }}>
+    <Text as="h6" sx={{ fontSize: 'xxs', fontWeight: 300, color: 'gray.500' }}>
       {phone}
     </Text>
   </Box>

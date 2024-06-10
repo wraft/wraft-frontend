@@ -429,7 +429,7 @@ const Form = () => {
               {varias && varias.fields && (
                 <Box sx={{ mb: 3, pt: 3 }}>
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 'sm' }}>
                       Content Type
                     </Text>
                     <Select
@@ -450,7 +450,7 @@ const Form = () => {
                   </Box>
 
                   <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
+                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 'sm' }}>
                       Variables
                     </Text>
                     {varias.fields &&
@@ -458,7 +458,7 @@ const Form = () => {
                         <Flex
                           sx={{
                             p: 1,
-                            fontSize: 2,
+                            fontSize: 'sm',
                             border: 'solid 1px',
                             borderBottom: 0,
                             borderColor: 'teal.200',
@@ -500,7 +500,7 @@ const Form = () => {
                         pt: 2,
                         pb: 3,
                       }}>
-                      <Text sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
+                      <Text sx={{ fontSize: 'sm', mb: 0, fontWeight: 600 }}>
                         {k.title}
                       </Text>
                     </Box>

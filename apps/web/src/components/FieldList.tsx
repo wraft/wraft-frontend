@@ -20,7 +20,7 @@ export interface FieldType {
 
 const ItemField: FC<any> = ({ name }) => {
   return (
-    <Text color="gray.8" sx={{ fontSize: 2, fontWeight: 400 }}>
+    <Text color="gray.8" sx={{ fontSize: 'sm', fontWeight: 400 }}>
       {name}
     </Text>
   );
@@ -49,7 +49,7 @@ const columns = [
     header: 'CREATED',
     accessorKey: 'updated_at',
     cell: ({ row }: any) => (
-      <Text as="span" sx={{ pt: 3, fontSize: 1 }}>
+      <Text as="span" sx={{ pt: 3, fontSize: 'xs' }}>
         <TimeAgo time={row?.original?.updated_at} />
       </Text>
     ),
