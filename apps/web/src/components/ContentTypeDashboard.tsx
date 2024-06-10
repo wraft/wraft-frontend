@@ -138,7 +138,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
       accessorKey: 'title',
       cell: ({ row }: any) => (
         <NextLink href={`/content-types/${row?.original?.id}`}>
-          <Flex sx={{ fontSize: '12px', ml: '-14px', py: 2 }}>
+          <Flex sx={{ fontSize: 'xs', ml: '-14px', py: 2 }}>
             <Box
               sx={{
                 width: '3px',
@@ -146,7 +146,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
               }}
             />
             <Box ml={3}>
-              <Box sx={{ fontSize: '15px', fontWeight: 500 }}>
+              <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
                 {row?.original?.name}
               </Box>
             </Box>

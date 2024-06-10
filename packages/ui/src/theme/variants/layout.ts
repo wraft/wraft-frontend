@@ -228,7 +228,7 @@ const layout = {
   menuItem: {
     px: 3,
     py: 2,
-    fontSize: 2,
+    fontSize: 'sm',
     cursor: 'pointer',
     color: 'text',
     '&:hover': {
@@ -237,7 +237,7 @@ const layout = {
   },
   menuItemHeading: {
     variant: 'layouts.menuItem',
-    fontSize: 1,
+    fontSize: 'xs',
     color: 'gray.400',
     p: 2,
     py: 2,

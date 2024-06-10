@@ -79,7 +79,7 @@ const ContentCardBase = (props: IField) => {
         }}
       />
       <Box sx={{ p: 3 }}>
-        <Text sx={{ fontSize: 0, color: 'text' }}>
+        <Text sx={{ fontSize: 'xxs', color: 'text' }}>
           {props.content.instance_id}
         </Text>
         <MenuItem
