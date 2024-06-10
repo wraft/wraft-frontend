@@ -81,7 +81,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                     }}>
                     OFFLET
                   </Text> */}
-                <Text sx={{ fontSize: 2, fontWeight: 500 }}>{navtitle}</Text>
+                <Text sx={{ fontSize: 'sm', fontWeight: 500 }}>{navtitle}</Text>
                 <EditIcon width={16} />
               </Flex>
             )}
@@ -154,7 +154,9 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                             <Text as="h4">{userProfile?.name}</Text>
 
                             {userProfile?.roles?.size > 0 && (
-                              <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+                              <Text
+                                as="p"
+                                sx={{ fontSize: 'xxs', color: 'text' }}>
                                 {userProfile?.roles[0]?.name}
                               </Text>
                             )}

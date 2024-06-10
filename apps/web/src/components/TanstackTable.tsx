@@ -35,7 +35,7 @@ export const Table = ({ data, columns }: TableProps) => {
       <Box
         as="thead"
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           textTransform: 'uppercase',
           border: '1px solid',
           borderColor: 'border',

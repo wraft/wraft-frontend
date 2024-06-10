@@ -744,7 +744,7 @@ const ContentForm = (props: IContentForm) => {
                       <>
                         {saving && <Spinner color="white" size={24} />}
                         {!saving && (
-                          <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
+                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
                             Save
                           </Text>
                         )}
@@ -776,7 +776,7 @@ const ContentForm = (props: IContentForm) => {
                         <Text
                           as="h6"
                           sx={{
-                            fontSize: 2,
+                            fontSize: 'sm',
                             mb: 0,
                             fontWeight: 600,
                             letterSpacing: '0.2px',
@@ -788,7 +788,7 @@ const ContentForm = (props: IContentForm) => {
                           sx={{
                             ml: 'auto',
                             mr: 3,
-                            fontSize: 1,
+                            fontSize: 'xs',
                             fontWeight: 600,
                             pt: 0,
                             color: 'gray.600',
@@ -823,7 +823,7 @@ const ContentForm = (props: IContentForm) => {
                   <Box
                     variant="layout.boxHeading"
                     sx={{ bg: 'teal.100', pb: 2, borderTop: 0 }}>
-                    <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
+                    <Text as="span" sx={{ fontSize: 'xxs', mr: 1 }}>
                       {activeFlow?.flow?.name}
                     </Text>
                     <Text as="span" variant="labelcaps">

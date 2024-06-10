@@ -90,7 +90,7 @@ const Nav = ({ navtitle }: INav) => {
                     sx={{
                       borderRadius: 0,
                       width: '130% !important',
-                      fontSize: 1,
+                      fontSize: 'xs',
                     }}
                   />
                   <Box
@@ -175,7 +175,7 @@ const Nav = ({ navtitle }: INav) => {
                               {userProfile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
-                                  sx={{ fontSize: 0, color: 'text' }}>
+                                  sx={{ fontSize: 'xxs', color: 'text' }}>
                                   {userProfile?.roles[0]?.name}
                                 </Text>
                               )}

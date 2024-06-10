@@ -14,7 +14,7 @@ const ButtonCustom = ({ text, price, dark }: props) => {
         sx={{
           cursor: 'pointer',
           fontWeight: 500,
-          fontSize: 1,
+          fontSize: 'xs',
           borderRadius: '4px',
           py: [2, 1, 2],
           px: [4, 1, 3],

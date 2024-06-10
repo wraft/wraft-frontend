@@ -28,7 +28,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
       : formatDistanceStrict(local_time, now, { addSuffix: true });
 
   return (
-    <Text variant="pM" sx={{ fontSize: 1, color: 'gray.900' }}>
+    <Text variant="pM" sx={{ fontSize: 'sm', color: 'gray.900' }}>
       {timed}
     </Text>
   );
@@ -110,7 +110,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
           mt: 2,
         }}
       />
-      <Text as="h4" sx={{ fontSize: 2, mt: 1, fontWeight: 500 }}>
+      <Text as="h4" sx={{ fontSize: 'sm', mt: 1, fontWeight: 500 }}>
         {title}
         <Text
           as="span"
@@ -118,7 +118,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
             ml: 1,
             // pl: 2,
             bg: 'neutral.200',
-            fontSize: '10px',
+            fontSize: 'xxs',
             fontWeight: 'heading',
             color: 'text',
             // border: 'solid 0.5px',
@@ -154,7 +154,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
         <Text
           sx={{
-            fontSize: 0,
+            fontSize: 'xxs',
             color: 'text',
             fontWeight: 300,
             cursor: 'pointer',
@@ -167,7 +167,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
           sx={{
             color: 'text',
             m: 0,
-            fontSize: 2,
+            fontSize: 'sm',
             fontWeight: 500,
             cursor: 'pointer',
           }}>

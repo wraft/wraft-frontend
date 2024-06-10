@@ -147,7 +147,7 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
           </Button> */}
           <Button
             variant="btnSecondary"
-            sx={{ width: '100%', fontSize: 1 }}
+            sx={{ width: '100%', fontSize: 'xs' }}
             type="button"
             onClick={showCroppedImage}>
             Done

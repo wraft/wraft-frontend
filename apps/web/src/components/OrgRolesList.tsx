@@ -92,10 +92,10 @@ const OrgRolesList = () => {
 
         {contents?.length < 1 && (
           <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'border' }}>
-            <Text as="h5" sx={{ fontSize: 1, color: 'text' }}>
+            <Text as="h5" sx={{ fontSize: 'xs', color: 'text' }}>
               No Roles?
             </Text>
-            <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+            <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
               Are you kidding?
             </Text>
           </Box>

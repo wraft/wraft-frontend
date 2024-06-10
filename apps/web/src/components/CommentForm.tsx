@@ -107,7 +107,7 @@ const CommentForm = (props: CommentFormProps) => {
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="btnSecondary" ml={0} sx={{ mt: 0, fontSize: 1 }}>
+        <Button variant="btnSecondary" ml={0} sx={{ mt: 0, fontSize: 'xs' }}>
           {submiting ? 'Saving ... ' : 'Add Comment'}
         </Button>
       </Box>

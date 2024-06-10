@@ -42,7 +42,7 @@ const NoEditorWrapper = forwardRef(
           boxShadow: 'none',
           mt: 0,
           lineHeight: 1.5,
-          fontSize: 3,
+          fontSize: 'base',
           m: 0,
           px: 1,
           '.remirror-toolbar': {

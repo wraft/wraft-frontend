@@ -120,14 +120,14 @@ const FieldForm = ({
               <Text
                 sx={{
                   color: 'neutral.800',
-                  fontSize: 2,
+                  fontSize: 'sm',
                   fontWeight: 300,
                 }}>
                 {x.name}
               </Text>
               <Text
                 sx={{
-                  fontSize: 2,
+                  fontSize: 'sm',
                   fontWeight: 'bold',
                   // color: 'green.1000',
                   ml: 'auto',
@@ -150,7 +150,7 @@ const FieldForm = ({
           as="form"
           onSubmit={handleSubmit(onSubmit)}
           sx={{ p: 4, bg: 'backgroundWhite' }}>
-          <Text sx={{ fontSize: 2 }}>Add Content</Text>
+          <Text sx={{ fontSize: 'sm' }}>Add Content</Text>
           {fields && fields.length > 0 && (
             <Box sx={{ pt: 4 }}>
               {fields.map((f: FieldT) => (
