@@ -53,7 +53,9 @@ const Index: FC = () => {
         };
       });
       setInitial(fileds);
-      const sortedFields = fileds.slice().sort((a:any, b:any) => a.order - b.order);
+      const sortedFields = fileds
+        .slice()
+        .sort((a: any, b: any) => a.order - b.order);
       setItems(sortedFields);
     });
   };
