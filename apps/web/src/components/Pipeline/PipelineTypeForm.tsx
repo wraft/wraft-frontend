@@ -108,7 +108,7 @@ const Form = ({
       .then((data: any) => {
         setLoading(true);
         const res: any[] = data.data_templates;
-          setTemplates(res);
+        setTemplates(res);
       })
       .catch(() => {
         setLoading(true);
