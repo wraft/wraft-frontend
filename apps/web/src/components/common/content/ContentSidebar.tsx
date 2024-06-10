@@ -140,7 +140,9 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
     <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
-        <Text as="h6" sx={{ color: 'gray.900', fontSize: 'xs', fontWeight: 400 }}>
+        <Text
+          as="h6"
+          sx={{ color: 'gray.900', fontSize: 'xs', fontWeight: 400 }}>
           {content.content_type?.layout?.name} / {content.content_type?.name}
         </Text>
         <Flex>

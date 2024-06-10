@@ -128,7 +128,8 @@ const LayoutCard = ({
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>
-            <Text sx={{ fontSize: 'base', fontWeight: 500, color: 'gray.1000' }}>
+            <Text
+              sx={{ fontSize: 'base', fontWeight: 500, color: 'gray.1000' }}>
               {name}
             </Text>
           </Box>
