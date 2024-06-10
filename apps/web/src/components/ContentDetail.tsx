@@ -376,7 +376,11 @@ const ContentDetail = () => {
                 }}>
                 <Box>
                   <Text
-                    sx={{ fontSize: 'base', fontWeight: 'bold', display: 'none' }}>
+                    sx={{
+                      fontSize: 'base',
+                      fontWeight: 'bold',
+                      display: 'none',
+                    }}>
                     {contents.content.serialized.title}
                   </Text>
                   <ProfileCard

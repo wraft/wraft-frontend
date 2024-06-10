@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
+import { Box, Flex, Text, Container, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
 
 import Footer from 'components/Footer';
@@ -13,13 +13,7 @@ const LandingBlockWrapper = styled(Box)`
   --lp-text-color: 16px;
   font-family: 'Mona Sans', sans-serif;
 `;
-const H1 = styled(Heading)`
-  font-size: 66px;
-  font-weight: 600;
-  line-height: 80px;
-  margin: 0;
-  white-space: pre-line;
-`;
+
 const H2 = styled.h2`
   font-size: 48px;
   font-weight: 600;
@@ -100,7 +94,10 @@ const LandingBlock = () => {
         </Box>
         <Box sx={{ textAlign: 'center', position: 'relative' }}>
           <Box sx={{ maxWidth: '80ch', mx: 'auto', mb: 2 }}>
-            <Text as="h1" pt="124px" sx={{ fontSize: '5xl', lineHeight: 1, mb: 3 }}>
+            <Text
+              as="h1"
+              pt="124px"
+              sx={{ fontSize: '5xl', lineHeight: 1, mb: 3 }}>
               {data.main_section?.title}
             </Text>
             <Text
@@ -361,7 +358,9 @@ const LandingBlock = () => {
                       <Box as="h5" sx={{ fontSize: 'xl', mb: '16px' }}>
                         {item.title}
                       </Box>
-                      <Box sx={{ fontSize: 'base', mb: '16px' }}>{item.des}</Box>
+                      <Box sx={{ fontSize: 'base', mb: '16px' }}>
+                        {item.des}
+                      </Box>
                     </Box>
                   </Flex>
                 ))}

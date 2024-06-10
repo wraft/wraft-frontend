@@ -154,7 +154,9 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
                             <Text as="h4">{userProfile?.name}</Text>
 
                             {userProfile?.roles?.size > 0 && (
-                              <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
+                              <Text
+                                as="p"
+                                sx={{ fontSize: 'xxs', color: 'text' }}>
                                 {userProfile?.roles[0]?.name}
                               </Text>
                             )}
