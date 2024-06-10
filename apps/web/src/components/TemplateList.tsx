@@ -17,7 +17,7 @@ const columns = [
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NavLink href={`/templates/edit/${row?.original?.id}`}>
-        <Box sx={{ fontSize: '15px', fontWeight: 500 }}>
+        <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
           {row?.original?.title}
         </Box>
       </NavLink>
@@ -44,7 +44,7 @@ const columns = [
           }}
         />
 
-        <Text sx={{ fontSize: 1, fontWeight: 'body', display: 'flex' }}>
+        <Text sx={{ fontSize: 'xs', fontWeight: 'body', display: 'flex' }}>
           {row?.original?.content_type?.name}
         </Text>
       </Flex>

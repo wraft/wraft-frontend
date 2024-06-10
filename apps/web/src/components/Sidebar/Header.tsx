@@ -90,11 +90,11 @@ const Header = () => {
                           fontWeight: `bold`,
                           color: 'gray.1200',
                           lineHeight: 1,
-                          fontSize: 2,
+                          fontSize: 'sm',
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.1000' }}>
+                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000' }}>
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -133,11 +133,11 @@ const Header = () => {
                           fontWeight: `bold`,
                           color: 'gray.1000',
                           lineHeight: 1,
-                          fontSize: 1,
+                          fontSize: 'xs',
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.400' }}>
+                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.400' }}>
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -209,7 +209,7 @@ const Header = () => {
                   <Text as="h4">{userProfile?.name}</Text>
 
                   {userProfile?.roles?.size > 0 && (
-                    <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+                    <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
                       {userProfile?.roles[0]?.name}
                     </Text>
                   )}

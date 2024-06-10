@@ -53,7 +53,7 @@ const buttons = {
     borderRadius: '4px',
     padding: '8px 16px',
     fontWeight: 'heading',
-    fontSize: '14px',
+    fontSize: 'sm',
     fontFamily: 'body',
     ':hover': {
       backgroundColor: 'green.1000',
@@ -68,14 +68,14 @@ const buttons = {
 
   secondary: {
     cursor: 'pointer',
-    bg: 'green.400',
+    backgroundColor: 'green.400',
     color: 'green.1200',
     border: '1px solid',
     borderColor: 'green.600',
     borderRadius: '6px',
     padding: '8px 16px',
     fontWeight: 'heading',
-    fontSize: 1,
+    fontSize: 'xs',
     fontFamily: 'body',
     ':hover': {
       backgroundColor: 'gray.400',
@@ -87,7 +87,7 @@ const buttons = {
     border: 'none',
     padding: '8px 16px',
     fontWeight: 'heading',
-    fontSize: '14px',
+    fontSize: 'sm',
     fontFamily: 'body',
     color: 'text',
     ':hover': {
@@ -117,7 +117,7 @@ const buttons = {
   },
   buttonPrimarySmall: {
     variant: 'buttons.buttonPrimary',
-    fontSize: 2,
+    fontSize: 'sm',
   },
   delete: {
     variant: 'buttons.buttonPrimary',
@@ -157,7 +157,7 @@ const buttons = {
     variant: 'buttons.btnBig',
     bg: 'primary.9',
     color: 'primary.1',
-    fontSize: 2,
+    fontSize: 'sm',
     borderRadius: 6,
     cursor: 'pointer',
     px: 3,
@@ -197,7 +197,7 @@ const buttons = {
     bg: 'neutral.100',
     cursor: 'pointer',
     color: 'gray.1000',
-    fontSize: 2,
+    fontSize: 'sm',
     borderRadius: 6,
     border: 'solid 1px',
     borderColor: 'border',
@@ -219,13 +219,13 @@ const buttons = {
   btnSmall: {
     cursor: 'pointer',
     variant: 'buttons.btnSecondary',
-    fontSize: 0,
+    fontSize: 'xxs',
     p: 1,
     px: 2,
   },
   btnPrimaryLarge: {
     variant: 'buttons.btnBig',
-    fontSize: 1,
+    fontSize: 'xs',
     p: 2,
     px: 3,
     border: 0,
@@ -248,7 +248,7 @@ const buttons = {
   buttonApproval: {
     ml: 3,
     bg: 'neutral.100',
-    fontSize: 0,
+    fontSize: 'xxs',
     fontWeight: 600,
     color: 'gray.800',
     border: 'solid 1px ',
@@ -271,7 +271,7 @@ const buttons = {
   },
   btnLarge: {
     // variant: 'buttons.btnBig',
-    fontSize: 3,
+    fontSize: 'base',
     p: 2,
     px: 3,
     border: 0,

@@ -27,7 +27,7 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
                 bg: formStep >= index ? 'green.600' : 'gray.100',
                 borderRadius: '50%',
               }}>
-              <Text sx={{ fontSize: 1, fontWeight: 500 }}>{index + 1}</Text>
+              <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>{index + 1}</Text>
             </Flex>
             <Text
               sx={{ ml: '10px', cursor: 'pointer', color: 'gray.1100' }}

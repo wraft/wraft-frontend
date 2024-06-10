@@ -121,7 +121,7 @@ const RolesList = ({
                     sx={{
                       cursor: 'pointer',
                       ml: '24px',
-                      fontSize: '12px',
+                      fontSize: 'xs',
                       fontWeight: 'heading',
                     }}>
                     ROLE NAME

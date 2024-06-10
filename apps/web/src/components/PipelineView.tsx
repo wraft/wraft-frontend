@@ -110,7 +110,7 @@ export interface IStage {
 // {fields &&
 //   fields.map((_p: any) => (
 //     <Box>
-//       <Text sx={{ fontSize: 1, mb:2 , mt: 1, fontWeight: 600}}>Form</Text>
+//       <Text sx={{ fontSize: 'xs', mb:2 , mt: 1, fontWeight: 600}}>Form</Text>
 //       { _p.map((pp: any) => (
 //         <Text as="code">{pp.name}</Text>
 //       ))}
@@ -322,7 +322,7 @@ const PipelineView = () => {
                 {activePipeline.name}
               </Text>
               {/* <Box>
-                <Text sx={{ fontSize: 0, color: 'text', mb: 2 }}>
+                <Text sx={{ fontSize: 'xxs', color: 'text', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
@@ -369,7 +369,7 @@ const PipelineView = () => {
               <Text
                 sx={{
                   // p: 2,
-                  fontSize: 0,
+                  fontSize: 'xxs',
                   color: 'text',
                   letterSpacing: '-0.2',
                   fontWeight: 100,
@@ -439,7 +439,7 @@ const PipelineView = () => {
                 )}
               </Box>
               <Box>
-                <Text sx={{ fontSize: 3, pt: 3, pb: 2 }}>
+                <Text sx={{ fontSize: 'base', pt: 3, pb: 2 }}>
                   Stages {activePipeline.stages.length}
                 </Text>
                 <Flex>
@@ -490,7 +490,7 @@ const PipelineView = () => {
                           <Box sx={{ paddingLeft: 3, pl: 4, pb: 4, pt: 0 }}>
                             <Text
                               sx={{
-                                fontSize: 2,
+                                fontSize: 'sm',
                                 fontWeight: 600,
                                 color: 'text',
                               }}
@@ -533,7 +533,7 @@ const PipelineView = () => {
                               sx={{
                                 p: 0,
                                 fontFamily: 'monospace',
-                                fontSize: 0,
+                                fontSize: 'xxs',
                                 color:
                                   m.state === 'success' ? 'green' : 'orange',
                                 borderRadius: 0,

@@ -244,7 +244,7 @@ export default function ImageUploader({
               marginTop: 2,
               //   borderRadius: '0.125rem',
               borderWidth: '1px',
-              fontSize: 2,
+              fontSize: 'sm',
               lineHeight: ['1rem', '1rem'],
               fontWeight: 500,
               border: 'dotted 2px #eee',

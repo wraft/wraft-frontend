@@ -80,7 +80,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
               type="submit"
               variant="buttonPrimary"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
                 mr: 3,
               }}>
@@ -92,7 +92,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
               }}
               variant="cancel"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
               }}>
               Cancel

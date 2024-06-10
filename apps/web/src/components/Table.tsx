@@ -15,7 +15,7 @@ export const styles = {
   } as ThemeUIStyleObject,
   thead: {
     // bg: 'gray.100',
-    fontSize: 0,
+    fontSize: 'xxs',
     textTransform: 'uppercase',
     border: '1px solid',
     borderColor: 'border',
@@ -56,7 +56,7 @@ export const Table: React.FC<TableProps> = ({ options, plugins }) => {
       <Box
         as="thead"
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           textTransform: 'uppercase',
           border: '1px solid',
           borderColor: 'border',

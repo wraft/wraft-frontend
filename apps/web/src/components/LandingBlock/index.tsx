@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
+import { Box, Flex, Text, Container, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
 
 import Footer from 'components/Footer';
@@ -13,13 +13,7 @@ const LandingBlockWrapper = styled(Box)`
   --lp-text-color: 16px;
   font-family: 'Mona Sans', sans-serif;
 `;
-const H1 = styled(Heading)`
-  font-size: 66px;
-  font-weight: 600;
-  line-height: 80px;
-  margin: 0;
-  white-space: pre-line;
-`;
+
 const H2 = styled.h2`
   font-size: 48px;
   font-weight: 600;
@@ -100,12 +94,15 @@ const LandingBlock = () => {
         </Box>
         <Box sx={{ textAlign: 'center', position: 'relative' }}>
           <Box sx={{ maxWidth: '80ch', mx: 'auto', mb: 2 }}>
-            <Text as="h1" pt="124px" sx={{ fontSize: 8, lineHeight: 1, mb: 3 }}>
+            <Text
+              as="h1"
+              pt="124px"
+              sx={{ fontSize: '5xl', lineHeight: 1, mb: 3 }}>
               {data.main_section?.title}
             </Text>
             <Text
               as="h2"
-              sx={{ fontSize: 6, fontWeight: 400, color: 'gray.1000' }}>
+              sx={{ fontSize: '3xl', fontWeight: 400, color: 'gray.1000' }}>
               {data.main_section?.sub_title}
             </Text>
           </Box>
@@ -134,10 +131,10 @@ const LandingBlock = () => {
           <Box sx={{ textAlign: 'left', mb: '90px', mt: 6 }}>
             <Text
               as="h1"
-              sx={{ fontSize: 6, fontWeight: 600, color: 'gray.1200' }}>
+              sx={{ fontSize: '3xl', fontWeight: 600, color: 'gray.1200' }}>
               Open Document Lifecycle
             </Text>
-            <Text sx={{ fontSize: 5, fontWeight: 400, color: 'gray.1000' }}>
+            <Text sx={{ fontSize: '2xl', fontWeight: 400, color: 'gray.1000' }}>
               Future proof way to sustain your companies document, end-to-end.
             </Text>
           </Box>
@@ -176,14 +173,14 @@ const LandingBlock = () => {
                 <Box className="future_block_left">
                   <Box
                     className="future_block_title"
-                    sx={{ fontSize: 3, color: 'gray.900' }}>
+                    sx={{ fontSize: 'base', color: 'gray.900' }}>
                     {item.subtitle}
                   </Box>
-                  <Text as="h3" sx={{ fontSize: 5, mb: 2 }}>
+                  <Text as="h3" sx={{ fontSize: '2xl', mb: 2 }}>
                     {item.title}
                   </Text>
 
-                  <Box sx={{ fontSize: 4, mr: 4 }}>{item.des}</Box>
+                  <Box sx={{ fontSize: 'xl', mr: 4 }}>{item.des}</Box>
                 </Box>
 
                 <Box className="future_block_right" sx={{ width: '50%' }}>
@@ -358,10 +355,12 @@ const LandingBlock = () => {
                         py: 3,
                         height: '250px',
                       }}>
-                      <Box as="h5" sx={{ fontSize: 4, mb: '16px' }}>
+                      <Box as="h5" sx={{ fontSize: 'xl', mb: '16px' }}>
                         {item.title}
                       </Box>
-                      <Box sx={{ fontSize: 3, mb: '16px' }}>{item.des}</Box>
+                      <Box sx={{ fontSize: 'base', mb: '16px' }}>
+                        {item.des}
+                      </Box>
                     </Box>
                   </Flex>
                 ))}
