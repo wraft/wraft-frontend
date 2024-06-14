@@ -87,6 +87,7 @@ const Form = ({
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
   const [pipeMapId, setPipeMapId] = useState<any>();
   const [destinationData, setDestinationData] = useState<any>([]);
+  const [stageMap, setStageMap] = useState<any>([]);
 
   const {
     register,
@@ -100,24 +101,14 @@ const Form = ({
 
   const isUpdate = cId ? true : false;
 
+  console.log(stageMap, 'logstage');
+
   const loadTemplate = () => {
     fetchAPI(`data_templates`)
       .then((data: any) => {
         setLoading(true);
         const res: any[] = data.data_templates;
-
-        if (pipelineData) {
-          const contentTypeIds = pipelineData.stages.map(
-            (stage: any) => stage.content_type.id,
-          );
-
-          const filteredTemplates = res.filter((template) => {
-            return !contentTypeIds.includes(template.content_type.id);
-          });
-          setTemplates(filteredTemplates);
-        } else {
-          setTemplates(res);
-        }
+        setTemplates(res);
       })
       .catch(() => {
         setLoading(true);
@@ -282,6 +273,7 @@ const Form = ({
   useEffect(() => {
     if (id && pipeStageDetails && pipeStageDetails.form_mapping[0]) {
       setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
+      setStageMap(pipeStageDetails.form_mapping[0].mapping);
     }
   }, [pipeStageDetails, id]);
 
@@ -475,7 +467,9 @@ const Form = ({
                             // onChange={() => handleSubmit(onSubmit)()}
                           >
                             <option disabled selected value={''}>
-                              select an option
+                              {stageMap[index]
+                                ? stageMap[index].destination.name
+                                : 'Select an option'}
                             </option>
                             {tempField &&
                               tempField.length > 0 &&
