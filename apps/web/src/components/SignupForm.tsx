@@ -46,8 +46,9 @@ const SignUpPage = () => {
         setShowSuccess(true);
         return 'Successfully added to waiting list';
       },
-      error: 'Failed to add to waiting list',
+      error: (error) => error.errors,
     });
+    console.log(waitingListRequest, 'log');
   };
 
   const handleGoogleSignIn = () => {
