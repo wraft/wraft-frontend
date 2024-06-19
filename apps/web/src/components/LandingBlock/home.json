@@ -71,7 +71,7 @@
         "title": "Document generation",
         "subtitle": "Easy and Fast",
         "des": "Easy and fast document generation for everyone. Our user-friendly platform streamlines the process, empowering you to create professional documents effortlessly with just a few clicks.",        
-        "image": "",
+        "image": "/document_generation.png",
         "link": ""
       },
       {
@@ -79,7 +79,7 @@
         "title": "Pipelines",
         "subtitle": "Automate complex flows",
         "des": "Streamline high-volume document creation with our pipeline functionality. Automating repetitive tasks, you can generate tailored documents en masse with unparalleled efficiency.",
-        "image": "",
+        "image": "/pipeline-screen.png",
         "link": ""
       },
       {
@@ -87,7 +87,7 @@
         "title": "E-signature",
         "subtitle": "Secure and Private",
         "des": "Safeguard your documents with our iron-clad e-signature solution. Digitally sign and secure files, ensuring privacy and legal validity with industry-leading encryption protocols.",
-        "image": "",
+        "image": "/document_generation.png",
         "link": ""
       },
       {
@@ -95,7 +95,7 @@
         "title": "Approval system",
         "subtitle": "Build workflows",
         "des": "Tailor document approval processes to your unique needs. Our flexible workflow system allows you to define multi-level review cycles effortlessly. Co",
-        "image": "",
+        "image": "/approval-dasboard.png",
         "link": ""
       }
     ]

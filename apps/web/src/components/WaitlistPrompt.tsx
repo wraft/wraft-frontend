@@ -22,8 +22,7 @@ const WaitlistPrompt: React.FC = () => {
           Hang tight!
         </Heading>
         <Heading
-          as="h5"
-          variant="styles.h5Bold"
+          as="h4"
           sx={{ mb: '28px', textAlign: 'center', color: 'gray.900' }}>
           You have been added to our waitlist
         </Heading>
@@ -37,9 +36,7 @@ const WaitlistPrompt: React.FC = () => {
             priority
           />
         </Box>
-        <Text
-          variant="styles.h5Medium"
-          sx={{ color: 'gray.900', textAlign: 'center' }}>
+        <Text sx={{ color: 'gray.900', textAlign: 'center' }}>
           Thanks for showing interest in Wraft, we will reach out to you once
           the availability opens up.
         </Text>

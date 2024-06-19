@@ -66,7 +66,7 @@ const Index = () => {
           as="p"
           variant="pM"
           sx={{
-            color: 'gray.400',
+            color: 'gray.900',
             mb: '48px',
           }}>
           We will send you a verification link to your registered email.
