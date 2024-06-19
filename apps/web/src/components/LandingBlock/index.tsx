@@ -186,10 +186,14 @@ const LandingBlock = () => {
                 <Box className="future_block_right" sx={{ width: '50%' }}>
                   <Image
                     alt="Home page visual representation"
-                    src="/home02.png"
+                    src={item.image ? item.image : '/home02.png'}
                     width={600}
                     height={400}
-                    style={{ width: '100%', height: 'auto' }}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '4px',
+                    }}
                   />
                 </Box>
               </Flex>

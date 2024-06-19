@@ -67,6 +67,7 @@ const Field: React.FC<Props> = ({
             p: p,
             color: color,
             fontWeight: fontWeight,
+            WebkitTextFillColor: 'var(--theme-ui-colors-gray-a1100)',
             fontSize: fontSize,
             ':disabled': {
               [view ? 'color' : '']: 'text',

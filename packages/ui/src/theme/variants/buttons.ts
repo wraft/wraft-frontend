@@ -47,7 +47,7 @@ const buttons = {
   },
   primary: {
     backgroundColor: 'primary',
-    color: 'green.100',
+    color: '#fff',
     border: '1px solid',
     borderColor: 'primary',
     borderRadius: '4px',
@@ -107,8 +107,8 @@ const buttons = {
       color: 'gray.200',
       bg: 'neutral.200',
     },
-    color: 'white',
-    backgroundColor: 'green.700',
+    color: '#fff',
+    backgroundColor: 'primary.9',
   },
   buttonSecondary: {
     variant: 'buttons.buttonPrimary',
