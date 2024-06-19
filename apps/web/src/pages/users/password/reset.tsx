@@ -8,6 +8,7 @@ import { z } from 'zod';
 
 import Field from 'components/Field';
 import Link from 'components/NavLink';
+import { BrandLogo } from 'components/Icons';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
 
@@ -60,14 +61,9 @@ const Index = () => {
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
             <Link href="/">
-              <Image
-                width={116}
-                height={35}
-                src={Logo}
-                alt="Wraft Logo"
-                className=""
-                priority
-              />
+              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+                <BrandLogo width="7rem" height="3rem" />
+              </Box>
             </Link>
           </Box>
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>

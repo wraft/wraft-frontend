@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
@@ -7,9 +6,8 @@ import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import CountdownTimer from 'components/common/CountDownTimer';
 import Field from 'components/Field';
 import Link from 'components/NavLink';
+import { BrandLogo } from 'components/Icons';
 import { postAPI } from 'utils/models';
-
-import Logo from '../../../public/Logo.svg';
 
 type FormValues = {
   email: string;
@@ -43,14 +41,9 @@ const Index = () => {
     <Flex variant="onboardingFormPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
         <Link href="/">
-          <Image
-            width={116}
-            height={35}
-            src={Logo}
-            alt="Wraft Logo"
-            className=""
-            priority
-          />
+          <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+            <BrandLogo width="7rem" height="3rem" />
+          </Box>
         </Link>
       </Box>
 
