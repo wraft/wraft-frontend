@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -13,8 +12,6 @@ import PasswordCreated from 'components/PasswordCreated';
 import { BrandLogo } from 'components/Icons';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
-
-import Logo from '../../../../public/Logo.svg';
 
 const schema = z
   .object({
