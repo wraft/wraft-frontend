@@ -18,6 +18,7 @@ import { userLogin } from '../utils/models';
 import { emailPattern } from '../utils/zodPatterns';
 import Field from './Field';
 import Link from './NavLink';
+import { BrandLogo } from './Icons';
 
 export interface IField {
   name: string;
@@ -108,14 +109,9 @@ const UserLoginForm = () => {
     <Flex variant="onboardingFormPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
         <Link href="/">
-          <Image
-            src={Logo}
-            alt="Wraft Logo"
-            width={116}
-            height={35}
-            className=""
-            priority
-          />
+          <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+            <BrandLogo width="7rem" height="3rem" />
+          </Box>
         </Link>
       </Box>
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>

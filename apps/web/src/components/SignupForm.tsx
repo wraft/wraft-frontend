@@ -8,11 +8,11 @@ import { Flex, Box, Heading, Button, Text, Link } from 'theme-ui';
 import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
-import Logo from '../../public/Logo.svg';
 import WaitlistPrompt from '../components/WaitlistPrompt';
 import { postAPI } from '../utils/models';
 import { emailPattern } from '../utils/zodPatterns';
 import Field from './Field';
+import { BrandLogo } from './Icons';
 
 type FormValues = {
   firstName: string;
@@ -63,14 +63,9 @@ const SignUpPage = () => {
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
             <Link href="/">
-              <Image
-                src={Logo}
-                alt="Wraft Logo"
-                width={116}
-                height={35}
-                className=""
-                priority
-              />
+              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+                <BrandLogo width="7rem" height="3rem" />
+              </Box>
             </Link>
           </Box>
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>

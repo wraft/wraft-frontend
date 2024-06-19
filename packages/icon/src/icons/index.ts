@@ -36,6 +36,7 @@ export { default as InkIcon } from './Ink';
 export { default as ItalicsIcon } from './Italics';
 export { default as LeftIcon } from './Left';
 export { default as LockIcon } from './Lock';
+export { default as LogoIcon } from './Logo';
 export { default as MailIcon } from './Mail';
 export { default as ManageIcon } from './Manage';
 export { default as MultipleChoiceIcon } from './MultipleChoice';
