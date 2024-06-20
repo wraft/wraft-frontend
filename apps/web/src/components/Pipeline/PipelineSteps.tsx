@@ -55,8 +55,6 @@ const Form = ({ rerender, setRerender }: Props) => {
     setPipelineStageTemplateId(pipelineStageTemplateId);
   };
 
-  console.log(pipelineData, 'logpipe');
-
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -74,8 +72,6 @@ const Form = ({ rerender, setRerender }: Props) => {
   };
 
   const onDelete = (stageId: any) => {
-    console.log(stageId, 'logstageid');
-
     deleteAPI(`stages/${stageId}`)
       .then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
