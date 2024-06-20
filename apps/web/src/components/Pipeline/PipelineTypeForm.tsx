@@ -90,10 +90,8 @@ const Form = ({
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
   const [pipeMapId, setPipeMapId] = useState<any>();
-  const [destinationData, setDestinationData] = useState<any>([]);
+  const [sourceData, setSourceData] = useState<any>([]);
   const [stageMap, setStageMap] = useState<any>([]);
-
-  console.log(selectedPipelineStageId, 'logselectected');
 
   const {
     register,
@@ -220,7 +218,7 @@ const Form = ({
   const onSubmit = () => {
     const sampleD = {
       pipe_stage_id: pipeStageDetails.id,
-      mapping: destinationData,
+      mapping: sourceData,
     };
     if (selectedPipelineStageId && pipeMapId) {
       putAPI(`forms/${formId}/mapping/${pipeMapId}`, sampleD)
@@ -275,7 +273,6 @@ const Form = ({
   };
 
   const loadTempType = (id: string) => {
-    console.log(id, 'logidddd');
     fetchAPI(`data_templates/${id}`).then((data: any) => {
       loadTempTypeSuccess(data);
     });
@@ -288,8 +285,6 @@ const Form = ({
   };
 
   useEffect(() => {
-    console.log(pipeStageDetails, 'logmap');
-
     if (
       selectedPipelineStageId &&
       pipeStageDetails &&
@@ -297,6 +292,7 @@ const Form = ({
     ) {
       setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
       setStageMap(pipeStageDetails.form_mapping[0].mapping);
+      setSourceData(pipeStageDetails.form_mapping[0].mapping);
     }
   }, [pipeStageDetails, selectedPipelineStageId]);
 
@@ -305,7 +301,6 @@ const Form = ({
     loadForm();
     ctypeChange();
     if (pipelineData && pipelineData.stages && pipelineStageTemplateId) {
-      console.log('logenneyan');
       loadTempType(pipelineStageTemplateId);
     }
   }, [selectedPipelineStageId]);
@@ -324,9 +319,10 @@ const Form = ({
   // function to organise the values which needed to for pipeline mappping
 
   const handleSelectChange = (index: any, selectedOption: any) => {
-    const selectedDestination = formField.find((m) => m.id === selectedOption);
-    if (selectedDestination) {
-      setDestinationData((prevData: any) => {
+    const selectedSource = formField.find((m) => m.id === selectedOption);
+
+    if (selectedSource) {
+      setSourceData((prevData: any) => {
         const newData = [...prevData];
         newData[index] = {
           destination: {
@@ -334,8 +330,8 @@ const Form = ({
             name: tempField[index].name,
           },
           source: {
-            id: selectedDestination.id,
-            name: selectedDestination.name,
+            id: selectedSource.id,
+            name: selectedSource.name,
           },
         };
         return newData;
@@ -477,47 +473,6 @@ const Form = ({
               <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
                 <Box>
                   <Label>Field Name</Label>
-                  {/* {formField.map((field, index) => (
-                    <Box key={field.id}>
-                      <Flex sx={{ alignItems: 'center', pb: '2' }}>
-                        <Box sx={{ mr: 2 }}>
-                          <Field
-                            name={`fields.${index}.name`}
-                            register={register}
-                            defaultValue={(field && field.name) || ''}
-                          />
-                        </Box>
-                        <ArrowRightIcon />
-                        <Box sx={{ flexGrow: 1, ml: 2 }}>
-                          <Select
-                            {...register(
-                              `fields.${index}.destination` as const,
-                              {
-                                required: true,
-                              },
-                            )}
-                            onChange={(e) =>
-                              handleSelectChange(index, e.target.value)
-                            }
-                            // onChange={() => handleSubmit(onSubmit)()}
-                          >
-                            <option disabled selected value={''}>
-                              {stageMap[index]
-                                ? stageMap[index].destination.name
-                                : 'Select an option'}
-                            </option>
-                            {tempField &&
-                              tempField.length > 0 &&
-                              tempField.map((m: any) => (
-                                <option value={m.id} key={m.id}>
-                                  {m.name}
-                                </option>
-                              ))}
-                          </Select>
-                        </Box>
-                      </Flex>
-                    </Box>
-                  ))} */}
                   {tempField &&
                     tempField.length > 0 &&
                     tempField.map((field, index) => (
@@ -568,7 +523,7 @@ const Form = ({
         <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
           <Flex>
             {pipelineData && (
-              <Flex>
+              <Flex sx={{ gap: 1 }}>
                 {formStep >= 1 && (
                   <Button variant="secondary" type="button" onClick={prev}>
                     Prev
