@@ -1,4 +1,4 @@
-import { border, borderRadius } from "@xstyled/emotion";
+import { border, borderRadius } from '@xstyled/emotion';
 
 const styles = {
   root: {
@@ -122,8 +122,7 @@ const styles = {
     maxWidth: '100%',
   },
   editorBody: {
-    '.remirror-theme h1': {},
-
+    '.remirror-theme h1': {},    
     '.remirror-editor-wrapper': {},
     '.remirror-theme .ProseMirror': {
       outline: 'none',
