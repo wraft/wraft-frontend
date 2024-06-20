@@ -416,10 +416,10 @@ const LandingBlock = () => {
         <Box
           sx={{ background: 'green.300', p: '64px', borderRadius: '0.75rem' }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Text as="h2" sx={{ fontSize: "1.25rem" }}>
+            <Text as="h2" sx={{ fontSize: '1.25rem' }}>
               {data?.hosting_section?.title}
             </Text>
-            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: "1.25rem" }}>
+            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: '1.25rem' }}>
               {data?.hosting_section?.sub_title}
             </Text>
           </Box>
