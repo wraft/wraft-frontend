@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+import { CloseIcon } from '@wraft/icon';
+import { Button } from '@wraft/ui';
 
 import { uuidRegex } from 'utils/regex';
 
@@ -49,8 +51,9 @@ interface Props {
   setIsOpen?: (e: any) => void;
   pipelineData?: any;
   setRerender: any;
-  id?: any;
+  selectedPipelineStageId?: any;
   pipeStageName?: any;
+  pipelineStageTemplateId?: any;
 }
 
 const schema = z.object({
@@ -72,8 +75,9 @@ const Form = ({
   setIsOpen,
   pipelineData,
   setRerender,
-  id,
+  selectedPipelineStageId,
   pipeStageName,
+  pipelineStageTemplateId,
 }: Props) => {
   const [formStep, setFormStep] = useState(step);
   const [source, setSource] = useState<any>(['Wraft Form']);
@@ -86,7 +90,7 @@ const Form = ({
   const [formId, setFormId] = useState<any>();
   const [pipeStageDetails, setPipeStageDetails] = useState<any>();
   const [pipeMapId, setPipeMapId] = useState<any>();
-  const [destinationData, setDestinationData] = useState<any>([]);
+  const [sourceData, setSourceData] = useState<any>([]);
   const [stageMap, setStageMap] = useState<any>([]);
 
   const {
@@ -101,14 +105,23 @@ const Form = ({
 
   const isUpdate = cId ? true : false;
 
-  console.log(stageMap, 'logstage');
-
   const loadTemplate = () => {
     fetchAPI(`data_templates`)
       .then((data: any) => {
         setLoading(true);
         const res: any[] = data.data_templates;
-        setTemplates(res);
+        if (pipelineData) {
+          const templateId = pipelineData.stages.map(
+            (stage: any) => stage.data_template.id,
+          );
+
+          const filteredTemplates = res.filter((template) => {
+            return !templateId.includes(template.id);
+          });
+          setTemplates(filteredTemplates);
+        } else {
+          setTemplates(res);
+        }
       })
       .catch(() => {
         setLoading(true);
@@ -162,8 +175,8 @@ const Form = ({
         content_type_id: ctemplate.content_type.id,
       };
 
-      if (id) {
-        putAPI(`stages/${id}`, sampleD)
+      if (selectedPipelineStageId) {
+        putAPI(`stages/${selectedPipelineStageId}`, sampleD)
           .then((res) => {
             setPipeStageDetails(res);
             toast.success('Stage Updated Successfully', {
@@ -205,9 +218,9 @@ const Form = ({
   const onSubmit = () => {
     const sampleD = {
       pipe_stage_id: pipeStageDetails.id,
-      mapping: destinationData,
+      mapping: sourceData,
     };
-    if (id) {
+    if (selectedPipelineStageId && pipeMapId) {
       putAPI(`forms/${formId}/mapping/${pipeMapId}`, sampleD)
         .then(() => {
           setIsOpen && setIsOpen(false);
@@ -267,25 +280,30 @@ const Form = ({
 
   const tempChange = (event: React.FormEvent<HTMLSelectElement>) => {
     const safeSearchTypeValue: string = event.currentTarget.value;
+
     loadTempType(safeSearchTypeValue);
   };
 
   useEffect(() => {
-    if (id && pipeStageDetails && pipeStageDetails.form_mapping[0]) {
+    if (
+      selectedPipelineStageId &&
+      pipeStageDetails &&
+      pipeStageDetails.form_mapping[0]
+    ) {
       setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
       setStageMap(pipeStageDetails.form_mapping[0].mapping);
+      setSourceData(pipeStageDetails.form_mapping[0].mapping);
     }
-  }, [pipeStageDetails, id]);
+  }, [pipeStageDetails, selectedPipelineStageId]);
 
   useEffect(() => {
     loadTemplate();
     loadForm();
     ctypeChange();
-    if (pipelineData && pipelineData.stages[0]) {
-      const defaultTemplateId = pipelineData.stages[0].data_template.id;
-      loadTempType(defaultTemplateId);
+    if (pipelineData && pipelineData.stages && pipelineStageTemplateId) {
+      loadTempType(pipelineStageTemplateId);
     }
-  }, []);
+  }, [selectedPipelineStageId]);
 
   function prev() {
     setFormStep((i) => i - 1);
@@ -301,18 +319,19 @@ const Form = ({
   // function to organise the values which needed to for pipeline mappping
 
   const handleSelectChange = (index: any, selectedOption: any) => {
-    const selectedDestination = tempField.find((m) => m.id === selectedOption);
-    if (selectedDestination) {
-      setDestinationData((prevData: any) => {
+    const selectedSource = formField.find((m) => m.id === selectedOption);
+
+    if (selectedSource) {
+      setSourceData((prevData: any) => {
         const newData = [...prevData];
         newData[index] = {
-          source: {
-            id: formField[index].id,
-            name: formField[index].name,
-          },
           destination: {
-            id: selectedDestination.id,
-            name: selectedDestination.name,
+            id: tempField[index].id,
+            name: tempField[index].name,
+          },
+          source: {
+            id: selectedSource.id,
+            name: selectedSource.name,
           },
         };
         return newData;
@@ -327,13 +346,24 @@ const Form = ({
         overflow: 'scroll',
         flexDirection: 'column',
       }}>
-      <Text
-        variant="pB"
-        sx={{
-          p: 4,
-        }}>
-        {pipelineData ? 'Create Stage' : 'Create Pipeline'}
-      </Text>
+      <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text
+          variant="pB"
+          sx={{
+            p: 4,
+          }}>
+          {selectedPipelineStageId
+            ? 'Edit Stage'
+            : pipelineData
+              ? 'Create Stage'
+              : 'Create Pipeline'}
+        </Text>
+        <CloseIcon
+          cursor="pointer"
+          onClick={() => setIsOpen && setIsOpen(false)}>
+          Close
+        </CloseIcon>
+      </Flex>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
       <Box sx={{ height: '100%' }} p={4} as="form">
         <Flex
@@ -419,12 +449,13 @@ const Form = ({
                   <Select
                     id="template_id"
                     {...register('template_id', { required: true })}
-                    onChange={(e) => tempChange(e)}>
+                    onChange={(e) => tempChange(e)}
+                    disabled={selectedPipelineStageId ? true : false}>
                     {
                       <option disabled selected>
-                        {pipelineData.stages[0]
-                          ? pipeStageName
-                          : 'select an option'}
+                        {!selectedPipelineStageId
+                          ? 'select an option'
+                          : pipeStageName}
                       </option>
                     }
                     {templates &&
@@ -442,47 +473,47 @@ const Form = ({
               <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
                 <Box>
                   <Label>Field Name</Label>
-                  {formField.map((field, index) => (
-                    <Box key={field.id}>
-                      <Flex sx={{ alignItems: 'center', pb: '2' }}>
-                        <Box sx={{ mr: 2 }}>
-                          <Field
-                            name={`fields.${index}.name`}
-                            register={register}
-                            defaultValue={(field && field.name) || ''}
-                          />
-                        </Box>
-                        <ArrowRightIcon />
-                        <Box sx={{ flexGrow: 1, ml: 2 }}>
-                          <Select
-                            {...register(
-                              `fields.${index}.destination` as const,
-                              {
+                  {tempField &&
+                    tempField.length > 0 &&
+                    tempField.map((field, index) => (
+                      <Box key={field.id}>
+                        <Flex sx={{ alignItems: 'center', pb: '2' }}>
+                          <Box sx={{ mr: 2 }}>
+                            <Field
+                              name={`fields.${index}.name`}
+                              register={register}
+                              defaultValue={(field && field.name) || ''}
+                              disable
+                            />
+                          </Box>
+                          <ArrowRightIcon />
+                          <Box sx={{ flexGrow: 1, ml: 2 }}>
+                            <Select
+                              {...register(`fields.${index}.source` as const, {
                                 required: true,
-                              },
-                            )}
-                            onChange={(e) =>
-                              handleSelectChange(index, e.target.value)
-                            }
-                            // onChange={() => handleSubmit(onSubmit)()}
-                          >
-                            <option disabled selected value={''}>
-                              {stageMap[index]
-                                ? stageMap[index].destination.name
-                                : 'Select an option'}
-                            </option>
-                            {tempField &&
-                              tempField.length > 0 &&
-                              tempField.map((m: any) => (
-                                <option value={m.id} key={m.id}>
-                                  {m.name}
-                                </option>
-                              ))}
-                          </Select>
-                        </Box>
-                      </Flex>
-                    </Box>
-                  ))}
+                              })}
+                              onChange={(e) =>
+                                handleSelectChange(index, e.target.value)
+                              }
+                              // onChange={() => handleSubmit(onSubmit)()}
+                            >
+                              <option disabled selected value={''}>
+                                {stageMap[index]
+                                  ? stageMap[index].source.name
+                                  : 'Select an option'}
+                              </option>
+                              {formField &&
+                                formField.length > 0 &&
+                                formField.map((m: any) => (
+                                  <option value={m.id} key={m.id}>
+                                    {m.name}
+                                  </option>
+                                ))}
+                            </Select>
+                          </Box>
+                        </Flex>
+                      </Box>
+                    ))}
                 </Box>
               </Box>
             )}
@@ -492,39 +523,28 @@ const Form = ({
         <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
           <Flex>
             {pipelineData && (
-              <Flex>
-                <Button
-                  sx={{
-                    display: formStep >= 1 ? 'block' : 'none',
-                  }}
-                  variant="buttonSecondary"
-                  type="button"
-                  onClick={prev}>
-                  Prev
-                </Button>
-                <Button
-                  ml={2}
-                  sx={{
-                    display: formStep >= 1 ? 'block' : 'none',
-                  }}
-                  variant="buttonPrimary"
-                  type="button"
-                  onClick={onSubmit}>
-                  Add
-                </Button>
+              <Flex sx={{ gap: 1 }}>
+                {formStep >= 1 && (
+                  <Button variant="secondary" type="button" onClick={prev}>
+                    Prev
+                  </Button>
+                )}
+                {formStep >= 1 && (
+                  <Button variant="primary" type="button" onClick={onSubmit}>
+                    {stageMap && stageMap.length > 0 ? 'Update' : 'Add'}
+                  </Button>
+                )}
               </Flex>
             )}
-            <Button
-              disabled={pipelineData ? false : !isValid}
-              ml={2}
-              sx={{
-                display: formStep == 0 ? 'block' : 'none',
-              }}
-              type="button"
-              onClick={pipelineData ? next : handleSubmit(createpipeline)}
-              variant="buttonPrimary">
-              {pipelineData ? 'Next' : 'Create'}
-            </Button>
+            {formStep == 0 && (
+              <Button
+                disabled={pipelineData ? false : !isValid}
+                type="button"
+                onClick={pipelineData ? next : handleSubmit(createpipeline)}
+                variant="primary">
+                {pipelineData ? 'Next' : 'Create'}
+              </Button>
+            )}
           </Flex>
         </Flex>
       </Box>
