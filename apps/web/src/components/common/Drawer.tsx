@@ -34,10 +34,14 @@ const drawerVariants = {
 
 export function Drawer({ open, setOpen, children, heading, footer }: Props) {
   const dialog = useDialogStore({ animated: true, open, setOpen });
+  const handleClose = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
 
   return (
     <>
       <Dialog
+        onClick={handleClose}
         store={dialog}
         as={Box}
         backdrop={<Box variant="layout.drawerBackdrop" />}>
