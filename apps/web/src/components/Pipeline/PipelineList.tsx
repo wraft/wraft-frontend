@@ -108,7 +108,10 @@ const Form = () => {
           <Table data={contents} columns={columns} isLoading={loading} />
         </Box>
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        setOpen={() => setIsOpen(false)}
+        disableHideOnInteractOutside={true}>
         {isOpen && (
           <PipelineTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
         )}
