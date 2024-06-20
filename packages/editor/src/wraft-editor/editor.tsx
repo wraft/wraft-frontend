@@ -12,6 +12,7 @@ import { AnyExtension, RemirrorEventListener } from 'remirror';
 import { Box } from 'theme-ui';
 
 import { HolderAtomPopupComponent } from './extension-holder/holder-popover';
+import { Toolbar } from './toolbar';
 
 export interface ContentState {
   readonly doc?: string;
@@ -50,7 +51,7 @@ const HolderSuggestComponent = ({ tokens }: any) => {
  * @returns
  */
 export function ContentEditor({
-  editor: { manager, state, getContext},
+  editor: { manager, state, getContext },
   onChange,
   editable,
   tokens,
@@ -68,9 +69,35 @@ export function ContentEditor({
 
   console.log('[ContentEditor]', tokens);
 
-
   return (
-    <Box>
+    <Box
+      sx={{
+        'hr.pagebreak-': {
+          color: 'blue',
+          background: '#d3ead3',
+          height: '0.5rem',
+          border: 0,
+          marginTop: '1rem',
+          marginBottom: '1rem',
+        },
+        '.remirror-editor table': {
+          my: 2,
+        },
+        '.remirror-editor th': {
+          textAlign: 'left',
+          paddingLeft: '15px',
+          paddingTop: '0px',
+          margin: 0,
+          bg: 'gray.400',
+        },
+
+        '.remirror-editor tr td': {
+          textAlign: 'left',
+          paddingLeft: '15px',
+          paddingTop: '0px',
+          margin: 0,
+        },
+      }}>
       <AllStyledComponent theme={theme}>
         <ThemeProvider
           theme={{
@@ -96,6 +123,7 @@ export function ContentEditor({
             state={state}
             onChange={onChange}
             editable={editable}>
+            {editable && <Toolbar />}
             <EditorComponent />
             <HolderSuggestComponent tokens={tokens} />
           </Remirror>
