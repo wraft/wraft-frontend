@@ -3,9 +3,9 @@ import Router, { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
-import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
 
+import { Drawer } from '../common/Drawer';
 import { deleteAPI, fetchAPI } from '../../utils/models';
 import PipelineTypeForm from './PipelineTypeForm';
 import Modal from '../Modal';
@@ -38,18 +38,24 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [pipelineData, setPipelineData] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
-  const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
   const [pipeStageName, setPipeStageName] = useState<string>('');
-  const [selectedPipelineStage, setSelectedPipelineStage] =
+  const [pipelineStageTemplateId, setPipelineStageTemplateId] =
+    useState<string>('');
+  const [selectedPipelineStageId, setSelectedPipelineStageId] =
     useState<string>('');
 
-  const handlePipelineClick = (pipelineId: string, stagename: string) => {
-    console.log(pipelineId, 'logid');
-
+  const handlePipelineClick = (
+    pipelineStageId: string,
+    stagename: string,
+    pipelineStageTemplateId: string,
+  ) => {
     setIsOpen(true);
-    setSelectedPipelineId(pipelineId);
+    setSelectedPipelineStageId(pipelineStageId);
     setPipeStageName(stagename);
+    setPipelineStageTemplateId(pipelineStageTemplateId);
   };
+
+  console.log(pipelineData, 'logpipe');
 
   const router = useRouter();
 
@@ -64,10 +70,12 @@ const Form = ({ rerender, setRerender }: Props) => {
   const handleAddPipelineStep = () => {
     setIsOpen(true);
     // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
-    setSelectedPipelineId('');
+    setSelectedPipelineStageId('');
   };
 
   const onDelete = (stageId: any) => {
+    console.log(stageId, 'logstageid');
+
     deleteAPI(`stages/${stageId}`)
       .then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
@@ -90,16 +98,8 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text
-            as="p"
-            variant="pM"
-            onClick={() =>
-              handlePipelineClick(
-                row.original.id,
-                row.original.data_template.title,
-              )
-            }>
-            {row.original.data_template.title}
+          <Text as="p" variant="pM">
+            {row.original.data_template?.title}
           </Text>
         </Box>
       ),
@@ -109,8 +109,8 @@ const Form = ({ rerender, setRerender }: Props) => {
       id: 'content.status',
       header: (
         <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
+          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+            CONFIGURATION
           </Text>
         </Flex>
       ),
@@ -118,8 +118,8 @@ const Form = ({ rerender, setRerender }: Props) => {
         <Flex
           key={row.index}
           sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            Approved
+          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+            {row.original.form_mapping.length > 0 ? 'Complete' : 'Incomplete'}
           </Text>
         </Flex>
       ),
@@ -127,26 +127,38 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
     {
       id: 'content.state',
-      header: (
-        <Flex sx={{ display: 'flex' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
-          </Text>
-        </Flex>
-      ),
+      // header: (
+      //   <Flex sx={{ display: 'flex' }}>
+      //     <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+      //       STATE
+      //     </Text>
+      //   </Flex>
+      // ),
       cell: ({ row }: any) => (
-        <Flex key={row.index} sx={{ justifyContent: 'space-between' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+        <Flex key={row.index} sx={{ justifyContent: 'end' }}>
+          {/* <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
             Published
-          </Text>
-          <Box>
+          </Text> */}
+          <Flex sx={{ alignItems: 'center', gap: 1 }}>
+            <Button
+              variant="secondary"
+              onClick={() =>
+                handlePipelineClick(
+                  row.original.id,
+                  row.original.data_template.title,
+                  row.original.data_template.id,
+                )
+              }>
+              Edit
+            </Button>
             <DeleteIcon
+              cursor="pointer"
               onClick={() => {
                 setIsOpenDelete(true);
-                setSelectedPipelineStage(row.original.id);
+                setSelectedPipelineStageId(row.original.id);
               }}
             />
-          </Box>
+          </Flex>
         </Flex>
       ),
       enableSorting: false,
@@ -175,8 +187,9 @@ const Form = ({ rerender, setRerender }: Props) => {
             setIsOpen={setIsOpen}
             setRerender={setRerender}
             pipelineData={pipelineData}
-            id={selectedPipelineId}
+            selectedPipelineStageId={selectedPipelineStageId}
             pipeStageName={pipeStageName}
+            pipelineStageTemplateId={pipelineStageTemplateId}
           />
         )}
       </Drawer>
@@ -187,7 +200,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             text="Are you sure you want to delete ?"
             setOpen={setIsOpenDelete}
             onConfirmDelete={() => {
-              onDelete(selectedPipelineStage);
+              onDelete(selectedPipelineStageId);
               setIsOpenDelete(false);
             }}
           />
