@@ -193,6 +193,7 @@ const LandingBlock = () => {
                       width: '100%',
                       height: 'auto',
                       borderRadius: '4px',
+                      border: '1px solid rgb(214 218 225)',
                     }}
                   />
                 </Box>
