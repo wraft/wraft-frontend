@@ -13,6 +13,7 @@ type Props = {
   children: React.ReactNode;
   heading?: any;
   footer?: any;
+  disableHideOnInteractOutside?: any;
 };
 
 const drawerVariants = {
@@ -32,13 +33,22 @@ const drawerVariants = {
   },
 };
 
-export function Drawer({ open, setOpen, children, heading, footer }: Props) {
+export function Drawer({
+  open,
+  setOpen,
+  children,
+  heading,
+  footer,
+  disableHideOnInteractOutside = false,
+}: Props) {
+  console.log(open, 'logopen');
+
   const dialog = useDialogStore({ animated: true, open, setOpen });
 
   return (
     <>
       <Dialog
-        hideOnInteractOutside={false}
+        hideOnInteractOutside={!disableHideOnInteractOutside}
         store={dialog}
         as={Box}
         backdrop={<Box variant="layout.drawerBackdrop" />}>

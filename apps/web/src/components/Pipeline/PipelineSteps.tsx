@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { Drawer } from '../common/Drawer';
 import { deleteAPI, fetchAPI } from '../../utils/models';
+import { StateBadge } from '../Atoms';
 import PipelineTypeForm from './PipelineTypeForm';
 import Modal from '../Modal';
 import { ConfirmDelete } from '../common';
@@ -105,18 +106,23 @@ const Form = ({ rerender, setRerender }: Props) => {
       id: 'content.status',
       header: (
         <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
-            CONFIGURATION
-          </Text>
+          CONFIGURATION
         </Flex>
       ),
       cell: ({ row }: any) => (
         <Flex
           key={row.index}
           sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
-            {row.original.form_mapping.length > 0 ? 'Complete' : 'Incomplete'}
-          </Text>
+          <Box>
+            <StateBadge
+              name={
+                row.original.form_mapping.length > 0 ? 'Complete' : 'Incomplete'
+              }
+              color={
+                row.original.form_mapping.length > 0 ? 'green.a400' : 'red.200'
+              }
+            />
+          </Box>
         </Flex>
       ),
       enableSorting: false,
@@ -177,7 +183,10 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Button>
         </Box>
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        setOpen={() => setIsOpen(false)}
+        disableHideOnInteractOutside={true}>
         {isOpen && (
           <PipelineTypeForm
             setIsOpen={setIsOpen}

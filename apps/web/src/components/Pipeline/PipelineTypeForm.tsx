@@ -353,7 +353,7 @@ const Form = ({
             p: 4,
           }}>
           {selectedPipelineStageId
-            ? 'Update Stage'
+            ? 'Edit Stage'
             : pipelineData
               ? 'Create Stage'
               : 'Create Pipeline'}
@@ -531,7 +531,7 @@ const Form = ({
                 )}
                 {formStep >= 1 && (
                   <Button variant="primary" type="button" onClick={onSubmit}>
-                    Add
+                    {stageMap && stageMap.length > 0 ? 'Update' : 'Add'}
                   </Button>
                 )}
               </Flex>
