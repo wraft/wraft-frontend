@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Drawer, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../../utils/models';
@@ -26,9 +26,11 @@ export interface Pipeline {
 
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const mobileMenuDrawer = useDrawer();
 
   const loadData = () => {
     fetchAPI('pipelines?sort=inserted_at_desc').then((data: any) => {
@@ -98,7 +100,7 @@ const Form = () => {
     <Box>
       <PageHeader title="All Pipelines">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="buttonSecondary" onClick={() => setIsOpen(true)}>
+          <Button variant="buttonSecondary" onClick={() => setShowSearch(true)}>
             New Pipeline
           </Button>
         </Flex>
@@ -108,12 +110,12 @@ const Form = () => {
           <Table data={contents} columns={columns} isLoading={loading} />
         </Box>
       </Box>
-      <Drawer
-        open={isOpen}
-        setOpen={() => setIsOpen(false)}
-        disableHideOnInteractOutside={true}>
-        {isOpen && (
-          <PipelineTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+      <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
+        {showSearch && (
+          <PipelineTypeForm
+            setIsOpen={setShowSearch}
+            setRerender={setRerender}
+          />
         )}
       </Drawer>
     </Box>
