@@ -15,18 +15,21 @@ import {
   StrikeExtension,
   TextHighlightExtension,
   TrailingNodeExtension,
+  TableExtension,
+  HorizontalRuleExtension
 } from 'remirror/extensions';
 
 import { HolderAtomExtension } from './extension-holder/holder-extension';
+import { PageBreakExtension } from './extension-pagebreak/pagebreak-extension';
 /**
  * A list of allowed Remirror Extensions
  */
 const extensions =
   (placeholder: string = '') =>
   (): Array<AnyExtension> => [
-    new BoldExtension(),
+    new BoldExtension({}),
     new ItalicExtension(),
-    new HeadingExtension(),
+    new HeadingExtension({}),
     new CodeExtension(),
     new BlockquoteExtension(),
     new LinkExtension({ autoLink: true }),
@@ -37,12 +40,12 @@ const extensions =
       priority: ExtensionPriority.High,
       enableCollapsible: true,
     }),
-    new TrailingNodeExtension(),
+    new TrailingNodeExtension({}),
     new MarkdownExtension({
       copyAsMarkdown: false,
     }),
     new HardBreakExtension(),
-    new TextHighlightExtension(),
+    new TextHighlightExtension({}),
     new PlaceholderExtension({
       placeholder,
     }),
@@ -56,6 +59,9 @@ const extensions =
         { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
       ],
     }),
+    new TableExtension({}),
+    new HorizontalRuleExtension({}),
+    new PageBreakExtension({}),
   ];
 
 export default extensions;
