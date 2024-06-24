@@ -15,7 +15,7 @@ export const Toolbar = () => {
   const active = useActive(true);
 
   return (
-    <Flex sx={{ bg: 'red.100', gap: 1 }}>
+    <Flex sx={{ gap: 1, px: 2, py: 2 }}>
       <HeadingLevelButtonGroup showAll />
       <ToggleBlockquoteButton />
       <CommandButton

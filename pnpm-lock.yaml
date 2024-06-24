@@ -466,6 +466,9 @@ importers:
       '@floating-ui/react':
         specifier: ^0.26.5
         version: 0.26.16(react-dom@18.2.0)(react@18.2.0)
+      '@phosphor-icons/react':
+        specifier: ^2.1.5
+        version: 2.1.5(react-dom@18.2.0)(react@18.2.0)
       '@remirror/core':
         specifier: ^2.0.19
         version: 2.0.19(@remirror/pm@2.0.8)(@types/node@20.14.2)
