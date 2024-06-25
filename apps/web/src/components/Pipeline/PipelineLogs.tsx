@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Box, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 
-import { fetchAPI } from '../../utils/models';
-import { useRouter } from 'next/router';
 import { StateBadge } from 'components/Atoms';
+
+import { fetchAPI } from '../../utils/models';
 
 export interface Theme {
   total_pages: number;

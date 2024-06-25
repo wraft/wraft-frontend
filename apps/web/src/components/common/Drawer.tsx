@@ -41,7 +41,6 @@ export function Drawer({
   footer,
   disableHideOnInteractOutside = false,
 }: Props) {
-  
   const dialog = useDialogStore({ animated: true, open, setOpen });
 
   return (

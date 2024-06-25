@@ -156,7 +156,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             <DeleteIcon
               cursor="pointer"
               onClick={() => {
-                setIsOpenDelete(true);                
+                setIsOpenDelete(true);
                 setSelectedPipelineStageId(row.original.id);
               }}
             />
