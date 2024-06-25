@@ -3,6 +3,8 @@ import { Box, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 
 import { fetchAPI } from '../../utils/models';
+import { useRouter } from 'next/router';
+import { StateBadge } from 'components/Atoms';
 
 export interface Theme {
   total_pages: number;
@@ -27,7 +29,12 @@ type Props = {
 
 const Form = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
+  const [triggerHistory, setTriggerHistory] = useState<Array<[]>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const router = useRouter();
+
+  const cId: string = router.query.id as string;
 
   const loadData = () => {
     setLoading(true);
@@ -43,21 +50,39 @@ const Form = ({ rerender }: Props) => {
       });
   };
 
+  const loadPipelineHistory = () => {
+    setLoading(true);
+
+    fetchAPI(`pipelines/${cId}/triggers`)
+      .then((data: any) => {
+        const res = data.triggers;
+        setTriggerHistory(res);
+        console.log(res, 'logtrigger');
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     loadData();
+    loadPipelineHistory();
   }, [rerender]);
 
   const columns = [
     {
       id: 'content.name',
-      header: 'LAST RUN',
+      header: 'Start Time',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box
           sx={{ display: 'flex', justifyContent: 'flex-start' }}
           key={row.index}>
           <Text as="p" variant="pM">
-            2022-12-05,8:33:05
+            {row.original.start_time
+              ? row.original.start_time.replace('T', ' ').replace(/-/g, '/')
+              : ''}
           </Text>
         </Box>
       ),
@@ -65,18 +90,71 @@ const Form = ({ rerender }: Props) => {
     },
     {
       id: 'content.name',
+      header: 'End Time',
+      accessorKey: 'content.name',
+      cell: ({ row }: any) => (
+        <Box
+          sx={{ display: 'flex', justifyContent: 'flex-start' }}
+          key={row.index}>
+          <Text as="p" variant="pM">
+            {row.original.end_time
+              ? row.original.end_time.replace('T', ' ').replace(/-/g, '/')
+              : ''}
+          </Text>
+        </Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.status',
       header: (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Text as="p" variant="pS">
-            Triggered
+            Status
+          </Text>
+        </Box>
+      ),
+      accessorKey: 'content.status',
+      cell: ({ row }: any) => (
+        <Box
+          sx={{ display: 'flex', justifyContent: 'flex-start' }}
+          key={row.index}>
+          <StateBadge
+            color={
+              row.original.state == 'pending'
+                ? 'orange.200'
+                : row.original.state == 'success'
+                  ? 'green.a400'
+                  : row.original.state == 'partially_completed'
+                    ? 'red.400'
+                    : 'orange.100'
+            }
+            name={row.original.state.replace(/_/g, ' ')}
+          />
+        </Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.name',
+      header: (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Text as="p" variant="pS">
+            Message
           </Text>
         </Box>
       ),
       accessorKey: 'content.name',
-      cell: () => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      cell: ({ row }: any) => (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Text as="p" variant="pM">
-            2
+            {row.original.state == 'pending'
+              ? 'Pipeline not triggered'
+              : row.original.state === 'partially_completed'
+                ? 'Build failed'
+                : row.original.state === 'success'
+                  ? 'Build complete'
+                  : 'Build in progress'}
           </Text>
         </Box>
       ),
@@ -86,7 +164,7 @@ const Form = ({ rerender }: Props) => {
 
   return (
     <Box>
-      <Table data={contents} columns={columns} isLoading={loading} />
+      <Table data={triggerHistory} columns={columns} isLoading={loading} />
     </Box>
   );
 };
