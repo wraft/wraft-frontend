@@ -15,10 +15,10 @@ import {
   StrikeExtension,
   TextHighlightExtension,
   TrailingNodeExtension,
-  TableExtension,
   HorizontalRuleExtension
 } from 'remirror/extensions';
 
+import { TableExtension } from '@remirror/extension-react-tables';
 import { HolderAtomExtension } from './extension-holder/holder-extension';
 import { PageBreakExtension } from './extension-pagebreak/pagebreak-extension';
 /**

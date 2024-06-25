@@ -194,6 +194,7 @@ const UserLoginForm = () => {
               minWidth: '100%',
               bg: 'transparent',
               border: 'none',
+              color: 'gray.900',
             }}
             variant="buttons.googleLogin">
             <Image src={GoogleLogo} alt="" width={24} height={24} />
