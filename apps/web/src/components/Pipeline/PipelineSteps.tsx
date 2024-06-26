@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
+import { Button, Table, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { Drawer } from '../common/Drawer';
 import { deleteAPI, fetchAPI } from '../../utils/models';
 import { StateBadge } from '../Atoms';
 import PipelineTypeForm from './PipelineTypeForm';
@@ -37,7 +36,7 @@ const Form = ({ rerender, setRerender }: Props) => {
   const { theme } = useThemeUI();
   const [loading, setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
   const [pipeStageName, setPipeStageName] = useState<string>('');
   const [pipelineStageTemplateId, setPipelineStageTemplateId] =
@@ -45,12 +44,14 @@ const Form = ({ rerender, setRerender }: Props) => {
   const [selectedPipelineStageId, setSelectedPipelineStageId] =
     useState<string>('');
 
+  const mobileMenuDrawer = useDrawer();
+
   const handlePipelineClick = (
     pipelineStageId: string,
     stagename: string,
     pipelineStageTemplateId: string,
   ) => {
-    setIsOpen(true);
+    setShowSearch(!showSearch);
     setSelectedPipelineStageId(pipelineStageId);
     setPipeStageName(stagename);
     setPipelineStageTemplateId(pipelineStageTemplateId);
@@ -67,7 +68,7 @@ const Form = ({ rerender, setRerender }: Props) => {
   };
 
   const handleAddPipelineStep = () => {
-    setIsOpen(true);
+    setShowSearch(true);
     // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
     setSelectedPipelineStageId('');
   };
@@ -183,13 +184,10 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Button>
         </Box>
       </Box>
-      <Drawer
-        open={isOpen}
-        setOpen={() => setIsOpen(false)}
-        disableHideOnInteractOutside={true}>
-        {isOpen && (
+      <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
+        {showSearch && (
           <PipelineTypeForm
-            setIsOpen={setIsOpen}
+            setIsOpen={setShowSearch}
             setRerender={setRerender}
             pipelineData={pipelineData}
             selectedPipelineStageId={selectedPipelineStageId}

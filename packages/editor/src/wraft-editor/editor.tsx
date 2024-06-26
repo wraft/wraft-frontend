@@ -13,6 +13,7 @@ import { Box } from 'theme-ui';
 
 import { HolderAtomPopupComponent } from './extension-holder/holder-popover';
 import { Toolbar } from './toolbar';
+import { TableComponents } from '@remirror/extension-react-tables';
 
 export interface ContentState {
   readonly doc?: string;
@@ -72,6 +73,21 @@ export function ContentEditor({
   return (
     <Box
       sx={{
+        '.remirror-editor-wrapper': {
+          pt: 1,
+        },
+        '.remirror-theme .ProseMirror': {
+          borderRadius: '0 0 6px 6px',
+        },
+        '.remirror-theme .ProseMirror:focus': {
+          boxShadow: 'var(--theme-ui-colors-blue-100) 0px 0px 1px 0.2em',
+        },
+        '.remirror-theme': {
+          borderRadius: '6px',
+          padding: 0,
+          border: 'solid 1px',
+          borderColor: 'var(--theme-ui-colors-gray-700)'
+        },
         'hr.pagebreak-': {
           color: 'blue',
           background: '#d3ead3',
@@ -83,12 +99,12 @@ export function ContentEditor({
         '.remirror-editor table': {
           my: 2,
         },
+        
         '.remirror-editor th': {
-          textAlign: 'left',
-          paddingLeft: '15px',
+          textAlign: 'left',          
           paddingTop: '0px',
           margin: 0,
-          bg: 'gray.400',
+          background: 'var(--theme-ui-colors-gray-300)'
         },
 
         '.remirror-editor tr td': {
@@ -97,6 +113,12 @@ export function ContentEditor({
           paddingTop: '0px',
           margin: 0,
         },
+        '.remirror-table-tbody-with-controllers>tr:nth-of-type(n + 2) th': {
+          paddingLeft: '15px',
+        },
+        '.remirror-table-tbody-with-controllers th.remirror-table-controller': {
+
+        }
       }}>
       <AllStyledComponent theme={theme}>
         <ThemeProvider
@@ -126,6 +148,7 @@ export function ContentEditor({
             {editable && <Toolbar />}
             <EditorComponent />
             <HolderSuggestComponent tokens={tokens} />
+            <TableComponents/>
           </Remirror>
         </ThemeProvider>
       </AllStyledComponent>
