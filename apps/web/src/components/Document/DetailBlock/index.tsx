@@ -136,15 +136,6 @@ const ContentForm = (props: IContentForm) => {
     }
   };
 
-  // /**
-  //  * Toggle Title Edit
-  //  * @param map
-  //  */
-  // const toggleEdit = () => {
-  //   console.log('hi');
-  //   setTitleEdit(!showTitleEdit);
-  //   setShowTemplate(!showTemplate);
-  // };
   /**
    * Update mapping of users inputs from fields to an internal array with fields
    * @param data
@@ -180,10 +171,6 @@ const ContentForm = (props: IContentForm) => {
    * @param data
    */
   const onCreate = (data: any) => {
-    if (data?.info) {
-      // console.log('Failed Build', data.info);
-    }
-
     if (data?.content?.id) {
       toast.success('Saved Successfully', {
         duration: 1000,
@@ -192,8 +179,6 @@ const ContentForm = (props: IContentForm) => {
       Router.push(`/content/${data.content.id}`);
     }
   };
-
-  console.log('isDirty', isDirty);
 
   /**
    * On Submit
@@ -206,8 +191,6 @@ const ContentForm = (props: IContentForm) => {
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
     const json = editorRef.current?.helpers?.getJSON();
 
-    console.log('onSubmit[1--b]', data);
-    console.log('onSubmit[1--b]', editorRef.current);
     setUnsavedChanges(false);
 
     setSaving(true);
@@ -229,11 +212,6 @@ const ContentForm = (props: IContentForm) => {
       serialized: serials,
       raw: markdownContent,
     };
-
-    console.log('onSubmit[1--3]', template);
-    console.log('onSubmit[1--4]', serials);
-
-    // return;
 
     if (edit) {
       putAPI(`contents/${id}`, template).then((data: any) => {
@@ -271,7 +249,6 @@ const ContentForm = (props: IContentForm) => {
   const onLoadContent = (data: any) => {
     // set master contents
     setContents(data);
-    console.log('data[11]', data);
     // map loaded state to corresponding form value
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -329,7 +306,6 @@ const ContentForm = (props: IContentForm) => {
       const pathGroup = pathname.split('/');
       // validate if its a edit page
       if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
-        // console.log('[red]', pathGroup);
         setShowForm(false);
       }
     }
@@ -428,12 +404,7 @@ const ContentForm = (props: IContentForm) => {
    * @param mappings
    */
   const passUpdates = async (content: any, mappings: any) => {
-    // console.log('passUpdates', content);
-
     const updatedCont = await updateVars(content, mappings);
-    // console.log('updatedCont', updatedCont);
-    // console.log('updatedCont[mappings]', mappings);
-
     setBody(updatedCont);
 
     getSummary();
@@ -530,10 +501,8 @@ const ContentForm = (props: IContentForm) => {
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-    // console.log('onSaved[body]', resx);
 
     updateStuff(selectedTemplate, resx);
-
     updatePageTitle(resx);
     // setTrigger(EMPTY_MARKDOWN_NODE);
     // we are inserting an empty node, so that the editor is triggered

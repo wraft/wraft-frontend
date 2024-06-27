@@ -16,7 +16,6 @@ const Index: FC = () => {
 
   useEffect(() => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
-      console.log(data);
       setVariant(data);
     });
   }, []);
