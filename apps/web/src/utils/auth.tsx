@@ -19,11 +19,9 @@ export const auth = (ctx: any) => {
 };
 
 export const withAuthSync = (WrappedComponent: any) => {
-  console.log('withAuthSync');
   const Wrapper = (props: any) => {
     const syncLogout = (event: any) => {
       if (event.key === 'logout') {
-        console.log('logged out from storage!');
         Router.push('/login');
       }
     };
@@ -41,7 +39,6 @@ export const withAuthSync = (WrappedComponent: any) => {
   };
 
   Wrapper.getInitialProps = async (ctx: any) => {
-    console.log('withAuthSync[2]');
     const token = auth(ctx);
 
     const componentProps =
@@ -51,6 +48,5 @@ export const withAuthSync = (WrappedComponent: any) => {
     return { ...componentProps, token };
   };
 
-  console.log('withAuthSync[3]');
   return Wrapper;
 };

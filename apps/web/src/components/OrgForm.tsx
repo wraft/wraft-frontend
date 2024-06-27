@@ -94,9 +94,8 @@ const OrgForm = () => {
   const [profile, setProfile] = useState<any>();
   const [organ, setOrgan] = useState<any>();
 
-  const onCreate = (d: any) => {
+  const onCreate = (_d: any) => {
     setSuccess(true);
-    console.log('__d', d, success);
     // if (d && d.id) {
     //   // Router.push(`/user-profile`);
     // }
@@ -139,11 +138,9 @@ const OrgForm = () => {
    */
   const onOrgLoad = (_o: any) => {
     setReady(true);
-    console.log('profile.organisation_id', _o);
     setOrgan(_o);
 
-    Object.keys(_o).map(function (key, index) {
-      console.log('key', key, index, `${key}`, _o[`${key}`]);
+    Object.keys(_o).map(function (key, _index) {
       setValue(`${key}`, _o[`${key}`]);
     });
 
@@ -152,7 +149,6 @@ const OrgForm = () => {
 
   const onOrgMembLoad = (_o: any) => {
     setReady(true);
-    console.log('onOrgMembLoad', _o);
     // setOrgan(_o);
 
     // Object.keys(_o).map(function(key, index) {
@@ -174,7 +170,6 @@ const OrgForm = () => {
     // const tokenInline = cookie.get('token') || false;
     //
     if (profile) {
-      console.log('profile', profile);
       // setValue('')
       // checkUser(token, onProfileLoad);
       fetchAPI(`organisations/${profile.organisation_id}`).then((data: any) => {
