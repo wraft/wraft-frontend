@@ -18,7 +18,6 @@ const Index: FC = () => {
 
   useEffect(() => {
     fetchAPI(`themes/${id}`).then((data: any) => {
-      console.log(data);
       setTheme(data);
     });
   }, []);

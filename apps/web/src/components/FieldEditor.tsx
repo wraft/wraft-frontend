@@ -58,7 +58,6 @@ const FieldForm = (props: FieldFormProps) => {
   const onSubmit = () => {
     setSubmitting(true);
     const vals: FieldValues = getValues();
-    console.log('submit on FieldEditor', vals);
 
     const filteredVals = vals.fields.filter(
       (val: any) => val.name !== undefined || null || '',
@@ -69,8 +68,6 @@ const FieldForm = (props: FieldFormProps) => {
       values: filteredVals,
       data: vals,
     };
-
-    console.log('reslut', results);
 
     props.onSave(results);
     setSubmitting(false);

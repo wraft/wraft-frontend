@@ -78,7 +78,6 @@ const FlowViewForm = () => {
       const states: States = data.states;
       setStates(states);
       setValue('name', res?.name);
-      console.log('👽flow', res, 'states', states);
     });
   };
 
