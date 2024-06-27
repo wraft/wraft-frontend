@@ -129,8 +129,6 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
     );
   };
 
-  console.log('loading[ww]', loading);
-
   const columns = [
     {
       id: 'title',

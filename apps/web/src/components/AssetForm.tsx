@@ -38,12 +38,9 @@ const AssetForm = ({
   }, [isSubmit]);
 
   const onAssetUploaded = (data: any) => {
-    console.log('uploading asset from AssetForm', data);
     const mData: Asset = data;
     onUpload(mData);
   };
-
-  useEffect(() => console.log('.....filesList', filesList), [filesList]);
 
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
@@ -85,7 +82,6 @@ const AssetForm = ({
         })
         .catch((error: any) => {
           setUploadProgress(0);
-          console.log(error);
           setFileError(
             error.errors.file[0] || error.message || 'There is an error',
           );

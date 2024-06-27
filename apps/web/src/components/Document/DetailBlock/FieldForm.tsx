@@ -54,7 +54,7 @@ const FieldForm = ({
   ): FieldInstance[] => {
     return fields.map((field: any) => ({
       ...field,
-      value: fieldValues[field.name] || '',
+      value: fieldValues[field.id] || '',
     }));
   };
 
@@ -90,57 +90,62 @@ const FieldForm = ({
 
   return (
     <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
-      <Box>
-        <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
-          Fields
-        </Text>
-      </Box>
+      {fieldValues && (
+        <>
+          <Box>
+            <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
+              Fields
+            </Text>
+          </Box>
 
-      <Box
-        p={0}
-        sx={{
-          bg: 'white',
-          mt: 1,
-          mb: 3,
-          border: 'solid 1px',
-          borderColor: 'border',
-        }}>
-        {mappedFields &&
-          mappedFields.map((x: any) => (
-            <Flex
-              key={x.id}
-              sx={{
-                // bg: 'red.400',
-                py: 2,
-                px: 3,
-                borderBottom: 'solid 0.5px',
-                borderColor: 'border',
-                // mb: 2,
-              }}>
-              <Text
-                sx={{
-                  color: 'neutral.800',
-                  fontSize: 'sm',
-                  fontWeight: 300,
-                }}>
-                {x.name}
-              </Text>
-              <Text
-                sx={{
-                  fontSize: 'sm',
-                  fontWeight: 'bold',
-                  // color: 'green.1000',
-                  ml: 'auto',
-                  color: 'text',
-                  // fontWeight: 300,
-                  // fontFamily: 'Menlo, monospace',
-                }}>
-                {x.value}
-              </Text>
-              <Text>{x.type}</Text>
-            </Flex>
-          ))}
-      </Box>
+          <Box
+            p={0}
+            sx={{
+              bg: 'white',
+              mt: 1,
+              mb: 3,
+              border: 'solid 1px',
+              borderColor: 'border',
+            }}>
+            {mappedFields &&
+              mappedFields.map((x: any) => (
+                <Flex
+                  key={x.id}
+                  sx={{
+                    // bg: 'red.400',
+                    py: 2,
+                    px: 3,
+                    borderBottom: 'solid 0.5px',
+                    borderColor: 'border',
+                    // mb: 2,
+                  }}>
+                  <Text
+                    sx={{
+                      color: 'text',
+                      fontSize: 'sm',
+                      fontWeight: 300,
+                      flex: '0 0 40%',
+                    }}>
+                    {x.name}
+                  </Text>
+                  <Text
+                    sx={{
+                      fontSize: 'sm',
+                      fontWeight: 'bold',
+                      // color: 'green.1000',
+                      ml: 'auto',
+                      color: 'text',
+                      // fontWeight: 300,
+                      // fontFamily: 'Menlo, monospace',
+                    }}>
+                    {x.value}
+                  </Text>
+                  <Text>{x.type}</Text>
+                </Flex>
+              ))}
+          </Box>
+        </>
+      )}
 
       {/* <Box sx={{ display: 'block' }}>
         
@@ -157,7 +162,7 @@ const FieldForm = ({
                 <Box key={f.id} sx={{ pb: 2 }}>
                   {f.field_type.name === 'date' && (
                     <FieldDate
-                      name={f.name}
+                      name={f.id}
                       label={f.name}
                       register={register}
                       sub="Date"
@@ -167,7 +172,7 @@ const FieldForm = ({
 
                   {f.field_type.name !== 'date' && (
                     <Field
-                      name={f.name}
+                      name={f.id}
                       label={f.name}
                       defaultValue=""
                       register={register}

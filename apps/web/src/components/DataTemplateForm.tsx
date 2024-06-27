@@ -16,7 +16,6 @@ const Form = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data: any) => {
-    console.log('data', data);
     fetch(`${env.api_dev}/api/v1/users/signin`, {
       method: 'post',
       headers: {
@@ -28,9 +27,7 @@ const Form = () => {
       .then(function (response) {
         return response.json();
       })
-      .then(function (data) {
-        console.log('Created Profile:', data);
-      });
+      .then(() => {});
   };
 
   return (

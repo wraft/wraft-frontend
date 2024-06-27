@@ -136,7 +136,6 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   }, [isDeleteAssets]);
 
   useEffect(() => {
-    console.log('🥋🐼', engines);
     if (engines && engines.length > 0) {
       const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
       pandocEngine && setValue('engine_uuid', pandocEngine?.id);

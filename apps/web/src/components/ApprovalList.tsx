@@ -151,9 +151,7 @@ const Approvals = () => {
    */
 
   const approveInstance = (id: string) => {
-    putAPI(`contents/${id}/approve`).then(() => {
-      console.log('onApproved');
-    });
+    putAPI(`contents/${id}/approve`).then(() => {});
   };
 
   return (

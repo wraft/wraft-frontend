@@ -79,8 +79,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     }
   };
 
-  console.log('user profile', userProfile);
-
   const login = async (data: any) => {
     // setIsUserLoading(true);
     const { access_token, refresh_token }: any = data;

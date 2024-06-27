@@ -222,7 +222,6 @@ const ContentDetail = () => {
    * Pass for build
    */
   const doBuild = () => {
-    console.log('Building');
     setLoading(true);
     postAPI(`contents/${cId}/build`, [])
       .then((data: any) => {
@@ -268,11 +267,10 @@ const ContentDetail = () => {
       const contentBodyAct = contents.content.serialized;
       const contentTypeId = contents.content_type.id;
       setPageTitle(contents.content.serialized?.title);
-      // console.log('[onLoadContent][x]', contents.content.serialized?.title);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
-        // console.log('contentBodyAct2', contentBodyAct2);
+
         setContentBody(contentBodyAct2);
       }
 
@@ -283,7 +281,6 @@ const ContentDetail = () => {
         });
       }
     }
-    console.log('contents:', contents);
   }, [contents]);
 
   const doNothing = () => {
@@ -319,10 +316,7 @@ const ContentDetail = () => {
 
   useEffect(() => {
     if (activeFlow && contents) {
-      console.log('🔥activeFlow', activeFlow, '🔥contents', contents);
-      fetchAPI(`flows/${activeFlow.id}/states`).then((data: any) => {
-        console.log('data', data);
-      });
+      fetchAPI(`flows/${activeFlow.id}/states`).then(() => {});
       const activeState = activeFlow?.states.filter(
         (a: any) => a.id === contents.state.id,
       )?.[0];

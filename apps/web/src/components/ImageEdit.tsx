@@ -36,11 +36,10 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
 
   const onCropComplete = useCallback(
     (
-      croppedArea: any,
+      _croppedArea: any,
       croppedAreaPixels: React.SetStateAction<Area | undefined>,
     ): any => {
       setCroppedAreaPixels(croppedAreaPixels);
-      console.log('croppedArea', croppedArea);
     },
     [],
   );
@@ -48,7 +47,6 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImage = await getCroppedImg(image, croppedAreaPixels, 0);
-      console.log('donee', { croppedImage });
       onSavable(croppedImage);
       setCroppedImg(croppedImage);
       onUpdate(croppedImage);
@@ -65,7 +63,6 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   // }, []);
 
   const changeZoom = (_e: any) => {
-    console.log('__e', _e);
     setZoom(_e.target.value);
   };
 
