@@ -239,8 +239,6 @@ export const createEntity = async (
   onSuccess?: any,
   onFailed?: any,
 ) => {
-  console.log('🥷', API_HOST, data);
-
   try {
     const response = await axios.post(`${API_HOST}/api/v1/${path}`, data, {
       headers: {
@@ -250,10 +248,7 @@ export const createEntity = async (
       },
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Created a model ${path} with Pass`, response.data);
       onSuccess(response.data);
     } else {
       console.log(`Created a model ${path}`, response.data);
@@ -324,10 +319,7 @@ export const updateEntity = async (
       },
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Updated model ${path} with Pass`, response.data);
       onSuccess(response.data);
     } else {
       console.log(`Updated model ${path}`, response.data);
@@ -393,7 +385,6 @@ export const createEntityFile = (
       return response.json();
     })
     .then(function (data) {
-      console.log(`Created a asset ${path}`, data);
       if (onSuccess) {
         onSuccess(data);
       }
@@ -424,7 +415,6 @@ export const updateEntityFile = (
       return response.json();
     })
     .then(function (data) {
-      console.log(`Created a model ${path}`, data);
       if (onSuccess) {
         onSuccess(data);
       }

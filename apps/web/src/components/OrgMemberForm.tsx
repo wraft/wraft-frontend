@@ -65,34 +65,15 @@ const OrgMemberForm = () => {
     setShowSearch(!showSearch);
   };
 
-  const onCreate = (d: any) => {
+  const onCreate = (_data: any) => {
     setSuccess(true);
-    console.log('__d', d);
-    // if (d && d.id) {
-    //   // Router.push(`/user-profile`);
-    // }
   };
 
-  /** Send Invite Form */
-
   const onInviteSubmit = (data: any) => {
-    console.log('data', data);
     postAPI(`organisations/${organ?.id}/invite`, data).then((data: any) => {
       onCreate(data);
     });
   };
-
-  /** Update Form */
-
-  // const onSubmit = (data: any) => {
-  //   console.log('data', data);
-  //   createEntity(data, 'organisations', token, onCreate);
-  //   // updateEntity('organisations', data, token, onCreate);
-  // };
-
-  useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
 
   /**
    * When Org data is load
@@ -100,7 +81,6 @@ const OrgMemberForm = () => {
    */
   const onOrgLoad = (_o: any) => {
     setReady(true);
-    console.log('profile.organisation_id', _o);
     setOrgan(_o);
 
     Object.keys(_o).map(function (key, index) {

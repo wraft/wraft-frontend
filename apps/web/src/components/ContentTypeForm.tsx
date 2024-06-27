@@ -160,7 +160,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const addField = () => {
-    console.log('addField');
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       fields = fields || [];
@@ -338,7 +337,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const isUpdate = cId ? true : false;
 
   const onSubmit = (data: any) => {
-    console.log('onSubmit', data);
     const sampleD = {
       name: data.name,
       layout_id: data.layout_id,
@@ -404,7 +402,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    console.log('onSave', fieldsNew);
     initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
@@ -417,10 +414,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
           (initialField: any) => initialField.name !== el.name,
         )
       ) {
-        console.log(fieldValue);
         addFieldVal(fieldValue);
       } else if (!initialFields) {
-        console.log(fieldValue);
         addFieldVal(fieldValue);
       }
     });

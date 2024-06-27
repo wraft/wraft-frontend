@@ -44,7 +44,6 @@ const ApprovalFormBase = ({
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
-    console.log('submitted');
     postAPI('approval_systems', data);
   };
 
@@ -52,7 +51,6 @@ const ApprovalFormBase = ({
     setUser(e);
     setValue('approver_id', e.id);
     setShowSearch(false);
-    console.log('Selected User', e);
   };
 
   /**
@@ -61,7 +59,6 @@ const ApprovalFormBase = ({
    */
 
   const onChangeInput = (e: any) => {
-    console.log('search', e.currentTarget.value);
     setShowSearch(true);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
       const usr = data.users;
