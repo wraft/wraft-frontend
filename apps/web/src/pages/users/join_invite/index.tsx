@@ -26,8 +26,6 @@ const Index = () => {
     cookie.set('inviteCookie', objectString);
   }, []);
 
-  console.log(inviteOrganisation);
-
   useEffect(() => {
     if (accessToken) {
       Router.push('/');

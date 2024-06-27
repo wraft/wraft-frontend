@@ -16,7 +16,6 @@ const Index: FC = () => {
 
   useEffect(() => {
     fetchAPI(`layouts/${id}`).then((data: any) => {
-      console.log(data);
       setLayout(data);
     });
   }, []);

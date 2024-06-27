@@ -14,7 +14,7 @@ import { menuLinks } from 'utils/index';
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
-  console.log('render state', rerender);
+
   return (
     <>
       <Head>

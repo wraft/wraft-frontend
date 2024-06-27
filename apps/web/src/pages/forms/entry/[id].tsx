@@ -18,7 +18,6 @@ const Index = () => {
     setLoading(true);
     fetchAPI(`forms/${id}`)
       .then((data: any) => {
-        console.log(data);
         setFormdata(data);
         const fields = data.fields.map((i: any) => {
           return {
@@ -38,8 +37,7 @@ const Index = () => {
         setItems(fields);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((_err) => {
         setLoading(false);
       });
   };
@@ -69,7 +67,6 @@ const Index = () => {
   };
 
   const onSave = () => {
-    console.log(items);
     if (items.some((i: any) => i.value.length === 0 && i.required)) {
       const errorsAdded = items.map((i: any) => {
         if (i.value.length === 0 && i.required === true) {

@@ -7,8 +7,6 @@ export function authorize(Component: any, permissionName: any) {
     const router = useRouter();
     const { permissions } = useAuth();
 
-    console.log('sssss', permissions && permissions[permissionName]);
-
     if (permissions && permissions[permissionName]) {
       return <Component {...props} />;
     }
