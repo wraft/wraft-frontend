@@ -319,6 +319,8 @@ const Form = ({
   // function to organise the values which needed to for pipeline mappping
 
   const handleSelectChange = (index: any, selectedOption: any) => {
+    console.log(selectedOption, 'logsel');
+
     const selectedSource = formField.find((m) => m.id === selectedOption);
 
     if (selectedSource) {
@@ -332,6 +334,21 @@ const Form = ({
           source: {
             id: selectedSource.id,
             name: selectedSource.name,
+          },
+        };
+        return newData;
+      });
+    }else{
+      setSourceData((prevData: any) => {
+        const newData = [...prevData];
+        newData[index] = {
+          destination: {
+            id: tempField[index].id,
+            name: tempField[index].name,
+          },
+          source: {
+            id: selectedOption,
+            name: selectedOption,
           },
         };
         return newData;
@@ -502,6 +519,7 @@ const Form = ({
                                   ? stageMap[index].source.name
                                   : 'Select an option'}
                               </option>
+                              <option value="nil">nil</option>
                               {formField &&
                                 formField.length > 0 &&
                                 formField.map((m: any) => (
