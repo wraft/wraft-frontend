@@ -123,14 +123,18 @@ const Form = ({ rerender }: Props) => {
           <StateBadge
             color={
               row.original.state == 'pending'
-                ? 'orange.200'
+                ? 'red.400'
                 : row.original.state == 'success'
                   ? 'green.a400'
                   : row.original.state == 'partially_completed'
                     ? 'red.400'
-                    : 'orange.100'
+                    : 'red.400'
             }
-            name={row.original.state.replace(/_/g, ' ')}
+            name={
+              row.original.state == 'success'
+                ? row.original.state.replace(/_/g, ' ')
+                : 'error'
+            }
           />
         </Box>
       ),
@@ -150,12 +154,12 @@ const Form = ({ rerender }: Props) => {
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Text as="p" variant="pM">
             {row.original.state == 'pending'
-              ? 'Pipeline not triggered'
+              ? `${row.original.error.info}`
               : row.original.state === 'partially_completed'
-                ? 'Build failed'
+                ? `${row.original.error.info}`
                 : row.original.state === 'success'
                   ? 'Build complete'
-                  : 'Build in progress'}
+                  : 'failed to start build'}
           </Text>
         </Box>
       ),
