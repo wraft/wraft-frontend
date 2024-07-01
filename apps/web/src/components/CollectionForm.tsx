@@ -49,7 +49,6 @@ const CollectionForm = () => {
     fields &&
       fields.length > 0 &&
       fields.map((item: any) => {
-        // console.log('item', item)
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
           key: item.name,
@@ -83,12 +82,10 @@ const CollectionForm = () => {
 
     const isUpdate = data.edit != 0 ? true : false;
     if (isUpdate) {
-      console.log('[isUpdate]', isUpdate);
       putAPI(`content_types/${data.edit}`, sampleD).then((d: any) => {
         onDone(d);
       });
     } else {
-      console.log('[isUpdate]', sampleD);
       postAPI('content_types', sampleD).then((d: any) => {
         onDone(d);
       });
@@ -148,7 +145,6 @@ const CollectionForm = () => {
   // };
 
   const onFieldsSave = (fds: any) => {
-    console.log('saved fields', fds, fields);
     setFields([]);
     // let newFields:any = []
     // format and replae existing fields
@@ -162,7 +158,6 @@ const CollectionForm = () => {
   };
 
   const addField = () => {
-    console.log('[addField]', fields);
     setFields((fields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
       const outputState: any = fields.slice(0);

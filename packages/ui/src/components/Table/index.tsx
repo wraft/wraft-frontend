@@ -54,7 +54,6 @@ const Table = ({
                   fontSize="12px"
                   color="#A5ABB2"
                   minWidth={header.getSize()}>
-                  {/* {console.log('header.column.columnDef', header.column.columnDef)} */}
                   {header.isPlaceholder ? null : (
                     <x.div
                       cursor={

@@ -53,10 +53,8 @@ const InviteTeam = ({ setOpen }: Props) => {
     const value = event.target.value;
 
     if (checked) {
-      console.log('checked', value);
       setCheckedValues([...checkedValues, value]);
     } else {
-      console.log('unchecked', value);
       setCheckedValues(checkedValues.filter((item: any) => item !== value));
     }
     trigger();
@@ -82,8 +80,7 @@ const InviteTeam = ({ setOpen }: Props) => {
     loadRole();
   }, []);
 
-  function onSubmit(data: any) {
-    console.log('submitted', data);
+  function onSubmit() {
     for (const email of selectedEmails) {
       const data = {
         email: email.value,

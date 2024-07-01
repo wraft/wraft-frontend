@@ -42,8 +42,6 @@ export function useContentEditor(
   },  
 ): UseContentEditorReturnType {
   const extensions = remirrorExtensions(args?.placeholder);
-
-  // console.log('[useContentEditor][value]', value);
   
   const editor = useRemirror({
     extensions,
@@ -73,7 +71,6 @@ export function useContentEditor(
 
       // @ts-ignore
       const json = getContext()?.helpers.getJSON();
-      console.log('onEditorChange', json);
       const contentObject = {
         json: json,
         md: markdownContent,

@@ -98,6 +98,7 @@ const CreateDocument = () => {
   };
 
   const onSubmit = (data: any) => {
+    console.log('data test', data);
     if (formStep === 0) {
       setFormStep(1);
     }
@@ -187,7 +188,7 @@ const CreateDocument = () => {
                     <Box key={f.id} sx={{ pb: 2 }}>
                       {f.field_type.name === 'date' && (
                         <FieldDate
-                          name={`contentFields[${f.name}]`}
+                          name={`contentFields[${f.id}]`}
                           label={capitalizeFirst(f.name)}
                           register={register}
                           sub="Date"
@@ -197,7 +198,7 @@ const CreateDocument = () => {
 
                       {f.field_type.name !== 'date' && (
                         <Field
-                          name={`contentFields[${f.name}]`}
+                          name={`contentFields[${f.id}]`}
                           label={capitalizeFirst(f.name)}
                           defaultValue=""
                           register={register}

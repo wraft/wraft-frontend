@@ -60,7 +60,7 @@ const PipelineView = () => {
   }, [pipelineData.source_id]);
 
   const onDelete = () => {
-    if (inputValue && inputValue.trim() === pipelineData.name) {
+    if (inputValue && inputValue.trim() == pipelineData.name) {
       deleteAPI(`pipelines/${cId}`).then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
         toast.success('Deleted Successfully', { duration: 1000 });

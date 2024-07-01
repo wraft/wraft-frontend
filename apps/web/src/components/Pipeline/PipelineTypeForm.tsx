@@ -56,7 +56,7 @@ interface Props {
   pipelineStageTemplateId?: any;
 }
 
-const schema = z.object({
+const pipelineschema = z.object({
   pipelinename: z
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
@@ -68,10 +68,21 @@ const schema = z.object({
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
+});
+
+const stageSchema = z.object({
   template_id: z.string().refine((value) => uuidRegex.test(value), {
     message: 'Template ID is required',
   }),
 });
+
+// const mapSchema = z.object({
+//   fields: z.array(
+//     z.object({
+//       source: z.string().refine((value) => uuidRegex.test(value)),
+//     }),
+//   ),
+// });
 
 const Form = ({
   step = 0,
@@ -95,6 +106,7 @@ const Form = ({
   const [pipeMapId, setPipeMapId] = useState<any>();
   const [sourceData, setSourceData] = useState<any>([]);
   const [stageMap, setStageMap] = useState<any>([]);
+  const [zodSchema, setZodSchema] = useState<any>(pipelineschema);
 
   const {
     register,
@@ -102,7 +114,7 @@ const Form = ({
     setValue,
     watch,
     formState: { errors, isValid },
-  } = useForm({ mode: 'all', resolver: zodResolver(schema) });
+  } = useForm({ mode: 'all', resolver: zodResolver(zodSchema) });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -146,13 +158,13 @@ const Form = ({
       });
   };
 
-  const setPipelineInfo = () => {
-    if (pipelineData) {
-      setValue('pipelinename', pipelineData.name);
-      setValue('pipeline_source', pipelineData.source);
-      setValue('pipeline_form', pipelineData.source_id);
-    }
-  };
+  // const setPipelineInfo = () => {
+  //   if (pipelineData) {
+  //     setValue('pipelinename', pipelineData.name);
+  //     setValue('pipeline_source', pipelineData.source);
+  //     setValue('pipeline_form', pipelineData.source_id);
+  //   }
+  // };
 
   //Pipeline Create API
 
@@ -320,10 +332,10 @@ const Form = ({
   }, [selectedPipelineStageId]);
 
   useEffect(() => {
-    if (pipelineData) {
-      setPipelineInfo();
+    if (pipeStageDetails || pipelineData) {
+      setZodSchema(stageSchema);
     }
-  }, []);
+  }, [pipeStageDetails]);
 
   useEffect(() => {
     tempChange(template_id);
@@ -575,7 +587,9 @@ const Form = ({
                 )}
                 {formStep >= 1 && (
                   <Button variant="primary" type="button" onClick={onSubmit}>
-                    {stageMap && stageMap.length > 0 ? 'Update' : 'Add'}
+                    {stageMap && stageMap.length > 0 && isValid
+                      ? 'Update'
+                      : 'Add'}
                   </Button>
                 )}
               </Flex>

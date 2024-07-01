@@ -86,7 +86,6 @@ class DropDownBox extends React.Component<any, any> {
     }
 
     return this.props.options.map((option: any, i: number) => {
-      // console.log('fdfd');
       return (
         <DropDownItem
           onClick={() => this.props.onChangeDate(option.date)}
@@ -100,7 +99,6 @@ class DropDownBox extends React.Component<any, any> {
   }
 
   render() {
-    // console.log('option', this.props.options)
     return (
       <DropDownBoxBlock
         ref={this.wrapperRef}

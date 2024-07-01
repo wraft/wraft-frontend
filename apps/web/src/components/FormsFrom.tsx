@@ -79,9 +79,9 @@ const FormsFrom = ({
       (ft: any) => ft.name.toLowerCase() === type.toLowerCase(),
     ).id;
     if (!fieldTypeId) {
-      console.log('no field type id found');
       return;
     }
+
     const newItem: any = {
       name: '',
       type: type,
@@ -298,7 +298,6 @@ const FormsFrom = ({
         validations: validations,
       };
 
-      console.log('testing..', uuidRegex.test(item.id), item.id);
       if (uuidRegex.test(item.id)) {
         data.field_id = item.id;
       }
@@ -315,9 +314,7 @@ const FormsFrom = ({
     };
 
     if (isEdit) {
-      console.log(data, 'logdata');
-      putAPI(`forms/${formdata.id}`, data).then((res: any) => {
-        console.log(res, 'logres');
+      putAPI(`forms/${formdata.id}`, data).then(() => {
         toast.success('Updated Successfully');
         setRerender && setRerender((prev: boolean) => !prev);
         setOpen && setOpen(false);
@@ -532,7 +529,6 @@ const DraggableValues = ({
 
   const handleDragEnd = ({ active, over }: any) => {
     if (!active || !over || active.id === over.id) return;
-    console.log(active, over, active.id, over.id);
     const activeValue = item.values.filter((s: any) => s.id == active.id)[0];
     const overValue = item.values.filter((s: any) => s.id == over.id)[0];
     const oldIndex = item.values.indexOf(activeValue);
