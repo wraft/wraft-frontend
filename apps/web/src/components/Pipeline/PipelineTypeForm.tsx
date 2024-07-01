@@ -72,7 +72,7 @@ const pipelineschema = z.object({
 
 const stageSchema = z.object({
   template_id: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Template ID is required',
+    message: 'Please select a template',
   }),
 });
 
@@ -179,7 +179,7 @@ const Form = ({
     postAPI(`pipelines`, sampleD).then((data: any) => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
-        duration: 1000,
+        duration: 2000,
         position: 'top-right',
       });
       const linkPipeline = {
@@ -206,16 +206,14 @@ const Form = ({
           .then((res) => {
             setPipeStageDetails(res);
             toast.success('Stage Updated Successfully', {
-              duration: 1000,
-              position: 'top-right',
+                  position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
             toast.error('Failed to Update Stage', {
-              duration: 1000,
-              position: 'top-right',
+                  position: 'top-right',
             });
           });
       } else {
@@ -223,16 +221,14 @@ const Form = ({
           .then((res: any) => {
             setPipeStageDetails(res);
             toast.success('Stage Created Successfully', {
-              duration: 1000,
-              position: 'top-right',
+                  position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
             toast.error('stage already exist', {
-              duration: 1000,
-              position: 'top-right',
+                  position: 'top-right',
             });
           });
       }
@@ -252,14 +248,12 @@ const Form = ({
           setIsOpen && setIsOpen(false);
           setRerender((prev: boolean) => !prev);
           toast.success('Mapping Updated Successfully', {
-            duration: 1000,
-            position: 'top-right',
+              position: 'top-right',
           });
         })
         .catch(() => {
           toast.error('Mapping Failed', {
-            duration: 1000,
-            position: 'top-right',
+              position: 'top-right',
           });
         });
     } else if (tempField.length == sampleD.mapping.length) {
@@ -267,13 +261,11 @@ const Form = ({
         setIsOpen && setIsOpen(false);
         setRerender((prev: boolean) => !prev);
         toast.success('Mapped Successfully', {
-          duration: 1000,
           position: 'top-right',
         });
       });
     } else {
       toast.error('Map every field', {
-        duration: 1000,
         position: 'top-right',
       });
     }
