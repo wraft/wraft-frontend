@@ -101,6 +101,24 @@ const FormList = ({ rerender, setRerender }: Props) => {
       },
     },
     {
+      id: 'content.description',
+      header: 'DESCRIPTION',
+      accessorKey: 'content.description',
+      enableSorting: false,
+      size: 250,
+      cell: ({ row }: any) => {
+        return (
+          <>
+            <NextLinkText href={`/forms/${row.original?.id}`}>
+              <Box>
+                <Box>{row.original?.description}</Box>
+              </Box>
+            </NextLinkText>
+          </>
+        );
+      },
+    },
+    {
       id: 'content.updated_at',
       header: 'LAST UPDATED',
       accessorKey: 'content.updated_at',
@@ -146,7 +164,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
                       color={
                         (theme.colors &&
                           theme.colors.gray &&
-                          theme.colors.gray[200]) ||
+                          theme.colors.gray[800]) ||
                         'black'
                       }
                     />

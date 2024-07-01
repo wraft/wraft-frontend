@@ -144,6 +144,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
               }}
             />
             <Box ml={3}>
+              <Box sx={{ color: 'gray.1000' }}>{row.original?.prefix}</Box>
               <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
                 {row?.original?.name}
               </Box>
