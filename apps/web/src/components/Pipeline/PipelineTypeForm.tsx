@@ -206,14 +206,14 @@ const Form = ({
           .then((res) => {
             setPipeStageDetails(res);
             toast.success('Stage Updated Successfully', {
-                  position: 'top-right',
+              position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
             toast.error('Failed to Update Stage', {
-                  position: 'top-right',
+              position: 'top-right',
             });
           });
       } else {
@@ -221,14 +221,14 @@ const Form = ({
           .then((res: any) => {
             setPipeStageDetails(res);
             toast.success('Stage Created Successfully', {
-                  position: 'top-right',
+              position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
           })
           .catch(() => {
             toast.error('stage already exist', {
-                  position: 'top-right',
+              position: 'top-right',
             });
           });
       }
@@ -248,12 +248,12 @@ const Form = ({
           setIsOpen && setIsOpen(false);
           setRerender((prev: boolean) => !prev);
           toast.success('Mapping Updated Successfully', {
-              position: 'top-right',
+            position: 'top-right',
           });
         })
         .catch(() => {
           toast.error('Mapping Failed', {
-              position: 'top-right',
+            position: 'top-right',
           });
         });
     } else if (tempField.length == sampleD.mapping.length) {
