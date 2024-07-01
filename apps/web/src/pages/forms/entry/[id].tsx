@@ -93,8 +93,8 @@ const Index = () => {
         toast.success('Submitted Successfully');
         onClear();
       })
-      .catch(() => {
-        toast.error('Submission Failed');
+      .catch((err) => {
+        toast.error(err.errors);
       });
   };
 
