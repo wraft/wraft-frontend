@@ -262,7 +262,7 @@ const Form = ({
             position: 'top-right',
           });
         });
-    } else {
+    } else if (tempField.length == sampleD.mapping.length) {
       postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
         setIsOpen && setIsOpen(false);
         setRerender((prev: boolean) => !prev);
@@ -270,6 +270,11 @@ const Form = ({
           duration: 1000,
           position: 'top-right',
         });
+      });
+    } else {
+      toast.error('Map every field', {
+        duration: 1000,
+        position: 'top-right',
       });
     }
   };
