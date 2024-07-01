@@ -68,6 +68,9 @@ const schema = z.object({
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
+  template_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Template ID is required',
+  }),
 });
 
 const Form = ({
@@ -96,12 +99,15 @@ const Form = ({
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isValid },
-    trigger,
   } = useForm({ mode: 'all', resolver: zodResolver(schema) });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
+
+  const template_id: any = watch('template_id');
 
   const isUpdate = cId ? true : false;
 
@@ -138,6 +144,14 @@ const Form = ({
       .catch(() => {
         setLoading(true);
       });
+  };
+
+  const setPipelineInfo = () => {
+    if (pipelineData) {
+      setValue('pipelinename', pipelineData.name);
+      setValue('pipeline_source', pipelineData.source);
+      setValue('pipeline_form', pipelineData.source_id);
+    }
   };
 
   //Pipeline Create API
@@ -278,8 +292,8 @@ const Form = ({
     });
   };
 
-  const tempChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const safeSearchTypeValue: string = event.currentTarget.value;
+  const tempChange = (id: any) => {
+    const safeSearchTypeValue: any = id;
 
     loadTempType(safeSearchTypeValue);
   };
@@ -305,6 +319,16 @@ const Form = ({
     }
   }, [selectedPipelineStageId]);
 
+  useEffect(() => {
+    if (pipelineData) {
+      setPipelineInfo();
+    }
+  }, []);
+
+  useEffect(() => {
+    tempChange(template_id);
+  }, [template_id]);
+
   function prev() {
     setFormStep((i) => i - 1);
   }
@@ -319,8 +343,6 @@ const Form = ({
   // function to organise the values which needed to for pipeline mappping
 
   const handleSelectChange = (index: any, selectedOption: any) => {
-    console.log(selectedOption, 'logsel');
-
     const selectedSource = formField.find((m) => m.id === selectedOption);
 
     if (selectedSource) {
@@ -338,7 +360,7 @@ const Form = ({
         };
         return newData;
       });
-    }else{
+    } else {
       setSourceData((prevData: any) => {
         const newData = [...prevData];
         newData[index] = {
@@ -466,7 +488,6 @@ const Form = ({
                   <Select
                     id="template_id"
                     {...register('template_id', { required: true })}
-                    onChange={(e) => tempChange(e)}
                     disabled={selectedPipelineStageId ? true : false}>
                     {
                       <option disabled selected>
@@ -483,6 +504,11 @@ const Form = ({
                         </option>
                       ))}
                   </Select>
+                  {errors.template_id && errors.template_id.message && (
+                    <Text variant="error">
+                      {errors.template_id.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
             )}
@@ -556,7 +582,11 @@ const Form = ({
             )}
             {formStep == 0 && (
               <Button
-                disabled={pipelineData ? false : !isValid}
+                disabled={
+                  (pipelineData && isValid) || selectedPipelineStageId
+                    ? false
+                    : !isValid
+                }
                 type="button"
                 onClick={pipelineData ? next : handleSubmit(createpipeline)}
                 variant="primary">
