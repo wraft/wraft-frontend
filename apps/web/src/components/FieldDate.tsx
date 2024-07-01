@@ -49,11 +49,9 @@ const Field: React.FC<Props> = ({
     //   isValidDay: typeof selectedDay !== 'undefined',
     //   isDisabled: modifiers.disabled === true,
     // });
-    console.log('date', _selectedDay, _modifiers, dayPickerInput, input);
     if (input) {
       const inptfrm = !input.value.trim();
       if (inptfrm) {
-        console.log('inptfrm muneef x10', inptfrm);
         // setstatus(2);
         // const result:any = parseDate(inptfrm, '', 'en');
         // setSelect(result);
@@ -63,12 +61,10 @@ const Field: React.FC<Props> = ({
   };
 
   const formatDate = (date: any, formatStr: string, locale: any) => {
-    // console.log('frm', date);
     return format(date, formatStr, { locale });
   };
 
   const parseDate = (str: string, format: string, locale: any) => {
-    // console.log('str', str);
     const parsed = parse(str, format, new Date(), { locale });
     if (DateUtils.isDate(parsed)) {
       return parsed;
@@ -81,16 +77,13 @@ const Field: React.FC<Props> = ({
   useEffect(() => {
     if (defaultValue) {
       setstatus(2);
-      // console.log('defaultValue', defaultValue, value);
 
       const dx = parseDate(defaultValue, FORMAT, 'en');
-      console.log('parseDate', 'fida vs muneef', dx);
       // const dd:any = parseDate(defaultValue, FORMAT, 'en')
       setSelect(dx);
     } else {
       const dx = parseDate('1989-01-02', FORMAT, 'en');
       setSelect(dx);
-      console.log('parseDate', 'fida vs muneef', dx);
       setstatus(2);
     }
   }, [defaultValue]);

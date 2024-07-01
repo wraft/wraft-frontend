@@ -28,8 +28,6 @@ const HolderSuggestComponent = ({ tokens }: any) => {
   const [mentionState, setMentionState] = useState<any>();
   // const commands = useCommands();
 
-  console.log('[tokens]', tokens);
-
   const items = useMemo(() => {
     const allItems = tokens;
 
@@ -67,8 +65,6 @@ export function ContentEditor({
       default: 'Georgia,serif',
     },
   };
-
-  console.log('[ContentEditor]', tokens);
 
   return (
     <Box

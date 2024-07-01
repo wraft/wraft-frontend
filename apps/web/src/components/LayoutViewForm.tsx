@@ -87,7 +87,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('🥋🐼', engines);
     if (engines && engines.length > 0) {
       const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
       pandocEngine && setValue('engine_uuid', pandocEngine?.id);

@@ -38,7 +38,6 @@ const Index = () => {
 
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
-  console.log(token);
 
   const onSubmit = (data: FormValues) => {
     if (data.newPassword === data.confirmPassword) {

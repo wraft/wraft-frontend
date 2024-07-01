@@ -71,8 +71,7 @@ const AssignRole = ({
     }
   };
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const onSubmit = () => {
     const assignPromises = selectedRolesId.map((role) => {
       return postAPI(`users/${userId}/roles/${role}`, {});
     });

@@ -36,7 +36,6 @@ const Index: FC = () => {
 
   const loadData = (id: string) => {
     fetchAPI(`forms/${id}`).then((data: any) => {
-      console.log(data);
       setFormdata(data);
       const fileds = data.fields.map((i: any) => {
         return {
@@ -78,10 +77,6 @@ const Index: FC = () => {
       loadData(cId);
     }
   }, [cId, rerender]);
-
-  useEffect(() => {
-    console.log('initial:', initial);
-  }, [initial]);
 
   return (
     <>
