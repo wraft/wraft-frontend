@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
+import { Button, Pagination, Table } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { fetchAPI } from '../utils/models';
@@ -148,14 +148,16 @@ const ContentList = () => {
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
+  const [selectedVariant, setSelectedVariant] = useState<any>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const currentVariant: any = router.query.variant
 
   useEffect(() => {
     loadData(currentPage);
     loadVariants();
-  }, []);
+  }, [selectedVariant]);
 
   /**
    * Load Content Types
@@ -183,7 +185,13 @@ const ContentList = () => {
    */
   const loadData = (page: number) => {
     setContenLoading(true);
-    const query = `page=${page}&sort=inserted_at_desc`;
+    let query;
+    let variant = selectedVariant || currentVariant
+    if (variant) {
+      query = `content_type_name=${variant}&page=${page}&sort=inserted_at_desc`;
+    } else {
+      query = `page=${page}&sort=inserted_at_desc`;
+    }
     fetchAPI(`contents?${query}`)
       .then((data: any) => {
         setContenLoading(false);
@@ -210,6 +218,21 @@ const ContentList = () => {
     );
   };
 
+  const handleFilter = (title:any) => {
+    setSelectedVariant(title)
+    setPage(page);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: page, variant:title };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  }
+
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Documents" desc="Manage all documents" />
@@ -235,17 +258,28 @@ const ContentList = () => {
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
-              <Text
-                as="h4"
-                variant="blockTitle"
-                sx={{
-                  mb: 2,
-                  fontWeight: 'body',
-                  fontSize: 'sm',
-                  color: 'text',
-                }}>
-                Filter by Variant
-              </Text>
+              <Flex sx={{ justifyContent: 'space-between' }}>
+                <Text
+                  as="h4"
+                  variant="blockTitle"
+                  sx={{
+                    mb: 2,
+                    fontWeight: 'body',
+                    fontSize: 'sm',
+                    color: 'text',
+                  }}>
+                  Filter by Variant
+                </Text>
+                {selectedVariant && (
+                  <Button
+                    size="xxs"
+                    variant="outlined"
+                    shape="square"
+                    onClick={() => setSelectedVariant('')}>
+                    clear
+                  </Button>
+                )}
+              </Flex>
               <Box
                 sx={{
                   borderRight: 'solid 1px',
@@ -258,7 +292,15 @@ const ContentList = () => {
                 }}>
                 {variants &&
                   variants.map((v: any) => (
-                    <FilterBlock key={v?.name} title={v?.name} no={0} {...v} />
+                    <FilterBlock
+                      key={v?.name}
+                      title={v?.name}
+                      no={0}
+                      setSelected={handleFilter}
+                      active={
+                        selectedVariant === v?.name ? 'neutral.200' : undefined
+                      }
+                    />
                   ))}
               </Box>
             </Box>
