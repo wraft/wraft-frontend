@@ -73,6 +73,8 @@ interface FilterBlockProps {
   title: string;
   no: number;
   color?: string;
+  setSelected?: any;
+  active?:string;
 }
 
 /**
@@ -80,11 +82,18 @@ interface FilterBlockProps {
  * @param param0
  * @returns
  */
-export const FilterBlock: FC<FilterBlockProps> = ({ title, no, color }) => {
+export const FilterBlock: FC<FilterBlockProps> = ({
+  title,
+  no,
+  color,
+  setSelected,
+  active
+}) => {
   return (
     <Flex
+      onClick={() => setSelected(title)}
       sx={{
-        bg: 'backgroundWhite',
+        bg: active ? active : 'backgroundWhite',
         cursor: 'pointer',
         ':hover': {
           bg: 'neutral.200',
