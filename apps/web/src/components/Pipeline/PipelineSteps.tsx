@@ -117,10 +117,10 @@ const Form = ({ rerender, setRerender }: Props) => {
           <Box>
             <StateBadge
               name={
-                row.original.form_mapping.length > 0 ? 'Complete' : 'Incomplete'
+                row.original.form_mapping != null ? 'Complete' : 'Incomplete'
               }
               color={
-                row.original.form_mapping.length > 0 ? 'green.a400' : 'red.200'
+                row.original.form_mapping != null ? 'green.a400' : 'red.200'
               }
             />
           </Box>

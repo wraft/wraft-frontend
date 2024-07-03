@@ -176,17 +176,12 @@ const Form = ({
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then((data: any) => {
+    postAPI(`pipelines`, sampleD).then(() => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
         duration: 2000,
         position: 'top-right',
       });
-      const linkPipeline = {
-        pipeline_ids: [data.id],
-        fields: [],
-      };
-      putAPI(`forms/${data.source_id}`, linkPipeline);
       setRerender((pre: boolean) => !pre);
     });
   };
