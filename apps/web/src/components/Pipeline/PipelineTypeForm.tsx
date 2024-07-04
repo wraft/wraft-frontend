@@ -56,7 +56,7 @@ interface Props {
   pipelineStageTemplateId?: any;
 }
 
-const schema = z.object({
+const pipelineschema = z.object({
   pipelinename: z
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
@@ -69,6 +69,20 @@ const schema = z.object({
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
 });
+
+const stageSchema = z.object({
+  template_id: z.string().refine((value) => uuidRegex.test(value), {
+    message: 'Please select a template',
+  }),
+});
+
+// const mapSchema = z.object({
+//   fields: z.array(
+//     z.object({
+//       source: z.string().refine((value) => uuidRegex.test(value)),
+//     }),
+//   ),
+// });
 
 const Form = ({
   step = 0,
@@ -92,16 +106,20 @@ const Form = ({
   const [pipeMapId, setPipeMapId] = useState<any>();
   const [sourceData, setSourceData] = useState<any>([]);
   const [stageMap, setStageMap] = useState<any>([]);
+  const [zodSchema, setZodSchema] = useState<any>(pipelineschema);
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors, isValid },
-    trigger,
-  } = useForm({ mode: 'all', resolver: zodResolver(schema) });
+  } = useForm({ mode: 'all', resolver: zodResolver(zodSchema) });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
+
+  const template_id: any = watch('template_id');
 
   const isUpdate = cId ? true : false;
 
@@ -150,17 +168,12 @@ const Form = ({
       source: data.pipeline_source,
     };
 
-    postAPI(`pipelines`, sampleD).then((data: any) => {
+    postAPI(`pipelines`, sampleD).then(() => {
       setIsOpen && setIsOpen(false);
       toast.success('Saved Successfully', {
-        duration: 1000,
+        duration: 2000,
         position: 'top-right',
       });
-      const linkPipeline = {
-        pipeline_ids: [data.id],
-        fields: [],
-      };
-      putAPI(`forms/${data.source_id}`, linkPipeline);
       setRerender((pre: boolean) => !pre);
     });
   };
@@ -180,7 +193,6 @@ const Form = ({
           .then((res) => {
             setPipeStageDetails(res);
             toast.success('Stage Updated Successfully', {
-              duration: 1000,
               position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
@@ -188,7 +200,6 @@ const Form = ({
           })
           .catch(() => {
             toast.error('Failed to Update Stage', {
-              duration: 1000,
               position: 'top-right',
             });
           });
@@ -197,7 +208,6 @@ const Form = ({
           .then((res: any) => {
             setPipeStageDetails(res);
             toast.success('Stage Created Successfully', {
-              duration: 1000,
               position: 'top-right',
             });
             setRerender((pre: boolean) => !pre);
@@ -205,7 +215,6 @@ const Form = ({
           })
           .catch(() => {
             toast.error('stage already exist', {
-              duration: 1000,
               position: 'top-right',
             });
           });
@@ -226,24 +235,25 @@ const Form = ({
           setIsOpen && setIsOpen(false);
           setRerender((prev: boolean) => !prev);
           toast.success('Mapping Updated Successfully', {
-            duration: 1000,
             position: 'top-right',
           });
         })
         .catch(() => {
           toast.error('Mapping Failed', {
-            duration: 1000,
             position: 'top-right',
           });
         });
-    } else {
+    } else if (tempField.length == sampleD.mapping.length) {
       postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
         setIsOpen && setIsOpen(false);
         setRerender((prev: boolean) => !prev);
         toast.success('Mapped Successfully', {
-          duration: 1000,
           position: 'top-right',
         });
+      });
+    } else {
+      toast.error('Map every field', {
+        position: 'top-right',
       });
     }
   };
@@ -278,8 +288,8 @@ const Form = ({
     });
   };
 
-  const tempChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const safeSearchTypeValue: string = event.currentTarget.value;
+  const tempChange = (id: any) => {
+    const safeSearchTypeValue: any = id;
 
     loadTempType(safeSearchTypeValue);
   };
@@ -288,11 +298,11 @@ const Form = ({
     if (
       selectedPipelineStageId &&
       pipeStageDetails &&
-      pipeStageDetails.form_mapping[0]
+      pipeStageDetails.form_mapping.mapping
     ) {
-      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
-      setStageMap(pipeStageDetails.form_mapping[0].mapping);
-      setSourceData(pipeStageDetails.form_mapping[0].mapping);
+      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping.id : '');
+      setStageMap(pipeStageDetails.form_mapping.mapping);
+      setSourceData(pipeStageDetails.form_mapping.mapping);
     }
   }, [pipeStageDetails, selectedPipelineStageId]);
 
@@ -304,6 +314,16 @@ const Form = ({
       loadTempType(pipelineStageTemplateId);
     }
   }, [selectedPipelineStageId]);
+
+  useEffect(() => {
+    if (pipeStageDetails || pipelineData) {
+      setZodSchema(stageSchema);
+    }
+  }, [pipeStageDetails]);
+
+  useEffect(() => {
+    tempChange(template_id);
+  }, [template_id]);
 
   function prev() {
     setFormStep((i) => i - 1);
@@ -332,6 +352,21 @@ const Form = ({
           source: {
             id: selectedSource.id,
             name: selectedSource.name,
+          },
+        };
+        return newData;
+      });
+    } else {
+      setSourceData((prevData: any) => {
+        const newData = [...prevData];
+        newData[index] = {
+          destination: {
+            id: tempField[index].id,
+            name: tempField[index].name,
+          },
+          source: {
+            id: selectedOption,
+            name: selectedOption,
           },
         };
         return newData;
@@ -449,7 +484,6 @@ const Form = ({
                   <Select
                     id="template_id"
                     {...register('template_id', { required: true })}
-                    onChange={(e) => tempChange(e)}
                     disabled={selectedPipelineStageId ? true : false}>
                     {
                       <option disabled selected>
@@ -466,6 +500,11 @@ const Form = ({
                         </option>
                       ))}
                   </Select>
+                  {errors.template_id && errors.template_id.message && (
+                    <Text variant="error">
+                      {errors.template_id.message as string}
+                    </Text>
+                  )}
                 </Box>
               </Box>
             )}
@@ -502,6 +541,7 @@ const Form = ({
                                   ? stageMap[index].source.name
                                   : 'Select an option'}
                               </option>
+                              <option value="nil">nil</option>
                               {formField &&
                                 formField.length > 0 &&
                                 formField.map((m: any) => (
@@ -531,14 +571,20 @@ const Form = ({
                 )}
                 {formStep >= 1 && (
                   <Button variant="primary" type="button" onClick={onSubmit}>
-                    {stageMap && stageMap.length > 0 ? 'Update' : 'Add'}
+                    {stageMap && stageMap.length > 0 && isValid
+                      ? 'Update'
+                      : 'Add'}
                   </Button>
                 )}
               </Flex>
             )}
             {formStep == 0 && (
               <Button
-                disabled={pipelineData ? false : !isValid}
+                disabled={
+                  (pipelineData && isValid) || selectedPipelineStageId
+                    ? false
+                    : !isValid
+                }
                 type="button"
                 onClick={pipelineData ? next : handleSubmit(createpipeline)}
                 variant="primary">
