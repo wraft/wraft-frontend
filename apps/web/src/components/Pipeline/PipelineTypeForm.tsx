@@ -158,14 +158,6 @@ const Form = ({
       });
   };
 
-  // const setPipelineInfo = () => {
-  //   if (pipelineData) {
-  //     setValue('pipelinename', pipelineData.name);
-  //     setValue('pipeline_source', pipelineData.source);
-  //     setValue('pipeline_form', pipelineData.source_id);
-  //   }
-  // };
-
   //Pipeline Create API
 
   const createpipeline = (data: any) => {
@@ -306,11 +298,11 @@ const Form = ({
     if (
       selectedPipelineStageId &&
       pipeStageDetails &&
-      pipeStageDetails.form_mapping[0]
+      pipeStageDetails.form_mapping.mapping
     ) {
-      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping[0].id : '');
-      setStageMap(pipeStageDetails.form_mapping[0].mapping);
-      setSourceData(pipeStageDetails.form_mapping[0].mapping);
+      setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping.id : '');
+      setStageMap(pipeStageDetails.form_mapping.mapping);
+      setSourceData(pipeStageDetails.form_mapping.mapping);
     }
   }, [pipeStageDetails, selectedPipelineStageId]);
 
