@@ -93,8 +93,9 @@ const Index = () => {
         toast.success('Submitted Successfully');
         onClear();
       })
-      .catch(() => {
-        toast.error('Submission Failed');
+      .catch((err) => {
+        if (err.errors == 'No mappings found')
+          toast.error('Pipeline configuration incompleted');
       });
   };
 
