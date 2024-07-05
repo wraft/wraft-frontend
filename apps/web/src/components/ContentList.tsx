@@ -152,12 +152,12 @@ const ContentList = () => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
-  const currentVariant: any = router.query.variant
+  let currentVariant: any = router.query.variant;
 
   useEffect(() => {
     loadData(currentPage);
     loadVariants();
-  }, [selectedVariant]);
+  }, [selectedVariant, currentVariant]);
 
   /**
    * Load Content Types
@@ -185,12 +185,11 @@ const ContentList = () => {
    */
   const loadData = (page: number) => {
     setContenLoading(true);
-    let query;
-    let variant = selectedVariant || currentVariant
+    let query = `page=${page}&sort=inserted_at_desc`;
+
+    let variant = selectedVariant || currentVariant;
     if (variant) {
-      query = `content_type_name=${variant}&page=${page}&sort=inserted_at_desc`;
-    } else {
-      query = `page=${page}&sort=inserted_at_desc`;
+      query += `&content_type_name=${variant}`;
     }
     fetchAPI(`contents?${query}`)
       .then((data: any) => {
@@ -218,11 +217,11 @@ const ContentList = () => {
     );
   };
 
-  const handleFilter = (title:any) => {
-    setSelectedVariant(title)
+  const handleFilter = (title: any) => {
+    setSelectedVariant(title);
     setPage(page);
     const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: page, variant:title };
+    const currentQuery = { ...router.query, page: page, variant: title };
     router.push(
       {
         pathname: currentPath,
@@ -231,8 +230,21 @@ const ContentList = () => {
       undefined,
       { shallow: true },
     );
-  }
+  };
 
+  const handleClear = () => {
+    setSelectedVariant('');
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: currentPage, variant: '' };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Documents" desc="Manage all documents" />
@@ -270,14 +282,16 @@ const ContentList = () => {
                   }}>
                   Filter by Variant
                 </Text>
-                {selectedVariant && (
-                  <Button
-                    size="xxs"
-                    variant="outlined"
-                    shape="square"
-                    onClick={() => setSelectedVariant('')}>
-                    clear
-                  </Button>
+                {(selectedVariant || currentVariant) && (
+                  <Box>
+                    <Button
+                      size="xxs"
+                      variant="outlined"
+                      shape="square"
+                      onClick={handleClear}>
+                      clear
+                    </Button>
+                  </Box>
                 )}
               </Flex>
               <Box
@@ -298,7 +312,9 @@ const ContentList = () => {
                       no={0}
                       setSelected={handleFilter}
                       active={
-                        selectedVariant === v?.name ? 'neutral.200' : undefined
+                        (selectedVariant || currentVariant) === v?.name
+                          ? 'neutral.200'
+                          : undefined
                       }
                     />
                   ))}
