@@ -120,7 +120,7 @@ const Form = ({ rerender, setRerender }: Props) => {
                 row.original.form_mapping != null ? 'Complete' : 'Incomplete'
               }
               color={
-                row.original.form_mapping != null  ? 'green.a400' : 'red.200'
+                row.original.form_mapping != null ? 'green.a400' : 'red.200'
               }
             />
           </Box>
