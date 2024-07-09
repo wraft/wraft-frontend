@@ -53,13 +53,13 @@ const Pagination: React.FC<IProp> = ({
   const disabledClassName = 'disabled';
   const pagecount = totalPage || 0;
   const previousClasses = `previous${currentPage === 1 ? ` ${disabledClassName}` : ''}`;
-  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ''}`;
+  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ''}`;  
 
   useEffect(() => {
     if (initialPage != undefined) {
       setCurrentPage(initialPage);
     }
-  }, []);
+  }, [initialPage]);
 
   const onHandlePreviousPage = (evt: any) => {
     evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);

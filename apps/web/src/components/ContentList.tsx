@@ -148,16 +148,15 @@ const ContentList = () => {
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
-  const [selectedVariant, setSelectedVariant] = useState<any>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
-  let currentVariant: any = router.query.variant;
+  const currentVariant: any = router.query.variant;
 
   useEffect(() => {
-    loadData(currentPage);
+    loadData();
     loadVariants();
-  }, [selectedVariant, currentVariant]);
+  }, []);
 
   /**
    * Load Content Types
@@ -173,24 +172,39 @@ const ContentList = () => {
       });
   };
 
+  // const loadState = () => {
+  //   fetchAPI('flows')
+  //     .then((data: any) => {
+  //       console.log(data, 'logdata');
+
+  //       const res: any = data.states.state;
+  //       setDocState(res);
+  //     })
+  //     .catch(() => {
+  //       toast.error('Failed to load states');
+  //     });
+  // };
+
   useEffect(() => {
-    if (page) {
-      loadData(page);
+    if (page || currentVariant) {
+      loadData();
     }
-  }, [page]);
+  }, [currentPage, currentVariant]);
 
   /**
    * Load Contents with pagination
    * @param page
    */
-  const loadData = (page: number) => {
+  const loadData = () => {
     setContenLoading(true);
-    let query = `page=${page}&sort=inserted_at_desc`;
 
-    let variant = selectedVariant || currentVariant;
-    if (variant) {
-      query += `&content_type_name=${variant}`;
-    }
+    const qpage = currentPage ? `&page=${currentPage}` : '';
+    const qvariant = currentVariant
+      ? `&content_type_name=${currentVariant}`
+      : '';
+
+    const query = `sort=inserted_at_desc${qpage}${qvariant}`;
+
     fetchAPI(`contents?${query}`)
       .then((data: any) => {
         setContenLoading(false);
@@ -217,11 +231,15 @@ const ContentList = () => {
     );
   };
 
-  const handleFilter = (title: any) => {
-    setSelectedVariant(title);
-    setPage(page);
+  const handleFilter = (title?: any) => {
+    setPage(1);
     const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: page, variant: title };
+    const currentQuery = { ...router.query, page: 1, variant: title };
+    if (!title) {
+      router.push({
+        pathname: currentPath,
+      });
+    }
     router.push(
       {
         pathname: currentPath,
@@ -232,19 +250,6 @@ const ContentList = () => {
     );
   };
 
-  const handleClear = () => {
-    setSelectedVariant('');
-    const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: currentPage, variant: '' };
-    router.push(
-      {
-        pathname: currentPath,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
-  };
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Documents" desc="Manage all documents" />
@@ -270,25 +275,24 @@ const ContentList = () => {
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
-              <Flex sx={{ justifyContent: 'space-between' }}>
+              <Flex sx={{ justifyContent: 'space-between', mb: 2 }}>
                 <Text
                   as="h4"
                   variant="blockTitle"
                   sx={{
-                    mb: 2,
                     fontWeight: 'body',
                     fontSize: 'sm',
                     color: 'text',
                   }}>
                   Filter by Variant
                 </Text>
-                {(selectedVariant || currentVariant) && (
+                {currentVariant && (
                   <Box>
                     <Button
                       size="xxs"
-                      variant="outlined"
+                      variant="secondary"
                       shape="square"
-                      onClick={handleClear}>
+                      onClick={() => handleFilter('')}>
                       clear
                     </Button>
                   </Box>
@@ -312,43 +316,43 @@ const ContentList = () => {
                       no={0}
                       setSelected={handleFilter}
                       active={
-                        (selectedVariant || currentVariant) === v?.name
-                          ? 'neutral.200'
-                          : undefined
+                        currentVariant === v?.name ? 'green.400' : undefined
                       }
                     />
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
-              <Text
-                as="h4"
-                variant="blockTitle"
-                sx={{
-                  mb: 2,
-                  fontSize: 'sm',
-                  fontWeight: 'body',
-                  color: 'text',
-                }}>
-                Filter by State
-              </Text>
-              <Box
-                sx={{
-                  borderRight: 'solid 1px',
-                  borderLeft: 'solid 1px',
-                  borderTop: 'solid 1px',
-                  borderColor: 'border',
-                  borderRadius: '5px',
-                  '&:last-child': {
-                    borderBottom: 0,
-                  },
-                }}>
-                <FilterBlock title="Draft" no={32} color="blue.3" />
-                <FilterBlock title="In Review" no={32} color="orange.3" />
-                <FilterBlock title="Published" no={32} color="green.3" />
-                <FilterBlock title="Archived" no={32} color="purple" />
+            {/* {currentVariant && (
+              <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
+                <Text
+                  as="h4"
+                  variant="blockTitle"
+                  sx={{
+                    mb: 2,
+                    fontSize: 'sm',
+                    fontWeight: 'body',
+                    color: 'text',
+                  }}>
+                  Filter by State
+                </Text>
+                <Box
+                  sx={{
+                    borderRight: 'solid 1px',
+                    borderLeft: 'solid 1px',
+                    borderTop: 'solid 1px',
+                    borderColor: 'border',
+                    borderRadius: '5px',
+                    '&:last-child': {
+                      borderBottom: 0,
+                    },
+                  }}>
+                  <FilterBlock title="Draft" no={32} color="blue.3" />
+                  <FilterBlock title="In Review" no={32} color="orange.3" />
+                  <FilterBlock title="Published" no={32} color="green.3" />
+                  <FilterBlock title="Archived" no={32} color="purple" />
+                </Box>
               </Box>
-            </Box>
+            )} */}
           </Box>
         </Flex>
       </Container>
