@@ -172,6 +172,8 @@ const ContentList = () => {
       });
   };
 
+  /* TO DO: waiting for the api response */
+
   // const loadState = () => {
   //   fetchAPI('flows')
   //     .then((data: any) => {
@@ -322,6 +324,9 @@ const ContentList = () => {
                   ))}
               </Box>
             </Box>
+
+            {/* TO DO */}
+
             {/* {currentVariant && (
               <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
                 <Text
