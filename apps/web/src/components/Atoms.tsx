@@ -71,7 +71,7 @@ export const ColorBlock = (props: any) => {
 
 interface FilterBlockProps {
   title: string;
-  no: number;
+  // no: number;
   color?: string;
   setSelected?: any;
   active?: string;
@@ -84,7 +84,7 @@ interface FilterBlockProps {
  */
 export const FilterBlock: FC<FilterBlockProps> = ({
   title,
-  no,
+  // no,
   color,
   setSelected,
   active,
@@ -121,7 +121,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       />
       <Text as="h4" sx={{ fontSize: 'sm', mt: 1, fontWeight: 500 }}>
         {title}
-        <Text
+        {/* <Text
           as="span"
           sx={{
             ml: 1,
@@ -140,7 +140,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({
             py: '1px',
           }}>
           {no}
-        </Text>
+        </Text> */}
       </Text>
     </Flex>
   );

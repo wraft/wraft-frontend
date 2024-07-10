@@ -315,7 +315,6 @@ const ContentList = () => {
                     <FilterBlock
                       key={v?.name}
                       title={v?.name}
-                      no={0}
                       setSelected={handleFilter}
                       active={
                         currentVariant === v?.name ? 'green.400' : undefined
