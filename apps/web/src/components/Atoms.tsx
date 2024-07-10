@@ -74,7 +74,7 @@ interface FilterBlockProps {
   no: number;
   color?: string;
   setSelected?: any;
-  active?:string;
+  active?: string;
 }
 
 /**
@@ -87,7 +87,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({
   no,
   color,
   setSelected,
-  active
+  active,
 }) => {
   return (
     <Flex
