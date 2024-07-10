@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
+import { Button, Pagination, Table } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { fetchAPI } from '../utils/models';
@@ -151,9 +151,10 @@ const ContentList = () => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const currentVariant: any = router.query.variant;
 
   useEffect(() => {
-    loadData(currentPage);
+    loadData();
     loadVariants();
   }, []);
 
@@ -171,19 +172,41 @@ const ContentList = () => {
       });
   };
 
+  /* TO DO: waiting for the api response */
+
+  // const loadState = () => {
+  //   fetchAPI('flows')
+  //     .then((data: any) => {
+  //       console.log(data, 'logdata');
+
+  //       const res: any = data.states.state;
+  //       setDocState(res);
+  //     })
+  //     .catch(() => {
+  //       toast.error('Failed to load states');
+  //     });
+  // };
+
   useEffect(() => {
-    if (page) {
-      loadData(page);
+    if (page || currentVariant) {
+      loadData();
     }
-  }, [page]);
+  }, [currentPage, currentVariant]);
 
   /**
    * Load Contents with pagination
    * @param page
    */
-  const loadData = (page: number) => {
+  const loadData = () => {
     setContenLoading(true);
-    const query = `page=${page}&sort=inserted_at_desc`;
+
+    const qpage = currentPage ? `&page=${currentPage}` : '';
+    const qvariant = currentVariant
+      ? `&content_type_name=${currentVariant}`
+      : '';
+
+    const query = `sort=inserted_at_desc${qpage}${qvariant}`;
+
     fetchAPI(`contents?${query}`)
       .then((data: any) => {
         setContenLoading(false);
@@ -200,6 +223,25 @@ const ContentList = () => {
     setPage(newPage);
     const currentPath = router.pathname;
     const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
+  const handleFilter = (title?: any) => {
+    setPage(1);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: 1, variant: title };
+    if (!title) {
+      router.push({
+        pathname: currentPath,
+      });
+    }
     router.push(
       {
         pathname: currentPath,
@@ -235,17 +277,29 @@ const ContentList = () => {
           </Box>
           <Box variant="layout.plateSidebar">
             <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
-              <Text
-                as="h4"
-                variant="blockTitle"
-                sx={{
-                  mb: 2,
-                  fontWeight: 'body',
-                  fontSize: 'sm',
-                  color: 'text',
-                }}>
-                Filter by Variant
-              </Text>
+              <Flex sx={{ justifyContent: 'space-between', mb: 2 }}>
+                <Text
+                  as="h4"
+                  variant="blockTitle"
+                  sx={{
+                    fontWeight: 'body',
+                    fontSize: 'sm',
+                    color: 'text',
+                  }}>
+                  Filter by Variant
+                </Text>
+                {currentVariant && (
+                  <Box>
+                    <Button
+                      size="xxs"
+                      variant="secondary"
+                      shape="square"
+                      onClick={() => handleFilter('')}>
+                      clear
+                    </Button>
+                  </Box>
+                )}
+              </Flex>
               <Box
                 sx={{
                   borderRight: 'solid 1px',
@@ -258,39 +312,51 @@ const ContentList = () => {
                 }}>
                 {variants &&
                   variants.map((v: any) => (
-                    <FilterBlock key={v?.name} title={v?.name} no={0} {...v} />
+                    <FilterBlock
+                      key={v?.name}
+                      title={v?.name}
+                      setSelected={handleFilter}
+                      active={
+                        currentVariant === v?.name ? 'green.400' : undefined
+                      }
+                    />
                   ))}
               </Box>
             </Box>
-            <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
-              <Text
-                as="h4"
-                variant="blockTitle"
-                sx={{
-                  mb: 2,
-                  fontSize: 'sm',
-                  fontWeight: 'body',
-                  color: 'text',
-                }}>
-                Filter by State
-              </Text>
-              <Box
-                sx={{
-                  borderRight: 'solid 1px',
-                  borderLeft: 'solid 1px',
-                  borderTop: 'solid 1px',
-                  borderColor: 'border',
-                  borderRadius: '5px',
-                  '&:last-child': {
-                    borderBottom: 0,
-                  },
-                }}>
-                <FilterBlock title="Draft" no={32} color="blue.3" />
-                <FilterBlock title="In Review" no={32} color="orange.3" />
-                <FilterBlock title="Published" no={32} color="green.3" />
-                <FilterBlock title="Archived" no={32} color="purple" />
+
+            {/* TO DO */}
+
+            {/* {currentVariant && (
+              <Box variant="layout.plateBox" sx={{ border: 0, pl: 3 }}>
+                <Text
+                  as="h4"
+                  variant="blockTitle"
+                  sx={{
+                    mb: 2,
+                    fontSize: 'sm',
+                    fontWeight: 'body',
+                    color: 'text',
+                  }}>
+                  Filter by State
+                </Text>
+                <Box
+                  sx={{
+                    borderRight: 'solid 1px',
+                    borderLeft: 'solid 1px',
+                    borderTop: 'solid 1px',
+                    borderColor: 'border',
+                    borderRadius: '5px',
+                    '&:last-child': {
+                      borderBottom: 0,
+                    },
+                  }}>
+                  <FilterBlock title="Draft" no={32} color="blue.3" />
+                  <FilterBlock title="In Review" no={32} color="orange.3" />
+                  <FilterBlock title="Published" no={32} color="green.3" />
+                  <FilterBlock title="Archived" no={32} color="purple" />
+                </Box>
               </Box>
-            </Box>
+            )} */}
           </Box>
         </Flex>
       </Container>
