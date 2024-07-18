@@ -23,6 +23,8 @@ import styles from './common/Tab/tab.module.css';
 import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
+import Modal from './Modal';
+import { ConfirmDelete } from './common';
 import { StateState } from './FlowForm';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -197,12 +199,15 @@ const ContentDetail = () => {
   const [activeFlow, setActiveFlow] = useState<any>(null);
   const [nextState, setNextState] = useState<StateState>();
   const [prevState, setPrevState] = useState<StateState>();
+  const [open, setOpen] = useState<boolean>(false);
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
 
   const loadData = (id: string) => {
     fetchAPI(`contents/${id}`).then((data: any) => {
+      console.log(data, 'logdatadoc');
+
       setLoading(false);
       const res: ContentInstance = data;
       setContents(res);
@@ -277,6 +282,8 @@ const ContentDetail = () => {
       // s
       if (contentTypeId) {
         fetchAPI(`content_types/${contentTypeId}`).then((data: any) => {
+          console.log('logcontentflow', data);
+
           onLoadData(data);
         });
       }
@@ -298,6 +305,7 @@ const ContentDetail = () => {
         },
         error: 'Failed',
       });
+      setOpen(false);
     }
   };
   const onRejectState = () => {
@@ -316,7 +324,9 @@ const ContentDetail = () => {
 
   useEffect(() => {
     if (activeFlow && contents) {
-      fetchAPI(`flows/${activeFlow.id}/states`).then(() => {});
+      console.log(activeFlow.flow.id, 'logactiveflow');
+
+      fetchAPI(`flows/${activeFlow.flow.id}/states`).then(() => {});
       const activeState = activeFlow?.states.filter(
         (a: any) => a.id === contents.state.id,
       )?.[0];
@@ -557,9 +567,7 @@ const ContentDetail = () => {
                     </Button>
                   )}
                   {nextState && (
-                    <Button
-                      variant="secondary"
-                      onClick={() => onApproveState()}>
+                    <Button variant="secondary" onClick={() => setOpen(true)}>
                       <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
                     </Button>
                   )}
@@ -712,6 +720,52 @@ const ContentDetail = () => {
           </Flex>
         )}
       </Box>
+      <Modal isOpen={open}>
+        {/* {
+          <ConfirmDelete
+            title="Confirm action"
+            text={`Are you sure you want send to ${nextState?.state}?`}
+            setOpen={setOpen}
+            onConfirmDelete={() => {
+              setOpen(false);
+            }}
+          />
+        } */}
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            width: '342px',
+            height: '205px',
+            border: '1px solid #E4E9EF',
+            background: '#FFF',
+            alignItems: 'center',
+          }}>
+          <Box sx={{ p: 3, borderColor: 'border' }}>
+            <Text as="p" variant="h5Medium">
+              Confirm action
+            </Text>
+          </Box>
+          <Text
+            sx={{
+              marginTop: '13px',
+              mb: '28px',
+              textAlign: 'center',
+              fontWeight: 'heading',
+              color: 'gray.900',
+            }}>
+            {`Are you sure you want send to ${nextState?.state}?`}
+          </Text>
+          <Flex sx={{ gap: '12px' }}>
+            <Button onClick={onApproveState}>Confirm</Button>
+
+            <Button
+              onClick={() => setOpen(false)}
+              sx={{ bg: 'red', color: 'white' }}>
+              Cancel
+            </Button>
+          </Flex>
+        </Flex>
+      </Modal>
     </Box>
   );
 };
