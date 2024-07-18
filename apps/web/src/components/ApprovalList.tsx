@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import toast from 'react-hot-toast';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
@@ -107,7 +108,7 @@ const columns = (approveInstance: any) => [
           <Box>
             <Button
               variant="btnAction"
-              onClick={() => approveInstance(row?.original?.instance?.id)}>
+              onClick={() => approveInstance(row?.original?.content?.id)}>
               Approve
             </Button>
           </Box>
@@ -122,6 +123,7 @@ const columns = (approveInstance: any) => [
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [rerender, setRerender] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
 
@@ -133,6 +135,8 @@ const Approvals = () => {
       .then((data: any) => {
         setLoading(false);
         const res: any[] = data.pending_approvals;
+        console.log(res, 'logres');
+
         setContents(res);
       })
       .catch(() => {
@@ -144,14 +148,22 @@ const Approvals = () => {
     if (accessToken) {
       loadData();
     }
-  }, [accessToken]);
+  }, [accessToken,rerender]);
 
   /**
    * Approve an Instance
    */
 
   const approveInstance = (id: string) => {
-    putAPI(`contents/${id}/approve`).then(() => {});
+    const req = putAPI(`contents/${id}/approve`)
+      toast.promise(req, {
+        loading: 'Approving...',
+        success: () => {
+          setRerender((prev) => !prev);
+          return 'Approved';
+        },
+        error: 'Failed',
+      });
   };
 
   return (
