@@ -72,33 +72,98 @@ export const findDefault = (needle: string, stack: any) => {
 //   return result;
 // };
 
-export const updateVars = (data, fields) => {
-  // Directly return the original data if fields are empty or the first item has no value
-  if (!fields?.length || !fields[0]?.value) {
+// export const updateVars = (data, fields) => {
+//   // Directly return the original data if fields are empty or the first item has no value
+//   if (!fields?.length || !fields[0]?.value) {
+//     return data;
+//   }
+
+//   console.log('UPDATED_BODY updateStuff', fields);
+
+//   // Create a deep copy of the data to avoid direct mutation
+//   const updatedData = JSON.parse(JSON.stringify(data));
+
+//   // Iterate over the content to find and update the 'holder' type elements
+//   updatedData.content.forEach((p, k) => {
+//     p.content?.forEach((c, y) => {
+//       if (c.type === 'holder') {
+//         const fieldToUpdate = fields.find(
+//           (field) => field.name === c.attrs.name,
+//         );
+//         if (fieldToUpdate) {
+//           // Update the named attribute of the holder
+//           updatedData.content[k].content[y].attrs.named = fieldToUpdate.value;
+//         }
+//       }
+//     });
+//   });
+
+//   return updatedData;
+// };
+
+export const findHolders = (data) => {
+  const holders = {};
+
+  const traverse = (node) => {
+    if (Array.isArray(node)) {
+      node.forEach(traverse);
+    } else if (typeof node === 'object' && node !== null) {
+      if (node.type === 'holder' && node.attrs) {
+        const { id, named } = node.attrs;
+        if (id && named !== undefined) {
+          holders[id] = named;
+        }
+      }
+      Object.values(node).forEach(traverse);
+    }
+  };
+
+  traverse(data);
+  return holders;
+};
+
+export const updateVars = (data, fields, nodeType = 'holder') => {
+  if (!fields?.length || !fields[0]?.value || !data?.content) {
     return data;
   }
 
-  console.log('UPDATED_BODY updateStuff', fields);
+  const fieldMap = new Map(fields.map((field) => [field.name, field.value]));
 
-  // Create a deep copy of the data to avoid direct mutation
-  const updatedData = JSON.parse(JSON.stringify(data));
+  function deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(deepClone);
+    }
+    const clonedObj = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        clonedObj[key] = deepClone(obj[key]);
+      }
+    }
+    return clonedObj;
+  }
 
-  // Iterate over the content to find and update the 'holder' type elements
-  updatedData.content.forEach((p, k) => {
-    p.content?.forEach((c, y) => {
-      if (c.type === 'holder') {
-        const fieldToUpdate = fields.find(
-          (field) => field.name === c.attrs.name,
-        );
-        if (fieldToUpdate) {
-          // Update the named attribute of the holder
-          updatedData.content[k].content[y].attrs.named = fieldToUpdate.value;
+  const clonedData = deepClone(data);
+
+  function update(node) {
+    if (Array.isArray(node)) {
+      node.forEach(update);
+    } else if (typeof node === 'object' && node !== null) {
+      if (node.type === nodeType) {
+        const value = fieldMap.get(node.attrs?.name);
+        if (value !== undefined) {
+          node.attrs.named = value;
         }
       }
-    });
-  });
+      Object.values(node).forEach(update);
+    }
+  }
 
-  return updatedData;
+  update(clonedData.content);
+
+  return clonedData;
 };
 
 /**
