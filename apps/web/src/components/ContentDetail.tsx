@@ -24,7 +24,6 @@ import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
 import Modal from './Modal';
-import { ConfirmDelete } from './common';
 import { StateState } from './FlowForm';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -197,20 +196,30 @@ const ContentDetail = () => {
   const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
   const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [activeState, setActiveState] = useState<StateState>();
   const [nextState, setNextState] = useState<StateState>();
   const [prevState, setPrevState] = useState<StateState>();
   const [open, setOpen] = useState<boolean>(false);
+  const [user, setUser] = useState<any>();
+  const [flowDetails, setFlowDetails] = useState<any>();
+  const [eligibleUser, setEligibleUser] = useState<boolean>(false);
+
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
 
   const loadData = (id: string) => {
     fetchAPI(`contents/${id}`).then((data: any) => {
-      console.log(data, 'logdatadoc');
-
       setLoading(false);
       const res: ContentInstance = data;
       setContents(res);
+    });
+  };
+
+  const loadUser = () => {
+    fetchAPI('users/me').then((data: any) => {
+      const res = data;
+      setUser(res);
     });
   };
 
@@ -244,6 +253,10 @@ const ContentDetail = () => {
   useEffect(() => {
     loadData(cId);
   }, [cId, rerender]);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   useEffect(() => {
     if (build) {
@@ -281,11 +294,13 @@ const ContentDetail = () => {
 
       // s
       if (contentTypeId) {
-        fetchAPI(`content_types/${contentTypeId}`).then((data: any) => {
-          console.log('logcontentflow', data);
-
-          onLoadData(data);
-        });
+        fetchAPI(`content_types/${contentTypeId}`)
+          .then((data: any) => {
+            onLoadData(data);
+          })
+          .catch((err) => {
+            console.log(err, 'logerr');
+          });
       }
     }
   }, [contents]);
@@ -324,9 +339,24 @@ const ContentDetail = () => {
 
   useEffect(() => {
     if (activeFlow && contents) {
-      console.log(activeFlow.flow.id, 'logactiveflow');
+      fetchAPI(`flows/${activeFlow.flow.id}/states`).then((data: any) => {
+        const stateNames: { state: string; approver: string }[] = [];
+        data.states.forEach((item: any) => {
+          const state = item.state;
 
-      fetchAPI(`flows/${activeFlow.flow.id}/states`).then(() => {});
+          if (state && state.approvers) {
+            state.approvers.map((approver: any) => {
+              const stateNamePair = {
+                state: state.state,
+                approver: approver.name,
+                id: approver.id,
+              };
+              stateNames.push(stateNamePair);
+            });
+          }
+        });
+        setFlowDetails(stateNames);
+      });
       const activeState = activeFlow?.states.filter(
         (a: any) => a.id === contents.state.id,
       )?.[0];
@@ -334,6 +364,7 @@ const ContentDetail = () => {
       const nextState = activeFlow.states[activeIndex + 1];
       const prevState = activeFlow.states[activeIndex - 1];
       if (activeState) {
+        setActiveState(activeState);
         setNextState(nextState);
         setPrevState(prevState);
       } else {
@@ -343,6 +374,16 @@ const ContentDetail = () => {
   }, [activeFlow, contents]);
 
   // const navTitle = contents?.content?.title;
+
+  useEffect(() => {
+    if (flowDetails && flowDetails.length > 0 && activeState && user) {
+      // Check if there is a match in flowDetails
+      const isApproved = flowDetails.some((detail: any) => {
+        return detail.state === activeState.state && detail.id === user.id;
+      });
+      setEligibleUser(isApproved);
+    }
+  }, [activeState, user, flowDetails]);
 
   return (
     <Box py={0} sx={{ minHeight: '100vh' }}>
@@ -566,10 +607,13 @@ const ContentDetail = () => {
                       <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
                     </Button>
                   )}
-                  {nextState && (
+                  {nextState && eligibleUser && (
                     <Button variant="secondary" onClick={() => setOpen(true)}>
                       <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
                     </Button>
+                  )}
+                  {!eligibleUser && (
+                    <Text variant="pB">Waiting for approval</Text>
                   )}
                 </Flex>
                 <Flex
@@ -581,19 +625,21 @@ const ContentDetail = () => {
                     flexDirection: 'row',
                     // border: 'solid 1px #ddd',
                   }}>
-                  <Button
-                    sx={{ py: 2 }}
-                    variant="btnPrimary"
-                    onClick={() => doBuild()}>
-                    <>
-                      {loading && <Spinner color="white" size={24} />}
-                      {!loading && (
-                        <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                          Build
-                        </Text>
-                      )}
-                    </>
-                  </Button>
+                  {eligibleUser && (
+                    <Button
+                      sx={{ py: 2 }}
+                      variant="btnPrimary"
+                      onClick={() => doBuild()}>
+                      <>
+                        {loading && <Spinner color="white" size={24} />}
+                        {!loading && (
+                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
+                            Build
+                          </Text>
+                        )}
+                      </>
+                    </Button>
+                  )}
                 </Flex>
               </Box>
 
