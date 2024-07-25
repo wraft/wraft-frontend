@@ -36,7 +36,7 @@ export interface State {
   id: string;
 }
 
-const columns = (approveInstance: any) => [
+const columns = () => [
   {
     id: 'content.name',
     header: 'Name',
@@ -100,18 +100,18 @@ const columns = (approveInstance: any) => [
     cell: ({ row }: any) => (
       <Flex sx={{ mr: 1, p: 2 }}>
         <Flex>
-          <Box sx={{ mr: 2 }}>
+          <NextLink href={`/content/${row.original?.content?.id}`}>
             <Button variant="btnSecondary" sx={{ mr: 1 }}>
               Review
             </Button>
-          </Box>
-          <Box>
+          </NextLink>
+          {/* <Box>
             <Button
               variant="btnAction"
               onClick={() => approveInstance(row?.original?.content?.id)}>
               Approve
             </Button>
-          </Box>
+          </Box> */}
         </Flex>
       </Flex>
     ),
@@ -135,8 +135,6 @@ const Approvals = () => {
       .then((data: any) => {
         setLoading(false);
         const res: any[] = data.pending_approvals;
-        console.log(res, 'logres');
-
         setContents(res);
       })
       .catch(() => {
@@ -148,22 +146,22 @@ const Approvals = () => {
     if (accessToken) {
       loadData();
     }
-  }, [accessToken,rerender]);
+  }, [accessToken, rerender]);
 
   /**
    * Approve an Instance
    */
 
   const approveInstance = (id: string) => {
-    const req = putAPI(`contents/${id}/approve`)
-      toast.promise(req, {
-        loading: 'Approving...',
-        success: () => {
-          setRerender((prev) => !prev);
-          return 'Approved';
-        },
-        error: 'Failed',
-      });
+    const req = putAPI(`contents/${id}/approve`);
+    toast.promise(req, {
+      loading: 'Approving...',
+      success: () => {
+        setRerender((prev) => !prev);
+        return 'Approved';
+      },
+      error: 'Failed',
+    });
   };
 
   return (
@@ -177,7 +175,7 @@ const Approvals = () => {
             <Table
               data={contents}
               isLoading={loading}
-              columns={columns(approveInstance)}
+              columns={columns}
               skeletonRows={10}
               emptyMessage="Nothing to approve"
             />

@@ -28,7 +28,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
   });
 
   const onSubmit = (data: any) => {
-    setCreating(true)
+    setCreating(true);
     const body = {
       name: data.name,
       url: data.url,
@@ -42,7 +42,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
           position: 'top-right',
         });
         setCreatedId(data.id);
-        setCreating(false)
+        setCreating(false);
       })
       .catch(() => {
         toast.error('Workspace creation failed!', {
@@ -89,8 +89,6 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
               }}>
               {creating && <Spinner width={16} height={16} color="white" />}
               {!creating && <Text>Create Workspace</Text>}
-
-              
             </Button>
             <Button
               onClick={() => {
