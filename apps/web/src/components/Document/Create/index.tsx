@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
-import { Button } from '@wraft/ui';
+import { Button, Skeleton } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
@@ -44,7 +44,7 @@ export interface IFieldItem {
 
 const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [fields, setField] = useState([]);
   const [formStep, setFormStep] = useState(0);
 
@@ -84,12 +84,12 @@ const CreateDocument = () => {
   const loadData = () => {
     fetchAPI(`data_templates`)
       .then((data: any) => {
-        setLoading(true);
+        setLoading(false);
         const res: IField[] = data.data_templates;
         setContents(res);
       })
       .catch(() => {
-        setLoading(true);
+        setLoading(false);
       });
   };
 
@@ -157,6 +157,27 @@ const CreateDocument = () => {
                   Select a template
                 </Text>
               </Box>
+
+              {loading &&
+                Array.from({ length: 10 }, (_, index) => (
+                  <Flex
+                    key={index}
+                    sx={{
+                      px: 3,
+                      py: 2,
+                      border: 'solid 1px',
+                      borderBottom: 'none',
+                      borderColor: 'border',
+                    }}>
+                    <Box>
+                      <Skeleton width="20px" height="22px" />
+                    </Box>
+                    <Box mx={3} sx={{ width: '100%' }}>
+                      <Skeleton height="22px" />
+                    </Box>
+                    <Skeleton width="20px" height="22px" />
+                  </Flex>
+                ))}
 
               {contents && (
                 <Controller

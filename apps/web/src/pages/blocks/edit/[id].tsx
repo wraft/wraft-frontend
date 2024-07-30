@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { Box } from 'theme-ui';
+import { ErrorBoundary } from '@wraft/ui';
 
 import TemplateForm from 'components/BlockTemplateForm';
 import { HeadingFrame } from 'components/Card';
@@ -16,7 +17,9 @@ const Index: FC = () => {
       <Page>
         <HeadingFrame title="Blocks / Edit Block" />
         <Box sx={{ pl: 4 }}>
-          <TemplateForm />
+          <ErrorBoundary>
+            <TemplateForm />
+          </ErrorBoundary>
         </Box>
       </Page>
     </>

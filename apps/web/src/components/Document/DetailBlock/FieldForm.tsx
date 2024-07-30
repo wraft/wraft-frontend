@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Drawer, useDrawer } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
+import { EditIcon } from '@wraft/icon';
 
 import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
-import { Field as FieldT, FieldInstance } from 'utils/types';
-// import { constants } from 'buffer';
+import { FieldInstance } from 'utils/types';
 
 export interface IFieldField {
   name: string;
@@ -15,10 +15,12 @@ export interface IFieldField {
 }
 
 export interface IFieldType {
+  id: string;
+  meta?: Record<string, any>;
   name: string;
+  description?: string | null;
+  field_type?: Record<string, any>;
   value: string;
-  type?: string;
-  id?: any;
 }
 
 interface FieldFormProps {
@@ -28,34 +30,29 @@ interface FieldFormProps {
   activeTemplate?: any;
   templates?: any;
   setShowForm?: any;
-  showForm?: any;
   onRefresh: any;
   fieldValues?: any;
 }
 
-const FieldForm = ({
-  fields,
-  onSaved,
-  // setMaps,
-  // onRefresh,
-  // activeTemplate,
-  setShowForm,
-  fieldValues,
-  // templates,
-  showForm,
-}: FieldFormProps) => {
+const FieldForm = ({ fields, onSaved, fieldValues }: FieldFormProps) => {
   const { register, handleSubmit } = useForm();
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
+
+  const mobileMenuDrawer = useDrawer();
 
   const mapFields = (
     fields: any,
     fieldValues: Record<string, any>,
   ): FieldInstance[] => {
-    return fields.map((field: any) => ({
-      ...field,
-      value: fieldValues[field.id] || '',
-    }));
+    return fields.map((field: any) => {
+      console.log('fields[neww][map single]', fieldValues[field.id]);
+      return {
+        ...field,
+        value: fieldValues[field.id] || '',
+      } as IFieldType;
+    });
   };
 
   const onSubmit = (data: Record<string, any>) => {
@@ -65,38 +62,39 @@ const FieldForm = ({
     setMappedFields(mappedFields);
     onSaved(mappedFields);
 
-    closeModal();
+    setSubmitting(false);
+    closeDrawer();
   };
 
   useEffect(() => {
     if (fields) {
-      const mappedFields = mapFields(fields, fieldValues);
-      onSaved(mappedFields);
-      setMappedFields(mappedFields);
+      console.log('fields[neww]', fields);
+      console.log('fields[neww][value]', fieldValues);
+      if (fieldValues) {
+        const mappedFields = mapFields(fields, fieldValues);
+        onSaved(mappedFields);
+        setMappedFields(mappedFields);
+      }
+
+      console.log('fields[neww][merged value]', mappedFields);
     }
-  }, [fields]);
+  }, [fields, fieldValues]);
 
-  function closeModal() {
-    setShowForm(false);
-  }
-
-  // const yoFileTha = () => {
-  //   onRefresh(fieldMap);
-  // };
-
-  // const updateForm = () => {
-  //   console.log('done', fieldMap);
-  // };
+  const openDrawer = () => setDrawerOpen(true);
+  const closeDrawer = () => setDrawerOpen(false);
 
   return (
     <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
       {fieldValues && (
         <>
-          <Box>
+          <Flex sx={{ justifyContent: 'space-between' }}>
             <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
               Fields
             </Text>
-          </Box>
+            <Box onClick={openDrawer}>
+              <EditIcon width={18} />
+            </Box>
+          </Flex>
 
           <Box
             p={0}
@@ -112,12 +110,10 @@ const FieldForm = ({
                 <Flex
                   key={x.id}
                   sx={{
-                    // bg: 'red.400',
                     py: 2,
                     px: 3,
                     borderBottom: 'solid 0.5px',
                     borderColor: 'border',
-                    // mb: 2,
                   }}>
                   <Text
                     sx={{
@@ -132,11 +128,8 @@ const FieldForm = ({
                     sx={{
                       fontSize: 'sm',
                       fontWeight: 'bold',
-                      // color: 'green.1000',
                       ml: 'auto',
                       color: 'text',
-                      // fontWeight: 300,
-                      // fontFamily: 'Menlo, monospace',
                     }}>
                     {x.value}
                   </Text>
@@ -147,49 +140,53 @@ const FieldForm = ({
         </>
       )}
 
-      {/* <Box sx={{ display: 'block' }}>
-        
-      </Box> */}
-      <Drawer open={showForm} setOpen={closeModal}>
+      <Drawer
+        open={isDrawerOpen}
+        store={mobileMenuDrawer}
+        aria-label="field drawer"
+        withBackdrop={true}
+        onClose={closeDrawer}>
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ p: 4, bg: 'backgroundWhite' }}>
-          <Text sx={{ fontSize: 'sm' }}>Add Content</Text>
-          {fields && fields.length > 0 && (
-            <Box sx={{ pt: 4 }}>
-              {fields.map((f: FieldT) => (
-                <Box key={f.id} sx={{ pb: 2 }}>
-                  {f.field_type.name === 'date' && (
-                    <FieldDate
-                      name={f.id}
-                      label={f.name}
-                      register={register}
-                      sub="Date"
-                      onChange={() => console.log('x')}
-                    />
-                  )}
+          sx={{ bg: 'backgroundWhite' }}>
+          <Drawer.Title>Update Content</Drawer.Title>
+          <Box sx={{ p: 4 }}>
+            {mappedFields && mappedFields.length > 0 && (
+              <Box>
+                {mappedFields.map((f: IFieldType) => (
+                  <Box key={f.id} sx={{ pb: 2 }}>
+                    {f.field_type?.name === 'date' && (
+                      <FieldDate
+                        name={f.id}
+                        label={f.name}
+                        register={register}
+                        sub="Date"
+                        onChange={() => console.log('x')}
+                      />
+                    )}
 
-                  {f.field_type.name !== 'date' && (
-                    <Field
-                      name={f.id}
-                      label={f.name}
-                      defaultValue=""
-                      register={register}
-                    />
-                  )}
-                </Box>
-              ))}
-            </Box>
-          )}
-          <Flex sx={{ pt: 3 }}>
-            <Button type="submit" disabled={submitting ? true : false}>
-              Save
-            </Button>
-            <Text onClick={closeModal} pl={2} pt={1}>
-              Close
-            </Text>
-          </Flex>
+                    {f.field_type?.name !== 'date' && (
+                      <Field
+                        name={f.id}
+                        label={f.name}
+                        defaultValue={f.value}
+                        register={register}
+                      />
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            )}
+            <Flex sx={{ pt: 3 }}>
+              <Button type="submit" disabled={submitting}>
+                Save
+              </Button>
+              <Text onClick={closeDrawer} pl={2} pt={1}>
+                Close
+              </Text>
+            </Flex>
+          </Box>
         </Box>
       </Drawer>
     </Box>
