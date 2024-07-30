@@ -72,7 +72,7 @@ const SignUpPage = () => {
             <Heading
               as="h3"
               variant="styles.h3Medium"
-              sx={{ mb: '48px', color: 'green.700' }}>
+              sx={{ mb: '48px', color: 'green.900' }}>
               Join Wraft
             </Heading>
             <Box as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -112,7 +112,7 @@ const SignUpPage = () => {
                 my: '36px',
               }}
             />
-            <Button onClick={handleGoogleSignIn} variant="googleLogin">
+            {/* <Button onClick={handleGoogleSignIn} variant="googleLogin">
               <Image
                 src={GoogleLogo}
                 alt="Google Logo"
@@ -121,9 +121,9 @@ const SignUpPage = () => {
                 className=""
               />
               Continue using Google
-            </Button>
+            </Button> */}
             <Flex
-              sx={{ gap: '8px', mt: '36px', mb: '4px', alignItems: 'center' }}>
+              sx={{ gap: '8px', mt: '12px', mb: '4px', alignItems: 'center' }}>
               <Text as="p" variant="pR">
                 Already joined?
               </Text>

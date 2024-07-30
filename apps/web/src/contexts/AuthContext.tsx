@@ -5,6 +5,7 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
+import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
@@ -32,6 +33,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [userProfile, setUserProfile] = useState<any | null>(null);
   const [organisations, setOrganisations] = useState<any | null>(null);
   const [permissions, setPermissions] = useState<any>(null);
+
+  const router = useRouter();
 
   const [isUserLoading, setIsUserLoading] = useState(false);
 
@@ -91,15 +94,24 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setRefreshToken(refresh_token);
   };
 
-  const logout = async () => {
-    await signOut({ redirect: false });
-    setAccessToken(null);
-    setRefreshToken(null);
-    setUserProfile(null);
-    setOrganisations(null);
+  const logout = async (redirectUrl = '') => {
+    try {
+      await signOut({ redirect: false });
 
-    cookie.remove('token');
-    cookie.remove('refreshToken');
+      setAccessToken(null);
+      setRefreshToken(null);
+      setUserProfile(null);
+      setOrganisations(null);
+
+      cookie.remove('token');
+      cookie.remove('refreshToken');
+
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   const updateUserData = (userdata: any) => {
