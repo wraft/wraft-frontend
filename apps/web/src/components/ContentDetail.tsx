@@ -310,11 +310,11 @@ const ContentDetail = () => {
   };
 
   const onApproveState = () => {
-    if (contents) {
+    if (contents) {      
       const req = putAPI(`contents/${contents.content.id}/approve`);
       toast.promise(req, {
         loading: 'Approving...',
-        success: () => {
+        success: () => {          
           setRerender((prev) => !prev);
           return 'Approved';
         },
@@ -610,6 +610,11 @@ const ContentDetail = () => {
                   {nextState && eligibleUser && (
                     <Button variant="secondary" onClick={() => setOpen(true)}>
                       <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                    </Button>
+                  )}
+                  {activeState?.state == 'Publish' && eligibleUser && (
+                    <Button variant="secondary" onClick={() => setOpen(true)}>
+                      <Text variant="pB">{`${activeState.state}`}</Text>
                     </Button>
                   )}
                   {!eligibleUser && (

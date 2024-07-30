@@ -123,7 +123,7 @@ const columns = () => [
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [rerender, setRerender] = useState<boolean>(false);
+  // const [rerender, setRerender] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
 
@@ -146,23 +146,23 @@ const Approvals = () => {
     if (accessToken) {
       loadData();
     }
-  }, [accessToken, rerender]);
+  }, [accessToken]);
 
   /**
    * Approve an Instance
    */
 
-  const approveInstance = (id: string) => {
-    const req = putAPI(`contents/${id}/approve`);
-    toast.promise(req, {
-      loading: 'Approving...',
-      success: () => {
-        setRerender((prev) => !prev);
-        return 'Approved';
-      },
-      error: 'Failed',
-    });
-  };
+  // const approveInstance = (id: string) => {
+  //   const req = putAPI(`contents/${id}/approve`);
+  //   toast.promise(req, {
+  //     loading: 'Approving...',
+  //     success: () => {
+  //       setRerender((prev) => !prev);
+  //       return 'Approved';
+  //     },
+  //     error: 'Failed',
+  //   });
+  // };
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
@@ -175,7 +175,7 @@ const Approvals = () => {
             <Table
               data={contents}
               isLoading={loading}
-              columns={columns}
+              columns={columns()}
               skeletonRows={10}
               emptyMessage="Nothing to approve"
             />
