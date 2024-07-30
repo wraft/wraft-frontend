@@ -51,6 +51,7 @@ export { default as RightIcon } from './Right';
 export { default as SearchIcon } from './Search';
 export { default as SettingIcon } from './Setting';
 export { default as SignIcon } from './Sign';
+export { default as SomethingWentIcon } from './SomethingWent';
 export { default as SortIcon } from './Sort';
 export { default as TableIcon } from './Table';
 export { default as TemplateIcon } from './Template';
