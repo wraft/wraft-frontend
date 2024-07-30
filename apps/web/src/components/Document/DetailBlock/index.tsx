@@ -15,7 +15,7 @@ import NavEdit from 'components/NavEdit';
 import FieldText from 'components/FieldText';
 import Field from 'components/Field';
 import Editor from 'components/common/Editor';
-import { findVars, replaceTitles, updateVars } from 'utils/index';
+import { findVars, replaceTitles, updateVars, findHolders } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
@@ -44,7 +44,7 @@ const ContentForm = (props: IContentForm) => {
     setValue,
   } = useForm();
 
-  const [_content, setContent] = useState<IVariantDetail>();
+  const [content, setContent] = useState<IVariantDetail>();
   const [contents, setContents] = useState<ContentInstance>();
   const [activeTemplate, setActiveTemplate] = useState('');
 
@@ -54,7 +54,7 @@ const ContentForm = (props: IContentForm) => {
   const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
 
   const [fields, setField] = useState<Array<FieldT>>([]);
-  const [showForm, setShowForm] = useState<boolean>(false);
+  // const [showForm, setShowForm] = useState<boolean>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
 
@@ -63,6 +63,7 @@ const ContentForm = (props: IContentForm) => {
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const [showDev, setShowDev] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
+  const [fieldValues, setFieldValues] = useState<any>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const { id, edit } = props;
   const [title, setTitle] = useState<string>('New Title');
@@ -86,6 +87,10 @@ const ContentForm = (props: IContentForm) => {
   useEffect(() => {
     if (!id && !edit && newContent) {
       onInitNewContentCreate(newContent.template);
+
+      if (newContent.contentFields) {
+        setFieldValues(newContent.contentFields);
+      }
     }
   }, [newContent]);
 
@@ -145,14 +150,6 @@ const ContentForm = (props: IContentForm) => {
   };
 
   /**
-   * Insertion Handler
-   * @param data
-   */
-  const makeInsert = (data: any) => {
-    setShowForm(data);
-  };
-
-  /**
    * Handle form mapping from the form for templates
    * @param fields
    * @returns
@@ -189,7 +186,17 @@ const ContentForm = (props: IContentForm) => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
-    const json = editorRef.current?.helpers?.getJSON();
+    const jsonContent = editorRef.current?.helpers?.getJSON();
+    const jsonContentnew = editorRef.current?.helpers;
+    const jsonContentnewtrPla = editorRef.current.getState();
+    const jsonContentnewtr = editorRef.current?.helpers?.getAllCommandOptions();
+
+    console.log('data[maps]', maps);
+    console.log('data[markdownContent]', markdownContent);
+    console.log('data[jsonContent]', jsonContent);
+    console.log('data[jsonContentnewref]', jsonContentnew);
+    console.log('data[jsonContentnew][jsonContentnewtr]', jsonContentnewtr);
+    console.log('data[jsonContentnew][placeholder]', jsonContentnewtrPla);
 
     setUnsavedChanges(false);
 
@@ -204,8 +211,17 @@ const ContentForm = (props: IContentForm) => {
       ...obj,
       title: data.title,
       body: markdownContent,
-      serialized: JSON.stringify(json),
+      serialized: JSON.stringify(jsonContent),
+      fields: newContent?.contentFields
+        ? JSON.stringify(newContent?.contentFields)
+        : '',
     };
+
+    console.log('data[jsonContentnew][serials]', newContent?.contentFields);
+    console.log('data[jsonContentnew][serials][3]', jsonContent);
+    console.log('data[jsonContentnew][serials][2]', fields);
+
+    // return;
 
     const template = {
       // state_uuid: data.state,
@@ -248,7 +264,21 @@ const ContentForm = (props: IContentForm) => {
    */
   const onLoadContent = (data: any) => {
     // set master contents
+
+    console.log('data', data);
     setContents(data);
+
+    if (
+      data &&
+      data.content &&
+      data.content.serialized &&
+      data.content.serialized.serialized
+    ) {
+      const serialized = JSON.parse(data.content.serialized.serialized);
+      const fdvalue = findHolders(serialized);
+      console.log('fdvalue', fdvalue);
+      setFieldValues(fdvalue);
+    }
     // map loaded state to corresponding form value
     const defaultState = data.state && data.state.id;
     setValue('state', defaultState);
@@ -301,16 +331,16 @@ const ContentForm = (props: IContentForm) => {
   /**
    * Watch out for changes in Content ID, and URL Paths
    */
-  useEffect(() => {
-    if (pathname) {
-      const pathGroup = pathname.split('/');
-      // validate if its a edit page
-      if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
-        setShowForm(false);
-      }
-    }
-    // getSummary();
-  }, [cId, pathname]);
+  // useEffect(() => {
+  //   if (pathname) {
+  //     const pathGroup = pathname.split('/');
+  //     // validate if its a edit page
+  //     if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
+  //       setShowForm(false);
+  //     }
+  //   }
+  //   // getSummary();
+  // }, [cId, pathname]);
 
   // syncable field
   useEffect(() => {
@@ -384,19 +414,19 @@ const ContentForm = (props: IContentForm) => {
    * @param x
    */
 
-  const changeText = (x: any) => {
-    setShowForm(true);
+  // const changeText = (x: any) => {
+  //   setShowForm(true);
 
-    setActiveTemplate(x.id);
+  //   setActiveTemplate(x.id);
 
-    // textOperation(x);
+  //   // textOperation(x);
 
-    // store template obj
-    setSelectedTemplate(x);
+  //   // store template obj
+  //   setSelectedTemplate(x);
 
-    changeTitle(x, maps);
-    updateStuff(x, maps);
-  };
+  //   changeTitle(x, maps);
+  //   updateStuff(x, maps);
+  // };
 
   /**
    * Mapping Form values to content and updating it
@@ -419,6 +449,8 @@ const ContentForm = (props: IContentForm) => {
   const updateStuff = (data: any, mapx: any) => {
     // console.log('updateStuff', mapx);
     // console.log('updateStuff[data]', data);
+
+    console.log('onSaved[3][data]', data);
     if (data?.data) {
       let respx = '';
 
@@ -502,8 +534,26 @@ const ContentForm = (props: IContentForm) => {
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
 
-    updateStuff(selectedTemplate, resx);
+    console.log('onSaved[1]', resx);
+    console.log('onSaved[2][selectedTemplate]', selectedTemplate);
+    console.log(
+      'onSaved[2.1][selectedTemplate]',
+      contents?.content?.serialized?.serialized,
+    );
+
+    if (contents?.content?.serialized?.serialized) {
+      const serializedData = JSON.parse(
+        contents?.content?.serialized?.serialized,
+      );
+      updateStuff(serializedData, resx);
+    }
+
+    if (!edit) {
+      updateStuff(selectedTemplate, resx);
+    }
+
     updatePageTitle(resx);
+
     // setTrigger(EMPTY_MARKDOWN_NODE);
     // we are inserting an empty node, so that the editor is triggered
   };
@@ -774,9 +824,7 @@ const ContentForm = (props: IContentForm) => {
               activeTemplate={activeTemplate}
               setMaps={updateMaps}
               fields={fieldMaps}
-              fieldValues={!edit && newContent?.contentFields}
-              showForm={showForm}
-              setShowForm={makeInsert}
+              fieldValues={fieldValues}
               onSaved={onSaved}
               onRefresh={onSaved}
             />

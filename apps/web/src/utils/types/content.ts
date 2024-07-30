@@ -38,6 +38,7 @@ export interface IField {
 export interface IVariantDetail {
   creator: ICreator;
   content_type?: IContentType;
+  content?: any;
 }
 
 export interface IFieldItem {

@@ -28,6 +28,7 @@ const Header = () => {
       organisation_id: id,
     })
       .then((res: any) => {
+        console.log('res', res);
         login(res);
         router.push('/');
       })
@@ -38,11 +39,11 @@ const Header = () => {
         });
       });
 
-    toast.promise(organRequest, {
-      loading: 'switching...',
-      success: <b>Switched workspace!</b>,
-      error: <b>Could not switch workspace.</b>,
-    });
+    // toast.promise(organRequest, {
+    //   loading: 'switching...',
+    //   success: <b>Switched workspace!</b>,
+    //   error: <b>Could not switch workspace.</b>,
+    // });
   };
 
   const onUserLogout = async () => {
