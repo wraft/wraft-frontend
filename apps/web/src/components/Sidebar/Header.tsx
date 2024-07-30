@@ -45,9 +45,13 @@ const Header = () => {
     });
   };
 
-  const onUserlogout = () => {
-    logout();
-    router.push('/login');
+  const onUserLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error during user logout:', error);
+    }
   };
 
   return (
@@ -137,7 +141,7 @@ const Header = () => {
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.400' }}>
+                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -146,29 +150,31 @@ const Header = () => {
                 )}
               </Flex>
               <DropdownMenu.Separator />
-              {organisations &&
-                organisations.map((org: any) => (
-                  <DropdownMenu.Item
-                    key={org.id}
-                    onClick={() => onSwitchOrganization(org?.id)}>
-                    <Image
-                      src={org?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '50%',
-                        height: `18px`,
-                        width: `18px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
-                    />
-                    {org.name}
-                  </DropdownMenu.Item>
-                ))}
+              <Box sx={{ height: '400px', overflowY: 'scroll' }}>
+                {organisations &&
+                  organisations.map((org: any) => (
+                    <DropdownMenu.Item
+                      key={org.id}
+                      onClick={() => onSwitchOrganization(org?.id)}>
+                      <Image
+                        src={org?.logo}
+                        width={24}
+                        height={24}
+                        alt="Workspace"
+                        sx={{
+                          borderRadius: '50%',
+                          height: `18px`,
+                          width: `18px`,
+                          border: '1px solid',
+                          borderColor: 'gray.100',
+                          p: '1px',
+                          mr: 2,
+                        }}
+                      />
+                      {org.name}
+                    </DropdownMenu.Item>
+                  ))}
+              </Box>
               <DropdownMenu.Separator />
 
               <DropdownMenu.Item>
@@ -234,11 +240,13 @@ const Header = () => {
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
                   <Link href="/account" path="/account">
-                    Settings
+                    <Box sx={{ width: '200px' }}>Settings</Box>
                   </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                  <Box onClick={onUserlogout}>Signout</Box>
+                  <Box sx={{ display: 'flex', flex: 1 }} onClick={onUserLogout}>
+                    Signout
+                  </Box>
                 </DropdownMenu.Item>
               </Box>
             </DropdownMenu>
