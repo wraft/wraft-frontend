@@ -9,6 +9,7 @@ import ContentSidebar, {
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
+import { ErrorBoundary } from '@wraft/ui';
 
 import { fetchAPI, postAPI, putAPI } from '../utils/models';
 import {
@@ -347,370 +348,374 @@ const ContentDetail = () => {
               top: '80px',
               bottom: 0,
             }}>
-            {/* <Spinner width={40} height={40} color="primary" /> */}
+            <Spinner width={40} height={40} color="primary" />
           </Box>
         )}
-        {contents && contents.content && (
-          <Flex>
-            <Box
-              // as="form"
-              // onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
-              <Flex
-                sx={{
-                  px: 4,
-                  // py: 3,
-                  py: 1,
-                  pb: 1,
-                  // pl: '115px',
-                  borderBottom: 'solid 1px',
-                  borderColor: 'border',
-                  // mb: 3,
-                  bg: 'gray.200',
-                }}>
-                <Box>
-                  <Text
-                    sx={{
-                      fontSize: 'base',
-                      fontWeight: 'bold',
-                      display: 'none',
-                    }}>
-                    {contents.content.serialized.title}
-                  </Text>
-                  <ProfileCard
-                    time={contents.content?.inserted_at}
-                    name={contents.creator?.name}
-                    image={contents?.creator?.profile_pic}
-                  />
-                </Box>
-                <Box sx={{ ml: 'auto' }}>
-                  <MenuItem
-                    variant="btnMenu"
-                    href={`/content/edit/[id]`}
-                    path={`/content/edit/${contents.content.id}`}>
-                    <EditIcon width={24} />
-                  </MenuItem>
-                </Box>
-              </Flex>
+        <ErrorBoundary>
+          {contents && contents.content && (
+            <Flex>
               <Box
-                sx={{
-                  mb: 0,
-                  bg: 'gray.400',
-                  // bg: 'gray.a100',
-                  // bg: 'neutral.200',
-                  '.tabPanel': { border: 0, bg: 'gray.200' },
-                  button: {
-                    border: 0,
-                    bg: 'transparent',
-                    px: 3,
-                    py: 2,
-                    borderRadius: 6,
-                  },
-                  '.tabGroup': {
-                    // bg: 'neutral.200',
-                    bg: 'gray.400',
-                    // border: 'solid 1px blue',
-                    px: 3,
-                    py: 2,
-                  },
-                  'button[aria-selected=true]': {
-                    border: 0,
-                    // bg: 'neutral.100',
+                // as="form"
+                // onSubmit={handleSubmit(onSubmit)}
+                sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
+                <Flex
+                  sx={{
+                    px: 4,
+                    // py: 3,
+                    py: 1,
+                    pb: 1,
+                    // pl: '115px',
+                    borderBottom: 'solid 1px',
+                    borderColor: 'border',
+                    // mb: 3,
                     bg: 'gray.200',
-                    px: 3,
-                    py: 2,
-                  },
-                }}>
-                <TabProvider defaultSelectedId={defaultSelectedId}>
-                  <TabList
-                    aria-label="Content Stages"
-                    className="tabPanel tabGroup">
-                    <Tab id="edit">
-                      <Box sx={{ ml: 3 }}>
-                        <StepBlock title="Matter" desc="Edit contents" />
-                      </Box>
-                    </Tab>
-                    <Tab id="view">
-                      <StepBlock title="Document" desc="Sign and Manage" />
-                    </Tab>
-                  </TabList>
-
-                  <TabPanel
-                    tabId={defaultSelectedId}
-                    className={styles.tablist}>
-                    <Box
+                  }}>
+                  <Box>
+                    <Text
                       sx={{
-                        mt: 0,
-                        px: 4,
-                        pb: 6,
-                        // bg: 'gray.100',
-                        // pl: '9rem !important',
-                        // pr: '9rem !important',
-                        // pt: '7rem !important',
-                        '.remirror-theme .ProseMirror': {
-                          bg: 'gray.200',
-                          pl: '9rem !important',
-                          pr: '9rem !important',
-                          pt: '7rem !important',
-                          p: 'gray.1200',
-                          'p mark': {
-                            background: 'transparent !important',
-                            color: 'gray.1200',
-                          },
-                        },
+                        fontSize: 'base',
+                        fontWeight: 'bold',
+                        display: 'none',
                       }}>
-                      <PreTag pt={4} pb={6}>
-                        {contentBody && (
-                          <Editor
-                            defaultValue={contentBody}
-                            editable={false}
-                            tokens={[]}
-                            onUpdate={doNothing}
-                            insertable={null}
-                            onceInserted={doNothing}
+                      {contents.content.serialized.title}
+                    </Text>
+                    <ProfileCard
+                      time={contents.content?.inserted_at}
+                      name={contents.creator?.name}
+                      image={contents?.creator?.profile_pic}
+                    />
+                  </Box>
+                  <Box sx={{ ml: 'auto' }}>
+                    <MenuItem
+                      variant="btnMenu"
+                      href={`/content/edit/[id]`}
+                      path={`/content/edit/${contents.content.id}`}>
+                      <EditIcon width={24} />
+                    </MenuItem>
+                  </Box>
+                </Flex>
+                <Box
+                  sx={{
+                    mb: 0,
+                    bg: 'gray.400',
+                    // bg: 'gray.a100',
+                    // bg: 'neutral.200',
+                    '.tabPanel': { border: 0, bg: 'gray.200' },
+                    button: {
+                      border: 0,
+                      bg: 'transparent',
+                      px: 3,
+                      py: 2,
+                      borderRadius: 6,
+                    },
+                    '.tabGroup': {
+                      // bg: 'neutral.200',
+                      bg: 'gray.400',
+                      // border: 'solid 1px blue',
+                      px: 3,
+                      py: 2,
+                    },
+                    'button[aria-selected=true]': {
+                      border: 0,
+                      // bg: 'neutral.100',
+                      bg: 'gray.200',
+                      px: 3,
+                      py: 2,
+                    },
+                  }}>
+                  <TabProvider defaultSelectedId={defaultSelectedId}>
+                    <TabList
+                      aria-label="Content Stages"
+                      className="tabPanel tabGroup">
+                      <Tab id="edit">
+                        <Box sx={{ ml: 3 }}>
+                          <StepBlock title="Matter" desc="Edit contents" />
+                        </Box>
+                      </Tab>
+                      <Tab id="view">
+                        <StepBlock title="Document" desc="Sign and Manage" />
+                      </Tab>
+                    </TabList>
+
+                    <TabPanel
+                      tabId={defaultSelectedId}
+                      className={styles.tablist}>
+                      <ErrorBoundary>
+                        <Box
+                          sx={{
+                            mt: 0,
+                            px: 4,
+                            pb: 6,
+                            // bg: 'gray.100',
+                            // pl: '9rem !important',
+                            // pr: '9rem !important',
+                            // pt: '7rem !important',
+                            '.remirror-theme .ProseMirror': {
+                              bg: 'gray.200',
+                              pl: '9rem !important',
+                              pr: '9rem !important',
+                              pt: '7rem !important',
+                              p: 'gray.1200',
+                              'p mark': {
+                                background: 'transparent !important',
+                                color: 'gray.1200',
+                              },
+                            },
+                          }}>
+                          <PreTag pt={4} pb={6}>
+                            {contentBody && (
+                              <Editor
+                                defaultValue={contentBody}
+                                editable={false}
+                                tokens={[]}
+                                onUpdate={doNothing}
+                                insertable={null}
+                                onceInserted={doNothing}
+                              />
+                            )}
+                          </PreTag>
+                        </Box>
+                      </ErrorBoundary>
+                    </TabPanel>
+                    <TabPanel>
+                      <Box
+                        sx={{
+                          bg: 'gray.400',
+                          // bg: 'neutral.200',
+                          mt: 4,
+                          border: 'solid 1px',
+                          borderColor: 'gray.400',
+                          '.react-pdf__Document': {
+                            mx: 2,
+                          },
+                          '.pdf__Page__textContent': {
+                            border: 'solid 1px',
+                            borderColor: 'grey.500',
+                          },
+                          pb: 5,
+                        }}>
+                        {contents.content.build && (
+                          <PdfViewer
+                            url={`${contents.content.build}`}
+                            pageNumber={1}
                           />
                         )}
-                      </PreTag>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel>
-                    <Box
-                      sx={{
-                        bg: 'gray.400',
-                        // bg: 'neutral.200',
-                        mt: 4,
-                        border: 'solid 1px',
-                        borderColor: 'gray.400',
-                        '.react-pdf__Document': {
-                          mx: 2,
-                        },
-                        '.pdf__Page__textContent': {
-                          border: 'solid 1px',
-                          borderColor: 'grey.500',
-                        },
-                        pb: 5,
-                      }}>
-                      {contents.content.build && (
-                        <PdfViewer
-                          url={`${contents.content.build}`}
-                          pageNumber={1}
-                        />
-                      )}
-                    </Box>
-                  </TabPanel>
-                </TabProvider>
+                      </Box>
+                    </TabPanel>
+                  </TabProvider>
+                </Box>
               </Box>
-            </Box>
-            <Box
-              variant="plateRightBar"
-              sx={{
-                // bg: 'neutral.100',
-                bg: 'gray.100',
-                py: 0,
-                width: '30%',
-                borderLeft: 'solid 1px',
-                borderColor: 'border',
-                minHeight: '100vh',
-                pt: 3,
-              }}>
-              <ContentSidebar content={contents} />
-
               <Box
-                variant="plateSide"
+                variant="plateRightBar"
                 sx={{
+                  // bg: 'neutral.100',
                   bg: 'gray.100',
-                  // pl: 3,
-                  flexGrow: 1,
-                  mr: 0,
-                  // pr: 3,
-                  pb: 3,
-                  // pt: 2,
-                  borderTop: 'solid 1px',
-                  // borderBottom: 'solid 1px',
-                  borderColor: 'gray.300',
-                  // bg: '#d9deda57',
+                  py: 0,
+                  width: '30%',
+                  borderLeft: 'solid 1px',
+                  borderColor: 'border',
+                  minHeight: '100vh',
+                  pt: 3,
                 }}>
-                <Flex
+                <ContentSidebar content={contents} />
+
+                <Box
+                  variant="plateSide"
                   sx={{
+                    bg: 'gray.100',
+                    // pl: 3,
+                    flexGrow: 1,
+                    mr: 0,
+                    // pr: 3,
+                    pb: 3,
+                    // pt: 2,
+                    borderTop: 'solid 1px',
+                    // borderBottom: 'solid 1px',
+                    borderColor: 'gray.300',
                     // bg: '#d9deda57',
-                    px: 3,
-                    py: 2,
-                    alignItems: 'center',
-                    overflowX: 'scroll',
                   }}>
-                  {activeFlow?.states.map((x: any) => (
-                    <FlowStateBlock
-                      activeFlow={contents}
-                      key={x?.id}
-                      state={x?.state}
-                      order={x?.order}
-                      id={x?.id}
-                    />
-                  ))}
-                </Flex>
-                <Flex sx={{ p: 3, gap: 2 }}>
-                  {prevState && (
+                  <Flex
+                    sx={{
+                      // bg: '#d9deda57',
+                      px: 3,
+                      py: 2,
+                      alignItems: 'center',
+                      overflowX: 'scroll',
+                    }}>
+                    {activeFlow?.states.map((x: any) => (
+                      <FlowStateBlock
+                        activeFlow={contents}
+                        key={x?.id}
+                        state={x?.state}
+                        order={x?.order}
+                        id={x?.id}
+                      />
+                    ))}
+                  </Flex>
+                  <Flex sx={{ p: 3, gap: 2 }}>
+                    {prevState && (
+                      <Button
+                        variant="buttonSecondary"
+                        onClick={() => onRejectState()}>
+                        <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                      </Button>
+                    )}
+                    {nextState && (
+                      <Button
+                        variant="secondary"
+                        onClick={() => onApproveState()}>
+                        <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                      </Button>
+                    )}
+                  </Flex>
+                  <Flex
+                    sx={{
+                      pt: 3,
+                      px: 3,
+                      alignItems: 'flex-start',
+                      alignContent: 'flex-start',
+                      flexDirection: 'row',
+                      // border: 'solid 1px #ddd',
+                    }}>
                     <Button
-                      variant="buttonSecondary"
-                      onClick={() => onRejectState()}>
-                      <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                      sx={{ py: 2 }}
+                      variant="btnPrimary"
+                      onClick={() => doBuild()}>
+                      <>
+                        {loading && <Spinner color="white" size={24} />}
+                        {!loading && (
+                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
+                            Build
+                          </Text>
+                        )}
+                      </>
                     </Button>
-                  )}
-                  {nextState && (
-                    <Button
-                      variant="secondary"
-                      onClick={() => onApproveState()}>
-                      <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
-                    </Button>
-                  )}
-                </Flex>
-                <Flex
-                  sx={{
-                    pt: 3,
-                    px: 3,
-                    alignItems: 'flex-start',
-                    alignContent: 'flex-start',
-                    flexDirection: 'row',
-                    // border: 'solid 1px #ddd',
-                  }}>
-                  <Button
-                    sx={{ py: 2 }}
-                    variant="btnPrimary"
-                    onClick={() => doBuild()}>
-                    <>
-                      {loading && <Spinner color="white" size={24} />}
-                      {!loading && (
-                        <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                          Build
-                        </Text>
-                      )}
-                    </>
-                  </Button>
-                </Flex>
-              </Box>
+                  </Flex>
+                </Box>
 
-              <Box>
-                <TabProvider defaultSelectedId={defaultSelectedId}>
-                  <TabList
-                    aria-label="Content Stages"
-                    className={styles.tablist}>
-                    <Tab id="edit" className={styles.tabInline}>
-                      Info
-                    </Tab>
-                    <Tab className={styles.tabInline} id="view">
-                      Discuss
-                    </Tab>
-                    <Tab className={styles.tabInline} id="history">
-                      History
-                    </Tab>
-                  </TabList>
+                <Box>
+                  <TabProvider defaultSelectedId={defaultSelectedId}>
+                    <TabList
+                      aria-label="Content Stages"
+                      className={styles.tablist}>
+                      <Tab id="edit" className={styles.tabInline}>
+                        Info
+                      </Tab>
+                      <Tab className={styles.tabInline} id="view">
+                        Discuss
+                      </Tab>
+                      <Tab className={styles.tabInline} id="history">
+                        History
+                      </Tab>
+                    </TabList>
 
-                  <TabPanel tabId={defaultSelectedId} className="tabPanel">
-                    <Box sx={{ bg: 'neutral.100' }}>
-                      <Box variant="layout.boxHeading">
-                        <Text as="h3" variant="sectionheading">
-                          Content
-                        </Text>
-                      </Box>
-                      <Box sx={{ pt: 2, px: 3, border: 0 }}>
-                        <Box>
-                          <Box sx={{ pb: 2 }}></Box>
-                          {contents.content.build && (
-                            <Flex pt={0} pb={3}>
-                              <Box>
-                                <Box>
-                                  <Text
-                                    as="h3"
-                                    sx={{
-                                      fontSize: 'xs',
-                                      mb: 0,
-                                      color: 'text',
-                                    }}>
-                                    {contents.content.instance_id}
-                                  </Text>
-                                  <Text
-                                    as="h4"
-                                    sx={{
-                                      fontSize: 'xs',
-                                      mb: 0,
-                                      mt: 1,
-                                      color: 'gray.700',
-                                      fontWeight: 500,
-                                      ml: 0,
-                                    }}>
-                                    <Flex as="span">
-                                      <Text sx={{ mr: 2 }}>Updated </Text>
-                                      {contents.versions.length && (
-                                        <TimeAgo
-                                          time={
-                                            contents?.versions[0]?.updated_at
-                                          }
-                                        />
-                                      )}
-                                    </Flex>
-                                  </Text>
-                                </Box>
-                              </Box>
-                              <Box sx={{ ml: 'auto' }}>
-                                <Link
-                                  variant="download"
-                                  href={`${contents.content.build}`}
-                                  target="_blank">
-                                  <DownloadIcon width={20} />
-                                </Link>
-                              </Box>
-                            </Flex>
-                          )}
-                        </Box>
-                      </Box>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel>
-                    <Box sx={{ bg: 'neutral.100' }}>
-                      <Box sx={{ pb: 3 }}>
-                        <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
-                          <Text
-                            as="h3"
-                            sx={{ fontSize: 'sm', fontWeight: 500 }}>
-                            Discussions
+                    <TabPanel tabId={defaultSelectedId} className="tabPanel">
+                      <Box sx={{ bg: 'neutral.100' }}>
+                        <Box variant="layout.boxHeading">
+                          <Text as="h3" variant="sectionheading">
+                            Content
                           </Text>
                         </Box>
-                        <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
-                          {contents && contents.content && (
-                            <Box mt={0}>
-                              <CommentForm
-                                master={contents.content_type.id}
-                                master_id={contents.content.id}
-                              />
-                            </Box>
-                          )}
+                        <Box sx={{ pt: 2, px: 3, border: 0 }}>
+                          <Box>
+                            <Box sx={{ pb: 2 }}></Box>
+                            {contents.content.build && (
+                              <Flex pt={0} pb={3}>
+                                <Box>
+                                  <Box>
+                                    <Text
+                                      as="h3"
+                                      sx={{
+                                        fontSize: 'xs',
+                                        mb: 0,
+                                        color: 'text',
+                                      }}>
+                                      {contents.content.instance_id}
+                                    </Text>
+                                    <Text
+                                      as="h4"
+                                      sx={{
+                                        fontSize: 'xs',
+                                        mb: 0,
+                                        mt: 1,
+                                        color: 'gray.700',
+                                        fontWeight: 500,
+                                        ml: 0,
+                                      }}>
+                                      <Flex as="span">
+                                        <Text sx={{ mr: 2 }}>Updated </Text>
+                                        {contents.versions.length && (
+                                          <TimeAgo
+                                            time={
+                                              contents?.versions[0]?.updated_at
+                                            }
+                                          />
+                                        )}
+                                      </Flex>
+                                    </Text>
+                                  </Box>
+                                </Box>
+                                <Box sx={{ ml: 'auto' }}>
+                                  <Link
+                                    variant="download"
+                                    href={`${contents.content.build}`}
+                                    target="_blank">
+                                    <DownloadIcon width={20} />
+                                  </Link>
+                                </Box>
+                              </Flex>
+                            )}
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel>
-                    <Box variant="layout.boxHeading">
-                      {contents.versions && contents.versions.length > 0 && (
-                        <Box>
-                          {contents.versions.map((v: any) => (
-                            <Flex key={v?.id} sx={{ py: 2 }}>
-                              <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>
-                                Version {v?.version_number}
-                              </Text>
-                              <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>
-                                <TimeAgo time={v?.updated_at} />
+                    </TabPanel>
+                    <TabPanel>
+                      <Box sx={{ bg: 'neutral.100' }}>
+                        <Box sx={{ pb: 3 }}>
+                          <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
+                            <Text
+                              as="h3"
+                              sx={{ fontSize: 'sm', fontWeight: 500 }}>
+                              Discussions
+                            </Text>
+                          </Box>
+                          <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
+                            {contents && contents.content && (
+                              <Box mt={0}>
+                                <CommentForm
+                                  master={contents.content_type.id}
+                                  master_id={contents.content.id}
+                                />
                               </Box>
-                            </Flex>
-                          ))}
+                            )}
+                          </Box>
                         </Box>
-                      )}
-                    </Box>
-                  </TabPanel>
-                </TabProvider>
+                      </Box>
+                    </TabPanel>
+                    <TabPanel>
+                      <Box variant="layout.boxHeading">
+                        {contents.versions && contents.versions.length > 0 && (
+                          <Box>
+                            {contents.versions.map((v: any) => (
+                              <Flex key={v?.id} sx={{ py: 2 }}>
+                                <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>
+                                  Version {v?.version_number}
+                                </Text>
+                                <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>
+                                  <TimeAgo time={v?.updated_at} />
+                                </Box>
+                              </Flex>
+                            ))}
+                          </Box>
+                        )}
+                      </Box>
+                    </TabPanel>
+                  </TabProvider>
+                </Box>
               </Box>
-            </Box>
-          </Flex>
-        )}
+            </Flex>
+          )}
+        </ErrorBoundary>
       </Box>
     </Box>
   );

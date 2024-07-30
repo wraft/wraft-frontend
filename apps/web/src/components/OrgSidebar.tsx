@@ -34,10 +34,8 @@ const profileLinks: menuLinksProps[] = [
     permissions: ['show'],
   },
   {
-    name: 'test link',
-    path: '/account/company',
-    permissionName: 'organisation',
-    permissions: [],
+    name: 'Change Password',
+    path: '/account/change-password',
   },
 ];
 
