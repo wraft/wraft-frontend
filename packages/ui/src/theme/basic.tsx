@@ -62,7 +62,7 @@ const theme: any = {
       borderRadius: '4px',
       backgroundColor: 'backgroundWhite',
       width: '574px',
-      minHeight: '629px',
+      minHeight: '600px',
       height: 'fit-content',
       flexDirection: 'column',
     },
