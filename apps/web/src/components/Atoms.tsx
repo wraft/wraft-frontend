@@ -199,13 +199,27 @@ interface StateBadgeProps {
 }
 
 export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
+  const getColor = () => {
+    switch (name) {
+      case 'Draft':
+        return 'gray.500';
+      case 'Review':
+        return '#fff6ab';
+      case 'Publish':
+        return 'green.400';
+      case 'custom':
+        return color || 'blue';
+      default:
+        return 'red';
+    }
+  };
   return (
     <Flex sx={{ pt: 2 }}>
       <Text
         pt={0}
         variant="labelSmall"
         sx={{
-          bg: color ? color : 'red',
+          bg: getColor(),
           color: 'text',
           borderRadius: '3rem',
           pl: '8px',
