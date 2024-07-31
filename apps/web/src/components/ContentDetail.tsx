@@ -311,11 +311,11 @@ const ContentDetail = () => {
   };
 
   const onApproveState = () => {
-    if (contents) {      
+    if (contents) {
       const req = putAPI(`contents/${contents.content.id}/approve`);
       toast.promise(req, {
         loading: 'Approving...',
-        success: () => {          
+        success: () => {
           setRerender((prev) => !prev);
           return 'Approved';
         },
@@ -570,87 +570,88 @@ const ContentDetail = () => {
                 }}>
                 <ContentSidebar content={contents} />
 
-              <Box
-                variant="plateSide"
-                sx={{
-                  bg: 'gray.100',
-                  // pl: 3,
-                  flexGrow: 1,
-                  mr: 0,
-                  // pr: 3,
-                  pb: 3,
-                  // pt: 2,
-                  borderTop: 'solid 1px',
-                  // borderBottom: 'solid 1px',
-                  borderColor: 'gray.300',
-                  // bg: '#d9deda57',
-                }}>
-                <Flex
+                <Box
+                  variant="plateSide"
                   sx={{
+                    bg: 'gray.100',
+                    // pl: 3,
+                    flexGrow: 1,
+                    mr: 0,
+                    // pr: 3,
+                    pb: 3,
+                    // pt: 2,
+                    borderTop: 'solid 1px',
+                    // borderBottom: 'solid 1px',
+                    borderColor: 'gray.300',
                     // bg: '#d9deda57',
-                    px: 3,
-                    py: 2,
-                    alignItems: 'center',
-                    overflowX: 'scroll',
                   }}>
-                  {activeFlow?.states.map((x: any) => (
-                    <FlowStateBlock
-                      activeFlow={contents}
-                      key={x?.id}
-                      state={x?.state}
-                      order={x?.order}
-                      id={x?.id}
-                    />
-                  ))}
-                </Flex>
-                <Flex sx={{ p: 3, gap: 2 }}>
-                  {prevState && (
-                    <Button
-                      variant="buttonSecondary"
-                      onClick={() => onRejectState()}>
-                      <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
-                    </Button>
-                  )}
-                  {nextState && eligibleUser && (
-                    <Button variant="secondary" onClick={() => setOpen(true)}>
-                      <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
-                    </Button>
-                  )}
-                  {activeState?.state == 'Publish' && eligibleUser && (
-                    <Button variant="secondary" onClick={() => setOpen(true)}>
-                      <Text variant="pB">{`${activeState.state}`}</Text>
-                    </Button>
-                  )}
-                  {!eligibleUser && (
-                    <Text variant="pB">Waiting for approval</Text>
-                  )}
-                </Flex>
-                <Flex
-                  sx={{
-                    pt: 3,
-                    px: 3,
-                    alignItems: 'flex-start',
-                    alignContent: 'flex-start',
-                    flexDirection: 'row',
-                    // border: 'solid 1px #ddd',
-                  }}>
-                  {eligibleUser && (
-                    <Button
-                      sx={{ py: 2 }}
-                      variant="btnPrimary"
-                      onClick={() => doBuild()}>
-                      <>
-                        {loading && <Spinner color="white" size={24} />}
-                        {!loading && (
-                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                            Build
-                          </Text>
-                        )}
-                      </>
-                    </Button>
-                  )}
-                </Flex>
-              </Box>
+                  <Flex
+                    sx={{
+                      // bg: '#d9deda57',
+                      px: 3,
+                      py: 2,
+                      alignItems: 'center',
+                      overflowX: 'scroll',
+                    }}>
+                    {activeFlow?.states.map((x: any) => (
+                      <FlowStateBlock
+                        activeFlow={contents}
+                        key={x?.id}
+                        state={x?.state}
+                        order={x?.order}
+                        id={x?.id}
+                      />
+                    ))}
+                  </Flex>
+                  <Flex sx={{ p: 3, gap: 2 }}>
+                    {prevState && (
+                      <Button
+                        variant="buttonSecondary"
+                        onClick={() => onRejectState()}>
+                        <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                      </Button>
+                    )}
+                    {nextState && eligibleUser && (
+                      <Button variant="secondary" onClick={() => setOpen(true)}>
+                        <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                      </Button>
+                    )}
+                    {activeState?.state == 'Publish' && eligibleUser && (
+                      <Button variant="secondary" onClick={() => setOpen(true)}>
+                        <Text variant="pB">{`${activeState.state}`}</Text>
+                      </Button>
+                    )}
+                    {!eligibleUser && (
+                      <Text variant="pB">Waiting for approval</Text>
+                    )}
+                  </Flex>
+                  <Flex
+                    sx={{
+                      pt: 3,
+                      px: 3,
+                      alignItems: 'flex-start',
+                      alignContent: 'flex-start',
+                      flexDirection: 'row',
+                      // border: 'solid 1px #ddd',
+                    }}>
+                    {eligibleUser && (
+                      <Button
+                        sx={{ py: 2 }}
+                        variant="btnPrimary"
+                        onClick={() => doBuild()}>
+                        <>
+                          {loading && <Spinner color="white" size={24} />}
+                          {!loading && (
+                            <Text
+                              sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
+                              Build
+                            </Text>
+                          )}
+                        </>
+                      </Button>
+                    )}
+                  </Flex>
+                </Box>
 
                 <Box>
                   <TabProvider defaultSelectedId={defaultSelectedId}>
