@@ -5,12 +5,12 @@ import { Box, Button, Flex, Text } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI } from 'utils/models';
 
-import { OptionsIcon } from './Icons';
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
 
@@ -193,7 +193,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
                   onClick={() => {
                     setIsOpen(row.index);
                   }}>
-                  <OptionsIcon />
+                  <ThreeDotIcon />
                 </Box>
               </MenuButton>
               <Menu
