@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
@@ -26,6 +27,7 @@ import MenuItem from './MenuItem';
 import Nav from './NavEdit';
 import Modal from './Modal';
 import { StateState } from './FlowForm';
+import Field from './FieldText';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -188,6 +190,7 @@ const PreTag = styled(Box)`
 `;
 
 const ContentDetail = () => {
+  const { register } = useForm();
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
@@ -204,6 +207,8 @@ const ContentDetail = () => {
   const [user, setUser] = useState<any>();
   const [flowDetails, setFlowDetails] = useState<any>();
   const [eligibleUser, setEligibleUser] = useState<boolean>(false);
+  const [complete, setComplete] = useState<boolean>(false);
+  const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
 
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
@@ -310,31 +315,30 @@ const ContentDetail = () => {
     //
   };
 
-  const onApproveState = () => {
+  const handleModalAction = () => {
     if (contents) {
-      const req = putAPI(`contents/${contents.content.id}/approve`);
-      toast.promise(req, {
-        loading: 'Approving...',
-        success: () => {
-          setRerender((prev) => !prev);
-          return 'Approved';
-        },
-        error: 'Failed',
-      });
+      if ((modalAction === 'next' && nextState) || activeState) {
+        const req = putAPI(`contents/${contents.content.id}/approve`);
+        toast.promise(req, {
+          loading: 'Approving...',
+          success: () => {
+            setRerender((prev) => !prev);
+            return 'Approved';
+          },
+          error: 'Failed',
+        });
+      } else if (modalAction === 'prev' && prevState) {
+        const req = putAPI(`contents/${contents.content.id}/reject`);
+        toast.promise(req, {
+          loading: 'Rejecting...',
+          success: () => {
+            setRerender((prev) => !prev);
+            return 'Rejected';
+          },
+          error: 'Failed',
+        });
+      }
       setOpen(false);
-    }
-  };
-  const onRejectState = () => {
-    if (contents) {
-      const req = putAPI(`contents/${contents.content.id}/reject`);
-      toast.promise(req, {
-        loading: 'Rejecting...',
-        success: () => {
-          setRerender((prev) => !prev);
-          return 'Rejected';
-        },
-        error: 'Failed',
-      });
     }
   };
 
@@ -603,28 +607,42 @@ const ContentDetail = () => {
                       />
                     ))}
                   </Flex>
-                  <Flex sx={{ p: 3, gap: 2 }}>
-                    {prevState && (
+                  {!complete && <Flex sx={{ p: 3, gap: 2 }}>
+                    {prevState && eligibleUser && (
                       <Button
                         variant="buttonSecondary"
-                        onClick={() => onRejectState()}>
+                        onClick={() => {
+                          setModalAction('prev');
+                          setOpen(true);
+                        }}>
                         <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
                       </Button>
                     )}
                     {nextState && eligibleUser && (
-                      <Button variant="secondary" onClick={() => setOpen(true)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => {
+                          setModalAction('next');
+                          setOpen(true);
+                        }}>
                         <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
                       </Button>
                     )}
                     {activeState?.state == 'Publish' && eligibleUser && (
-                      <Button variant="secondary" onClick={() => setOpen(true)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => {
+                          setModalAction('next');
+                          setOpen(true);
+                          setComplete(true)
+                        }}>
                         <Text variant="pB">{`${activeState.state}`}</Text>
                       </Button>
                     )}
                     {!eligibleUser && (
                       <Text variant="pB">Waiting for approval</Text>
                     )}
-                  </Flex>
+                  </Flex>}
                   <Flex
                     sx={{
                       pt: 3,
@@ -791,29 +809,36 @@ const ContentDetail = () => {
         <Flex
           sx={{
             flexDirection: 'column',
-            width: '342px',
-            height: '205px',
+            width: '372px',
+            height: '225px',
             border: '1px solid #E4E9EF',
             background: '#FFF',
             alignItems: 'center',
           }}>
-          <Box sx={{ p: 3, borderColor: 'border' }}>
+          <Box sx={{ px: 3, py: 2, borderColor: 'border' }}>
             <Text as="p" variant="h5Medium">
               Confirm action
             </Text>
           </Box>
           <Text
             sx={{
-              marginTop: '13px',
-              mb: '28px',
+              marginTop: '5px',
+              mb: '5px',
               textAlign: 'center',
               fontWeight: 'heading',
               color: 'gray.900',
             }}>
-            {`Are you sure you want send to ${nextState?.state}?`}
+            {modalAction === 'next'
+              ? `Are you sure you want to send to ${nextState?.state}?`
+              : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
           </Text>
+          <Box as="form" py={1} mt={0}>
+            <Box mx={0} mb={2} sx={{ width: '350px' }}>
+              <Field name="body" label="" defaultValue="" register={register} />
+            </Box>
+          </Box>
           <Flex sx={{ gap: '12px' }}>
-            <Button onClick={onApproveState}>Confirm</Button>
+            <Button onClick={handleModalAction}>Confirm</Button>
 
             <Button
               onClick={() => setOpen(false)}
