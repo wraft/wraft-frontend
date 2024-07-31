@@ -56,6 +56,7 @@ export { default as SortIcon } from './Sort';
 export { default as TableIcon } from './Table';
 export { default as TemplateIcon } from './Template';
 export { default as TextIcon } from './Text';
+export { default as ThreeDotIcon } from './ThreeDot';
 export { default as TickIcon } from './Tick';
 export { default as TimeIcon } from './Time';
 export { default as UnderlineIcon } from './Underline';

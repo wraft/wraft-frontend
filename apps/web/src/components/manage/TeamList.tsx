@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Flex, Box, Text, Button, Image } from 'theme-ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
 import { ConfirmDelete } from '../common';
-import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
+import { AddIcon, Close, FilterArrowDown } from '../Icons';
 import Modal from '../Modal';
 import { Table } from '../Table';
 import AssignRole from './AssignRole';
@@ -361,7 +362,7 @@ const TeamList = () => {
                             setIsOpen(row.index);
                             setUserID(tableList[row.index].members.memberId);
                           }}>
-                          <OptionsIcon />
+                          <ThreeDotIcon />
                         </Button>
                       </MenuButton>
                       <Menu

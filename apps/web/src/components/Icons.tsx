@@ -180,19 +180,6 @@ export const DocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-export const OptionsIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="36"
-    height="18"
-    viewBox="0 0 36 18"
-    fill="none">
-    <circle cx="8.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-    <circle cx="17.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-    <circle cx="26.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-  </svg>
-);
-
 export const FilterArrowDown = () => (
   <svg
     width="12"
