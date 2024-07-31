@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 import styled from '@emotion/styled';
 import ContentSidebar, {
@@ -317,11 +317,14 @@ const ContentDetail = () => {
 
   const handleModalAction = () => {
     if (contents) {
-      if ((modalAction === 'next' && nextState) || activeState) {
+      if (modalAction === 'next') {
         const req = putAPI(`contents/${contents.content.id}/approve`);
         toast.promise(req, {
           loading: 'Approving...',
           success: () => {
+            if (activeState?.state == 'Publish') {
+              setComplete(true);
+            }
             setRerender((prev) => !prev);
             return 'Approved';
           },
@@ -607,42 +610,43 @@ const ContentDetail = () => {
                       />
                     ))}
                   </Flex>
-                  {!complete && <Flex sx={{ p: 3, gap: 2 }}>
-                    {prevState && eligibleUser && (
-                      <Button
-                        variant="buttonSecondary"
-                        onClick={() => {
-                          setModalAction('prev');
-                          setOpen(true);
-                        }}>
-                        <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
-                      </Button>
-                    )}
-                    {nextState && eligibleUser && (
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          setModalAction('next');
-                          setOpen(true);
-                        }}>
-                        <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
-                      </Button>
-                    )}
-                    {activeState?.state == 'Publish' && eligibleUser && (
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          setModalAction('next');
-                          setOpen(true);
-                          setComplete(true)
-                        }}>
-                        <Text variant="pB">{`${activeState.state}`}</Text>
-                      </Button>
-                    )}
-                    {!eligibleUser && (
-                      <Text variant="pB">Waiting for approval</Text>
-                    )}
-                  </Flex>}
+                  {!complete && (
+                    <Flex sx={{ p: 3, gap: 2 }}>
+                      {prevState && eligibleUser && (
+                        <Button
+                          variant="buttonSecondary"
+                          onClick={() => {
+                            setModalAction('prev');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                        </Button>
+                      )}
+                      {nextState && eligibleUser && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                        </Button>
+                      )}
+                      {activeState?.state == 'Publish' && eligibleUser && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`${activeState.state}`}</Text>
+                        </Button>
+                      )}
+                      {!eligibleUser && (
+                        <Text variant="pB">Waiting for approval</Text>
+                      )}
+                    </Flex>
+                  )}
                   <Flex
                     sx={{
                       pt: 3,
