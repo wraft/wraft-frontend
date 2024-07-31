@@ -5,13 +5,20 @@ import { format } from 'date-fns';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 import { File } from '@phosphor-icons/react';
 
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI } from 'utils/models';
+
 import { ApproveTick } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
 
 interface BlockCardProps {
   title: string;
-  desc: string;
+  desc: number;
+}
+interface DashboardStatsProps {
+  daily_documents: number;
+  pending_approvals: number;
+  total_documents: number;
 }
 const BlockCard = ({ title, desc }: BlockCardProps) => (
   <Flex
@@ -42,7 +49,7 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
         sx={{
           ml: 'auto',
           fontSize: 'base',
-          fontWeight: 100,
+          fontWeight: 300,
         }}>
         {desc}
       </Box>
@@ -67,8 +74,17 @@ const finishSetup = [
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [dashboardStatus, setDashboardStatus] = useState<DashboardStatsProps>({
+    daily_documents: 0,
+    pending_approvals: 0,
+    total_documents: 0,
+  });
   // const [dashboardLoading, setDashboardLoading] = useState();
   const { userProfile } = useAuth();
+
+  useEffect(() => {
+    getDashboardStats();
+  }, [userProfile?.organisation_id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -77,6 +93,12 @@ const Dashboard = () => {
 
     return () => clearInterval(intervalId);
   }, [userProfile?.organisation_id]);
+
+  const getDashboardStats = () => {
+    fetchAPI('dashboard_stats').then((data: any) => {
+      setDashboardStatus(data);
+    });
+  };
 
   const getGreeting = () => {
     const currentHour = currentTime.getHours();
@@ -173,9 +195,18 @@ const Dashboard = () => {
       </Flex>
 
       <Grid gap={3} columns={4}>
-        <BlockCard title="Daily Total" desc="21" />
-        <BlockCard title="Total Documents" desc="34" />
-        <BlockCard title="Pending Approvals" desc="2" />
+        <BlockCard
+          title="Daily Total"
+          desc={dashboardStatus?.daily_documents}
+        />
+        <BlockCard
+          title="Total Documents"
+          desc={dashboardStatus?.total_documents}
+        />
+        <BlockCard
+          title="Pending Approvals"
+          desc={dashboardStatus?.pending_approvals}
+        />
       </Grid>
 
       <PendingDocumentBlock />
