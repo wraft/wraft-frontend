@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
-import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Table, Pagination } from '@wraft/ui';
 
 import PageHeader from 'components/PageHeader';
 import { StateBadge, TimeAgo } from 'components/Atoms';
@@ -34,6 +34,13 @@ export interface Instance {
 export interface State {
   state: string;
   id: string;
+}
+
+export interface IPageMeta {
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
+  contents?: any;
 }
 
 const columns = () => [
@@ -123,30 +130,50 @@ const columns = () => [
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  // const [rerender, setRerender] = useState<boolean>(false);
+  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [page, setPage] = useState<number>(1);
 
-  // const { addToast } = useToasts();
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   const { accessToken } = useAuth();
 
-  const loadData = () => {
+  const loadData = (page: number) => {
     setLoading(true);
-    fetchAPI('users/list_pending_approvals')
+    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
+    fetchAPI(`users/list_pending_approvals${pageNo}`)
       .then((data: any) => {
+        console.log(data, 'logdata');
+
         setLoading(false);
         const res: any[] = data.pending_approvals;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
       });
   };
 
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
+
   useEffect(() => {
     if (accessToken) {
-      loadData();
+      loadData(page);
     }
-  }, [accessToken]);
+  }, [accessToken, page]);
 
   /**
    * Approve an Instance
@@ -179,15 +206,25 @@ const Approvals = () => {
               skeletonRows={10}
               emptyMessage="Nothing to approve"
             />
+            {pageMeta && pageMeta?.total_pages > 1 && (
+              <Box mx={0} mt={3}>
+                <Pagination
+                  totalPage={pageMeta?.total_pages}
+                  initialPage={currentPage}
+                  onPageChange={changePage}
+                  totalEntries={pageMeta?.total_entries}
+                />
+              </Box>
+            )}
           </Box>
-          <Box
+          {/* <Box
             sx={{
               bg: 'backgroundWhite',
               minHeight: '100vh',
               width: '25%',
               borderLeft: 'solid 1px',
               borderColor: 'border',
-            }}></Box>
+            }}></Box> */}
         </Flex>
       </Box>
     </Box>
