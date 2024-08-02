@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Button, Text } from 'theme-ui';
+import { Box, Button, Text, Spinner } from 'theme-ui';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { postAPI } from '../../utils/models';
@@ -17,6 +17,7 @@ interface FormInputs {
 }
 
 const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
+  const [creating, setCreating] = useState<boolean>(false);
   const { userProfile } = useAuth();
   const {
     register,
@@ -27,6 +28,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
   });
 
   const onSubmit = (data: any) => {
+    setCreating(true);
     const body = {
       name: data.name,
       url: data.url,
@@ -40,6 +42,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
           position: 'top-right',
         });
         setCreatedId(data.id);
+        setCreating(false);
       })
       .catch(() => {
         toast.error('Workspace creation failed!', {
@@ -84,7 +87,8 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
                 flexGrow: 1,
                 mr: 3,
               }}>
-              Create Workspace
+              {creating && <Spinner width={16} height={16} color="white" />}
+              {!creating && <Text>Create Workspace</Text>}
             </Button>
             <Button
               onClick={() => {
