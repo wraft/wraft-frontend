@@ -74,7 +74,7 @@ export const Table = ({ data, columns }: TableProps) => {
                 },
               }}>
               {row.getVisibleCells().map((cell) => (
-                <Box as="th" variant="text.subR" key={cell.id} sx={styles.td}>
+                <Box as="th" key={cell.id} sx={styles.td}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Box>
               ))}
