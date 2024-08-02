@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
-import { Flex, Container, Button, Box } from 'theme-ui';
+import { Flex, Container, Box } from 'theme-ui';
+import { Drawer, useDrawer, Button } from '@wraft/ui';
 
 import { InviteUserIcon } from 'components/Icons';
 import { InviteTeam } from 'components/manage';
@@ -15,6 +15,7 @@ import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuDrawer = useDrawer();
 
   const { userProfile } = useAuth();
   const currentOrg = userProfile?.currentOrganisation?.name;
@@ -37,15 +38,15 @@ const Index: FC = () => {
                 ]}
               />
             }>
-            <Button
-              variant="btnPrimary"
-              onClick={() => setIsOpen(true)}
-              sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Button variant="primary" onClick={() => setIsOpen(true)}>
               <InviteUserIcon />
               Invite people
             </Button>
           </PageHeader>
-          <Drawer open={isOpen} setOpen={setIsOpen}>
+          <Drawer
+            open={isOpen}
+            store={menuDrawer}
+            onClose={() => setIsOpen(false)}>
             {isOpen && <InviteTeam setOpen={setIsOpen} />}
           </Drawer>
           <Container variant="layout.pageFrame">

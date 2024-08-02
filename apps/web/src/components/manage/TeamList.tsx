@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import toast from 'react-hot-toast';
-import { Flex, Box, Text, Button, Image } from 'theme-ui';
+import { Flex, Box, Text, Image } from 'theme-ui';
+import { ThreeDotIcon } from '@wraft/icon';
+import { Button, Table, Modal, DropdownMenu } from '@wraft/ui';
 
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
+
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
-import { ConfirmDelete } from '../common';
-import { AddIcon, Close, FilterArrowDown, OptionsIcon } from '../Icons';
-import Modal from '../Modal';
-import { Table } from '../Table';
+import { AddIcon, Close } from '../Icons';
 import AssignRole from './AssignRole';
 
 interface Role {
@@ -56,17 +55,16 @@ export type RoleType = {
 
 const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
+  const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
   const [currentRoleList, setCurrentRoleList] = useState<string[]>([]);
-  const [updatedRoleList, setUpdatedRoleList] = useState([]);
-  const [userId, setUserID] = useState<string | null>(null);
   const [isAssignRole, setIsAssignRole] = useState<number | null>(null);
-  const [isRemoveRole, setIsRemoveRole] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [isRemoveUser, setIsRemoveUser] = useState<number | null>(null);
-  const [sort, setSort] = useState('joined_at');
+  const [isUnassignModalOpen, setUnassignModalOpen] = useState<boolean>(false);
+  const [isOpenUnassignUserModal, setOpenUnassignUserModal] =
+    useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
   const [roles, setRoles] = useState<RoleType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { userProfile } = useAuth();
 
@@ -79,37 +77,35 @@ const TeamList = () => {
   }, []);
 
   const loadData = (id: string) => {
-    fetchAPI(`organisations/${id}/members?sort=${sort}`).then((data: any) => {
+    fetchAPI(`organisations/${id}/members?sort=joined_at`).then((data: any) => {
       setContents(data);
+      setLoading(false);
     });
   };
-  useEffect(() => {
-    if (updatedRoleList.length > 0) {
-      setCurrentRoleList([...updatedRoleList]);
-    }
-  }, [updatedRoleList]);
 
   useEffect(() => {
     if (organisationId) {
       loadData(organisationId);
     }
-  }, [organisationId, sort, rerender]);
+  }, [organisationId, rerender]);
 
   useEffect(() => {
     if (contents) {
-      const memberData: MemberData[] = contents.members.map((member) => {
-        return {
-          members: {
-            name: member.name,
-            profilePic: member.profile_pic,
-            memberId: member.id,
-          },
-          roles: member.roles.map((role) => ({
-            roleName: role.name,
-            roleId: role.id,
-          })),
-        };
-      });
+      const memberData: MemberData[] =
+        contents.members &&
+        contents?.members.map((member) => {
+          return {
+            members: {
+              name: member.name,
+              profilePic: member.profile_pic,
+              memberId: member.id,
+            },
+            roles: member.roles.map((role) => ({
+              roleName: role.name,
+              roleId: role.id,
+            })),
+          };
+        });
 
       setTableList(memberData);
     }
@@ -117,14 +113,16 @@ const TeamList = () => {
 
   const data = useMemo(() => tableList, [tableList]);
 
-  const onConfirmDelete = () => {
-    deleteAPI(`users/${userId}/roles/${isRemoveRole}`)
+  const onConfirmDelete = (uid: number, rid: number) => {
+    deleteAPI(`users/${uid}/roles/${rid}`)
       .then((response: any) => {
         toast.success(`${response?.info}`, {
           duration: 1000,
           position: 'top-center',
         });
         setRerender((prev) => !prev);
+        setCurrentRole(null);
+        setUnassignModalOpen(false);
       })
       .catch(() => {
         toast.error(`Failed to Delete!`, {
@@ -132,301 +130,228 @@ const TeamList = () => {
           position: 'top-center',
         });
       });
-    setIsRemoveRole(null);
   };
 
-  const AssignRoleFunc = (row: any) => {
-    setIsAssignRole(row.index);
-    setUserID(tableList[row.index].members.memberId);
-    setUpdatedRoleList(
-      tableList[row.index].roles.map(
-        (role: { roleName: string; roleId: string }) => role.roleId,
-      ),
-    );
+  const onUnassignRole = (role: any, member: any) => {
+    setCurrentRole({ role: role, member: member });
+    setUnassignModalOpen(true);
+  };
+
+  const onUnassignUserConfirm = (member: any) => {
+    console.log('member', member);
+    setCurrentRole({ member: member });
+    setOpenUnassignUserModal(true);
+  };
+
+  const onUnassignUser = (memberId: any) => {
+    postAPI(`organisations/remove_user/${memberId}`, {})
+      .then(() => {
+        toast.success('User removed Successfully', {
+          duration: 2000,
+          position: 'top-center',
+        });
+        setRerender((prev) => !prev);
+        setOpenUnassignUserModal(false);
+      })
+      .catch(() => {
+        toast.error('User removed Failed', {
+          duration: 2000,
+          position: 'top-center',
+        });
+      });
   };
 
   return (
     <Flex>
       <Table
-        options={{
-          columns: [
-            {
-              Header: () => (
-                <Flex
-                  onClick={() => {
-                    if (sort == 'name') {
-                      setSort('name_desc');
-                    } else {
-                      setSort('name');
-                    }
-                  }}
+        data={data}
+        isLoading={loading}
+        columns={[
+          {
+            id: 'content.name',
+            header: 'NAME',
+            accessorKey: 'content.name',
+            isPlaceholder: true,
+            cell: ({ row }: any) => (
+              <Flex
+                sx={{
+                  gap: '18px',
+                  alignItems: 'center',
+                }}>
+                <Image
+                  src={row.original.members.profilePic}
+                  alt="memberImg"
                   sx={{
-                    cursor: 'pointer',
-                    ml: '24px',
-                    fontSize: 'xs',
-                    fontWeight: 'heading',
-                  }}>
-                  NAME
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '100%',
-                      my: 'auto',
-                      ml: 2,
-                      rotate: sort === 'name_desc' ? '180deg' : '0deg',
-                    }}>
-                    <FilterArrowDown />
-                  </Box>
-                </Flex>
-              ),
-              accessor: 'members',
-              Cell: ({ row }) => {
-                return (
-                  <Flex
-                    sx={{
-                      ml: '24px',
-                      gap: '18px',
-                      alignItems: 'center',
-                    }}>
-                    <Image
-                      src={row.original.members.profilePic}
-                      alt="memberImg"
-                      sx={{
-                        width: '32px',
-                        height: '32px',
-                        maxWidth: 'auto',
-                        borderRadius: 99,
-                        border: 'solid 1px',
-                        borderColor: 'gray.300',
-                        overflow: 'hidden',
-                        objectFit: 'cover',
-                        flexShrink: 0,
-                      }}
-                    />
-                    <Text sx={{ fontWeight: 'heading', color: 'gray.600' }}>
-                      {row.original.members.name}
-                    </Text>
-                  </Flex>
-                );
-              },
-            },
-            {
-              Header: () => (
-                <Flex
-                  sx={{ ml: '24px', fontSize: 'xs', fontWeight: 'heading' }}>
-                  ROLE
-                </Flex>
-              ),
-              accessor: 'roles',
-              Cell: ({ row }) => {
-                return (
-                  <Flex
-                    sx={{
-                      color: 'gray.500',
-                      gap: '12px',
-                      alignItems: 'center',
-                    }}>
-                    {row.original.roles.map(
-                      (role: { roleName: string; roleId: string }) => (
-                        <Box
-                          sx={{ display: 'flex', alignItems: 'center' }}
-                          key={role.roleId}>
-                          <Flex
-                            sx={{
-                              fontWeight: 'body',
-                              px: '12px',
-                              py: '4px',
-                              backgroundColor: '#EFF2F6',
-                              borderRadius: '60px',
-                              gap: '6px',
-                              alignItems: 'center',
-                              my: 'auto',
-                            }}>
-                            {role.roleName}
-                            <Button
-                              onClick={() => {
-                                setIsRemoveRole(role.roleId);
-                                setUserID(
-                                  tableList[row.index].members.memberId,
-                                );
-                              }}
-                              sx={{
-                                cursor: 'pointer',
-                                margin: '0px',
-                                padding: '0px',
-                                bg: 'transparent',
-                                ':disabled': {
-                                  display: 'none',
-                                },
-                              }}>
-                              <Box
-                                sx={{
-                                  color: 'gray.900',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  objectFit: 'contain',
-                                }}>
-                                <Close width={30} color="black" />
-                              </Box>
-                            </Button>
-                            <Modal
-                              isOpen={isRemoveRole === role.roleId}
-                              onClose={() => setIsRemoveRole(null)}>
-                              <ConfirmDelete
-                                title="Delete role"
-                                text={`Are you sure you want to delete ${role.roleName} ?`}
-                                setOpen={setIsRemoveRole}
-                                onConfirmDelete={onConfirmDelete}
-                              />
-                            </Modal>
-                          </Flex>
-                        </Box>
-                      ),
-                    )}
+                    width: '28px',
+                    height: '28px',
+                    maxWidth: 'auto',
+                    borderRadius: 99,
+                    border: 'solid 1px',
+                    borderColor: 'gray.300',
+                    overflow: 'hidden',
+                    objectFit: 'cover',
+                    flexShrink: 0,
+                  }}
+                />
+                <Text sx={{ color: 'text' }}>{row.original.members.name}</Text>
+              </Flex>
+            ),
+            width: '100%',
+            enableSorting: false,
+          },
+          {
+            id: 'content.user_count',
+            header: 'ROLE',
+            accessorKey: 'content.user_count',
+            isPlaceholder: true,
+            cell: ({ row }: any) => (
+              <Flex
+                sx={{
+                  color: 'gray.500',
+                  gap: '12px',
+                  alignItems: 'center',
+                }}>
+                {row.original.roles.map(
+                  (role: { roleName: string; roleId: string }) => (
                     <Box
-                      sx={{
-                        margin: '0px',
-                        padding: '3px',
-                        borderRadius: '4px',
-                        border: '1px solid #E4E9EF',
-                        lineHeight: '0px',
-                        height: 'fit-content',
-                      }}>
-                      <MenuProvider>
-                        <MenuButton
-                          as={Button}
-                          onClick={() => {
-                            AssignRoleFunc(row);
-                          }}
+                      sx={{ display: 'flex', alignItems: 'center' }}
+                      key={role.roleId}>
+                      <Flex
+                        sx={{
+                          fontWeight: 'body',
+                          px: '16px',
+                          py: '6px',
+                          backgroundColor: 'green.400',
+                          fontSize: 'xs',
+                          borderRadius: '60px',
+                          gap: '6px',
+                          alignItems: 'center',
+                          my: 'auto',
+                          color: 'black',
+                        }}>
+                        {role.roleName}
+
+                        <Box
+                          onClick={() =>
+                            onUnassignRole(role, row.original.members)
+                          }
                           sx={{
-                            cursor: 'pointer',
-                            margin: '0px',
-                            padding: '0px',
-                            bg: 'transparent',
-                            ':disabled': {
-                              display: 'none',
-                            },
-                          }}>
-                          <AddIcon />
-                        </MenuButton>
-                        <Menu
-                          as={Box}
-                          variant="layout.menu"
-                          sx={{ top: 16, left: 0 }}
-                          open={isAssignRole === row.index}
-                          onClose={() => {
-                            setCurrentRoleList([]);
-                            setIsAssignRole(null);
-                          }}>
-                          <AssignRole
-                            setIsAssignRole={setIsAssignRole}
-                            roles={roles}
-                            setRerender={setRerender}
-                            currentRoleList={currentRoleList}
-                            userId={userId}
-                          />
-                        </Menu>
-                      </MenuProvider>
-                    </Box>
-                  </Flex>
-                );
-              },
-            },
-            {
-              Header: '',
-              accessor: 'col3',
-              Cell: ({ row }) => {
-                return (
-                  <Box sx={{ position: 'relative' }}>
-                    <MenuProvider>
-                      <MenuButton
-                        as={Box}
-                        sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Button
-                          sx={{
+                            color: 'black',
                             display: 'flex',
                             alignItems: 'center',
-                            position: 'relative',
-                            cursor: 'pointer',
-                            margin: '0px',
-                            padding: '0px',
-                            bg: 'transparent',
-                            ':disabled': {
-                              display: 'none',
-                            },
-                          }}
-                          onClick={() => {
-                            setIsOpen(row.index);
-                            setUserID(tableList[row.index].members.memberId);
+                            objectFit: 'contain',
                           }}>
-                          <OptionsIcon />
-                        </Button>
-                      </MenuButton>
-                      <Menu
-                        as={Box}
-                        variant="layout.menu"
-                        open={isOpen == row.index}
-                        onClose={() => setIsOpen(null)}>
-                        <MenuItem>
-                          <Button
-                            variant="base"
-                            onClick={() => {
-                              setIsOpen(null);
-                              setIsRemoveUser(row.index);
-                            }}>
-                            <Text
-                              variant=""
-                              sx={{ cursor: 'pointer', color: 'red.600' }}>
-                              Delete
-                            </Text>
-                          </Button>
-                        </MenuItem>
-                      </Menu>
-                      <Modal
-                        isOpen={isRemoveUser === row.index}
-                        onClose={() => setIsRemoveUser(null)}>
-                        {
-                          <ConfirmDelete
-                            title="Delete role"
-                            text={`Are you sure you want to delete ‘${
-                              tableList[row.index]?.members?.name
-                            }’?`}
-                            setOpen={setIsRemoveUser}
-                            onConfirmDelete={async () => {
-                              postAPI(
-                                `organisations/remove_user/${row.original.members.memberId}`,
-                                {},
-                              )
-                                .then(() => {
-                                  toast.success('User removed Successfully', {
-                                    duration: 2000,
-                                    position: 'top-center',
-                                  });
-                                  setRerender((prev) => !prev);
-                                })
-                                .catch(() => {
-                                  toast.error('User removed Failed', {
-                                    duration: 2000,
-                                    position: 'top-center',
-                                  });
-                                });
-                              setIsRemoveUser(null);
-                            }}
-                          />
-                        }
-                      </Modal>
-                    </MenuProvider>
-                  </Box>
-                );
-              },
-              width: '10%',
-            },
-          ],
-          data: data,
-        }}
+                          <Close width={30} color="black" />
+                        </Box>
+                      </Flex>
+                    </Box>
+                  ),
+                )}
+                <Box
+                  sx={{
+                    margin: '0px',
+                    padding: '3px',
+                    borderRadius: '4px',
+                    border: '1px solid #E4E9EF',
+                    lineHeight: '0px',
+                    height: 'fit-content',
+                  }}>
+                  <DropdownMenu.Provider>
+                    <DropdownMenu.Trigger>
+                      <AddIcon />
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu aria-label="dropdown role">
+                      <AssignRole
+                        setIsAssignRole={setIsAssignRole}
+                        roles={roles}
+                        setRerender={setRerender}
+                        currentRoleList={currentRoleList}
+                        userId={row.original?.members?.memberId}
+                      />
+                    </DropdownMenu>
+                  </DropdownMenu.Provider>
+                </Box>
+              </Flex>
+            ),
+            enableSorting: false,
+          },
+          {
+            id: 'editor',
+            header: '',
+            cell: ({ row }: any) => (
+              <DropdownMenu.Provider>
+                <DropdownMenu.Trigger>
+                  <ThreeDotIcon />
+                </DropdownMenu.Trigger>
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item
+                    onClick={() => onUnassignUserConfirm(row.original.members)}>
+                    <Text
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'red.600',
+                        textAlign: 'left',
+                        width: '200px',
+                      }}>
+                      Remove
+                    </Text>
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              </DropdownMenu.Provider>
+            ),
+            enableSorting: false,
+          },
+        ]}
       />
+      <Modal
+        open={isUnassignModalOpen}
+        ariaLabel="unassign role modal popup"
+        onClose={() => setUnassignModalOpen(false)}>
+        <Box>
+          <Modal.Header>Are you sure</Modal.Header>
+          <Box my={3}>
+            {`Are you sure you want to delete ${currentRole?.role?.roleName} ?`}
+          </Box>
+          <Flex sx={{ gap: '8px' }}>
+            <Button
+              variant="secondary"
+              onClick={() => setUnassignModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() =>
+                onConfirmDelete(
+                  currentRole.member.memberId,
+                  currentRole.role.roleId,
+                )
+              }>
+              Confirm
+            </Button>
+          </Flex>
+        </Box>
+      </Modal>
+
+      <Modal
+        open={isOpenUnassignUserModal}
+        ariaLabel="unassign user modal popup"
+        onClose={() => setOpenUnassignUserModal(false)}>
+        <Box>
+          <Modal.Header>Are you sure</Modal.Header>
+          <Box my={3}>
+            {`Are you sure you want to delete ${currentRole?.member?.name} ?`}
+          </Box>
+          <Flex sx={{ gap: '8px' }}>
+            <Button
+              variant="secondary"
+              onClick={() => setOpenUnassignUserModal(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => onUnassignUser(currentRole.member.memberId)}>
+              Confirm
+            </Button>
+          </Flex>
+        </Box>
+      </Modal>
     </Flex>
   );
 };
