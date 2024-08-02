@@ -90,7 +90,7 @@ const RolesList = ({
   setFilterLoading,
 }: Props) => {
   const [contents, setContents] = useState<Array<RolesItem>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [isOpenDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [currentContent, setCurrentContent] = useState<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
