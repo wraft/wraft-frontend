@@ -107,6 +107,7 @@ export interface ContentInstance {
 }
 
 export interface Content {
+  approval_status: any;
   updated_at: any;
   serialized: Serialized;
   raw: string;

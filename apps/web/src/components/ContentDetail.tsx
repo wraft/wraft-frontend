@@ -207,7 +207,6 @@ const ContentDetail = () => {
   const [user, setUser] = useState<any>();
   const [flowDetails, setFlowDetails] = useState<any>();
   const [eligibleUser, setEligibleUser] = useState<boolean>(false);
-  const [complete, setComplete] = useState<boolean>(false);
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
 
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
@@ -322,9 +321,6 @@ const ContentDetail = () => {
         toast.promise(req, {
           loading: 'Approving...',
           success: () => {
-            if (activeState?.state == 'Publish') {
-              setComplete(true);
-            }
             setRerender((prev) => !prev);
             return 'Approved';
           },
@@ -610,7 +606,7 @@ const ContentDetail = () => {
                       />
                     ))}
                   </Flex>
-                  {!complete && (
+                  {!contents?.content?.approval_status && (
                     <Flex sx={{ p: 3, gap: 2 }}>
                       {prevState && eligibleUser && (
                         <Button
