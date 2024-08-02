@@ -652,22 +652,21 @@ const ContentDetail = () => {
                       flexDirection: 'row',
                       // border: 'solid 1px #ddd',
                     }}>
-                    {eligibleUser && (
-                      <Button
-                        sx={{ py: 2 }}
-                        variant="btnPrimary"
-                        onClick={() => doBuild()}>
-                        <>
-                          {loading && <Spinner color="white" size={24} />}
-                          {!loading && (
-                            <Text
-                              sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                              Build
-                            </Text>
-                          )}
-                        </>
-                      </Button>
-                    )}
+                    {/* {eligibleUser && ( */}
+                    <Button
+                      sx={{ py: 2 }}
+                      variant="btnPrimary"
+                      onClick={() => doBuild()}>
+                      <>
+                        {loading && <Spinner color="white" size={24} />}
+                        {!loading && (
+                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
+                            Build
+                          </Text>
+                        )}
+                      </>
+                    </Button>
+                    {/* )} */}
                   </Flex>
                 </Box>
 
