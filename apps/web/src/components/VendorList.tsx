@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Container } from 'theme-ui';
+import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../utils/models';
 import ContentLoader from './ContentLoader';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
-import { Table } from './Table';
 
 export interface VendorTypes {
   vendors: Vendor[];
@@ -45,7 +45,7 @@ const VendorListBlock: FC = () => {
   // const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Vendor>>([]);
   const [vendors, setVendors] = useState<Array<Vendor>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   // const { addToast } = useToasts();
 
   const loadData = () => {
@@ -53,7 +53,7 @@ const VendorListBlock: FC = () => {
       .then((data: any) => {
         const res: Vendor[] = data.vendors;
         setContents(res);
-        setLoading(true);
+        setLoading(false);
       })
       .catch();
   };
@@ -96,25 +96,23 @@ const VendorListBlock: FC = () => {
         <Box mx={0} mb={3}>
           {!loading && <ContentLoader />}
           <Box sx={{ maxWidth: '70ch' }}>
-            {loading && vendors && (
-              <Table
-                options={{
-                  columns: [
-                    {
-                      Header: 'Name',
-                      accessor: 'col2',
-                      width: '65%',
-                    },
-                    {
-                      Header: 'Contact',
-                      accessor: 'col3',
-                      width: '30%',
-                    },
-                  ],
-                  data: vendors,
-                }}
-              />
-            )}
+            {/* <Table
+              data={vendors}
+              isLoading={loading}
+              columns={[
+                {
+                  Header: 'Name',
+                  accessor: 'col2',
+                  width: '65%',
+                },
+                {
+                  Header: 'Contact',
+                  accessor: 'col3',
+                  width: '30%',
+                },
+              ]}
+              skeletonRows={10}
+            /> */}
           </Box>
         </Box>
       </Container>

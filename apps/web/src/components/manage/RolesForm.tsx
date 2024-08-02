@@ -18,7 +18,7 @@ import { ArrowDropdown } from '../Icons';
 interface Props {
   setOpen: any;
   setRender: any;
-  roleId?: string;
+  roleId?: any;
 }
 
 interface FormInputs {
