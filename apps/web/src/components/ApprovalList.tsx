@@ -143,8 +143,6 @@ const Approvals = () => {
     const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
     fetchAPI(`users/list_pending_approvals${pageNo}`)
       .then((data: any) => {
-        console.log(data, 'logdata');
-
         setLoading(false);
         const res: any[] = data.pending_approvals;
         setContents(res);
