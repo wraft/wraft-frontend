@@ -96,7 +96,7 @@ const DrawerComponent = React.forwardRef<HTMLDivElement, DrawerOptions>(
       hideOnInteractOutside = true,
       placement = 'right',
       store,
-      withBackdrop = false,
+      withBackdrop = true,
       withCloseButton = true,
       open,
       ...rest

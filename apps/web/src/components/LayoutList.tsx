@@ -4,11 +4,11 @@ import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { fetchAPI, deleteAPI } from '../utils/models';
 import { ConfirmDelete } from './common';
 import { Drawer } from './common/Drawer';
-import { OptionsIcon } from './Icons';
 import LayoutForm from './LayoutForm';
 import Modal from './Modal';
 
@@ -138,7 +138,7 @@ const LayoutList = ({ rerender }: Props) => {
                     onClick={() => {
                       setIsOpen(row.index);
                     }}>
-                    <OptionsIcon />
+                    <ThreeDotIcon />
                   </Box>
                 </MenuButton>
                 <Menu

@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import {
   flexRender,
+  ExpandedState,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
+  getExpandedRowModel,
 } from '@tanstack/react-table';
 import { x } from '@xstyled/emotion';
 
@@ -28,11 +31,18 @@ const Table = ({
   skeletonRows = 5,
   emptyMessage = 'No Data',
 }: TableProps) => {
+  const [expanded, setExpanded] = useState<ExpandedState>({});
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
     data,
     columns,
+    state: {
+      expanded,
+    },
+    onExpandedChange: setExpanded,
+    getSubRows: (row: any) => row.children,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     manualPagination: true,
   });
 
@@ -130,7 +140,8 @@ const Table = ({
                       px="24px"
                       borderBottom="1px solid"
                       borderColor="border"
-                      minWidth={`${cell.column.getSize()}`}>
+                      minWidth={`${cell.column.getSize()}`}
+                      >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
