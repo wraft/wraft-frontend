@@ -9,7 +9,6 @@ import { Table } from '@wraft/ui';
 
 import { putAPI, fetchAPI } from '../../utils/models';
 import { ArrowDropdown } from '../Icons';
-// import Table from '../TanstackTable';
 
 const PermissionsList = () => {
   const [roles, setRoles] = useState<any>([]);
