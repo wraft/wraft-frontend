@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import toast from 'react-hot-toast';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
@@ -35,7 +36,7 @@ export interface State {
   id: string;
 }
 
-const columns = (approveInstance: any) => [
+const columns = () => [
   {
     id: 'content.name',
     header: 'Name',
@@ -99,18 +100,18 @@ const columns = (approveInstance: any) => [
     cell: ({ row }: any) => (
       <Flex sx={{ mr: 1, p: 2 }}>
         <Flex>
-          <Box sx={{ mr: 2 }}>
+          <NextLink href={`/content/${row.original?.content?.id}`}>
             <Button variant="btnSecondary" sx={{ mr: 1 }}>
               Review
             </Button>
-          </Box>
-          <Box>
+          </NextLink>
+          {/* <Box>
             <Button
               variant="btnAction"
-              onClick={() => approveInstance(row?.original?.instance?.id)}>
+              onClick={() => approveInstance(row?.original?.content?.id)}>
               Approve
             </Button>
-          </Box>
+          </Box> */}
         </Flex>
       </Flex>
     ),
@@ -122,6 +123,7 @@ const columns = (approveInstance: any) => [
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  // const [rerender, setRerender] = useState<boolean>(false);
 
   // const { addToast } = useToasts();
 
@@ -150,9 +152,17 @@ const Approvals = () => {
    * Approve an Instance
    */
 
-  const approveInstance = (id: string) => {
-    putAPI(`contents/${id}/approve`).then(() => {});
-  };
+  // const approveInstance = (id: string) => {
+  //   const req = putAPI(`contents/${id}/approve`);
+  //   toast.promise(req, {
+  //     loading: 'Approving...',
+  //     success: () => {
+  //       setRerender((prev) => !prev);
+  //       return 'Approved';
+  //     },
+  //     error: 'Failed',
+  //   });
+  // };
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
@@ -165,7 +175,7 @@ const Approvals = () => {
             <Table
               data={contents}
               isLoading={loading}
-              columns={columns(approveInstance)}
+              columns={columns()}
               skeletonRows={10}
               emptyMessage="Nothing to approve"
             />

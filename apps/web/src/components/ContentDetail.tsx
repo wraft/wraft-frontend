@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 import styled from '@emotion/styled';
 import ContentSidebar, {
@@ -24,7 +25,9 @@ import styles from './common/Tab/tab.module.css';
 import { EditIcon, DownloadIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
+import Modal from './Modal';
 import { StateState } from './FlowForm';
+import Field from './FieldText';
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -187,6 +190,7 @@ const PreTag = styled(Box)`
 `;
 
 const ContentDetail = () => {
+  const { register } = useForm();
   const router = useRouter();
   const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
@@ -196,8 +200,16 @@ const ContentDetail = () => {
   const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
   const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [activeState, setActiveState] = useState<StateState>();
   const [nextState, setNextState] = useState<StateState>();
   const [prevState, setPrevState] = useState<StateState>();
+  const [open, setOpen] = useState<boolean>(false);
+  const [user, setUser] = useState<any>();
+  const [flowDetails, setFlowDetails] = useState<any>();
+  const [eligibleUser, setEligibleUser] = useState<boolean>(false);
+  const [complete, setComplete] = useState<boolean>(false);
+  const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
+
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
   const defaultSelectedId = 'edit';
@@ -207,6 +219,13 @@ const ContentDetail = () => {
       setLoading(false);
       const res: ContentInstance = data;
       setContents(res);
+    });
+  };
+
+  const loadUser = () => {
+    fetchAPI('users/me').then((data: any) => {
+      const res = data;
+      setUser(res);
     });
   };
 
@@ -240,6 +259,10 @@ const ContentDetail = () => {
   useEffect(() => {
     loadData(cId);
   }, [cId, rerender]);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
 
   useEffect(() => {
     if (build) {
@@ -277,9 +300,13 @@ const ContentDetail = () => {
 
       // s
       if (contentTypeId) {
-        fetchAPI(`content_types/${contentTypeId}`).then((data: any) => {
-          onLoadData(data);
-        });
+        fetchAPI(`content_types/${contentTypeId}`)
+          .then((data: any) => {
+            onLoadData(data);
+          })
+          .catch((err) => {
+            console.log(err, 'logerr');
+          });
       }
     }
   }, [contents]);
@@ -288,36 +315,56 @@ const ContentDetail = () => {
     //
   };
 
-  const onApproveState = () => {
+  const handleModalAction = () => {
     if (contents) {
-      const req = putAPI(`contents/${contents.content.id}/approve`);
-      toast.promise(req, {
-        loading: 'Approving...',
-        success: () => {
-          setRerender((prev) => !prev);
-          return 'Approved';
-        },
-        error: 'Failed',
-      });
-    }
-  };
-  const onRejectState = () => {
-    if (contents) {
-      const req = putAPI(`contents/${contents.content.id}/reject`);
-      toast.promise(req, {
-        loading: 'Rejecting...',
-        success: () => {
-          setRerender((prev) => !prev);
-          return 'Rejected';
-        },
-        error: 'Failed',
-      });
+      if (modalAction === 'next') {
+        const req = putAPI(`contents/${contents.content.id}/approve`);
+        toast.promise(req, {
+          loading: 'Approving...',
+          success: () => {
+            if (activeState?.state == 'Publish') {
+              setComplete(true);
+            }
+            setRerender((prev) => !prev);
+            return 'Approved';
+          },
+          error: 'Failed',
+        });
+      } else if (modalAction === 'prev' && prevState) {
+        const req = putAPI(`contents/${contents.content.id}/reject`);
+        toast.promise(req, {
+          loading: 'Rejecting...',
+          success: () => {
+            setRerender((prev) => !prev);
+            return 'Rejected';
+          },
+          error: 'Failed',
+        });
+      }
+      setOpen(false);
     }
   };
 
   useEffect(() => {
     if (activeFlow && contents) {
-      fetchAPI(`flows/${activeFlow.id}/states`).then(() => {});
+      fetchAPI(`flows/${activeFlow.flow.id}/states`).then((data: any) => {
+        const stateNames: { state: string; approver: string }[] = [];
+        data.states.forEach((item: any) => {
+          const state = item.state;
+
+          if (state && state.approvers) {
+            state.approvers.map((approver: any) => {
+              const stateNamePair = {
+                state: state.state,
+                approver: approver.name,
+                id: approver.id,
+              };
+              stateNames.push(stateNamePair);
+            });
+          }
+        });
+        setFlowDetails(stateNames);
+      });
       const activeState = activeFlow?.states.filter(
         (a: any) => a.id === contents.state.id,
       )?.[0];
@@ -325,6 +372,7 @@ const ContentDetail = () => {
       const nextState = activeFlow.states[activeIndex + 1];
       const prevState = activeFlow.states[activeIndex - 1];
       if (activeState) {
+        setActiveState(activeState);
         setNextState(nextState);
         setPrevState(prevState);
       } else {
@@ -334,6 +382,16 @@ const ContentDetail = () => {
   }, [activeFlow, contents]);
 
   // const navTitle = contents?.content?.title;
+
+  useEffect(() => {
+    if (flowDetails && flowDetails.length > 0 && activeState && user) {
+      // Check if there is a match in flowDetails
+      const isApproved = flowDetails.some((detail: any) => {
+        return detail.state === activeState.state && detail.id === user.id;
+      });
+      setEligibleUser(isApproved);
+    }
+  }, [activeState, user, flowDetails]);
 
   return (
     <Box py={0} sx={{ minHeight: '100vh' }}>
@@ -552,22 +610,43 @@ const ContentDetail = () => {
                       />
                     ))}
                   </Flex>
-                  <Flex sx={{ p: 3, gap: 2 }}>
-                    {prevState && (
-                      <Button
-                        variant="buttonSecondary"
-                        onClick={() => onRejectState()}>
-                        <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
-                      </Button>
-                    )}
-                    {nextState && (
-                      <Button
-                        variant="secondary"
-                        onClick={() => onApproveState()}>
-                        <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
-                      </Button>
-                    )}
-                  </Flex>
+                  {!complete && (
+                    <Flex sx={{ p: 3, gap: 2 }}>
+                      {prevState && eligibleUser && (
+                        <Button
+                          variant="buttonSecondary"
+                          onClick={() => {
+                            setModalAction('prev');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                        </Button>
+                      )}
+                      {nextState && eligibleUser && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
+                        </Button>
+                      )}
+                      {activeState?.state == 'Publish' && eligibleUser && (
+                        <Button
+                          variant="secondary"
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}>
+                          <Text variant="pB">{`${activeState.state}`}</Text>
+                        </Button>
+                      )}
+                      {!eligibleUser && (
+                        <Text variant="pB">Waiting for approval</Text>
+                      )}
+                    </Flex>
+                  )}
                   <Flex
                     sx={{
                       pt: 3,
@@ -577,19 +656,22 @@ const ContentDetail = () => {
                       flexDirection: 'row',
                       // border: 'solid 1px #ddd',
                     }}>
-                    <Button
-                      sx={{ py: 2 }}
-                      variant="btnPrimary"
-                      onClick={() => doBuild()}>
-                      <>
-                        {loading && <Spinner color="white" size={24} />}
-                        {!loading && (
-                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                            Build
-                          </Text>
-                        )}
-                      </>
-                    </Button>
+                    {eligibleUser && (
+                      <Button
+                        sx={{ py: 2 }}
+                        variant="btnPrimary"
+                        onClick={() => doBuild()}>
+                        <>
+                          {loading && <Spinner color="white" size={24} />}
+                          {!loading && (
+                            <Text
+                              sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
+                              Build
+                            </Text>
+                          )}
+                        </>
+                      </Button>
+                    )}
                   </Flex>
                 </Box>
 
@@ -717,6 +799,59 @@ const ContentDetail = () => {
           )}
         </ErrorBoundary>
       </Box>
+      <Modal isOpen={open}>
+        {/* {
+          <ConfirmDelete
+            title="Confirm action"
+            text={`Are you sure you want send to ${nextState?.state}?`}
+            setOpen={setOpen}
+            onConfirmDelete={() => {
+              setOpen(false);
+            }}
+          />
+        } */}
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            width: '372px',
+            height: '225px',
+            border: '1px solid #E4E9EF',
+            background: '#FFF',
+            alignItems: 'center',
+          }}>
+          <Box sx={{ px: 3, py: 2, borderColor: 'border' }}>
+            <Text as="p" variant="h5Medium">
+              Confirm action
+            </Text>
+          </Box>
+          <Text
+            sx={{
+              marginTop: '5px',
+              mb: '5px',
+              textAlign: 'center',
+              fontWeight: 'heading',
+              color: 'gray.900',
+            }}>
+            {modalAction === 'next'
+              ? `Are you sure you want to send to ${nextState?.state}?`
+              : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
+          </Text>
+          <Box as="form" py={1} mt={0}>
+            <Box mx={0} mb={2} sx={{ width: '350px' }}>
+              <Field name="body" label="" defaultValue="" register={register} />
+            </Box>
+          </Box>
+          <Flex sx={{ gap: '12px' }}>
+            <Button onClick={handleModalAction}>Confirm</Button>
+
+            <Button
+              onClick={() => setOpen(false)}
+              sx={{ bg: 'red', color: 'white' }}>
+              Cancel
+            </Button>
+          </Flex>
+        </Flex>
+      </Modal>
     </Box>
   );
 };
