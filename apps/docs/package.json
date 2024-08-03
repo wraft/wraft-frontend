@@ -29,7 +29,7 @@
     "@storybook/addon-links": "^7.6.12",
     "@storybook/blocks": "^7.6.12",
     "@storybook/react": "^7.6.12",
-    "@storybook/react-vite": "^8.0.10",
+    "@storybook/react-vite": "^7.6.12",
     "@vitejs/plugin-react": "^4.3.0",
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
