@@ -14,6 +14,7 @@ import { Box } from 'theme-ui';
 import { HolderAtomPopupComponent } from './extension-holder/holder-popover';
 import { Toolbar } from './toolbar';
 import { TableComponents } from '@remirror/extension-react-tables';
+import { SlashSuggestor } from './extensions/useSlash';
 
 export interface ContentState {
   readonly doc?: string;
@@ -70,19 +71,35 @@ export function ContentEditor({
     <Box
       sx={{
         '.remirror-editor-wrapper': {
-          pt: 1,
+          pt: 0,
+          px: 0,
         },
         '.remirror-theme .ProseMirror': {
           borderRadius: '0 0 6px 6px',
+          minHeight: '45vh',
+          boxShadow: 'none', // 'var(--theme-ui-colors-green-300) 0px 0px 0px 0px',
+          border: 0,
+          bg: 'var(--theme-ui-colors-gray-200)',
+          borderColor: 'var(--theme-ui-colors-gray-500)',
+          outline: 'none',
+          px: 0,
+          py: 0,
+          // px: isFullWidth ? '7rem' : '3rem',
+          // py: isFullWidth ? '4rem' : '3rem',
+          transition: 'padding 0.3s ease-in-out',
         },
         '.remirror-theme .ProseMirror:focus': {
-          boxShadow: 'var(--theme-ui-colors-blue-100) 0px 0px 1px 0.2em',
+          boxShadow: 'none', //'var(--theme-ui-colors-green-300) 0px 0px 0px 0px',
+          border: 'solid 1px var(--theme-ui-colors-gray-500)',
+          bg: 'var(--theme-ui-colors-gray-100)',
+          outline: 'none',
         },
         '.remirror-theme': {
           borderRadius: '6px',
           padding: 0,
           border: 'solid 1px',
-          borderColor: 'var(--theme-ui-colors-gray-700)'
+          borderColor: 'var(--theme-ui-colors-gray-500)',
+          bg: '#fff',
         },
         'hr.pagebreak-': {
           color: 'blue',
@@ -95,12 +112,12 @@ export function ContentEditor({
         '.remirror-editor table': {
           my: 2,
         },
-        
+
         '.remirror-editor th': {
-          textAlign: 'left',          
+          textAlign: 'left',
           paddingTop: '0px',
           margin: 0,
-          background: 'var(--theme-ui-colors-gray-300)'
+          background: 'var(--theme-ui-colors-gray-300)',
         },
 
         '.remirror-editor tr td': {
@@ -112,9 +129,8 @@ export function ContentEditor({
         '.remirror-table-tbody-with-controllers>tr:nth-of-type(n + 2) th': {
           paddingLeft: '15px',
         },
-        '.remirror-table-tbody-with-controllers th.remirror-table-controller': {
-
-        }
+        '.remirror-table-tbody-with-controllers th.remirror-table-controller':
+          {},
       }}>
       <AllStyledComponent theme={theme}>
         <ThemeProvider
@@ -141,10 +157,18 @@ export function ContentEditor({
             state={state}
             onChange={onChange}
             editable={editable}>
-            {editable && <Toolbar />}
+            {editable && (
+              <Toolbar
+                onWidthToggle={function (isFullWidth: boolean): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
+            )}
+            {/* <Count */}
             <EditorComponent />
+            <SlashSuggestor />
             <HolderSuggestComponent tokens={tokens} />
-            <TableComponents/>
+            <TableComponents />
           </Remirror>
         </ThemeProvider>
       </AllStyledComponent>
