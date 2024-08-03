@@ -1,3 +1,20 @@
+import React, { MouseEventHandler, useCallback, useState } from 'react';
+import {
+  CodeBlock,
+  FrameCorners,
+  ListBullets,
+  ListNumbers,
+  Quotes,
+  Table,
+  TextBolder,
+  TextHOne,
+  TextHTwo,
+  TextHThree,
+  TextItalic,
+  ArrowsOutSimple,
+  ArrowsInSimple,
+  Image,
+} from '@phosphor-icons/react';
 import {
   CommandButton,
   HeadingLevelButtonGroup,
@@ -7,48 +24,125 @@ import {
   useActive,
   useCommands,
 } from '@remirror/react';
+import { Text, Box, Flex } from 'theme-ui';
+import { Counter } from './extensions/counter';
 
-import { Flex } from 'theme-ui';
+// import { Flex } from 'theme-ui';
 
-export const Toolbar = () => {
+const ThemedCommandButton = (props: any) => (
+  <Box
+    as={CommandButton}
+    sx={{
+      margin: '0 4px',
+      padding: '4px',
+      border: 0,
+      borderRadius: '6px',
+      '&.selected': {
+        backgroundColor: 'lightblue !important',
+      },
+      backgroundColor: props.active ? 'lightblue' : 'transparent',
+      '&:hover': {
+        backgroundColor: props.active ? 'lightblue' : '#f0f0f0',
+      },
+      '&:last-child': {
+        ml: 'auto',
+      },
+    }}
+    {...props}
+  />
+);
+
+interface ToolbarProps {
+  onWidthToggle: (isFullWidth: boolean) => void;
+}
+
+export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
   const commands = useCommands();
   const active = useActive(true);
+  const [isFullWidth, setIsFullWidth] = useState(false);
+
+  const toggleWidth = () => {
+    const newIsFullWidth = !isFullWidth;
+    setIsFullWidth(newIsFullWidth);
+    onWidthToggle(newIsFullWidth);
+  };
 
   return (
-    <Flex sx={{ gap: 1, px: 2, py: 2 }}>
-      <HeadingLevelButtonGroup showAll />
-      <ToggleBlockquoteButton />
-      <CommandButton
-        commandName="toggleItalic"
-        icon={<Icon name={'italic'} />}
-        onSelect={() => commands.toggleItalic()}
-        enabled={true}
-      />
+    <Flex sx={{ px: 3, py: 2, borderBottom: `solid 1px`, borderColor: '#eee' }}>
+      {/* <HeadingLevelButtonGroup showAll /> */}
+      {/* <ToggleBlockquoteButton /> */}
 
-      <CommandButton
-        icon={<Icon name={'bold'} />}
+      <ThemedCommandButton
+        icon={<TextBolder size={18} />}
         commandName="toggleBold"
         onSelect={() => commands.toggleBold()}
         enabled={true}
+        active={active.bold()}
       />
 
-      <CommandButton
-        icon={<Icon name={'listUnordered'} />}
+      <ThemedCommandButton
+        commandName="toggleItalic"
+        icon={<TextItalic size={18} />}
+        onSelect={() => commands.toggleItalic()}
+        enabled={true}
+        active={active.italic()}
+      />
+      <ThemedCommandButton
+        commandName="toggleBlockquote"
+        icon={<Quotes size={18} />}
+        onSelect={() => commands.toggleBlockquote()}
+        enabled={true}
+        active={active.blockquote()}
+      />
+      <Box sx={{ width: '1px', backgroundColor: '#eee', mx: 2 }} />
+      <ThemedCommandButton
+        commandName="toggleHeading"
+        icon={<TextHOne size={18} />}
+        onSelect={() => commands.toggleHeading({ level: 1 })}
+        enabled={true}
+        active={active.heading({ level: 1 })}
+      />
+      <ThemedCommandButton
+        commandName="toggleHeading"
+        icon={<TextHTwo size={18} />}
+        onSelect={() => commands.toggleHeading({ level: 2 })}
+        enabled={true}
+        active={active.heading({ level: 2 })}
+      />
+
+      <ThemedCommandButton
+        commandName="toggleHeading"
+        icon={<TextHThree size={18} />}
+        onSelect={() => commands.toggleHeading({ level: 3 })}
+        enabled={true}
+        active={active.heading({ level: 3 })}
+      />
+
+      <ThemedCommandButton
+        icon={<ListBullets size={18} />}
         commandName="toggleBulletList"
         active={active.bulletList()}
         onSelect={() => commands.toggleBulletList()}
         enabled={true}
       />
-      <CommandButton
-        icon={<Icon name={'listOrdered'} />}
+      <ThemedCommandButton
+        icon={<ListNumbers size={18} />}
         commandName="toggleOrderedList"
         active={active.orderedList()}
         onSelect={() => commands.toggleOrderedList()}
         enabled={true}
       />
+
+      <Box sx={{ width: '1px', backgroundColor: '#eee', mx: 2 }} />
+      <ThemedCommandButton
+        icon={<Image size={18} />}
+        commandName={'uploadImage'}
+        // onSelect={() => commands.uploadImage()}
+        enabled={true}
+      />
       {/* <InsertHorizontalRuleButton /> */}
-      <CommandButton
-        icon={<Icon name={'table2'} />}
+      <ThemedCommandButton
+        icon={<Table size={18} />}
         commandName={'addTable'}
         onSelect={() =>
           commands.createTable({
@@ -59,6 +153,36 @@ export const Toolbar = () => {
         }
         enabled={true}
       />
+
+      {/* <ThemedCommandButton
+        icon={<FrameCorners size={18} weight="bold" />}
+        commandName={'addCodeBlock'}
+        // onSelect={() => commands.createCodeBlock()}
+        enabled={true}
+      /> */}
+
+      <Flex sx={{ alignItems: 'center', ml: 'auto' }}>
+        <Flex>{/* <Counter /> */}</Flex>
+        <ThemedCommandButton
+          icon={
+            isFullWidth ? (
+              <ArrowsInSimple size={18} weight="bold" />
+            ) : (
+              <ArrowsOutSimple size={18} weight="bold" />
+            )
+          }
+          commandName="toggleWidth"
+          onSelect={toggleWidth}
+          enabled={true}
+          active={false}
+        />
+      </Flex>
     </Flex>
   );
+};
+
+// Function to adjust editor padding (implement this in your editor component)
+const adjustEditorPadding = (isFullWidth: boolean) => {
+  // Implement the logic to adjust the editor padding based on isFullWidth
+  // This might involve updating a state in a parent component or using a context
 };
