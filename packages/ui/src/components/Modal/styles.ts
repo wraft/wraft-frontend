@@ -35,7 +35,7 @@ export const Dialog: any = styled.div`
   flex-direction: column;
   gap: 1rem;
   overflow: auto;
-  border-radius: 0.75rem;
+  border-radius: 0.65rem;
   background-color: hsl(204 20% 100%);
   padding: 1rem;
   color: hsl(204 10% 10%);
@@ -61,7 +61,8 @@ export const Dialog: any = styled.div`
     bottom: 10vh;
     margin-top: 0px;
     max-height: 80vh;
-    width: 420px;
+    width: fit-content;
+    max-width: 80%;
     border-radius: 1rem;
     padding: 1.5rem;
   }

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Box, Flex, Text, Container, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
+import { Modal } from '@wraft/ui';
 
 import Footer from 'components/Footer';
 import NextLinkText from 'components/NavLink';
@@ -35,6 +36,8 @@ const MainSection = styled(Flex)`
 `;
 
 const LandingBlock = () => {
+  const [isOpendemoModal, setOpendemoModal] = useState<boolean>(false);
+
   return (
     <LandingBlockWrapper bg="backgroundWhite">
       <Head>
@@ -110,9 +113,26 @@ const LandingBlock = () => {
             <NextLinkText variant={'primaryLarge'} href="/signup">
               Get Started
             </NextLinkText>
-            <NextLinkText variant={'secondaryLarge'} href="/login">
+            <Box
+              sx={{
+                backgroundColor: 'gray.100',
+                fontSize: '1.15rem',
+                fontWeight: 600,
+                color: 'green.1200',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.75rem',
+                border: 'solid 1px',
+                borderColor: 'green.900',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'green.200',
+                  borderColor: 'green.a500',
+                  color: 'green.100',
+                },
+              }}
+              onClick={() => setOpendemoModal(true)}>
               Watch Demo
-            </NextLinkText>
+            </Box>
           </Flex>
           <Box mt="92px">
             <Image
@@ -434,6 +454,37 @@ const LandingBlock = () => {
         </Box>
       </Box>
       <Footer />
+      <Modal
+        open={isOpendemoModal}
+        ariaLabel="delete modal"
+        onClose={() => setOpendemoModal(false)}>
+        <>
+          {isOpendemoModal && (
+            <Box sx={{ width: '100ch' }}>
+              <Flex
+                sx={{
+                  position: 'relative',
+                  width: '`100%',
+                  height: '72vh',
+                }}>
+                <iframe
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  src="https://www.youtube.com/embed/I71DmG_t3rA?si=fYvnDjHdWdRhilx5?rel=0&modestbranding=1&autoplay=1"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media"
+                  referrerPolicy="strict-origin-when-cross-origin"></iframe>
+              </Flex>
+            </Box>
+          )}
+        </>
+      </Modal>
     </LandingBlockWrapper>
   );
 };
