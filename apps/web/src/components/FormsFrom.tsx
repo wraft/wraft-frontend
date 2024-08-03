@@ -619,7 +619,7 @@ const SortableItem = ({
         sx={{
           cursor: 'pointer',
           flexShrink: 0,
-          color: 'gray.200',
+          color: 'gray.400',
         }}>
         <Box
           as="div"

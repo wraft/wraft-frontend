@@ -242,7 +242,7 @@ const SortableItem = ({
             marginTop: '28px',
           }}>
           <DragIcon
-            color={themeui?.theme?.colors?.gray?.[200] || ''}
+            color={themeui?.theme?.colors?.gray?.[600] || ''}
             width={20}
             height={20}
             viewBox="0 0 24 24"
