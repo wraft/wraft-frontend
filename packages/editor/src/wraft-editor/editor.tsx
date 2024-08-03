@@ -67,6 +67,12 @@ export function ContentEditor({
     },
   };
 
+  const [isFullWidth, setIsFullWidth] = useState(false);
+
+  const handleWidthToggle = (isFullWidth: boolean) => {
+    setIsFullWidth(isFullWidth);
+  };
+
   return (
     <Box
       sx={{
@@ -82,10 +88,8 @@ export function ContentEditor({
           bg: 'var(--theme-ui-colors-gray-200)',
           borderColor: 'var(--theme-ui-colors-gray-500)',
           outline: 'none',
-          px: 0,
-          py: 0,
-          // px: isFullWidth ? '7rem' : '3rem',
-          // py: isFullWidth ? '4rem' : '3rem',
+          px: isFullWidth ? '7rem' : '3rem',
+          py: isFullWidth ? '4rem' : '3rem',
           transition: 'padding 0.3s ease-in-out',
         },
         '.remirror-theme .ProseMirror:focus': {
@@ -157,13 +161,8 @@ export function ContentEditor({
             state={state}
             onChange={onChange}
             editable={editable}>
-            {editable && (
-              <Toolbar
-                onWidthToggle={function (isFullWidth: boolean): void {
-                  throw new Error('Function not implemented.');
-                }}
-              />
-            )}
+            {editable && <Toolbar onWidthToggle={handleWidthToggle} />}
+
             {/* <Count */}
             <EditorComponent />
             <SlashSuggestor />
