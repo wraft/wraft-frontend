@@ -28,6 +28,8 @@ import Nav from './NavEdit';
 import Modal from './Modal';
 import { StateState } from './FlowForm';
 import Field from './FieldText';
+import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
+
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 /**
@@ -684,6 +686,9 @@ const ContentDetail = () => {
                       <Tab className={styles.tabInline} id="history">
                         History
                       </Tab>
+                      <Tab className={styles.tabInline} id="approval">
+                        Approval History
+                      </Tab>
                     </TabList>
 
                     <TabPanel tabId={defaultSelectedId} className="tabPanel">
@@ -786,6 +791,9 @@ const ContentDetail = () => {
                           </Box>
                         )}
                       </Box>
+                    </TabPanel>
+                    <TabPanel>
+                      <ApprovalFlowHistory id={cId} />
                     </TabPanel>
                   </TabProvider>
                 </Box>
