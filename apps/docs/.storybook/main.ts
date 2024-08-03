@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/react-vite';
+import react from '@vitejs/plugin-react';
 
 import { dirname, join, resolve } from "path";
 

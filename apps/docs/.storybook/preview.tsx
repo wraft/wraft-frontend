@@ -13,7 +13,7 @@ const preview: Preview = {
         order: ['Introduction', 'Colors', 'Icons', 'Typography', ['Home', 'Login', 'Admin'], 'Components', '*', 'WIP'],
       },
     },
-    actions: { argTypesRegex: "^on[A-Z].*" },
+    // actions: { argTypesRegex: "^on[A-Z].*" },
     controls: {
       matchers: {
         color: /(background|color)$/i,
