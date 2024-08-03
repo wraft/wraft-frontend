@@ -1,4 +1,4 @@
-import { Box, Flex, Text, useColorMode } from 'theme-ui';
+import { Box, Flex, useColorMode } from 'theme-ui';
 
 import Container from './Container';
 import { BrandLogo } from './Icons';

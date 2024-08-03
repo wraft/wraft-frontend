@@ -38,7 +38,14 @@ module.exports = {
         'react/prop-types': 'off',
         'react/react-in-jsx-scope': 'off',
         'jsx-a11y/anchor-is-valid': 'off',
-        "no-unused-vars": "warn",
+        // "no-unused-vars": "warn",
+        "no-unused-vars": ["error", {
+            "vars": "all",
+            "args": "after-used",
+            "caughtErrors": "all",
+            "ignoreRestSiblings": false,
+            "reportUsedIgnorePattern": false
+        }],
         "@typescript-eslint/no-unused-vars": "off",
         // // '@typescript-eslint/no-unused-vars': ['warn', {
         // //   varsIgnorePattern: '[iI]gnored|createElement',

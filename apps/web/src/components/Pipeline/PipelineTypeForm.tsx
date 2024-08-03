@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
@@ -14,7 +14,7 @@ import { Button } from '@wraft/ui';
 import { uuidRegex } from 'utils/regex';
 
 import Field from '../Field';
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../../utils/models';
+import { fetchAPI, postAPI, putAPI } from '../../utils/models';
 
 export interface IFieldItem {
   name: string;
