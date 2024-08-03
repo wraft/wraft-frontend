@@ -5,14 +5,13 @@ import Router, { useRouter } from 'next/router';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import { Box, Flex, Button, Text, Label, Input, Spinner, Grid } from 'theme-ui';
+import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { RoutedDialog } from '@wraft-ui/RoutedDialog';
 
 import NavEdit from 'components/NavEdit';
-import FieldText from 'components/FieldText';
 import Field from 'components/Field';
 import Editor from 'components/common/Editor';
 import { findVars, replaceTitles, updateVars, findHolders } from 'utils/index';

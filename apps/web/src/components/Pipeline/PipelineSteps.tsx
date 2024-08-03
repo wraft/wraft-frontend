@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { Button, Table, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
@@ -33,7 +33,6 @@ type Props = {
 };
 
 const Form = ({ rerender, setRerender }: Props) => {
-  const { theme } = useThemeUI();
   const [loading, setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
