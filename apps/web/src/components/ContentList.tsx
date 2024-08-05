@@ -84,7 +84,7 @@ const columns = [
             <Box
               as="h5"
               sx={{
-                fontSize: 'xs',
+                fontSize: 'sm',
                 color: 'gray.1200',
                 letterSpacing: '-0.15px',
                 fontWeight: 500,
@@ -116,9 +116,10 @@ const columns = [
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Box sx={{ height: '20px' }}>
+      <Flex>
         <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-      </Box>
+        <Box sx={{ fontSize: 'sm', ml: 3 }}>{row.original?.creator?.name}</Box>
+      </Flex>
     ),
     enableSorting: false,
   },

@@ -93,13 +93,15 @@ const ApprovalFlowHistory = ({ id }: any) => {
   }, [id]);
 
   const loadData = () => {
-    fetchAPI(`contents/${id}/approval_history`).then((data: any) => {
-      const res: any = data;
-      setContents(res);
-      setIsLoading(false);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    fetchAPI(`contents/${id}/approval_history`)
+      .then((data: any) => {
+        const res: any = data;
+        setContents(res);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
   if (isLoading) {
     return <Box p={4}>Loading...</Box>;
