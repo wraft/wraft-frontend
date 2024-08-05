@@ -1,11 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import NavLink from 'next/link';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import { Button, Table } from '@wraft/ui';
-import { Box, Text } from 'theme-ui';
+import { Table, DropdownMenu } from '@wraft/ui';
+import { Box, Text, Flex, Avatar } from 'theme-ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'components/Atoms';
-import { DotsVerticalRounded } from 'components/Icons';
 import Link from 'components/NavLink';
 import PageHeader from 'components/PageHeader';
 import { fetchAPI } from 'utils/models';
@@ -29,7 +28,7 @@ const columns = [
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NavLink href={`/blocks/edit/${row?.original?.id}`}>
-        <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
+        <Box sx={{ fontSize: 'sm', fontWeight: 500 }}>
           {row?.original?.title}
         </Box>
       </NavLink>
@@ -49,41 +48,37 @@ const columns = [
     enableSorting: false,
   },
   {
+    id: 'content.created',
+    header: 'CREATED BY',
+    accessorKey: 'created',
+    cell: ({ row }: any) => (
+      <Flex>
+        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
+        <Box sx={{ fontSize: 'sm', ml: 3 }}>{row.original?.creator?.name}</Box>
+      </Flex>
+    ),
+    enableSorting: false,
+  },
+  {
     id: 'content.name',
-    header: 'ACTION',
-    cell: () => (
+    header: '',
+    cell: ({ row }: any) => (
       <>
-        <MenuProvider>
-          <MenuButton>
-            <Button variant="secondary">
-              <DotsVerticalRounded width={16} height={16} />
-            </Button>
-          </MenuButton>
-          <Menu
-            as={Box}
-            aria-label="Manage Block"
-            sx={{
-              border: 'solid 1px',
-              borderColor: 'border',
-              borderRadius: 4,
-              bg: 'neutral.100',
-              color: 'text',
-              zIndex: 1,
-            }}>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                // onDelete(id);
-              }}>
-              Delete
-            </Button>
-            <MenuItem as={Box} sx={{ width: '100%', px: 3 }}>
-              <NavLink href={`/manage/blocks/edit/[id]`}>
-                <Text sx={{ fontSize: 'xxs', fontWeight: 500 }}>Edit</Text>
-              </NavLink>
-            </MenuItem>
-          </Menu>
-        </MenuProvider>
+        <Flex sx={{ justifyContent: 'flex-end' }}>
+          <DropdownMenu.Provider>
+            <DropdownMenu.Trigger>
+              <ThreeDotIcon />
+            </DropdownMenu.Trigger>
+            <DropdownMenu aria-label="dropdown role">
+              <DropdownMenu.Item>
+                <NavLink href={`/blocks/edit/${row?.original?.id}`}>
+                  <Text>Edit</Text>
+                </NavLink>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item>Delete</DropdownMenu.Item>
+            </DropdownMenu>
+          </DropdownMenu.Provider>
+        </Flex>
       </>
     ),
     enableSorting: false,
