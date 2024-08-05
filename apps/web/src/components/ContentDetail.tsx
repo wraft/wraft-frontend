@@ -210,6 +210,8 @@ const ContentDetail = () => {
   const [flowDetails, setFlowDetails] = useState<any>();
   const [eligibleUser, setEligibleUser] = useState<boolean>(false);
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
+  const [tabActiveId, setTabActiveId] = useState<any>();
+
 
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
@@ -673,7 +675,7 @@ const ContentDetail = () => {
                 </Box>
 
                 <Box>
-                  <TabProvider defaultSelectedId={defaultSelectedId}>
+                  <TabProvider setSelectedId={setTabActiveId}  defaultSelectedId={defaultSelectedId}>
                     <TabList
                       aria-label="Content Stages"
                       className={styles.tablist}>
@@ -793,7 +795,9 @@ const ContentDetail = () => {
                       </Box>
                     </TabPanel>
                     <TabPanel>
+                    {tabActiveId === 'approval' && (
                       <ApprovalFlowHistory id={cId} />
+                    )}
                     </TabPanel>
                   </TabProvider>
                 </Box>
