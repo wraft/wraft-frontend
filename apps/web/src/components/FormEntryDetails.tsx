@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Heading, Text } from 'theme-ui';
+import { Box, Heading, Label, Text } from 'theme-ui';
 
 import { fetchAPI } from 'utils/models';
 
@@ -62,52 +62,31 @@ const FormEntryDetails = () => {
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'gray.100' }}>
-      <PageHeader title={fId} desc={entryId}>
-        <Box
-          sx={{
-            flexGrow: 1,
-            ml: 'auto',
-            textAlign: 'right',
-            mr: 0,
-            pt: 2,
-            mt: 1,
-          }}></Box>
+      <PageHeader title="Response Details" desc={entryId}>
+        <Box />
       </PageHeader>
       <Box
         sx={{
-          maxWidth: '600px',
-          margin: '10px auto',
-          padding: '20px',
-          borderRadius: '8px',
-          boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-          backgroundColor: 'background',
+          my: 4,
+          mx: 4,
+          width: '70%',
+          bg: 'white',
+          border: '1px solid',
+          borderColor: 'border',
         }}>
-        <Heading as="h2" sx={{ marginBottom: '20px' }}>
-          Form Details
-        </Heading>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column', // Ensure items stack vertically
-            marginBottom: '10px',
-            padding: '10px',
-            borderRadius: '4px',
-            backgroundColor: 'muted',
-          }}>
-          {newData &&
-            newData.map((data: any) => (
-              <Box
-                key={data.name}
-                sx={{
-                  marginBottom: '10px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                }}>
-                <Text>{data.name}</Text>
-                <Text>{data.value}</Text>
-              </Box>
-            ))}
-        </Box>
+        {newData &&
+          newData.map((item: any) => (
+            <Box
+              key={item.id}
+              sx={{
+                p: 4,
+                borderBottom: '1px solid',
+                borderColor: 'border',
+              }}>
+              <Label>{item.name}</Label>
+              <Text>{item.value}</Text>
+            </Box>
+          ))}
       </Box>
     </Box>
   );
