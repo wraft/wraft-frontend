@@ -816,7 +816,7 @@ const ContentDetail = () => {
                           <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
                             <Text
                               as="h3"
-                              sx={{ fontSize: 'sm', fontWeight: 500 }}>
+                              sx={{ fontSize: 'sm', fontWeight: 600 }}>
                               Discussions
                             </Text>
                           </Box>

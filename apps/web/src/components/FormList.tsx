@@ -90,13 +90,11 @@ const FormList = ({ rerender, setRerender }: Props) => {
       size: 250,
       cell: ({ row }: any) => {
         return (
-          <>
-            <NextLinkText href={`/forms/${row.original?.id}`}>
-              <Box>
-                <Box>{row.original?.name}</Box>
-              </Box>
-            </NextLinkText>
-          </>
+          <NextLinkText href={`/forms/${row.original?.id}`}>
+            <Box sx={{ fontSize: 'sm', fontWeight: '600' }}>
+              {row.original?.name}
+            </Box>
+          </NextLinkText>
         );
       },
     },
@@ -107,15 +105,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
       enableSorting: false,
       size: 250,
       cell: ({ row }: any) => {
-        return (
-          <>
-            <NextLinkText href={`/forms/${row.original?.id}`}>
-              <Box>
-                <Box>{row.original?.description}</Box>
-              </Box>
-            </NextLinkText>
-          </>
-        );
+        return <Box sx={{ fontSize: 'sm' }}>{row.original?.description}</Box>;
       },
     },
     {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Heading, Label, Text } from 'theme-ui';
+import { Box, Flex, Heading, Label, Text } from 'theme-ui';
 
 import { fetchAPI } from 'utils/models';
 
@@ -72,23 +72,24 @@ const FormEntryDetails = () => {
           py: 2,
           width: '50%',
           bg: 'white',
+          minHeight: '80vh',
           border: '1px solid',
           borderColor: 'border',
         }}>
+        <Box px={4} p={3} sx={{ fontSize: 'sm', fontWeight: '500' }}>
+          Response Details
+        </Box>
         {newData &&
           newData.map((item: any) => (
-            <Box
+            <Flex
               key={item.id}
               sx={{
-                display: 'flex',
-                px: 3,
+                px: 4,
                 py: 2,
-                // borderBottom: '1px solid',
-                // borderColor: 'border',
               }}>
-              <Label sx={{ width: '50%' }}>{item.name}</Label>
+              <Label sx={{ width: '30%' }}>{item.name}</Label>
               <Text sx={{ fontSize: 'sm' }}>{item.value}</Text>
-            </Box>
+            </Flex>
           ))}
       </Box>
     </Box>
