@@ -60,6 +60,7 @@ const FormResponseList = () => {
       });
   };
 
+
   useEffect(() => {
     loadData(page);
   }, [page]);
@@ -74,7 +75,7 @@ const FormResponseList = () => {
       cell: ({ row }: any) => {
         return (
           <>
-            <NextLinkText href={`/forms/${row.original?.id}`}>
+            <NextLinkText href={`/forms/${fId}/entries/${row.original?.id}`}>
               <Box>
                 <Box>{row.original?.id}</Box>
               </Box>
