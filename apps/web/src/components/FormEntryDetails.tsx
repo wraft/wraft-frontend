@@ -69,7 +69,8 @@ const FormEntryDetails = () => {
         sx={{
           my: 4,
           mx: 4,
-          width: '70%',
+          py: 2,
+          width: '50%',
           bg: 'white',
           border: '1px solid',
           borderColor: 'border',
@@ -79,12 +80,14 @@ const FormEntryDetails = () => {
             <Box
               key={item.id}
               sx={{
-                p: 4,
-                borderBottom: '1px solid',
-                borderColor: 'border',
+                display: 'flex',
+                px: 3,
+                py: 2,
+                // borderBottom: '1px solid',
+                // borderColor: 'border',
               }}>
-              <Label>{item.name}</Label>
-              <Text>{item.value}</Text>
+              <Label sx={{ width: '50%' }}>{item.name}</Label>
+              <Text sx={{ fontSize: 'sm' }}>{item.value}</Text>
             </Box>
           ))}
       </Box>
