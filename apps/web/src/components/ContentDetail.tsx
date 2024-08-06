@@ -687,14 +687,9 @@ const ContentDetail = () => {
                                     fontWeight: 400,
                                     marginBottom: 1,
                                   }}>
-                                  <Image
+                                  <Avatar
                                     src={assignee?.profile_pic}
-                                    alt="Profile_pic"
-                                    sx={{
-                                      borderRadius: '99rem',
-                                      height: `14px`,
-                                      width: `14px`,
-                                    }}
+                                    width="15px"
                                   />
                                   <Text sx={{ color: 'black' }}>
                                     {assignee.approver}
