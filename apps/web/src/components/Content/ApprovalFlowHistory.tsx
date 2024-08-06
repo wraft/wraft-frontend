@@ -10,9 +10,9 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
     className="progress__item--completed"
     sx={{
       position: 'relative',
-      minHeight: '75px', // Replace with actual variable or value
+      minHeight: '75px',
       counterIncrement: 'list',
-      paddingLeft: '0.75rem', // Replace with actual variable or value
+      paddingLeft: '0.75rem',
       '&:before': {
         content: '""',
         position: 'absolute',
@@ -84,6 +84,7 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
 
 const ApprovalFlowHistory = ({ id }: any) => {
   const [contents, setContents] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (id) {
@@ -91,15 +92,21 @@ const ApprovalFlowHistory = ({ id }: any) => {
     }
   }, [id]);
 
-  console.log('Workflow', contents);
-
   const loadData = () => {
-    fetchAPI(`contents/${id}/approval_history`).then((data: any) => {
-      const res: any = data;
-      setContents(res);
-    });
+    fetchAPI(`contents/${id}/approval_history`)
+      .then((data: any) => {
+        const res: any = data;
+        setContents(res);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
-  if (contents && contents.length === 0) {
+  if (isLoading) {
+    return <Box p={4}>Loading...</Box>;
+  }
+  if (!isLoading && contents && contents.length === 0) {
     return <Box p={4}> No Approval History</Box>;
   }
   return (

@@ -5,7 +5,7 @@ import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text, useThemeUI, Avatar } from 'theme-ui';
 import { Button, Table, Pagination } from '@wraft/ui';
 
 import { TimeAgo } from 'components/Atoms';
@@ -125,9 +125,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
         return (
           <>
             <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
-              <Box>
-                <Box>{row.original?.flow?.name}</Box>
-              </Box>
+              <Box sx={{ fontSize: 'sm' }}>{row.original?.flow?.name}</Box>
             </NextLink>
             <Drawer open={false} setOpen={() => {}}>
               <FlowForm setOpen={() => {}} />
@@ -148,6 +146,22 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
           )
         );
       },
+    },
+    {
+      id: 'content.created',
+      header: 'CREATED BY',
+      accessorKey: 'created',
+      cell: ({ row }: any) => (
+        <Flex>
+          {row.original?.creator?.profile_pic && (
+            <Box sx={{ mr: 3 }}>
+              <Avatar width="20px" src={row.original?.creator?.profile_pic} />
+            </Box>
+          )}
+          <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
+        </Flex>
+      ),
+      enableSorting: false,
     },
     {
       id: 'content.id',

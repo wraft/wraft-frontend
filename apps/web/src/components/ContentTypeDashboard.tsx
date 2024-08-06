@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Box, Button, Flex, Text } from 'theme-ui';
+import { Avatar, Box, Button, Flex, Text } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
@@ -136,7 +136,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
       accessorKey: 'title',
       cell: ({ row }: any) => (
         <NextLink href={`/content-types/${row?.original?.id}`}>
-          <Flex sx={{ fontSize: 'xs', ml: '-14px', py: 2 }}>
+          <Flex sx={{ fontSize: 'xs', ml: '-14px' }}>
             <Box
               sx={{
                 width: '3px',
@@ -145,12 +145,54 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
             />
             <Box ml={3}>
               <Box sx={{ color: 'gray.1000' }}>{row.original?.prefix}</Box>
-              <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
+              <Box as="h5" sx={{ fontSize: 'sm', fontWeight: 500 }}>
                 {row?.original?.name}
               </Box>
             </Box>
           </Flex>
         </NextLink>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.updated_at',
+      header: 'FLOW',
+      accessorKey: 'TIME',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: '14px' }}>{row.original?.flow?.name}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.updated_at',
+      header: 'THEME',
+      accessorKey: 'TIME',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.theme?.name}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.updated_at',
+      header: 'LAYOUT',
+      accessorKey: 'TIME',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.layout?.name}</Box>
+      ),
+      enableSorting: false,
+    },
+
+    {
+      id: 'content.updated_at',
+      header: 'CREATED BY',
+      accessorKey: 'TIME',
+      cell: ({ row }: any) => (
+        <Flex>
+          <Avatar width="20px" src={row.original?.creator?.profile_pic} />
+          <Box sx={{ fontSize: 'sm', ml: 3 }}>
+            {row.original?.creator?.name}
+          </Box>
+        </Flex>
       ),
       enableSorting: false,
     },

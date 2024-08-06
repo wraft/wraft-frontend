@@ -109,7 +109,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             }}>
             <FontIcon height={12} width={12} viewBox="0 0 24 24" />
           </Box>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300', ml: 2 }}>
+          <Text as="p" variant="pM" sx={{ ml: 2 }}>
             {row.original.font}
           </Text>
         </Flex>
