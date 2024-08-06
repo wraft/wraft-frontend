@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Heading, Text } from 'theme-ui';
-import PageHeader from './PageHeader';
 import { useRouter } from 'next/router';
+import { Box, Heading, Text } from 'theme-ui';
+
 import { fetchAPI } from 'utils/models';
-import { setDate } from 'date-fns';
+
+import PageHeader from './PageHeader';
 
 type ContentItem = {
   name: string;
@@ -11,9 +12,7 @@ type ContentItem = {
 };
 
 const FormEntryDetails = () => {
-  const [contents, setContents] = useState<
-    { [key: string]: string | number } | undefined
-  >(undefined);
+  const [contents, setContents] = useState<any>();
   const [formField, setFormField] = useState<any[]>([]);
   const [newData, setNewData] = useState<ContentItem[]>([]);
 
@@ -22,12 +21,10 @@ const FormEntryDetails = () => {
   const fId: string = router.query.id as string;
 
   const loadData = () => {
-    fetchAPI(`forms/${fId}/entries/4e144748-19d4-4ef1-87f4-bcdbe2659fbb`).then(
-      (data: any) => {
-        const res = data.data;
-        setContents(res);
-      },
-    );
+    fetchAPI(`forms/${fId}/entries/${entryId}`).then((data: any) => {
+      const res = data.data;
+      setContents(res);
+    });
   };
 
   const loadFormField = () => {
@@ -37,12 +34,7 @@ const FormEntryDetails = () => {
     });
   };
 
-  useEffect(() => {
-    loadData();
-    loadFormField();
-  }, []);
-
-  useEffect(() => {
+  const formResponse = () => {
     if (formField.length > 0 && contents) {
       const idToNameMap = formField.reduce((acc: any, field: any) => {
         acc[field.id] = field.name;
@@ -57,6 +49,15 @@ const FormEntryDetails = () => {
 
       setNewData(newData);
     }
+  };
+
+  useEffect(() => {
+    loadData();
+    loadFormField();
+  }, []);
+
+  useEffect(() => {
+    formResponse();
   }, [formField, contents]);
 
   return (
@@ -95,7 +96,13 @@ const FormEntryDetails = () => {
           }}>
           {newData &&
             newData.map((data: any) => (
-              <Box key={data.name} sx={{ marginBottom: '10px', display:'flex', justifyContent:'space-between' }}>
+              <Box
+                key={data.name}
+                sx={{
+                  marginBottom: '10px',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}>
                 <Text>{data.name}</Text>
                 <Text>{data.value}</Text>
               </Box>

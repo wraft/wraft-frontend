@@ -60,7 +60,6 @@ const FormResponseList = () => {
       });
   };
 
-
   useEffect(() => {
     loadData(page);
   }, [page]);
