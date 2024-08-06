@@ -367,7 +367,7 @@ const FormsFrom = ({
   };
 
   return (
-    <Box>
+    <Box sx={{ bg: 'white', border: '1px solid', borderColor: 'border' }}>
       <Box>
         {items &&
           items.map((item: any, index: number) => (
