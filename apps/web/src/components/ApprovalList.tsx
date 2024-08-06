@@ -60,8 +60,20 @@ const columns = () => [
             }}
           />
           <Box ml={3}>
-            <Box>{row.original?.content?.instance_id}</Box>
-            <Box>{row.original?.content?.serialized?.title}</Box>
+            <Box sx={{ color: 'gray.1000' }}>
+              {row.original?.content?.instance_id}
+            </Box>
+            <Box
+              as="h5"
+              sx={{
+                fontSize: 'sm',
+                color: 'gray.1200',
+                letterSpacing: '-0.15px',
+                fontWeight: 500,
+                lineHeight: 1.25,
+              }}>
+              {row.original?.content?.serialized?.title}
+            </Box>
           </Box>
         </Flex>
       </NextLink>
@@ -84,9 +96,10 @@ const columns = () => [
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Box sx={{ height: '20px' }}>
+      <Flex>
         <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-      </Box>
+        <Box sx={{ fontSize: 'sm', ml: 3 }}>{row.original?.creator?.name}</Box>
+      </Flex>
     ),
     enableSorting: false,
   },

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Flex, Text } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
+import { Pagination, DropdownMenu, Table } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { fetchAPI } from '../utils/models';
 import { IField } from '../utils/types/content';
@@ -17,7 +18,7 @@ const columns = [
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NavLink href={`/templates/edit/${row?.original?.id}`}>
-        <Box sx={{ fontSize: 'base', fontWeight: 500 }}>
+        <Box sx={{ fontSize: 'sm', fontWeight: 500 }}>
           {row?.original?.title}
         </Box>
       </NavLink>
@@ -44,7 +45,7 @@ const columns = [
           }}
         />
 
-        <Text sx={{ fontSize: 'xs', fontWeight: 'body', display: 'flex' }}>
+        <Text sx={{ fontSize: 'sm', fontWeight: 'body', display: 'flex' }}>
           {row?.original?.content_type?.name}
         </Text>
       </Flex>
@@ -64,11 +65,22 @@ const columns = [
   },
   {
     id: 'id',
-    header: 'ACTION',
+    header: '',
     cell: ({ row }: any) => (
-      <Box>
-        <NavLink href={`/templates/edit/${row?.original?.id}`}>Edit</NavLink>
-      </Box>
+      <Flex sx={{ justifyContent: 'flex-end' }}>
+        <DropdownMenu.Provider>
+          <DropdownMenu.Trigger>
+            <ThreeDotIcon />
+          </DropdownMenu.Trigger>
+          <DropdownMenu aria-label="dropdown role">
+            <DropdownMenu.Item>
+              <NavLink href={`/templates/edit/${row?.original?.id}`}>
+                Edit
+              </NavLink>
+            </DropdownMenu.Item>
+          </DropdownMenu>
+        </DropdownMenu.Provider>
+      </Flex>
     ),
     enableSorting: false,
     textAlign: 'right',
