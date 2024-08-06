@@ -8,7 +8,7 @@ import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
+import { Box, Flex, Text, Link, Button, Avatar, Image } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
 
@@ -211,6 +211,7 @@ const ContentDetail = () => {
   const [eligibleUser, setEligibleUser] = useState<boolean>(false);
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
   const [tabActiveId, setTabActiveId] = useState<any>();
+  const [currentAssigne, setCurrentAssigne] = useState<any>();
 
   // const [varient, setVarient] = useState<IVariantDetail | null>(null);
 
@@ -317,6 +318,18 @@ const ContentDetail = () => {
     //
   };
 
+  const getCorrectFlowdetails = (flowdetails: any, activestate: any) => {
+    if (!eligibleUser) {
+      const activeState = activestate.state;
+
+      const correctFlowdetails = flowdetails.filter(
+        (detail: any) => detail.state === activeState,
+      );
+
+      setCurrentAssigne(correctFlowdetails);
+    }
+  };
+
   const handleModalAction = () => {
     if (contents) {
       if (modalAction === 'next') {
@@ -357,6 +370,7 @@ const ContentDetail = () => {
                 state: state.state,
                 approver: approver.name,
                 id: approver.id,
+                profile_pic: approver.profile_pic,
               };
               stateNames.push(stateNamePair);
             });
@@ -389,6 +403,7 @@ const ContentDetail = () => {
         return detail.state === activeState.state && detail.id === user.id;
       });
       setEligibleUser(isApproved);
+      getCorrectFlowdetails(flowDetails, activeState);
     }
   }, [activeState, user, flowDetails]);
 
@@ -641,9 +656,50 @@ const ContentDetail = () => {
                           <Text variant="pB">{`${activeState.state}`}</Text>
                         </Button>
                       )}
-                      {!eligibleUser && (
-                        <Text variant="pB">Waiting for approval</Text>
-                      )}
+                      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        {!eligibleUser && (
+                          <Text variant="pB">Waiting for approval</Text>
+                        )}
+                        {!eligibleUser && currentAssigne && (
+                          <Flex sx={{ gap: 4, alignItems: 'start', pt: 3 }}>
+                            <Text
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                color: 'gray.900',
+                                fontSize: 'xs',
+                                fontWeight: 400,
+                                marginBottom: 1,
+                              }}>
+                              Assigned to
+                            </Text>
+                            <Box
+                              sx={{ display: 'flex', flexDirection: 'column' }}>
+                              {currentAssigne.map((assignee: any) => (
+                                <Box
+                                  key={assignee.id}
+                                  sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 2,
+                                    color: 'gray.900',
+                                    fontSize: 'xs',
+                                    fontWeight: 400,
+                                    marginBottom: 1,
+                                  }}>
+                                  <Avatar
+                                    src={assignee?.profile_pic}
+                                    width="15px"
+                                  />
+                                  <Text sx={{ color: 'black' }}>
+                                    {assignee.approver}
+                                  </Text>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Flex>
+                        )}
+                      </Box>
                     </Flex>
                   )}
                   <Flex
