@@ -661,28 +661,48 @@ const ContentDetail = () => {
                           <Text variant="pB">Waiting for approval</Text>
                         )}
                         {!eligibleUser && currentAssigne && (
-                          <>
-                            {currentAssigne.map((assignee: any) => (
-                              <Text
-                                sx={{
-                                  display: 'flex',
-                                  gap: 1,
-                                  color: 'gray.900',
-                                  fontSize: 'xs',
-                                  fontWeight: 400,
-                                }}>
-                                assigned to {assignee.approver}
-                                <Image
-                                  src={assignee?.profile_pic}
+                          <Flex sx={{ gap: 4, alignItems: 'start', pt: 3 }}>
+                            <Text
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                color: 'gray.900',
+                                fontSize: 'xs',
+                                fontWeight: 400,
+                                marginBottom: 1,
+                              }}>
+                              Assigned to
+                            </Text>
+                            <Box
+                              sx={{ display: 'flex', flexDirection: 'column' }}>
+                              {currentAssigne.map((assignee: any) => (
+                                <Box
+                                  key={assignee.id}
                                   sx={{
-                                    borderRadius: '99rem',
-                                    height: `14px`,
-                                    width: `14px`,
-                                  }}
-                                />
-                              </Text>
-                            ))}
-                          </>
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 2,
+                                    color: 'gray.900',
+                                    fontSize: 'xs',
+                                    fontWeight: 400,
+                                    marginBottom: 1,
+                                  }}>
+                                  <Image
+                                    src={assignee?.profile_pic}
+                                    alt="Profile_pic"
+                                    sx={{
+                                      borderRadius: '99rem',
+                                      height: `14px`,
+                                      width: `14px`,
+                                    }}
+                                  />
+                                  <Text sx={{ color: 'black' }}>
+                                    {assignee.approver}
+                                  </Text>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Flex>
                         )}
                       </Box>
                     </Flex>
