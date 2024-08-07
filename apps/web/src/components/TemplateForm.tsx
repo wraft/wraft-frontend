@@ -53,7 +53,8 @@ const EditMenus = ({ id }: EditMenuProps) => {
   };
   return (
     <MenuProvider>
-      <Flex
+      <MenuButton
+        as={Box}
         sx={{
           mt: 2,
           border: 'solid 1px',
@@ -65,13 +66,12 @@ const EditMenus = ({ id }: EditMenuProps) => {
           pb: 0,
           height: '33px',
           width: '33px',
-
           // pb: 1,
           // mt: 2,
           // border: 0,
         }}>
         <ThreeDots width={24} height={24} />
-      </Flex>
+      </MenuButton>
       <Menu
         as={Box}
         aria-label="Manage Content"
@@ -168,8 +168,6 @@ const Form = () => {
             position: 'top-right',
           });
         });
-
-      setLoading(false);
     }
   };
 
@@ -515,8 +513,10 @@ const Form = () => {
         {/* <WraftEditor/> */}
         <Box>
           <Flex sx={{ px: 4, py: 1 }}>
-            {loading && <Spinner color="white" size={24} />}
-            {!loading && <Button type='submit'>{cId ? 'Update' : 'Create'}</Button>}
+            {loading && <Spinner color="white" size={20} />}
+            <Button type="submit" disabled={loading}>
+              {cId ? 'Update' : 'Create'}
+            </Button>
           </Flex>
         </Box>
       </Box>
