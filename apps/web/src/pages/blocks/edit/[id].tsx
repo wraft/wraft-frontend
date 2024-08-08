@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box } from 'theme-ui';
+import { Container } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
 
-import TemplateForm from 'components/BlockTemplateForm';
-import { HeadingFrame } from 'components/Card';
-import Page from 'components/PageFrame';
+import Page from 'components/BlankFrame';
+import BlockTemplateForm from 'components/BlockTemplateForm';
+import NavEdit from 'components/NavEdit';
 
-const Index: FC = () => {
+export const Index: FC = () => {
   return (
     <>
       <Head>
@@ -15,12 +15,12 @@ const Index: FC = () => {
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Page>
-        <HeadingFrame title="Blocks / Edit Block" />
-        <Box sx={{ pl: 4 }}>
+        <NavEdit navtitle="Edit Block" />
+        <Container sx={{ maxWidth: '90ch', mx: 'auto' }}>
           <ErrorBoundary>
-            <TemplateForm />
+            <BlockTemplateForm />
           </ErrorBoundary>
-        </Box>
+        </Container>
       </Page>
     </>
   );
