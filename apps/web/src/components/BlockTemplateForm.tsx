@@ -261,7 +261,7 @@ const Form = () => {
         </Flex>
       </Box>
       {saved && <Text>Saved</Text>}
-      <Box mt={3}>
+      <Flex mt={3}>
         <Button variant="primary">
           <Flex m={0}>
             {loading && <Spinner color="white" size={24} />}
@@ -274,7 +274,7 @@ const Form = () => {
             Delete
           </Button>
         )}
-      </Box>
+      </Flex>
     </Box>
   );
 };
