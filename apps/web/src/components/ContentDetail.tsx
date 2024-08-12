@@ -11,6 +11,22 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
+import {
+  AlignCenterVertical,
+  ArrowLeft,
+  ArrowRight,
+  ArrowsLeftRight,
+  ArrowUpRight,
+  CircleNotch,
+  DownloadSimple,
+  FileArrowDown,
+  FilePdf,
+  Gavel,
+  Play,
+  Rewind,
+  Triangle,
+} from '@phosphor-icons/react';
+// import VerticalStepper from '@wraft-ui/HistoryStepper';
 
 import { fetchAPI, postAPI, putAPI } from '../utils/models';
 import {
@@ -29,22 +45,6 @@ import Modal from './Modal';
 import { StateState } from './FlowForm';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
-import {
-  AlignCenterVertical,
-  ArrowLeft,
-  ArrowRight,
-  ArrowsLeftRight,
-  ArrowUpRight,
-  CircleNotch,
-  DownloadSimple,
-  FileArrowDown,
-  FilePdf,
-  Gavel,
-  Play,
-  Rewind,
-  Triangle,
-} from '@phosphor-icons/react';
-import VerticalStepper from '@wraft-ui/HistoryStepper';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -170,7 +170,7 @@ interface ProfileCardP {
 
 export const ProfileCard = ({
   name,
-  time,
+  time = '',
   image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
 }: ProfileCardP) => {
   const finalImage =
@@ -194,6 +194,7 @@ export const ProfileCard = ({
       <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
+      {time}
       {/* <TimeAgo time={time} ago={true} /> */}
     </Flex>
   );

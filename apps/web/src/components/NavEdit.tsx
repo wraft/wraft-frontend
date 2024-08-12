@@ -1,20 +1,21 @@
 import React from 'react';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
+import { Box, Flex, Text, Image } from 'theme-ui';
 import {
   ArrowLeft,
   Bell,
-  LinkSimple,
+  // LinkSimple,
   Pencil,
   Share,
-  UserPlus,
+  // UserPlus,
 } from '@phosphor-icons/react';
+import { Button } from '@wraft/ui';
 
 import { useAuth } from '../contexts/AuthContext';
-import { EditIcon } from './Icons';
+// import { EditIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
-import { Button } from '@wraft/ui';
+
 // import { Button } from './common';
 
 export interface IUser {
