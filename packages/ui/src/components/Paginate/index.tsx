@@ -114,7 +114,7 @@ const Pagination: React.FC<IProp> = ({
     const pageRangeDisplayed: number = numberPageDisplayed || 0;
     const marginPagesDisplayed: number = numberMarginPagesDisplayed || 0;
     if (pageCount <= pageRangeDisplayed) {
-      for (let page = 0; page <= pageCount; page++) {
+      for (let page = 1; page <= pageCount; page++) {
         items.push(getPageElement(page));
       }
     } else {
@@ -235,7 +235,7 @@ const Pagination: React.FC<IProp> = ({
         </x.ul>
         {totalEntries && (
           <x.div fontSize="12px" color="#656E78" fontWeight="heading">
-            {`Showing ${currentPage - 1}0 of ${totalEntries}`}
+            {`Showing ${currentPage === 1 ? '':  currentPage - 1}0 of ${totalEntries}`}
           </x.div>
         )}
       </S.Pagination>

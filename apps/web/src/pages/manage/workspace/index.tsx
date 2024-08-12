@@ -195,6 +195,8 @@ const Index: FC = () => {
     }
   };
 
+  const orgImage = previewSource ? previewSource : logoSrc;
+
   return (
     <>
       <Head>
@@ -226,13 +228,15 @@ const Index: FC = () => {
                 variant="layout.contentFrame"
                 sx={{ backgroundColor: 'backgroundWhite' }}
                 p={4}>
-                <Box sx={{ height: '128px', mb: 4 }}>
-                  <Image
-                    variant="profile"
-                    src={previewSource ? previewSource : logoSrc}
-                    alt="logo"
-                    onClick={() => fileRef.current?.click()}
-                  />
+                <Box sx={{ height: '128px', mb: 4, bg: 'gray' }}>
+                  {orgImage && (
+                    <Image
+                      variant="profile"
+                      src={previewSource ? previewSource : logoSrc}
+                      alt="logo"
+                      onClick={() => fileRef.current?.click()}
+                    />
+                  )}
                 </Box>
                 <Input
                   sx={{ display: 'none' }}

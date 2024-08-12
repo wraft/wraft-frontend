@@ -36,7 +36,7 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     isPlaceholder: true,
     cell: ({ row }: any) => (
       <Box
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: 'pointer', fontSize: 'sm', fontWeight: '500' }}
         onClick={() => openDrawer(row.original.id)}>
         {row.original.name}
       </Box>
@@ -49,14 +49,16 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     header: 'USER',
     accessorKey: 'content.user_count',
     isPlaceholder: true,
-    cell: ({ row }: any) => <Box>{row.original.user_count}</Box>,
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'sm' }}>{row.original.user_count}</Box>
+    ),
     enableSorting: false,
   },
   {
     id: 'editor',
     header: '',
     cell: ({ row }: any) => (
-      <Box>
+      <Flex sx={{ justifyContent: 'right' }}>
         {row.original?.name !== 'superadmin' && (
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
@@ -77,7 +79,7 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
             </DropdownMenu>
           </DropdownMenu.Provider>
         )}
-      </Box>
+      </Flex>
     ),
     enableSorting: false,
   },
