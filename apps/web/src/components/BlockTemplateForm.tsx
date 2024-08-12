@@ -275,26 +275,6 @@ const Form = () => {
             {!loading && <Text>{cId ? 'Update' : 'Create'}</Text>}
           </Flex>
         </Button>
-
-        {/* {cId && (
-          <Box
-            sx={{
-              bg: 'red.600',
-              borderColor: 'border',
-              borderRadius: '4px',
-            }}>
-            <Button type="button" onClick={deleteBlock} variant="ghost">
-              <Text
-                variant="pR"
-                sx={{
-                  cursor: 'pointer',
-                  color: 'white',
-                }}>
-                Delete
-              </Text>
-            </Button>
-          </Box>
-        )} */}
       </Flex>
     </Box>
   );
