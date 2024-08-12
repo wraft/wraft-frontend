@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
+import { Box, Flex, Text, Spinner, Select } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 import { Menu, MenuButton, MenuProvider, MenuItem } from '@ariakit/react';
+
+import { Button, DropdownMenu } from '@wraft/ui';
 
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
 import {
@@ -55,44 +57,24 @@ const EditMenus = ({ id }: EditMenuProps) => {
     });
   };
   return (
-    <MenuProvider>
-      <MenuButton
+    <DropdownMenu.Provider>
+      <DropdownMenu.Trigger
         as={Button}
-        variant="btnPrimaryInline"
+        variant="btnSecondaryInline"
         sx={{
-          mt: 2,
-          ml: 'auto',
-          // border: 'solid 1px',
-          // borderRadius: '9rem',
           color: 'text',
-          borderColor: 'border',
           px: 2,
           py: 1,
-          bg: 'neutral.100',
-          pb: 0,
-          height: '33px',
-          // pb: 1,
-          // mt: 2,
-          // border: 0,
         }}>
-        <DotsThreeVertical size={18} />
-      </MenuButton>
-      <Menu
-        as={Box}
-        aria-label="Manage Content"
-        sx={{
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: 4,
-          bg: 'neutral.100',
-          color: 'text',
-          width: '20ch',
-        }}>
-        <MenuItem onClick={() => deleteContent(id)}>
+        <DotsThreeVertical size={18} weight="bold" />
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu aria-label="dropdown role">
+        <DropdownMenu.Item onClick={() => deleteContent(id)}>
           <IconMenuItem text="Delete" icon={<TrashSimple />} />
-        </MenuItem>
-      </Menu>
-    </MenuProvider>
+        </DropdownMenu.Item>
+      </DropdownMenu>
+    </DropdownMenu.Provider>
   );
 };
 
@@ -406,7 +388,7 @@ const Form = () => {
       />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
-          <Flex>
+          <Flex sx={{ alignItems: 'flex-start' }}>
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
@@ -434,7 +416,7 @@ const Form = () => {
                   <Flex sx={{ pr: 0, py: 0 }}>
                     {loading && <Spinner color="white" size={24} />}
                     {!loading && (
-                      <Button variant="btnPrimary">
+                      <Button variant="primary">
                         {cId ? 'Update' : 'Create'}
                       </Button>
                     )}
@@ -553,10 +535,10 @@ const Form = () => {
                     borderTop: 'solid 1px',
                     borderColor: 'gray.400',
                   }}>
-                  <Button variant="btnPrimary" onClick={() => saveMe()}>
+                  <Button variant="primary" onClick={() => saveMe()}>
                     Save
                   </Button>
-                  <Button variant="btnSecondary">Cancel</Button>
+                  <Button variant="secondary">Cancel</Button>
                 </Flex>
               </Flex>
             </Modal>
@@ -581,7 +563,9 @@ const Form = () => {
                       ago={true}
                     />
                   </Box>
-                  <EditMenus id={cId} />
+                  <Box sx={{ ml: 'auto' }}>
+                    <EditMenus id={cId} />
+                  </Box>
                 </Flex>
               )}
 
