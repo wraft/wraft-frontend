@@ -4,6 +4,7 @@ import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
+import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
 import {
@@ -16,14 +17,8 @@ import {
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
-import { BracesVariable, ThreeDots } from './Icons';
+// import { BracesVariable, ThreeDots } from './Icons';
 import NavEdit from './NavEdit';
-import {
-  DotsThreeVertical,
-  GearSix,
-  TextT,
-  TrashSimple,
-} from '@phosphor-icons/react';
 import { TimeAgo } from './Atoms';
 import Modal from './Modal';
 

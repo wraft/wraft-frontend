@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
+import { Check } from '@phosphor-icons/react';
 
 import { TimeAgo } from 'components/Atoms';
 import { fetchAPI } from 'utils/models';
-import { Check, CheckCircle, CheckFat, Circle } from '@phosphor-icons/react';
 
 const WorkflowStep = ({ title, description, createDate }: any) => (
   <Flex
