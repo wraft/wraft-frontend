@@ -68,10 +68,10 @@ const buttons = {
 
   secondary: {
     cursor: 'pointer',
-    backgroundColor: 'green.400',
-    color: 'green.1200',
+    backgroundColor: 'gray.200',
+    color: 'gray.1200',
     border: '1px solid',
-    borderColor: 'green.600',
+    borderColor: 'gray.400',
     borderRadius: '6px',
     padding: '8px 16px',
     fontWeight: 'heading',
@@ -79,7 +79,7 @@ const buttons = {
     fontFamily: 'body',
     ':hover': {
       backgroundColor: 'gray.400',
-      borderColor: 'gray.600',
+      borderColor: 'gray.500',
     },
   },
   ghost: {
