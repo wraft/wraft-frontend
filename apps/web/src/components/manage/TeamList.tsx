@@ -207,7 +207,8 @@ const TeamList = () => {
                       fontWeight: '500',
                       lineHeight: 1,
                     }}>
-                    {row.original.members.name} {row.original.members.is_current ? `(You)` : ''}
+                    {row.original.members.name}{' '}
+                    {row.original.members.is_current ? `(You)` : ''}
                   </Text>
                   <Text sx={{ color: 'text', fontSize: 'xs' }}>
                     {row.original.members.email}
