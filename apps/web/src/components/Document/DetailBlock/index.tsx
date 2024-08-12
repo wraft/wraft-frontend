@@ -186,16 +186,6 @@ const ContentForm = (props: IContentForm) => {
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
     const jsonContent = editorRef.current?.helpers?.getJSON();
-    const jsonContentnew = editorRef.current?.helpers;
-    const jsonContentnewtrPla = editorRef.current.getState();
-    const jsonContentnewtr = editorRef.current?.helpers?.getAllCommandOptions();
-
-    console.log('data[maps]', maps);
-    console.log('data[markdownContent]', markdownContent);
-    console.log('data[jsonContent]', jsonContent);
-    console.log('data[jsonContentnewref]', jsonContentnew);
-    console.log('data[jsonContentnew][jsonContentnewtr]', jsonContentnewtr);
-    console.log('data[jsonContentnew][placeholder]', jsonContentnewtrPla);
 
     setUnsavedChanges(false);
 

@@ -53,8 +53,17 @@ const columns = [
     enableSorting: false,
   },
   {
+    id: 'content.prefix',
+    header: 'PREFIX',
+    accessorKey: 'prefix',
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'xs' }}>{row.original?.content_type?.prefix}</Box>
+    ),
+    enableSorting: false,
+  },
+  {
     id: 'content.updated_at',
-    header: 'TIME',
+    header: 'UPDATE AT',
     accessorKey: 'TIME',
     cell: ({ row }: any) => (
       <Box>
@@ -110,7 +119,7 @@ const TemplateList = () => {
     setLoading(true);
 
     const query = `?page=${page}`;
-    fetchAPI(`data_templates${query}`)
+    fetchAPI(`data_templates${query}&sort=inserted_at_desc`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;
