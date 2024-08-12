@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Spinner, Select } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
-import { Menu, MenuButton, MenuProvider, MenuItem } from '@ariakit/react';
-
 import { Button, DropdownMenu } from '@wraft/ui';
 
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
