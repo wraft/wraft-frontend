@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 import { Menu, MenuButton, MenuProvider, MenuItem } from '@ariakit/react';
+
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
 import {
   IContentType,
@@ -87,8 +88,7 @@ const EditMenus = ({ id }: EditMenuProps) => {
           color: 'text',
           width: '20ch',
         }}>
-        {/* onClick={() => deleteContent(id)}  */}
-        <MenuItem>
+        <MenuItem onClick={() => deleteContent(id)}>
           <IconMenuItem text="Delete" icon={<TrashSimple />} />
         </MenuItem>
       </Menu>
