@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 
 import { TimeAgo } from 'components/Atoms';
 import { fetchAPI } from 'utils/models';
-import { Check, CheckCircle, Circle } from '@phosphor-icons/react';
+import { Check, CheckCircle, CheckFat, Circle } from '@phosphor-icons/react';
 
 const WorkflowStep = ({ title, description, createDate }: any) => (
   <Flex
-    as="li"
+    // as="li"
     className="progress__item--completed"
     sx={{
       position: 'relative',
       // minHeight: '75px',
       counterIncrement: 'list',
-      paddingLeft: '0.75rem',
+      // paddingLeft: '0.75rem',
       // '&:before': {
       //   content: '""',
       //   position: 'absolute',
@@ -65,12 +65,28 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
       <Flex sx={{}}>
         <Flex
           sx={{ bg: 'blue', flexDirection: 'column', alignItems: 'center' }}>
-          <Circle size={24} />
+          <Flex
+            sx={{
+              // display: 'block',
+              width: '18px',
+              height: '18px',
+              borderRadius: '5rem',
+              bg: 'gray.400',
+              alignItems: 'center',
+              justifyContent: 'center',
+              px: 1,
+              py: 1,
+              svg: {
+                color: 'gray.1000',
+              },
+            }}>
+            <Check size={12} weight="bold" />
+          </Flex>
           <Box
             sx={{
-              width: '6px',
+              width: '1px',
               height: '100%',
-              bg: 'gray.400',
+              bg: 'gray.500',
               left: '50%',
             }}></Box>
         </Flex>
@@ -79,17 +95,20 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
             // fontWeight: 'bold',
             color: 'gray.1200',
             fontSize: '13px',
-            mb: 0,
+            mb: 2,
+            width: '100%',
             pl: 3,
           }}>
-          {title}
-          <TimeAgo time={createDate} ago={false} />
+          <Flex sx={{}}>
+            <Text sx={{ fontWeight: 700 }}>{description}</Text>
+            <Text sx={{ ml: 'auto' }}>{title}</Text>
+          </Flex>
           <Box
             sx={{
               fontSize: 'xs',
               color: 'gray.900',
             }}>
-            {description}
+            <TimeAgo time={createDate} ago={false} />
           </Box>
         </Box>
       </Flex>
@@ -126,9 +145,11 @@ const ApprovalFlowHistory = ({ id }: any) => {
   }
   return (
     <Box
-      as="ul"
+      // as="ul"
       sx={{
-        p: 4,
+        // p: 4,
+        py: 3,
+        px: 3,
         fontFamily: 'body',
         // position: 'relative',
         // padding: '0 1rem 0 3.5rem',
