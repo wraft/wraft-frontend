@@ -75,9 +75,7 @@ const FormResponseList = () => {
         return (
           <>
             <NextLinkText href={`/forms/${fId}/entries/${row.original?.id}`}>
-              <Box>
-                <Box>{row.original?.id}</Box>
-              </Box>
+              <Box sx={{ fontSize: 'sm' }}>{row.original?.id}</Box>
             </NextLinkText>
           </>
         );

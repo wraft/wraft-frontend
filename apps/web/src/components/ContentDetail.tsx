@@ -667,8 +667,8 @@ const ContentDetail = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 color: 'gray.900',
-                                fontSize: 'xs',
-                                fontWeight: 400,
+                                fontSize: 'sm',
+                                fontWeight: 500,
                                 marginBottom: 1,
                               }}>
                               Assigned to
@@ -683,13 +683,13 @@ const ContentDetail = () => {
                                     alignItems: 'center',
                                     gap: 2,
                                     color: 'gray.900',
-                                    fontSize: 'xs',
+                                    fontSize: 'sm',
                                     fontWeight: 400,
                                     marginBottom: 1,
                                   }}>
                                   <Avatar
                                     src={assignee?.profile_pic}
-                                    width="15px"
+                                    width={18}
                                   />
                                   <Text sx={{ color: 'black' }}>
                                     {assignee.approver}
@@ -816,7 +816,7 @@ const ContentDetail = () => {
                           <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
                             <Text
                               as="h3"
-                              sx={{ fontSize: 'sm', fontWeight: 500 }}>
+                              sx={{ fontSize: 'sm', fontWeight: 600 }}>
                               Discussions
                             </Text>
                           </Box>

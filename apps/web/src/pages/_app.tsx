@@ -4,6 +4,8 @@ import { TourProvider, components } from '@reactour/tour';
 import { theme, GlobalStyle } from '@wraft/ui';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
+import { Analytics } from '@vercel/analytics/react';
+import { GoogleTagManager } from '@next/third-parties/google';
 // import { Theme } from 'theme-ui';
 
 import { UserProvider } from '../contexts/AuthContext';
@@ -40,6 +42,8 @@ const MyApp = ({
   return (
     // <TourProvider steps={steps}>
     <TourProvider steps={[]} components={{ Badge }} padding={{ mask: 0 }}>
+      <Analytics mode={'production'} />
+      <GoogleTagManager gtmId="G-N0QTG72FK0" />
       <GlobalStyle />
       <SessionProvider session={session}>
         <ToasterNewProvider />

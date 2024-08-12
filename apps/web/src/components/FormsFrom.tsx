@@ -16,13 +16,8 @@ import {
 } from '@dnd-kit/sortable';
 import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
 import {
-  AddIcon,
-  ArrowDownIcon,
-  ArrowUpIcon,
   CloseIcon,
-  CopyIcon,
   DateIcon,
-  DeleteIcon,
   DocumentsIcon,
   DragIcon,
   MailIcon,
