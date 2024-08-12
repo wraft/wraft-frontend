@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
-import { Button, Skeleton } from '@wraft/ui';
+import { Button, Pagination, Skeleton } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
@@ -44,6 +44,8 @@ export interface IFieldItem {
 
 const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
+  const [pageMeta, setPageMeta] = useState<any>();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [fields, setField] = useState([]);
   const [formStep, setFormStep] = useState(0);
@@ -81,12 +83,13 @@ const CreateDocument = () => {
     }
   }, [template?.id]);
 
-  const loadData = () => {
-    fetchAPI(`data_templates`)
+  const loadData = (page = 1) => {
+    fetchAPI(`data_templates?page=${page}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
@@ -123,6 +126,11 @@ const CreateDocument = () => {
     // //temp
     // setActiveTemplate(tid);
     // setShowForm(true);
+  };
+
+  const changePage = (newPage: any) => {
+    loadData(newPage);
+    setLoading(true);
   };
 
   const vals = getValues();
@@ -179,7 +187,7 @@ const CreateDocument = () => {
                   </Flex>
                 ))}
 
-              {contents && (
+              {!loading && contents && (
                 <Controller
                   control={control}
                   defaultValue=""
@@ -199,6 +207,17 @@ const CreateDocument = () => {
                   )}
                 />
               )}
+              <Box mt="16px">
+                {pageMeta && pageMeta?.total_pages > 1 && (
+                  <Pagination
+                    type="simple"
+                    totalPage={pageMeta?.total_pages}
+                    initialPage={1}
+                    onPageChange={changePage}
+                    totalEntries={pageMeta?.total_entries}
+                  />
+                )}
+              </Box>
             </>
           )}
           {formStep === 1 && (
