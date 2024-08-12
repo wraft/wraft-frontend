@@ -152,12 +152,6 @@ const Approvals = () => {
   const { accessToken } = useAuth();
 
   useEffect(() => {
-    if (accessToken) {
-      loadData();
-    }
-  }, []);
-
-  useEffect(() => {
     if (page) {
       loadData();
     }
