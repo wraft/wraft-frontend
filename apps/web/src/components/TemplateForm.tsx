@@ -3,6 +3,7 @@ import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Spinner, Select } from 'theme-ui';
+import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 import { Button, DropdownMenu } from '@wraft/ui';
 
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
@@ -16,8 +17,11 @@ import {
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
-import { BracesVariable, ThreeDots } from './Icons';
+// import { BracesVariable, ThreeDots } from './Icons';
 import NavEdit from './NavEdit';
+import { TimeAgo } from './Atoms';
+import Modal from './Modal';
+// import MenuItem from './MenuItem';
 
 export interface BlockTemplate {
   id: string;
@@ -52,15 +56,47 @@ const EditMenus = ({ id }: EditMenuProps) => {
   };
   return (
     <DropdownMenu.Provider>
-      <DropdownMenu.Trigger>
-        <ThreeDots width={24} height={24} />
+      <DropdownMenu.Trigger
+        as={Button}
+        variant="btnSecondaryInline"
+        sx={{
+          color: 'text',
+          px: 2,
+          py: 1,
+        }}>
+        <DotsThreeVertical size={18} weight="bold" />
       </DropdownMenu.Trigger>
+
       <DropdownMenu aria-label="dropdown role">
         <DropdownMenu.Item onClick={() => deleteContent(id)}>
-          Delete
+          <IconMenuItem text="Delete" icon={<TrashSimple />} />
         </DropdownMenu.Item>
       </DropdownMenu>
     </DropdownMenu.Provider>
+  );
+};
+
+interface IconMenuItemProps {
+  icon: any;
+  text: string;
+}
+const IconMenuItem = ({ icon, text }: IconMenuItemProps) => {
+  return (
+    <Flex
+      sx={{
+        alignItem: 'center',
+        cursor: 'pointer',
+        gap: 1,
+        ':hover': {
+          bg: 'gray.300',
+        },
+        alignItems: 'center',
+        px: 2,
+        py: 2,
+      }}>
+      {icon}
+      {text && <Text sx={{ fontWeight: 500, fontSize: 'sm' }}>{text}</Text>}
+    </Flex>
   );
 };
 
@@ -69,6 +105,7 @@ const Form = () => {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
   } = useForm();
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
@@ -79,6 +116,10 @@ const Form = () => {
   const [insertable, setInsertable] = useState<any>();
   const [tokkans, setTokkans] = useState<any>('');
   const [insertions, setInsertions] = useState<any | null>(null);
+
+  const [pagetitle, setPageTitle] = useState<string>('');
+
+  const [showSetup, setShowSetup] = useState<boolean>(true);
 
   // determine edit state based on URL
   const router = useRouter();
@@ -296,6 +337,7 @@ const Form = () => {
       setValue('title', d.title);
       setValue('title_template', d.title_template);
       setValue('parent', dataTemplate.content_type.id);
+      setPageTitle(d.title);
 
       loadContentType(dataTemplate.content_type.id);
       const insertReady = (d && d.serialized && d.serialized.data) || false;
@@ -319,16 +361,32 @@ const Form = () => {
     }
   };
 
+  /**
+
+  */
+
+  const saveMe = () => {
+    setShowSetup(!showSetup);
+
+    const name = getValues();
+    console.log('name=', name);
+    setPageTitle(name?.title);
+
+    if (name?.title_temple == '') {
+      setValue('title_template', name?.title);
+    }
+  };
+
   return (
     <Box>
       <NavEdit
-        navtitle={cId ? 'Edit Template' : 'New Template'}
+        navtitle={cId ? 'Edit ' + pagetitle : pagetitle}
         backLink="/templates"
+        onToggleEdit={saveMe}
       />
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
         <Box>
-          <Flex>
-            {insertable && <Box />}
+          <Flex sx={{ alignItems: 'flex-start' }}>
             <Box
               // as="form"
               // onSubmit={handleSubmit(onSubmit)}
@@ -337,26 +395,41 @@ const Form = () => {
                 bg: 'neutral.100',
                 maxWidth: '83ch',
                 m: 0,
-                pt: 4,
+                pt: 3,
                 input: {
                   bg: 'white',
                 },
               }}>
-              <Box sx={{ px: 4 }}>
-                <Field
-                  name="title"
-                  label="Name"
-                  defaultValue=""
-                  register={register}
-                />
+              <Flex sx={{ px: 4 }}>
+                <Box sx={{ flex: 1 }}>
+                  <Field
+                    name="title_template"
+                    label=""
+                    placeholder="Automatic Title, use @"
+                    defaultValue=""
+                    register={register}
+                  />
+                </Box>
+                <Box sx={{ ml: 2 }}>
+                  <Flex sx={{ pr: 0, py: 0 }}>
+                    {loading && <Spinner color="white" size={24} />}
+                    {!loading && (
+                      <Button variant="primary">
+                        {cId ? 'Update' : 'Create'}
+                      </Button>
+                    )}
+                  </Flex>
+                </Box>
+                {/*
+                    <Field
+                      name="title"
+                      label="Name"
+                      defaultValue=""
+                      register={register}
+                    />
+                    */}
                 {/* <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} /> */}
-                <Field
-                  name="title_template"
-                  label="Title Template"
-                  defaultValue=""
-                  register={register}
-                />
-              </Box>
+              </Flex>
               <Box sx={{ display: 'none' }}>
                 <FieldText
                   name="data"
@@ -390,43 +463,128 @@ const Form = () => {
               </Box>
               {/* <Counter /> */}
             </Box>
+
+            <Modal isOpen={showSetup}>
+              <Flex
+                sx={{
+                  p: 0,
+                  minWidth: '50ch',
+                  width: '100%',
+                  // verticalAlign: 'top',
+                  flexDirection: 'column',
+                  // justifyContent: 'space-between',
+                }}>
+                <Box
+                  sx={{
+                    py: 2,
+                    px: 3,
+                    borderBottom: 'solid 1px',
+                    borderColor: 'gray.400',
+                  }}>
+                  <Text sx={{ fontWeight: 600 }}>Create Template</Text>
+                </Box>
+                <Box sx={{ py: 3, px: 4 }}>
+                  <Field
+                    name="title"
+                    label="Name your Template"
+                    placeholder="Title for your template"
+                    defaultValue=""
+                    register={register}
+                  />
+                  {varias && varias.fields && (
+                    <Box sx={{ mb: 2, pt: 3 }}>
+                      <Box sx={{ mb: 2, pb: 3 }}>
+                        <Text
+                          as="h4"
+                          mb={2}
+                          sx={{
+                            mb: 2,
+                            fontSize: 'sm',
+                            fontWeight: 500,
+                            letterSpacing: '-0.15px',
+                          }}>
+                          Variant
+                        </Text>
+                        <Select
+                          id="parent"
+                          // name="parent"
+                          defaultValue="Parent ID"
+                          disabled={false}
+                          // ref={register({ required: true })}
+                          {...register('parent', { required: true })}
+                          onChange={(e) => ctypeChange(e)}>
+                          {ctypes &&
+                            ctypes.length > 0 &&
+                            ctypes.map((m: any) => (
+                              <option value={m.id} key={m.id}>
+                                {m.name}
+                              </option>
+                            ))}
+                        </Select>
+                      </Box>
+                    </Box>
+                  )}
+                </Box>
+                <Flex
+                  sx={{
+                    py: 3,
+                    px: 3,
+                    gap: 2,
+                    borderTop: 'solid 1px',
+                    borderColor: 'gray.400',
+                  }}>
+                  <Button variant="primary" onClick={() => saveMe()}>
+                    Save
+                  </Button>
+                  <Button variant="secondary">Cancel</Button>
+                </Flex>
+              </Flex>
+            </Modal>
             <Box
               px={4}
               variant="plateRightBar"
               sx={{
-                bg: 'neutral.100',
+                bg: 'gray.100',
                 width: '100%',
                 borderLeft: 'solid 1px',
                 borderColor: 'border',
                 minHeight: '100vh',
               }}>
-              <Box>{cId && <EditMenus id={cId} />}</Box>
-              {varias && varias.fields && (
-                <Box sx={{ mb: 3, pt: 3 }}>
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 'sm' }}>
-                      Content Type
+              {cId && dataTemplate && (
+                <Flex sx={{ pt: 2, alignItems: 'center' }}>
+                  <Box sx={{}}>
+                    <Text sx={{ fontSize: 'sm', color: 'gray.1100' }}>
+                      Updated{' '}
                     </Text>
-                    <Select
-                      id="parent"
-                      // name="parent"
-                      defaultValue="Parent ID"
-                      // ref={register({ required: true })}
-                      {...register('parent', { required: true })}
-                      onChange={(e) => ctypeChange(e)}>
-                      {ctypes &&
-                        ctypes.length > 0 &&
-                        ctypes.map((m: any) => (
-                          <option value={m.id} key={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                    </Select>
+                    <TimeAgo
+                      time={dataTemplate?.data_template?.updated_at}
+                      ago={true}
+                    />
                   </Box>
+                  <Box sx={{ ml: 'auto' }}>
+                    <EditMenus id={cId} />
+                  </Box>
+                </Flex>
+              )}
 
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 'sm' }}>
-                      Variables
+              {varias && varias.fields && (
+                <Box sx={{ mb: 2, pt: 3 }}>
+                  <Box sx={{ mb: 3, pb: 3 }}>
+                    <Text
+                      as="h4"
+                      // mb={2}
+                      sx={{
+                        mb: 0,
+                        fontSize: 'sm',
+                        fontWeight: 500,
+                        letterSpacing: '-0.15px',
+                      }}>
+                      Fields
+                    </Text>
+                    <Text
+                      as="p"
+                      sx={{ fontSize: 'xs', color: 'gray.1000', mb: 3 }}>
+                      Dynamic variables provided by Variants
                     </Text>
                     {varias.fields &&
                       varias.fields.map((k: FieldT) => (
@@ -436,12 +594,12 @@ const Form = () => {
                             fontSize: 'sm',
                             border: 'solid 1px',
                             borderBottom: 0,
-                            borderColor: 'teal.200',
-                            bg: 'teal.100',
+                            borderColor: 'gray.500',
+                            bg: 'gray.200',
                             px: 3,
                             ':last-child': {
                               borderBottom: 'solid 1px',
-                              borderColor: 'teal.200',
+                              borderColor: 'gray.500',
                             },
                           }}
                           // as="p"
@@ -449,7 +607,7 @@ const Form = () => {
                           onClick={() => insertBlock(k)}>
                           {k.name}
                           <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
-                            <BracesVariable width={16} />
+                            <TextT />
                           </Box>
                         </Flex>
                       ))}
@@ -457,10 +615,23 @@ const Form = () => {
                 </Box>
               )}
 
-              <Box sx={{ borderBottom: 'solid 1px red', mb: 3, pb: 2 }}>
-                <Text as="h4" mb={2} sx={{ mb: 3 }}>
-                  Blocks
-                </Text>
+              <Box sx={{ borderBottom: 0, mb: 3, pb: 2 }}>
+                <Box sx={{ mb: 3 }}>
+                  <Text
+                    as="h4"
+                    sx={{
+                      mb: 0,
+                      fontSize: 'sm',
+                      fontWeight: 500,
+                      letterSpacing: '-0.15px',
+                    }}>
+                    Blocks
+                  </Text>
+                  <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000' }}>
+                    Blocks are reusable contents, click to insert
+                  </Text>
+                </Box>
+
                 {blocks &&
                   blocks.map((k: BlockTemplate) => (
                     <Box
@@ -468,12 +639,13 @@ const Form = () => {
                       onClick={() => insertBlock(k)}
                       sx={{
                         pl: 3,
-                        border: 'solid 0.5px',
-                        borderColor: 'border',
-                        bg: 'neutral.200',
-                        mb: 1,
+                        borderBottom: 0,
+                        border: 'solid 1px',
+                        borderColor: 'gray.400',
+                        bg: 'gray.200',
+                        mb: 0,
                         pt: 2,
-                        pb: 3,
+                        pb: 2,
                       }}>
                       <Text sx={{ fontSize: 'sm', mb: 0, fontWeight: 600 }}>
                         {k.title}
@@ -487,14 +659,6 @@ const Form = () => {
         </Box>
 
         {/* <WraftEditor/> */}
-        <Box>
-          <Flex sx={{ px: 4, py: 1 }}>
-            {loading && <Spinner color="white" size={20} />}
-            <Button type="submit" disabled={loading}>
-              {cId ? 'Update' : 'Create'}
-            </Button>
-          </Flex>
-        </Box>
       </Box>
     </Box>
   );
