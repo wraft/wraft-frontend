@@ -59,7 +59,9 @@ export const FlowStateBlock = ({
         }}>
         <Check size={16} />
       </Box>
-      <Text sx={{ fontSize: 'xs', textTransform: 'capitalize' }}>{state}</Text>
+      <Text sx={{ fontSize: '13px', textTransform: 'capitalize' }}>
+        {state}
+      </Text>
       <Box
         sx={{
           paddingLeft: 1,
@@ -96,8 +98,8 @@ export const EditMenus = ({ id }: EditMenuProps) => {
   };
   return (
     <MenuProvider>
-      <MenuButton as={Button} variant="base">
-        <DotsThreeVertical size={20} />
+      <MenuButton as={Button} variant="btnIcon">
+        <DotsThreeVertical weight="bold" size={16} />
       </MenuButton>
       <Menu
         as={Box}
@@ -180,8 +182,9 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
     <Flex
       sx={{
         ml: 'auto',
+        alignItems: 'center',
+        gap: 1,
       }}>
-      <Share size={20} />
       <EditMenus id={content?.content?.id} />
     </Flex>
   </Flex>

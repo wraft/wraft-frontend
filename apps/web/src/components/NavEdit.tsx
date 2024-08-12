@@ -1,12 +1,20 @@
 import React from 'react';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
-import { ArrowLeft, Bell, LinkSimple } from '@phosphor-icons/react';
+import {
+  ArrowLeft,
+  Bell,
+  LinkSimple,
+  Pencil,
+  Share,
+  UserPlus,
+} from '@phosphor-icons/react';
 
 import { useAuth } from '../contexts/AuthContext';
 import { EditIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
+import { Button } from '@wraft/ui';
 // import { Button } from './common';
 
 export interface IUser {
@@ -30,7 +38,7 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
         bg: 'gray.100',
         borderBottom: 'solid 1px',
         borderColor: 'border',
-        pt: 1,
+        // pt: 1,
         pb: 0,
         position: 'sticky',
         top: 0,
@@ -44,8 +52,8 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
         <Box
           sx={{
             p: 0,
-            pt: 1,
-            pb: 1,
+            pt: 0,
+            // pb: 1,
             pl: 2,
 
             // borderRight: 'solid 1px',
@@ -55,34 +63,26 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
           <Flex>
             <Link href={backLink ? backLink : '/contents'}>
               {/* <BackIcon width={20} color="gray.1200" /> */}
-              <Box sx={{ pt: 1 }}>
-                <ArrowLeft size={18} />
+              <Box sx={{ pt: 2 }}>
+                <ArrowLeft size={16} />
               </Box>
             </Link>
+
             {navtitle && (
               <Flex
-                onClick={onToggleEdit}
                 variant="navtitle"
                 sx={{
                   p: 0,
-                  pt: 1,
+                  pt: 2,
                   ml: 2,
 
                   fontWeight: 'heading',
                   verticalAlign: 'middle',
                 }}>
-                {/* <Text
-                    as="span"
-                    sx={{
-                      fontSize: '10.24px',
-                      textTransform: 'uppercase',
-                      fontWeight: 300,
-                      display: 'block',
-                    }}>
-                    OFFLET
-                  </Text> */}
                 <Text sx={{ fontSize: 'sm', fontWeight: 500 }}>{navtitle}</Text>
-                <EditIcon width={16} />
+                <Button variant="ghost" onClick={onToggleEdit}>
+                  <Pencil size={16} />
+                </Button>
               </Flex>
             )}
           </Flex>
@@ -91,21 +91,9 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
 
       <Flex ml="auto" mr={3}>
         <Flex ml={2}>
-          <ButtonBase
-            variant="btnSecondary"
-            sx={{
-              p: 0,
-              height: 32,
-              width: 32,
-              border: 0,
-              mr: 3,
-              bg: 'transparent',
-              ':hover': {
-                bg: 'transparent',
-              },
-            }}>
-            <LinkSimple size={20} />
-          </ButtonBase>
+          <Button variant="ghost">
+            <Share size={16} />
+          </Button>
         </Flex>
         <Flex
           sx={{
@@ -114,8 +102,10 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
             alignItems: 'center',
           }}>
           <Flex>
-            <Box variant="button" sx={{ mt: 0, pt: 0, ml: 3, mr: 2 }}>
-              <Bell size={20} />
+            <Box sx={{}}>
+              <Button variant="ghost">
+                <Bell size={18} />
+              </Button>
             </Box>
           </Flex>
           {!accessToken && (

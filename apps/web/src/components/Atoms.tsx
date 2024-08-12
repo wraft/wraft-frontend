@@ -10,10 +10,12 @@ import MenuItem from './NavLink';
 interface TimeAgoProps {
   time?: any;
   ago?: boolean;
+  short?: boolean;
 }
 
 export const TimeAgo = (props: TimeAgoProps) => {
   const utc_time = new Date(props.time);
+  const showAgo = props.ago ? true : false;
   const offset_time_minutes = utc_time.getTimezoneOffset();
   const local_time = new Date(
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
@@ -25,10 +27,12 @@ export const TimeAgo = (props: TimeAgoProps) => {
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
       ? format(local_time, 'MMM dd, yyyy')
-      : formatDistanceStrict(local_time, now, { addSuffix: true });
+      : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
 
   return (
-    <Text variant="pM" sx={{ fontSize: 'sm' }}>
+    <Text
+      variant="pM"
+      sx={{ fontSize: '13px', color: 'gray.1000', mt: props?.short ? 0 : 0 }}>
       {timed}
     </Text>
   );
