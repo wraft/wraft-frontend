@@ -576,15 +576,17 @@ const Form = () => {
                 borderColor: 'border',
                 minHeight: '100vh',
               }}>
-              {cId && (
+              {cId && dataTemplate && (
                 <Flex sx={{ pt: 2, alignItems: 'center' }}>
-                  <Text sx={{ fontSize: 'sm', color: 'gray.1100' }}>
-                    Updated{' '}
+                  <Box sx={{}}>
+                    <Text sx={{ fontSize: 'sm', color: 'gray.1100' }}>
+                      Updated{' '}
+                    </Text>
                     <TimeAgo
                       time={dataTemplate?.data_template?.updated_at}
                       ago={true}
                     />
-                  </Text>
+                  </Box>
                   <EditMenus id={cId} />
                 </Flex>
               )}

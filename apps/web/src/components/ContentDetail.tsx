@@ -33,11 +33,14 @@ import {
   AlignCenterVertical,
   ArrowLeft,
   ArrowRight,
+  ArrowsLeftRight,
   ArrowUpRight,
+  CircleNotch,
   DownloadSimple,
   FileArrowDown,
   FilePdf,
   Gavel,
+  Play,
   Rewind,
   Triangle,
 } from '@phosphor-icons/react';
@@ -513,24 +516,28 @@ const ContentDetail = () => {
                               }
                             }>
                             <Button
-                              sx={{ py: 2 }}
+                              sx={{ py: '6px', gap: 1, alignItem: 'center' }}
                               variant="btnSecondaryInline"
                               onClick={() => doBuild()}>
                               {/**
                              btnSecondaryInline
                               */}
+
                               {loading && (
                                 <Spinner color="green.400" size={16} />
                               )}
                               {!loading && (
-                                <Text
-                                  sx={{
-                                    fontSize: 'sm',
-                                    fontWeight: 600,
-                                    p: 0,
-                                  }}>
-                                  Generate
-                                </Text>
+                                <>
+                                  <Text
+                                    sx={{
+                                      fontSize: 'sm',
+                                      fontWeight: 600,
+                                      p: 0,
+                                    }}>
+                                    Generate
+                                  </Text>
+                                  <Play size={16} />
+                                </>
                               )}
                             </Button>
                           </Box>
@@ -549,23 +556,44 @@ const ContentDetail = () => {
 
                           {nextState && eligibleUser && (
                             <Button
+                              sx={{
+                                gap: 1,
+                                ':hover': {
+                                  svg: {
+                                    color: 'green.800',
+                                  },
+                                },
+                              }}
                               variant="btnPrimaryInline"
                               onClick={() => {
                                 setModalAction('next');
                                 setOpen(true);
                               }}>
-                              <Text variant="pB">{`${nextState.state || ''}`}</Text>
-                              <ArrowUpRight size={12} stroke="bold" />
+                              <Text
+                                variant="pB"
+                                sx={{
+                                  pr: 2,
+                                }}>{`${nextState.state || ''}`}</Text>
+                              <ArrowRight size={16} stroke="bold" />
                             </Button>
                           )}
                           {activeState?.state == 'Publish' && eligibleUser && (
                             <Button
-                              variant="btnSecondary"
+                              variant="btnSecondaryInline"
+                              sx={{
+                                gap: 1,
+                                '&:hover': {
+                                  svg: {
+                                    color: 'green.800',
+                                  },
+                                },
+                              }}
                               onClick={() => {
                                 setModalAction('next');
                                 setOpen(true);
                               }}>
                               <Text variant="pB">{`${activeState.state}`}</Text>
+                              <ArrowRight size={16} stroke="bold" />
                             </Button>
                           )}
                         </Flex>
@@ -621,9 +649,7 @@ const ContentDetail = () => {
                       aria-label="Content Stages"
                       className="tabPanel tabGroup">
                       <Tab id="edit">
-                        <Box>
-                          <StepBlock title="Content" desc="Edit contents" />
-                        </Box>
+                        <StepBlock title="Content" desc="Edit contents" />
                       </Tab>
                       <Tab id="view">
                         <StepBlock title="Document" desc="Sign and Manage" />
@@ -678,7 +704,7 @@ const ContentDetail = () => {
                           bg: 'gray.400',
                           // bg: 'neutral.200',
                           mt: 4,
-                          width: '100%',
+                          // width: '100%',
                           // bg: 'red',
                           border: 'solid 1px',
                           borderColor: 'gray.400',
@@ -934,9 +960,16 @@ const ContentDetail = () => {
                       </Box>
                     </TabPanel>
                     <TabPanel>
-                      {tabActiveId === 'approval' && (
-                        <ApprovalFlowHistory id={cId} />
-                      )}
+                      <Box variant="layout.boxHeading" sx={{ pb: 2 }}>
+                        <Text sx={{ fontSize: 'xs', color: 'gray.900' }}>
+                          Approval Log
+                        </Text>
+                      </Box>
+                      <Box>
+                        {tabActiveId === 'approval' && (
+                          <ApprovalFlowHistory id={cId} />
+                        )}
+                      </Box>
                     </TabPanel>
                   </TabProvider>
                 </Box>
@@ -963,23 +996,39 @@ const ContentDetail = () => {
             height: '225px',
             border: '1px solid #E4E9EF',
             background: '#FFF',
-            alignItems: 'center',
+            // alignItems: 'center',
+            alignItems: 'flex-start',
+            // align-items: flex-start;
+            justifyContent: 'space-evenly',
           }}>
-          <Box sx={{ px: 3, py: 2, borderColor: 'border' }}>
-            <Text as="p" variant="h5Medium" sx={{ textAlign: 'left' }}>
+          <Box
+            sx={{
+              px: 3,
+              py: 2,
+              borderColor: 'border',
+              width: '100%',
+              borderBottom: 'solid 1px #ddd',
+              mb: 2,
+            }}>
+            <Text
+              as="p"
+              variant="h5Medium"
+              sx={{ textAlign: 'left', fontSize: '15px' }}>
               Confirm action
             </Text>
           </Box>
           <Text
             sx={{
+              px: 4,
+              mb: 2,
               marginTop: '5px',
-              mb: '5px',
+              // mb: '5px',
               textAlign: 'left',
               fontWeight: 'heading',
               color: 'gray.900',
             }}>
             {modalAction === 'next'
-              ? `Are you sure you want to send to ${nextState?.state}?`
+              ? `Confirm to send current content to ${nextState?.state} stage ?`
               : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
           </Text>
           <Box as="form" py={1} mt={0} sx={{ display: 'none' }}>
@@ -987,7 +1036,16 @@ const ContentDetail = () => {
               <Field name="body" label="" defaultValue="" register={register} />
             </Box>
           </Box>
-          <Flex sx={{ gap: '12px' }}>
+          <Flex
+            sx={{
+              gap: '12px',
+              px: 3,
+              py: 3,
+              mt: 3,
+              // borderColor: '#eee',
+              borderTop: 'solid 1px #ddd',
+              width: '100%',
+            }}>
             <Button onClick={handleModalAction} sx={{}}>
               Confirm
             </Button>
