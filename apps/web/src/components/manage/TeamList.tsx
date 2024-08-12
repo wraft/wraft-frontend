@@ -4,6 +4,7 @@ import { Flex, Box, Text, Image } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import { Button, Table, Modal, DropdownMenu } from '@wraft/ui';
 
+import { TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 
 import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
@@ -97,8 +98,13 @@ const TeamList = () => {
           return {
             members: {
               name: member.name,
+              id: member.id,
               profilePic: member.profile_pic,
               memberId: member.id,
+              joined_at: member.joined_at || null,
+              updated_at: member.updated_at || null,
+              email: member.email || null,
+              is_current: member.id === userProfile.id,
             },
             roles: member.roles.map((role) => ({
               roleName: role.name,
@@ -193,12 +199,26 @@ const TeamList = () => {
                     flexShrink: 0,
                   }}
                 />
-                <Text sx={{ color: 'text' }}>{row.original.members.name}</Text>
+                <Flex sx={{ flexDirection: 'column' }}>
+                  <Text
+                    sx={{
+                      color: 'text',
+                      fontSize: 'sm',
+                      fontWeight: '500',
+                      lineHeight: 1,
+                    }}>
+                    {row.original.members.name} {row.original.members.is_current ? `(You)` : ''}
+                  </Text>
+                  <Text sx={{ color: 'text', fontSize: 'xs' }}>
+                    {row.original.members.email}
+                  </Text>
+                </Flex>
               </Flex>
             ),
             width: '100%',
             enableSorting: false,
           },
+
           {
             id: 'content.user_count',
             header: 'ROLE',
@@ -272,6 +292,28 @@ const TeamList = () => {
                   </DropdownMenu.Provider>
                 </Box>
               </Flex>
+            ),
+            enableSorting: false,
+          },
+          {
+            id: 'content.joined_at',
+            header: 'JOIN AT',
+            accessorKey: 'joined_at',
+            cell: ({ row }: any) => (
+              <Box>
+                <TimeAgo time={row.original?.members?.joined_at} />
+              </Box>
+            ),
+            enableSorting: false,
+          },
+          {
+            id: 'content.updated_at',
+            header: 'UPDATED AT',
+            accessorKey: 'updated_at',
+            cell: ({ row }: any) => (
+              <Box>
+                <TimeAgo time={row.original?.members?.updated_at} />
+              </Box>
             ),
             enableSorting: false,
           },
