@@ -64,5 +64,3 @@ apps/docs/storybook-static
 #db
 db
 volumes
-
-pnpm-lock.yaml
