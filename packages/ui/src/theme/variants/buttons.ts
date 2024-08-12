@@ -1,4 +1,4 @@
-import { borderRadius, cursor, fontSize, fontWeight } from "@xstyled/emotion";
+import { borderRadius, cursor, fontSize, fontWeight } from '@xstyled/emotion';
 
 const buttons = {
   none: {
@@ -12,7 +12,7 @@ const buttons = {
   },
   primaryLarge: {
     backgroundColor: 'green.1000',
-    fontSize: "1.15rem",
+    fontSize: '1.15rem',
     fontWeight: 600,
     color: 'green.100',
     padding: '0.75rem 1rem',
@@ -24,7 +24,7 @@ const buttons = {
   },
   secondaryLarge: {
     backgroundColor: 'gray.100',
-    fontSize: "1.15rem",
+    fontSize: '1.15rem',
     fontWeight: 600,
     color: 'green.1200',
     padding: '0.75rem 1rem',
@@ -39,7 +39,7 @@ const buttons = {
   },
   tertiaryLarge: {
     backgroundColor: 'gray.100',
-    fontSize: "1.15rem",
+    fontSize: '1.15rem',
     fontWeight: 600,
     color: 'gray.1200',
     padding: '0.75rem 1rem',
@@ -68,10 +68,10 @@ const buttons = {
 
   secondary: {
     cursor: 'pointer',
-    backgroundColor: 'green.400',
-    color: 'green.1200',
+    backgroundColor: 'gray.200',
+    color: 'gray.1200',
     border: '1px solid',
-    borderColor: 'green.600',
+    borderColor: 'gray.400',
     borderRadius: '6px',
     padding: '8px 16px',
     fontWeight: 'heading',
@@ -79,7 +79,7 @@ const buttons = {
     fontFamily: 'body',
     ':hover': {
       backgroundColor: 'gray.400',
-      borderColor: 'gray.600',
+      borderColor: 'gray.500',
     },
   },
   ghost: {
@@ -156,7 +156,7 @@ const buttons = {
   btnPrimary: {
     variant: 'buttons.btnBig',
     bg: 'primary.9',
-    color: 'primary.1',
+    color: 'primary.2',
     fontSize: 'sm',
     borderRadius: 6,
     cursor: 'pointer',
@@ -179,7 +179,7 @@ const buttons = {
       px: 1,
       width: '100%',
       '&.active': {
-        background: 'green.a200', 
+        background: 'green.a200',
         // background: '#E2F7EA',
         color: 'green.800',
         svg: {
@@ -187,18 +187,63 @@ const buttons = {
         },
       },
       ':hover': {
-        background: 'green.a500',  
+        background: 'green.a500',
         // background: '#E2F7EA',
       },
     },
   },
   btnSecondary: {
     variant: 'buttons.btnPrimary',
-    bg: 'neutral.100',
+    bg: 'gray.100',
     cursor: 'pointer',
-    color: 'gray.1000',
+    color: 'gray.1200',
     fontSize: 'sm',
     borderRadius: 6,
+    border: 'solid 1px',
+    borderColor: 'border',
+    ':hover': {
+      bg: 'gray.200',
+      color: 'gray.900',
+    },
+  },
+  btnSecondaryInline: {
+    variant: 'buttons.btnPrimary',
+    bg: 'white',
+    cursor: 'pointer',
+    color: 'gray.1200',
+    fontSize: 'sm',
+    borderRadius: 6,
+    display: 'flex',
+    paddingTop: '6px',
+    paddingBottom: '6px',
+    alignItems: 'center',
+    paddingLeft: '12px',
+    paddingRight: '12px',
+    marginTop: '4px',
+    marginBottom: '4px',
+    border: 'solid 1px',
+    borderColor: 'border',
+    ':hover': {
+      bg: 'gray.200',
+      color: 'gray.1200',
+    },
+  },
+  btnPrimaryInline: {
+    variant: 'buttons.btnPrimary',
+    bg: 'green.1100',
+    cursor: 'pointer',
+    color: 'green.100',
+    fontSize: 'sm',
+    borderRadius: 6,
+    display: 'flex',
+    paddingTop: '4px',
+    paddingBottom: '4px',
+    alignItems: 'center',
+    paddingLeft: '12px',
+    paddingRight: '12px',
+    marginTop: '4px',
+    marginBottom: '4px',
+    py: 1,
     border: 'solid 1px',
     borderColor: 'border',
     ':hover': {
@@ -222,6 +267,19 @@ const buttons = {
     fontSize: 'xxs',
     p: 1,
     px: 2,
+  },
+  btnIcon: {
+    variant: 'buttons.btnSecondary',
+    bg: 'gray.100',
+    color: 'gray.1100',
+    borderColor: 'gray.300',
+    ':hover': {
+      bg: 'gray.300',
+      color: 'gray.1200',
+    },
+    px: 2,
+    py: '3px',
+    pt: '6px',
   },
   btnPrimaryLarge: {
     variant: 'buttons.btnBig',
