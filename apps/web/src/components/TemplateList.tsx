@@ -145,7 +145,10 @@ const TemplateList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="secondary" type="button">
+          <Link
+            href="/templates/new"
+            variant="btnSecondaryInline"
+            type="button">
             + New Template
           </Link>
         </Box>

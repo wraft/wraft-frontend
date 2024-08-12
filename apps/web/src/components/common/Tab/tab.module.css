@@ -41,6 +41,8 @@
   color: #000;
   margin-bottom: -1px;
   border-bottom: solid 2px transparent;
+  letter-spacing: -0.075px;
+  font-weight: 600;
 }
 
 .tabInline:hover {
@@ -55,7 +57,7 @@
 .tabInline[aria-selected='true'] {
   /* background-color: hsl(204 100% 40%); */
   background-color: transparent;
-  border-bottom: solid 2px var(--theme-ui-colors-green-300);
+  border-bottom: solid 2px var(--theme-ui-colors-green-800);
   border-radius: 0;
   color: #333;
   font-size: 14px;

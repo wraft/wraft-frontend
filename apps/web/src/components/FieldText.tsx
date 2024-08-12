@@ -25,12 +25,13 @@ const FieldText: React.FC<Props> = ({
     <Box>
       <Label htmlFor="description">{label}</Label>
       <Textarea
-        rows={3}
+        rows={2}
         id={name}
         defaultValue={defaultValue}
         {...register(name, { required: `${label} is required` })}
         disabled={disabled || view}
         sx={{
+          fontFamily: 'body',
           ':disabled': {
             [view ? 'color' : '']: 'text',
           },

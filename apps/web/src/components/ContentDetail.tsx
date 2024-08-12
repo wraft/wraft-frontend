@@ -22,13 +22,26 @@ import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';
 import styles from './common/Tab/tab.module.css';
-import { EditIcon, DownloadIcon } from './Icons';
+import { EditIcon, DownloadIcon, BackIcon } from './Icons';
 import MenuItem from './MenuItem';
 import Nav from './NavEdit';
 import Modal from './Modal';
 import { StateState } from './FlowForm';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
+import {
+  AlignCenterVertical,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  DownloadSimple,
+  FileArrowDown,
+  FilePdf,
+  Gavel,
+  Rewind,
+  Triangle,
+} from '@phosphor-icons/react';
+import VerticalStepper from '@wraft-ui/HistoryStepper';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -148,7 +161,7 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
  */
 interface ProfileCardP {
   name: string;
-  time: string;
+  time?: string;
   image?: string;
 }
 
@@ -178,7 +191,7 @@ export const ProfileCard = ({
       <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
-      <TimeAgo time={time} ago={true} />
+      {/* <TimeAgo time={time} ago={true} /> */}
     </Flex>
   );
 };
@@ -396,7 +409,7 @@ const ContentDetail = () => {
     <Box py={0} sx={{ minHeight: '100vh' }}>
       {!loading && pageTitle && <Nav navtitle={pageTitle} />}
       <Box sx={{ pt: 0 }}>
-        {loading && (
+        {/* {loading && (
           <Box
             sx={{
               position: 'absolute',
@@ -407,49 +420,171 @@ const ContentDetail = () => {
             }}>
             <Spinner width={40} height={40} color="primary" />
           </Box>
-        )}
+        )} */}
         <ErrorBoundary>
           {contents && contents.content && (
             <Flex>
               <Box
                 // as="form"
                 // onSubmit={handleSubmit(onSubmit)}
-                sx={{ minWidth: '70%', maxWidth: '85ch', m: 0 }}>
+                sx={{ minWidth: '70%', m: 0 }}>
                 <Flex
                   sx={{
-                    px: 4,
+                    px: 3,
                     // py: 3,
-                    py: 1,
-                    pb: 1,
+                    py: 2,
+                    // pb: 2,
                     // pl: '115px',
                     borderBottom: 'solid 1px',
                     borderColor: 'border',
                     // mb: 3,
                     bg: 'gray.200',
                   }}>
-                  <Box>
-                    <Text
+                  <Flex sx={{ width: '100%', alignItems: 'center' }}>
+                    {/* <Text
                       sx={{
                         fontSize: 'base',
                         fontWeight: 'bold',
                         display: 'none',
                       }}>
                       {contents.content.serialized.title}
-                    </Text>
-                    <ProfileCard
+                    </Text> */}
+                    <Flex
+                      sx={{
+                        // bg: '#d9deda57',
+                        py: 1,
+                        alignItems: 'center',
+                        overflowX: 'scroll',
+                        bg: 'white',
+                        border: 'solid 1px',
+                        borderColor: 'gray.300',
+                        px: 2,
+                        borderRadius: '9px',
+                      }}>
+                      {activeFlow?.states.map((x: any) => (
+                        <FlowStateBlock
+                          activeFlow={contents}
+                          key={x?.id}
+                          state={x?.state}
+                          order={x?.order}
+                          id={x?.id}
+                        />
+                      ))}
+
+                      {!eligibleUser && (
+                        <Flex
+                          sx={{
+                            px: 1,
+                            py: '2px',
+                            gap: 1,
+                            alignItems: 'center',
+                            verticalAlign: 'center',
+                            borderRadius: '6px',
+                            fontSize: 'xs',
+                            color: 'orange.800',
+                            bg: 'orange.100',
+                          }}>
+                          <Triangle size={10} />
+                          <Text
+                            sx={{
+                              textTransform: 'uppercase',
+                              letterSpacing: '-0.01rem',
+                            }}>
+                            Waiting for approval
+                          </Text>
+                        </Flex>
+                      )}
+                    </Flex>
+
+                    <Flex sx={{ ml: 'auto', alignItems: 'center' }}>
+                      {!contents?.content?.approval_status && (
+                        <Flex
+                          sx={{
+                            p: 0,
+                            gap: 2,
+                            ml: 'auto',
+                            alignItems: 'center',
+                          }}>
+                          <Box
+                            sx={
+                              {
+                                // pt: 3,
+                                // px: 3,
+                              }
+                            }>
+                            <Button
+                              sx={{ py: 2 }}
+                              variant="btnSecondaryInline"
+                              onClick={() => doBuild()}>
+                              {/**
+                             btnSecondaryInline
+                              */}
+                              {loading && (
+                                <Spinner color="green.400" size={16} />
+                              )}
+                              {!loading && (
+                                <Text
+                                  sx={{
+                                    fontSize: 'sm',
+                                    fontWeight: 600,
+                                    p: 0,
+                                  }}>
+                                  Generate
+                                </Text>
+                              )}
+                            </Button>
+                          </Box>
+
+                          {/* {prevState && eligibleUser && (
+                            <Button
+                              // variant="btnSecondary"
+                              onClick={() => {
+                                setModalAction('prev');
+                                setOpen(true);
+                              }}>
+                              <ArrowLeft />
+                              <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
+                            </Button>
+                          )} */}
+
+                          {nextState && eligibleUser && (
+                            <Button
+                              variant="btnPrimaryInline"
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}>
+                              <Text variant="pB">{`${nextState.state || ''}`}</Text>
+                              <ArrowUpRight size={12} stroke="bold" />
+                            </Button>
+                          )}
+                          {activeState?.state == 'Publish' && eligibleUser && (
+                            <Button
+                              variant="btnSecondary"
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}>
+                              <Text variant="pB">{`${activeState.state}`}</Text>
+                            </Button>
+                          )}
+                        </Flex>
+                      )}
+                    </Flex>
+                    {/* <ProfileCard
                       time={contents.content?.inserted_at}
                       name={contents.creator?.name}
                       image={contents?.creator?.profile_pic}
-                    />
-                  </Box>
-                  <Box sx={{ ml: 'auto' }}>
+                    /> */}
+                  </Flex>
+                  {/* <Box sx={{ ml: 'auto' }}>
                     <MenuItem
                       variant="btnMenu"
                       href={`/content/edit/[id]`}
                       path={`/content/edit/${contents.content.id}`}>
                       <EditIcon width={24} />
                     </MenuItem>
-                  </Box>
+                  </Box> */}
                 </Flex>
                 <Box
                   sx={{
@@ -457,7 +592,7 @@ const ContentDetail = () => {
                     bg: 'gray.400',
                     // bg: 'gray.a100',
                     // bg: 'neutral.200',
-                    '.tabPanel': { border: 0, bg: 'gray.200' },
+                    '.tabPanel': { border: 0, bg: 'gray.400' },
                     button: {
                       border: 0,
                       bg: 'transparent',
@@ -470,6 +605,7 @@ const ContentDetail = () => {
                       bg: 'gray.400',
                       // border: 'solid 1px blue',
                       px: 3,
+                      // textAlign: 'centre',
                       py: 2,
                     },
                     'button[aria-selected=true]': {
@@ -485,8 +621,8 @@ const ContentDetail = () => {
                       aria-label="Content Stages"
                       className="tabPanel tabGroup">
                       <Tab id="edit">
-                        <Box sx={{ ml: 3 }}>
-                          <StepBlock title="Matter" desc="Edit contents" />
+                        <Box>
+                          <StepBlock title="Content" desc="Edit contents" />
                         </Box>
                       </Tab>
                       <Tab id="view">
@@ -501,8 +637,10 @@ const ContentDetail = () => {
                         <Box
                           sx={{
                             mt: 0,
+                            borderRadius: '6px',
+                            maxWidth: '100%',
                             px: 4,
-                            pb: 6,
+                            // pb: 6,
                             // bg: 'gray.100',
                             // pl: '9rem !important',
                             // pr: '9rem !important',
@@ -519,7 +657,7 @@ const ContentDetail = () => {
                               },
                             },
                           }}>
-                          <PreTag pt={4} pb={6}>
+                          <PreTag pt={0} pb={6}>
                             {contentBody && (
                               <Editor
                                 defaultValue={contentBody}
@@ -540,6 +678,8 @@ const ContentDetail = () => {
                           bg: 'gray.400',
                           // bg: 'neutral.200',
                           mt: 4,
+                          width: '100%',
+                          // bg: 'red',
                           border: 'solid 1px',
                           borderColor: 'gray.400',
                           '.react-pdf__Document': {
@@ -565,10 +705,13 @@ const ContentDetail = () => {
               <Box
                 variant="plateRightBar"
                 sx={{
+                  // position: 'fixed',
+                  right: 0,
+                  // display: 'none',
                   // bg: 'neutral.100',
                   bg: 'gray.100',
                   py: 0,
-                  width: '30%',
+                  width: '100%',
                   borderLeft: 'solid 1px',
                   borderColor: 'border',
                   minHeight: '100vh',
@@ -584,69 +727,14 @@ const ContentDetail = () => {
                     flexGrow: 1,
                     mr: 0,
                     // pr: 3,
-                    pb: 3,
+                    // pb: 3,
                     // pt: 2,
-                    borderTop: 'solid 1px',
+                    // borderTop: 'solid 1px',
                     // borderBottom: 'solid 1px',
                     borderColor: 'gray.300',
                     // bg: '#d9deda57',
                   }}>
-                  <Flex
-                    sx={{
-                      // bg: '#d9deda57',
-                      px: 3,
-                      py: 2,
-                      alignItems: 'center',
-                      overflowX: 'scroll',
-                    }}>
-                    {activeFlow?.states.map((x: any) => (
-                      <FlowStateBlock
-                        activeFlow={contents}
-                        key={x?.id}
-                        state={x?.state}
-                        order={x?.order}
-                        id={x?.id}
-                      />
-                    ))}
-                  </Flex>
-                  {!contents?.content?.approval_status && (
-                    <Flex sx={{ p: 3, gap: 2 }}>
-                      {prevState && eligibleUser && (
-                        <Button
-                          variant="buttonSecondary"
-                          onClick={() => {
-                            setModalAction('prev');
-                            setOpen(true);
-                          }}>
-                          <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
-                        </Button>
-                      )}
-                      {nextState && eligibleUser && (
-                        <Button
-                          variant="secondary"
-                          onClick={() => {
-                            setModalAction('next');
-                            setOpen(true);
-                          }}>
-                          <Text variant="pB">{`Send to ${nextState.state || ''}`}</Text>
-                        </Button>
-                      )}
-                      {activeState?.state == 'Publish' && eligibleUser && (
-                        <Button
-                          variant="secondary"
-                          onClick={() => {
-                            setModalAction('next');
-                            setOpen(true);
-                          }}>
-                          <Text variant="pB">{`${activeState.state}`}</Text>
-                        </Button>
-                      )}
-                      {!eligibleUser && (
-                        <Text variant="pB">Waiting for approval</Text>
-                      )}
-                    </Flex>
-                  )}
-                  <Flex
+                  {/* <Flex
                     sx={{
                       pt: 3,
                       px: 3,
@@ -655,7 +743,22 @@ const ContentDetail = () => {
                       flexDirection: 'row',
                       // border: 'solid 1px #ddd',
                     }}>
-                    {/* {eligibleUser && ( */}
+                    {eligibleUser && (
+                      <Box sx={{ ml: 'auto' }}>
+                        <MenuItem
+                          variant="btnMenu"
+                          href={`/content/edit/[id]`}
+                          path={`/content/edit/${contents.content.id}`}>
+                          <EditIcon width={24} />
+                        </MenuItem>
+                      </Box>
+                    )}
+                  </Flex> */}
+                  {/* <Box
+                    sx={{
+                      // pt: 3,
+                      // px: 3,
+                    }}>
                     <Button
                       sx={{ py: 2 }}
                       variant="btnPrimary"
@@ -669,8 +772,7 @@ const ContentDetail = () => {
                         )}
                       </>
                     </Button>
-                    {/* )} */}
-                  </Flex>
+                  </Box> */}
                 </Box>
 
                 <Box>
@@ -690,20 +792,33 @@ const ContentDetail = () => {
                         History
                       </Tab>
                       <Tab className={styles.tabInline} id="approval">
-                        Approval History
+                        Log
                       </Tab>
                     </TabList>
 
                     <TabPanel tabId={defaultSelectedId} className="tabPanel">
-                      <Box sx={{ bg: 'neutral.100' }}>
-                        <Box variant="layout.boxHeading">
-                          <Text as="h3" variant="sectionheading">
-                            Content
+                      <Box sx={{ bg: 'neutral.100', mb: 6, pb: 0 }}>
+                        <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
+                          <Text
+                            as="h3"
+                            variant="sectionheading"
+                            sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                            Editors
                           </Text>
+                          <ProfileCard
+                            time={contents.content?.inserted_at}
+                            name={contents.creator?.name}
+                            image={contents?.creator?.profile_pic}
+                          />
                         </Box>
                         <Box sx={{ pt: 2, px: 3, border: 0 }}>
+                          <Text
+                            as="h3"
+                            variant="sectionheading"
+                            sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                            Document
+                          </Text>
                           <Box>
-                            <Box sx={{ pb: 2 }}></Box>
                             {contents.content.build && (
                               <Flex pt={0} pb={3}>
                                 <Box>
@@ -711,24 +826,32 @@ const ContentDetail = () => {
                                     <Text
                                       as="h3"
                                       sx={{
-                                        fontSize: 'xs',
+                                        fontSize: 'sm',
                                         mb: 0,
                                         color: 'text',
                                       }}>
                                       {contents.content.instance_id}
+                                      <Text
+                                        as="span"
+                                        sx={{ ml: 2, fontWeight: 400 }}>
+                                        v
+                                        {contents.versions[0]?.version_number ??
+                                          ''}
+                                      </Text>
                                     </Text>
                                     <Text
                                       as="h4"
                                       sx={{
-                                        fontSize: 'xs',
+                                        fontSize: '14px',
                                         mb: 0,
+                                        pb: 0,
                                         mt: 1,
                                         color: 'gray.700',
                                         fontWeight: 500,
                                         ml: 0,
                                       }}>
                                       <Flex as="span">
-                                        <Text sx={{ mr: 2 }}>Updated </Text>
+                                        {/* <Text sx={{ mr: 2 }}>Updated </Text> */}
                                         {contents.versions.length && (
                                           <TimeAgo
                                             time={
@@ -742,10 +865,18 @@ const ContentDetail = () => {
                                 </Box>
                                 <Box sx={{ ml: 'auto' }}>
                                   <Link
-                                    variant="download"
+                                    // variant="download"
+                                    sx={{
+                                      bg: 'gray.000',
+                                      borderRadius: '6px',
+                                      border: 'solid 1px',
+                                      borderColor: 'border',
+                                      px: 3,
+                                      py: 2,
+                                    }}
                                     href={`${contents.content.build}`}
                                     target="_blank">
-                                    <DownloadIcon width={20} />
+                                    <DownloadSimple width={20} />
                                   </Link>
                                 </Box>
                               </Flex>
@@ -757,11 +888,18 @@ const ContentDetail = () => {
                     <TabPanel>
                       <Box sx={{ bg: 'neutral.100' }}>
                         <Box sx={{ pb: 3 }}>
-                          <Box variant="layout.boxHeading" sx={{ pb: 1 }}>
+                          <Box
+                            variant="layout.boxHeading"
+                            sx={{ pb: 1, borderBottom: 0 }}>
                             <Text
                               as="h3"
-                              sx={{ fontSize: 'sm', fontWeight: 500 }}>
-                              Discussions
+                              sx={{
+                                fontSize: '13px',
+                                opacity: 0.5,
+                                letterSpacing: '-0.075px',
+                                fontWeight: 500,
+                              }}>
+                              Recent Comments
                             </Text>
                           </Box>
                           <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
@@ -828,7 +966,7 @@ const ContentDetail = () => {
             alignItems: 'center',
           }}>
           <Box sx={{ px: 3, py: 2, borderColor: 'border' }}>
-            <Text as="p" variant="h5Medium">
+            <Text as="p" variant="h5Medium" sx={{ textAlign: 'left' }}>
               Confirm action
             </Text>
           </Box>
@@ -836,7 +974,7 @@ const ContentDetail = () => {
             sx={{
               marginTop: '5px',
               mb: '5px',
-              textAlign: 'center',
+              textAlign: 'left',
               fontWeight: 'heading',
               color: 'gray.900',
             }}>
@@ -844,17 +982,19 @@ const ContentDetail = () => {
               ? `Are you sure you want to send to ${nextState?.state}?`
               : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
           </Text>
-          <Box as="form" py={1} mt={0}>
+          <Box as="form" py={1} mt={0} sx={{ display: 'none' }}>
             <Box mx={0} mb={2} sx={{ width: '350px' }}>
               <Field name="body" label="" defaultValue="" register={register} />
             </Box>
           </Box>
           <Flex sx={{ gap: '12px' }}>
-            <Button onClick={handleModalAction}>Confirm</Button>
-
+            <Button onClick={handleModalAction} sx={{}}>
+              Confirm
+            </Button>
             <Button
+              variant="btnSecondary"
               onClick={() => setOpen(false)}
-              sx={{ bg: 'red', color: 'white' }}>
+              sx={{ bg: 'red', color: 'gray.1100', fontWeight: 'bold' }}>
               Cancel
             </Button>
           </Flex>
