@@ -151,10 +151,19 @@ const Approvals = () => {
 
   const { accessToken } = useAuth();
 
-  const loadData = (page: number) => {
+  useEffect(() => {
+    if (page) {
+      loadData();
+    }
+  }, [currentPage]);
+
+  const loadData = () => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`users/list_pending_approvals${pageNo}`)
+    const pageNo = currentPage ? `&page=${currentPage}` : '';
+
+    const query = `sort=inserted_at_desc${pageNo}`;
+
+    fetchAPI(`users/list_pending_approvals?${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: any[] = data.pending_approvals;
@@ -179,12 +188,6 @@ const Approvals = () => {
       { shallow: true },
     );
   };
-
-  useEffect(() => {
-    if (accessToken) {
-      loadData(page);
-    }
-  }, [accessToken, page]);
 
   /**
    * Approve an Instance

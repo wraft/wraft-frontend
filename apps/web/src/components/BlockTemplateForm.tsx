@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner } from 'theme-ui';
+import { Box, Flex, Text, Spinner } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 // import { useAuth } from '../contexts/AuthContext';
 
@@ -219,13 +220,20 @@ const Form = () => {
       <Box>
         <Flex>
           <Box variant="w100" sx={{ minWidth: '70ch' }}>
-            <Box>
-              <Field
-                name="title"
-                label="Name"
-                defaultValue=""
-                register={register}
-              />
+            <Box
+              sx={{
+                input: {
+                  bg: 'white',
+                },
+              }}>
+              <Box sx={{ px: 1, py: 1 }}>
+                <Field
+                  name="title"
+                  label="Name"
+                  defaultValue=""
+                  register={register}
+                />
+              </Box>
               <Box variant="hidden" sx={{ display: 'none' }}>
                 <Field
                   name="body"
@@ -253,28 +261,21 @@ const Form = () => {
             </Box>
           </Box>
           <Box>
-            <Button variant="btnSecondary" onClick={() => toggleAssetForm()}>
+            <Button variant="secondary" onClick={() => toggleAssetForm()}>
               + Image
             </Button>
           </Box>
           {errors.serialized && <Text>This field is required</Text>}
         </Flex>
       </Box>
-      {saved && <Text>Saved</Text>}
-      <Box mt={3}>
-        <Button variant="primary">
+      <Flex mt={3} ml={1}>
+        <Button type="submit" variant="primary">
           <Flex m={0}>
             {loading && <Spinner color="white" size={24} />}
             {!loading && <Text>{cId ? 'Update' : 'Create'}</Text>}
           </Flex>
         </Button>
-
-        {cId && (
-          <Button type="button" onClick={deleteBlock} variant="delete">
-            Delete
-          </Button>
-        )}
-      </Box>
+      </Flex>
     </Box>
   );
 };

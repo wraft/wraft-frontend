@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image, Button as ButtonBase } from 'theme-ui';
 import { ArrowLeft, Bell, LinkSimple } from '@phosphor-icons/react';
@@ -19,8 +20,17 @@ interface INav {
   backLink?: string;
 }
 
-const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
+const Nav = ({ navtitle, onToggleEdit }: INav) => {
+  const router = useRouter();
   const { accessToken, userProfile, logout } = useAuth();
+
+  const goBack = () => {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/');
+    }
+  };
 
   return (
     <Flex
@@ -53,12 +63,10 @@ const Nav = ({ navtitle, onToggleEdit, backLink }: INav) => {
             color: 'gray.1200',
           }}>
           <Flex>
-            <Link href={backLink ? backLink : '/contents'}>
-              {/* <BackIcon width={20} color="gray.1200" /> */}
-              <Box sx={{ pt: 1 }}>
-                <ArrowLeft size={18} />
-              </Box>
-            </Link>
+            {/* <BackIcon width={20} color="gray.1200" /> */}
+            <Box sx={{ pt: 1 }}>
+              <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
+            </Box>
             {navtitle && (
               <Flex
                 onClick={onToggleEdit}
