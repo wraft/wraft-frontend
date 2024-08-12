@@ -22,11 +22,11 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
           minHeight: '36px',
           width: 'max-content',
           border: '1px solid',
-          borderColor: 'border',
+          borderColor: 'gray.600',
           borderRadius: '4px',
           transition: 'all 0.3s ease',
           '& .text': {
-            color: 'green.600',
+            color: 'green.800',
             minWidth: '0px',
             width: '0px',
             overflow: 'hidden',
@@ -43,10 +43,10 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
             },
           },
           '& .icon': {
-            color: 'gray.400',
+            color: 'gray.800',
           },
           ':hover': {
-            borderColor: 'green.200',
+            borderColor: 'green.600',
             '& .icon': { color: 'green.600' },
             '& .text': {
               ml: 1,

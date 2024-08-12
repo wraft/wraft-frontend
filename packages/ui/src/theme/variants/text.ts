@@ -103,7 +103,6 @@ const text = {
   },
   pM: {
     variant: 'text.pR',
-    fontWeight: 500,
   },
   pB: {
     variant: 'text.pR',

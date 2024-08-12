@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex, Label, Text } from 'theme-ui';
+import { Box, Container, Flex, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import { arrayMove } from '@dnd-kit/sortable';
 
 import Page from 'components/PageFrame';
 import FormsFrom from 'components/FormsFrom';
@@ -135,11 +134,6 @@ const Index: FC = () => {
                 titles={['Questions', 'Responses']}
               />
               {formStep === 0 && (
-                // <Box
-                //   sx={{
-                //     width: '100%',
-                //     bg: 'white',
-                //   }}>
                 <FormsFrom
                   formdata={formdata}
                   items={items}
@@ -148,7 +142,6 @@ const Index: FC = () => {
                   isEdit
                   setIsOpen={setIsOpen}
                 />
-                // </Box>
               )}
               {formStep === 1 && (
                 <Box
