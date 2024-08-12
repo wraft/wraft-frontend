@@ -116,9 +116,12 @@ const columns = [
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Flex>
-        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-        <Box sx={{ fontSize: 'sm', ml: 3 }}>{row.original?.creator?.name}</Box>
+      <Flex sx={{ alignItems: 'center' }}>
+        <Avatar
+          width="20px"
+          height="20px"
+          src={row.original?.creator?.profile_pic}
+        />
       </Flex>
     ),
     enableSorting: false,
