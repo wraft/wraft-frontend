@@ -3,7 +3,8 @@ import Router, { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
+import { Box, Flex, Text, Spinner, Select } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
 import {
@@ -53,10 +54,9 @@ const EditMenus = ({ id }: EditMenuProps) => {
   return (
     <MenuProvider>
       <MenuButton
-        as={Button}
+        as={Box}
         sx={{
           mt: 2,
-          ml: 'auto',
           border: 'solid 1px',
           borderRadius: '9rem',
           color: 'text',
@@ -65,6 +65,7 @@ const EditMenus = ({ id }: EditMenuProps) => {
           bg: 'neutral.100',
           pb: 0,
           height: '33px',
+          width: '33px',
           // pb: 1,
           // mt: 2,
           // border: 0,
@@ -167,8 +168,6 @@ const Form = () => {
             position: 'top-right',
           });
         });
-
-      setLoading(false);
     }
   };
 
@@ -514,8 +513,10 @@ const Form = () => {
         {/* <WraftEditor/> */}
         <Box>
           <Flex sx={{ px: 4, py: 1 }}>
-            {loading && <Spinner color="white" size={24} />}
-            {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
+            {loading && <Spinner color="white" size={20} />}
+            <Button type="submit" disabled={loading}>
+              {cId ? 'Update' : 'Create'}
+            </Button>
           </Flex>
         </Box>
       </Box>
