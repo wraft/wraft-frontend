@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import getConfig from 'next/config';
 
 const { publicRuntimeConfig } = getConfig();
