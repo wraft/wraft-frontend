@@ -457,12 +457,20 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
     name: 'General',
     path: '/manage/workspace',
   },
+  {
+    name: 'Fields',
+    path: '/manage/fields',
+  },
 ];
 
 export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
+  },
+  {
+    name: 'Fields',
+    path: '/manage/workspace/fields',
   },
   {
     name: 'Members',

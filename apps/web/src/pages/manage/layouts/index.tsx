@@ -2,7 +2,8 @@ import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Drawer } from '@wraft-ui/Drawer';
-import { Flex, Container, Button, Box } from 'theme-ui';
+import { Flex, Container, Box } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import LayoutForm from 'components/LayoutForm';
 import LayoutList from 'components/LayoutList';
@@ -28,11 +29,8 @@ const Index: FC = () => {
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
             />
           }>
-          <Button
-            variant="btnSecondary"
-            sx={{ fontSize: 1 }}
-            onClick={() => setIsOpen(true)}>
-            Add Layout
+          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+            + Add Layout
           </Button>
         </PageHeader>
         <Drawer open={isOpen} setOpen={setIsOpen}>

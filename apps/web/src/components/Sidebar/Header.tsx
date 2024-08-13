@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import NavLink from 'next/link';
 import { Button, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
+import { Gear } from '@phosphor-icons/react';
 
-import Link from '../../components/NavLink';
-import { useAuth } from '../../contexts/AuthContext';
-import { postAPI } from '../../utils/models';
+import Link from 'components/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+import { postAPI } from 'utils/models';
+
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 import Modal from '../Modal';
 import ModeToggle from '../ModeToggle';
@@ -113,43 +116,54 @@ const Header = () => {
                 color="primary"
                 py="12px"
                 px="8px"
-                sx={{ fill: 'text', cursor: 'pointer', minWidth: '200px' }}>
+                sx={{
+                  fill: 'text',
+                  cursor: 'pointer',
+                  minWidth: '200px',
+                  justifyContent: 'space-between',
+                }}>
                 {userProfile?.currentOrganisation && (
-                  <Flex>
-                    <Image
-                      src={userProfile?.currentOrganisation?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `28px`,
-                        width: `28px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
-                    />
-                    <Box>
-                      <Text
-                        as="p"
+                  <>
+                    <Flex>
+                      <Image
+                        src={userProfile?.currentOrganisation?.logo}
+                        width={24}
+                        height={24}
+                        alt="Workspace"
                         sx={{
-                          fontWeight: `bold`,
-                          color: 'gray.1000',
-                          lineHeight: 1,
-                          fontSize: 'xs',
-                        }}>
-                        {userProfile?.currentOrganisation?.name}
-                      </Text>
-                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
-                        {userProfile?.currentOrganisation?.members_count}{' '}
-                        members
-                      </Text>
-                    </Box>
-                  </Flex>
+                          borderRadius: '99rem',
+                          height: `28px`,
+                          width: `28px`,
+                          border: '1px solid',
+                          borderColor: 'gray.100',
+                          p: '1px',
+                          mr: 2,
+                        }}
+                      />
+                      <Box>
+                        <Text
+                          as="p"
+                          sx={{
+                            fontWeight: `bold`,
+                            color: 'gray.1000',
+                            lineHeight: 1,
+                            fontSize: 'xs',
+                          }}>
+                          {userProfile?.currentOrganisation?.name}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
+                          {userProfile?.currentOrganisation?.members_count}{' '}
+                          members
+                        </Text>
+                      </Box>
+                    </Flex>
+                    <NavLink href={`/manage/workspace`}>
+                      <Gear size={18} weight="bold" color="#777" />
+                    </NavLink>
+                  </>
                 )}
               </Flex>
+
               <DropdownMenu.Separator />
               <Box sx={{ height: '400px', overflowY: 'scroll' }}>
                 {organisations &&

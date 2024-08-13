@@ -28,12 +28,6 @@ const profileLinks: menuLinksProps[] = [
     path: '/account/profile',
   },
   {
-    name: 'Manage Workspace',
-    path: '/account/company',
-    permissionName: 'organisation',
-    permissions: ['show'],
-  },
-  {
     name: 'Change Password',
     path: '/account/change-password',
   },
