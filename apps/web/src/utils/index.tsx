@@ -428,11 +428,6 @@ export const menuLinks: menuLinksProps[] = [
     logo: <Style width="20px" />,
     path: '/manage/themes',
   },
-  {
-    name: 'Fields',
-    logo: <User width="20px" />,
-    path: '/manage/fields',
-  },
 ];
 
 {
@@ -457,12 +452,20 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
     name: 'General',
     path: '/manage/workspace',
   },
+  {
+    name: 'Fields',
+    path: '/manage/fields',
+  },
 ];
 
 export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
+  },
+  {
+    name: 'Fields',
+    path: '/manage/workspace/fields',
   },
   {
     name: 'Members',

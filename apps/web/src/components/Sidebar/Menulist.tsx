@@ -59,11 +59,6 @@ const Menulist = [
         icon: <UserFocus size={20} />,
         path: '/manage',
       },
-      {
-        name: 'Settings',
-        icon: <Gear size={20} />,
-        path: '/account',
-      },
     ],
   },
 ];

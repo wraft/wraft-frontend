@@ -5,16 +5,7 @@ import Checkbox from '@wraft-ui/Checkbox';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-  Flex,
-  Container,
-  Button,
-  Box,
-  Input,
-  Label,
-  Text,
-  Image,
-} from 'theme-ui';
+import { Flex, Container, Button, Box, Input, Label, Text } from 'theme-ui';
 
 import { ConfirmDelete } from 'components/common';
 import Field from 'components/Field';
@@ -22,6 +13,7 @@ import ManageSidebar from 'components/ManageSidebar';
 import Modal from 'components/Modal';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
+import DefaultAvatar from 'components/DefaultAvatar';
 import { useAuth } from 'contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
@@ -230,12 +222,13 @@ const Index: FC = () => {
                 p={4}>
                 <Box sx={{ height: '128px', mb: 4, bg: 'gray' }}>
                   {orgImage && (
-                    <Image
-                      variant="profile"
-                      src={previewSource ? previewSource : logoSrc}
-                      alt="logo"
-                      onClick={() => fileRef.current?.click()}
-                    />
+                    <Box onClick={() => fileRef.current?.click()}>
+                      <DefaultAvatar
+                        url={previewSource ? previewSource : logoSrc}
+                        value={org?.name}
+                        size={120}
+                      />
+                    </Box>
                   )}
                 </Box>
                 <Input
