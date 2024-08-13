@@ -106,10 +106,6 @@ const TemplateList = () => {
   const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
-    loadData(1);
-  }, []);
-
-  useEffect(() => {
     if (page) {
       loadData(page);
     }
@@ -119,7 +115,7 @@ const TemplateList = () => {
     setLoading(true);
 
     const query = `?page=${page}`;
-    fetchAPI(`data_templates${query}&sort=inserted_at_desc`)
+    fetchAPI(`data_templates${query}&sort=updated_at_desc`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;

@@ -85,7 +85,7 @@ const CreateDocument = () => {
   }, [template?.id]);
 
   const loadData = (page = 1) => {
-    fetchAPI(`data_templates?page=${page}`)
+    fetchAPI(`data_templates?page=${page}&sort=updated_at_desc`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;
