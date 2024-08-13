@@ -10,7 +10,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Vendor - Wraft Docs</title>
+        <title>Create Vendor - Wraft</title>
       </Head>
       <Page>
         <Flex>

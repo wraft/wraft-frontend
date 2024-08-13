@@ -10,8 +10,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Field Type - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Create Field Type | Wraft </title>
+        <meta name="description" content="create new fields" />
       </Head>
       <Page>
         <PageHeader title="Create Field Type" />

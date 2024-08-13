@@ -11,8 +11,8 @@ const Contents: FC = () => {
   return (
     <>
       <Head>
-        <title>My Account | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>My Account | Wraft</title>
+        <meta name="description" content="my wraft account" />
       </Head>
       <Page>
         <PageHeader title="My Account" desc="Manage your account">
