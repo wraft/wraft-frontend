@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Spinner, Box, Text } from 'theme-ui';
-// import { Label, Select, Textarea } from 'theme-ui';
+import { Spinner, Box } from 'theme-ui';
+import toast from 'react-hot-toast';
+import { Button } from '@wraft/ui';
 
-import { putAPI, fetchAPI, fetchUserInfo } from '../utils/models';
+import { useAuth } from 'contexts/AuthContext';
+import { putAPI, fetchAPI } from 'utils/models';
+
 import Field from './Field';
 
 export interface Profile {
@@ -30,179 +33,99 @@ const formList = [
     id: 'name',
     label: 'Company Name',
     ftype: 'text',
-    defaultValue: 'Functionary Films',
+    defaultValue: '',
   },
   {
     id: 'legal_name',
     label: 'Legal Name',
     ftype: 'text',
-    defaultValue: 'Functionary Films Pvt Ltd',
+    defaultValue: '',
   },
   {
-    id: 'addres',
+    id: 'address',
     label: 'Address',
     ftype: 'text',
-    defaultValue: '#21, HM Green Oak Apartments, Bengaluru, IN',
+    defaultValue: '',
   },
-  {
-    id: 'corporate_id',
-    label: 'Corporate ID',
-    ftype: 'text',
-    defaultValue: 'AHEPH-XXXX',
-  },
-  {
-    id: 'name_of_ceo',
-    label: 'CEO Full Name',
-    ftype: 'text',
-    defaultValue: 'Muneef Hameed',
-  },
-  {
-    id: 'name_of_cto',
-    label: 'CTO Full Name',
-    ftype: 'text',
-    defaultValue: 'Salsabeel Jamal',
-  },
+  // {
+  //   id: 'corporate_id',
+  //   label: 'Corporate ID',
+  //   ftype: 'text',
+  //   defaultValue: 'AHEPH-XXXX',
+  // },
+  // {
+  //   id: 'name_of_ceo',
+  //   label: 'CEO Full Name',
+  //   ftype: 'text',
+  //   defaultValue: 'Muneef Hameed',
+  // },
+  // {
+  //   id: 'name_of_cto',
+  //   label: 'CTO Full Name',
+  //   ftype: 'text',
+  //   defaultValue: 'Salsabeel Jamal',
+  // },
   {
     id: 'phone',
     label: 'Phone Number',
     ftype: 'text',
-    defaultValue: '8050473500',
+    defaultValue: '',
   },
   {
     id: 'gstin',
     label: 'GST Number',
     ftype: 'text',
-    defaultValue: 'GST-IN-XXX',
+    defaultValue: '',
   },
   {
     id: 'email',
     label: 'Email Address',
     ftype: 'text',
-    defaultValue: 'info@aurut.com',
+    defaultValue: '',
   },
 ];
 
 const OrgForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [ready, setReady] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
-  const [profile, setProfile] = useState<any>();
-  const [organ, setOrgan] = useState<any>();
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const { userProfile } = useAuth();
 
-  const onCreate = (_d: any) => {
-    setSuccess(true);
-    // if (d && d.id) {
-    //   // Router.push(`/user-profile`);
-    // }
-  };
+  const orgId = (userProfile && userProfile.organisation_id) || false;
 
-  /** Update Form */
+  useEffect(() => {
+    if (orgId) {
+      fetchOrganisationDetail();
+    }
+  }, [orgId]);
 
   const onSubmit = (data: any) => {
-    putAPI(`organisations/${profile.organisation_id}`, data).then(
+    setLoading(true);
+    putAPI(`organisations/${orgId}`, data).then(() => {
+      setLoading(false);
+      toast.success('updated Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    });
+  };
+
+  const fetchOrganisationDetail = () => {
+    fetchAPI(`organisations/${userProfile?.organisation_id}`).then(
       (data: any) => {
-        onCreate(data);
+        setReady(true);
+        Object.keys(data).map((key) => {
+          if (key !== 'logo') {
+            setValue(`${key}`, data[`${key}`]);
+          }
+        });
       },
     );
   };
 
-  useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
-
-  const onProfileLoad = (data: any) => {
-    const res: any[] = data;
-    setProfile(res);
-  };
-
-  useEffect(() => {
-    // check if token is there
-    // const tokenInline = cookie.get('token') || false;
-    //
-
-    fetchUserInfo().then((data: any) => {
-      onProfileLoad(data);
-    });
-
-    // loadEntity(token, 'macros', loadDataSuccess);
-  }, []);
-
-  /**
-   * When Org data is load
-   *
-   */
-  const onOrgLoad = (_o: any) => {
-    setReady(true);
-    setOrgan(_o);
-
-    Object.keys(_o).map(function (key, _index) {
-      setValue(`${key}`, _o[`${key}`]);
-    });
-
-    // set sample
-  };
-
-  const onOrgMembLoad = (_o: any) => {
-    setReady(true);
-    // setOrgan(_o);
-
-    // Object.keys(_o).map(function(key, index) {
-    //   console.log('key', key, index, `${key}`, _o[`${key}`]);
-    //   setValue(`${key}`, _o[`${key}`]);
-    // });
-  };
-
-  const onOrgLoadAll = (_x: any) => {
-    console.log('x', _x);
-  };
-
-  /**
-   * Set Profile Context
-   */
-
-  useEffect(() => {
-    // check if token is there
-    // const tokenInline = cookie.get('token') || false;
-    //
-    if (profile) {
-      // setValue('')
-      // checkUser(token, onProfileLoad);
-      fetchAPI(`organisations/${profile.organisation_id}`).then((data: any) => {
-        onOrgLoad(data);
-      });
-
-      fetchAPI(`organisations`).then((data: any) => {
-        onOrgLoadAll(data);
-      });
-
-      fetchAPI(`organisations/${profile.organisation_id}/memberships`).then(
-        (data: any) => {
-          onOrgMembLoad(data);
-        },
-      );
-    }
-
-    if (organ) {
-      console.log('got organ', organ);
-    }
-  }, [profile]);
-
-  /**
-   * Watch Form Change
-   */
-  // const checkChange = (_a: any) => {
-  //   console.log('__args', _a);
-  // };
-
   return (
     <Box>
       {!ready && <Spinner />}
-      <Text as="h3">Company Information</Text>
       <Box>
         {ready && (
           <Box
@@ -221,9 +144,11 @@ const OrgForm = () => {
                 />
               </Box>
             ))}
-            <Button type="submit" ml={2} mt={3}>
-              Update Profile
-            </Button>
+            <Box mt={4}>
+              <Button type="submit" loading={isLoading}>
+                Update Profile
+              </Button>
+            </Box>
           </Box>
         )}
       </Box>
