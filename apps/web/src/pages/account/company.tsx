@@ -12,8 +12,8 @@ const CompanyForm: FC = () => {
   return (
     <>
       <Head>
-        <title>Manage Organization | Wraft Doc</title>
-        <meta name="description" content="Wraft Docs" />
+        <title>Manage Organization | Wraft</title>
+        <meta name="description" content="manage organization in wraft" />
       </Head>
       <Page>
         <PageHeader title="Settings" desc="">

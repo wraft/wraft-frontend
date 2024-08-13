@@ -151,8 +151,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Pricing - Wraft</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Pricing | Wraft</title>
+        <meta name="description" content="wraft pricing" />
       </Head>
       <UserNav />
       <Container sx={{ bg: 'backgroundWhite' }}>

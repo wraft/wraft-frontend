@@ -61,7 +61,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Wraft - The Document Automation Platform</title>
+        <title>Wraft | The Document Automation Platform</title>
         <meta
           name="description"
           content="Wraft is a document automation and pipelining tools for businesses"
