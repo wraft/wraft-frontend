@@ -7,6 +7,7 @@ import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
 import { Gear } from '@phosphor-icons/react';
 
 import Link from 'components/NavLink';
+import DefaultAvatar from 'components/DefaultAvatar';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
@@ -76,22 +77,13 @@ const Header = () => {
               <Flex color="primary" sx={{ fill: 'text', cursor: 'pointer' }}>
                 {userProfile?.currentOrganisation && (
                   <Flex>
-                    <Image
-                      src={userProfile?.currentOrganisation?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `28px`,
-                        width: `28px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
+                    <DefaultAvatar
+                      url={userProfile?.currentOrganisation?.logo}
+                      value={userProfile?.currentOrganisation?.name}
+                      size={24}
                     />
-                    <Box>
+
+                    <Box ml={2}>
                       <Text
                         as="p"
                         sx={{
@@ -125,22 +117,12 @@ const Header = () => {
                 {userProfile?.currentOrganisation && (
                   <>
                     <Flex>
-                      <Image
-                        src={userProfile?.currentOrganisation?.logo}
-                        width={24}
-                        height={24}
-                        alt="Workspace"
-                        sx={{
-                          borderRadius: '99rem',
-                          height: `28px`,
-                          width: `28px`,
-                          border: '1px solid',
-                          borderColor: 'gray.100',
-                          p: '1px',
-                          mr: 2,
-                        }}
+                      <DefaultAvatar
+                        url={userProfile?.currentOrganisation?.logo}
+                        value={userProfile?.currentOrganisation?.name}
+                        size={24}
                       />
-                      <Box>
+                      <Box ml={2}>
                         <Text
                           as="p"
                           sx={{
@@ -171,22 +153,12 @@ const Header = () => {
                     <DropdownMenu.Item
                       key={org.id}
                       onClick={() => onSwitchOrganization(org?.id)}>
-                      <Image
-                        src={org?.logo}
-                        width={24}
-                        height={24}
-                        alt="Workspace"
-                        sx={{
-                          borderRadius: '50%',
-                          height: `18px`,
-                          width: `18px`,
-                          border: '1px solid',
-                          borderColor: 'gray.100',
-                          p: '1px',
-                          mr: 2,
-                        }}
+                      <DefaultAvatar
+                        url={org?.logo}
+                        value={org.name}
+                        size={20}
                       />
-                      {org.name}
+                      <Box ml={2}>{org.name}</Box>
                     </DropdownMenu.Item>
                   ))}
               </Box>

@@ -428,11 +428,6 @@ export const menuLinks: menuLinksProps[] = [
     logo: <Style width="20px" />,
     path: '/manage/themes',
   },
-  {
-    name: 'Fields',
-    logo: <User width="20px" />,
-    path: '/manage/fields',
-  },
 ];
 
 {
