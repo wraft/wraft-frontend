@@ -14,7 +14,7 @@ const Contents: FC = () => {
   return (
     <>
       <Head>
-        <title>Contents | Wraft Docs</title>
+        <title>Contents | Wraft</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
       <Box>

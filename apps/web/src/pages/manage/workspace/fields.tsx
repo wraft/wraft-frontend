@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
+import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 
+import ManageSidebar from 'components/ManageSidebar';
 import OrgForm from 'components/OrgForm';
-import OrgSidebar from 'components/OrgSidebar';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
+import { workspaceLinks } from 'utils/index';
 import { authorize } from 'middleware/authorize';
 
 const CompanyForm: FC = () => {
@@ -16,12 +18,18 @@ const CompanyForm: FC = () => {
         <meta name="description" content="Wraft Docs" />
       </Head>
       <Page>
-        <PageHeader title="Settings" desc="">
-          <Box sx={{ ml: 'auto' }} />
-        </PageHeader>
+        <PageHeader
+          title="Workspace"
+          desc={
+            <DescriptionLinker
+              data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
+            />
+          }
+        />
+
         <Container variant="layout.pageFrame">
           <Flex>
-            <OrgSidebar />
+            <ManageSidebar items={workspaceLinks} />
             <Box sx={{ bg: 'white', width: '100%' }} p={4}>
               <Box sx={{ width: '526px' }}>
                 <OrgForm />
@@ -34,4 +42,4 @@ const CompanyForm: FC = () => {
   );
 };
 
-export default authorize(CompanyForm, 'organisation');
+export default CompanyForm;

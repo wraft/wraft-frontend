@@ -149,8 +149,8 @@ const CreateDocument = () => {
             p: '32px',
             borderTop: 'solid 1px',
             borderColor: 'border',
-            height: 'calc(100vh - 180px)',
-            overflowX: 'scroll',
+            height: 'calc(100vh - 220px)',
+            overflowY: 'scroll',
           }}>
           {formStep === 0 && (
             <>
@@ -251,7 +251,7 @@ const CreateDocument = () => {
             </>
           )}
         </Box>
-        <Flex px="32px" sx={{ gap: 2 }}>
+        <Flex p="32px" sx={{ gap: 2 }}>
           <Button
             disabled={formStep === 0}
             onClick={() => setFormStep((pre) => pre - 1)}>
