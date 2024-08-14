@@ -253,36 +253,38 @@ const CreateDocument = () => {
                             />
                           )}
 
-                      {f.field_type.name !== 'date' && (
-                        <Field
-                          name={`contentFields[${f.id}]`}
-                          label={capitalizeFirst(f.name)}
-                          defaultValue=""
-                          register={register}
-                        />
-                      )}
+                          {f.field_type.name !== 'date' && (
+                            <Field
+                              name={`contentFields[${f.id}]`}
+                              label={capitalizeFirst(f.name)}
+                              defaultValue=""
+                              register={register}
+                            />
+                          )}
+                        </Box>
+                      ))}
                     </Box>
-                  ))}
-                </Box>
+                  )}
+                </>
               )}
-            </>
-          )}
-        </Box>
-        <Flex p="32px" sx={{ gap: 2 }}>
-          <Button
-            disabled={formStep === 0}
-            onClick={() => setFormStep((pre) => pre - 1)}>
-            Prev
-          </Button>
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            disabled={
-              vals === (undefined || null) || (vals && vals.template === '')
-            }>
-            {formStep === 1 ? 'Create' : 'Next'}
-          </Button>
-        </Flex>
-      </Box>
+            </Box>
+            <Flex p="32px" sx={{ gap: 2 }}>
+              <Button
+                disabled={formStep === 0}
+                onClick={() => setFormStep((pre) => pre - 1)}>
+                Prev
+              </Button>
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                disabled={
+                  vals === (undefined || null) || (vals && vals.template === '')
+                }>
+                {formStep === 1 ? 'Create' : 'Next'}
+              </Button>
+            </Flex>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
