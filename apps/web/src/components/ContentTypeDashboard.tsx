@@ -64,7 +64,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<any>();
-  const [page, setPage] = useState<number>();
+  const [page, setPage] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteVariant, setDeleteVariant] = useState<number | null>(null);
 
@@ -75,13 +75,9 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
 
   useEffect(() => {
     if (page) {
-      loadData(page);
+      loadData();
     }
-  }, [page]);
-
-  useEffect(() => {
-    loadData(1);
-  }, [rerender]);
+  }, [currentPage, rerender]);
 
   const onDelete = (id: string) => {
     deleteAPI(`content_types/${id}`)
@@ -95,11 +91,14 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
       });
   };
 
-  const loadData = (page: number) => {
+  const loadData = () => {
     setLoading(true);
 
-    const query = `?page=${page}&sort=inserted_at_desc`;
-    fetchAPI(`content_types${query}`)
+    const pageNo = currentPage ? `&page=${currentPage}` : '';
+
+    const query = `sort=inserted_at_desc${pageNo}`;
+
+    fetchAPI(`content_types?${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.content_types;
@@ -110,10 +109,6 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
         setLoading(false);
       });
   };
-
-  useEffect(() => {
-    loadData(currentPage);
-  }, [accessToken]);
 
   const changePage = (newPage: any) => {
     setPage(newPage);
