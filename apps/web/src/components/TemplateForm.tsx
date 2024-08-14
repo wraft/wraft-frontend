@@ -326,7 +326,6 @@ const Form = () => {
     // find the first element
     if (ctypes && ctypes[0] && ctypes[0].id) {
       loadContentType(ctypes[0].id);
-      console.log('loginsert', ctypes);
     }
   }, [ctypes]);
 
@@ -349,8 +348,6 @@ const Form = () => {
 
       loadContentType(dataTemplate.content_type.id);
       const insertReady = (d && d.serialized && d.serialized.data) || false;
-
-      console.log('loginsertReady', insertReady);
 
       if (insertReady) {
         setValue('serialized', insertReady);
