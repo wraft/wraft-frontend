@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer, useDrawer } from '@wraft/ui';
+import { Drawer, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../../utils/models';
@@ -24,25 +25,59 @@ export interface Pipeline {
   stages: any;
 }
 
+export interface IPageMeta {
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
+  contents?: any;
+}
+
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [page, setPage] = useState<number>(1);
+
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
   const mobileMenuDrawer = useDrawer();
 
   const loadData = () => {
-    fetchAPI('pipelines?sort=inserted_at_desc').then((data: any) => {
+    setLoading(true);
+    const pageNo = currentPage ? `&page=${currentPage}` : '';
+
+    const query = `sort=inserted_at_desc${pageNo}`;
+
+    fetchAPI(`pipelines?${query}`).then((data: any) => {
       const res: Pipeline[] = data.pipelines;
       setContents(res);
+      setPageMeta(data);
       setLoading(false);
     });
   };
 
   useEffect(() => {
-    loadData();
-  }, [rerender]);
+    if (page) {
+      loadData();
+    }
+  }, [currentPage, rerender]);
+
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   const columns = [
     {
@@ -108,6 +143,16 @@ const Form = () => {
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>
         <Box mt={0}>
           <Table data={contents} columns={columns} isLoading={loading} />
+          {pageMeta && pageMeta?.total_pages > 1 && (
+            <Box mx={0} mt={3}>
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={changePage}
+                totalEntries={pageMeta?.total_entries}
+              />
+            </Box>
+          )}
         </Box>
       </Box>
       <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
