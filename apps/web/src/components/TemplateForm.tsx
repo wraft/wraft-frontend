@@ -339,7 +339,7 @@ const Form = () => {
    * On Template Load
    */
   useEffect(() => {
-    if (dataTemplate && dataTemplate.data_template) {
+    if (cId && dataTemplate && dataTemplate.data_template) {
       const d: DataTemplate = dataTemplate.data_template;
       setValue('title', d.title);
       setValue('title_template', d.title_template);
@@ -348,8 +348,6 @@ const Form = () => {
 
       loadContentType(dataTemplate.content_type.id);
       const insertReady = (d && d.serialized && d.serialized.data) || false;
-
-      console.log('insertReady', insertReady);
 
       if (insertReady) {
         setValue('serialized', insertReady);

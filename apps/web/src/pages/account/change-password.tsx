@@ -75,8 +75,8 @@ const Contents: FC = () => {
   return (
     <>
       <Head>
-        <title>change password | Wraft</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Change Password | Wraft</title>
+        <meta name="description" content="change your wraft password" />
       </Head>
       <Page>
         <PageHeader title="Settings" />

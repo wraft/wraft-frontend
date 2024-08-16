@@ -12,7 +12,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>New Document - Wraft Docs</title>
+        <title>New Document - Wraft</title>
         <meta name="description" content="Create a New Document with Wraft" />
       </Head>
       <Page>

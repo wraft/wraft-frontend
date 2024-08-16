@@ -8,8 +8,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit Pipeline - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Edit Pipeline | Wraft</title>
+        <meta name="description" content="edit pipeline" />
       </Head>
       <Page>
         <PipelineForm />

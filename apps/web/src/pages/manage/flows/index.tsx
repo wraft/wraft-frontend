@@ -18,8 +18,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Manage Flows - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Manage Flows | Wraft</title>
+        <meta name="description" content="wraft flows" />
       </Head>
       <Page>
         <PageHeader

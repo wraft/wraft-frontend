@@ -21,11 +21,12 @@ const Index: FC = () => {
   const [organisationName, setOrganisationName] = useState<string | null>(null);
   const inviteCookie = cookie.get('inviteCookie');
 
-  const { accessToken } = useAuth();
+  const { accessToken, updateOrganisations } = useAuth();
 
   useEffect(() => {
     if (inviteCookie) {
       const retrievedObject = JSON.parse(inviteCookie);
+
       setOrganisationName(retrievedObject.inviteOrganisation);
       setIsTeamInvite(true);
     }
@@ -45,6 +46,7 @@ const Index: FC = () => {
         loading: 'Loading',
         success: () => {
           setIsTeamInvite(false);
+          updateOrganisations();
           cookie.remove('inviteCookie');
           return `Successfully joined`;
         },
@@ -59,7 +61,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Wraft - The Document Automation Platform</title>
+        <title>Wraft | The Document Automation Platform</title>
         <meta
           name="description"
           content="Wraft is a document automation and pipelining tools for businesses"

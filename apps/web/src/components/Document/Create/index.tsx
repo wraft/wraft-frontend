@@ -9,6 +9,7 @@ import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 
 import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
+import { EmptyForm } from 'components/Icons';
 import { capitalizeFirst } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
@@ -137,135 +138,153 @@ const CreateDocument = () => {
 
   return (
     <Box bg="gray.0">
-      <Box>{loading && <></>}</Box>
-      <StepsIndicator
-        titles={['Choose a template', 'Add content']}
-        formStep={formStep}
-        goTo={goTo}
-      />
-      <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-        <Box
-          sx={{
-            p: '32px',
-            borderTop: 'solid 1px',
-            borderColor: 'border',
-            height: 'calc(100vh - 220px)',
-            overflowY: 'scroll',
-          }}>
-          {formStep === 0 && (
-            <>
-              <Box
-                variant="caps"
-                sx={{
-                  fontSize: 'xxs',
-                  py: 2,
-                  color: 'text',
-                }}>
-                <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
-                  Select a template
-                </Text>
-              </Box>
-
-              {loading &&
-                Array.from({ length: 10 }, (_, index) => (
-                  <Flex
-                    key={index}
-                    sx={{
-                      px: 3,
-                      py: 2,
-                      border: 'solid 1px',
-                      borderBottom: 'none',
-                      borderColor: 'border',
-                    }}>
-                    <Box>
-                      <Skeleton width="20px" height="22px" />
-                    </Box>
-                    <Box mx={3} sx={{ width: '100%' }}>
-                      <Skeleton height="22px" />
-                    </Box>
-                    <Skeleton width="20px" height="22px" />
-                  </Flex>
-                ))}
-
-              {!loading && contents && (
-                <Controller
-                  control={control}
-                  defaultValue=""
-                  name="template"
-                  // rules={{ required: true }}
-                  render={({ field: { onChange, value } }) => (
-                    <>
-                      {contents.map((x: any) => (
-                        <BlockItem
-                          key={x.id}
-                          template={x}
-                          selected={value}
-                          onChange={onChange}
-                        />
-                      ))}
-                    </>
-                  )}
-                />
-              )}
-              <Box mt="16px">
-                {pageMeta && pageMeta?.total_pages > 1 && (
-                  <Pagination
-                    type="simple"
-                    totalPage={pageMeta?.total_pages}
-                    initialPage={1}
-                    onPageChange={changePage}
-                    totalEntries={pageMeta?.total_entries}
-                  />
-                )}
-              </Box>
-            </>
-          )}
-          {formStep === 1 && (
-            <>
-              {fields && fields.length > 0 && (
-                <Box sx={{ pt: 4 }}>
-                  {fields.map((f: FieldT) => (
-                    <Box key={f.id} sx={{ pb: 2 }}>
-                      {f.field_type.name === 'date' && (
-                        <FieldDate
-                          name={`contentFields[${f.id}]`}
-                          label={capitalizeFirst(f.name)}
-                          register={register}
-                          sub="Date"
-                          onChange={() => console.log('x')}
-                        />
-                      )}
-
-                      {f.field_type.name !== 'date' && (
-                        <Field
-                          name={`contentFields[${f.id}]`}
-                          label={capitalizeFirst(f.name)}
-                          defaultValue=""
-                          register={register}
-                        />
-                      )}
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </>
-          )}
-        </Box>
-        <Flex p="32px" sx={{ gap: 2 }}>
-          <Button
-            disabled={formStep === 0}
-            onClick={() => setFormStep((pre) => pre - 1)}>
-            Prev
-          </Button>
-          <Button
-            onClick={handleSubmit(onSubmit)}
-            disabled={
-              vals === (undefined || null) || (vals && vals.template === '')
-            }>
-            {formStep === 1 ? 'Create' : 'Next'}
-          </Button>
+      {!loading && contents.length < 1 && (
+        <Flex sx={{ alignItems: 'center' }}>
+          <Box sx={{ color: 'gray.500' }}>
+            <EmptyForm />
+          </Box>
+          <Box sx={{ m: 2, pb: 0 }}>
+            <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
+              No template has been created yet.
+            </Text>
+          </Box>
         </Flex>
-      </Box>
+      )}
+      {contents && contents.length >= 1 && (
+        <>
+          <Box>{loading && <></>}</Box>
+          <StepsIndicator
+            titles={['Choose a template', 'Add content']}
+            formStep={formStep}
+            goTo={goTo}
+          />
+          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Box
+              sx={{
+                p: '32px',
+                borderTop: 'solid 1px',
+                borderColor: 'border',
+                height: 'calc(100vh - 220px)',
+                overflowY: 'scroll',
+              }}>
+              {formStep === 0 && (
+                <>
+                  <Box
+                    variant="caps"
+                    sx={{
+                      fontSize: 'xxs',
+                      py: 2,
+                      color: 'text',
+                    }}>
+                    <Text
+                      as="h4"
+                      sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
+                      Select a template
+                    </Text>
+                  </Box>
+
+                  {loading &&
+                    Array.from({ length: 10 }, (_, index) => (
+                      <Flex
+                        key={index}
+                        sx={{
+                          px: 3,
+                          py: 2,
+                          border: 'solid 1px',
+                          borderBottom: 'none',
+                          borderColor: 'border',
+                        }}>
+                        <Box>
+                          <Skeleton width="20px" height="22px" />
+                        </Box>
+                        <Box mx={3} sx={{ width: '100%' }}>
+                          <Skeleton height="22px" />
+                        </Box>
+                        <Skeleton width="20px" height="22px" />
+                      </Flex>
+                    ))}
+
+                  {!loading && contents && (
+                    <Controller
+                      control={control}
+                      defaultValue=""
+                      name="template"
+                      // rules={{ required: true }}
+                      render={({ field: { onChange, value } }) => (
+                        <>
+                          {contents.map((x: any) => (
+                            <BlockItem
+                              key={x.id}
+                              template={x}
+                              selected={value}
+                              onChange={onChange}
+                            />
+                          ))}
+                        </>
+                      )}
+                    />
+                  )}
+                  <Box mt="16px">
+                    {pageMeta && pageMeta?.total_pages > 1 && (
+                      <Pagination
+                        type="simple"
+                        totalPage={pageMeta?.total_pages}
+                        initialPage={1}
+                        onPageChange={changePage}
+                        totalEntries={pageMeta?.total_entries}
+                      />
+                    )}
+                  </Box>
+                </>
+              )}
+              {formStep === 1 && (
+                <>
+                  {fields && fields.length > 0 && (
+                    <Box sx={{ pt: 4 }}>
+                      {fields.map((f: FieldT) => (
+                        <Box key={f.id} sx={{ pb: 2 }}>
+                          {f.field_type.name === 'date' && (
+                            <FieldDate
+                              name={`contentFields[${f.id}]`}
+                              label={capitalizeFirst(f.name)}
+                              register={register}
+                              sub="Date"
+                              onChange={() => console.log('x')}
+                            />
+                          )}
+
+                          {f.field_type.name !== 'date' && (
+                            <Field
+                              name={`contentFields[${f.id}]`}
+                              label={capitalizeFirst(f.name)}
+                              defaultValue=""
+                              register={register}
+                            />
+                          )}
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                </>
+              )}
+            </Box>
+            <Flex p="32px" sx={{ gap: 2 }}>
+              <Button
+                disabled={formStep === 0}
+                onClick={() => setFormStep((pre) => pre - 1)}>
+                Prev
+              </Button>
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                disabled={
+                  vals === (undefined || null) || (vals && vals.template === '')
+                }>
+                {formStep === 1 ? 'Create' : 'Next'}
+              </Button>
+            </Flex>
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

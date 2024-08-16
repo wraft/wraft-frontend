@@ -8,7 +8,7 @@ export const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Login - Wraft</title>
+        <title>Login | Wraft</title>
         <meta
           name="description"
           content="Wraft - The Document Automation Platform"

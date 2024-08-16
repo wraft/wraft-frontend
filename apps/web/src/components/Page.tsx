@@ -36,14 +36,14 @@ export const Page = (props: any) => {
   return (
     <>
       <Head>
-        <title>Wraft Docs</title>
+        <title>Wraft</title>
         <meta
           name="keywords"
           content="document,automation,proposals,sales,hr,contract management"
         />
         <meta
           name="description"
-          content="Wraft Docs help busines move steady and fast with Document Automation System"
+          content="Wraft help busines move steady and fast with Document Automation System"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />

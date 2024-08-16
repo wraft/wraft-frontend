@@ -8,7 +8,7 @@ const PipelineIndex: FC = () => {
   return (
     <>
       <Head>
-        <title>Pipelines - Wraft Docs</title>
+        <title>Pipelines | Wraft</title>
         <meta name="description" content="Manage Pipelines" />
       </Head>
       <Page>
