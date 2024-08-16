@@ -41,7 +41,7 @@ const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
           height: `${size + (size * 25) / 100}px`,
           width: `${size + (size * 25) / 100}px`,
           border: '1px solid',
-          borderColor: 'gray.300',
+          borderColor: 'gray.200',
           p: '3px',
           bg: 'gray.600',
         }}
@@ -57,7 +57,7 @@ const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
         height: `${size + 4}px`,
         width: `${size + 4}px`,
         border: '1px solid',
-        borderColor: 'gray.500',
+        borderColor: 'gray.200',
         overflow: 'hidden',
         bg: 'gray.600',
       }}>
@@ -65,6 +65,7 @@ const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
         src={url}
         alt="Workspace logo"
         sx={{
+          borderRadius: '99rem',
           objectFit: 'cover',
           height: `${size}px`,
           width: `${size}px`,
