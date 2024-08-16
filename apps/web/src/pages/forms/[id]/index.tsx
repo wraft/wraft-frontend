@@ -80,8 +80,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Collection Form - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Form Details | Wraft</title>
+        <meta name="description" content="form questions and responses" />
       </Head>
       <Page id="Modal" showFull={true}>
         {' '}

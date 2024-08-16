@@ -8,7 +8,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>New Template | Wraft Docs</title>
+        <title>New Template | Wraft</title>
       </Head>
       <Page>
         <TemplateForm />

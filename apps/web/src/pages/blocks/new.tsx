@@ -10,8 +10,8 @@ export const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Content Types - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Create Block | Wraft</title>
+        <meta name="description" content="create new block" />
       </Head>
       <Page>
         <NavEdit navtitle="Manage Blocks" backLink="/blocks" />

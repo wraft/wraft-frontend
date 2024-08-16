@@ -9,8 +9,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit Layout - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Edit Field | Wraft</title>
+        <meta name="description" content="edit field" />
       </Head>
       <Page>
         <Box>

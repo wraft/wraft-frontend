@@ -140,6 +140,7 @@ const Form = ({
         } else {
           setTemplates(res);
         }
+        setLoading(false);
       })
       .catch(() => {
         setLoading(true);
@@ -152,6 +153,7 @@ const Form = ({
         setLoading(true);
         const res: any = data.forms;
         setForms(res);
+        setLoading(false);
       })
       .catch(() => {
         setLoading(true);
@@ -161,6 +163,7 @@ const Form = ({
   //Pipeline Create API
 
   const createpipeline = (data: any) => {
+    setLoading(true);
     const sampleD = {
       name: data.pipelinename,
       api_route: 'client.crm.com',
@@ -175,6 +178,7 @@ const Form = ({
         position: 'top-right',
       });
       setRerender((pre: boolean) => !pre);
+      setLoading(false);
     });
   };
 
@@ -182,6 +186,7 @@ const Form = ({
   // calls when the next button is clicked
 
   function next() {
+    setLoading(true);
     if (formStep == 0) {
       const sampleD = {
         data_template_id: ctemplate.data_template.id,
@@ -197,6 +202,7 @@ const Form = ({
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
+            setLoading(false);
           })
           .catch(() => {
             toast.error('Failed to Update Stage', {
@@ -212,6 +218,7 @@ const Form = ({
             });
             setRerender((pre: boolean) => !pre);
             setFormStep((i) => i + 1);
+            setLoading(false);
           })
           .catch(() => {
             toast.error('stage already exist', {
@@ -225,6 +232,7 @@ const Form = ({
   // Pipeline mapping api
 
   const onSubmit = () => {
+    setLoading(true);
     const sampleD = {
       pipe_stage_id: pipeStageDetails.id,
       mapping: sourceData,
@@ -237,11 +245,13 @@ const Form = ({
           toast.success('Mapping Updated Successfully', {
             position: 'top-right',
           });
+          setLoading(false);
         })
         .catch(() => {
           toast.error('Mapping Failed', {
             position: 'top-right',
           });
+          setLoading(false);
         });
     } else if (tempField.length == sampleD.mapping.length) {
       postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
@@ -250,11 +260,13 @@ const Form = ({
         toast.success('Mapped Successfully', {
           position: 'top-right',
         });
+        setLoading(false);
       });
     } else {
       toast.error('Map every field', {
         position: 'top-right',
       });
+      setLoading(false);
     }
   };
 
@@ -298,7 +310,7 @@ const Form = ({
     if (
       selectedPipelineStageId &&
       pipeStageDetails &&
-      pipeStageDetails.form_mapping.mapping
+      pipeStageDetails.form_mapping?.mapping
     ) {
       setPipeMapId(pipeStageDetails ? pipeStageDetails.form_mapping.id : '');
       setStageMap(pipeStageDetails.form_mapping.mapping);
@@ -570,7 +582,12 @@ const Form = ({
                   </Button>
                 )}
                 {formStep >= 1 && (
-                  <Button variant="primary" type="button" onClick={onSubmit}>
+                  <Button
+                    variant="primary"
+                    type="button"
+                    loading={loading}
+                    disabled={loading}
+                    onClick={onSubmit}>
                     {stageMap && stageMap.length > 0 && isValid
                       ? 'Update'
                       : 'Add'}
@@ -580,14 +597,16 @@ const Form = ({
             )}
             {formStep == 0 && (
               <Button
-                disabled={
-                  (pipelineData && isValid) || selectedPipelineStageId
-                    ? false
-                    : !isValid
-                }
+                // disabled={
+                //   (pipelineData && isValid) || selectedPipelineStageId
+                //     ? false
+                //     : !isValid
+                // }
+                disabled={isValid && loading}
                 type="button"
                 onClick={pipelineData ? next : handleSubmit(createpipeline)}
-                variant="primary">
+                variant="primary"
+                loading={loading}>
                 {pipelineData ? 'Next' : 'Create'}
               </Button>
             )}

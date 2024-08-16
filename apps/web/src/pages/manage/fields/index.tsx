@@ -13,8 +13,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Fields | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Fields | Wraft</title>
+        <meta name="description" content="wraft fields" />
       </Head>
       <Page>
         <PageHeader title="Fields Types" desc="Manage System Level fields">

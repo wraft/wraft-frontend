@@ -35,7 +35,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Forms - Wraft Docs</title>
+        <title>Forms | Wraft</title>
         <meta name="description" content="Manage Forms" />
       </Head>
       <Page>
