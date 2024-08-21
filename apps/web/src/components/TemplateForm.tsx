@@ -101,6 +101,17 @@ const IconMenuItem = ({ icon, text }: IconMenuItemProps) => {
 };
 
 const Form = () => {
+  const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
+  const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
+  const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
+  const [insertable, setInsertable] = useState<any>();
+  const [insertions, setInsertions] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [pagetitle, setPageTitle] = useState<string>('');
+  const [showSetup, setShowSetup] = useState<boolean>(false);
+  const [tokkans, setTokkans] = useState<any>('');
+  const [varias, setVarias] = useState<IContentType>();
+
   const {
     register,
     handleSubmit,
@@ -108,24 +119,66 @@ const Form = () => {
     getValues,
     setValue,
   } = useForm();
-  const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
-  const [varias, setVarias] = useState<IContentType>();
-  const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
-  const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [insertable, setInsertable] = useState<any>();
-  const [tokkans, setTokkans] = useState<any>('');
-  const [insertions, setInsertions] = useState<any | null>(null);
-
-  const [pagetitle, setPageTitle] = useState<string>('');
-
-  const [showSetup, setShowSetup] = useState<boolean>(false);
-
-  console.log('errors', errors);
-
-  // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
+
+  useEffect(() => {
+    if (cId && dataTemplate && dataTemplate.data_template) {
+      const d: DataTemplate = dataTemplate.data_template;
+      setValue('title', d.title);
+      setValue('title_template', d.title_template);
+      setValue('parent', dataTemplate.content_type.id);
+      setPageTitle(d.title);
+
+      loadContentType(dataTemplate.content_type.id);
+      const insertReady = (d && d.serialized && d.serialized.data) || false;
+
+      if (insertReady) {
+        setValue('serialized', insertReady);
+        const mm = JSON.parse(insertReady);
+        setInsertable(mm);
+      }
+    }
+  }, [dataTemplate]);
+
+  useEffect(() => {
+    loadTypes();
+    loadBlocks();
+
+    if (!cId) {
+      setShowSetup(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // find the first element
+    if (!cId && ctypes && ctypes[0] && ctypes[0].id) {
+      loadContentType(ctypes[0].id);
+    }
+  }, [ctypes]);
+
+  useEffect(() => {
+    if (cId) {
+      loadTemplate(cId);
+    }
+  }, [cId]);
+
+  useEffect(() => {
+    if (varias?.fields) {
+      const { fields } = varias;
+
+      if (fields.length > 0) {
+        const results = fields.map((sr: any) => {
+          return {
+            id: `${sr.id}`,
+            label: `${sr.name}`,
+            name: `${sr.name}`,
+          };
+        });
+        setTokkans(results);
+      }
+    }
+  }, [varias]);
 
   const onCreated = () => {
     Router.push('/templates');
@@ -202,19 +255,15 @@ const Form = () => {
     });
   };
 
-  const loadContentTypeSuccess = (data: any) => {
-    const formed: ContentTypes = data;
-    setVarias(formed.content_type);
-    dataFiller(formed.content_type.fields || {});
-  };
-
   /**
    * Load Content Type Details
    * @param id
    */
   const loadContentType = (id: string) => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
-      loadContentTypeSuccess(data);
+      const formed: ContentTypes = data;
+      setVarias(formed.content_type);
+      dataFiller(formed.content_type.fields || {});
     });
   };
 
@@ -268,26 +317,6 @@ const Form = () => {
   };
 
   /**
-   * Document variables
-   */
-  useEffect(() => {
-    if (varias?.fields) {
-      const { fields } = varias;
-
-      if (fields.length > 0) {
-        const results = fields.map((sr: any) => {
-          return {
-            id: `${sr.id}`,
-            label: `${sr.name}`,
-            name: `${sr.name}`,
-          };
-        });
-        setTokkans(results);
-      }
-    }
-  }, [varias]);
-
-  /**
    * When Content Type is Changed
    * - Load Available fields here.
    * @param event
@@ -313,50 +342,6 @@ const Form = () => {
     }
   };
 
-  useEffect(() => {
-    loadTypes();
-    loadBlocks();
-
-    if (!cId) {
-      setShowSetup(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    // find the first element
-    if (ctypes && ctypes[0] && ctypes[0].id) {
-      loadContentType(ctypes[0].id);
-    }
-  }, [ctypes]);
-
-  useEffect(() => {
-    if (cId) {
-      loadTemplate(cId);
-    }
-  }, [cId]);
-
-  /**
-   * On Template Load
-   */
-  useEffect(() => {
-    if (cId && dataTemplate && dataTemplate.data_template) {
-      const d: DataTemplate = dataTemplate.data_template;
-      setValue('title', d.title);
-      setValue('title_template', d.title_template);
-      setValue('parent', dataTemplate.content_type.id);
-      setPageTitle(d.title);
-
-      loadContentType(dataTemplate.content_type.id);
-      const insertReady = (d && d.serialized && d.serialized.data) || false;
-
-      if (insertReady) {
-        setValue('serialized', insertReady);
-        const mm = JSON.parse(insertReady);
-        setInsertable(mm);
-      }
-    }
-  }, [dataTemplate]);
-
   /**
    * Insert a block at pointer
    * @param block
@@ -378,6 +363,15 @@ const Form = () => {
     if (name?.title_temple == '') {
       setValue('title_template', name?.title);
     }
+  };
+
+  const onCancelPopup = () => {
+    if (!cId) {
+      onCreated();
+      return;
+    }
+
+    setShowSetup(!showSetup);
   };
 
   return (
@@ -529,7 +523,9 @@ const Form = () => {
               <Button variant="primary" onClick={() => saveMe()}>
                 Save
               </Button>
-              <Button variant="secondary">Cancel</Button>
+              <Button variant="secondary" onClick={() => onCancelPopup()}>
+                Cancel
+              </Button>
             </Flex>
           </Flex>
         </Modal>
