@@ -28,7 +28,7 @@ type Props = {
   setRerender: (e: any) => void;
 };
 
-const Form = ({ rerender }: Props) => {
+const PipelineLogsList = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [triggerHistory, setTriggerHistory] = useState<Array<[]>>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -88,6 +88,15 @@ const Form = ({ rerender }: Props) => {
         </Box>
       ),
       enableSorting: false,
+    },
+    {
+      id: 'content.id',
+      header: 'TASK ID',
+      accessorKey: 'content.id',
+      enableSorting: false,
+      cell: ({ row }: any) => {
+        return <Box sx={{ fontSize: 'sm' }}>{row.original?.id}</Box>;
+      },
     },
     {
       id: 'content.name',
@@ -173,4 +182,4 @@ const Form = ({ rerender }: Props) => {
     </Box>
   );
 };
-export default Form;
+export default PipelineLogsList;
