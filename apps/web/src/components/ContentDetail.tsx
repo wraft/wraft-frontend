@@ -439,7 +439,7 @@ const ContentDetail = () => {
       }
     }
     return 0;
-  }, [contents]);
+  }, [contents, states]);
 
   console.log('currentActiveIndex', currentActiveIndex);
 
