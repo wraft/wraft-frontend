@@ -154,8 +154,8 @@ const ApprovalForm = () => {
    */
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
-      const res: States = data;
-      setContent(res.states);
+      const res: StateElement[] = data;
+      setContent(res);
     });
   };
 
