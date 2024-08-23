@@ -421,13 +421,27 @@ const ContentDetail = () => {
 
   const currentActiveIndex = useMemo(() => {
     if (contents && states && states.length > 0) {
-      // const { content, state }: ContentInstance = contents;
-      // if()
-      // const index = states.findIndex((item: any) => item.id === targetId);
-      // return content?.approval_status;
+      const { content, state }: ContentInstance = contents;
+      const approval_status = content?.approval_status;
+      if (state === null && !approval_status) {
+        return 0;
+      }
+
+      if (state === null && approval_status) {
+        return states.length + 1;
+      }
+      if (state) {
+        const statesindex = states.findIndex(
+          (item: any) => item.id === state.id,
+        );
+
+        return statesindex + 1;
+      }
     }
-    return false;
+    return 0;
   }, [contents]);
+
+  console.log('currentActiveIndex', currentActiveIndex);
 
   return (
     <Box py={0} sx={{ minHeight: '100vh' }}>
@@ -492,6 +506,7 @@ const ContentDetail = () => {
                             num={i + 1}
                             state={x?.state}
                             order={x?.order}
+                            currentActiveIndex={currentActiveIndex}
                             nextState={nextState}
                             id={x?.id}
                           />
