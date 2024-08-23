@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -12,41 +12,45 @@ import { Box, Flex, Text, Link, Button, Avatar, Image } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
 import {
-  AlignCenterVertical,
   ArrowLeft,
   ArrowRight,
-  ArrowsLeftRight,
-  ArrowUpRight,
-  CircleNotch,
   DownloadSimple,
-  FileArrowDown,
-  FilePdf,
-  Gavel,
   Play,
-  Rewind,
+  LockSimple,
   Triangle,
 } from '@phosphor-icons/react';
-// import VerticalStepper from '@wraft-ui/HistoryStepper';
 
-import { fetchAPI, postAPI, putAPI } from '../utils/models';
-import {
-  ContentInstance,
-  IBuild,
-  IVariantDetail,
-} from '../utils/types/content';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, postAPI, putAPI } from 'utils/models';
+import { ContentInstance, IVariantDetail } from 'utils/types/content';
+
 import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';
 import styles from './common/Tab/tab.module.css';
-import { EditIcon, DownloadIcon, BackIcon } from './Icons';
-import MenuItem from './MenuItem';
 import Nav from './NavEdit';
 import Modal from './Modal';
-import { StateState } from './FlowForm';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
+
+interface Approver {
+  id: string;
+  name: string;
+  profile_pic: string;
+}
+
+interface StateState {
+  approvers: Approver[];
+  id: string;
+  state: string;
+  order: number;
+  is_user_eligible: boolean;
+  inserted_at: string;
+  updated_at: string;
+  error?: string | undefined;
+}
 
 /**
  * Number Block
@@ -184,17 +188,18 @@ export const ProfileCard = ({
         fontSize: 'xxs',
         color: 'text',
         my: 1,
+        alignItems: 'center',
       }}>
       <Avatar
         width={18}
         height={18}
         sx={{ mr: 2, borderColor: 'border', border: 0 }}
-        src={finalImage} // image
+        src={finalImage}
       />
       <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
-      {time}
+      <Box>{time}</Box>
       {/* <TimeAgo time={time} ago={true} /> */}
     </Flex>
   );
@@ -209,108 +214,48 @@ const PreTag = styled(Box)`
 `;
 
 const ContentDetail = () => {
-  const { register } = useForm();
-  const router = useRouter();
-  const cId: string = router.query.id as string;
   const [contents, setContents] = useState<ContentInstance>();
+  const [flow, setFlow] = useState<any>(null);
+  const [states, setStates] = useState<any>();
+
   const [rerender, setRerender] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [contentBody, setContentBody] = useState<any>();
-  const [build, setBuild] = useState<IBuild>();
   const [pageTitle, setPageTitle] = useState<string>('');
-  const [activeFlow, setActiveFlow] = useState<any>(null);
-  const [activeState, setActiveState] = useState<StateState>();
+
   const [nextState, setNextState] = useState<StateState>();
   const [prevState, setPrevState] = useState<StateState>();
   const [open, setOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<any>();
-  const [flowDetails, setFlowDetails] = useState<any>();
-  const [eligibleUser, setEligibleUser] = useState<boolean>(false);
+
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
   const [tabActiveId, setTabActiveId] = useState<any>();
-  const [currentAssigne, setCurrentAssigne] = useState<any>();
 
-  // const [varient, setVarient] = useState<IVariantDetail | null>(null);
+  const { register } = useForm();
+  const router = useRouter();
+  const { userProfile } = useAuth();
+
+  const cId: string = router.query.id as string;
 
   const defaultSelectedId = 'edit';
 
-  const loadData = (id: string) => {
-    fetchAPI(`contents/${id}`).then((data: any) => {
-      setLoading(false);
-      const res: ContentInstance = data;
-      setContents(res);
-    });
-  };
-
-  const loadUser = () => {
-    fetchAPI('users/me').then((data: any) => {
-      const res = data;
-      setUser(res);
-    });
-  };
-
-  /** DELETE content
-   * @TODO move to inner page [design]
-   */
-  // const delData = (id: string) => {
-  //   if (token) {
-  //     deleteEntity(`contents/${id}`, token);
-  //   }
-  // };
-
-  /**
-   * Pass for build
-   */
-  const doBuild = () => {
-    setLoading(true);
-    postAPI(`contents/${cId}/build`, [])
-      .then((data: any) => {
-        setLoading(false);
-        setBuild(data);
-        loadData(cId);
-        toast.success('Build Successfully');
-      })
-      .catch(() => {
-        setLoading(false);
-        toast.error('Build Failed');
-      });
-  };
-
   useEffect(() => {
-    loadData(cId);
+    fetchContentDetails(cId);
   }, [cId, rerender]);
 
   useEffect(() => {
-    loadUser();
-  }, []);
-
-  useEffect(() => {
-    if (build) {
-      toast.success('Build done successfully', {
-        duration: 500,
-        position: 'top-right',
-      });
+    if (flow && flow.flow && contents) {
+      fetchStates(flow.flow.id);
     }
-  }, [build]);
-
-  /**
-   * Cast content_type to `content`
-   * @param data IField compatiable
-   * */
-  const onLoadData = (data: any) => {
-    // variant details
-    const res: IVariantDetail = data;
-    // setVarient(res);
-    // inner flows
-    const tFlow = res?.content_type?.flow;
-    setActiveFlow(tFlow);
-  };
+  }, [flow, contents]);
 
   useEffect(() => {
     if (contents && contents.content && contents.content.serialized) {
-      const contentBodyAct = contents.content.serialized;
-      const contentTypeId = contents.content_type.id;
-      setPageTitle(contents.content.serialized?.title);
+      const { content, content_type } = contents;
+
+      const contentBodyAct = content.serialized;
+      const contentTypeId = content_type.id;
+
+      setPageTitle(content.serialized?.title);
 
       if (contentBodyAct.serialized) {
         const contentBodyAct2 = JSON.parse(contentBodyAct.serialized);
@@ -318,33 +263,104 @@ const ContentDetail = () => {
         setContentBody(contentBodyAct2);
       }
 
-      // s
       if (contentTypeId) {
-        fetchAPI(`content_types/${contentTypeId}`)
-          .then((data: any) => {
-            onLoadData(data);
-          })
-          .catch((err) => {
-            console.log(err, 'logerr');
-          });
+        fetchContentTypeDetails(contentTypeId);
       }
     }
   }, [contents]);
 
-  const doNothing = () => {
-    //
-  };
-
-  const getCorrectFlowdetails = (flowdetails: any, activestate: any) => {
-    if (!eligibleUser) {
-      const activeState = activestate.state;
-
-      const correctFlowdetails = flowdetails.filter(
-        (detail: any) => detail.state === activeState,
+  useEffect(() => {
+    if (states && userProfile) {
+      const activeState = states.find(
+        (state: any) => state.id === contents?.state?.id,
       );
 
-      setCurrentAssigne(correctFlowdetails);
+      const currentIndex = states.indexOf(activeState);
+
+      if (currentIndex !== -1 && activeState) {
+        const nextState = states[currentIndex + 1] || null;
+        const prevState = states[currentIndex - 1] || null;
+
+        setNextState(nextState);
+        setPrevState(prevState);
+      }
+
+      if (contents && contents.state === null && states.length > 0) {
+        const { creator } = contents;
+        const { id: userId } = userProfile;
+
+        if (creator?.id === userId) {
+          const state = states[0];
+          setNextState({ ...state, is_user_eligible: true });
+        }
+      }
     }
+  }, [flow, states]);
+
+  const fetchContentDetails = (id: string) => {
+    fetchAPI(`contents/${id}`).then((data: any) => {
+      setLoading(false);
+      const res: ContentInstance = data;
+      setContents(res);
+    });
+  };
+
+  const fetchStates = (id: string) => {
+    fetchAPI(`flows/${id}/states`).then((data: any) => {
+      const stateNames = data
+        .flatMap((item: any) => {
+          const state = item.state;
+
+          const isUserEligible = state.approvers.some(
+            (approver: any) => approver.id === userProfile.id,
+          );
+
+          return {
+            state: state.state,
+            active_state: state.id === contents?.state?.id,
+            id: state.id,
+            order: state.order,
+            is_user_eligible: isUserEligible,
+            approvers: state.approvers,
+          };
+        })
+        .sort((a: any, b: any) => a.order - b.order);
+
+      setStates(stateNames);
+    });
+  };
+
+  const fetchContentTypeDetails = (id: any) => {
+    fetchAPI(`content_types/${id}`)
+      .then((data: any) => {
+        const res: IVariantDetail = data;
+        const tFlow = res?.content_type?.flow;
+        setFlow(tFlow);
+      })
+      .catch((err) => {
+        console.log(err, 'logerr');
+      });
+  };
+
+  /**
+   * Pass for build
+   */
+  const doBuild = () => {
+    setLoading(true);
+    postAPI(`contents/${cId}/build`, [])
+      .then(() => {
+        setLoading(false);
+        fetchContentDetails(cId);
+
+        toast.success('Build done successfully', {
+          duration: 500,
+          position: 'top-right',
+        });
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error('Build Failed');
+      });
   };
 
   const handleModalAction = () => {
@@ -374,55 +390,58 @@ const ContentDetail = () => {
     }
   };
 
-  useEffect(() => {
-    if (activeFlow && contents) {
-      fetchAPI(`flows/${activeFlow.flow.id}/states`).then((data: any) => {
-        const stateNames: { state: string; approver: string }[] = [];
-        data.states.forEach((item: any) => {
-          const state = item.state;
+  const doNothing = () => {
+    //
+  };
 
-          if (state && state.approvers) {
-            state.approvers.map((approver: any) => {
-              const stateNamePair = {
-                state: state.state,
-                approver: approver.name,
-                id: approver.id,
-                profile_pic: approver.profile_pic,
-              };
-              stateNames.push(stateNamePair);
-            });
-          }
-        });
-        setFlowDetails(stateNames);
-      });
-      const activeState = activeFlow?.states.filter(
-        (a: any) => a.id === contents.state.id,
-      )?.[0];
-      const activeIndex = activeFlow?.states.indexOf(activeState);
-      const nextState = activeFlow.states[activeIndex + 1];
-      const prevState = activeFlow.states[activeIndex - 1];
-      if (activeState) {
-        setActiveState(activeState);
-        setNextState(nextState);
-        setPrevState(prevState);
-      } else {
-        setNextState(activeFlow.states[0]);
+  const isMakeCompete = useMemo(() => {
+    if (contents && states && states.length > 0) {
+      const { state, content }: ContentInstance = contents;
+      const lastState = states[states.length - 1];
+      const currentstate = state?.state;
+      const approval_status = content?.approval_status;
+
+      return (
+        (currentstate === lastState.state &&
+          !approval_status &&
+          lastState.is_user_eligible) ||
+        false
+      );
+    }
+    return false;
+  }, [contents, states]);
+
+  const isEditable = useMemo(() => {
+    if (contents) {
+      const { content }: ContentInstance = contents;
+      return content?.approval_status;
+    }
+    return false;
+  }, [contents]);
+
+  const currentActiveIndex = useMemo(() => {
+    if (contents && states && states.length > 0) {
+      const { content, state }: ContentInstance = contents;
+      const approval_status = content?.approval_status;
+      if (state === null && !approval_status) {
+        return 0;
+      }
+
+      if (state === null && approval_status) {
+        return states.length + 1;
+      }
+      if (state) {
+        const statesindex = states.findIndex(
+          (item: any) => item.id === state.id,
+        );
+
+        return statesindex + 1;
       }
     }
-  }, [activeFlow, contents]);
+    return 0;
+  }, [contents, states]);
 
-  // const navTitle = contents?.content?.title;
-
-  useEffect(() => {
-    if (flowDetails && flowDetails.length > 0 && activeState && user) {
-      // Check if there is a match in flowDetails
-      const isApproved = flowDetails.some((detail: any) => {
-        return detail.state === activeState.state && detail.id === user.id;
-      });
-      setEligibleUser(isApproved);
-      getCorrectFlowdetails(flowDetails, activeState);
-    }
-  }, [activeState, user, flowDetails]);
+  console.log('currentActiveIndex', currentActiveIndex);
 
   return (
     <Box py={0} sx={{ minHeight: '100vh' }}>
@@ -480,39 +499,45 @@ const ContentDetail = () => {
                         px: 2,
                         borderRadius: '9px',
                       }}>
-                      {activeFlow?.states.map((x: any) => (
-                        <FlowStateBlock
-                          activeFlow={contents}
-                          key={x?.id}
-                          state={x?.state}
-                          order={x?.order}
-                          id={x?.id}
-                        />
-                      ))}
+                      {states &&
+                        states.map((x: any, i: number) => (
+                          <FlowStateBlock
+                            key={x?.id}
+                            num={i + 1}
+                            state={x?.state}
+                            order={x?.order}
+                            currentActiveIndex={currentActiveIndex}
+                            nextState={nextState}
+                            id={x?.id}
+                          />
+                        ))}
 
-                      {!eligibleUser && (
-                        <Flex
-                          sx={{
-                            px: 1,
-                            py: '2px',
-                            gap: 1,
-                            alignItems: 'center',
-                            verticalAlign: 'center',
-                            borderRadius: '6px',
-                            fontSize: 'xs',
-                            color: 'orange.800',
-                            bg: 'orange.100',
-                          }}>
-                          <Triangle size={10} />
-                          <Text
+                      {contents &&
+                        !nextState?.is_user_eligible &&
+                        !isMakeCompete &&
+                        !isEditable && (
+                          <Flex
                             sx={{
-                              textTransform: 'uppercase',
-                              letterSpacing: '-0.01rem',
+                              px: 1,
+                              py: '2px',
+                              gap: 1,
+                              alignItems: 'center',
+                              verticalAlign: 'center',
+                              borderRadius: '6px',
+                              fontSize: 'xs',
+                              color: 'orange.800',
+                              bg: 'orange.100',
                             }}>
-                            Waiting for approval
-                          </Text>
-                        </Flex>
-                      )}
+                            <Triangle size={10} />
+                            <Text
+                              sx={{
+                                textTransform: 'uppercase',
+                                letterSpacing: '-0.01rem',
+                              }}>
+                              Waiting for approval
+                            </Text>
+                          </Flex>
+                        )}
                     </Flex>
 
                     <Flex sx={{ ml: 'auto', alignItems: 'center' }}>
@@ -570,7 +595,7 @@ const ContentDetail = () => {
                             </Button>
                           )} */}
 
-                          {nextState && eligibleUser && (
+                          {nextState && nextState.is_user_eligible && (
                             <Button
                               sx={{
                                 gap: 1,
@@ -589,13 +614,13 @@ const ContentDetail = () => {
                                 variant="pB"
                                 sx={{
                                   pr: 2,
-                                }}>{`${nextState.state || ''}`}</Text>
+                                }}>{`${nextState?.state || ''}`}</Text>
                               <ArrowRight size={16} stroke="bold" />
                             </Button>
                           )}
-                          {activeState?.state == 'Publish' && eligibleUser && (
+                          {isMakeCompete && (
                             <Button
-                              variant="btnSecondaryInline"
+                              variant="btnPrimaryInline"
                               sx={{
                                 gap: 1,
                                 '&:hover': {
@@ -608,10 +633,33 @@ const ContentDetail = () => {
                                 setModalAction('next');
                                 setOpen(true);
                               }}>
-                              <Text variant="pB">{`${activeState.state}`}</Text>
+                              <Text variant="pB">Mark Complete</Text>
                               <ArrowRight size={16} stroke="bold" />
                             </Button>
                           )}
+                        </Flex>
+                      )}
+                      {isEditable && (
+                        <Flex
+                          sx={{
+                            px: 1,
+                            py: '2px',
+                            gap: 1,
+                            alignItems: 'center',
+                            verticalAlign: 'center',
+                            borderRadius: '6px',
+                            fontSize: 'xs',
+                            color: 'text',
+                            bg: 'green.400',
+                          }}>
+                          <LockSimple size={10} />
+                          <Text
+                            sx={{
+                              textTransform: 'uppercase',
+                              letterSpacing: '-0.01rem',
+                            }}>
+                            Locked
+                          </Text>
                         </Flex>
                       )}
                     </Flex>
@@ -759,7 +807,7 @@ const ContentDetail = () => {
                   minHeight: '100vh',
                   pt: 3,
                 }}>
-                <ContentSidebar content={contents} />
+                <ContentSidebar content={contents} nextState={nextState} />
 
                 <Box
                   variant="plateSide"
@@ -850,9 +898,34 @@ const ContentDetail = () => {
                           <ProfileCard
                             time={contents.content?.inserted_at}
                             name={contents.creator?.name}
-                            image={contents?.creator?.profile_pic}
+                            image={contents?.profile_pic}
                           />
                         </Box>
+                        {contents &&
+                          !nextState?.is_user_eligible &&
+                          !isMakeCompete &&
+                          !isEditable && (
+                            <Box
+                              variant="layout.boxHeading"
+                              sx={{ pb: 3, borderTop: 'none' }}>
+                              <Text
+                                as="h3"
+                                variant="sectionheading"
+                                sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                                Waiting for approval
+                              </Text>
+                              {nextState &&
+                                nextState.approvers &&
+                                nextState.approvers.map((approver: any) => (
+                                  <ProfileCard
+                                    key={approver.id}
+                                    // time={contents.content?.inserted_at}
+                                    name={approver.name}
+                                    image={approver.profile_pic}
+                                  />
+                                ))}
+                            </Box>
+                          )}
                         <Box sx={{ pt: 2, px: 3, border: 0 }}>
                           <Text
                             as="h3"

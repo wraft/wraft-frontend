@@ -79,9 +79,12 @@ export interface IFieldModel {
 
 export interface FlowStateBlockProps {
   state?: string;
-  order?: number;
+  order?: number | undefined;
   id?: any;
   activeFlow?: any;
+  num?: any;
+  nextState?: any;
+  currentActiveIndex?: any;
 }
 
 /**
@@ -103,6 +106,7 @@ export interface ContentInstance {
   creator: Creator;
   content_type: ContentType;
   content: Content;
+  profile_pic?: string;
   versions?: any;
 }
 

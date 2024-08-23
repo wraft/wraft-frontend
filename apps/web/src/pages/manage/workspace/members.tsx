@@ -24,8 +24,8 @@ const Index: FC = () => {
     (currentOrg !== 'Personal' || '') && (
       <>
         <Head>
-          <title>Layouts | Wraft Docs</title>
-          <meta name="description" content="a nextjs starter boilerplate" />
+          <title>Members | Wraft</title>
+          <meta name="layouts" content="workspace members" />
         </Head>
         <Page>
           <PageHeader
