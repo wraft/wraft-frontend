@@ -84,7 +84,7 @@ export interface FlowStateBlockProps {
   activeFlow?: any;
   num?: any;
   nextState?: any;
-  completedStateIndex?: any;
+  currentActiveIndex?: any;
 }
 
 /**

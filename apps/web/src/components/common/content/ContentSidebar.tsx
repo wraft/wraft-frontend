@@ -29,9 +29,9 @@ export const FlowStateBlock = ({
   id,
   num,
   nextState,
-  order,
+  currentActiveIndex,
 }: FlowStateBlockProps) => {
-  const checked = nextState && order && nextState?.order > order;
+  const checked = currentActiveIndex >= num;
   const activeState = nextState && id === nextState?.id;
   return (
     <Flex
