@@ -10,7 +10,6 @@ interface DefaultAvatarProps {
 
 const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
   const [isDummyImage, setIsDummyImage] = useState<boolean>(false);
-  console.log('lodingd', url);
 
   const containsPathSegment = (url: string, segment: string): boolean => {
     return url.includes(segment);
