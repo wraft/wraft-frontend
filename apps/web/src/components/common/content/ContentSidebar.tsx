@@ -9,9 +9,9 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
-import { Check, DotsThreeVertical, Share } from '@phosphor-icons/react';
+import { Check, DotsThreeVertical, DotOutline } from '@phosphor-icons/react';
 
-import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
+import { BackArrowIcon } from 'components/Icons';
 import Modal from 'components/Modal';
 import { deleteAPI } from 'utils/models';
 import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
@@ -26,10 +26,13 @@ import { ConfirmDelete } from '..';
  */
 export const FlowStateBlock = ({
   state,
-  activeFlow,
   id,
+  num,
+  nextState,
+  currentActiveIndex,
 }: FlowStateBlockProps) => {
-  const isCurrent = activeFlow && activeFlow.state.id === id ? true : false;
+  const checked = currentActiveIndex >= num;
+  const activeState = nextState && id === nextState?.id;
   return (
     <Flex
       as={Focusable}
@@ -48,7 +51,9 @@ export const FlowStateBlock = ({
           width: '18px',
           height: '18px',
           borderRadius: '9rem',
-          bg: isCurrent ? 'green.500' : 'gray.500',
+          bg: activeState || checked ? 'green.500' : 'gray.500',
+          border: '1px solid',
+          borderColor: activeState ? 'green.800' : 'gray.500',
           textAlign: 'center',
           mr: 2,
           display: 'flex',
@@ -57,7 +62,10 @@ export const FlowStateBlock = ({
           flexShrink: 0,
           p: 1,
         }}>
-        <Check size={16} />
+        {/* {nextState?.order} */}
+        {!checked && !activeState && <>{num}</>}
+        {activeState && <DotOutline size={12} />}
+        {checked && <Check size={16} />}
       </Box>
       <Text sx={{ fontSize: '13px', textTransform: 'capitalize' }}>
         {state}
@@ -75,13 +83,14 @@ export const FlowStateBlock = ({
 
 interface EditMenuProps {
   id: string;
+  nextState: any;
 }
 /**
  * Context Menu for Delete, Edit
  * @param param0
  * @returns
  */
-export const EditMenus = ({ id }: EditMenuProps) => {
+export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   /**
    * Delete content
@@ -111,6 +120,14 @@ export const EditMenus = ({ id }: EditMenuProps) => {
           bg: 'gray.100',
           color: 'gray.900',
         }}>
+        {nextState && nextState.is_user_eligible && (
+          <MenuItem
+            as={Box}
+            onClick={() => Router.push(`/content/edit/${id}`)}
+            sx={{ px: 3, py: 2, cursor: 'pointer' }}>
+            Edit
+          </MenuItem>
+        )}
         <MenuItem
           as={Box}
           onClick={() => setIsDelete(true)}
@@ -136,9 +153,10 @@ export const EditMenus = ({ id }: EditMenuProps) => {
  */
 interface ContentSidebarProps {
   content: ContentInstance;
+  nextState?: any;
 }
 
-const ContentSidebar = ({ content }: ContentSidebarProps) => (
+const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
     <Flex sx={{ width: '70%' }}>
       <Box sx={{ mr: 3 }}>
@@ -185,7 +203,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
         alignItems: 'center',
         gap: 1,
       }}>
-      <EditMenus id={content?.content?.id} />
+      <EditMenus id={content?.content?.id} nextState={nextState} />
     </Flex>
   </Flex>
 );

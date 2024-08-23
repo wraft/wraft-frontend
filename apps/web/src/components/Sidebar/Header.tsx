@@ -37,7 +37,6 @@ const Header = () => {
       organisation_id: id,
     })
       .then((res: any) => {
-        console.log('res', res);
         login(res);
         router.push('/');
       })

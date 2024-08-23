@@ -12,7 +12,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Doc - Wraft Docs</title>
+        <title>Create Doc - Wraft</title>
       </Head>
       <Page id="Modal" showFull={false}>
         <ContentForm id={router.query.id} edit={true} />

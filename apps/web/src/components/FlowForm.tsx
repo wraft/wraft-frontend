@@ -111,8 +111,8 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
-      const res: States = data;
-      const x: StateState[] = res.states
+      const res: StateElement[] = data;
+      const x: any = res
         .map((s: any) => {
           return s.state;
         })
@@ -244,9 +244,9 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         toast.promise(allReqs, {
           loading: 'Updating states',
           success: () => {
-            fetchAPI(`flows/${cId}/states`).then(async (data: States) => {
-              const res: States = data;
-              const x: StateState[] = res.states
+            fetchAPI(`flows/${cId}/states`).then(async (data: StateState[]) => {
+              const res: StateState[] = data;
+              const x: StateState[] = res
                 .map((s: any) => {
                   return s.state;
                 })

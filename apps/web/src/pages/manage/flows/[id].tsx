@@ -23,7 +23,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit Flow - Wraft Docs</title>
+        <title>Edit Flow | Wraft</title>
       </Head>
       <Page>
         <PageHeader

@@ -21,7 +21,7 @@
     <img src="public/demo.png" alt="Logo" width="100%" height="auto">
   </a>
 
-<h3 align="center">Wraft Docs [Frontend]</h3>    
+<h3 align="center">Wraft [Frontend]</h3>    
 <p>Version: v0.1.1</p>
 
 <p align="center">
@@ -92,7 +92,7 @@ To get a local copy up and running follow these simple example steps.
 This is an example of how to list things you need to use the software and how to install them.
 
 - npm
-  
+
   ```sh
   npm install npm@latest -g
   ```

@@ -8,7 +8,7 @@ const VenderPage: FC = () => {
   return (
     <>
       <Head>
-        <title>Vendors - Wraft Docs</title>
+        <title>Vendors - Wraft</title>
       </Head>
       <Page>
         <VendorList />

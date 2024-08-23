@@ -21,6 +21,7 @@ interface IUserContextProps {
   organisations: any;
   login: (data: any) => void;
   logout: () => void;
+  updateOrganisations: any;
 }
 
 export const UserContext = createContext<IUserContextProps>(
@@ -79,6 +80,15 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
       setIsUserLoading(false);
     } catch {
       setIsUserLoading(false);
+    }
+  };
+
+  const updateOrganisations = async () => {
+    try {
+      const userOrg: any = await fetchAPI('users/organisations');
+      setOrganisations(userOrg.organisations);
+    } catch (error) {
+      console.error('Error fetching organisations:', error);
     }
   };
 
@@ -141,6 +151,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         permissions,
         login,
         logout,
+        updateOrganisations,
       }}>
       {children}
     </UserContext.Provider>

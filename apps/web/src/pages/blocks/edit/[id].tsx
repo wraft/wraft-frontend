@@ -11,8 +11,8 @@ export const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit TemplateForm - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Edit Block | Wraft</title>
+        <meta name="description" content="edit block" />
       </Head>
       <Page>
         <NavEdit navtitle="Edit Block" />
