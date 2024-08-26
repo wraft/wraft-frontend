@@ -107,7 +107,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   };
   return (
     <MenuProvider>
-      <MenuButton as={Button} variant="btnIcon">
+      <MenuButton as={Button} variant="btnIcon" sx={{ display: 'flex', p: 2 }}>
         <DotsThreeVertical weight="bold" size={16} />
       </MenuButton>
       <Menu
@@ -158,7 +158,7 @@ interface ContentSidebarProps {
 
 const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
-    <Flex sx={{ width: '70%' }}>
+    <Flex>
       <Box sx={{ mr: 3 }}>
         <Text
           as="h6"
@@ -200,7 +200,7 @@ const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
     <Flex
       sx={{
         ml: 'auto',
-        alignItems: 'center',
+        alignItems: 'baseline',
         gap: 1,
       }}>
       <EditMenus id={content?.content?.id} nextState={nextState} />

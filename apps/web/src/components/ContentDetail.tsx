@@ -191,8 +191,8 @@ export const ProfileCard = ({
         alignItems: 'center',
       }}>
       <Avatar
-        width={18}
-        height={18}
+        width={16}
+        height={16}
         sx={{ mr: 2, borderColor: 'border', border: 0 }}
         src={finalImage}
       />
@@ -461,35 +461,19 @@ const ContentDetail = () => {
         )} */}
         <ErrorBoundary>
           {contents && contents.content && (
-            <Flex>
-              <Box
-                // as="form"
-                // onSubmit={handleSubmit(onSubmit)}
-                sx={{ minWidth: '70%', m: 0 }}>
+            <Flex sx={{ bg: 'gray.400' }}>
+              <Box sx={{ minWidth: '70%', m: 0 }}>
                 <Flex
                   sx={{
                     px: 3,
-                    // py: 3,
                     py: 2,
-                    // pb: 2,
-                    // pl: '115px',
                     borderBottom: 'solid 1px',
                     borderColor: 'border',
-                    // mb: 3,
                     bg: 'gray.200',
                   }}>
                   <Flex sx={{ width: '100%', alignItems: 'center' }}>
-                    {/* <Text
-                      sx={{
-                        fontSize: 'base',
-                        fontWeight: 'bold',
-                        display: 'none',
-                      }}>
-                      {contents.content.serialized.title}
-                    </Text> */}
                     <Flex
                       sx={{
-                        // bg: '#d9deda57',
                         py: 1,
                         alignItems: 'center',
                         overflowX: 'scroll',
@@ -766,10 +750,8 @@ const ContentDetail = () => {
                       <Box
                         sx={{
                           bg: 'gray.400',
-                          // bg: 'neutral.200',
                           mt: 4,
-                          // width: '100%',
-                          // bg: 'red',
+                          // minHeight: '100vh',
                           border: 'solid 1px',
                           borderColor: 'gray.400',
                           '.react-pdf__Document': {
@@ -805,7 +787,7 @@ const ContentDetail = () => {
                   borderLeft: 'solid 1px',
                   borderColor: 'border',
                   minHeight: '100vh',
-                  pt: 3,
+                  pt: 2,
                 }}>
                 <ContentSidebar content={contents} nextState={nextState} />
 
