@@ -28,7 +28,7 @@ const Header = () => {
   }, [createdId]);
 
   const onSwitchOrganization = async (id: string) => {
-    const organRequest = postAPI('switch_organisations', {
+    postAPI('switch_organisations', {
       organisation_id: id,
     })
       .then((res: any) => {
@@ -41,12 +41,6 @@ const Header = () => {
           position: 'top-center',
         });
       });
-
-    // toast.promise(organRequest, {
-    //   loading: 'switching...',
-    //   success: <b>Switched workspace!</b>,
-    //   error: <b>Could not switch workspace.</b>,
-    // });
   };
 
   const onUserLogout = async () => {

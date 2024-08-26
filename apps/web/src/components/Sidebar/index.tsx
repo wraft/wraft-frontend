@@ -4,7 +4,7 @@ import { Button, Drawer, useDrawer } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
-import { Plus } from '@phosphor-icons/react';
+import { Plus, X } from '@phosphor-icons/react';
 
 import DefaultMenuItem from 'components/MenuItem';
 
@@ -148,7 +148,16 @@ const Sidebar = (props: any) => {
         onClose={() => setShowSearch(false)}>
         {showSearch && (
           <>
-            <Drawer.Title>Create New Document</Drawer.Title>
+            <Drawer.Header>
+              <Drawer.Title>Create New Document</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setShowSearch(false)}
+              />
+            </Drawer.Header>
+
             <CreateDocument />
           </>
         )}
