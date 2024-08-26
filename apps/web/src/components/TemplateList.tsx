@@ -4,14 +4,16 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from 'theme-ui';
 import { Pagination, DropdownMenu, Table } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
+import toast from 'react-hot-toast';
 
-import { fetchAPI } from '../utils/models';
-import { IField } from '../utils/types/content';
+import { fetchAPI, postAPI } from 'utils/models';
+import { IField } from 'utils/types/content';
+
 import { TimeAgo } from './Atoms';
 import Link from './NavLink';
 import PageHeader from './PageHeader';
 
-const columns = [
+const columns = ({ onCloneTemplete }: any) => [
   {
     id: 'title',
     header: 'Name',
@@ -87,6 +89,9 @@ const columns = [
                 Edit
               </NavLink>
             </DropdownMenu.Item>
+            <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
+              Clone
+            </DropdownMenu.Item>
           </DropdownMenu>
         </DropdownMenu.Provider>
       </Flex>
@@ -104,6 +109,10 @@ const TemplateList = () => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+
+  useEffect(() => {
+    loadData(currentPage);
+  }, []);
 
   useEffect(() => {
     if (page) {
@@ -142,9 +151,32 @@ const TemplateList = () => {
     );
   };
 
-  useEffect(() => {
-    loadData(currentPage);
-  }, []);
+  const onCloneTemplete = (content: any) => {
+    const convertedData = {
+      title_template: content.title_template,
+      title: `${content.title} duplicate`,
+      data: content.data,
+      serialized: content.serialized,
+    };
+
+    postAPI(
+      `content_types/${content.content_type.id}/data_templates`,
+      convertedData,
+    )
+      .then((data: any) => {
+        router.push(`/templates/edit/${data.id}`);
+        toast.success('Created Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      })
+      .catch(() => {
+        toast.error('Failed', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
+  };
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
@@ -160,7 +192,7 @@ const TemplateList = () => {
           <Table
             data={contents}
             isLoading={loading}
-            columns={columns}
+            columns={columns({ onCloneTemplete })}
             skeletonRows={10}
             emptyMessage="No template has been created yet."
           />

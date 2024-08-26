@@ -2,22 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image } from 'theme-ui';
-import {
-  ArrowLeft,
-  Bell,
-  // LinkSimple,
-  Pencil,
-  Share,
-  // UserPlus,
-} from '@phosphor-icons/react';
-import { Button } from '@wraft/ui';
+import { ArrowLeft, Bell, Pencil, Share } from '@phosphor-icons/react';
 
 import { useAuth } from '../contexts/AuthContext';
-// import { EditIcon } from './Icons';
 import ModeToggle from './ModeToggle';
 import Link from './NavLink';
-
-// import { Button } from './common';
 
 export interface IUser {
   name: string;
@@ -45,15 +34,15 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
     <Flex
       variant="header"
       sx={{
-        p: 0,
-        bg: 'gray.100',
-        borderBottom: 'solid 1px',
-        borderColor: 'border',
-        // pt: 1,
-        pb: 0,
         position: 'sticky',
         top: 0,
         zIndex: 1,
+        alignItems: 'center',
+        bg: 'gray.100',
+        borderBottom: 'solid 1px',
+        borderColor: 'border',
+        py: 2,
+        px: 3,
       }}>
       <Box
         sx={{
@@ -62,66 +51,49 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
         }}>
         <Box
           sx={{
-            p: 0,
-            pt: 0,
-            // pb: 1,
-            pl: 2,
-
-            // borderRight: 'solid 1px',
-            // borderColor: 'border',
             color: 'gray.1200',
           }}>
-          <Flex sx={{ alignItems: 'center' }}>
-            <Box sx={{ pt: 0 }}>
-              <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
-            </Box>
+          <Flex sx={{ alignItems: 'center', gap: 3 }}>
+            <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
+
             {navtitle && (
               <Flex
                 variant="navtitle"
                 sx={{
-                  p: 0,
-                  pt: 0,
-                  ml: 2,
                   alignItems: 'center',
                   fontWeight: 'heading',
                   verticalAlign: 'middle',
+                  gap: 3,
                 }}>
                 <Text sx={{ fontSize: 'sm', fontWeight: 500 }}>{navtitle}</Text>
-                <Button variant="ghost" onClick={onToggleEdit}>
-                  <Pencil size={16} />
-                </Button>
+
+                <Pencil cursor="pointer" size={16} onClick={onToggleEdit} />
               </Flex>
             )}
           </Flex>
         </Box>
       </Box>
 
-      <Flex ml="auto" mr={3}>
-        <Flex ml={2}>
-          <Button variant="ghost">
-            <Share size={16} />
-          </Button>
-        </Flex>
+      <Flex ml="auto" sx={{ alignItems: 'center', gap: 3 }}>
+        <Share size={18} cursor="pointer" />
+
         <Flex
           sx={{
             borderLeft: 'solid 1px',
             borderColor: 'border',
             alignItems: 'center',
+            gap: 3,
+            pl: 2,
           }}>
-          <Flex>
-            <Box sx={{}}>
-              <Button variant="ghost">
-                <Bell size={18} />
-              </Button>
-            </Box>
-          </Flex>
+          <Bell size={18} />
+
           {!accessToken && (
             <Link href="/login">
               <Text>Login</Text>
             </Link>
           )}
           {accessToken && accessToken !== '' && (
-            <Flex ml={1}>
+            <Flex>
               {userProfile && (
                 <Flex
                   sx={{
@@ -131,14 +103,15 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                   }}>
                   <Box>
                     <MenuProvider>
-                      <MenuButton as={Box} sx={{ cursor: 'pointer' }}>
+                      <MenuButton
+                        as={Box}
+                        sx={{ cursor: 'pointer', display: 'flex' }}>
                         <Image
                           alt=""
                           sx={{ borderRadius: '3rem', bg: 'red' }}
-                          width="28px"
-                          height="28px"
+                          width="18px"
+                          height="18px"
                           src={userProfile?.profile_pic}
-                          // src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                         />
                       </MenuButton>
                       <Menu
