@@ -4,7 +4,7 @@ import NavLink from 'next/link';
 import { Button, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
-import { Gear } from '@phosphor-icons/react';
+import { Gear, Plus } from '@phosphor-icons/react';
 
 import Link from 'components/NavLink';
 import DefaultAvatar from 'components/DefaultAvatar';
@@ -165,6 +165,7 @@ const Header = () => {
 
               <DropdownMenu.Item>
                 <Button variant="ghost" onClick={() => setIsOpen(true)}>
+                  <Plus size={16} />
                   Create or join a workspace
                 </Button>
               </DropdownMenu.Item>

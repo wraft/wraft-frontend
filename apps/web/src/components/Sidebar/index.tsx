@@ -4,12 +4,14 @@ import { Button, Drawer, useDrawer } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Plus } from '@phosphor-icons/react';
 
 import DefaultMenuItem from 'components/MenuItem';
 
 import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
+
 // import SearchBlock from './SearchBlock';
 
 export interface INav {
@@ -133,7 +135,7 @@ const Sidebar = (props: any) => {
         <Box mt="auto" mb="4">
           <Box className="first-step" p={3}>
             <Button variant="primary" size="full" onClick={toggleSearch}>
-              + New Document
+              <Plus size={16} /> New Document
             </Button>
           </Box>
         </Box>

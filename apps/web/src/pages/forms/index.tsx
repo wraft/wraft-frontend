@@ -4,6 +4,7 @@ import { Box, Container, Flex, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
+import { Plus } from '@phosphor-icons/react';
 
 import FormList from 'components/FormList';
 import Page from 'components/PageFrame';
@@ -42,7 +43,8 @@ const Index: FC = () => {
         <PageHeader title="Forms">
           <Box sx={{ ml: 'auto', pt: 2 }}>
             <Button variant="secondary" onClick={() => setIsOpen(true)}>
-              New Form
+              <Plus size={12} weight="bold" />
+              Create From
             </Button>
           </Box>
         </PageHeader>
@@ -59,7 +61,7 @@ const Index: FC = () => {
             <Box
               sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
               <Text as="p" variant="h4Medium">
-                Create new form
+                Create Form
               </Text>
             </Box>
             <Box sx={{ p: 4 }}>
@@ -115,7 +117,7 @@ const Index: FC = () => {
               borderBottom: '1px solid',
               borderColor: 'border',
             }}>
-            <Text variant="h6Bold">Create new form</Text>
+            <Text variant="h6Bold">Create Form</Text>
           </Box>
           <Box sx={{ height: '100%', flexGrow: 1, overflow: 'auto', px: 4 }}>
             <FormsFrom

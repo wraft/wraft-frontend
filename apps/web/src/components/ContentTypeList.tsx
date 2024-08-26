@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Button, Flex } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import { Drawer } from '@wraft-ui/Drawer';
+import { Plus } from '@phosphor-icons/react';
+import { Button } from '@wraft/ui';
 
 import ContentTypeDashboard from './ContentTypeDashboard';
 import PageHeader from './PageHeader';
@@ -41,8 +43,9 @@ const ContentTypeList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="buttonSecondary" onClick={() => setIsOpen(true)}>
-            New Variant
+          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+            <Plus size={12} weight="bold" />
+            Create Variant
           </Button>
         </Flex>
       </PageHeader>
