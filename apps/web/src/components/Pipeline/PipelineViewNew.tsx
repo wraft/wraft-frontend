@@ -19,7 +19,7 @@ import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from '../MenuStepsIndicator';
 import PipelineLogs from './PipelineLogs';
-import FormEntry from '../FormEntry'
+import FormEntry from '../FormEntry';
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);
@@ -91,7 +91,10 @@ const PipelineView = () => {
       <PageHeader title={pipelineData.name}>
         <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
           <Flex>
-            <Button variant="secondary"  onClick={() => onRunClick(pipelineData?.source_id)} type="button">
+            <Button
+              variant="secondary"
+              onClick={() => onRunClick(pipelineData?.source_id)}
+              type="button">
               Run
             </Button>
             {/* <Button ml={2} variant="buttonPrimary" type="button">
@@ -163,50 +166,54 @@ const PipelineView = () => {
           </Box>
         </Flex>
       </Container>
-      <Modal size='md' ariaLabel='pipelinedelte' open={isDelete} onClose={() => setDelete(false)}>
+      <Modal
+        size="md"
+        ariaLabel="pipelinedelte"
+        open={isDelete}
+        onClose={() => setDelete(false)}>
         <>
-        <Text
-          variant="pB"
-          sx={{
-            py: 3,
-            px: 4,
-            display: 'inline-block',
-          }}>
-          Verify pipeline delete request
-        </Text>
-        <Box
-          sx={{
-            pt: 3,
-            pb: 4,
-            borderTop: '1px solid',
-            borderColor: 'border',
-          }}>
-          <Box sx={{ px: 4 }}>
-            <Box sx={{ mt: '24px' }}>
-              <Label variant="text.pR" sx={{ color: 'black.800' }}>
-                <span>
-                  {`To confirm, type "${pipelineData.name}" in the box below`}
-                </span>
-              </Label>
-              <Input
-                ref={inputRef}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}></Input>
+          <Text
+            variant="pB"
+            sx={{
+              py: 3,
+              px: 4,
+              display: 'inline-block',
+            }}>
+            Verify pipeline delete request
+          </Text>
+          <Box
+            sx={{
+              pt: 3,
+              pb: 4,
+              borderTop: '1px solid',
+              borderColor: 'border',
+            }}>
+            <Box sx={{ px: 4 }}>
+              <Box sx={{ mt: '24px' }}>
+                <Label variant="text.pR" sx={{ color: 'black.800' }}>
+                  <span>
+                    {`To confirm, type "${pipelineData.name}" in the box below`}
+                  </span>
+                </Label>
+                <Input
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}></Input>
+              </Box>
+              <Flex sx={{ gap: 3, pt: 4 }}>
+                <Button onClick={onDelete} variant="delete">
+                  Delete Pipeline
+                </Button>
+                <Button onClick={() => setDelete(false)} variant="cancel">
+                  Cancel
+                </Button>
+              </Flex>
             </Box>
-            <Flex sx={{ gap: 3, pt: 4 }}>
-              <Button onClick={onDelete} variant="delete">
-                Delete Pipeline
-              </Button>
-              <Button onClick={() => setDelete(false)} variant="cancel">
-                Cancel
-              </Button>
-            </Flex>
           </Box>
-        </Box>
         </>
       </Modal>
       <Modal open={isOpen} ariaLabel="formentry">
-        <FormEntry formId={sourceId} setIsOpen={setIsOpen}/>
+        <FormEntry formId={sourceId} setIsOpen={setIsOpen} />
       </Modal>
     </Box>
   );
