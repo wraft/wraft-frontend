@@ -94,12 +94,12 @@ const FormEntry = ({ formId, setIsOpen }: any) => {
       data: fields,
     };
 
-    const cID = formId ? formId : cId
+    const cID = formId ? formId : cId;
 
     postAPI(`forms/${cID}/entries`, data)
       .then(() => {
         toast.success('Submitted Successfully');
-        setIsOpen(false)
+        setIsOpen(false);
         onClear();
       })
       .catch((err) => {
