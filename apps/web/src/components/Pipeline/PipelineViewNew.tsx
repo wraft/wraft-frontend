@@ -10,6 +10,7 @@ import {
   Label,
   Input,
 } from 'theme-ui';
+import { Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { deleteAPI, fetchAPI } from 'utils/models';
@@ -17,8 +18,8 @@ import { deleteAPI, fetchAPI } from 'utils/models';
 import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from '../MenuStepsIndicator';
-import Modal from '../Modal';
 import PipelineLogs from './PipelineLogs';
+import FormEntry from '../FormEntry'
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);
@@ -28,6 +29,8 @@ const PipelineView = () => {
   const [isDelete, setDelete] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [inputValue, setInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [sourceId, setSourceId] = useState<any>();
 
   const router = useRouter();
 
@@ -76,21 +79,26 @@ const PipelineView = () => {
     setDelete(true);
   };
 
+  const onRunClick = (formId: any) => {
+    setIsOpen(true);
+    setSourceId(formId);
+  };
+
   const titles = ['Steps', 'Configure', 'Logs'];
 
   return (
     <Box>
       <PageHeader title={pipelineData.name}>
-        {/* <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
+        <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
           <Flex>
-            <Button variant="buttonSecondary" type="button">
+            <Button variant="secondary"  onClick={() => onRunClick(pipelineData?.source_id)} type="button">
               Run
             </Button>
-            <Button ml={2} variant="buttonPrimary" type="button">
+            {/* <Button ml={2} variant="buttonPrimary" type="button">
               Save
-            </Button>
+            </Button> */}
           </Flex>
-        </Flex> */}
+        </Flex>
       </PageHeader>
       <Container variant="layout.pageFrame">
         <Flex>
@@ -155,7 +163,8 @@ const PipelineView = () => {
           </Box>
         </Flex>
       </Container>
-      <Modal width="556px" isOpen={isDelete} onClose={() => setDelete(false)}>
+      <Modal size='md' ariaLabel='pipelinedelte' open={isDelete} onClose={() => setDelete(false)}>
+        <>
         <Text
           variant="pB"
           sx={{
@@ -194,6 +203,10 @@ const PipelineView = () => {
             </Flex>
           </Box>
         </Box>
+        </>
+      </Modal>
+      <Modal open={isOpen} ariaLabel="formentry">
+        <FormEntry formId={sourceId} setIsOpen={setIsOpen}/>
       </Modal>
     </Box>
   );
