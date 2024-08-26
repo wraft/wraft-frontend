@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer, Pagination, useDrawer } from '@wraft/ui';
+import { Drawer, Pagination, useDrawer, Modal } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 
 import { fetchAPI } from '../../utils/models';
 import Link from '../NavLink';
 import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
+import FormEntry from '../FormEntry';
 
 export interface Pipelines {
   total_pages: number;
@@ -38,6 +39,8 @@ const Form = () => {
   const [rerender, setRerender] = React.useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [sourceId, setSourceId] = useState<any>();
   const [page, setPage] = useState<number>(1);
 
   const router: any = useRouter();
@@ -77,6 +80,11 @@ const Form = () => {
       undefined,
       { shallow: true },
     );
+  };
+
+  const onRunClick = (formId: any) => {
+    setIsOpen(true);
+    setSourceId(formId);
   };
 
   const columns = [
@@ -122,9 +130,13 @@ const Form = () => {
         </Box>
       ),
       accessorKey: 'content.name',
-      cell: () => (
+      cell: ({ row }: any) => (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="secondary">Run</Button>
+          <Button
+            onClick={() => onRunClick(row.original.source_id)}
+            variant="secondary">
+            Run
+          </Button>
         </Box>
       ),
       enableSorting: false,
@@ -163,6 +175,9 @@ const Form = () => {
           />
         )}
       </Drawer>
+      <Modal open={isOpen} ariaLabel="formentry">
+        <FormEntry formId={sourceId} setIsOpen={setIsOpen} />
+      </Modal>
     </Box>
   );
 };
