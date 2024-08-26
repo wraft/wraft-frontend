@@ -196,7 +196,6 @@ const Form = () => {
    * @param data
    */
   const onSubmit = (data: any) => {
-    console.log('onSubmit', data);
     setLoading(true);
 
     const formValues = {
@@ -220,6 +219,7 @@ const Form = () => {
           setLoading(false);
         })
         .catch(() => {
+          setLoading(true);
           toast.error('Failed to update!', {
             duration: 1000,
             position: 'top-right',
@@ -227,17 +227,19 @@ const Form = () => {
         });
     } else {
       postAPI(`content_types/${data.parent}/data_templates`, formValues)
-        .then(() => {
+        .then((content: any) => {
+          Router.push(`/templates/edit/${content.id}`);
           // onCreated();
           toast.success('Created Successfully', {
-            duration: 1000,
+            duration: 3000,
             position: 'top-right',
           });
           setLoading(false);
         })
         .catch(() => {
+          setLoading(true);
           toast.error('Failed to Create!', {
-            duration: 1000,
+            duration: 3000,
             position: 'top-right',
           });
         });

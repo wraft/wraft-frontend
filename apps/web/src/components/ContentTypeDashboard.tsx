@@ -2,31 +2,15 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Avatar, Box, Button, Flex, Text } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
+import { Pagination, Table, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'components/Atoms';
-import { useAuth } from 'contexts/AuthContext';
-import { fetchAPI, deleteAPI } from 'utils/models';
+import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 
 import Modal from './Modal';
 import { ConfirmDelete } from './common';
-
-/**
- * DocType Cards
- * -------------
- *
- * @returns
- */
-
-// interface DocCardProps {
-//   id: any;
-//   name?: string;
-//   color?: string;
-//   isEdit?: boolean;
-// }
 
 export interface ILayout {
   width: number;
@@ -67,8 +51,6 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteVariant, setDeleteVariant] = useState<number | null>(null);
-
-  const { accessToken } = useAuth();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -122,6 +104,52 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
       undefined,
       { shallow: true },
     );
+  };
+
+  const generateRandomPrefix = (length = 6) => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let prefix = '';
+    for (let i = 0; i < length; i++) {
+      prefix += characters.charAt(
+        Math.floor(Math.random() * characters.length),
+      );
+    }
+    return prefix;
+  };
+
+  const onCloneContentType = (row: any) => {
+    const originalData = row.original;
+    const randomPrefix = generateRandomPrefix();
+
+    const convertedData = {
+      name: `${originalData.name} ${randomPrefix} duplicate`,
+      layout_id: originalData.layout.id,
+      fields: originalData.fields.map((field: any) => ({
+        name: field.name,
+        key: field.name,
+        field_type_id: field.field_type.id,
+      })),
+      description: originalData.description,
+      prefix: randomPrefix,
+      flow_id: originalData.flow.id,
+      color: originalData.color,
+      theme_id: originalData.theme.id,
+    };
+
+    postAPI('content_types', convertedData)
+      .then((content: any) => {
+        router.push(`/content-types/${content.id}`);
+        toast.success('Created Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      })
+      .catch(() => {
+        toast.error('Failed', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
   };
 
   const columns = [
@@ -209,11 +237,8 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
         <Flex sx={{ justifyContent: 'space-between' }}>
           <Box />
           <Box>
-            <MenuProvider>
-              <MenuButton
-                as={Box}
-                variant="none"
-                sx={{ display: 'flex', alignItems: 'center' }}>
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
                 <Box
                   sx={{
                     display: 'flex',
@@ -232,27 +257,22 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
                   }}>
                   <ThreeDotIcon />
                 </Box>
-              </MenuButton>
-              <Menu
-                as={Box}
-                variant="layout.menu"
-                open={isOpen == row.index}
-                onClose={() => setIsOpen(null)}>
-                <MenuItem>
-                  <Button
-                    variant="base"
-                    onClick={() => {
-                      setIsOpen(null);
-                      setDeleteVariant(row.index);
-                    }}>
-                    <Text
-                      variant=""
-                      sx={{ cursor: 'pointer', color: 'red.600' }}>
-                      Delete
-                    </Text>
-                  </Button>
-                </MenuItem>
-              </Menu>
+              </DropdownMenu.Trigger>
+              <DropdownMenu aria-label="dropdown role">
+                <DropdownMenu.Item onClick={() => onCloneContentType(row)}>
+                  Clone
+                </DropdownMenu.Item>
+
+                <DropdownMenu.Item
+                  onClick={() => {
+                    setIsOpen(null);
+                    setDeleteVariant(row.index);
+                  }}>
+                  <Text variant="" sx={{ cursor: 'pointer', color: 'red.600' }}>
+                    Delete
+                  </Text>
+                </DropdownMenu.Item>
+              </DropdownMenu>
               <Modal
                 isOpen={deleteVariant === row.index}
                 onClose={() => setDeleteVariant(null)}>
@@ -267,7 +287,7 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
                   />
                 }
               </Modal>
-            </MenuProvider>
+            </DropdownMenu.Provider>
           </Box>
         </Flex>
       ),

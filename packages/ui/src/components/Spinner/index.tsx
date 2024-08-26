@@ -14,7 +14,9 @@ const StyledSpinner =
   { size: number } >
   `
   height: ${(props) => `${props.size + 2}px`};
-  // position: relative;
+  width: ${(props) => `${props.size + 2}px`};
+  position: relative;
+
   &::after {
     content: '';
     position: absolute;
@@ -25,7 +27,7 @@ const StyledSpinner =
     right: 0;
     bottom: 0;
     margin: auto;
-    border: 3px solid transparent;
+    border: 3px solid #ffffff52;
     border-top-color: #fff;
     border-radius: 50%;
     animation: load3 1s infinite linear;

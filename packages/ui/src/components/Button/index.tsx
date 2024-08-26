@@ -32,6 +32,7 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   justify-content: center;
   align-items: center;
   position: relative;
+  gap: 10px;
   cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   transition:
@@ -51,17 +52,16 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
 `;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
-  ({ variant = 'primary', children, loading = false, ...rest }, ref) => {
+  ({ variant = 'primary', children, loading = false, disabled = false, ...rest }, ref) => {
+    const isDisabled = disabled || loading
     return (
-      <ButtonWrapper variant={variant} loading={loading} disabled={loading} {...rest} ref={ref}>
-        <x.div display="flex">
-          {loading && (
-            <x.div flex="0 1 auto">
-              <Spinner />
-            </x.div>
-          )}
-          <x.div flex="0 1 auto">{children}</x.div>
-        </x.div>
+      <ButtonWrapper variant={variant} loading={loading} disabled={isDisabled} {...rest} ref={ref}>
+        {loading && (
+          <x.div display="flex" >
+            <Spinner size={9} />
+          </x.div>
+        )}
+        <x.div >{children}</x.div>
       </ButtonWrapper>
     );
   },
