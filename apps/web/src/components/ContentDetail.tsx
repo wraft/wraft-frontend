@@ -444,10 +444,11 @@ const ContentDetail = () => {
   console.log('currentActiveIndex', currentActiveIndex);
 
   return (
-    <Box py={0} sx={{ minHeight: '100vh' }}>
-      {!loading && pageTitle && <Nav navtitle={pageTitle} />}
-      <Box sx={{ pt: 0 }}>
-        {/* {loading && (
+    <>
+      <Box py={0} sx={{ minHeight: '100vh' }}>
+        {!loading && pageTitle && <Nav navtitle={pageTitle} />}
+        <Box sx={{ pt: 0 }}>
+          {/* {loading && (
           <Box
             sx={{
               position: 'absolute',
@@ -459,115 +460,115 @@ const ContentDetail = () => {
             <Spinner width={40} height={40} color="primary" />
           </Box>
         )} */}
-        <ErrorBoundary>
-          {contents && contents.content && (
-            <Flex sx={{ bg: 'gray.400' }}>
-              <Box sx={{ minWidth: '70%', m: 0 }}>
-                <Flex
-                  sx={{
-                    px: 3,
-                    py: 2,
-                    borderBottom: 'solid 1px',
-                    borderColor: 'border',
-                    bg: 'gray.200',
-                  }}>
-                  <Flex sx={{ width: '100%', alignItems: 'center' }}>
-                    <Flex
-                      sx={{
-                        py: 1,
-                        alignItems: 'center',
-                        overflowX: 'scroll',
-                        bg: 'white',
-                        border: 'solid 1px',
-                        borderColor: 'gray.300',
-                        px: 2,
-                        borderRadius: '9px',
-                      }}>
-                      {states &&
-                        states.map((x: any, i: number) => (
-                          <FlowStateBlock
-                            key={x?.id}
-                            num={i + 1}
-                            state={x?.state}
-                            order={x?.order}
-                            currentActiveIndex={currentActiveIndex}
-                            nextState={nextState}
-                            id={x?.id}
-                          />
-                        ))}
+          <ErrorBoundary>
+            {contents && contents.content && (
+              <Flex sx={{ bg: 'gray.400' }}>
+                <Box sx={{ minWidth: '70%', m: 0 }}>
+                  <Flex
+                    sx={{
+                      px: 3,
+                      py: 2,
+                      borderBottom: 'solid 1px',
+                      borderColor: 'border',
+                      bg: 'gray.200',
+                    }}>
+                    <Flex sx={{ width: '100%', alignItems: 'center' }}>
+                      <Flex
+                        sx={{
+                          py: 1,
+                          alignItems: 'center',
+                          overflowX: 'scroll',
+                          bg: 'white',
+                          border: 'solid 1px',
+                          borderColor: 'gray.300',
+                          px: 2,
+                          borderRadius: '9px',
+                        }}>
+                        {states &&
+                          states.map((x: any, i: number) => (
+                            <FlowStateBlock
+                              key={x?.id}
+                              num={i + 1}
+                              state={x?.state}
+                              order={x?.order}
+                              currentActiveIndex={currentActiveIndex}
+                              nextState={nextState}
+                              id={x?.id}
+                            />
+                          ))}
 
-                      {contents &&
-                        !nextState?.is_user_eligible &&
-                        !isMakeCompete &&
-                        !isEditable && (
+                        {contents &&
+                          !nextState?.is_user_eligible &&
+                          !isMakeCompete &&
+                          !isEditable && (
+                            <Flex
+                              sx={{
+                                px: 1,
+                                py: '2px',
+                                gap: 1,
+                                alignItems: 'center',
+                                verticalAlign: 'center',
+                                borderRadius: '6px',
+                                fontSize: 'xs',
+                                color: 'orange.800',
+                                bg: 'orange.100',
+                              }}>
+                              <Triangle size={10} />
+                              <Text
+                                sx={{
+                                  textTransform: 'uppercase',
+                                  letterSpacing: '-0.01rem',
+                                }}>
+                                Waiting for approval
+                              </Text>
+                            </Flex>
+                          )}
+                      </Flex>
+
+                      <Flex sx={{ ml: 'auto', alignItems: 'center' }}>
+                        {!contents?.content?.approval_status && (
                           <Flex
                             sx={{
-                              px: 1,
-                              py: '2px',
-                              gap: 1,
+                              p: 0,
+                              gap: 2,
+                              ml: 'auto',
                               alignItems: 'center',
-                              verticalAlign: 'center',
-                              borderRadius: '6px',
-                              fontSize: 'xs',
-                              color: 'orange.800',
-                              bg: 'orange.100',
                             }}>
-                            <Triangle size={10} />
-                            <Text
-                              sx={{
-                                textTransform: 'uppercase',
-                                letterSpacing: '-0.01rem',
-                              }}>
-                              Waiting for approval
-                            </Text>
-                          </Flex>
-                        )}
-                    </Flex>
-
-                    <Flex sx={{ ml: 'auto', alignItems: 'center' }}>
-                      {!contents?.content?.approval_status && (
-                        <Flex
-                          sx={{
-                            p: 0,
-                            gap: 2,
-                            ml: 'auto',
-                            alignItems: 'center',
-                          }}>
-                          <Box
-                            sx={
-                              {
-                                // pt: 3,
-                                // px: 3,
-                              }
-                            }>
-                            <Button
-                              sx={{ py: '6px', gap: 1, alignItem: 'center' }}
-                              variant="btnSecondaryInline"
-                              onClick={() => doBuild()}>
-                              {/**
+                            <Box
+                              sx={
+                                {
+                                  // pt: 3,
+                                  // px: 3,
+                                }
+                              }>
+                              <Button
+                                sx={{ py: '6px', gap: 1, alignItem: 'center' }}
+                                variant="btnSecondaryInline"
+                                onClick={() => doBuild()}>
+                                {/**
                              btnSecondaryInline
                               */}
 
-                              {loading && (
-                                <Spinner color="green.400" size={16} />
-                              )}
-                              {!loading && (
-                                <>
-                                  <Text
-                                    sx={{
-                                      fontSize: 'sm',
-                                      fontWeight: 600,
-                                      p: 0,
-                                    }}>
-                                    Generate
-                                  </Text>
-                                  <Play size={16} />
-                                </>
-                              )}
-                            </Button>
-                          </Box>
+                                {loading && (
+                                  <Spinner color="green.400" size={16} />
+                                )}
+                                {!loading && (
+                                  <>
+                                    <Text
+                                      sx={{
+                                        fontSize: 'sm',
+                                        fontWeight: 600,
+                                        p: 0,
+                                      }}>
+                                      Generate
+                                    </Text>
+                                    <Play size={16} />
+                                  </>
+                                )}
+                              </Button>
+                            </Box>
 
-                          {/* {prevState && eligibleUser && (
+                            {/* {prevState && eligibleUser && (
                             <Button
                               // variant="btnSecondary"
                               onClick={() => {
@@ -579,81 +580,81 @@ const ContentDetail = () => {
                             </Button>
                           )} */}
 
-                          {nextState && nextState.is_user_eligible && (
-                            <Button
-                              sx={{
-                                gap: 1,
-                                ':hover': {
-                                  svg: {
-                                    color: 'green.800',
-                                  },
-                                },
-                              }}
-                              variant="btnPrimaryInline"
-                              onClick={() => {
-                                setModalAction('next');
-                                setOpen(true);
-                              }}>
-                              <Text
-                                variant="pB"
+                            {nextState && nextState.is_user_eligible && (
+                              <Button
                                 sx={{
-                                  pr: 2,
-                                }}>{`${nextState?.state || ''}`}</Text>
-                              <ArrowRight size={16} stroke="bold" />
-                            </Button>
-                          )}
-                          {isMakeCompete && (
-                            <Button
-                              variant="btnPrimaryInline"
-                              sx={{
-                                gap: 1,
-                                '&:hover': {
-                                  svg: {
-                                    color: 'green.800',
+                                  gap: 1,
+                                  ':hover': {
+                                    svg: {
+                                      color: 'green.800',
+                                    },
                                   },
-                                },
-                              }}
-                              onClick={() => {
-                                setModalAction('next');
-                                setOpen(true);
-                              }}>
-                              <Text variant="pB">Mark Complete</Text>
-                              <ArrowRight size={16} stroke="bold" />
-                            </Button>
-                          )}
-                        </Flex>
-                      )}
-                      {isEditable && (
-                        <Flex
-                          sx={{
-                            px: 1,
-                            py: '2px',
-                            gap: 1,
-                            alignItems: 'center',
-                            verticalAlign: 'center',
-                            borderRadius: '6px',
-                            fontSize: 'xs',
-                            color: 'text',
-                            bg: 'green.400',
-                          }}>
-                          <LockSimple size={10} />
-                          <Text
+                                }}
+                                variant="btnPrimaryInline"
+                                onClick={() => {
+                                  setModalAction('next');
+                                  setOpen(true);
+                                }}>
+                                <Text
+                                  variant="pB"
+                                  sx={{
+                                    pr: 2,
+                                  }}>{`${nextState?.state || ''}`}</Text>
+                                <ArrowRight size={16} stroke="bold" />
+                              </Button>
+                            )}
+                            {isMakeCompete && (
+                              <Button
+                                variant="btnPrimaryInline"
+                                sx={{
+                                  gap: 1,
+                                  '&:hover': {
+                                    svg: {
+                                      color: 'green.800',
+                                    },
+                                  },
+                                }}
+                                onClick={() => {
+                                  setModalAction('next');
+                                  setOpen(true);
+                                }}>
+                                <Text variant="pB">Mark Complete</Text>
+                                <ArrowRight size={16} stroke="bold" />
+                              </Button>
+                            )}
+                          </Flex>
+                        )}
+                        {isEditable && (
+                          <Flex
                             sx={{
-                              textTransform: 'uppercase',
-                              letterSpacing: '-0.01rem',
+                              px: 1,
+                              py: '2px',
+                              gap: 1,
+                              alignItems: 'center',
+                              verticalAlign: 'center',
+                              borderRadius: '6px',
+                              fontSize: 'xs',
+                              color: 'text',
+                              bg: 'green.400',
                             }}>
-                            Locked
-                          </Text>
-                        </Flex>
-                      )}
-                    </Flex>
-                    {/* <ProfileCard
+                            <LockSimple size={10} />
+                            <Text
+                              sx={{
+                                textTransform: 'uppercase',
+                                letterSpacing: '-0.01rem',
+                              }}>
+                              Locked
+                            </Text>
+                          </Flex>
+                        )}
+                      </Flex>
+                      {/* <ProfileCard
                       time={contents.content?.inserted_at}
                       name={contents.creator?.name}
                       image={contents?.creator?.profile_pic}
                     /> */}
-                  </Flex>
-                  {/* <Box sx={{ ml: 'auto' }}>
+                    </Flex>
+                    {/* <Box sx={{ ml: 'auto' }}>
                     <MenuItem
                       variant="btnMenu"
                       href={`/content/edit/[id]`}
@@ -661,152 +662,152 @@ const ContentDetail = () => {
                       <EditIcon width={24} />
                     </MenuItem>
                   </Box> */}
-                </Flex>
-                <Box
-                  sx={{
-                    mb: 0,
-                    bg: 'gray.400',
-                    // bg: 'gray.a100',
-                    // bg: 'neutral.200',
-                    '.tabPanel': { border: 0, bg: 'gray.400' },
-                    button: {
-                      border: 0,
-                      bg: 'transparent',
-                      px: 3,
-                      py: 2,
-                      borderRadius: 6,
-                    },
-                    '.tabGroup': {
-                      // bg: 'neutral.200',
+                  </Flex>
+                  <Box
+                    sx={{
+                      mb: 0,
                       bg: 'gray.400',
-                      // border: 'solid 1px blue',
-                      px: 3,
-                      // textAlign: 'centre',
-                      py: 2,
-                    },
-                    'button[aria-selected=true]': {
-                      border: 0,
-                      // bg: 'neutral.100',
-                      bg: 'gray.200',
-                      px: 3,
-                      py: 2,
-                    },
-                  }}>
-                  <TabProvider defaultSelectedId={defaultSelectedId}>
-                    <TabList
-                      aria-label="Content Stages"
-                      className="tabPanel tabGroup">
-                      <Tab id="edit">
-                        <StepBlock title="Content" desc="Edit contents" />
-                      </Tab>
-                      <Tab id="view">
-                        <StepBlock title="Document" desc="Sign and Manage" />
-                      </Tab>
-                    </TabList>
+                      // bg: 'gray.a100',
+                      // bg: 'neutral.200',
+                      '.tabPanel': { border: 0, bg: 'gray.400' },
+                      button: {
+                        border: 0,
+                        bg: 'transparent',
+                        px: 3,
+                        py: 2,
+                        borderRadius: 6,
+                      },
+                      '.tabGroup': {
+                        // bg: 'neutral.200',
+                        bg: 'gray.400',
+                        // border: 'solid 1px blue',
+                        px: 3,
+                        // textAlign: 'centre',
+                        py: 2,
+                      },
+                      'button[aria-selected=true]': {
+                        border: 0,
+                        // bg: 'neutral.100',
+                        bg: 'gray.200',
+                        px: 3,
+                        py: 2,
+                      },
+                    }}>
+                    <TabProvider defaultSelectedId={defaultSelectedId}>
+                      <TabList
+                        aria-label="Content Stages"
+                        className="tabPanel tabGroup">
+                        <Tab id="edit">
+                          <StepBlock title="Content" desc="Edit contents" />
+                        </Tab>
+                        <Tab id="view">
+                          <StepBlock title="Document" desc="Sign and Manage" />
+                        </Tab>
+                      </TabList>
 
-                    <TabPanel
-                      tabId={defaultSelectedId}
-                      className={styles.tablist}>
-                      <ErrorBoundary>
+                      <TabPanel
+                        tabId={defaultSelectedId}
+                        className={styles.tablist}>
+                        <ErrorBoundary>
+                          <Box
+                            sx={{
+                              mt: 0,
+                              borderRadius: '6px',
+                              maxWidth: '100%',
+                              px: 4,
+                              // pb: 6,
+                              // bg: 'gray.100',
+                              // pl: '9rem !important',
+                              // pr: '9rem !important',
+                              // pt: '7rem !important',
+                              '.remirror-theme .ProseMirror': {
+                                bg: 'gray.200',
+                                pl: '9rem !important',
+                                pr: '9rem !important',
+                                pt: '7rem !important',
+                                p: 'gray.1200',
+                                'p mark': {
+                                  background: 'transparent !important',
+                                  color: 'gray.1200',
+                                },
+                              },
+                            }}>
+                            <PreTag pt={0} pb={6}>
+                              {contentBody && (
+                                <Editor
+                                  defaultValue={contentBody}
+                                  editable={false}
+                                  tokens={[]}
+                                  onUpdate={doNothing}
+                                  insertable={null}
+                                  onceInserted={doNothing}
+                                />
+                              )}
+                            </PreTag>
+                          </Box>
+                        </ErrorBoundary>
+                      </TabPanel>
+                      <TabPanel>
                         <Box
                           sx={{
-                            mt: 0,
-                            borderRadius: '6px',
-                            maxWidth: '100%',
-                            px: 4,
-                            // pb: 6,
-                            // bg: 'gray.100',
-                            // pl: '9rem !important',
-                            // pr: '9rem !important',
-                            // pt: '7rem !important',
-                            '.remirror-theme .ProseMirror': {
-                              bg: 'gray.200',
-                              pl: '9rem !important',
-                              pr: '9rem !important',
-                              pt: '7rem !important',
-                              p: 'gray.1200',
-                              'p mark': {
-                                background: 'transparent !important',
-                                color: 'gray.1200',
-                              },
-                            },
-                          }}>
-                          <PreTag pt={0} pb={6}>
-                            {contentBody && (
-                              <Editor
-                                defaultValue={contentBody}
-                                editable={false}
-                                tokens={[]}
-                                onUpdate={doNothing}
-                                insertable={null}
-                                onceInserted={doNothing}
-                              />
-                            )}
-                          </PreTag>
-                        </Box>
-                      </ErrorBoundary>
-                    </TabPanel>
-                    <TabPanel>
-                      <Box
-                        sx={{
-                          bg: 'gray.400',
-                          mt: 4,
-                          // minHeight: '100vh',
-                          border: 'solid 1px',
-                          borderColor: 'gray.400',
-                          '.react-pdf__Document': {
-                            mx: 2,
-                          },
-                          '.pdf__Page__textContent': {
+                            bg: 'gray.400',
+                            mt: 4,
+                            // minHeight: '100vh',
                             border: 'solid 1px',
-                            borderColor: 'grey.500',
-                          },
-                          pb: 5,
-                        }}>
-                        {contents.content.build && (
-                          <PdfViewer
-                            url={`${contents.content.build}`}
-                            pageNumber={1}
-                          />
-                        )}
-                      </Box>
-                    </TabPanel>
-                  </TabProvider>
+                            borderColor: 'gray.400',
+                            '.react-pdf__Document': {
+                              mx: 2,
+                            },
+                            '.pdf__Page__textContent': {
+                              border: 'solid 1px',
+                              borderColor: 'grey.500',
+                            },
+                            pb: 5,
+                          }}>
+                          {contents.content.build && (
+                            <PdfViewer
+                              url={`${contents.content.build}`}
+                              pageNumber={1}
+                            />
+                          )}
+                        </Box>
+                      </TabPanel>
+                    </TabProvider>
+                  </Box>
                 </Box>
-              </Box>
-              <Box
-                variant="plateRightBar"
-                sx={{
-                  // position: 'fixed',
-                  right: 0,
-                  // display: 'none',
-                  // bg: 'neutral.100',
-                  bg: 'gray.100',
-                  py: 0,
-                  width: '100%',
-                  borderLeft: 'solid 1px',
-                  borderColor: 'border',
-                  minHeight: '100vh',
-                  pt: 2,
-                }}>
-                <ContentSidebar content={contents} nextState={nextState} />
-
                 <Box
-                  variant="plateSide"
+                  variant="plateRightBar"
                   sx={{
+                    // position: 'fixed',
+                    right: 0,
+                    // display: 'none',
+                    // bg: 'neutral.100',
                     bg: 'gray.100',
-                    // pl: 3,
-                    flexGrow: 1,
-                    mr: 0,
-                    // pr: 3,
-                    // pb: 3,
-                    // pt: 2,
-                    // borderTop: 'solid 1px',
-                    // borderBottom: 'solid 1px',
-                    borderColor: 'gray.300',
-                    // bg: '#d9deda57',
+                    py: 0,
+                    width: '100%',
+                    borderLeft: 'solid 1px',
+                    borderColor: 'border',
+                    minHeight: '100vh',
+                    pt: 2,
                   }}>
-                  {/* <Flex
+                  <ContentSidebar content={contents} nextState={nextState} />
+
+                  <Box
+                    variant="plateSide"
+                    sx={{
+                      bg: 'gray.100',
+                      // pl: 3,
+                      flexGrow: 1,
+                      mr: 0,
+                      // pr: 3,
+                      // pb: 3,
+                      // pt: 2,
+                      // borderTop: 'solid 1px',
+                      // borderBottom: 'solid 1px',
+                      borderColor: 'gray.300',
+                      // bg: '#d9deda57',
+                    }}>
+                    {/* <Flex
                     sx={{
                       pt: 3,
                       px: 3,
@@ -826,7 +827,7 @@ const ContentDetail = () => {
                       </Box>
                     )}
                   </Flex> */}
-                  {/* <Box
+                    {/* <Box
                     sx={{
                       // pt: 3,
                       // px: 3,
@@ -845,207 +846,210 @@ const ContentDetail = () => {
                       </>
                     </Button>
                   </Box> */}
-                </Box>
+                  </Box>
 
-                <Box>
-                  <TabProvider
-                    setSelectedId={setTabActiveId}
-                    defaultSelectedId={defaultSelectedId}>
-                    <TabList
-                      aria-label="Content Stages"
-                      className={styles.tablist}>
-                      <Tab id="edit" className={styles.tabInline}>
-                        Info
-                      </Tab>
-                      <Tab className={styles.tabInline} id="view">
-                        Discuss
-                      </Tab>
-                      <Tab className={styles.tabInline} id="history">
-                        History
-                      </Tab>
-                      <Tab className={styles.tabInline} id="approval">
-                        Log
-                      </Tab>
-                    </TabList>
+                  <Box>
+                    <TabProvider
+                      setSelectedId={setTabActiveId}
+                      defaultSelectedId={defaultSelectedId}>
+                      <TabList
+                        aria-label="Content Stages"
+                        className={styles.tablist}>
+                        <Tab id="edit" className={styles.tabInline}>
+                          Info
+                        </Tab>
+                        <Tab className={styles.tabInline} id="view">
+                          Discuss
+                        </Tab>
+                        <Tab className={styles.tabInline} id="history">
+                          History
+                        </Tab>
+                        <Tab className={styles.tabInline} id="approval">
+                          Log
+                        </Tab>
+                      </TabList>
 
-                    <TabPanel tabId={defaultSelectedId} className="tabPanel">
-                      <Box sx={{ bg: 'neutral.100', mb: 6, pb: 0 }}>
-                        <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
-                          <Text
-                            as="h3"
-                            variant="sectionheading"
-                            sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
-                            Editors
-                          </Text>
-                          <ProfileCard
-                            time={contents.content?.inserted_at}
-                            name={contents.creator?.name}
-                            image={contents?.profile_pic}
-                          />
-                        </Box>
-                        {contents &&
-                          !nextState?.is_user_eligible &&
-                          !isMakeCompete &&
-                          !isEditable && (
-                            <Box
-                              variant="layout.boxHeading"
-                              sx={{ pb: 3, borderTop: 'none' }}>
-                              <Text
-                                as="h3"
-                                variant="sectionheading"
-                                sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
-                                Waiting for approval
-                              </Text>
-                              {nextState &&
-                                nextState.approvers &&
-                                nextState.approvers.map((approver: any) => (
-                                  <ProfileCard
-                                    key={approver.id}
-                                    // time={contents.content?.inserted_at}
-                                    name={approver.name}
-                                    image={approver.profile_pic}
-                                  />
-                                ))}
-                            </Box>
-                          )}
-                        <Box sx={{ pt: 2, px: 3, border: 0 }}>
-                          <Text
-                            as="h3"
-                            variant="sectionheading"
-                            sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
-                            Document
-                          </Text>
-                          <Box>
-                            {contents.content.build && (
-                              <Flex pt={0} pb={3}>
-                                <Box>
-                                  <Box>
-                                    <Text
-                                      as="h3"
-                                      sx={{
-                                        fontSize: 'sm',
-                                        mb: 0,
-                                        color: 'text',
-                                      }}>
-                                      {contents.content.instance_id}
-                                      <Text
-                                        as="span"
-                                        sx={{ ml: 2, fontWeight: 400 }}>
-                                        v
-                                        {contents.versions[0]?.version_number ??
-                                          ''}
-                                      </Text>
-                                    </Text>
-                                    <Text
-                                      as="h4"
-                                      sx={{
-                                        fontSize: '14px',
-                                        mb: 0,
-                                        pb: 0,
-                                        mt: 1,
-                                        color: 'gray.700',
-                                        fontWeight: 500,
-                                        ml: 0,
-                                      }}>
-                                      <Flex as="span">
-                                        {/* <Text sx={{ mr: 2 }}>Updated </Text> */}
-                                        {contents.versions.length && (
-                                          <TimeAgo
-                                            time={
-                                              contents?.versions[0]?.updated_at
-                                            }
-                                          />
-                                        )}
-                                      </Flex>
-                                    </Text>
-                                  </Box>
-                                </Box>
-                                <Box sx={{ ml: 'auto' }}>
-                                  <Link
-                                    // variant="download"
-                                    sx={{
-                                      bg: 'gray.000',
-                                      borderRadius: '6px',
-                                      border: 'solid 1px',
-                                      borderColor: 'border',
-                                      px: 3,
-                                      py: 2,
-                                    }}
-                                    href={`${contents.content.build}`}
-                                    target="_blank">
-                                    <DownloadSimple width={20} />
-                                  </Link>
-                                </Box>
-                              </Flex>
-                            )}
-                          </Box>
-                        </Box>
-                      </Box>
-                    </TabPanel>
-                    <TabPanel>
-                      <Box sx={{ bg: 'neutral.100' }}>
-                        <Box sx={{ pb: 3 }}>
-                          <Box
-                            variant="layout.boxHeading"
-                            sx={{ pb: 1, borderBottom: 0 }}>
+                      <TabPanel tabId={defaultSelectedId} className="tabPanel">
+                        <Box sx={{ bg: 'neutral.100', mb: 6, pb: 0 }}>
+                          <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
                             <Text
                               as="h3"
-                              sx={{ fontSize: 'sm', fontWeight: 600 }}>
-                              Discussions
+                              variant="sectionheading"
+                              sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                              Editors
                             </Text>
+                            <ProfileCard
+                              time={contents.content?.inserted_at}
+                              name={contents.creator?.name}
+                              image={contents?.profile_pic}
+                            />
                           </Box>
-                          <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
-                            {contents && contents.content && (
-                              <Box mt={0}>
-                                <CommentForm
-                                  master={contents.content_type.id}
-                                  master_id={contents.content.id}
-                                />
+                          {contents &&
+                            !nextState?.is_user_eligible &&
+                            !isMakeCompete &&
+                            !isEditable && (
+                              <Box
+                                variant="layout.boxHeading"
+                                sx={{ pb: 3, borderTop: 'none' }}>
+                                <Text
+                                  as="h3"
+                                  variant="sectionheading"
+                                  sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                                  Waiting for approval
+                                </Text>
+                                {nextState &&
+                                  nextState.approvers &&
+                                  nextState.approvers.map((approver: any) => (
+                                    <ProfileCard
+                                      key={approver.id}
+                                      // time={contents.content?.inserted_at}
+                                      name={approver.name}
+                                      image={approver.profile_pic}
+                                    />
+                                  ))}
                               </Box>
                             )}
+                          <Box sx={{ pt: 2, px: 3, border: 0 }}>
+                            <Text
+                              as="h3"
+                              variant="sectionheading"
+                              sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                              Document
+                            </Text>
+                            <Box>
+                              {contents.content.build && (
+                                <Flex pt={0} pb={3}>
+                                  <Box>
+                                    <Box>
+                                      <Text
+                                        as="h3"
+                                        sx={{
+                                          fontSize: 'sm',
+                                          mb: 0,
+                                          color: 'text',
+                                        }}>
+                                        {contents.content.instance_id}
+                                        <Text
+                                          as="span"
+                                          sx={{ ml: 2, fontWeight: 400 }}>
+                                          v
+                                          {contents.versions[0]
+                                            ?.version_number ?? ''}
+                                        </Text>
+                                      </Text>
+                                      <Text
+                                        as="h4"
+                                        sx={{
+                                          fontSize: '14px',
+                                          mb: 0,
+                                          pb: 0,
+                                          mt: 1,
+                                          color: 'gray.700',
+                                          fontWeight: 500,
+                                          ml: 0,
+                                        }}>
+                                        <Flex as="span">
+                                          {/* <Text sx={{ mr: 2 }}>Updated </Text> */}
+                                          {contents.versions.length && (
+                                            <TimeAgo
+                                              time={
+                                                contents?.versions[0]
+                                                  ?.updated_at
+                                              }
+                                            />
+                                          )}
+                                        </Flex>
+                                      </Text>
+                                    </Box>
+                                  </Box>
+                                  <Box sx={{ ml: 'auto' }}>
+                                    <Link
+                                      // variant="download"
+                                      sx={{
+                                        bg: 'gray.000',
+                                        borderRadius: '6px',
+                                        border: 'solid 1px',
+                                        borderColor: 'border',
+                                        px: 3,
+                                        py: 2,
+                                      }}
+                                      href={`${contents.content.build}`}
+                                      target="_blank">
+                                      <DownloadSimple width={20} />
+                                    </Link>
+                                  </Box>
+                                </Flex>
+                              )}
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    </TabPanel>
-                    <TabPanel>
-                      <Box variant="layout.boxHeading">
-                        {contents.versions && contents.versions.length > 0 && (
-                          <Box>
-                            {contents.versions.map((v: any) => (
-                              <Flex key={v?.id} sx={{ py: 2 }}>
-                                <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>
-                                  Version {v?.version_number}
-                                </Text>
-                                <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>
-                                  <TimeAgo time={v?.updated_at} />
+                      </TabPanel>
+                      <TabPanel>
+                        <Box sx={{ bg: 'neutral.100' }}>
+                          <Box sx={{ pb: 3 }}>
+                            <Box
+                              variant="layout.boxHeading"
+                              sx={{ pb: 1, borderBottom: 0 }}>
+                              <Text
+                                as="h3"
+                                sx={{ fontSize: 'sm', fontWeight: 600 }}>
+                                Discussions
+                              </Text>
+                            </Box>
+                            <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
+                              {contents && contents.content && (
+                                <Box mt={0}>
+                                  <CommentForm
+                                    master={contents.content_type.id}
+                                    master_id={contents.content.id}
+                                  />
                                 </Box>
-                              </Flex>
-                            ))}
+                              )}
+                            </Box>
                           </Box>
-                        )}
-                      </Box>
-                    </TabPanel>
-                    <TabPanel>
-                      <Box variant="layout.boxHeading" sx={{ pb: 2 }}>
-                        <Text sx={{ fontSize: 'xs', color: 'gray.900' }}>
-                          Approval Log
-                        </Text>
-                      </Box>
-                      <Box>
-                        {tabActiveId === 'approval' && (
-                          <ApprovalFlowHistory id={cId} />
-                        )}
-                      </Box>
-                    </TabPanel>
-                  </TabProvider>
+                        </Box>
+                      </TabPanel>
+                      <TabPanel>
+                        <Box variant="layout.boxHeading">
+                          {contents.versions &&
+                            contents.versions.length > 0 && (
+                              <Box>
+                                {contents.versions.map((v: any) => (
+                                  <Flex key={v?.id} sx={{ py: 2 }}>
+                                    <Text
+                                      sx={{ fontSize: 'xs', fontWeight: 500 }}>
+                                      Version {v?.version_number}
+                                    </Text>
+                                    <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>
+                                      <TimeAgo time={v?.updated_at} />
+                                    </Box>
+                                  </Flex>
+                                ))}
+                              </Box>
+                            )}
+                        </Box>
+                      </TabPanel>
+                      <TabPanel>
+                        <Box variant="layout.boxHeading" sx={{ pb: 2 }}>
+                          <Text sx={{ fontSize: 'xs', color: 'gray.900' }}>
+                            Approval Log
+                          </Text>
+                        </Box>
+                        <Box>
+                          {tabActiveId === 'approval' && (
+                            <ApprovalFlowHistory id={cId} />
+                          )}
+                        </Box>
+                      </TabPanel>
+                    </TabProvider>
+                  </Box>
                 </Box>
-              </Box>
-            </Flex>
-          )}
-        </ErrorBoundary>
-      </Box>
-      <Modal isOpen={open}>
-        {/* {
+              </Flex>
+            )}
+          </ErrorBoundary>
+        </Box>
+        <Modal isOpen={open}>
+          {/* {
           <ConfirmDelete
             title="Confirm action"
             text={`Are you sure you want send to ${nextState?.state}?`}
@@ -1055,76 +1059,82 @@ const ContentDetail = () => {
             }}
           />
         } */}
-        <Flex
-          sx={{
-            flexDirection: 'column',
-            width: '372px',
-            height: '225px',
-            border: '1px solid #E4E9EF',
-            background: '#FFF',
-            // alignItems: 'center',
-            alignItems: 'flex-start',
-            // align-items: flex-start;
-            justifyContent: 'space-evenly',
-          }}>
-          <Box
-            sx={{
-              px: 3,
-              py: 2,
-              borderColor: 'border',
-              width: '100%',
-              borderBottom: 'solid 1px #ddd',
-              mb: 2,
-            }}>
-            <Text
-              as="p"
-              variant="h5Medium"
-              sx={{ textAlign: 'left', fontSize: '15px' }}>
-              Confirm action
-            </Text>
-          </Box>
-          <Text
-            sx={{
-              px: 4,
-              mb: 2,
-              marginTop: '5px',
-              // mb: '5px',
-              textAlign: 'left',
-              fontWeight: 'heading',
-              color: 'gray.900',
-            }}>
-            {modalAction === 'next'
-              ? `Confirm to send current content to ${nextState?.state} stage ?`
-              : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
-          </Text>
-          <Box as="form" py={1} mt={0} sx={{ display: 'none' }}>
-            <Box mx={0} mb={2} sx={{ width: '350px' }}>
-              <Field name="body" label="" defaultValue="" register={register} />
-            </Box>
-          </Box>
           <Flex
             sx={{
-              gap: '12px',
-              px: 3,
-              py: 3,
-              mt: 3,
-              // borderColor: '#eee',
-              borderTop: 'solid 1px #ddd',
-              width: '100%',
+              flexDirection: 'column',
+              width: '372px',
+              height: '225px',
+              border: '1px solid #E4E9EF',
+              background: '#FFF',
+              // alignItems: 'center',
+              alignItems: 'flex-start',
+              // align-items: flex-start;
+              justifyContent: 'space-evenly',
             }}>
-            <Button onClick={handleModalAction} sx={{}}>
-              Confirm
-            </Button>
-            <Button
-              variant="btnSecondary"
-              onClick={() => setOpen(false)}
-              sx={{ bg: 'red', color: 'gray.1100', fontWeight: 'bold' }}>
-              Cancel
-            </Button>
+            <Box
+              sx={{
+                px: 3,
+                py: 2,
+                borderColor: 'border',
+                width: '100%',
+                borderBottom: 'solid 1px #ddd',
+                mb: 2,
+              }}>
+              <Text
+                as="p"
+                variant="h5Medium"
+                sx={{ textAlign: 'left', fontSize: '15px' }}>
+                Confirm action
+              </Text>
+            </Box>
+            <Text
+              sx={{
+                px: 4,
+                mb: 2,
+                marginTop: '5px',
+                // mb: '5px',
+                textAlign: 'left',
+                fontWeight: 'heading',
+                color: 'gray.900',
+              }}>
+              {modalAction === 'next'
+                ? `Confirm to send current content to ${nextState?.state} stage ?`
+                : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
+            </Text>
+            <Box as="form" py={1} mt={0} sx={{ display: 'none' }}>
+              <Box mx={0} mb={2} sx={{ width: '350px' }}>
+                <Field
+                  name="body"
+                  label=""
+                  defaultValue=""
+                  register={register}
+                />
+              </Box>
+            </Box>
+            <Flex
+              sx={{
+                gap: '12px',
+                px: 3,
+                py: 3,
+                mt: 3,
+                // borderColor: '#eee',
+                borderTop: 'solid 1px #ddd',
+                width: '100%',
+              }}>
+              <Button onClick={handleModalAction} sx={{}}>
+                Confirm
+              </Button>
+              <Button
+                variant="btnSecondary"
+                onClick={() => setOpen(false)}
+                sx={{ bg: 'red', color: 'gray.1100', fontWeight: 'bold' }}>
+                Cancel
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </Modal>
-    </Box>
+        </Modal>
+      </Box>
+    </>
   );
 };
 export default ContentDetail;

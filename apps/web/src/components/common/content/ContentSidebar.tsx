@@ -13,6 +13,7 @@ import { Check, DotsThreeVertical, DotOutline } from '@phosphor-icons/react';
 
 import { BackArrowIcon } from 'components/Icons';
 import Modal from 'components/Modal';
+import EmailComposer from 'components/EmailComposer';
 import { deleteAPI } from 'utils/models';
 import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
 
@@ -92,6 +93,7 @@ interface EditMenuProps {
  */
 export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
+  const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
   /**
    * Delete content
    * @param id
@@ -106,44 +108,60 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     });
   };
   return (
-    <MenuProvider>
-      <MenuButton as={Button} variant="btnIcon" sx={{ display: 'flex', p: 2 }}>
-        <DotsThreeVertical weight="bold" size={16} />
-      </MenuButton>
-      <Menu
-        as={Box}
-        aria-label="Manage Content"
-        sx={{
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: 4,
-          bg: 'gray.100',
-          color: 'gray.900',
-        }}>
-        {nextState && nextState.is_user_eligible && (
+    <>
+      <MenuProvider>
+        <MenuButton
+          as={Button}
+          variant="btnIcon"
+          sx={{ display: 'flex', p: 2 }}>
+          <DotsThreeVertical weight="bold" size={16} />
+        </MenuButton>
+        <Menu
+          as={Box}
+          aria-label="Manage Content"
+          sx={{
+            border: 'solid 1px',
+            borderColor: 'border',
+            borderRadius: 4,
+            bg: 'gray.100',
+            color: 'gray.900',
+          }}>
+          {nextState && nextState.is_user_eligible && (
+            <MenuItem
+              as={Box}
+              onClick={() => Router.push(`/content/edit/${id}`)}
+              sx={{ px: 3, py: 2, cursor: 'pointer' }}>
+              Edit
+            </MenuItem>
+          )}
           <MenuItem
             as={Box}
-            onClick={() => Router.push(`/content/edit/${id}`)}
-            sx={{ px: 3, py: 2, cursor: 'pointer' }}>
-            Edit
+            onClick={() => setIsDelete(true)}
+            sx={{ px: 3, py: 2, cursor: 'pointer', color: 'red.700' }}>
+            Delete
           </MenuItem>
-        )}
-        <MenuItem
-          as={Box}
-          onClick={() => setIsDelete(true)}
-          sx={{ px: 3, py: 2, cursor: 'pointer', color: 'red.700' }}>
-          Delete
-        </MenuItem>
-      </Menu>
-      <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
-        <ConfirmDelete
-          onConfirmDelete={() => deleteContent(id)}
-          setOpen={setIsDelete}
-          title="Delete Document"
-          text={`Are you sure you want to delete this document ?`}
-        />
+
+          <MenuItem
+            as={Box}
+            onClick={() => setMailPopupOpen(true)}
+            sx={{ px: 3, py: 2, cursor: 'pointer' }}>
+            Send Mail
+          </MenuItem>
+        </Menu>
+        <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
+          <ConfirmDelete
+            onConfirmDelete={() => deleteContent(id)}
+            setOpen={setIsDelete}
+            title="Delete Document"
+            text={`Are you sure you want to delete this document ?`}
+          />
+        </Modal>
+      </MenuProvider>
+
+      <Modal isOpen={isMailPopupOpen}>
+        <EmailComposer id={id} setOpen={setMailPopupOpen} />
       </Modal>
-    </MenuProvider>
+    </>
   );
 };
 
