@@ -70,7 +70,7 @@ const MentionField: React.FC<any> = ({
       <MentionsWrapper>
         <Mentions
           onChange={onChange}
-          open={true}
+          // open={true}
           placeholder={placeholder}
           options={options}
           value={defaultValue || ''}
