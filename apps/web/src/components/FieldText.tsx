@@ -11,6 +11,7 @@ interface Props {
   defaultValue: string;
   disabled?: boolean;
   view?: boolean;
+  rows?: number;
 }
 
 const FieldText: React.FC<Props> = ({
@@ -22,17 +23,20 @@ const FieldText: React.FC<Props> = ({
   disabled,
   placeholder,
   view = false,
+  rows = 2,
+  ...resest
 }) => {
   return (
     <Box>
       <Label htmlFor="description">{label}</Label>
       <Textarea
-        rows={2}
+        rows={rows}
         id={name}
         defaultValue={defaultValue}
         {...register(name, { required: `${label} is required` })}
         disabled={disabled || view}
         placeholder={placeholder || ''}
+        {...resest}
         sx={{
           fontFamily: 'body',
           ':disabled': {
