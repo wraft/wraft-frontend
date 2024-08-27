@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, Select } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
@@ -17,11 +17,10 @@ import {
 import Editor from './common/Editor';
 import Field from './Field';
 import FieldText from './FieldText';
-// import { BracesVariable, ThreeDots } from './Icons';
 import NavEdit from './NavEdit';
 import { TimeAgo } from './Atoms';
 import Modal from './Modal';
-// import MenuItem from './MenuItem';
+import MentionField from './MentionsField';
 
 export interface BlockTemplate {
   id: string;
@@ -111,6 +110,7 @@ const Form = () => {
   const [showSetup, setShowSetup] = useState<boolean>(false);
   const [tokkans, setTokkans] = useState<any>('');
   const [varias, setVarias] = useState<IContentType>();
+  const [fields, setFields] = useState<any>([]);
 
   const {
     register,
@@ -118,6 +118,7 @@ const Form = () => {
     formState: { errors },
     getValues,
     setValue,
+    control,
   } = useForm();
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -127,9 +128,10 @@ const Form = () => {
       const d: DataTemplate = dataTemplate.data_template;
       setValue('title', d.title);
       setValue('title_template', d.title_template);
-      setValue('parent', dataTemplate.content_type.id);
+      setValue('parent', dataTemplate.content_type.id, {
+        shouldValidate: true,
+      });
       setPageTitle(d.title);
-
       loadContentType(dataTemplate.content_type.id);
       const insertReady = (d && d.serialized && d.serialized.data) || false;
 
@@ -228,7 +230,7 @@ const Form = () => {
     } else {
       postAPI(`content_types/${data.parent}/data_templates`, formValues)
         .then((content: any) => {
-          Router.push(`/templates/edit/${content.id}`);
+          Router.replace(`/templates/edit/${content.id}`);
           // onCreated();
           toast.success('Created Successfully', {
             duration: 3000,
@@ -236,12 +238,16 @@ const Form = () => {
           });
           setLoading(false);
         })
-        .catch(() => {
-          setLoading(true);
-          toast.error('Failed to Create!', {
-            duration: 3000,
-            position: 'top-right',
-          });
+        .catch((error) => {
+          setLoading(false);
+          toast.error(
+            (error && JSON.stringify(error)) ||
+              'Something went wrong please try again later',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
         });
     }
   };
@@ -265,6 +271,14 @@ const Form = () => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
       const formed: ContentTypes = data;
       setVarias(formed.content_type);
+
+      if (formed?.content_type?.fields) {
+        const fieldOption = formed.content_type.fields.map(({ name }) => ({
+          value: name,
+          label: name,
+        }));
+        setFields(fieldOption);
+      }
       dataFiller(formed.content_type.fields || {});
     });
   };
@@ -404,14 +418,21 @@ const Form = () => {
           }}>
           <Flex sx={{ px: 4, alignItems: 'center' }}>
             <Box sx={{ flex: 1 }}>
-              <Field
+              <Controller
+                control={control}
                 name="title_template"
-                label=""
-                placeholder="Automatic Title, use @"
-                defaultValue=""
-                register={register}
+                render={({ field: { onChange, value, name } }) => (
+                  <MentionField
+                    onChange={onChange}
+                    name={name}
+                    defaultValue={value}
+                    options={fields}
+                    placeholder="Automatic Title, use @ ds"
+                  />
+                )}
               />
             </Box>
+
             <Box sx={{ ml: 2 }}>
               <Button variant="primary" loading={loading} type="submit">
                 {cId ? 'Update' : 'Create'}
