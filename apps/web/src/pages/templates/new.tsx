@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 import Page from 'components/PageFrameInner';
-import TemplateForm from 'components/TemplateForm';
+import MentionField from 'components/MentionsField';
 
 const Index: FC = () => {
   return (
@@ -11,7 +11,7 @@ const Index: FC = () => {
         <title>New Template | Wraft</title>
       </Head>
       <Page>
-        <TemplateForm />
+        <MentionField />
       </Page>
     </>
   );

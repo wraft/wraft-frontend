@@ -213,10 +213,13 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
         return 'green.400';
       case 'custom':
         return color || 'blue';
+      case null || undefined:
+        return 'blue.100';
       default:
         return 'red';
     }
   };
+
   return (
     <Flex sx={{ pt: 2 }}>
       <Text
@@ -231,7 +234,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
           pb: '2px',
           fontWeight: '600',
         }}>
-        {name}
+        {name || 'Setting Up'}
       </Text>
     </Flex>
   );
