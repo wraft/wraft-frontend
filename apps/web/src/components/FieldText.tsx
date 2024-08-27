@@ -6,6 +6,7 @@ interface Props {
   error?: any;
   register: any;
   label: string;
+  placeholder?: string;
   name: string;
   defaultValue: string;
   disabled?: boolean;
@@ -19,6 +20,7 @@ const FieldText: React.FC<Props> = ({
   register,
   defaultValue,
   disabled,
+  placeholder,
   view = false,
 }) => {
   return (
@@ -30,6 +32,7 @@ const FieldText: React.FC<Props> = ({
         defaultValue={defaultValue}
         {...register(name, { required: `${label} is required` })}
         disabled={disabled || view}
+        placeholder={placeholder || ''}
         sx={{
           fontFamily: 'body',
           ':disabled': {
