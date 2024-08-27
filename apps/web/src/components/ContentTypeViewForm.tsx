@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Drawer, useDrawer, Button } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
 import Field from 'components/Field';
 import FieldColor from 'components/FieldColor';
@@ -106,6 +107,8 @@ const ContentTypeViewForm = () => {
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+
+  const mobileMenuDrawer = useDrawer();
 
   const {
     register,
@@ -400,25 +403,42 @@ const ContentTypeViewForm = () => {
               </Box>
             </Box>
 
-            <Button
-              variant="buttonSecondary"
-              mt={4}
-              onClick={(e) => {
-                e.preventDefault();
-                setIsOpen(true);
-              }}>
-              Edit
-            </Button>
+            <Box mt={3}>
+              <Button
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(true);
+                }}>
+                Edit
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Flex>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        store={mobileMenuDrawer}
+        aria-label="Menu backdrop"
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <Form
-            step={formStep}
-            setIsOpen={setIsOpen}
-            setRerender={setRerender}
-          />
+          <>
+            <Drawer.Header>
+              <Drawer.Title>Update Variant</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <Form
+              step={formStep}
+              setIsOpen={setIsOpen}
+              setRerender={setRerender}
+            />
+          </>
         )}
       </Drawer>
     </Box>

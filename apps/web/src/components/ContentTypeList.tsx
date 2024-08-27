@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Flex } from 'theme-ui';
-import { Drawer } from '@wraft-ui/Drawer';
-import { Plus } from '@phosphor-icons/react';
-import { Button } from '@wraft/ui';
+import { Drawer, useDrawer, Button } from '@wraft/ui';
+import { Plus, X } from '@phosphor-icons/react';
 
 import ContentTypeDashboard from './ContentTypeDashboard';
 import PageHeader from './PageHeader';
@@ -39,6 +38,8 @@ interface ContentTypeList {
 const ContentTypeList = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+  const mobileMenuDrawer = useDrawer();
+
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
@@ -61,9 +62,25 @@ const ContentTypeList = () => {
         }}>
         <ContentTypeDashboard rerender={rerender} setRerender={setRerender} />
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        store={mobileMenuDrawer}
+        aria-label="Menu backdrop"
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <ContentTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+          <>
+            <Drawer.Header>
+              <Drawer.Title>Create Variant</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <ContentTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+          </>
         )}
       </Drawer>
     </Box>
