@@ -12,7 +12,6 @@ import { Box, Flex, Text } from 'theme-ui';
 import { z } from 'zod';
 
 import GoogleLogo from '../../public/GoogleLogo.svg';
-import Logo from '../../public/Logo.svg';
 import { useAuth } from '../contexts/AuthContext';
 import { userLogin } from '../utils/models';
 import { emailPattern } from '../utils/zodPatterns';

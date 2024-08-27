@@ -76,7 +76,5 @@ export const GlobalStyle = createGlobalStyle`
       }
     }
   }
-}
-  
+} 
 `;
-

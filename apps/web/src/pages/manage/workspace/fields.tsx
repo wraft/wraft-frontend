@@ -8,7 +8,6 @@ import OrgForm from 'components/OrgForm';
 import Page from 'components/PageFrame';
 import PageHeader from 'components/PageHeader';
 import { workspaceLinks } from 'utils/index';
-import { authorize } from 'middleware/authorize';
 
 const CompanyForm: FC = () => {
   return (
