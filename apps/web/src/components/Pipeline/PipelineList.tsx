@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer, Pagination, useDrawer, Modal } from '@wraft/ui';
+import { Drawer, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
 import { fetchAPI } from '../../utils/models';
 import Link from '../NavLink';
@@ -36,17 +37,23 @@ export interface IPageMeta {
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
+  const [pipelineId, setPipelineId] = useState<any>();
   const [page, setPage] = useState<number>(1);
+  const [formName, setFormName] = useState<any>();
+
+  console.log(contents, 'logcontents');
+  console.log(formName, 'logname');
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
   const mobileMenuDrawer = useDrawer();
+  const formMenuDrawer = useDrawer();
 
   const loadData = () => {
     setLoading(true);
@@ -82,9 +89,10 @@ const Form = () => {
     );
   };
 
-  const onRunClick = (formId: any) => {
+  const onRunClick = (formId: any, pipelineId: any) => {
     setIsOpen(true);
     setSourceId(formId);
+    setPipelineId(pipelineId);
   };
 
   const columns = [
@@ -133,7 +141,9 @@ const Form = () => {
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
-            onClick={() => onRunClick(row.original.source_id)}
+            onClick={() => {
+              onRunClick(row.original.source_id, row.original.id);
+            }}
             variant="secondary">
             Run
           </Button>
@@ -175,9 +185,27 @@ const Form = () => {
           />
         )}
       </Drawer>
-      <Modal open={isOpen} ariaLabel="formentry">
-        <FormEntry formId={sourceId} setIsOpen={setIsOpen} />
-      </Modal>
+      <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
+        {isOpen && (
+          <>
+            <Drawer.Header>
+              <Drawer.Title>{formName}</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <FormEntry
+              formId={sourceId}
+              pipelineId={pipelineId}
+              setIsOpen={setIsOpen}
+              setFormName={setFormName}
+            />
+          </>
+        )}
+      </Drawer>
     </Box>
   );
 };

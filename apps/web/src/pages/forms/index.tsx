@@ -131,7 +131,9 @@ const Index: FC = () => {
             />
           </Box>
           <Box p={4} onClick={() => setTrigger((prev) => !prev)}>
-            <Button disabled={loading}>Create</Button>
+            <Button type="submit" disabled={loading}>
+              Create
+            </Button>
           </Box>
         </Flex>
       </Drawer>

@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Logo } from 'components/Icons';
 import { fetchAPI, postAPI } from 'utils/models';
 
-const FormEntry = ({ formId, setIsOpen }: any) => {
+const FormEntry = ({ formId, pipelineId, setIsOpen }: any) => {
   const [items, setItems] = useState<any>([]);
   const [initial, setInitial] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>();
@@ -95,8 +95,9 @@ const FormEntry = ({ formId, setIsOpen }: any) => {
     };
 
     const cID = formId ? formId : cId;
+    const query = formId ? pipelineId : '';
 
-    postAPI(`forms/${cID}/entries`, data)
+    postAPI(`forms/${cID}/entries?${query}`, data)
       .then(() => {
         toast.success('Submitted Successfully');
         setIsOpen(false);
@@ -134,37 +135,45 @@ const FormEntry = ({ formId, setIsOpen }: any) => {
   }
 
   return (
-    <Box sx={{ background: 'background' }}>
+    <Box sx={{ background: 'background', width: formId ? '500px' : '' }}>
       <Box sx={{ position: 'absolute', top: 4, left: 4 }}>
-        <Logo />
+        {!formId && <Logo />}
       </Box>
       <Flex
         sx={{
+          px: 4,
+          py: formId ? 2 : 4,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
         <Box
           sx={{
-            my: 5,
             maxWidth: '80ch',
             width: '100%',
           }}>
-          <Box sx={{ width: '100%', height: '4px', bg: 'green.700' }}></Box>
-          <Box
-            sx={{
-              bg: 'white',
-              p: 4,
-              border: '1px solid',
-              borderTop: 'none',
-              borderColor: 'border',
-            }}>
-            <Text as="p" variant="h4Medium">
-              {formdata?.name || 'name'}
-            </Text>
-            <Text as="p" variant="h6Regular" sx={{ mt: 3, color: 'gray.600' }}>
-              {formdata?.description || 'description'}
-            </Text>
-          </Box>
+          {!formId && (
+            <>
+              <Box sx={{ width: '100%', height: '4px', bg: 'green.700' }}></Box>
+              <Box
+                sx={{
+                  bg: 'white',
+                  p: 4,
+                  border: '1px solid',
+                  borderTop: 'none',
+                  borderColor: 'border',
+                }}>
+                <Text as="p" variant="h4Medium">
+                  {formdata?.name || 'name'}
+                </Text>
+                <Text
+                  as="p"
+                  variant="h6Regular"
+                  sx={{ mt: 3, color: 'gray.600' }}>
+                  {formdata?.description || 'description'}
+                </Text>
+              </Box>
+            </>
+          )}
           <Box
             sx={{
               mt: 4,
