@@ -22,6 +22,7 @@ import {
   Flex,
   Input,
   Label,
+  Select,
   Spinner,
   Text,
   useThemeUI,
@@ -190,6 +191,24 @@ const SortableItem = ({
     }
   };
 
+  const onTypeChange = (e: any) => {
+    const newType = e.target.value;
+    if (states && state) {
+      const newState: StateState = {
+        ...state,
+        type: newType,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
+  };
+
   const onDeleteState = () => {
     if (states && state) {
       const newArr = states.filter((s: any) => s.id !== state.id);
@@ -288,12 +307,33 @@ const SortableItem = ({
               gap: 0,
             }}></Flex>
         </Flex>
+        <Label mt={2}>State Mode</Label>
+        <Select
+          defaultValue={state.type}
+          onChange={(e) => {
+            onTypeChange(e);
+          }}
+          sx={{
+            width: '100%',
+            border: '1px solid',
+            borderColor: 'border',
+            borderRadius: '4px',
+          }}>
+          <option disabled value="">
+            Select a State Mode
+          </option>
+          <option value="reviewer">Reviewer</option>
+          <option value="editor">Editor</option>
+          <option value="sign">Sign</option>
+        </Select>
+
         <Box>
           {state.error && (
             <Text as={'p'} variant="error">
               {state.error}
             </Text>
           )}
+
           <Box mt={3}>
             <Box>
               <Input

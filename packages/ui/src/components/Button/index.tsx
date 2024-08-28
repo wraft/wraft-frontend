@@ -25,6 +25,7 @@ export interface ButtonOptions extends AkButtonProps {
   shape?: Shape;
 }
 
+
 const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   cursor: pointer;
   user-select: none;
@@ -51,6 +52,12 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   `}
 `;
 
+export const ContentWrapper: any = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
   ({ variant = 'primary', children, loading = false, disabled = false, ...rest }, ref) => {
     const isDisabled = disabled || loading
@@ -61,7 +68,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
             <Spinner size={9} />
           </x.div>
         )}
-        <x.div >{children}</x.div>
+        <ContentWrapper>{children}</ContentWrapper>
       </ButtonWrapper>
     );
   },

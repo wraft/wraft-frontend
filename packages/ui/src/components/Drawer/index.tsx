@@ -9,7 +9,7 @@ import styled, { th, x } from '@xstyled/emotion';
 import { motion } from 'framer-motion';
 import React from 'react';
 
-import { Title } from './Title';
+import { Title, Header } from './Title';
 import * as S from './styles'
 
 
@@ -137,4 +137,4 @@ export function useDrawer(options: UseDrawerProps = {}): UseDrawer {
   return dialog
 }
 
-export const Drawer = Object.assign(DrawerComponent, {Title})
+export const Drawer = Object.assign(DrawerComponent, {Title, Header})

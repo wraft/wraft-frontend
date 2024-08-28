@@ -27,7 +27,7 @@ const createAxiosInstance = (): AxiosInstance => {
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
+      if (error?.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         await cookie.remove('token');
 
@@ -44,6 +44,13 @@ const createAxiosInstance = (): AxiosInstance => {
 const api = createAxiosInstance();
 
 export default api;
+
+const handleApiError = (error: any) => {
+  if (error?.response?.data) {
+    return error.response.data;
+  }
+  return 'An unexpected error occurred. Please try again later.';
+};
 
 /**
  * Load fetchAPI
@@ -85,17 +92,8 @@ export const postAPI = (
           }
         },
       })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -105,17 +103,8 @@ export const putAPI = (path: string, body: any = {}) =>
   new Promise((resolve, reject) => {
     api
       .put(`/${path}`, body)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 export const postEntityFile = (path: string, formData: any, token: string) =>
@@ -127,14 +116,8 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
           token: token,
         },
       })
-      .then(async (resp) => {
-        if (resp.status === 204) {
-          resolve(resp);
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -144,17 +127,8 @@ export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
     api
       .delete(`/${path}`, body || {})
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -164,17 +138,8 @@ export const fetchUserInfo = () =>
   new Promise((resolve, reject) => {
     api
       .get(`${API_HOST}/api/v1/users/me`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
