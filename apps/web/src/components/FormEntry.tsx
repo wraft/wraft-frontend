@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Logo } from 'components/Icons';
 import { fetchAPI, postAPI } from 'utils/models';
 
-const FormEntry = ({ formId, pipelineId, setIsOpen }: any) => {
+const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
   const [items, setItems] = useState<any>([]);
   const [initial, setInitial] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>();
@@ -91,13 +91,14 @@ const FormEntry = ({ formId, pipelineId, setIsOpen }: any) => {
       };
     });
     const data = {
+      ...(pipelineId && { pipeline_id: pipelineId }),
       data: fields,
     };
 
     const cID = formId ? formId : cId;
-    const query = formId ? pipelineId : '';
+    // const query = formId ? pipelineId : '';
 
-    postAPI(`forms/${cID}/entries?${query}`, data)
+    postAPI(`forms/${cID}/entries`, data)
       .then(() => {
         toast.success('Submitted Successfully');
         setIsOpen(false);
