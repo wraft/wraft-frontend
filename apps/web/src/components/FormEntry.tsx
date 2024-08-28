@@ -10,7 +10,7 @@ import { fetchAPI, postAPI } from 'utils/models';
 const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
   const [items, setItems] = useState<any>([]);
   const [initial, setInitial] = useState<any>([]);
-  const [formdata, setFormdata] = useState<any>();
+  const [formdata, setFormdata] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -19,6 +19,7 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
     fetchAPI(`forms/${id}`)
       .then((data: any) => {
         setFormdata(data);
+        formId && setFormName(data.name);
         const fields = data.fields.map((i: any) => {
           return {
             id: i.id,
@@ -67,20 +68,14 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
   };
 
   const onSave = () => {
-    console.log('logvannu');
-
     if (items.some((i: any) => i.value.length === 0 && i.required)) {
       const errorsAdded = items.map((i: any) => {
         if (i.value.length === 0 && i.required === true) {
           return { ...i, error: 'This field is required' };
         } else {
-          console.log(i, 'loggi');
-
           return i;
         }
       });
-      console.log(errorsAdded, 'logg');
-
       setItems(errorsAdded);
       return;
     }
