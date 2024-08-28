@@ -11,6 +11,8 @@ import {
   Input,
 } from 'theme-ui';
 import { Modal } from '@wraft/ui';
+import { Drawer, useDrawer } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { deleteAPI, fetchAPI } from 'utils/models';
@@ -31,10 +33,13 @@ const PipelineView = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
+  const [formName, setFormName] = useState<any>();
 
   const router = useRouter();
 
   const cId: string = router.query.id as string;
+
+  const formMenuDrawer = useDrawer();
 
   const goTo = (step: number) => {
     setFormStep(step);
@@ -80,6 +85,8 @@ const PipelineView = () => {
   };
 
   const onRunClick = (formId: any) => {
+    console.log(formId, 'logform');
+
     setIsOpen(true);
     setSourceId(formId);
   };
@@ -212,9 +219,27 @@ const PipelineView = () => {
           </Box>
         </>
       </Modal>
-      <Modal open={isOpen} ariaLabel="formentry">
-        <FormEntry formId={sourceId} setIsOpen={setIsOpen} />
-      </Modal>
+      <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
+        {isOpen && (
+          <>
+            <Drawer.Header>
+              <Drawer.Title>{formName}</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <FormEntry
+              formId={sourceId}
+              pipelineId={cId}
+              setIsOpen={setIsOpen}
+              setFormName={setFormName}
+            />
+          </>
+        )}
+      </Drawer>
     </Box>
   );
 };
