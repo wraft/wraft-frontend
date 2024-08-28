@@ -2,7 +2,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
+import {
+  Tab,
+  TabList,
+  TabPanel,
+  TabProvider,
+  useTabStore,
+} from '@ariakit/react';
 import styled from '@emotion/styled';
 import ContentSidebar, {
   FlowStateBlock,
@@ -18,6 +24,7 @@ import {
   Play,
   LockSimple,
   Triangle,
+  PencilSimple,
 } from '@phosphor-icons/react';
 
 import { useAuth } from 'contexts/AuthContext';
@@ -32,6 +39,7 @@ import Nav from './NavEdit';
 import Modal from './Modal';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
+import NavLink from './NavLink';
 
 const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
@@ -237,6 +245,9 @@ const ContentDetail = () => {
   const cId: string = router.query.id as string;
 
   const defaultSelectedId = 'edit';
+
+  const tabView = useTabStore();
+  const { items, selectedId, activeId } = tabView.useState();
 
   useEffect(() => {
     fetchContentDetails(cId);
@@ -540,33 +551,7 @@ const ContentDetail = () => {
                                   // pt: 3,
                                   // px: 3,
                                 }
-                              }>
-                              <Button
-                                sx={{ py: '6px', gap: 1, alignItem: 'center' }}
-                                variant="btnSecondaryInline"
-                                onClick={() => doBuild()}>
-                                {/**
-                             btnSecondaryInline
-                              */}
-
-                                {loading && (
-                                  <Spinner color="green.400" size={16} />
-                                )}
-                                {!loading && (
-                                  <>
-                                    <Text
-                                      sx={{
-                                        fontSize: 'sm',
-                                        fontWeight: 600,
-                                        p: 0,
-                                      }}>
-                                      Generate
-                                    </Text>
-                                    <Play size={16} />
-                                  </>
-                                )}
-                              </Button>
-                            </Box>
+                              }></Box>
 
                             {/* {prevState && eligibleUser && (
                             <Button
@@ -635,7 +620,7 @@ const ContentDetail = () => {
                               borderRadius: '6px',
                               fontSize: 'xs',
                               color: 'text',
-                              bg: 'green.400',
+                              bg: 'green.a400',
                             }}>
                             <LockSimple size={10} />
                             <Text
@@ -666,26 +651,27 @@ const ContentDetail = () => {
                   <Box
                     sx={{
                       mb: 0,
-                      bg: 'gray.400',
+                      // bg: 'gray.400',
                       // bg: 'gray.a100',
                       // bg: 'neutral.200',
                       '.tabPanel': { border: 0, bg: 'gray.400' },
-                      button: {
+                      '.tabPanel button': {
                         border: 0,
                         bg: 'transparent',
                         px: 3,
                         py: 2,
-                        borderRadius: 6,
+                        borderRadius: '6px',
                       },
                       '.tabGroup': {
                         // bg: 'neutral.200',
-                        bg: 'gray.400',
+                        bg: 'gray.a300',
                         // border: 'solid 1px blue',
-                        px: 3,
-                        // textAlign: 'centre',
-                        py: 2,
+                        px: '6px',
+                        py: '6px',
+                        display: 'flex',
+                        borderRadius: '6px',
                       },
-                      'button[aria-selected=true]': {
+                      '.tabPanel button[aria-selected=true]': {
                         border: 0,
                         // bg: 'neutral.100',
                         bg: 'gray.200',
@@ -694,19 +680,84 @@ const ContentDetail = () => {
                       },
                     }}>
                     <TabProvider defaultSelectedId={defaultSelectedId}>
-                      <TabList
-                        aria-label="Content Stages"
-                        className="tabPanel tabGroup">
-                        <Tab id="edit">
-                          <StepBlock title="Content" desc="Edit contents" />
-                        </Tab>
-                        <Tab id="view">
-                          <StepBlock title="Document" desc="Sign and Manage" />
-                        </Tab>
-                      </TabList>
+                      <Flex sx={{ pt: '6px', pl: '6px' }}>
+                        <TabList
+                          store={tabView}
+                          aria-label="Content Stages"
+                          className="tabPanel tabGroup">
+                          <Tab id="edit">
+                            <StepBlock title="Content" desc="Draft content" />
+                          </Tab>
+                          <Tab id="view">
+                            <StepBlock
+                              title="Document"
+                              desc="Sign and Manage"
+                            />
+                          </Tab>
+                        </TabList>
+                        <Flex
+                          sx={{
+                            ml: 'auto',
+                            gap: 2,
+                            alignItems: 'center',
+                            mr: 3,
+                          }}>
+                          {activeId == 'view' && !isEditable && (
+                            <Button
+                              variant="btnSecondary"
+                              sx={
+                                {
+                                  //   py: '6px',
+                                  //   gap: 1,
+                                  //   alignItem: 'center',
+                                  // bg: 'gray.800',
+                                  // //   display: 'flex',
+                                  // border: 'solid 1px',
+                                  // borderColor: 'gray.600',
+                                  // color: 'gray.1200',
+                                  //   '.action': {
+                                  //     opacity: 0.4,
+                                  //   },
+                                }
+                              }
+                              onClick={() => doBuild()}>
+                              {loading && (
+                                <Spinner color="green.400" size={14} />
+                              )}
+                              {!loading && (
+                                <Flex
+                                  sx={{
+                                    gap: 2,
+                                    alignItems: 'center',
+                                  }}>
+                                  <Play size={14} className="action" />
+                                  <Text
+                                    sx={{
+                                      fontWeight: 600,
+                                      fontSize: 'sm',
+                                      p: 0,
+                                    }}>
+                                    Generate
+                                  </Text>
+                                </Flex>
+                              )}
+                            </Button>
+                          )}
+                          {activeId == 'edit' && !isEditable && (
+                            <NavLink
+                              variant="ghostinline"
+                              href={`/content/edit/[id]`}
+                              path={`/content/edit/${contents.content.id}`}>
+                              <PencilSimple size={14} className="icon" />
+                              <Text sx={{ fontSize: 'sm', ml: 1 }}>Edit</Text>
+                            </NavLink>
+                          )}
+                        </Flex>
+                      </Flex>
 
                       <TabPanel
                         tabId={defaultSelectedId}
+                        store={tabView}
                         className={styles.tablist}>
                         <ErrorBoundary>
                           <Box
@@ -747,7 +798,7 @@ const ContentDetail = () => {
                           </Box>
                         </ErrorBoundary>
                       </TabPanel>
-                      <TabPanel>
+                      <TabPanel store={tabView}>
                         <Box
                           sx={{
                             bg: 'gray.400',
@@ -764,6 +815,59 @@ const ContentDetail = () => {
                             },
                             pb: 5,
                           }}>
+                          {!contents.content.build && (
+                            <Box sx={{ px: 6, minHeight: '80vh' }}>
+                              <Box
+                                sx={{
+                                  px: 4,
+                                  py: 3,
+                                  border: 'solid 1px',
+                                  borderColor: 'gray.500',
+                                  bg: 'gray.300',
+                                  borderRadius: '6px',
+                                }}>
+                                <Text as="h4">Document not generated</Text>
+                                <Text as="p" sx={{ color: 'gray.900' }}>
+                                  Documents need to be generated
+                                </Text>
+
+                                <Button
+                                  sx={{
+                                    // py: '6px',
+                                    py: 2,
+                                    px: 3,
+                                    gap: 1,
+                                    alignItem: 'center',
+                                    // bg: 'green.300',
+                                    border: 'solid 1px',
+                                    borderColor: 'gray.600',
+                                    '.action': {
+                                      opacity: 0.4,
+                                    },
+                                  }}
+                                  variant="btnPrimaryInline"
+                                  onClick={() => doBuild()}>
+                                  {loading && (
+                                    <Spinner color="green.400" size={14} />
+                                  )}
+                                  {!loading && (
+                                    <>
+                                      <Play size={14} className="action" />
+                                      <Text
+                                        sx={{
+                                          fontWeight: 600,
+                                          fontSize: 'sm',
+                                          p: 0,
+                                        }}>
+                                        Generate Now
+                                      </Text>
+                                    </>
+                                  )}
+                                </Button>
+                              </Box>
+                            </Box>
+                          )}
+
                           {contents.content.build && (
                             <PdfViewer
                               url={`${contents.content.build}`}
