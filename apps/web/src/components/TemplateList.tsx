@@ -5,12 +5,13 @@ import { Box, Flex, Text } from 'theme-ui';
 import { Pagination, DropdownMenu, Table } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+import { Plus } from '@phosphor-icons/react';
+import { Button } from '@wraft/ui';
 
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
 
 import { TimeAgo } from './Atoms';
-import Link from './NavLink';
 import PageHeader from './PageHeader';
 
 const columns = ({ onCloneTemplete }: any) => [
@@ -182,9 +183,12 @@ const TemplateList = () => {
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="secondary" type="button">
-            + New Template
-          </Link>
+          <Button
+            onClick={() => router.push(`/templates/new`)}
+            variant="secondary">
+            <Plus size={12} weight="bold" />
+            New Template
+          </Button>
         </Box>
       </PageHeader>
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>

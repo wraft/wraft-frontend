@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { Button, Pagination, Skeleton } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
+import toast from 'react-hot-toast';
 // import { steps } from 'framer-motion';
 
 import Field from 'components/Field';
@@ -39,10 +40,6 @@ export interface IFieldItem {
   type: string;
 }
 
-// interface ContentTypeList {
-//   isEdit?: boolean;
-// }
-
 const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<any>();
@@ -51,7 +48,7 @@ const CreateDocument = () => {
   const [fields, setField] = useState([]);
   const [formStep, setFormStep] = useState(0);
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const {
     // formState: { errors },
@@ -67,7 +64,6 @@ const CreateDocument = () => {
   });
 
   const template = watch('template');
-  console.log('template', template);
   const setNewContent = contentStore((state) => state.addNewContent);
 
   useEffect(() => {
@@ -77,7 +73,6 @@ const CreateDocument = () => {
   }, []);
 
   useEffect(() => {
-    // const { tid, cid } = template;
     if (template?.id) {
       resetField('contentFields');
       getFields(template?.content_type.id);
@@ -102,15 +97,19 @@ const CreateDocument = () => {
   };
 
   const onSubmit = (data: any) => {
-    console.log('data test', data);
+    if (formStep === 0 && !template) {
+      toast.error('Please select a template.', {
+        duration: 3000,
+        position: 'top-right',
+      });
+      return;
+    }
     if (formStep === 0) {
       setFormStep(1);
     }
     if (formStep === 1) {
-      console.log('data', data);
       setNewContent(data);
-      Router.push(`/content/new`);
-      console.log('data[lor]', data);
+      router.push(`/content/new`);
     }
   };
 
@@ -123,10 +122,6 @@ const CreateDocument = () => {
         setField(tFields);
       }
     });
-    // loadTemplates(tid);
-    // //temp
-    // setActiveTemplate(tid);
-    // setShowForm(true);
   };
 
   const changePage = (newPage: any) => {
@@ -138,153 +133,149 @@ const CreateDocument = () => {
 
   return (
     <Box bg="gray.0">
-      {!loading && contents.length < 1 && (
-        <Flex sx={{ alignItems: 'center' }}>
-          <Box sx={{ color: 'gray.500' }}>
-            <EmptyForm />
-          </Box>
-          <Box sx={{ m: 2, pb: 0 }}>
-            <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
-              No template has been created yet.
-            </Text>
-          </Box>
-        </Flex>
-      )}
-      {contents && contents.length >= 1 && (
-        <>
-          <Box>{loading && <></>}</Box>
-          <StepsIndicator
-            titles={['Choose a template', 'Add content']}
-            formStep={formStep}
-            goTo={goTo}
-          />
-          <Box as="form" onSubmit={handleSubmit(onSubmit)}>
-            <Box
-              sx={{
-                p: '32px',
-                borderTop: 'solid 1px',
-                borderColor: 'border',
-                height: 'calc(100vh - 220px)',
-                overflowY: 'scroll',
-              }}>
-              {formStep === 0 && (
-                <>
-                  <Box
-                    variant="caps"
-                    sx={{
-                      fontSize: 'xxs',
-                      py: 2,
-                      color: 'text',
-                    }}>
-                    <Text
-                      as="h4"
-                      sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
-                      Select a template
+      <Box>{loading && <></>}</Box>
+      <StepsIndicator
+        titles={['Choose a template', 'Add content']}
+        formStep={formStep}
+        goTo={goTo}
+      />
+      <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+        <Box
+          sx={{
+            p: '32px',
+            borderTop: 'solid 1px',
+            borderColor: 'border',
+            height: 'calc(100vh - 220px)',
+            overflowY: 'scroll',
+          }}>
+          {formStep === 0 && (
+            <>
+              <Box
+                variant="caps"
+                sx={{
+                  fontSize: 'xxs',
+                  py: 2,
+                  color: 'text',
+                }}>
+                <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
+                  Select a template
+                </Text>
+              </Box>
+
+              {!loading && contents.length < 1 && (
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Box sx={{ color: 'gray.500' }}>
+                    <EmptyForm />
+                  </Box>
+                  <Box sx={{ m: 2, pb: 0 }}>
+                    <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
+                      No template has been created yet.
                     </Text>
                   </Box>
-
-                  {loading &&
-                    Array.from({ length: 10 }, (_, index) => (
-                      <Flex
-                        key={index}
-                        sx={{
-                          px: 3,
-                          py: 2,
-                          border: 'solid 1px',
-                          borderBottom: 'none',
-                          borderColor: 'border',
-                        }}>
-                        <Box>
-                          <Skeleton width="20px" height="22px" />
-                        </Box>
-                        <Box mx={3} sx={{ width: '100%' }}>
-                          <Skeleton height="22px" />
-                        </Box>
-                        <Skeleton width="20px" height="22px" />
-                      </Flex>
-                    ))}
-
-                  {!loading && contents && (
-                    <Controller
-                      control={control}
-                      defaultValue=""
-                      name="template"
-                      // rules={{ required: true }}
-                      render={({ field: { onChange, value } }) => (
-                        <>
-                          {contents.map((x: any) => (
-                            <BlockItem
-                              key={x.id}
-                              template={x}
-                              selected={value}
-                              onChange={onChange}
-                            />
-                          ))}
-                        </>
-                      )}
-                    />
-                  )}
-                  <Box mt="16px">
-                    {pageMeta && pageMeta?.total_pages > 1 && (
-                      <Pagination
-                        type="simple"
-                        totalPage={pageMeta?.total_pages}
-                        initialPage={1}
-                        onPageChange={changePage}
-                        totalEntries={pageMeta?.total_entries}
-                      />
-                    )}
-                  </Box>
-                </>
+                </Flex>
               )}
-              {formStep === 1 && (
-                <>
-                  {fields && fields.length > 0 && (
-                    <Box sx={{ pt: 4 }}>
-                      {fields.map((f: FieldT) => (
-                        <Box key={f.id} sx={{ pb: 2 }}>
-                          {f.field_type.name === 'date' && (
-                            <FieldDate
-                              name={`contentFields[${f.id}]`}
-                              label={capitalizeFirst(f.name)}
-                              register={register}
-                              sub="Date"
-                              onChange={() => console.log('x')}
-                            />
-                          )}
 
-                          {f.field_type.name !== 'date' && (
-                            <Field
-                              name={`contentFields[${f.id}]`}
-                              label={capitalizeFirst(f.name)}
-                              defaultValue=""
-                              register={register}
-                            />
-                          )}
-                        </Box>
-                      ))}
+              {loading &&
+                Array.from({ length: 10 }, (_, index) => (
+                  <Flex
+                    key={index}
+                    sx={{
+                      px: 3,
+                      py: 2,
+                      border: 'solid 1px',
+                      borderBottom: 'none',
+                      borderColor: 'border',
+                    }}>
+                    <Box>
+                      <Skeleton width="20px" height="22px" />
                     </Box>
+                    <Box mx={3} sx={{ width: '100%' }}>
+                      <Skeleton height="22px" />
+                    </Box>
+                    <Skeleton width="20px" height="22px" />
+                  </Flex>
+                ))}
+
+              {!loading && contents && (
+                <Controller
+                  control={control}
+                  defaultValue=""
+                  name="template"
+                  // rules={{ required: true }}
+                  render={({ field: { onChange, value } }) => (
+                    <>
+                      {contents.map((x: any) => (
+                        <BlockItem
+                          key={x.id}
+                          template={x}
+                          selected={value}
+                          onChange={onChange}
+                        />
+                      ))}
+                    </>
                   )}
-                </>
+                />
               )}
-            </Box>
-            <Flex p="32px" sx={{ gap: 2 }}>
-              <Button
-                disabled={formStep === 0}
-                onClick={() => setFormStep((pre) => pre - 1)}>
-                Prev
-              </Button>
-              <Button
-                onClick={handleSubmit(onSubmit)}
-                disabled={
-                  vals === (undefined || null) || (vals && vals.template === '')
-                }>
-                {formStep === 1 ? 'Create' : 'Next'}
-              </Button>
-            </Flex>
-          </Box>
-        </>
-      )}
+              <Box mt="16px">
+                {pageMeta && pageMeta?.total_pages > 1 && (
+                  <Pagination
+                    type="simple"
+                    totalPage={pageMeta?.total_pages}
+                    initialPage={1}
+                    onPageChange={changePage}
+                    totalEntries={pageMeta?.total_entries}
+                  />
+                )}
+              </Box>
+            </>
+          )}
+          {formStep === 1 && (
+            <>
+              {fields && fields.length > 0 && (
+                <Box sx={{ pt: 4 }}>
+                  {fields.map((f: FieldT) => (
+                    <Box key={f.id} sx={{ pb: 2 }}>
+                      {f.field_type.name === 'date' && (
+                        <FieldDate
+                          name={`contentFields[${f.id}]`}
+                          label={capitalizeFirst(f.name)}
+                          register={register}
+                          sub="Date"
+                          onChange={() => console.log('x')}
+                        />
+                      )}
+
+                      {f.field_type.name !== 'date' && (
+                        <Field
+                          name={`contentFields[${f.id}]`}
+                          label={capitalizeFirst(f.name)}
+                          defaultValue=""
+                          register={register}
+                        />
+                      )}
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </>
+          )}
+        </Box>
+        <Flex p="32px" sx={{ gap: 2 }}>
+          <Button
+            variant="ghost"
+            disabled={formStep === 0}
+            onClick={() => setFormStep((pre) => pre - 1)}>
+            Back
+          </Button>
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            disabled={
+              vals === (undefined || null) || (vals && vals.template === '')
+            }>
+            {formStep === 1 ? 'Create' : 'Next'}
+          </Button>
+        </Flex>
+      </Box>
     </Box>
   );
 };
@@ -312,14 +303,14 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
         borderBottom: 'none',
         borderColor: 'border',
         cursor: 'pointer',
-        bg: selected.id === id && 'gray.200',
+        bg: selected.id === id && 'green.300',
 
         '&:last-child': {
           borderBottom: 'solid 1px',
           borderColor: 'border',
         },
 
-        '&:hover': { bg: 'neutral.200' },
+        '&:hover': { bg: 'green.200' },
       }}>
       <Box
         sx={{

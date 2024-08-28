@@ -34,7 +34,12 @@ interface FieldFormProps {
   fieldValues?: any;
 }
 
-const FieldForm = ({ fields, onSaved, fieldValues }: FieldFormProps) => {
+const FieldForm = ({
+  fields,
+  onSaved,
+  fieldValues,
+  setMaps,
+}: FieldFormProps) => {
   const { register, handleSubmit } = useForm();
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -47,7 +52,6 @@ const FieldForm = ({ fields, onSaved, fieldValues }: FieldFormProps) => {
     fieldValues: Record<string, any>,
   ): FieldInstance[] => {
     return fields.map((field: any) => {
-      console.log('fields[neww][map single]', fieldValues[field.id]);
       return {
         ...field,
         value: fieldValues[field.id] || '',
@@ -68,15 +72,12 @@ const FieldForm = ({ fields, onSaved, fieldValues }: FieldFormProps) => {
 
   useEffect(() => {
     if (fields) {
-      console.log('fields[neww]', fields);
-      console.log('fields[neww][value]', fieldValues);
       if (fieldValues) {
         const mappedFields = mapFields(fields, fieldValues);
         onSaved(mappedFields);
         setMappedFields(mappedFields);
+        setMaps(mappedFields);
       }
-
-      console.log('fields[neww][merged value]', mappedFields);
     }
   }, [fields, fieldValues]);
 

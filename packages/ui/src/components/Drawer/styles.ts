@@ -107,6 +107,13 @@ export const Backdrop: any =
 `;
 
 export const Title: any = styled.divBox`
-  padding: 0px 32px;
+  // padding: 0px 32px;
   ${th('drawers.title')};
+`;
+
+export const Header: any = styled.divBox`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 32px;
 `;

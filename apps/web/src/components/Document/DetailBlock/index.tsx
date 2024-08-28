@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import ContentSidebar, {
   FlowStateBlock,
 } from '@wraft-ui/content/ContentSidebar';
-import { Box, Flex, Button, Text, Label, Input, Spinner } from 'theme-ui';
+import { Box, Flex, Text, Label, Input } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { RoutedDialog } from '@wraft-ui/RoutedDialog';
+import { Button } from '@wraft/ui';
 
 import NavEdit from 'components/NavEdit';
 import Field from 'components/Field';
@@ -60,7 +61,6 @@ const ContentForm = (props: IContentForm) => {
   const [activeFlow, setActiveFlow] = useState<any>(null);
   const [saving, setSaving] = useState<boolean>(false);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
-  const [showDev, setShowDev] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [fieldValues, setFieldValues] = useState<any>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -84,6 +84,15 @@ const ContentForm = (props: IContentForm) => {
   }, [id, edit]);
 
   useEffect(() => {
+    // create title
+    if (!id && newContent?.template?.title_template) {
+      const title_template = newContent?.template?.title_template;
+
+      createDefaultTitle(title_template, maps);
+    }
+  }, [maps, newContent]);
+
+  useEffect(() => {
     if (!id && !edit && newContent) {
       onInitNewContentCreate(newContent.template);
 
@@ -101,7 +110,6 @@ const ContentForm = (props: IContentForm) => {
     setSelectedTemplate(template);
 
     const ctypeId = template?.content_type?.id;
-    const defaultState = template.state?.id;
     const serialbody = template.content?.serialized;
     const content_title = serialbody?.title;
 
@@ -109,8 +117,6 @@ const ContentForm = (props: IContentForm) => {
       setValue('ttype', ctypeId);
       fetchContentTypeDetails(ctypeId);
     }
-
-    setValue('state', defaultState);
 
     if (content_title) {
       setValue('title', content_title);
@@ -138,6 +144,19 @@ const ContentForm = (props: IContentForm) => {
     } catch (error) {
       console.error('Failed to fetch content type details:', error);
     }
+  };
+
+  const createDefaultTitle = (titleFormat: any, maps: any) => {
+    const title = replacePlaceholders(titleFormat, maps);
+    setValue('title', title);
+  };
+
+  const replacePlaceholders = (str: string, replacements: any): any => {
+    replacements &&
+      replacements.forEach(({ name, value }: any) => {
+        str = str.replace(new RegExp(`@${name}`, 'g'), value);
+      });
+    return str;
   };
 
   /**
@@ -172,7 +191,7 @@ const ContentForm = (props: IContentForm) => {
         duration: 1000,
         position: 'top-right',
       });
-      Router.push(`/content/${data.content.id}`);
+      router.replace(`/content/${data.content.id}`);
     }
   };
 
@@ -206,10 +225,6 @@ const ContentForm = (props: IContentForm) => {
         : '',
     };
 
-    console.log('data[jsonContentnew][serials]', newContent?.contentFields);
-    console.log('data[jsonContentnew][serials][3]', jsonContent);
-    console.log('data[jsonContentnew][serials][2]', fields);
-
     // return;
 
     const template = {
@@ -224,8 +239,8 @@ const ContentForm = (props: IContentForm) => {
         setSaving(false);
       });
     } else {
-      postAPI(`content_types/${data.ttype}/contents`, template).then(
-        (data: any) => {
+      postAPI(`content_types/${data.ttype}/contents`, template)
+        .then((data: any) => {
           if (data?.info) {
             toast.success('Build Failed', {
               duration: 1000,
@@ -239,11 +254,20 @@ const ContentForm = (props: IContentForm) => {
               duration: 1000,
               position: 'top-right',
             });
-            Router.push(`/content/${data.content.id}`);
+            router.replace(`/content/${data.content.id}`);
             setSaving(false);
           }
-        },
-      );
+        })
+        .catch((error) => {
+          setSaving(false);
+          toast.error(
+            error?.message || 'Something went wrong please try again later',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
+        });
     }
   };
 
@@ -254,7 +278,6 @@ const ContentForm = (props: IContentForm) => {
   const onLoadContent = (data: any) => {
     // set master contents
 
-    console.log('data', data);
     setContents(data);
 
     if (
@@ -265,7 +288,6 @@ const ContentForm = (props: IContentForm) => {
     ) {
       const serialized = JSON.parse(data.content.serialized.serialized);
       const fdvalue = findHolders(serialized);
-      console.log('fdvalue', fdvalue);
       setFieldValues(fdvalue);
     }
     // map loaded state to corresponding form value
@@ -297,39 +319,6 @@ const ContentForm = (props: IContentForm) => {
       }
     }
   };
-
-  /**
-   * Load Templates for the particular content type
-   * @param id
-   */
-  // const loadTemplates = (id: string) => {
-  //   fetchAPI(`data_templates/${id}`).then((data: any) => {
-  //     const res: Template[] = data.data_template;
-  //     changeText(res);
-  //   });
-  // };
-
-  const getSummary = () => {
-    // const res =
-    //   document
-    //     .querySelector('.remirror-editor')
-    //     ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
-    // console.log('remirror-editor', res);
-  };
-
-  /**
-   * Watch out for changes in Content ID, and URL Paths
-   */
-  // useEffect(() => {
-  //   if (pathname) {
-  //     const pathGroup = pathname.split('/');
-  //     // validate if its a edit page
-  //     if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
-  //       setShowForm(false);
-  //     }
-  //   }
-  //   // getSummary();
-  // }, [cId, pathname]);
 
   // syncable field
   useEffect(() => {
@@ -425,8 +414,6 @@ const ContentForm = (props: IContentForm) => {
   const passUpdates = async (content: any, mappings: any) => {
     const updatedCont = await updateVars(content, mappings);
     setBody(updatedCont);
-
-    getSummary();
   };
 
   /**
@@ -436,10 +423,6 @@ const ContentForm = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any) => {
-    // console.log('updateStuff', mapx);
-    // console.log('updateStuff[data]', data);
-
-    console.log('onSaved[3][data]', data);
     if (data?.data) {
       let respx = '';
 
@@ -522,13 +505,6 @@ const ContentForm = (props: IContentForm) => {
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-
-    console.log('onSaved[1]', resx);
-    console.log('onSaved[2][selectedTemplate]', selectedTemplate);
-    console.log(
-      'onSaved[2.1][selectedTemplate]',
-      contents?.content?.serialized?.serialized,
-    );
 
     if (contents?.content?.serialized?.serialized) {
       const serializedData = JSON.parse(
@@ -625,10 +601,7 @@ const ContentForm = (props: IContentForm) => {
                   />
                 </Box>
                 <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
-                  <Button
-                    variant="secondary"
-                    type="submit"
-                    sx={{ fontWeight: 600 }}>
+                  <Button variant="secondary" type="submit">
                     Save
                   </Button>
                 </Box>
@@ -650,13 +623,12 @@ const ContentForm = (props: IContentForm) => {
                     pr: '2rem',
                   },
                 }}>
-                <Button
+                {/* <Button
                   variant="secondary"
                   type="button"
-                  sx={{ display: 'none' }}
                   onClick={() => setShowDev(!showDev)}>
                   Dev
-                </Button>
+                </Button> */}
                 <Box
                   sx={{
                     mt: 0,
@@ -685,12 +657,12 @@ const ContentForm = (props: IContentForm) => {
               </Box>
             )}
             <Box sx={{ display: 'none' }}>
-              <Field
+              {/* <Field
                 name="state"
                 label="state"
                 defaultValue=""
                 register={register}
-              />
+              /> */}
 
               {id && (
                 <Box>
@@ -748,15 +720,9 @@ const ContentForm = (props: IContentForm) => {
                     <Button
                       form="content-form"
                       type="submit"
-                      variant="btnPrimary">
-                      <>
-                        {saving && <Spinner color="white" size={24} />}
-                        {!saving && (
-                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                            Save
-                          </Text>
-                        )}
-                      </>
+                      variant="primary"
+                      loading={saving}>
+                      Save
                     </Button>
                   </Flex>
                 </Box>

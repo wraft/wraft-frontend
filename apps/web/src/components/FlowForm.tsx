@@ -48,6 +48,7 @@ export interface StateState {
   approvers: Approver[];
   id: string;
   state: string;
+  type: string;
   order: number;
   inserted_at: string;
   updated_at: string;
@@ -149,6 +150,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       return (
         item1.approvers === item2.approvers &&
         item1.state === item2.state &&
+        item1.type === item2.type &&
         item1.order === item2.order
       );
     };
@@ -209,6 +211,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           return {
             id: changedItem.id,
             state: changedItem.state,
+            type: changedItem.type,
             //used initial order cause backend throws error order already exists
             order: initialItem.order,
             approvers: {
@@ -221,6 +224,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         const createDataArr = newStates.map((newItem, index) => {
           return {
             state: newItem.state,
+            type: newItem.type,
             order: highestOrder + 1 + index,
             approvers: newItem.approvers.map((approver) => approver.id),
           };
@@ -335,6 +339,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     const newState: StateState = {
       id: Math.random().toString(),
       state: '',
+      type: '',
       order: highestOrder + 1,
       approvers: [],
       inserted_at: new Date().toISOString(),

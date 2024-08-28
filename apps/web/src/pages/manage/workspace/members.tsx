@@ -3,8 +3,8 @@ import Head from 'next/head';
 import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Flex, Container, Box } from 'theme-ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
+import { UserPlus } from '@phosphor-icons/react';
 
-import { InviteUserIcon } from 'components/Icons';
 import { InviteTeam } from 'components/manage';
 import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'components/ManageSidebar';
@@ -39,7 +39,7 @@ const Index: FC = () => {
               />
             }>
             <Button variant="primary" onClick={() => setIsOpen(true)}>
-              <InviteUserIcon />
+              <UserPlus size={16} />
               Invite people
             </Button>
           </PageHeader>

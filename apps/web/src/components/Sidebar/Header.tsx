@@ -4,7 +4,7 @@ import NavLink from 'next/link';
 import { Button, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
-import { Gear } from '@phosphor-icons/react';
+import { Gear, Plus } from '@phosphor-icons/react';
 
 import Link from 'components/NavLink';
 import DefaultAvatar from 'components/DefaultAvatar';
@@ -33,7 +33,7 @@ const Header = () => {
   }, []);
 
   const onSwitchOrganization = async (id: string) => {
-    const organRequest = postAPI('switch_organisations', {
+    postAPI('switch_organisations', {
       organisation_id: id,
     })
       .then((res: any) => {
@@ -46,12 +46,6 @@ const Header = () => {
           position: 'top-center',
         });
       });
-
-    // toast.promise(organRequest, {
-    //   loading: 'switching...',
-    //   success: <b>Switched workspace!</b>,
-    //   error: <b>Could not switch workspace.</b>,
-    // });
   };
 
   const notificationCount = () => {
@@ -177,6 +171,7 @@ const Header = () => {
 
               <DropdownMenu.Item>
                 <Button variant="ghost" onClick={() => setIsOpen(true)}>
+                  <Plus size={16} />
                   Create or join a workspace
                 </Button>
               </DropdownMenu.Item>

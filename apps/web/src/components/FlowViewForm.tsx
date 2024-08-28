@@ -146,6 +146,9 @@ const FlowViewForm = () => {
                             <Text sx={{ ml: 2 }} variant="pM">
                               {item.state}
                             </Text>
+                            <Text sx={{ ml: 2 }} variant="pM">
+                              {item?.type && `- ${item?.type}`}
+                            </Text>
                           </Flex>
                         </Flex>
                         <Flex

@@ -2,9 +2,14 @@ import React from 'react';
 import NavLink from 'next/link';
 import styled from '@emotion/styled';
 import { Flex, Box, Text } from 'theme-ui';
+import {
+  Layout,
+  BuildingOffice,
+  TreeStructure,
+  IntersectSquare,
+  PaintRoller,
+} from '@phosphor-icons/react';
 
-import { LayoutLogo, FlowLogo, ThemeLogo, PermLogo, Layout } from './Icons';
-// import NavLink from './NavLink';
 import PageHeader from './PageHeader';
 
 export interface INav {
@@ -14,44 +19,32 @@ export interface INav {
 const listMenu = [
   {
     name: 'Workspace',
-    logo: <PermLogo />,
+    logo: <BuildingOffice size={50} weight="thin" />,
     path: '/manage/workspace',
     desc: 'Manage RBAC',
   },
   {
     name: 'Layouts',
-    logo: <LayoutLogo />,
+    logo: <Layout size={50} weight="thin" />,
     path: '/manage/layouts',
     desc: 'Manage Document Structures',
   },
   {
     name: 'Flows',
-    logo: <FlowLogo />,
+    logo: <IntersectSquare size={50} weight="thin" />,
     path: '/manage/flows',
     desc: 'Manage Document Flows',
   },
 
   {
     name: 'Themes',
-    logo: <ThemeLogo />,
+    logo: <PaintRoller size={50} weight="thin" />,
     path: '/manage/themes',
     desc: 'Manage Themes',
   },
-  // {
-  //   name: 'Roles',
-  //   logo: <PermLogo />,
-  //   path: '/manage/roles',
-  //   desc: 'Manage RBAC',
-  // },
-  {
-    name: 'Fields',
-    logo: <PermLogo />,
-    path: '/manage/fields',
-    desc: 'Manage Fields',
-  },
   {
     name: 'Pipelines',
-    logo: <PermLogo />,
+    logo: <TreeStructure size={50} weight="thin" />,
     path: '/manage/pipelines',
     desc: 'Manage Pipelines',
   },
@@ -69,12 +62,7 @@ const ManageHomePage = () => {
             mr: 0,
             pt: 2,
             mt: 1,
-          }}>
-          {/* <NavLink href="/content-types/new" variant="btnSmall"> */}
-          {/* <Text as="h5" sx={{ color: 'gray.800' }}>Functionary Labs</Text>
-            <Text as="p" sx={{ color: 'gray.500', fontSize: 0 }}>Bengaluru, India</Text> */}
-          {/* </NavLink> */}
-        </Box>
+          }}></Box>
       </PageHeader>
 
       <Flex
@@ -101,7 +89,7 @@ const ManageHomePage = () => {
                     fill: 'green.900',
                   },
                 }}>
-                <Flex sx={{ py: 4, px: 4 }}>
+                <Flex sx={{ py: 4, px: 4, alignItems: 'center' }}>
                   <Box
                     sx={{
                       width: '4rem',
@@ -109,6 +97,7 @@ const ManageHomePage = () => {
                       mb: 1,
                       mr: 1,
                       color: 'gray.800',
+                      display: 'contents',
                       svg: {
                         fill: 'green.700',
                       },
