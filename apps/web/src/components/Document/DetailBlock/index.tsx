@@ -566,6 +566,36 @@ const ContentForm = (props: IContentForm) => {
               m: 0,
               bg: 'neutral.200',
             }}>
+            {activeFlow && (
+              <Flex
+                sx={{
+                  // bg: '#d9deda57',
+                  px: 3,
+                  py: '9px',
+                  gap: 2,
+                  bg: 'gray.200',
+                  alignContent: 'center',
+                }}>
+                {activeFlow?.states.map((x: any) => (
+                  <FlowStateBlock
+                    key={x?.id}
+                    state={x?.state}
+                    order={x?.order}
+                    id={x?.id}
+                  />
+                ))}
+
+                <Box sx={{ ml: 'auto' }}>
+                  <Button
+                    form="content-form"
+                    type="submit"
+                    variant="primary"
+                    loading={saving}>
+                    Save
+                  </Button>
+                </Box>
+              </Flex>
+            )}
             <input type="hidden" {...register('hiddenField')} value="body" />
             <Box
               sx={{
@@ -695,38 +725,12 @@ const ContentForm = (props: IContentForm) => {
             {contents && <ContentSidebar content={contents} />}
 
             <Box>
-              {activeFlow && (
-                <Flex
-                  sx={{
-                    bg: '#d9deda57',
-                    px: 3,
-                    py: 1,
-                    gap: 2,
-                    alignContent: 'center',
-                  }}>
-                  {activeFlow?.states.map((x: any) => (
-                    <FlowStateBlock
-                      key={x?.id}
-                      state={x?.state}
-                      order={x?.order}
-                      id={x?.id}
-                    />
-                  ))}
-                </Flex>
-              )}
-              <Box variant="layout.boxHeading" sx={{}}>
+              {/**<Box variant="layout.boxHeading" sx={{}}>
                 <Box sx={{ pt: 2, pb: 3 }}>
-                  <Flex sx={{ gap: 0 }}>
-                    <Button
-                      form="content-form"
-                      type="submit"
-                      variant="primary"
-                      loading={saving}>
-                      Save
-                    </Button>
-                  </Flex>
+                  <Flex sx={{ gap: 0 }}></Flex>
                 </Box>
               </Box>
+              **/}
               <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Content
