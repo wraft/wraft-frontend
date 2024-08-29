@@ -153,9 +153,9 @@ const Header = () => {
 
               <DropdownMenu.Separator />
               <Box
+                variant="styles.scrollbarY"
                 sx={{
                   height: '400px',
-                  overflowY: 'scroll',
                 }}>
                 {organisations &&
                   organisations.map((org: any) => (

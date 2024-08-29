@@ -122,7 +122,7 @@ const styles = {
     maxWidth: '100%',
   },
   editorBody: {
-    '.remirror-theme h1': {},    
+    '.remirror-theme h1': {},
     '.remirror-editor-wrapper': {},
     '.remirror-theme .ProseMirror': {
       outline: 'none',
@@ -242,6 +242,38 @@ const styles = {
       ':hover': {
         background: 'green.a300',
       },
+    },
+  },
+  scrollbarY: {
+    overflowY: 'scroll',
+    '::-webkit-scrollbar': {
+      width: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
+    },
+  },
+  scrollbarX: {
+    overflowX: 'scroll',
+    '::-webkit-scrollbar': {
+      height: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
     },
   },
 };
