@@ -16,9 +16,10 @@ interface INav {
   navtitle: string;
   onToggleEdit?: any;
   backLink?: string;
+  isEdit?: boolean;
 }
 
-const Nav = ({ navtitle, onToggleEdit }: INav) => {
+const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
   const router = useRouter();
   const { accessToken, userProfile, logout } = useAuth();
 
@@ -67,7 +68,9 @@ const Nav = ({ navtitle, onToggleEdit }: INav) => {
                 }}>
                 <Text sx={{ fontSize: 'sm', fontWeight: 500 }}>{navtitle}</Text>
 
-                <Pencil cursor="pointer" size={16} onClick={onToggleEdit} />
+                {isEdit && (
+                  <Pencil cursor="pointer" size={16} onClick={onToggleEdit} />
+                )}
               </Flex>
             )}
           </Flex>
