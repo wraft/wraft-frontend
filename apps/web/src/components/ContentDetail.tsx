@@ -245,7 +245,6 @@ const ContentDetail = () => {
   const cId: string = router.query.id as string;
 
   const defaultSelectedId = 'edit';
-
   const tabView = useTabStore();
   const { items, selectedId, activeId } = tabView.useState();
 
@@ -452,12 +451,10 @@ const ContentDetail = () => {
     return 0;
   }, [contents, states]);
 
-  console.log('currentActiveIndex', currentActiveIndex);
-
   return (
     <>
       <Box py={0} sx={{ minHeight: '100vh' }}>
-        {!loading && pageTitle && <Nav navtitle={pageTitle} />}
+        {!loading && pageTitle && <Nav navtitle={pageTitle} isEdit={false} />}
         <Box sx={{ pt: 0 }}>
           {/* {loading && (
           <Box
