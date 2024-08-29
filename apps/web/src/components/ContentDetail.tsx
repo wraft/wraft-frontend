@@ -478,6 +478,7 @@ const ContentDetail = () => {
                           py: 1,
                           alignItems: 'center',
                           overflowX: 'scroll',
+                          scrollbarWidth: 'none',
                           bg: 'white',
                           border: 'solid 1px',
                           borderColor: 'gray.300',
