@@ -21,7 +21,7 @@ import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from '../MenuStepsIndicator';
 import PipelineLogs from './PipelineLogs';
-import FormEntry from '../FormEntry';
+import PipelineFormEntry from '../PipelineFormEntry';
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);
@@ -40,6 +40,8 @@ const PipelineView = () => {
   const cId: string = router.query.id as string;
 
   const formMenuDrawer = useDrawer();
+
+  console.log(pipelineData, 'logdata');
 
   const goTo = (step: number) => {
     setFormStep(step);
@@ -101,7 +103,8 @@ const PipelineView = () => {
             <Button
               variant="secondary"
               onClick={() => onRunClick(pipelineData?.source_id)}
-              type="button">
+              type="button"
+              disabled={pipelineData.stages?.length == 0}>
               Run
             </Button>
             {/* <Button ml={2} variant="buttonPrimary" type="button">
@@ -231,7 +234,7 @@ const PipelineView = () => {
                 onClick={() => setIsOpen(false)}
               />
             </Drawer.Header>
-            <FormEntry
+            <PipelineFormEntry
               formId={sourceId}
               pipelineId={cId}
               setIsOpen={setIsOpen}

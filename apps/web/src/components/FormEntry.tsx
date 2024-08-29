@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Logo } from 'components/Icons';
 import { fetchAPI, postAPI } from 'utils/models';
 
-const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
+const FormEntry = () => {
   const [items, setItems] = useState<any>([]);
   const [initial, setInitial] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>(null);
@@ -19,7 +19,6 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
     fetchAPI(`forms/${id}`)
       .then((data: any) => {
         setFormdata(data);
-        formId && setFormName(data.name);
         const fields = data.fields.map((i: any) => {
           return {
             id: i.id,
@@ -86,17 +85,14 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
       };
     });
     const data = {
-      ...(pipelineId && { pipeline_id: pipelineId }),
       data: fields,
     };
 
-    const cID = formId ? formId : cId;
     // const query = formId ? pipelineId : '';
 
-    postAPI(`forms/${cID}/entries`, data)
+    postAPI(`forms/${cId}/entries`, data)
       .then(() => {
         toast.success('Submitted Successfully');
-        setIsOpen(false);
         onClear();
       })
       .catch((err) => {
@@ -108,10 +104,6 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
   useEffect(() => {
     if (cId && cId.length > 0) loadData(cId);
   }, [cId]);
-
-  useEffect(() => {
-    if (formId) loadData(formId);
-  }, [formId]);
 
   useEffect(() => {
     console.table(items);
@@ -131,14 +123,14 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
   }
 
   return (
-    <Box sx={{ background: 'background', width: formId ? '500px' : '' }}>
+    <Box sx={{ background: 'background' }}>
       <Box sx={{ position: 'absolute', top: 4, left: 4 }}>
-        {!formId && <Logo />}
+        <Logo />
       </Box>
       <Flex
         sx={{
           px: 4,
-          py: formId ? 2 : 4,
+          py: 4,
           alignItems: 'center',
           justifyContent: 'center',
         }}>
@@ -147,29 +139,27 @@ const FormEntry = ({ formId, pipelineId, setIsOpen, setFormName }: any) => {
             maxWidth: '80ch',
             width: '100%',
           }}>
-          {!formId && (
-            <>
-              <Box sx={{ width: '100%', height: '4px', bg: 'green.700' }}></Box>
-              <Box
-                sx={{
-                  bg: 'white',
-                  p: 4,
-                  border: '1px solid',
-                  borderTop: 'none',
-                  borderColor: 'border',
-                }}>
-                <Text as="p" variant="h4Medium">
-                  {formdata?.name || 'name'}
-                </Text>
-                <Text
-                  as="p"
-                  variant="h6Regular"
-                  sx={{ mt: 3, color: 'gray.600' }}>
-                  {formdata?.description || 'description'}
-                </Text>
-              </Box>
-            </>
-          )}
+          <>
+            <Box sx={{ width: '100%', height: '4px', bg: 'green.700' }}></Box>
+            <Box
+              sx={{
+                bg: 'white',
+                p: 4,
+                border: '1px solid',
+                borderTop: 'none',
+                borderColor: 'border',
+              }}>
+              <Text as="p" variant="h4Medium">
+                {formdata?.name || 'name'}
+              </Text>
+              <Text
+                as="p"
+                variant="h6Regular"
+                sx={{ mt: 3, color: 'gray.600' }}>
+                {formdata?.description || 'description'}
+              </Text>
+            </Box>
+          </>
           <Box
             sx={{
               mt: 4,

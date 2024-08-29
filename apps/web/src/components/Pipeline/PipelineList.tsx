@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer, Pagination, useDrawer } from '@wraft/ui';
+import { Box, Flex, Text } from 'theme-ui';
+import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
@@ -9,7 +9,7 @@ import { fetchAPI } from '../../utils/models';
 import Link from '../NavLink';
 import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
-import FormEntry from '../FormEntry';
+import PipelineFormEntry from '../PipelineFormEntry';
 
 export interface Pipelines {
   total_pages: number;
@@ -46,6 +46,8 @@ const Form = () => {
   const [page, setPage] = useState<number>(1);
   const [formName, setFormName] = useState<any>();
 
+  console.log(contents, 'logcont');
+
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
@@ -64,6 +66,10 @@ const Form = () => {
       setPageMeta(data);
       setLoading(false);
     });
+  };
+
+  const pipelineDetail = (id: any) => {
+    fetchAPI(`pipelines/${id}`);
   };
 
   useEffect(() => {
@@ -141,7 +147,8 @@ const Form = () => {
             onClick={() => {
               onRunClick(row.original.source_id, row.original.id);
             }}
-            variant="secondary">
+            variant="secondary"
+            disabled={row.original.stages_count == 0}>
             Run
           </Button>
         </Box>
@@ -154,7 +161,7 @@ const Form = () => {
     <Box>
       <PageHeader title="All Pipelines">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="buttonSecondary" onClick={() => setShowSearch(true)}>
+          <Button variant="secondary" onClick={() => setShowSearch(true)}>
             New Pipeline
           </Button>
         </Flex>
@@ -194,7 +201,7 @@ const Form = () => {
                 onClick={() => setIsOpen(false)}
               />
             </Drawer.Header>
-            <FormEntry
+            <PipelineFormEntry
               formId={sourceId}
               pipelineId={pipelineId}
               setIsOpen={setIsOpen}
