@@ -109,84 +109,76 @@ const Header = () => {
               </Flex>
             </DropdownMenu.Trigger>
             <DropdownMenu aria-label="Switch Workspace">
+              <Flex
+                color="primary"
+                py="12px"
+                px="8px"
+                sx={{
+                  fill: 'text',
+                  cursor: 'pointer',
+                  minWidth: '200px',
+                  justifyContent: 'space-between',
+                }}>
+                {userProfile?.currentOrganisation && (
+                  <>
+                    <Flex>
+                      <DefaultAvatar
+                        url={userProfile?.currentOrganisation?.logo}
+                        value={userProfile?.currentOrganisation?.name}
+                        size={24}
+                      />
+                      <Box ml={2}>
+                        <Text
+                          as="p"
+                          sx={{
+                            fontWeight: `bold`,
+                            color: 'gray.1000',
+                            lineHeight: 1,
+                            fontSize: 'xs',
+                          }}>
+                          {userProfile?.currentOrganisation?.name}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
+                          {userProfile?.currentOrganisation?.members_count}{' '}
+                          members
+                        </Text>
+                      </Box>
+                    </Flex>
+                    <NavLink href={`/manage/workspace`}>
+                      <Gear size={18} weight="bold" color="#777" />
+                    </NavLink>
+                  </>
+                )}
+              </Flex>
+
+              <DropdownMenu.Separator />
               <Box
                 sx={{
-                  width: '228px',
+                  height: '400px',
+                  overflowY: 'scroll',
                 }}>
-                <Flex
-                  color="primary"
-                  py="12px"
-                  px="8px"
-                  sx={{
-                    fill: 'text',
-                    cursor: 'pointer',
-                    minWidth: '200px',
-                    justifyContent: 'space-between',
-                  }}>
-                  {userProfile?.currentOrganisation && (
-                    <>
-                      <Flex>
-                        <DefaultAvatar
-                          url={userProfile?.currentOrganisation?.logo}
-                          value={userProfile?.currentOrganisation?.name}
-                          size={24}
-                        />
-                        <Box ml={2}>
-                          <Text
-                            as="p"
-                            sx={{
-                              fontWeight: `bold`,
-                              color: 'gray.1000',
-                              lineHeight: 1,
-                              fontSize: 'xs',
-                            }}>
-                            {userProfile?.currentOrganisation?.name}
-                          </Text>
-                          <Text
-                            as="p"
-                            sx={{ fontSize: 'xs', color: 'gray.800' }}>
-                            {userProfile?.currentOrganisation?.members_count}{' '}
-                            members
-                          </Text>
-                        </Box>
-                      </Flex>
-                      <NavLink href={`/manage/workspace`}>
-                        <Gear size={18} weight="bold" color="#777" />
-                      </NavLink>
-                    </>
-                  )}
-                </Flex>
-
-                <DropdownMenu.Separator />
-                <Box
-                  sx={{
-                    height: '400px',
-                    overflowY: 'scroll',
-                    scrollbarWidth: 'none',
-                  }}>
-                  {organisations &&
-                    organisations.map((org: any) => (
-                      <DropdownMenu.Item
-                        key={org.id}
-                        onClick={() => onSwitchOrganization(org?.id)}>
-                        <DefaultAvatar
-                          url={org?.logo}
-                          value={org.name}
-                          size={20}
-                        />
-                        <Box ml={2}>{org.name}</Box>
-                      </DropdownMenu.Item>
-                    ))}
-                </Box>
-                <DropdownMenu.Separator />
-
-                <DropdownMenu.Item>
-                  <Button variant="ghost" onClick={() => setIsOpen(true)}>
-                    <Plus size={16} />
-                    Create or join a workspace
-                  </Button>
-                </DropdownMenu.Item>
+                {organisations &&
+                  organisations.map((org: any) => (
+                    <DropdownMenu.Item
+                      key={org.id}
+                      onClick={() => onSwitchOrganization(org?.id)}>
+                      <DefaultAvatar
+                        url={org?.logo}
+                        value={org.name}
+                        size={20}
+                      />
+                      <Box ml={2}>{org.name}</Box>
+                    </DropdownMenu.Item>
+                  ))}
               </Box>
+              <DropdownMenu.Separator />
+
+              <DropdownMenu.Item>
+                <Button variant="ghost" onClick={() => setIsOpen(true)}>
+                  <Plus size={16} />
+                  Create or join a workspace
+                </Button>
+              </DropdownMenu.Item>
             </DropdownMenu>
           </DropdownMenu.Provider>
         </Box>
