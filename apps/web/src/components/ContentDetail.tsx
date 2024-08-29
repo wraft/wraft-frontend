@@ -474,7 +474,7 @@ const ContentDetail = () => {
           <ErrorBoundary>
             {contents && contents.content && (
               <Flex sx={{ bg: 'gray.400' }}>
-                <Box sx={{ minWidth: '70%', m: 0 }}>
+                <Box sx={{ width: '70%', m: 0 }}>
                   <Flex
                     sx={{
                       px: 3,
@@ -888,7 +888,7 @@ const ContentDetail = () => {
                     // bg: 'neutral.100',
                     bg: 'gray.100',
                     py: 0,
-                    width: '100%',
+                    width: '30%',
                     borderLeft: 'solid 1px',
                     borderColor: 'border',
                     minHeight: '100vh',
