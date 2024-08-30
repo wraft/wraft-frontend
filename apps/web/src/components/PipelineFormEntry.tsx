@@ -69,9 +69,9 @@ const PipelineFormEntry = ({
   };
 
   const onSave = () => {
-    if (items.some((i: any) => !i.value)) {
+    if (items.some((i: any) => !i.value && i.required == true)) {
       const errorsAdded = items.map((i: any) => {
-        if (!i.value) {
+        if (!i.value && i.required == true) {
           return { ...i, error: 'This field is required' };
         } else {
           return i;
@@ -152,7 +152,6 @@ const PipelineFormEntry = ({
               <Input
                 sx={{ bg: 'transparent' }}
                 name={`contentFields[${item.id}]`}
-                value={item.value}
                 onChange={(e) => onValueChange(e, item)}
               />
             )}
