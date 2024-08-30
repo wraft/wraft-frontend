@@ -63,7 +63,7 @@ const PipelineView = () => {
 
   useEffect(() => {
     loadDetails();
-  }, [cId]);
+  }, [cId, rerender]);
 
   useEffect(() => {
     loadForm();
