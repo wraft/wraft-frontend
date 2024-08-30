@@ -56,10 +56,7 @@ const PipelineFormEntry = ({
     const newItem = {
       ...item,
       value: newVal,
-      error:
-        newVal.length === 0 && item.required
-          ? 'This field is required'
-          : undefined,
+      error: newVal === '' ? 'This field is required' : undefined,
     };
     const newArr = items.map((s: any) => {
       if (s.id === item.id) {
@@ -72,9 +69,9 @@ const PipelineFormEntry = ({
   };
 
   const onSave = () => {
-    if (items.some((i: any) => i.value.length === 0 && i.required)) {
+    if (items.some((i: any) => !i.value)) {
       const errorsAdded = items.map((i: any) => {
-        if (i.value.length === 0 && i.required === true) {
+        if (!i.value) {
           return { ...i, error: 'This field is required' };
         } else {
           return i;
@@ -155,7 +152,7 @@ const PipelineFormEntry = ({
               <Input
                 sx={{ bg: 'transparent' }}
                 name={`contentFields[${item.id}]`}
-                defaultValue=""
+                value={item.value}
                 onChange={(e) => onValueChange(e, item)}
               />
             )}
@@ -179,7 +176,7 @@ const PipelineFormEntry = ({
         ))}
       </Box>
       <Flex p="32px" sx={{ gap: 2 }}>
-        <Button onClick={onSave}>Save</Button>
+        <Button onClick={onSave}>Run</Button>
         <Button variant="secondary" onClick={onClear}>
           Clear
         </Button>
