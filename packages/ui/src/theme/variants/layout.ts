@@ -151,6 +151,19 @@ const layout = {
     p: 4,
     height: 'calc(100vh - 72px)',
     overflow: 'scroll',
+    '::-webkit-scrollbar': {
+      width: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
+    },
   },
   contentFrame: {
     width: '100%',
