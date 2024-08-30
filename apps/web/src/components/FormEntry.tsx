@@ -67,9 +67,9 @@ const FormEntry = () => {
   };
 
   const onSave = () => {
-    if (items.some((i: any) => i.value.length === 0 && i.required)) {
+    if (items.some((i: any) => i.value.length === 0 && i.required == true)) {
       const errorsAdded = items.map((i: any) => {
-        if (i.value.length === 0 && i.required === true) {
+        if (i.value.length === 0 && i.required == true) {
           return { ...i, error: 'This field is required' };
         } else {
           return i;
