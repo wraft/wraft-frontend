@@ -1,4 +1,10 @@
-import { borderRadius, cursor, fontSize, fontWeight } from '@xstyled/emotion';
+import {
+  borderRadius,
+  cursor,
+  fontSize,
+  fontWeight,
+  opacity,
+} from '@xstyled/emotion';
 
 const buttons = {
   none: {
@@ -80,6 +86,29 @@ const buttons = {
     ':hover': {
       backgroundColor: 'gray.400',
       borderColor: 'gray.500',
+    },
+  },
+  ghostinline: {
+    display: 'flex',
+    bg: 'gray.200',
+    border: 'solid 1px',
+    borderColor: 'gray.700',
+    padding: '6px 9px',
+    fontWeight: 'heading',
+    svg: {
+      opacity: '0.6',
+    },
+    fontSize: 'sm',
+    fontFamily: 'body',
+    borderRadius: '6px',
+    color: 'gray.1100',
+    ':hover': {
+      bg: 'green.300',
+      color: 'gray.200',
+    },
+    ':disabled': {
+      color: 'gray.900',
+      bg: 'neutral.300',
     },
   },
   ghost: {

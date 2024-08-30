@@ -17,7 +17,6 @@ const validationSchema: any = yup.object().shape({
   subject: yup
     .string()
     .min(4, 'Minimum 4 characters required')
-    .max(20, 'Maximum 20 characters allowed')
     .transform((value) => value.trim())
     .optional(),
   message: yup
@@ -88,7 +87,7 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
         <Field
           register={register}
           error={errors.email}
-          label="From"
+          label="To"
           name="email"
           defaultValue=""
           placeholder="Enter from Email"

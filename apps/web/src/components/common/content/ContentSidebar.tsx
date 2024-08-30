@@ -9,7 +9,12 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
-import { Check, DotsThreeVertical, DotOutline } from '@phosphor-icons/react';
+import {
+  Check,
+  DotsThreeVertical,
+  DotOutline,
+  Circle,
+} from '@phosphor-icons/react';
 
 import { BackArrowIcon } from 'components/Icons';
 import Modal from 'components/Modal';
@@ -34,6 +39,20 @@ export const FlowStateBlock = ({
 }: FlowStateBlockProps) => {
   const checked = currentActiveIndex >= num;
   const activeState = nextState && id === nextState?.id;
+
+  // const bgC = activeState &&
+  // Color logic
+  const getBgColor = () => {
+    if (activeState) {
+      return checked ? 'green.100' : 'orange.100';
+    }
+
+    if (!checked && !activeState) {
+      return 'gray.200';
+    }
+    return 'green.400';
+  }; // {!checked && !activeState
+
   return (
     <Flex
       as={Focusable}
@@ -52,23 +71,32 @@ export const FlowStateBlock = ({
           width: '18px',
           height: '18px',
           borderRadius: '9rem',
-          bg: activeState || checked ? 'green.500' : 'gray.500',
+          bg: getBgColor(),
           border: '1px solid',
-          borderColor: activeState ? 'green.800' : 'gray.500',
+          borderColor: activeState ? 'gray.300' : 'gray.500',
+          color: activeState
+            ? checked
+              ? 'green.1200'
+              : 'green.400'
+            : 'green.1200',
           textAlign: 'center',
           mr: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
+          '.circlced': {
+            color: 'orange.300',
+          },
           p: 1,
         }}>
         {/* {nextState?.order} */}
         {!checked && !activeState && <>{num}</>}
-        {activeState && <DotOutline size={12} />}
-        {checked && <Check size={16} />}
+        {activeState && <Circle size={16} weight="fill" className="circlced" />}
+        {checked && <Check size={16} weight="bold" />}
       </Box>
-      <Text sx={{ fontSize: '13px', textTransform: 'capitalize' }}>
+      <Text
+        sx={{ fontSize: '13px', textTransform: 'capitalize', fontWeight: 500 }}>
         {state}
       </Text>
       <Box
