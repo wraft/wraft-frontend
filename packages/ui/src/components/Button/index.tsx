@@ -34,7 +34,6 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   align-items: center;
   position: relative;
   gap: 10px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   transition:
     color 0.15s ease-in-out,

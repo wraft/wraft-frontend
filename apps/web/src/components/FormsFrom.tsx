@@ -17,12 +17,12 @@ import {
 import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
 import {
   CloseIcon,
-  DateIcon,
+  // DateIcon,
   DocumentsIcon,
   DragIcon,
-  MailIcon,
-  MultipleChoiceIcon,
-  TimeIcon,
+  // MailIcon,
+  // MultipleChoiceIcon,
+  // TimeIcon,
 } from '@wraft/icon';
 import { ArrowDown, ArrowUp, Copy, Plus, Trash } from '@phosphor-icons/react';
 import { CSS } from '@dnd-kit/utilities';
@@ -59,6 +59,8 @@ const FormsFrom = ({
 }: Props) => {
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
   const [removedFields, setRemovedFields] = useState<string[]>([]);
+
+  console.log('fieldTypes', fieldTypes);
 
   const onAddField = (
     type:
@@ -248,6 +250,8 @@ const FormsFrom = ({
   };
 
   const onSave = () => {
+    // console.log('onSave', 'onSave');
+
     if (formdata === undefined) {
       return;
     }
@@ -308,25 +312,42 @@ const FormsFrom = ({
       description: formdata.description,
     };
 
+    // console.log('data', data);
+    // return;
+
     if (isEdit) {
-      putAPI(`forms/${formdata.id}`, data).then(() => {
-        toast.success('Updated Successfully');
-        setRerender && setRerender((prev: boolean) => !prev);
-        setOpen && setOpen(false);
-      });
+      putAPI(`forms/${formdata.id}`, data)
+        .then(() => {
+          toast.success('Updated Successfully');
+          setRerender && setRerender((prev: boolean) => !prev);
+          setOpen && setOpen(false);
+        })
+        .catch((err) => {
+          toast.error(err?.errors && JSON.stringify(err?.errors), {
+            duration: 3000,
+            position: 'top-right',
+          });
+        });
     } else {
       setLoading(true);
-      postAPI(`forms`, data).then(() => {
-        toast.success('Created Successfully');
-        setRerender && setRerender((prev: boolean) => !prev);
-        setOpen && setOpen(false);
-        setLoading(false);
-      });
+      postAPI(`forms`, data)
+        .then(() => {
+          toast.success('Created Successfully');
+          setRerender && setRerender((prev: boolean) => !prev);
+          setOpen && setOpen(false);
+          setLoading(false);
+        })
+        .catch((err) => {
+          toast.error(err?.errors && JSON.stringify(err?.errors), {
+            duration: 3000,
+            position: 'top-right',
+          });
+        });
     }
   };
 
   useEffect(() => {
-    onSave();
+    // onSave();
   }, [trigger]);
 
   useEffect(() => {
@@ -362,139 +383,154 @@ const FormsFrom = ({
   };
 
   return (
-    <Box sx={{ bg: 'white', border: '1px solid', borderColor: 'border' }}>
-      <Box>
-        {items &&
-          items.map((item: any, index: number) => (
-            <Box
-              key={item.id}
-              sx={{ mt: 3, p: 4, borderBottom: '1px solid #eee' }}>
-              <Label>Field Name</Label>
-              <Input
-                defaultValue={item.name}
-                placeholder="Name"
-                onChange={(e) => onNameChange(e, item)}></Input>
-              {item.error && <Text variant="error">{item.error}</Text>}
-              {item.type === 'options' && (
-                <Box mt={3}>
-                  <DraggableValues
-                    item={item}
-                    items={items}
-                    setItems={setItems}
-                    onOptionNameChange={onOptionNameChange}
-                    onDeleteValue={onDeleteValue}
-                  />
-                  <Flex sx={{ flexDirection: 'column', width: '100%' }} mt={3}>
-                    <Button
-                      variant="secondary"
-                      onClick={() => onAddOption(item.id)}>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        height: '90vh',
+        width: isEdit ? '50%' : 'auto',
+      }}>
+      <Box sx={{ height: '100%', flexGrow: 1, overflow: 'auto', px: 4 }}>
+        <Box sx={{ bg: 'white', border: '1px solid', borderColor: 'border' }}>
+          <Box>
+            {items &&
+              items.map((item: any, index: number) => (
+                <Box
+                  key={item.id}
+                  sx={{ mt: 3, p: 4, borderBottom: '1px solid #eee' }}>
+                  <Label>Field Name</Label>
+                  <Input
+                    defaultValue={item.name}
+                    placeholder="Name"
+                    onChange={(e) => onNameChange(e, item)}></Input>
+                  {item.error && <Text variant="error">{item.error}</Text>}
+                  {item.type === 'options' && (
+                    <Box mt={3}>
+                      <DraggableValues
+                        item={item}
+                        items={items}
+                        setItems={setItems}
+                        onOptionNameChange={onOptionNameChange}
+                        onDeleteValue={onDeleteValue}
+                      />
                       <Flex
-                        sx={{
-                          alignItems: 'center',
-                          color: 'gray.800',
-                        }}>
-                        <Plus size={20} />
-                        <Text sx={{ ml: 2 }}>Add Option</Text>
+                        sx={{ flexDirection: 'column', width: '100%' }}
+                        mt={3}>
+                        <Button
+                          variant="secondary"
+                          onClick={() => onAddOption(item.id)}>
+                          <Flex
+                            sx={{
+                              alignItems: 'center',
+                              color: 'gray.800',
+                            }}>
+                            <Plus size={20} />
+                            <Text sx={{ ml: 2 }}>Add Option</Text>
+                          </Flex>
+                        </Button>
                       </Flex>
-                    </Button>
+                    </Box>
+                  )}
+                  <Flex sx={{ justifyContent: 'space-between' }}>
+                    <Flex sx={{ gap: 3, mt: 3 }}>
+                      <Box>
+                        <Switch
+                          label="Required"
+                          sx={{
+                            bg: 'gray.100',
+                          }}
+                          checked={item.required}
+                          onChange={(e) => onRequiredChecked(e, index)}
+                        />
+                      </Box>
+                      {item.type === 'text' && (
+                        <Box>
+                          <Switch
+                            label="Long Answer"
+                            sx={{ bg: 'gray.100' }}
+                            checked={item.long}
+                            onChange={(e) => onLongChecked(e, index)}
+                          />
+                        </Box>
+                      )}
+                      {item.type === 'options' && (
+                        <Box>
+                          <Switch
+                            label="Multiple Answers"
+                            sx={{ bg: 'gray.100' }}
+                            checked={item.long}
+                            onChange={(e) => onMultipleChecked(e, index)}
+                          />
+                        </Box>
+                      )}
+                    </Flex>
+                    <Flex sx={{ alignItems: 'center', gap: 3 }}>
+                      <Button
+                        variant="none"
+                        onClick={() => onDuplicateField(index, item)}>
+                        <Copy size={20} />
+                      </Button>
+                      <Button
+                        variant="none"
+                        onClick={() => onDeleteField(index)}>
+                        <Trash width={24} />
+                      </Button>
+                      <Button
+                        variant="none"
+                        disabled={index + 1 === items.length}
+                        onClick={() => onMoveDown(index)}>
+                        <ArrowDown size={20} />
+                      </Button>
+                      <Button
+                        variant="none"
+                        disabled={index === 0}
+                        onClick={() => onMoveUp(index)}>
+                        <ArrowUp width={20} />
+                      </Button>
+                    </Flex>
                   </Flex>
                 </Box>
-              )}
-              <Flex sx={{ justifyContent: 'space-between' }}>
-                <Flex sx={{ gap: 3, mt: 3 }}>
-                  <Box>
-                    <Switch
-                      label="Required"
-                      sx={{
-                        bg: 'gray.100',
-                      }}
-                      checked={item.required}
-                      onChange={(e) => onRequiredChecked(e, index)}
-                    />
-                  </Box>
-                  {item.type === 'text' && (
-                    <Box>
-                      <Switch
-                        label="Long Answer"
-                        sx={{ bg: 'gray.100' }}
-                        checked={item.long}
-                        onChange={(e) => onLongChecked(e, index)}
-                      />
-                    </Box>
-                  )}
-                  {item.type === 'options' && (
-                    <Box>
-                      <Switch
-                        label="Multiple Answers"
-                        sx={{ bg: 'gray.100' }}
-                        checked={item.long}
-                        onChange={(e) => onMultipleChecked(e, index)}
-                      />
-                    </Box>
-                  )}
-                </Flex>
-                <Flex sx={{ alignItems: 'center', gap: 3 }}>
-                  <Button
-                    variant="none"
-                    onClick={() => onDuplicateField(index, item)}>
-                    <Copy size={20} />
-                  </Button>
-                  <Button variant="none" onClick={() => onDeleteField(index)}>
-                    <Trash width={24} />
-                  </Button>
-                  <Button
-                    variant="none"
-                    disabled={index + 1 === items.length}
-                    onClick={() => onMoveDown(index)}>
-                    <ArrowDown size={20} />
-                  </Button>
-                  <Button
-                    variant="none"
-                    disabled={index === 0}
-                    onClick={() => onMoveUp(index)}>
-                    <ArrowUp width={20} />
-                  </Button>
-                </Flex>
-              </Flex>
-            </Box>
-          ))}
-      </Box>
-      <Flex sx={{ gap: 3, p: 4 }}>
-        <AnimatedButton text="Text" onClick={() => onAddField('String')}>
-          <DocumentsIcon />
-        </AnimatedButton>
-        <AnimatedButton text="Long Text" onClick={() => onAddField('Text')}>
-          <Box sx={{ fontWeight: '700', fontSize: '16px' }}>L</Box>
-        </AnimatedButton>
-        <AnimatedButton text="Date" onClick={() => onAddField('Date')}>
+              ))}
+          </Box>
+          <Flex sx={{ gap: 3, p: 4 }}>
+            <AnimatedButton text="Text" onClick={() => onAddField('String')}>
+              <DocumentsIcon />
+            </AnimatedButton>
+            <AnimatedButton text="Long Text" onClick={() => onAddField('Text')}>
+              <Box sx={{ fontWeight: '700', fontSize: '16px' }}>L</Box>
+            </AnimatedButton>
+            {/* <AnimatedButton text="Date" onClick={() => onAddField('Date')}>
           <DateIcon />
-        </AnimatedButton>
-        <AnimatedButton
+        </AnimatedButton> */}
+            {/* <AnimatedButton
           disabled
           text="Image"
           onClick={() => onAddField('File Input')}>
           <Box sx={{ fontWeight: '700', fontSize: '16px' }}>I</Box>
-        </AnimatedButton>
-        <AnimatedButton
+        </AnimatedButton> */}
+            {/* <AnimatedButton
           disabled
           text="Multiple Choice"
           onClick={() => onAddField('Radio Button')}>
           <MultipleChoiceIcon />
-        </AnimatedButton>
-        <AnimatedButton text="Time" onClick={() => onAddField('Time')} disabled>
+        </AnimatedButton> */}
+            {/* <AnimatedButton text="Time" onClick={() => onAddField('Time')} disabled>
           <TimeIcon />
-        </AnimatedButton>
-        <AnimatedButton
+        </AnimatedButton> */}
+            {/* <AnimatedButton
           text="Email"
           onClick={() => onAddField('Email')}
           disabled>
           <MailIcon />
-        </AnimatedButton>
-      </Flex>
-      <Box sx={{ display: isEdit ? 'block' : 'none', p: 4, pt: 0 }}>
-        <Button onClick={onSave}>Save</Button>
+        </AnimatedButton> */}
+          </Flex>
+        </Box>
       </Box>
-    </Box>
+      <Box p={4}>
+        <Button type="submit" onClick={onSave}>
+          {isEdit ? 'Update' : 'Create'}
+        </Button>
+      </Box>
+    </Flex>
   );
 };
 

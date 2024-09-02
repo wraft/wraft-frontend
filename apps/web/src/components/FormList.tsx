@@ -73,6 +73,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
         position: 'top-right',
       });
     });
+    setDeleteOpen(null);
   };
 
   useEffect(() => {
