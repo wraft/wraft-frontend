@@ -239,7 +239,7 @@ const Header = () => {
                   <Link href="/notifications">
                     <Flex>
                       <Box sx={{ width: '180px' }}>Notifications</Box>
-                      {count > 0 && (
+                      {count && count > 0 && (
                         <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
                       )}
                     </Flex>
