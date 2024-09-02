@@ -98,8 +98,15 @@ const PipelineFormEntry = ({
         onClear();
       })
       .catch((err) => {
-        if (err.errors == 'No mappings found')
+        if (err.errors == 'No mappings found') {
           toast.error('Pipeline configuration incompleted');
+          return;
+        }
+
+        toast.error(JSON.stringify(err), {
+          duration: 3000,
+          position: 'top-right',
+        });
       });
   };
 
