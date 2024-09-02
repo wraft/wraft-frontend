@@ -104,6 +104,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   }, [page, rerender]);
 
   const onDelete = (index: number) => {
+    setDeleteFlow(null);
     setIsOpen(null);
     deleteAPI(`flows/${contents[index].flow.id}`).then(() => {
       setRerender((prev: boolean) => !prev);

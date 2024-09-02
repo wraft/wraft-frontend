@@ -99,7 +99,7 @@ const Index: FC = () => {
             <Box>
               <Button variant="secondary">
                 <a
-                  href={`/forms/entry/${cId}`}
+                  href={`/forms/entry/new/${cId}`}
                   target="_blank"
                   rel="noopener noreferrer">
                   Share

@@ -27,8 +27,9 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
           transition: 'all 0.3s ease',
           '& .text': {
             color: 'green.800',
-            minWidth: '0px',
-            width: '0px',
+            // minWidth: '0px',
+            ml: 1,
+            width: 'fit-content',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             transition: 'width 0.3s ease',
@@ -38,8 +39,8 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
               left: 0,
               right: 0,
               color: 'text',
-              clipPath: 'inset(0 100% 0 0)',
-              transition: 'clip-path 0.3s ease-out ',
+              // clipPath: 'inset(0 100% 0 0)',
+              // transition: 'clip-path 0.3s ease-out ',
             },
           },
           '& .icon': {
@@ -52,7 +53,7 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
               ml: 1,
               width: 'fit-content',
               '&::before': {
-                clipPath: 'inset(0 0 0 0)',
+                // clipPath: 'inset(0 0 0 0)',
               },
             },
           },
