@@ -5,7 +5,9 @@ import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 import { Button, Pagination, Table } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { fetchAPI } from '../utils/models';
+import ContentTitleList from 'components/common/content/ContentTitleList';
+import { fetchAPI } from 'utils/models';
+
 import { TimeAgo, FilterBlock, StateBadge } from './Atoms';
 import PageHeader from './PageHeader';
 
@@ -68,32 +70,10 @@ const columns = [
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
-          <Box
-            sx={{
-              width: '3px',
-              bg: row.original?.content_type?.color
-                ? row.original?.content_type?.color
-                : 'blue',
-            }}
-          />
-          <Box ml={3}>
-            <Box sx={{ color: 'gray.1000' }}>
-              {row.original?.content?.instance_id}
-            </Box>
-            <Box
-              as="h5"
-              sx={{
-                fontSize: 'sm',
-                color: 'gray.1200',
-                letterSpacing: '-0.15px',
-                fontWeight: 500,
-                lineHeight: 1.25,
-              }}>
-              {row.original?.content?.serialized?.title}
-            </Box>
-          </Box>
-        </Flex>
+        <ContentTitleList
+          content={row.original?.content}
+          contentType={row.original?.content_type}
+        />
       </NextLink>
     ),
     // width: '20%',

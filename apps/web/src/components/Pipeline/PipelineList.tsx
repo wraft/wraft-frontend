@@ -46,8 +46,6 @@ const Form = () => {
   const [page, setPage] = useState<number>(1);
   const [formName, setFormName] = useState<any>();
 
-  console.log(contents, 'logcont');
-
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 

@@ -19,7 +19,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
   const [mode, setMode] = useColorMode();
-  const [count, setCount] = useState<number>();
+  const [count, setCount] = useState<number | undefined>();
 
   const router = useRouter();
   const { organisations, userProfile, accessToken, login, logout } = useAuth();
@@ -239,7 +239,9 @@ const Header = () => {
                   <Link href="/notifications">
                     <Flex>
                       <Box sx={{ width: '180px' }}>Notifications</Box>
-                      <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
+                      {count > 0 && (
+                        <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
+                      )}
                     </Flex>
                   </Link>
                 </DropdownMenu.Item>

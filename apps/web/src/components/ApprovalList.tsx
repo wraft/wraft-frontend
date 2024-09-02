@@ -3,11 +3,12 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
 import { Table, Pagination } from '@wraft/ui';
+import ContentTitleList from '@wraft-ui/content/ContentTitleList';
 
 import PageHeader from 'components/PageHeader';
 import { StateBadge, TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
-import { putAPI, fetchAPI } from 'utils/models';
+import { fetchAPI } from 'utils/models';
 
 export interface ApprovalList {
   pre_state: State;
@@ -50,32 +51,10 @@ const columns = () => [
     accessorKey: 'content.name',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
-          <Box
-            sx={{
-              width: '3px',
-              bg: row.original?.content_type?.color
-                ? row.original?.content_type?.color
-                : 'blue',
-            }}
-          />
-          <Box ml={3}>
-            <Box sx={{ color: 'gray.1000' }}>
-              {row.original?.content?.instance_id}
-            </Box>
-            <Box
-              as="h5"
-              sx={{
-                fontSize: 'sm',
-                color: 'gray.1200',
-                letterSpacing: '-0.15px',
-                fontWeight: 500,
-                lineHeight: 1.25,
-              }}>
-              {row.original?.content?.serialized?.title}
-            </Box>
-          </Box>
-        </Flex>
+        <ContentTitleList
+          contentType={row.original?.content_type}
+          content={row.original?.content}
+        />
       </NextLink>
     ),
     enableSorting: false,
@@ -188,22 +167,6 @@ const Approvals = () => {
       { shallow: true },
     );
   };
-
-  /**
-   * Approve an Instance
-   */
-
-  // const approveInstance = (id: string) => {
-  //   const req = putAPI(`contents/${id}/approve`);
-  //   toast.promise(req, {
-  //     loading: 'Approving...',
-  //     success: () => {
-  //       setRerender((prev) => !prev);
-  //       return 'Approved';
-  //     },
-  //     error: 'Failed',
-  //   });
-  // };
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
