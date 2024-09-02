@@ -9,7 +9,7 @@ import { Gear, Plus } from '@phosphor-icons/react';
 import Link from 'components/NavLink';
 import DefaultAvatar from 'components/DefaultAvatar';
 import { useAuth } from 'contexts/AuthContext';
-import { postAPI } from 'utils/models';
+import { fetchAPI, postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 import Modal from '../Modal';
@@ -19,6 +19,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
   const [mode, setMode] = useColorMode();
+  const [count, setCount] = useState<number | undefined>();
 
   const router = useRouter();
   const { organisations, userProfile, accessToken, login, logout } = useAuth();
@@ -26,6 +27,10 @@ const Header = () => {
   useEffect(() => {
     if (createdId) onSwitchOrganization(createdId);
   }, [createdId]);
+
+  useEffect(() => {
+    notificationCount();
+  }, []);
 
   const onSwitchOrganization = async (id: string) => {
     postAPI('switch_organisations', {
@@ -41,6 +46,13 @@ const Header = () => {
           position: 'top-center',
         });
       });
+  };
+
+  const notificationCount = () => {
+    fetchAPI('notifications/count').then((data: any) => {
+      const res = data.count;
+      setCount(res);
+    });
   };
 
   const onUserLogout = async () => {
@@ -140,7 +152,11 @@ const Header = () => {
               </Flex>
 
               <DropdownMenu.Separator />
-              <Box sx={{ height: '400px', overflowY: 'scroll' }}>
+              <Box
+                variant="styles.scrollbarY"
+                sx={{
+                  height: '400px',
+                }}>
                 {organisations &&
                   organisations.map((org: any) => (
                     <DropdownMenu.Item
@@ -218,6 +234,16 @@ const Header = () => {
                       <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
                     </Box>
                   </Flex>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                  <Link href="/notifications">
+                    <Flex>
+                      <Box sx={{ width: '180px' }}>Notifications</Box>
+                      {count && count > 0 && (
+                        <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
+                      )}
+                    </Flex>
+                  </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
                   <Link href="/account" path="/account">

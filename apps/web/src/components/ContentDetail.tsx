@@ -482,10 +482,10 @@ const ContentDetail = () => {
                     }}>
                     <Flex sx={{ width: '100%', alignItems: 'center' }}>
                       <Flex
+                        variant="styles.scrollbarX"
                         sx={{
-                          py: 1,
+                          pt: 1,
                           alignItems: 'center',
-                          overflowX: 'scroll',
                           bg: 'white',
                           border: 'solid 1px',
                           borderColor: 'gray.300',

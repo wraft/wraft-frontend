@@ -43,12 +43,10 @@ const ContentTypeList = () => {
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
-        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="secondary" onClick={() => setIsOpen(true)}>
-            <Plus size={12} weight="bold" />
-            Create Variant
-          </Button>
-        </Flex>
+        <Button variant="secondary" onClick={() => setIsOpen(true)}>
+          <Plus size={12} weight="bold" />
+          Create Variant
+        </Button>
       </PageHeader>
       <Box
         variant="layout.pageFrame"

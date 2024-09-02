@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { Avatar, Box, Flex } from 'theme-ui';
 import { Table } from '@wraft/ui';
+import ContentTitleList from '@wraft-ui/content/ContentTitleList';
 
 import { StateBadge, TimeAgo } from 'components/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -14,24 +15,10 @@ const columns = [
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
-          <Box
-            sx={{
-              width: '3px',
-              bg: row.original?.content_type?.color
-                ? row.original?.content_type?.color
-                : 'blue',
-            }}
-          />
-          <Box ml={3}>
-            <Box sx={{ color: 'gray.900' }}>
-              {row.original?.content?.instance_id}
-            </Box>
-            <Box as="h5" sx={{ fontSize: 'sm', fontWeight: 500 }}>
-              {row.original?.content?.serialized?.title}
-            </Box>
-          </Box>
-        </Flex>
+        <ContentTitleList
+          contentType={row.original?.content_type}
+          content={row.original?.content}
+        />
       </NextLink>
     ),
     enableSorting: false,

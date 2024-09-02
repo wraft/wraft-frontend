@@ -11,9 +11,7 @@ const Index: FC = () => {
         <title>Form Entry | Wraft</title>
         <meta name="description" content="form entry" />
       </Head>
-      <Page>
-        <FormEntry />
-      </Page>
+      <FormEntry />
     </>
   );
 };

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Button, Flex, Text } from 'theme-ui';
-import { Drawer, Pagination, useDrawer } from '@wraft/ui';
+import { Box, Flex, Text } from 'theme-ui';
+import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
 import { fetchAPI } from '../../utils/models';
 import Link from '../NavLink';
 import PageHeader from '../PageHeader';
 import PipelineTypeForm from './PipelineTypeForm';
+import PipelineFormEntry from '../PipelineFormEntry';
 
 export interface Pipelines {
   total_pages: number;
@@ -35,15 +37,20 @@ export interface IPageMeta {
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [sourceId, setSourceId] = useState<any>();
+  const [pipelineId, setPipelineId] = useState<any>();
   const [page, setPage] = useState<number>(1);
+  const [formName, setFormName] = useState<any>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
   const mobileMenuDrawer = useDrawer();
+  const formMenuDrawer = useDrawer();
 
   const loadData = () => {
     setLoading(true);
@@ -57,6 +64,10 @@ const Form = () => {
       setPageMeta(data);
       setLoading(false);
     });
+  };
+
+  const pipelineDetail = (id: any) => {
+    fetchAPI(`pipelines/${id}`);
   };
 
   useEffect(() => {
@@ -77,6 +88,12 @@ const Form = () => {
       undefined,
       { shallow: true },
     );
+  };
+
+  const onRunClick = (formId: any, pipelineId: any) => {
+    setIsOpen(true);
+    setSourceId(formId);
+    setPipelineId(pipelineId);
   };
 
   const columns = [
@@ -122,9 +139,16 @@ const Form = () => {
         </Box>
       ),
       accessorKey: 'content.name',
-      cell: () => (
+      cell: ({ row }: any) => (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button variant="secondary">Run</Button>
+          <Button
+            onClick={() => {
+              onRunClick(row.original.source_id, row.original.id);
+            }}
+            variant="secondary"
+            disabled={row.original.stages_count == 0}>
+            Run
+          </Button>
         </Box>
       ),
       enableSorting: false,
@@ -135,7 +159,7 @@ const Form = () => {
     <Box>
       <PageHeader title="All Pipelines">
         <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="buttonSecondary" onClick={() => setShowSearch(true)}>
+          <Button variant="secondary" onClick={() => setShowSearch(true)}>
             New Pipeline
           </Button>
         </Flex>
@@ -161,6 +185,27 @@ const Form = () => {
             setIsOpen={setShowSearch}
             setRerender={setRerender}
           />
+        )}
+      </Drawer>
+      <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
+        {isOpen && (
+          <>
+            <Drawer.Header>
+              <Drawer.Title>{formName}</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <PipelineFormEntry
+              formId={sourceId}
+              pipelineId={pipelineId}
+              setIsOpen={setIsOpen}
+              setFormName={setFormName}
+            />
+          </>
         )}
       </Drawer>
     </Box>

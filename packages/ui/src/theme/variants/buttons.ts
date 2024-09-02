@@ -83,6 +83,11 @@ const buttons = {
     fontWeight: 'heading',
     fontSize: 'xs',
     fontFamily: 'body',
+    ':disabled': {
+      color: 'gray.600',
+      cursor: 'not-allowed',
+      pointerEvents: 'auto !important',
+    },
     ':hover': {
       backgroundColor: 'gray.400',
       borderColor: 'gray.500',

@@ -1,10 +1,9 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
 import { Box, Container, Flex, Text } from 'theme-ui';
-import { Button } from '@wraft/ui';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Button, Drawer, useDrawer } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import { Plus } from '@phosphor-icons/react';
+import { Plus, X } from '@phosphor-icons/react';
 
 import FormList from 'components/FormList';
 import Page from 'components/PageFrame';
@@ -24,15 +23,32 @@ const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState<any>([]);
-  const { register, handleSubmit } = useForm<FormValues>();
-  const [data, setData] = useState<FormValues>();
+  const [data, setData] = useState<FormValues | null>();
   const [trigger, setTrigger] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const mobileMenuDrawer = useDrawer();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormValues>();
+
   const onSubmit = (data: any) => {
     setData(data);
+    setDrawerOpen(true);
+    setIsOpen(false);
   };
+
+  const onCloseDrawer = () => {
+    setDrawerOpen(false);
+    setData(null);
+    reset();
+  };
+
   return (
     <>
       <Head>
@@ -52,17 +68,25 @@ const Index: FC = () => {
           <FormList rerender={rerender} setRerender={setRerender} />
         </Container>
       </Page>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setData(null);
+        }}>
         {isOpen && (
           <Box
             as="form"
             onSubmit={handleSubmit(onSubmit)}
             sx={{ minWidth: '518px' }}>
             <Box
-              sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
-              <Text as="p" variant="h4Medium">
-                Create Form
-              </Text>
+              sx={{
+                py: 3,
+                px: 4,
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.400',
+              }}>
+              <Text sx={{ fontWeight: 600 }}>Create Form</Text>
             </Box>
             <Box sx={{ p: 4 }}>
               <Field
@@ -70,6 +94,7 @@ const Index: FC = () => {
                 label="Name"
                 placeholder="Name"
                 register={register}
+                error={errors.name}
                 mb={3}
               />
               <Field
@@ -77,6 +102,7 @@ const Index: FC = () => {
                 label="Prefix"
                 placeholder="PREFIX"
                 register={register}
+                error={errors.prefix}
                 mb={3}
               />
               <FieldText
@@ -85,6 +111,11 @@ const Index: FC = () => {
                 defaultValue=""
                 register={register}
               />
+              {errors.description && errors.description.message && (
+                <Text variant="error">
+                  {errors.description.message as string}
+                </Text>
+              )}
             </Box>
             <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
               <Button
@@ -92,8 +123,6 @@ const Index: FC = () => {
                 variant="primary"
                 onClick={() => {
                   handleSubmit(onSubmit)();
-                  setDrawerOpen(true);
-                  setIsOpen(false);
                 }}>
                 Create
               </Button>
@@ -102,6 +131,7 @@ const Index: FC = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   setIsOpen(false);
+                  setData(null);
                 }}>
                 Cancel
               </Button>
@@ -109,31 +139,26 @@ const Index: FC = () => {
           </Box>
         )}
       </Modal>
-      <Drawer open={drawerOpen} setOpen={() => setDrawerOpen(false)}>
-        <Flex sx={{ flexDirection: 'column', height: '100vh' }}>
-          <Box
-            sx={{
-              p: 4,
-              borderBottom: '1px solid',
-              borderColor: 'border',
-            }}>
-            <Text variant="h6Bold">Create Form</Text>
-          </Box>
-          <Box sx={{ height: '100%', flexGrow: 1, overflow: 'auto', px: 4 }}>
-            <FormsFrom
-              items={items}
-              setItems={setItems}
-              formdata={data}
-              trigger={trigger}
-              setRerender={setRerender}
-              setOpen={setDrawerOpen}
-              setLoading={setLoading}
-            />
-          </Box>
-          <Box p={4} onClick={() => setTrigger((prev) => !prev)}>
-            <Button disabled={loading}>Create</Button>
-          </Box>
-        </Flex>
+      <Drawer
+        open={drawerOpen}
+        store={mobileMenuDrawer}
+        aria-label="Menu backdrop"
+        withBackdrop={true}
+        onClose={onCloseDrawer}>
+        <Drawer.Header>
+          <Drawer.Title>Create Form</Drawer.Title>
+          <X size={20} weight="bold" cursor="pointer" onClick={onCloseDrawer} />
+        </Drawer.Header>
+
+        <FormsFrom
+          items={items}
+          setItems={setItems}
+          formdata={data}
+          trigger={trigger}
+          setRerender={setRerender}
+          setOpen={onCloseDrawer}
+          setLoading={setLoading}
+        />
       </Drawer>
     </>
   );

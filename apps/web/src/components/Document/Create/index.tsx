@@ -97,6 +97,8 @@ const CreateDocument = () => {
   };
 
   const onSubmit = (data: any) => {
+    console.log(data, 'logdata');
+
     if (formStep === 0 && !template) {
       toast.error('Please select a template.', {
         duration: 3000,

@@ -14,7 +14,8 @@ export type Variant =
   | 'disabled'
   | 'googleLogin'
   | 'ghost'
-  | 'none';
+  | 'none'
+  | 'delete';
 
 export interface ButtonOptions extends AkButtonProps {
   disabled?: boolean;
@@ -25,7 +26,6 @@ export interface ButtonOptions extends AkButtonProps {
   shape?: Shape;
 }
 
-
 const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   cursor: pointer;
   user-select: none;
@@ -34,7 +34,6 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   align-items: center;
   position: relative;
   gap: 10px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 
   transition:
     color 0.15s ease-in-out,
@@ -59,12 +58,27 @@ export const ContentWrapper: any = styled.div`
 `;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
-  ({ variant = 'primary', children, loading = false, disabled = false, ...rest }, ref) => {
-    const isDisabled = disabled || loading
+  (
+    {
+      variant = 'primary',
+      children,
+      loading = false,
+      disabled = false,
+      ...rest
+    },
+    ref,
+  ) => {
+    const isDisabled = disabled || loading;
     return (
-      <ButtonWrapper variant={variant} loading={loading} disabled={isDisabled} {...rest} ref={ref}>
+      <ButtonWrapper
+        variant={variant}
+        loading={loading}
+        disabled={isDisabled}
+        {...rest}
+        ref={ref}
+      >
         {loading && (
-          <x.div display="flex" >
+          <x.div display="flex">
             <Spinner size={9} />
           </x.div>
         )}
