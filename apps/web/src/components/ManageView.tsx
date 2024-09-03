@@ -42,12 +42,12 @@ const listMenu = [
     path: '/manage/themes',
     desc: 'Manage Themes',
   },
-  {
-    name: 'Pipelines',
-    logo: <TreeStructure size={50} weight="thin" />,
-    path: '/manage/pipelines',
-    desc: 'Manage Pipelines',
-  },
+  // {
+  //   name: 'Pipelines',
+  //   logo: <TreeStructure size={50} weight="thin" />,
+  //   path: '/manage/pipelines',
+  //   desc: 'Manage Pipelines',
+  // },
 ];
 
 const ManageHomePage = () => {

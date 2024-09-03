@@ -77,7 +77,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       .then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
         toast.success('Stage Deleted Successfully', { duration: 1000 });
-        Router.push(`/manage/pipelines/run/${cId}`);
+        Router.push(`/pipelines/run/${cId}`);
       })
       .catch(() => {
         toast.error('Delete Failed', { duration: 1000 });

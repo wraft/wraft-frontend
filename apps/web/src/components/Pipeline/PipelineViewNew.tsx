@@ -74,7 +74,7 @@ const PipelineView = () => {
       deleteAPI(`pipelines/${cId}`).then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
         toast.success('Deleted Successfully', { duration: 1000 });
-        Router.push('/manage/pipelines');
+        Router.push('/pipelines');
         setDelete(false);
       });
     } else {

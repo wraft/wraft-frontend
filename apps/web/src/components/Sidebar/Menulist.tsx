@@ -4,6 +4,7 @@ import {
   HouseSimple,
   Table,
   Gear,
+  GitBranch,
   TextColumns,
   UserFocus,
   Article,
@@ -48,6 +49,11 @@ const Menulist = [
         name: 'Forms',
         icon: <Table size={20} />,
         path: '/forms',
+      },
+      {
+        name: 'Pipeline',
+        icon: <GitBranch size={20} />,
+        path: '/pipelines',
       },
       {
         name: 'Blocks',

@@ -15,7 +15,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <Flex>
-          <Link href="/manage/pipelines">Back</Link>
+          <Link href="/pipelines">Back</Link>
           <Container sx={{ maxWidth: '60ch', mx: 'auto' }}>
             <PipelineForm />
           </Container>

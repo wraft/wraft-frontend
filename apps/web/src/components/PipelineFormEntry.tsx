@@ -30,6 +30,7 @@ const PipelineFormEntry = ({
             name: i.name,
             type: i.field_type.name,
             fieldTypeId: i.field_type.id,
+            order: i.order,
             required: i.validations.some(
               (val: any) =>
                 val.validation.rule === 'required' &&
@@ -138,6 +139,7 @@ const PipelineFormEntry = ({
     );
   }
 
+  console.log('items', items);
   return (
     <Box>
       <Box
@@ -146,40 +148,41 @@ const PipelineFormEntry = ({
           p: '32px',
           height: 'calc(100vh - 170px)',
         }}>
-        {items.map((item: any) => (
-          <Box key={item.id} sx={{ pb: 2 }}>
-            <Label sx={{ color: '#000b08a1' }}>{item.name}</Label>
-            {item.type === 'Text' && (
-              <Textarea
-                value={item.value}
-                onChange={(e) => onValueChange(e, item)}
-              />
-            )}
-            {item.type === 'String' && (
-              <Input
-                sx={{ bg: 'transparent' }}
-                name={`contentFields[${item.id}]`}
-                onChange={(e) => onValueChange(e, item)}
-              />
-            )}
-            {item.type === 'File Input' && (
-              <Input
-                type="file"
-                value={item.value}
-                onChange={(e) => onValueChange(e, item)}
-              />
-            )}
-            {item.type === 'Date' && (
-              <Field
-                name={`contentFields[${item.id}]`}
-                label={item.name}
-                defaultValue=""
-                register={register}
-              />
-            )}
-            {item.error && <Text variant="error">{item.error}</Text>}
-          </Box>
-        ))}
+        {items
+          .sort((a: any, b: any) => a.order - b.order)
+          .map((item: any) => (
+            <Box key={item.id} sx={{ pb: 2 }}>
+              <Label sx={{ color: '#000b08a1' }}>{item.name}</Label>
+              {item.type === 'Text' && (
+                <Textarea
+                  value={item.value}
+                  onChange={(e) => onValueChange(e, item)}
+                />
+              )}
+              {item.type === 'String' && (
+                <Input
+                  sx={{ bg: 'transparent' }}
+                  name={`contentFields[${item.id}]`}
+                  onChange={(e) => onValueChange(e, item)}
+                />
+              )}
+              {item.type === 'File Input' && (
+                <Input
+                  type="file"
+                  value={item.value}
+                  onChange={(e) => onValueChange(e, item)}
+                />
+              )}
+              {item.type === 'Date' && (
+                <Input
+                  type="date"
+                  value={item.value}
+                  onChange={(e) => onValueChange(e, item)}
+                />
+              )}
+              {item.error && <Text variant="error">{item.error}</Text>}
+            </Box>
+          ))}
       </Box>
       <Flex p="32px" sx={{ gap: 2 }}>
         <Button onClick={onSave}>Run</Button>

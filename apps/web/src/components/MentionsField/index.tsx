@@ -75,7 +75,7 @@ const MentionField: React.FC<any> = ({
         <Mentions
           // onChange={onChange}
           onChange={handleChange}
-          prefix={['@', '#']}
+          prefix={['@']}
           split=""
           // open={true}
           placeholder={placeholder}
