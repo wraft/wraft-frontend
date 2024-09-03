@@ -274,7 +274,7 @@ const Form = () => {
 
       if (formed?.content_type?.fields) {
         const fieldOption = formed.content_type.fields.map(({ name }) => ({
-          value: name,
+          value: `[${name}]`,
           label: name,
         }));
         setFields(fieldOption);
