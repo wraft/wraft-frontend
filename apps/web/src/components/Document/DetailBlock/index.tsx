@@ -154,7 +154,8 @@ const ContentForm = (props: IContentForm) => {
   const replacePlaceholders = (str: string, replacements: any): any => {
     replacements &&
       replacements.forEach(({ name, value }: any) => {
-        str = str.replace(new RegExp(`@${name}`, 'g'), value);
+        const regex = new RegExp(`\\[${name}\\]`, 'g');
+        str = str.replace(regex, value);
       });
     return str;
   };

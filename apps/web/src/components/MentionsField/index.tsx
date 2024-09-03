@@ -55,6 +55,10 @@ const MentionField: React.FC<any> = ({
   onChange,
   defaultValue,
 }) => {
+  const handleChange = (newValue: any) => {
+    const formattedText = newValue.replace(/@(?=\[)/g, '');
+    onChange(formattedText);
+  };
   return (
     <>
       <GlobalStyle />
@@ -69,12 +73,16 @@ const MentionField: React.FC<any> = ({
 
       <MentionsWrapper>
         <Mentions
-          onChange={onChange}
+          // onChange={onChange}
+          onChange={handleChange}
+          prefix={['@', '#']}
+          split=""
           // open={true}
           placeholder={placeholder}
           options={options}
           value={defaultValue || ''}
           id={name}
+          onSelect={(val) => console.log('onSelect', val)}
         />
         {error && (
           <Text
