@@ -35,7 +35,7 @@ const Checkbox = ({
     <AriakitCheckbox
       sx={{
         appearance: 'none',
-        border: `1px solid #D4D7DA`,
+        border: `1px solid #848f8c`,
         backgroundColor: 'transparent',
         borderRadius: '4px',
         height: `${checkboxSize}px`,

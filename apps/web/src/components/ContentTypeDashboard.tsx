@@ -210,11 +210,12 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
       header: 'CREATED BY',
       accessorKey: 'TIME',
       cell: ({ row }: any) => (
-        <Flex>
-          <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-          <Box sx={{ fontSize: 'sm', ml: 3 }}>
-            {row.original?.creator?.name}
-          </Box>
+        <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+          <Avatar
+            sx={{ width: '16px', height: '16px' }}
+            src={row.original?.creator?.profile_pic}
+          />
+          <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
         </Flex>
       ),
       enableSorting: false,

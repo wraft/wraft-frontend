@@ -153,12 +153,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       header: 'CREATED BY',
       accessorKey: 'created',
       cell: ({ row }: any) => (
-        <Flex>
-          {row.original?.creator?.profile_pic && (
-            <Box sx={{ mr: 3 }}>
-              <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-            </Box>
-          )}
+        <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+          <Avatar
+            sx={{ width: '16px', height: '16px' }}
+            src={row.original?.creator?.profile_pic}
+          />
           <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
         </Flex>
       ),
