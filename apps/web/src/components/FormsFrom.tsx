@@ -60,8 +60,6 @@ const FormsFrom = ({
   const [fieldTypes, setFieldTypes] = useState<any[]>([]);
   const [removedFields, setRemovedFields] = useState<string[]>([]);
 
-  console.log('fieldTypes', fieldTypes);
-
   const onAddField = (
     type:
       | 'Email'
@@ -250,9 +248,8 @@ const FormsFrom = ({
   };
 
   const onSave = () => {
-    // console.log('onSave', 'onSave');
-
     if (formdata === undefined) {
+      toast.error('Missing Data');
       return;
     }
     if (items.some((item: any) => item.name === '')) {
@@ -305,7 +302,7 @@ const FormsFrom = ({
     const deletedFields = removedFields.map((id) => ({ field_id: id }));
     const data = {
       status: formdata?.status || 'active',
-      prefix: formdata.prefix,
+      prefix: formdata?.prefix,
       pipeline_ids: [],
       name: formdata.name,
       fields: [...fields, ...deletedFields],

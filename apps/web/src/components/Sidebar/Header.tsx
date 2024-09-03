@@ -158,18 +158,22 @@ const Header = () => {
                   height: '400px',
                 }}>
                 {organisations &&
-                  organisations.map((org: any) => (
-                    <DropdownMenu.Item
-                      key={org.id}
-                      onClick={() => onSwitchOrganization(org?.id)}>
-                      <DefaultAvatar
-                        url={org?.logo}
-                        value={org.name}
-                        size={20}
-                      />
-                      <Box ml={2}>{org.name}</Box>
-                    </DropdownMenu.Item>
-                  ))}
+                  organisations
+                    .filter(
+                      (org: any) => org.id !== userProfile.organisation_id,
+                    )
+                    .map((org: any) => (
+                      <DropdownMenu.Item
+                        key={org.id}
+                        onClick={() => onSwitchOrganization(org?.id)}>
+                        <DefaultAvatar
+                          url={org?.logo}
+                          value={org.name}
+                          size={20}
+                        />
+                        <Box ml={2}>{org.name}</Box>
+                      </DropdownMenu.Item>
+                    ))}
               </Box>
               <DropdownMenu.Separator />
 
