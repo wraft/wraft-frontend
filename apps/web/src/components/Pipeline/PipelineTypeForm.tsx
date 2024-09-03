@@ -189,8 +189,8 @@ const Form = ({
     setLoading(true);
     if (formStep == 0) {
       const sampleD = {
-        data_template_id: ctemplate.data_template.id,
-        content_type_id: ctemplate.content_type.id,
+        data_template_id: ctemplate?.data_template?.id,
+        content_type_id: ctemplate?.content_type?.id,
       };
 
       if (selectedPipelineStageId) {

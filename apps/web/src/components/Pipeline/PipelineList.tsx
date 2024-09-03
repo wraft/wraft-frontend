@@ -105,7 +105,7 @@ const Form = () => {
         <Box
           sx={{ display: 'flex', justifyContent: 'flex-start' }}
           key={row.index}>
-          <Link href={`/manage/pipelines/run/${row.original.id}`}>
+          <Link href={`/pipelines/run/${row.original.id}`}>
             <Text as="h4" variant="pM">
               {row.original.name}
             </Text>
