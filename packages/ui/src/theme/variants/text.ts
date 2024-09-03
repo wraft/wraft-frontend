@@ -110,7 +110,7 @@ const text = {
   },
   //sub heading
   subR: {
-    color: 'gray.500',
+    color: 'gray.900',
     fontSize: 'xs',
     fontWeight: 400,
     lineHeight: '1.6',

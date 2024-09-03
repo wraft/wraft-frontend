@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Container, Button, Box, Input, Label, Text } from 'theme-ui';
 
-import { ConfirmDelete } from 'components/common';
 import Field from 'components/Field';
 import ManageSidebar from 'components/ManageSidebar';
 import Modal from 'components/Modal';
@@ -45,13 +44,11 @@ const Index: FC = () => {
     mode: 'onSubmit',
   });
   const [isDelete, setDelete] = useState(false);
-  const [isConfirmDelete, setConfirmDelete] = useState(false);
   const [org, setOrg] = useState<Organisation>();
   const [logoSrc, setLogoSrc] = useState(org?.logo);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   const { userProfile, logout } = useAuth();
@@ -76,24 +73,21 @@ const Index: FC = () => {
     setLogoSrc(logo);
   }, [org]);
 
-  useEffect(() => {
-    const data = inputRef.current?.value;
-    setInputValue(parseInt(data ?? '0', 10));
-  }, [inputRef.current?.value]);
-
-  const onConfirmDelete = async (inputValue: any) => {
-    const body = { code: `${inputValue}` };
-    const deleteRequest = deleteAPI('organisations', body);
-    toast.promise(deleteRequest, {
-      loading: 'Loading...',
-      success: () => {
-        setConfirmDelete(false);
-        logout();
-        Router.push('/login');
-        return 'Deleted workspace successfully';
-      },
-      error: (error) => error?.message || 'Failed to deleted workspace',
-    });
+  const onConfirmDelete = async () => {
+    const code = inputRef.current?.value;
+    await deleteAPI(`organisations?code=${code}`)
+      .then(() => {
+        toast.success('Deleted workspace successfully', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.message || 'Failed to deleted workspace', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      });
   };
 
   /**
@@ -124,13 +118,16 @@ const Index: FC = () => {
   };
 
   const onSendCode = () => {
-    setDelete(true);
-    const deleteRequest = postAPI('organisations/request_deletion', {});
-    toast.promise(deleteRequest, {
-      loading: 'Loading...',
-      success: 'Deleted workspace scuccessfully',
-      error: 'Failed to delete workspace',
-    });
+    postAPI('organisations/request_deletion', {})
+      .then(() => {
+        setDelete(true);
+      })
+      .catch((err) => {
+        toast.error(JSON.stringify(err) || 'Failed to delete workspace', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      });
   };
 
   const handleImageUpload = (event: any) => {
@@ -326,7 +323,7 @@ const Index: FC = () => {
                             , please enter the deletion code sent to your email.
                           </Text>
                           <Box sx={{ mt: '24px' }}>
-                            <Label variant="text.pR" sx={{ color: 'gray.800' }}>
+                            <Label variant="text.pR" sx={{ color: 'gray.900' }}>
                               <span>Enter the deletion code to confirm</span>
                             </Label>
                             <Input ref={inputRef}></Input>
@@ -350,10 +347,7 @@ const Index: FC = () => {
                           <Flex sx={{ gap: 3, pt: 4 }}>
                             <Button
                               disabled={!isChecked}
-                              onClick={() => {
-                                setDelete(false);
-                                setConfirmDelete(true);
-                              }}
+                              onClick={onConfirmDelete}
                               variant="delete">
                               Delete workspace
                             </Button>
@@ -365,17 +359,6 @@ const Index: FC = () => {
                           </Flex>
                         </Box>
                       </Box>
-                    </Modal>
-                    <Modal
-                      isOpen={isConfirmDelete}
-                      onClose={() => setConfirmDelete(false)}>
-                      <ConfirmDelete
-                        inputValue={inputValue}
-                        title="Delete workspace"
-                        text="Are you sure you want to delete this workspace?"
-                        onConfirmDelete={onConfirmDelete}
-                        setOpen={setConfirmDelete}
-                      />
                     </Modal>
                   </Box>
                 )}

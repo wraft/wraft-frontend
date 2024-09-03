@@ -126,7 +126,7 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
 export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
     api
-      .delete(`/${path}`, body || {})
+      .delete(`/${path}`, { data: body } || {})
       .then((response: any) => resolve(response.data))
       .catch((err) => reject(handleApiError(err)));
   });
