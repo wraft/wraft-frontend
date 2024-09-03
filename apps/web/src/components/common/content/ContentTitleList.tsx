@@ -9,7 +9,16 @@ type Props = {
 
 const ContentTitleList = ({ content, contentType }: Props) => {
   return (
-    <Flex sx={{ fontSize: 'xs', ml: '-16px' }}>
+    <Flex
+      sx={{
+        fontSize: 'xs',
+        ml: '-16px',
+        ':hover': {
+          '.title': {
+            color: 'green.900',
+          },
+        },
+      }}>
       <Box
         sx={{
           width: '3px',
@@ -21,6 +30,7 @@ const ContentTitleList = ({ content, contentType }: Props) => {
         <Flex sx={{ alignItems: 'center', gap: '4px' }}>
           <Box
             as="h5"
+            className="title"
             sx={{
               fontSize: 'sm',
               color: 'gray.1200',

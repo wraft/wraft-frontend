@@ -1,4 +1,5 @@
 import {
+  background,
   borderRadius,
   cursor,
   fontSize,
@@ -40,7 +41,7 @@ const buttons = {
     '&:hover': {
       backgroundColor: 'green.200',
       borderColor: 'green.a500',
-      color: 'green.100',
+      color: 'green.700 !important',
     },
   },
   tertiaryLarge: {
@@ -50,6 +51,9 @@ const buttons = {
     color: 'gray.1200',
     padding: '0.75rem 1rem',
     borderRadius: '0.75rem',
+    '&:hover': {
+      color: 'green.800 !important',
+    },
   },
   primary: {
     backgroundColor: 'primary',
@@ -163,9 +167,9 @@ const buttons = {
     color: 'gray.900',
   },
   googleLogin: {
-    fontWeight: 'body',
-    color: 'gray.600',
-    bg: 'backgroundWhite',
+    fontWeight: 'bold',
+    color: 'gray.800',
+    background: 'none',
     border: '1px solid',
     borderColor: 'border',
     borderRadius: '4px',

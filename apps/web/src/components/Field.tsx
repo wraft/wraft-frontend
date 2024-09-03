@@ -90,7 +90,7 @@ const Field: React.FC<Props> = ({
               right: '4px',
               top: '4px',
               zIndex: 100,
-              color: 'gray.200',
+              color: 'gray.700',
               p: 2,
               ':hover': { color: 'gray.800' },
             }}
