@@ -49,6 +49,12 @@ const Index: FC = () => {
     reset();
   };
 
+  const onOpenDrawer = () => {
+    reset();
+    setData(null);
+    setIsOpen(true);
+  };
+
   return (
     <>
       <Head>
@@ -58,7 +64,7 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Forms">
           <Box sx={{ ml: 'auto', pt: 2 }}>
-            <Button variant="secondary" onClick={() => setIsOpen(true)}>
+            <Button variant="secondary" onClick={onOpenDrawer}>
               <Plus size={12} weight="bold" />
               Create From
             </Button>
@@ -68,12 +74,7 @@ const Index: FC = () => {
           <FormList rerender={rerender} setRerender={setRerender} />
         </Container>
       </Page>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-          setData(null);
-        }}>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         {isOpen && (
           <Box
             as="form"
@@ -121,9 +122,7 @@ const Index: FC = () => {
               <Button
                 type="submit"
                 variant="primary"
-                onClick={() => {
-                  handleSubmit(onSubmit)();
-                }}>
+                onClick={handleSubmit(onSubmit)}>
                 Create
               </Button>
               <Button
