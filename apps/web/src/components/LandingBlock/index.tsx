@@ -127,7 +127,7 @@ const LandingBlock = () => {
                 '&:hover': {
                   backgroundColor: 'green.200',
                   borderColor: 'green.a500',
-                  color: 'green.100',
+                  color: 'green.700',
                 },
               }}
               onClick={() => setOpendemoModal(true)}>

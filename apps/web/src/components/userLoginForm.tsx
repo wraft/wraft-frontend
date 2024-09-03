@@ -181,23 +181,19 @@ const UserLoginForm = () => {
           }}
         />
 
-        <Button
-          onClick={() => signIn('gmail')}
-          variant="googleLogin"
-          // sx={{ bg: 'gray.1000' }}
-        >
+        <Button onClick={() => signIn('gmail')} variant="googleLogin">
           <Flex
             sx={{
               alignItems: 'center',
               gap: 2,
               minWidth: '100%',
-              bg: 'transparent',
+              bg: 'none',
               border: 'none',
               color: 'gray.900',
             }}
             variant="buttons.googleLogin">
             <Image src={GoogleLogo} alt="" width={24} height={24} />
-            Login using Google
+            Login in with Google
           </Flex>
         </Button>
 
