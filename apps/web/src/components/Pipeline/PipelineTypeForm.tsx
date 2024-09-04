@@ -8,8 +8,8 @@ import * as z from 'zod';
 import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { CloseIcon } from '@wraft/icon';
-import { Button } from '@wraft/ui';
+import { Button, Drawer } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
 import { uuidRegex } from 'utils/regex';
 
@@ -62,12 +62,11 @@ const pipelineschema = z.object({
     .min(4, { message: 'Minimum 4 characters required' })
     .max(20, { message: 'Maximum 20 characters allowed' }),
   pipeline_form: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Form',
+    message: 'Select a Option',
   }),
-  pipeline_source: z
-    .string()
-    .min(4, { message: 'Minimum 4 characters required' })
-    .max(20, { message: 'Maximum 20 characters allowed' }),
+  // pipeline_source: z.string().refine((value) => uuidRegex.test(value), {
+  //   message: 'Select a Option',
+  // }),
 });
 
 const stageSchema = z.object({
@@ -94,7 +93,9 @@ const Form = ({
   pipelineStageTemplateId,
 }: Props) => {
   const [formStep, setFormStep] = useState(step);
-  const [source, setSource] = useState<any>(['Wraft Form']);
+  const [source, setSource] = useState<any>([
+    { label: 'Wraft Form', value: 'wraft_from' },
+  ]);
   const [loading, setLoading] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Array<IField>>([]);
   const [forms, setForms] = useState<any>([]);
@@ -114,7 +115,7 @@ const Form = ({
     setValue,
     watch,
     formState: { errors, isValid },
-  } = useForm({ mode: 'all', resolver: zodResolver(zodSchema) });
+  } = useForm({ mode: 'onSubmit', resolver: zodResolver(zodSchema) });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
@@ -165,21 +166,34 @@ const Form = ({
   const createpipeline = (data: any) => {
     setLoading(true);
     const sampleD = {
-      name: data.pipelinename,
+      name: data?.pipelinename.trim(),
       api_route: 'client.crm.com',
       source_id: data.pipeline_form,
-      source: data.pipeline_source,
+      source: 'wraft_from',
     };
 
-    postAPI(`pipelines`, sampleD).then(() => {
-      setIsOpen && setIsOpen(false);
-      toast.success('Saved Successfully', {
-        duration: 2000,
-        position: 'top-right',
+    postAPI(`pipelines`, sampleD)
+      .then(() => {
+        setIsOpen && setIsOpen(false);
+        toast.success('Saved Successfully', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        setRerender((pre: boolean) => !pre);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        toast.error(
+          (err?.errors && JSON.stringify(err?.errors)) ||
+            JSON.stringify(err) ||
+            'somthing wrong',
+          {
+            duration: 2000,
+            position: 'top-right',
+          },
+        );
       });
-      setRerender((pre: boolean) => !pre);
-      setLoading(false);
-    });
   };
 
   // Pipeline Stage create Api
@@ -205,6 +219,7 @@ const Form = ({
             setLoading(false);
           })
           .catch(() => {
+            setLoading(false);
             toast.error('Failed to Update Stage', {
               position: 'top-right',
             });
@@ -221,6 +236,7 @@ const Form = ({
             setLoading(false);
           })
           .catch(() => {
+            setLoading(false);
             toast.error('stage already exist', {
               position: 'top-right',
             });
@@ -254,14 +270,25 @@ const Form = ({
           setLoading(false);
         });
     } else if (tempField.length == sampleD.mapping.length) {
-      postAPI(`forms/${formId}/mapping`, sampleD).then(() => {
-        setIsOpen && setIsOpen(false);
-        setRerender((prev: boolean) => !prev);
-        toast.success('Mapped Successfully', {
-          position: 'top-right',
+      postAPI(`forms/${formId}/mapping`, sampleD)
+        .then(() => {
+          setIsOpen && setIsOpen(false);
+          setRerender((prev: boolean) => !prev);
+          toast.success('Mapped Successfully', {
+            position: 'top-right',
+          });
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error(
+            (err?.errors && JSON.stringify(err?.errors)) || JSON.stringify(err),
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
         });
-        setLoading(false);
-      });
     } else {
       toast.error('Map every field', {
         position: 'top-right',
@@ -393,24 +420,21 @@ const Form = ({
         overflow: 'scroll',
         flexDirection: 'column',
       }}>
-      <Flex sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-        <Text
-          variant="pB"
-          sx={{
-            p: 4,
-          }}>
+      <Drawer.Header>
+        <Drawer.Title>
           {selectedPipelineStageId
             ? 'Edit Stage'
             : pipelineData
               ? 'Create Stage'
               : 'Create Pipeline'}
-        </Text>
-        <CloseIcon
+        </Drawer.Title>
+        <X
+          size={20}
+          weight="bold"
           cursor="pointer"
-          onClick={() => setIsOpen && setIsOpen(false)}>
-          Close
-        </CloseIcon>
-      </Flex>
+          onClick={() => setIsOpen && setIsOpen(false)}
+        />
+      </Drawer.Header>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
       <Box sx={{ height: '100%' }} p={4} as="form">
         <Flex
@@ -428,7 +452,7 @@ const Form = ({
                   name="pipelinename"
                   defaultValue={pipelineData ? pipelineData.name : ''}
                   placeholder="Pipeline Name"
-                  error={errors.name}
+                  error={errors.pipelinename}
                 />
                 <Box mt={3}>
                   <Label htmlFor="pipeline_source">Source</Label>
@@ -437,14 +461,14 @@ const Form = ({
                     {...register('pipeline_source', { required: true })}>
                     {!isUpdate && (
                       <option disabled selected>
-                        select an option
+                        Select an option
                       </option>
                     )}
                     {source &&
                       source.length > 0 &&
                       source.map((m: any) => (
-                        <option value={m} key={m}>
-                          {m}
+                        <option value={m.value} key={m.value}>
+                          {m.label}
                         </option>
                       ))}
                   </Select>
@@ -461,7 +485,7 @@ const Form = ({
                     {...register('pipeline_form', { required: true })}>
                     {!isUpdate && (
                       <option disabled selected>
-                        select an option
+                        Select an option
                       </option>
                     )}
                     {forms &&
@@ -500,7 +524,7 @@ const Form = ({
                     {
                       <option disabled selected>
                         {!selectedPipelineStageId
-                          ? 'select an option'
+                          ? 'Select an option'
                           : pipeStageName}
                       </option>
                     }
