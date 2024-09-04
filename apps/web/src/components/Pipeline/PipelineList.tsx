@@ -140,7 +140,13 @@ const Form = () => {
       ),
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+          <Button
+            onClick={() => router.push(`/workflow/${row.original.id}`)}
+            variant="secondary"
+            disabled={row.original.stages_count == 0}>
+            WorkFlow
+          </Button>
           <Button
             onClick={() => {
               onRunClick(row.original.source_id, row.original.id);
