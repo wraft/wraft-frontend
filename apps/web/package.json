@@ -65,6 +65,7 @@
     "@wraft/editor": "workspace:^",
     "@wraft/icon": "*",
     "@wraft/ui": "*",
+    "@xyflow/react": "^12.2.0",
     "axios": "^1.6.3",
     "date-fns": "^3.0.6",
     "express": "^4.15.3",
