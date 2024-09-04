@@ -303,7 +303,6 @@ const FormsFrom = ({
     const data = {
       status: formdata?.status || 'active',
       prefix: formdata?.prefix,
-      pipeline_ids: [],
       name: formdata.name,
       fields: [...fields, ...deletedFields],
       description: formdata.description,
@@ -397,7 +396,7 @@ const FormsFrom = ({
                   <Label>Field Name</Label>
                   <Input
                     defaultValue={item.name}
-                    placeholder="Name"
+                    placeholder="Enter field Name"
                     onChange={(e) => onNameChange(e, item)}></Input>
                   {item.error && <Text variant="error">{item.error}</Text>}
                   {item.type === 'options' && (
@@ -433,7 +432,7 @@ const FormsFrom = ({
                         <Switch
                           label="Required"
                           sx={{
-                            bg: 'gray.100',
+                            bg: 'gray.500',
                           }}
                           checked={item.required}
                           onChange={(e) => onRequiredChecked(e, index)}
