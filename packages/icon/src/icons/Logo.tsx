@@ -1,5 +1,5 @@
-import * as React from 'react';
-import type { SVGProps } from 'react';
+import * as React from "react";
+import type { SVGProps } from "react";
 const SvgLogoIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -9,7 +9,8 @@ const SvgLogoIcon = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 116 35"
     aria-hidden="true"
     role="icon"
-    {...props}>
+    {...props}
+  >
     <g clipPath="url(#Logo_svg__a)">
       <path
         fill="#363E49"

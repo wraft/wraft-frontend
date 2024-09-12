@@ -213,7 +213,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
         return 'green.400';
       case 'custom':
         return color || 'blue';
-      case null || undefined:
+      case null:
         return 'blue.100';
       default:
         return 'red';

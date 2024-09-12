@@ -1,5 +1,5 @@
-import * as React from 'react';
-import type { SVGProps } from 'react';
+import * as React from "react";
+import type { SVGProps } from "react";
 const SvgNotificationIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -9,9 +9,10 @@ const SvgNotificationIcon = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     aria-hidden="true"
     role="icon"
-    {...props}>
+    {...props}
+  >
     <path
-      stroke={props.color || 'currentColor' || `#2C3641`}
+      stroke={props.color || "currentColor" || `#2C3641`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.989}

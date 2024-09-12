@@ -272,7 +272,9 @@ const CreateDocument = () => {
           <Button
             onClick={handleSubmit(onSubmit)}
             disabled={
-              vals === (undefined || null) || (vals && vals.template === '')
+              vals === undefined ||
+              vals === null ||
+              (vals && vals.template === '')
             }>
             {formStep === 1 ? 'Create' : 'Next'}
           </Button>
