@@ -2,21 +2,12 @@
   <img src="apps/web/public/wraft-top-banner.png" alt="Wraft Logo" />
 </p>
 
-<h3 align="center">
+<h1 align="center">
   <a href="https://wraft.co">wraft.co</a>
-</h3>
+</h1>
 
 <p align="center">
   <i>The open-source Contract Lifecycle Management platform.</i>
-</p>
-
-<p align="center">
-  <a href="https://documen.so/discord">
-    <img src="https://img.shields.io/badge/Discord-Join%20Wraft%20on%20Discord-%235865F2" alt="Join Wraft on Discord" />
-  </a>
-  <a href="https://github.com/documenso/documenso/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-AGPLv3-purple" alt="License" />
-  </a>
 </p>
 
 <div align="center">
@@ -56,7 +47,7 @@ To run **wraft.co**, you’ll need:
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+#### 1. Clone the repository
 
 Fork or clone the repository from [GitHub](https://github.com/wraft/wraft).
 
@@ -64,32 +55,48 @@ Fork or clone the repository from [GitHub](https://github.com/wraft/wraft).
 git clone https://github.com/wraft/wraft.git
 ```
 
-2. Navigate to the project folder
+#### 2. Navigate to the project folder
 
 ```sh
 cd wraft
 ```
 
-3. Install the dependencies
+#### 3. Install the dependencies
+
+Make sure you have pnpm installed, then install all the project dependencies.
 
 ```sh
 pnpm i
 ```
 
-4. Set up environment variables
+#### 4. Set up environment variables
+
+Copy the .env.example file to .env inside the apps/web directory.
 
 ```sh
-cp apps/web/.env.example .env
+cd apps/web
+cp .env.example .env
+cd ../..
 ```
 
-5. Build all packages
+#### 5. Build all packages
+
+Run the following command to build all packages.
 
 ```sh
  pnpm run build
 ```
 
-6. Start the development server
+#### 6. Start the development server
+
+After building, run the application in development mode.
 
 ```sh
  pnpm run dev
 ```
+
+The app should now be running locally, and you can access it at http://localhost:3000.
+
+## 📄 License
+
+Wraft is open-source software licensed under the [AGPLv3](LICENSE).
