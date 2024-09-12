@@ -3,7 +3,6 @@ import {
   Files,
   HouseSimple,
   Table,
-  Gear,
   GitBranch,
   TextColumns,
   UserFocus,

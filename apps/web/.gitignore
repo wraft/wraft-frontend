@@ -6,3 +6,8 @@ out
 *.swp
 *.swo
 .nvmrc
+
+
+.env.local
+.env.production
+.env
