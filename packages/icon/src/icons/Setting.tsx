@@ -1,5 +1,5 @@
-import * as React from 'react';
-import type { SVGProps } from 'react';
+import * as React from "react";
+import type { SVGProps } from "react";
 const SvgSettingIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -9,13 +9,15 @@ const SvgSettingIcon = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 24 24"
     aria-hidden="true"
     role="icon"
-    {...props}>
+    {...props}
+  >
     <g
-      stroke={props.color || 'currentColor' || `#2C3641`}
+      stroke={props.color || "currentColor" || `#2C3641`}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeMiterlimit={10}
-      strokeWidth={1.5}>
+      strokeWidth={1.5}
+    >
       <path d="M13.883 4.706c.69.179 1.343.452 1.942.806l.613-.612a1.255 1.255 0 0 1 1.775 0l.887.887a1.255 1.255 0 0 1 0 1.775l-.613.613c.355.6.628 1.251.807 1.942h.865c.693 0 1.255.562 1.255 1.255v1.256c0 .693-.562 1.255-1.255 1.255h-.865a7.5 7.5 0 0 1-.806 1.942l.612.613a1.255 1.255 0 0 1 0 1.775l-.887.887a1.254 1.254 0 0 1-1.775 0l-.613-.613a7.5 7.5 0 0 1-1.942.807v.865c0 .693-.562 1.255-1.255 1.255h-1.256a1.255 1.255 0 0 1-1.255-1.255v-.865a7.5 7.5 0 0 1-1.942-.806l-.613.612a1.254 1.254 0 0 1-1.775 0l-.887-.887a1.255 1.255 0 0 1 0-1.775l.612-.613a7.5 7.5 0 0 1-.806-1.942h-.865a1.255 1.255 0 0 1-1.255-1.255v-1.256c0-.693.562-1.255 1.255-1.255h.865c.179-.69.452-1.343.806-1.942L4.9 7.562a1.255 1.255 0 0 1 0-1.775l.887-.887a1.254 1.254 0 0 1 1.775 0l.613.612a7.5 7.5 0 0 1 1.942-.806v-.865c0-.693.562-1.255 1.255-1.255h1.256c.693 0 1.255.562 1.255 1.255z" />
       <path d="M12 8.234A3.767 3.767 0 0 1 15.766 12 3.767 3.767 0 0 1 12 15.766 3.767 3.767 0 0 1 8.234 12 3.767 3.767 0 0 1 12 8.234" />
     </g>

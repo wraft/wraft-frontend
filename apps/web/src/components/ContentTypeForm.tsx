@@ -343,8 +343,11 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
           : true;
 
         if (
-          !Number(item.name) &&
-          item.name !== ('0' || '' || null || undefined) &&
+          isNaN(Number(item.name)) &&
+          item.name !== '0' &&
+          item.name !== '' &&
+          item.name !== null &&
+          item.name !== undefined &&
           notInContent
         ) {
           fieldsMap.push(it);

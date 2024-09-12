@@ -15,7 +15,8 @@ const DropdownMenuComponent = forwardRef<any, DropdownMenuOptions>(
         ref={ref}
         tabIndex={0}
         render={<S.Inner />}
-        {...rest}>
+        {...rest}
+      >
         {children}
       </Ariakit.Menu>
     );
@@ -38,13 +39,20 @@ export const Trigger = forwardRef<'button', any>(
   },
 );
 
-export const Item = forwardRef<'HTMLButtonElement', any>(
-  ({ as, ...rest }, ref) => {
-    return (
-      <Ariakit.MenuItem ref={ref} type="button" render={<S.Item />} {...rest} />
-    );
-  },
-);
+export const Item = forwardRef<
+  HTMLButtonElement,
+  Omit<Ariakit.MenuItemProps, 'as'>
+>(({ as, ...rest }: any, ref) => {
+  return (
+    <Ariakit.MenuItem
+      as={as}
+      ref={ref}
+      type="button"
+      render={<S.Item as={as} />}
+      {...rest}
+    />
+  );
+});
 
 export const Separator = forwardRef<'div', any>((props, ref) => {
   return <Ariakit.MenuSeparator ref={ref} as={S.Separator} {...props} />;

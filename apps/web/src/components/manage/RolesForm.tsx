@@ -27,7 +27,8 @@ interface FormInputs {
 }
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
-  const isEdit = roleId && roleId !== (null || undefined || '');
+  const isEdit =
+    roleId && roleId !== null && roleId !== undefined && roleId !== '';
   const {
     register,
     trigger,
