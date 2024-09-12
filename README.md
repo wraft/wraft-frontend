@@ -11,7 +11,7 @@
 </p>
 
 <div align="center">
-  <img src="apps/web/public/demo.png" alt="Wraft Demo" style="width: 80%;" />
+  <img src="apps/web/public/demo-v1.png" alt="Wraft Demo" style="width: 80%;" />
 </div>
 
 ---
