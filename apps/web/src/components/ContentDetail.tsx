@@ -40,8 +40,8 @@ import Modal from './Modal';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
 import NavLink from './NavLink';
-
-const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
+import PdfViewer from './PdfViewer';
+// const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 interface Approver {
   id: string;
@@ -803,6 +803,10 @@ const ContentDetail = () => {
                             // minHeight: '100vh',
                             border: 'solid 1px',
                             borderColor: 'gray.400',
+                            '.react-pdf__Page': {
+                              backgroundColor: 'transparent !important',
+                              marginBottom: '8px',
+                            },
                             '.react-pdf__Document': {
                               mx: 2,
                             },

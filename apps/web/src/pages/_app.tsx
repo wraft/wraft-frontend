@@ -6,16 +6,14 @@ import { SessionProvider, getSession } from 'next-auth/react';
 import { ThemeUIProvider } from 'theme-ui';
 import { Analytics } from '@vercel/analytics/react';
 import { GoogleTagManager } from '@next/third-parties/google';
-// import { Theme } from 'theme-ui';
+import 'core-js/full/promise/with-resolvers.js';
+
+import { polyfillPromiseWithResolvers } from 'utils/PromiseWithResolvers';
 
 import { UserProvider } from '../contexts/AuthContext';
 import ToasterNewProvider from '../contexts/ToasterProvider';
-// import theme from '../theme';
 
-// import theme from '../utils/theme';
-// theme
-// const makeTheme = <T extends Theme>(t: T): T => t;
-// const themes = makeTheme(theme);
+polyfillPromiseWithResolvers();
 interface AppPropsWithRedux extends AppProps {
   reduxStore: any;
 }
