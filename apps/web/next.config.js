@@ -21,6 +21,16 @@ module.exports = withImages({
     unoptimized: true,
   },
   experimental: {
+    esmExternals: 'loose',
     optimizePackageImports: ['@phosphor-icons/react'],
+    turbo: {
+      resolveAlias: {
+        canvas: './empty-module.ts',
+      },
+    },
+  },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
   },
 });
