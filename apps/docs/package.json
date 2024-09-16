@@ -8,7 +8,7 @@
     "build": "storybook build",
     "preview-storybook": "serve storybook-static",
     "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint": "eslint ./stories/*.stories.tsx --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --max-warnings 0",
     "build-storybook": "storybook build"
   },
   "dependencies": {

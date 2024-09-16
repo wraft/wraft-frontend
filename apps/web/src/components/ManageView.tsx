@@ -5,12 +5,11 @@ import { Flex, Box, Text } from 'theme-ui';
 import {
   Layout,
   BuildingOffice,
-  TreeStructure,
   IntersectSquare,
   PaintRoller,
 } from '@phosphor-icons/react';
 
-import PageHeader from './PageHeader';
+import PageHeader from 'common/PageHeader';
 
 export interface INav {
   showFull?: boolean;

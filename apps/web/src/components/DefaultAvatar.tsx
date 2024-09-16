@@ -11,8 +11,8 @@ interface DefaultAvatarProps {
 const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
   const [isDummyImage, setIsDummyImage] = useState<boolean>(false);
 
-  const containsPathSegment = (url: string, segment: string): boolean => {
-    return url.includes(segment);
+  const containsPathSegment = (imgUrl: string, segment: string): boolean => {
+    return imgUrl.includes(segment);
   };
 
   useEffect(() => {

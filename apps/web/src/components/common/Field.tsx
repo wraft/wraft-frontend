@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
 
-import { EyeIcon } from './Icons';
+import { EyeIcon } from 'components/Icons';
 
 interface Props {
   onChange?: any;

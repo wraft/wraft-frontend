@@ -4,7 +4,7 @@ import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { Label, Input, Text, Box } from 'theme-ui';
 
-import { Calendar } from './Icons';
+import { Calendar } from 'components/Icons';
 import 'react-day-picker/lib/style.css';
 
 interface Props {
@@ -64,8 +64,8 @@ const Field: React.FC<Props> = ({
     return format(date, formatStr, { locale });
   };
 
-  const parseDate = (str: string, format: string, locale: any) => {
-    const parsed = parse(str, format, new Date(), { locale });
+  const parseDate = (str: string, dateFormat: string, locale: any) => {
+    const parsed = parse(str, dateFormat, new Date(), { locale });
     if (DateUtils.isDate(parsed)) {
       return parsed;
     }

@@ -1,7 +1,7 @@
 {
   "extends": "@wraft/typescript-config/react-library.json",
   "compilerOptions": {
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"]

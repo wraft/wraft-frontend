@@ -19,11 +19,11 @@ export const repeat = (times: number) => (callback: (index: number) => any) =>
     .map((_, index) => callback(index));
 
 const PdfViewer = ({ url }: PdfViewerProps) => {
-  const [numPages, setNumPages] = useState<any>(0);
+  const [totalPages, setTotalPages] = useState<any>(0);
   const [pageNumber, setPageNumber] = useState(1);
 
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
+    setTotalPages(numPages);
     setPageNumber(1);
   };
 
@@ -36,7 +36,7 @@ const PdfViewer = ({ url }: PdfViewerProps) => {
             __html: ` canvas { margin: auto; }`,
           }}
         />
-        {repeat(numPages)((index) => (
+        {repeat(totalPages)((index) => (
           // TODO: Dynamically resize width to fit container
           // https://github.com/wojtekmaj/react-pdf/issues/129
           <Page key={`page_${index + 1}`} pageNumber={index + 1} />

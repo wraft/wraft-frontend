@@ -4,16 +4,17 @@ import {
   DisclosureContent,
   DisclosureProvider,
 } from '@ariakit/react';
-import { Drawer } from '@wraft-ui/Drawer';
 import { Controller, useForm } from 'react-hook-form';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
-import { Asset, Engine } from '../utils/types';
-import Field from './Field';
+import { ArrowDropdown } from 'components/Icons';
+import { Drawer } from 'common/Drawer';
+import Field from 'common/Field';
+import { fetchAPI } from 'utils/models';
+import { Asset, Engine } from 'utils/types';
+
 import FieldText from './FieldText';
-import { ArrowDropdown } from './Icons';
 import LayoutForm from './LayoutForm';
 import MenuStepsIndicator from './MenuStepsIndicator';
 

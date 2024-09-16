@@ -1,9 +1,9 @@
 // import React 'react';
 import { Box } from 'theme-ui';
 // import Container from './Container';
-// import Field from './Field';
+// import Field from 'common/Field';
 // import { format } from 'date-fns';
-// import Link from './NavLink';
+// import Link from 'common/NavLink';
 // import ProfilePopup from './ProfilePopup';
 // import { format } from 'date-fns';
 

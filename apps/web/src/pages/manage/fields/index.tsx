@@ -5,8 +5,8 @@ import { Box, Container, Flex } from 'theme-ui';
 import FieldList from 'components/FieldList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
-import NextLinkText from 'components/NavLink';
+import PageHeader from 'common/PageHeader';
+import NextLinkText from 'common/NavLink';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {

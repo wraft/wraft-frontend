@@ -2,8 +2,8 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Flex, Box, Text } from 'theme-ui';
 
-import { menuLinksProps } from '../utils';
-import NavLink from './NavLink';
+import NavLink from 'common/NavLink';
+import { menuLinksProps } from 'utils';
 
 export interface INav {
   showFull?: boolean;

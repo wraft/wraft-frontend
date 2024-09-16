@@ -4,8 +4,8 @@ import { Button, Box, Flex, Text, Spinner, useThemeUI } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { CloseIcon } from '@wraft/icon';
 
-import Field from './Field';
-import Modal from './Modal';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
 
 interface FieldFormProps {
   fields?: any;

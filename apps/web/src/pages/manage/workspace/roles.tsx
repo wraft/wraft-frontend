@@ -1,7 +1,5 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Box, Input, Spinner } from 'theme-ui';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
@@ -10,7 +8,9 @@ import { SearchIcon } from 'components/Icons';
 import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import { Drawer } from 'common/Drawer';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
 import { workspaceLinks } from 'utils/index';
 

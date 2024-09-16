@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Container } from 'theme-ui';
 
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
 import ContentTypeViewForm from 'components/ContentTypeViewForm';
+import PageHeader from 'common/PageHeader';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {

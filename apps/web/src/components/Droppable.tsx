@@ -31,11 +31,11 @@ import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI } from 'utils/models';
 
 import { StateState } from './FlowForm';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
 
 type Props = {
   states: StateState[];
@@ -212,9 +212,9 @@ const SortableItem = ({
   const onDeleteState = () => {
     if (states && state) {
       const newArr = states.filter((s: any) => s.id !== state.id);
-      const final = newArr.map((s: any, index: number) => ({
+      const final = newArr.map((s: any, i: number) => ({
         ...s,
-        order: index + 1,
+        order: i + 1,
       }));
       setStates(final);
       setDeleteOpen(false);

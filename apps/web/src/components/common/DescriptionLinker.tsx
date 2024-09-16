@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 
-import { GraterThanIcon } from '../Icons';
-import NextLinkText from '../NavLink';
+import { GraterThanIcon } from 'components/Icons';
+import NextLinkText from 'common/NavLink';
 
 type Data = {
   name: string;

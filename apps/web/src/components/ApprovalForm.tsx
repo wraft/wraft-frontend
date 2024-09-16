@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
 
-import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-import Field from './Field';
+import Field from 'common/Field';
+import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
 
 export interface States {
   total_pages: number;
@@ -199,19 +199,6 @@ const ApprovalForm = () => {
   const onSubmit = (data: any) => {
     postAPI('flows', data);
   };
-
-  // const loadSearchSuccess = (d: any) => {
-  //   console.log('d', d);
-  // };
-
-  // /**
-  //  * Search User
-  //  * @param data
-  //  */
-  // const onChangeInput = (data: any) => {
-  //   console.log('data', data);
-  //   // loadEntity(token, `users/search?key=${data}`, loadSearchSuccess);
-  // };
 
   useEffect(() => {
     if (cId && cId.length > 0) {

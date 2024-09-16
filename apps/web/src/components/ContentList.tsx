@@ -5,11 +5,10 @@ import { Box, Text, Avatar, Flex, Container } from 'theme-ui';
 import { Button, Pagination, Table } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import ContentTitleList from 'components/common/content/ContentTitleList';
+import { ContentTitleList } from 'common/content';
+import { TimeAgo, FilterBlock, StateBadge } from 'common/Atoms';
+import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
-
-import { TimeAgo, FilterBlock, StateBadge } from './Atoms';
-import PageHeader from './PageHeader';
 
 export interface ILayout {
   width: number;
@@ -155,21 +154,6 @@ const ContentList = () => {
         toast.error('Failed to load content types');
       });
   };
-
-  /* TO DO: waiting for the api response */
-
-  // const loadState = () => {
-  //   fetchAPI('flows')
-  //     .then((data: any) => {
-  //       console.log(data, 'logdata');
-
-  //       const res: any = data.states.state;
-  //       setDocState(res);
-  //     })
-  //     .catch(() => {
-  //       toast.error('Failed to load states');
-  //     });
-  // };
 
   useEffect(() => {
     if (page || currentVariant) {

@@ -1,14 +1,14 @@
 /** @jsxImportSource theme-ui */
 
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import Checkbox from '@wraft-ui/Checkbox';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
-import { putAPI, fetchAPI } from '../../utils/models';
-import { ArrowDropdown } from '../Icons';
+import { ArrowDropdown } from 'components/Icons';
+import Checkbox from 'common/Checkbox';
+import { putAPI, fetchAPI } from 'utils/models';
 
 const PermissionsList = () => {
   const [roles, setRoles] = useState<any>([]);
@@ -28,8 +28,8 @@ const PermissionsList = () => {
       });
   }, []);
 
-  const reStructurePermission = (permissions: any, roleData: any) => {
-    const data = Object.entries(permissions).map(([key, value], index) => ({
+  const reStructurePermission = (permissionList: any, roleData: any) => {
+    const data = Object.entries(permissionList).map(([key, value], index) => ({
       id: index,
       name: key,
       children: value,
@@ -63,8 +63,6 @@ const PermissionsList = () => {
 
   const data = useMemo(() => permissions, [permissions]);
 
-  console.log('permissions', permissions);
-
   const checkedValuesFunc = useCallback(
     (role: any) => {
       return permissions.reduce((acc: string[], item: any) => {
@@ -96,16 +94,20 @@ const PermissionsList = () => {
 
   const onChangeParent = (e: any, role: any, index: any) => {
     const { checked } = e.target;
-    const data = [...permissions];
-    data[index][role.name] = checked;
+    const permissionList = [...permissions];
+    permissionList[index][role.name] = checked;
 
-    if (data[index][role.name]) {
-      data[index].children.map((child: any) => (child[role.name] = checked));
+    if (permissionList[index][role.name]) {
+      permissionList[index].children.map(
+        (child: any) => (child[role.name] = checked),
+      );
     } else {
-      data[index].children.map((child: any) => (child[role.name] = false));
+      permissionList[index].children.map(
+        (child: any) => (child[role.name] = false),
+      );
     }
 
-    setPermissions(data);
+    setPermissions(permissionList);
     onSubmit(role);
   };
 
@@ -116,21 +118,21 @@ const PermissionsList = () => {
     parentIndex: any,
   ) => {
     const { checked } = e.target;
-    const data = [...permissions];
+    const permissionList = [...permissions];
 
-    data[parentIndex].children[childIndex][role.name] = checked;
-    data[parentIndex].children.map(() => {
-      const isAllSelected = data[parentIndex].children.every(
+    permissionList[parentIndex].children[childIndex][role.name] = checked;
+    permissionList[parentIndex].children.map(() => {
+      const isAllSelected = permissionList[parentIndex].children.every(
         (child: any) => child[role.name] === true,
       );
       if (isAllSelected) {
-        data[parentIndex][role.name] = checked;
+        permissionList[parentIndex][role.name] = checked;
       } else {
-        data[parentIndex][role.name] = false;
+        permissionList[parentIndex][role.name] = false;
       }
     });
 
-    setPermissions(data);
+    setPermissions(permissionList);
     onSubmit(role);
   };
 

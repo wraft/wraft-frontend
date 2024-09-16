@@ -8,10 +8,9 @@ import { Analytics } from '@vercel/analytics/react';
 import { GoogleTagManager } from '@next/third-parties/google';
 import 'core-js/full/promise/with-resolvers.js';
 
+import { UserProvider } from 'contexts/AuthContext';
+import ToasterNewProvider from 'contexts/ToasterProvider';
 import { polyfillPromiseWithResolvers } from 'utils/PromiseWithResolvers';
-
-import { UserProvider } from '../contexts/AuthContext';
-import ToasterNewProvider from '../contexts/ToasterProvider';
 
 polyfillPromiseWithResolvers();
 interface AppPropsWithRedux extends AppProps {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI } from 'utils/models';
 export interface PermissionGroupList {
   total_pages: number;
   total_entries: number;
@@ -78,16 +78,10 @@ const OrgPermissionList = () => {
    */
   const ky = (r: any) => {
     let pname = '';
-    Object.keys(r).map(function (key, index) {
-      // myObject[key] *= 2;
-      console.log('keys', key, index);
+    Object.keys(r).map(function (key, _index) {
       pname = key;
     });
 
-    // return pname;
-    if (pname) {
-      console.log('pname', r[`${pname}`]);
-    }
     return pname;
   };
 

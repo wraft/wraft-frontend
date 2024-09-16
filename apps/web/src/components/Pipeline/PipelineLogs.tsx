@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Text } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
+import { Table } from '@wraft/ui';
 
-import { StateBadge } from 'components/Atoms';
-
-import { fetchAPI } from '../../utils/models';
+import { StateBadge } from 'common/Atoms';
+import { fetchAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;
@@ -29,27 +28,11 @@ type Props = {
 };
 
 const PipelineLogsList = ({ rerender }: Props) => {
-  const [contents, setContents] = useState<Array<ThemeElement>>([]);
-  const [triggerHistory, setTriggerHistory] = useState<Array<[]>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [triggerHistory, setTriggerHistory] = useState<Array<[]>>([]);
 
   const router = useRouter();
-
   const cId: string = router.query.id as string;
-
-  const loadData = () => {
-    setLoading(true);
-
-    fetchAPI('themes?sort=inserted_at_desc')
-      .then((data: any) => {
-        const res: ThemeElement[] = data.themes;
-        setContents(res);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
 
   const loadPipelineHistory = () => {
     setLoading(true);
@@ -58,7 +41,6 @@ const PipelineLogsList = ({ rerender }: Props) => {
       .then((data: any) => {
         const res = data.triggers;
         setTriggerHistory(res);
-        console.log(res, 'logtrigger');
         setLoading(false);
       })
       .catch(() => {
@@ -67,7 +49,6 @@ const PipelineLogsList = ({ rerender }: Props) => {
   };
 
   useEffect(() => {
-    loadData();
     loadPipelineHistory();
   }, [rerender]);
 

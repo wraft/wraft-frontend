@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
-import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router';
-import ContentSidebar, {
-  FlowStateBlock,
-} from '@wraft-ui/content/ContentSidebar';
 import { Box, Flex, Text, Label, Input } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
-import { RoutedDialog } from '@wraft-ui/RoutedDialog';
 import { Button } from '@wraft/ui';
 
 import NavEdit from 'components/NavEdit';
-import Field from 'components/Field';
 import Editor from 'components/common/Editor';
-import { findVars, replaceTitles, updateVars, findHolders } from 'utils/index';
+import Field from 'common/Field';
+import { RoutedDialog } from 'common/RoutedDialog';
+import { FlowStateBlock, ContentSidebar } from 'common/content';
+import { replaceTitles, updateVars, findHolders } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
@@ -31,9 +28,23 @@ import contentStore from 'store/content.store';
 
 import FieldForm from './FieldForm';
 
-const ContentForm = (props: IContentForm) => {
-  // Base
-  // -------
+const ContentForm = ({ id, edit }: IContentForm) => {
+  const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [activeTemplate, setActiveTemplate] = useState('');
+  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
+  const [content, setContent] = useState<IVariantDetail>();
+  const [contents, setContents] = useState<ContentInstance>();
+  const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
+  const [fields, setField] = useState<Array<FieldT>>([]);
+  const [fieldValues, setFieldValues] = useState<any>();
+  const [maps, setMaps] = useState<Array<IFieldField>>([]);
+  const [pageTitle, setPageTitle] = useState<string>('New Title');
+  const [saving, setSaving] = useState<boolean>(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
+  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('New Title');
+  const [trigger, setTrigger] = useState<any>(null);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
 
   const router = useRouter();
   const {
@@ -43,36 +54,9 @@ const ContentForm = (props: IContentForm) => {
     formState: { errors, isDirty },
     setValue,
   } = useForm();
-
-  const [content, setContent] = useState<IVariantDetail>();
-  const [contents, setContents] = useState<ContentInstance>();
-  const [activeTemplate, setActiveTemplate] = useState('');
-
-  const cId: string = router.query.id as string;
-  const pathname = usePathname();
-
-  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
-
-  const [fields, setField] = useState<Array<FieldT>>([]);
-  // const [showForm, setShowForm] = useState<boolean>(false);
-  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
-  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
-
-  const [activeFlow, setActiveFlow] = useState<any>(null);
-  const [saving, setSaving] = useState<boolean>(false);
-  const [maps, setMaps] = useState<Array<IFieldField>>([]);
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
-  const [fieldValues, setFieldValues] = useState<any>();
-  const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { id, edit } = props;
-  const [title, setTitle] = useState<string>('New Title');
-
-  const [pageTitle, setPageTitle] = useState<string>('New Title');
-
   const editorRef = useRef<any>();
 
-  // triggers
-  const [trigger, setTrigger] = useState<any>(null);
+  const cId: string = router.query.id as string;
   const newContent = contentStore((state: any) => state.newContents);
 
   useEffect(() => {
@@ -146,9 +130,9 @@ const ContentForm = (props: IContentForm) => {
     }
   };
 
-  const createDefaultTitle = (titleFormat: any, maps: any) => {
-    const title = replacePlaceholders(titleFormat, maps);
-    setValue('title', title);
+  const createDefaultTitle = (titleFormat: any, fieldMappings: any) => {
+    const generatedTitle = replacePlaceholders(titleFormat, fieldMappings);
+    setValue('title', generatedTitle);
   };
 
   const replacePlaceholders = (str: string, replacements: any): any => {
@@ -173,10 +157,10 @@ const ContentForm = (props: IContentForm) => {
    * @param fields
    * @returns
    */
-  const mapFields = (fields: any) => {
+  const mapFields = (inputFields: any) => {
     const vals = getValues();
 
-    return fields.map((field: any) => ({
+    return inputFields.map((field: any) => ({
       ...field,
       value: vals[field.name],
     }));
@@ -235,14 +219,14 @@ const ContentForm = (props: IContentForm) => {
     };
 
     if (edit) {
-      putAPI(`contents/${id}`, template).then((data: any) => {
-        onCreate(data);
+      putAPI(`contents/${id}`, template).then((response: any) => {
+        onCreate(response);
         setSaving(false);
       });
     } else {
       postAPI(`content_types/${data.ttype}/contents`, template)
-        .then((data: any) => {
-          if (data?.info) {
+        .then((response: any) => {
+          if (response?.info) {
             toast.success('Build Failed', {
               duration: 1000,
               position: 'top-right',
@@ -250,12 +234,12 @@ const ContentForm = (props: IContentForm) => {
             setSaving(false);
           }
 
-          if (data?.content?.id) {
+          if (response?.content?.id) {
             toast.success('Saved Successfully', {
               duration: 1000,
               position: 'top-right',
             });
-            router.replace(`/content/${data.content.id}`);
+            router.replace(`/content/${response.content.id}`);
             setSaving(false);
           }
         })
@@ -373,48 +357,13 @@ const ContentForm = (props: IContentForm) => {
   }, [activeTemplate]);
 
   /**
-   * Change Title on Fields change
-   * @param piece
-   */
-  const changeTitle = (piece: any, maps: any) => {
-    if (maps) {
-      // lazy matching
-      const tempTitle = piece.title_template;
-      const m = findVars(tempTitle, false);
-      // m.map((x: any) => {
-      //   const cName = cleanName(x);
-      //   // console.log('🐴🐴  [changeTitle] ', cName, maps);
-      // });
-    }
-  };
-
-  /**
-   * on select template
-   * @param x
-   */
-
-  // const changeText = (x: any) => {
-  //   setShowForm(true);
-
-  //   setActiveTemplate(x.id);
-
-  //   // textOperation(x);
-
-  //   // store template obj
-  //   setSelectedTemplate(x);
-
-  //   changeTitle(x, maps);
-  //   updateStuff(x, maps);
-  // };
-
-  /**
    * Mapping Form values to content and updating it
    * @param content
    * @param mappings
    */
-  const passUpdates = async (content: any, mappings: any) => {
-    const updatedCont = await updateVars(content, mappings);
-    setBody(updatedCont);
+  const passUpdates = async (contentData: any, mappings: any) => {
+    const updatedContent = await updateVars(contentData, mappings);
+    setBody(updatedContent);
   };
 
   /**

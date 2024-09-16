@@ -1,18 +1,17 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
-import Router from 'next/router';
-import Checkbox from '@wraft-ui/Checkbox';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Container, Button, Box, Input, Label, Text } from 'theme-ui';
 
-import Field from 'components/Field';
 import ManageSidebar from 'components/ManageSidebar';
-import Modal from 'components/Modal';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
 import DefaultAvatar from 'components/DefaultAvatar';
+import PageHeader from 'common/PageHeader';
+import Field from 'common/Field';
+import Modal from 'common/Modal';
+import DescriptionLinker from 'common/DescriptionLinker';
+import Checkbox from 'common/Checkbox';
 import { useAuth } from 'contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
@@ -51,7 +50,7 @@ const Index: FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const { userProfile, logout } = useAuth();
+  const { userProfile } = useAuth();
 
   const orgId = userProfile?.organisation_id || null;
   const currentOrg = userProfile?.currentOrganisation || null;

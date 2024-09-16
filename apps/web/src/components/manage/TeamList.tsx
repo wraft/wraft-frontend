@@ -4,11 +4,11 @@ import { Flex, Box, Text, Image } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import { Button, Table, Modal, DropdownMenu } from '@wraft/ui';
 
-import { TimeAgo } from 'components/Atoms';
+import { AddIcon, Close } from 'components/Icons';
+import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 
-import { fetchAPI, deleteAPI, postAPI } from '../../utils/models';
-import { AddIcon, Close } from '../Icons';
 import AssignRole from './AssignRole';
 
 interface Role {
@@ -58,8 +58,8 @@ const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
   const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
-  const [currentRoleList, setCurrentRoleList] = useState<string[]>([]);
-  const [isAssignRole, setIsAssignRole] = useState<number | null>(null);
+  const [currentRoleList, _setCurrentRoleList] = useState<string[]>([]);
+  const [_isAssignRole, setIsAssignRole] = useState<number | null>(null);
   const [isUnassignModalOpen, setUnassignModalOpen] = useState<boolean>(false);
   const [isOpenUnassignUserModal, setOpenUnassignUserModal] =
     useState<boolean>(false);
@@ -144,7 +144,6 @@ const TeamList = () => {
   };
 
   const onUnassignUserConfirm = (member: any) => {
-    console.log('member', member);
     setCurrentRole({ member: member });
     setOpenUnassignUserModal(true);
   };

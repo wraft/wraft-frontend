@@ -6,10 +6,10 @@ import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import { z } from 'zod';
 
-import Field from 'components/Field';
-import Link from 'components/NavLink';
 import PasswordCreated from 'components/PasswordCreated';
 import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
 

@@ -1,8 +1,6 @@
 import React from 'react';
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Check, Circle } from '@phosphor-icons/react';
-// import { CheckCircle2, Circle } from 'lucide-react';
 
 interface Approver {
   name: string;
@@ -99,13 +97,6 @@ const StepDate = styled.p`
 const ApproverInfo = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const ApproverImage = styled.img`
-  width: 2rem;
-  height: 2rem;
-  border-radius: 9999px;
-  margin-right: 0.5rem;
 `;
 
 const ApproverName = styled.span`

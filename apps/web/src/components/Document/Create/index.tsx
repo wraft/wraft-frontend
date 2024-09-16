@@ -4,13 +4,13 @@ import { Button, Pagination, Skeleton } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import toast from 'react-hot-toast';
 // import { steps } from 'framer-motion';
 
-import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
 import { EmptyForm } from 'components/Icons';
+import Field from 'common/Field';
+import StepsIndicator from 'common/Form/StepsIndicator';
 import { capitalizeFirst } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
@@ -97,8 +97,6 @@ const CreateDocument = () => {
   };
 
   const onSubmit = (data: any) => {
-    console.log(data, 'logdata');
-
     if (formStep === 0 && !template) {
       toast.error('Please select a template.', {
         duration: 3000,

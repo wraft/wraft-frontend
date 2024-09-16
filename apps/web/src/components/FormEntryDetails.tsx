@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Heading, Label, Text } from 'theme-ui';
+import { Box, Flex, Label, Text } from 'theme-ui';
 
+import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
-
-import PageHeader from './PageHeader';
 
 type ContentItem = {
   name: string;
@@ -42,12 +41,12 @@ const FormEntryDetails = () => {
       }, {});
 
       // Step 2: Transform the contents object
-      const newData = Object.keys(contents).map((id) => ({
+      const transformedData = Object.keys(contents).map((id) => ({
         name: idToNameMap[id] || id,
         value: contents[id],
       }));
 
-      setNewData(newData);
+      setNewData(transformedData);
     }
   };
 

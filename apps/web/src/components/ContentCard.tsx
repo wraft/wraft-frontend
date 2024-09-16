@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 
-import { TimeAgo } from './Atoms';
-import MenuItem from './NavLink';
+import { TimeAgo } from 'common/Atoms';
+import MenuItem from 'common/NavLink';
 
 export interface ILayout {
   width: number;

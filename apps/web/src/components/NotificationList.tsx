@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import { Box } from 'theme-ui';
 import { Pagination, Table } from '@wraft/ui';
 
+import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
-
-import { TimeAgo } from './Atoms';
 
 export interface IPageMeta {
   page_number: number;

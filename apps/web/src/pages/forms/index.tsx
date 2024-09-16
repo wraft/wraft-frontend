@@ -7,11 +7,11 @@ import { Plus, X } from '@phosphor-icons/react';
 
 import FormList from 'components/FormList';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
-import Modal from 'components/Modal';
 import FormsFrom from 'components/FormsFrom';
-import Field from 'components/Field';
 import FieldText from 'components/FieldText';
+import PageHeader from 'common/PageHeader';
+import Field from 'common/Field';
+import Modal from 'common/Modal';
 
 type FormValues = {
   name: string;
@@ -24,9 +24,9 @@ const Index: FC = () => {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState<any>([]);
   const [data, setData] = useState<FormValues | null>();
-  const [trigger, setTrigger] = useState<boolean>(false);
+  const [trigger, _setTrigger] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [_loading, setLoading] = useState<boolean>(false);
 
   const mobileMenuDrawer = useDrawer();
 
@@ -37,8 +37,8 @@ const Index: FC = () => {
     formState: { errors },
   } = useForm<FormValues>();
 
-  const onSubmit = (data: any) => {
-    setData(data);
+  const onSubmit = (formData: any) => {
+    setData(formData);
     setDrawerOpen(true);
     setIsOpen(false);
   };

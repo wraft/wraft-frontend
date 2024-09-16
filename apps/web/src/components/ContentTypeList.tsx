@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Flex } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { Plus, X } from '@phosphor-icons/react';
 
+import PageHeader from 'common/PageHeader';
+
 import ContentTypeDashboard from './ContentTypeDashboard';
-import PageHeader from './PageHeader';
 import ContentTypeForm from './ContentTypeForm';
 
 export interface ILayout {

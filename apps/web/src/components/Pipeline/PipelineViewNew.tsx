@@ -15,9 +15,9 @@ import { Drawer, useDrawer } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
+import PageHeader from 'common/PageHeader';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
-import PageHeader from '../PageHeader';
 import PipelineSteps from './PipelineSteps';
 import MenuStepsIndicator from '../MenuStepsIndicator';
 import PipelineLogs from './PipelineLogs';
@@ -40,9 +40,6 @@ const PipelineView = () => {
   const cId: string = router.query.id as string;
 
   const formMenuDrawer = useDrawer();
-
-  console.log(pipelineData, 'logdata');
-
   const goTo = (step: number) => {
     setFormStep(step);
   };
@@ -87,8 +84,6 @@ const PipelineView = () => {
   };
 
   const onRunClick = (formId: any) => {
-    console.log(formId, 'logform');
-
     setIsOpen(true);
     setSourceId(formId);
   };

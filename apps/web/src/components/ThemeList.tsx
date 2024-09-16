@@ -5,10 +5,10 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { ConfirmDelete } from './common';
-import Modal from './Modal';
-import Link from './NavLink';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import Link from 'common/NavLink';
+import { fetchAPI, deleteAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;

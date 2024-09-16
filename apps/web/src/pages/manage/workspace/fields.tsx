@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 
 import ManageSidebar from 'components/ManageSidebar';
 import OrgForm from 'components/OrgForm';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { workspaceLinks } from 'utils/index';
 
 const CompanyForm: FC = () => {

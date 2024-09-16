@@ -5,9 +5,10 @@ import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
-import { fetchAPI } from '../../utils/models';
-import Link from '../NavLink';
-import PageHeader from '../PageHeader';
+import Link from 'common/NavLink';
+import PageHeader from 'common/PageHeader';
+import { fetchAPI } from 'utils/models';
+
 import PipelineTypeForm from './PipelineTypeForm';
 import PipelineFormEntry from '../PipelineFormEntry';
 
@@ -36,15 +37,15 @@ export interface IPageMeta {
 
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [rerender, setRerender] = React.useState(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [pageMeta, setPageMeta] = useState<IPageMeta>();
-  const [sourceId, setSourceId] = useState<any>();
-  const [pipelineId, setPipelineId] = useState<any>();
-  const [page, setPage] = useState<number>(1);
   const [formName, setFormName] = useState<any>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [pipelineId, setPipelineId] = useState<any>();
+  const [rerender, setRerender] = React.useState(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [sourceId, setSourceId] = useState<any>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -64,10 +65,6 @@ const Form = () => {
       setPageMeta(data);
       setLoading(false);
     });
-  };
-
-  const pipelineDetail = (id: any) => {
-    fetchAPI(`pipelines/${id}`);
   };
 
   useEffect(() => {
@@ -90,10 +87,10 @@ const Form = () => {
     );
   };
 
-  const onRunClick = (formId: any, pipelineId: any) => {
+  const onRunClick = (formId: any, pipeId: any) => {
     setIsOpen(true);
     setSourceId(formId);
-    setPipelineId(pipelineId);
+    setPipelineId(pipeId);
   };
 
   const columns = [

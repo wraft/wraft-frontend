@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import SignupForm from '../components/SignupForm';
+import SignupForm from 'components/SignupForm';
 
 const Index: FC = () => {
   return (

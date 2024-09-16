@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Button, Text, Spinner } from 'theme-ui';
 
-import { useAuth } from '../../contexts/AuthContext';
-import { postAPI } from '../../utils/models';
-import Field from '../Field';
+import Field from 'common/Field';
+import { useAuth } from 'contexts/AuthContext';
+import { postAPI } from 'utils/models';
 
 interface props {
   setOpen: any;
@@ -35,13 +35,13 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
       email: userProfile.email,
     };
     postAPI('organisations', body)
-      .then((data: any) => {
+      .then((response: any) => {
         setOpen(false);
         toast.success('Created new workspace', {
           duration: 1000,
           position: 'top-right',
         });
-        setCreatedId(data.id);
+        setCreatedId(response.id);
         setCreating(false);
       })
       .catch(() => {

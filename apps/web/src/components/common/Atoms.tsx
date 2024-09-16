@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
 
-import MenuItem from './NavLink';
+import MenuItem from 'common/NavLink';
 
 /**
  * Convert UTC date to local date

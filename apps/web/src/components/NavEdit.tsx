@@ -4,9 +4,10 @@ import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { Box, Flex, Text, Image } from 'theme-ui';
 import { ArrowLeft, Bell, Pencil, Share } from '@phosphor-icons/react';
 
-import { useAuth } from '../contexts/AuthContext';
+import Link from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+
 import ModeToggle from './ModeToggle';
-import Link from './NavLink';
 
 export interface IUser {
   name: string;

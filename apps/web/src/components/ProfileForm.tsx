@@ -4,10 +4,11 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { base64ToFile } from '../utils/imgCrop';
-import { loadEntity, updateEntityFile } from '../utils/models';
-import Field from './Field';
+import Field from 'common/Field';
+import { useAuth } from 'contexts/AuthContext';
+import { base64ToFile } from 'utils/imgCrop';
+import { loadEntity, updateEntityFile } from 'utils/models';
+
 import ImageUploader from './ImageUploader';
 
 export interface Profile {
@@ -118,8 +119,7 @@ const Form = () => {
    * Catch update response
    * @param respo
    */
-  const onUpdated = (respo: any) => {
-    console.log('response', respo);
+  const onUpdated = (_respo: any) => {
     toast.success('Image Updated', {
       duration: 1000,
       position: 'top-right',
@@ -150,8 +150,6 @@ const Form = () => {
   const toggleEditor = () => {
     setShowAvatarUploader(!showAvatarUploader);
   };
-
-  console.log('imagessss');
 
   return (
     <Box sx={{ width: '50%' }}>

@@ -10,7 +10,7 @@ import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI } from 'utils/models';
 
 interface IUserContextProps {
   isUserLoading: boolean;
@@ -40,10 +40,10 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   useEffect(() => {
-    const refreshToken = cookie.get('refreshToken') || false;
+    const cookieRefreshToken = cookie.get('refreshToken') || false;
 
-    if (refreshToken) {
-      setRefreshToken(refreshToken);
+    if (cookieRefreshToken) {
+      setRefreshToken(cookieRefreshToken);
     }
 
     const token = cookie.get('token') || false;

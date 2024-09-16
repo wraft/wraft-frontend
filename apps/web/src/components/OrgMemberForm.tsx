@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { fetchAPI, postAPI } from '../utils/models';
-import Field from './Field';
-import Modal from './Modal';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, postAPI } from 'utils/models';
+
 import OrgMembersList from './OrgMembersList';
 
 export interface Members {
@@ -47,12 +48,7 @@ export interface ProfileClass {
 }
 
 const OrgMemberForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [members, setMembers] = useState<Member | undefined>();
@@ -70,8 +66,8 @@ const OrgMemberForm = () => {
   };
 
   const onInviteSubmit = (data: any) => {
-    postAPI(`organisations/${organ?.id}/invite`, data).then((data: any) => {
-      onCreate(data);
+    postAPI(`organisations/${organ?.id}/invite`, data).then((response: any) => {
+      onCreate(response);
     });
   };
 
@@ -83,8 +79,7 @@ const OrgMemberForm = () => {
     setReady(true);
     setOrgan(_o);
 
-    Object.keys(_o).map(function (key, index) {
-      console.log('key', key, index, `${key}`, _o[`${key}`]);
+    Object.keys(_o).map(function (key, _index) {
       setValue(`${key}`, _o[`${key}`]);
     });
   };

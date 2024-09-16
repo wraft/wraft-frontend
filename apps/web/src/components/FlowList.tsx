@@ -3,15 +3,15 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
-import { Drawer } from '@wraft-ui/Drawer';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text, useThemeUI, Avatar } from 'theme-ui';
 import { Button, Table, Pagination } from '@wraft/ui';
 
-import { TimeAgo } from 'components/Atoms';
-import { ConfirmDelete } from 'components/common';
 import FlowForm from 'components/FlowForm';
-import Modal from 'components/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import Modal from 'common/Modal';
+import { TimeAgo } from 'common/Atoms';
+import { Drawer } from 'common/Drawer';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -70,10 +70,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
-  const loadData = (page: number) => {
+  const loadData = (pageNumber: number) => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`flows${pageNo}`)
+    const query =
+      pageNumber > 0 ? `?page=${pageNumber}&sort=inserted_at_desc` : '';
+    fetchAPI(`flows${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.flows;

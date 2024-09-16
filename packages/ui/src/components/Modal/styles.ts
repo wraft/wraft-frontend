@@ -1,11 +1,12 @@
-import type * as Ariakit from '@ariakit/react'
+import type * as Ariakit from '@ariakit/react';
 import styled, { css, up } from '@xstyled/emotion';
 
-export type BackdropProps = Pick<Ariakit.DialogOptions, 'hideOnInteractOutside'>
-
+export type BackdropProps = Pick<Ariakit.DialogOptions, 'hideOnInteractOutside'>;
 
 export const Backdrop: any = styled.divBox<Pick<BackdropProps, 'hideOnInteractOutside'>>`
-  ${({ hideOnInteractOutside }) => hideOnInteractOutside && `
+  ${({ hideOnInteractOutside }) =>
+    hideOnInteractOutside &&
+    `
     position: fixed;
     top: 0;
     right: 0;
@@ -20,9 +21,7 @@ export const Backdrop: any = styled.divBox<Pick<BackdropProps, 'hideOnInteractOu
       opacity: 1;
     }
   `};
-`
-
-
+`;
 
 export const Dialog: any = styled.div`
   position: fixed;
@@ -40,7 +39,6 @@ export const Dialog: any = styled.div`
   padding: 1rem;
   color: hsl(204 10% 10%);
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-
 
   @media (min-width: 640px) {
     .button {
@@ -101,4 +99,4 @@ export const Dialog: any = styled.div`
       height: fit-content;
     `,
   )}
-`
+`;

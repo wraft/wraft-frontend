@@ -7,13 +7,14 @@ import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
 import * as yup from 'yup';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { Button } from '@wraft/ui';
 
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
-import { hexColorRegex, uuidRegex } from '../utils/regex';
-import { ContentType } from '../utils/types';
-import Field from './Field';
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Field from 'common/Field';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from 'utils/models';
+import { hexColorRegex, uuidRegex } from 'utils/regex';
+import { ContentType } from 'utils/types';
+
 import FieldColor from './FieldColor';
 import FieldEditor from './FieldEditor';
 import FieldText from './FieldText';
@@ -183,10 +184,10 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const cId: string = router.query.id as string;
 
   const addField = () => {
-    setFields((fields) => {
+    setFields((currentFields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      fields = fields || [];
-      const outputState: any = fields.slice(0);
+      currentFields = fields || [];
+      const outputState: any = currentFields.slice(0);
 
       outputState.push('');
 
@@ -207,10 +208,10 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   }, [content]);
 
   const addFieldVal = (val: any) =>
-    setFields((fields) => {
+    setFields((currentFields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      fields = fields || [];
-      const outputState: any = fields.slice(0);
+      currentFields = currentFields || [];
+      const outputState: any = currentFields.slice(0);
       if (val.name !== undefined || null) {
         outputState.push({ name: val.value.name, value: val.value });
 
@@ -226,13 +227,13 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   const removeField = (did: number) =>
     fields &&
-    setFields((fields) => {
-      const outputState = fields.slice(0);
+    setFields((currentFields) => {
+      const outputState = currentFields.slice(0);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
 
-      const idToRemove = (fields[did] as { id: string })?.id;
+      const idToRemove = (currentFields[did] as { id: string })?.id;
       const popedNewArr = newFields.filter(
         (item: any) => item.id !== idToRemove,
       );
@@ -243,8 +244,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
       return final;
     });
 
-  const deleteField = (id: number, fields: any) => {
-    const deletable = fields[id];
+  const deleteField = (id: number, fieldList: any) => {
+    const deletable = fieldList[id];
     if (deletable && deletable.value && deletable.value.id) {
       const deletableId = deletable.value.id;
       const contentypeId = content?.content_type.id;
@@ -323,12 +324,12 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     });
   };
 
-  const formatFields = (fields: any) => {
+  const formatFields = (formFields: any) => {
     const fieldsMap: any = [];
 
-    fields &&
-      fields.length > 0 &&
-      fields.map((item: any) => {
+    formFields &&
+      formFields.length > 0 &&
+      formFields.map((item: any) => {
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
           name: item.name,
@@ -457,8 +458,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     loadFieldTypes();
   }, []);
 
-  const goTo = (step: number) => {
-    setFormStep(step);
+  const goTo = (formStepNumber: number) => {
+    setFormStep(formStepNumber);
   };
   const titles = ['Details', 'Configure', 'Fields'];
 

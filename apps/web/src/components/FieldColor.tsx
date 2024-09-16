@@ -61,7 +61,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
 
   const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHexColor = e.target.value;
-    console.log('newHexColor', newHexColor);
     setVal(newHexColor);
     if (onChangeColor) {
       onChangeColor(newHexColor, name);

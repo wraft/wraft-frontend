@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 import { Modal } from '@wraft/ui';
 
 import Footer from 'components/Footer';
-import NextLinkText from 'components/NavLink';
+import NextLinkText from 'common/NavLink';
 
 import data from './home.json';
 

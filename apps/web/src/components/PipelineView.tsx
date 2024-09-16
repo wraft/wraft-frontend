@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
-import { fetchAPI, postAPI, deleteAPI } from '../utils/models';
-import Field from './Field';
-import { PlayCircle } from './Icons';
-import Modal from './Modal';
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import { PlayCircle } from 'components/Icons';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
+import PageHeader from 'common/PageHeader';
+import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
+
 import { Pipeline } from './Pipeline/PipelineList';
 
 export interface ITriggers {
@@ -52,31 +53,6 @@ export interface Error {
   info: string;
 }
 
-// const _customStyles: Styles = {
-//   overlay: {
-//     position: 'fixed',
-//     top: 0,
-//     left: 0,
-//     right: 0,
-//     bottom: 0,
-//     backgroundColor: 'rgba(0, 0, 0, 0.75)',
-//   },
-//   content: {
-//     position: 'absolute',
-//     top: '20%',
-//     left: '20%',
-//     right: '20%',
-//     bottom: '20%',
-//     border: '1px solid #ccc',
-//     background: '#fff',
-//     overflow: 'auto',
-//     WebkitOverflowScrolling: 'touch',
-//     borderRadius: '4px',
-//     outline: 'none',
-//     padding: '20px',
-//   },
-// };
-
 export interface IStage {
   name: string;
   state_id: string;
@@ -84,41 +60,7 @@ export interface IStage {
   content_type_id: string;
 }
 
-// const Dot = styled.div`
-//   width: 12px;
-//   height: 12px;
-//   display: block;
-//   border-radius: 11rem;
-//   margin-top: 6px;
-//   background-color: #589444;
-//   position: absolute;
-//   left: 41%;
-//   top: 16px;
-//   z-index: 200;
-// `;
-
-// const Line = styled.div`
-//   width: 1px;
-//   height: 100%;
-//   border-right: solid 1px #58944461;
-//   position: absolute;
-//   left: 50%;
-//   z-index: 3000;
-//   display: block;
-// `;
-
-// {fields &&
-//   fields.map((_p: any) => (
-//     <Box>
-//       <Text sx={{ fontSize: 'xs', mb:2 , mt: 1, fontWeight: 600}}>Form</Text>
-//       { _p.map((pp: any) => (
-//         <Text as="code">{pp.name}</Text>
-//       ))}
-//     </Box>
-//   ))}
-
 const PipelineForm = (fields: any) => {
-  // console.log('fields', fields.fields.length);
   return (
     <Box>
       <Text>Pipeline Form 2 ({fields?.fields?.length})</Text>
@@ -155,14 +97,9 @@ const PipelineView = () => {
     const res: Pipeline = data;
     setActivePipeline(res);
 
-    // setFields(res.stages)
-
     if (res.stages) {
       const mx: any = [];
       res.stages.map((s: any) => {
-        // s.map((s: any) => {
-        // const fs:any = s?.content_type?.fields;
-        // console.log('fields', fs);
         mx.push(s?.content_type?.fields);
       });
 
@@ -188,7 +125,6 @@ const PipelineView = () => {
   // When pipe line is ready
   useEffect(() => {
     if (activePipeline) {
-      console.log('activePipeline', activePipeline);
       activePipeline &&
         activePipeline.stages &&
         activePipeline.stages.length > 0 &&
@@ -234,29 +170,17 @@ const PipelineView = () => {
    * @param id pipline_id
    */
   const loadTriggers = (id: string) => {
-    console.log('loading triggers for ', id);
-    // setState('running');
     fetchAPI(`/pipelines/${id}/triggers`).then((data: any) => {
       const res: ITriggers = data;
       setTriggers(res);
     });
   };
 
-  // const closeRunning = () => {
-  //   setState('nostart');
-  // };
-
   /**
    * Build a pipeline with Data
    * @param pipe
    */
   const buildPipelineNow = (pipe: any) => {
-    console.log('pipe', pipe);
-    // const sampleData = {
-    //   //1.  /content_types/{c_type_id}/data_templates/bulk_import
-    //   // 2.
-    // };
-
     triggerPipeline(pipe?.id);
   };
 
@@ -285,10 +209,6 @@ const PipelineView = () => {
   };
 
   const onSubmit = (data: any) => {
-    // createEntity(data, 'organisations', token, onCreate);
-    console.log('data', data);
-    // return false;
-
     const dataPost = {
       data,
     };

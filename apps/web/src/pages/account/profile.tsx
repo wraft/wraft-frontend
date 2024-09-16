@@ -3,9 +3,9 @@ import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
 
 import OrgSidebar from 'components/OrgSidebar';
-import PageHeader from 'components/PageHeader';
 import Page from 'components/PageFrame';
 import ProfileForm from 'components/ProfileForm';
+import PageHeader from 'common/PageHeader';
 
 const Contents: FC = () => {
   return (

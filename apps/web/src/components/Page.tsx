@@ -2,7 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
+
 import Container from './Container';
 import Nav from './Nav';
 import Sidebar from './Sidebar';
@@ -19,16 +20,6 @@ export interface IAlert {
   appearance?: any;
   children: any;
 }
-
-// const AlertBlock = (props: IAlert) => {
-//   console.log('props AlertBlock', props);
-//   return (
-//     <Box bg="primary">
-//       X{props.children}
-//       <Close ml="auto" mr={-2} />
-//     </Box>
-//   );
-// };
 
 export const Page = (props: any) => {
   const showFull: boolean = props && props.showFull ? true : false;

@@ -6,13 +6,13 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
 import { Gear, Plus } from '@phosphor-icons/react';
 
-import Link from 'components/NavLink';
 import DefaultAvatar from 'components/DefaultAvatar';
+import Link from 'common/NavLink';
+import Modal from 'common/Modal';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
-import Modal from '../Modal';
 import ModeToggle from '../ModeToggle';
 
 const Header = () => {

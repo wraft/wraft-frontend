@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
-import { TimeAgo } from 'components/Atoms';
+import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export interface FieldTypeList {
@@ -17,14 +17,6 @@ export interface FieldType {
   inserted_at: string;
   id: string;
 }
-
-const ItemField: FC<any> = ({ name }) => {
-  return (
-    <Text color="gray.8" sx={{ fontSize: 'sm', fontWeight: 400 }}>
-      {name}
-    </Text>
-  );
-};
 
 const columns = [
   {

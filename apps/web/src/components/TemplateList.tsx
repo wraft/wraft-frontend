@@ -8,11 +8,10 @@ import toast from 'react-hot-toast';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
+import { TimeAgo } from 'common/Atoms';
+import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
-
-import { TimeAgo } from './Atoms';
-import PageHeader from './PageHeader';
 
 const columns = ({ onCloneTemplete }: any) => [
   {
@@ -121,10 +120,10 @@ const TemplateList = () => {
     }
   }, [page]);
 
-  const loadData = (page: number) => {
+  const loadData = (pageNo: number) => {
     setLoading(true);
 
-    const query = `?page=${page}`;
+    const query = `?page=${pageNo}`;
     fetchAPI(`data_templates${query}&sort=updated_at_desc`)
       .then((data: any) => {
         setLoading(false);

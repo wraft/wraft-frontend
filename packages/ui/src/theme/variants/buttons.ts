@@ -1,12 +1,3 @@
-import {
-  background,
-  borderRadius,
-  cursor,
-  fontSize,
-  fontWeight,
-  opacity,
-} from '@xstyled/emotion';
-
 const buttons = {
   none: {
     padding: '0px',

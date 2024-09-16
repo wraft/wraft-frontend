@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Avatar, Box, Button, Flex, Text } from 'theme-ui';
+import { Avatar, Box, Flex, Text } from 'theme-ui';
 import { Pagination, Table, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
 
-import { TimeAgo } from 'components/Atoms';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
-
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
 
 export interface ILayout {
   width: number;
@@ -36,9 +35,6 @@ export interface IFieldItem {
   type: string;
 }
 
-// interface ContentTypeDashboardProps {
-//   isEdit?: boolean;
-// }
 interface Props {
   rerender: boolean;
   setRerender?: (prev: any) => void;
@@ -46,11 +42,10 @@ interface Props {
 
 const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [pageMeta, setPageMeta] = useState<any>();
-  const [page, setPage] = useState<number>(1);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteVariant, setDeleteVariant] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [pageMeta, setPageMeta] = useState<any>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -252,9 +247,6 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
                     ':disabled': {
                       display: 'none',
                     },
-                  }}
-                  onClick={() => {
-                    setIsOpen(row.index);
                   }}>
                   <ThreeDotIcon />
                 </Box>
@@ -266,7 +258,6 @@ const ContentTypeDashboard = ({ rerender, setRerender }: Props) => {
 
                 <DropdownMenu.Item
                   onClick={() => {
-                    setIsOpen(null);
                     setDeleteVariant(row.index);
                   }}>
                   <Text variant="" sx={{ cursor: 'pointer', color: 'red.600' }}>

@@ -4,10 +4,9 @@ import { Spinner, Box } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
 
+import Field from 'common/Field';
 import { useAuth } from 'contexts/AuthContext';
 import { putAPI, fetchAPI } from 'utils/models';
-
-import Field from './Field';
 
 export interface Profile {
   allergies?: string[];

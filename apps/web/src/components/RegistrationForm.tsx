@@ -6,11 +6,11 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, Button, Heading } from 'theme-ui';
 import { z } from 'zod';
 
-import { postAPI } from '../utils/models';
-import { emailPattern, passwordPattern } from '../utils/zodPatterns';
-import Field from './Field';
-import Link from './NavLink';
-import { BrandLogo } from './Icons';
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
+import { postAPI } from 'utils/models';
+import { emailPattern, passwordPattern } from 'utils/zodPatterns';
 
 export interface IField {
   name: string;

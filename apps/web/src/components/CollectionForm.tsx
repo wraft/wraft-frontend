@@ -5,12 +5,13 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Input } from 'theme-ui';
 
-import { isNumeric } from '../utils';
-import { postAPI, fetchAPI, putAPI } from '../utils/models';
+import Field from 'common/Field';
+import PageHeader from 'common/PageHeader';
+import { isNumeric } from 'utils';
+import { postAPI, fetchAPI, putAPI } from 'utils/models';
+
 import { FieldType, FieldTypeList } from './ContentTypeForm';
-import Field from './Field';
 import FieldEditor from './FieldEditor';
-import PageHeader from './PageHeader';
 
 export interface FieldTypeItem {
   key: string;
@@ -43,12 +44,12 @@ const CollectionForm = () => {
     });
   };
 
-  const formatFields = (fields: any) => {
+  const formatFields = (formFields: any) => {
     const fieldsMap: any = [];
 
-    fields &&
-      fields.length > 0 &&
-      fields.map((item: any) => {
+    formFields &&
+      formFields.length > 0 &&
+      formFields.map((item: any) => {
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
           key: item.name,
@@ -113,43 +114,24 @@ const CollectionForm = () => {
     }
   }, [cId]);
 
-  /**
-   * On Change Color
-   */
-
-  // const onChangeField = (name: string, value: any) => {
-  //   setValue(name, value);
-  // };
-
   const addFieldVal = (val: any) =>
-    setFields((fields) => {
-      // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      const outputState: any = fields.slice(0);
+    setFields((currentFields) => {
+      const outputState: any = currentFields.slice(0);
       outputState.push({ name: val.name, value: val.value });
       return outputState;
     });
 
   const removeField = (did: number) =>
-    setFields((fields) => {
-      const outputState = fields.slice(0);
-      // deleteField(did, outputState);
-      // `delete` removes the element while preserving the indexes.
+    setFields((currentFields) => {
+      const outputState = currentFields.slice(0);
       delete outputState[did];
       return outputState;
     });
 
-  // const deleteField = (id: number, fields: any) => {
-  //   // const deletable = fields[id];
-  //   // const deletableId = deletable.value.id;
-  //   // deleteEntity(`/content_type_fields/${deletableId}`, token);
-  // };
-
   const onFieldsSave = (fds: any) => {
     setFields([]);
-    // let newFields:any = []
-    // format and replae existing fields
+
     fds?.data?.fields?.forEach((el: any) => {
-      // el {name: "name", type: "e614e6d8-eaf1-469f-89e0-f23589d0bb7b"}
       const ff = fieldtypes.find((f: any) => f.id === el.type);
       const fff = { field_type: ff, name: el.name };
       const fieldType = { value: fff, name: el.name };
@@ -158,9 +140,8 @@ const CollectionForm = () => {
   };
 
   const addField = () => {
-    setFields((fields) => {
-      // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      const outputState: any = fields.slice(0);
+    setFields((currentFields) => {
+      const outputState: any = currentFields.slice(0);
       outputState.push('');
       return outputState;
     });

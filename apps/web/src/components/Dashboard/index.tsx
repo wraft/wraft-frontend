@@ -5,10 +5,10 @@ import { format } from 'date-fns';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 import { File } from '@phosphor-icons/react';
 
+import { ApproveTick } from 'components/Icons';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
-import { ApproveTick } from '../Icons';
 import PendingDocumentBlock from './PendingDocument';
 
 interface BlockCardProps {

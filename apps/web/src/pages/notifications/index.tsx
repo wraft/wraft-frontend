@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { Container } from 'theme-ui';
 
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
 import NotificationList from 'components/NotificationList';
+import PageHeader from 'common/PageHeader';
 
 const Notification: FC = () => {
   return (

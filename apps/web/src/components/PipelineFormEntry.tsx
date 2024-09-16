@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Input, Label, Spinner, Text, Textarea } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { useForm } from 'react-hook-form';
 
-import Field from 'components/Field';
 import { fetchAPI, postAPI } from 'utils/models';
 
 const PipelineFormEntry = ({
@@ -15,14 +13,12 @@ const PipelineFormEntry = ({
 }: any) => {
   const [items, setItems] = useState<any>([]);
   const [initial, setInitial] = useState<any>([]);
-  const [formdata, setFormdata] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const loadData = (id: string) => {
     setLoading(true);
     fetchAPI(`forms/${id}`)
       .then((data: any) => {
-        setFormdata(data);
         formId && setFormName(data.name);
         const fields = data.fields.map((i: any) => {
           return {
@@ -111,13 +107,6 @@ const PipelineFormEntry = ({
       });
   };
 
-  const {
-    // formState: { errors },
-    register,
-  } = useForm<any>({
-    mode: 'onSubmit',
-  });
-
   useEffect(() => {
     if (formId) loadData(formId);
   }, [formId]);
@@ -139,7 +128,6 @@ const PipelineFormEntry = ({
     );
   }
 
-  console.log('items', items);
   return (
     <Box>
       <Box

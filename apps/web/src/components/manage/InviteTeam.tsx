@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import Checkbox from '@wraft-ui/Checkbox';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Creatable from 'react-select/creatable';
 import { Box, Button, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../../utils/models';
-import { emailRegex } from '../../utils/regex';
+import Checkbox from 'common/Checkbox';
+import { fetchAPI, postAPI } from 'utils/models';
+import { emailRegex } from 'utils/regex';
 
 interface FormInputs {
   emails: string[];

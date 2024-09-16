@@ -1,5 +1,9 @@
 module.exports = {
-  extends: ["@wraft/eslint-config/library.js", 'plugin:@typescript-eslint/recommended'],
+  root: true,
+  extends: [
+    '@wraft/eslint-config/library.js',
+    'plugin:@typescript-eslint/recommended',
+  ],
   ignorePatterns: [
     'node_modules',
     '.turbo',
@@ -10,65 +14,62 @@ module.exports = {
     'jest.config.js',
     'babel.config.js',
   ],
-  parserOptions: {
-    project: 'tsconfig.json',
-    tsconfigRootDir: __dirname,
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2018,
-    sourceType: 'module',
-  },
-  plugins: ['@typescript-eslint/eslint-plugin', 'import'],
+  plugins: ['prettier', '@typescript-eslint/eslint-plugin', 'import'],
   rules: {
-    "import/no-default-export": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    'import/no-default-export': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/no-unsafe-call": "off",
-    '@typescript-eslint/no-unsafe-member-access': "off",
-    '@typescript-eslint/no-unsafe-assignment': "off",
-    "@typescript-eslint/no-unsafe-argument": "off",
-    "@typescript-eslint/no-unsafe-return": "off",
-    "import/order": [
-      "error",
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-argument': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    'unicorn/filename-case': [
+      'error',
       {
-        "groups": [["builtin", "external"], "internal", "parent", "sibling", "index"],
-        "newlines-between": "always",
-        "alphabetize": { "order": "asc" }
-      }
+        cases: {
+          pascalCase: true,
+          camelCase: true,
+        },
+      },
     ],
-    "prettier/prettier": [
-      "error",
+    'import/order': [
+      'error',
       {
-        "singleQuote": true,
-        "parser": "flow"
-      }
+        groups: [
+          ['builtin', 'external'],
+          'internal',
+          'parent',
+          'sibling',
+          'index',
+        ],
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc' },
+      },
     ],
-    // "import/order": [
-    //   "warn",
-    //   {
-    //     pathGroups: [
-    //       {
-    //         pattern: "@factor/**",
-    //         group: "internal",
-    //         position: "before",
-    //       },
-    //     ],
-    //   },
-    // ],
-    
-    
-    // '@typescript-eslint/interface-name-prefix': 'off',
-    // '@typescript-eslint/explicit-function-return-type': 'off',
-    // '@typescript-eslint/explicit-module-boundary-types': 'off',
-    // '@typescript-eslint/no-explicit-any': 'off',
-    // 'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-    // '@typescript-eslint/interface-name-prefix': 'off',
-    // '@typescript-eslint/explicit-function-return-type': 'off',
-    // '@typescript-eslint/explicit-module-boundary-types': 'off',
-    // '@typescript-eslint/no-explicit-any': 'off',
-    // "@typescript-eslint/no-unsafe-call": 'off',
-    // "import/prefer-default-export": "off" 
+    'prettier/prettier': [
+      'error',
+      {
+        singleQuote: true,
+        parser: 'flow',
+      },
+    ],
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'function',
+        modifiers: ['exported'],
+        format: ['camelCase', 'PascalCase'],
+      },
+      {
+        selector: 'typeLike',
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'enumMember',
+        format: ['StrictPascalCase'],
+      },
+    ],
   },
 };

@@ -53,10 +53,10 @@ const Pagination: React.FC<IProp> = ({
   const disabledClassName = 'disabled';
   const pagecount = totalPage || 0;
   const previousClasses = `previous${currentPage === 1 ? ` ${disabledClassName}` : ''}`;
-  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ''}`;  
+  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ''}`;
 
   useEffect(() => {
-    if (initialPage != undefined) {
+    if (initialPage !== undefined) {
       setCurrentPage(initialPage);
     }
   }, [initialPage]);
@@ -77,7 +77,7 @@ const Pagination: React.FC<IProp> = ({
     }
   };
 
-  const onHandlePageSelected = (page: number, evt: any) => {
+  const onHandlePageSelected = (page: number, _evt: any) => {
     setCurrentPage(page);
     if (onPageChange) {
       onPageChange(page);
@@ -86,10 +86,7 @@ const Pagination: React.FC<IProp> = ({
 
   const onHandleBreakClick = (page: number, evt: any) => {
     evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
-    onHandlePageSelected(
-      currentPage < page ? getForwardJump() : getBackwardJump(),
-      evt,
-    );
+    onHandlePageSelected(currentPage < page ? getForwardJump() : getBackwardJump(), evt);
   };
 
   const getForwardJump = () => {
@@ -102,7 +99,6 @@ const Pagination: React.FC<IProp> = ({
 
   const getBackwardJump = () => {
     const pageRangeDisplayed = numberPageDisplayed || 0;
-    const pageCount = totalPage || 0;
 
     const backwardJump = currentPage - pageRangeDisplayed;
     return backwardJump < 0 ? 0 : backwardJump;
@@ -132,7 +128,7 @@ const Pagination: React.FC<IProp> = ({
       let index;
       let page: number;
       let breakView: any;
-      const createPageView = (page: number) => getPageElement(page);
+      const createPageView = (pageNumber: number) => getPageElement(pageNumber);
 
       for (index = 0; index < pageCount; index++) {
         page = index + 1;
@@ -155,12 +151,7 @@ const Pagination: React.FC<IProp> = ({
         if (breakLabel && items[items.length - 1] !== breakView) {
           const hanlder = onHandleBreakClick.bind(null, page);
           breakView = (
-            <BreakView
-              key={page}
-              breakLabel={breakLabel}
-              breakClassName={breakClassName}
-              breakHandler={hanlder}
-            />
+            <BreakView key={page} breakLabel={breakLabel} breakClassName={breakClassName} breakHandler={hanlder} />
           );
           items.push(breakView);
         }
@@ -178,7 +169,6 @@ const Pagination: React.FC<IProp> = ({
         selected={currentPage === page}
         pageClassName={pageClassName}
         activeClassName={activeClassName}
-        href={'#'}
         page={page}
       />
     );
@@ -220,22 +210,17 @@ const Pagination: React.FC<IProp> = ({
             </x.div>
           </x.li>
 
-          {type == 'advanced' && pagination()}
+          {type === 'advanced' && pagination()}
 
           <li className={nextClasses}>
-            <x.div
-              tabIndex={0}
-              role="button"
-              onClick={onHandleNextPage}
-              aria-label={'next'}
-              rel={'next'}>
+            <x.div tabIndex={0} role="button" onClick={onHandleNextPage} aria-label={'next'} rel={'next'}>
               {nextLabel}
             </x.div>
           </li>
         </x.ul>
         {totalEntries && (
           <x.div fontSize="12px" color="#656E78" fontWeight="heading">
-            {`Showing ${currentPage === 1 ? '':  currentPage - 1}0 of ${totalEntries}`}
+            {`Showing ${currentPage === 1 ? '' : currentPage - 1}0 of ${totalEntries}`}
           </x.div>
         )}
       </S.Pagination>
