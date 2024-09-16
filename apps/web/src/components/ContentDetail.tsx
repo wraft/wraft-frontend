@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
@@ -10,15 +9,11 @@ import {
   useTabStore,
 } from '@ariakit/react';
 import styled from '@emotion/styled';
-import ContentSidebar, {
-  FlowStateBlock,
-} from '@wraft-ui/content/ContentSidebar';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Link, Button, Avatar, Image } from 'theme-ui';
+import { Box, Flex, Text, Link, Button, Avatar } from 'theme-ui';
 import { Spinner } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
 import {
-  ArrowLeft,
   ArrowRight,
   DownloadSimple,
   Play,
@@ -27,21 +22,21 @@ import {
   PencilSimple,
 } from '@phosphor-icons/react';
 
+import { FlowStateBlock, ContentSidebar } from 'common/content';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import NavLink from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { ContentInstance, IVariantDetail } from 'utils/types/content';
 
-import { TimeAgo } from './Atoms';
 import CommentForm from './CommentForm';
 import Editor from './common/Editor';
 import styles from './common/Tab/tab.module.css';
 import Nav from './NavEdit';
-import Modal from './Modal';
 import Field from './FieldText';
 import ApprovalFlowHistory from './Content/ApprovalFlowHistory';
-import NavLink from './NavLink';
 import PdfViewer from './PdfViewer';
-// const PdfViewer = dynamic(() => import('./PdfViewer'), { ssr: false });
 
 interface Approver {
   id: string;
@@ -114,9 +109,7 @@ export const StepBlock = ({
             fontFamily: 'body',
             fontSize: 'xs',
             color: 'text',
-            // color: tab.selectedId === 'view' ? 'teal.200' : 'gray.1000',
             mb: 0,
-            // pt: 1,
           }}>
           {title}
         </Text>
@@ -246,7 +239,7 @@ const ContentDetail = () => {
 
   const defaultSelectedId = 'edit';
   const tabView = useTabStore();
-  const { items, selectedId, activeId } = tabView.useState();
+  const { activeId } = tabView.useState();
 
   useEffect(() => {
     fetchContentDetails(cId);
@@ -288,11 +281,11 @@ const ContentDetail = () => {
       const currentIndex = states.indexOf(activeState);
 
       if (currentIndex !== -1 && activeState) {
-        const nextState = states[currentIndex + 1] || null;
-        const prevState = states[currentIndex - 1] || null;
+        const nextAvailableState = states[currentIndex + 1] || null;
+        const previousState = states[currentIndex - 1] || null;
 
-        setNextState(nextState);
-        setPrevState(prevState);
+        setNextState(nextAvailableState);
+        setPrevState(previousState);
       }
 
       if (contents && contents.state === null && states.length > 0) {

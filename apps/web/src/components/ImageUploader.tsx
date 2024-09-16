@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import { Box, Input, Label, Slider, Button } from 'theme-ui';
 
-import Modal from './Modal';
+import Modal from 'common/Modal';
 
 type ReadAsMethod =
   | 'readAsText'
@@ -158,12 +158,12 @@ export default function ImageUploader({
   };
 
   const showCroppedImage = useCallback(
-    async (croppedAreaPixels: Area | null) => {
+    async (areaPixels: Area | null) => {
       try {
-        if (!croppedAreaPixels) return;
+        if (!areaPixels) return;
         const croppedImage = await getCroppedImg(
           result as string /* result is always string when using readAsDataUrl */,
-          croppedAreaPixels,
+          areaPixels,
         );
         handleAvatarChange(croppedImage);
       } catch (e) {

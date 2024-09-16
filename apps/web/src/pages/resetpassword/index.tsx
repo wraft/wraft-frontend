@@ -3,13 +3,13 @@ import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Text } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
+import { Button } from '@wraft/ui';
 import { MailIcon } from '@wraft/icon';
 
 import CountdownTimer from 'components/common/CountDownTimer';
-import Field from 'components/Field';
-import Link from 'components/NavLink';
 import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
 
 type FormValues = {

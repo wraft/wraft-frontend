@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Flex, Container, Box } from 'theme-ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { UserPlus } from '@phosphor-icons/react';
@@ -9,7 +8,8 @@ import { InviteTeam } from 'components/manage';
 import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
 import { workspaceLinks } from 'utils/index';
 

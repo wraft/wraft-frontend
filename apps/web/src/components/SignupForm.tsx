@@ -1,18 +1,15 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text, Link } from 'theme-ui';
 import { z } from 'zod';
 
-import GoogleLogo from '../../public/GoogleLogo.svg';
-import WaitlistPrompt from '../components/WaitlistPrompt';
-import { postAPI } from '../utils/models';
-import { emailPattern } from '../utils/zodPatterns';
-import Field from './Field';
-import { BrandLogo } from './Icons';
+import WaitlistPrompt from 'components/WaitlistPrompt';
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import { postAPI } from 'utils/models';
+import { emailPattern } from 'utils/zodPatterns';
 
 type FormValues = {
   firstName: string;
@@ -48,11 +45,6 @@ const SignUpPage = () => {
       },
       error: (error) => error.errors,
     });
-    console.log(waitingListRequest, 'log');
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn('gmail');
   };
 
   return (
@@ -112,16 +104,6 @@ const SignUpPage = () => {
                 my: '36px',
               }}
             />
-            {/* <Button onClick={handleGoogleSignIn} variant="googleLogin">
-              <Image
-                src={GoogleLogo}
-                alt="Google Logo"
-                width={24}
-                height={24}
-                className=""
-              />
-              Continue using Google
-            </Button> */}
             <Flex
               sx={{ gap: '8px', mt: '12px', mb: '4px', alignItems: 'center' }}>
               <Text as="p" variant="pR">

@@ -5,11 +5,12 @@ import { Box, Flex, Text } from 'theme-ui';
 import { Button, Table, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { deleteAPI, fetchAPI } from '../../utils/models';
-import { StateBadge } from '../Atoms';
+import { StateBadge } from 'common/Atoms';
+import ConfirmDelete from 'common/ConfirmDelete';
+import Modal from 'common/Modal';
+import { deleteAPI, fetchAPI } from 'utils/models';
+
 import PipelineTypeForm from './PipelineTypeForm';
-import Modal from '../Modal';
-import { ConfirmDelete } from '../common';
 
 export interface Theme {
   total_pages: number;
@@ -33,7 +34,7 @@ type Props = {
 };
 
 const Form = ({ rerender, setRerender }: Props) => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, _setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
@@ -46,14 +47,14 @@ const Form = ({ rerender, setRerender }: Props) => {
   const mobileMenuDrawer = useDrawer();
 
   const handlePipelineClick = (
-    pipelineStageId: string,
+    stageId: string,
     stagename: string,
-    pipelineStageTemplateId: string,
+    stageTemplateId: string,
   ) => {
     setShowSearch(!showSearch);
-    setSelectedPipelineStageId(pipelineStageId);
+    setSelectedPipelineStageId(stageId);
     setPipeStageName(stagename);
-    setPipelineStageTemplateId(pipelineStageTemplateId);
+    setPipelineStageTemplateId(stageTemplateId);
   };
 
   const router = useRouter();

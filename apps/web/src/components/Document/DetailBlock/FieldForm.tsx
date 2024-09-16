@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { EditIcon } from '@wraft/icon';
 
-import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
+import Field from 'common/Field';
 import { FieldInstance } from 'utils/types';
 
 export interface IFieldField {
@@ -40,21 +40,21 @@ const FieldForm = ({
   fieldValues,
   setMaps,
 }: FieldFormProps) => {
-  const { register, handleSubmit } = useForm();
+  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
 
+  const { register, handleSubmit } = useForm();
   const mobileMenuDrawer = useDrawer();
 
   const mapFields = (
-    fields: any,
-    fieldValues: Record<string, any>,
+    inputFields: any,
+    inputFieldValues: Record<string, any>,
   ): FieldInstance[] => {
-    return fields.map((field: any) => {
+    return inputFields.map((field: any) => {
       return {
         ...field,
-        value: fieldValues[field.id] || '',
+        value: inputFieldValues[field.id] || '',
       } as IFieldType;
     });
   };
@@ -62,9 +62,9 @@ const FieldForm = ({
   const onSubmit = (data: Record<string, any>) => {
     setSubmitting(true);
 
-    const mappedFields = mapFields(fields, data);
-    setMappedFields(mappedFields);
-    onSaved(mappedFields);
+    const newMappedFields = mapFields(fields, data);
+    setMappedFields(newMappedFields);
+    onSaved(newMappedFields);
 
     setSubmitting(false);
     closeDrawer();
@@ -73,10 +73,10 @@ const FieldForm = ({
   useEffect(() => {
     if (fields) {
       if (fieldValues) {
-        const mappedFields = mapFields(fields, fieldValues);
-        onSaved(mappedFields);
-        setMappedFields(mappedFields);
-        setMaps(mappedFields);
+        const newMappedFields = mapFields(fields, fieldValues);
+        onSaved(newMappedFields);
+        setMappedFields(newMappedFields);
+        setMaps(newMappedFields);
       }
     }
   }, [fields, fieldValues]);

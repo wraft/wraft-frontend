@@ -1,16 +1,11 @@
-import styled, { th, x } from '@xstyled/emotion';
+import styled from '@xstyled/emotion';
 
 interface SkeletonProps {
   width?: string;
   height: string;
-  borderRadius?: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({
-  width = '100%',
-  height,
-  borderRadius = '4px',
-}) => {
+const Skeleton: React.FC<SkeletonProps> = ({ width = '100%', height }) => {
   const SkeletonWrapper = styled('div')`
     width: ${width};
     height: ${height || '4px'};

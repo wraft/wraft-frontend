@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 
+import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 import { API_HOST } from 'utils/models';
-
-import { TimeAgo } from './Atoms';
 
 export interface ActivityStream {
   activities: Activity[];
@@ -23,6 +22,7 @@ export interface Activity {
   object: string;
 }
 
+/* eslint-disable no-unused-vars */
 export enum Action {
   Insert = 'insert',
   Update = 'update',

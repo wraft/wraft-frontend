@@ -4,7 +4,7 @@ import { Text, Flex, Box } from 'theme-ui';
 
 import OrgSidebar from 'components/OrgSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
 
 /**
  *  @TODO Icons: Convert to local files

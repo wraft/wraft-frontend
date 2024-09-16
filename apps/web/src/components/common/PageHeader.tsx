@@ -1,8 +1,8 @@
 import React from 'react';
-import Back from '@wraft-ui/Back';
 import { Flex, Box, Text, Link } from 'theme-ui';
 
-import { ArrowBack } from './Icons';
+import { ArrowBack } from 'components/Icons';
+import Back from 'common/Back';
 
 interface PageHeaderProps {
   children?: any;

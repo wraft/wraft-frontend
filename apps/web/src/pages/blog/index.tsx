@@ -4,7 +4,7 @@ import { Flex } from 'theme-ui';
 
 // import CombinationList from '../../src/components/CombinationList'
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
 
 const Index: FC = () => {
   return (

@@ -5,43 +5,12 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Text, Spinner } from 'theme-ui';
 import { Button } from '@wraft/ui';
 
-// import { useAuth } from '../contexts/AuthContext';
+import Field from 'common/Field';
+import { BlockTemplates } from 'utils/types';
+import { postAPI, putAPI, fetchAPI } from 'utils/models';
 
 import Editor from './common/Editor';
-// import EditorWraft from './EditorWraft';
-import Field from './Field';
 import FieldText from './FieldText';
-import {
-  // API_HOST,
-  postAPI,
-  putAPI,
-  fetchAPI,
-  deleteAPI,
-} from '../utils/models';
-import { BlockTemplates } from '../utils/types';
-// import ImagesList from './ImagesList';
-
-// const Tag = styled(Box)`
-//   padding: 5px;
-//   color: #444;
-//   border-radius: 3px;
-//   margin-bottom: 8px;
-//   padding-left: 16px;
-//   padding-top: 8px;
-//   padding-bottom: 8px;
-//   background-color: #d7f7e2;
-//   max-width: 60%;
-//   font-family: monospace;
-//   font-weight: bold;
-//   color: #3d5039;
-// `;
-
-// interface IFormTemplate {
-//   name?: string;
-//   serialized?: any;
-// }
-
-// const dummyFormTemplate: IFormTemplate = {};
 
 const EMPTY_MARKDOWN_NODE = {
   type: 'doc',
@@ -59,62 +28,24 @@ const EMPTY_MARKDOWN_NODE = {
 };
 
 const Form = () => {
+  const [addAsset, setAddAsset] = useState<boolean>(false);
+  const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
+  const [def, setDef] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [saved, setSaved] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
   } = useForm();
-  const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
-  const [def, setDef] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [saved, setSaved] = useState<boolean>(false);
-
-  // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
-
-  // toggle image uploader
-  const [addAsset, setAddAsset] = useState<boolean>(false);
-  // const [asset, setAsset] = useState<any>();
 
   const toggleAssetForm = () => {
     setAddAsset(!addAsset);
   };
-
-  // const formatImageNode = (src: string) => {
-  //   // image object
-  //   const imageNode = {
-  //     type: 'doc',
-  //     content: [
-  //       {
-  //         type: 'paragraph',
-  //         attrs: {},
-  //         content: [
-  //           {
-  //             type: 'image',
-  //             attrs: {
-  //               src: `${API_HOST}/${src}`,
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   };
-  //   return imageNode;
-  // };
-
-  // /**
-  //  *
-  //  * @param _data
-  //  */
-  // const imageAdded = (_m: any) => {
-  //   console.log('imaged', _m);
-  //   const imageNode = formatImageNode(_m?.file);
-  //   setInsertable(imageNode);
-  // };
-
-  /** Editor Submit */
 
   const onSubmit = (data: any) => {
     setLoading(true);
@@ -125,7 +56,6 @@ const Form = () => {
       serialized: data.serialized,
     };
 
-    // if edit is live
     if (cId) {
       putAPI(`block_templates/${cId}`, formValues).then(() => {
         toast.success('Saved Successfully', {
@@ -147,20 +77,12 @@ const Form = () => {
     }
   };
 
-  /**
-   * Load Content Type Details
-   * @param id
-   */
   const loadTemplate = (id: string) => {
     fetchAPI(`block_templates/${id}`).then((data: BlockTemplates) => {
       setDataTemplate(data);
     });
   };
 
-  /**
-   * Handle editor's serialized state
-   * @param state Prosemirror Node
-   */
   const doUpdate = (state: any) => {
     setValue('serialized', JSON.stringify(state.json));
     setValue('body', state.md);
@@ -192,17 +114,17 @@ const Form = () => {
   /**
    * Delete a block
    */
-  const deleteBlock = () => {
-    if (cId) {
-      deleteAPI(`block_templates/${cId}`).then(() => {
-        Router.push(`/block_templates`);
-        toast.success('Deleted Block Successfully', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      });
-    }
-  };
+  // const deleteBlock = () => {
+  //   if (cId) {
+  //     deleteAPI(`block_templates/${cId}`).then(() => {
+  //       Router.push(`/block_templates`);
+  //       toast.success('Deleted Block Successfully', {
+  //         duration: 1000,
+  //         position: 'top-right',
+  //       });
+  //     });
+  //   }
+  // };
 
   const onceInserted = () => {};
   const tokens: any = [];

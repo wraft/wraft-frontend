@@ -1,5 +1,3 @@
-import { border, borderRadius } from '@xstyled/emotion';
-
 const styles = {
   root: {
     fontFamily: 'body',

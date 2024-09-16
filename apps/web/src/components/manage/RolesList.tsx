@@ -96,7 +96,7 @@ const RolesList = ({
   const [isOpenDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [currentContent, setCurrentContent] = useState<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [sort, setSort] = useState('');
+  const [sort, _setSort] = useState('');
 
   const mobileMenuDrawer = useDrawer();
 

@@ -8,9 +8,9 @@ import { Button } from '@wraft/ui';
 import { Text } from 'theme-ui';
 
 import OrgSidebar from 'components/OrgSidebar';
-import PageHeader from 'components/PageHeader';
 import Page from 'components/PageFrame';
-import Field from 'components/Field';
+import PageHeader from 'common/PageHeader';
+import Field from 'common/Field';
 import { putAPI } from 'utils/models';
 
 const Contents: FC = () => {
@@ -69,8 +69,6 @@ const Contents: FC = () => {
         setLoading(false);
       });
   };
-
-  console.log('errors', errors);
 
   return (
     <>

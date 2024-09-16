@@ -12,8 +12,6 @@ import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
 
-// import SearchBlock from './SearchBlock';
-
 export interface INav {
   showFull: boolean;
 }
@@ -30,8 +28,8 @@ const Sidebar = (props: any) => {
   const showFull = props && props.showFull ? true : true;
   const pathname: string = router.pathname as any;
 
-  const checkActive = (pathname: string, path: any) => {
-    if (pathname === '/content/[id]' && path.path === '/contents') {
+  const checkActive = (currentPath: string, path: any) => {
+    if (currentPath === '/content/[id]' && path.path === '/contents') {
       return true;
     }
 

@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { ContentForm } from 'components/Document';
 import Page from 'components/PageFrameInner';
 
-// const CreateForm = dynamic(() => import('../components/ContentForm'), {
+// const CreateForm = dynamic(() => import('components/ContentForm'), {
 //   ssr: false,
 // });
 

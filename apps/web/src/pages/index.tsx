@@ -5,14 +5,14 @@ import cookie from 'js-cookie';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
 
-import Dashboard from '../components/Dashboard';
-import Modal from '../components/Modal';
-import Page from '../components/PageFrame';
-import UserNav from '../components/UserNav';
-import { useAuth } from '../contexts/AuthContext';
-import { postAPI } from '../utils/models';
+import Dashboard from 'components/Dashboard';
+import Page from 'components/PageFrame';
+import UserNav from 'components/UserNav';
+import Modal from 'common/Modal';
+import { useAuth } from 'contexts/AuthContext';
+import { postAPI } from 'utils/models';
 
-const UserHome = dynamic(() => import('../components/LandingBlock'), {
+const UserHome = dynamic(() => import('components/LandingBlock'), {
   ssr: false,
 });
 

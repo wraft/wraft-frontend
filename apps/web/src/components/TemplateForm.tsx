@@ -6,20 +6,21 @@ import { Box, Flex, Text, Select } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 import { Button, DropdownMenu } from '@wraft/ui';
 
-import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import { putAPI, postAPI, fetchAPI, deleteAPI } from 'utils/models';
 import {
   IContentType,
   ContentTypes,
   Field as FieldT,
   DataTemplate,
   DataTemplates,
-} from '../utils/types';
+} from 'utils/types';
+
 import Editor from './common/Editor';
-import Field from './Field';
 import FieldText from './FieldText';
 import NavEdit from './NavEdit';
-import { TimeAgo } from './Atoms';
-import Modal from './Modal';
 import MentionField from './MentionsField';
 
 export interface BlockTemplate {
@@ -43,8 +44,8 @@ const EditMenus = ({ id }: EditMenuProps) => {
    * Delete content
    * @param id
    */
-  const deleteContent = (id: string) => {
-    deleteAPI(`data_templates/${id}`).then(() => {
+  const deleteContent = (contentId: string) => {
+    deleteAPI(`data_templates/${contentId}`).then(() => {
       toast.success('Deleted the Template', {
         duration: 1000,
         position: 'top-right',
@@ -103,14 +104,14 @@ const Form = () => {
   const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
   const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
+  const [fields, setFields] = useState<any>([]);
   const [insertable, setInsertable] = useState<any>();
   const [insertions, setInsertions] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagetitle, setPageTitle] = useState<string>('');
   const [showSetup, setShowSetup] = useState<boolean>(false);
   const [tokkans, setTokkans] = useState<any>('');
-  const [varias, setVarias] = useState<IContentType>();
-  const [fields, setFields] = useState<any>([]);
+  const [variant, setVariant] = useState<IContentType>();
 
   const {
     register,
@@ -166,11 +167,11 @@ const Form = () => {
   }, [cId]);
 
   useEffect(() => {
-    if (varias?.fields) {
-      const { fields } = varias;
+    if (variant?.fields) {
+      const { fields: variasFields } = variant;
 
-      if (fields.length > 0) {
-        const results = fields.map((sr: any) => {
+      if (variasFields.length > 0) {
+        const results = variasFields.map((sr: any) => {
           return {
             id: `${sr.id}`,
             label: `${sr.name}`,
@@ -180,7 +181,7 @@ const Form = () => {
         setTokkans(results);
       }
     }
-  }, [varias]);
+  }, [variant]);
 
   const onCreated = () => {
     Router.push('/templates');
@@ -270,7 +271,7 @@ const Form = () => {
   const loadContentType = (id: string) => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
       const formed: ContentTypes = data;
-      setVarias(formed.content_type);
+      setVariant(formed.content_type);
 
       if (formed?.content_type?.fields) {
         const fieldOption = formed.content_type.fields.map(({ name }) => ({
@@ -373,7 +374,6 @@ const Form = () => {
     setShowSetup(!showSetup);
 
     const name = getValues();
-    console.log('name=', name);
     setPageTitle(name?.title);
 
     if (name?.title_temple == '') {
@@ -478,9 +478,7 @@ const Form = () => {
               p: 0,
               minWidth: '50ch',
               width: '100%',
-              // verticalAlign: 'top',
               flexDirection: 'column',
-              // justifyContent: 'space-between',
             }}>
             <Box
               sx={{
@@ -501,7 +499,7 @@ const Form = () => {
                 defaultValue=""
                 register={register}
               />
-              {varias && varias.fields && !cId && (
+              {variant && variant.fields && !cId && (
                 <Box sx={{ mb: 2, pt: 3 }}>
                   <Box sx={{ mb: 2, pb: 3 }}>
                     <Text
@@ -579,7 +577,7 @@ const Form = () => {
             </Flex>
           )}
 
-          {varias && varias.fields && (
+          {variant && variant.fields && (
             <Box sx={{ mb: 2, pt: 3 }}>
               <Box sx={{ mb: 3, pb: 3 }}>
                 <Text
@@ -596,8 +594,8 @@ const Form = () => {
                 <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000', mb: 3 }}>
                   Dynamic variables provided by Variants
                 </Text>
-                {varias.fields &&
-                  varias.fields.map((k: FieldT) => (
+                {variant.fields &&
+                  variant.fields.map((k: FieldT) => (
                     <Flex
                       sx={{
                         p: 1,

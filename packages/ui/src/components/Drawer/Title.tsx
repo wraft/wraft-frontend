@@ -1,4 +1,4 @@
-import styled, { th, x, css, right } from '@xstyled/emotion';
+import { x } from '@xstyled/emotion';
 import React from 'react';
 
 import * as S from './styles';

@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'theme-ui';
 
-import { BackIcon } from '../Icons';
+import { BackIcon } from 'components/Icons';
 
 const Back = () => {
   const { pathname } = useRouter();

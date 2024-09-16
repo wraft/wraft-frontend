@@ -5,16 +5,15 @@ import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { ArrowRightIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { Button, Drawer } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Field from 'common/Field';
 import { uuidRegex } from 'utils/regex';
-
-import Field from '../Field';
-import { fetchAPI, postAPI, putAPI } from '../../utils/models';
+import { fetchAPI, postAPI, putAPI } from 'utils/models';
 
 export interface IFieldItem {
   name: string;
@@ -93,7 +92,7 @@ const Form = ({
   pipelineStageTemplateId,
 }: Props) => {
   const [formStep, setFormStep] = useState(step);
-  const [source, setSource] = useState<any>([
+  const [source, _setSource] = useState<any>([
     { label: 'Wraft Form', value: 'wraft_from' },
   ]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -112,7 +111,6 @@ const Form = ({
   const {
     register,
     handleSubmit,
-    setValue,
     watch,
     formState: { errors, isValid },
   } = useForm({ mode: 'onSubmit', resolver: zodResolver(zodSchema) });
@@ -257,7 +255,7 @@ const Form = ({
       putAPI(`forms/${formId}/mapping/${pipeMapId}`, sampleD)
         .then(() => {
           setIsOpen && setIsOpen(false);
-          setRerender((prev: boolean) => !prev);
+          setRerender((previous: boolean) => !previous);
           toast.success('Mapping Updated Successfully', {
             position: 'top-right',
           });
@@ -273,7 +271,7 @@ const Form = ({
       postAPI(`forms/${formId}/mapping`, sampleD)
         .then(() => {
           setIsOpen && setIsOpen(false);
-          setRerender((prev: boolean) => !prev);
+          setRerender((previous: boolean) => !previous);
           toast.success('Mapped Successfully', {
             position: 'top-right',
           });
@@ -368,8 +366,8 @@ const Form = ({
     setFormStep((i) => i - 1);
   }
 
-  const goTo = (step: number) => {
-    setFormStep(step);
+  const goTo = (nextStep: number) => {
+    setFormStep(nextStep);
   };
 
   const titles = pipelineData ? ['Configure', 'Mapping'] : ['Details'];

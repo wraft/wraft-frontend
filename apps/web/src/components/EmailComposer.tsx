@@ -7,9 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import toast from 'react-hot-toast';
 
+import Field from 'common/Field';
 import { postAPI } from 'utils/models';
 
-import Field from './Field';
 import FieldText from './FieldText';
 
 const validationSchema: any = yup.object().shape({
@@ -51,7 +51,6 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
 
   const onSubmit = (data: any) => {
     setLoading(true);
-    console.log('data', data);
     postAPI(`contents/${id}/email`, data)
       .then(() => {
         setLoading(false);

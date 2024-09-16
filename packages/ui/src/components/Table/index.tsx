@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import type { ExpandedState } from '@tanstack/react-table';
 import {
   flexRender,
-  ExpandedState,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
   getExpandedRowModel,
 } from '@tanstack/react-table';
 import { x } from '@xstyled/emotion';
+import { useState } from 'react';
 
 import { Skeleton } from '../Skeleton';
 
@@ -66,9 +66,7 @@ const Table = ({
                   minWidth={header.getSize()}>
                   {header.isPlaceholder ? null : (
                     <x.div
-                      cursor={
-                        header.column.getCanSort() ? 'pointer' : 'default'
-                      }
+                      cursor={header.column.getCanSort() ? 'pointer' : 'default'}
                       // sx={{
                       //   cursor: header.column.getCanSort()
                       //     ? 'pointer'
@@ -84,25 +82,18 @@ const Table = ({
                         transform={
                           header.column.getIsResizing()
                             ? `translateX(${
-                                (options.columnResizeDirection === 'rtl'
-                                  ? -1
-                                  : 1) *
+                                (options.columnResizeDirection === 'rtl' ? -1 : 1) *
                                 (getState().columnSizingInfo.deltaOffset ?? 0)
                               }px)`
                             : ''
                         }>
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                        {flexRender(header.column.columnDef.header, header.getContext())}
                       </x.span>
                       {header.column.getCanSort() && (
                         <x.span>
                           {header.column.getIsSorted() === 'asc' && ' 🔼'}
                           {header.column.getIsSorted() === 'desc' && ' 🔽'}
-                          {header.column.getIsSorted() !== 'asc' &&
-                            header.column.getIsSorted() !== 'desc' &&
-                            ' ⬍'}
+                          {header.column.getIsSorted() !== 'asc' && header.column.getIsSorted() !== 'desc' && ' ⬍'}
                         </x.span>
                       )}
                     </x.div>
@@ -140,12 +131,8 @@ const Table = ({
                       px="24px"
                       borderBottom="1px solid"
                       borderColor="border"
-                      minWidth={`${cell.column.getSize()}`}
-                      >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      minWidth={`${cell.column.getSize()}`}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </x.td>
                   ))}
                 </x.tr>

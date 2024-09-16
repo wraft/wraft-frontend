@@ -4,11 +4,12 @@ import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
+import { Bell, Search } from 'components/Icons';
+import Modal from 'common/Modal';
+import Link from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+
 import { CreateDocument } from './Document';
-import { Bell, Search } from './Icons';
-import Modal from './Modal';
-import Link from './NavLink';
 
 export interface IUser {
   name: string;

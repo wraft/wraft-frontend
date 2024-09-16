@@ -1,11 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text, Container } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Box, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
-import ContentLoader from './ContentLoader';
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import PageHeader from 'common/PageHeader';
+import Link from 'common/NavLink';
+import { fetchAPI } from 'utils/models';
 
 export interface VendorTypes {
   vendors: Vendor[];
@@ -42,11 +40,9 @@ export interface Vendor {
 }
 
 const VendorListBlock: FC = () => {
-  // const token = useStoreState((state) => state.auth.token);
   const [contents, setContents] = useState<Array<Vendor>>([]);
-  const [vendors, setVendors] = useState<Array<Vendor>>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  // const { addToast } = useToasts();
+  const [_vendors, setVendors] = useState<Array<Vendor>>([]);
+  const [_loading, setLoading] = useState<boolean>(true);
 
   const loadData = () => {
     fetchAPI('vendors')
@@ -92,30 +88,6 @@ const VendorListBlock: FC = () => {
           </Link>
         </Box>
       </PageHeader>
-      <Container sx={{ pl: 5, pr: 5, pt: 4 }}>
-        <Box mx={0} mb={3}>
-          {!loading && <ContentLoader />}
-          <Box sx={{ maxWidth: '70ch' }}>
-            {/* <Table
-              data={vendors}
-              isLoading={loading}
-              columns={[
-                {
-                  Header: 'Name',
-                  accessor: 'col2',
-                  width: '65%',
-                },
-                {
-                  Header: 'Contact',
-                  accessor: 'col3',
-                  width: '30%',
-                },
-              ]}
-              skeletonRows={10}
-            /> */}
-          </Box>
-        </Box>
-      </Container>
     </Box>
   );
 };

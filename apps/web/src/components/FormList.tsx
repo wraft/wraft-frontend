@@ -7,12 +7,12 @@ import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { EmptyForm } from './Icons';
-import { NextLinkText } from './NavLink';
-import { TimeAgo } from './Atoms';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
+import { EmptyForm } from 'components/Icons';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import { NextLinkText } from 'common/NavLink';
+import { fetchAPI, deleteAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;
@@ -50,10 +50,11 @@ const FormList = ({ rerender, setRerender }: Props) => {
 
   const { theme } = useThemeUI();
 
-  const loadData = (page: number) => {
+  const loadData = (pageNumber: number) => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`forms${pageNo}`)
+    const query =
+      pageNumber > 0 ? `?page=${pageNumber}&sort=inserted_at_desc` : '';
+    fetchAPI(`forms${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: FormElement[] = data.forms;

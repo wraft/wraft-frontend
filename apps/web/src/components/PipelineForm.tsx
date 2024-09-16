@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
-import { postAPI, fetchAPI, putAPI } from '../utils/models';
-import { IContentType, Template } from '../utils/types';
-import Field from './Field';
-import Modal from './Modal';
-import PageHeader from './PageHeader';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import PageHeader from 'common/PageHeader';
+import { postAPI, fetchAPI, putAPI } from 'utils/models';
+import { IContentType, Template } from 'utils/types';
+
 import { Pipeline } from './Pipeline/PipelineList';
 
 export interface IStage {
@@ -64,7 +65,6 @@ const PipelineForm = () => {
   }
 
   const onSubmit = (data: any) => {
-    console.log('stages', stages);
     const submitt = {
       stages: stages,
       name: data.name,
@@ -122,8 +122,6 @@ const PipelineForm = () => {
   useEffect(() => {
     if (activePipeline) {
       setEdit(true);
-      console.log('activePipeline', activePipeline);
-      // const assetsList: Asset[] = layout.assets;
 
       activePipeline &&
         activePipeline.stages &&
@@ -152,10 +150,6 @@ const PipelineForm = () => {
       loadPipeline(cId);
     }
   }, [cId]);
-
-  // const LoadContentType = (props:any) => {
-  //   console.log('x', props);
-  // };
 
   const LoadContentType = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const eId = e.target.value;

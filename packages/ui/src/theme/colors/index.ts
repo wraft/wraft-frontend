@@ -1,7 +1,7 @@
 import dark from './dark';
 import light from './light';
 
-export const colors = {
+const colors = {
   ...light,
   modes: {
     dark,

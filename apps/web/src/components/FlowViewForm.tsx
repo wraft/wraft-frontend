@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Drawer } from '@wraft-ui/Drawer';
 import { useForm } from 'react-hook-form';
 import { Avatar, Box, Button, Container, Flex, Label, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
-import Field from './Field';
+import { Drawer } from 'common/Drawer';
+import Field from 'common/Field';
+import { fetchAPI } from 'utils/models';
+
 import FlowForm from './FlowForm';
 
 export interface States {
@@ -75,8 +76,8 @@ const FlowViewForm = () => {
     fetchAPI(`flows/${fId}`).then((data: any) => {
       const res: Flow = data.flow;
       setFlow(res);
-      const states: States = data.states;
-      setStates(states);
+      const flowStates: States = data.states;
+      setStates(flowStates);
       setValue('name', res?.name);
     });
   };
@@ -153,7 +154,7 @@ const FlowViewForm = () => {
                         </Flex>
                         <Flex
                           sx={{ flexDirection: 'column', gap: '12px', mt: 3 }}>
-                          {item.approvers.map((x: any, index: number) => {
+                          {item.approvers.map((x: any, i: number) => {
                             return (
                               <Flex
                                 key={x.id}
@@ -182,7 +183,7 @@ const FlowViewForm = () => {
                                     />
                                     <Box
                                       sx={{
-                                        display: index === 0 ? 'none' : 'block',
+                                        display: i === 0 ? 'none' : 'block',
                                         height: '13px',
                                         width: '1px',
                                         bg: 'neutral.200',

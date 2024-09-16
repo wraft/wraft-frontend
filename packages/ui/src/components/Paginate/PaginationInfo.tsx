@@ -40,9 +40,7 @@ const PaginationInfo: React.FC<IProp> = ({
   return (
     <>
       <div className="pagination-info">
-        <div className="pagination-info--summary">
-          Page Selection: {totalRecord}
-        </div>
+        <div className="pagination-info--summary">Page Selection: {totalRecord}</div>
         <div className="flex-spacer"></div>
 
         {showPageSize && (
@@ -61,11 +59,7 @@ const PaginationInfo: React.FC<IProp> = ({
           </select>
         )}
 
-        <Pagination
-          showGoto={showGoto}
-          totalPage={totalPage}
-          onPageChange={onPageChange}
-        />
+        <Pagination showGoto={showGoto} totalPage={totalPage} onPageChange={onPageChange} />
       </div>
     </>
   );

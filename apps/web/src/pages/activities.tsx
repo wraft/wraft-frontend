@@ -2,11 +2,11 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Text, Box, Flex, Container } from 'theme-ui';
 
-import ActivityFeed from '../components/ActivityFeed';
-import Page from '../components/PageFrame';
-import LandingBlock from '../components/LandingBlock';
-import UserNav from '../components/UserNav';
-import { useAuth } from '../contexts/AuthContext';
+import ActivityFeed from 'components/ActivityFeed';
+import Page from 'components/PageFrame';
+import LandingBlock from 'components/LandingBlock';
+import UserNav from 'components/UserNav';
+import { useAuth } from 'contexts/AuthContext';
 
 const Index: FC = () => {
   const { accessToken } = useAuth();

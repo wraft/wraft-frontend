@@ -3,11 +3,7 @@ interface IProp {
   breakClassName?: string;
   breakHandler?: (evt: any) => void;
 }
-const BreakView: React.FC<IProp> = ({
-  breakLabel,
-  breakClassName,
-  breakHandler,
-}) => {
+const BreakView: React.FC<IProp> = ({ breakLabel, breakClassName, breakHandler }) => {
   const className = breakClassName || 'break';
 
   return (

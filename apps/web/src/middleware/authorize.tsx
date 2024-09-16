@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
 
 export function authorize(Component: any, permissionName: any) {
   return function WithRolesWrapper(props: any) {

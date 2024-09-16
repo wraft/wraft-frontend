@@ -9,20 +9,14 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
-import {
-  Check,
-  DotsThreeVertical,
-  DotOutline,
-  Circle,
-} from '@phosphor-icons/react';
+import { Check, DotsThreeVertical, Circle } from '@phosphor-icons/react';
 
 import { BackArrowIcon } from 'components/Icons';
-import Modal from 'components/Modal';
 import EmailComposer from 'components/EmailComposer';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
 import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
-
-import { ConfirmDelete } from '..';
 
 /**
  * Atom Component to show Flow State
@@ -126,8 +120,8 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
    * Delete content
    * @param id
    */
-  const deleteContent = (id: string) => {
-    deleteAPI(`contents/${id}`).then(() => {
+  const deleteContent = (contentId: string) => {
+    deleteAPI(`contents/${contentId}`).then(() => {
       toast.success('Deleted a content', {
         duration: 1000,
         position: 'top-right',
@@ -202,7 +196,7 @@ interface ContentSidebarProps {
   nextState?: any;
 }
 
-const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
+export const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
     <Flex>
       <Box sx={{ mr: 3 }}>
@@ -253,5 +247,3 @@ const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
     </Flex>
   </Flex>
 );
-
-export default ContentSidebar;

@@ -15,15 +15,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { Box, Flex, Input, Label, Switch, Text } from 'theme-ui';
-import {
-  CloseIcon,
-  // DateIcon,
-  DocumentsIcon,
-  DragIcon,
-  // MailIcon,
-  // MultipleChoiceIcon,
-  // TimeIcon,
-} from '@wraft/icon';
+import { CloseIcon, DocumentsIcon, DragIcon } from '@wraft/icon';
 import { ArrowDown, ArrowUp, Copy, Plus, Trash } from '@phosphor-icons/react';
 import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
@@ -33,7 +25,6 @@ import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
 
 import AnimatedButton from './AnimatedButton';
-import { ArrowBack } from './Icons';
 
 type Props = {
   formdata: any;
@@ -308,9 +299,6 @@ const FormsFrom = ({
       description: formdata.description,
     };
 
-    // console.log('data', data);
-    // return;
-
     if (isEdit) {
       putAPI(`forms/${formdata.id}`, data)
         .then(() => {
@@ -353,30 +341,6 @@ const FormsFrom = ({
   useEffect(() => {
     onFetchFieldTypes();
   }, []);
-
-  const handleDragEnd = ({
-    active,
-    over,
-  }: {
-    active: { id: string };
-    over: { id: string };
-  }) => {
-    if (!active || !over || active.id === over.id) return;
-
-    const oldIndex = items.findIndex((item: any) => item.id === active.id);
-    const newIndex = items.findIndex((item: any) => item.id === over.id);
-
-    if (oldIndex === -1 || newIndex === -1) {
-      console.error('Failed to find active or over items by id', {
-        activeId: active.id,
-        overId: over.id,
-      });
-      return;
-    }
-
-    const newArr = arrayMove(items, oldIndex, newIndex);
-    setItems(newArr);
-  };
 
   return (
     <Flex
@@ -567,17 +531,6 @@ const DraggableValues = ({
         return { ...i, values: newArr };
       } else return { ...i };
     });
-    console.log(
-      '🔥',
-      activeValue,
-      overValue,
-      oldIndex,
-      newIndex,
-      newArr,
-      data,
-      '🔥',
-    );
-
     setItems([]);
     setTimeout(() => {
       setItems(data);

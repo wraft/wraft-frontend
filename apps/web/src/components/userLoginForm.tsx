@@ -11,13 +11,14 @@ import { Heading } from 'theme-ui';
 import { Box, Flex, Text } from 'theme-ui';
 import { z } from 'zod';
 
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+import { userLogin } from 'utils/models';
+import { emailPattern } from 'utils/zodPatterns';
+
 import GoogleLogo from '../../public/GoogleLogo.svg';
-import { useAuth } from '../contexts/AuthContext';
-import { userLogin } from '../utils/models';
-import { emailPattern } from '../utils/zodPatterns';
-import Field from './Field';
-import Link from './NavLink';
-import { BrandLogo } from './Icons';
 
 export interface IField {
   name: string;
@@ -57,8 +58,8 @@ const UserLoginForm = () => {
             await signOut({ redirect: false });
           }
           router.push('/login');
-        } catch (error) {
-          console.error('Error during sign out:', error);
+        } catch (err) {
+          console.error('Error during sign out:', err);
         }
       }
     };
@@ -82,11 +83,11 @@ const UserLoginForm = () => {
     }
   }, [data, status]);
 
-  const onSubmit = async (data: any): Promise<void> => {
+  const onSubmit = async (formData: any): Promise<void> => {
     setLoading(true);
     setLoginError(null);
     try {
-      const res = await userLogin(data);
+      const res = await userLogin(formData);
       if (res) {
         login(res);
       }

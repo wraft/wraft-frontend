@@ -6,13 +6,12 @@ import { Box, Text, Flex, Avatar } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 
-import { TimeAgo } from 'components/Atoms';
-import Link from 'components/NavLink';
-import PageHeader from 'components/PageHeader';
+import Link from 'common/NavLink';
+import PageHeader from 'common/PageHeader';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
-
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
 
 export interface IField {
   id: string;
@@ -30,7 +29,6 @@ const BlockTemplateListFrame: FC = () => {
   const [contents, setContents] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [render, setRender] = useState(false);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteBlock, setDeleteBlock] = useState<number | null>(null);
 
   const loadData = () => {
@@ -123,7 +121,6 @@ const BlockTemplateListFrame: FC = () => {
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onClick={() => {
-                    setIsOpen(null);
                     setDeleteBlock(row.index);
                   }}>
                   Delete

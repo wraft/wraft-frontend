@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Button } from 'theme-ui';
 import { Input } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
 // import CombinationCard from './CombinationCard';
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import Link from 'common/NavLink';
+import PageHeader from 'common/PageHeader';
+import { fetchAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;
@@ -38,21 +38,21 @@ const Form = () => {
     setUsers(res);
   };
 
-  const loadData = (page: number) => {
-    fetchAPI(`users?page=${page}`).then((data: any) => {
+  const loadData = (pageNo: number) => {
+    fetchAPI(`users?page=${pageNo}`).then((data: any) => {
       loadDataSuccess(data);
     });
   };
 
-  const searchLoadData = (page: number, search: string) => {
-    fetchAPI(`users?page=${page}&name=${search}`).then((data: any) => {
+  const searchLoadData = (pageNo: number, searchText: string) => {
+    fetchAPI(`users?page=${pageNo}&name=${searchText}`).then((data: any) => {
       loadDataSuccess(data);
     });
   };
 
-  const loadDataPage = (page: number) => {
-    setPage(page);
-    loadData(page);
+  const loadDataPage = (pageNo: number) => {
+    setPage(pageNo);
+    loadData(pageNo);
   };
 
   const doSearch = (e: any) => {

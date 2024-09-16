@@ -7,12 +7,12 @@ import { useImmer } from 'use-immer';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
-import Field from 'components/Field';
 import FieldColor from 'components/FieldColor';
 import FieldText from 'components/FieldText';
 import { IFlow, ICreator } from 'components/FlowList';
 import MenuStepsIndicator from 'components/MenuStepsIndicator';
 import Form from 'components/ContentTypeForm';
+import Field from 'common/Field';
 import { ContentType } from 'utils/types';
 import { fetchAPI } from 'utils/models';
 

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
 import FormEntry from 'components/FormEntry';
 
 const Index: FC = () => {

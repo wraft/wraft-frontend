@@ -6,8 +6,8 @@ import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 
-import { NextLinkText } from 'components/NavLink';
-import { TimeAgo, StateBadge } from 'components/Atoms';
+import { NextLinkText } from 'common/NavLink';
+import { TimeAgo, StateBadge } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export interface Theme {
@@ -37,7 +37,7 @@ const FormResponseList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [deleteOpen, setDeleteOpen] = useState<number | null>(null);
+  const [_deleteOpen, setDeleteOpen] = useState<number | null>(null);
 
   const router = useRouter();
   const fId: string = router.query.id as string;
@@ -45,10 +45,10 @@ const FormResponseList = () => {
 
   const { theme } = useThemeUI();
 
-  const loadData = (page: number) => {
+  const loadData = (pageNo: number) => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`forms/${fId}/entries${pageNo}`)
+    const query = pageNo > 0 ? `?page=${pageNo}&sort=inserted_at_desc` : '';
+    fetchAPI(`forms/${fId}/entries${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: FormElement[] = data.entries;

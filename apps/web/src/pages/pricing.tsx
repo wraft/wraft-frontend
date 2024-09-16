@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 import { Box, Close, Container, Flex, Text } from 'theme-ui';
 
-import ButtonCustom from '../components/ButtonCustom';
-import Footer from '../components/Footer';
-import HR from '../components/HR';
-import { IconCustomDesign } from '../components/IconFeatures';
-import { IconCorrect, IconCorrectDark } from '../components/IconsPricing';
-import UserNav from '../components/UserNav';
+import ButtonCustom from 'components/ButtonCustom';
+import Footer from 'components/Footer';
+import HR from 'components/HR';
+import { IconCustomDesign } from 'components/IconFeatures';
+import { IconCorrect, IconCorrectDark } from 'components/IconsPricing';
+import UserNav from 'components/UserNav';
 
 interface cardProps {
   onClick?: () => void;

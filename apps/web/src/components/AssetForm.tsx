@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Text } from 'theme-ui';
 
-import { postAPI } from '../utils/models';
-import { Asset } from '../utils/types';
+import Dropzone from 'common/Dropzone';
+import { postAPI } from 'utils/models';
+import { Asset } from 'utils/types';
+
 import FontList from './FontList';
 
 interface AssetFormProps {

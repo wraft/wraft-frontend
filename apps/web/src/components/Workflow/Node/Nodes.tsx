@@ -1,13 +1,6 @@
-import { useCallback } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { Text, Box, Flex, Button } from 'theme-ui';
+import { Box, Flex } from 'theme-ui';
 import { HardDrives, X, Files } from '@phosphor-icons/react';
-
-// const onCloseIconClick = (event: any, props: any) => {
-//   event.stopPropagation();
-//   const { data, id } = props;
-//   data.onDeleteNodeCallback(id);
-// };
 
 export const Source = ({
   type,
@@ -18,10 +11,6 @@ export const Source = ({
   onCloseIconClick,
   additionalClassName,
 }: any) => {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
-
   return (
     <>
       <Flex
@@ -66,10 +55,6 @@ export const Templete = ({
   additionalClassName,
   isConnectable,
 }: any) => {
-  const onChange = useCallback((evt: any) => {
-    console.log(evt.target.value);
-  }, []);
-
   return (
     <>
       <Handle type="target" position={Position.Top} className="NodePort" />

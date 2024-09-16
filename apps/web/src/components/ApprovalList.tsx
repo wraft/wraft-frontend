@@ -3,11 +3,10 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
 import { Table, Pagination } from '@wraft/ui';
-import ContentTitleList from '@wraft-ui/content/ContentTitleList';
 
-import PageHeader from 'components/PageHeader';
-import { StateBadge, TimeAgo } from 'components/Atoms';
-import { useAuth } from 'contexts/AuthContext';
+import PageHeader from 'common/PageHeader';
+import { StateBadge, TimeAgo } from 'common/Atoms';
+import { ContentTitleList } from 'common/content';
 import { fetchAPI } from 'utils/models';
 
 export interface ApprovalList {
@@ -107,13 +106,6 @@ const columns = () => [
               Review
             </Button>
           </NextLink>
-          {/* <Box>
-            <Button
-              variant="btnAction"
-              onClick={() => approveInstance(row?.original?.content?.id)}>
-              Approve
-            </Button>
-          </Box> */}
         </Flex>
       </Flex>
     ),
@@ -130,8 +122,6 @@ const Approvals = () => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
-
-  const { accessToken } = useAuth();
 
   useEffect(() => {
     if (page) {
@@ -197,14 +187,6 @@ const Approvals = () => {
               </Box>
             )}
           </Box>
-          {/* <Box
-            sx={{
-              bg: 'backgroundWhite',
-              minHeight: '100vh',
-              width: '25%',
-              borderLeft: 'solid 1px',
-              borderColor: 'border',
-            }}></Box> */}
         </Flex>
       </Box>
     </Box>

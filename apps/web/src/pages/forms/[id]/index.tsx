@@ -7,13 +7,13 @@ import { useForm } from 'react-hook-form';
 
 import Page from 'components/PageFrame';
 import FormsFrom from 'components/FormsFrom';
-import PageHeader from 'components/PageHeader';
 import MenuStepsIndicator from 'components/MenuStepsIndicator';
-import Modal from 'components/Modal';
-import Field from 'components/Field';
 import FieldText from 'components/FieldText';
 import FormViewForm from 'components/FormViewForm';
 import { FormResponseList } from 'components/WraftForm';
+import Field from 'common/Field';
+import PageHeader from 'common/PageHeader';
+import Modal from 'common/Modal';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -23,7 +23,6 @@ const Index: FC = () => {
     formState: { errors },
   } = useForm();
   const [items, setItems] = useState<any>([]);
-  const [initial, setInitial] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>();
   const [formStep, setFormStep] = useState<number>(0);
   const [rerender, setRerender] = useState<boolean>(false);
@@ -50,7 +49,6 @@ const Index: FC = () => {
           ),
         };
       });
-      setInitial(fileds);
       const sortedFields = fileds
         .slice()
         .sort((a: any, b: any) => a.order - b.order);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 import { Check } from '@phosphor-icons/react';
 
-import { TimeAgo } from 'components/Atoms';
+import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 const WorkflowStep = ({ title, description, createDate }: any) => (

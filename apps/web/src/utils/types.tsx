@@ -1,10 +1,3 @@
-// export interface ContentTypes {
-//   total_pages: number;
-//   total_entries: number;
-//   page_number: number;
-//   content_types: ContentType[];
-// }
-
 export interface TokenPayload {
   iss: 'WraftAPI';
   sub: string;

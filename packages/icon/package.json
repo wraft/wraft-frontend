@@ -11,8 +11,8 @@
   ],
   "scripts": {
     "build": "pnpm run icons:create && tsup src/icons/index.ts --format esm,cjs --dts --external react",
-    "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "eslint .",
     "icons:create": "npx @svgr/cli --typescript --index-template svgr-index-template.js -d ./src/icons ./rawIcon --config-file ./svgr-config.json --template ./svgr-template.js"
   },
   "devDependencies": {

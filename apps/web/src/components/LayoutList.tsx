@@ -6,12 +6,13 @@ import { Box, Flex, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { ConfirmDelete } from './common';
-import { Drawer } from './common/Drawer';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import { Drawer } from 'common/Drawer';
+import { fetchAPI, deleteAPI } from 'utils/models';
+
 import LayoutForm from './LayoutForm';
-import Modal from './Modal';
-import { TimeAgo } from './Atoms';
 
 export interface ILayout {
   width: number;

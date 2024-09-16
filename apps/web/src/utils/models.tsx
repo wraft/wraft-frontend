@@ -216,8 +216,6 @@ export const createEntity = async (
 
     if (onSuccess) {
       onSuccess(response.data);
-    } else {
-      console.log(`Created a model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
@@ -249,13 +247,8 @@ export const deleteEntity = async (
       data: data,
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Deleted model ${path} with Pass`, response.data);
       onSuccess(response.data);
-    } else {
-      console.log(`Deleted model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
@@ -287,45 +280,12 @@ export const updateEntity = async (
 
     if (onSuccess) {
       onSuccess(response.data);
-    } else {
-      console.log(`Updated model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
     console.error('🐞Error', error);
   }
 };
-
-// interface IapiWrapper {
-//   host: string;
-//   path: string;
-//   token: string;
-//   data: any;
-//   onSuccess?: any;
-//   type: string;
-// }
-
-// const apiWrapper = (props:IapiWrapper ) => {
-//   console.log('props', props);
-//   // fetch(`${host}/api/v1/${path}`, {
-//   //   method: 'PUT',
-//   //   headers: {
-//   //     Accept: 'application/json',
-//   //     // 'Content-Type': 'application/json',
-//   //     Authorization: `Bearer ${token}`,
-//   //   },
-//   //   body: data,
-//   // })
-//   //   .then(function(response) {
-//   //     return response.json();
-//   //   })
-//   //   .then(function(data) {
-//   //     console.log(`Created a model ${path}`, data);
-//   //     if (onSuccess) {
-//   //       onSuccess(data);
-//   //     }
-//   //   });
-// }
 
 /**
  * Update an Entity
@@ -347,12 +307,12 @@ export const createEntityFile = (
     },
     body: data,
   })
-    .then(function (response) {
+    .then((response) => {
       return response.json();
     })
-    .then(function (data) {
+    .then((res) => {
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess(res);
       }
     });
 };
@@ -380,9 +340,9 @@ export const updateEntityFile = (
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
+    .then(function (res) {
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess(res);
       }
     });
 };
@@ -399,8 +359,8 @@ export const registerUser = (data: any, onSuccess?: any) => {
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      onSuccess(data);
+    .then(function (res) {
+      onSuccess(res);
     });
 };
 export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
@@ -448,33 +408,6 @@ export const userLogin = async (body: any) =>
         reject(err);
       });
   });
-// export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
-//   fetch(`${API_HOST}/api/v1/users/signin`, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   })
-//     .then(function (response) {
-//       if (!response.ok) {
-//         throw new Error();
-//       }
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       const { access_token } = data;
-//       cookie.set('token', access_token);
-//       onSuccess(access_token);
-//     })
-//     .catch(function (error) {
-//       // console.error('Error:', error);
-//       if (onError) {
-//         onError(error);
-//       }
-//     });
-// };
 
 /**
  * Login a user
@@ -493,8 +426,8 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      const { token } = data;
+    .then(function (response) {
+      const { token } = response;
       cookie.set('token', token);
       onSuccess(token);
     });
@@ -505,29 +438,6 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
  */
 
 export const switchProfile = (data: any) => {
-  // fetch(`${API_HOST}/api/v1/users/signin`, {
-  //   method: 'POST',
-  //   headers: {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(data),
-  // })
-  //   .then(function (response) {
-  //     if (!response.ok) {
-  //       throw new Error();
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(function (data) {
   const { access_token } = data;
   cookie.set('token', access_token);
-  // onSuccess(access_token);
-  // })
-  // .catch(function (error) {
-  //   // console.error('Error:', error);
-  //   if (onError) {
-  //     onError(error);
-  //   }
-  // });
 };

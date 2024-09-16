@@ -1,18 +1,19 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { CloseIcon } from '@wraft/icon';
-// import Checkbox from '@wraft-ui/Checkbox';
+// import Checkbox from 'common/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Input, Label } from 'theme-ui';
 
-import { putAPI, fetchAPI, deleteAPI, postAPI } from '../utils/models';
-import { Asset } from '../utils/types';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import { putAPI, fetchAPI, deleteAPI, postAPI } from 'utils/models';
+import { Asset } from 'utils/types';
+
 import AssetForm from './AssetForm';
-import Field from './Field';
 import FieldColor from './FieldColor';
 import FontList from './FontList';
-import Modal from './Modal';
 
 interface ThemeElement {
   name: string;
@@ -78,7 +79,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       {
         loading: 'Loading',
         success: (data: any) => {
-          console.log(data);
           setAssets((prev) => prev.filter((item) => item.id !== data.id));
           return `Successfully deleted `;
         },
@@ -124,8 +124,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       assetsList = a.join(',');
     }
 
-    console.log('assetsList', assetsList);
-
     const themeData: any = {
       secondary_color: data?.secondary_color,
       primary_color: data?.primary_color,
@@ -135,8 +133,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       body_color: data?.body_color,
       assets: assetsList,
     };
-
-    console.log('🍿.....', themeData);
 
     if (data?.edit) {
       putAPI(`themes/${data?.edit}`, themeData).then(() => {

@@ -12,10 +12,10 @@ importers:
         specifier: ^2.27.8
         version: 2.27.8
       '@wraft/eslint-config':
-        specifier: ^0.0.0
+        specifier: '*'
         version: link:packages/eslint-config
       '@wraft/typescript-config':
-        specifier: ^0.0.0
+        specifier: '*'
         version: link:packages/typescript-config
       husky:
         specifier: ^8.0.3

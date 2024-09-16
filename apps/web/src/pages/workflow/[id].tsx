@@ -26,15 +26,11 @@ export const Index: any = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
 
   const [selectedNode, setSelectedNode] = useState<any>(null);
-  const [isSelected, setIsSelected] = useState(false);
+  const [_isSelected, setIsSelected] = useState(false);
 
   const router = useRouter();
-
-  const id: any = router.query.id;
-
   const mobileMenuDrawer = useDrawer();
-
-  console.log('nodes_new', nodes);
+  const id: any = router.query.id;
 
   useEffect(() => {
     setNodes(nodeData);
@@ -45,8 +41,8 @@ export const Index: any = () => {
   }, [edgeData]);
 
   useEffect(() => {
-    const node = nodes.filter((node: any) => {
-      if (node.selected) return true;
+    const node = nodes.filter((item: any) => {
+      if (item.selected) return true;
       return false;
     });
     if (node[0]) {
@@ -71,14 +67,11 @@ export const Index: any = () => {
 
   const loadPipeline = (cid: string) => {
     fetchAPI(`pipelines/${cid}`).then((data: any) => {
-      console.log('Pipeline-data', data);
-      const nodeData = restructure(data);
-      console.log('Pipeline-nodeData', nodeData);
-      const edges = createEdges(data);
-      console.log('Pipeline-edges', edges);
+      const createdNodeData = restructure(data);
+      const createdEdges = createEdges(data);
 
-      setNodeData(nodeData);
-      setEdgeData(edges);
+      setNodeData(createdNodeData);
+      setEdgeData(createdEdges);
       setPiplineDetails(data);
     });
   };
@@ -121,30 +114,6 @@ export const Index: any = () => {
         isAddButtonHidden: true,
       },
     }));
-  };
-
-  const onDrop = (event: any) => {
-    // event.preventDefault();
-
-    console.log('onDrop', event);
-
-    // const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-
-    // const type = event.dataTransfer.getData("application/reactflow");
-    // const label = event.dataTransfer.getData("content");
-    // console.log(reactFlowInstance, "reactIns");
-    // const position = reactFlowInstance.project({
-    //   x: event.clientX - reactFlowBounds.left,
-    //   y: event.clientY - reactFlowBounds.top
-    // });
-    // const newNode = {
-    //   id: getId(),
-    //   type,
-    //   position,
-    //   data: { heading: "Send Message", content: label }
-    // };
-    // setNodes((es) => es.concat(newNode));
-    // setSelectedNode(newNode.id);
   };
 
   const goBack = () => {

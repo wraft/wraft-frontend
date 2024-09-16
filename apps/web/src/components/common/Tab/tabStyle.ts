@@ -8,9 +8,9 @@ import styled from '@emotion/styled';
 /**
  * Internal dependencies
  */
-// import { COLORS } from '../utils';
-// import { reduceMotion } from '../utils/reduce-motion';
-// import { space } from '../utils/space';
+// import { COLORS } from 'utils';
+// import { reduceMotion } from 'utils/reduce-motion';
+// import { space } from 'utils/space';
 
 export const TabListWrapper = styled.div`
   display: flex;
