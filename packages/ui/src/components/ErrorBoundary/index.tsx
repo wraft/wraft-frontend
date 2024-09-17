@@ -1,15 +1,19 @@
-import { SomethingWentIcon } from '@wraft/icon';
-import { x } from '@xstyled/emotion';
-import type { ErrorInfo } from 'react';
-import React, { Component } from 'react';
+import { SomethingWentIcon } from "@wraft/icon";
+import { x } from "@xstyled/emotion";
+import type { ErrorInfo } from "react";
+import { Component } from "react";
 
-import { Button } from '../Button';
+import { Button } from "../Button";
 
 class ErrorBoundary extends Component<
-  { children: React.ReactNode, message?: string },
-  { error: Error | null, errorInfo: ErrorInfo | null },
+  { children: React.ReactNode; message?: string },
+  { error: Error | null; errorInfo: ErrorInfo | null }
 > {
-  constructor(props: { children: React.ReactNode } | Readonly<{ children: React.ReactNode }>) {
+  constructor(
+    props:
+      | { children: React.ReactNode }
+      | Readonly<{ children: React.ReactNode }>,
+  ) {
     super(props);
     this.state = { error: null, errorInfo: null };
   }
@@ -26,16 +30,26 @@ class ErrorBoundary extends Component<
 
   render() {
     // do not intercept next-not-found error, allow displaying not-found.tsx page when notFound() is thrown on server side
-    if (this.state.error !== null && 'digest' in this.state.error && this.state.error.digest === 'NEXT_NOT_FOUND') {
+    if (
+      this.state.error !== null &&
+      "digest" in this.state.error &&
+      this.state.error.digest === "NEXT_NOT_FOUND"
+    ) {
       return this.props.children;
     }
 
     if (this.state.errorInfo) {
       // Error path
       return (
-        <x.div display="flex" flexDirection="column" alignItems="center" my="24px" minWidth="100%">
-          <SomethingWentIcon width={'300px'} height={'300px'} />
-          <x.h2>{this.props.message || 'Something went wrong.'}</x.h2>
+        <x.div
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          my="24px"
+          minWidth="100%"
+        >
+          <SomethingWentIcon width={"300px"} height={"300px"} />
+          <x.h2>{this.props.message || "Something went wrong."}</x.h2>
           {/* <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error && this.state.error.toString()}
           </details> */}

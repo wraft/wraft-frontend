@@ -1,7 +1,5 @@
-import React, { MouseEventHandler, useCallback, useState } from 'react';
+import React, { useState } from "react";
 import {
-  CodeBlock,
-  FrameCorners,
   ListBullets,
   ListNumbers,
   Quotes,
@@ -14,18 +12,10 @@ import {
   ArrowsOutSimple,
   ArrowsInSimple,
   Image,
-} from '@phosphor-icons/react';
-import {
-  CommandButton,
-  HeadingLevelButtonGroup,
-  Icon,
-  InsertHorizontalRuleButton,
-  ToggleBlockquoteButton,
-  useActive,
-  useCommands,
-} from '@remirror/react';
-import { Text, Box, Flex } from 'theme-ui';
-import { Counter } from './extensions/counter';
+} from "@phosphor-icons/react";
+import { CommandButton, useActive, useCommands } from "@remirror/react";
+import { Box, Flex } from "theme-ui";
+// import { Counter } from "./extensions/counter";
 
 // import { Flex } from 'theme-ui';
 
@@ -33,19 +23,19 @@ const ThemedCommandButton = (props: any) => (
   <Box
     as={CommandButton}
     sx={{
-      margin: '0 4px',
-      padding: '4px',
+      margin: "0 4px",
+      padding: "4px",
       border: 0,
-      borderRadius: '6px',
-      '&.selected': {
-        backgroundColor: 'lightblue !important',
+      borderRadius: "6px",
+      "&.selected": {
+        backgroundColor: "lightblue !important",
       },
-      backgroundColor: props.active ? 'lightblue' : 'transparent',
-      '&:hover': {
-        backgroundColor: props.active ? 'lightblue' : '#f0f0f0',
+      backgroundColor: props.active ? "lightblue" : "transparent",
+      "&:hover": {
+        backgroundColor: props.active ? "lightblue" : "#f0f0f0",
       },
-      '&:last-child': {
-        ml: 'auto',
+      "&:last-child": {
+        ml: "auto",
       },
     }}
     {...props}
@@ -68,7 +58,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
   };
 
   return (
-    <Flex sx={{ px: 3, py: 2, borderBottom: `solid 1px`, borderColor: '#eee' }}>
+    <Flex sx={{ px: 3, py: 2, borderBottom: `solid 1px`, borderColor: "#eee" }}>
       {/* <HeadingLevelButtonGroup showAll /> */}
       {/* <ToggleBlockquoteButton /> */}
 
@@ -94,7 +84,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
         enabled={true}
         active={active.blockquote()}
       />
-      <Box sx={{ width: '1px', backgroundColor: '#eee', mx: 2 }} />
+      <Box sx={{ width: "1px", backgroundColor: "#eee", mx: 2 }} />
       <ThemedCommandButton
         commandName="toggleHeading"
         icon={<TextHOne size={18} />}
@@ -133,17 +123,17 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
         enabled={true}
       />
 
-      <Box sx={{ width: '1px', backgroundColor: '#eee', mx: 2 }} />
+      <Box sx={{ width: "1px", backgroundColor: "#eee", mx: 2 }} />
       <ThemedCommandButton
         icon={<Image size={18} />}
-        commandName={'uploadImage'}
+        commandName={"uploadImage"}
         // onSelect={() => commands.uploadImage()}
         enabled={true}
       />
       {/* <InsertHorizontalRuleButton /> */}
       <ThemedCommandButton
         icon={<Table size={18} />}
-        commandName={'addTable'}
+        commandName={"addTable"}
         onSelect={() =>
           commands.createTable({
             rowsCount: 4,
@@ -161,7 +151,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
         enabled={true}
       /> */}
 
-      <Flex sx={{ alignItems: 'center', ml: 'auto' }}>
+      <Flex sx={{ alignItems: "center", ml: "auto" }}>
         <Flex>{/* <Counter /> */}</Flex>
         <ThemedCommandButton
           icon={
@@ -182,7 +172,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ onWidthToggle }) => {
 };
 
 // Function to adjust editor padding (implement this in your editor component)
-const adjustEditorPadding = (isFullWidth: boolean) => {
-  // Implement the logic to adjust the editor padding based on isFullWidth
-  // This might involve updating a state in a parent component or using a context
-};
+// const adjustEditorPadding = (isFullWidth: boolean) => {
+//   // Implement the logic to adjust the editor padding based on isFullWidth
+//   // This might involve updating a state in a parent component or using a context
+// };

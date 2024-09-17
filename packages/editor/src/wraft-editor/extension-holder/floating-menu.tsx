@@ -1,38 +1,35 @@
-import React, {
+import type {
   FC,
   MouseEventHandler,
   PropsWithChildren,
   ReactNode,
   Ref,
-  useCallback,
-  useMemo,
-} from 'react';
-
-import {
+} from "react";
+import React, { useCallback, useMemo } from "react";
+import type {
   Alignment,
+  Middleware,
+  Placement as FloatingUIPlacement,
+  Strategy,
+} from "@floating-ui/react";
+import {
   autoPlacement,
   autoUpdate,
   flip,
   FloatingPortal,
-  Middleware,
   offset,
-  Placement as FloatingUIPlacement,
-  Strategy,
   useFloating,
-} from '@floating-ui/react';
-import { cx, isObject } from '@remirror/core';
-import type { PositionerParam } from '@remirror/extension-positioner';
-import { getPositioner } from '@remirror/extension-positioner';
-import { useHelpers } from '@remirror/react-core';
-import {
-  useEditorFocus,
-  UseEditorFocusProps,
-  usePositioner,
-} from '@remirror/react-hooks';
-import { ComponentsTheme, ExtensionPositionerTheme } from '@remirror/theme';
+} from "@floating-ui/react";
+import { cx, isObject } from "@remirror/core";
+import type { PositionerParam } from "@remirror/extension-positioner";
+import { getPositioner } from "@remirror/extension-positioner";
+import { useHelpers } from "@remirror/react-core";
+import type { UseEditorFocusProps } from "@remirror/react-hooks";
+import { useEditorFocus, usePositioner } from "@remirror/react-hooks";
+import { ComponentsTheme, ExtensionPositionerTheme } from "@remirror/theme";
 // import composeRefs from '@seznam/compose-react-refs';
-import { composeRefs } from './common-packages/seznam-compose-react-refs';
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
+import { composeRefs } from "./common-packages/seznam-compose-react-refs";
 // import { Box } from 'theme-ui';
 
 interface BaseFloatingPositioner extends UseEditorFocusProps {
@@ -68,7 +65,7 @@ interface BaseFloatingPositioner extends UseEditorFocusProps {
    *
    * https://floating-ui.com/docs/autoPlacement#conflict-with-flip
    */
-  placement?: FloatingUIPlacement | 'auto' | `auto-${Alignment}`;
+  placement?: FloatingUIPlacement | "auto" | `auto-${Alignment}`;
 
   /**
    * When `true` the child component is rendered outside the `ProseMirror`
@@ -89,7 +86,7 @@ interface BaseFloatingPositioner extends UseEditorFocusProps {
    * Array of middleware objects to modify the positioning or provide data for
    * rendering.
    */
-  middleware?: Array<Middleware | null | undefined | false>;
+  middleware?: (Middleware | null | undefined | false)[];
 
   /**
    * The strategy to use when positioning the floating element.
@@ -140,7 +137,7 @@ export const FloatingWrapper: FC<PropsWithChildren<FloatingWrapperProps>> = (
 ): JSX.Element => {
   const {
     containerClass,
-    placement = 'right-end',
+    placement = "right-end",
     positioner,
     children,
     blurOnInactive = false,
@@ -204,13 +201,13 @@ export const FloatingWrapper: FC<PropsWithChildren<FloatingWrapperProps>> = (
   );
 
   let floatingElement = (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <span
       aria-label={floatingLabel}
       ref={refs.setFloating}
       style={floatingStyles}
       className={cx(ComponentsTheme.FLOATING_POPOVER, containerClass)}
-      onMouseDown={handleMouseDown}>
+      onMouseDown={handleMouseDown}
+    >
       {shouldShow && children}
     </span>
   );
@@ -258,10 +255,10 @@ export const PositionerPortal: FC<PositionerComponentProps> = (props) => {
 };
 
 function isFloatingUIPlacement(
-  placement: BaseFloatingPositioner['placement'],
+  placement: BaseFloatingPositioner["placement"],
 ): placement is FloatingUIPlacement {
   // Compare to previous PopperJS, FloatingUI doesn't support "auto" placement anymore.
-  return !placement?.startsWith('auto');
+  return !placement?.startsWith("auto");
 }
 
 // interface FloatingActionsMenuProps extends Partial<FloatingWrapperProps> {

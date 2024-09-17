@@ -1,18 +1,18 @@
-import type { ExpandedState } from '@tanstack/react-table';
+import type { ExpandedState } from "@tanstack/react-table";
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
   getExpandedRowModel,
-} from '@tanstack/react-table';
-import { x } from '@xstyled/emotion';
-import { useState } from 'react';
+} from "@tanstack/react-table";
+import { x } from "@xstyled/emotion";
+import { useState } from "react";
 
-import { Skeleton } from '../Skeleton';
+import { Skeleton } from "../Skeleton";
 
-import { EmptyImage } from './EmptyImage';
-import * as S from './styled';
+import { EmptyImage } from "./EmptyImage";
+import * as S from "./styled";
 
 interface TableProps {
   data: any;
@@ -20,16 +20,16 @@ interface TableProps {
   isLoading?: any;
   skeletonRows?: number;
   emptyMessage?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
 }
 
 const Table = ({
   data,
   columns,
-  'aria-label': ariaLabel,
+  "aria-label": ariaLabel,
   isLoading = false,
   skeletonRows = 5,
-  emptyMessage = 'No Data',
+  emptyMessage = "No Data",
 }: TableProps) => {
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
@@ -63,10 +63,13 @@ const Table = ({
                   fontWeight="heading"
                   fontSize="12px"
                   color="#A5ABB2"
-                  minWidth={header.getSize()}>
+                  minWidth={header.getSize()}
+                >
                   {header.isPlaceholder ? null : (
                     <x.div
-                      cursor={header.column.getCanSort() ? 'pointer' : 'default'}
+                      cursor={
+                        header.column.getCanSort() ? "pointer" : "default"
+                      }
                       // sx={{
                       //   cursor: header.column.getCanSort()
                       //     ? 'pointer'
@@ -77,23 +80,32 @@ const Table = ({
                       //       : 'inherit',
                       //   },
                       // }}
-                      onClick={header.column.getToggleSortingHandler()}>
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
                       <x.span
                         transform={
                           header.column.getIsResizing()
                             ? `translateX(${
-                                (options.columnResizeDirection === 'rtl' ? -1 : 1) *
+                                (options.columnResizeDirection === "rtl"
+                                  ? -1
+                                  : 1) *
                                 (getState().columnSizingInfo.deltaOffset ?? 0)
                               }px)`
-                            : ''
-                        }>
-                        {flexRender(header.column.columnDef.header, header.getContext())}
+                            : ""
+                        }
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                       </x.span>
                       {header.column.getCanSort() && (
                         <x.span>
-                          {header.column.getIsSorted() === 'asc' && ' 🔼'}
-                          {header.column.getIsSorted() === 'desc' && ' 🔽'}
-                          {header.column.getIsSorted() !== 'asc' && header.column.getIsSorted() !== 'desc' && ' ⬍'}
+                          {header.column.getIsSorted() === "asc" && " 🔼"}
+                          {header.column.getIsSorted() === "desc" && " 🔽"}
+                          {header.column.getIsSorted() !== "asc" &&
+                            header.column.getIsSorted() !== "desc" &&
+                            " ⬍"}
                         </x.span>
                       )}
                     </x.div>
@@ -113,7 +125,8 @@ const Table = ({
                     px="24px"
                     borderBottom="1px solid"
                     borderColor="border"
-                    key={`${columnIndex}-${index}`}>
+                    key={`${columnIndex}-${index}`}
+                  >
                     <Skeleton height="22px" />
                   </x.td>
                 ))}
@@ -131,8 +144,12 @@ const Table = ({
                       px="24px"
                       borderBottom="1px solid"
                       borderColor="border"
-                      minWidth={`${cell.column.getSize()}`}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      minWidth={`${cell.column.getSize()}`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </x.td>
                   ))}
                 </x.tr>
@@ -149,7 +166,8 @@ const Table = ({
           justifyContent="center"
           border="1px solid"
           borderColor="border"
-          borderTop="none">
+          borderTop="none"
+        >
           <x.div textAlign="center">
             <EmptyImage />
             <x.p m="0">{emptyMessage}</x.p>

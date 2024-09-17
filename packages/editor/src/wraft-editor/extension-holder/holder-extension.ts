@@ -1,50 +1,51 @@
+import type { ApplySchemaAttributes, Static } from "@remirror/core";
 import {
-  ApplySchemaAttributes,
   extension,
   ExtensionTag,
   isElementDomNode,
-  Static,
   command,
   pick,
-} from '@remirror/core';
-import { Node } from '@remirror/pm/model';
+} from "@remirror/core";
+import type { Node } from "@remirror/pm/model";
 // import type { CreateEventHandlers } from '@remirror/extension-events';
-import {
-  DEFAULT_SUGGESTER,
+import type {
   MatchValue,
   RangeWithCursor,
   SuggestChangeHandlerProps,
   Suggester,
-} from '@remirror/pm/suggest';
-import { ExtensionMentionAtomTheme as Theme } from '@remirror/theme';
-import {
+} from "@remirror/pm/suggest";
+import { DEFAULT_SUGGESTER } from "@remirror/pm/suggest";
+import { ExtensionMentionAtomTheme as Theme } from "@remirror/theme";
+import type {
   CommandFunction,
-  ErrorConstant,
-  getTextSelection,
   Handler,
-  invariant,
-  isString,
-  NodeExtension,
   NodeExtensionSpec,
   NodeSpecOverride,
   NodeWithPosition,
-  omitExtraAttributes,
   PrimitiveSelection,
   ProsemirrorAttributes,
+} from "remirror";
+import {
+  ErrorConstant,
+  getTextSelection,
+  invariant,
+  isString,
+  NodeExtension,
+  omitExtraAttributes,
   replaceText,
-} from 'remirror';
+} from "remirror";
 
 /**
  * The default matcher to use when none is provided in options
  */
 const DEFAULT_MATCHER = {
   ...pick(DEFAULT_SUGGESTER, [
-    'startOfLine',
-    'supportedCharacters',
-    'validPrefixCharacters',
-    'invalidPrefixCharacters',
+    "startOfLine",
+    "supportedCharacters",
+    "validPrefixCharacters",
+    "invalidPrefixCharacters",
   ]),
-  appendText: '',
+  appendText: "",
   matchOffset: 1,
   suggestClassName: Theme.SUGGEST_ATOM,
   mentionClassName: Theme.MENTION_ATOM,
@@ -122,13 +123,13 @@ export type HolderAtomChangeHandler = (
 export interface HolderAtomExtensionMatcher
   extends Pick<
     Suggester,
-    | 'char'
-    | 'name'
-    | 'startOfLine'
-    | 'supportedCharacters'
-    | 'validPrefixCharacters'
-    | 'invalidPrefixCharacters'
-    | 'suggestClassName'
+    | "char"
+    | "name"
+    | "startOfLine"
+    | "supportedCharacters"
+    | "validPrefixCharacters"
+    | "invalidPrefixCharacters"
+    | "suggestClassName"
   > {
   /**
    * See [[``Suggester.matchOffset`]] for more details.
@@ -165,11 +166,11 @@ export interface HolderAtomExtensionMatcher
 export interface HolderAtomOptions
   extends Pick<
     Suggester,
-    | 'invalidNodes'
-    | 'validNodes'
-    | 'invalidMarks'
-    | 'validMarks'
-    | 'isValidPosition'
+    | "invalidNodes"
+    | "validNodes"
+    | "invalidMarks"
+    | "validMarks"
+    | "isValidPosition"
   > {
   /**
    * When `true` the atom node which wraps the holder will be selectable.
@@ -260,10 +261,10 @@ export interface HolderAtomOptions
   defaultOptions: {
     selectable: true,
     draggable: false,
-    holderTag: 'span' as const,
+    holderTag: "span" as const,
     matchers: [],
-    appendText: ' ',
-    suggestTag: 'span' as const,
+    appendText: " ",
+    suggestTag: "span" as const,
     disableDecorations: false,
     invalidMarks: [],
     invalidNodes: [],
@@ -274,12 +275,12 @@ export interface HolderAtomOptions
     // name: '',
   },
   handlerKeyOptions: { onClick: { earlyReturnValue: true } },
-  handlerKeys: ['onChange', 'onClick'],
-  staticKeys: ['selectable', 'draggable', 'holderTag', 'matchers'],
+  handlerKeys: ["onChange", "onClick"],
+  staticKeys: ["selectable", "draggable", "holderTag", "matchers"],
 })
 export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
   get name() {
-    return 'holder' as const;
+    return "holder" as const;
   }
 
   createTags() {
@@ -290,8 +291,8 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
     extra: ApplySchemaAttributes,
     override: NodeSpecOverride,
   ): NodeExtensionSpec {
-    const dataAttributeId = 'data-holder-atom-id';
-    const dataAttributeName = 'data-holder-atom-name';
+    const dataAttributeId = "data-holder-atom-id";
+    const dataAttributeName = "data-holder-atom-name";
 
     return {
       inline: true,
@@ -340,7 +341,7 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
 
         const attrs = {
           ...extra.dom(node),
-          class: named?.length > 0 ? 'holder' : 'no-holder',
+          class: named?.length > 0 ? "holder" : "no-holder",
           [dataAttributeId]: id,
           [dataAttributeName]: name,
         };
@@ -367,7 +368,7 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
     return ({ tr, dispatch }) => {
       const { from, to } = getTextSelection(selection ?? tr.selection, tr.doc);
 
-      tr.insertText('\n', from, to);
+      tr.insertText("\n", from, to);
       tr.replaceRangeWith(from, from, content);
       dispatch?.(tr);
       return true;
@@ -404,7 +405,7 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
 
     const { from, to } = {
       from: range.from,
-      to: replacementType === 'partial' ? range.cursor : range.to,
+      to: replacementType === "partial" ? range.cursor : range.to,
     };
 
     return replaceText({
@@ -417,14 +418,14 @@ export class HolderAtomExtension extends NodeExtension<HolderAtomOptions> {
 
   createSuggesters(): Suggester[] {
     const options = pick(this.options, [
-      'invalidMarks',
-      'invalidNodes',
-      'isValidPosition',
-      'validMarks',
-      'validNodes',
-      'suggestTag',
-      'disableDecorations',
-      'appendText',
+      "invalidMarks",
+      "invalidNodes",
+      "isValidPosition",
+      "validMarks",
+      "validNodes",
+      "suggestTag",
+      "disableDecorations",
+      "appendText",
     ]);
 
     return this.options.matchers.map<Suggester>((matcher) => ({
@@ -465,7 +466,6 @@ function getAppendText(
 }
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Remirror {
     interface AllExtensions {
       holder: HolderAtomExtension;

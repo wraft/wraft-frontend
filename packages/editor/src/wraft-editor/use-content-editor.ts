@@ -1,19 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
-
-import {
-  ReactExtensions,
-  useRemirror,
-  UseRemirrorReturn,
-  useRemirrorContext,
-} from '@remirror/react';
-import {
+import { useCallback, useEffect, useState } from "react";
+import type { ReactExtensions, UseRemirrorReturn } from "@remirror/react";
+import { useRemirror } from "@remirror/react";
+import type {
   AnyExtension,
   RemirrorEventListener,
   RemirrorEventListenerProps,
-} from 'remirror';
-import { RemirrorContentType } from "remirror";
-
-import remirrorExtensions from './extensions.js';
+  RemirrorContentType,
+} from "remirror";
+import remirrorExtensions from "./extensions.js";
 
 const emptyDoc: RemirrorContentType = {
   type: "doc",
@@ -28,32 +22,29 @@ export interface UseContentEditorReturnType {
   content: string;
   setContent: (content: string) => void;
   insertNow: (content: any) => void;
-  onInserted: Function,
-  getContext: any,
-  
+  onInserted: (value: any) => void;
+  getContext: any;
 }
 
 export function useContentEditor(
-  value: string | any,
+  value: string,
   doUpdate: any,
-  onInserted: Function,
+  onInserted: (value: any) => void,
   args?: {
     placeholder?: string;
-  },  
+  },
 ): UseContentEditorReturnType {
   const extensions = remirrorExtensions(args?.placeholder);
-  
+
   const editor = useRemirror({
     extensions,
-    stringHandler: 'markdown',
+    stringHandler: "markdown",
     content: value || emptyDoc,
-    selection: 'start',
+    selection: "start",
   });
-
 
   const { onChange, manager, getContext } = editor;
 
-  // @ts-ignore
   const text = getContext()?.helpers.getText();
 
   const [content, setMarkdownContent] = useState(text);
@@ -64,15 +55,13 @@ export function useContentEditor(
         ReactExtensions<ReturnType<typeof extensions>[number]>
       >,
     ) => {
-      // @ts-ignore
       const markdownContent = parameter.helpers.getMarkdown(parameter.state);
       setMarkdownContent(markdownContent);
       onChange(parameter);
 
-      // @ts-ignore
       const json = getContext()?.helpers.getJSON();
       const contentObject = {
-        json: json,
+        json,
         md: markdownContent,
       };
       doUpdate(contentObject);
@@ -85,8 +74,8 @@ export function useContentEditor(
       manager.view.updateState(
         manager.createState({
           content: value,
-          selection: 'end',
-          stringHandler: 'markdown',
+          selection: "end",
+          stringHandler: "markdown",
         }),
       );
       setMarkdownContent(value);
@@ -99,18 +88,17 @@ export function useContentEditor(
    */
   const insertNow = useCallback(
     (value: string) => {
-        // @ts-ignore
-        const state = manager.getState();
+      // @ts-expect-error
+      const state = manager.getState();
 
-        const { selection, schema } = state;
-        const { insertBlock } = manager.store.commands
-        const newNode = schema?.nodeFromJSON(value);
-        insertBlock(newNode, selection);
-        onInserted;
+      const { selection, schema } = state;
+      const { insertBlock } = manager.store.commands;
+      const newNode = schema?.nodeFromJSON(value);
+      insertBlock(newNode, selection);
+      onInserted;
     },
-    [manager]
+    [manager],
   );
-  
 
   // when default value is provided
   useEffect(() => {
