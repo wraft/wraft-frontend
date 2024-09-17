@@ -1,4 +1,5 @@
-import { AnyExtension, ExtensionPriority } from 'remirror';
+import type { AnyExtension } from "remirror";
+import { ExtensionPriority } from "remirror";
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -16,20 +17,19 @@ import {
   TextHighlightExtension,
   TrailingNodeExtension,
   HorizontalRuleExtension,
-} from 'remirror/extensions';
-
-import { TableExtension } from '@remirror/extension-react-tables';
-import { HolderAtomExtension } from './extension-holder/holder-extension';
-import { PageBreakExtension } from './extension-pagebreak/pagebreak-extension';
-import { SlashExtension } from './extensions/slash';
+} from "remirror/extensions";
+import { TableExtension } from "@remirror/extension-react-tables";
+import { HolderAtomExtension } from "./extension-holder/holder-extension";
+import { PageBreakExtension } from "./extension-pagebreak/pagebreak-extension";
+import { SlashExtension } from "./extensions/slash";
 
 // import { CountExtension } from '@remirror/extension-count';
 /**
  * A list of allowed Remirror Extensions
  */
 const extensions =
-  (placeholder: string = '') =>
-  (): Array<AnyExtension> => [
+  (placeholder = "") =>
+  (): AnyExtension[] => [
     new BoldExtension({}),
     new ItalicExtension(),
     new HeadingExtension({}),
@@ -55,17 +55,17 @@ const extensions =
     }),
     new HolderAtomExtension({
       extraAttributes: {
-        named: '',
-        name: '',
-        mentionTag: 'holder',
+        named: "",
+        name: "",
+        mentionTag: "holder",
       },
       matchers: [
-        { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
+        { name: "holder", char: "@", appendText: " ", matchOffset: 0 },
       ],
     }),
     new SlashExtension({
-      extraAttributes: { type: 'user' },
-      matchers: [{ name: 'slash', char: '/', appendText: ' ', matchOffset: 0 }],
+      extraAttributes: { type: "user" },
+      matchers: [{ name: "slash", char: "/", appendText: " ", matchOffset: 0 }],
     }),
 
     new TableExtension({}),

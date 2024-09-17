@@ -1,6 +1,6 @@
-import React, { MouseEventHandler, useCallback } from 'react';
-import { capitalCase } from '@remirror/core';
-import { useHelpers } from '@remirror/react';
+import type { MouseEventHandler } from "react";
+import { useCallback } from "react";
+import { useHelpers } from "@remirror/react";
 
 // export interface CommandButtonProps extends Omit<ButtonProps, 'type'> {
 //     active?: boolean;
@@ -26,9 +26,10 @@ export const CommandButton = ({
 
   return (
     <button
-      type={active ? 'link' : 'text'}
+      type={active ? "link" : "text"}
       onMouseDown={handleMouseDown}
-      {...buttonProps}>
+      {...buttonProps}
+    >
       {children}
     </button>
   );

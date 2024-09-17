@@ -1,23 +1,24 @@
-import {
+import type {
   ApplySchemaAttributes,
-  command,
   CommandFunction,
+  InputRule,
+  NodeExtensionSpec,
+  NodeSpecOverride,
+  Transaction,
+} from "@remirror/core";
+import {
+  command,
   ErrorConstant,
   extension,
   ExtensionTag,
-  InputRule,
   invariant,
   isEmptyBlockNode,
   isNodeSelection,
   NodeExtension,
-  NodeExtensionSpec,
   nodeInputRule,
-  NodeSpecOverride,
-  Transaction,
-} from '@remirror/core';
-import { TextSelection } from '@remirror/pm/state';
-
-import { insertPageBreakOptions } from './page-break-utils.js';
+} from "@remirror/core";
+import { TextSelection } from "@remirror/pm/state";
+import { insertPageBreakOptions } from "./page-break-utils.js";
 
 export interface PageBreakOptions {
   /**
@@ -34,14 +35,14 @@ export interface PageBreakOptions {
  * Adds a horizontal line to the editor.
  */
 @extension<PageBreakOptions>({
-  defaultOptions: { insertionNode: 'paragraph' },
+  defaultOptions: { insertionNode: "paragraph" },
   staticKeys: [],
   handlerKeys: [],
-  customHandlerKeys: []
+  customHandlerKeys: [],
 })
 export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
   get name() {
-    return 'pageBreak' as const;
+    return "pageBreak" as const;
   }
 
   createTags() {
@@ -56,14 +57,14 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
       ...override,
       attrs: extra.defaults(),
       parseDOM: [
-        { tag: '\newpage', getAttrs: extra.parse },
+        { tag: "\newpage", getAttrs: extra.parse },
         ...(override.parseDOM ?? []),
       ],
       toDOM: (node) => {
         // Adding a class to the hr element
         const attrs = extra.dom(node);
-        attrs.class = attrs.class ? `${attrs.class} pagebreak` : 'pagebreak-';
-        return ['hr', attrs];
+        attrs.class = attrs.class ? `${attrs.class} pagebreak` : "pagebreak-";
+        return ["hr", attrs];
       },
     };
   }
@@ -79,7 +80,7 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
       const initialParent = $pos.parent;
 
       if (
-        initialParent.type.name === 'doc' ||
+        initialParent.type.name === "doc" ||
         initialParent.isAtom ||
         initialParent.isLeaf
       ) {

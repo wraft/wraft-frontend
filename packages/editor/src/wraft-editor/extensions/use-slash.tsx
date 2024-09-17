@@ -1,37 +1,37 @@
 // Adapted from codepod/ui/src/components/nodes/extensions/useSlash.tsx
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   MentionChangeHandler,
   MentionChangeHandlerCommand,
   MentionExtensionAttributes,
-} from '@remirror/extension-mention';
+} from "@remirror/extension-mention";
 // import { MentionExtension } from "@remirror/extension-mention";
-import { SlashExtension } from './slash';
-import { ChangeReason } from '@remirror/pm/suggest';
-import { useExtensionEvent, useHelpers } from '@remirror/react-core';
-
-import { Box } from 'theme-ui';
-
-import {
-  FloatingWrapper,
+import { ChangeReason } from "@remirror/pm/suggest";
+import { useExtensionEvent, useHelpers } from "@remirror/react-core";
+import { Box } from "theme-ui";
+import type {
   MentionState,
-  useCommands,
   UseMentionProps,
   UseMentionReturn,
-  useMenuNavigation,
-} from '@remirror/react';
-import { cx } from 'remirror';
+} from "@remirror/react";
 import {
-  ArrowBendDownLeft,
-  Browsers,
-  CurrencyDollar,
-  Image,
+  FloatingWrapper,
+  useCommands,
+  useMenuNavigation,
+} from "@remirror/react";
+import { cx } from "remirror";
+import {
+  // ArrowBendDownLeft,
+  // Browsers,
+  // CurrencyDollar,
+  // Image,
   Table,
   TextHOne,
   TextHThree,
   TextHTwo,
-} from '@phosphor-icons/react';
+} from "@phosphor-icons/react";
+import { SlashExtension } from "./slash";
 
 function useSlash<
   Data extends MentionExtensionAttributes = MentionExtensionAttributes,
@@ -47,7 +47,7 @@ function useSlash<
   } = props;
   const [state, setState] = useState<MentionState | null>(null);
   const helpers = useHelpers();
-  const isOpen = !!state;
+  const isOpen = Boolean(state);
 
   const onDismiss = useCallback(() => {
     if (!state) {
@@ -133,7 +133,7 @@ function useSlash<
           const regex = /^\s+/;
 
           const appendText = regex.test(textAfter)
-            ? ''
+            ? ""
             : defaultAppendTextValue;
 
           // Default to append text only when the textAfter the match does not
@@ -145,20 +145,20 @@ function useSlash<
           // TODO different commands for different mentions.
           const { id } = attrs;
           switch (id) {
-            case 'table':
+            case "table":
               createTable({
                 rowsCount: 2,
                 columnsCount: 3,
                 withHeaderRow: false,
               });
               break;
-            case 'heading1':
+            case "heading1":
               toggleHeading({ level: 1 });
               break;
-            case 'heading2':
+            case "heading2":
               toggleHeading({ level: 2 });
               break;
-            case 'heading3':
+            case "heading3":
               toggleHeading({ level: 3 });
               break;
             default:
@@ -187,7 +187,7 @@ function useSlash<
       }
 
       const exitCommand: MentionChangeHandlerCommand = (attrs) => {
-        cmd({ appendText: '', ...attrs });
+        cmd({ appendText: "", ...attrs });
       };
 
       // Call the onExit handler.
@@ -200,7 +200,7 @@ function useSlash<
   );
 
   // Add the handlers to the `MentionExtension`
-  useExtensionEvent(SlashExtension, 'onChange', onChange);
+  useExtensionEvent(SlashExtension, "onChange", onChange);
 
   return useMemo(() => ({ ...menu, state }), [menu, state]);
 }
@@ -221,10 +221,10 @@ export function SlashSuggestor(): JSX.Element {
   // <Menu title={'Conditional Block'} icon={<PlusMinus />} />
 
   const allUsers = [
-    { id: 'table', label: 'Table', icon: <Table /> },
-    { id: 'heading1', label: 'Heading 1', icon: <TextHOne /> },
-    { id: 'heading2', label: 'Heading 2', icon: <TextHTwo /> },
-    { id: 'heading3', label: 'Heading 3', icon: <TextHThree /> },
+    { id: "table", label: "Table", icon: <Table /> },
+    { id: "heading1", label: "Heading 1", icon: <TextHOne /> },
+    { id: "heading2", label: "Heading 2", icon: <TextHTwo /> },
+    { id: "heading3", label: "Heading 3", icon: <TextHThree /> },
     // { id: 'pagebreak', label: 'PageBreak', icon: <Browsers /> },
     // { id: 'image', label: 'Image', icon: <Image /> },
     // { id: 'variable', label: 'Variable', icon: <CurrencyDollar /> },
@@ -243,28 +243,30 @@ export function SlashSuggestor(): JSX.Element {
     setUsers(filteredUsers);
   }, [state]);
 
-  const enabled = !!state;
+  const enabled = Boolean(state);
 
   return (
     <FloatingWrapper
       positioner="cursor"
       enabled={enabled}
       // className="floater"
-      placement="bottom-start">
+      placement="bottom-start"
+    >
       <Box
         {...getMenuProps()}
         sx={{
-          ml: 'auto',
+          ml: "auto",
           mr: 2,
-          bg: 'var(--theme-ui-colors-gray-100)',
-          border: 'solid 1px',
-          borderRadius: '6px',
-          borderColor: 'var(--theme-ui-colors-gray-600)',
+          bg: "var(--theme-ui-colors-gray-100)",
+          border: "solid 1px",
+          borderRadius: "6px",
+          borderColor: "var(--theme-ui-colors-gray-600)",
           boxShadow:
-            '0 0 0 1px var(--theme-ui-colors-gray-300), 0 2px 3px -2px var(--theme-ui-colors-gray-300), 0 3px 12px -4px var(--black-a2),0 4px 16px -8px var(--theme-ui-colors-gray-300)',
-          overflow: 'hidden',
+            "0 0 0 1px var(--theme-ui-colors-gray-300), 0 2px 3px -2px var(--theme-ui-colors-gray-300), 0 3px 12px -4px var(--black-a2),0 4px 16px -8px var(--theme-ui-colors-gray-300)",
+          overflow: "hidden",
         }}
-        className="suggestions">
+        className="suggestions"
+      >
         {enabled &&
           users.map((user, index) => {
             const isHighlighted = indexIsSelected(index);
@@ -273,35 +275,36 @@ export function SlashSuggestor(): JSX.Element {
             return (
               <Box
                 sx={{
-                  cursor: 'pointer',
-                  borderBottom: 'solid 1px',
-                  ':hover': {
-                    bg: 'var(--theme-ui-colors-green-300)',
+                  cursor: "pointer",
+                  borderBottom: "solid 1px",
+                  ":hover": {
+                    bg: "var(--theme-ui-colors-green-300)",
                   },
-                  '.highlighted': {
-                    bg: 'var(--theme-ui-colors-gray-900)',
+                  ".highlighted": {
+                    bg: "var(--theme-ui-colors-gray-900)",
                   },
-                  '.hovered': {
-                    bg: 'var(--theme-ui-colors-green-200)',
+                  ".hovered": {
+                    bg: "var(--theme-ui-colors-green-200)",
                   },
                   svg: {
-                    color: 'var(--theme-ui-colors-gray-900)',
+                    color: "var(--theme-ui-colors-gray-900)",
                   },
-                  p: '8px 12px',
-                  borderColor: 'var(--theme-ui-colors-gray-600)',
+                  p: "8px 12px",
+                  borderColor: "var(--theme-ui-colors-gray-600)",
                   lineHeight: 1,
                 }}
                 // getMenuProps
                 key={user.id}
                 className={cx(
-                  'suggestion',
-                  isHighlighted && 'highlighted',
-                  isHovered && 'hovered',
+                  "suggestion",
+                  isHighlighted && "highlighted",
+                  isHovered && "hovered",
                 )}
                 {...getItemProps({
                   item: user,
                   index,
-                })}>
+                })}
+              >
                 {user.icon} {user.label}
               </Box>
             );

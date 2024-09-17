@@ -1,11 +1,15 @@
-// This configuration only applies to the package manager root.
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  ignorePatterns: ["apps/**", "packages/**"],
-  extends: ["@wraft/eslint-config/library.js"],
+  extends: ["@wraft/eslint-config/react-internal.js"],
+  plugins: ["@typescript-eslint", "import"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: true,
+    project: "./tsconfig.json",
+    tsconfigRootDir: __dirname,
+  },
+  ignorePatterns: ["svgr-index-template.js", "svgr-template.js"],
+  rules: {
+    "no-redeclare": ["error", { builtinGlobals: false }],
   },
 };

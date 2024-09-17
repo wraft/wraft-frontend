@@ -1,4 +1,4 @@
-import { x } from '@xstyled/emotion';
+import { x } from "@xstyled/emotion";
 
 interface IProp {
   page: number;
@@ -20,27 +20,27 @@ const PageView: React.FC<IProp> = ({
   activeLinkClassName,
 }) => {
   const getPageClassName = () => {
-    let classNames = '';
-    if (typeof pageClassName !== 'undefined') {
-      classNames = `${pageClassName} ${selected ? activeClassName : ''}`;
+    let classNames = "";
+    if (typeof pageClassName !== "undefined") {
+      classNames = `${pageClassName} ${selected ? activeClassName : ""}`;
     } else {
-      classNames = (selected ? activeClassName : '') || '';
+      classNames = (selected ? activeClassName : "") || "";
     }
     return classNames;
   };
 
   const getPageLinkClassName = () => {
-    let classNames = '';
-    if (typeof pageLinkClassName !== 'undefined') {
-      classNames = `${pageLinkClassName} ${selected ? activeLinkClassName : ''}`;
+    let classNames = "";
+    if (typeof pageLinkClassName !== "undefined") {
+      classNames = `${pageLinkClassName} ${selected ? activeLinkClassName : ""}`;
     } else {
-      classNames = (selected ? activeLinkClassName : '') || '';
+      classNames = (selected ? activeLinkClassName : "") || "";
     }
     return classNames;
   };
 
-  const pageLabelBuilder = (page: number) => {
-    return `${page}`;
+  const pageLabelBuilder = (pageLabel: number) => {
+    return `${pageLabel}`;
   };
 
   return (
@@ -49,13 +49,15 @@ const PageView: React.FC<IProp> = ({
         className={getPageClassName()}
         onClick={(evt: any) => {
           pageSelectedHandler(evt, page);
-        }}>
+        }}
+      >
         <x.div
           role="button"
           className={getPageLinkClassName()}
           tabIndex={0}
-          aria-label={'ariaLabel'}
-          aria-current={'page'}>
+          aria-label={"ariaLabel"}
+          aria-current={"page"}
+        >
           {pageLabelBuilder(page)}
         </x.div>
       </x.li>

@@ -1,10 +1,10 @@
-import * as Ariakit from '@ariakit/react';
-import React, { forwardRef } from 'react';
+import * as Ariakit from "@ariakit/react";
+import { forwardRef } from "react";
 
-import { Title, Header } from './Title';
-import * as S from './styles';
+import { Title, Header } from "./Title";
+import * as S from "./styles";
 
-export type Placement = 'top' | 'right' | 'bottom' | 'left';
+export type Placement = "top" | "right" | "bottom" | "left";
 
 export interface DrawerOptions extends Ariakit.DialogOptions {
   children: React.ReactNode;
@@ -13,17 +13,35 @@ export interface DrawerOptions extends Ariakit.DialogOptions {
 }
 
 const DrawerComponent = forwardRef<HTMLDivElement, DrawerOptions>(
-  ({ children, hideOnInteractOutside = true, placement = 'right', store, withBackdrop = true, open, ...rest }, ref) => {
+  (
+    {
+      children,
+      hideOnInteractOutside = true,
+      placement = "right",
+      store,
+      withBackdrop = true,
+      open,
+      ...rest
+    },
+    ref,
+  ) => {
     return (
       <Ariakit.Dialog
-        backdrop={withBackdrop ? <S.Backdrop hideOnInteractOutside={hideOnInteractOutside} /> : false}
+        backdrop={
+          withBackdrop ? (
+            <S.Backdrop hideOnInteractOutside={hideOnInteractOutside} />
+          ) : (
+            false
+          )
+        }
         hideOnInteractOutside={hideOnInteractOutside}
         modal={withBackdrop}
         ref={ref}
         render={<S.Drawer placement={placement} />}
         store={store}
         open={open}
-        {...(rest as Ariakit.DialogProps)}>
+        {...(rest as Ariakit.DialogProps)}
+      >
         {open && <>{children}</>}
       </Ariakit.Dialog>
     );

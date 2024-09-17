@@ -1,31 +1,27 @@
-import {
-  command,
-  CommandFunction,
-  extension,
-  FromToProps,
-  pick,
-} from '@remirror/core';
-
+import type { CommandFunction, FromToProps } from "@remirror/core";
+import { command, extension, pick } from "@remirror/core";
+import type {
+  SuggestChangeHandlerProps,
+  Suggester,
+} from "@remirror/pm/suggest";
 import {
   DEFAULT_SUGGESTER,
   isSelectionExitReason,
   isSplitReason,
-  SuggestChangeHandlerProps,
-  Suggester,
-} from '@remirror/pm/suggest';
-import { PlainExtension } from 'remirror';
-import {
+} from "@remirror/pm/suggest";
+import { PlainExtension } from "remirror";
+import type {
   MentionChangeHandlerCommandAttributes,
   MentionOptions,
   NamedMentionExtensionAttributes,
-} from 'remirror/extensions';
+} from "remirror/extensions";
 
 @extension<MentionOptions>({
   defaultOptions: {
-    mentionTag: 'a' as const,
+    mentionTag: "a" as const,
     matchers: [],
-    appendText: '',
-    suggestTag: 'a' as const,
+    appendText: "",
+    suggestTag: "a" as const,
     disableDecorations: false,
     invalidMarks: [],
     invalidNodes: [],
@@ -35,12 +31,12 @@ import {
     isMentionValid: isMentionValidDefault,
   },
   handlerKeyOptions: { onClick: { earlyReturnValue: true } },
-  handlerKeys: ['onChange', 'onClick'],
-  staticKeys: ['mentionTag', 'matchers'],
+  handlerKeys: ["onChange", "onClick"],
+  staticKeys: ["mentionTag", "matchers"],
 })
 export class SlashExtension extends PlainExtension<MentionOptions> {
   get name() {
-    return 'slash' as const;
+    return "slash" as const;
   }
 
   /**
@@ -50,13 +46,13 @@ export class SlashExtension extends PlainExtension<MentionOptions> {
     let cachedRange: FromToProps | undefined;
 
     const options = pick(this.options, [
-      'invalidMarks',
-      'invalidNodes',
-      'isValidPosition',
-      'validMarks',
-      'validNodes',
-      'suggestTag',
-      'disableDecorations',
+      "invalidMarks",
+      "invalidNodes",
+      "isValidPosition",
+      "validMarks",
+      "validNodes",
+      "suggestTag",
+      "disableDecorations",
     ]);
 
     return this.options.matchers.map<Suggester>((matcher) => ({
@@ -108,7 +104,7 @@ export class SlashExtension extends PlainExtension<MentionOptions> {
 
       // Destructure the `attrs` and using the defaults.
       const {
-        replacementType = isSplitReason(reason) ? 'partial' : 'full',
+        replacementType = isSplitReason(reason) ? "partial" : "full",
         id = query[replacementType],
         label = text[replacementType],
         appendText = this.options.appendText,
@@ -160,15 +156,15 @@ export class SlashExtension extends PlainExtension<MentionOptions> {
  */
 const DEFAULT_MATCHER = {
   ...pick(DEFAULT_SUGGESTER, [
-    'startOfLine',
-    'supportedCharacters',
-    'validPrefixCharacters',
-    'invalidPrefixCharacters',
-    'suggestClassName',
+    "startOfLine",
+    "supportedCharacters",
+    "validPrefixCharacters",
+    "invalidPrefixCharacters",
+    "suggestClassName",
   ]),
-  appendText: '',
+  appendText: "",
   matchOffset: 1,
-  mentionClassName: 'mention',
+  mentionClassName: "mention",
 };
 
 /**
