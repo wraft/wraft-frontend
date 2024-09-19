@@ -31,7 +31,6 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
     setCreating(true);
     const body = {
       name: data.name,
-      url: data.url,
       email: userProfile.email,
     };
     postAPI('organisations', body)
@@ -65,19 +64,10 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
           <Field
             name="name"
             register={register}
-            placeholder="Functionary"
+            placeholder="Enter Workspace Name"
             label="Workspace Name"
             error={errors.name}
           />
-          <Box sx={{ pt: 2 }}>
-            <Field
-              name="url"
-              register={register}
-              placeholder="wraft.co/functionary"
-              label="Workspace URL"
-              error={errors.url}
-            />
-          </Box>
           <Box sx={{ gap: 3, py: 4 }}>
             <Button
               type="submit"
