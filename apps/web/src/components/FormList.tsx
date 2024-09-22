@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Text, Flex, useThemeUI } from 'theme-ui';
-import { Button } from 'theme-ui';
+import { Button } from '@wraft/ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
@@ -38,9 +38,10 @@ interface Meta {
 type Props = {
   rerender: boolean;
   setRerender: (e: any) => void;
+  onOpenDrawer: (e: any) => void;
 };
 
-const FormList = ({ rerender, setRerender }: Props) => {
+const FormList = ({ rerender, setRerender, onOpenDrawer }: Props) => {
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -240,7 +241,9 @@ const FormList = ({ rerender, setRerender }: Props) => {
                   create one
                 </Text>
                 <Box sx={{ mt: 3, pb: 0 }}>
-                  <Button>Add Form</Button>
+                  <Button variant="primary" onClick={onOpenDrawer}>
+                    Add Form
+                  </Button>
                 </Box>
               </Box>
             </Flex>
