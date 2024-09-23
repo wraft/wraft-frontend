@@ -169,7 +169,12 @@ const Form = () => {
       </PageHeader>
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>
         <Box mt={0}>
-          <Table data={contents} columns={columns} isLoading={loading} />
+          <Table
+            data={contents}
+            columns={columns}
+            isLoading={loading}
+            emptyMessage="No pipelines has been created yet."
+          />
           {pageMeta && pageMeta?.total_pages > 1 && (
             <Box mx={0} mt={3}>
               <Pagination
