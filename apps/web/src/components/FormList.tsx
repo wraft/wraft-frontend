@@ -38,10 +38,9 @@ interface Meta {
 type Props = {
   rerender: boolean;
   setRerender: (e: any) => void;
-  onOpenDrawer: (e: any) => void;
 };
 
-const FormList = ({ rerender, setRerender, onOpenDrawer }: Props) => {
+const FormList = ({ rerender, setRerender }: Props) => {
   const [contents, setContents] = useState<Array<FormElement>>([]);
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -224,9 +223,9 @@ const FormList = ({ rerender, setRerender, onOpenDrawer }: Props) => {
     );
   };
   return (
-    <Box py={3} mb={4}>
+    <Box mb={4}>
       <Box mx={0} mb={3}>
-        {!loading && contents.length < 1 && (
+        {/* {!loading && contents.length < 1 && (
           <Box>
             <Flex>
               <Box sx={{ color: 'gray.500', width: 'auto' }}>
@@ -242,17 +241,23 @@ const FormList = ({ rerender, setRerender, onOpenDrawer }: Props) => {
                 </Text>
                 <Box sx={{ mt: 3, pb: 0 }}>
                   <Button variant="primary" onClick={onOpenDrawer}>
-                    Add Form
+                    <Plus size={12} weight="bold" />
+                    Create Form
                   </Button>
                 </Box>
               </Box>
             </Flex>
           </Box>
-        )}
+        )} */}
         <Box>
           <Box sx={{ width: '100%' }}>
             <Box mx={0} mb={3} sx={{ width: '100%' }}>
-              <Table data={contents} columns={columns} isLoading={loading} />
+              <Table
+                data={contents}
+                columns={columns}
+                isLoading={loading}
+                emptyMessage="No forms has been created yet."
+              />
             </Box>
             <Box mx={2}>
               {pageMeta && pageMeta?.total_pages > 1 && (
