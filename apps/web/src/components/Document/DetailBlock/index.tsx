@@ -116,8 +116,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
   };
 
   const createDefaultTitle = (titleTemplate: string) => {
-    console.log('fieldValues ---', fieldValues);
-    console.log('fieldMaps ---', fieldMaps);
     const generatedTitle = replacePlaceholders(titleTemplate, maps || []);
     setPageTitle(generatedTitle);
   };

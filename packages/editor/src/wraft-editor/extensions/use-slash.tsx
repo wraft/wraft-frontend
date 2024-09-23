@@ -101,7 +101,7 @@ function useSlash<
   });
   const { setIndex } = menu;
 
-  const { createTable, toggleHeading } = useCommands();
+  const { createTable, toggleHeading, insertNewpage } = useCommands();
 
   /**
    * The is the callback for when a suggestion is changed.
@@ -160,6 +160,9 @@ function useSlash<
               break;
             case "heading3":
               toggleHeading({ level: 3 });
+              break;
+            case "pagebreak":
+              insertNewpage();
               break;
             default:
               break;
@@ -225,6 +228,7 @@ export function SlashSuggestor(): JSX.Element {
     { id: "heading1", label: "Heading 1", icon: <TextHOne /> },
     { id: "heading2", label: "Heading 2", icon: <TextHTwo /> },
     { id: "heading3", label: "Heading 3", icon: <TextHThree /> },
+    { id: "pagebreak", label: "pagebreak", icon: <TextHThree /> },
     // { id: 'pagebreak', label: 'PageBreak', icon: <Browsers /> },
     // { id: 'image', label: 'Image', icon: <Image /> },
     // { id: 'variable', label: 'Variable', icon: <CurrencyDollar /> },
