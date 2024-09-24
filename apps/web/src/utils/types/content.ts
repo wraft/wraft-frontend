@@ -50,6 +50,8 @@ export interface IFieldField {
   name: string;
   value: string;
   id?: string;
+  named?: string;
+  label?: string;
 }
 
 export interface IFieldType {
