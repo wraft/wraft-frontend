@@ -12,37 +12,25 @@ import {
   extension,
   ExtensionTag,
   invariant,
-  isEmptyBlockNode,
-  isNodeSelection,
   NodeExtension,
   nodeInputRule,
 } from "@remirror/core";
 import { TextSelection } from "@remirror/pm/state";
-import { insertPageBreakOptions } from "./page-break-utils.js";
 
 export interface PageBreakOptions {
-  /**
-   * The name of the node to insert after inserting a pageBreak.
-   *
-   * Set to false to prevent adding a node afterwards.
-   *
-   * @defaultValue 'paragraph'
-   */
   insertionNode?: string | false;
+  pageBreakClass?: string;
 }
 
-/**
- * Adds a horizontal line to the editor.
- */
 @extension<PageBreakOptions>({
-  defaultOptions: { insertionNode: "paragraph" },
-  staticKeys: [],
-  handlerKeys: [],
-  customHandlerKeys: [],
+  defaultOptions: {
+    insertionNode: "paragraph",
+    pageBreakClass: "page-break-block",
+  },
 })
 export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
   get name() {
-    return "pageBreak" as const;
+    return "pagebreak" as const;
   }
 
   createTags() {
@@ -57,33 +45,28 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
       ...override,
       attrs: extra.defaults(),
       parseDOM: [
-        { tag: "\newpage", getAttrs: extra.parse },
+        {
+          tag: "div",
+          getAttrs: extra.parse,
+        },
         ...(override.parseDOM ?? []),
       ],
       toDOM: (node) => {
-        // Adding a class to the hr element
         const attrs = extra.dom(node);
-        attrs.class = attrs.class ? `${attrs.class} pagebreak` : "pagebreak-";
-        return ["hr", attrs];
+        attrs.class =
+          `${attrs.class || ""} ${this.options.pageBreakClass}`.trim();
+        return ["div", attrs, ["span", { class: "page-break" }, "page-break"]];
       },
     };
   }
 
-  /**
-   * Inserts a horizontal line into the editor.
-   */
-  @command(insertPageBreakOptions)
-  insertPageBreak(): CommandFunction {
-    return (props) => {
-      const { tr, dispatch } = props;
-      const $pos = tr.selection.$anchor;
-      const initialParent = $pos.parent;
+  @command()
+  insertNewpage(): CommandFunction {
+    return ({ tr, dispatch }) => {
+      const { selection } = tr;
+      const { $to } = selection;
 
-      if (
-        initialParent.type.name === "doc" ||
-        initialParent.isAtom ||
-        initialParent.isLeaf
-      ) {
+      if ($to.parent.type.name === "doc") {
         return false;
       }
 
@@ -91,23 +74,14 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
         return true;
       }
 
-      // A boolean value that is true when the current node is empty and
-      // should be duplicated before the replacement of the current node by
-      // the `hr`.
-      const shouldDuplicateEmptyNode =
-        tr.selection.empty && isEmptyBlockNode(initialParent);
+      const pos = $to.end();
 
-      // When the node should eb duplicated add it to the position after
-      // before the replacement.
-      if (shouldDuplicateEmptyNode) {
-        tr.insert($pos.pos + 1, initialParent);
-      }
+      tr.insert(pos, this.type.create());
 
-      // Create the horizontal rule by replacing the selection
-      tr.replaceSelectionWith(this.type.create());
+      const newPos = pos + 1;
+      tr.setSelection(TextSelection.near(tr.doc.resolve(newPos)));
 
-      // Update the selection if currently pointed at the node.
-      this.updateFromNodeSelection(tr);
+      this.insertNodeAfterPageBreak(tr, newPos);
 
       dispatch(tr.scrollIntoView());
 
@@ -118,40 +92,19 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
   createInputRules(): InputRule[] {
     return [
       nodeInputRule({
-        // Allow dash + hyphen to cater for ShortcutsExtension, which replaces first
-        // two hyphens with a dash, i.e. "---" becomes "<dash>-"
-        // regexp: /^(?:~~~|~~)$/,
-        regexp: /\\newpage$/,
+        regexp: /\\pagebreak$/,
         type: this.type,
         beforeDispatch: ({ tr }) => {
-          // Update to using a text selection.
-          this.updateFromNodeSelection(tr);
+          const pos = tr.selection.$to.pos;
+          this.insertNodeAfterPageBreak(tr, pos);
         },
       }),
     ];
   }
 
-  /**
-   * Updates the transaction after a `pageBreak` has been inserted to make
-   * sure the currently selected node isn't a Horizontal Rule.
-   *
-   * This should only be called for empty selections.
-   */
-  private updateFromNodeSelection(tr: Transaction): void {
-    // Make sure  the `pageBreak` that is selected. Otherwise do nothing.
-    if (
-      !isNodeSelection(tr.selection) ||
-      tr.selection.node.type.name !== this.name
-    ) {
-      return;
-    }
-
-    // Get the position right after the current selection for inserting the
-    // node.
-    const pos = tr.selection.$from.pos + 1;
+  private insertNodeAfterPageBreak(tr: Transaction, pos: number): void {
     const { insertionNode } = this.options;
 
-    // If `insertionNode` was set to false, then don't insert anything.
     if (!insertionNode) {
       return;
     }
@@ -163,11 +116,9 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
       message: `'${insertionNode}' node provided as the insertionNode to the '${this.constructorName}' does not exist.`,
     });
 
-    // Insert the new node
     const node = type.create();
     tr.insert(pos, node);
 
-    // Set the new selection to be inside the inserted node.
     tr.setSelection(TextSelection.near(tr.doc.resolve(pos + 1)));
   }
 }
@@ -175,7 +126,7 @@ export class PageBreakExtension extends NodeExtension<PageBreakOptions> {
 declare global {
   namespace Remirror {
     interface AllExtensions {
-      pageBreak: PageBreakExtension;
+      newpage: PageBreakExtension;
     }
   }
 }

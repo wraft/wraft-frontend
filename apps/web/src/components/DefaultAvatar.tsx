@@ -17,7 +17,7 @@ const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
 
   useEffect(() => {
     if (url) {
-      const expectedPath = '/uploads/images/logo.png';
+      const expectedPath = '/public/images/logo.png';
       const pathMatches = containsPathSegment(url, expectedPath);
       if (pathMatches) {
         setIsDummyImage(true);

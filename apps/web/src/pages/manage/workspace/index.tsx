@@ -20,7 +20,7 @@ export interface Organisation {
   id: string;
   name: string;
   address: string;
-  url: string;
+  url?: string;
   logo: string;
   email: string;
   phone: string;
@@ -35,7 +35,7 @@ type FormInputs = {
   // logo: FileList;
   logo: any;
   name: string;
-  url: string;
+  url?: string;
 };
 
 const Index: FC = () => {
@@ -156,9 +156,9 @@ const Index: FC = () => {
     if (data.name !== 'Personal' && data.name !== '') {
       formData.append('name', data.name);
     }
-    if (data.url !== '') {
-      formData.append('url', data.url);
-    }
+    // if (data.url !== '') {
+    //   formData.append('url', data.url);
+    // }
 
     if (orgId) {
       const updateRequest = putAPI(`organisations/${orgId}`, formData);
@@ -244,14 +244,14 @@ const Index: FC = () => {
                   disable={!isEdit}
                   mb={'24px'}
                 />
-                <Field
+                {/* <Field
                   label="Workspace URL"
                   placeholder={'wraft.co/example'}
                   defaultValue={org?.url}
                   name="url"
                   register={register}
                   disable={!isEdit}
-                />
+                /> */}
                 <Box mt={'24px'}>
                   {isEdit ? (
                     <Button variant="buttonPrimary" type="submit">

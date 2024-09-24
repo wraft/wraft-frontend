@@ -22,6 +22,7 @@ import { TableExtension } from "@remirror/extension-react-tables";
 import { HolderAtomExtension } from "./extension-holder/holder-extension";
 import { PageBreakExtension } from "./extension-pagebreak/pagebreak-extension";
 import { SlashExtension } from "./extensions/slash";
+import { htmlToMarkdown } from "./turn-down-service";
 
 // import { CountExtension } from '@remirror/extension-count';
 /**
@@ -46,8 +47,13 @@ const extensions =
     }),
     new TrailingNodeExtension({}),
     new MarkdownExtension({
+      htmlToMarkdown: (html) => htmlToMarkdown(html),
       copyAsMarkdown: false,
     }),
+    // new MarkdownExtension({
+    //   htmlToMarkdown: (html) => htmlToMarkdown(html),
+    //   copyAsMarkdown: false,
+    // }),
     new HardBreakExtension(),
     new TextHighlightExtension({}),
     new PlaceholderExtension({

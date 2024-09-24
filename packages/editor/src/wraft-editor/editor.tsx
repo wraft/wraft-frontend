@@ -117,6 +117,23 @@ export function ContentEditor({
           background: "var(--theme-ui-colors-gray-300)",
         },
 
+        ".page-break-block": {
+          display: "flex",
+          backgroundColor: "#dfdfdf",
+          alignItems: "center",
+          textAlign: "center",
+          paddingTop: "4px",
+          paddingBottom: "4px",
+        },
+        ".page-break-block::after, .page-break-block::before": {
+          content: '""',
+          flex: 1,
+          borderBottom: "1px dashed #000",
+        },
+
+        ".page-break-block .page-break": {
+          display: "none",
+        },
         ".remirror-editor tr td": {
           textAlign: "left",
           paddingLeft: "15px",

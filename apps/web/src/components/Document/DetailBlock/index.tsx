@@ -17,7 +17,6 @@ import {
   IContentForm,
   IFieldField,
   IFieldType,
-  IVariantDetail,
   EMPTY_MARKDOWN_NODE,
   ContentInstance,
 } from 'utils/types/content';
@@ -30,55 +29,46 @@ import FieldForm from './FieldForm';
 
 const ContentForm = ({ id, edit }: IContentForm) => {
   const [activeFlow, setActiveFlow] = useState<any>(null);
-  const [activeTemplate, setActiveTemplate] = useState('');
   const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
-  const [content, setContent] = useState<IVariantDetail>();
   const [contents, setContents] = useState<ContentInstance>();
+  const [contentTypeId, setContentTypeId] = useState<ContentInstance>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
   const [fields, setField] = useState<Array<FieldT>>([]);
-  const [fieldValues, setFieldValues] = useState<any>();
+  const [fieldValues, setFieldValues] = useState<any>([]);
   const [maps, setMaps] = useState<Array<IFieldField>>([]);
   const [pageTitle, setPageTitle] = useState<string>('New Title');
   const [saving, setSaving] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
   const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('New Title');
   const [trigger, setTrigger] = useState<any>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
+  const [fieldTokkons, setFieldTokkons] = useState<any>([]);
 
   const router = useRouter();
   const {
     register,
-    getValues,
     handleSubmit,
     formState: { errors, isDirty },
-    setValue,
   } = useForm();
   const editorRef = useRef<any>();
-
-  const cId: string = router.query.id as string;
   const newContent = contentStore((state: any) => state.newContents);
+  const cId: string = router.query.id as string;
 
   useEffect(() => {
     if (id && edit) {
-      fetchAPI(`contents/${id}`).then((data: any) => {
-        onLoadContent(data);
-      });
+      fetchContent(id);
     }
   }, [id, edit]);
 
   useEffect(() => {
-    // create title
     if (!id && newContent?.template?.title_template) {
-      const title_template = newContent?.template?.title_template;
-
-      createDefaultTitle(title_template, maps);
+      createDefaultTitle(newContent.template.title_template);
     }
   }, [maps, newContent]);
 
   useEffect(() => {
     if (!id && !edit && newContent) {
-      onInitNewContentCreate(newContent.template);
+      initNewContent(newContent.template);
 
       if (newContent.contentFields) {
         setFieldValues(newContent.contentFields);
@@ -90,7 +80,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
     setUnsavedChanges(isDirty);
   }, [isDirty]);
 
-  const onInitNewContentCreate = (template: any) => {
+  const initNewContent = (template: any) => {
     setSelectedTemplate(template);
 
     const ctypeId = template?.content_type?.id;
@@ -98,23 +88,18 @@ const ContentForm = ({ id, edit }: IContentForm) => {
     const content_title = serialbody?.title;
 
     if (ctypeId) {
-      setValue('ttype', ctypeId);
       fetchContentTypeDetails(ctypeId);
+      setContentTypeId(ctypeId);
     }
 
     if (content_title) {
-      setValue('title', content_title);
-      setTitle(content_title);
       setPageTitle(content_title);
     }
-    // updateStuff(template, maps);
-    // setTrigger(EMPTY_MARKDOWN_NODE);
   };
 
-  const fetchContentTypeDetails = async (contentTypeId: string) => {
+  const fetchContentTypeDetails = async (cid: string) => {
     try {
-      const data: any = await fetchAPI(`content_types/${contentTypeId}`);
-      setContent(data);
+      const data: any = await fetchAPI(`content_types/${cid}`);
 
       const tFields = data.content_type?.fields;
       if (tFields) {
@@ -130,9 +115,9 @@ const ContentForm = ({ id, edit }: IContentForm) => {
     }
   };
 
-  const createDefaultTitle = (titleFormat: any, fieldMappings: any) => {
-    const generatedTitle = replacePlaceholders(titleFormat, fieldMappings);
-    setValue('title', generatedTitle);
+  const createDefaultTitle = (titleTemplate: string) => {
+    const generatedTitle = replacePlaceholders(titleTemplate, maps || []);
+    setPageTitle(generatedTitle);
   };
 
   const replacePlaceholders = (str: string, replacements: any): any => {
@@ -144,26 +129,8 @@ const ContentForm = ({ id, edit }: IContentForm) => {
     return str;
   };
 
-  /**
-   * Update mapping of users inputs from fields to an internal array with fields
-   * @param data
-   */
   const updateMaps = (map: any) => {
     setMaps(map);
-  };
-
-  /**
-   * Handle form mapping from the form for templates
-   * @param fields
-   * @returns
-   */
-  const mapFields = (inputFields: any) => {
-    const vals = getValues();
-
-    return inputFields.map((field: any) => ({
-      ...field,
-      value: vals[field.name],
-    }));
   };
 
   /**
@@ -185,7 +152,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
    * @param data
    */
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = () => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
@@ -195,14 +162,9 @@ const ContentForm = ({ id, edit }: IContentForm) => {
 
     setSaving(true);
 
-    maps &&
-      maps.forEach((f: any) => {
-        obj[f.name] = f.value;
-      });
-
     const serials: any = {
       ...obj,
-      title: data.title,
+      title: pageTitle || 'welcome',
       body: markdownContent,
       serialized: JSON.stringify(jsonContent),
       fields: newContent?.contentFields
@@ -210,10 +172,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
         : '',
     };
 
-    // return;
-
     const template = {
-      // state_uuid: data.state,
       serialized: serials,
       raw: markdownContent,
     };
@@ -224,7 +183,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
         setSaving(false);
       });
     } else {
-      postAPI(`content_types/${data.ttype}/contents`, template)
+      postAPI(`content_types/${contentTypeId}/contents`, template)
         .then((response: any) => {
           if (response?.info) {
             toast.success('Build Failed', {
@@ -256,33 +215,34 @@ const ContentForm = ({ id, edit }: IContentForm) => {
     }
   };
 
+  const fetchContent = async (contentId: string) => {
+    try {
+      const data = await fetchAPI(`contents/${contentId}`);
+      loadContentData(data);
+    } catch (error) {
+      toast.error('Failed to load content');
+    }
+  };
+
   /**
    * Load content data from a doc
    * @param data
    */
-  const onLoadContent = (data: any) => {
+  const loadContentData = (data: any) => {
     // set master contents
 
     setContents(data);
 
-    if (
-      data &&
-      data.content &&
-      data.content.serialized &&
-      data.content.serialized.serialized
-    ) {
+    if (data?.content?.serialized?.serialized) {
       const serialized = JSON.parse(data.content.serialized.serialized);
       const fdvalue = findHolders(serialized);
       setFieldValues(fdvalue);
     }
-    // map loaded state to corresponding form value
-    const defaultState = data.state && data.state.id;
-    setValue('state', defaultState);
 
-    if (data && data.content && data.content.serialized) {
+    if (data?.content?.serialized) {
       const serialbody = data?.content?.serialized;
       const ctypeId = data?.content_type?.id;
-      setValue('ttype', ctypeId);
+      setContentTypeId(ctypeId);
 
       // middle wares
       const content_title = serialbody?.title || undefined;
@@ -290,8 +250,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
       // fields and templates
       fetchContentTypeDetails(ctypeId);
 
-      setValue('title', content_title);
-      setTitle(content_title);
       setPageTitle(content_title);
 
       const jsonBody = serialbody.serialized;
@@ -308,8 +266,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
   // syncable field
   useEffect(() => {
     if (fields) {
-      const f: any = mapFields(fields);
-      updateFields(f);
+      updateFields(fields);
     }
   }, [fields]);
 
@@ -317,8 +274,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
    * Update Document  Title
    */
   const updateTitle = () => {
-    setTitle(selectedTemplate?.title_template);
-    setValue('title', selectedTemplate?.title_template, { shouldDirty: true });
+    setPageTitle(selectedTemplate?.title_template);
   };
   /**
    * Field update eventbus
@@ -336,7 +292,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
    */
   useEffect(() => {
     if (errors) {
-      // items = errors.keys();
       const items = Object.keys(errors);
       items.map((i: any) => {
         // @ts-expect-error temporary solution here
@@ -348,13 +303,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
       });
     }
   }, [errors]);
-
-  // when template selection modal is active
-  useEffect(() => {
-    if (activeTemplate.length < 1) {
-      // setShowTemplate(true);
-    }
-  }, [activeTemplate]);
 
   /**
    * Mapping Form values to content and updating it
@@ -403,19 +351,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
    * @param state object with md, and json representation
    */
 
-  const doUpdate = (state: any) => {
-    // const markdownContent = editorRef.current?.helpers?.getMarkdown();
-    // const json = editorRef.current?.helpers?.getJSON();
-    // if (state.json) {
-    //   setValue('serialized', JSON.stringify(json));
-    // }
-    if (state.md) {
-      setValue('body', state.md, { shouldDirty: true });
-    }
-    // if (state.json) {
-    //   setValue('serialized', JSON.stringify(state.json));
-    // }
-  };
+  const doUpdate = () => {};
 
   const getInits = (field_maps: any) => {
     const initials: IFieldField[] = [];
@@ -424,29 +360,13 @@ const ContentForm = ({ id, edit }: IContentForm) => {
         const item: IFieldField = {
           name: i.name,
           value: i.value,
+          named: i.value,
+          label: i.name,
           id: i?.field_type?.id,
         };
         initials.push(item);
       });
     return initials;
-  };
-
-  /**
-   * Update Page Title
-   * @param x
-   */
-  const updatePageTitle = (x: any) => {
-    const tempTitle = selectedTemplate?.title_template;
-
-    const m = replaceTitles(tempTitle, x);
-    const actState = activeFlow?.states[0]?.id;
-
-    setValue('state', actState);
-    if (!edit) {
-      setValue('title', m);
-    }
-
-    setTitle(m);
   };
 
   /**
@@ -456,33 +376,30 @@ const ContentForm = ({ id, edit }: IContentForm) => {
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
 
+    if (resx?.length > 0) {
+      setFieldTokkons(resx);
+    }
+
     if (contents?.content?.serialized?.serialized) {
-      const serializedData = JSON.parse(
-        contents?.content?.serialized?.serialized,
-      );
+      const serializedData = editorRef.current?.helpers?.getJSON();
       updateStuff(serializedData, resx);
     }
 
     if (!edit) {
       updateStuff(selectedTemplate, resx);
     }
-
-    updatePageTitle(resx);
-
-    // setTrigger(EMPTY_MARKDOWN_NODE);
-    // we are inserting an empty node, so that the editor is triggered
   };
 
-  /**
-   * @TODO to remove
-   * @param e
-   */
   const onceInserted = () => {
     setTrigger(null);
   };
 
   const toggleTitleEdit = () => {
-    // setPageTitle(pageTitle);
+    setTitleEdit(!showTitleEdit);
+  };
+
+  const onTitleUpdate = (data: any) => {
+    setPageTitle(data.title);
     setTitleEdit(!showTitleEdit);
   };
 
@@ -494,10 +411,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
       />
 
       <Box sx={{ height: '100vh' }}>
-        <NavEdit
-          navtitle={pageTitle || title}
-          onToggleEdit={() => toggleTitleEdit()}
-        />
+        <NavEdit navtitle={pageTitle} onToggleEdit={() => toggleTitleEdit()} />
 
         <Flex
           sx={{
@@ -506,9 +420,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
             height: 'calc(100% - 47px)',
           }}>
           <Box
-            as="form"
-            id="content-form"
-            onSubmit={handleSubmit(onSubmit)}
             sx={{
               // minWidth: '40%',
               overflowX: 'scroll',
@@ -536,57 +447,57 @@ const ContentForm = ({ id, edit }: IContentForm) => {
                 ))}
 
                 <Box sx={{ ml: 'auto' }}>
-                  <Button
-                    form="content-form"
-                    type="submit"
-                    variant="primary"
-                    loading={saving}>
+                  <Button onClick={onSubmit} variant="primary" loading={saving}>
                     Save
                   </Button>
                 </Box>
               </Flex>
             )}
-            <input type="hidden" {...register('hiddenField')} value="body" />
-            <Box
-              sx={{
-                // position: 'relative',
-                bg: 'neutral.100',
-                borderBottom: 'solid 1px',
-                borderBottomColor: 'neutral.200',
-                p: 4,
-                display: showTitleEdit ? 'block' : 'none',
-                flexGrow: 1,
-                width: '100%',
-                pl: 2,
-                pt: 2,
-                // display: 'none',
-              }}>
-              <Flex
+
+            {showTitleEdit && (
+              <Box
+                as="form"
+                onSubmit={handleSubmit(onTitleUpdate)}
                 sx={{
+                  // position: 'relative',
                   bg: 'neutral.100',
-                  // position: 'absolute',
-                  alignItems: 'center',
-                  top: 0,
-                  right: 1,
-                  left: 1,
-                  zIndex: 9000,
+                  borderBottom: 'solid 1px',
+                  borderBottomColor: 'neutral.200',
+                  p: 4,
+                  display: showTitleEdit ? 'block' : 'none',
+                  flexGrow: 1,
+                  width: '100%',
+                  pl: 2,
+                  pt: 2,
+                  // display: 'none',
                 }}>
-                <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
-                  <Field
-                    name="title"
-                    label=""
-                    placeholder="Document Name"
-                    register={register}
-                    defaultValue={pageTitle}
-                  />
-                </Box>
-                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
-                  <Button variant="secondary" type="submit">
-                    Save
-                  </Button>
-                </Box>
-              </Flex>
-            </Box>
+                <Flex
+                  sx={{
+                    bg: 'neutral.100',
+                    // position: 'absolute',
+                    alignItems: 'center',
+                    top: 0,
+                    right: 1,
+                    left: 1,
+                    zIndex: 9000,
+                  }}>
+                  <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
+                    <Field
+                      name="title"
+                      label=""
+                      placeholder="Document Name"
+                      register={register}
+                      defaultValue={pageTitle}
+                    />
+                  </Box>
+                  <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
+                    <Button variant="secondary" type="submit">
+                      Save
+                    </Button>
+                  </Box>
+                </Flex>
+              </Box>
+            )}
 
             {body && (
               <Box
@@ -628,7 +539,7 @@ const ContentForm = ({ id, edit }: IContentForm) => {
                     defaultValue={body}
                     editable
                     onUpdate={doUpdate}
-                    tokens={[]}
+                    tokens={fieldTokkons}
                     insertable={trigger}
                     ref={editorRef}
                     onceInserted={onceInserted}
@@ -675,12 +586,6 @@ const ContentForm = ({ id, edit }: IContentForm) => {
             {contents && <ContentSidebar content={contents} />}
 
             <Box>
-              {/**<Box variant="layout.boxHeading" sx={{}}>
-                <Box sx={{ pt: 2, pb: 3 }}>
-                  <Flex sx={{ gap: 0 }}></Flex>
-                </Box>
-              </Box>
-              **/}
               <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Content
@@ -730,50 +635,12 @@ const ContentForm = ({ id, edit }: IContentForm) => {
               </Box>
             </Box>
             <FieldForm
-              activeTemplate={activeTemplate}
               setMaps={updateMaps}
               fields={fieldMaps}
               fieldValues={fieldValues}
               onSaved={onSaved}
               onRefresh={onSaved}
             />
-            <Box>
-              {/* <Box variant="layout.boxHeading">
-                <Text as="h3" variant="sectionheading">
-                  Flow
-                </Text>
-              </Box> */}
-
-              {/* {activeFlow && (
-                <Box sx={{ position: 'relative' }}>
-                  <Box
-                    variant="layout.boxHeading"
-                    sx={{ bg: 'teal.100', pb: 2, borderTop: 0 }}>
-                    <Text as="span" sx={{ fontSize: 'xxs', mr: 1 }}>
-                      {activeFlow?.flow?.name}
-                    </Text>
-                    <Text as="span" variant="labelcaps">
-                      ({activeFlow?.states.length})
-                    </Text>
-                  </Box>
-
-                  <Box sx={{ pt: 2, px: 3, bg: 'teal.100' }}>
-                    <Box>
-                      <Box sx={{ px: 0, py: 1 }}>
-                        {activeFlow?.states.map((x: any) => (
-                          <FlowStateBlock
-                            key={x?.id}
-                            state={x?.state}
-                            order={x?.order}
-                            id={x?.id}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )} */}
-            </Box>
           </Box>
         </Flex>
       </Box>
