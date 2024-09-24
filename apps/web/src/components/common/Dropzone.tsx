@@ -10,7 +10,7 @@ import { Asset } from 'utils/types';
 
 import ProgressBar from './ProgressBar';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.mjs`;
 
 type DropzoneProps = {
   accept?: Accept;
