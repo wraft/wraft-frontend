@@ -40,7 +40,10 @@ const PermissionsList = () => {
         const newChildren = item.children.map((child: any) => ({
           name: child.action,
           action: child.name,
-          [role.name]: role.permissions.includes(child.name),
+          [role.name]:
+            role.name === 'superadmin'
+              ? true
+              : role.permissions.includes(child.name),
         }));
         return {
           ...item,
@@ -53,7 +56,10 @@ const PermissionsList = () => {
     const updatedData = dataWithRoles.map((item: any) => {
       const newItem = roleData.map((role: any) => ({
         ...item,
-        [role.name]: item.children.every((child: any) => child[role.name]),
+        [role.name]:
+          role.name === 'superadmin'
+            ? true
+            : item.children.every((child: any) => child[role.name]),
       }));
       return _.merge({}, ...newItem);
     });
@@ -160,6 +166,7 @@ const PermissionsList = () => {
                     (child: any) => child[role.name] === true,
                   ),
                 onChange: (e: any) => onChangeParent(e, role, row.index),
+                disabled: role.name === 'superadmin',
               }}
               variant={row.getCanExpand() ? 'dark' : 'white'}
             />
