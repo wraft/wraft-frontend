@@ -5,7 +5,6 @@ import {
   DisclosureProvider,
 } from '@ariakit/react';
 import { Controller, useForm } from 'react-hook-form';
-import { Document, Page, pdfjs } from 'react-pdf';
 import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
 
 import { ArrowDropdown } from 'components/Icons';
@@ -17,8 +16,7 @@ import { Asset, Engine } from 'utils/types';
 import FieldText from './FieldText';
 import LayoutForm from './LayoutForm';
 import MenuStepsIndicator from './MenuStepsIndicator';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.mjs`;
+import PdfViewer from './PdfViewer';
 
 export interface Layouts {
   layout: Layout;
@@ -196,9 +194,11 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                         bg: 'background',
                         py: '24px',
                       }}>
-                      <Document file={assets[assets.length - 1].file}>
-                        <Page pageNumber={1} width={251} />
-                      </Document>
+                      <PdfViewer
+                        url={`${assets[assets.length - 1].file}`}
+                        pageNumber={1}
+                        height={350}
+                      />
                     </Box>
                     <Box
                       sx={{
