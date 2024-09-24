@@ -27,7 +27,6 @@ interface FieldFormProps {
   fields: any;
   onSaved: any;
   setMaps?: any;
-  activeTemplate?: any;
   templates?: any;
   setShowForm?: any;
   onRefresh: any;
@@ -36,8 +35,8 @@ interface FieldFormProps {
 
 const FieldForm = ({
   fields,
-  onSaved,
   fieldValues,
+  onSaved,
   setMaps,
 }: FieldFormProps) => {
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
