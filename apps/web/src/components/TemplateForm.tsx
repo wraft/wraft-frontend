@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Spinner, Select } from 'theme-ui';
+import { Box, Flex, Text, Select } from 'theme-ui';
+import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
+import { Button, DropdownMenu } from '@wraft/ui';
 
-import { putAPI, postAPI, fetchAPI, deleteAPI } from '../utils/models';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import { putAPI, postAPI, fetchAPI, deleteAPI } from 'utils/models';
 import {
   IContentType,
   ContentTypes,
   Field as FieldT,
   DataTemplate,
   DataTemplates,
-} from '../utils/types';
+} from 'utils/types';
+
 import Editor from './common/Editor';
-import Field from './Field';
 import FieldText from './FieldText';
-import { BracesVariable, ThreeDots } from './Icons';
 import NavEdit from './NavEdit';
+import MentionField from './MentionsField';
 
 export interface BlockTemplate {
   id: string;
@@ -40,8 +44,8 @@ const EditMenus = ({ id }: EditMenuProps) => {
    * Delete content
    * @param id
    */
-  const deleteContent = (id: string) => {
-    deleteAPI(`data_templates/${id}`).then(() => {
+  const deleteContent = (contentId: string) => {
+    deleteAPI(`data_templates/${contentId}`).then(() => {
       toast.success('Deleted the Template', {
         duration: 1000,
         position: 'top-right',
@@ -51,61 +55,133 @@ const EditMenus = ({ id }: EditMenuProps) => {
     });
   };
   return (
-    <MenuProvider>
-      <MenuButton
+    <DropdownMenu.Provider>
+      <DropdownMenu.Trigger
         as={Button}
+        variant="btnSecondaryInline"
         sx={{
-          mt: 2,
-          ml: 'auto',
-          border: 'solid 1px',
-          borderRadius: '9rem',
           color: 'text',
-          borderColor: 'border',
-          p: 0,
-          bg: 'neutral.100',
-          pb: 0,
-          height: '33px',
-          // pb: 1,
-          // mt: 2,
-          // border: 0,
+          px: 2,
+          py: 1,
         }}>
-        <ThreeDots width={24} height={24} />
-      </MenuButton>
-      <Menu
-        as={Box}
-        aria-label="Manage Content"
-        sx={{
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: 4,
-          bg: 'neutral.100',
-          color: 'text',
-        }}>
-        <MenuItem onClick={() => deleteContent(id)}>Delete</MenuItem>
-      </Menu>
-    </MenuProvider>
+        <DotsThreeVertical size={18} weight="bold" />
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu aria-label="dropdown role">
+        <DropdownMenu.Item onClick={() => deleteContent(id)}>
+          <IconMenuItem text="Delete" icon={<TrashSimple />} />
+        </DropdownMenu.Item>
+      </DropdownMenu>
+    </DropdownMenu.Provider>
+  );
+};
+
+interface IconMenuItemProps {
+  icon: any;
+  text: string;
+}
+const IconMenuItem = ({ icon, text }: IconMenuItemProps) => {
+  return (
+    <Flex
+      sx={{
+        alignItem: 'center',
+        cursor: 'pointer',
+        gap: 1,
+        ':hover': {
+          bg: 'gray.300',
+        },
+        alignItems: 'center',
+        px: 2,
+        py: 2,
+      }}>
+      {icon}
+      {text && <Text sx={{ fontWeight: 500, fontSize: 'sm' }}>{text}</Text>}
+    </Flex>
   );
 };
 
 const Form = () => {
+  const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
+  const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
+  const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
+  const [fields, setFields] = useState<any>([]);
+  const [insertable, setInsertable] = useState<any>();
+  const [insertions, setInsertions] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [pagetitle, setPageTitle] = useState<string>('');
+  const [showSetup, setShowSetup] = useState<boolean>(false);
+  const [tokkans, setTokkans] = useState<any>('');
+  const [variant, setVariant] = useState<IContentType>();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
     setValue,
+    control,
   } = useForm();
-  const [ctypes, setContentTypes] = useState<Array<IContentType>>([]);
-  const [varias, setVarias] = useState<IContentType>();
-  const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
-  const [blocks, setBlocks] = useState<Array<BlockTemplate>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [insertable, setInsertable] = useState<any>();
-  const [tokkans, setTokkans] = useState<any>('');
-  const [insertions, setInsertions] = useState<any | null>(null);
-
-  // determine edit state based on URL
   const router = useRouter();
   const cId: string = router.query.id as string;
+
+  useEffect(() => {
+    if (cId && dataTemplate && dataTemplate.data_template) {
+      const d: DataTemplate = dataTemplate.data_template;
+      setValue('title', d.title);
+      setValue('title_template', d.title_template);
+      setValue('parent', dataTemplate.content_type.id, {
+        shouldValidate: true,
+      });
+      setPageTitle(d.title);
+      loadContentType(dataTemplate.content_type.id);
+      const insertReady = (d && d.serialized && d.serialized.data) || false;
+
+      if (insertReady) {
+        setValue('serialized', insertReady);
+        const mm = JSON.parse(insertReady);
+        setInsertable(mm);
+      }
+    }
+  }, [dataTemplate]);
+
+  useEffect(() => {
+    loadTypes();
+    loadBlocks();
+
+    if (!cId) {
+      setShowSetup(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    // find the first element
+    if (!cId && ctypes && ctypes[0] && ctypes[0].id) {
+      loadContentType(ctypes[0].id);
+    }
+  }, [ctypes]);
+
+  useEffect(() => {
+    if (cId) {
+      loadTemplate(cId);
+    }
+  }, [cId]);
+
+  useEffect(() => {
+    if (variant?.fields) {
+      const { fields: variasFields } = variant;
+
+      if (variasFields.length > 0) {
+        const results = variasFields.map((sr: any) => {
+          return {
+            id: `${sr.id}`,
+            label: `${sr.name}`,
+            name: `${sr.name}`,
+          };
+        });
+        setTokkans(results);
+      }
+    }
+  }, [variant]);
 
   const onCreated = () => {
     Router.push('/templates');
@@ -146,6 +222,7 @@ const Form = () => {
           setLoading(false);
         })
         .catch(() => {
+          setLoading(true);
           toast.error('Failed to update!', {
             duration: 1000,
             position: 'top-right',
@@ -153,22 +230,26 @@ const Form = () => {
         });
     } else {
       postAPI(`content_types/${data.parent}/data_templates`, formValues)
-        .then(() => {
-          onCreated();
+        .then((content: any) => {
+          Router.replace(`/templates/edit/${content.id}`);
+          // onCreated();
           toast.success('Created Successfully', {
-            duration: 1000,
+            duration: 3000,
             position: 'top-right',
           });
           setLoading(false);
         })
-        .catch(() => {
-          toast.error('Failed to Create!', {
-            duration: 1000,
-            position: 'top-right',
-          });
+        .catch((error) => {
+          setLoading(false);
+          toast.error(
+            (error && JSON.stringify(error)) ||
+              'Something went wrong please try again later',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
         });
-
-      setLoading(false);
     }
   };
 
@@ -183,19 +264,23 @@ const Form = () => {
     });
   };
 
-  const loadContentTypeSuccess = (data: any) => {
-    const formed: ContentTypes = data;
-    setVarias(formed.content_type);
-    dataFiller(formed.content_type.fields || {});
-  };
-
   /**
    * Load Content Type Details
    * @param id
    */
   const loadContentType = (id: string) => {
     fetchAPI(`content_types/${id}`).then((data: any) => {
-      loadContentTypeSuccess(data);
+      const formed: ContentTypes = data;
+      setVariant(formed.content_type);
+
+      if (formed?.content_type?.fields) {
+        const fieldOption = formed.content_type.fields.map(({ name }) => ({
+          value: `[${name}]`,
+          label: name,
+        }));
+        setFields(fieldOption);
+      }
+      dataFiller(formed.content_type.fields || {});
     });
   };
 
@@ -249,26 +334,6 @@ const Form = () => {
   };
 
   /**
-   * Document variables
-   */
-  useEffect(() => {
-    if (varias?.fields) {
-      const { fields } = varias;
-
-      if (fields.length > 0) {
-        const results = fields.map((sr: any) => {
-          return {
-            id: `${sr.id}`,
-            label: `${sr.name}`,
-            name: `${sr.name}`,
-          };
-        });
-        setTokkans(results);
-      }
-    }
-  }, [varias]);
-
-  /**
    * When Content Type is Changed
    * - Load Available fields here.
    * @param event
@@ -294,45 +359,6 @@ const Form = () => {
     }
   };
 
-  useEffect(() => {
-    loadTypes();
-    loadBlocks();
-  }, []);
-
-  useEffect(() => {
-    // find the first element
-    if (ctypes && ctypes[0] && ctypes[0].id) {
-      loadContentType(ctypes[0].id);
-    }
-  }, [ctypes]);
-
-  useEffect(() => {
-    if (cId) {
-      loadTemplate(cId);
-    }
-  }, [cId]);
-
-  /**
-   * On Template Load
-   */
-  useEffect(() => {
-    if (dataTemplate && dataTemplate.data_template) {
-      const d: DataTemplate = dataTemplate.data_template;
-      setValue('title', d.title);
-      setValue('title_template', d.title_template);
-      setValue('parent', dataTemplate.content_type.id);
-
-      loadContentType(dataTemplate.content_type.id);
-      const insertReady = (d && d.serialized && d.serialized.data) || false;
-
-      if (insertReady) {
-        setValue('serialized', insertReady);
-        const mm = JSON.parse(insertReady);
-        setInsertable(mm);
-      }
-    }
-  }, [dataTemplate]);
-
   /**
    * Insert a block at pointer
    * @param block
@@ -344,98 +370,154 @@ const Form = () => {
     }
   };
 
+  const saveMe = () => {
+    setShowSetup(!showSetup);
+
+    const name = getValues();
+    setPageTitle(name?.title);
+
+    if (name?.title_temple == '') {
+      setValue('title_template', name?.title);
+    }
+  };
+
+  const onCancelPopup = () => {
+    if (!cId) {
+      onCreated();
+      return;
+    }
+
+    setShowSetup(!showSetup);
+  };
+
   return (
-    <Box>
+    <Box sx={{ height: 'calc(100vh)', overflow: 'hidden' }}>
       <NavEdit
-        navtitle={cId ? 'Edit Template' : 'New Template'}
+        navtitle={cId ? 'Edit ' + pagetitle : pagetitle}
         backLink="/templates"
+        onToggleEdit={saveMe}
       />
-      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
-        <Box>
-          <Flex>
-            {insertable && <Box />}
-            <Box
-              // as="form"
-              // onSubmit={handleSubmit(onSubmit)}
-              sx={{
-                minWidth: '70%',
-                bg: 'neutral.100',
-                maxWidth: '83ch',
-                m: 0,
-                pt: 4,
-                input: {
-                  bg: 'white',
-                },
-              }}>
-              <Box sx={{ px: 4 }}>
-                <Field
-                  name="title"
-                  label="Name"
-                  defaultValue=""
-                  register={register}
-                />
-                {/* <Divider color="gray.2" sx={{ mt: 3, mb: 4 }} /> */}
-                <Field
-                  name="title_template"
-                  label="Title Template"
-                  defaultValue=""
-                  register={register}
-                />
-              </Box>
-              <Box sx={{ display: 'none' }}>
-                <FieldText
-                  name="data"
-                  label="Text Template"
-                  defaultValue={''}
-                  register={register}
-                />
-                <FieldText
-                  name="serialized"
-                  label="Text Template"
-                  defaultValue={''}
-                  register={register}
-                />
-              </Box>
-              <Box
-                py={4}
-                sx={{
-                  px: 4,
-                  '.remirror-editor-wrapper .remirror-theme .ProseMirror': {
-                    py: '5rem !important',
-                  },
-                }}>
-                <Editor
-                  editable
-                  defaultValue={insertable}
-                  onUpdate={doUpdate}
-                  tokens={tokkans}
-                  onceInserted={onceInserted}
-                  insertable={insertions}
-                />
-              </Box>
-              {/* <Counter /> */}
+      <Flex
+        // as="form"
+        sx={{ alignItems: 'flex-start' }}
+        // onSubmit={handleSubmit(onSubmit)}
+        py={0}
+        mt={0}>
+        <Box
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{
+            minWidth: '70%',
+            bg: 'neutral.100',
+            maxWidth: '83ch',
+            m: 0,
+            pt: 3,
+            input: {
+              bg: 'white',
+            },
+          }}>
+          <Flex sx={{ px: 4, alignItems: 'center' }}>
+            <Box sx={{ flex: 1 }}>
+              <Controller
+                control={control}
+                name="title_template"
+                render={({ field: { onChange, value, name } }) => (
+                  <MentionField
+                    onChange={onChange}
+                    name={name}
+                    defaultValue={value}
+                    options={fields}
+                    placeholder="Automatic Title, use @ ds"
+                  />
+                )}
+              />
             </Box>
+
+            <Box sx={{ ml: 2 }}>
+              <Button variant="primary" loading={loading} type="submit">
+                {cId ? 'Update' : 'Create'}
+              </Button>
+            </Box>
+          </Flex>
+          <Box sx={{ display: 'none' }}>
+            <FieldText
+              name="serialized"
+              label="Text Template"
+              defaultValue={''}
+              register={register}
+            />
+          </Box>
+          <Box
+            py={4}
+            sx={{
+              px: 4,
+              '.remirror-editor-wrapper': {
+                maxHeight: 'calc(100vh - 200px)',
+                display: 'block',
+                overflowY: 'scroll',
+              },
+              '.remirror-editor-wrapper .remirror-theme .ProseMirror': {
+                py: '5rem !important',
+              },
+            }}>
+            <Editor
+              editable
+              defaultValue={insertable}
+              onUpdate={doUpdate}
+              tokens={tokkans}
+              onceInserted={onceInserted}
+              insertable={insertions}
+            />
+          </Box>
+          {/* <Counter /> */}
+        </Box>
+
+        <Modal isOpen={showSetup}>
+          <Flex
+            sx={{
+              p: 0,
+              minWidth: '50ch',
+              width: '100%',
+              flexDirection: 'column',
+            }}>
             <Box
-              px={4}
-              variant="plateRightBar"
               sx={{
-                bg: 'neutral.100',
-                width: '100%',
-                borderLeft: 'solid 1px',
-                borderColor: 'border',
-                minHeight: '100vh',
+                py: 2,
+                px: 3,
+                borderBottom: 'solid 1px',
+                borderColor: 'gray.400',
               }}>
-              <Box>{cId && <EditMenus id={cId} />}</Box>
-              {varias && varias.fields && (
-                <Box sx={{ mb: 3, pt: 3 }}>
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
-                      Content Type
+              <Text sx={{ fontWeight: 600 }}>
+                {cId ? `EditTemplate` : 'Create Template'}
+              </Text>
+            </Box>
+            <Box sx={{ py: 3, px: 4 }}>
+              <Field
+                name="title"
+                label="Name your Template"
+                placeholder="Title for your template"
+                defaultValue=""
+                register={register}
+              />
+              {variant && variant.fields && !cId && (
+                <Box sx={{ mb: 2, pt: 3 }}>
+                  <Box sx={{ mb: 2, pb: 3 }}>
+                    <Text
+                      as="h4"
+                      mb={2}
+                      sx={{
+                        mb: 2,
+                        fontSize: 'sm',
+                        fontWeight: 500,
+                        letterSpacing: '-0.15px',
+                      }}>
+                      Variant
                     </Text>
                     <Select
                       id="parent"
                       // name="parent"
                       defaultValue="Parent ID"
+                      disabled={false}
                       // ref={register({ required: true })}
                       {...register('parent', { required: true })}
                       onChange={(e) => ctypeChange(e)}>
@@ -448,77 +530,142 @@ const Form = () => {
                         ))}
                     </Select>
                   </Box>
-
-                  <Box sx={{ borderBottom: 'solid 1px #ddd', mb: 3, pb: 3 }}>
-                    <Text as="h4" mb={2} sx={{ mb: 2, fontSize: 2 }}>
-                      Variables
-                    </Text>
-                    {varias.fields &&
-                      varias.fields.map((k: FieldT) => (
-                        <Flex
-                          sx={{
-                            p: 1,
-                            fontSize: 2,
-                            border: 'solid 1px',
-                            borderBottom: 0,
-                            borderColor: 'teal.200',
-                            bg: 'teal.100',
-                            px: 3,
-                            ':last-child': {
-                              borderBottom: 'solid 1px',
-                              borderColor: 'teal.200',
-                            },
-                          }}
-                          // as="p"
-                          key={k.id}
-                          onClick={() => insertBlock(k)}>
-                          {k.name}
-                          <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
-                            <BracesVariable width={16} />
-                          </Box>
-                        </Flex>
-                      ))}
-                  </Box>
                 </Box>
               )}
-
-              <Box sx={{ borderBottom: 'solid 1px red', mb: 3, pb: 2 }}>
-                <Text as="h4" mb={2} sx={{ mb: 3 }}>
-                  Blocks
+            </Box>
+            <Flex
+              sx={{
+                py: 3,
+                px: 3,
+                gap: 2,
+                borderTop: 'solid 1px',
+                borderColor: 'gray.400',
+              }}>
+              <Button variant="primary" onClick={() => saveMe()}>
+                Save
+              </Button>
+              <Button variant="secondary" onClick={() => onCancelPopup()}>
+                Cancel
+              </Button>
+            </Flex>
+          </Flex>
+        </Modal>
+        <Box
+          px={4}
+          variant="plateRightBar"
+          sx={{
+            bg: 'gray.100',
+            width: '100%',
+            borderLeft: 'solid 1px',
+            borderColor: 'border',
+            minHeight: '100vh',
+          }}>
+          {cId && dataTemplate && (
+            <Flex sx={{ pt: 2, alignItems: 'center' }}>
+              <Box sx={{}}>
+                <Text sx={{ fontSize: 'sm', color: 'gray.1100' }}>
+                  Updated{' '}
                 </Text>
-                {blocks &&
-                  blocks.map((k: BlockTemplate) => (
-                    <Box
-                      key={k.id}
-                      onClick={() => insertBlock(k)}
+                <TimeAgo
+                  time={dataTemplate?.data_template?.updated_at}
+                  ago={true}
+                />
+              </Box>
+              <Box sx={{ ml: 'auto' }}>
+                <EditMenus id={cId} />
+              </Box>
+            </Flex>
+          )}
+
+          {variant && variant.fields && (
+            <Box sx={{ mb: 2, pt: 3 }}>
+              <Box sx={{ mb: 3, pb: 3 }}>
+                <Text
+                  as="h4"
+                  // mb={2}
+                  sx={{
+                    mb: 0,
+                    fontSize: 'sm',
+                    fontWeight: 500,
+                    letterSpacing: '-0.15px',
+                  }}>
+                  Fields
+                </Text>
+                <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000', mb: 3 }}>
+                  Dynamic variables provided by Variants
+                </Text>
+                {variant.fields &&
+                  variant.fields.map((k: FieldT) => (
+                    <Flex
                       sx={{
-                        pl: 3,
-                        border: 'solid 0.5px',
-                        borderColor: 'border',
-                        bg: 'neutral.200',
-                        mb: 1,
-                        pt: 2,
-                        pb: 3,
-                      }}>
-                      <Text sx={{ fontSize: 2, mb: 0, fontWeight: 600 }}>
-                        {k.title}
-                      </Text>
-                    </Box>
+                        p: 1,
+                        fontSize: 'sm',
+                        border: 'solid 1px',
+                        borderBottom: 0,
+                        borderColor: 'gray.500',
+                        bg: 'gray.200',
+                        px: 3,
+                        ':last-child': {
+                          borderBottom: 'solid 1px',
+                          borderColor: 'gray.500',
+                        },
+                      }}
+                      // as="p"
+                      key={k.id}
+                      onClick={() => insertBlock(k)}>
+                      {k.name}
+                      <Box sx={{ ml: 'auto', svg: { fill: 'blue.800' } }}>
+                        <TextT />
+                      </Box>
+                    </Flex>
                   ))}
               </Box>
             </Box>
-            {errors.exampleRequired && <Text>This field is required</Text>}
-          </Flex>
+          )}
+
+          <Box sx={{ borderBottom: 0, mb: 3, pb: 2 }}>
+            <Box sx={{ mb: 3 }}>
+              <Text
+                as="h4"
+                sx={{
+                  mb: 0,
+                  fontSize: 'sm',
+                  fontWeight: 500,
+                  letterSpacing: '-0.15px',
+                }}>
+                Blocks
+              </Text>
+              <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000' }}>
+                Blocks are reusable contents, click to insert
+              </Text>
+            </Box>
+
+            {blocks &&
+              blocks.map((k: BlockTemplate) => (
+                <Box
+                  key={k.id}
+                  onClick={() => insertBlock(k)}
+                  sx={{
+                    pl: 3,
+                    borderBottom: 0,
+                    border: 'solid 1px',
+                    borderColor: 'gray.400',
+                    bg: 'gray.200',
+                    mb: 0,
+                    pt: 2,
+                    pb: 2,
+                  }}>
+                  <Text sx={{ fontSize: 'sm', mb: 0, fontWeight: 600 }}>
+                    {k.title}
+                  </Text>
+                </Box>
+              ))}
+          </Box>
         </Box>
+        {errors.exampleRequired && <Text>This field is required</Text>}
 
         {/* <WraftEditor/> */}
-        <Box>
-          <Flex sx={{ px: 4, py: 1 }}>
-            {loading && <Spinner color="white" size={24} />}
-            {!loading && <Button>{cId ? 'Update' : 'Create'}</Button>}
-          </Flex>
-        </Box>
-      </Box>
+      </Flex>
     </Box>
   );
 };

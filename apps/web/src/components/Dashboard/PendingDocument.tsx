@@ -3,7 +3,8 @@ import NextLink from 'next/link';
 import { Avatar, Box, Flex } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
-import { StateBadge, TimeAgo } from 'components/Atoms';
+import { StateBadge, TimeAgo } from 'common/Atoms';
+import { ContentTitleList } from 'common/content';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
@@ -14,24 +15,10 @@ const columns = [
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
-          <Box
-            sx={{
-              width: '3px',
-              bg: row.original?.content_type?.color
-                ? row.original?.content_type?.color
-                : 'blue',
-            }}
-          />
-          <Box ml={3}>
-            <Box sx={{ color: 'gray.900' }}>
-              {row.original?.content?.instance_id}
-            </Box>
-            <Box as="h5" sx={{ fontSize: 2, fontWeight: 500 }}>
-              {row.original?.content?.serialized?.title}
-            </Box>
-          </Box>
-        </Flex>
+        <ContentTitleList
+          contentType={row.original?.content_type}
+          content={row.original?.content}
+        />
       </NextLink>
     ),
     enableSorting: false,
@@ -52,9 +39,13 @@ const columns = [
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Box sx={{ height: '20px' }}>
-        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-      </Box>
+      <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+        <Avatar
+          sx={{ width: '16px', height: '16px' }}
+          src={row.original?.creator?.profile_pic}
+        />
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
+      </Flex>
     ),
     enableSorting: false,
   },
@@ -98,7 +89,7 @@ const PendingDocumentBlock = () => {
     <>
       <Box
         sx={{
-          fontSize: 3,
+          fontSize: 'base',
           fontWeight: 500,
           mb: '18px',
           mt: '36px',

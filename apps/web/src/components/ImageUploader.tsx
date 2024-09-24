@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import { Box, Input, Label, Slider, Button } from 'theme-ui';
 
-import Modal from './Modal';
+import Modal from 'common/Modal';
 
 type ReadAsMethod =
   | 'readAsText'
@@ -151,7 +151,6 @@ export default function ImageUploader({
     const file = e.target.files[0];
 
     if (file.size > limit) {
-      console.log('image_size_limit_exceed');
       // showToast(t("image_size_limit_exceed"), "error");
     } else {
       setFile(file);
@@ -159,12 +158,12 @@ export default function ImageUploader({
   };
 
   const showCroppedImage = useCallback(
-    async (croppedAreaPixels: Area | null) => {
+    async (areaPixels: Area | null) => {
       try {
-        if (!croppedAreaPixels) return;
+        if (!areaPixels) return;
         const croppedImage = await getCroppedImg(
           result as string /* result is always string when using readAsDataUrl */,
-          croppedAreaPixels,
+          areaPixels,
         );
         handleAvatarChange(croppedImage);
       } catch (e) {
@@ -244,7 +243,7 @@ export default function ImageUploader({
               marginTop: 2,
               //   borderRadius: '0.125rem',
               borderWidth: '1px',
-              fontSize: 2,
+              fontSize: 'sm',
               lineHeight: ['1rem', '1rem'],
               fontWeight: 500,
               border: 'dotted 2px #eee',

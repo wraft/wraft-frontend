@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { fetchAPI, postAPI } from '../utils/models';
-import Field from './Field';
-import Modal from './Modal';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, postAPI } from 'utils/models';
+
 import OrgMembersList from './OrgMembersList';
 
 export interface Members {
@@ -47,12 +48,7 @@ export interface ProfileClass {
 }
 
 const OrgMemberForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [ready, setReady] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [members, setMembers] = useState<Member | undefined>();
@@ -65,34 +61,15 @@ const OrgMemberForm = () => {
     setShowSearch(!showSearch);
   };
 
-  const onCreate = (d: any) => {
+  const onCreate = (_data: any) => {
     setSuccess(true);
-    console.log('__d', d);
-    // if (d && d.id) {
-    //   // Router.push(`/user-profile`);
-    // }
   };
-
-  /** Send Invite Form */
 
   const onInviteSubmit = (data: any) => {
-    console.log('data', data);
-    postAPI(`organisations/${organ?.id}/invite`, data).then((data: any) => {
-      onCreate(data);
+    postAPI(`organisations/${organ?.id}/invite`, data).then((response: any) => {
+      onCreate(response);
     });
   };
-
-  /** Update Form */
-
-  // const onSubmit = (data: any) => {
-  //   console.log('data', data);
-  //   createEntity(data, 'organisations', token, onCreate);
-  //   // updateEntity('organisations', data, token, onCreate);
-  // };
-
-  useEffect(() => {
-    console.log('errors', errors);
-  }, [errors]);
 
   /**
    * When Org data is load
@@ -100,11 +77,9 @@ const OrgMemberForm = () => {
    */
   const onOrgLoad = (_o: any) => {
     setReady(true);
-    console.log('profile.organisation_id', _o);
     setOrgan(_o);
 
-    Object.keys(_o).map(function (key, index) {
-      console.log('key', key, index, `${key}`, _o[`${key}`]);
+    Object.keys(_o).map(function (key, _index) {
       setValue(`${key}`, _o[`${key}`]);
     });
   };
@@ -178,7 +153,7 @@ const OrgMemberForm = () => {
                       <Text
                         variant="blocktitle"
                         sx={{
-                          fontSize: 1,
+                          fontSize: 'xs',
                           // pl: 3,
                           py: 2,
                           color: 'primary',

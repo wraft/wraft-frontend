@@ -2,9 +2,9 @@ import React, { Fragment } from 'react';
 import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { UserIcon, BrandLogo } from './Icons';
-import Link, { NextLinkText } from './NavLink';
+import { UserIcon, BrandLogo } from 'components/Icons';
+import Link, { NextLinkText } from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
 
 export interface IUser {
   name: string;
@@ -16,9 +16,6 @@ const UserNav = () => {
   return (
     <Box
       sx={{
-        // bg: '#F2F7F4',
-        // borderBottom: 'solid 1px',
-        // borderColor: 'border',
         py: 2,
       }}>
       <Container>

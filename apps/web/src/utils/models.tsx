@@ -27,7 +27,7 @@ const createAxiosInstance = (): AxiosInstance => {
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
+      if (error?.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
         await cookie.remove('token');
 
@@ -44,6 +44,13 @@ const createAxiosInstance = (): AxiosInstance => {
 const api = createAxiosInstance();
 
 export default api;
+
+const handleApiError = (error: any) => {
+  if (error?.response?.data) {
+    return error.response.data;
+  }
+  return 'An unexpected error occurred. Please try again later.';
+};
 
 /**
  * Load fetchAPI
@@ -85,17 +92,8 @@ export const postAPI = (
           }
         },
       })
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -105,17 +103,8 @@ export const putAPI = (path: string, body: any = {}) =>
   new Promise((resolve, reject) => {
     api
       .put(`/${path}`, body)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 export const postEntityFile = (path: string, formData: any, token: string) =>
@@ -127,14 +116,8 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
           token: token,
         },
       })
-      .then(async (resp) => {
-        if (resp.status === 204) {
-          resolve(resp);
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -142,19 +125,11 @@ export const postEntityFile = (path: string, formData: any, token: string) =>
  */
 export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
+    const config = body ? { data: body } : {};
     api
-      .delete(`/${path}`, body || {})
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .delete(`/${path}`, config)
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -164,17 +139,8 @@ export const fetchUserInfo = () =>
   new Promise((resolve, reject) => {
     api
       .get(`${API_HOST}/api/v1/users/me`)
-      .then((response) => {
-        resolve(response.data);
-      })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
-      });
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
   });
 
 /**
@@ -239,8 +205,6 @@ export const createEntity = async (
   onSuccess?: any,
   onFailed?: any,
 ) => {
-  console.log('🥷', API_HOST, data);
-
   try {
     const response = await axios.post(`${API_HOST}/api/v1/${path}`, data, {
       headers: {
@@ -250,13 +214,8 @@ export const createEntity = async (
       },
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Created a model ${path} with Pass`, response.data);
       onSuccess(response.data);
-    } else {
-      console.log(`Created a model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
@@ -288,13 +247,8 @@ export const deleteEntity = async (
       data: data,
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Deleted model ${path} with Pass`, response.data);
       onSuccess(response.data);
-    } else {
-      console.log(`Deleted model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
@@ -324,50 +278,14 @@ export const updateEntity = async (
       },
     });
 
-    console.log(response);
-
     if (onSuccess) {
-      console.log(`Updated model ${path} with Pass`, response.data);
       onSuccess(response.data);
-    } else {
-      console.log(`Updated model ${path}`, response.data);
     }
   } catch (error) {
     if (onFailed) onFailed(error);
     console.error('🐞Error', error);
   }
 };
-
-// interface IapiWrapper {
-//   host: string;
-//   path: string;
-//   token: string;
-//   data: any;
-//   onSuccess?: any;
-//   type: string;
-// }
-
-// const apiWrapper = (props:IapiWrapper ) => {
-//   console.log('props', props);
-//   // fetch(`${host}/api/v1/${path}`, {
-//   //   method: 'PUT',
-//   //   headers: {
-//   //     Accept: 'application/json',
-//   //     // 'Content-Type': 'application/json',
-//   //     Authorization: `Bearer ${token}`,
-//   //   },
-//   //   body: data,
-//   // })
-//   //   .then(function(response) {
-//   //     return response.json();
-//   //   })
-//   //   .then(function(data) {
-//   //     console.log(`Created a model ${path}`, data);
-//   //     if (onSuccess) {
-//   //       onSuccess(data);
-//   //     }
-//   //   });
-// }
 
 /**
  * Update an Entity
@@ -389,13 +307,12 @@ export const createEntityFile = (
     },
     body: data,
   })
-    .then(function (response) {
+    .then((response) => {
       return response.json();
     })
-    .then(function (data) {
-      console.log(`Created a asset ${path}`, data);
+    .then((res) => {
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess(res);
       }
     });
 };
@@ -423,10 +340,9 @@ export const updateEntityFile = (
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      console.log(`Created a model ${path}`, data);
+    .then(function (res) {
       if (onSuccess) {
-        onSuccess(data);
+        onSuccess(res);
       }
     });
 };
@@ -443,8 +359,8 @@ export const registerUser = (data: any, onSuccess?: any) => {
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      onSuccess(data);
+    .then(function (res) {
+      onSuccess(res);
     });
 };
 export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
@@ -492,33 +408,6 @@ export const userLogin = async (body: any) =>
         reject(err);
       });
   });
-// export const userLogin = (data: any, onSuccess?: any, onError?: any) => {
-//   fetch(`${API_HOST}/api/v1/users/signin`, {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(data),
-//   })
-//     .then(function (response) {
-//       if (!response.ok) {
-//         throw new Error();
-//       }
-//       return response.json();
-//     })
-//     .then(function (data) {
-//       const { access_token } = data;
-//       cookie.set('token', access_token);
-//       onSuccess(access_token);
-//     })
-//     .catch(function (error) {
-//       // console.error('Error:', error);
-//       if (onError) {
-//         onError(error);
-//       }
-//     });
-// };
 
 /**
  * Login a user
@@ -537,8 +426,8 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
     .then(function (response) {
       return response.json();
     })
-    .then(function (data) {
-      const { token } = data;
+    .then(function (response) {
+      const { token } = response;
       cookie.set('token', token);
       onSuccess(token);
     });
@@ -549,29 +438,6 @@ export const userOtpLogin = (data: any, onSuccess?: any) => {
  */
 
 export const switchProfile = (data: any) => {
-  // fetch(`${API_HOST}/api/v1/users/signin`, {
-  //   method: 'POST',
-  //   headers: {
-  //     Accept: 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify(data),
-  // })
-  //   .then(function (response) {
-  //     if (!response.ok) {
-  //       throw new Error();
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(function (data) {
   const { access_token } = data;
   cookie.set('token', access_token);
-  // onSuccess(access_token);
-  // })
-  // .catch(function (error) {
-  //   // console.error('Error:', error);
-  //   if (onError) {
-  //     onError(error);
-  //   }
-  // });
 };

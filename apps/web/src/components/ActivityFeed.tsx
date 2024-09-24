@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { fetchAPI } from '../utils/models';
-import { API_HOST } from '../utils/models';
-import { TimeAgo } from './Atoms';
+import { TimeAgo } from 'common/Atoms';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI } from 'utils/models';
+import { API_HOST } from 'utils/models';
 
 export interface ActivityStream {
   activities: Activity[];
@@ -22,6 +22,7 @@ export interface Activity {
   object: string;
 }
 
+/* eslint-disable no-unused-vars */
 export enum Action {
   Insert = 'insert',
   Update = 'update',
@@ -73,13 +74,13 @@ const ActivityCard = (props: any) => (
       />
     </Box>
     <Box pt={1}>
-      <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+      <Text sx={{ fontSize: 'xxs', display: 'inline-block', fontWeight: 600 }}>
         {props?.actor?.name}
       </Text>{' '}
-      <Text as="em" sx={{ fontSize: 0, display: 'inline-block', mr: 2 }}>
+      <Text as="em" sx={{ fontSize: 'xxs', display: 'inline-block', mr: 2 }}>
         {props?.action}d{' '}
       </Text>
-      {/* <Text sx={{ fontSize: 0, display: 'inline-block', fontWeight: 600 }}>
+      {/* <Text sx={{ fontSize: 'xxs', display: 'inline-block', fontWeight: 600 }}>
         {props?.object_details?.name}
       </Text> */}
     </Box>

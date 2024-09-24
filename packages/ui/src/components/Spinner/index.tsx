@@ -1,5 +1,4 @@
-import styled from '@xstyled/emotion';
-import React from 'react';
+import styled from "@xstyled/emotion";
 
 export interface SpinnerOptions {
   size?: number;
@@ -9,14 +8,13 @@ export const Spinner = ({ size = 12 }: SpinnerOptions) => {
   return <StyledSpinner size={size} />;
 };
 
-const StyledSpinner =
-  styled.div <
-  { size: number } >
-  `
+const StyledSpinner = styled.div<{ size: number }>`
   height: ${(props) => `${props.size + 2}px`};
-  // position: relative;
+  width: ${(props) => `${props.size + 2}px`};
+  position: relative;
+
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     width: ${(props) => `${props.size}px`};
     height: ${(props) => `${props.size}px`};
@@ -25,7 +23,7 @@ const StyledSpinner =
     right: 0;
     bottom: 0;
     margin: auto;
-    border: 3px solid transparent;
+    border: 3px solid #ffffff52;
     border-top-color: #fff;
     border-radius: 50%;
     animation: load3 1s infinite linear;

@@ -1,12 +1,12 @@
-import { x } from '@xstyled/emotion';
-import { useEffect, useState } from 'react';
+import { x } from "@xstyled/emotion";
+import { useEffect, useState } from "react";
 
-import BreakView from './BreakView';
-import PageView from './PageView';
-import * as S from './styles';
+import BreakView from "./BreakView";
+import PageView from "./PageView";
+import * as S from "./styles";
 
 export interface IProp {
-  type?: 'simple' | 'advanced';
+  type?: "simple" | "advanced";
   onPageChange?: (page: number) => void;
   showGoto?: boolean;
 
@@ -50,16 +50,16 @@ const Pagination: React.FC<IProp> = ({
   breakClassName,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(initialPage || 1);
-  const disabledClassName = 'disabled';
+  const disabledClassName = "disabled";
   const pagecount = totalPage || 0;
-  const previousClasses = `previous${currentPage === 1 ? ` ${disabledClassName}` : ''}`;
-  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ''}`;
+  const previousClasses = `previous${currentPage === 1 ? ` ${disabledClassName}` : ""}`;
+  const nextClasses = `next${currentPage >= pagecount ? ` ${disabledClassName}` : ""}`;
 
   useEffect(() => {
-    if (initialPage != undefined) {
+    if (initialPage !== undefined) {
       setCurrentPage(initialPage);
     }
-  }, []);
+  }, [initialPage]);
 
   const onHandlePreviousPage = (evt: any) => {
     evt.preventDefault ? evt.preventDefault() : (evt.returnValue = false);
@@ -77,7 +77,7 @@ const Pagination: React.FC<IProp> = ({
     }
   };
 
-  const onHandlePageSelected = (page: number, evt: any) => {
+  const onHandlePageSelected = (page: number, _evt: any) => {
     setCurrentPage(page);
     if (onPageChange) {
       onPageChange(page);
@@ -102,7 +102,6 @@ const Pagination: React.FC<IProp> = ({
 
   const getBackwardJump = () => {
     const pageRangeDisplayed = numberPageDisplayed || 0;
-    const pageCount = totalPage || 0;
 
     const backwardJump = currentPage - pageRangeDisplayed;
     return backwardJump < 0 ? 0 : backwardJump;
@@ -114,7 +113,7 @@ const Pagination: React.FC<IProp> = ({
     const pageRangeDisplayed: number = numberPageDisplayed || 0;
     const marginPagesDisplayed: number = numberMarginPagesDisplayed || 0;
     if (pageCount <= pageRangeDisplayed) {
-      for (let page = 0; page <= pageCount; page++) {
+      for (let page = 1; page <= pageCount; page++) {
         items.push(getPageElement(page));
       }
     } else {
@@ -132,7 +131,7 @@ const Pagination: React.FC<IProp> = ({
       let index;
       let page: number;
       let breakView: any;
-      const createPageView = (page: number) => getPageElement(page);
+      const createPageView = (pageNumber: number) => getPageElement(pageNumber);
 
       for (index = 0; index < pageCount; index++) {
         page = index + 1;
@@ -178,7 +177,6 @@ const Pagination: React.FC<IProp> = ({
         selected={currentPage === page}
         pageClassName={pageClassName}
         activeClassName={activeClassName}
-        href={'#'}
         page={page}
       />
     );
@@ -214,28 +212,30 @@ const Pagination: React.FC<IProp> = ({
               tabIndex={0}
               role="button"
               onClick={onHandlePreviousPage}
-              aria-label={'previous'}
-              rel={'prev'}>
+              aria-label={"previous"}
+              rel={"prev"}
+            >
               {previousLabel}
             </x.div>
           </x.li>
 
-          {type == 'advanced' && pagination()}
+          {type === "advanced" && pagination()}
 
           <li className={nextClasses}>
             <x.div
               tabIndex={0}
               role="button"
               onClick={onHandleNextPage}
-              aria-label={'next'}
-              rel={'next'}>
+              aria-label={"next"}
+              rel={"next"}
+            >
               {nextLabel}
             </x.div>
           </li>
         </x.ul>
         {totalEntries && (
           <x.div fontSize="12px" color="#656E78" fontWeight="heading">
-            {`Showing ${currentPage - 1}0 of ${totalEntries}`}
+            {`Showing ${currentPage === 1 ? "" : currentPage - 1}0 of ${totalEntries}`}
           </x.div>
         )}
       </S.Pagination>
@@ -244,13 +244,13 @@ const Pagination: React.FC<IProp> = ({
 };
 
 Pagination.defaultProps = {
-  type: 'advanced',
+  type: "advanced",
   showGoto: false,
   numberPageDisplayed: 2,
   numberMarginPagesDisplayed: 2,
-  activeClassName: 'selected',
-  previousLabel: '< Previous',
-  nextLabel: 'Next >',
-  breakLabel: '...',
+  activeClassName: "selected",
+  previousLabel: "< Previous",
+  nextLabel: "Next >",
+  breakLabel: "...",
 };
 export default Pagination;

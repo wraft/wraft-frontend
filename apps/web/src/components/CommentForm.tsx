@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Text } from 'theme-ui';
+import { ChatCircle } from '@phosphor-icons/react';
 
-import { fetchAPI, postAPI } from '../utils/models';
+import { fetchAPI, postAPI } from 'utils/models';
+
 import CommentCard from './CommentCard';
 import Field from './FieldText';
 
@@ -49,18 +51,16 @@ export interface User {
   email: string;
 }
 
-const CommentForm = (props: CommentFormProps) => {
+const CommentForm = ({ master, master_id }: CommentFormProps) => {
+  const [comments, setComments] = useState<Array<Comment>>([]);
+  const [submiting, setSubmitting] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
   } = useForm();
-  const [submiting, setSubmitting] = useState<boolean>(false);
-
-  const [comments, setComments] = useState<Array<Comment>>([]);
-
-  const { master, master_id } = props;
 
   const onSubmit = async (data: any) => {
     setSubmitting(true);
@@ -73,13 +73,15 @@ const CommentForm = (props: CommentFormProps) => {
 
     try {
       await postAPI('comments', commentExample);
-      fetchAPI(`comments?master_id=${master_id}&page=0`).then((data: any) => {
-        if (data.comments) {
-          setComments(data.comments);
-          setSubmitting(false);
-          setValue('body', '');
-        }
-      });
+      fetchAPI(`comments?master_id=${master_id}&page=0`).then(
+        (response: any) => {
+          if (response.comments) {
+            setComments(response.comments);
+            setSubmitting(false);
+            setValue('body', '');
+          }
+        },
+      );
     } catch {
       console.error('comment error');
     }
@@ -107,7 +109,17 @@ const CommentForm = (props: CommentFormProps) => {
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="btnSecondary" ml={0} sx={{ mt: 0, fontSize: 1 }}>
+        <Button
+          variant="btnSecondary"
+          ml={0}
+          sx={{
+            mt: 2,
+            display: 'flex',
+            gap: '4px',
+            fontSize: 'sm',
+            alignItems: 'center',
+          }}>
+          <ChatCircle size={16} weight="bold" color="#777" />
           {submiting ? 'Saving ... ' : 'Add Comment'}
         </Button>
       </Box>

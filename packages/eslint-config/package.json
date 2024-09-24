@@ -5,7 +5,8 @@
   "files": [
     "library.js",
     "react.js",
-    "storybook.js"
+    "storybook.js",
+    "react-internal.js"
   ],
   "devDependencies": {
     "@vercel/style-guide": "^5.2.0",

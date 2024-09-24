@@ -1,10 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Container } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
-import { Collection, LayoutAlt, Style, FlowBranch, UserAlt } from './Icons';
+import {
+  Collection,
+  LayoutAlt,
+  Style,
+  FlowBranch,
+  UserAlt,
+} from 'components/Icons';
+import PageHeader from 'common/PageHeader';
+import { fetchAPI } from 'utils/models';
+
 import ManageSidebar from './ManageSidebar';
-import PageHeader from './PageHeader';
 
 // const ICON_COLOR = '#999';
 interface menuLinksProps {
@@ -63,7 +70,7 @@ const PersonCard = ({ name, phone }: PersonCardProps) => (
     <Text as="h5" sx={{ fontWeight: 500, color: 'text' }}>
       {name}
     </Text>
-    <Text as="h6" sx={{ fontSize: 0, fontWeight: 300, color: 'gray.500' }}>
+    <Text as="h6" sx={{ fontSize: 'xxs', fontWeight: 300, color: 'gray.500' }}>
       {phone}
     </Text>
   </Box>

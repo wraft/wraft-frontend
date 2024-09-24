@@ -4,20 +4,19 @@ import {
   DisclosureContent,
   DisclosureProvider,
 } from '@ariakit/react';
-import { Drawer } from '@wraft-ui/Drawer';
 import { Controller, useForm } from 'react-hook-form';
-import { Document, Page, pdfjs } from 'react-pdf';
 import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
-import { Asset, Engine } from '../utils/types';
-import Field from './Field';
+import { ArrowDropdown } from 'components/Icons';
+import { Drawer } from 'common/Drawer';
+import Field from 'common/Field';
+import { fetchAPI } from 'utils/models';
+import { Asset, Engine } from 'utils/types';
+
 import FieldText from './FieldText';
-import { ArrowDropdown } from './Icons';
 import LayoutForm from './LayoutForm';
 import MenuStepsIndicator from './MenuStepsIndicator';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import PdfViewer from './PdfViewer';
 
 export interface Layouts {
   layout: Layout;
@@ -87,7 +86,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('🥋🐼', engines);
     if (engines && engines.length > 0) {
       const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
       pandocEngine && setValue('engine_uuid', pandocEngine?.id);
@@ -196,9 +194,11 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                         bg: 'background',
                         py: '24px',
                       }}>
-                      <Document file={assets[assets.length - 1].file}>
-                        <Page pageNumber={1} width={251} />
-                      </Document>
+                      <PdfViewer
+                        url={`${assets[assets.length - 1].file}`}
+                        pageNumber={1}
+                        height={350}
+                      />
                     </Box>
                     <Box
                       sx={{

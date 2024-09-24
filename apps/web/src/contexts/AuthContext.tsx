@@ -5,11 +5,12 @@ import React, {
   ReactElement,
   useContext,
 } from 'react';
+import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI } from 'utils/models';
 
 interface IUserContextProps {
   isUserLoading: boolean;
@@ -20,6 +21,7 @@ interface IUserContextProps {
   organisations: any;
   login: (data: any) => void;
   logout: () => void;
+  updateOrganisations: any;
 }
 
 export const UserContext = createContext<IUserContextProps>(
@@ -33,13 +35,15 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [organisations, setOrganisations] = useState<any | null>(null);
   const [permissions, setPermissions] = useState<any>(null);
 
+  const router = useRouter();
+
   const [isUserLoading, setIsUserLoading] = useState(false);
 
   useEffect(() => {
-    const refreshToken = cookie.get('refreshToken') || false;
+    const cookieRefreshToken = cookie.get('refreshToken') || false;
 
-    if (refreshToken) {
-      setRefreshToken(refreshToken);
+    if (cookieRefreshToken) {
+      setRefreshToken(cookieRefreshToken);
     }
 
     const token = cookie.get('token') || false;
@@ -79,7 +83,14 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     }
   };
 
-  console.log('user profile', userProfile);
+  const updateOrganisations = async () => {
+    try {
+      const userOrg: any = await fetchAPI('users/organisations');
+      setOrganisations(userOrg.organisations);
+    } catch (error) {
+      console.error('Error fetching organisations:', error);
+    }
+  };
 
   const login = async (data: any) => {
     // setIsUserLoading(true);
@@ -93,15 +104,24 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
     setRefreshToken(refresh_token);
   };
 
-  const logout = async () => {
-    await signOut({ redirect: false });
-    setAccessToken(null);
-    setRefreshToken(null);
-    setUserProfile(null);
-    setOrganisations(null);
+  const logout = async (redirectUrl = '') => {
+    try {
+      await signOut({ redirect: false });
 
-    cookie.remove('token');
-    cookie.remove('refreshToken');
+      setAccessToken(null);
+      setRefreshToken(null);
+      setUserProfile(null);
+      setOrganisations(null);
+
+      cookie.remove('token');
+      cookie.remove('refreshToken');
+
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
   };
 
   const updateUserData = (userdata: any) => {
@@ -131,6 +151,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         permissions,
         login,
         logout,
+        updateOrganisations,
       }}>
       {children}
     </UserContext.Provider>

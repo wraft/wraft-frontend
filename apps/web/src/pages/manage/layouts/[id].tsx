@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { Container } from 'theme-ui';
 
 import LayoutViewForm from 'components/LayoutViewForm';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -16,15 +16,14 @@ const Index: FC = () => {
 
   useEffect(() => {
     fetchAPI(`layouts/${id}`).then((data: any) => {
-      console.log(data);
       setLayout(data);
     });
   }, []);
   return (
     <>
       <Head>
-        <title>Edit Theme - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Edit Layout | Wraft</title>
+        <meta name="description" content="edit layout" />
       </Head>
       <Page>
         <PageHeader

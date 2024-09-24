@@ -4,14 +4,14 @@ import { Box, Container } from 'theme-ui';
 
 import FieldTypeForm from 'components/FieldTypeForm';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Create Field Type - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Create Field Type | Wraft </title>
+        <meta name="description" content="create new fields" />
       </Head>
       <Page>
         <PageHeader title="Create Field Type" />

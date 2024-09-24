@@ -151,13 +151,26 @@ const layout = {
     p: 4,
     height: 'calc(100vh - 72px)',
     overflow: 'scroll',
+    '::-webkit-scrollbar': {
+      width: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
+    },
   },
   contentFrame: {
     width: '100%',
     // bg: 'backgroundWhite',
-    border: '1px solid',
-    borderColor: 'border',
-    borderRadius: 4,
+    // border: '1px solid',
+    // borderColor: 'border',
+    // borderRadius: 4,
   },
   menuWrapper: {
     a: {
@@ -228,7 +241,7 @@ const layout = {
   menuItem: {
     px: 3,
     py: 2,
-    fontSize: 2,
+    fontSize: 'sm',
     cursor: 'pointer',
     color: 'text',
     '&:hover': {
@@ -237,7 +250,7 @@ const layout = {
   },
   menuItemHeading: {
     variant: 'layouts.menuItem',
-    fontSize: 1,
+    fontSize: 'xs',
     color: 'gray.400',
     p: 2,
     py: 2,

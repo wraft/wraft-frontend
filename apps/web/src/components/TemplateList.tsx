@@ -2,22 +2,25 @@ import React, { useEffect, useState } from 'react';
 import NavLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Box, Flex, Text } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
+import { Pagination, DropdownMenu, Table } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
+import toast from 'react-hot-toast';
+import { Plus } from '@phosphor-icons/react';
+import { Button } from '@wraft/ui';
 
-import { fetchAPI } from '../utils/models';
-import { IField } from '../utils/types/content';
-import { TimeAgo } from './Atoms';
-import Link from './NavLink';
-import PageHeader from './PageHeader';
+import { TimeAgo } from 'common/Atoms';
+import PageHeader from 'common/PageHeader';
+import { fetchAPI, postAPI } from 'utils/models';
+import { IField } from 'utils/types/content';
 
-const columns = [
+const columns = ({ onCloneTemplete }: any) => [
   {
     id: 'title',
     header: 'Name',
     accessorKey: 'title',
     cell: ({ row }: any) => (
       <NavLink href={`/templates/edit/${row?.original?.id}`}>
-        <Box sx={{ fontSize: '15px', fontWeight: 500 }}>
+        <Box sx={{ fontSize: 'sm', fontWeight: 500 }}>
           {row?.original?.title}
         </Box>
       </NavLink>
@@ -44,7 +47,7 @@ const columns = [
           }}
         />
 
-        <Text sx={{ fontSize: 1, fontWeight: 'body', display: 'flex' }}>
+        <Text sx={{ fontSize: 'sm', fontWeight: 'body', display: 'flex' }}>
           {row?.original?.content_type?.name}
         </Text>
       </Flex>
@@ -52,8 +55,17 @@ const columns = [
     enableSorting: false,
   },
   {
+    id: 'content.prefix',
+    header: 'PREFIX',
+    accessorKey: 'prefix',
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'xs' }}>{row.original?.content_type?.prefix}</Box>
+    ),
+    enableSorting: false,
+  },
+  {
     id: 'content.updated_at',
-    header: 'TIME',
+    header: 'UPDATE AT',
     accessorKey: 'TIME',
     cell: ({ row }: any) => (
       <Box>
@@ -64,11 +76,25 @@ const columns = [
   },
   {
     id: 'id',
-    header: 'ACTION',
+    header: '',
     cell: ({ row }: any) => (
-      <Box>
-        <NavLink href={`/templates/edit/${row?.original?.id}`}>Edit</NavLink>
-      </Box>
+      <Flex sx={{ justifyContent: 'flex-end' }}>
+        <DropdownMenu.Provider>
+          <DropdownMenu.Trigger>
+            <ThreeDotIcon />
+          </DropdownMenu.Trigger>
+          <DropdownMenu aria-label="dropdown role">
+            <DropdownMenu.Item>
+              <NavLink href={`/templates/edit/${row?.original?.id}`}>
+                Edit
+              </NavLink>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
+              Clone
+            </DropdownMenu.Item>
+          </DropdownMenu>
+        </DropdownMenu.Provider>
+      </Flex>
     ),
     enableSorting: false,
     textAlign: 'right',
@@ -85,7 +111,7 @@ const TemplateList = () => {
   const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
-    loadData(1);
+    loadData(currentPage);
   }, []);
 
   useEffect(() => {
@@ -94,11 +120,11 @@ const TemplateList = () => {
     }
   }, [page]);
 
-  const loadData = (page: number) => {
+  const loadData = (pageNo: number) => {
     setLoading(true);
 
-    const query = `?page=${page}`;
-    fetchAPI(`data_templates${query}`)
+    const query = `?page=${pageNo}`;
+    fetchAPI(`data_templates${query}&sort=updated_at_desc`)
       .then((data: any) => {
         setLoading(false);
         const res: IField[] = data.data_templates;
@@ -125,17 +151,43 @@ const TemplateList = () => {
     );
   };
 
-  useEffect(() => {
-    loadData(currentPage);
-  }, []);
+  const onCloneTemplete = (content: any) => {
+    const convertedData = {
+      title_template: content.title_template,
+      title: `${content.title} duplicate`,
+      data: content.data,
+      serialized: content.serialized,
+    };
+
+    postAPI(
+      `content_types/${content.content_type.id}/data_templates`,
+      convertedData,
+    )
+      .then((data: any) => {
+        router.push(`/templates/edit/${data.id}`);
+        toast.success('Created Successfully', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      })
+      .catch(() => {
+        toast.error('Failed', {
+          duration: 1000,
+          position: 'top-right',
+        });
+      });
+  };
 
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Templates" desc="Content Templates for Variants">
         <Box sx={{ ml: 'auto', pt: 2 }}>
-          <Link href="/templates/new" variant="secondary" type="button">
-            + New Template
-          </Link>
+          <Button
+            onClick={() => router.push(`/templates/new`)}
+            variant="secondary">
+            <Plus size={12} weight="bold" />
+            New Template
+          </Button>
         </Box>
       </PageHeader>
       <Box variant="layout.pageFrame" sx={{ py: 4 }}>
@@ -143,7 +195,7 @@ const TemplateList = () => {
           <Table
             data={contents}
             isLoading={loading}
-            columns={columns}
+            columns={columns({ onCloneTemplete })}
             skeletonRows={10}
             emptyMessage="No template has been created yet."
           />

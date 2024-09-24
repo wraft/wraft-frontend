@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { Box, Text, Flex, useThemeUI } from 'theme-ui';
-import { Button } from 'theme-ui';
+import { Button } from '@wraft/ui';
 import { Pagination, Table } from '@wraft/ui';
 import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import { EllipsisHIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { EmptyForm } from './Icons';
-import { NextLinkText } from './NavLink';
-import { TimeAgo } from './Atoms';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import { NextLinkText } from 'common/NavLink';
+import { fetchAPI, deleteAPI } from 'utils/models';
 
 export interface Theme {
   total_pages: number;
@@ -50,10 +49,11 @@ const FormList = ({ rerender, setRerender }: Props) => {
 
   const { theme } = useThemeUI();
 
-  const loadData = (page: number) => {
+  const loadData = (pageNumber: number) => {
     setLoading(true);
-    const pageNo = page > 0 ? `?page=${page}&sort=inserted_at_desc` : '';
-    fetchAPI(`forms${pageNo}`)
+    const query =
+      pageNumber > 0 ? `?page=${pageNumber}&sort=inserted_at_desc` : '';
+    fetchAPI(`forms${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: FormElement[] = data.forms;
@@ -73,6 +73,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
         position: 'top-right',
       });
     });
+    setDeleteOpen(null);
   };
 
   useEffect(() => {
@@ -90,14 +91,22 @@ const FormList = ({ rerender, setRerender }: Props) => {
       size: 250,
       cell: ({ row }: any) => {
         return (
-          <>
-            <NextLinkText href={`/forms/${row.original?.id}`}>
-              <Box>
-                <Box>{row.original?.name}</Box>
-              </Box>
-            </NextLinkText>
-          </>
+          <NextLinkText href={`/forms/${row.original?.id}`}>
+            <Box sx={{ fontSize: 'sm', fontWeight: '600' }}>
+              {row.original?.name}
+            </Box>
+          </NextLinkText>
         );
+      },
+    },
+    {
+      id: 'content.description',
+      header: 'DESCRIPTION',
+      accessorKey: 'content.description',
+      enableSorting: false,
+      size: 250,
+      cell: ({ row }: any) => {
+        return <Box sx={{ fontSize: 'sm' }}>{row.original?.description}</Box>;
       },
     },
     {
@@ -146,7 +155,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
                       color={
                         (theme.colors &&
                           theme.colors.gray &&
-                          theme.colors.gray[200]) ||
+                          theme.colors.gray[800]) ||
                         'black'
                       }
                     />
@@ -213,33 +222,17 @@ const FormList = ({ rerender, setRerender }: Props) => {
     );
   };
   return (
-    <Box py={3} mb={4}>
+    <Box mb={4}>
       <Box mx={0} mb={3}>
-        {!loading && contents.length < 1 && (
-          <Box>
-            <Flex>
-              <Box sx={{ color: 'gray.500', width: 'auto' }}>
-                <EmptyForm />
-              </Box>
-              <Box sx={{ m: 2, pb: 0 }}>
-                <Text as="h2" sx={{ fontWeight: 300 }}>
-                  No Forms present
-                </Text>
-                <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
-                  You have not created a collection form yet, click below to
-                  create one
-                </Text>
-                <Box sx={{ mt: 3, pb: 0 }}>
-                  <Button>Add Form</Button>
-                </Box>
-              </Box>
-            </Flex>
-          </Box>
-        )}
         <Box>
           <Box sx={{ width: '100%' }}>
             <Box mx={0} mb={3} sx={{ width: '100%' }}>
-              <Table data={contents} columns={columns} isLoading={loading} />
+              <Table
+                data={contents}
+                columns={columns}
+                isLoading={loading}
+                emptyMessage="No forms has been created yet."
+              />
             </Box>
             <Box mx={2}>
               {pageMeta && pageMeta?.total_pages > 1 && (

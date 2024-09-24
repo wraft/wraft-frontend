@@ -1,26 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState, useRef } from 'react';
-import { usePathname } from 'next/navigation';
-import Router, { useRouter } from 'next/router';
-import ContentSidebar, {
-  FlowStateBlock,
-} from '@wraft-ui/content/ContentSidebar';
-import { Box, Flex, Button, Text, Label, Input, Spinner, Grid } from 'theme-ui';
+import { useRouter } from 'next/router';
+import { Box, Flex, Text, Label, Input } from 'theme-ui';
 import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
-import { RoutedDialog } from '@wraft-ui/RoutedDialog';
+import { Button } from '@wraft/ui';
 
 import NavEdit from 'components/NavEdit';
-import FieldText from 'components/FieldText';
-import Field from 'components/Field';
 import Editor from 'components/common/Editor';
-import { findVars, replaceTitles, updateVars } from 'utils/index';
+import Field from 'common/Field';
+import { RoutedDialog } from 'common/RoutedDialog';
+import { FlowStateBlock, ContentSidebar } from 'common/content';
+import { replaceTitles, updateVars, findHolders } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
   IFieldType,
-  IVariantDetail,
   EMPTY_MARKDOWN_NODE,
   ContentInstance,
 } from 'utils/types/content';
@@ -31,61 +27,52 @@ import contentStore from 'store/content.store';
 
 import FieldForm from './FieldForm';
 
-const ContentForm = (props: IContentForm) => {
-  // Base
-  // -------
+const ContentForm = ({ id, edit }: IContentForm) => {
+  const [activeFlow, setActiveFlow] = useState<any>(null);
+  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
+  const [contents, setContents] = useState<ContentInstance>();
+  const [contentTypeId, setContentTypeId] = useState<ContentInstance>();
+  const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
+  const [fields, setField] = useState<Array<FieldT>>([]);
+  const [fieldValues, setFieldValues] = useState<any>([]);
+  const [maps, setMaps] = useState<Array<IFieldField>>([]);
+  const [pageTitle, setPageTitle] = useState<string>('New Title');
+  const [saving, setSaving] = useState<boolean>(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
+  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
+  const [trigger, setTrigger] = useState<any>(null);
+  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
+  const [fieldTokkons, setFieldTokkons] = useState<any>([]);
 
   const router = useRouter();
   const {
     register,
-    getValues,
     handleSubmit,
     formState: { errors, isDirty },
-    setValue,
   } = useForm();
-
-  const [_content, setContent] = useState<IVariantDetail>();
-  const [contents, setContents] = useState<ContentInstance>();
-  const [activeTemplate, setActiveTemplate] = useState('');
-
-  const cId: string = router.query.id as string;
-  const pathname = usePathname();
-
-  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
-
-  const [fields, setField] = useState<Array<FieldT>>([]);
-  const [showForm, setShowForm] = useState<boolean>(false);
-  const [showTitleEdit, setTitleEdit] = useState<boolean>(false);
-  const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
-
-  const [activeFlow, setActiveFlow] = useState<any>(null);
-  const [saving, setSaving] = useState<boolean>(false);
-  const [maps, setMaps] = useState<Array<IFieldField>>([]);
-  const [showDev, setShowDev] = useState<boolean>(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(false);
-  const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
-  const { id, edit } = props;
-  const [title, setTitle] = useState<string>('New Title');
-
-  const [pageTitle, setPageTitle] = useState<string>('New Title');
-
   const editorRef = useRef<any>();
-
-  // triggers
-  const [trigger, setTrigger] = useState<any>(null);
   const newContent = contentStore((state: any) => state.newContents);
+  const cId: string = router.query.id as string;
 
   useEffect(() => {
     if (id && edit) {
-      fetchAPI(`contents/${id}`).then((data: any) => {
-        onLoadContent(data);
-      });
+      fetchContent(id);
     }
   }, [id, edit]);
 
   useEffect(() => {
+    if (!id && newContent?.template?.title_template) {
+      createDefaultTitle(newContent.template.title_template);
+    }
+  }, [maps, newContent]);
+
+  useEffect(() => {
     if (!id && !edit && newContent) {
-      onInitNewContentCreate(newContent.template);
+      initNewContent(newContent.template);
+
+      if (newContent.contentFields) {
+        setFieldValues(newContent.contentFields);
+      }
     }
   }, [newContent]);
 
@@ -93,34 +80,26 @@ const ContentForm = (props: IContentForm) => {
     setUnsavedChanges(isDirty);
   }, [isDirty]);
 
-  const onInitNewContentCreate = (template: any) => {
+  const initNewContent = (template: any) => {
     setSelectedTemplate(template);
 
     const ctypeId = template?.content_type?.id;
-    const defaultState = template.state?.id;
     const serialbody = template.content?.serialized;
     const content_title = serialbody?.title;
 
     if (ctypeId) {
-      setValue('ttype', ctypeId);
       fetchContentTypeDetails(ctypeId);
+      setContentTypeId(ctypeId);
     }
-
-    setValue('state', defaultState);
 
     if (content_title) {
-      setValue('title', content_title);
-      setTitle(content_title);
       setPageTitle(content_title);
     }
-    // updateStuff(template, maps);
-    // setTrigger(EMPTY_MARKDOWN_NODE);
   };
 
-  const fetchContentTypeDetails = async (contentTypeId: string) => {
+  const fetchContentTypeDetails = async (cid: string) => {
     try {
-      const data: any = await fetchAPI(`content_types/${contentTypeId}`);
-      setContent(data);
+      const data: any = await fetchAPI(`content_types/${cid}`);
 
       const tFields = data.content_type?.fields;
       if (tFields) {
@@ -136,43 +115,22 @@ const ContentForm = (props: IContentForm) => {
     }
   };
 
-  // /**
-  //  * Toggle Title Edit
-  //  * @param map
-  //  */
-  // const toggleEdit = () => {
-  //   console.log('hi');
-  //   setTitleEdit(!showTitleEdit);
-  //   setShowTemplate(!showTemplate);
-  // };
-  /**
-   * Update mapping of users inputs from fields to an internal array with fields
-   * @param data
-   */
+  const createDefaultTitle = (titleTemplate: string) => {
+    const generatedTitle = replacePlaceholders(titleTemplate, maps || []);
+    setPageTitle(generatedTitle);
+  };
+
+  const replacePlaceholders = (str: string, replacements: any): any => {
+    replacements &&
+      replacements.forEach(({ name, value }: any) => {
+        const regex = new RegExp(`\\[${name}\\]`, 'g');
+        str = str.replace(regex, value);
+      });
+    return str;
+  };
+
   const updateMaps = (map: any) => {
     setMaps(map);
-  };
-
-  /**
-   * Insertion Handler
-   * @param data
-   */
-  const makeInsert = (data: any) => {
-    setShowForm(data);
-  };
-
-  /**
-   * Handle form mapping from the form for templates
-   * @param fields
-   * @returns
-   */
-  const mapFields = (fields: any) => {
-    const vals = getValues();
-
-    return fields.map((field: any) => ({
-      ...field,
-      value: vals[field.name],
-    }));
   };
 
   /**
@@ -180,70 +138,54 @@ const ContentForm = (props: IContentForm) => {
    * @param data
    */
   const onCreate = (data: any) => {
-    if (data?.info) {
-      // console.log('Failed Build', data.info);
-    }
-
     if (data?.content?.id) {
       toast.success('Saved Successfully', {
         duration: 1000,
         position: 'top-right',
       });
-      Router.push(`/content/${data.content.id}`);
+      router.replace(`/content/${data.content.id}`);
     }
   };
-
-  console.log('isDirty', isDirty);
 
   /**
    * On Submit
    * @param data
    */
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = () => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
-    const json = editorRef.current?.helpers?.getJSON();
+    const jsonContent = editorRef.current?.helpers?.getJSON();
 
-    console.log('onSubmit[1--b]', data);
-    console.log('onSubmit[1--b]', editorRef.current);
     setUnsavedChanges(false);
 
     setSaving(true);
 
-    maps &&
-      maps.forEach((f: any) => {
-        obj[f.name] = f.value;
-      });
-
     const serials: any = {
       ...obj,
-      title: data.title,
+      title: pageTitle || 'welcome',
       body: markdownContent,
-      serialized: JSON.stringify(json),
+      serialized: JSON.stringify(jsonContent),
+      fields: newContent?.contentFields
+        ? JSON.stringify(newContent?.contentFields)
+        : '',
     };
 
     const template = {
-      // state_uuid: data.state,
       serialized: serials,
       raw: markdownContent,
     };
 
-    console.log('onSubmit[1--3]', template);
-    console.log('onSubmit[1--4]', serials);
-
-    // return;
-
     if (edit) {
-      putAPI(`contents/${id}`, template).then((data: any) => {
-        onCreate(data);
+      putAPI(`contents/${id}`, template).then((response: any) => {
+        onCreate(response);
         setSaving(false);
       });
     } else {
-      postAPI(`content_types/${data.ttype}/contents`, template).then(
-        (data: any) => {
-          if (data?.info) {
+      postAPI(`content_types/${contentTypeId}/contents`, template)
+        .then((response: any) => {
+          if (response?.info) {
             toast.success('Build Failed', {
               duration: 1000,
               position: 'top-right',
@@ -251,16 +193,34 @@ const ContentForm = (props: IContentForm) => {
             setSaving(false);
           }
 
-          if (data?.content?.id) {
+          if (response?.content?.id) {
             toast.success('Saved Successfully', {
               duration: 1000,
               position: 'top-right',
             });
-            Router.push(`/content/${data.content.id}`);
+            router.replace(`/content/${response.content.id}`);
             setSaving(false);
           }
-        },
-      );
+        })
+        .catch((error) => {
+          setSaving(false);
+          toast.error(
+            error?.message || 'Something went wrong please try again later',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
+        });
+    }
+  };
+
+  const fetchContent = async (contentId: string) => {
+    try {
+      const data = await fetchAPI(`contents/${contentId}`);
+      loadContentData(data);
+    } catch (error) {
+      toast.error('Failed to load content');
     }
   };
 
@@ -268,18 +228,21 @@ const ContentForm = (props: IContentForm) => {
    * Load content data from a doc
    * @param data
    */
-  const onLoadContent = (data: any) => {
+  const loadContentData = (data: any) => {
     // set master contents
-    setContents(data);
-    console.log('data[11]', data);
-    // map loaded state to corresponding form value
-    const defaultState = data.state && data.state.id;
-    setValue('state', defaultState);
 
-    if (data && data.content && data.content.serialized) {
+    setContents(data);
+
+    if (data?.content?.serialized?.serialized) {
+      const serialized = JSON.parse(data.content.serialized.serialized);
+      const fdvalue = findHolders(serialized);
+      setFieldValues(fdvalue);
+    }
+
+    if (data?.content?.serialized) {
       const serialbody = data?.content?.serialized;
       const ctypeId = data?.content_type?.id;
-      setValue('ttype', ctypeId);
+      setContentTypeId(ctypeId);
 
       // middle wares
       const content_title = serialbody?.title || undefined;
@@ -287,8 +250,6 @@ const ContentForm = (props: IContentForm) => {
       // fields and templates
       fetchContentTypeDetails(ctypeId);
 
-      setValue('title', content_title);
-      setTitle(content_title);
       setPageTitle(content_title);
 
       const jsonBody = serialbody.serialized;
@@ -302,45 +263,10 @@ const ContentForm = (props: IContentForm) => {
     }
   };
 
-  /**
-   * Load Templates for the particular content type
-   * @param id
-   */
-  // const loadTemplates = (id: string) => {
-  //   fetchAPI(`data_templates/${id}`).then((data: any) => {
-  //     const res: Template[] = data.data_template;
-  //     changeText(res);
-  //   });
-  // };
-
-  const getSummary = () => {
-    // const res =
-    //   document
-    //     .querySelector('.remirror-editor')
-    //     ?.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5') || [];
-    // console.log('remirror-editor', res);
-  };
-
-  /**
-   * Watch out for changes in Content ID, and URL Paths
-   */
-  useEffect(() => {
-    if (pathname) {
-      const pathGroup = pathname.split('/');
-      // validate if its a edit page
-      if (pathGroup.length > 2 && pathGroup[2] === 'edit') {
-        // console.log('[red]', pathGroup);
-        setShowForm(false);
-      }
-    }
-    // getSummary();
-  }, [cId, pathname]);
-
   // syncable field
   useEffect(() => {
     if (fields) {
-      const f: any = mapFields(fields);
-      updateFields(f);
+      updateFields(fields);
     }
   }, [fields]);
 
@@ -348,8 +274,7 @@ const ContentForm = (props: IContentForm) => {
    * Update Document  Title
    */
   const updateTitle = () => {
-    setTitle(selectedTemplate?.title_template);
-    setValue('title', selectedTemplate?.title_template, { shouldDirty: true });
+    setPageTitle(selectedTemplate?.title_template);
   };
   /**
    * Field update eventbus
@@ -367,7 +292,6 @@ const ContentForm = (props: IContentForm) => {
    */
   useEffect(() => {
     if (errors) {
-      // items = errors.keys();
       const items = Object.keys(errors);
       items.map((i: any) => {
         // @ts-expect-error temporary solution here
@@ -380,63 +304,14 @@ const ContentForm = (props: IContentForm) => {
     }
   }, [errors]);
 
-  // when template selection modal is active
-  useEffect(() => {
-    if (activeTemplate.length < 1) {
-      // setShowTemplate(true);
-    }
-  }, [activeTemplate]);
-
-  /**
-   * Change Title on Fields change
-   * @param piece
-   */
-  const changeTitle = (piece: any, maps: any) => {
-    if (maps) {
-      // lazy matching
-      const tempTitle = piece.title_template;
-      const m = findVars(tempTitle, false);
-      // m.map((x: any) => {
-      //   const cName = cleanName(x);
-      //   // console.log('🐴🐴  [changeTitle] ', cName, maps);
-      // });
-    }
-  };
-
-  /**
-   * on select template
-   * @param x
-   */
-
-  const changeText = (x: any) => {
-    setShowForm(true);
-
-    setActiveTemplate(x.id);
-
-    // textOperation(x);
-
-    // store template obj
-    setSelectedTemplate(x);
-
-    changeTitle(x, maps);
-    updateStuff(x, maps);
-  };
-
   /**
    * Mapping Form values to content and updating it
    * @param content
    * @param mappings
    */
-  const passUpdates = async (content: any, mappings: any) => {
-    // console.log('passUpdates', content);
-
-    const updatedCont = await updateVars(content, mappings);
-    // console.log('updatedCont', updatedCont);
-    // console.log('updatedCont[mappings]', mappings);
-
-    setBody(updatedCont);
-
-    getSummary();
+  const passUpdates = async (contentData: any, mappings: any) => {
+    const updatedContent = await updateVars(contentData, mappings);
+    setBody(updatedContent);
   };
 
   /**
@@ -446,8 +321,6 @@ const ContentForm = (props: IContentForm) => {
    * @param key
    */
   const updateStuff = (data: any, mapx: any) => {
-    // console.log('updateStuff', mapx);
-    // console.log('updateStuff[data]', data);
     if (data?.data) {
       let respx = '';
 
@@ -478,19 +351,7 @@ const ContentForm = (props: IContentForm) => {
    * @param state object with md, and json representation
    */
 
-  const doUpdate = (state: any) => {
-    // const markdownContent = editorRef.current?.helpers?.getMarkdown();
-    // const json = editorRef.current?.helpers?.getJSON();
-    // if (state.json) {
-    //   setValue('serialized', JSON.stringify(json));
-    // }
-    if (state.md) {
-      setValue('body', state.md, { shouldDirty: true });
-    }
-    // if (state.json) {
-    //   setValue('serialized', JSON.stringify(state.json));
-    // }
-  };
+  const doUpdate = () => {};
 
   const getInits = (field_maps: any) => {
     const initials: IFieldField[] = [];
@@ -499,6 +360,8 @@ const ContentForm = (props: IContentForm) => {
         const item: IFieldField = {
           name: i.name,
           value: i.value,
+          named: i.value,
+          label: i.name,
           id: i?.field_type?.id,
         };
         initials.push(item);
@@ -507,48 +370,36 @@ const ContentForm = (props: IContentForm) => {
   };
 
   /**
-   * Update Page Title
-   * @param x
-   */
-  const updatePageTitle = (x: any) => {
-    const tempTitle = selectedTemplate?.title_template;
-
-    const m = replaceTitles(tempTitle, x);
-    const actState = activeFlow?.states[0]?.id;
-
-    setValue('state', actState);
-    if (!edit) {
-      setValue('title', m);
-    }
-
-    setTitle(m);
-  };
-
-  /**
    * When use saves variant form names
    * @param defx
    */
   const onSaved = (defx: any) => {
     const resx = getInits(defx);
-    // console.log('onSaved[body]', resx);
 
-    updateStuff(selectedTemplate, resx);
+    if (resx?.length > 0) {
+      setFieldTokkons(resx);
+    }
 
-    updatePageTitle(resx);
-    // setTrigger(EMPTY_MARKDOWN_NODE);
-    // we are inserting an empty node, so that the editor is triggered
+    if (contents?.content?.serialized?.serialized) {
+      const serializedData = editorRef.current?.helpers?.getJSON();
+      updateStuff(serializedData, resx);
+    }
+
+    if (!edit) {
+      updateStuff(selectedTemplate, resx);
+    }
   };
 
-  /**
-   * @TODO to remove
-   * @param e
-   */
   const onceInserted = () => {
     setTrigger(null);
   };
 
   const toggleTitleEdit = () => {
-    // setPageTitle(pageTitle);
+    setTitleEdit(!showTitleEdit);
+  };
+
+  const onTitleUpdate = (data: any) => {
+    setPageTitle(data.title);
     setTitleEdit(!showTitleEdit);
   };
 
@@ -560,10 +411,7 @@ const ContentForm = (props: IContentForm) => {
       />
 
       <Box sx={{ height: '100vh' }}>
-        <NavEdit
-          navtitle={pageTitle || title}
-          onToggleEdit={() => toggleTitleEdit()}
-        />
+        <NavEdit navtitle={pageTitle} onToggleEdit={() => toggleTitleEdit()} />
 
         <Flex
           sx={{
@@ -572,9 +420,6 @@ const ContentForm = (props: IContentForm) => {
             height: 'calc(100% - 47px)',
           }}>
           <Box
-            as="form"
-            id="content-form"
-            onSubmit={handleSubmit(onSubmit)}
             sx={{
               // minWidth: '40%',
               overflowX: 'scroll',
@@ -582,50 +427,77 @@ const ContentForm = (props: IContentForm) => {
               m: 0,
               bg: 'neutral.200',
             }}>
-            <input type="hidden" {...register('hiddenField')} value="body" />
-            <Box
-              sx={{
-                // position: 'relative',
-                bg: 'neutral.100',
-                borderBottom: 'solid 1px',
-                borderBottomColor: 'neutral.200',
-                p: 4,
-                display: showTitleEdit ? 'block' : 'none',
-                flexGrow: 1,
-                width: '100%',
-                pl: 2,
-                pt: 2,
-                // display: 'none',
-              }}>
+            {activeFlow && (
               <Flex
                 sx={{
-                  bg: 'neutral.100',
-                  // position: 'absolute',
-                  alignItems: 'center',
-                  top: 0,
-                  right: 1,
-                  left: 1,
-                  zIndex: 9000,
+                  // bg: '#d9deda57',
+                  px: 3,
+                  py: '9px',
+                  gap: 2,
+                  bg: 'gray.200',
+                  alignContent: 'center',
                 }}>
-                <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
-                  <Field
-                    name="title"
-                    label=""
-                    placeholder="Document Name"
-                    register={register}
-                    defaultValue={pageTitle}
+                {activeFlow?.states.map((x: any) => (
+                  <FlowStateBlock
+                    key={x?.id}
+                    state={x?.state}
+                    order={x?.order}
+                    id={x?.id}
                   />
-                </Box>
-                <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
-                  <Button
-                    variant="secondary"
-                    type="submit"
-                    sx={{ fontWeight: 600 }}>
+                ))}
+
+                <Box sx={{ ml: 'auto' }}>
+                  <Button onClick={onSubmit} variant="primary" loading={saving}>
                     Save
                   </Button>
                 </Box>
               </Flex>
-            </Box>
+            )}
+
+            {showTitleEdit && (
+              <Box
+                as="form"
+                onSubmit={handleSubmit(onTitleUpdate)}
+                sx={{
+                  // position: 'relative',
+                  bg: 'neutral.100',
+                  borderBottom: 'solid 1px',
+                  borderBottomColor: 'neutral.200',
+                  p: 4,
+                  display: showTitleEdit ? 'block' : 'none',
+                  flexGrow: 1,
+                  width: '100%',
+                  pl: 2,
+                  pt: 2,
+                  // display: 'none',
+                }}>
+                <Flex
+                  sx={{
+                    bg: 'neutral.100',
+                    // position: 'absolute',
+                    alignItems: 'center',
+                    top: 0,
+                    right: 1,
+                    left: 1,
+                    zIndex: 9000,
+                  }}>
+                  <Box sx={{ width: '90%', pl: 3, pt: 2, mr: 2 }}>
+                    <Field
+                      name="title"
+                      label=""
+                      placeholder="Document Name"
+                      register={register}
+                      defaultValue={pageTitle}
+                    />
+                  </Box>
+                  <Box sx={{ width: '10%', pt: 2, ml: 'auto', mr: 4 }}>
+                    <Button variant="secondary" type="submit">
+                      Save
+                    </Button>
+                  </Box>
+                </Flex>
+              </Box>
+            )}
 
             {body && (
               <Box
@@ -642,13 +514,12 @@ const ContentForm = (props: IContentForm) => {
                     pr: '2rem',
                   },
                 }}>
-                <Button
+                {/* <Button
                   variant="secondary"
                   type="button"
-                  sx={{ display: 'none' }}
                   onClick={() => setShowDev(!showDev)}>
                   Dev
-                </Button>
+                </Button> */}
                 <Box
                   sx={{
                     mt: 0,
@@ -668,7 +539,7 @@ const ContentForm = (props: IContentForm) => {
                     defaultValue={body}
                     editable
                     onUpdate={doUpdate}
-                    tokens={[]}
+                    tokens={fieldTokkons}
                     insertable={trigger}
                     ref={editorRef}
                     onceInserted={onceInserted}
@@ -677,12 +548,12 @@ const ContentForm = (props: IContentForm) => {
               </Box>
             )}
             <Box sx={{ display: 'none' }}>
-              <Field
+              {/* <Field
                 name="state"
                 label="state"
                 defaultValue=""
                 register={register}
-              />
+              /> */}
 
               {id && (
                 <Box>
@@ -715,44 +586,6 @@ const ContentForm = (props: IContentForm) => {
             {contents && <ContentSidebar content={contents} />}
 
             <Box>
-              {activeFlow && (
-                <Flex
-                  sx={{
-                    bg: '#d9deda57',
-                    px: 3,
-                    py: 1,
-                    gap: 2,
-                    alignContent: 'center',
-                  }}>
-                  {activeFlow?.states.map((x: any) => (
-                    <FlowStateBlock
-                      key={x?.id}
-                      state={x?.state}
-                      order={x?.order}
-                      id={x?.id}
-                    />
-                  ))}
-                </Flex>
-              )}
-              <Box variant="layout.boxHeading" sx={{}}>
-                <Box sx={{ pt: 2, pb: 3 }}>
-                  <Flex sx={{ gap: 0 }}>
-                    <Button
-                      form="content-form"
-                      type="submit"
-                      variant="btnPrimary">
-                      <>
-                        {saving && <Spinner color="white" size={24} />}
-                        {!saving && (
-                          <Text sx={{ fontSize: 2, fontWeight: 600, p: 3 }}>
-                            Save
-                          </Text>
-                        )}
-                      </>
-                    </Button>
-                  </Flex>
-                </Box>
-              </Box>
               <Box variant="layout.boxHeading">
                 <Text as="h3" variant="sectionheading">
                   Content
@@ -776,7 +609,7 @@ const ContentForm = (props: IContentForm) => {
                         <Text
                           as="h6"
                           sx={{
-                            fontSize: 2,
+                            fontSize: 'sm',
                             mb: 0,
                             fontWeight: 600,
                             letterSpacing: '0.2px',
@@ -788,7 +621,7 @@ const ContentForm = (props: IContentForm) => {
                           sx={{
                             ml: 'auto',
                             mr: 3,
-                            fontSize: 1,
+                            fontSize: 'xs',
                             fontWeight: 600,
                             pt: 0,
                             color: 'gray.600',
@@ -802,52 +635,12 @@ const ContentForm = (props: IContentForm) => {
               </Box>
             </Box>
             <FieldForm
-              activeTemplate={activeTemplate}
               setMaps={updateMaps}
               fields={fieldMaps}
-              fieldValues={!edit && newContent?.contentFields}
-              showForm={showForm}
-              setShowForm={makeInsert}
+              fieldValues={fieldValues}
               onSaved={onSaved}
               onRefresh={onSaved}
             />
-            <Box>
-              {/* <Box variant="layout.boxHeading">
-                <Text as="h3" variant="sectionheading">
-                  Flow
-                </Text>
-              </Box> */}
-
-              {/* {activeFlow && (
-                <Box sx={{ position: 'relative' }}>
-                  <Box
-                    variant="layout.boxHeading"
-                    sx={{ bg: 'teal.100', pb: 2, borderTop: 0 }}>
-                    <Text as="span" sx={{ fontSize: 0, mr: 1 }}>
-                      {activeFlow?.flow?.name}
-                    </Text>
-                    <Text as="span" variant="labelcaps">
-                      ({activeFlow?.states.length})
-                    </Text>
-                  </Box>
-
-                  <Box sx={{ pt: 2, px: 3, bg: 'teal.100' }}>
-                    <Box>
-                      <Box sx={{ px: 0, py: 1 }}>
-                        {activeFlow?.states.map((x: any) => (
-                          <FlowStateBlock
-                            key={x?.id}
-                            state={x?.state}
-                            order={x?.order}
-                            id={x?.id}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-                  </Box>
-                </Box>
-              )} */}
-            </Box>
           </Box>
         </Flex>
       </Box>

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -6,12 +5,11 @@ import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button } from 'theme-ui';
 import { z } from 'zod';
 
-import Field from 'components/Field';
-import Link from 'components/NavLink';
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
-
-import Logo from '../../../../public/Logo.svg';
 
 const schema = z
   .object({
@@ -60,14 +58,9 @@ const Index = () => {
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
             <Link href="/">
-              <Image
-                width={116}
-                height={35}
-                src={Logo}
-                alt="Wraft Logo"
-                className=""
-                priority
-              />
+              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+                <BrandLogo width="7rem" height="3rem" />
+              </Box>
             </Link>
           </Box>
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>

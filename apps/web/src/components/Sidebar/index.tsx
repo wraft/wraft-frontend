@@ -4,13 +4,13 @@ import { Button, Drawer, useDrawer } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Plus, X } from '@phosphor-icons/react';
 
 import DefaultMenuItem from 'components/MenuItem';
 
 import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
-// import SearchBlock from './SearchBlock';
 
 export interface INav {
   showFull: boolean;
@@ -28,8 +28,8 @@ const Sidebar = (props: any) => {
   const showFull = props && props.showFull ? true : true;
   const pathname: string = router.pathname as any;
 
-  const checkActive = (pathname: string, path: any) => {
-    if (pathname === '/content/[id]' && path.path === '/contents') {
+  const checkActive = (currentPath: string, path: any) => {
+    if (currentPath === '/content/[id]' && path.path === '/contents') {
       return true;
     }
 
@@ -116,7 +116,7 @@ const Sidebar = (props: any) => {
                             ? rawColors?.green?.[1200]
                             : rawColors?.gray?.[1200],
                           fontWeight: 500,
-                          fontSize: '15px',
+                          fontSize: 'base',
                           lineHeight: '18.8px',
                           letterSpacing: '-0.25px',
                         }}>
@@ -133,7 +133,7 @@ const Sidebar = (props: any) => {
         <Box mt="auto" mb="4">
           <Box className="first-step" p={3}>
             <Button variant="primary" size="full" onClick={toggleSearch}>
-              + New Document
+              <Plus size={16} /> New Document
             </Button>
           </Box>
         </Box>
@@ -146,7 +146,16 @@ const Sidebar = (props: any) => {
         onClose={() => setShowSearch(false)}>
         {showSearch && (
           <>
-            <Drawer.Title>Create New Document</Drawer.Title>
+            <Drawer.Header>
+              <Drawer.Title>Create New Document</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setShowSearch(false)}
+              />
+            </Drawer.Header>
+
             <CreateDocument />
           </>
         )}

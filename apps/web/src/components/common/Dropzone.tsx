@@ -2,15 +2,13 @@ import React, { useCallback, useEffect } from 'react';
 import { TickIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
+import { ApproveTick, Close, CloudUploadIcon } from 'components/Icons';
+import PdfViewer from 'components/PdfViewer';
 import { Asset } from 'utils/types';
 
-import { ApproveTick, Close, CloudUploadIcon } from '../Icons';
 import ProgressBar from './ProgressBar';
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 type DropzoneProps = {
   accept?: Accept;
@@ -97,9 +95,11 @@ const Dropzone = ({
             }}>
             <Close width={24} height={24} />
           </Box>
-          <Document file={assets[assets.length - 1].file}>
-            <Page pageNumber={1} width={251} />
-          </Document>
+          <PdfViewer
+            height={350}
+            url={`${assets[assets.length - 1].file}`}
+            pageNumber={1}
+          />
         </Box>
       )}
       <Box

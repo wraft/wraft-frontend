@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Button, Flex } from 'theme-ui';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Box } from 'theme-ui';
+import { Drawer, useDrawer, Button } from '@wraft/ui';
+import { Plus, X } from '@phosphor-icons/react';
+
+import PageHeader from 'common/PageHeader';
 
 import ContentTypeDashboard from './ContentTypeDashboard';
-import PageHeader from './PageHeader';
 import ContentTypeForm from './ContentTypeForm';
 
 export interface ILayout {
@@ -37,14 +39,15 @@ interface ContentTypeList {
 const ContentTypeList = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+  const mobileMenuDrawer = useDrawer();
+
   return (
     <Box sx={{ pl: 0, minHeight: '100%', bg: 'neutral.100' }}>
       <PageHeader title="Variants" desc="Manage Variants">
-        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="buttonSecondary" onClick={() => setIsOpen(true)}>
-            New Variant
-          </Button>
-        </Flex>
+        <Button variant="secondary" onClick={() => setIsOpen(true)}>
+          <Plus size={12} weight="bold" />
+          Create Variant
+        </Button>
       </PageHeader>
       <Box
         variant="layout.pageFrame"
@@ -58,9 +61,25 @@ const ContentTypeList = () => {
         }}>
         <ContentTypeDashboard rerender={rerender} setRerender={setRerender} />
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        store={mobileMenuDrawer}
+        aria-label="Menu backdrop"
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <ContentTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+          <>
+            <Drawer.Header>
+              <Drawer.Title>Create Variant</Drawer.Title>
+              <X
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={() => setIsOpen(false)}
+              />
+            </Drawer.Header>
+            <ContentTypeForm setIsOpen={setIsOpen} setRerender={setRerender} />
+          </>
         )}
       </Drawer>
     </Box>

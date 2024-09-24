@@ -1,4 +1,5 @@
-import { AnyExtension, ExtensionPriority } from 'remirror';
+import type { AnyExtension } from "remirror";
+import { ExtensionPriority } from "remirror";
 import {
   BlockquoteExtension,
   BoldExtension,
@@ -15,19 +16,26 @@ import {
   StrikeExtension,
   TextHighlightExtension,
   TrailingNodeExtension,
-} from 'remirror/extensions';
+  HorizontalRuleExtension,
+} from "remirror/extensions";
+import { TableExtension } from "@remirror/extension-react-tables";
+import { HolderAtomExtension } from "./extension-holder/holder-extension";
+import { PageBreakExtension } from "./extension-pagebreak/pagebreak-extension";
+import { SlashExtension } from "./extensions/slash";
+import { htmlToMarkdown } from "./turn-down-service";
 
-import { HolderAtomExtension } from './extension-holder/holder-extension';
+// import { CountExtension } from '@remirror/extension-count';
 /**
  * A list of allowed Remirror Extensions
  */
 const extensions =
-  (placeholder: string = '') =>
-  (): Array<AnyExtension> => [
-    new BoldExtension(),
+  (placeholder = "") =>
+  (): AnyExtension[] => [
+    new BoldExtension({}),
     new ItalicExtension(),
-    new HeadingExtension(),
+    new HeadingExtension({}),
     new CodeExtension(),
+    // new CountExtension(),
     new BlockquoteExtension(),
     new LinkExtension({ autoLink: true }),
     new StrikeExtension(),
@@ -37,25 +45,38 @@ const extensions =
       priority: ExtensionPriority.High,
       enableCollapsible: true,
     }),
-    new TrailingNodeExtension(),
+    new TrailingNodeExtension({}),
     new MarkdownExtension({
+      htmlToMarkdown: (html) => htmlToMarkdown(html),
       copyAsMarkdown: false,
     }),
+    // new MarkdownExtension({
+    //   htmlToMarkdown: (html) => htmlToMarkdown(html),
+    //   copyAsMarkdown: false,
+    // }),
     new HardBreakExtension(),
-    new TextHighlightExtension(),
+    new TextHighlightExtension({}),
     new PlaceholderExtension({
       placeholder,
     }),
     new HolderAtomExtension({
       extraAttributes: {
-        named: '',
-        name: '',
-        mentionTag: 'holder',
+        named: "",
+        name: "",
+        mentionTag: "holder",
       },
       matchers: [
-        { name: 'holder', char: '@', appendText: ' ', matchOffset: 0 },
+        { name: "holder", char: "@", appendText: " ", matchOffset: 0 },
       ],
     }),
+    new SlashExtension({
+      extraAttributes: { type: "user" },
+      matchers: [{ name: "slash", char: "/", appendText: " ", matchOffset: 0 }],
+    }),
+
+    new TableExtension({}),
+    new HorizontalRuleExtension({}),
+    new PageBreakExtension({}),
   ];
 
 export default extensions;

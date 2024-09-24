@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Box, Text } from 'theme-ui';
 
-import { fetchAPI } from '../utils/models';
+import { fetchAPI } from 'utils/models';
 
 export interface PermissionGroupList {
   total_pages: number;
@@ -30,10 +30,7 @@ const OrgRolesList = () => {
    * @param token
    */
   const loadLayout = () => {
-    // console.log(profile)
-    // const org_id = profile?.organisation_id
     fetchAPI(`role_groups`).then((data: any) => {
-      console.log('roles', data);
       setContents(data.role_groups);
     });
   };
@@ -63,16 +60,10 @@ const OrgRolesList = () => {
    */
   const ky = (r: any) => {
     let pname = '';
-    Object.keys(r).map(function (key, index) {
-      // myObject[key] *= 2;
-      console.log('keys', key, index);
+    Object.keys(r).map(function (key, _index) {
       pname = key;
     });
 
-    // return pname;
-    if (pname) {
-      console.log('pname', r[`${pname}`]);
-    }
     return pname;
   };
 
@@ -92,10 +83,10 @@ const OrgRolesList = () => {
 
         {contents?.length < 1 && (
           <Box sx={{ p: 4, border: 'solid 1px', borderColor: 'border' }}>
-            <Text as="h5" sx={{ fontSize: 1, color: 'text' }}>
+            <Text as="h5" sx={{ fontSize: 'xs', color: 'text' }}>
               No Roles?
             </Text>
-            <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+            <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
               Are you kidding?
             </Text>
           </Box>

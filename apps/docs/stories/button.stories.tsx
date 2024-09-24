@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { x } from '@xstyled/emotion';
 import { Button } from "@wraft/ui";
 
 const meta: Meta<typeof Button> = {
@@ -15,7 +14,8 @@ const meta: Meta<typeof Button> = {
     // Add parameters for Storybook to handle component documentation and behavior.
     docs: {
       description: {
-        component: 'Use the `Button` component to render buttons with different styles and behaviors.',
+        component:
+          "Use the `Button` component to render buttons with different styles and behaviors.",
       },
     },
   },
@@ -27,14 +27,14 @@ type Story = StoryObj<typeof Button>;
 
 export const Primary: Story = {
   render: (args) => <Button {...args}>{args.children}</Button>,
-  name: 'Primary',
   args: {
-    children: 'Primary Button',
-    variant: 'primary',
+    children: "Primary Button",
+    variant: "primary",
   },
   parameters: {
     docs: {
-      storyDescription: 'A primary button used for main actions in forms and dialogs.',
+      storyDescription:
+        "A primary button used for main actions in forms and dialogs.",
     },
   },
 };
@@ -42,15 +42,15 @@ export const Primary: Story = {
 export const Secondary: Story = {
   render: (args) => <Button {...args}>{args.children}</Button>,
   args: {
-    children: 'Secondary Button',
-    variant: 'secondary',
+    children: "Secondary Button",
+    variant: "secondary",
   },
 };
 
 export const Outlined: Story = {
   render: (args) => <Button {...args}>{args.children}</Button>,
   args: {
-    children: 'Outlined Button',
-    variant: 'outlined',
+    children: "Outlined Button",
+    variant: "outlined",
   },
 };

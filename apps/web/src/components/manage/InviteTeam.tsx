@@ -1,12 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import Checkbox from '@wraft-ui/Checkbox';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import Creatable from 'react-select/creatable';
 import { Box, Button, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
 
-import { fetchAPI, postAPI } from '../../utils/models';
-import { emailRegex } from '../../utils/regex';
+import Checkbox from 'common/Checkbox';
+import { fetchAPI, postAPI } from 'utils/models';
+import { emailRegex } from 'utils/regex';
 
 interface FormInputs {
   emails: string[];
@@ -53,10 +53,8 @@ const InviteTeam = ({ setOpen }: Props) => {
     const value = event.target.value;
 
     if (checked) {
-      console.log('checked', value);
       setCheckedValues([...checkedValues, value]);
     } else {
-      console.log('unchecked', value);
       setCheckedValues(checkedValues.filter((item: any) => item !== value));
     }
     trigger();
@@ -82,8 +80,7 @@ const InviteTeam = ({ setOpen }: Props) => {
     loadRole();
   }, []);
 
-  function onSubmit(data: any) {
-    console.log('submitted', data);
+  function onSubmit() {
     for (const email of selectedEmails) {
       const data = {
         email: email.value,

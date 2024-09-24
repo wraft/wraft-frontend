@@ -1,14 +1,16 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
-import { Flex, Container, Button, Box, Input, Spinner } from 'theme-ui';
+import { Flex, Container, Box, Input, Spinner } from 'theme-ui';
+import { Plus } from '@phosphor-icons/react';
+import { Button } from '@wraft/ui';
 
-import { AddIcon, SearchIcon } from 'components/Icons';
+import { SearchIcon } from 'components/Icons';
 import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import { Drawer } from 'common/Drawer';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
 import { workspaceLinks } from 'utils/index';
 
@@ -24,8 +26,8 @@ const Index: FC = () => {
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
       <>
         <Head>
-          <title>Layouts | Wraft Docs</title>
-          <meta name="description" content="a nextjs starter boilerplate" />
+          <title>Roles | Wraft</title>
+          <meta name="description" content="workspace roles" />
         </Head>
         <Page>
           <PageHeader
@@ -79,12 +81,9 @@ const Index: FC = () => {
                 </Box>
               </Box>
 
-              <Button
-                variant="buttonPrimarySmall"
-                onClick={() => setIsOpen(true)}
-                sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <AddIcon />
-                Create new role
+              <Button variant="primary" onClick={() => setIsOpen(true)}>
+                <Plus size={14} weight="bold" />
+                Create Role
               </Button>
             </Flex>
           </PageHeader>

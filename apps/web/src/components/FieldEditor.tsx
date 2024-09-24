@@ -4,8 +4,8 @@ import { Button, Box, Flex, Text, Spinner, useThemeUI } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { CloseIcon } from '@wraft/icon';
 
-import Field from './Field';
-import Modal from './Modal';
+import Modal from 'common/Modal';
+import Field from 'common/Field';
 
 interface FieldFormProps {
   fields?: any;
@@ -58,7 +58,6 @@ const FieldForm = (props: FieldFormProps) => {
   const onSubmit = () => {
     setSubmitting(true);
     const vals: FieldValues = getValues();
-    console.log('submit on FieldEditor', vals);
 
     const filteredVals = vals.fields.filter(
       (val: any) => val.name !== undefined || null || '',
@@ -69,8 +68,6 @@ const FieldForm = (props: FieldFormProps) => {
       values: filteredVals,
       data: vals,
     };
-
-    console.log('reslut', results);
 
     props.onSave(results);
     setSubmitting(false);
@@ -97,7 +94,7 @@ const FieldForm = (props: FieldFormProps) => {
               <Text as="h3" sx={{ mb: 0 }}>
                 Empty State
               </Text>
-              <Text as="p" sx={{ fontSize: 1, color: 'text', mb: 3, pr: 3 }}>
+              <Text as="p" sx={{ fontSize: 'xs', color: 'text', mb: 3, pr: 3 }}>
                 You have no fields added, start adding fields to `field` up your
                 Variant
               </Text>

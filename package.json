@@ -18,17 +18,24 @@
     "version-packages": "changeset version"
   },
   "lint-staged": {
-    "(apps|packages)/**/*.{ts,tsx}": [
+    "(apps|packages)/**/*.{ts,tsx,md}": [
       "prettier --write",
       "eslint --fix"
     ]
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
+    "@changesets/cli": "^2.27.8",
+    "@wraft/eslint-config": "*",
+    "@wraft/typescript-config": "*",
     "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
-    "prettier": "^3.2.4",
+    "lint-staged": "^15.2.10",
+    "prettier": "^3.3.3",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@8.15.4"
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0",
+    "npm": "not supported"
+  }
 }

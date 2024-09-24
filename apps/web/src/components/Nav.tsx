@@ -4,11 +4,12 @@ import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
+import { Bell, Search } from 'components/Icons';
+import Modal from 'common/Modal';
+import Link from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+
 import { CreateDocument } from './Document';
-import { Bell, Search } from './Icons';
-import Modal from './Modal';
-import Link from './NavLink';
 
 export interface IUser {
   name: string;
@@ -90,7 +91,7 @@ const Nav = ({ navtitle }: INav) => {
                     sx={{
                       borderRadius: 0,
                       width: '130% !important',
-                      fontSize: 1,
+                      fontSize: 'xs',
                     }}
                   />
                   <Box
@@ -141,7 +142,7 @@ const Nav = ({ navtitle }: INav) => {
                     sx={{
                       alignContent: 'top',
                       verticalAlign: 'top',
-                      mt: 2,
+                      // mt: 2,
                     }}>
                     <Box>
                       <MenuProvider>
@@ -175,7 +176,7 @@ const Nav = ({ navtitle }: INav) => {
                               {userProfile?.roles?.size > 0 && (
                                 <Text
                                   as="p"
-                                  sx={{ fontSize: 0, color: 'text' }}>
+                                  sx={{ fontSize: 'xxs', color: 'text' }}>
                                   {userProfile?.roles[0]?.name}
                                 </Text>
                               )}

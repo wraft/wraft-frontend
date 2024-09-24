@@ -68,11 +68,22 @@ const FieldColor: React.FC<FieldColorProps> = ({
   };
 
   useEffect(() => {
-    const vX: string = defaultValue || '#000000';
+    const vX: string = defaultValue || generateRandomColor();
     setVal(vX);
+    if (onChangeColor) {
+      onChangeColor(vX, name);
+    }
   }, [defaultValue]);
 
   const isInside = variant === 'inside';
+
+  const generateRandomColor = (): string => {
+    const randomValue = () =>
+      Math.floor(Math.random() * 256)
+        .toString(16)
+        .padStart(2, '0');
+    return `#${randomValue()}${randomValue()}${randomValue()}`;
+  };
 
   return (
     <PopoverProvider>
@@ -100,7 +111,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
               placeholder={placeholder ? placeholder : ''}
               id={name}
               type={ftype}
-              defaultValue={valx || defaultValue || ''}
+              value={valx || defaultValue || ''}
               sx={{
                 pl: '40px',
                 pr: '80px',

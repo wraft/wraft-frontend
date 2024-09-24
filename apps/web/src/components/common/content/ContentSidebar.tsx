@@ -9,14 +9,14 @@ import {
 } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, Button } from 'theme-ui';
-import { Check, DotsThreeVertical, Share } from '@phosphor-icons/react';
+import { Check, DotsThreeVertical, Circle } from '@phosphor-icons/react';
 
-import { SendIcon, ThreeDots, BackArrowIcon } from 'components/Icons';
-import Modal from 'components/Modal';
+import { BackArrowIcon } from 'components/Icons';
+import EmailComposer from 'components/EmailComposer';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
 import { FlowStateBlockProps, ContentInstance } from 'utils/types/content';
-
-import { ConfirmDelete } from '..';
 
 /**
  * Atom Component to show Flow State
@@ -26,10 +26,27 @@ import { ConfirmDelete } from '..';
  */
 export const FlowStateBlock = ({
   state,
-  activeFlow,
   id,
+  num,
+  nextState,
+  currentActiveIndex,
 }: FlowStateBlockProps) => {
-  const isCurrent = activeFlow && activeFlow.state.id === id ? true : false;
+  const checked = currentActiveIndex >= num;
+  const activeState = nextState && id === nextState?.id;
+
+  // const bgC = activeState &&
+  // Color logic
+  const getBgColor = () => {
+    if (activeState) {
+      return checked ? 'green.100' : 'orange.100';
+    }
+
+    if (!checked && !activeState) {
+      return 'gray.200';
+    }
+    return 'green.400';
+  }; // {!checked && !activeState
+
   return (
     <Flex
       as={Focusable}
@@ -44,22 +61,38 @@ export const FlowStateBlock = ({
       }}>
       <Box
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           width: '18px',
           height: '18px',
           borderRadius: '9rem',
-          bg: isCurrent ? 'green.500' : 'gray.500',
+          bg: getBgColor(),
+          border: '1px solid',
+          borderColor: activeState ? 'gray.300' : 'gray.500',
+          color: activeState
+            ? checked
+              ? 'green.1200'
+              : 'green.400'
+            : 'green.1200',
           textAlign: 'center',
           mr: 2,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           flexShrink: 0,
+          '.circlced': {
+            color: 'orange.300',
+          },
           p: 1,
         }}>
-        <Check size={16} />
+        {/* {nextState?.order} */}
+        {!checked && !activeState && <>{num}</>}
+        {activeState && <Circle size={16} weight="fill" className="circlced" />}
+        {checked && <Check size={16} weight="bold" />}
       </Box>
-      <Text sx={{ fontSize: 1, textTransform: 'capitalize' }}>{state}</Text>
+      <Text
+        sx={{ fontSize: '13px', textTransform: 'capitalize', fontWeight: 500 }}>
+        {state}
+      </Text>
       <Box
         sx={{
           paddingLeft: 1,
@@ -73,20 +106,22 @@ export const FlowStateBlock = ({
 
 interface EditMenuProps {
   id: string;
+  nextState: any;
 }
 /**
  * Context Menu for Delete, Edit
  * @param param0
  * @returns
  */
-export const EditMenus = ({ id }: EditMenuProps) => {
+export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
+  const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
   /**
    * Delete content
    * @param id
    */
-  const deleteContent = (id: string) => {
-    deleteAPI(`contents/${id}`).then(() => {
+  const deleteContent = (contentId: string) => {
+    deleteAPI(`contents/${contentId}`).then(() => {
       toast.success('Deleted a content', {
         duration: 1000,
         position: 'top-right',
@@ -95,36 +130,60 @@ export const EditMenus = ({ id }: EditMenuProps) => {
     });
   };
   return (
-    <MenuProvider>
-      <MenuButton as={Button} variant="base">
-        <DotsThreeVertical size={20} />
-      </MenuButton>
-      <Menu
-        as={Box}
-        aria-label="Manage Content"
-        sx={{
-          border: 'solid 1px',
-          borderColor: 'border',
-          borderRadius: 4,
-          bg: 'gray.100',
-          color: 'gray.900',
-        }}>
-        <MenuItem
+    <>
+      <MenuProvider>
+        <MenuButton
+          as={Button}
+          variant="btnIcon"
+          sx={{ display: 'flex', p: 2 }}>
+          <DotsThreeVertical weight="bold" size={16} />
+        </MenuButton>
+        <Menu
           as={Box}
-          onClick={() => setIsDelete(true)}
-          sx={{ px: 3, py: 2, cursor: 'pointer', color: 'red.700' }}>
-          Delete
-        </MenuItem>
-      </Menu>
-      <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
-        <ConfirmDelete
-          onConfirmDelete={() => deleteContent(id)}
-          setOpen={setIsDelete}
-          title="Delete Document"
-          text={`Are you sure you want to delete this document ?`}
-        />
+          aria-label="Manage Content"
+          sx={{
+            border: 'solid 1px',
+            borderColor: 'border',
+            borderRadius: 4,
+            bg: 'gray.100',
+            color: 'gray.900',
+          }}>
+          {nextState && nextState.is_user_eligible && (
+            <MenuItem
+              as={Box}
+              onClick={() => Router.push(`/content/edit/${id}`)}
+              sx={{ px: 3, py: 2, cursor: 'pointer' }}>
+              Edit
+            </MenuItem>
+          )}
+          <MenuItem
+            as={Box}
+            onClick={() => setIsDelete(true)}
+            sx={{ px: 3, py: 2, cursor: 'pointer', color: 'red.700' }}>
+            Delete
+          </MenuItem>
+
+          <MenuItem
+            as={Box}
+            onClick={() => setMailPopupOpen(true)}
+            sx={{ px: 3, py: 2, cursor: 'pointer' }}>
+            Send Mail
+          </MenuItem>
+        </Menu>
+        <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
+          <ConfirmDelete
+            onConfirmDelete={() => deleteContent(id)}
+            setOpen={setIsDelete}
+            title="Delete Document"
+            text={`Are you sure you want to delete this document ?`}
+          />
+        </Modal>
+      </MenuProvider>
+
+      <Modal isOpen={isMailPopupOpen}>
+        <EmailComposer id={id} setOpen={setMailPopupOpen} />
       </Modal>
-    </MenuProvider>
+    </>
   );
 };
 
@@ -134,13 +193,16 @@ export const EditMenus = ({ id }: EditMenuProps) => {
  */
 interface ContentSidebarProps {
   content: ContentInstance;
+  nextState?: any;
 }
 
-const ContentSidebar = ({ content }: ContentSidebarProps) => (
+export const ContentSidebar = ({ content, nextState }: ContentSidebarProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
-    <Flex sx={{ width: '70%' }}>
+    <Flex>
       <Box sx={{ mr: 3 }}>
-        <Text as="h6" sx={{ color: 'gray.900', fontSize: 1, fontWeight: 400 }}>
+        <Text
+          as="h6"
+          sx={{ color: 'gray.900', fontSize: 'xs', fontWeight: 400 }}>
           {content.content_type?.layout?.name} / {content.content_type?.name}
         </Text>
         <Flex>
@@ -148,7 +210,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
             as="h3"
             sx={{
               fontWeight: 'heading',
-              fontSize: 2,
+              fontSize: 'sm',
               lineHeight: '24px',
             }}>
             {content.content?.instance_id}
@@ -167,7 +229,7 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
                 borderRadius: '3px',
                 letterSpacing: '0.2px',
                 textTransform: 'uppercase',
-                fontSize: 0,
+                fontSize: 'xxs',
               }}>
               {content?.state?.state}
             </Text>
@@ -178,11 +240,10 @@ const ContentSidebar = ({ content }: ContentSidebarProps) => (
     <Flex
       sx={{
         ml: 'auto',
+        alignItems: 'baseline',
+        gap: 1,
       }}>
-      <Share size={20} />
-      <EditMenus id={content?.content?.id} />
+      <EditMenus id={content?.content?.id} nextState={nextState} />
     </Flex>
   </Flex>
 );
-
-export default ContentSidebar;

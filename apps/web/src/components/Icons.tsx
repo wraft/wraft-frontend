@@ -2,7 +2,8 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Image } from 'theme-ui';
 
-import { IconWrapper } from './Atoms';
+import { IconWrapper } from 'common/Atoms';
+
 import abstract from './icon/abstract.svg';
 import del from './icon/bin.svg';
 import flow from './icon/bolt.svg';
@@ -48,7 +49,7 @@ const IconBox = styled.div`
 `;
 
 interface IconBoxWrapperProps {
-  content: string;
+  Icon: string;
 }
 
 /**
@@ -56,23 +57,23 @@ interface IconBoxWrapperProps {
  * @param param0
  * @returns
  */
-export const IconBoxWrapper = ({ content }: IconBoxWrapperProps) => (
+export const IconBoxWrapper = ({ Icon }: IconBoxWrapperProps) => (
   <IconBox>
-    <Image alt="" src={content} />
+    <Image alt="" src={Icon} />
   </IconBox>
 );
 
-export const Book = () => <IconBoxWrapper content={content} />;
-export const Layout = () => <IconBoxWrapper content={grid} />;
-export const ContentType = () => <IconBoxWrapper content={layout} />;
-export const Template = () => <IconBoxWrapper content={templates} />;
-export const Flow = () => <IconBoxWrapper content={flow} />;
-export const Del = () => <IconBoxWrapper content={del} />;
-export const Edit = () => <IconBoxWrapper content={edit} />;
-export const File = () => <IconBoxWrapper content={file} />;
-export const FieldIcon = () => <IconBoxWrapper content={field} />;
-export const User = () => <IconBoxWrapper content={user} />;
-export const Plus = () => <IconBoxWrapper content={plus} />;
+export const Book = () => <IconBoxWrapper Icon={content} />;
+export const Layout = () => <IconBoxWrapper Icon={grid} />;
+export const ContentType = () => <IconBoxWrapper Icon={layout} />;
+export const Template = () => <IconBoxWrapper Icon={templates} />;
+export const Flow = () => <IconBoxWrapper Icon={flow} />;
+export const Del = () => <IconBoxWrapper Icon={del} />;
+export const Edit = () => <IconBoxWrapper Icon={edit} />;
+export const File = () => <IconBoxWrapper Icon={file} />;
+export const FieldIcon = () => <IconBoxWrapper Icon={field} />;
+export const User = () => <IconBoxWrapper Icon={user} />;
+export const Plus = () => <IconBoxWrapper Icon={plus} />;
 
 export const Logo = () => (
   <IconBox>
@@ -179,19 +180,6 @@ export const DocumentIcon = (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
-
-export const OptionsIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="36"
-    height="18"
-    viewBox="0 0 36 18"
-    fill="none">
-    <circle cx="8.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-    <circle cx="17.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-    <circle cx="26.5" cy="8.5" r="2.5" fill="#C1C6DB" />
-  </svg>
-);
 
 export const FilterArrowDown = () => (
   <svg

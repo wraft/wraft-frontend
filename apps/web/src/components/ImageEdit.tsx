@@ -3,9 +3,9 @@ import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { Box, Slider, Flex, Button, Image } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
-import { getCroppedImg } from '../utils/imgCrop';
-import { updateEntityFile } from '../utils/models';
+import { useAuth } from 'contexts/AuthContext';
+import { getCroppedImg } from 'utils/imgCrop';
+import { updateEntityFile } from 'utils/models';
 
 interface IImageCopperProps {
   image?: any;
@@ -36,11 +36,10 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
 
   const onCropComplete = useCallback(
     (
-      croppedArea: any,
-      croppedAreaPixels: React.SetStateAction<Area | undefined>,
+      _croppedArea: any,
+      newCroppedAreaPixels: React.SetStateAction<Area | undefined>,
     ): any => {
-      setCroppedAreaPixels(croppedAreaPixels);
-      console.log('croppedArea', croppedArea);
+      setCroppedAreaPixels(newCroppedAreaPixels);
     },
     [],
   );
@@ -48,7 +47,6 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImage = await getCroppedImg(image, croppedAreaPixels, 0);
-      console.log('donee', { croppedImage });
       onSavable(croppedImage);
       setCroppedImg(croppedImage);
       onUpdate(croppedImage);
@@ -60,12 +58,7 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
     }
   }, [croppedAreaPixels, 0]);
 
-  // const onClose = useCallback(() => {
-  //   setCroppedImage(undefined);
-  // }, []);
-
   const changeZoom = (_e: any) => {
-    console.log('__e', _e);
     setZoom(_e.target.value);
   };
 
@@ -83,14 +76,11 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
           zIndex: 5000,
           minWidth: '100%',
           width: '100%',
-          // bg: "black",
-          // p: 4,
         }}>
         <Box>
           {image && (
             <Box
               sx={{
-                // bg: "gray.2",
                 width: '280px',
                 height: '280px',
                 minHeight: '100%',
@@ -128,26 +118,15 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
             max={10}
             step={1}
             aria-labelledby="Zoom"
-            onChange={(zoom: any) => changeZoom(zoom)}
+            onChange={(e: any) => changeZoom(e)}
           />
         </Flex>
       </Box>
       <Flex sx={{ bg: 'neutral.100', p: 3 }}>
         <Box sx={{ ml: 'auto' }}>
-          {/* <Button
-            type="button"
-            sx={{
-              border: 'solid 1px',
-              borderColor: 'border',
-              bg: 'background',
-              color: 'gray.800',
-              mr: 1,
-            }}>
-            Clear
-          </Button> */}
           <Button
             variant="btnSecondary"
-            sx={{ width: '100%', fontSize: 1 }}
+            sx={{ width: '100%', fontSize: 'xs' }}
             type="button"
             onClick={showCroppedImage}>
             Done

@@ -11,13 +11,14 @@ import { Heading } from 'theme-ui';
 import { Box, Flex, Text } from 'theme-ui';
 import { z } from 'zod';
 
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import Link from 'common/NavLink';
+import { useAuth } from 'contexts/AuthContext';
+import { userLogin } from 'utils/models';
+import { emailPattern } from 'utils/zodPatterns';
+
 import GoogleLogo from '../../public/GoogleLogo.svg';
-import Logo from '../../public/Logo.svg';
-import { useAuth } from '../contexts/AuthContext';
-import { userLogin } from '../utils/models';
-import { emailPattern } from '../utils/zodPatterns';
-import Field from './Field';
-import Link from './NavLink';
 
 export interface IField {
   name: string;
@@ -57,8 +58,8 @@ const UserLoginForm = () => {
             await signOut({ redirect: false });
           }
           router.push('/login');
-        } catch (error) {
-          console.error('Error during sign out:', error);
+        } catch (err) {
+          console.error('Error during sign out:', err);
         }
       }
     };
@@ -82,11 +83,11 @@ const UserLoginForm = () => {
     }
   }, [data, status]);
 
-  const onSubmit = async (data: any): Promise<void> => {
+  const onSubmit = async (formData: any): Promise<void> => {
     setLoading(true);
     setLoginError(null);
     try {
-      const res = await userLogin(data);
+      const res = await userLogin(formData);
       if (res) {
         login(res);
       }
@@ -108,21 +109,16 @@ const UserLoginForm = () => {
     <Flex variant="onboardingFormPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
         <Link href="/">
-          <Image
-            src={Logo}
-            alt="Wraft Logo"
-            width={116}
-            height={35}
-            className=""
-            priority
-          />
+          <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+            <BrandLogo width="7rem" height="3rem" />
+          </Box>
         </Link>
       </Box>
       <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
         <Heading
           as="h3"
           variant="styles.h3Medium"
-          sx={{ fontSize: 5, mb: '48px', color: 'gray.1200' }}>
+          sx={{ fontSize: '2xl', mb: '48px', color: 'gray.1200' }}>
           Sign in
         </Heading>
 
@@ -186,22 +182,19 @@ const UserLoginForm = () => {
           }}
         />
 
-        <Button
-          onClick={() => signIn('gmail')}
-          variant="googleLogin"
-          // sx={{ bg: 'gray.1000' }}
-        >
+        <Button onClick={() => signIn('gmail')} variant="googleLogin">
           <Flex
             sx={{
               alignItems: 'center',
               gap: 2,
               minWidth: '100%',
-              bg: 'transparent',
+              bg: 'none',
               border: 'none',
+              color: 'gray.900',
             }}
             variant="buttons.googleLogin">
             <Image src={GoogleLogo} alt="" width={24} height={24} />
-            Login using Google
+            Login in with Google
           </Flex>
         </Button>
 

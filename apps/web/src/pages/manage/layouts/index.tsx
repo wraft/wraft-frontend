@@ -1,14 +1,15 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
-import { Flex, Container, Button, Box } from 'theme-ui';
+import { Flex, Container, Box } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import LayoutForm from 'components/LayoutForm';
 import LayoutList from 'components/LayoutList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import { Drawer } from 'common/Drawer';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
@@ -17,8 +18,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Layouts | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Layouts | Wraft</title>
+        <meta name="description" content="wraft layouts" />
       </Head>
       <Page>
         <PageHeader
@@ -28,11 +29,8 @@ const Index: FC = () => {
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
             />
           }>
-          <Button
-            variant="btnSecondary"
-            sx={{ fontSize: 1 }}
-            onClick={() => setIsOpen(true)}>
-            Add Layout
+          <Button variant="secondary" onClick={() => setIsOpen(true)}>
+            + Add Layout
           </Button>
         </PageHeader>
         <Drawer open={isOpen} setOpen={setIsOpen}>

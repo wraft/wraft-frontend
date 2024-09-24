@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
-import { Drawer } from '@wraft-ui/Drawer';
+import { Box, Flex, Text } from 'theme-ui';
+import { Button, Table, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
-import { deleteAPI, fetchAPI } from '../../utils/models';
+import { StateBadge } from 'common/Atoms';
+import ConfirmDelete from 'common/ConfirmDelete';
+import Modal from 'common/Modal';
+import { deleteAPI, fetchAPI } from 'utils/models';
+
 import PipelineTypeForm from './PipelineTypeForm';
-import Modal from '../Modal';
-import { ConfirmDelete } from '../common';
 
 export interface Theme {
   total_pages: number;
@@ -33,22 +34,27 @@ type Props = {
 };
 
 const Form = ({ rerender, setRerender }: Props) => {
-  const { theme } = useThemeUI();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, _setLoading] = useState<boolean>(false);
   const [pipelineData, setPipelineData] = useState<any>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
   const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
-  const [selectedPipelineId, setSelectedPipelineId] = useState<string>('');
   const [pipeStageName, setPipeStageName] = useState<string>('');
-  const [selectedPipelineStage, setSelectedPipelineStage] =
+  const [pipelineStageTemplateId, setPipelineStageTemplateId] =
+    useState<string>('');
+  const [selectedPipelineStageId, setSelectedPipelineStageId] =
     useState<string>('');
 
-  const handlePipelineClick = (pipelineId: string, stagename: string) => {
-    console.log(pipelineId, 'logid');
+  const mobileMenuDrawer = useDrawer();
 
-    setIsOpen(true);
-    setSelectedPipelineId(pipelineId);
+  const handlePipelineClick = (
+    stageId: string,
+    stagename: string,
+    stageTemplateId: string,
+  ) => {
+    setShowSearch(!showSearch);
+    setSelectedPipelineStageId(stageId);
     setPipeStageName(stagename);
+    setPipelineStageTemplateId(stageTemplateId);
   };
 
   const router = useRouter();
@@ -62,9 +68,9 @@ const Form = ({ rerender, setRerender }: Props) => {
   };
 
   const handleAddPipelineStep = () => {
-    setIsOpen(true);
+    setShowSearch(true);
     // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
-    setSelectedPipelineId('');
+    setSelectedPipelineStageId('');
   };
 
   const onDelete = (stageId: any) => {
@@ -72,7 +78,7 @@ const Form = ({ rerender, setRerender }: Props) => {
       .then(() => {
         setRerender && setRerender((prev: boolean) => !prev);
         toast.success('Stage Deleted Successfully', { duration: 1000 });
-        Router.push(`/manage/pipelines/run/${cId}`);
+        Router.push(`/pipelines/run/${cId}`);
       })
       .catch(() => {
         toast.error('Delete Failed', { duration: 1000 });
@@ -90,16 +96,8 @@ const Form = ({ rerender, setRerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text
-            as="p"
-            variant="pM"
-            onClick={() =>
-              handlePipelineClick(
-                row.original.id,
-                row.original.data_template.title,
-              )
-            }>
-            {row.original.data_template.title}
+          <Text as="p" variant="pM">
+            {row.original.data_template?.title}
           </Text>
         </Box>
       ),
@@ -109,44 +107,61 @@ const Form = ({ rerender, setRerender }: Props) => {
       id: 'content.status',
       header: (
         <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
-          </Text>
+          CONFIGURATION
         </Flex>
       ),
       cell: ({ row }: any) => (
         <Flex
           key={row.index}
           sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            Approved
-          </Text>
+          <Box>
+            <StateBadge
+              name={
+                row.original.form_mapping != null ? 'Complete' : 'Incomplete'
+              }
+              color={
+                row.original.form_mapping != null ? 'green.a400' : 'red.200'
+              }
+            />
+          </Box>
         </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.state',
-      header: (
-        <Flex sx={{ display: 'flex' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
-            STATE
-          </Text>
-        </Flex>
-      ),
+      // header: (
+      //   <Flex sx={{ display: 'flex' }}>
+      //     <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
+      //       STATE
+      //     </Text>
+      //   </Flex>
+      // ),
       cell: ({ row }: any) => (
-        <Flex key={row.index} sx={{ justifyContent: 'space-between' }}>
-          <Text as="p" variant="pM" sx={{ color: 'gray.300' }}>
+        <Flex key={row.index} sx={{ justifyContent: 'end' }}>
+          {/* <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
             Published
-          </Text>
-          <Box>
+          </Text> */}
+          <Flex sx={{ alignItems: 'center', gap: 1 }}>
+            <Button
+              variant="secondary"
+              onClick={() =>
+                handlePipelineClick(
+                  row.original.id,
+                  row.original.data_template.title,
+                  row.original.data_template.id,
+                )
+              }>
+              Edit
+            </Button>
             <DeleteIcon
+              cursor="pointer"
               onClick={() => {
                 setIsOpenDelete(true);
-                setSelectedPipelineStage(row.original.id);
+                setSelectedPipelineStageId(row.original.id);
               }}
             />
-          </Box>
+          </Flex>
         </Flex>
       ),
       enableSorting: false,
@@ -169,14 +184,15 @@ const Form = ({ rerender, setRerender }: Props) => {
           </Button>
         </Box>
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
-        {isOpen && (
+      <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
+        {showSearch && (
           <PipelineTypeForm
-            setIsOpen={setIsOpen}
+            setIsOpen={setShowSearch}
             setRerender={setRerender}
             pipelineData={pipelineData}
-            id={selectedPipelineId}
+            selectedPipelineStageId={selectedPipelineStageId}
             pipeStageName={pipeStageName}
+            pipelineStageTemplateId={pipelineStageTemplateId}
           />
         )}
       </Drawer>
@@ -187,7 +203,7 @@ const Form = ({ rerender, setRerender }: Props) => {
             text="Are you sure you want to delete ?"
             setOpen={setIsOpenDelete}
             onConfirmDelete={() => {
-              onDelete(selectedPipelineStage);
+              onDelete(selectedPipelineStageId);
               setIsOpenDelete(false);
             }}
           />

@@ -6,7 +6,7 @@ const HOST = process.env.NEXT_PUBLIC_API_HOST;
 module.exports = withImages({
   env: {
     api: process.env.NEXT_PUBLIC_API_HOST,
-    API_HOST: process.env.API_HOST,
+    API_HOST: process.env.NEXT_PUBLIC_API_HOST,
   },
   async rewrites() {
     return [
@@ -18,9 +18,19 @@ module.exports = withImages({
   },
   output: 'standalone',
   images: {
-    unoptimized: true
+    unoptimized: true,
   },
   experimental: {
+    esmExternals: 'loose',
     optimizePackageImports: ['@phosphor-icons/react'],
+    turbo: {
+      resolveAlias: {
+        canvas: './empty-module.ts',
+      },
+    },
+  },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
   },
 });

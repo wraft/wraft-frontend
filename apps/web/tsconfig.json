@@ -4,7 +4,7 @@
     "baseUrl": "./src",
     "esModuleInterop": true,
     "paths": {
-      "@wraft-ui/*": ["components/common/*"],
+      "common/*": ["components/common/*"]
     },
 
     "lib": ["dom", "es2017"],

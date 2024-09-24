@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import NavLink from 'next/link';
 import { Button, DropdownMenu } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
+import { Gear, Plus } from '@phosphor-icons/react';
 
-import Link from '../../components/NavLink';
-import { useAuth } from '../../contexts/AuthContext';
-import { postAPI } from '../../utils/models';
+import DefaultAvatar from 'components/DefaultAvatar';
+import Link from 'common/NavLink';
+import Modal from 'common/Modal';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI, postAPI } from 'utils/models';
+
 import WorkspaceCreate from '../manage/WorkspaceCreate';
-import Modal from '../Modal';
 import ModeToggle from '../ModeToggle';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
   const [mode, setMode] = useColorMode();
+  const [count, setCount] = useState<number | undefined>();
 
   const router = useRouter();
   const { organisations, userProfile, accessToken, login, logout } = useAuth();
@@ -23,8 +28,12 @@ const Header = () => {
     if (createdId) onSwitchOrganization(createdId);
   }, [createdId]);
 
+  useEffect(() => {
+    notificationCount();
+  }, []);
+
   const onSwitchOrganization = async (id: string) => {
-    const organRequest = postAPI('switch_organisations', {
+    postAPI('switch_organisations', {
       organisation_id: id,
     })
       .then((res: any) => {
@@ -37,17 +46,22 @@ const Header = () => {
           position: 'top-center',
         });
       });
+  };
 
-    toast.promise(organRequest, {
-      loading: 'switching...',
-      success: <b>Switched workspace!</b>,
-      error: <b>Could not switch workspace.</b>,
+  const notificationCount = () => {
+    fetchAPI('notifications/count').then((data: any) => {
+      const res = data.count;
+      setCount(res);
     });
   };
 
-  const onUserlogout = () => {
-    logout();
-    router.push('/login');
+  const onUserLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Error during user logout:', error);
+    }
   };
 
   return (
@@ -68,33 +82,24 @@ const Header = () => {
               <Flex color="primary" sx={{ fill: 'text', cursor: 'pointer' }}>
                 {userProfile?.currentOrganisation && (
                   <Flex>
-                    <Image
-                      src={userProfile?.currentOrganisation?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `28px`,
-                        width: `28px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
+                    <DefaultAvatar
+                      url={userProfile?.currentOrganisation?.logo}
+                      value={userProfile?.currentOrganisation?.name}
+                      size={24}
                     />
-                    <Box>
+
+                    <Box ml={2}>
                       <Text
                         as="p"
                         sx={{
                           fontWeight: `bold`,
                           color: 'gray.1200',
                           lineHeight: 1,
-                          fontSize: 2,
+                          fontSize: 'sm',
                         }}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.1000' }}>
+                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000' }}>
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -108,71 +113,73 @@ const Header = () => {
                 color="primary"
                 py="12px"
                 px="8px"
-                sx={{ fill: 'text', cursor: 'pointer', minWidth: '200px' }}>
+                sx={{
+                  fill: 'text',
+                  cursor: 'pointer',
+                  minWidth: '200px',
+                  justifyContent: 'space-between',
+                }}>
                 {userProfile?.currentOrganisation && (
-                  <Flex>
-                    <Image
-                      src={userProfile?.currentOrganisation?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '99rem',
-                        height: `28px`,
-                        width: `28px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
-                    />
-                    <Box>
-                      <Text
-                        as="p"
-                        sx={{
-                          fontWeight: `bold`,
-                          color: 'gray.1000',
-                          lineHeight: 1,
-                          fontSize: 1,
-                        }}>
-                        {userProfile?.currentOrganisation?.name}
-                      </Text>
-                      <Text as="p" sx={{ fontSize: 1, color: 'gray.400' }}>
-                        {userProfile?.currentOrganisation?.members_count}{' '}
-                        members
-                      </Text>
-                    </Box>
-                  </Flex>
+                  <>
+                    <Flex>
+                      <DefaultAvatar
+                        url={userProfile?.currentOrganisation?.logo}
+                        value={userProfile?.currentOrganisation?.name}
+                        size={24}
+                      />
+                      <Box ml={2}>
+                        <Text
+                          as="p"
+                          sx={{
+                            fontWeight: `bold`,
+                            color: 'gray.1000',
+                            lineHeight: 1,
+                            fontSize: 'xs',
+                          }}>
+                          {userProfile?.currentOrganisation?.name}
+                        </Text>
+                        <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
+                          {userProfile?.currentOrganisation?.members_count}{' '}
+                          members
+                        </Text>
+                      </Box>
+                    </Flex>
+                    <NavLink href={`/manage/workspace`}>
+                      <Gear size={18} weight="bold" color="#777" />
+                    </NavLink>
+                  </>
                 )}
               </Flex>
+
               <DropdownMenu.Separator />
-              {organisations &&
-                organisations.map((org: any) => (
-                  <DropdownMenu.Item
-                    key={org.id}
-                    onClick={() => onSwitchOrganization(org?.id)}>
-                    <Image
-                      src={org?.logo}
-                      width={24}
-                      height={24}
-                      alt="Workspace"
-                      sx={{
-                        borderRadius: '50%',
-                        height: `18px`,
-                        width: `18px`,
-                        border: '1px solid',
-                        borderColor: 'gray.100',
-                        p: '1px',
-                        mr: 2,
-                      }}
-                    />
-                    {org.name}
-                  </DropdownMenu.Item>
-                ))}
+              <Box
+                variant="styles.scrollbarY"
+                sx={{
+                  height: '400px',
+                }}>
+                {organisations &&
+                  organisations
+                    .filter(
+                      (org: any) => org.id !== userProfile.organisation_id,
+                    )
+                    .map((org: any) => (
+                      <DropdownMenu.Item
+                        key={org.id}
+                        onClick={() => onSwitchOrganization(org?.id)}>
+                        <DefaultAvatar
+                          url={org?.logo}
+                          value={org.name}
+                          size={20}
+                        />
+                        <Box ml={2}>{org.name}</Box>
+                      </DropdownMenu.Item>
+                    ))}
+              </Box>
               <DropdownMenu.Separator />
 
               <DropdownMenu.Item>
                 <Button variant="ghost" onClick={() => setIsOpen(true)}>
+                  <Plus size={16} />
                   Create or join a workspace
                 </Button>
               </DropdownMenu.Item>
@@ -209,7 +216,7 @@ const Header = () => {
                   <Text as="h4">{userProfile?.name}</Text>
 
                   {userProfile?.roles?.size > 0 && (
-                    <Text as="p" sx={{ fontSize: 0, color: 'text' }}>
+                    <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
                       {userProfile?.roles[0]?.name}
                     </Text>
                   )}
@@ -233,12 +240,24 @@ const Header = () => {
                   </Flex>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                  <Link href="/account" path="/account">
-                    Settings
+                  <Link href="/notifications">
+                    <Flex>
+                      <Box sx={{ width: '180px' }}>Notifications</Box>
+                      {count && count > 0 && (
+                        <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
+                      )}
+                    </Flex>
                   </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                  <Box onClick={onUserlogout}>Signout</Box>
+                  <Link href="/account" path="/account">
+                    <Box sx={{ width: '200px' }}>Settings</Box>
+                  </Link>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item>
+                  <Box sx={{ display: 'flex', flex: 1 }} onClick={onUserLogout}>
+                    Signout
+                  </Box>
                 </DropdownMenu.Item>
               </Box>
             </DropdownMenu>

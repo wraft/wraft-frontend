@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Button, Text } from 'theme-ui';
+import { Box, Button, Text, Spinner } from 'theme-ui';
 
-import { useAuth } from '../../contexts/AuthContext';
-import { postAPI } from '../../utils/models';
-import Field from '../Field';
+import Field from 'common/Field';
+import { useAuth } from 'contexts/AuthContext';
+import { postAPI } from 'utils/models';
 
 interface props {
   setOpen: any;
@@ -17,6 +17,7 @@ interface FormInputs {
 }
 
 const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
+  const [creating, setCreating] = useState<boolean>(false);
   const { userProfile } = useAuth();
   const {
     register,
@@ -27,19 +28,20 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
   });
 
   const onSubmit = (data: any) => {
+    setCreating(true);
     const body = {
       name: data.name,
-      url: data.url,
       email: userProfile.email,
     };
     postAPI('organisations', body)
-      .then((data: any) => {
+      .then((response: any) => {
         setOpen(false);
         toast.success('Created new workspace', {
           duration: 1000,
           position: 'top-right',
         });
-        setCreatedId(data.id);
+        setCreatedId(response.id);
+        setCreating(false);
       })
       .catch(() => {
         toast.error('Workspace creation failed!', {
@@ -62,29 +64,21 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
           <Field
             name="name"
             register={register}
-            placeholder="Functionary"
+            placeholder="Enter Workspace Name"
             label="Workspace Name"
             error={errors.name}
           />
-          <Box sx={{ pt: 2 }}>
-            <Field
-              name="url"
-              register={register}
-              placeholder="wraft.co/functionary"
-              label="Workspace URL"
-              error={errors.url}
-            />
-          </Box>
           <Box sx={{ gap: 3, py: 4 }}>
             <Button
               type="submit"
               variant="buttonPrimary"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
                 mr: 3,
               }}>
-              Create Workspace
+              {creating && <Spinner width={16} height={16} color="white" />}
+              {!creating && <Text>Create Workspace</Text>}
             </Button>
             <Button
               onClick={() => {
@@ -92,7 +86,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
               }}
               variant="cancel"
               sx={{
-                fontSize: 2,
+                fontSize: 'sm',
                 flexGrow: 1,
               }}>
               Cancel

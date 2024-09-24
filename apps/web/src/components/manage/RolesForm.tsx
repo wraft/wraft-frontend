@@ -5,20 +5,20 @@ import {
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
-import Checkbox from '@wraft-ui/Checkbox';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
 
-import { putAPI, fetchAPI, postAPI } from '../../utils/models';
-import Field from '../Field';
-import { ArrowDropdown } from '../Icons';
+import { ArrowDropdown } from 'components/Icons';
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Checkbox from 'common/Checkbox';
+import Field from 'common/Field';
+import { putAPI, fetchAPI, postAPI } from 'utils/models';
 
 interface Props {
   setOpen: any;
   setRender: any;
-  roleId?: string;
+  roleId?: any;
 }
 
 interface FormInputs {
@@ -27,7 +27,8 @@ interface FormInputs {
 }
 
 const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
-  const isEdit = roleId && roleId !== (null || undefined || '');
+  const isEdit =
+    roleId && roleId !== null && roleId !== undefined && roleId !== '';
   const {
     register,
     trigger,
@@ -182,7 +183,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
         success: () => {
           setFormStep(0);
           setOpen(null);
-          setRender((prev: boolean) => !prev);
+          setRender((previous: boolean) => !previous);
           return `Role ${text}ed`;
         },
         error: (error) => {

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Container, Button, Text, Flex } from 'theme-ui';
 import { AddIcon } from '@wraft/icon';
 
-import { postAPI, deleteAPI, fetchAPI, putAPI } from '../utils/models';
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Field from 'common/Field';
+import { postAPI, deleteAPI, fetchAPI, putAPI } from 'utils/models';
+
 import { Droppable } from './Droppable';
-import Field from './Field';
 
 export interface States {
   total_pages: number;
@@ -48,6 +49,7 @@ export interface StateState {
   approvers: Approver[];
   id: string;
   state: string;
+  type: string;
   order: number;
   inserted_at: string;
   updated_at: string;
@@ -111,15 +113,15 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
    */
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
-      const res: States = data;
-      const x: StateState[] = res.states
+      const res: StateElement[] = data;
+      const x: any = res
         .map((s: any) => {
           return s.state;
         })
         .sort((a, b) => a.order - b.order);
       const bigOrderItem: StateState = x.reduce(
-        (prev: StateState, current: StateState) => {
-          return prev.order > current.order ? prev : current;
+        (previous: StateState, current: StateState) => {
+          return previous.order > current.order ? previous : current;
         },
       );
       setHighestOrder(bigOrderItem.order);
@@ -149,6 +151,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       return (
         item1.approvers === item2.approvers &&
         item1.state === item2.state &&
+        item1.type === item2.type &&
         item1.order === item2.order
       );
     };
@@ -209,6 +212,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
           return {
             id: changedItem.id,
             state: changedItem.state,
+            type: changedItem.type,
             //used initial order cause backend throws error order already exists
             order: initialItem.order,
             approvers: {
@@ -221,17 +225,18 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         const createDataArr = newStates.map((newItem, index) => {
           return {
             state: newItem.state,
+            type: newItem.type,
             order: highestOrder + 1 + index,
             approvers: newItem.approvers.map((approver) => approver.id),
           };
         });
 
-        const CreateReqs = createDataArr.map((data) => {
-          return postAPI(`flows/${cId}/states`, data);
+        const CreateReqs = createDataArr.map((item) => {
+          return postAPI(`flows/${cId}/states`, item);
         });
         const UpdateReqs = updateDataArr.map((updateData) => {
-          const { id, ...data } = updateData;
-          return putAPI(`states/${id}`, data);
+          const { id, ...updateFields } = updateData;
+          return putAPI(`states/${id}`, updateFields);
         });
         const DeleteReqs = removedStates.map((s) => {
           deleteAPI(`states/${s.id}`);
@@ -244,45 +249,49 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         toast.promise(allReqs, {
           loading: 'Updating states',
           success: () => {
-            fetchAPI(`flows/${cId}/states`).then(async (data: States) => {
-              const res: States = data;
-              const x: StateState[] = res.states
-                .map((s: any) => {
-                  return s.state;
-                })
-                .sort((a, b) => a.order - b.order);
-              type Align = {
-                states: {
-                  order: number;
-                  id: string;
-                }[];
-              };
-              const alignData: Align = {
-                states: x.map((state) => {
-                  return {
-                    order:
-                      states.find((s) => s.state === state.state)?.order || 0,
-                    id: state.id,
-                  };
-                }),
-              };
-              await putAPI(`flows/${cId}/align-states`, alignData).then(() => {
-                toast.success('Sorted flow state', {
-                  duration: 1000,
-                  position: 'top-right',
-                });
-                setRerender((pre: boolean) => !pre);
-              });
+            fetchAPI(`flows/${cId}/states`).then(
+              async (response: StateState[]) => {
+                const res: StateState[] = response;
+                const x: StateState[] = res
+                  .map((s: any) => {
+                    return s.state;
+                  })
+                  .sort((a, b) => a.order - b.order);
+                type Align = {
+                  states: {
+                    order: number;
+                    id: string;
+                  }[];
+                };
+                const alignData: Align = {
+                  states: x.map((state) => {
+                    return {
+                      order:
+                        states.find((s) => s.state === state.state)?.order || 0,
+                      id: state.id,
+                    };
+                  }),
+                };
+                await putAPI(`flows/${cId}/align-states`, alignData).then(
+                  () => {
+                    toast.success('Sorted flow state', {
+                      duration: 1000,
+                      position: 'top-right',
+                    });
+                    setRerender((pre: boolean) => !pre);
+                  },
+                );
 
-              await putAPI(`flows/${cId}`, data).then(() => {
-                toast.success('flow updated', {
-                  duration: 1000,
-                  position: 'top-right',
+                await putAPI(`flows/${cId}`, data).then(() => {
+                  toast.success('flow updated', {
+                    duration: 1000,
+                    position: 'top-right',
+                  });
+                  setOpen(false);
+                  setRerender((previous: boolean) => !previous);
                 });
-                setOpen(false);
-                setRerender((prev: boolean) => !prev);
-              });
-            });
+              },
+            );
             return 'States updated';
           },
           error: 'Error updating states',
@@ -290,12 +299,12 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       }
     } else {
       await postAPI('flows', data)
-        .then((data: any) => {
+        .then((response: any) => {
           toast.success('Flow created', {
             duration: 1000,
             position: 'top-right',
           });
-          setCId(data?.id);
+          setCId(response?.id);
           if (errorRef.current) {
             const errorElement = errorRef.current;
             if (errorElement) {
@@ -335,6 +344,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     const newState: StateState = {
       id: Math.random().toString(),
       state: '',
+      type: '',
       order: highestOrder + 1,
       approvers: [],
       inserted_at: new Date().toISOString(),

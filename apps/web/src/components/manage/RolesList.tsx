@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { MenuProvider, MenuButton, Menu, MenuItem } from '@ariakit/react';
-import { Drawer } from '@wraft-ui/Drawer';
-import ContentLoader from 'react-content-loader';
-import { Box, Text, Flex, Button } from 'theme-ui';
+import { Box, Text, Flex } from 'theme-ui';
+import {
+  Table,
+  Drawer,
+  useDrawer,
+  DropdownMenu,
+  Modal,
+  Button,
+} from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../../utils/models';
-import { ConfirmDelete } from '../common';
-import { BigErrorIcon, FilterArrowDown, OptionsIcon } from '../Icons';
-import Modal from '../Modal';
-import { Table } from '../Table';
-import { RolesForm } from '.';
+import { fetchAPI, deleteAPI } from 'utils/models';
+
+import RolesForm from './RolesForm';
 
 export interface RolesItem {
   id: string;
@@ -25,6 +28,63 @@ interface Props {
   setFilterLoading: (e: boolean) => void;
 }
 
+const columns = ({ openDrawer, onDeleteRole }: any) => [
+  {
+    id: 'content.name',
+    header: 'ROLE NAME',
+    accessorKey: 'content.name',
+    isPlaceholder: true,
+    cell: ({ row }: any) => (
+      <Box
+        sx={{ cursor: 'pointer', fontSize: 'sm', fontWeight: '500' }}
+        onClick={() => openDrawer(row.original.id)}>
+        {row.original.name}
+      </Box>
+    ),
+    width: '100%',
+    enableSorting: false,
+  },
+  {
+    id: 'content.user_count',
+    header: 'USER',
+    accessorKey: 'content.user_count',
+    isPlaceholder: true,
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'sm' }}>{row.original.user_count}</Box>
+    ),
+    enableSorting: false,
+  },
+  {
+    id: 'editor',
+    header: '',
+    cell: ({ row }: any) => (
+      <Flex sx={{ justifyContent: 'right' }}>
+        {row.original?.name !== 'superadmin' && (
+          <DropdownMenu.Provider>
+            <DropdownMenu.Trigger>
+              <ThreeDotIcon />
+            </DropdownMenu.Trigger>
+            <DropdownMenu aria-label="dropdown role">
+              <DropdownMenu.Item onClick={() => onDeleteRole(row.original.id)}>
+                <Text
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'red.600',
+                    textAlign: 'left',
+                    width: '200px',
+                  }}>
+                  Delete
+                </Text>
+              </DropdownMenu.Item>
+            </DropdownMenu>
+          </DropdownMenu.Provider>
+        )}
+      </Flex>
+    ),
+    enableSorting: false,
+  },
+];
+
 const RolesList = ({
   render,
   setRender,
@@ -32,17 +92,19 @@ const RolesList = ({
   setFilterLoading,
 }: Props) => {
   const [contents, setContents] = useState<Array<RolesItem>>([]);
-  const [tableList, setTableList] = useState<Array<any>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
-  const [isDelete, setIsDelete] = useState<number | null>(null);
-  const [isEdit, setIsEdit] = useState<number | null>(null);
-  const [sort, setSort] = useState('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isOpenDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [currentContent, setCurrentContent] = useState<any>(null);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const [sort, _setSort] = useState('');
+
+  const mobileMenuDrawer = useDrawer();
 
   const loadData = async () => {
+    setLoading(true);
     await fetchAPI(`roles?name=${searchTerm}&sort=${sort}`).then(
       (data: any) => {
-        setLoading(true);
+        setLoading(false);
         setContents(data);
       },
     );
@@ -58,219 +120,84 @@ const RolesList = ({
     loadData();
   }, [render, sort]);
 
-  useEffect(() => {
-    if (contents && contents.length > 0) {
-      const row: any = [];
-      contents.map((r: any) => {
-        const rFormated = {
-          name: (
-            <Text variant="text.pM" sx={{ color: 'gray.500' }}>
-              {r.name}
-            </Text>
-          ),
-          users: (
-            <Text variant="pM" sx={{ color: 'gray.500' }}>
-              {r.user_count}
-            </Text>
-          ),
-        };
-
-        row.push(rFormated);
-      });
-
-      setTableList(row);
-    }
-  }, [contents]);
-
-  const onDelete = (row: any) => {
-    deleteAPI(`roles/${contents[row.index].id}`);
-    setIsDelete(null);
+  const onDelete = (id: any) => {
+    deleteAPI(`roles/${id}`);
+    setOpenDeleteModal(false);
     if (setRender) {
       setRender((prev: boolean) => !prev);
+      loadData();
     }
+  };
+
+  const openDrawer = (id: any) => {
+    setOpen(true);
+    const content = contents.find((x) => x.id === id);
+    setCurrentContent(content);
+  };
+
+  const onDeleteRole = (id: any) => {
+    setOpenDeleteModal(true);
+    const content = contents.find((x) => x.id === id);
+    setCurrentContent(content);
   };
 
   return (
     <Flex sx={{ width: '100%' }}>
-      {!loading && <ContentLoader />}
-      {loading && !contents && (
-        <Box
-          sx={{
-            p: 4,
-            bg: 'gray.100',
-            border: 'solid 1px',
-            borderColor: 'border',
-          }}>
-          <Text>Nothing to approve</Text>
-        </Box>
-      )}
-      {loading && contents && (
-        <Table
-          options={{
-            columns: [
-              {
-                Header: () => (
-                  <Flex
-                    onClick={() => {
-                      if (sort == 'name') {
-                        setSort('name_desc');
-                      } else {
-                        setSort('name');
-                      }
-                    }}
-                    sx={{
-                      cursor: 'pointer',
-                      ml: '24px',
-                      fontSize: '12px',
-                      fontWeight: 'heading',
-                    }}>
-                    ROLE NAME
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100%',
-                        my: 'auto',
-                        ml: 2,
-                        rotate: sort === 'name_desc' ? '180deg' : '0deg',
-                      }}>
-                      <FilterArrowDown />
-                    </Box>
-                  </Flex>
-                ),
-                accessor: 'name',
-                width: '50%',
-                Cell: ({ row }) => {
-                  return (
-                    <Box
-                      sx={{ ml: '24px', cursor: 'pointer' }}
-                      onClick={() => {
-                        setIsEdit(row.index);
-                      }}>
-                      {row.original.name}
-                      <Drawer
-                        open={isEdit === row.index}
-                        setOpen={() => setIsEdit(null)}>
-                        {isEdit === row.index && (
-                          <RolesForm
-                            setRender={setRender}
-                            setOpen={setIsEdit}
-                            roleId={contents[row.index]?.id}
-                          />
-                        )}
-                      </Drawer>
-                    </Box>
-                  );
-                },
-              },
-              {
-                Header: 'USERS',
-                accessor: 'users',
-                width: '30%',
-              },
-              {
-                Header: '',
-                accessor: 'col3',
-                Cell: ({ row }) => {
-                  return (
-                    <Box>
-                      {contents[row.index]?.name !== 'superadmin' && (
-                        <MenuProvider>
-                          <MenuButton
-                            as={Box}
-                            variant="none"
-                            sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                position: 'relative',
-                                cursor: 'pointer',
-                                margin: '0px',
-                                padding: '0px',
-                                bg: 'transparent',
-                                ':disabled': {
-                                  display: 'none',
-                                },
-                              }}
-                              onClick={() => {
-                                setIsOpen(row.index);
-                              }}>
-                              <OptionsIcon />
-                            </Box>
-                          </MenuButton>
-                          <Menu
-                            as={Box}
-                            variant="layout.menu"
-                            open={isOpen == row.index}
-                            onClose={() => setIsOpen(null)}>
-                            <Button
-                              variant="base"
-                              onClick={() => {
-                                setIsOpen(null);
-                                setIsDelete(row.index);
-                              }}>
-                              <MenuItem as={Box} sx={{ width: 'fit-content' }}>
-                                <Text
-                                  sx={{
-                                    cursor: 'pointer',
-                                    color: 'red.600',
-                                    textAlign: 'left',
-                                  }}>
-                                  Delete
-                                </Text>
-                              </MenuItem>
-                            </Button>
-                          </Menu>
-                        </MenuProvider>
-                      )}
-                      <Modal
-                        isOpen={isDelete === row.index}
-                        onClose={() => setIsDelete(null)}>
-                        {contents[row.index] &&
-                        contents[row.index].user_count > 0 ? (
-                          <Flex
-                            sx={{
-                              width: '403px',
-                              flexDirection: 'column',
-                              alignItems: 'center',
-                              p: 4,
-                              gap: 3,
-                            }}>
-                            <BigErrorIcon />
-                            <Text variant="pR" sx={{ color: 'text' }}>
-                              You cannot remove a role that is in use
-                            </Text>
-                            <Button
-                              sx={{ mt: 2 }}
-                              variant="buttonPrimary"
-                              onClick={() => setIsDelete(null)}>
-                              Okay
-                            </Button>
-                          </Flex>
-                        ) : (
-                          <ConfirmDelete
-                            title="Delete role"
-                            text={`Are you sure you want to delete ‘${
-                              contents[row.index]?.name
-                            }’?`}
-                            setOpen={setIsDelete}
-                            setRender={setRender}
-                            onConfirmDelete={() => onDelete(row)}
-                          />
-                        )}
-                      </Modal>
-                    </Box>
-                  );
-                },
-                width: '3%',
-              },
-            ],
-            data: tableList,
-          }}
-        />
-      )}
+      <Table
+        data={contents}
+        isLoading={loading}
+        columns={columns({ openDrawer, onDeleteRole })}
+        skeletonRows={12}
+      />
+      <Drawer
+        open={isOpen}
+        store={mobileMenuDrawer}
+        withBackdrop={true}
+        onClose={() => setOpen(false)}>
+        {currentContent && (
+          <RolesForm
+            setRender={setRender}
+            setOpen={setOpen}
+            roleId={currentContent.id}
+          />
+        )}
+      </Drawer>
+      <Modal
+        open={isOpenDeleteModal}
+        ariaLabel="delete modal"
+        onClose={() => setOpenDeleteModal(false)}>
+        <>
+          {currentContent && currentContent.user_count > 0 && (
+            <Box>
+              <Modal.Header>Are you sure</Modal.Header>
+              <Box my={3}>You cannot remove a role that is in use</Box>
+              <Flex sx={{ gap: '8px' }}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setOpenDeleteModal(false)}>
+                  Cancel
+                </Button>
+              </Flex>
+            </Box>
+          )}
+          {currentContent && currentContent.user_count === 0 && (
+            <Box>
+              <Modal.Header>Are you sure</Modal.Header>
+              <Box my={3}>Are you sure you want to delete?</Box>
+              <Flex sx={{ gap: '8px' }}>
+                <Button
+                  variant="secondary"
+                  onClick={() => setOpenDeleteModal(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={() => onDelete(currentContent.id)}>
+                  Confirm
+                </Button>
+              </Flex>
+            </Box>
+          )}
+        </>
+      </Modal>
     </Flex>
   );
 };

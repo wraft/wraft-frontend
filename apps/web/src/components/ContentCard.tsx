@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Text, Flex, Avatar } from 'theme-ui';
 
-import { TimeAgo } from './Atoms';
-import MenuItem from './NavLink';
+import { TimeAgo } from 'common/Atoms';
+import MenuItem from 'common/NavLink';
 
 export interface ILayout {
   width: number;
@@ -79,7 +79,7 @@ const ContentCardBase = (props: IField) => {
         }}
       />
       <Box sx={{ p: 3 }}>
-        <Text sx={{ fontSize: 0, color: 'text' }}>
+        <Text sx={{ fontSize: 'xxs', color: 'text' }}>
           {props.content.instance_id}
         </Text>
         <MenuItem

@@ -1,28 +1,21 @@
-import { useCallback, useMemo, useState } from 'react';
-
-// import {
-//   HolderAtomChangeHandler,
-//   HolderAtomExtension,
-//   HolderAtomNodeAttributes,
-// } from '@remirror/extension-mention-atom';
-
-import { ChangeReason, SuggestChangeHandlerProps } from '@remirror/pm/suggest';
-import { useExtension, useHelpers } from '@remirror/react-core';
-import {
+import { useCallback, useMemo, useState } from "react";
+import type { SuggestChangeHandlerProps } from "@remirror/pm/suggest";
+import { ChangeReason } from "@remirror/pm/suggest";
+import { useExtension, useHelpers } from "@remirror/react-core";
+import type {
   MenuNavigationOptions,
-  useMenuNavigation,
   UseMenuNavigationReturn,
-} from '@remirror/react-hooks';
-
-import {
+} from "@remirror/react-hooks";
+import { useMenuNavigation } from "@remirror/react-hooks";
+import type {
   HolderAtomChangeHandler,
-  HolderAtomExtension,
   HolderAtomNodeAttributes,
-} from './holder-extension';
+} from "./holder-extension";
+import { HolderAtomExtension } from "./holder-extension";
 
 export interface HolderAtomState<
   Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,
-> extends Pick<SuggestChangeHandlerProps, 'name' | 'query' | 'text' | 'range'> {
+> extends Pick<SuggestChangeHandlerProps, "name" | "query" | "text" | "range"> {
   /**
    * The reason for the change.
    */
@@ -72,7 +65,7 @@ export function useHolderAtom<
   } = props;
   const [state, setState] = useState<HolderAtomState<Data> | null>(null);
   const helpers = useHelpers();
-  const isOpen = !!state;
+  const isOpen = Boolean(state);
 
   const onDismiss = useCallback(() => {
     if (!state) {
@@ -169,7 +162,7 @@ export function useHolderAtom<
   // Add the handlers to the `MentionExtension`
   useExtension(
     HolderAtomExtension,
-    ({ addHandler }) => addHandler('onChange', onChange),
+    ({ addHandler }) => addHandler("onChange", onChange),
     [onChange],
   );
 

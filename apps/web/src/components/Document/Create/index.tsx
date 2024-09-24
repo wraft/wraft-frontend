@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
-import { Button } from '@wraft/ui';
+import { useRouter } from 'next/router';
+import { Button, Pagination, Skeleton } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
+import toast from 'react-hot-toast';
 // import { steps } from 'framer-motion';
 
-import Field from 'components/Field';
 import FieldDate from 'components/FieldDate';
+import { EmptyForm } from 'components/Icons';
+import Field from 'common/Field';
+import StepsIndicator from 'common/Form/StepsIndicator';
 import { capitalizeFirst } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
@@ -38,17 +40,15 @@ export interface IFieldItem {
   type: string;
 }
 
-// interface ContentTypeList {
-//   isEdit?: boolean;
-// }
-
 const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [pageMeta, setPageMeta] = useState<any>();
+
+  const [loading, setLoading] = useState<boolean>(true);
   const [fields, setField] = useState([]);
   const [formStep, setFormStep] = useState(0);
 
-  // const router = useRouter();
+  const router = useRouter();
 
   const {
     // formState: { errors },
@@ -64,7 +64,6 @@ const CreateDocument = () => {
   });
 
   const template = watch('template');
-  console.log('template', template);
   const setNewContent = contentStore((state) => state.addNewContent);
 
   useEffect(() => {
@@ -74,22 +73,22 @@ const CreateDocument = () => {
   }, []);
 
   useEffect(() => {
-    // const { tid, cid } = template;
     if (template?.id) {
       resetField('contentFields');
       getFields(template?.content_type.id);
     }
   }, [template?.id]);
 
-  const loadData = () => {
-    fetchAPI(`data_templates`)
+  const loadData = (page = 1) => {
+    fetchAPI(`data_templates?page=${page}&sort=updated_at_desc`)
       .then((data: any) => {
-        setLoading(true);
+        setLoading(false);
         const res: IField[] = data.data_templates;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
-        setLoading(true);
+        setLoading(false);
       });
   };
 
@@ -98,14 +97,19 @@ const CreateDocument = () => {
   };
 
   const onSubmit = (data: any) => {
+    if (formStep === 0 && !template) {
+      toast.error('Please select a template.', {
+        duration: 3000,
+        position: 'top-right',
+      });
+      return;
+    }
     if (formStep === 0) {
       setFormStep(1);
     }
     if (formStep === 1) {
-      console.log('data', data);
       setNewContent(data);
-      Router.push(`/content/new`);
-      console.log('data[lor]', data);
+      router.push(`/content/new`);
     }
   };
 
@@ -118,10 +122,11 @@ const CreateDocument = () => {
         setField(tFields);
       }
     });
-    // loadTemplates(tid);
-    // //temp
-    // setActiveTemplate(tid);
-    // setShowForm(true);
+  };
+
+  const changePage = (newPage: any) => {
+    loadData(newPage);
+    setLoading(true);
   };
 
   const vals = getValues();
@@ -140,24 +145,58 @@ const CreateDocument = () => {
             p: '32px',
             borderTop: 'solid 1px',
             borderColor: 'border',
-            height: 'calc(100vh - 180px)',
-            overflowX: 'scroll',
+            height: 'calc(100vh - 220px)',
+            overflowY: 'scroll',
           }}>
           {formStep === 0 && (
             <>
               <Box
                 variant="caps"
                 sx={{
-                  fontSize: 0,
+                  fontSize: 'xxs',
                   py: 2,
                   color: 'text',
                 }}>
-                <Text as="h4" sx={{ fontSize: 2, fontWeight: 'heading' }}>
+                <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
                   Select a template
                 </Text>
               </Box>
 
-              {contents && (
+              {!loading && contents.length < 1 && (
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Box sx={{ color: 'gray.500' }}>
+                    <EmptyForm />
+                  </Box>
+                  <Box sx={{ m: 2, pb: 0 }}>
+                    <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
+                      No template has been created yet.
+                    </Text>
+                  </Box>
+                </Flex>
+              )}
+
+              {loading &&
+                Array.from({ length: 10 }, (_, index) => (
+                  <Flex
+                    key={index}
+                    sx={{
+                      px: 3,
+                      py: 2,
+                      border: 'solid 1px',
+                      borderBottom: 'none',
+                      borderColor: 'border',
+                    }}>
+                    <Box>
+                      <Skeleton width="20px" height="22px" />
+                    </Box>
+                    <Box mx={3} sx={{ width: '100%' }}>
+                      <Skeleton height="22px" />
+                    </Box>
+                    <Skeleton width="20px" height="22px" />
+                  </Flex>
+                ))}
+
+              {!loading && contents && (
                 <Controller
                   control={control}
                   defaultValue=""
@@ -177,6 +216,17 @@ const CreateDocument = () => {
                   )}
                 />
               )}
+              <Box mt="16px">
+                {pageMeta && pageMeta?.total_pages > 1 && (
+                  <Pagination
+                    type="simple"
+                    totalPage={pageMeta?.total_pages}
+                    initialPage={1}
+                    onPageChange={changePage}
+                    totalEntries={pageMeta?.total_entries}
+                  />
+                )}
+              </Box>
             </>
           )}
           {formStep === 1 && (
@@ -187,7 +237,7 @@ const CreateDocument = () => {
                     <Box key={f.id} sx={{ pb: 2 }}>
                       {f.field_type.name === 'date' && (
                         <FieldDate
-                          name={`contentFields[${f.name}]`}
+                          name={`contentFields[${f.id}]`}
                           label={capitalizeFirst(f.name)}
                           register={register}
                           sub="Date"
@@ -197,7 +247,7 @@ const CreateDocument = () => {
 
                       {f.field_type.name !== 'date' && (
                         <Field
-                          name={`contentFields[${f.name}]`}
+                          name={`contentFields[${f.id}]`}
                           label={capitalizeFirst(f.name)}
                           defaultValue=""
                           register={register}
@@ -210,16 +260,19 @@ const CreateDocument = () => {
             </>
           )}
         </Box>
-        <Flex px="32px" sx={{ gap: 2 }}>
+        <Flex p="32px" sx={{ gap: 2 }}>
           <Button
+            variant="ghost"
             disabled={formStep === 0}
             onClick={() => setFormStep((pre) => pre - 1)}>
-            Prev
+            Back
           </Button>
           <Button
             onClick={handleSubmit(onSubmit)}
             disabled={
-              vals === (undefined || null) || (vals && vals.template === '')
+              vals === undefined ||
+              vals === null ||
+              (vals && vals.template === '')
             }>
             {formStep === 1 ? 'Create' : 'Next'}
           </Button>
@@ -252,14 +305,14 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
         borderBottom: 'none',
         borderColor: 'border',
         cursor: 'pointer',
-        bg: selected.id === id && 'gray.200',
+        bg: selected.id === id && 'green.300',
 
         '&:last-child': {
           borderBottom: 'solid 1px',
           borderColor: 'border',
         },
 
-        '&:hover': { bg: 'neutral.200' },
+        '&:hover': { bg: 'green.200' },
       }}>
       <Box
         sx={{
@@ -276,7 +329,7 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       <Text
         as="h4"
         sx={{
-          fontSize: 0,
+          fontSize: 'xxs',
           m: 0,
           ml: 'auto',
           color: 'text',

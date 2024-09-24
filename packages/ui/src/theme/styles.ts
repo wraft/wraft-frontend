@@ -1,11 +1,9 @@
-import { border, borderRadius } from "@xstyled/emotion";
-
 const styles = {
   root: {
     fontFamily: 'body',
     lineHeight: 'body',
     fontWeight: 'body',
-    fontSize: `15px`,
+    fontSize: `base`,
   },
   body: {
     fontFamily: 'body',
@@ -15,42 +13,42 @@ const styles = {
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 5,
+    fontSize: '2xl',
   },
   h2: {
     color: 'text',
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 4,
+    fontSize: 'xl',
   },
   h3: {
     color: 'text',
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 3,
+    fontSize: 'base',
   },
   h4: {
     color: 'text',
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 2,
+    fontSize: 'sm',
   },
   h5: {
     color: 'text',
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 1,
+    fontSize: 'xs',
   },
   h6: {
     color: 'text',
     fontFamily: 'heading',
     lineHeight: 'heading',
     fontWeight: 'heading',
-    fontSize: 0,
+    fontSize: 'xxs',
   },
   p: {
     color: 'text',
@@ -115,7 +113,7 @@ const styles = {
   },
   tableInput: {
     variant: 'text.pM',
-    fontSize: 0,
+    fontSize: 'xxs',
     color: 'gray.500',
   },
   img: {
@@ -123,7 +121,6 @@ const styles = {
   },
   editorBody: {
     '.remirror-theme h1': {},
-
     '.remirror-editor-wrapper': {},
     '.remirror-theme .ProseMirror': {
       outline: 'none',
@@ -142,14 +139,14 @@ const styles = {
       fontFamily: 'body',
       textTransform: 'uppercase',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h2: {
       color: 'red.400',
       py: 3,
       fontFamily: 'body',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h3: {
       color: 'red.400',
@@ -157,14 +154,14 @@ const styles = {
       fontFamily: 'body',
       textTransform: 'uppercase',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h4: {
       color: 'red.400',
       py: 3,
       fontFamily: 'body',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
   },
   editorBody2: {
@@ -200,28 +197,28 @@ const styles = {
       py: 3,
       fontFamily: 'editor2',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h2: {
       color: 'red.400',
       py: 3,
       fontFamily: 'editor2',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h3: {
       color: 'red.400',
       py: 2,
       fontFamily: 'editor2',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
     h4: {
       color: 'red.400',
       py: 3,
       fontFamily: 'editor2',
       lineHeight: 1.25,
-      fontSize: 1,
+      fontSize: 'xs',
     },
   },
   btnMenuBlock: {
@@ -243,6 +240,38 @@ const styles = {
       ':hover': {
         background: 'green.a300',
       },
+    },
+  },
+  scrollbarY: {
+    overflowY: 'scroll',
+    '::-webkit-scrollbar': {
+      width: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
+    },
+  },
+  scrollbarX: {
+    overflowX: 'scroll',
+    '::-webkit-scrollbar': {
+      height: '8px',
+    },
+    '::-webkit-scrollbar-thumb': {
+      backgroundColor: '#B8B3B1',
+      borderRadius: '10px',
+    },
+    '::-webkit-scrollbar-track': {
+      backgroundColor: 'transparent',
+    },
+    '::-webkit-scrollbar-button': {
+      display: 'none',
     },
   },
 };

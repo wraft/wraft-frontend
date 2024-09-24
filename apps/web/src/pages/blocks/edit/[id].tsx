@@ -1,23 +1,26 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box } from 'theme-ui';
+import { Container } from 'theme-ui';
+import { ErrorBoundary } from '@wraft/ui';
 
-import TemplateForm from 'components/BlockTemplateForm';
-import { HeadingFrame } from 'components/Card';
-import Page from 'components/PageFrame';
+import Page from 'components/BlankFrame';
+import BlockTemplateForm from 'components/BlockTemplateForm';
+import NavEdit from 'components/NavEdit';
 
-const Index: FC = () => {
+export const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Edit TemplateForm - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Edit Block | Wraft</title>
+        <meta name="description" content="edit block" />
       </Head>
       <Page>
-        <HeadingFrame title="Blocks / Edit Block" />
-        <Box sx={{ pl: 4 }}>
-          <TemplateForm />
-        </Box>
+        <NavEdit navtitle="Edit Block" />
+        <Container sx={{ maxWidth: '90ch', mx: 'auto' }}>
+          <ErrorBoundary>
+            <BlockTemplateForm />
+          </ErrorBoundary>
+        </Container>
       </Page>
     </>
   );

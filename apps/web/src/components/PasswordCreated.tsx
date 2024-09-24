@@ -21,7 +21,7 @@ const PasswordCreated = () => {
           Password Created
         </Heading>
         <Image alt="" src={CheckSuccess} className="" width={32} height={32} />
-        <Text sx={{ my: '40px', color: 'gray.400', fontWeight: 'heading' }}>
+        <Text sx={{ my: '40px', color: 'gray.900', fontWeight: 'heading' }}>
           Awesome! You are ready to access your Wraft account Login your account
           and enjoy your workplace
         </Text>

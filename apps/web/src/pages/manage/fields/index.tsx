@@ -5,16 +5,16 @@ import { Box, Container, Flex } from 'theme-ui';
 import FieldList from 'components/FieldList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
-import NextLinkText from 'components/NavLink';
+import PageHeader from 'common/PageHeader';
+import NextLinkText from 'common/NavLink';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Fields | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Fields | Wraft</title>
+        <meta name="description" content="wraft fields" />
       </Head>
       <Page>
         <PageHeader title="Fields Types" desc="Manage System Level fields">

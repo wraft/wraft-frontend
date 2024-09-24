@@ -7,14 +7,7 @@ import { Spinner } from '../Spinner';
 
 export type Shape = 'circle' | 'square';
 export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'full';
-export type Variant =
-  | 'primary'
-  | 'secondary'
-  | 'outlined'
-  | 'disabled'
-  | 'googleLogin'
-  | 'ghost'
-  | 'none';
+export type Variant = 'primary' | 'secondary' | 'outlined' | 'disabled' | 'googleLogin' | 'ghost' | 'none' | 'delete';
 
 export interface ButtonOptions extends AkButtonProps {
   disabled?: boolean;
@@ -25,14 +18,17 @@ export interface ButtonOptions extends AkButtonProps {
   shape?: Shape;
 }
 
-const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
+const ButtonWrapper =
+  styled(AriakitButton) <
+  ButtonOptions >
+  `
   cursor: pointer;
   user-select: none;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+  gap: 10px;
 
   transition:
     color 0.15s ease-in-out,
@@ -50,18 +46,23 @@ const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   `}
 `;
 
+export const ContentWrapper: any = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
-  ({ variant = 'primary', children, loading = false, ...rest }, ref) => {
+  ({ variant = 'primary', children, loading = false, disabled = false, ...rest }, ref) => {
+    const isDisabled = disabled || loading;
     return (
-      <ButtonWrapper variant={variant} loading={loading} {...rest} ref={ref}>
-        <x.div display="flex">
-          {loading && (
-            <x.div flex="0 1 auto">
-              <Spinner />
-            </x.div>
-          )}
-          <x.div flex="0 1 auto">{children}</x.div>
-        </x.div>
+      <ButtonWrapper variant={variant} loading={loading} disabled={isDisabled} {...rest} ref={ref}>
+        {loading && (
+          <x.div display="flex">
+            <Spinner size={9} />
+          </x.div>
+        )}
+        <ContentWrapper>{children}</ContentWrapper>
       </ButtonWrapper>
     );
   },

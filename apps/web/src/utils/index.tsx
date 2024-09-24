@@ -2,12 +2,9 @@
 // @ts-nocheck
 import { AxiosRequestConfig, AxiosError } from 'axios';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { produce } from 'immer';
 import cookie from 'js-cookie';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ContentState } from './types';
-import { Layout, User, Style, FlowBranch } from '../components/Icons';
+import { Layout, Style, FlowBranch } from 'components/Icons';
 
 /**
  *  @TODO Icons: Convert to local files
@@ -27,7 +24,6 @@ export const cleanName = (val: string): string => {
 
 // Clean Square Brackets
 export const cleanName2 = (val: string): string => {
-  // console.log('cleanName2', val)
   const val1 = val.replace('\\[', '');
   return val1.replace('\\]', '');
 };
@@ -36,69 +32,69 @@ export const findDefault = (needle: string, stack: any) => {
   return stack.find((x: IField) => x.name === needle);
 };
 
-/**
- * Update ProseMirror Node
- * @param data
- * @param fields
- * @todo - Limited to 2 level deep arrays
- */
-// export const updateVars = (
-//   data: ContentState,
-//   fields: Field[],
-// ): RemirrorJSON => {
-//   // Directly return the original data if fields are empty or the first item has no value
-//   if (!fields?.length || !fields[0]?.value) {
-//     return data;
-//   }
+export const findHolders = (data) => {
+  const holders = {};
 
-//   console.log('UPDATED_BODY updateStuff', fields);
+  const traverse = (node) => {
+    if (Array.isArray(node)) {
+      node.forEach(traverse);
+    } else if (typeof node === 'object' && node !== null) {
+      if (node.type === 'holder' && node.attrs) {
+        const { id, named } = node.attrs;
+        if (id && named !== undefined) {
+          holders[id] = named;
+        }
+      }
+      Object.values(node).forEach(traverse);
+    }
+  };
 
-//   const result = produce(data, (draft) => {
-//     draft.content.forEach((p, k) => {
-//       p.content?.forEach((c, y) => {
-//         if (c.type === 'holder') {
-//           const fieldToUpdate = fields.find(
-//             (field) => field.name === c.attrs.name,
-//           );
-//           if (fieldToUpdate) {
-//             // Using optional chaining to safely access nested properties
-//             draft.content[k].content[y].attrs.named = fieldToUpdate.value;
-//           }
-//         }
-//       });
-//     });
-//   });
+  traverse(data);
+  return holders;
+};
 
-//   return result;
-// };
-
-export const updateVars = (data, fields) => {
-  // Directly return the original data if fields are empty or the first item has no value
-  if (!fields?.length || !fields[0]?.value) {
+export const updateVars = (data, fields, nodeType = 'holder') => {
+  if (!fields?.length || !fields[0]?.value || !data?.content) {
     return data;
   }
 
-  console.log('UPDATED_BODY updateStuff', fields);
+  const fieldMap = new Map(fields.map((field) => [field.name, field.value]));
 
-  // Create a deep copy of the data to avoid direct mutation
-  const updatedData = JSON.parse(JSON.stringify(data));
+  function deepClone(obj) {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+    if (Array.isArray(obj)) {
+      return obj.map(deepClone);
+    }
+    const clonedObj = {};
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        clonedObj[key] = deepClone(obj[key]);
+      }
+    }
+    return clonedObj;
+  }
 
-  // Iterate over the content to find and update the 'holder' type elements
-  updatedData.content.forEach((p, k) => {
-    p.content?.forEach((c, y) => {
-      if (c.type === 'holder') {
-        const fieldToUpdate = fields.find(
-          (field) => field.name === c.attrs.name,
-        );
-        if (fieldToUpdate) {
-          // Update the named attribute of the holder
-          updatedData.content[k].content[y].attrs.named = fieldToUpdate.value;
+  const clonedData = deepClone(data);
+
+  function update(node) {
+    if (Array.isArray(node)) {
+      node.forEach(update);
+    } else if (typeof node === 'object' && node !== null) {
+      if (node.type === nodeType) {
+        const value = fieldMap.get(node.attrs?.name);
+        if (value !== undefined) {
+          node.attrs.named = value;
         }
       }
-    });
-  });
+      Object.values(node).forEach(update);
+    }
+  }
 
-  return updatedData;
+  update(clonedData.content);
+
+  return clonedData;
 };
 
 /**
@@ -123,13 +119,9 @@ export const replaceBoy = (
         const m = findDefault(cleanNames, maps);
         // find the key from
         if (m && m.value) {
-          console.log('ESCAPED', escaped);
-          // if its escaped
           if (escaped) {
             localBody = localBody.replace(`\\[${cleanNames}\\]`, m.value);
           }
-        } else {
-          console.log('ESCAPED X', escaped);
         }
       });
     }
@@ -165,7 +157,6 @@ export const findVars = (body: string, escaped: boolean): string[] => {
       results.push(match);
     });
   }
-  // console.log('results', results);
   return results;
 };
 
@@ -209,10 +200,7 @@ export const replaceTitle = (
 
         const m = findDefault(cleanNames, maps);
         if (m && m.value) {
-          console.log('🐴🐴  🧶  ');
           localBody = localBody.replace(`[${cleanNames}]`, m.value);
-        } else {
-          console.log('🐴🐴  🧶  ', m);
         }
       });
     }
@@ -363,11 +351,6 @@ export const menuLinks: menuLinksProps[] = [
     logo: <Style width="20px" />,
     path: '/manage/themes',
   },
-  {
-    name: 'Fields',
-    logo: <User width="20px" />,
-    path: '/manage/fields',
-  },
 ];
 
 {
@@ -392,12 +375,20 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
     name: 'General',
     path: '/manage/workspace',
   },
+  {
+    name: 'Fields',
+    path: '/manage/fields',
+  },
 ];
 
 export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
+  },
+  {
+    name: 'Fields',
+    path: '/manage/workspace/fields',
   },
   {
     name: 'Members',

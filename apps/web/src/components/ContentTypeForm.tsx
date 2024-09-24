@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Input } from 'theme-ui';
+import { Box, Flex, Text, Input } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 import { useImmer } from 'use-immer';
-import * as z from 'zod';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
+import * as yup from 'yup';
+import { Button } from '@wraft/ui';
 
-import { fetchAPI, postAPI, putAPI, deleteAPI } from '../utils/models';
-import { hexColorRegex, uuidRegex } from '../utils/regex';
-import { ContentType } from '../utils/types';
-import Field from './Field';
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Field from 'common/Field';
+import { fetchAPI, postAPI, putAPI, deleteAPI } from 'utils/models';
+import { hexColorRegex, uuidRegex } from 'utils/regex';
+import { ContentType } from 'utils/types';
+
 import FieldColor from './FieldColor';
 import FieldEditor from './FieldEditor';
 import FieldText from './FieldText';
@@ -100,34 +102,50 @@ export interface FieldTypeItem {
   field_type_id: string;
 }
 
-const schema = z.object({
-  name: z
-    .string()
-    .min(4, { message: 'Minimum 4 characters required' })
-    .max(20, { message: 'Maximum 20 characters allowed' }),
-  prefix: z
-    .string()
-    .min(2, { message: 'Minimum 2 characters required' })
-    .max(6, { message: 'Maximum 6 characters allowed' })
-    .refine((value) => !/\d/.test(value), {
-      message: 'Prefix cannot contain numbers',
-    }),
-  color: z.string().refine((value) => hexColorRegex.test(value), {
-    message: 'Invalid hexadecimal color',
+const formModel = {
+  layout_id: '',
+  name: '',
+  description: '',
+  prefix: '',
+  flow_id: '',
+  theme_id: '',
+  edit: '',
+  color: '',
+};
+
+const validationSchema: any = [
+  yup.object().shape({
+    name: yup
+      .string()
+      .min(4, 'Minimum 4 characters required')
+      .max(20, 'Maximum 20 characters allowed')
+      .transform((value) => value.trim())
+      .optional(),
+    description: yup
+      .string()
+      .trim()
+      .min(5, 'Minimum 5 characters required')
+      .optional(),
+    prefix: yup
+      .string()
+      .min(2, 'Minimum 2 characters required')
+      .max(6, 'Maximum 6 characters allowed')
+      .matches(/^\D*$/, 'Prefix cannot contain numbers')
+      .optional(),
   }),
-  description: z.string().min(5, { message: 'Minimum 5 characters required' }),
-  fields: z.any(),
-  layout_id: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Layout',
+  yup.object().shape({
+    layout_id: yup.string().matches(uuidRegex, 'Select Layout').optional(),
+    flow_id: yup.string().matches(uuidRegex, 'Invalid Flow').optional(),
+    theme_id: yup.string().matches(uuidRegex, 'Invalid Theme').optional(),
+    color: yup
+      .string()
+      .matches(hexColorRegex, 'Invalid hexadecimal color')
+      .optional(),
   }),
-  flow_id: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Flow',
+  yup.object().shape({
+    fields: yup.mixed().optional(),
   }),
-  theme_id: z.string().refine((value) => uuidRegex.test(value), {
-    message: 'Invalid Theme',
-  }),
-  edit: z.any(),
-});
+];
 
 interface Props {
   step?: number;
@@ -144,27 +162,32 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const [fieldtypes, setFieldtypes] = useState<Array<FieldType>>([]);
   const [newFields, setNewFields] = useState<any>([]);
   const [formStep, setFormStep] = useState(step);
-  const [isEdit, setEdit] = useState<boolean>(false);
+
+  const currentValidationSchema = validationSchema[formStep];
 
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
+    reset,
     setValue,
+    getValues,
     trigger,
   } = useForm({
-    resolver: zodResolver(schema),
+    defaultValues: formModel,
+    shouldUnregister: false,
+    resolver: yupResolver(currentValidationSchema),
+    mode: 'onBlur',
   });
   const router = useRouter();
 
   const cId: string = router.query.id as string;
 
   const addField = () => {
-    console.log('addField');
-    setFields((fields) => {
+    setFields((currentFields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      fields = fields || [];
-      const outputState: any = fields.slice(0);
+      currentFields = fields || [];
+      const outputState: any = currentFields.slice(0);
 
       outputState.push('');
 
@@ -185,10 +208,10 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
   }, [content]);
 
   const addFieldVal = (val: any) =>
-    setFields((fields) => {
+    setFields((currentFields) => {
       // DON'T USE [...spread] to clone the array because it will bring back deleted elements!
-      fields = fields || [];
-      const outputState: any = fields.slice(0);
+      currentFields = currentFields || [];
+      const outputState: any = currentFields.slice(0);
       if (val.name !== undefined || null) {
         outputState.push({ name: val.value.name, value: val.value });
 
@@ -204,13 +227,13 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   const removeField = (did: number) =>
     fields &&
-    setFields((fields) => {
-      const outputState = fields.slice(0);
+    setFields((currentFields) => {
+      const outputState = currentFields.slice(0);
       deleteField(did, outputState);
       // `delete` removes the element while preserving the indexes.
       delete outputState[did];
 
-      const idToRemove = (fields[did] as { id: string })?.id;
+      const idToRemove = (currentFields[did] as { id: string })?.id;
       const popedNewArr = newFields.filter(
         (item: any) => item.id !== idToRemove,
       );
@@ -221,8 +244,8 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
       return final;
     });
 
-  const deleteField = (id: number, fields: any) => {
-    const deletable = fields[id];
+  const deleteField = (id: number, fieldList: any) => {
+    const deletable = fieldList[id];
     if (deletable && deletable.value && deletable.value.id) {
       const deletableId = deletable.value.id;
       const contentypeId = content?.content_type.id;
@@ -257,9 +280,9 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
       setValue('name', res.content_type.name);
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
-      setValue('layout_id', res.content_type.layout?.id || undefined);
-      setValue('flow_id', res.content_type.flow?.flow?.id || undefined);
-      setValue('theme_id', res.content_type?.theme?.id || undefined);
+      setValue('layout_id', res.content_type.layout?.id);
+      setValue('flow_id', res?.content_type.flow?.flow?.id);
+      setValue('theme_id', res.content_type?.theme?.id);
       setValue('edit', res.content_type.id);
       setValue('color', res.content_type.color);
       trigger();
@@ -301,12 +324,12 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     });
   };
 
-  const formatFields = (fields: any) => {
+  const formatFields = (formFields: any) => {
     const fieldsMap: any = [];
 
-    fields &&
-      fields.length > 0 &&
-      fields.map((item: any) => {
+    formFields &&
+      formFields.length > 0 &&
+      formFields.map((item: any) => {
         const fid: string = item && item.value && item.value.field_type.id;
         const it: FieldTypeItem = {
           name: item.name,
@@ -321,8 +344,11 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
           : true;
 
         if (
-          !Number(item.name) &&
-          item.name !== ('0' || '' || null || undefined) &&
+          isNaN(Number(item.name)) &&
+          item.name !== '0' &&
+          item.name !== '' &&
+          item.name !== null &&
+          item.name !== undefined &&
           notInContent
         ) {
           fieldsMap.push(it);
@@ -331,27 +357,25 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     return fieldsMap;
   };
 
-  /**
-   * On Theme Created
-   */
-
-  const isUpdate = cId ? true : false;
-
   const onSubmit = (data: any) => {
-    console.log('onSubmit', data);
+    if (formStep < 2) {
+      setFormStep((i) => i + 1);
+      return;
+    }
+
     const sampleD = {
-      name: data.name,
+      name: data?.name?.trim(),
       layout_id: data.layout_id,
       fields: formatFields(fields),
-      description: data.description,
-      prefix: data.prefix,
+      description: data?.description?.trim(),
+      prefix: data.prefix?.trim(),
       flow_id: data.flow_id,
-      color: data.color,
+      color: data?.color?.trim(),
       theme_id: data.theme_id,
     };
 
-    if (isUpdate) {
-      putAPI(`content_types/${data.edit}`, sampleD)
+    if (cId) {
+      putAPI(`content_types/${cId}`, sampleD)
         .then(() => {
           setIsOpen && setIsOpen(false);
           setRerender && setRerender((prev: boolean) => !prev);
@@ -376,18 +400,20 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
             position: 'top-right',
           });
         })
-        .catch(() => {
-          toast.error('Save Failed', {
-            duration: 1000,
-            position: 'top-right',
-          });
+        .catch((err) => {
+          toast.error(
+            (err?.errors && JSON.stringify(err?.errors)) || 'Save Failed',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
         });
     }
   };
 
   useEffect(() => {
     if (cId) {
-      setEdit(true);
       setValue('edit', cId);
       loadDataDetails(cId);
       loadThemes();
@@ -396,7 +422,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   useEffect(() => {
     loadThemes();
-    setValue('color', '#000000');
   }, []);
 
   /**
@@ -404,7 +429,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
    * @param fileds
    */
   const onFieldsSave = (fieldsNew: any) => {
-    console.log('onSave', fieldsNew);
     initialFields ? setFields(initialFields) : setFields([]);
     // format and replae existing fields
     fieldsNew?.data?.fields?.forEach((el: any) => {
@@ -417,17 +441,15 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
           (initialField: any) => initialField.name !== el.name,
         )
       ) {
-        console.log(fieldValue);
         addFieldVal(fieldValue);
       } else if (!initialFields) {
-        console.log(fieldValue);
         addFieldVal(fieldValue);
       }
     });
   };
 
-  const onChangeFields = (_e: any, _name: string) => {
-    setValue(_name, _e);
+  const onChangeFields = (e: any, name: any) => {
+    setValue(name, e);
   };
 
   useEffect(() => {
@@ -436,17 +458,29 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
     loadFieldTypes();
   }, []);
 
-  function next() {
-    setFormStep((i) => i + 1);
-  }
-  function prev() {
-    setFormStep((i) => i - 1);
-  }
-
-  const goTo = (step: number) => {
-    setFormStep(step);
+  const goTo = (formStepNumber: number) => {
+    setFormStep(formStepNumber);
   };
   const titles = ['Details', 'Configure', 'Fields'];
+
+  const generateRandomColor = (): string => {
+    const randomValue = () =>
+      Math.floor(Math.random() * 256)
+        .toString(16)
+        .padStart(2, '0');
+    return `#${randomValue()}${randomValue()}${randomValue()}`;
+  };
+
+  const coloeCode = useMemo(() => {
+    return generateRandomColor();
+  }, []);
+
+  const handleBack = () => {
+    if (formStep > 0) {
+      setFormStep((i) => i - 1);
+      reset({ ...getValues() });
+    }
+  };
 
   return (
     <Flex
@@ -455,13 +489,6 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
         overflow: 'scroll',
         flexDirection: 'column',
       }}>
-      <Text
-        variant="pB"
-        sx={{
-          p: 4,
-        }}>
-        {isEdit ? 'Edit Variant' : 'Create new variant'}
-      </Text>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
       <Box
         sx={{ height: '100%' }}
@@ -475,180 +502,178 @@ const Form = ({ step = 0, setIsOpen, setRerender }: Props) => {
             overflowY: 'auto',
           }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-              <Field
-                register={register}
-                error={errors.name}
-                label="Name"
-                name="name"
-                defaultValue=""
-                placeholder="Variant Name"
-              />
-              <Box mt={3}>
-                <FieldText
-                  register={register}
-                  label="Description"
-                  name="description"
-                  defaultValue="Something to guide the user here"
-                />
-                {errors.description && errors.description.message && (
-                  <Text variant="error">
-                    {errors.description.message as string}
-                  </Text>
-                )}
-              </Box>
-              <Box mt={3}>
+            {formStep === 0 && (
+              <Box>
                 <Field
                   register={register}
-                  error={errors.prefix}
-                  label="Prefix"
-                  name="prefix"
+                  error={errors.name}
+                  label="Name"
+                  name="name"
                   defaultValue=""
+                  placeholder="Variant Name"
                 />
+                <Box mt={3}>
+                  <FieldText
+                    register={register}
+                    label="Description"
+                    name="description"
+                    placeholder="Something to guide the user here"
+                    defaultValue=""
+                  />
+                  {errors.description && errors.description.message && (
+                    <Text variant="error">
+                      {errors.description.message as string}
+                    </Text>
+                  )}
+                </Box>
+                <Box mt={3}>
+                  <Field
+                    register={register}
+                    error={errors.prefix}
+                    label="Prefix"
+                    name="prefix"
+                    defaultValue=""
+                  />
+                </Box>
               </Box>
-            </Box>
-            <Box sx={{ display: formStep === 1 ? 'block' : 'none' }}>
+            )}
+            {formStep === 1 && (
               <Box>
-                <FieldColor
-                  register={register}
-                  label="Color"
-                  name="color"
-                  defaultValue={(content && content?.content_type.color) || ''}
-                  onChangeColor={onChangeFields}
-                />
-                {errors.color && errors.color.message && (
-                  <Text variant="error">{errors.color.message as string}</Text>
-                )}
-              </Box>
-              <Box mt={3}>
-                <Label htmlFor="layout_id">Layout</Label>
-                <Select
-                  id="layout_id"
-                  {...register('layout_id', { required: true })}>
-                  {!isUpdate && (
-                    <option disabled selected>
-                      Select an option
-                    </option>
+                <Box>
+                  <FieldColor
+                    register={register}
+                    label="Color"
+                    name="color"
+                    defaultValue={
+                      (content && content?.content_type.color) || coloeCode
+                    }
+                    onChangeColor={onChangeFields}
+                  />
+                  {errors.color && errors.color.message && (
+                    <Text variant="error">
+                      {errors.color.message as string}
+                    </Text>
                   )}
-                  {layouts &&
-                    layouts.length > 0 &&
-                    layouts.map((m: any) => (
-                      <option value={m.id} key={m.id}>
-                        {m.name}
+                </Box>
+                <Box mt={3}>
+                  <Label htmlFor="layout_id">Layout</Label>
+                  <Select id="layout_id" {...register('layout_id')}>
+                    {!cId && (
+                      <option value="" disabled selected>
+                        Select an option
                       </option>
-                    ))}
-                </Select>
-                {errors.layout_id && errors.layout_id.message && (
-                  <Text variant="error">
-                    {errors.layout_id.message as string}
-                  </Text>
-                )}
-              </Box>
-              <Box sx={{ mt: 3 }}>
-                <Label htmlFor="flow_id">Flow</Label>
-                <Select
-                  id="flow_id"
-                  defaultValue=""
-                  {...register('flow_id', { required: true })}>
-                  {!isUpdate && (
-                    <option disabled selected>
-                      Select an option
-                    </option>
+                    )}
+                    {layouts &&
+                      layouts.length > 0 &&
+                      layouts.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                  </Select>
+                  {errors.layout_id && errors.layout_id.message && (
+                    <Text variant="error">
+                      {errors.layout_id.message as string}
+                    </Text>
                   )}
-                  {flows &&
-                    flows.length > 0 &&
-                    flows.map((m: any) => (
-                      <option value={m.flow.id} key={m.flow.id}>
-                        {m.flow.name}
+                </Box>
+                <Box sx={{ mt: 3 }}>
+                  <Label htmlFor="flow_id">Flow</Label>
+                  <Select
+                    id="flow_id"
+                    defaultValue=""
+                    {...register('flow_id', { required: true })}>
+                    {!cId && (
+                      <option value="" disabled selected>
+                        Select an option
                       </option>
-                    ))}
-                </Select>
-                {errors.flow_id && errors.flow_id.message && (
-                  <Text variant="error">
-                    {errors.flow_id.message as string}
-                  </Text>
-                )}
-              </Box>
+                    )}
+                    {flows &&
+                      flows.length > 0 &&
+                      flows.map((m: any) => (
+                        <option value={m.flow.id} key={m.flow.id}>
+                          {m.flow.name}
+                        </option>
+                      ))}
+                  </Select>
+                  {errors.flow_id && errors.flow_id.message && (
+                    <Text variant="error">
+                      {errors.flow_id.message as string}
+                    </Text>
+                  )}
+                </Box>
 
-              <Box sx={{ display: 'none' }}>
-                <Input
-                  id="edit"
-                  defaultValue={0}
-                  hidden={true}
-                  {...register('edit', { required: true })}
+                <Box sx={{ display: 'none' }}>
+                  <Input
+                    id="edit"
+                    defaultValue={0}
+                    hidden={true}
+                    {...register('edit', { required: true })}
+                  />
+                </Box>
+
+                <Box sx={{ mt: 3 }}>
+                  <Label htmlFor="theme_id">Themes</Label>
+                  <Select
+                    id="theme_id"
+                    defaultValue=""
+                    {...register('theme_id', { required: true })}>
+                    {!cId && (
+                      <option value="" disabled selected>
+                        Select an option
+                      </option>
+                    )}
+                    {themes &&
+                      themes.length > 0 &&
+                      themes.map((m: any) => (
+                        <option value={m.id} key={m.id}>
+                          {m.name}
+                        </option>
+                      ))}
+                  </Select>
+                  {errors.theme_id && errors.theme_id.message && (
+                    <Text variant="error">
+                      {errors.theme_id.message as string}
+                    </Text>
+                  )}
+                </Box>
+              </Box>
+            )}
+            {formStep === 2 && (
+              <Box>
+                <FieldEditor
+                  fields={fields}
+                  content={content}
+                  fieldtypes={fieldtypes}
+                  removeField={removeField}
+                  addField={addField}
+                  onSave={onFieldsSave}
+                  trigger={trigger}
                 />
               </Box>
-
-              <Box sx={{ mt: 3 }}>
-                <Label htmlFor="theme_id">Themes</Label>
-                <Select
-                  id="theme_id"
-                  defaultValue=""
-                  {...register('theme_id', { required: true })}>
-                  {!isUpdate && (
-                    <option disabled selected>
-                      Select an option
-                    </option>
-                  )}
-                  {themes &&
-                    themes.length > 0 &&
-                    themes.map((m: any) => (
-                      <option value={m.id} key={m.id}>
-                        {m.name}
-                      </option>
-                    ))}
-                </Select>
-                {errors.theme_id && errors.theme_id.message && (
-                  <Text variant="error">
-                    {errors.theme_id.message as string}
-                  </Text>
-                )}
-              </Box>
-            </Box>
-            <Box sx={{ display: formStep === 2 ? 'block' : 'none' }}>
-              <FieldEditor
-                fields={fields}
-                content={content}
-                fieldtypes={fieldtypes}
-                removeField={removeField}
-                addField={addField}
-                onSave={onFieldsSave}
-                trigger={trigger}
-              />
-            </Box>
+            )}
           </Box>
         </Flex>
 
-        <Flex mt={'auto'} pt={4} sx={{ justifyContent: 'space-between' }}>
-          <Flex>
-            <Button
-              sx={{
-                display: formStep >= 1 ? 'block' : 'none',
-              }}
-              variant="buttonSecondary"
-              type="button"
-              onClick={prev}>
-              Prev
-            </Button>
-            <Button
-              ml={2}
-              sx={{
-                display: formStep !== titles.length - 1 ? 'block' : 'none',
-              }}
-              type="button"
-              onClick={next}
-              variant="buttonPrimary">
-              Next
-            </Button>
-          </Flex>
+        <Flex pt={4} sx={{ gap: '8px' }}>
           <Button
-            disabled={
-              !isValid || fields === undefined || (fields && fields.length < 1)
-            }
-            variant="buttonPrimary"
+            variant="ghost"
+            disabled={formStep === 0}
+            onClick={handleBack}>
+            Back
+          </Button>
+          <Button
             type="submit"
-            ml={2}>
-            {isEdit ? 'Update' : 'Create'}
+            onClick={handleSubmit(onSubmit)}
+            variant="primary"
+            disabled={
+              formStep === 2
+                ? !isValid ||
+                  fields === undefined ||
+                  (fields && fields.length < 1)
+                : false
+            }>
+            {formStep === 2 ? (cId ? 'Update' : 'Create') : 'Next'}
           </Button>
         </Flex>
       </Box>

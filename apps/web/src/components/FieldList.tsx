@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box } from 'theme-ui';
 import { Table } from '@wraft/ui';
 
-import { TimeAgo } from 'components/Atoms';
+import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export interface FieldTypeList {
@@ -18,20 +18,14 @@ export interface FieldType {
   id: string;
 }
 
-const ItemField: FC<any> = ({ name }) => {
-  return (
-    <Text color="gray.8" sx={{ fontSize: 2, fontWeight: 400 }}>
-      {name}
-    </Text>
-  );
-};
-
 const columns = [
   {
     id: 'name',
     header: 'NAME',
     accessorKey: 'name',
-    cell: ({ row }: any) => row?.original && <ItemField {...row?.original} />,
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'sm' }}>{row.original?.name}</Box>
+    ),
     // size: 200,
     enableSorting: false,
   },
@@ -39,8 +33,9 @@ const columns = [
     id: 'description',
     header: 'DESCRIPTION',
     accessorKey: 'description',
-    cell: ({ row }: any) =>
-      row?.original && <Box>{row?.original?.description}</Box>,
+    cell: ({ row }: any) => (
+      <Box sx={{ fontSize: 'sm' }}>{row?.original?.description}</Box>
+    ),
     // size: 200,
     enableSorting: false,
   },
@@ -48,11 +43,7 @@ const columns = [
     id: 'updated_at',
     header: 'CREATED',
     accessorKey: 'updated_at',
-    cell: ({ row }: any) => (
-      <Text as="span" sx={{ pt: 3, fontSize: 1 }}>
-        <TimeAgo time={row?.original?.updated_at} />
-      </Text>
-    ),
+    cell: ({ row }: any) => <TimeAgo time={row?.original?.updated_at} />,
     // size: 180,
     enableSorting: false,
   },

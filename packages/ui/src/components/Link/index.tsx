@@ -2,12 +2,7 @@ import styled, { th, x } from '@xstyled/emotion';
 import { forwardRef } from 'react';
 
 export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'full';
-export type Variant =
-  | 'primary'
-  | 'secondary'
-  | 'outlined'
-  | 'disabled'
-  | 'googleLogin';
+export type Variant = 'primary' | 'secondary' | 'outlined' | 'disabled' | 'googleLogin';
 export type Type = 'button' | 'link';
 
 export interface LinkOptions {
@@ -35,7 +30,7 @@ const AnchorStyled =
     display: flex;
     justify-content: center;
   `}
-  
+
   transition:
     color 0.15s ease-in-out,
     background-color 0.15s ease-in-out,

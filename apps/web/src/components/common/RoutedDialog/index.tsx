@@ -39,8 +39,6 @@ export const RoutedDialog = ({
       onConfirmLeave();
     }
 
-    console.log('handleCancelLeave', nextUrl);
-
     setDialogOpen(false);
     router.push(nextUrl);
   };

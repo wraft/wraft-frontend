@@ -27,7 +27,7 @@ const SearchBlock = () => {
           outline: 'none',
           borderRadius: 0,
           width: '130% !important',
-          fontSize: 2,
+          fontSize: 'sm',
           pl: 2,
           color: 'gray.600',
           '::placeholder': {

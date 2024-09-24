@@ -1,25 +1,25 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
 import { Flex, Container, Button, Box } from 'theme-ui';
 
 import FlowForm from 'components/FlowForm';
 import FlowList from 'components/FlowList';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import PageHeader from 'common/PageHeader';
+import { Drawer } from 'common/Drawer';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
-  console.log('render state', rerender);
+
   return (
     <>
       <Head>
-        <title>Manage Flows - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Manage Flows | Wraft</title>
+        <meta name="description" content="wraft flows" />
       </Head>
       <Page>
         <PageHeader

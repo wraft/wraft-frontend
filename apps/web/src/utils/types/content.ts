@@ -38,6 +38,7 @@ export interface IField {
 export interface IVariantDetail {
   creator: ICreator;
   content_type?: IContentType;
+  content?: any;
 }
 
 export interface IFieldItem {
@@ -49,6 +50,8 @@ export interface IFieldField {
   name: string;
   value: string;
   id?: string;
+  named?: string;
+  label?: string;
 }
 
 export interface IFieldType {
@@ -78,9 +81,12 @@ export interface IFieldModel {
 
 export interface FlowStateBlockProps {
   state?: string;
-  order?: number;
+  order?: number | undefined;
   id?: any;
   activeFlow?: any;
+  num?: any;
+  nextState?: any;
+  currentActiveIndex?: any;
 }
 
 /**
@@ -102,10 +108,12 @@ export interface ContentInstance {
   creator: Creator;
   content_type: ContentType;
   content: Content;
+  profile_pic?: string;
   versions?: any;
 }
 
 export interface Content {
+  approval_status: any;
   updated_at: any;
   serialized: Serialized;
   raw: string;

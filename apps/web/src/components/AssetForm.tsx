@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Dropzone from '@wraft-ui/Dropzone';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Text } from 'theme-ui';
 
-import { postAPI } from '../utils/models';
-import { Asset } from '../utils/types';
+import Dropzone from 'common/Dropzone';
+import { postAPI } from 'utils/models';
+import { Asset } from 'utils/types';
+
 import FontList from './FontList';
 
 interface AssetFormProps {
@@ -38,12 +39,9 @@ const AssetForm = ({
   }, [isSubmit]);
 
   const onAssetUploaded = (data: any) => {
-    console.log('uploading asset from AssetForm', data);
     const mData: Asset = data;
     onUpload(mData);
   };
-
-  useEffect(() => console.log('.....filesList', filesList), [filesList]);
 
   const onSubmit = async (data: FormValues) => {
     setFileError(null);
@@ -85,7 +83,6 @@ const AssetForm = ({
         })
         .catch((error: any) => {
           setUploadProgress(0);
-          console.log(error);
           setFileError(
             error.errors.file[0] || error.message || 'There is an error',
           );

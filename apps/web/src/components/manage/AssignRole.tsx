@@ -1,11 +1,11 @@
 /** @jsxImportSource theme-ui */
 
 import { useState, useEffect } from 'react';
-import Checkbox from '@wraft-ui/Checkbox';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Text, Button, Box, Label } from 'theme-ui';
 
+import Checkbox from 'common/Checkbox';
 import { postAPI } from 'utils/models';
 
 import { RoleType } from './TeamList';
@@ -71,8 +71,7 @@ const AssignRole = ({
     }
   };
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data);
+  const onSubmit = () => {
     const assignPromises = selectedRolesId.map((role) => {
       return postAPI(`users/${userId}/roles/${role}`, {});
     });

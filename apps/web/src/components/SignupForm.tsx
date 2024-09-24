@@ -1,18 +1,15 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text, Link } from 'theme-ui';
 import { z } from 'zod';
 
-import GoogleLogo from '../../public/GoogleLogo.svg';
-import Logo from '../../public/Logo.svg';
-import WaitlistPrompt from '../components/WaitlistPrompt';
-import { postAPI } from '../utils/models';
-import { emailPattern } from '../utils/zodPatterns';
-import Field from './Field';
+import WaitlistPrompt from 'components/WaitlistPrompt';
+import { BrandLogo } from 'components/Icons';
+import Field from 'common/Field';
+import { postAPI } from 'utils/models';
+import { emailPattern } from 'utils/zodPatterns';
 
 type FormValues = {
   firstName: string;
@@ -46,12 +43,8 @@ const SignUpPage = () => {
         setShowSuccess(true);
         return 'Successfully added to waiting list';
       },
-      error: 'Failed to add to waiting list',
+      error: (error) => error.errors,
     });
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn('gmail');
   };
 
   return (
@@ -62,21 +55,16 @@ const SignUpPage = () => {
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
             <Link href="/">
-              <Image
-                src={Logo}
-                alt="Wraft Logo"
-                width={116}
-                height={35}
-                className=""
-                priority
-              />
+              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+                <BrandLogo width="7rem" height="3rem" />
+              </Box>
             </Link>
           </Box>
           <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
             <Heading
               as="h3"
               variant="styles.h3Medium"
-              sx={{ mb: '48px', color: 'green.700' }}>
+              sx={{ mb: '48px', color: 'green.900' }}>
               Join Wraft
             </Heading>
             <Box as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -116,18 +104,8 @@ const SignUpPage = () => {
                 my: '36px',
               }}
             />
-            <Button onClick={handleGoogleSignIn} variant="googleLogin">
-              <Image
-                src={GoogleLogo}
-                alt="Google Logo"
-                width={24}
-                height={24}
-                className=""
-              />
-              Continue using Google
-            </Button>
             <Flex
-              sx={{ gap: '8px', mt: '36px', mb: '4px', alignItems: 'center' }}>
+              sx={{ gap: '8px', mt: '12px', mb: '4px', alignItems: 'center' }}>
               <Text as="p" variant="pR">
                 Already joined?
               </Text>

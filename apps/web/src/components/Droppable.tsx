@@ -22,6 +22,7 @@ import {
   Flex,
   Input,
   Label,
+  Select,
   Spinner,
   Text,
   useThemeUI,
@@ -30,11 +31,11 @@ import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI } from 'utils/models';
 
 import { StateState } from './FlowForm';
-import Modal from './Modal';
-import { ConfirmDelete } from './common';
 
 type Props = {
   states: StateState[];
@@ -190,12 +191,30 @@ const SortableItem = ({
     }
   };
 
+  const onTypeChange = (e: any) => {
+    const newType = e.target.value;
+    if (states && state) {
+      const newState: StateState = {
+        ...state,
+        type: newType,
+      };
+      const newArr = states.map((s: any) => {
+        if (s.id === state.id) {
+          return newState;
+        } else {
+          return s;
+        }
+      });
+      setStates(newArr);
+    }
+  };
+
   const onDeleteState = () => {
     if (states && state) {
       const newArr = states.filter((s: any) => s.id !== state.id);
-      const final = newArr.map((s: any, index: number) => ({
+      const final = newArr.map((s: any, i: number) => ({
         ...s,
-        order: index + 1,
+        order: i + 1,
       }));
       setStates(final);
       setDeleteOpen(false);
@@ -242,7 +261,7 @@ const SortableItem = ({
             marginTop: '28px',
           }}>
           <DragIcon
-            color={themeui?.theme?.colors?.gray?.[200] || ''}
+            color={themeui?.theme?.colors?.gray?.[600] || ''}
             width={20}
             height={20}
             viewBox="0 0 24 24"
@@ -288,12 +307,33 @@ const SortableItem = ({
               gap: 0,
             }}></Flex>
         </Flex>
+        <Label mt={2}>State Mode</Label>
+        <Select
+          defaultValue={state.type}
+          onChange={(e) => {
+            onTypeChange(e);
+          }}
+          sx={{
+            width: '100%',
+            border: '1px solid',
+            borderColor: 'border',
+            borderRadius: '4px',
+          }}>
+          <option disabled value="">
+            Select a State Mode
+          </option>
+          <option value="reviewer">Reviewer</option>
+          <option value="editor">Editor</option>
+          <option value="sign">Sign</option>
+        </Select>
+
         <Box>
           {state.error && (
             <Text as={'p'} variant="error">
               {state.error}
             </Text>
           )}
+
           <Box mt={3}>
             <Box>
               <Input

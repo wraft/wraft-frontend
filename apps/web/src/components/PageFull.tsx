@@ -2,7 +2,8 @@ import React from 'react';
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from 'contexts/AuthContext';
+
 import Container from './Container';
 // import Sidebar from './Sidebar';
 import Nav from './Nav';
@@ -25,14 +26,14 @@ export const PageFull = (props: any) => {
   return (
     <>
       <Head>
-        <title>Wraft Docs</title>
+        <title>Wraft</title>
         <meta
           name="keywords"
           content="document,automation,proposals,sales,hr,contract management"
         />
         <meta
           name="description"
-          content="Wraft Docs help busines move steady and fast with Document Automation System"
+          content="Wraft help busines move steady and fast with Document Automation System"
         />
       </Head>
       <Container width={100} bg={''}>

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import { Box, Flex, Avatar, Button } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Table, Pagination } from '@wraft/ui';
 
-import PageHeader from 'components/PageHeader';
-import { StateBadge, TimeAgo } from 'components/Atoms';
-import { useAuth } from 'contexts/AuthContext';
-import { putAPI, fetchAPI } from 'utils/models';
+import PageHeader from 'common/PageHeader';
+import { StateBadge, TimeAgo } from 'common/Atoms';
+import { ContentTitleList } from 'common/content';
+import { fetchAPI } from 'utils/models';
 
 export interface ApprovalList {
   pre_state: State;
@@ -35,27 +36,24 @@ export interface State {
   id: string;
 }
 
-const columns = (approveInstance: any) => [
+export interface IPageMeta {
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
+  contents?: any;
+}
+
+const columns = () => [
   {
     id: 'content.name',
     header: 'Name',
     accessorKey: 'content.name',
     cell: ({ row }: any) => (
       <NextLink href={`/content/${row.original?.content?.id}`}>
-        <Flex sx={{ fontSize: '12px', ml: '-16px' }}>
-          <Box
-            sx={{
-              width: '3px',
-              bg: row.original?.content_type?.color
-                ? row.original?.content_type?.color
-                : 'blue',
-            }}
-          />
-          <Box ml={3}>
-            <Box>{row.original?.content?.instance_id}</Box>
-            <Box>{row.original?.content?.serialized?.title}</Box>
-          </Box>
-        </Flex>
+        <ContentTitleList
+          contentType={row.original?.content_type}
+          content={row.original?.content}
+        />
       </NextLink>
     ),
     enableSorting: false,
@@ -76,9 +74,13 @@ const columns = (approveInstance: any) => [
     header: 'EDITORS',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Box sx={{ height: '20px' }}>
-        <Avatar width="20px" src={row.original?.creator?.profile_pic} />
-      </Box>
+      <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+        <Avatar
+          sx={{ width: '16px', height: '16px' }}
+          src={row.original?.creator?.profile_pic}
+        />
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
+      </Flex>
     ),
     enableSorting: false,
   },
@@ -99,18 +101,11 @@ const columns = (approveInstance: any) => [
     cell: ({ row }: any) => (
       <Flex sx={{ mr: 1, p: 2 }}>
         <Flex>
-          <Box sx={{ mr: 2 }}>
+          <NextLink href={`/content/${row.original?.content?.id}`}>
             <Button variant="btnSecondary" sx={{ mr: 1 }}>
               Review
             </Button>
-          </Box>
-          <Box>
-            <Button
-              variant="btnAction"
-              onClick={() => approveInstance(row?.original?.instance?.id)}>
-              Approve
-            </Button>
-          </Box>
+          </NextLink>
         </Flex>
       </Flex>
     ),
@@ -122,38 +117,48 @@ const columns = (approveInstance: any) => [
 const Approvals = () => {
   const [contents, setContents] = useState<Array<ApprovaSystemItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [pageMeta, setPageMeta] = useState<IPageMeta>();
+  const [page, setPage] = useState<number>(1);
 
-  // const { addToast } = useToasts();
+  const router: any = useRouter();
+  const currentPage: any = parseInt(router.query.page) || 1;
 
-  const { accessToken } = useAuth();
+  useEffect(() => {
+    if (page) {
+      loadData();
+    }
+  }, [currentPage]);
 
   const loadData = () => {
     setLoading(true);
-    fetchAPI('users/list_pending_approvals')
+    const pageNo = currentPage ? `&page=${currentPage}` : '';
+
+    const query = `sort=inserted_at_desc${pageNo}`;
+
+    fetchAPI(`users/list_pending_approvals?${query}`)
       .then((data: any) => {
         setLoading(false);
         const res: any[] = data.pending_approvals;
         setContents(res);
+        setPageMeta(data);
       })
       .catch(() => {
         setLoading(false);
       });
   };
 
-  useEffect(() => {
-    if (accessToken) {
-      loadData();
-    }
-  }, [accessToken]);
-
-  /**
-   * Approve an Instance
-   */
-
-  const approveInstance = (id: string) => {
-    putAPI(`contents/${id}/approve`).then(() => {
-      console.log('onApproved');
-    });
+  const changePage = (newPage: any) => {
+    setPage(newPage);
+    const currentPath = router.pathname;
+    const currentQuery = { ...router.query, page: newPage };
+    router.push(
+      {
+        pathname: currentPath,
+        query: currentQuery,
+      },
+      undefined,
+      { shallow: true },
+    );
   };
 
   return (
@@ -167,19 +172,21 @@ const Approvals = () => {
             <Table
               data={contents}
               isLoading={loading}
-              columns={columns(approveInstance)}
+              columns={columns()}
               skeletonRows={10}
               emptyMessage="Nothing to approve"
             />
+            {pageMeta && pageMeta?.total_pages > 1 && (
+              <Box mx={0} mt={3}>
+                <Pagination
+                  totalPage={pageMeta?.total_pages}
+                  initialPage={currentPage}
+                  onPageChange={changePage}
+                  totalEntries={pageMeta?.total_entries}
+                />
+              </Box>
+            )}
           </Box>
-          <Box
-            sx={{
-              bg: 'backgroundWhite',
-              minHeight: '100vh',
-              width: '25%',
-              borderLeft: 'solid 1px',
-              borderColor: 'border',
-            }}></Box>
         </Flex>
       </Box>
     </Box>

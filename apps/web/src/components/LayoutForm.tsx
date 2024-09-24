@@ -5,7 +5,6 @@ import {
   DisclosureProvider,
 } from '@ariakit/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import StepsIndicator from '@wraft-ui/Form/StepsIndicator';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import {
@@ -21,19 +20,15 @@ import {
 } from 'theme-ui';
 import * as z from 'zod';
 
-import {
-  API_HOST,
-  fetchAPI,
-  deleteAPI,
-  postAPI,
-  putAPI,
-} from '../utils/models';
-import { uuidRegex } from '../utils/regex';
-import { Asset, Engine } from '../utils/types';
+import { ArrowDropdown } from 'components/Icons';
+import StepsIndicator from 'common/Form/StepsIndicator';
+import Field from 'common/Field';
+import { API_HOST, fetchAPI, deleteAPI, postAPI, putAPI } from 'utils/models';
+import { uuidRegex } from 'utils/regex';
+import { Asset, Engine } from 'utils/types';
+
 import AssetForm from './AssetForm';
-import Field from './Field';
 import FieldText from './FieldText';
-import { ArrowDropdown } from './Icons';
 
 export interface Layouts {
   layout: Layout;
@@ -136,7 +131,6 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   }, [isDeleteAssets]);
 
   useEffect(() => {
-    console.log('🥋🐼', engines);
     if (engines && engines.length > 0) {
       const pandocEngine = engines.find((engine) => engine.name === 'Pandoc');
       pandocEngine && setValue('engine_uuid', pandocEngine?.id);
@@ -235,8 +229,8 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     setFormStep((i) => i - 1);
   }
 
-  const goTo = (step: number) => {
-    setFormStep(step);
+  const goTo = (currentStep: number) => {
+    setFormStep(currentStep);
   };
 
   const styleEl = formStep !== 0 ? { display: 'none' } : { display: 'block' };
@@ -289,7 +283,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       //create
       postAPI(`layouts`, formData)
         .then(() => {
-          setRerender((prev: boolean) => !prev);
+          setRerender((previous: boolean) => !previous);
           setOpen(false);
           toast.success(`Updated Layout ${data.name}`, {
             duration: 1000,

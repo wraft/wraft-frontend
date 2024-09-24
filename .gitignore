@@ -59,3 +59,12 @@ next-env.d.ts
 #Storybook
 apps/storybook/build-storybook.log
 apps/docs/storybook-static/project.json
+apps/docs/storybook-static
+
+#db
+db
+volumes
+
+.env.local
+.env.production
+.env

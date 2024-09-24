@@ -1,124 +1,119 @@
 /** @jsxImportSource theme-ui */
 
-import React, { useEffect, useMemo, useState } from 'react';
-import Checkbox from '@wraft-ui/Checkbox';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
-import { Box, Button, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
+import { Table } from '@wraft/ui';
 
-import { putAPI, fetchAPI } from '../../utils/models';
-import { ArrowDropdown } from '../Icons';
-import Table from '../TanstackTable';
+import { ArrowDropdown } from 'components/Icons';
+import Checkbox from 'common/Checkbox';
+import { putAPI, fetchAPI } from 'utils/models';
 
 const PermissionsList = () => {
-  const [permissionsInitial, setPermissionsInitial] = useState<any>({});
   const [roles, setRoles] = useState<any>([]);
   const [permissions, setPermissions] = useState<any>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
   const render = React.useRef<any>();
 
   useEffect(() => {
-    fetchAPI('permissions').then((data: any) => {
-      setPermissionsInitial(data);
-    });
-
-    fetchAPI('roles').then((data: any) => {
-      setRoles(data);
-    });
+    Promise.all([fetchAPI('permissions'), fetchAPI('roles')])
+      .then(([permissionsData, rolesData]) => {
+        reStructurePermission(permissionsData, rolesData);
+        setRoles(rolesData);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
   }, []);
 
-  useEffect(() => {
-    //normalize
-    const data: any[] = Object.entries(permissionsInitial).map(
-      ([key, value], index) => {
-        return { id: index, name: key, children: value };
-      },
-    );
+  const reStructurePermission = (permissionList: any, roleData: any) => {
+    const data = Object.entries(permissionList).map(([key, value], index) => ({
+      id: index,
+      name: key,
+      children: value,
+    }));
 
-    //adding roles
-    const Data: any = data.map((item) => {
-      const newItem = roles.map((role: any) => {
-        const newChildren = item.children.map((child: any) => {
-          const rolecheck = role.permissions.includes(child.name);
-          return {
-            //swapping name and action because subRow is looking for name
-            name: child.action,
-            action: child.name,
-            [role?.name]: rolecheck,
-          };
-        });
+    const dataWithRoles = data.map((item: any) => {
+      const newItem = roleData.map((role: any) => {
+        const newChildren = item.children.map((child: any) => ({
+          name: child.action,
+          action: child.name,
+          [role.name]:
+            role.name === 'superadmin'
+              ? true
+              : role.permissions.includes(child.name),
+        }));
         return {
           ...item,
           children: newChildren,
         };
       });
-      return _.merge.apply(null, newItem);
+      return _.merge({}, ...newItem);
     });
 
-    // adding parent role check
-    const updatedData = Data.map((item: any) => {
-      const newItem = roles.map((role: any) => {
-        const isAllSelected = item.children.every(
-          (child: any) => child[role.name] === true,
-        );
-        if (isAllSelected) {
-          return {
-            ...item,
-            [role?.name]: true,
-          };
-        } else {
-          return {
-            ...item,
-            [role?.name]: false,
-          };
-        }
-      });
-      return _.merge.apply(null, newItem);
+    const updatedData = dataWithRoles.map((item: any) => {
+      const newItem = roleData.map((role: any) => ({
+        ...item,
+        [role.name]:
+          role.name === 'superadmin'
+            ? true
+            : item.children.every((child: any) => child[role.name]),
+      }));
+      return _.merge({}, ...newItem);
     });
 
     setPermissions(updatedData);
-  }, [permissionsInitial, roles]);
+  };
 
   const data = useMemo(() => permissions, [permissions]);
 
-  const checkedValuesFunc = (permissionsList: string[], role: any) => {
-    permissions.forEach((item: any) => {
-      item.children.forEach((child: any) => {
-        if (child[role.name] === true) {
-          //swapped name to action
-          permissionsList.push(child.action);
-        }
-      });
-    });
-  };
+  const checkedValuesFunc = useCallback(
+    (role: any) => {
+      return permissions.reduce((acc: string[], item: any) => {
+        const rolePermissions = item.children
+          .filter((child: any) => child[role.name] === true)
+          .map((child: any) => child.action);
+        return [...acc, ...rolePermissions];
+      }, []);
+    },
+    [permissions],
+  );
 
-  const onSubmit = (role: any) => {
-    const permissionsList: string[] = [];
-    checkedValuesFunc(permissionsList, role);
-    const body = {
-      name: role.name,
-      permissions: permissionsList,
-    };
-    putAPI(`roles/${role.id}`, body).then(() => {
-      toast.success('Updated Permissions', {
-        duration: 1000,
-        position: 'top-right',
+  const onSubmit = useCallback(
+    (role: any) => {
+      const permissionsList = checkedValuesFunc(role);
+      const body = {
+        name: role.name,
+        permissions: permissionsList,
+      };
+      putAPI(`roles/${role.id}`, body).then(() => {
+        toast.success('Updated Permissions', {
+          duration: 1000,
+          position: 'top-right',
+        });
       });
-    });
-  };
+    },
+    [checkedValuesFunc],
+  );
 
   const onChangeParent = (e: any, role: any, index: any) => {
     const { checked } = e.target;
-    const data = [...permissions];
+    const permissionList = [...permissions];
+    permissionList[index][role.name] = checked;
 
-    data[index][role.name] = checked;
-
-    if (data[index][role.name]) {
-      data[index].children.map((child: any) => (child[role.name] = checked));
+    if (permissionList[index][role.name]) {
+      permissionList[index].children.map(
+        (child: any) => (child[role.name] = checked),
+      );
     } else {
-      data[index].children.map((child: any) => (child[role.name] = false));
+      permissionList[index].children.map(
+        (child: any) => (child[role.name] = false),
+      );
     }
 
-    setPermissions(data);
+    setPermissions(permissionList);
     onSubmit(role);
   };
 
@@ -129,21 +124,21 @@ const PermissionsList = () => {
     parentIndex: any,
   ) => {
     const { checked } = e.target;
-    const data = [...permissions];
+    const permissionList = [...permissions];
 
-    data[parentIndex].children[childIndex][role.name] = checked;
-    data[parentIndex].children.map(() => {
-      const isAllSelected = data[parentIndex].children.every(
+    permissionList[parentIndex].children[childIndex][role.name] = checked;
+    permissionList[parentIndex].children.map(() => {
+      const isAllSelected = permissionList[parentIndex].children.every(
         (child: any) => child[role.name] === true,
       );
       if (isAllSelected) {
-        data[parentIndex][role.name] = checked;
+        permissionList[parentIndex][role.name] = checked;
       } else {
-        data[parentIndex][role.name] = false;
+        permissionList[parentIndex][role.name] = false;
       }
     });
 
-    setPermissions(data);
+    setPermissions(permissionList);
     onSubmit(role);
   };
 
@@ -153,9 +148,10 @@ const PermissionsList = () => {
 
   const ColumnRoles = roles.map((role: any) => {
     return {
-      header: role.name,
+      header: role.name.toUpperCase(),
       accessorKey: role.name,
       id: role.id,
+      enableSorting: false,
       cell: ({ row }: any) => (
         <Box>
           {row.getCanExpand() ? (
@@ -170,6 +166,7 @@ const PermissionsList = () => {
                     (child: any) => child[role.name] === true,
                   ),
                 onChange: (e: any) => onChangeParent(e, role, row.index),
+                disabled: role.name === 'superadmin',
               }}
               variant={row.getCanExpand() ? 'dark' : 'white'}
             />
@@ -192,13 +189,13 @@ const PermissionsList = () => {
 
   const columns = [
     {
-      header: 'Name',
+      header: 'NAME',
       accessorKey: 'name',
       id: 'name',
       cell: ({ row, getValue }: any) => (
         <Box>
           {row.getCanExpand() ? (
-            <Button
+            <Box
               variant="base"
               {...{
                 onClick: row.getToggleExpandedHandler(),
@@ -219,7 +216,7 @@ const PermissionsList = () => {
                   <ArrowDropdown />
                 </Box>
               </Flex>
-            </Button>
+            </Box>
           ) : (
             <Box
               sx={{
@@ -241,7 +238,7 @@ const PermissionsList = () => {
 
   return (
     <Flex sx={{ width: '100%' }} ref={render}>
-      <Table data={data} columns={columns} />
+      <Table data={data} columns={columns} isLoading={isLoading} />
     </Flex>
   );
 };

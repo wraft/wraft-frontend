@@ -1,18 +1,17 @@
-import React, { ComponentType, FC, useEffect } from 'react';
-
-import { cx, isEmptyArray } from '@remirror/core';
-import { ReactComponentMessages as Messages } from '@remirror/messages';
-import { useCommands, useI18n } from '@remirror/react-core';
-import { ExtensionMentionAtomTheme as Theme } from '@remirror/theme';
-
-import { FloatingWrapper } from './floating-menu';
-import {
+import type { ComponentType, FC } from "react";
+import React, { useEffect } from "react";
+import { cx, isEmptyArray } from "@remirror/core";
+import { ReactComponentMessages as Messages } from "@remirror/messages";
+import { useCommands, useI18n } from "@remirror/react-core";
+import { ExtensionMentionAtomTheme as Theme } from "@remirror/theme";
+import { FloatingWrapper } from "./floating-menu";
+import type {
   HolderAtomNodeAttributes,
   HolderAtomState,
   UseHolderAtomProps,
   UseHolderAtomReturn,
-  useHolderAtom,
-} from './mention-hooks';
+} from "./mention-hooks";
+import { useHolderAtom } from "./mention-hooks";
 
 interface HolderAtomPopupComponentProps<
   Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,
@@ -36,8 +35,8 @@ interface HolderAtomPopupComponentProps<
 interface UseHolderAtomChangeHandlerProps<
   Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,
 > {
-  state: UseHolderAtomReturn<Data>['state'];
-  onChange: HolderAtomPopupComponentProps<Data>['onChange'];
+  state: UseHolderAtomReturn<Data>["state"];
+  onChange: HolderAtomPopupComponentProps<Data>["onChange"];
 }
 
 function useHolderAtomChangeHandler<
@@ -70,11 +69,12 @@ export function HolderAtomPopupComponent<
   return (
     <FloatingWrapper
       positioner="cursor"
-      enabled={!!state}
+      enabled={Boolean(state)}
       placement="auto-end"
-      renderOutsideEditor>
+      renderOutsideEditor
+    >
       <div {...getMenuProps()} className={cx(Theme.MENTION_ATOM_POPUP_WRAPPER)}>
-        {!!state && isEmptyArray(hookProps.items) ? (
+        {Boolean(state) && isEmptyArray(hookProps.items) ? (
           <ZeroItemsComponent />
         ) : (
           hookProps.items.map((item, index) => {
@@ -96,7 +96,8 @@ export function HolderAtomPopupComponent<
                   },
                   item,
                   index,
-                })}>
+                })}
+              >
                 <ItemComponent item={item} state={state} />
               </div>
             );
@@ -111,7 +112,7 @@ interface HolderAtomPopupItemComponentProps<
   Data extends HolderAtomNodeAttributes = HolderAtomNodeAttributes,
 > {
   item: Data;
-  state: UseHolderAtomReturn<Data>['state'];
+  state: UseHolderAtomReturn<Data>["state"];
 }
 
 function DefaultItemComponent<

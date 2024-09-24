@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 
+import { DotsVerticalRounded } from 'components/Icons';
+
 import { Drawer } from './common/Drawer';
-import { DotsVerticalRounded } from './Icons';
 import LayoutForm from './LayoutForm';
 
 /**
@@ -112,7 +113,7 @@ const LayoutCard = ({
                       }}>
                       <Text
                         sx={{
-                          fontSize: 3,
+                          fontSize: 'base',
                           fontWeight: 500,
                           color: 'text',
                         }}>
@@ -128,7 +129,8 @@ const LayoutCard = ({
             </Box>
           </Box>
           <Box sx={{ p: 3 }}>
-            <Text sx={{ fontSize: 3, fontWeight: 500, color: 'gray.1000' }}>
+            <Text
+              sx={{ fontSize: 'base', fontWeight: 500, color: 'gray.1000' }}>
               {name}
             </Text>
           </Box>

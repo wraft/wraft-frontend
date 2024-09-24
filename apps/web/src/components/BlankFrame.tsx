@@ -50,7 +50,7 @@ export const Page = ({ children, inner }: IPage) => {
 
             {children}
             <Flex sx={{ pt: 0 }}>
-              <Text sx={{ fontSize: '12px', p: 4, color: 'text' }}>
+              <Text sx={{ fontSize: 'xs', p: 4, color: 'text' }}>
                 Wraft v0.3.0
               </Text>
               <Box
@@ -58,7 +58,7 @@ export const Page = ({ children, inner }: IPage) => {
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
                 }}>
-                {/* <Text sx={{ fontSize: 0, p: 4, color: 'text' }}>
+                {/* <Text sx={{ fontSize: 'xxs', p: 4, color: 'text' }}>
                   Support | Contact Us
                 </Text> */}
               </Box>

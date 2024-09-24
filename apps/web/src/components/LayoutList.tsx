@@ -4,13 +4,15 @@ import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
 import { Button, Table } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
-import { fetchAPI, deleteAPI } from '../utils/models';
-import { ConfirmDelete } from './common';
-import { Drawer } from './common/Drawer';
-import { OptionsIcon } from './Icons';
+import { TimeAgo } from 'common/Atoms';
+import Modal from 'common/Modal';
+import ConfirmDelete from 'common/ConfirmDelete';
+import { Drawer } from 'common/Drawer';
+import { fetchAPI, deleteAPI } from 'utils/models';
+
 import LayoutForm from './LayoutForm';
-import Modal from './Modal';
 
 export interface ILayout {
   width: number;
@@ -97,9 +99,7 @@ const LayoutList = ({ rerender }: Props) => {
       cell: ({ row }: any) => (
         <>
           <NextLink href={`/manage/layouts/${row.original.id}`}>
-            <Box>
-              <Box>{row.original?.name}</Box>
-            </Box>
+            <Box sx={{ fontSize: 'sm' }}>{row.original?.name}</Box>
           </NextLink>
           <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
             <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
@@ -109,13 +109,62 @@ const LayoutList = ({ rerender }: Props) => {
       enableSorting: false,
     },
     {
+      id: 'content.description',
+      header: 'DESCRIPTION',
+      accessorKey: 'description',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.description}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.slug',
+      header: 'SLUG',
+      accessorKey: 'slug',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.slug}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.size',
+      header: 'SIZE',
+      accessorKey: 'size',
+      cell: ({ row }: any) => (
+        <Box
+          sx={{
+            fontSize: 'sm',
+          }}>{`${row.original?.width} X ${row.original?.height} ${row.original?.unit}`}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.engine.name',
+      header: 'ENGINE',
+      accessorKey: 'name',
+      cell: ({ row }: any) => (
+        <Box sx={{ fontSize: 'sm' }}>{row.original?.engine?.name}</Box>
+      ),
+      enableSorting: false,
+    },
+    {
+      id: 'content.update_at',
+      header: 'DATE',
+      accessorKey: 'update_at',
+      cell: ({ row }: any) => (
+        <Box>
+          <TimeAgo time={row.original?.update_at} />
+        </Box>
+      ),
+      enableSorting: false,
+    },
+    {
       id: 'content.id',
       header: '',
       accessor: 'content.id',
       cell: ({ row }: any) => {
         return (
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Box />
+          <Flex sx={{ justifyContent: 'flex-end' }}>
             <Box>
               <MenuProvider>
                 <MenuButton
@@ -138,7 +187,7 @@ const LayoutList = ({ rerender }: Props) => {
                     onClick={() => {
                       setIsOpen(row.index);
                     }}>
-                    <OptionsIcon />
+                    <ThreeDotIcon />
                   </Box>
                 </MenuButton>
                 <Menu

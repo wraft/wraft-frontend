@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Box, Flex, Text, Container, Heading, Grid } from 'theme-ui';
+import { Box, Flex, Text, Container, Grid } from 'theme-ui';
 import styled from '@emotion/styled';
+import { Modal } from '@wraft/ui';
 
 import Footer from 'components/Footer';
-import NextLinkText from 'components/NavLink';
+import NextLinkText from 'common/NavLink';
 
 import data from './home.json';
 
@@ -13,13 +14,7 @@ const LandingBlockWrapper = styled(Box)`
   --lp-text-color: 16px;
   font-family: 'Mona Sans', sans-serif;
 `;
-const H1 = styled(Heading)`
-  font-size: 66px;
-  font-weight: 600;
-  line-height: 80px;
-  margin: 0;
-  white-space: pre-line;
-`;
+
 const H2 = styled.h2`
   font-size: 48px;
   font-weight: 600;
@@ -41,6 +36,8 @@ const MainSection = styled(Flex)`
 `;
 
 const LandingBlock = () => {
+  const [isOpendemoModal, setOpendemoModal] = useState<boolean>(false);
+
   return (
     <LandingBlockWrapper bg="backgroundWhite">
       <Head>
@@ -100,12 +97,15 @@ const LandingBlock = () => {
         </Box>
         <Box sx={{ textAlign: 'center', position: 'relative' }}>
           <Box sx={{ maxWidth: '80ch', mx: 'auto', mb: 2 }}>
-            <Text as="h1" pt="124px" sx={{ fontSize: 8, lineHeight: 1, mb: 3 }}>
+            <Text
+              as="h1"
+              pt="124px"
+              sx={{ fontSize: '5xl', lineHeight: 1, mb: 3 }}>
               {data.main_section?.title}
             </Text>
             <Text
               as="h2"
-              sx={{ fontSize: 6, fontWeight: 400, color: 'gray.1000' }}>
+              sx={{ fontSize: '3xl', fontWeight: 400, color: 'gray.1000' }}>
               {data.main_section?.sub_title}
             </Text>
           </Box>
@@ -113,9 +113,26 @@ const LandingBlock = () => {
             <NextLinkText variant={'primaryLarge'} href="/signup">
               Get Started
             </NextLinkText>
-            <NextLinkText variant={'secondaryLarge'} href="/login">
+            <Box
+              sx={{
+                backgroundColor: 'gray.100',
+                fontSize: '1.15rem',
+                fontWeight: 600,
+                color: 'green.1200',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.75rem',
+                border: 'solid 1px',
+                borderColor: 'green.900',
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'green.200',
+                  borderColor: 'green.a500',
+                  color: 'green.700',
+                },
+              }}
+              onClick={() => setOpendemoModal(true)}>
               Watch Demo
-            </NextLinkText>
+            </Box>
           </Flex>
           <Box mt="92px">
             <Image
@@ -134,10 +151,10 @@ const LandingBlock = () => {
           <Box sx={{ textAlign: 'left', mb: '90px', mt: 6 }}>
             <Text
               as="h1"
-              sx={{ fontSize: 6, fontWeight: 600, color: 'gray.1200' }}>
+              sx={{ fontSize: '3xl', fontWeight: 600, color: 'gray.1200' }}>
               Open Document Lifecycle
             </Text>
-            <Text sx={{ fontSize: 5, fontWeight: 400, color: 'gray.1000' }}>
+            <Text sx={{ fontSize: '2xl', fontWeight: 400, color: 'gray.1000' }}>
               Future proof way to sustain your companies document, end-to-end.
             </Text>
           </Box>
@@ -176,23 +193,28 @@ const LandingBlock = () => {
                 <Box className="future_block_left">
                   <Box
                     className="future_block_title"
-                    sx={{ fontSize: 3, color: 'gray.900' }}>
+                    sx={{ fontSize: 'base', color: 'gray.900' }}>
                     {item.subtitle}
                   </Box>
-                  <Text as="h3" sx={{ fontSize: 5, mb: 2 }}>
+                  <Text as="h3" sx={{ fontSize: '2xl', mb: 2 }}>
                     {item.title}
                   </Text>
 
-                  <Box sx={{ fontSize: 4, mr: 4 }}>{item.des}</Box>
+                  <Box sx={{ fontSize: 'xl', mr: 4 }}>{item.des}</Box>
                 </Box>
 
                 <Box className="future_block_right" sx={{ width: '50%' }}>
                   <Image
                     alt="Home page visual representation"
-                    src="/home02.png"
+                    src={item.image ? item.image : '/home02.png'}
                     width={600}
                     height={400}
-                    style={{ width: '100%', height: 'auto' }}
+                    style={{
+                      width: '100%',
+                      height: 'auto',
+                      borderRadius: '4px',
+                      border: '1px solid rgb(214 218 225)',
+                    }}
                   />
                 </Box>
               </Flex>
@@ -358,10 +380,12 @@ const LandingBlock = () => {
                         py: 3,
                         height: '250px',
                       }}>
-                      <Box as="h5" sx={{ fontSize: 4, mb: '16px' }}>
+                      <Box as="h5" sx={{ fontSize: 'xl', mb: '16px' }}>
                         {item.title}
                       </Box>
-                      <Box sx={{ fontSize: 3, mb: '16px' }}>{item.des}</Box>
+                      <Box sx={{ fontSize: 'base', mb: '16px' }}>
+                        {item.des}
+                      </Box>
                     </Box>
                   </Flex>
                 ))}
@@ -412,10 +436,10 @@ const LandingBlock = () => {
         <Box
           sx={{ background: 'green.300', p: '64px', borderRadius: '0.75rem' }}>
           <Box sx={{ textAlign: 'center' }}>
-            <Text as="h2" sx={{ fontSize: 6 }}>
+            <Text as="h2" sx={{ fontSize: '1.25rem' }}>
               {data?.hosting_section?.title}
             </Text>
-            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: 5 }}>
+            <Text as="h3" sx={{ fontWeight: 'normal', fontSize: '1.25rem' }}>
               {data?.hosting_section?.sub_title}
             </Text>
           </Box>
@@ -430,6 +454,37 @@ const LandingBlock = () => {
         </Box>
       </Box>
       <Footer />
+      <Modal
+        open={isOpendemoModal}
+        ariaLabel="delete modal"
+        onClose={() => setOpendemoModal(false)}>
+        <>
+          {isOpendemoModal && (
+            <Box sx={{ width: '100ch' }}>
+              <Flex
+                sx={{
+                  position: 'relative',
+                  width: '`100%',
+                  height: '72vh',
+                }}>
+                <iframe
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  src="https://www.youtube.com/embed/I71DmG_t3rA?si=fYvnDjHdWdRhilx5?rel=0&modestbranding=1&autoplay=1"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media"
+                  referrerPolicy="strict-origin-when-cross-origin"></iframe>
+              </Flex>
+            </Box>
+          )}
+        </>
+      </Modal>
     </LandingBlockWrapper>
   );
 };

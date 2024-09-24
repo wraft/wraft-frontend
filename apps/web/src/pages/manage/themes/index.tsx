@@ -1,14 +1,14 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
-import { Drawer } from '@wraft-ui/Drawer';
 import { Box, Button, Container, Flex, Text } from 'theme-ui';
 
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
 import ThemeAddForm from 'components/ThemeForm';
 import ThemeList from 'components/ThemeList';
+import PageHeader from 'common/PageHeader';
+import { Drawer } from 'common/Drawer';
+import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
@@ -17,8 +17,8 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Themes - Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Themes | Wraft</title>
+        <meta name="description" content="wraft themes" />
       </Head>
       <Page>
         <PageHeader

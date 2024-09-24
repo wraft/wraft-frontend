@@ -1,9 +1,9 @@
 {
-  "page_title": "Document Generation for Smart Companies",
+  "page_title": "A new way to create documents",
   "page_meta": "",
   "main_section": {
-    "title": "Document Generation \n for Smart Companies",
-    "sub_title": "Easiest way to create or to automate document production teams"
+    "title": "A new way to create documents",
+    "sub_title": "Wraft makes creating documents at scale easy"
   },
   "case_studies_sections": {
     "title": "See what you can do with Wraft",
@@ -58,12 +58,12 @@
     ]
   },
   "hosting_section": {
-    "title": "Future-proof Documents \n for ambitious companies",
-    "sub_title": "Self-host or use our cloud platform"
+    "title": "Documents \n for ambitious companies",
+    "sub_title": "Self-host or use our cloud platform (soon)"
 
   },
   "future_proof_sections": {
-    "title": "Open Document Lifecycle",
+    "title": "Structured Documents for everyone",
     "sub_title": "Future proof way to sustain your companies document, end-to-end.",
     "section": [
       {
@@ -71,7 +71,7 @@
         "title": "Document generation",
         "subtitle": "Easy and Fast",
         "des": "Easy and fast document generation for everyone. Our user-friendly platform streamlines the process, empowering you to create professional documents effortlessly with just a few clicks.",        
-        "image": "",
+        "image": "/document_generation.png",
         "link": ""
       },
       {
@@ -79,7 +79,7 @@
         "title": "Pipelines",
         "subtitle": "Automate complex flows",
         "des": "Streamline high-volume document creation with our pipeline functionality. Automating repetitive tasks, you can generate tailored documents en masse with unparalleled efficiency.",
-        "image": "",
+        "image": "/pipeline-screen.png",
         "link": ""
       },
       {
@@ -87,7 +87,7 @@
         "title": "E-signature",
         "subtitle": "Secure and Private",
         "des": "Safeguard your documents with our iron-clad e-signature solution. Digitally sign and secure files, ensuring privacy and legal validity with industry-leading encryption protocols.",
-        "image": "",
+        "image": "/document_generation.png",
         "link": ""
       },
       {
@@ -95,7 +95,7 @@
         "title": "Approval system",
         "subtitle": "Build workflows",
         "des": "Tailor document approval processes to your unique needs. Our flexible workflow system allows you to define multi-level review cycles effortlessly. Co",
-        "image": "",
+        "image": "/approval-dasboard.png",
         "link": ""
       }
     ]

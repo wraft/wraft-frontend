@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
 
-import { postAPI, fetchAPI } from '../utils/models';
-import Field from './Field';
+import Field from 'common/Field';
+import { postAPI, fetchAPI } from 'utils/models';
+
 interface ApprovalFormBaseProps {
   states?: Array<any>;
   // isOpen?: boolean;
@@ -44,7 +45,6 @@ const ApprovalFormBase = ({
    * @param data Form Data
    */
   const onSubmit = (data: any) => {
-    console.log('submitted');
     postAPI('approval_systems', data);
   };
 
@@ -52,7 +52,6 @@ const ApprovalFormBase = ({
     setUser(e);
     setValue('approver_id', e.id);
     setShowSearch(false);
-    console.log('Selected User', e);
   };
 
   /**
@@ -61,7 +60,6 @@ const ApprovalFormBase = ({
    */
 
   const onChangeInput = (e: any) => {
-    console.log('search', e.currentTarget.value);
     setShowSearch(true);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
       const usr = data.users;

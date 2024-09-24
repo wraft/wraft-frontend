@@ -1,7 +1,8 @@
-import { Box, Flex, Text, useColorMode } from 'theme-ui';
+import { Box, Flex, useColorMode } from 'theme-ui';
+
+import { BrandLogo } from 'components/Icons';
 
 import Container from './Container';
-import { BrandLogo } from './Icons';
 import ModeToggle from './ModeToggle';
 
 const footerMenu = [

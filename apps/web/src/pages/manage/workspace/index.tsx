@@ -1,27 +1,17 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
-import Router from 'next/router';
-import Checkbox from '@wraft-ui/Checkbox';
-import DescriptionLinker from '@wraft-ui/DescriptionLinker';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-  Flex,
-  Container,
-  Button,
-  Box,
-  Input,
-  Label,
-  Text,
-  Image,
-} from 'theme-ui';
+import { Flex, Container, Button, Box, Input, Label, Text } from 'theme-ui';
 
-import { ConfirmDelete } from 'components/common';
-import Field from 'components/Field';
 import ManageSidebar from 'components/ManageSidebar';
-import Modal from 'components/Modal';
 import Page from 'components/PageFrame';
-import PageHeader from 'components/PageHeader';
+import DefaultAvatar from 'components/DefaultAvatar';
+import PageHeader from 'common/PageHeader';
+import Field from 'common/Field';
+import Modal from 'common/Modal';
+import DescriptionLinker from 'common/DescriptionLinker';
+import Checkbox from 'common/Checkbox';
 import { useAuth } from 'contexts/AuthContext';
 import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
@@ -30,7 +20,7 @@ export interface Organisation {
   id: string;
   name: string;
   address: string;
-  url: string;
+  url?: string;
   logo: string;
   email: string;
   phone: string;
@@ -45,7 +35,7 @@ type FormInputs = {
   // logo: FileList;
   logo: any;
   name: string;
-  url: string;
+  url?: string;
 };
 
 const Index: FC = () => {
@@ -53,16 +43,14 @@ const Index: FC = () => {
     mode: 'onSubmit',
   });
   const [isDelete, setDelete] = useState(false);
-  const [isConfirmDelete, setConfirmDelete] = useState(false);
   const [org, setOrg] = useState<Organisation>();
   const [logoSrc, setLogoSrc] = useState(org?.logo);
   const fileRef = useRef<HTMLInputElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = useState(false);
-  const [inputValue, setInputValue] = useState<number>(0);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const { userProfile, logout } = useAuth();
+  const { userProfile } = useAuth();
 
   const orgId = userProfile?.organisation_id || null;
   const currentOrg = userProfile?.currentOrganisation || null;
@@ -84,24 +72,21 @@ const Index: FC = () => {
     setLogoSrc(logo);
   }, [org]);
 
-  useEffect(() => {
-    const data = inputRef.current?.value;
-    setInputValue(parseInt(data ?? '0', 10));
-  }, [inputRef.current?.value]);
-
-  const onConfirmDelete = async (inputValue: any) => {
-    const body = { code: `${inputValue}` };
-    const deleteRequest = deleteAPI('organisations', body);
-    toast.promise(deleteRequest, {
-      loading: 'Loading...',
-      success: () => {
-        setConfirmDelete(false);
-        logout();
-        Router.push('/login');
-        return 'Deleted workspace successfully';
-      },
-      error: (error) => error?.message || 'Failed to deleted workspace',
-    });
+  const onConfirmDelete = async () => {
+    const code = inputRef.current?.value;
+    await deleteAPI(`organisations?code=${code}`)
+      .then(() => {
+        toast.success('Deleted workspace successfully', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      })
+      .catch((error) => {
+        toast.error(error?.message || 'Failed to deleted workspace', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      });
   };
 
   /**
@@ -132,13 +117,16 @@ const Index: FC = () => {
   };
 
   const onSendCode = () => {
-    setDelete(true);
-    const deleteRequest = postAPI('organisations/request_deletion', {});
-    toast.promise(deleteRequest, {
-      loading: 'Loading...',
-      success: 'Deleted workspace scuccessfully',
-      error: 'Failed to delete workspace',
-    });
+    postAPI('organisations/request_deletion', {})
+      .then(() => {
+        setDelete(true);
+      })
+      .catch((err) => {
+        toast.error(JSON.stringify(err) || 'Failed to delete workspace', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      });
   };
 
   const handleImageUpload = (event: any) => {
@@ -168,9 +156,9 @@ const Index: FC = () => {
     if (data.name !== 'Personal' && data.name !== '') {
       formData.append('name', data.name);
     }
-    if (data.url !== '') {
-      formData.append('url', data.url);
-    }
+    // if (data.url !== '') {
+    //   formData.append('url', data.url);
+    // }
 
     if (orgId) {
       const updateRequest = putAPI(`organisations/${orgId}`, formData);
@@ -195,11 +183,13 @@ const Index: FC = () => {
     }
   };
 
+  const orgImage = previewSource ? previewSource : logoSrc;
+
   return (
     <>
       <Head>
-        <title>Workspace | Wraft Docs</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>Workspace | Wraft</title>
+        <meta name="description" content="wraft workspace" />
       </Head>
       <Page>
         <PageHeader
@@ -226,13 +216,16 @@ const Index: FC = () => {
                 variant="layout.contentFrame"
                 sx={{ backgroundColor: 'backgroundWhite' }}
                 p={4}>
-                <Box sx={{ height: '128px', mb: 4 }}>
-                  <Image
-                    variant="profile"
-                    src={previewSource ? previewSource : logoSrc}
-                    alt="logo"
-                    onClick={() => fileRef.current?.click()}
-                  />
+                <Box sx={{ height: '128px', mb: 4, bg: 'gray' }}>
+                  {orgImage && (
+                    <Box onClick={() => fileRef.current?.click()}>
+                      <DefaultAvatar
+                        url={previewSource ? previewSource : logoSrc}
+                        value={org?.name}
+                        size={120}
+                      />
+                    </Box>
+                  )}
                 </Box>
                 <Input
                   sx={{ display: 'none' }}
@@ -251,14 +244,14 @@ const Index: FC = () => {
                   disable={!isEdit}
                   mb={'24px'}
                 />
-                <Field
+                {/* <Field
                   label="Workspace URL"
                   placeholder={'wraft.co/example'}
                   defaultValue={org?.url}
                   name="url"
                   register={register}
                   disable={!isEdit}
-                />
+                /> */}
                 <Box mt={'24px'}>
                   {isEdit ? (
                     <Button variant="buttonPrimary" type="submit">
@@ -329,7 +322,7 @@ const Index: FC = () => {
                             , please enter the deletion code sent to your email.
                           </Text>
                           <Box sx={{ mt: '24px' }}>
-                            <Label variant="text.pR" sx={{ color: 'gray.800' }}>
+                            <Label variant="text.pR" sx={{ color: 'gray.900' }}>
                               <span>Enter the deletion code to confirm</span>
                             </Label>
                             <Input ref={inputRef}></Input>
@@ -353,10 +346,7 @@ const Index: FC = () => {
                           <Flex sx={{ gap: 3, pt: 4 }}>
                             <Button
                               disabled={!isChecked}
-                              onClick={() => {
-                                setDelete(false);
-                                setConfirmDelete(true);
-                              }}
+                              onClick={onConfirmDelete}
                               variant="delete">
                               Delete workspace
                             </Button>
@@ -368,17 +358,6 @@ const Index: FC = () => {
                           </Flex>
                         </Box>
                       </Box>
-                    </Modal>
-                    <Modal
-                      isOpen={isConfirmDelete}
-                      onClose={() => setConfirmDelete(false)}>
-                      <ConfirmDelete
-                        inputValue={inputValue}
-                        title="Delete workspace"
-                        text="Are you sure you want to delete this workspace?"
-                        onConfirmDelete={onConfirmDelete}
-                        setOpen={setConfirmDelete}
-                      />
                     </Modal>
                   </Box>
                 )}

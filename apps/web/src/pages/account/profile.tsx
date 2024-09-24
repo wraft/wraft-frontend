@@ -3,16 +3,16 @@ import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
 
 import OrgSidebar from 'components/OrgSidebar';
-import PageHeader from 'components/PageHeader';
 import Page from 'components/PageFrame';
 import ProfileForm from 'components/ProfileForm';
+import PageHeader from 'common/PageHeader';
 
 const Contents: FC = () => {
   return (
     <>
       <Head>
-        <title>Contens | Wraft</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <title>My Account | Wraft</title>
+        <meta name="description" content="my wraft account" />
       </Head>
       <Page>
         <PageHeader title="Settings" />

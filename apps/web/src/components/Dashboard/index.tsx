@@ -5,13 +5,20 @@ import { format } from 'date-fns';
 import { Text, Box, Flex, Container, Grid } from 'theme-ui';
 import { File } from '@phosphor-icons/react';
 
-import { useAuth } from '../../contexts/AuthContext';
-import { ApproveTick } from '../Icons';
+import { ApproveTick } from 'components/Icons';
+import { useAuth } from 'contexts/AuthContext';
+import { fetchAPI } from 'utils/models';
+
 import PendingDocumentBlock from './PendingDocument';
 
 interface BlockCardProps {
   title: string;
-  desc: string;
+  desc: number;
+}
+interface DashboardStatsProps {
+  daily_documents: number;
+  pending_approvals: number;
+  total_documents: number;
 }
 const BlockCard = ({ title, desc }: BlockCardProps) => (
   <Flex
@@ -31,7 +38,7 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
     <Flex ml={2} sx={{ flex: 1 }}>
       <Box
         sx={{
-          fontSize: 2,
+          fontSize: 'sm',
           fontWeight: 500,
           mb: 1,
           color: 'gray.1100',
@@ -41,8 +48,8 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
       <Box
         sx={{
           ml: 'auto',
-          fontSize: 3,
-          fontWeight: 100,
+          fontSize: 'base',
+          fontWeight: 300,
         }}>
         {desc}
       </Box>
@@ -67,8 +74,17 @@ const finishSetup = [
 
 const Dashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [dashboardStatus, setDashboardStatus] = useState<DashboardStatsProps>({
+    daily_documents: 0,
+    pending_approvals: 0,
+    total_documents: 0,
+  });
   // const [dashboardLoading, setDashboardLoading] = useState();
   const { userProfile } = useAuth();
+
+  useEffect(() => {
+    getDashboardStats();
+  }, [userProfile?.organisation_id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -77,6 +93,12 @@ const Dashboard = () => {
 
     return () => clearInterval(intervalId);
   }, [userProfile?.organisation_id]);
+
+  const getDashboardStats = () => {
+    fetchAPI('dashboard_stats').then((data: any) => {
+      setDashboardStatus(data);
+    });
+  };
 
   const getGreeting = () => {
     const currentHour = currentTime.getHours();
@@ -96,12 +118,12 @@ const Dashboard = () => {
     <Container
       variant="layout.pageFrame"
       sx={{ height: '100vh', bg: 'gray.200' }}>
-      <Box sx={{ fontSize: 2, color: 'gray.900' }}>
+      <Box sx={{ fontSize: 'sm', color: 'gray.900' }}>
         {format(currentTime, 'EEEE, MMMM dd')}
       </Box>
       <Box
         sx={{
-          fontSize: 3,
+          fontSize: 'sm',
           fontWeight: 'heading',
           fontFamily: 'body',
           mb: 3,
@@ -124,14 +146,14 @@ const Dashboard = () => {
           <Box>
             <Box
               sx={{
-                fontSize: '16px',
+                fontSize: 'base',
                 fontWeight: 'heading',
                 lineHeight: '19.2px',
                 mb: 3,
               }}>
               Personalise your experience
             </Box>
-            <Text as="p" sx={{ fontSize: '12px', mb: 3 }}>
+            <Text as="p" sx={{ fontSize: 'xs', mb: 3 }}>
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
@@ -150,7 +172,7 @@ const Dashboard = () => {
           <Box>
             <Box
               sx={{
-                fontSize: '14px',
+                fontSize: 'sm',
                 fontWeight: 'heading',
                 mb: '18px',
               }}>
@@ -162,7 +184,7 @@ const Dashboard = () => {
                 <Box
                   px={2}
                   sx={{
-                    fontSize: '12px',
+                    fontSize: 'xs',
                   }}>
                   {data.title}
                 </Box>
@@ -173,9 +195,18 @@ const Dashboard = () => {
       </Flex>
 
       <Grid gap={3} columns={4}>
-        <BlockCard title="Daily Total" desc="21" />
-        <BlockCard title="Total Documents" desc="34" />
-        <BlockCard title="Pending Approvals" desc="2" />
+        <BlockCard
+          title="Daily Total"
+          desc={dashboardStatus?.daily_documents}
+        />
+        <BlockCard
+          title="Total Documents"
+          desc={dashboardStatus?.total_documents}
+        />
+        <BlockCard
+          title="Pending Approvals"
+          desc={dashboardStatus?.pending_approvals}
+        />
       </Grid>
 
       <PendingDocumentBlock />
