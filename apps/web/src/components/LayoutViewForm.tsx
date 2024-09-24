@@ -18,7 +18,7 @@ import FieldText from './FieldText';
 import LayoutForm from './LayoutForm';
 import MenuStepsIndicator from './MenuStepsIndicator';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.mjs`;
 
 export interface Layouts {
   layout: Layout;
