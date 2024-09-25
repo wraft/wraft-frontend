@@ -3,11 +3,11 @@
 </p>
 
 <h1 align="center">
-  <a href="https://wraft.co">wraft.co</a>
+  <a href="https://wraft.co">wraft.app</a>
 </h1>
 
 <p align="center">
-  <i>The open-source Contract Lifecycle Management platform.</i>
+  <i>The open-source Document Lifecycle Management platform.</i>
 </p>
 
 <div align="center">
@@ -16,7 +16,7 @@
 
 ---
 
-# 📝 Wraft - Contract Lifecycle Management
+# 📝 Wraft - Document Lifecycle Management
 
 **Wraft** is a comprehensive open-source platform for managing contracts and documents through their lifecycle. It helps users simplify, streamline, and automate document creation, processing, approval, and signing.
 
@@ -24,7 +24,7 @@
 
 - **Document Creation**: Generate documents quickly and easily using customizable templates.
 - **High-Volume Automation**: Support for high-volume document creation via automated pipelines.
-- **Secure E-Signatures**: Get documents signed securely online, compliant with international standards.
+- **Secure E-Signatures(WIP)**: Get documents signed securely online, compliant with international standards.
 - **Customizable Workflows**: Design approval workflows that fit your organization’s processes.
 - **Compliance and Security**: Built with strong security features and compliance in mind.
 
