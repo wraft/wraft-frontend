@@ -6,7 +6,11 @@ const HOST = process.env.NEXT_PUBLIC_API_HOST;
 module.exports = withImages({
   env: {
     api: process.env.NEXT_PUBLIC_API_HOST,
+    homePageUrl: process.env.NEXT_PUBLIC_HOME_PAGE_URL || '/',
     API_HOST: process.env.NEXT_PUBLIC_API_HOST,
+    SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   },
   async rewrites() {
     return [
@@ -15,6 +19,9 @@ module.exports = withImages({
         destination: `${HOST}/uploads/:path*`, // Proxy to Backend
       },
     ];
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   output: 'standalone',
   images: {
