@@ -29,6 +29,7 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
   const [showSuccess, setShowSuccess] = useState(false);
+  const homePageUrl = process.env.homePageUrl || '/';
 
   const onSubmit = (data: FormValues) => {
     const body = {
@@ -54,7 +55,7 @@ const SignUpPage = () => {
       ) : (
         <Flex variant="onboardingFormPage">
           <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-            <Link href="/">
+            <Link href={homePageUrl}>
               <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
                 <BrandLogo width="7rem" height="3rem" />
               </Box>

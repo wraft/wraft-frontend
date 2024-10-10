@@ -1,20 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import toast from 'react-hot-toast';
-import { Text, Box, Flex, Button } from 'theme-ui';
+import { Text, Flex, Button } from 'theme-ui';
 
 import Dashboard from 'components/Dashboard';
 import Page from 'components/PageFrame';
-import UserNav from 'components/UserNav';
 import Modal from 'common/Modal';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
-
-const UserHome = dynamic(() => import('components/LandingBlock'), {
-  ssr: false,
-});
 
 const Index: FC = () => {
   const [isTeamInvite, setIsTeamInvite] = useState(false);
@@ -22,6 +17,13 @@ const Index: FC = () => {
   const inviteCookie = cookie.get('inviteCookie');
 
   const { accessToken, updateOrganisations } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!accessToken) {
+      router.push('/login');
+    }
+  }, [accessToken, router]);
 
   useEffect(() => {
     if (inviteCookie) {
@@ -58,6 +60,7 @@ const Index: FC = () => {
       });
     }
   };
+
   return (
     <>
       <Head>
@@ -67,12 +70,6 @@ const Index: FC = () => {
           content="Wraft is a document automation and pipelining tools for businesses"
         />
       </Head>
-      {!accessToken && (
-        <Box>
-          <UserNav />
-          <UserHome />
-        </Box>
-      )}
       {accessToken && (
         <Page>
           <Dashboard />

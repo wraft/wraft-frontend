@@ -47,6 +47,9 @@ const UserLoginForm = () => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
   const router = useRouter();
+  const homePageUrl = process.env.homePageUrl || '/';
+  const isSelfHost =
+    process.env.SELF_HOST?.toLowerCase() === 'false' ? false : true;
 
   const { session, error } = router.query;
 
@@ -108,7 +111,7 @@ const UserLoginForm = () => {
   return (
     <Flex variant="onboardingFormPage">
       <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-        <Link href="/">
+        <Link href={homePageUrl}>
           <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
             <BrandLogo width="7rem" height="3rem" />
           </Box>
@@ -172,47 +175,57 @@ const UserLoginForm = () => {
           </Flex>
         </Box>
 
-        <Box
-          sx={{
-            borderBottom: '1px solid',
-            borderColor: 'border',
-            whidth: '100%',
-            mt: '63px',
-            mb: '56px',
-          }}
-        />
+        {((process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_CLIENT_ID) ||
+          !isSelfHost) && (
+          <>
+            <Box
+              sx={{
+                borderBottom: '1px solid',
+                borderColor: 'border',
+                whidth: '100%',
+                mt: '63px',
+                mb: '56px',
+              }}
+            />
 
-        <Button onClick={() => signIn('gmail')} variant="googleLogin">
-          <Flex
-            sx={{
-              alignItems: 'center',
-              gap: 2,
-              minWidth: '100%',
-              bg: 'none',
-              border: 'none',
-              color: 'gray.900',
-            }}
-            variant="buttons.googleLogin">
-            <Image src={GoogleLogo} alt="" width={24} height={24} />
-            Login in with Google
-          </Flex>
-        </Button>
+            {process.env.GOOGLE_CLIENT_SECRET &&
+              process.env.GOOGLE_CLIENT_ID && (
+                <Button onClick={() => signIn('gmail')} variant="googleLogin">
+                  <Flex
+                    sx={{
+                      alignItems: 'center',
+                      gap: 2,
+                      minWidth: '100%',
+                      bg: 'none',
+                      border: 'none',
+                      color: 'gray.900',
+                    }}
+                    variant="buttons.googleLogin">
+                    <Image src={GoogleLogo} alt="" width={24} height={24} />
+                    Login in with Google
+                  </Flex>
+                </Button>
+              )}
 
-        <Flex
-          sx={{
-            alignItems: 'center',
-            mt: '24px',
-            color: 'gray.1000',
-            gap: '8px',
-            mb: '48px',
-          }}>
-          <Text variant="pR">Not a user yet? {''}</Text>
-          <Link href="/signup" variant="none">
-            <Text variant="pB" sx={{ cursor: 'pointer' }}>
-              Request invite
-            </Text>
-          </Link>
-        </Flex>
+            {!isSelfHost && (
+              <Flex
+                sx={{
+                  alignItems: 'center',
+                  mt: '24px',
+                  color: 'gray.1000',
+                  gap: '8px',
+                  mb: '48px',
+                }}>
+                <Text variant="pR">Not a user yet? {''}</Text>
+                <Link href="/signup" variant="none">
+                  <Text variant="pB" sx={{ cursor: 'pointer' }}>
+                    Request invite
+                  </Text>
+                </Link>
+              </Flex>
+            )}
+          </>
+        )}
       </Flex>
     </Flex>
   );
