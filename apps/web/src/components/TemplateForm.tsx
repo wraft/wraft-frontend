@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Select } from 'theme-ui';
+import { Box, Flex, Text } from 'theme-ui';
 import { DotsThreeVertical, TextT, TrashSimple } from '@phosphor-icons/react';
 import { Button, DropdownMenu } from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';
 import Modal from 'common/Modal';
 import Field from 'common/Field';
+import SelectCombobox from 'common/SelectCombobox';
 import { putAPI, postAPI, fetchAPI, deleteAPI } from 'utils/models';
 import {
   IContentType,
@@ -336,11 +337,12 @@ const Form = () => {
   /**
    * When Content Type is Changed
    * - Load Available fields here.
-   * @param event
+   * @param id
    */
 
-  const ctypeChange = (event: React.FormEvent<HTMLSelectElement>) => {
-    const safeSearchTypeValue: string = event.currentTarget.value;
+  const ctypeChange = (ctypeId: string) => {
+    const safeSearchTypeValue: string = ctypeId;
+    setValue('parent', ctypeId);
     loadContentType(safeSearchTypeValue);
   };
 
@@ -376,7 +378,7 @@ const Form = () => {
     const name = getValues();
     setPageTitle(name?.title);
 
-    if (name?.title_temple == '') {
+    if (name?.title_template === '') {
       setValue('title_template', name?.title);
     }
   };
@@ -499,6 +501,10 @@ const Form = () => {
                 defaultValue=""
                 register={register}
               />
+              {errors.title && errors.title.message && (
+                <Text variant="error">{errors.title.message as string}</Text>
+              )}
+
               {variant && variant.fields && !cId && (
                 <Box sx={{ mb: 2, pt: 3 }}>
                   <Box sx={{ mb: 2, pb: 3 }}>
@@ -513,22 +519,18 @@ const Form = () => {
                       }}>
                       Variant
                     </Text>
-                    <Select
+                    <SelectCombobox
                       id="parent"
-                      // name="parent"
-                      defaultValue="Parent ID"
                       disabled={false}
-                      // ref={register({ required: true })}
-                      {...register('parent', { required: true })}
-                      onChange={(e) => ctypeChange(e)}>
-                      {ctypes &&
-                        ctypes.length > 0 &&
-                        ctypes.map((m: any) => (
-                          <option value={m.id} key={m.id}>
-                            {m.name}
-                          </option>
-                        ))}
-                    </Select>
+                      {...register('parent')}
+                      onChange={ctypeChange}
+                      options={ctypes}
+                    />
+                    {errors.parent && errors.parent.message && (
+                      <Text variant="error">
+                        {errors.parent.message as string}
+                      </Text>
+                    )}
                   </Box>
                 </Box>
               )}
@@ -541,7 +543,7 @@ const Form = () => {
                 borderTop: 'solid 1px',
                 borderColor: 'gray.400',
               }}>
-              <Button variant="primary" onClick={() => saveMe()}>
+              <Button variant="primary" onClick={handleSubmit(saveMe)}>
                 Save
               </Button>
               <Button variant="secondary" onClick={() => onCancelPopup()}>
