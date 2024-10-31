@@ -19,6 +19,8 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@phosphor-icons/react": "^2.1.7",
+    "@prosekit/core": "^0.7.12",
+    "@prosekit/pm": "^0.1.8",
     "@xstyled/emotion": "^3.8.0",
     "prosekit": "^0.10.3"
   },

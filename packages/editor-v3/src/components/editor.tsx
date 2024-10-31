@@ -9,6 +9,7 @@ import SlashMenu from "./slash-menu";
 import TagMenu from "./tag-menu";
 import Toolbar from "./toolbar";
 import UserMenu from "./user-menu";
+import { users } from "./user-data";
 
 // import 'prosekit/basic/style.css'
 
@@ -45,6 +46,12 @@ const EditorContent = styled.div`
   flex: 1;
   box-sizing: border-box;
   overflow-y: scroll;
+
+  .holder {
+    background: #ffe889;
+    color: #000;
+    padding: 2px;
+  }
 `;
 
 const EditorContentInput = styled.div`
@@ -95,7 +102,7 @@ export const Editor: React.FC<EditorProps> = ({
             <EditorContentInput ref={editor.mount} />
             <InlineMenu />
             <SlashMenu />
-            <UserMenu />
+            <UserMenu users={users} />
             <TagMenu />
             <BlockHandle />
           </EditorContent>

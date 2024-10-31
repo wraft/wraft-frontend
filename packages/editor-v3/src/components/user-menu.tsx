@@ -8,7 +8,6 @@ import {
 } from "prosekit/react/autocomplete";
 import styled from "@emotion/styled";
 import type { EditorExtension } from "./extension";
-import { users } from "./user-data";
 
 const StyledPopover = styled(AutocompletePopover)`
   position: relative;
@@ -18,12 +17,12 @@ const StyledPopover = styled(AutocompletePopover)`
   user-select: none;
   overflow: auto;
   white-space: nowrap;
-  padding: 1rem;
+  padding: 8px;
   z-index: 10;
   box-sizing: border-box;
   border-radius: 0.5rem;
   border: 1px solid var(--border-color);
-  background-color: var(--background-color);
+  background-color: white;
   box-shadow: var(--shadow-lg);
   &[data-state='']: hidden;
 `;
@@ -60,14 +59,16 @@ const StyledItem = styled(AutocompleteItem)`
   }
 `;
 
-export default function UserMenu() {
+export default function UserMenu({ users }: any) {
   const editor = useEditor<EditorExtension>();
 
   const handleUserInsert = (id: number, username: string) => {
-    editor.commands.insertMention({
+    editor.commands.insertHolder({
       id: id.toString(),
-      value: `@${username}`,
-      kind: "user",
+      name: `@${username}`,
+      named: username,
+      mentionTag: "",
+      label: "",
     });
     editor.commands.insertText({ text: " " });
   };
@@ -77,7 +78,7 @@ export default function UserMenu() {
       <AutocompleteList>
         <StyledEmpty>No results</StyledEmpty>
 
-        {users.map((user) => (
+        {users.map((user: any) => (
           <StyledItem
             key={user.id}
             onSelect={() => handleUserInsert(user.id, user.name)}

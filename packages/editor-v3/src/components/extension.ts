@@ -12,6 +12,8 @@ import {
   type ReactNodeViewComponent,
 } from "prosekit/react";
 import { defineFancyParagraph } from "../extensions/paragraph";
+import { defineHolder } from "../extensions/holder";
+// import { defineHolderSpec } from "../extensions/holder/holder-spec";
 import ImageView from "./image-view";
 import { defineImageFileHandlers } from "./upload-file";
 
@@ -24,6 +26,7 @@ export function defineExtension({ placeholder }: any) {
     defineCodeBlockShiki(),
     defineHorizontalRule(),
     defineFancyParagraph(),
+    defineHolder(),
     defineReactNodeView({
       name: "image",
       component: ImageView satisfies ReactNodeViewComponent,
