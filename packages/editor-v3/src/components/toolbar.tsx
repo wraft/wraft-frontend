@@ -15,6 +15,7 @@ import {
   Image,
   TextStrikethrough,
   TextUnderline,
+  Table,
 } from "@phosphor-icons/react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
@@ -135,7 +136,7 @@ export default function Toolbar() {
       <Button
         pressed={editor.nodes.list.isActive({ kind: "bullet" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
-        onClick={() => editor.commands.toggleList.canExec({ kind: "bullet" })}
+        onClick={() => editor.commands.toggleList({ kind: "bullet" })}
         tooltip="Bullet List"
       >
         <ListBullets size={18} />
@@ -144,7 +145,7 @@ export default function Toolbar() {
       <Button
         pressed={editor.nodes.list.isActive({ kind: "ordered" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "ordered" })}
-        onClick={() => editor.commands.toggleList.canExec({ kind: "ordered" })}
+        onClick={() => editor.commands.toggleList({ kind: "ordered" })}
         tooltip="Ordered List"
       >
         <List size={18} />
@@ -156,6 +157,16 @@ export default function Toolbar() {
       >
         <Image size={18} />
       </ImageUploadPopover>
+      <Button
+        pressed={editor.nodes.table.isActive()}
+        disabled={!editor.commands.insertTable.canExec}
+        onClick={() =>
+          editor.commands.insertTable({ row: 3, col: 2, header: false })
+        }
+        tooltip="Table"
+      >
+        <Table size={18} />
+      </Button>
     </ToolbarContainer>
   );
 }

@@ -1,7 +1,17 @@
 'use client';
 
-import { FC } from 'react';
+import { FC, Suspense } from 'react';
 import { Editor } from '@wraft/editor-v3';
+import '@wraft/editor-v3/style.css';
+
+// import dynamic from 'next/dynamic';
+
+// const Editor = dynamic(
+//   () => import('@wraft/editor-v3').then((mod) => mod.Editor),
+//   {
+//     ssr: false,
+//   },
+// );
 
 const data = {
   type: 'doc',
@@ -11,21 +21,432 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'Dear ',
+          text: 'Hi JEDDAH SEASON',
+        },
+      ],
+    },
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: 'I am delighted to work with JEDDAH SEASON ',
+        },
+        {
+          type: 'text',
+          text: ' ',
         },
         {
           type: 'holder',
           attrs: {
-            named: 'Nihal',
+            named: 'AR Rahman dsa dsadsa',
             name: 'name',
             mentionTag: 'holder',
-            id: 'bec01d2f-21c9-4fa6-8fc0-4e856af55d97',
+            id: '4fe88167-db21-43cb-ac6a-cea805df806d',
             label: 'name',
           },
         },
         {
           type: 'text',
-          text: ',',
+          text: ' ',
+        },
+        {
+          type: 'text',
+          text: ' Folio for your upcoming anniversary September-October issue',
+        },
+        {
+          type: 'text',
+          text: '. I would like to extend my gratitude to ASON on ',
+        },
+        {
+          type: 'text',
+          text: 'Musici',
+        },
+        {
+          type: 'holder',
+          attrs: {
+            named: 'AR Rahman dsa dsadsa',
+            name: 'name',
+            mentionTag: 'holder',
+            id: 'ed43a0e7-58e5-4c0d-931c-54b286a62226',
+            label: 'name',
+          },
+        },
+        {
+          type: 'text',
+          text: ' for their unwavering support throughout this journey.',
+        },
+      ],
+    },
+    {
+      type: 'paragraph',
+    },
+    {
+      type: 'paragraph',
+    },
+    {
+      type: 'table',
+      attrs: {
+        isControllersInjected: true,
+        insertButtonAttrs: null,
+      },
+      content: [
+        {
+          type: 'tableRow',
+          content: [
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+          ],
+        },
+        {
+          type: 'tableRow',
+          content: [
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableHeaderCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'Table 1',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableHeaderCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'Table 2',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableHeaderCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'Table 3',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'tableRow',
+          content: [
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'one',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'two',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'three',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'tableRow',
+          content: [
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'four',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'five',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'six',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'tableRow',
+          content: [
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'holder',
+                      attrs: {
+                        named: 'AR Rahman dsa dsadsa',
+                        name: 'name',
+                        mentionTag: 'holder',
+                        id: '4fe88167-db21-43cb-ac6a-cea805df806d',
+                        label: 'name',
+                      },
+                    },
+                    {
+                      type: 'text',
+                      text: ' ',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'holder',
+                      attrs: {
+                        named: 'AR Rahman dsa dsadsa',
+                        name: 'name',
+                        mentionTag: 'holder',
+                        id: '4fe88167-db21-43cb-ac6a-cea805df806d',
+                        label: 'name',
+                      },
+                    },
+                    {
+                      type: 'text',
+                      text: ' ',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              type: 'tableCell',
+              attrs: {
+                colspan: 1,
+                rowspan: 1,
+                colwidth: null,
+                background: null,
+              },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'ddd',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -34,7 +455,248 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'Happy Birthday!',
+          text: 'As requested, please find below the detailed itinerary:',
+        },
+      ],
+    },
+    // {
+    //   type: 'bulletList',
+    //   content: [
+    //     {
+    //       type: 'listItem',
+    //       attrs: {
+    //         closed: false,
+    //         nested: false,
+    //       },
+    //       content: [
+    //         {
+    //           type: 'paragraph',
+    //           content: [
+    //             {
+    //               type: 'text',
+    //               marks: [
+    //                 {
+    //                   type: 'bold',
+    //                 },
+    //               ],
+    //               text: 'Travel Date and Time',
+    //             },
+    //           ],
+    //         },
+    //         {
+    //           type: 'bulletList',
+    //           content: [
+    //             {
+    //               type: 'listItem',
+    //               attrs: {
+    //                 closed: false,
+    //                 nested: false,
+    //               },
+    //               content: [
+    //                 {
+    //                   type: 'paragraph',
+    //                   content: [
+    //                     {
+    //                       type: 'text',
+    //                       marks: [
+    //                         {
+    //                           type: 'bold',
+    //                         },
+    //                       ],
+    //                       text: 'Date:',
+    //                     },
+    //                     {
+    //                       type: 'text',
+    //                       text: ' 8th  July',
+    //                     },
+    //                   ],
+    //                 },
+    //               ],
+    //             },
+    //             {
+    //               type: 'listItem',
+    //               attrs: {
+    //                 closed: false,
+    //                 nested: false,
+    //               },
+    //               content: [
+    //                 {
+    //                   type: 'paragraph',
+    //                   content: [
+    //                     {
+    //                       type: 'text',
+    //                       marks: [
+    //                         {
+    //                           type: 'bold',
+    //                         },
+    //                       ],
+    //                       text: 'Time:',
+    //                     },
+    //                     {
+    //                       type: 'text',
+    //                       text: ' Late Night',
+    //                     },
+    //                   ],
+    //                 },
+    //               ],
+    //             },
+    //             {
+    //               type: 'listItem',
+    //               attrs: {
+    //                 closed: false,
+    //                 nested: false,
+    //               },
+    //               content: [
+    //                 {
+    //                   type: 'paragraph',
+    //                   content: [
+    //                     {
+    //                       type: 'text',
+    //                       marks: [
+    //                         {
+    //                           type: 'bold',
+    //                         },
+    //                       ],
+    //                       text: 'Route:',
+    //                     },
+    //                     {
+    //                       type: 'text',
+    //                       text: ' Kochi to Mumbai',
+    //                     },
+    //                   ],
+    //                 },
+    //               ],
+    //             },
+    //             {
+    //               type: 'listItem',
+    //               attrs: {
+    //                 closed: false,
+    //                 nested: false,
+    //               },
+    //               content: [
+    //                 {
+    //                   type: 'paragraph',
+    //                   content: [
+    //                     {
+    //                       type: 'text',
+    //                       marks: [
+    //                         {
+    //                           type: 'bold',
+    //                         },
+    //                       ],
+    //                       text: 'Return ticket:',
+    //                     },
+    //                     {
+    //                       type: 'text',
+    //                       text: '  as per your schedule',
+    //                     },
+    //                   ],
+    //                 },
+    //               ],
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       type: 'listItem',
+    //       attrs: {
+    //         closed: false,
+    //         nested: false,
+    //       },
+    //       content: [
+    //         {
+    //           type: 'paragraph',
+    //           content: [
+    //             {
+    //               type: 'text',
+    //               marks: [
+    //                 {
+    //                   type: 'bold',
+    //                 },
+    //               ],
+    //               text: 'Accommodation and Travel Arrangements on 8th July night',
+    //             },
+    //           ],
+    //         },
+    //         {
+    //           type: 'paragraph',
+    //           content: [
+    //             {
+    //               type: 'text',
+    //               text: 'Please note the other team members accompanying me:',
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       type: 'listItem',
+    //       attrs: {
+    //         closed: false,
+    //         nested: false,
+    //       },
+    //       content: [
+    //         {
+    //           type: 'paragraph',
+    //           content: [
+    //             {
+    //               type: 'text',
+    //               marks: [
+    //                 {
+    //                   type: 'bold',
+    //                 },
+    //               ],
+    //               text: 'Yasir C',
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       type: 'listItem',
+    //       attrs: {
+    //         closed: false,
+    //         nested: false,
+    //       },
+    //       content: [
+    //         {
+    //           type: 'paragraph',
+    //           content: [
+    //             {
+    //               type: 'text',
+    //               marks: [
+    //                 {
+    //                   type: 'bold',
+    //                 },
+    //               ],
+    //               text: 'Naufal',
+    //             },
+    //             {
+    //               type: 'text',
+    //               text: ' ',
+    //             },
+    //             {
+    //               type: 'text',
+    //               marks: [
+    //                 {
+    //                   type: 'bold',
+    //                 },
+    //               ],
+    //               text: 'babu',
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   ],
+    // },
+    {
+      type: 'paragraph',
+      content: [
+        {
+          type: 'text',
+          text: "All passengers' identification documents are attached for your reference.",
         },
       ],
     },
@@ -43,7 +705,7 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'On behalf of everyone at [Company Name], I want to extend our warmest wishes to you on your special day. Birthdays are a time for celebration, reflection, and looking forward to the year ahead, and we hope this year brings you all the success, joy, and fulfillment you deserve.',
+          text: 'Thank you once again for your support.',
         },
       ],
     },
@@ -52,7 +714,7 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'We greatly appreciate the hard work, dedication, and positive energy you bring to the team every day. Your contributions play a crucial role in our continued success, and we are grateful to have you as part of our work family.',
+          text: '.',
         },
       ],
     },
@@ -61,7 +723,7 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'As you celebrate your birthday, we hope you take some time to relax, enjoy, and do something that makes you truly happy. We look forward to celebrating many more birthdays with you and continuing to achieve great things together.',
+          text: 'Best regards,',
         },
       ],
     },
@@ -70,7 +732,7 @@ const data = {
       content: [
         {
           type: 'text',
-          text: "Once again, happy birthday, [Employee's Name]! May this year be filled with new opportunities, personal growth, and wonderful memories.",
+          text: '.',
         },
       ],
     },
@@ -79,16 +741,12 @@ const data = {
       content: [
         {
           type: 'text',
-          text: 'Warm regards,',
-        },
-      ],
-    },
-    {
-      type: 'paragraph',
-      content: [
-        {
-          type: 'text',
-          text: '[Your Name]',
+          marks: [
+            {
+              type: 'bold',
+            },
+          ],
+          text: 'Dabzee',
         },
       ],
     },
@@ -98,24 +756,9 @@ const data = {
 const Index: FC = () => {
   return (
     <>
-      <Editor
-        defaultContent={data}
-        // defaultContent={{
-        //   type: 'doc',
-        //   content: [
-        //     {
-        //       type: 'fancyparagraph',
-        //       // attrs: { class: 'fancy-paragraph' },
-        //       content: [
-        //         {
-        //           type: 'text',
-        //           text: 'This is a fancy paragraph!',
-        //         },
-        //       ],
-        //     },
-        //   ],
-        // }}
-      />
+      <Suspense fallback={<div>Loading editor...</div>}>
+        <Editor defaultContent={data} />
+      </Suspense>
     </>
   );
 };
