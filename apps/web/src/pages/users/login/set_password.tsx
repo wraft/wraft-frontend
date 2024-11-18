@@ -88,6 +88,7 @@ const Index = () => {
                   name="newPassword"
                   label="Enter Password"
                   register={register}
+                  type="password"
                   error={errors.newPassword}
                   mb={'24px'}
                 />
