@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Container, Button, Box, Input, Label, Text } from 'theme-ui';
@@ -50,7 +51,8 @@ const Index: FC = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  const { userProfile } = useAuth();
+  const { userProfile, login } = useAuth();
+  const router = useRouter();
 
   const orgId = userProfile?.organisation_id || null;
   const currentOrg = userProfile?.currentOrganisation || null;
@@ -75,16 +77,38 @@ const Index: FC = () => {
   const onConfirmDelete = async () => {
     const code = inputRef.current?.value;
     await deleteAPI(`organisations?code=${code}`)
-      .then(() => {
+      .then((res) => {
+        setDelete(false);
         toast.success('Deleted workspace successfully', {
-          duration: 3000,
+          duration: 4000,
           position: 'top-right',
         });
+
+        login(res);
+        router.push('/');
       })
       .catch((error) => {
-        toast.error(error?.message || 'Failed to deleted workspace', {
-          duration: 3000,
-          position: 'top-right',
+        toast.error(
+          'The OTP you entered is not valid. Please check your email for the correct code and try again.',
+          {
+            duration: 3000,
+            position: 'top-right',
+          },
+        );
+      });
+  };
+
+  const onSwitchOrganization = async (id: string) => {
+    postAPI('switch_organisations', {
+      organisation_id: id,
+    })
+      .then((res: any) => {
+        login(res);
+      })
+      .catch(() => {
+        toast.error('failed Switch', {
+          duration: 1000,
+          position: 'top-center',
         });
       });
   };
@@ -120,6 +144,13 @@ const Index: FC = () => {
     postAPI('organisations/request_deletion', {})
       .then(() => {
         setDelete(true);
+        toast.success(
+          'An OTP has been sent to your email. Please check your inbox to verify and proceed with the organization deletion.',
+          {
+            duration: 4000,
+            position: 'top-right',
+          },
+        );
       })
       .catch((err) => {
         toast.error(JSON.stringify(err) || 'Failed to delete workspace', {
@@ -317,7 +348,7 @@ const Index: FC = () => {
                             If you are sure you want to proceed with deletion of
                             the workspace{' '}
                             <Text as={'span'} variant="pB">
-                              Functionary
+                              {org?.name}
                             </Text>
                             , please enter the deletion code sent to your email.
                           </Text>
