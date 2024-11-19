@@ -10,6 +10,7 @@ on:
       - main
       - develop
 
+# to
 jobs:
   Deploy-Preview:
     runs-on: ubuntu-latest
@@ -31,6 +32,7 @@ jobs:
       - name: Deploy Project Artifacts
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
 
+      # Cache the pnpm store to speed up subsequent runs
       - name: Cache pnpm store
         uses: actions/cache@v3
         with:
