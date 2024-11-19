@@ -1,5 +1,9 @@
 name: Vercel Production Deployment
 
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
 on:
   push:
     branches:
@@ -11,32 +15,22 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy to Vercel
+  Deploy-Production:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Node.js and pnpm
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "pnpm"
-      - run: |
-          corepack enable
-          pnpm install --frozen-lockfile
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Build project
-        run: pnpm run build
+      - name: Install Vercel CLI
+        run: pnpm add -g vercel
 
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          npx vercel \
-            --token $VERCEL_TOKEN \
-            --prod \
-            --project ${{ secrets.VERCEL_PROJECT_ID }} \
-            --org ${{ secrets.VERCEL_ORG_ID }}
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
