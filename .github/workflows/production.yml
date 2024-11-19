@@ -20,18 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
-      - name: Setup pnpm global bin directory
-        run: |
-          pnpm setup
-          export PNPM_HOME=$(pnpm config get PNPM_HOME)
-          echo "PNPM_HOME=$PNPM_HOME" >> $GITHUB_ENV
-          echo "$PNPM_HOME" >> $GITHUB_PATH
-
-      - name: Install Vercel CLI
-        run: pnpm add -g vercel
+      - run: pnpm add -g vercel
 
       - name: Pull Vercel Environment Information
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
