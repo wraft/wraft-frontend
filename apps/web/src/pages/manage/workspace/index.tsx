@@ -87,7 +87,7 @@ const Index: FC = () => {
         login(res);
         router.push('/');
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(
           'The OTP you entered is not valid. Please check your email for the correct code and try again.',
           {
@@ -95,21 +95,6 @@ const Index: FC = () => {
             position: 'top-right',
           },
         );
-      });
-  };
-
-  const onSwitchOrganization = async (id: string) => {
-    postAPI('switch_organisations', {
-      organisation_id: id,
-    })
-      .then((res: any) => {
-        login(res);
-      })
-      .catch(() => {
-        toast.error('failed Switch', {
-          duration: 1000,
-          position: 'top-center',
-        });
       });
   };
 
