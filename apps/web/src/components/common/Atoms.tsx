@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from 'theme-ui';
+import { Triangle } from '@phosphor-icons/react';
 
 import MenuItem from 'common/NavLink';
 
@@ -125,26 +126,6 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       />
       <Text as="h4" sx={{ fontSize: 'sm', mt: 1, fontWeight: 500 }}>
         {title}
-        {/* <Text
-          as="span"
-          sx={{
-            ml: 1,
-            // pl: 2,
-            bg: 'neutral.200',
-            fontSize: 'xxs',
-            fontWeight: 'heading',
-            color: 'text',
-            // border: 'solid 0.5px',
-            borderColor: 'border',
-            p: 1,
-            pt: '4px',
-            pb: '4px',
-            borderRadius: '3rem',
-            px: '4px',
-            py: '1px',
-          }}>
-          {no}
-        </Text> */}
       </Text>
     </Flex>
   );
@@ -222,20 +203,46 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
 
   return (
     <Flex sx={{ pt: 2 }}>
-      <Text
-        pt={0}
-        variant="labelSmall"
-        sx={{
-          bg: getColor(),
-          color: 'text',
-          borderRadius: '3rem',
-          pl: '8px',
-          pt: '2px',
-          pb: '2px',
-          fontWeight: '600',
-        }}>
-        {name || 'Setting Up'}
-      </Text>
+      {name && (
+        <Text
+          pt={0}
+          variant="labelSmall"
+          sx={{
+            bg: getColor(),
+            color: 'text',
+            borderRadius: '3rem',
+            pl: '8px',
+            pt: '2px',
+            pb: '2px',
+            fontWeight: '600',
+          }}>
+          {name}
+        </Text>
+      )}
+      {!name && (
+        <Flex
+          sx={{
+            alignItems: 'center',
+            gap: '2px',
+            bg: 'orange.100',
+            borderRadius: '3rem',
+            py: '2px',
+            px: 2,
+          }}>
+          <Text
+            variant="labelSmall"
+            sx={{
+              color: '#FF8C02',
+              mr: '0px',
+              p: 0,
+              fontWeight: '600',
+            }}>
+            Draft
+          </Text>
+
+          <Triangle size={10} weight="bold" color="#FF8C02" />
+        </Flex>
+      )}
     </Flex>
   );
 };
