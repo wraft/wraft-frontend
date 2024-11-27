@@ -52,13 +52,13 @@ To run **wraft.co**, you’ll need:
 Fork or clone the repository from [GitHub](https://github.com/wraft/wraft).
 
 ```sh
-git clone https://github.com/wraft/wraft.git
+git clone https://github.com/wraft/wraft-frontend.git
 ```
 
 #### 2. Navigate to the project folder
 
 ```sh
-cd wraft
+cd wraft-frontend
 ```
 
 #### 3. Install the dependencies
