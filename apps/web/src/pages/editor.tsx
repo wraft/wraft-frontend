@@ -757,7 +757,7 @@ const Index: FC = () => {
   return (
     <>
       <Suspense fallback={<div>Loading editor...</div>}>
-        <Editor defaultContent={data} />
+        <Editor />
       </Suspense>
     </>
   );

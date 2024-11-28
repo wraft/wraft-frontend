@@ -10,9 +10,16 @@ import {
 import { defineYjs } from "prosekit/extensions/yjs";
 import type { Awareness } from "y-protocols/awareness";
 import type * as Y from "yjs";
-import { defineFancyParagraph } from "../extensions/paragraph";
-import { defineHolder } from "../extensions/holder";
-// import { defineHolderSpec } from "../extensions/holder/holder-spec";
+import { defineHolder } from "@extensions/holder";
+import { defineFancyParagraph } from "@extensions/paragraph";
+// import { defineHolderSpec } from "@extensions/holder/holder-spec";
+import { defineTextHighlight } from "@extensions/text-highlight";
+import {
+  defineListItem,
+  defineOrderedList,
+  defineBulletList,
+} from "@extensions/list-item";
+import { defineHardBreak } from "@extensions/hard-break";
 import ImageView from "./image-view";
 import { defineImageFileHandlers } from "./upload-file";
 
@@ -22,41 +29,42 @@ export interface ExtensionProps {
   awareness: Awareness;
 }
 
-export function defineExtension({
+export interface DefaultExtensionProps {
+  placeholder: string;
+}
+
+export function defineDefaultExtension({
+  placeholder = "",
+}: DefaultExtensionProps) {
+  return union(
+    defineBasicExtension(),
+    definePlaceholder({ placeholder }),
+    defineMention(),
+    defineHorizontalRule(),
+    defineFancyParagraph(),
+    defineHolder(),
+    defineTextHighlight(),
+    defineListItem(),
+    defineOrderedList(),
+    defineBulletList(),
+    defineHardBreak(),
+    defineReactNodeView({
+      name: "image",
+      component: ImageView satisfies ReactNodeViewComponent,
+    }),
+    defineImageFileHandlers(),
+  );
+}
+
+export function defineCollaborativeExtension({
   placeholder = "",
   doc,
   awareness,
 }: ExtensionProps) {
   return union(
-    defineBasicExtension(),
-    definePlaceholder({ placeholder }),
-    defineMention(),
-    defineHorizontalRule(),
-    defineFancyParagraph(),
-    defineHolder(),
-    defineReactNodeView({
-      name: "image",
-      component: ImageView satisfies ReactNodeViewComponent,
-    }),
+    defineDefaultExtension({ placeholder }),
     defineYjs({ doc, awareness }),
-    defineImageFileHandlers(),
   );
 }
 
-export function schmeaExtension({ placeholder = "" }: ExtensionProps) {
-  return union(
-    defineBasicExtension(),
-    definePlaceholder({ placeholder }),
-    defineMention(),
-    defineHorizontalRule(),
-    defineFancyParagraph(),
-    defineHolder(),
-    defineReactNodeView({
-      name: "image",
-      component: ImageView satisfies ReactNodeViewComponent,
-    }),
-    defineImageFileHandlers(),
-  );
-}
-
-export type EditorExtension = ReturnType<typeof defineExtension>;
+// export type EditorExtension = ReturnType<typeof defineExtension>;

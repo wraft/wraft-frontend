@@ -1,4 +1,4 @@
-import { createEditor, jsonFromNode } from "prosekit/core";
+import { createEditor, jsonFromNode, htmlFromNode } from "prosekit/core";
 import { ProseKit } from "prosekit/react";
 import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
@@ -6,8 +6,13 @@ import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
 import { Schema, Node } from "@prosekit/pm/model";
+import { ListDOMSerializer } from "prosekit/extensions/list";
+import { markdownFromHTML } from "@helpers/markdown";
 import BlockHandle from "./block-handle";
-import { defineExtension, schmeaExtension } from "./extension";
+import {
+  defineDefaultExtension,
+  defineCollaborativeExtension,
+} from "./extension";
 import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
 import TagMenu from "./tag-menu";
@@ -31,6 +36,7 @@ export interface EditorProps {
   onChange?: (content: string) => void;
   placeholder?: string;
   className?: string;
+  isCollaborative?: boolean;
 }
 
 const EditorContainer = styled.div`
@@ -163,6 +169,7 @@ export const Editor: React.FC<EditorProps> = ({
   defaultContent = "",
   placeholder = "Write something, or ' / ' for commands…",
   className = "",
+  isCollaborative = false,
 }) => {
   const editor = useMemo(() => {
     const doc = new Y.Doc({
@@ -181,57 +188,46 @@ export const Editor: React.FC<EditorProps> = ({
     );
 
     const awareness = wsProvider.awareness;
-    const extension = defineExtension({
-      placeholder,
-      doc,
-      awareness,
-    });
+    const extension = isCollaborative
+      ? defineCollaborativeExtension({
+          placeholder,
+          doc,
+          awareness,
+        })
+      : defineDefaultExtension({ placeholder });
 
-    // provider.on("status", (event: any) => {
-    //   console.log("status", event); // logs "connected" or "disconnected"
-    // });
-
-    wsProvider.on("sync", (isSynced: boolean) => {
-      console.log("status", isSynced); // logs "connected" or "disconnected"
-    });
-
-    // Log connected status
-    wsProvider.on("sync", (status: any) =>
-      console.log(
-        `Websocket status: ${status ? "Connected" : "Not Connected"}`,
-      ),
-    );
-
-    const newEditor = createEditor({ extension, defaultContent });
+    const editor = createEditor({ extension, defaultContent });
 
     const yXmlFragment = doc.getXmlFragment("prosemirror");
     setTimeout(() => {
       if (yXmlFragment.length === 0) {
         prosemirrorJSONToYXmlFragment(
-          newEditor.schema,
+          editor.schema,
           defaultContent,
           yXmlFragment,
         );
       }
     }, 3000);
 
-    // // const yDocInstance = prosemirrorJSONToYXmlFragment(
-    // //   newEditor.schema,
-    // //   defaultContent,
-    // //   yXmlFragment
-    // // );
-
-    // console.log("doc111[1]", yXmlFragment);
-
-    return newEditor;
-  }, []);
+    return editor;
+  }, [defaultContent]);
 
   // console.log("editor", editor);
 
   // Save the current document as a JSON string
   const handleSave = useCallback(() => {
     const record = jsonFromNode(editor.view.state.doc);
-    // console.log("handleSave", record);
+    console.log("handleSave", record);
+  }, [editor]);
+
+  // save to markdown
+  const handleMakdownSave = useCallback(() => {
+    const html = htmlFromNode(editor.view.state.doc, {
+      DOMSerializer: ListDOMSerializer,
+    });
+    const record = markdownFromHTML(html);
+
+    console.log("makdown", record);
   }, [editor]);
 
   return (
@@ -245,18 +241,23 @@ export const Editor: React.FC<EditorProps> = ({
             <SlashMenu />
             <UserMenu users={users} />
             <TagMenu />
+            <button
+              onClick={handleSave}
+              className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
+            >
+              save
+            </button>
+            <button
+              onClick={handleMakdownSave}
+              className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
+            >
+              markdown save
+            </button>
             {/* <BlockHandle /> */}
             {/* <TableHandle /> */}
           </EditorContent>
         </EditorContainer>
       </ProseKit>
-
-      <button
-        onClick={handleSave}
-        className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
-      >
-        save
-      </button>
     </div>
   );
 };
