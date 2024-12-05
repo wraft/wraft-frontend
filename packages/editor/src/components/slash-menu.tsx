@@ -77,12 +77,6 @@ export default function SlashMenu() {
         </StyledItem>
 
         <StyledItem
-          onSelect={() => editor.commands.wrapInList({ kind: "task" })}
-        >
-          Task list
-        </StyledItem>
-
-        <StyledItem
           onSelect={() => editor.commands.wrapInList({ kind: "bullet" })}
         >
           Bullet list

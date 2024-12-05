@@ -1,19 +1,49 @@
 {
   "name": "@wraft/editor",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
+  "style": "./dist/style.css",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./src/style.css"
+  },
   "sideEffects": false,
   "files": [
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
-    "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@phosphor-icons/react": "^2.1.7",
+    "@prosekit/core": "^0.7.12",
+    "@prosekit/pm": "^0.1.8",
+    "@xstyled/emotion": "^3.8.0",
+    "prosekit": "^0.11.0",
+    "rehype-parse": "^9.0.1",
+    "rehype-raw": "^7.0.0",
+    "rehype-remark": "^10.0.0",
+    "remark-gfm": "^4.0.0",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "turndown": "^7.2.0",
+    "unified": "^11.0.5",
+    "y-prosemirror": "^1.2.12",
+    "y-protocols": "^1.0.6",
+    "y-websocket": "^2.0.4",
+    "yjs": "^13.6.20"
   },
   "devDependencies": {
     "@turbo/gen": "^1.11.3",
@@ -24,38 +54,14 @@
     "@wraft/eslint-config": "workspace:*",
     "@wraft/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
-    "theme-ui": "^0.16.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
-    "@remirror/core": "^2.0.19",
-    "@remirror/extension-events": "^2.1.17",
-    "@remirror/extension-positioner": "^2.1.8",
-    "@remirror/extension-react-tables": "^2.2.19",
-    "@remirror/messages": "^2.0.6",
-    "@remirror/pm": "^2.0.8",
-    "@remirror/react-core": "^2.0.21",
-    "@remirror/react-editors": "^1.0.40",
-    "@remirror/react-hooks": "^2.0.25",
-    "@remirror/react": "^2.0.35",
-    "@remirror/styles": "^2.0.7",
-    "@remirror/theme": "^2.0.9",
-    "immer": "^10.0.3",
-    "react-dom": "^18.2.0",
     "react": "^18.2.0",
-    "remirror": "^2.0.38",
-    "turndown": "^7.2.0"
+    "react-dom": "^18.2.0"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.22.3",
-    "@floating-ui/react": "^0.26.5",
-    "@phosphor-icons/react": "^2.1.5",
-    "@remirror/extension-count": "^3.0.1",
-    "@seznam/compose-react-refs": "^1.0.6",
-    "escape-string-regexp": "^4.0.0"
   }
 }

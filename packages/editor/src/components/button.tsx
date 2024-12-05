@@ -138,10 +138,8 @@ export default function Button({
           onMouseDown={(event) => event.preventDefault()}
         >
           {children}
-          {/* {tooltip ? <span className="sr-only">{tooltip}</span> : null} */}
         </StyledButton>
       </StyledTooltipTrigger>
-      <StyledTooltipContent>{tooltip}</StyledTooltipContent>
     </TooltipRoot>
   );
 }

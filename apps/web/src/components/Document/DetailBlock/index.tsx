@@ -5,7 +5,7 @@ import { Box, Flex, Text, Label, Input } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { Button } from '@wraft/ui';
-import type { NodeJSON } from '@wraft/editor-v3';
+import type { NodeJSON } from '@wraft/editor';
 
 import NavEdit from 'components/NavEdit';
 import Editor from 'components/common/Editor';

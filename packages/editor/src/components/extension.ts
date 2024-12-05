@@ -23,7 +23,7 @@ import {
   defineBulletList,
 } from "@extensions/list-item";
 import { defineHardBreak } from "@extensions/hard-break";
-import type { BlockExtension} from "@extensions/block";
+import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
 import ImageView from "./image-view";
 

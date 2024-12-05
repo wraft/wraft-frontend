@@ -146,12 +146,12 @@ export default function Toolbar() {
         <List size={18} />
       </Button>
 
-      <ImageUploadPopover
+      {/* <ImageUploadPopover
         disabled={!editor.commands.insertImage.canExec()}
         tooltip="Insert Image"
       >
         <Image size={18} />
-      </ImageUploadPopover>
+      </ImageUploadPopover> */}
       <Button
         pressed={editor.nodes.table.isActive()}
         disabled={!editor.commands.insertTable.canExec}

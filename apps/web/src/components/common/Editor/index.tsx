@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
-import { Editor } from '@wraft/editor-v3';
-import type { NodeJSON } from '@wraft/editor-v3';
-import '@wraft/editor-v3/style.css';
+import { Editor } from '@wraft/editor';
+import type { NodeJSON } from '@wraft/editor';
+import '@wraft/editor/style.css';
 
 type EditorProps = {
   defaultContent?: NodeJSON;

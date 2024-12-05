@@ -225,7 +225,7 @@ export const ImageUploadPopover: FC<{
   disabled: boolean;
   children: ReactNode;
 }> = ({ tooltip, disabled, children }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [webUrl, setWebUrl] = useState("");
   const [objectUrl, setObjectUrl] = useState("");
   const url = webUrl || objectUrl;
