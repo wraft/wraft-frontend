@@ -18,6 +18,6 @@ export function defineHardBreakSpec(): HardBreakSpecExtension {
     group: "inline",
     atom: true,
     parseDOM: [{ tag: "br" }],
-    toDOM: () => ["br", 0],
+    toDOM: () => ["br"],
   });
 }
