@@ -17,6 +17,7 @@ import TagMenu from "./tag-menu";
 import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
+import { TableHandle } from "./table-handle";
 
 export interface EditorProps {
   defaultContent?: any;
@@ -126,7 +127,7 @@ export const Editor = forwardRef(
               {tokens && <TokenMenu tokens={tokens} />}
               <TagMenu />
               {/* <BlockHandle /> */}
-              {/* <TableHandle /> */}
+              <TableHandle />
             </S.EditorContent>
           </S.EditorContainer>
         </ProseKit>

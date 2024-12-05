@@ -25,20 +25,16 @@ const StyledTableHandleColumnRoot = styled(TableHandleColumnRoot)`
   width: 1.5em;
   background-color: white;
   border: solid 1px;
-  border-color: #d1d5db; /* zinc-200 */
+  border-color: #d1d5db;
   border-radius: 4px;
-  color: rgba(113, 113, 113, 0.5); /* zinc-500/50 */
-  transition:
-    transform 150ms,
-    opacity 150ms;
+  color: rgba(113, 113, 113, 0.5);
 
   &:hover {
-    background-color: #f5f5f5; /* zinc-100 */
+    background-color: #f5f5f5;
   }
 
   &[data-state="open"] {
     opacity: 1;
-    // transform: scale(0.95);
     transform: translateY(14px);
   }
 
@@ -58,7 +54,7 @@ const StyledTableHandlePopoverContent = styled(TableHandlePopoverContent)`
   padding: 0.25rem;
   overflow: auto;
   background-color: white;
-  border: 1px solid #d1d5db; /* zinc-200 */
+  border: 1px solid #d1d5db;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
@@ -69,7 +65,7 @@ const StyledTableHandlePopoverItem = styled(TableHandlePopoverItem)`
   gap: 2rem;
   cursor: pointer;
   &:hover {
-    background-color: #f5f5f5; /* zinc-100 */
+    background-color: #f5f5f5;
   }
 `;
 
