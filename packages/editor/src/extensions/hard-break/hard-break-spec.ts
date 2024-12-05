@@ -15,9 +15,9 @@ export function defineHardBreakSpec(): HardBreakSpecExtension {
     name: "hardBreak",
     inline: true,
     selectable: false,
+    group: "inline",
     atom: true,
-    leafText: () => "\n",
     parseDOM: [{ tag: "br" }],
-    toDOM: () => ["br"],
+    toDOM: () => ["br", 0],
   });
 }

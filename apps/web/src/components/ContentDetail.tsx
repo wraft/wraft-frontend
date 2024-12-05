@@ -445,18 +445,6 @@ const ContentDetail = () => {
       <Box py={0} sx={{ minHeight: '100vh' }}>
         {!loading && pageTitle && <Nav navtitle={pageTitle} isEdit={false} />}
         <Box sx={{ pt: 0 }}>
-          {/* {loading && (
-          <Box
-            sx={{
-              position: 'absolute',
-              right: '-50%',
-              left: '50%',
-              top: '80px',
-              bottom: 0,
-            }}>
-            <Spinner width={40} height={40} color="primary" />
-          </Box>
-        )} */}
           <ErrorBoundary>
             {contents && contents.content && (
               <Flex sx={{ bg: 'gray.400' }}>
@@ -531,26 +519,6 @@ const ContentDetail = () => {
                               ml: 'auto',
                               alignItems: 'center',
                             }}>
-                            <Box
-                              sx={
-                                {
-                                  // pt: 3,
-                                  // px: 3,
-                                }
-                              }></Box>
-
-                            {/* {prevState && eligibleUser && (
-                            <Button
-                              // variant="btnSecondary"
-                              onClick={() => {
-                                setModalAction('prev');
-                                setOpen(true);
-                              }}>
-                              <ArrowLeft />
-                              <Text variant="pB">{`Back to ${prevState.state || ''}`}</Text>
-                            </Button>
-                          )} */}
-
                             {nextState && nextState.is_user_eligible && (
                               <Button
                                 sx={{
@@ -619,27 +587,11 @@ const ContentDetail = () => {
                           </Flex>
                         )}
                       </Flex>
-                      {/* <ProfileCard
-                      time={contents.content?.inserted_at}
-                      name={contents.creator?.name}
-                      image={contents?.creator?.profile_pic}
-                    /> */}
                     </Flex>
-                    {/* <Box sx={{ ml: 'auto' }}>
-                    <MenuItem
-                      variant="btnMenu"
-                      href={`/content/edit/[id]`}
-                      path={`/content/edit/${contents.content.id}`}>
-                      <EditIcon width={24} />
-                    </MenuItem>
-                  </Box> */}
                   </Flex>
                   <Box
                     sx={{
                       mb: 0,
-                      // bg: 'gray.400',
-                      // bg: 'gray.a100',
-                      // bg: 'neutral.200',
                       '.tabPanel': { border: 0, bg: 'gray.400' },
                       '.tabPanel button': {
                         border: 0,
@@ -649,9 +601,7 @@ const ContentDetail = () => {
                         borderRadius: '6px',
                       },
                       '.tabGroup': {
-                        // bg: 'neutral.200',
                         bg: 'gray.a300',
-                        // border: 'solid 1px blue',
                         px: '6px',
                         py: '6px',
                         display: 'flex',
@@ -659,7 +609,6 @@ const ContentDetail = () => {
                       },
                       '.tabPanel button[aria-selected=true]': {
                         border: 0,
-                        // bg: 'neutral.100',
                         bg: 'gray.200',
                         px: 3,
                         py: 2,
@@ -691,21 +640,6 @@ const ContentDetail = () => {
                           {activeId == 'view' && !isEditable && (
                             <Button
                               variant="btnSecondary"
-                              sx={
-                                {
-                                  //   py: '6px',
-                                  //   gap: 1,
-                                  //   alignItem: 'center',
-                                  // bg: 'gray.800',
-                                  // //   display: 'flex',
-                                  // border: 'solid 1px',
-                                  // borderColor: 'gray.600',
-                                  // color: 'gray.1200',
-                                  //   '.action': {
-                                  //     opacity: 0.4,
-                                  //   },
-                                }
-                              }
                               onClick={() => doBuild()}>
                               {loading && (
                                 <Spinner color="green.400" size={14} />
@@ -752,11 +686,6 @@ const ContentDetail = () => {
                               borderRadius: '6px',
                               maxWidth: '100%',
                               px: 4,
-                              // pb: 6,
-                              // bg: 'gray.100',
-                              // pl: '9rem !important',
-                              // pr: '9rem !important',
-                              // pt: '7rem !important',
                               '.remirror-theme .ProseMirror': {
                                 bg: 'gray.200',
                                 pl: '9rem !important',
@@ -868,10 +797,7 @@ const ContentDetail = () => {
                 <Box
                   variant="plateRightBar"
                   sx={{
-                    // position: 'fixed',
                     right: 0,
-                    // display: 'none',
-                    // bg: 'neutral.100',
                     bg: 'gray.100',
                     py: 0,
                     width: '30%',
@@ -886,57 +812,10 @@ const ContentDetail = () => {
                     variant="plateSide"
                     sx={{
                       bg: 'gray.100',
-                      // pl: 3,
                       flexGrow: 1,
                       mr: 0,
-                      // pr: 3,
-                      // pb: 3,
-                      // pt: 2,
-                      // borderTop: 'solid 1px',
-                      // borderBottom: 'solid 1px',
                       borderColor: 'gray.300',
-                      // bg: '#d9deda57',
-                    }}>
-                    {/* <Flex
-                    sx={{
-                      pt: 3,
-                      px: 3,
-                      alignItems: 'flex-start',
-                      alignContent: 'flex-start',
-                      flexDirection: 'row',
-                      // border: 'solid 1px #ddd',
-                    }}>
-                    {eligibleUser && (
-                      <Box sx={{ ml: 'auto' }}>
-                        <MenuItem
-                          variant="btnMenu"
-                          href={`/content/edit/[id]`}
-                          path={`/content/edit/${contents.content.id}`}>
-                          <EditIcon width={24} />
-                        </MenuItem>
-                      </Box>
-                    )}
-                  </Flex> */}
-                    {/* <Box
-                    sx={{
-                      // pt: 3,
-                      // px: 3,
-                    }}>
-                    <Button
-                      sx={{ py: 2 }}
-                      variant="btnPrimary"
-                      onClick={() => doBuild()}>
-                      <>
-                        {loading && <Spinner color="white" size={24} />}
-                        {!loading && (
-                          <Text sx={{ fontSize: 'sm', fontWeight: 600, p: 3 }}>
-                            Build
-                          </Text>
-                        )}
-                      </>
-                    </Button>
-                  </Box> */}
-                  </Box>
+                    }}></Box>
 
                   <Box>
                     <TabProvider
@@ -1139,16 +1018,6 @@ const ContentDetail = () => {
           </ErrorBoundary>
         </Box>
         <Modal isOpen={open}>
-          {/* {
-          <ConfirmDelete
-            title="Confirm action"
-            text={`Are you sure you want send to ${nextState?.state}?`}
-            setOpen={setOpen}
-            onConfirmDelete={() => {
-              setOpen(false);
-            }}
-          />
-        } */}
           <Flex
             sx={{
               flexDirection: 'column',
@@ -1156,9 +1025,7 @@ const ContentDetail = () => {
               height: '225px',
               border: '1px solid #E4E9EF',
               background: '#FFF',
-              // alignItems: 'center',
               alignItems: 'flex-start',
-              // align-items: flex-start;
               justifyContent: 'space-evenly',
             }}>
             <Box

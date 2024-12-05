@@ -33,7 +33,16 @@ export function defineHolderSpec() {
     leafText(node) {
       return `@${node.attrs.name}`;
     },
-    parseDOM: [{ tag: "span[data-holder]" }],
+    parseDOM: [
+      {
+        tag: `span[data-mention]`,
+        getAttrs: (dom: HTMLElement): HolderAttrs => ({
+          id: dom.getAttribute("data-attribute-id") || "",
+          name: dom.getAttribute("data-attribute-name") || "",
+          named: dom.getAttribute("data-attribute-named") || "",
+        }),
+      },
+    ],
     toDOM(node) {
       const { named, name, id } = node.attrs;
 
@@ -41,9 +50,7 @@ export function defineHolderSpec() {
         class: named ? "holder" : "no-holder",
         "data-attribute-id": id,
         "data-attribute-name": name || "",
-        style: named
-          ? "background-color: #ffe889; color: #000; font-weight: bold; padding: 2px;"
-          : "background-color: rgba(243, 120, 18, 0.38); color: rgba(95, 54, 20, 0.9); font-weight: bold; padding: 1px; border-bottom: 2px solid rgb(112, 212, 191);",
+        "data-attribute-namd": named || "",
       };
 
       const value = named ? named : name;

@@ -194,6 +194,8 @@ const Form = () => {
   const onSubmit = (data: any) => {
     setLoading(true);
 
+    console.log('data', data);
+
     const jsonContent = editorRef.current?.helpers?.getJSON();
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
 
@@ -341,21 +343,6 @@ const Form = () => {
   };
 
   /**
-   * When Editor is updated, sync values to
-   * the hidden fields
-   * @param data
-   */
-  const doUpdate = (data: any) => {
-    if (data.md) {
-      setValue('data', data.md);
-    }
-    if (data.json) {
-      const body = data.json;
-      setValue('serialized', JSON.stringify(body));
-    }
-  };
-
-  /**
    * Insert a block at pointer
    * @param block
    */
@@ -391,15 +378,8 @@ const Form = () => {
         backLink="/templates"
         onToggleEdit={saveMe}
       />
-      <Flex
-        // as="form"
-        sx={{ alignItems: 'flex-start' }}
-        // onSubmit={handleSubmit(onSubmit)}
-        py={0}
-        mt={0}>
+      <Flex sx={{ alignItems: 'flex-start' }}>
         <Box
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
           sx={{
             minWidth: '70%',
             bg: 'neutral.100',
@@ -410,7 +390,10 @@ const Form = () => {
               bg: 'white',
             },
           }}>
-          <Flex sx={{ px: 4, alignItems: 'center' }}>
+          <Flex
+            sx={{ px: 4, alignItems: 'center' }}
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ flex: 1 }}>
               <Controller
                 control={control}
@@ -453,7 +436,6 @@ const Form = () => {
               ref={editorRef}
             />
           </Box>
-          {/* <Counter /> */}
         </Box>
 
         <Modal isOpen={showSetup}>

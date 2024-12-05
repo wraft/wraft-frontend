@@ -31,6 +31,8 @@ const InlineMenuPopover = styled(InlinePopover)`
 export default function InlineMenu() {
   const editor = useEditor<EditorExtension>({ update: true });
 
+  // return null;
+
   return (
     <>
       <InlineMenuPopover data-testid="inline-menu-main">
