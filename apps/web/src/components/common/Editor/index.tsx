@@ -5,7 +5,7 @@ import '@wraft/editor-v3/style.css';
 
 type EditorProps = {
   defaultContent?: NodeJSON;
-  isReadonly: boolean;
+  isReadonly?: boolean;
   tokens?: any;
 };
 

@@ -85,6 +85,7 @@ export function useContentEditor(
 
   /**
    * Insert inline
+   *
    */
   const insertNow = useCallback(
     (value: string) => {

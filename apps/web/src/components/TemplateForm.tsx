@@ -360,7 +360,8 @@ const Form = () => {
    * @param block
    */
   const insertBlock = (block: any) => {
-    const n = JSON.parse(block.serialized);
+    const blockContent = JSON.parse(block.serialized);
+    editorRef.current.helpers.insterBlock(blockContent);
   };
 
   const saveMe = () => {

@@ -23,7 +23,10 @@ import {
   defineBulletList,
 } from "@extensions/list-item";
 import { defineHardBreak } from "@extensions/hard-break";
+import type { BlockExtension} from "@extensions/block";
+import { defineBlock } from "@extensions/block";
 import ImageView from "./image-view";
+
 // import { defineImageFileHandlers } from "./upload-file";
 export interface ExtensionProps {
   placeholder: string;
@@ -38,7 +41,7 @@ export interface DefaultExtensionProps {
 }
 
 export type BasicsExtension = Union<
-  [BasicExtension, PlainExtension, HolderExtension]
+  [BasicExtension, PlainExtension, HolderExtension, BlockExtension]
 >;
 
 export function defineDefaultExtension({
@@ -57,6 +60,7 @@ export function defineDefaultExtension({
     defineOrderedList(),
     defineBulletList(),
     defineHardBreak(),
+    defineBlock(),
     isReadonly ? defineReadonly() : undefined,
     defineReactNodeView({
       name: "image",

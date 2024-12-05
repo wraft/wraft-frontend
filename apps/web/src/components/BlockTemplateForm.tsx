@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -10,29 +10,15 @@ import { BlockTemplates } from 'utils/types';
 import { postAPI, putAPI, fetchAPI } from 'utils/models';
 
 import Editor from './common/Editor';
-import FieldText from './FieldText';
-
-const EMPTY_MARKDOWN_NODE = {
-  type: 'doc',
-  content: [
-    {
-      type: 'paragraph',
-      content: [
-        {
-          type: 'text',
-          text: 'Write here',
-        },
-      ],
-    },
-  ],
-};
 
 const Form = () => {
   const [addAsset, setAddAsset] = useState<boolean>(false);
   const [dataTemplate, setDataTemplate] = useState<BlockTemplates>();
-  const [def, setDef] = useState<any>();
+  const [content, setContent] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [saved, setSaved] = useState<boolean>(false);
+
+  const editorRef = useRef<any>();
 
   const {
     register,
@@ -50,30 +36,41 @@ const Form = () => {
   const onSubmit = (data: any) => {
     setLoading(true);
 
+    const jsonContent = editorRef.current?.helpers?.getJSON();
+    const markdownContent = editorRef.current?.helpers?.getMarkdown();
+
     const formValues = {
       title: data.title,
-      body: data.body,
-      serialized: data.serialized,
+      body: markdownContent,
+      serialized: JSON.stringify(jsonContent),
     };
 
     if (cId) {
-      putAPI(`block_templates/${cId}`, formValues).then(() => {
-        toast.success('Saved Successfully', {
-          duration: 1000,
-          position: 'top-right',
+      putAPI(`block_templates/${cId}`, formValues)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          setLoading(false);
+          setSaved(true);
+        })
+        .catch(() => {
+          setLoading(false);
         });
-        setLoading(false);
-        setSaved(true);
-      });
     } else {
-      postAPI(`block_templates`, formValues).then(() => {
-        toast.success('Saved Successfully', {
-          duration: 1000,
-          position: 'top-right',
+      postAPI(`block_templates`, formValues)
+        .then(() => {
+          toast.success('Saved Successfully', {
+            duration: 1000,
+            position: 'top-right',
+          });
+          setLoading(false);
+          setSaved(true);
+        })
+        .catch(() => {
+          setLoading(false);
         });
-        setLoading(false);
-        setSaved(true);
-      });
     }
   };
 
@@ -83,16 +80,11 @@ const Form = () => {
     });
   };
 
-  const doUpdate = (state: any) => {
-    setValue('serialized', JSON.stringify(state.json));
-    setValue('body', state.md);
-  };
-
   useEffect(() => {
     if (dataTemplate) {
       setValue('title', dataTemplate.title);
       const contentBody = JSON.parse(dataTemplate.serialized);
-      setDef(contentBody);
+      setContent(contentBody);
     }
   }, [dataTemplate]);
 
@@ -103,9 +95,6 @@ const Form = () => {
   }, [saved]);
 
   useEffect(() => {
-    if (!cId) {
-      setDef(EMPTY_MARKDOWN_NODE);
-    }
     if (cId) {
       loadTemplate(cId);
     }
@@ -125,9 +114,6 @@ const Form = () => {
   //     });
   //   }
   // };
-
-  const onceInserted = () => {};
-  const tokens: any = [];
 
   return (
     <Box
@@ -156,29 +142,11 @@ const Form = () => {
                   register={register}
                 />
               </Box>
-              <Box variant="hidden" sx={{ display: 'none' }}>
-                <Field
-                  name="body"
-                  label="Body"
-                  defaultValue={''}
-                  register={register}
-                />
-              </Box>
-              <Box variant="hidden" sx={{ display: 'none' }}>
-                <FieldText
-                  name="serialized"
-                  label="Serialized"
-                  defaultValue={'{}'}
-                  register={register}
-                />
-              </Box>
+
               <Editor
-                editable
-                defaultValue={def}
-                onUpdate={doUpdate}
-                tokens={tokens}
-                insertable={undefined}
-                onceInserted={onceInserted}
+                defaultContent={content}
+                isReadonly={false}
+                ref={editorRef}
               />
             </Box>
           </Box>

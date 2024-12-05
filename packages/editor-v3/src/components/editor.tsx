@@ -7,6 +7,7 @@ import * as Y from "yjs";
 import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import { markdownFromHTML } from "@helpers/markdown";
+import type { Node } from "@prosekit/pm/model";
 import {
   defineDefaultExtension,
   defineCollaborativeExtension,
@@ -219,6 +220,11 @@ export const Editor = forwardRef(
           const record = markdownFromHTML(html);
           return record;
         },
+        insterBlock: (block: Node) => {
+          const { selection, schema } = editor.state;
+          const blockContent = schema.nodeFromJSON(block);
+          return editor.commands.insertBlock(blockContent, selection);
+        },
       }),
       [editor],
     );
@@ -243,18 +249,6 @@ export const Editor = forwardRef(
               <SlashMenu />
               {tokens && <TokenMenu tokens={tokens} />}
               <TagMenu />
-              {/* <button
-                onClick={() => console.log(helpers.getJSON())}
-                className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
-              >
-                save
-              </button>
-              <button
-                onClick={() => console.log(helpers.getMarkdown())}
-                className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
-              >
-                markdown save
-              </button> */}
               {/* <BlockHandle /> */}
               {/* <TableHandle /> */}
             </EditorContent>
