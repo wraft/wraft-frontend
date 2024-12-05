@@ -393,10 +393,6 @@ const ContentDetail = () => {
     }
   };
 
-  const doNothing = () => {
-    //
-  };
-
   const isMakeCompete = useMemo(() => {
     if (contents && states && states.length > 0) {
       const { state, content }: ContentInstance = contents;
@@ -776,12 +772,8 @@ const ContentDetail = () => {
                             <PreTag pt={0} pb={6}>
                               {contentBody && (
                                 <Editor
-                                  defaultValue={contentBody}
-                                  editable={false}
-                                  tokens={[]}
-                                  onUpdate={doNothing}
-                                  insertable={null}
-                                  onceInserted={doNothing}
+                                  defaultContent={contentBody}
+                                  isReadonly={true}
                                 />
                               )}
                             </PreTag>

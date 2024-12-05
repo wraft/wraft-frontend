@@ -1,27 +1,18 @@
 import { union, type Union } from "@prosekit/core";
+import type { HolderCommandsExtension } from "./holder-commands";
 import { defineHolderCommands } from "./holder-commands";
-import { defineHolderInputRule } from "./holder-input-rule";
-// import { defineHolderKeymap } from "./holder-keymap";
 import { defineHolderSpec, type HolderSpecExtension } from "./holder-spec";
 
 /**
  * @internal
  */
-export type HolderExtension = Union<[HolderSpecExtension]>;
+export type HolderExtension = Union<
+  [HolderSpecExtension, HolderCommandsExtension]
+>;
 
 /**
  * @public
  */
 export function defineHolder() {
-  return union(
-    defineHolderSpec(),
-    defineHolderCommands(),
-    defineHolderInputRule(),
-  );
-  // return union(
-  //   defineHolderSpec()
-  //   // defineHolderCommands(),
-  //   // defineHolderKeymap(),
-  //   // defineHolderInputRule()
-  // );
+  return union(defineHolderSpec(), defineHolderCommands());
 }

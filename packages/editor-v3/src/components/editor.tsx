@@ -1,14 +1,12 @@
 import { createEditor, jsonFromNode, htmlFromNode } from "prosekit/core";
 import { ProseKit } from "prosekit/react";
-import { useMemo, useCallback, useState, useEffect, useRef } from "react";
+import { useMemo, useImperativeHandle, forwardRef } from "react";
 import styled from "@emotion/styled";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
-import { Schema, Node } from "@prosekit/pm/model";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import { markdownFromHTML } from "@helpers/markdown";
-import BlockHandle from "./block-handle";
 import {
   defineDefaultExtension,
   defineCollaborativeExtension,
@@ -17,19 +15,10 @@ import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
 import TagMenu from "./tag-menu";
 import Toolbar from "./toolbar";
-import UserMenu from "./user-menu";
-import { users } from "./user-data";
-import { TableHandle } from "./table-handle";
+import TokenMenu from "./token-menu";
 
 // import "prosekit/style.css";
 // import "prosekit/basic/style.css";
-
-const defaultSchema = new Schema({
-  nodes: {
-    text: {},
-    doc: { content: "text*" },
-  },
-});
 
 export interface EditorProps {
   defaultContent?: any;
@@ -37,13 +26,15 @@ export interface EditorProps {
   placeholder?: string;
   className?: string;
   isCollaborative?: boolean;
+  isReadonly?: boolean;
+  tokens?: any;
 }
 
 const EditorContainer = styled.div`
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-  min-height: 9rem;
+  min-height: 40rem;
   overflow: hidden;
   border-radius: 0.375rem;
   border: 1px solid;
@@ -65,12 +56,6 @@ const EditorContent = styled.div`
   flex: 1;
   box-sizing: border-box;
   overflow-y: scroll;
-
-  .holder {
-    background: #ffe889;
-    color: #000;
-    padding: 2px;
-  }
 
   .ProseMirror .ProseMirror-yjs-cursor {
     position: absolute;
@@ -165,99 +150,117 @@ const EditorContentInput = styled.div`
   }
 `;
 
-export const Editor: React.FC<EditorProps> = ({
-  defaultContent = "",
-  placeholder = "Write something, or ' / ' for commands…",
-  className = "",
-  isCollaborative = false,
-}) => {
-  const editor = useMemo(() => {
-    const doc = new Y.Doc({
-      gc: true,
-      guid: "123e4567-e89b-12d3-a456-426614174000",
-    });
+// export const Editor: React.FC<EditorProps> = ({
+export const Editor = forwardRef(
+  (
+    {
+      defaultContent = "",
+      placeholder = "Write something, or ' / ' for commands…",
+      className = "",
+      isCollaborative = false,
+      isReadonly = true,
+      tokens,
+    }: EditorProps,
+    ref,
+  ) => {
+    const editor = useMemo(() => {
+      const doc = new Y.Doc({
+        gc: true,
+        guid: "123e4567-e89b-12d3-a456-426614174000",
+      });
 
-    const wsProvider = new WebsocketProvider(
-      "ws://localhost:3000",
-      "editor-001",
-      doc,
-      {
-        connect: true,
-        WebSocketPolyfill: WebSocket,
-      },
+      const wsProvider = new WebsocketProvider(
+        "ws://localhost:3000",
+        "editor-001",
+        doc,
+        {
+          connect: true,
+          WebSocketPolyfill: WebSocket,
+        },
+      );
+
+      const awareness = wsProvider.awareness;
+      const extension = isCollaborative
+        ? defineCollaborativeExtension({
+            placeholder,
+            doc,
+            awareness,
+            isReadonly,
+          })
+        : defineDefaultExtension({ placeholder, isReadonly });
+
+      const editor = createEditor({ extension, defaultContent });
+
+      const yXmlFragment = doc.getXmlFragment("prosemirror");
+      setTimeout(() => {
+        if (yXmlFragment.length === 0 && defaultContent) {
+          prosemirrorJSONToYXmlFragment(
+            editor.schema,
+            defaultContent,
+            yXmlFragment,
+          );
+        }
+      }, 3000);
+
+      return editor;
+    }, [defaultContent]);
+
+    const helpers = useMemo(
+      () => ({
+        getJSON: () => {
+          const record = jsonFromNode(editor.view.state.doc);
+          return record;
+        },
+
+        getMarkdown: () => {
+          const html = htmlFromNode(editor.view.state.doc, {
+            DOMSerializer: ListDOMSerializer,
+          });
+          const record = markdownFromHTML(html);
+          return record;
+        },
+      }),
+      [editor],
     );
 
-    const awareness = wsProvider.awareness;
-    const extension = isCollaborative
-      ? defineCollaborativeExtension({
-          placeholder,
-          doc,
-          awareness,
-        })
-      : defineDefaultExtension({ placeholder });
+    useImperativeHandle(
+      ref,
+      () => ({
+        editor,
+        helpers,
+      }),
+      [editor],
+    );
 
-    const editor = createEditor({ extension, defaultContent });
-
-    const yXmlFragment = doc.getXmlFragment("prosemirror");
-    setTimeout(() => {
-      if (yXmlFragment.length === 0) {
-        prosemirrorJSONToYXmlFragment(
-          editor.schema,
-          defaultContent,
-          yXmlFragment,
-        );
-      }
-    }, 3000);
-
-    return editor;
-  }, [defaultContent]);
-
-  // console.log("editor", editor);
-
-  // Save the current document as a JSON string
-  const handleSave = useCallback(() => {
-    const record = jsonFromNode(editor.view.state.doc);
-    console.log("handleSave", record);
-  }, [editor]);
-
-  // save to markdown
-  const handleMakdownSave = useCallback(() => {
-    const html = htmlFromNode(editor.view.state.doc, {
-      DOMSerializer: ListDOMSerializer,
-    });
-    const record = markdownFromHTML(html);
-
-    console.log("makdown", record);
-  }, [editor]);
-
-  return (
-    <div className={`wraft-editor ${className}`}>
-      <ProseKit editor={editor}>
-        <EditorContainer>
-          <Toolbar />
-          <EditorContent>
-            <EditorContentInput ref={editor.mount} />
-            <InlineMenu />
-            <SlashMenu />
-            <UserMenu users={users} />
-            <TagMenu />
-            <button
-              onClick={handleSave}
-              className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
-            >
-              save
-            </button>
-            <button
-              onClick={handleMakdownSave}
-              className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
-            >
-              markdown save
-            </button>
-            {/* <BlockHandle /> */}
-            {/* <TableHandle /> */}
-          </EditorContent>
-        </EditorContainer>
-      </ProseKit>
-    </div>
-  );
-};
+    return (
+      <div className={`wraft-editor ${className}`}>
+        <ProseKit editor={editor}>
+          <EditorContainer>
+            {!isReadonly && <Toolbar />}
+            <EditorContent>
+              <EditorContentInput ref={editor.mount} />
+              {!isReadonly && <InlineMenu />}
+              <SlashMenu />
+              {tokens && <TokenMenu tokens={tokens} />}
+              <TagMenu />
+              {/* <button
+                onClick={() => console.log(helpers.getJSON())}
+                className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
+              >
+                save
+              </button>
+              <button
+                onClick={() => console.log(helpers.getMarkdown())}
+                className="m-1 border border-solid bg-white px-2 py-1 text-sm text-black disabled:cursor-not-allowed disabled:text-gray-500"
+              >
+                markdown save
+              </button> */}
+              {/* <BlockHandle /> */}
+              {/* <TableHandle /> */}
+            </EditorContent>
+          </EditorContainer>
+        </ProseKit>
+      </div>
+    );
+  },
+);

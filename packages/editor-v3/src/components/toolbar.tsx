@@ -32,15 +32,10 @@ const ToolbarContainer = styled.div`
   gap: 0.25rem;
   padding: 0.5rem;
   align-items: center;
-
-  @media (prefers-color-scheme: dark) {
-    border-color: #1f2937;
-  }
 `;
 
 export default function Toolbar() {
   const editor = useEditor<EditorExtension>({ update: true });
-
   return (
     <ToolbarContainer>
       <Button
@@ -161,7 +156,7 @@ export default function Toolbar() {
         pressed={editor.nodes.table.isActive()}
         disabled={!editor.commands.insertTable.canExec}
         onClick={() =>
-          editor.commands.insertTable({ row: 3, col: 2, header: false })
+          editor.commands.insertTable({ row: 3, col: 2, header: true })
         }
         tooltip="Table"
       >

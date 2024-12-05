@@ -5,7 +5,8 @@
   "compilerOptions": {
     "paths": {
       "@extensions*": ["./src/extensions*"],
-      "@helpers*": ["./src/helpers*"]
+      "@helpers*": ["./src/helpers*"],
+      "@hooks*": ["./src/hooks*"]
     }
   }
 }

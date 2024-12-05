@@ -16,13 +16,15 @@ const StyledPopover = styled(AutocompletePopover)`
   select: none;
   overflow: auto;
   white-space: nowrap;
-  padding: 1rem;
+  padding: 0.5rem;
   z-index: 10;
   box-sizing: border-box;
   border-radius: 0.5rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--background-color);
-  box-shadow: var(--shadow-lg);
+  border: 1px solid #fff;
+  background-color: #fff;
+  box-shadow:
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
 `;
 
 const StyledList = styled(AutocompleteList)``; // You can add styles if needed
@@ -54,8 +56,8 @@ const StyledItem = styled(AutocompleteItem)`
   user-select: none;
   white-space: nowrap;
   outline: none;
-  &:focus-visible {
-    background-color: var(--focused-bg-color);
+  &[data-focused="true"] {
+    background-color: #ccc;
   }
 `;
 

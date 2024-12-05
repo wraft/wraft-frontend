@@ -2,17 +2,17 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Flex, Text, Label, Input } from 'theme-ui';
-import { RemirrorJSON } from 'remirror';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { Button } from '@wraft/ui';
+import type { NodeJSON } from '@wraft/editor-v3';
 
 import NavEdit from 'components/NavEdit';
 import Editor from 'components/common/Editor';
 import Field from 'common/Field';
 import { RoutedDialog } from 'common/RoutedDialog';
 import { FlowStateBlock, ContentSidebar } from 'common/content';
-import { replaceTitles, updateVars, findHolders } from 'utils/index';
+import { updateVars, findHolders } from 'utils/index';
 import {
   IContentForm,
   IFieldField,
@@ -29,7 +29,7 @@ import FieldForm from './FieldForm';
 
 const ContentForm = ({ id, edit }: IContentForm) => {
   const [activeFlow, setActiveFlow] = useState<any>(null);
-  const [body, setBody] = useState<RemirrorJSON>(EMPTY_MARKDOWN_NODE);
+  const [body, setBody] = useState<NodeJSON>(EMPTY_MARKDOWN_NODE);
   const [contents, setContents] = useState<ContentInstance>();
   const [contentTypeId, setContentTypeId] = useState<ContentInstance>();
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -536,13 +536,9 @@ const ContentForm = ({ id, edit }: IContentForm) => {
                     },
                   }}>
                   <Editor
-                    defaultValue={body}
-                    editable
-                    onUpdate={doUpdate}
-                    tokens={fieldTokkons}
-                    insertable={trigger}
+                    defaultContent={body}
+                    isReadonly={false}
                     ref={editorRef}
-                    onceInserted={onceInserted}
                   />
                 </Box>
               </Box>

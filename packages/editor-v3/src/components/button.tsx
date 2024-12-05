@@ -27,7 +27,7 @@ const StyledButton = styled.button<{ pressed?: boolean; disabled?: boolean }>`
   background-color: transparent;
   color: inherit;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: none;
   gap: 8px;
 
   &:focus-visible {
@@ -47,7 +47,7 @@ const StyledButton = styled.button<{ pressed?: boolean; disabled?: boolean }>`
   }
 
   &:hover {
-    background-color: #b4b4b4; /* Light mode */
+    background-color: #edf1f6;
   }
 
   &[data-state="on"] {

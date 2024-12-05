@@ -24,6 +24,9 @@ const StyledPopover = styled(AutocompletePopover)`
   border: 1px solid var(--border-color);
   background-color: white;
   box-shadow: var(--shadow-lg);
+  box-shadow:
+    0px 1px 3px 1px rgba(0, 0, 0, 0.15),
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3);
   &[data-state='']: hidden;
 `;
 
@@ -54,23 +57,26 @@ const StyledItem = styled(AutocompleteItem)`
   user-select: none;
   white-space: nowrap;
   outline: none;
-  &:focus-visible {
-    background-color: var(--focused-bg-color);
+  &[data-focused="true"] {
+    background-color: #ccc;
   }
 `;
 
-export default function UserMenu({ users }: any) {
+interface TokensAttrs {
+  label: string;
+  name: string;
+  id: string;
+}
+
+export default function TokenMenu({ tokens }: any) {
   const editor = useEditor<EditorExtension>();
 
-  const handleUserInsert = (id: number, username: string) => {
+  const handleHolderInsert = (token: any) => {
     editor.commands.insertHolder({
-      id: id.toString(),
-      name: `@${username}`,
-      named: username,
-      mentionTag: "",
-      label: "",
+      id: token.id,
+      name: token.name,
+      named: token.named || null,
     });
-    editor.commands.insertText({ text: " " });
   };
 
   return (
@@ -78,12 +84,9 @@ export default function UserMenu({ users }: any) {
       <AutocompleteList>
         <StyledEmpty>No results</StyledEmpty>
 
-        {users.map((user: any) => (
-          <StyledItem
-            key={user.id}
-            onSelect={() => handleUserInsert(user.id, user.name)}
-          >
-            {user.name}
+        {tokens?.map((token: TokensAttrs) => (
+          <StyledItem key={token.id} onSelect={() => handleHolderInsert(token)}>
+            {token.label}
           </StyledItem>
         ))}
       </AutocompleteList>
