@@ -26,6 +26,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@liveblocks/client": "^2.14.0",
+    "@liveblocks/yjs": "^2.14.0",
     "@phosphor-icons/react": "^2.1.7",
     "@prosekit/core": "^0.7.12",
     "@prosekit/pm": "^0.1.8",
@@ -40,7 +42,8 @@
     "remark-stringify": "^11.0.0",
     "turndown": "^7.2.0",
     "unified": "^11.0.5",
-    "y-prosemirror": "^1.2.12",
+    "y-indexeddb": "^9.0.12",
+    "y-prosemirror": "^1.2.15",
     "y-protocols": "^1.0.6",
     "y-websocket": "^2.0.4",
     "yjs": "^13.6.20"

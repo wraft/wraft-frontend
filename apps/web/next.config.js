@@ -11,6 +11,7 @@ module.exports = withImages({
     SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_WEBSOCKET_URL: process.env.NEXT_PUBLIC_WEBSOCKET_URL,
   },
   async rewrites() {
     return [

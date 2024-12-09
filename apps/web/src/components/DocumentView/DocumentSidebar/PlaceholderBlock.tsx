@@ -6,6 +6,7 @@ import { EditIcon } from '@wraft/icon';
 
 import FieldDate from 'components/FieldDate';
 import Field from 'common/Field';
+import { convertToVariableName } from 'utils';
 import { FieldInstance } from 'utils/types';
 
 export interface IFieldField {
@@ -23,22 +24,17 @@ export interface IFieldType {
   value: string;
 }
 
-interface FieldFormProps {
+interface PlaceholderBlockProps {
   fields: any;
   onSaved: any;
-  setMaps?: any;
-  templates?: any;
-  setShowForm?: any;
-  onRefresh: any;
   fieldValues?: any;
 }
 
-const FieldForm = ({
+const PlaceholderBlock = ({
   fields,
   fieldValues,
   onSaved,
-  setMaps,
-}: FieldFormProps) => {
+}: PlaceholderBlockProps) => {
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -51,9 +47,12 @@ const FieldForm = ({
     inputFieldValues: Record<string, any>,
   ): FieldInstance[] => {
     return inputFields.map((field: any) => {
+      const variableName = convertToVariableName(field.name);
+      const fieldValue = inputFieldValues[variableName] ?? '';
+
       return {
         ...field,
-        value: inputFieldValues[field.id] || '',
+        value: fieldValue,
       } as IFieldType;
     });
   };
@@ -75,7 +74,6 @@ const FieldForm = ({
         const newMappedFields = mapFields(fields, fieldValues);
         onSaved(newMappedFields);
         setMappedFields(newMappedFields);
-        setMaps(newMappedFields);
       }
     }
   }, [fields, fieldValues]);
@@ -149,9 +147,9 @@ const FieldForm = ({
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ bg: 'backgroundWhite' }}>
-          <Drawer.Title>Update Content</Drawer.Title>
-          <Box sx={{ p: 4 }}>
+          sx={{ bg: 'backgroundWhite', px: 4 }}>
+          <Drawer.Title>Placeholder</Drawer.Title>
+          <Box sx={{ pb: 4 }}>
             {mappedFields && mappedFields.length > 0 && (
               <Box>
                 {mappedFields.map((f: IFieldType) => (
@@ -168,7 +166,7 @@ const FieldForm = ({
 
                     {f.field_type?.name !== 'date' && (
                       <Field
-                        name={f.id}
+                        name={convertToVariableName(f.name)}
                         label={f.name}
                         defaultValue={f.value}
                         register={register}
@@ -180,7 +178,7 @@ const FieldForm = ({
             )}
             <Flex sx={{ pt: 3 }}>
               <Button type="submit" disabled={submitting}>
-                Save
+                Update
               </Button>
               <Text onClick={closeDrawer} pl={2} pt={1}>
                 Close
@@ -192,4 +190,4 @@ const FieldForm = ({
     </Box>
   );
 };
-export default FieldForm;
+export default PlaceholderBlock;

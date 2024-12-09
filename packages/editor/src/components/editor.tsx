@@ -1,16 +1,10 @@
 import { createEditor, jsonFromNode, htmlFromNode } from "prosekit/core";
 import { ProseKit } from "prosekit/react";
 import { useMemo, useImperativeHandle, forwardRef } from "react";
-import { WebsocketProvider } from "y-websocket";
-import * as Y from "yjs";
-import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import { markdownFromHTML } from "@helpers/markdown";
 import type { Node } from "@prosekit/pm/model";
-import {
-  defineDefaultExtension,
-  defineCollaborativeExtension,
-} from "./extension";
+import { defineDefaultExtension } from "./extension";
 import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
 import TagMenu from "./tag-menu";
@@ -24,7 +18,6 @@ export interface EditorProps {
   onChange?: (content: string) => void;
   placeholder?: string;
   className?: string;
-  isCollaborative?: boolean;
   isReadonly?: boolean;
   tokens?: any;
 }
@@ -35,53 +28,15 @@ export const Editor = forwardRef(
       defaultContent = "",
       placeholder = "Write something, or ' / ' for commands…",
       className = "",
-      isCollaborative = false,
       isReadonly = true,
       tokens,
     }: EditorProps,
     ref,
   ) => {
     const editor = useMemo(() => {
-      const doc = new Y.Doc({
-        gc: true,
-        guid: "123e4567-e89b-12d3-a456-426614174000",
-      });
-
-      const wsProvider = new WebsocketProvider(
-        "ws://localhost:3000",
-        "editor-001",
-        doc,
-        {
-          connect: true,
-          WebSocketPolyfill: WebSocket,
-        },
-      );
-
-      const awareness = wsProvider.awareness;
-      const extension = isCollaborative
-        ? defineCollaborativeExtension({
-            placeholder,
-            doc,
-            awareness,
-            isReadonly,
-          })
-        : defineDefaultExtension({ placeholder, isReadonly });
-
-      const editor = createEditor({ extension, defaultContent });
-
-      const yXmlFragment = doc.getXmlFragment("prosemirror");
-      setTimeout(() => {
-        if (yXmlFragment.length === 0 && defaultContent) {
-          prosemirrorJSONToYXmlFragment(
-            editor.schema,
-            defaultContent,
-            yXmlFragment,
-          );
-        }
-      }, 3000);
-
-      return editor;
-    }, [defaultContent]);
+      const extension = defineDefaultExtension({ placeholder, isReadonly });
+      return createEditor({ extension, defaultContent });
+    }, [isReadonly, defaultContent]);
 
     const helpers = useMemo(
       () => ({

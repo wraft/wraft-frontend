@@ -98,17 +98,17 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
  * Content Sidebar Element
  * @content ContentInstance from `get contents/[id]`
  */
-interface ContentSidebarProps {
+interface ContentInfoBlockProps {
   content: ContentInstance;
   nextState?: any;
   contentType?: any;
 }
 
-export const ContentSidebar = ({
+export const ContentInfoBlock = ({
   content,
   nextState,
   contentType,
-}: ContentSidebarProps) => (
+}: ContentInfoBlockProps) => (
   <Flex sx={{ px: 3, py: 1 }}>
     <Flex>
       <Box sx={{ mr: 3 }}>

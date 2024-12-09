@@ -11,7 +11,7 @@ import FieldDate from 'components/FieldDate';
 import { EmptyForm } from 'components/Icons';
 import Field from 'common/Field';
 import StepsIndicator from 'common/Form/StepsIndicator';
-import { capitalizeFirst } from 'utils/index';
+import { capitalizeFirst, convertToVariableName } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
 import contentStore from 'store/content.store';
@@ -237,7 +237,7 @@ const CreateDocument = () => {
                     <Box key={f.id} sx={{ pb: 2 }}>
                       {f.field_type.name === 'date' && (
                         <FieldDate
-                          name={`contentFields[${f.id}]`}
+                          name={`contentFields[${convertToVariableName(f.name)}]`}
                           label={capitalizeFirst(f.name)}
                           register={register}
                           sub="Date"
@@ -247,7 +247,7 @@ const CreateDocument = () => {
 
                       {f.field_type.name !== 'date' && (
                         <Field
-                          name={`contentFields[${f.id}]`}
+                          name={`contentFields[${convertToVariableName(f.name)}]`}
                           label={capitalizeFirst(f.name)}
                           defaultValue=""
                           register={register}

@@ -1,21 +1,20 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-
-// import ContentTypeForm from '../../src/components/ContentTypeForm';
 
 import Page from 'components/PageFrameInner';
-import { ContentForm } from 'components/Document';
+import { DocumentProvider } from 'components/DocumentView/DocumentContext';
+import DocumentView from 'components/DocumentView';
 
 const Index: FC = () => {
-  const router = useRouter();
   return (
     <>
       <Head>
-        <title>Create Doc - Wraft</title>
+        <title>Edit Doc - Wraft</title>
       </Head>
-      <Page id="Modal" showFull={false}>
-        <ContentForm id={router.query.id} edit={true} />
+      <Page>
+        <DocumentProvider mode="edit">
+          <DocumentView />
+        </DocumentProvider>
       </Page>
     </>
   );

@@ -5,7 +5,7 @@ import type { Attrs } from "@prosekit/pm/model";
  * @internal
  */
 export type HolderSpecExtension = Extension<{
-  Marks: {
+  Nodes: {
     holder: Attrs;
   };
 }>;

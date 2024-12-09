@@ -16,7 +16,6 @@ import type { HolderExtension } from "@extensions/holder";
 import { defineHolder } from "@extensions/holder";
 import { defineFancyParagraph } from "@extensions/paragraph";
 import { defineTextHighlight } from "@extensions/text-highlight";
-import { defineReadonly } from "prosekit/extensions/readonly";
 import {
   defineListItem,
   defineOrderedList,
@@ -25,6 +24,7 @@ import {
 import { defineHardBreak } from "@extensions/hard-break";
 import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
+import { defineReadonly } from "prosekit/extensions/readonly";
 import ImageView from "./image-view";
 
 // import { defineImageFileHandlers } from "./upload-file";
@@ -76,7 +76,7 @@ export function defineCollaborativeExtension({
   doc,
   awareness,
   isReadonly,
-}: ExtensionProps) {
+}: ExtensionProps): BasicsExtension {
   return union(
     defineDefaultExtension({ placeholder, isReadonly }),
     defineYjs({ doc, awareness }),

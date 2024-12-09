@@ -194,8 +194,6 @@ const Form = () => {
   const onSubmit = (data: any) => {
     setLoading(true);
 
-    console.log('data', data);
-
     const jsonContent = editorRef.current?.helpers?.getJSON();
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
 
@@ -420,8 +418,8 @@ const Form = () => {
             py={4}
             sx={{
               px: 4,
-              '.remirror-editor-wrapper': {
-                maxHeight: 'calc(100vh - 200px)',
+              '.wraft-editor ': {
+                maxHeight: 'calc(100vh - 150px)',
                 display: 'block',
                 overflowY: 'scroll',
               },

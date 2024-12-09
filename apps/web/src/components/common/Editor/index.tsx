@@ -7,6 +7,8 @@ type EditorProps = {
   defaultContent?: NodeJSON;
   isReadonly?: boolean;
   tokens?: any;
+  collabData?: any;
+  isCollaborative?: boolean;
 };
 
 const EditorWrapper = forwardRef(

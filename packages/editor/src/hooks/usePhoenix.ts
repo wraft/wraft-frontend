@@ -9,17 +9,6 @@ import {
 } from "y-prosemirror";
 import { WebsocketProvider } from "y-websocket";
 
-// import { useYjsAwareness, type AwarenessUser } from "./useYjsAwareness";
-// import { WraftProvider } from "./wraftProvider";
-// Map to store WraftProvider instances for each document ID
-
-/**
- * Custom hook to manage WebSocket connections and Yjs document synchronization.
- *
- * @param user - The current user's awareness information.
- * @param documentId - The unique identifier for the document being edited.
- * @returns An object containing awareness, provider, and Yjs document.
- */
 export function useWebsocketProvider(
   documentId: string,
   doc: any,

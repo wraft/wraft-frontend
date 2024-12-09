@@ -120,8 +120,5 @@
   "cacheDirectories": [
     "node_modules/",
     ".next/cache/"
-  ],
-  "engines": {
-    "node": "18.x"
-  }
+  ]
 }
