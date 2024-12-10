@@ -14,6 +14,7 @@ import { Asset } from 'utils/types';
 
 import TemplateUploader from './TemplateUploader';
 import TemplatePreview from './TemplatePreview';
+import { ImportedItems } from './ImportedItems';
 // import { Box as BoxBase } from './Box';
 
 type Step = {
@@ -83,7 +84,7 @@ const StepSection = ({ currentStep, step }: StepSectionProps) => {
         {currentStep > step.id ? (
           <Circle
             sx={{
-              bg: 'green.900', //currentStep === step.id ? 'green.700' : 'blue.400',
+              bg: 'green.1000', //currentStep === step.id ? 'green.700' : 'blue.400',
               mt: '-2px',
               color: 'green.100',
               svg: {
@@ -124,6 +125,8 @@ function ImporterApp() {
   const [uploaded, setUploaded] = useState<any>();
   const tab = Tab.useTabStore();
   const [assets, setAssets] = useState<Array<Asset>>([]);
+
+  const [imported, setImported] = useState<ImportedItems | []>([]);
 
   const [errors, setErrors] = useState<any>([]);
 
@@ -178,9 +181,10 @@ function ImporterApp() {
 
   const importNow = (id: string, _onDone?: any) => {
     postAPI(`template_assets/${id}/import`, {})
-      .then((res) => {
+      .then((res: ImportedItems) => {
         console.log('res', res);
         toast.success('Importing ...' + id);
+        setImported(res);
         handleNext();
         _onDone && _onDone(res);
       })
@@ -196,11 +200,14 @@ function ImporterApp() {
    * import templates from uploaded template aset
    */
 
+  interface validateResp {
+    missing_items: any;
+  }
+
   const validateNow = (id: string, _onDone?: any) => {
     fetchAPI(`template_assets/${id}/pre_import`)
-      .then((res) => {
+      .then((res: validateResp) => {
         console.log('res', res);
-
         if (!res?.missing_items?.length) {
           toast.success('Verified and good to go');
         }
@@ -272,11 +279,64 @@ function ImporterApp() {
             )}
 
             {currentStep === 3 && (
-              <Box>
-                <Text as="h4" variant="sectiontitle" sx={{ pb: 2, mb: 2 }}>
+              <Box
+                sx={{
+                  bg: 'green.200',
+                  border: 'solid 1px',
+                  borderColor: 'green.500',
+                  borderRadius: '4px',
+                  mt: 3,
+                  px: 4,
+                  py: 4,
+                }}>
+                <Text
+                  as="h4"
+                  variant="sectiontitle"
+                  sx={{ color: 'green.1100', pb: 2, mb: 2 }}>
                   Import Success
                 </Text>
-                <Box sx={{ py: 2 }}>
+
+                {imported && (
+                  <Box>
+                    <Box>
+                      {Array.isArray(imported.items) &&
+                        imported.items.map((item, i) => (
+                          <Flex
+                            key={item.id}
+                            sx={{
+                              py: 2,
+                              px: 3,
+                              // mb: 2,
+                              bg: 'gray.100',
+                              borderRadius: 0,
+                              alignItems: 'center',
+                              border: '1px solid',
+                              borderColor: 'gray.500',
+                              borderBottom: 0,
+                            }}>
+                            <Check size={16} color="#22C55E" />
+                            <Box sx={{ ml: 3, flex: 1 }}>
+                              <Text variant="pB">
+                                {item.title || item.name}
+                              </Text>
+                              <Text
+                                variant="small"
+                                sx={{ ml: 2, color: 'gray.100' }}>
+                                {item.item_type} • Created:{' '}
+                                {new Date(item.created_at).toLocaleDateString()}
+                              </Text>
+                            </Box>
+                          </Flex>
+                        ))}
+                      <Alert>
+                        <Text variant="small" sx={{ color: 'gray.600', pt: 2 }}>
+                          {imported.message}
+                        </Text>
+                      </Alert>
+                    </Box>
+                  </Box>
+                )}
+                {/* <Box sx={{ py: 2 }}>
                   <Flex sx={{ mb: 1 }}>
                     <Check size={20} color="#22C55E" />
                     <Text sx={{ ml: 2 }}>
@@ -296,7 +356,7 @@ function ImporterApp() {
                   <Box sx={{ py: 3 }}>
                     <Link href="/variand/id">View Created Variant</Link>
                   </Box>
-                </Box>
+                </Box> */}
               </Box>
             )}
           </BoxBase>
