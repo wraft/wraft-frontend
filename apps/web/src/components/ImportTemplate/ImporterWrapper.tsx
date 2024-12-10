@@ -26,17 +26,17 @@ type Step = {
 const steps: Step[] = [
   {
     id: 1,
-    title: 'Select Source',
-    description: 'Choose your template source',
+    title: 'Upload',
+    description: 'Upload custom structures',
   },
   {
     id: 2,
-    title: 'Configure',
-    description: 'Set template options',
+    title: 'Verify',
+    description: 'Validate imported items',
   },
   {
     id: 3,
-    title: 'Import',
+    title: 'Complete',
     description: 'Start the import process',
   },
 ];
@@ -125,6 +125,7 @@ function ImporterApp() {
   const [uploaded, setUploaded] = useState<any>();
   const tab = Tab.useTabStore();
   const [assets, setAssets] = useState<Array<Asset>>([]);
+  const [nextIsActive, setNextIsActive] = useState(false);
 
   const [imported, setImported] = useState<ImportedItems | []>([]);
 
@@ -185,6 +186,7 @@ function ImporterApp() {
         console.log('res', res);
         toast.success('Importing ...' + id);
         setImported(res);
+        setNextIsActive(true);
         handleNext();
         _onDone && _onDone(res);
       })
@@ -281,20 +283,33 @@ function ImporterApp() {
             {currentStep === 3 && (
               <Box
                 sx={{
-                  bg: 'green.200',
+                  bg: 'gray.200',
                   border: 'solid 1px',
-                  borderColor: 'green.500',
+                  borderColor: 'gray.500',
                   borderRadius: '4px',
                   mt: 3,
                   px: 4,
                   py: 4,
                 }}>
-                <Text
-                  as="h4"
-                  variant="sectiontitle"
-                  sx={{ color: 'green.1100', pb: 2, mb: 2 }}>
-                  Import Success
-                </Text>
+                <Alert
+                  sx={{
+                    my: 3,
+                    bg: 'green.300',
+                    color: 'green.400',
+                    border: '1px solid',
+                    borderColor: 'green.500',
+                  }}>
+                  <Text
+                    variant="small"
+                    sx={{
+                      fontSize: 'sm',
+                      fontWeight: 'body',
+                      color: 'green.900',
+                      py: 1,
+                    }}>
+                    {imported.message}
+                  </Text>
+                </Alert>
 
                 {imported && (
                   <Box>
@@ -321,42 +336,24 @@ function ImporterApp() {
                               </Text>
                               <Text
                                 variant="small"
-                                sx={{ ml: 2, color: 'gray.100' }}>
-                                {item.item_type} • Created:{' '}
-                                {new Date(item.created_at).toLocaleDateString()}
+                                sx={{ ml: 2, color: 'gray.800' }}>
+                                {item.item_type}
                               </Text>
                             </Box>
+                            <Text
+                              variant="small"
+                              sx={{
+                                fontSize: 'sm',
+                                ml: 'auto',
+                                color: 'gray.800',
+                              }}>
+                              {new Date(item.created_at).toLocaleDateString()}
+                            </Text>
                           </Flex>
                         ))}
-                      <Alert>
-                        <Text variant="small" sx={{ color: 'gray.600', pt: 2 }}>
-                          {imported.message}
-                        </Text>
-                      </Alert>
                     </Box>
                   </Box>
                 )}
-                {/* <Box sx={{ py: 2 }}>
-                  <Flex sx={{ mb: 1 }}>
-                    <Check size={20} color="#22C55E" />
-                    <Text sx={{ ml: 2 }}>
-                      Template source uploaded successfully
-                    </Text>
-                  </Flex>
-                  <Flex sx={{ mb: 1 }}>
-                    <Check size={20} color="#22C55E" />
-                    <Text sx={{ ml: 2 }}>Template configuration validated</Text>
-                  </Flex>
-                  <Flex sx={{ mb: 1 }}>
-                    <Check size={20} color="#22C55E" />
-                    <Text sx={{ ml: 2 }}>
-                      Import completed - templates are ready to use
-                    </Text>
-                  </Flex>
-                  <Box sx={{ py: 3 }}>
-                    <Link href="/variand/id">View Created Variant</Link>
-                  </Box>
-                </Box> */}
               </Box>
             )}
           </BoxBase>
@@ -374,7 +371,7 @@ function ImporterApp() {
           <Button
             variant="secondary"
             onClick={handleNext}
-            disabled={currentStep === 1 && !selectedSource}>
+            disabled={currentStep === 1 && !selectedSource && nextIsActive}>
             {currentStep === steps.length ? 'Finish' : 'Continue'}
           </Button>
         </Flex>

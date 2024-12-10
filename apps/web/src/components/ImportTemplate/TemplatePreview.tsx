@@ -110,7 +110,9 @@ const TemplatePreview = ({
               }}>
               {assets[0].name}
             </Text>
-            <Text variant="caps" sx={{ fontSize: 'xss', mb: 0, pb: 0 }}>
+            <Text
+              variant="caps"
+              sx={{ display: 'hidden', fontSize: 'xss', mb: 0, pb: 0 }}>
               {assets[0].id}
             </Text>
             <Box sx={{ ml: 'auto' }}>
