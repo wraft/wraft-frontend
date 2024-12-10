@@ -76,8 +76,11 @@ interface StepSectionProps {
 const StepSection = ({ currentStep, step }: StepSectionProps) => {
   return (
     <Flex key={step.id} sx={{ flex: 1 }}>
-      <Flex
-        as={motion.div}
+      <motion.div
+        style={{
+          display: 'flex',
+        }}
+        // as={motion.div}
         initial={{ scale: 0.8 }}
         animate={{ scale: currentStep === step.id ? 1 : 0.8 }}
         transition={{ duration: 0.2 }}>
@@ -102,7 +105,7 @@ const StepSection = ({ currentStep, step }: StepSectionProps) => {
             {step.id}
           </Circle>
         )}
-      </Flex>
+      </motion.div>
       <Box sx={{ pl: 3, pt: 0, flex: 1 }}>
         <Box className="rest-line" sx={{ pr: 1 }}>
           <Text variant="pR">{step.title}</Text>
@@ -127,7 +130,7 @@ function ImporterApp() {
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [nextIsActive, setNextIsActive] = useState(false);
 
-  const [imported, setImported] = useState<ImportedItems | []>([]);
+  const [imported, setImported] = useState<ImportedItems>();
 
   const [errors, setErrors] = useState<any>([]);
 
@@ -307,7 +310,7 @@ function ImporterApp() {
                       color: 'green.900',
                       py: 1,
                     }}>
-                    {imported.message}
+                    {imported?.message}
                   </Text>
                 </Alert>
 
@@ -315,7 +318,7 @@ function ImporterApp() {
                   <Box>
                     <Box>
                       {Array.isArray(imported.items) &&
-                        imported.items.map((item, i) => (
+                        imported.items.map((item, _i) => (
                           <Flex
                             key={item.id}
                             sx={{

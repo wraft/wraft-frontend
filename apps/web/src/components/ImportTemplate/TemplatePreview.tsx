@@ -315,7 +315,9 @@ const TemplatePreview = ({
                                         mt: 0,
                                         lineHeight: 1,
                                       }}>
-                                      {colorValue}
+                                      {typeof colorValue === 'string'
+                                        ? colorValue
+                                        : null}
                                     </Text>
                                   </Box>
                                 </Flex>

@@ -4,12 +4,9 @@ import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
-import { ApproveTick, Close, CloudUploadIcon } from 'components/Icons';
-import PdfViewer from 'components/PdfViewer';
+import { ApproveTick, CloudUploadIcon } from 'components/Icons';
 import ProgressBar from 'components/common/ProgressBar';
 import { Asset } from 'utils/types';
-
-import TemplatePreview from './TemplatePreview';
 
 type DropzoneProps = {
   accept?: Accept;
@@ -27,9 +24,7 @@ const Dropzone = ({
   accept,
   progress,
   assets,
-  setPdfPreview,
   setIsSubmit,
-  setDeleteAssets,
   multiple = false,
   noChange = false,
   onDropped,
@@ -74,19 +69,6 @@ const Dropzone = ({
         borderColor: 'neutral.200',
         borderRadius: '4px',
       }}>
-      {/* {assets && assets.length > 0 && (
-        <Box
-          sx={{
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            bg: 'background',
-            // py: '24px',
-          }}
-        />
-      )} */}
       <Box
         {...getRootProps()}
         sx={{
