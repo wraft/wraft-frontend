@@ -7,6 +7,7 @@ import {
   BuildingOffice,
   IntersectSquare,
   PaintRoller,
+  FileArrowUp,
 } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
@@ -41,12 +42,12 @@ const listMenu = [
     path: '/manage/themes',
     desc: 'Manage Themes',
   },
-  // {
-  //   name: 'Pipelines',
-  //   logo: <TreeStructure size={50} weight="thin" />,
-  //   path: '/manage/pipelines',
-  //   desc: 'Manage Pipelines',
-  // },
+  {
+    name: 'Import',
+    logo: <FileArrowUp size={50} weight="thin" />,
+    path: '/manage/import',
+    desc: 'Manage Pipelines',
+  },
 ];
 
 const ManageHomePage = () => {
