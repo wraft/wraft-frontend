@@ -43,7 +43,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
         bg: 'gray.100',
         borderBottom: 'solid 1px',
         borderColor: 'border',
-        py: 2,
+        py: 3, //'12px',
         px: 3,
       }}>
       <Box
@@ -79,7 +79,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       </Box>
 
       <Flex ml="auto" sx={{ alignItems: 'center', gap: 3 }}>
-        <Share size={18} cursor="pointer" />
+        <Share size={21} cursor="pointer" />
 
         <Flex
           sx={{
@@ -89,7 +89,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
             gap: 3,
             pl: 2,
           }}>
-          <Bell size={18} />
+          <Bell size={21} />
 
           {!accessToken && (
             <Link href="/login">
@@ -113,8 +113,8 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
                         <Image
                           alt=""
                           sx={{ borderRadius: '3rem', bg: 'red' }}
-                          width="18px"
-                          height="18px"
+                          width={24}
+                          height={24}
                           src={userProfile?.profile_pic}
                         />
                       </MenuButton>

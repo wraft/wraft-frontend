@@ -8,7 +8,13 @@ import {
   UserFocus,
   Article,
   Blueprint,
+  Wrench,
+  FileText,
+  House,
+  Lego,
 } from '@phosphor-icons/react';
+
+const defaultIcon = 18;
 
 const Menulist = [
   {
@@ -16,18 +22,28 @@ const Menulist = [
     menus: [
       {
         name: 'Dashboard',
-        icon: <HouseSimple size={20} />,
+        icon: <House size={defaultIcon} />,
         path: '/',
       },
       {
         name: 'Documents',
-        icon: <Files size={20} />,
+        icon: <FileText size={defaultIcon} />,
         path: '/contents',
       },
       {
         name: 'Approvals',
-        icon: <ThumbsUp size={20} />,
+        icon: <ThumbsUp size={defaultIcon} />,
         path: '/approvals',
+      },
+      {
+        name: 'Pipelines',
+        icon: <GitBranch size={defaultIcon} />,
+        path: '/pipelines',
+      },
+      {
+        name: 'Templates',
+        icon: <Article size={defaultIcon} />,
+        path: '/templates',
       },
     ],
   },
@@ -35,33 +51,23 @@ const Menulist = [
     section: 'structure',
     menus: [
       {
-        name: 'Templates',
-        icon: <Article size={20} />,
-        path: '/templates',
-      },
-      {
         name: 'Variants',
-        icon: <Blueprint size={20} />,
+        icon: <Blueprint size={defaultIcon} />,
         path: '/content-types',
       },
       {
         name: 'Forms',
-        icon: <Table size={20} />,
+        icon: <Table size={defaultIcon} />,
         path: '/forms',
       },
       {
-        name: 'Pipeline',
-        icon: <GitBranch size={20} />,
-        path: '/pipelines',
-      },
-      {
         name: 'Blocks',
-        icon: <TextColumns size={20} />,
+        icon: <TextColumns size={defaultIcon} />,
         path: '/blocks',
       },
       {
         name: 'Manage',
-        icon: <UserFocus size={20} />,
+        icon: <UserFocus size={defaultIcon} />,
         path: '/manage',
       },
     ],

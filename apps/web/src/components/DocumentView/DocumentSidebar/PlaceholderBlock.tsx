@@ -86,7 +86,7 @@ const PlaceholderBlock = ({
   const closeDrawer = () => setDrawerOpen(false);
 
   return (
-    <Box sx={{ p: 3, borderColor: 'border', bg: 'neutral.100' }}>
+    <Box sx={{ p: 3, borderColor: 'border', bg: 'gray.100' }}>
       {fieldValues && (
         <>
           <Flex sx={{ justifyContent: 'space-between' }}>

@@ -10,6 +10,8 @@ export const GlobalStyle = createGlobalStyle`
     color: var(--theme-ui-colors-text);
     font-family: inter;
     -webkit-font-smoothing: antialiased;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
   }
 
   details > summary {

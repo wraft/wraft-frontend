@@ -49,7 +49,7 @@ export const DocumentSidebar = () => {
             {editorMode !== 'new' && (
               <>
                 <Tab className={styles.tabInline} id="view">
-                  Discuss
+                  Comments
                 </Tab>
                 <Tab className={styles.tabInline} id="history">
                   History
@@ -65,7 +65,7 @@ export const DocumentSidebar = () => {
             <InfoSection />
           </TabPanel>
           <TabPanel>
-            <Box sx={{ bg: 'neutral.100' }}>
+            <Box sx={{ bg: 'gray.100' }}>
               <Box sx={{ pb: 3 }}>
                 <Box
                   variant="layout.boxHeading"
@@ -74,7 +74,7 @@ export const DocumentSidebar = () => {
                     Discussions
                   </Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: 'neutral.100' }}>
+                <Box sx={{ pt: 2, px: 3, bg: 'gray.100' }}>
                   {contents && contents.content && (
                     <Box mt={0}>
                       <CommentForm

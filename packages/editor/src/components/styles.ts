@@ -1,6 +1,7 @@
-import styled from "@emotion/styled";
+// import styled from "@emotion/styled";
+import styled from "@xstyled/emotion";
 
-export const EditorContainer = styled.div`
+export const EditorContainer = styled.divBox`
   box-sizing: border-box;
   height: 100%;
   width: 100%;
@@ -8,7 +9,7 @@ export const EditorContainer = styled.div`
   overflow: hidden;
   border-radius: 0.375rem;
   border: 1px solid;
-  border-color: #e5e7eb;
+  border-color: gray.300;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   display: flex;
   flex-direction: column;
@@ -16,13 +17,16 @@ export const EditorContainer = styled.div`
   color: black;
 `;
 
-export const EditorContent = styled.div`
+export const EditorContent = styled.divBox`
   position: relative;
   width: 100%;
   flex: 1;
   box-sizing: border-box;
   overflow-y: scroll;
-
+  .ProseMirror {
+    background-color: var(--theme-ui-colors-gray-100);
+    color: var(--theme-ui-colors-gray-1200);
+  }
   .ProseMirror .ProseMirror-yjs-cursor {
     position: absolute;
     border-left: black;
@@ -96,7 +100,7 @@ export const EditorContent = styled.div`
   }
 `;
 
-export const EditorContentInput = styled.div`
+export const EditorContentInput = styled.divBox`
   box-sizing: border-box;
   min-height: 100%;
   padding: 2rem calc(max(4rem, 50% - 20rem));

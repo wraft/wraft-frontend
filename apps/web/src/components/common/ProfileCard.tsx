@@ -1,4 +1,6 @@
 import { Box, Flex, Avatar, Text } from 'theme-ui';
+
+import { TimeAgo } from './Atoms';
 /**
  * Profile Block
  */
@@ -35,8 +37,7 @@ export const ProfileCard = ({
       <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
-      <Box>{time}</Box>
-      {/* <TimeAgo time={time} ago={true} /> */}
+      <TimeAgo time={time} ago={true} />
     </Flex>
   );
 };
