@@ -1,12 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import { ContentForm } from 'components/Document';
 import Page from 'components/PageFrameInner';
-
-// const CreateForm = dynamic(() => import('components/ContentForm'), {
-//   ssr: false,
-// });
+import { DocumentProvider } from 'components/DocumentView/DocumentContext';
+import DocumentView from 'components/DocumentView';
 
 const Index: FC = () => {
   return (
@@ -16,7 +13,9 @@ const Index: FC = () => {
         <meta name="description" content="Create a New Document with Wraft" />
       </Head>
       <Page>
-        <ContentForm />
+        <DocumentProvider mode="new">
+          <DocumentView />
+        </DocumentProvider>
       </Page>
     </>
   );

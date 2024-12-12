@@ -2,13 +2,11 @@ import React from 'react';
 import { Text } from 'theme-ui';
 import { Label } from 'theme-ui';
 import Mentions from 'rc-mentions';
-// import type { MentionsProps } from 'rc-mentions';
 import styled from '@emotion/styled';
 
 import { GlobalStyle } from './style';
 
 const MentionsWrapper = styled.div`
-  // Customize style
   .rc-mentions {
     font-size: 20px;
     border: 1px solid #999;
@@ -22,28 +20,10 @@ const MentionsWrapper = styled.div`
     background-color: ${({ theme }: any) => theme.rawColors.white} !important;
     border-color: var(--theme-ui-colors-border);
   }
+  textarea {
+    color: ${({ theme }: any) => theme.colors.text};
+  }
 `;
-
-// interface Props extends MentionsProps {
-//   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//   // bg?: string;
-//   // error?: any;
-//   // register: any;
-//   // label?: string;
-//   // name: string;
-//   // defaultValue?: string;
-//   // mr?: string | number;
-//   // mb?: string | number;
-//   // placeholder?: string;
-//   // sub?: string;
-//   // variant?: string;
-//   // disable?: boolean;
-//   // p?: string | number;
-//   // color?: string | number;
-//   // fontWeight?: string | number;
-//   // fontSize?: string | number;
-//   // view?: boolean;
-// }
 
 const MentionField: React.FC<any> = ({
   error,
@@ -73,11 +53,9 @@ const MentionField: React.FC<any> = ({
 
       <MentionsWrapper>
         <Mentions
-          // onChange={onChange}
           onChange={handleChange}
           prefix={['@']}
           split=""
-          // open={true}
           placeholder={placeholder}
           options={options}
           value={defaultValue || ''}

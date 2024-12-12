@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text } from 'theme-ui';
 
-import { ProfileCard } from './ContentDetail';
+import { ProfileCard } from 'common/ProfileCard';
 
 export interface Comment {
   updated_at: string;

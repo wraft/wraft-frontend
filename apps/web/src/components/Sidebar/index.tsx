@@ -7,8 +7,8 @@ import { Box, Flex, Text, useThemeUI } from 'theme-ui';
 import { Plus, X } from '@phosphor-icons/react';
 
 import DefaultMenuItem from 'components/MenuItem';
+import CreateDocument from 'components/DocumentCreate';
 
-import { CreateDocument } from '../Document';
 import Header from './Header';
 import Menulist from './Menulist';
 
