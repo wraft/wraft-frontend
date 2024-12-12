@@ -40,9 +40,9 @@ export const findHolders = (data) => {
       node.forEach(traverse);
     } else if (typeof node === 'object' && node !== null) {
       if (node.type === 'holder' && node.attrs) {
-        const { id, named } = node.attrs;
+        const { id, named, name } = node.attrs;
         if (id && named !== undefined) {
-          holders[id] = named;
+          holders[convertToVariableName(name)] = named;
         }
       }
       Object.values(node).forEach(traverse);
@@ -58,7 +58,9 @@ export const updateVars = (data, fields, nodeType = 'holder') => {
     return data;
   }
 
-  const fieldMap = new Map(fields.map((field) => [field.name, field.value]));
+  const fieldMap = new Map(
+    fields.map((field) => [convertToVariableName(field.name), field.value]),
+  );
 
   function deepClone(obj) {
     if (obj === null || typeof obj !== 'object') {
@@ -83,7 +85,8 @@ export const updateVars = (data, fields, nodeType = 'holder') => {
       node.forEach(update);
     } else if (typeof node === 'object' && node !== null) {
       if (node.type === nodeType) {
-        const value = fieldMap.get(node.attrs?.name);
+        const variableName = convertToVariableName(node.attrs?.name);
+        const value = fieldMap.get(convertToVariableName(variableName));
         if (value !== undefined) {
           node.attrs.named = value;
         }
@@ -459,4 +462,19 @@ export const checkSubRoutePermission = (routes: any, permissions: any) => {
   });
 
   return routeList;
+};
+
+export const convertToVariableName = (name) => {
+  let varName = name
+    .replace(/'/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, '_')
+    .replace(/[^a-z0-9_]/g, '');
+
+  // Ensure the name starts with a letter
+  if (!/^[a-z]/.test(varName)) {
+    varName = 'field_' + varName;
+  }
+
+  return varName;
 };

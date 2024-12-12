@@ -1,0 +1,12 @@
+.holder {
+  background-color: #ffe889;
+  color: #000;
+  padding: 2px;
+}
+
+.no-holder {
+  background-color: rgba(243, 120, 18, 0.38);
+  color: rgba(95, 54, 20, 0.9);
+  padding: 1px;
+  border-bottom: 2px solid rgb(112, 212, 191);
+}

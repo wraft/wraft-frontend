@@ -9,7 +9,7 @@ import Modal from 'common/Modal';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
-import { CreateDocument } from './Document';
+import CreateDocument from './DocumentCreate';
 
 export interface IUser {
   name: string;

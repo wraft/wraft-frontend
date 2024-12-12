@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -19,7 +19,6 @@ import {
 } from 'utils/types';
 
 import Editor from './common/Editor';
-import FieldText from './FieldText';
 import NavEdit from './NavEdit';
 import MentionField from './MentionsField';
 
@@ -106,12 +105,13 @@ const Form = () => {
   const [dataTemplate, setDataTemplate] = useState<DataTemplates>();
   const [fields, setFields] = useState<any>([]);
   const [insertable, setInsertable] = useState<any>();
-  const [insertions, setInsertions] = useState<any | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [pagetitle, setPageTitle] = useState<string>('');
   const [showSetup, setShowSetup] = useState<boolean>(false);
-  const [tokkans, setTokkans] = useState<any>('');
+  const [tokens, setTokens] = useState<any>('');
   const [variant, setVariant] = useState<IContentType>();
+
+  const editorRef = useRef<any>();
 
   const {
     register,
@@ -178,7 +178,7 @@ const Form = () => {
             name: `${sr.name}`,
           };
         });
-        setTokkans(results);
+        setTokens(results);
       }
     }
   }, [variant]);
@@ -188,25 +188,21 @@ const Form = () => {
   };
 
   /**
-   * Cleanup Inserts
-   */
-  const onceInserted = () => {
-    setInsertions(null);
-  };
-
-  /**
    * Form Submit
    * @param data
    */
   const onSubmit = (data: any) => {
     setLoading(true);
 
+    const jsonContent = editorRef.current?.helpers?.getJSON();
+    const markdownContent = editorRef.current?.helpers?.getMarkdown();
+
     const formValues = {
       title_template: data.title_template,
       title: data.title,
-      data: data.data,
+      data: markdownContent,
       serialized: {
-        data: data.serialized,
+        data: JSON.stringify(jsonContent),
       },
     };
 
@@ -345,29 +341,12 @@ const Form = () => {
   };
 
   /**
-   * When Editor is updated, sync values to
-   * the hidden fields
-   * @param data
-   */
-  const doUpdate = (data: any) => {
-    if (data.md) {
-      setValue('data', data.md);
-    }
-    if (data.json) {
-      const body = data.json;
-      setValue('serialized', JSON.stringify(body));
-    }
-  };
-
-  /**
    * Insert a block at pointer
    * @param block
    */
   const insertBlock = (block: any) => {
-    const n = JSON.parse(block.serialized);
-    if (n && n.content) {
-      setInsertions(n);
-    }
+    const blockContent = JSON.parse(block.serialized);
+    editorRef.current.helpers.insterBlock(blockContent);
   };
 
   const saveMe = () => {
@@ -397,15 +376,8 @@ const Form = () => {
         backLink="/templates"
         onToggleEdit={saveMe}
       />
-      <Flex
-        // as="form"
-        sx={{ alignItems: 'flex-start' }}
-        // onSubmit={handleSubmit(onSubmit)}
-        py={0}
-        mt={0}>
+      <Flex sx={{ alignItems: 'flex-start' }}>
         <Box
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
           sx={{
             minWidth: '70%',
             bg: 'neutral.100',
@@ -416,7 +388,10 @@ const Form = () => {
               bg: 'white',
             },
           }}>
-          <Flex sx={{ px: 4, alignItems: 'center' }}>
+          <Flex
+            sx={{ px: 4, alignItems: 'center' }}
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}>
             <Box sx={{ flex: 1 }}>
               <Controller
                 control={control}
@@ -439,20 +414,12 @@ const Form = () => {
               </Button>
             </Box>
           </Flex>
-          <Box sx={{ display: 'none' }}>
-            <FieldText
-              name="serialized"
-              label="Text Template"
-              defaultValue={''}
-              register={register}
-            />
-          </Box>
           <Box
             py={4}
             sx={{
               px: 4,
-              '.remirror-editor-wrapper': {
-                maxHeight: 'calc(100vh - 200px)',
+              '.wraft-editor ': {
+                maxHeight: 'calc(100vh - 150px)',
                 display: 'block',
                 overflowY: 'scroll',
               },
@@ -461,15 +428,12 @@ const Form = () => {
               },
             }}>
             <Editor
-              editable
-              defaultValue={insertable}
-              onUpdate={doUpdate}
-              tokens={tokkans}
-              onceInserted={onceInserted}
-              insertable={insertions}
+              isReadonly={false}
+              defaultContent={insertable}
+              tokens={tokens}
+              ref={editorRef}
             />
           </Box>
-          {/* <Counter /> */}
         </Box>
 
         <Modal isOpen={showSetup}>
