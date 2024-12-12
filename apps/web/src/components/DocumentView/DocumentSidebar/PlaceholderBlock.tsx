@@ -9,6 +9,8 @@ import Field from 'common/Field';
 import { convertToVariableName } from 'utils';
 import { FieldInstance } from 'utils/types';
 
+import { useDocument } from '../DocumentContext';
+
 export interface IFieldField {
   name: string;
   value: string;
@@ -38,6 +40,8 @@ const PlaceholderBlock = ({
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
+
+  const { editorMode } = useDocument();
 
   const { register, handleSubmit } = useForm();
   const mobileMenuDrawer = useDrawer();
@@ -89,9 +93,11 @@ const PlaceholderBlock = ({
             <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
               Fields
             </Text>
-            <Box onClick={openDrawer}>
-              <EditIcon width={18} />
-            </Box>
+            {editorMode !== 'view' && (
+              <Box onClick={openDrawer}>
+                <EditIcon width={18} />
+              </Box>
+            )}
           </Flex>
 
           <Box
