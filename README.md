@@ -20,16 +20,6 @@
 
 **Wraft** is a comprehensive open-source platform for managing contracts and documents through their lifecycle. It helps users simplify, streamline, and automate document creation, processing, approval, and signing.
 
-## ✨ Features
-
-- **Document Creation**: Generate documents quickly and easily using customizable templates.
-- **High-Volume Automation**: Support for high-volume document creation via automated pipelines.
-- **Secure E-Signatures(WIP)**: Get documents signed securely online, compliant with international standards.
-- **Customizable Workflows**: Design approval workflows that fit your organization’s processes.
-- **Compliance and Security**: Built with strong security features and compliance in mind.
-
----
-
 ## 🌟 About Wraft
 
 Wraft focuses on efficiency, security, and flexibility, making it ideal for businesses and individuals who want to modernize their document-related processes. Whether you're managing contracts, agreements, or any official documentation, Wraft provides a seamless solution from start to finish.

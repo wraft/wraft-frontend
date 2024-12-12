@@ -28,6 +28,7 @@ export const Label = styled.div`
   display: flex;
   align-items: flex-start;
   gap: sm;
+  margin-bottom: 4px;
 `;
 
 export const LabelWithHint = styled.div`
