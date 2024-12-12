@@ -46,7 +46,7 @@ const listMenu = [
     name: 'Import',
     logo: <FileArrowUp size={50} weight="thin" />,
     path: '/manage/import',
-    desc: 'Manage Pipelines',
+    desc: 'Import Structs',
   },
 ];
 

@@ -2,10 +2,13 @@ import React, { useCallback, useEffect } from 'react';
 import { TickIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
+import { Button, Flex, Input, useThemeUI } from 'theme-ui';
+import { SystemProps, x } from '@xstyled/emotion';
 
 import { ApproveTick, CloudUploadIcon } from 'components/Icons';
 import ProgressBar from 'components/common/ProgressBar';
+import { Box } from 'common/Box';
+import { Text } from 'common/Text';
 import { Asset } from 'utils/types';
 
 type DropzoneProps = {
@@ -62,27 +65,19 @@ const Dropzone = ({
   register('file');
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        border: '1px dashed',
-        borderColor: 'neutral.200',
-        borderRadius: '4px',
-      }}>
+    <Box border="1px dashed" borderColor="neutral.200" borderRadius="4px">
       <Box
         {...getRootProps()}
-        sx={{
-          width: '100%',
-          bg: isDragActive ? 'grayA35' : 'white',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: '4px',
-          height: '100%',
-          py: '18px',
-          px: 3,
-        }}>
+        w="100%"
+        bg={isDragActive ? 'grayA35' : 'white'}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        borderRadius="4px"
+        h="100%"
+        py="18px"
+        px={3}>
         <Input
           type="file"
           name="file"
@@ -91,43 +86,37 @@ const Dropzone = ({
         />
         {!assets && (
           <Box
-            sx={{
-              height: '52px',
-              width: '52px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '4px',
-            }}>
+            h="52px"
+            w="52px"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            borderRadius="4px">
             <CloudUploadIcon width={32} height={32} />
           </Box>
         )}
         {assets && assets.length > 0 ? (
           <Box
-            sx={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              borderRadius: '6px',
-              justifyContent: 'space-between',
-            }}>
+            w="100%"
+            display="flex"
+            alignItems="center"
+            borderRadius="6px"
+            justifyContent="space-between">
             <Flex
               sx={{
                 alignItems: 'center',
                 pl: 2,
               }}>
-              <Text variant="pM">{assets[assets.length - 1].name}</Text>
+              <Text>{assets[assets.length - 1].name}</Text>
               <Box
-                sx={{
-                  height: '16px',
-                  width: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bg: 'green.700',
-                  borderRadius: '44px',
-                  ml: 2,
-                }}>
+                bg="green.700"
+                h="16px"
+                w="16px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                borderRadius="44px"
+                ml={2}>
                 <TickIcon
                   color={themeui?.theme?.colors?.white as string}
                   height={12}
@@ -162,26 +151,25 @@ const Dropzone = ({
                   alignItems: 'center',
                   mt: '12px',
                 }}>
-                <Text variant="pM" sx={{ mb: 1 }}>
-                  Drag & drop or upload files
+                <Text fontSize="sm" fontWeight="bold" mb={0} color="gray.1100">
+                  Drag & drop or upload valid <a href="#">Wraft</a> files
                 </Text>
-                <Text variant="capM">{types || 'All'} - Max file size 1MB</Text>
+                <Text fontSize="xs" mt={1} color="gray.900">
+                  A valid structure file is a zip contains a valid wraft.json
+                  {/* {types || 'All'} - Max file size 1MB */}
+                </Text>
               </Flex>
             )}
             {files && files[0] && !noChange && (
               <Flex sx={{ alignItems: 'center' }}>
-                <Text variant="pM" sx={{ flexShrink: 0 }}>
-                  {files[0].name}
-                </Text>
+                <Text flexShrink={0}>{files[0].name}</Text>
                 {assets && assets.length > 0 && (
                   <Box
-                    sx={{
-                      color: 'green.700',
-                      ml: '12px',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      display: 'flex',
-                    }}>
+                    color="green.700"
+                    ml="12px"
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex">
                     <ApproveTick />
                   </Box>
                 )}
@@ -194,7 +182,7 @@ const Dropzone = ({
             <ProgressBar progress={progress} />
           </Box>
         ) : (
-          <div />
+          <Box />
         )}
       </Box>
     </Box>
