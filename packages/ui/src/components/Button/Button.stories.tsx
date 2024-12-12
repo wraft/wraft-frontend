@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "@wraft/ui";
+
+import { Button } from ".";
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Compontent/Button",
+  title: "Forms/Button",
   argTypes: {
     variant: {
       control: "select",

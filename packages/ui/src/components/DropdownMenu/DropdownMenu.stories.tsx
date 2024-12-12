@@ -1,10 +1,10 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from "@storybook/react";
 
-import { DropdownMenu } from '.';
+import { DropdownMenu } from ".";
 
 const meta: Meta<any> = {
   component: DropdownMenu,
-  title: 'Compontent/DropdownMenu',
+  title: "Navigation/DropdownMenu",
 };
 // export default {
 // 	title: 'Components/DropdownMenu',

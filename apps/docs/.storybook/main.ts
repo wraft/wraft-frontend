@@ -1,5 +1,5 @@
-import type { StorybookConfig } from '@storybook/react-vite';
-import react from '@vitejs/plugin-react';
+import type { StorybookConfig } from "@storybook/react-vite";
+import react from "@vitejs/plugin-react";
 
 import { dirname, join, resolve } from "path";
 
@@ -11,8 +11,7 @@ const config: StorybookConfig = {
     "../stories/**/*.mdx",
     "../stories/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../../packages/ui/src/**/*.mdx",
-    "../../../packages/ui/src/**/*.stories.@(js|jsx|ts|tsx)",
+    "../../../packages/ui/src/components/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-links",
@@ -29,8 +28,7 @@ const config: StorybookConfig = {
   ],
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
-    options: {
-    }
+    options: {},
   },
   core: {
     disableTelemetry: true,
@@ -48,6 +46,10 @@ const config: StorybookConfig = {
           {
             find: "ui",
             replacement: resolve(__dirname, "../../../packages/ui/"),
+          },
+          {
+            find: "@",
+            replacement: resolve(__dirname, "../../../packages/ui/src"),
           },
         ],
       },
