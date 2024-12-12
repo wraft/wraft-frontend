@@ -144,13 +144,14 @@ interface TemplatePreviewProps {
   assets?: any;
   onValidate?: any;
   actionState: ActionState;
+  onImport?: any;
 }
 const TemplatePreview = ({
   assets,
   onValidate,
   actionState,
+  onImport,
 }: TemplatePreviewProps) => {
-  // const [isImporting, setIsImporting] = useState<boolean>(false);
   const [isVerified, setIsVerified] = useState<boolean>(false);
 
   /**
@@ -169,7 +170,8 @@ const TemplatePreview = ({
       borderColor="gray.400"
       overflow="hidden">
       <Box
-        px={4}
+        px={3}
+        mb={3}
         // pt={2}
         display="flex"
         borderBottomStyle="solid"
@@ -179,8 +181,11 @@ const TemplatePreview = ({
           <FileArchive size={16} weight="thin" />
           <Text>{assets[0]?.name}</Text>
         </Box>
-        <Box ml="auto" mr={1} mt={2} pt={1}>
-          <Button variant="primary" onClick={checkImport}>
+        <Box display="flex" gap={2} ml="auto" mr={1} mt={2} pt={1}>
+          <Button variant="secondary" onClick={checkImport}>
+            {actionState === 'VALIDATING' ? 'Validating...' : 'Validate'}
+          </Button>
+          <Button variant="secondary" onClick={onImport}>
             {(actionState === 'IMPORTING' || actionState === 'VALIDATING') && (
               <Spinner />
             )}
@@ -190,52 +195,94 @@ const TemplatePreview = ({
                 ? 'Validating...'
                 : isVerified
                   ? 'Import'
-                  : 'Verify'}
+                  : 'Import'}
           </Button>
         </Box>
       </Box>
       <Box
+        display="flex"
+        pb={4}
         border="solid 0"
         borderTopWidth={1}
         borderTopColor="gray.300"
-        pb={4}
         px={4}
-        pt={1}
+        py={3}
         bg="white">
-        <Box>
-          <Box px={0} pb={1}>
-            <Text fontSize="sm" fontWeight={500}>
-              Imported Structures
-            </Text>
+        <Box w={'40%'} position="relative">
+          <Box
+            bg="white"
+            mx={4}
+            ml={0}
+            mt={3}
+            // pb="141.4%"
+            h="80%"
+            mb={4}
+            pb={7}
+            // w="100%"
+            position="relative"
+            border="1px solid"
+            borderColor="gray.300"
+            borderRadius={2}
+            overflow="hidden"
+            boxShadow="0 1px 3px rgba(0,0,0,0.1)">
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              bg="gray.50"
+            />
           </Box>
-          <Box>
-            <Block
-              icon={<Article />}
-              title={assets[0]?.wraft_json?.data_template?.title}
-              desc="Template"
-            />
-            <Block
-              icon={<TreeStructure />}
-              title={assets[0]?.wraft_json?.flow?.name}
-              desc="Flow"
-            />
-            <Block
-              icon={<Layout />}
-              title={assets[0]?.wraft_json?.layout?.name}
-              desc="Layout"
-            />
-            <Accordion
-              title={assets[0]?.wraft_json?.variant?.name}
-              icon={<Blueprint />}
-              desc="Variant">
-              <VariantBlock assets={assets} />
-            </Accordion>
-            <Accordion
-              title={assets[0]?.wraft_json?.theme?.name}
-              icon={<Blueprint />}
-              desc="Theme">
-              <ThemeBlock assets={assets} />
-            </Accordion>
+        </Box>
+        <Box flex={1}>
+          <Box pb={6}>
+            <Box>
+              <Box px={0} pb={1}>
+                <Text fontSize="sm" fontWeight={500}>
+                  Imported Structures
+                </Text>
+              </Box>
+              <Box>
+                <Block
+                  icon={<Article />}
+                  title={assets[0]?.wraft_json?.data_template?.title}
+                  desc="Template"
+                />
+                <Block
+                  icon={<TreeStructure />}
+                  title={assets[0]?.wraft_json?.flow?.name}
+                  desc="Flow"
+                />
+                <Block
+                  icon={<Layout />}
+                  title={assets[0]?.wraft_json?.layout?.name}
+                  desc="Layout"
+                />
+                <Accordion
+                  header={
+                    <Block
+                      icon={<Blueprint />}
+                      title={assets[0]?.wraft_json?.variant?.name}
+                      desc="Variant"
+                      clean={true}
+                    />
+                  }>
+                  <VariantBlock assets={assets} />
+                </Accordion>
+                <Accordion
+                  header={
+                    <Block
+                      icon={<Blueprint />}
+                      title={assets[0]?.wraft_json?.theme?.name}
+                      desc="Theme"
+                      clean={true}
+                    />
+                  }>
+                  <ThemeBlock assets={assets} />
+                </Accordion>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

@@ -192,8 +192,8 @@ function ImporterApp() {
         if (!res?.missing_items?.length) {
           toast.success('Validated, importing now...');
 
-          // if validation is no errors
-          importNow(id);
+          // // if validation is no errors
+          // importNow(id);
 
           setActionState({
             state: ActionState.COMPLETED,
@@ -271,6 +271,7 @@ function ImporterApp() {
                   assets={assets}
                   onValidate={validateNow}
                   actionState={actionState.state}
+                  onImport={importNow}
                 />
                 {renderErrors(errors)}
               </Box>
@@ -278,24 +279,20 @@ function ImporterApp() {
 
             {currentStep === 3 && (
               <Box>
-                <Box display="flex" bg="green.300" px={3} py={2} mb={3}>
-                  <Box pt={2}>
-                    <Checks size={20} />
-                  </Box>
-                  <Box px={3} py={2}>
+                <Alert>
+                  <Box px={0} py={0}>
                     <x.h4 m={0} fontSize="sm">
-                      Import Succesful
+                      Succesfully Imported!
                     </x.h4>
                     <Text m={0} fontSize="sm" color="green.1200">
                       {imported?.message}
                     </Text>
+                    {/* <Box display="flex" px={0} py={2} gap={2}>
+                      <Button variant="secondary">Create Document</Button>
+                      <Button variant="secondary">View Imported</Button>
+                    </Box> */}
                   </Box>
-                  <Box px={3} py={2} ml="auto">
-                    <Button>Create Document</Button>
-                  </Box>
-                </Box>
-
-                <ImportedList items={imported?.items} />
+                </Alert>
               </Box>
             )}
           </Box>

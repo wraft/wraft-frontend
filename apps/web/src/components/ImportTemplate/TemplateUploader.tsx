@@ -3,13 +3,14 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Alert, Box } from 'theme-ui';
+// import { Alert, Box } from 'theme-ui';
 import { x } from '@xstyled/emotion';
 
+import { Box } from 'common/Box';
 import { postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
-// import { Box } from './Box';
+import { Alert } from './Alert';
 import FileDropzone from './FileDropzone';
 
 type FormValues = {
@@ -36,17 +37,9 @@ interface ErrorComponentProps {
  */
 const ErrorComponent = ({ fileError }: ErrorComponentProps) => {
   if (typeof fileError === 'string') {
-    return (
-      <Alert sx={{ color: 'red.700', bg: 'red.100', fontSize: 'sm', mt: 3 }}>
-        {fileError}
-      </Alert>
-    );
+    return <Alert variant="error">{fileError}</Alert>;
   }
-  return (
-    <Alert sx={{ color: 'red.700', bg: 'red.100', fontSize: 'sm', mt: 3 }}>
-      Uploaded file is not a valid zip file.
-    </Alert>
-  );
+  return <Alert variant="error">Uploaded file is not a valid zip file.</Alert>;
 };
 
 // const HandleTemplate = () => {
@@ -120,8 +113,6 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
    */
 
   const onDropped = (files: File[]) => {
-    console.log('files', files);
-
     const formData = new FormData();
     const f: File = files[0];
     formData.append('zip_file', files[0]);
@@ -177,8 +168,6 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
             noChange={false}
           />
         </x.div>
-
-        {/* {console.log(fileError)} */}
         {assets && assets.length > 0 && (
           <ErrorComponent fileError={fileError} />
         )}

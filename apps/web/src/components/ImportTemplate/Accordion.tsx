@@ -1,13 +1,13 @@
 import styled, { x } from '@xstyled/emotion';
 import { CaretCircleDown, CaretDown } from '@phosphor-icons/react';
 
+import { Box } from 'common/Box';
+
 import Block from './Block';
 
 interface AccordionProps {
-  title: string;
+  header: React.ReactNode;
   children?: any;
-  icon?: React.ReactNode;
-  desc?: string;
 }
 
 const Frame = styled.divBox`
@@ -28,17 +28,17 @@ const Header = styled.divBox`
   border-color: gray.400;
 `;
 
-const Accordion = ({ title, children, icon, desc }: AccordionProps) => (
+const Accordion = ({ header, children }: AccordionProps) => (
   <Frame as="details">
     <Header display="flex" as="summary" borderBottom={0}>
-      <Block icon={icon} title={title} desc={desc} clean={true} />
-      <x.div mr={2} mt={2}>
+      {header}
+      <Box mr={2} mt={2}>
         <CaretDown size={16} />
-      </x.div>
+      </Box>
     </Header>
-    <x.div border="solid 1px" borderColor="gray.400" borderBottom={0}>
+    <Box border="solid 1px" borderColor="gray.400" borderBottom={0}>
       {children}
-    </x.div>
+    </Box>
   </Frame>
 );
 

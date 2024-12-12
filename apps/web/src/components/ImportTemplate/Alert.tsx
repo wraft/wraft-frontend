@@ -1,6 +1,7 @@
-/** @jsxImportSource theme-ui */
-import { Alert as MessageAlert } from '@theme-ui/components';
-import { Text } from '@theme-ui/components';
+import { Checks, Warning } from '@phosphor-icons/react';
+
+import { Box } from 'common/Box';
+import { Text } from 'common/Text';
 
 interface MessageAlertProps {
   children?: React.ReactNode;
@@ -13,10 +14,10 @@ export const Alert: React.FC<MessageAlertProps> = ({
 }) => {
   const colors = {
     error: {
-      bg: 'red.300',
-      color: 'red.400',
-      borderColor: 'red.500',
-      textColor: 'red.900',
+      bg: 'red.100',
+      color: 'red.800',
+      borderColor: 'red.200',
+      textColor: 'red.1000',
     },
     success: {
       bg: 'green.300',
@@ -35,24 +36,28 @@ export const Alert: React.FC<MessageAlertProps> = ({
   const colorSet = colors[variant];
 
   return (
-    <MessageAlert
-      sx={{
-        my: 3,
-        bg: colorSet.bg,
-        color: colorSet.color,
-        border: '1px solid',
-        borderColor: colorSet.borderColor,
-      }}>
+    <Box
+      display="flex"
+      my={3}
+      px={3}
+      backgroundColor={colorSet.bg}
+      color={colorSet.color}
+      borderWidth="1px"
+      borderStyle="solid"
+      borderRadius="3px"
+      borderColor={colorSet.borderColor}>
       <Text
-        variant="small"
-        sx={{
-          fontSize: 'sm',
-          fontWeight: 'body',
-          color: colorSet.textColor,
-          py: 1,
-        }}>
+        display="flex"
+        fontSize="sm"
+        fontWeight="body"
+        color={colorSet.textColor}
+        gap={2}
+        py={1}>
+        {variant === 'alert' && <Warning size={18} />}
+        {variant === 'error' && <Warning size={18} />}
+        {variant === 'success' && <Checks size={18} />}
         {children}
       </Text>
-    </MessageAlert>
+    </Box>
   );
 };
