@@ -9,7 +9,7 @@ interface ProfileCard {
 export const AvatarCard = ({
   name,
   image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
-  time,
+  // time,
 }: ProfileCard) => {
   const finalImage =
     image == '/uploads/default.jpg'
