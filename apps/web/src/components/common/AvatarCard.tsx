@@ -9,7 +9,7 @@ interface ProfileCard {
 export const AvatarCard = ({
   name,
   image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
-  time,
+  // time,
 }: ProfileCard) => {
   const finalImage =
     image == '/uploads/default.jpg'
@@ -33,7 +33,7 @@ export const AvatarCard = ({
       <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
         {name}
       </Text>
-      <Box>{time}</Box>
+      {/* <Box>{time}</Box> */}
     </Flex>
   );
 };

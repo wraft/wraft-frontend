@@ -93,7 +93,7 @@ export const InfoSection = () => {
   };
 
   return (
-    <Box sx={{ bg: 'neutral.100', mb: 6, pb: 0 }}>
+    <Box sx={{ bg: 'gray.100', mb: 6, pb: 0 }}>
       <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
         <Text
           as="h3"

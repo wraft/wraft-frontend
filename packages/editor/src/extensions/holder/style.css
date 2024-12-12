@@ -1,7 +1,10 @@
 .holder {
-  background-color: #ffe889;
-  color: #000;
+  background-color: var(--theme-ui-colors-green-300);
+  color: var(--theme-ui-colors-green-1100);
   padding: 2px;
+  border-radius: 3px;
+  font-weight: inherit;
+  border: solid 1px var(--theme-ui-colors-green-400);
 }
 
 .no-holder {

@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import styled from "@emotion/styled";
+
 import { useEditor } from "prosekit/react";
+import styled, { x } from "@xstyled/emotion";
 import {
   ArrowCounterClockwise,
   ArrowClockwise,
@@ -19,25 +20,31 @@ import {
 } from "@phosphor-icons/react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
-import { ImageUploadPopover } from "./image-upload-popover";
+// import { ImageUploadPopover } from "./image-upload-popover";
 
-const ToolbarContainer = styled.div`
+const ToolbarContainer = styled.divBox`
   z-index: 2;
   box-sizing: border-box;
-  border-color: #e2e8f0;
   border-style: solid;
   border-width: 0 0 1px;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  padding: 0.5rem;
+  gap: 1;
+  px: 2;
   align-items: center;
 `;
 
 export default function Toolbar() {
   const editor = useEditor<EditorExtension>({ update: true });
   return (
-    <ToolbarContainer>
+    <ToolbarContainer
+      display="flex"
+      bg="gray.200"
+      color="gray.1100"
+      px={2}
+      py={1}
+      borderBottomColor="gray.500"
+    >
       <Button
         pressed={false}
         disabled={!editor.commands.undo.canExec()}

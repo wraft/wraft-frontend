@@ -9,7 +9,7 @@ import {
   TabProvider,
   useTabStore,
 } from '@ariakit/react';
-import { Play, PencilSimple } from '@phosphor-icons/react';
+import { Play, PencilSimple, Eyes, Eye } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 // import { LiveEditor } from '@wraft/editor';
 import { EditorView } from 'prosemirror-view';
@@ -239,6 +239,8 @@ export const DocumentContentBlock = () => {
         <Box
           sx={{
             mb: 0,
+            px: 2,
+            py: 2,
             '.tabPanel': { border: 0, bg: 'gray.400' },
             '.tabPanel button': {
               border: 0,
@@ -249,7 +251,7 @@ export const DocumentContentBlock = () => {
             },
             '.tabGroup': {
               bg: 'gray.a300',
-              px: '6px',
+              px: 2,
               py: '6px',
               display: 'flex',
               borderRadius: '6px',
@@ -275,30 +277,33 @@ export const DocumentContentBlock = () => {
                   <StepBlock title="Document" desc="Sign and Manage" />
                 </Tab>
               </TabList>
-              <Flex
-                sx={{
-                  ml: 'auto',
-                  gap: 2,
-                  alignItems: 'center',
-                  mr: 3,
-                }}>
-                {activeId == 'view' && !isEditable && (
+              {!isEditable && (
+                <Flex
+                  sx={{
+                    ml: 'auto',
+                    gap: 2,
+                    alignItems: 'center',
+                    mr: 3,
+                  }}>
                   <Button
                     variant="secondary"
                     loading={isBuilding}
                     onClick={() => doBuild()}>
                     <Play size={14} className="action" /> Generate
                   </Button>
-                )}
-                {activeId == 'edit' && !isEditable && (
                   <Button
-                    variant="primary"
+                    variant="secondary"
                     onClick={() => onSwitchEditorMode(editorMode)}>
-                    <PencilSimple size={14} className="icon" />{' '}
-                    {editorMode === 'edit' ? 'View Mode' : 'Edit Mode'}
+                    {' '}
+                    {editorMode === 'edit' ? (
+                      <Eye size={14} className="icon" />
+                    ) : (
+                      <PencilSimple size={14} className="icon" />
+                    )}
+                    {editorMode === 'edit' ? 'View' : 'Edit'}
                   </Button>
-                )}
-              </Flex>
+                </Flex>
+              )}
             </Flex>
 
             <TabPanel

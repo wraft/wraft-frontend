@@ -224,15 +224,18 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
           sx={{
             alignItems: 'center',
             gap: '2px',
-            bg: 'orange.100',
+            bg: 'orange.50',
             borderRadius: '3rem',
             py: '2px',
             px: 2,
+            svg: {
+              fill: 'orange.600',
+            },
           }}>
           <Text
             variant="labelSmall"
             sx={{
-              color: '#FF8C02',
+              color: 'orange.600',
               mr: '0px',
               p: 0,
               fontWeight: '600',
@@ -240,7 +243,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
             Draft
           </Text>
 
-          <Triangle size={10} weight="bold" color="#FF8C02" />
+          <Triangle size={8} weight="bold" color="#FF8C02" />
         </Flex>
       )}
     </Flex>

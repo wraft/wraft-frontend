@@ -117,7 +117,7 @@ const Sidebar = (props: any) => {
                             : rawColors?.gray?.[1200],
                           fontWeight: 500,
                           fontSize: 'base',
-                          lineHeight: '18.8px',
+                          lineHeight: 'heading',
                           letterSpacing: '-0.25px',
                         }}>
                         {name}
