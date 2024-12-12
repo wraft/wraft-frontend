@@ -1,7 +1,6 @@
 import React from "react";
 
-// import { IconGroupWrapper, IconWrapper } from '@welcome-ui/field'
-// import { ClearButton } from '@welcome-ui/clear-button'
+import { IconWrapper } from "../Field/styles";
 
 import * as S from "./styles";
 
@@ -51,6 +50,10 @@ export const InputText = forwardRef<"input", InputTextProps>(
     },
     ref,
   ) => {
+    const hasClearButtonAndRightIcon = isClearable && iconPlacement === "right";
+    const hasIcon = icon && iconPlacement;
+    const iconSize = FIELD_ICON_SIZE[size];
+
     return (
       <S.Wrapper>
         <S.InputText
@@ -72,11 +75,11 @@ export const InputText = forwardRef<"input", InputTextProps>(
           variant={variant}
           {...rest}
         />
-        {/* {hasIcon && !hasClearButtonAndRightIcon && (
+        {hasIcon && !hasClearButtonAndRightIcon && (
           <IconWrapper iconPlacement={iconPlacement} size={iconSize}>
             {React.cloneElement(icon, { ...icon.props, size: iconSize })}
           </IconWrapper>
-        )} */}
+        )}
         {/* {isClearable && (
           <IconGroupWrapper size={iconSize}>
             {value && <ClearButton onClick={handleReset} />}
