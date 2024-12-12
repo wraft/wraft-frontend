@@ -16,8 +16,8 @@
     "icons:create": "npx @svgr/cli --typescript --index-template svgr-index-template.js -d ./src/icons ./rawIcon --config-file ./svgr-config.json --template ./svgr-template.js"
   },
   "devDependencies": {
-    "@types/react": "^18.2.46",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^18.3.9",
+    "@types/react-dom": "^18.3.0",
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
     "eslint": "^8.56.0",
