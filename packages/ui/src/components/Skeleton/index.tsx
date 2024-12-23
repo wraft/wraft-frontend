@@ -1,14 +1,14 @@
-import styled from '@xstyled/emotion';
+import styled from "@xstyled/emotion";
 
-interface SkeletonProps {
+export interface SkeletonProps {
   width?: string;
   height: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ width = '100%', height }) => {
-  const SkeletonWrapper = styled('div')`
+const Skeleton: React.FC<SkeletonProps> = ({ width = "100%", height }) => {
+  const SkeletonWrapper = styled("div")`
     width: ${width};
-    height: ${height || '4px'};
+    height: ${height || "4px"};
     border-radius;
     background-color: #E4E9EF;
     animation: skloading 1.5s infinite ease-in-out;
