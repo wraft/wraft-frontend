@@ -6,13 +6,13 @@ import { Component } from "react";
 import { Button } from "../Button";
 
 class ErrorBoundary extends Component<
-  { children: React.ReactNode; message?: string },
+  { children: React.ReactNode; message?: string }, // Include message here
   { error: Error | null; errorInfo: ErrorInfo | null }
 > {
   constructor(
     props:
-      | { children: React.ReactNode }
-      | Readonly<{ children: React.ReactNode }>,
+      | { children: React.ReactNode; message?: string } // Also add message here
+      | Readonly<{ children: React.ReactNode; message?: string }>, // Same here
   ) {
     super(props);
     this.state = { error: null, errorInfo: null };
@@ -21,7 +21,6 @@ class ErrorBoundary extends Component<
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Catch errors in any components below and re-render with error message
     this.setState({ error, errorInfo });
-    // You can also log error messages to an error reporting service here
   }
 
   handleBack = () => {
@@ -50,9 +49,6 @@ class ErrorBoundary extends Component<
         >
           <SomethingWentIcon width={"300px"} height={"300px"} />
           <x.h2>{this.props.message || "Something went wrong."}</x.h2>
-          {/* <details style={{ whiteSpace: "pre-wrap" }}>
-            {this.state.error && this.state.error.toString()}
-          </details> */}
           <Button variant="primary" onClick={this.handleBack}>
             Back
           </Button>
