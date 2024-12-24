@@ -23,38 +23,49 @@ const meta: Meta<typeof Spinner> = {
 export default meta;
 type Story = StoryObj<typeof Spinner>;
 
-// Basic spinner stories
+// Basic spinner variations using args
 export const Default: Story = {
   args: {
     size: 12,
   },
 };
 
-// Button with spinner examples
-export const ButtonLoading: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      <Button variant="primary" loading>
-        Loading...
-      </Button>
-
-      <Button variant="primary">Not Loading</Button>
-    </div>
-  ),
+export const Large: Story = {
+  args: {
+    size: 24,
+  },
 };
 
-// Interactive loading state example
-export const InteractiveButtonLoading: Story = {
-  render: () => {
-    return (
-      <div style={{ display: "flex", gap: "20px" }}>
-        <Button variant="primary" loading>
-          Submit
-        </Button>
-        <Button variant="secondary" loading>
-          Cancel
-        </Button>
-      </div>
-    );
+export const Small: Story = {
+  args: {
+    size: 8,
   },
+};
+
+// Required render for multiple components display
+export const SpinnerSizes: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+        <Spinner size={8} />
+        <Spinner size={12} />
+        <Spinner size={24} />
+        <Spinner size={36} />
+      </div>
+    ),
+  ],
+};
+
+// Example with button integrations
+export const ButtonWithSpinner: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <Button variant="primary" loading>
+          Loading Button
+        </Button>
+        <Button variant="primary">Normal Button</Button>
+      </div>
+    ),
+  ],
 };
