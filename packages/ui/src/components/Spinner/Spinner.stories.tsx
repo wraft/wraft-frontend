@@ -5,10 +5,17 @@ import { Button } from "../Button";
 import { Spinner } from "./index";
 
 const meta: Meta<typeof Spinner> = {
-  title: "Components/Spinner",
+  title: "Layout/Spinner",
   component: Spinner,
   parameters: {
     layout: "centered",
+    backgrounds: {
+      default: "dark",
+      values: [
+        { name: "dark", value: "#333333" },
+        { name: "light", value: "#ffffff" },
+      ],
+    },
   },
   tags: ["autodocs"],
   argTypes: {
@@ -23,48 +30,110 @@ const meta: Meta<typeof Spinner> = {
 export default meta;
 type Story = StoryObj<typeof Spinner>;
 
-// Basic spinner variations using args
 export const Default: Story = {
-  args: {
-    size: 12,
-  },
-};
-
-export const Large: Story = {
-  args: {
-    size: 24,
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: 8,
-  },
-};
-
-// Required render for multiple components display
-export const SpinnerSizes: Story = {
   decorators: [
     (Story) => (
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <Spinner size={8} />
+      <div style={{ padding: "20px" }}>
         <Spinner size={12} />
-        <Spinner size={24} />
-        <Spinner size={36} />
       </div>
     ),
   ],
 };
 
-// Example with button integrations
+export const Large: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ padding: "20px" }}>
+        <Spinner size={24} />
+      </div>
+    ),
+  ],
+};
+
+export const Small: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ padding: "20px" }}>
+        <Spinner size={8} />
+      </div>
+    ),
+  ],
+};
+
+export const SpinnerSizes: Story = {
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          display: "flex",
+          gap: "20px",
+          alignItems: "center",
+          padding: "20px",
+          background: "#333333",
+          borderRadius: "8px",
+        }}
+      >
+        <div>
+          <Spinner size={8} />
+          <div style={{ color: "white", fontSize: "12px", marginTop: "8px" }}>
+            8px
+          </div>
+        </div>
+        <div>
+          <Spinner size={12} />
+          <div style={{ color: "white", fontSize: "12px", marginTop: "8px" }}>
+            12px
+          </div>
+        </div>
+        <div>
+          <Spinner size={24} />
+          <div style={{ color: "white", fontSize: "12px", marginTop: "8px" }}>
+            24px
+          </div>
+        </div>
+        <div>
+          <Spinner size={36} />
+          <div style={{ color: "white", fontSize: "12px", marginTop: "8px" }}>
+            36px
+          </div>
+        </div>
+      </div>
+    ),
+  ],
+};
+
 export const ButtonWithSpinner: Story = {
   decorators: [
     (Story) => (
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          padding: "20px",
+        }}
+      >
         <Button variant="primary" loading>
           Loading Button
         </Button>
-        <Button variant="primary">Normal Button</Button>
+      </div>
+    ),
+  ],
+};
+
+export const CustomBackground: Story = {
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          padding: "20px",
+          background: "linear-gradient(45deg, #FF6B6B, #4ECDC4)",
+          borderRadius: "8px",
+          display: "flex",
+          gap: "20px",
+        }}
+      >
+        <Spinner size={24} />
       </div>
     ),
   ],
