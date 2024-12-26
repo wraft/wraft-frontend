@@ -3,12 +3,10 @@ import React from "react";
 
 import ErrorBoundary from ".";
 
-// Mock component to simulate an error
 const ErrorThrowingComponent = () => {
   throw new Error("This is a test error.");
 };
 
-// Mock children to show normal rendering
 const NormalComponent = () => <div>Everything is working fine!</div>;
 
 const meta: Meta<typeof ErrorBoundary> = {
