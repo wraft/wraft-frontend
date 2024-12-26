@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import Pagination, { IProp } from "./index";
 
 export default {
-  title: "Components/Pagination",
+  title: "Navigation/Pagination",
   component: Pagination,
   argTypes: {
     onPageChange: { action: "pageChanged" },
@@ -30,7 +30,6 @@ const Template: StoryFn<IProp> = (args) => {
   );
 };
 
-// Default Pagination
 export const Default = Template.bind({});
 Default.args = {
   totalPage: 10,
@@ -42,7 +41,6 @@ Default.args = {
   numberMarginPagesDisplayed: 2,
 };
 
-// Advanced Pagination
 export const Advanced = Template.bind({});
 Advanced.args = {
   type: "advanced",
@@ -55,7 +53,6 @@ Advanced.args = {
   numberMarginPagesDisplayed: 3,
 };
 
-// Simple Pagination
 export const Simple = Template.bind({});
 Simple.args = {
   type: "simple",
@@ -68,7 +65,6 @@ Simple.args = {
   numberMarginPagesDisplayed: 1,
 };
 
-// With Page Size Selector
 export const WithPageSizeSelector = Template.bind({});
 WithPageSizeSelector.args = {
   totalPage: 10,
@@ -82,7 +78,6 @@ WithPageSizeSelector.args = {
   pageSizeLabel: "Items per page",
 };
 
-// Edge Case: Single Page
 export const SinglePage = Template.bind({});
 SinglePage.args = {
   totalPage: 1,
@@ -94,7 +89,6 @@ SinglePage.args = {
   numberMarginPagesDisplayed: 2,
 };
 
-// No Pagination (Edge Case)
 export const NoPagination = Template.bind({});
 NoPagination.args = {
   totalPage: 0,
