@@ -2,6 +2,8 @@
 import * as Ariakit from "@ariakit/react";
 import { forwardRef } from "react";
 
+import { Button } from "../Button";
+
 import { Header } from "./Header";
 import * as S from "./styles";
 
@@ -31,14 +33,13 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
       hideOnInteractOutside = true,
       open,
       size = "md",
-      onConfirm, // <-- Destructure onConfirm
+      onConfirm,
       ...rest
     },
     ref,
   ) => {
     const dialog = Ariakit.useDialogStore({ animated: true, open });
 
-    // Size handling for the modal
     const modalSize = {
       xs: "200px",
       sm: "300px",
@@ -53,7 +54,7 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
         backdrop={
           backdrop && (
             <S.Backdrop
-              backdrop={backdrop}
+              isVisible={backdrop}
               hideOnInteractOutside={hideOnInteractOutside}
             />
           )
@@ -62,17 +63,18 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
         open={open}
         hideOnInteractOutside={hideOnInteractOutside}
         ref={ref}
-        render={<S.Dialog sx={{ width: modalSize }} />}
+        render={<S.Dialog width={modalSize} />}
         {...(rest as Ariakit.DialogProps)}
       >
         {children}
-        {/* If onConfirm is provided, render the Confirm button */}
         {onConfirm && (
           <div
             style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
           >
-            <button onClick={rest.onClose}>Cancel</button>
-            <button onClick={onConfirm}>Confirm</button>
+            <Button variant="secondary" onClick={rest.onClose}>
+              Cancel
+            </Button>
+            <Button onClick={onConfirm}>Confirm</Button>
           </div>
         )}
       </Ariakit.Dialog>
