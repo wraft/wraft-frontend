@@ -1,11 +1,12 @@
-// Modal.stories.tsx
 import { Meta, StoryFn } from "@storybook/react";
 import React, { useState } from "react";
+
+import { Button } from "../Button";
 
 import { Modal } from "./index";
 
 export default {
-  title: "Components/Modal",
+  title: "Overlay/Modal",
   component: Modal,
   argTypes: {
     onClose: { action: "closed" },
@@ -28,12 +29,12 @@ const Template: StoryFn<any> = (args) => {
 
   return (
     <>
-      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+      <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
       <Modal
         {...args}
         open={isOpen}
         onClose={handleClose}
-        onConfirm={handleConfirm} // Pass onConfirm here
+        onConfirm={handleConfirm}
       >
         <div>
           <Modal.Header>Modal Header</Modal.Header>
