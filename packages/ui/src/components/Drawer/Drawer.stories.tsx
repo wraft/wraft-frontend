@@ -1,10 +1,12 @@
 import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 
+import { Button } from "../Button";
+
 import { Drawer, DrawerOptions, useDrawer } from "./index";
 
 export default {
-  title: "Components/Drawer",
+  title: "Overlay/Drawer",
   component: Drawer,
   decorators: [
     (Story) => (
@@ -49,7 +51,6 @@ export default {
   tags: ["autodocs"],
 } as Meta<DrawerOptions>;
 
-// Helper component to handle drawer state
 const DrawerDemo: React.FC<Partial<DrawerOptions>> = ({
   placement = "right",
   withBackdrop = true,
@@ -59,7 +60,9 @@ const DrawerDemo: React.FC<Partial<DrawerOptions>> = ({
 
   return (
     <>
-      <button onClick={dialog.show}>Open Drawer</button>
+      <Button variant="primary" onClick={dialog.show}>
+        Open Drawer
+      </Button>
       <Drawer
         store={dialog}
         placement={placement as DrawerOptions["placement"]}
@@ -70,8 +73,16 @@ const DrawerDemo: React.FC<Partial<DrawerOptions>> = ({
           <Drawer.Title>Drawer Title</Drawer.Title>
           <button onClick={dialog.hide}>✕</button>
         </Drawer.Header>
-        <div className="p-8">
-          <h4 className="mb-4 text-lg font-medium">Drawer Content</h4>
+        <div style={{ padding: "2rem" }}>
+          <h4
+            style={{
+              marginBottom: "1rem",
+              fontSize: "1.125rem",
+              fontWeight: 500,
+            }}
+          >
+            Drawer Content
+          </h4>
           <p>This is the content of the drawer. You can put anything here.</p>
         </div>
       </Drawer>
@@ -86,11 +97,3 @@ export const Default: StoryObj<DrawerOptions> = {
 export const LeftPlacement: StoryObj<DrawerOptions> = {
   render: () => <DrawerDemo placement="left" />,
 };
-
-// export const TopPlacement: StoryObj<DrawerOptions> = {
-//   render: () => <DrawerDemo placement="top" />
-// };
-
-// export const BottomPlacement: StoryObj<DrawerOptions> = {
-//   render: () => <DrawerDemo placement="bottom" />
-// };
