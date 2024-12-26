@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Table from ".";
 
 const meta: Meta<typeof Table> = {
-  title: "Components/Table",
+  title: "Component/Table",
   component: Table,
   parameters: {
     layout: "centered",
@@ -14,7 +14,6 @@ const meta: Meta<typeof Table> = {
 export default meta;
 type Story = StoryObj<typeof Table>;
 
-// Sample data for our stories
 const sampleData = [
   {
     id: 1,
@@ -75,7 +74,6 @@ const columns = [
   },
 ];
 
-// Default story
 export const Default: Story = {
   args: {
     data: sampleData,
@@ -84,7 +82,6 @@ export const Default: Story = {
   },
 };
 
-// Loading state story
 export const Loading: Story = {
   args: {
     ...Default.args,
@@ -93,7 +90,6 @@ export const Loading: Story = {
   },
 };
 
-// Empty state story
 export const Empty: Story = {
   args: {
     ...Default.args,
@@ -102,55 +98,6 @@ export const Empty: Story = {
   },
 };
 
-// Story with expandable rows
-// export const ExpandableRows: Story = {
-//   args: {
-//     ...Default.args,
-//     data: [
-//       {
-//         id: 1,
-//         name: 'Parent 1',
-//         email: 'parent1@example.com',
-//         status: 'Active',
-//         role: 'Admin',
-//         children: [
-//           {
-//             id: 2,
-//             name: 'Child 1.1',
-//             email: 'child1@example.com',
-//             status: 'Active',
-//             role: 'User',
-//           },
-//           {
-//             id: 3,
-//             name: 'Child 1.2',
-//             email: 'child2@example.com',
-//             status: 'Inactive',
-//             role: 'User',
-//           },
-//         ],
-//       },
-//       {
-//         id: 4,
-//         name: 'Parent 2',
-//         email: 'parent2@example.com',
-//         status: 'Active',
-//         role: 'Editor',
-//         children: [
-//           {
-//             id: 5,
-//             name: 'Child 2.1',
-//             email: 'child3@example.com',
-//             status: 'Active',
-//             role: 'User',
-//           },
-//         ],
-//       },
-//     ],
-//   },
-// };
-
-// Story with custom number of skeleton rows
 export const CustomSkeletonRows: Story = {
   args: {
     ...Default.args,
@@ -159,7 +106,6 @@ export const CustomSkeletonRows: Story = {
   },
 };
 
-// Story with sortable columns
 export const SortableColumns: Story = {
   args: {
     ...Default.args,
