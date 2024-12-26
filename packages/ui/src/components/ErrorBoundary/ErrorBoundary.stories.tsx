@@ -12,7 +12,7 @@ const ErrorThrowingComponent = () => {
 const NormalComponent = () => <div>Everything is working fine!</div>;
 
 const meta: Meta<typeof ErrorBoundary> = {
-  title: "Components/ErrorBoundary",
+  title: "Layout/ErrorBoundary",
   component: ErrorBoundary,
   argTypes: {
     message: {
