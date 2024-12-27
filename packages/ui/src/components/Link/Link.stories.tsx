@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { HomeIcon, ArrowRightIcon } from "@wraft/icon";
-import { padding } from "@xstyled/emotion";
 
 import { Link } from "./index";
 
