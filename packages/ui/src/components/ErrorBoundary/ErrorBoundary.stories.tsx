@@ -3,26 +3,35 @@ import React from "react";
 
 import ErrorBoundary from ".";
 
+interface ErrorBoundaryComponentProps {
+  children: React.ReactNode;
+  message?: string;
+}
+
 const ErrorThrowingComponent = () => {
   throw new Error("This is a test error.");
 };
 
 const NormalComponent = () => <div>Everything is working fine!</div>;
 
-const meta: Meta<typeof ErrorBoundary> = {
+const meta: Meta<ErrorBoundaryComponentProps> = {
   title: "Layout/ErrorBoundary",
   component: ErrorBoundary,
+  tags: ["autodocs"],
   argTypes: {
+    children: {
+      control: false,
+    },
     message: {
-      control: "text",
-      defaultValue: "Something went wrong.",
+      control: { type: "text" },
+      description: "Custom error message to display",
     },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ErrorBoundary>;
+type Story = StoryObj<ErrorBoundaryComponentProps>;
 
 export const Default: Story = {
   render: (args) => (
@@ -30,6 +39,9 @@ export const Default: Story = {
       <NormalComponent />
     </ErrorBoundary>
   ),
+  args: {
+    message: "Something went wrong.",
+  },
 };
 
 export const WithError: Story = {
@@ -38,4 +50,7 @@ export const WithError: Story = {
       <ErrorThrowingComponent />
     </ErrorBoundary>
   ),
+  args: {
+    message: "Something went wrong.",
+  },
 };
