@@ -3,11 +3,11 @@ import { th } from "@xstyled/emotion";
 export type Variant = "error" | "focused" | "info" | "success" | "warning";
 
 export const VARIANTS: Record<Variant, string> = {
-  error: "danger-400",
-  focused: "primary-200",
+  error: "red-400",
+  focused: "gray.400",
   info: "info-500",
-  success: "success-400",
-  warning: "warning-400",
+  success: "green.400",
+  warning: "yellow.400",
 };
 
 export const getVariantColor = (variant: Variant): ReturnType<any> => {
