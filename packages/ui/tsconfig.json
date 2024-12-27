@@ -2,6 +2,8 @@
   "extends": "@wraft/typescript-config/react-library.json",
   "compilerOptions": {
     "noImplicitAny": false,
+    "strict": false,
+    // "jsx": "react",
     "paths": {
       "@": ["./src"],
       "@/*": ["./src/*"]

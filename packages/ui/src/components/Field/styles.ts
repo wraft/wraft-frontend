@@ -1,4 +1,4 @@
-import styled, { css, system, th } from "@xstyled/emotion";
+import styled, { css, th } from "@xstyled/emotion";
 
 import { Variant } from "./index";
 
@@ -46,9 +46,18 @@ type IconWrapperProps = {
 export const IconWrapper = styled.div<IconWrapperProps>`
   position: absolute;
   top: 0;
+  left: ${({ iconPlacement, size }) =>
+    iconPlacement === "left"
+      ? th(`defaultFields.iconPlacement.${size}.left`)
+      : "auto"};
+
+  right: ${({ iconPlacement, size }) =>
+    iconPlacement === "right"
+      ? th(`defaultFields.iconPlacement.${size}.right`)
+      : "auto"};
+
   bottom: 0;
   display: flex;
-  inset: 0px 0.75rem 0px auto;
   justify-content: center;
   align-items: center;
   pointer-events: none;
