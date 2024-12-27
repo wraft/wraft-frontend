@@ -97,12 +97,23 @@ export const postAPI = (
   });
 
 /**
- * Load postAPI
+ * Load putAPI
  */
 export const putAPI = (path: string, body: any = {}) =>
   new Promise((resolve, reject) => {
     api
       .put(`/${path}`, body)
+      .then((response: any) => resolve(response.data))
+      .catch((err) => reject(handleApiError(err)));
+  });
+
+/**
+ * Load putAPI
+ */
+export const patchAPI = (path: string, body: any = {}) =>
+  new Promise((resolve, reject) => {
+    api
+      .patch(`/${path}`, body)
       .then((response: any) => resolve(response.data))
       .catch((err) => reject(handleApiError(err)));
   });

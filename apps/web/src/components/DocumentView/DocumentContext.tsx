@@ -8,7 +8,10 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
+import axios, { AxiosInstance } from 'axios';
 import { NodeJSON } from '@wraft/editor';
+export const API_HOST =
+  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
 import { useAuth } from 'contexts/AuthContext';
 import { ContentInstance, IVariantDetail } from 'utils/types/content';
@@ -34,7 +37,8 @@ interface StateState {
   updated_at: string;
 }
 
-type EditorMode = 'view' | 'edit' | 'new';
+type EditorMode = 'view' | 'edit' | 'new' | 'sign';
+type UserMode = 'default' | 'guest';
 
 interface DocumentContextProps {
   cId: string;
@@ -57,6 +61,10 @@ interface DocumentContextProps {
   selectedTemplate: any;
   states: any;
   tabActiveId: string;
+  userMode: string;
+  additionalCollaborator: any;
+  setAdditionalCollaborator: (data: any) => void;
+  setUserMode: (state: UserMode) => void;
   fetchContentDetails: (cid: string) => void;
   setContentBody: (contetn: any) => void;
   setEditorMode: (state: EditorMode) => void;
@@ -64,6 +72,12 @@ interface DocumentContextProps {
   setPageTitle: (data: any) => void;
   setTabActiveId: (state: string) => void;
 }
+
+const createAxiosInstance = (): AxiosInstance => {
+  return axios.create({
+    baseURL: `${API_HOST}/api/v1`, // replace with your actual API host
+  });
+};
 
 export const DocumentContext = createContext<DocumentContextProps>(
   {} as DocumentContextProps,
@@ -76,13 +90,16 @@ export const DocumentProvider = ({
   children: ReactElement;
   mode: EditorMode;
 }) => {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [contentBody, setContentBody] = useState<NodeJSON>();
   const [contents, setContents] = useState<ContentInstance>();
   const [contentType, setContentType] = useState<any>();
   const [editorMode, setEditorMode] = useState<EditorMode>('view');
+  const [userMode, setUserMode] = useState<UserMode>('default');
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
+  const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
   const [flow, setFlow] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [nextState, setNextState] = useState<StateState>();
@@ -91,12 +108,18 @@ export const DocumentProvider = ({
   const [selectedTemplate, setSelectedTemplate] = useState<any>();
   const [states, setStates] = useState<any>();
   const [tabActiveId, setTabActiveId] = useState<any>('edit');
+  const [error, setError] = useState(null);
 
   const newContent = contentStore((state: any) => state.newContents);
   const editorRef = useRef<any>();
   const router = useRouter();
   const { userProfile } = useAuth();
+  const api = createAxiosInstance();
 
+  const { token, type } = router.query;
+
+  console.log('token', token);
+  console.log('token', type);
   const cId: string = router.query.id as string;
 
   useEffect(() => {
@@ -106,10 +129,41 @@ export const DocumentProvider = ({
   }, [mode]);
 
   useEffect(() => {
-    if (cId) {
+    if (type === 'invite' && token) {
+      setUserMode('guest');
+      verifyInvitezUserAccess();
+    }
+  }, [type, token]);
+
+  useEffect(() => {
+    if (type === 'invite' && token && accessToken) {
+      fetchGuestContentDetails(cId);
+    }
+  }, [accessToken]);
+
+  const verifyInvitezUserAccess = async () => {
+    try {
+      const response = await fetch(
+        `${API_HOST}/api/v1/guest/contents/${cId}/verify_access/${token}`,
+      );
+      if (!response.ok) {
+        throw new Error('Failed to verify access');
+      }
+      const data = await response.json();
+      if (data?.token) {
+        setAccessToken(data.token);
+      }
+      // setAccessStatus(data); // Set the access status
+    } catch (err) {
+      // setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    if (type !== 'invite' && cId) {
       fetchContentDetails(cId);
     }
-  }, [cId]);
+  }, [type, cId]);
 
   useEffect(() => {
     if (flow && flow.flow) {
@@ -161,6 +215,42 @@ export const DocumentProvider = ({
     }
   }, [newContent]);
 
+  const fetchGuestContentDetails = (id: string) => {
+    api
+      .get(`/guest/contents/${id}?type=guest`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json', // Optional, if you want to specify content type
+        },
+      })
+      .then((response) => {
+        const data = response.data;
+        if (data?.content?.serialized?.serialized) {
+          const serialized = JSON.parse(data.content.serialized.serialized);
+          setContentBody(serialized);
+
+          const holders = findHolders(serialized);
+          setFieldValues(holders);
+        }
+
+        if (data?.content?.serialized) {
+          const { content_type, content } = data;
+          const cTypeId = content_type.id;
+
+          if (cTypeId) {
+            setContentType(content_type);
+          }
+
+          setPageTitle(content.serialized?.title);
+          setContents(data);
+          setLoading(false);
+        }
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  };
   const fetchContentDetails = (id: string) => {
     fetchAPI(`contents/${id}`).then((data: any) => {
       if (data?.content?.serialized?.serialized) {
@@ -336,6 +426,10 @@ export const DocumentProvider = ({
         selectedTemplate,
         states,
         tabActiveId,
+        userMode,
+        additionalCollaborator,
+        setAdditionalCollaborator,
+        setUserMode,
         fetchContentDetails,
         setContentBody,
         setEditorMode,

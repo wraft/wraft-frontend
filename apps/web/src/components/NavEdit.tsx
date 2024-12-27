@@ -8,6 +8,8 @@ import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
 import ModeToggle from './ModeToggle';
+import InviteCollaborators from './DocumentView/InviteCollaborators';
+import { useDocument } from './DocumentView/DocumentContext';
 
 export interface IUser {
   name: string;
@@ -23,6 +25,7 @@ interface INav {
 const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
   const router = useRouter();
   const { accessToken, userProfile, logout } = useAuth();
+  const { userMode, editorMode } = useDocument();
 
   const goBack = () => {
     if (window.history.length > 1) {
@@ -79,6 +82,9 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       </Box>
 
       <Flex ml="auto" sx={{ alignItems: 'center', gap: 3 }}>
+        {userMode === 'default' && editorMode !== 'new' && (
+          <InviteCollaborators />
+        )}
         <Share size={21} cursor="pointer" />
 
         <Flex
