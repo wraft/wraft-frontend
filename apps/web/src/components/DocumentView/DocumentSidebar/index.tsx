@@ -2,13 +2,13 @@ import { Box, Flex, Text } from 'theme-ui';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
 import ApprovalFlowHistory from 'components/Content/ApprovalFlowHistory';
-import CommentForm from 'components/CommentForm';
 import { TimeAgo } from 'common/Atoms';
 import styles from 'common/Tab/tab.module.css';
 
 import { useDocument } from '../DocumentContext';
 import { InfoSection } from './InfoSection';
 import { ContentInfoBlock } from './ContentInfoBlock';
+import CommentForm from './Comment/CommentForm';
 
 export const DocumentSidebar = () => {
   const {
@@ -75,14 +75,14 @@ export const DocumentSidebar = () => {
                   </Text>
                 </Box>
                 <Box sx={{ pt: 2, px: 3, bg: 'gray.100' }}>
-                  {contents && contents.content && (
+                  {/* {contents && contents.content && (
                     <Box mt={0}>
                       <CommentForm
                         master={contents.content_type.id}
                         master_id={contents.content.id}
                       />
                     </Box>
-                  )}
+                  )} */}
                 </Box>
               </Box>
             </Box>

@@ -10,6 +10,7 @@ import { ContentState } from 'utils/types';
 
 import { useDocument } from '../DocumentContext';
 import PlaceholderBlock from './PlaceholderBlock';
+import InviteFlowStateMember from '../InviteFlowStateMember';
 
 export const InfoSection = () => {
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -24,6 +25,7 @@ export const InfoSection = () => {
     fields,
     fieldValues,
     selectedTemplate,
+    additionalCollaborator,
     setFieldTokens,
     setContentBody,
   } = useDocument();
@@ -94,42 +96,62 @@ export const InfoSection = () => {
 
   return (
     <Box sx={{ bg: 'gray.100', mb: 6, pb: 0 }}>
-      <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
-        <Text
-          as="h3"
-          variant="sectionheading"
-          sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
-          Editors
-        </Text>
-        <AvatarCard
-          time={contents?.content?.inserted_at}
-          name={contents?.creator?.name}
-          image={contents?.profile_pic}
-        />
-      </Box>
-      {contents &&
-        !nextState?.is_user_eligible &&
-        !isMakeCompete &&
-        !isEditable && (
-          <Box variant="layout.boxHeading" sx={{ pb: 3, borderTop: 'none' }}>
+      {editorMode !== 'new' && (
+        <>
+          <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
             <Text
               as="h3"
               variant="sectionheading"
               sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
-              Waiting for approval
+              Editors
             </Text>
-            {nextState &&
-              nextState.approvers &&
-              nextState.approvers.map((approver: any) => (
-                <AvatarCard
-                  key={approver.id}
-                  // time={contents.content?.inserted_at}
-                  name={approver.name}
-                  image={approver.profile_pic}
-                />
-              ))}
+            <AvatarCard
+              time={contents?.content?.inserted_at}
+              name={contents?.creator?.name}
+              image={contents?.profile_pic}
+            />
           </Box>
-        )}
+
+          {contents?.state?.id && (
+            <Box variant="layout.boxHeading" sx={{ pb: 3, borderTop: 'none' }}>
+              {contents &&
+                !nextState?.is_user_eligible &&
+                !isMakeCompete &&
+                !isEditable && (
+                  <>
+                    <Text
+                      as="h3"
+                      variant="sectionheading"
+                      sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                      Waiting for approval
+                    </Text>
+                    {nextState &&
+                      nextState.approvers &&
+                      nextState.approvers.map((approver: any) => (
+                        <AvatarCard
+                          key={approver.id}
+                          // time={contents.content?.inserted_at}
+                          name={approver.name}
+                          image={approver.profile_pic}
+                        />
+                      ))}
+                  </>
+                )}
+              {additionalCollaborator &&
+                additionalCollaborator.map((approver: any) => (
+                  <AvatarCard
+                    key={approver.id}
+                    // time={contents.content?.inserted_at}
+                    name={approver.name}
+                    image={approver.profile_pic}
+                  />
+                ))}
+              <InviteFlowStateMember />
+            </Box>
+          )}
+        </>
+      )}
+
       <Box sx={{ pt: 2, px: 3, border: 0 }}>
         <Text
           as="h3"
