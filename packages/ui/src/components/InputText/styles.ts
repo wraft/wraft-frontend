@@ -1,12 +1,9 @@
 import { css } from "@emotion/react";
-import styled, { system } from "@xstyled/emotion";
-
-import { getVariantColor, Variant } from "../../utils";
+import styled from "@xstyled/emotion";
 
 import { InputTextOptions } from "./index";
 
-import { shouldForwardProp } from "@/system";
-import { defaultFieldStyles } from "@/utils";
+import { getVariantColor } from "@/utils";
 
 // export const InputText = styled('input')<
 //   Pick<InputTextOptions, 'iconPlacement' | 'isClearable' | 'transparent' | 'variant' | 'size'>

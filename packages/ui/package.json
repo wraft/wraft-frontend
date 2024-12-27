@@ -41,7 +41,9 @@
     "@tanstack/react-table": "^8.11.2",
     "@wraft/icon": "*",
     "@xstyled/emotion": "^3.8.0",
+    "downshift": "^9.0.8",
     "framer-motion": "^10.17.0",
+    "match-sorter": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
