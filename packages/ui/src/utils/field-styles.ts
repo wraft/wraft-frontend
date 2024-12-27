@@ -37,7 +37,12 @@ export const defaultFieldStyles: DefaultFieldStyles = ({
   variant,
 }) => {
   return css`
+    ${th("defaultFields.default") as any}
     width: 100%;
+    transition: medium;
+    border-color: ${getVariantColor(variant as any) as any};
+    appearance: none;
+    ${size && (th(`defaultFields.sizes.${size}`) as any)};
   `;
 };
 // export const defaultFieldStyles: DefaultFieldStyles = ({
