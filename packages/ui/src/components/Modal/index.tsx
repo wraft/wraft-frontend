@@ -1,8 +1,5 @@
-// index.tsx
 import * as Ariakit from "@ariakit/react";
 import { forwardRef } from "react";
-
-import { Button } from "../Button";
 
 import { Header } from "./Header";
 import * as S from "./styles";
@@ -13,48 +10,30 @@ export interface ModalOptions extends Omit<Ariakit.DialogOptions, "as"> {
   ariaLabel: string;
   children: React.ReactElement;
   size?: Size;
-  backdrop?: boolean;
-  hideOnInteractOutside?: boolean;
-  onConfirm?: () => void;
-  onClose?: () => void;
-}
-
-export interface IProp extends ModalOptions {
-  open: boolean;
-  onClose: () => void;
 }
 
 const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
   (
     {
       ariaLabel,
+
       backdrop = true,
       children,
       hideOnInteractOutside = true,
       open,
-      size = "md",
-      onConfirm,
       ...rest
     },
     ref,
   ) => {
     const dialog = Ariakit.useDialogStore({ animated: true, open });
-
-    const modalSize = {
-      xs: "200px",
-      sm: "300px",
-      md: "500px",
-      lg: "700px",
-      auto: "auto",
-    }[size];
-
+    // const dialog = Ariakit.useDialogStore(animated: true,)
     return (
       <Ariakit.Dialog
         aria-label={ariaLabel}
         backdrop={
           backdrop && (
             <S.Backdrop
-              isVisible={backdrop}
+              backdrop={backdrop}
               hideOnInteractOutside={hideOnInteractOutside}
             />
           )
@@ -63,23 +42,14 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
         open={open}
         hideOnInteractOutside={hideOnInteractOutside}
         ref={ref}
-        render={<S.Dialog width={modalSize} />}
+        render={<S.Dialog />}
         {...(rest as Ariakit.DialogProps)}
       >
         {children}
-        {onConfirm && (
-          <div
-            style={{ display: "flex", justifyContent: "flex-end", gap: "1rem" }}
-          >
-            <Button variant="secondary" onClick={rest.onClose}>
-              Cancel
-            </Button>
-            <Button onClick={onConfirm}>Confirm</Button>
-          </div>
-        )}
       </Ariakit.Dialog>
     );
   },
 );
 
+// Nested exports
 export const Modal = Object.assign(ModalComponent, { Header });
