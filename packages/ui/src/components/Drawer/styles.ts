@@ -54,6 +54,34 @@ export const Drawer: any = styled.div`
   }
 `;
 
+// export const Drawer: any = styled.divBox<Pick<DrawerOptions, 'placement' >>(
+//   ({ placement}: any) => css`
+//     ${getPlacementStyle(placement)}
+//     position: fixed;
+//     display: flex;
+//     flex-direction: column;
+//     overflow: auto;
+//     opacity: 0;
+//     transition: medium;
+//     max-width: 100%;
+
+//     &[data-enter] {
+//       opacity: 1;
+//       transform: translate(0, 0);
+//     }
+//   `
+// )
+// export const Drawer: any = styled.div`
+// position: fixed;
+//     top: 0;
+//     right: 0;
+//     left: 0;
+//     bottom: 0;
+//     opacity: 0;
+//     // transition: opacity 150ms ease-in-out;
+
+// `
+
 export const Backdrop: any = styled.div<any>`
   position: fixed;
   top: 0;
