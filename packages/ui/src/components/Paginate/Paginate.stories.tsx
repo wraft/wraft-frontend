@@ -65,19 +65,6 @@ Simple.args = {
   numberMarginPagesDisplayed: 1,
 };
 
-export const WithPageSizeSelector = Template.bind({});
-WithPageSizeSelector.args = {
-  totalPage: 10,
-  showGoto: true,
-  showPageSize: true,
-  previousLabel: "< Previous",
-  nextLabel: "Next >",
-  breakLabel: "...",
-  numberPageDisplayed: 5,
-  numberMarginPagesDisplayed: 2,
-  pageSizeLabel: "Items per page",
-};
-
 export const SinglePage = Template.bind({});
 SinglePage.args = {
   totalPage: 1,
