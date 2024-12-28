@@ -42,7 +42,7 @@ const DrawerComponent = forwardRef<HTMLDivElement, DrawerOptions>(
         open={open}
         {...(rest as Ariakit.DialogProps)}
       >
-        {children}
+        {open && <>{children}</>}
       </Ariakit.Dialog>
     );
   },
