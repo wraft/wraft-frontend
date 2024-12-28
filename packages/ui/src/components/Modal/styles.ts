@@ -1,14 +1,15 @@
 import type * as Ariakit from "@ariakit/react";
 import styled, { css, up } from "@xstyled/emotion";
 
-export interface BackdropProps
-  extends Pick<Ariakit.DialogOptions, "hideOnInteractOutside"> {
-  isVisible?: boolean;
-}
+export type BackdropProps = Pick<
+  Ariakit.DialogOptions,
+  "hideOnInteractOutside"
+>;
 
-export const Backdrop = styled.divBox<BackdropProps>`
-  ${({ isVisible = true, hideOnInteractOutside }) =>
-    isVisible &&
+export const Backdrop: any = styled.divBox<
+  Pick<BackdropProps, "hideOnInteractOutside">
+>`
+  ${({ hideOnInteractOutside }) =>
     hideOnInteractOutside &&
     `
     position: fixed;
@@ -27,11 +28,7 @@ export const Backdrop = styled.divBox<BackdropProps>`
   `};
 `;
 
-interface DialogProps {
-  width?: string;
-}
-
-export const Dialog = styled.div<DialogProps>`
+export const Dialog: any = styled.div`
   position: fixed;
   inset: 0.75rem;
   z-index: 50;
@@ -47,9 +44,6 @@ export const Dialog = styled.div<DialogProps>`
   padding: 1rem;
   color: hsl(204 10% 10%);
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  width: ${(props) => props.width || "500px"}; // Add this line
-  max-width: ${(props) =>
-    props.width === "auto" ? "100%" : props.width}; // Add this line
 
   @media (min-width: 640px) {
     .button {
@@ -70,13 +64,8 @@ export const Dialog = styled.div<DialogProps>`
     bottom: 10vh;
     margin-top: 0px;
     max-height: 80vh;
-    max-width: ${(props) =>
-      props.width === "auto"
-        ? "100%"
-        : Math.min(
-            parseInt(props.width || "500", 10),
-            80,
-          )}%; // Modified this line
+    width: fit-content;
+    max-width: 80%;
     border-radius: 1rem;
     padding: 1.5rem;
   }
@@ -87,6 +76,22 @@ export const Dialog = styled.div<DialogProps>`
     line-height: 1.75rem;
     font-weight: 600;
   }
+
+  // position: fixed;
+  // inset: 0;
+  // margin: auto;
+  // margin-top: xl;
+  // top: 50%;
+  // transform: translate3d(0, -50%, 0);
+  // display: flex;
+  // flex-direction: column;
+  // align-self: center;
+  // height: 100%;
+  // max-height: 100%;
+  // max-width: 100%;
+  // overflow: auto;
+  // opacity: 0;
+  // transition: opacity 250ms ease-in-out, margin-top 250ms ease-in-out;
 
   &[data-enter] {
     opacity: 1;
