@@ -25,8 +25,6 @@ export interface IProp {
   pageClassName?: string;
   activeClassName?: string;
   breakClassName?: string;
-  showPageSize?: boolean;
-  pageSizeLabel?: string;
 }
 
 const Pagination: React.FC<IProp> = ({
