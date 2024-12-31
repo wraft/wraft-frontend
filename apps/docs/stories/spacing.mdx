@@ -1,0 +1,39 @@
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { theme, Box } from "@wraft/ui";
+
+<Meta title="Foundation/Spacing" />
+
+# Spacings
+
+You can customize the global spacing for padding and margin, top, left, right and bottom.
+
+export const Spacing = () => {
+  function splitRemValue(remString) {
+    const match = remString.match(/^(\d*\.?\d+)/);
+    return match ? parseFloat(match[1]) : null;
+  }
+  return (
+    <table>
+      <tbody>
+        {Object.entries(theme.space).map(([key, value]) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{value}</td>
+            <td>{value && theme.toPx(splitRemValue(value))}</td>
+            <td>
+              <Box
+                style={{
+                  width: value,
+                  height: value,
+                  backgroundColor: "skyblue",
+                }}
+              ></Box>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+<Spacing />

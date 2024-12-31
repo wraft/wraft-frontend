@@ -1,29 +1,91 @@
-import { Meta, Title } from '@storybook/blocks'
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { theme, Box, Text, Button } from "@wraft/ui";
 
-
-<Meta title='Typography' />
+<Meta title="Foundation/Typography" />
 
 # Typography
 
-## Typefaces
+We use fonts, fontSizes, fontWeights, lineHeights and letterSpacings to customize the theme. You should use the
+Text component
+with predefined text styles where you can.
 
-Adjust’s products are translated into many different languages which also use different character sets (e.g., Chinese). To put a reliable, scalable, and performant solution in place, all text is rendered in system fonts. These are fonts that come with the operating system, meaning users do not need to download them.
+## font-size
 
-### Typefaces
+export const FontSizeComponent = () => {
+  function splitRemValue(remString) {
+    const match = remString.match(/^(\d*\.?\d+)/);
+    return match ? parseFloat(match[1]) : null;
+  }
+  return (
+    <table>
+      <tbody>
+        {Object.entries(theme.fontSizes).map(([key, value]) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{value}</td>
+            <td>{value && theme.toPx(splitRemValue(value))}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
-- Atlas uses **San Francisco** on Apple devices and **Arial** on all other systems (Windows, Linux, Android, …).
+<FontSizeComponent />
 
-## Typographic Scale
+## font-weight
 
-The typographic scale is limited to five font sizes (including line height and letter spacing) in three weights. It works well on both small and large screens.
+export const FontWeightComponent = () => {
+  return (
+    <table>
+      <tbody>
+        {Object.entries(theme.fontWeights).map(([key, value]) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
-- Always use the scale; do not introduce other font sizes.
+<FontWeightComponent />
 
-### Font Scale
+## line-heights
 
-- Regular copy is always set in normal font weight.
-- Buttons and other controls use medium weight.
-- Certain headings are set in bold.
-- Most text (in LTR languages) should be left-aligned; use centered or even right-aligned text very sparingly!
+export const LineHeightsComponent = () => {
+  return (
+    <table>
+      <tbody>
+        {Object.entries(theme.lineHeights).map(([key, value]) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
-The font sizes are multiples of 2px. The line heights are all multiples of 4px, creating a fine-grained 4px typographic baseline grid. If you wish to learn more, take a look at Atlas’ spacing system.
+<LineHeightsComponent />
+
+## letter-spacings
+
+export const LetterSpacingsComponent = () => {
+  return (
+    <table>
+      <tbody>
+        {Object.entries(theme.letterSpacings).map(([key, value]) => (
+          <tr key={key}>
+            <td>{key}</td>
+            <td>{value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+<LetterSpacingsComponent />

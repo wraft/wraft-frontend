@@ -1,5 +1,8 @@
 {
   "extends": "@wraft/typescript-config/react-app.json",
   "include": ["."],
+  "compilerOptions": {
+    "baseUrl": "./src"
+  },
   "exclude": ["dist", "build", "node_modules"]
 }

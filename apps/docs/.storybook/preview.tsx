@@ -1,16 +1,26 @@
-import React from 'react';
+import React from "react";
 
-import { defaultTheme, ThemeProvider, Preflight } from '@xstyled/emotion';
-import { theme, GlobalStyle } from '@wraft/ui';
+import { ThemeProvider } from "@xstyled/emotion";
+import { theme, GlobalStyle } from "@wraft/ui";
 
-import { Preview } from '@storybook/react';
-
+import { Preview } from "@storybook/react";
 
 const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Introduction', 'Colors', 'Icons', 'Typography', ['Home', 'Login', 'Admin'], 'Components', '*', 'WIP'],
+        order: [
+          "Overview",
+          "Foundation",
+          "Colors",
+          "Icons",
+          "Spacing",
+          ["Home", "Login", "Admin"],
+          "Components",
+          "Typography",
+          "*",
+          "WIP",
+        ],
       },
     },
     // actions: { argTypesRegex: "^on[A-Z].*" },
@@ -24,13 +34,11 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <>
-      <GlobalStyle />
-      
+        <GlobalStyle />
         <ThemeProvider theme={theme}>
           <Story />
         </ThemeProvider>
       </>
-     
     ),
   ],
 };
