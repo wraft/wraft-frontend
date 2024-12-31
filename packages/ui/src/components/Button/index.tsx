@@ -1,13 +1,21 @@
-import type { ButtonProps as AkButtonProps } from '@ariakit/react';
-import { Button as AriakitButton } from '@ariakit/react';
-import styled, { th, x } from '@xstyled/emotion';
-import { forwardRef } from 'react';
+import type { ButtonProps as AkButtonProps } from "@ariakit/react";
+import { Button as AriakitButton } from "@ariakit/react";
+import styled, { th, x } from "@xstyled/emotion";
+import { forwardRef } from "react";
 
-import { Spinner } from '../Spinner';
+import { Spinner } from "../Spinner";
 
-export type Shape = 'circle' | 'square';
-export type Size = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'full';
-export type Variant = 'primary' | 'secondary' | 'outlined' | 'disabled' | 'googleLogin' | 'ghost' | 'none' | 'delete';
+export type Shape = "circle" | "square";
+export type Size = "xxs" | "xs" | "sm" | "md" | "lg" | "full";
+export type Variant =
+  | "primary"
+  | "secondary"
+  | "outlined"
+  | "disabled"
+  | "googleLogin"
+  | "ghost"
+  | "none"
+  | "delete";
 
 export interface ButtonOptions extends AkButtonProps {
   disabled?: boolean;
@@ -18,10 +26,7 @@ export interface ButtonOptions extends AkButtonProps {
   shape?: Shape;
 }
 
-const ButtonWrapper =
-  styled(AriakitButton) <
-  ButtonOptions >
-  `
+const ButtonWrapper = styled(AriakitButton)<ButtonOptions>`
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -36,10 +41,10 @@ const ButtonWrapper =
     border-color 0.15s ease-in-out,
     box-shadow 0.15s ease-in-out;
   ${({ variant }) => th(`buttons.${variant}`)};
-  color: ${(props) => props.loading && 'transparent'};
-  width: ${({ size }) => size === 'full' && '100%'};
+  color: ${(props) => props.loading && "transparent"};
+  width: ${({ size }) => size === "full" && "100%"};
   ${({ size }) =>
-    size === 'full' &&
+    size === "full" &&
     `
     padding-top: 12px;
     padding-bottom: 12px;
@@ -53,10 +58,25 @@ export const ContentWrapper: any = styled.div`
 `;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
-  ({ variant = 'primary', children, loading = false, disabled = false, ...rest }, ref) => {
+  (
+    {
+      variant = "primary",
+      children,
+      loading = false,
+      disabled = false,
+      ...rest
+    },
+    ref,
+  ) => {
     const isDisabled = disabled || loading;
     return (
-      <ButtonWrapper variant={variant} loading={loading} disabled={isDisabled} {...rest} ref={ref}>
+      <ButtonWrapper
+        variant={variant}
+        loading={loading}
+        disabled={isDisabled}
+        {...rest}
+        ref={ref}
+      >
         {loading && (
           <x.div display="flex">
             <Spinner size={9} />
@@ -68,4 +88,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
   },
 );
 
-Button.displayName = 'Button';
+Button.displayName = "Button";

@@ -3,7 +3,7 @@ import { createGlobalStyle } from "@xstyled/emotion";
 export const GlobalStyle = createGlobalStyle`
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
   html {
-    font-size: 15px !important;
+    font-size: 14px !important;
   }
 
   body {

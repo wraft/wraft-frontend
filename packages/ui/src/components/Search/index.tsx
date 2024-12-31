@@ -19,9 +19,9 @@ import {
 
 const EMPTY_STRING = "";
 
-export type Option = { label: string; value: string };
-export type OptionGroup = { label: string; options: Option[] };
-export type Item = Option | OptionGroup | string | unknown;
+export type SearchOption = { label: string; value: string };
+export type OptionGroup = { label: string; options: SearchOption[] };
+export type Item = SearchOption | OptionGroup | string | unknown;
 
 export interface SearchOptions extends DefaultFieldStylesProps {
   groupsEnabled?: boolean;
@@ -38,7 +38,7 @@ export interface SearchOptions extends DefaultFieldStylesProps {
 
 export type SearchProps = CreateWuiProps<
   "input",
-  SearchOptions & Omit<DownshiftProps<Option>, keyof SearchOptions>
+  SearchOptions & Omit<DownshiftProps<SearchOption>, keyof SearchOptions>
 >;
 
 const Downshift: typeof DownshiftImport =
@@ -78,7 +78,7 @@ export const Search = forwardRef<"input", SearchProps>(
     const initialInputValue = selected ? itemToString(selected) : EMPTY_STRING;
 
     // Keep results in state
-    const [results, setResults] = useState<Option[] | OptionGroup[]>([]);
+    const [results, setResults] = useState<SearchOption[] | OptionGroup[]>([]);
 
     // Update results when searching
     const searchResults = useCallback(
@@ -86,7 +86,7 @@ export const Search = forwardRef<"input", SearchProps>(
         if (minChars === 0 || value?.length >= minChars) {
           const data = await search(value);
           console.log("data", data);
-          setResults((data as Option[] | OptionGroup[]) || []);
+          setResults((data as SearchOption[] | OptionGroup[]) || []);
         } else {
           setResults([]);
         }

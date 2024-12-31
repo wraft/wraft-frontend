@@ -32,21 +32,21 @@ import {
 } from "@/utils";
 
 export type OptionValue = string | number;
-export type Option = {
+export type SeletOption = {
   disabled?: boolean;
   icon?: React.ReactElement;
   label: string;
   value: OptionValue;
 };
-export type OptionGroup = { label: string; options: Option[] };
-export type OptionItem = Option | OptionGroup;
-export type Options = Array<Option | OptionGroup>;
+export type SelectOptionGroup = { label: string; options: SeletOption[] };
+export type OptionItem = SeletOption | SelectOptionGroup;
+export type SeletOptions = Array<SeletOption | SelectOptionGroup>;
 export type SelectValue =
   | string
   | number
   | string[]
-  | Option
-  | (string | number | Option)[];
+  | SeletOption
+  | (string | number | SeletOption)[];
 
 export interface SelectOptions extends DefaultFieldStylesProps {
   allowUnselectFromList?: boolean;
@@ -68,16 +68,16 @@ export interface SelectOptions extends DefaultFieldStylesProps {
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   onCreate?: (option: string, event: CreateEvent) => void;
   onFocus?: () => void;
-  options: Options;
+  options: SeletOptions;
   placeholder?: string;
   renderCreateItem?: (inputValue: SelectValue) => void | any;
-  renderGroupHeader?: (option: OptionGroup) => React.ReactNode;
+  renderGroupHeader?: (option: SelectOptionGroup) => React.ReactNode;
   renderItem?: (
-    item: Option | unknown,
+    item: SeletOption | unknown,
     isItemSelected?: boolean,
   ) => string | React.ReactElement;
   renderMultiple?: (
-    values: Option[],
+    values: SeletOption[],
     handleRemove: (value: string) => void,
   ) => React.ReactElement;
   transparent?: boolean;
@@ -85,7 +85,8 @@ export interface SelectOptions extends DefaultFieldStylesProps {
 }
 export type SelectProps = CreateWuiProps<
   "input",
-  SelectOptions & Omit<DownshiftProps<Option>, keyof SelectOptions | "children">
+  SelectOptions &
+    Omit<DownshiftProps<SeletOption>, keyof SelectOptions | "children">
 >;
 
 // because of this issue: https://github.com/downshift-js/downshift/issues/1505
@@ -172,10 +173,10 @@ export const Select = forwardRef<"input", SelectProps>(
     const handleInputChange = (value: string) => {
       // Update
       if (isSearchable && value !== inputValue) {
-        let options: (Option | OptionGroup)[] = [];
+        let options: (SeletOption | SelectOptionGroup)[] = [];
 
         if (groupsEnabled) {
-          options = matchSorter(defaultOptions as OptionGroup[], value, {
+          options = matchSorter(defaultOptions as SelectOptionGroup[], value, {
             // should match on group.label OR group.options.label
             keys: [
               (item) => item.label,
@@ -198,13 +199,13 @@ export const Select = forwardRef<"input", SelectProps>(
     };
 
     // Send event to parent when value(s) changes
-    const handleChange = (options: Option[]) => {
+    const handleChange = (options: SeletOption[]) => {
       let values: OptionValue[] = [];
 
       if (groupsEnabled) {
         values = getValuesFromOptions(
           options,
-          defaultOptions.flatMap((group: OptionGroup) => group.options),
+          defaultOptions.flatMap((group: SelectOptionGroup) => group.options),
         );
       } else {
         values = getValuesFromOptions(options, defaultOptions);
@@ -228,7 +229,7 @@ export const Select = forwardRef<"input", SelectProps>(
     };
 
     // Update internal state when clicking/adding a select item
-    const handleSelect = (option: Option) => {
+    const handleSelect = (option: SeletOption) => {
       let newItems;
       let isClearInput;
 
@@ -259,7 +260,7 @@ export const Select = forwardRef<"input", SelectProps>(
       handleChange(newItems);
     };
 
-    const handleOuterClick = (e: ControllerStateAndHelpers<Option>) => {
+    const handleOuterClick = (e: ControllerStateAndHelpers<SeletOption>) => {
       // Reset input value if not selecting a new item
       if (isMultiple && e.selectedItem) {
         setInputValue("");
@@ -276,7 +277,7 @@ export const Select = forwardRef<"input", SelectProps>(
       inputValue,
       isMultiple,
       isSearchable,
-      options: defaultOptions as Option[],
+      options: defaultOptions as SeletOption[],
       renderItem,
     });
 
@@ -328,7 +329,7 @@ export const Select = forwardRef<"input", SelectProps>(
                 onClick: () => setIsOpen(!isOpen),
               })}
             >
-              <DownIcon />
+              <DownIcon width={18} />
             </S.DropDownIndicator>
           );
 

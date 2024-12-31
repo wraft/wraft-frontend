@@ -10,6 +10,7 @@ module.exports = {
   },
   rules: {
     "@typescript-eslint/no-unused-vars": "warn",
+    "no-redeclare": ["error", { builtinGlobals: false }],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "warn",

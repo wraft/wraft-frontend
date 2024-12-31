@@ -4,10 +4,10 @@ import { Tag } from "../Tag";
 
 import * as S from "./styles";
 
-import { Option } from "./index";
+import { SeletOption } from "./index";
 
 export function multipleSelections(
-  values: Option[],
+  values: SeletOption[],
   handleRemove: (value: string) => void,
 ): React.ReactElement {
   return (
