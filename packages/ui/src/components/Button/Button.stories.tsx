@@ -4,7 +4,7 @@ import { Button } from ".";
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "Forms/Button",
+  title: "Action/Button",
   argTypes: {
     variant: {
       control: "select",

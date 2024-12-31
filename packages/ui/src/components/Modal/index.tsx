@@ -1,12 +1,12 @@
-import * as Ariakit from '@ariakit/react';
-import { forwardRef } from 'react';
+import * as Ariakit from "@ariakit/react";
+import { forwardRef } from "react";
 
-import { Header } from './Header';
-import * as S from './styles';
+import { Header } from "./Header";
+import * as S from "./styles";
 
-export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'auto';
+export type Size = "xs" | "sm" | "md" | "lg" | "auto";
 
-export interface ModalOptions extends Omit<Ariakit.DialogOptions, 'as'> {
+export interface ModalOptions extends Omit<Ariakit.DialogOptions, "as"> {
   ariaLabel: string;
   children: React.ReactElement;
   size?: Size;
@@ -30,13 +30,21 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
     return (
       <Ariakit.Dialog
         aria-label={ariaLabel}
-        backdrop={backdrop && <S.Backdrop backdrop={backdrop} hideOnInteractOutside={hideOnInteractOutside} />}
+        backdrop={
+          backdrop && (
+            <S.Backdrop
+              backdrop={backdrop}
+              hideOnInteractOutside={hideOnInteractOutside}
+            />
+          )
+        }
         store={dialog}
         open={open}
         hideOnInteractOutside={hideOnInteractOutside}
         ref={ref}
         render={<S.Dialog />}
-        {...(rest as Ariakit.DialogProps)}>
+        {...(rest as Ariakit.DialogProps)}
+      >
         {children}
       </Ariakit.Dialog>
     );

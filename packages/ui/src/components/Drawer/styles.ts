@@ -1,36 +1,36 @@
-import styled, { th } from '@xstyled/emotion';
+import styled, { th } from "@xstyled/emotion";
 
-import type { Placement } from '.';
+import type { Placement } from ".";
 
 const getPlacementStyle = (placement: Placement) => {
   switch (placement) {
-    case 'top':
+    case "top":
       return {
-        top: '0 !important',
+        top: "0 !important",
         right: 0,
         left: 0,
-        transform: 'translateY(-100%)',
+        transform: "translateY(-100%)",
       };
-    case 'right':
+    case "right":
       return {
-        top: '0 !important',
+        top: "0 !important",
         right: 0,
         bottom: 0,
-        transform: 'translateX(100%)',
+        transform: "translateX(100%)",
       };
-    case 'bottom':
+    case "bottom":
       return {
         right: 0,
         bottom: 0,
         left: 0,
-        transform: 'translateY(100%)',
+        transform: "translateY(100%)",
       };
-    case 'left':
+    case "left":
       return {
-        top: '0 !important',
+        top: "0 !important",
         bottom: 0,
         left: 0,
-        transform: 'translateX(-100%)',
+        transform: "translateX(-100%)",
       };
   }
 };
@@ -82,33 +82,29 @@ export const Drawer: any = styled.div`
 
 // `
 
-export const Backdrop: any =
-  styled.div <
-  any >
-  `
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: opacity 150ms ease-in-out;
-    background-color: rgba(0, 0, 0, 0.35);
-    ${({ hideOnInteractOutside }) =>
-      hideOnInteractOutside &&
-      `
+export const Backdrop: any = styled.div<any>`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  background-color: rgba(0, 0, 0, 0.35);
+  ${({ hideOnInteractOutside }) =>
+    hideOnInteractOutside &&
+    `
       cursor: pointer;
 
       &[data-enter] {
         opacity: 1;
       }
     `};
-  
 `;
 
 export const Title: any = styled.divBox`
   // padding: 0px 32px;
-  ${th('drawers.title')};
+  ${th("drawers.title")};
 `;
 
 export const Header: any = styled.divBox`
