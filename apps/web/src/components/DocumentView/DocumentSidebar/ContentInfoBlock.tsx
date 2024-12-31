@@ -141,7 +141,7 @@ export const ContentInfoBlock = ({
                 borderRadius: '3px',
                 letterSpacing: '0.2px',
                 textTransform: 'uppercase',
-                fontSize: 'xxs',
+                fontSize: 'xs',
               }}>
               {content?.state?.state}
             </Text>

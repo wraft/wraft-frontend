@@ -23,7 +23,7 @@ export const ProfileCard = ({
   return (
     <Flex
       sx={{
-        fontSize: 'xxs',
+        fontSize: 'xs',
         color: 'text',
         my: 1,
         alignItems: 'center',

@@ -133,7 +133,7 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                     </Box>
                     <Text
                       sx={{
-                        fontSize: 'xxs',
+                        fontSize: 'xs',
                         pl: 3,
                         pt: 3,
                         color: 'blue.600',

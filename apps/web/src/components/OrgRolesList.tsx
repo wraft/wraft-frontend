@@ -86,7 +86,7 @@ const OrgRolesList = () => {
             <Text as="h5" sx={{ fontSize: 'xs', color: 'text' }}>
               No Roles?
             </Text>
-            <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
+            <Text as="p" sx={{ fontSize: 'xs', color: 'text' }}>
               Are you kidding?
             </Text>
           </Box>

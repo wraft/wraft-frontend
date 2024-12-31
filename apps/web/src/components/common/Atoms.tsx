@@ -148,7 +148,7 @@ export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
         <Text
           sx={{
-            fontSize: 'xxs',
+            fontSize: 'xs',
             color: 'text',
             fontWeight: 300,
             cursor: 'pointer',

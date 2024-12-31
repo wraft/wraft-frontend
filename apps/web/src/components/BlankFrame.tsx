@@ -58,7 +58,7 @@ export const Page = ({ children, inner }: IPage) => {
                   ml: 'auto',
                   flexDirection: ['column', 'column'],
                 }}>
-                {/* <Text sx={{ fontSize: 'xxs', p: 4, color: 'text' }}>
+                {/* <Text sx={{ fontSize: 'xs', p: 4, color: 'text' }}>
                   Support | Contact Us
                 </Text> */}
               </Box>
