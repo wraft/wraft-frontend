@@ -85,7 +85,7 @@ export const Tag = forwardRef<"div", TagProps>(
         {!!onRemove && (
           <S.ActionIcon size={size}>
             <S.Button onClick={onRemove} title="Remove" type="button">
-              <CloseIcon />
+              <CloseIcon width={14} />
             </S.Button>
           </S.ActionIcon>
         )}
