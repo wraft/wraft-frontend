@@ -40,23 +40,27 @@ export const Tag = styled.div<StyledTagProps & WuiProps>`
   transition: medium;
   max-width: 100%;
   ${overflowEllipsis}
-  ${system}
-    ${length !== 1 &&
-  `
+  ${({ length }) =>
+    system &&
+    length !== 1 &&
+    `
     span,
     p {
       ${overflowEllipsis}
     }
-  `}
-    ${length === 1 &&
-  `
-    justify-content: center;
-    ${({ size, w, h }) =>
+   
+    ${
+      length === 1 &&
       `
-    ${shapeStyles(size, w as string, h as string)};
-  `}
-    
-  `};
+      justify-content: center;
+      ${({ size, w, h }) =>
+        `
+        ${shapeStyles(size, w as string, h as string)};
+      `}
+    `
+    }
+   
+   `}
 
   ${({ hasLink, hasClickAction }) =>
     hasLink ||
@@ -88,9 +92,9 @@ export const Tag = styled.div<StyledTagProps & WuiProps>`
   }
 
   > *:not(:only-child) {
-    ${/* sc-selector */ StyledIcon}:last-child {
+    svg:last-child {
       opacity: 1;
-      transition: opacity ${th.transition("medium")};
+      // transition: opacity ${th.transition("medium")};
       cursor: pointer;
 
       &:hover {
