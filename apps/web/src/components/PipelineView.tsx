@@ -242,7 +242,7 @@ const PipelineView = () => {
                 {activePipeline.name}
               </Text>
               {/* <Box>
-                <Text sx={{ fontSize: 'xxs', color: 'text', mb: 2 }}>
+                <Text sx={{ fontSize: 'xs', color: 'text', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
@@ -289,7 +289,7 @@ const PipelineView = () => {
               <Text
                 sx={{
                   // p: 2,
-                  fontSize: 'xxs',
+                  fontSize: 'xs',
                   color: 'text',
                   letterSpacing: '-0.2',
                   fontWeight: 100,
@@ -453,7 +453,7 @@ const PipelineView = () => {
                               sx={{
                                 p: 0,
                                 fontFamily: 'monospace',
-                                fontSize: 'xxs',
+                                fontSize: 'xs',
                                 color:
                                   m.state === 'success' ? 'green' : 'orange',
                                 borderRadius: 0,

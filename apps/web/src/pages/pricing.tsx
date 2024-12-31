@@ -102,7 +102,7 @@ const Card = ({
             }}>
             {fullAccess ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xs', fontWeight: 400, color: text }}>
             Full Access
           </Text>
         </Flex>
@@ -117,7 +117,7 @@ const Card = ({
             }}>
             {users ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xs', fontWeight: 400, color: text }}>
             Upto 10 users
           </Text>
         </Flex>
@@ -132,7 +132,7 @@ const Card = ({
             }}>
             {storage ? iconYes : iconNo}
           </Box>
-          <Text sx={{ fontSize: 'xxs', fontWeight: 400, color: text }}>
+          <Text sx={{ fontSize: 'xs', fontWeight: 400, color: text }}>
             Upto 50GB of cloud storage
           </Text>
         </Flex>

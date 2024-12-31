@@ -40,7 +40,7 @@ export const FlowProgressBar = ({
       }}>
       <Box
         sx={{
-          fontSize: 'xxs',
+          fontSize: 'xs',
           width: '18px',
           height: '18px',
           borderRadius: '9rem',

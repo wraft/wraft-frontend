@@ -1,22 +1,14 @@
 import type { Meta } from "@storybook/react";
 import * as React from "react";
 
+import { Tag } from "../Tag";
+
 import { Select, SelectProps } from "./index";
 
 const meta: Meta<any> = {
   component: Select,
   title: "Forms/Select",
-  parameters: {
-    docs: {
-      description: {
-        component:
-          "The Select component is an input field used to query and retrieve information from a dataset or database. It often includes features like autocomplete, suggestions, and filters to improve the search experience. This component enables users to easily find specific content or data within an application, enhancing usability and efficiency.",
-      },
-    },
-  },
 };
-
-type Item = { Title: string };
 
 const ITEMS = [
   { value: "bold", label: "Bold" },
@@ -34,6 +26,75 @@ export const Basic = () => {
 
   return (
     <Select
+      name="welcome"
+      onChange={handleChange}
+      options={ITEMS}
+      value={value}
+    />
+  );
+};
+
+export const Multiple = () => {
+  const [value, setValue] = React.useState<SelectProps["value"]>();
+
+  const handleChange = (newValue: SelectProps["value"]) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Select
+      isMultiple
+      name="welcome"
+      onChange={handleChange}
+      options={ITEMS}
+      value={value}
+    />
+  );
+};
+export const RenderMultiple = () => {
+  const [value, setValue] = React.useState<SelectProps["value"]>();
+
+  const handleChange = (newValue: SelectProps["value"]) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Select
+      isMultiple
+      name="welcome"
+      onChange={handleChange}
+      options={ITEMS}
+      renderMultiple={(values, handleRemove) => (
+        <>
+          {values.map((option) => {
+            return (
+              <Tag
+                key={option.value}
+                mr="sm"
+                mt="sm"
+                onRemove={() => handleRemove(option.value as string)}
+                size="sm"
+              >
+                <div>{option.label}</div>
+              </Tag>
+            );
+          })}
+        </>
+      )}
+      value={value}
+    />
+  );
+};
+export const Searchable = () => {
+  const [value, setValue] = React.useState<SelectProps["value"]>();
+
+  const handleChange = (newValue: SelectProps["value"]) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Select
+      isSearchable
       name="welcome"
       onChange={handleChange}
       options={ITEMS}

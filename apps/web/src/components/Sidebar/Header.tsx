@@ -216,7 +216,7 @@ const Header = () => {
                   <Text as="h4">{userProfile?.name}</Text>
 
                   {userProfile?.roles?.size > 0 && (
-                    <Text as="p" sx={{ fontSize: 'xxs', color: 'text' }}>
+                    <Text as="p" sx={{ fontSize: 'xs', color: 'text' }}>
                       {userProfile?.roles[0]?.name}
                     </Text>
                   )}

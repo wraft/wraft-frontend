@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Drawer, useDrawer } from '@wraft/ui';
+import { Button, Drawer, useDrawer, Text, Box, Flex } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { useThemeUI } from 'theme-ui';
 import { Plus, X } from '@phosphor-icons/react';
 
 import DefaultMenuItem from 'components/MenuItem';
@@ -68,58 +68,46 @@ const Sidebar = (props: any) => {
 
   return (
     <>
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          maxHeight: '100%',
-          height: '100vh',
-          justifyContent: 'stretch',
-        }}>
+      <Flex direction="column" h="100vh" maxHeight="100%" justify="stretch">
         <Header />
-        <Box sx={{ flex: 1 }}>
+        <Flex flex={1} direction="column">
           {/* <SearchBlock /> */}
 
           {Menulist.map((m, i) => (
-            <Box key={i} sx={{ mb: 4 }}>
-              <Box
-                sx={{
-                  textTransform: 'uppercase',
-                  fontSize: '9.6px',
-                  fontWeight: '500',
-                  px: 3,
-                  mb: '12px',
-                  color: 'gray.900',
-                }}>
+            <Box key={i} mb={4}>
+              <Text
+                as="h6"
+                variant="sm"
+                p="md"
+                textTransform="uppercase"
+                fontWeight="heading">
                 {m.section}
-              </Box>
+              </Text>
               {m.menus.map(({ name, icon, path }: any) => (
                 <DefaultMenuItem
                   href={path}
                   key={name}
                   variant="layout.menuWrapper">
-                  <Flex sx={{ alignItems: 'center', gap: '8px' }}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                      }}>
+                  <Flex alignItems="center" gap="8px">
+                    <Flex>
                       {React.cloneElement(icon, {
                         color: checkActive(pathname, path)
                           ? rawColors?.green?.[900]
                           : rawColors?.gray?.[900],
                       })}
                       {/* {icon} */}
-                    </Box>
+                    </Flex>
                     {showFull && (
                       <Text
-                        sx={{
-                          color: checkActive(pathname, path)
+                        color={
+                          checkActive(pathname, path)
                             ? rawColors?.green?.[1200]
-                            : rawColors?.gray?.[1200],
-                          fontWeight: 500,
-                          fontSize: 'base',
-                          lineHeight: 'heading',
-                          letterSpacing: '-0.25px',
-                        }}>
+                            : rawColors?.gray?.[1200]
+                        }
+                        fontWeight="500"
+                        fontSize="base"
+                        lineHeight="heading"
+                        letterSpacing="-0.25px">
                         {name}
                       </Text>
                     )}
@@ -128,10 +116,10 @@ const Sidebar = (props: any) => {
               ))}
             </Box>
           ))}
-        </Box>
+        </Flex>
 
-        <Box mt="auto" mb="4">
-          <Box className="first-step" p={3}>
+        <Box mt="auto" mb="md">
+          <Box className="first-step" p="md">
             <Button variant="primary" size="full" onClick={toggleSearch}>
               <Plus size={16} /> New Document
             </Button>

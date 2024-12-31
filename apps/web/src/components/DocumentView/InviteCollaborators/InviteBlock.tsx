@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Box } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Button, InputText } from '@wraft/ui';
+import { Button, InputText, Select } from '@wraft/ui';
 
 import { postAPI, fetchAPI, patchAPI } from 'utils/models';
 
@@ -24,6 +24,12 @@ interface Collaborator {
   content_id: string;
   state_id: string;
 }
+
+const ITEMS = [
+  { value: 'suggestor', label: 'Suggestor' },
+  { value: 'editor', label: 'Editor' },
+  { value: 'viewer', label: 'Viewer' },
+];
 
 export default function InviteBlock({ docId }: any) {
   const [collaborators, setCollaborators] = useState<any>([]);
@@ -111,6 +117,19 @@ export default function InviteBlock({ docId }: any) {
                 {...field}
                 type="email"
                 placeholder="Email address"
+                required
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="role"
+            rules={{ required: 'Please select a Engine ID' }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={ITEMS}
+                placeholder="Select role"
                 required
               />
             )}

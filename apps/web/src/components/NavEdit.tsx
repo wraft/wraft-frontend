@@ -136,7 +136,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
                             {userProfile?.roles?.size > 0 && (
                               <Text
                                 as="p"
-                                sx={{ fontSize: 'xxs', color: 'text' }}>
+                                sx={{ fontSize: 'xs', color: 'text' }}>
                                 {userProfile?.roles[0]?.name}
                               </Text>
                             )}

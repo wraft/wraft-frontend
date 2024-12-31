@@ -75,12 +75,18 @@ importers:
       '@storybook/blocks':
         specifier: ^8.4.7
         version: 8.4.7(react-dom@18.3.1)(react@18.3.1)(storybook@8.4.7)
+      '@storybook/manager-api':
+        specifier: ^8.4.7
+        version: 8.4.7(storybook@8.4.7)
       '@storybook/react':
         specifier: ^8.4.7
         version: 8.4.7(react-dom@18.3.1)(react@18.3.1)(storybook@8.4.7)(typescript@5.7.2)
       '@storybook/react-vite':
         specifier: ^8.4.7
         version: 8.4.7(react-dom@18.3.1)(react@18.3.1)(storybook@8.4.7)(typescript@5.7.2)(vite@6.0.3)
+      '@storybook/theming':
+        specifier: ^8.4.7
+        version: 8.4.7(storybook@8.4.7)
       '@vitejs/plugin-react':
         specifier: ^4.3.0
         version: 4.3.4(vite@6.0.3)

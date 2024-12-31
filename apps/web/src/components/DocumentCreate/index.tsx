@@ -153,7 +153,7 @@ const CreateDocument = () => {
               <Box
                 variant="caps"
                 sx={{
-                  fontSize: 'xxs',
+                  fontSize: 'xs',
                   py: 2,
                   color: 'text',
                 }}>
@@ -329,7 +329,7 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       <Text
         as="h4"
         sx={{
-          fontSize: 'xxs',
+          fontSize: 'xs',
           m: 0,
           ml: 'auto',
           color: 'text',

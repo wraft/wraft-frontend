@@ -1,8 +1,6 @@
 import styled, { th } from "@xstyled/emotion";
 
 import { IconWrapper as WUIIconWrapper } from "../Field/styles";
-import { StyledIcon } from "../Icon";
-import { StyledTag } from "../Tag";
 
 import { SelectOptions } from "./index";
 
@@ -127,7 +125,7 @@ export const Indicators = styled.div<{
   padding: 0;
   top: 0;
   bottom: 0;
-  // ${({ size }) => (size === "xs" ? "sm" : "md")};
+  right: 0;
   display: flex;
   gap: xs;
 `;
@@ -146,8 +144,8 @@ export const DropDownIndicator = styled.button<{
   background: transparent;
   ${centerContent};
 
-  ${StyledIcon} {
-    cursor: ${(isOpen) =>
+  svg {
+    transform: ${({ isOpen }) =>
       isOpen ? "rotate3d(0, 0, 1, 180deg)" : "rotate3d(0)"};
     transition: medium;
   }
@@ -164,7 +162,7 @@ export const DropDownIndicator = styled.button<{
 export const Tags = styled.divBox`
   margin-top: lg;
 
-  ${/* sc-selector */ StyledTag}:not(:last-child) {
+  svg:not(:last-child) {
     margin-right: sm;
     margin-bottom: sm;
   }

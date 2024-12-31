@@ -38,7 +38,7 @@ export const Dialog: any = styled.div`
   max-height: calc(100dvh - 2 * 0.75rem);
   flex-direction: column;
   gap: 1rem;
-  overflow: auto;
+  // overflow: auto;
   border-radius: 0.65rem;
   background-color: hsl(204 20% 100%);
   padding: 1rem;

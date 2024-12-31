@@ -1,8 +1,10 @@
+import { rpxTransformers } from "@xstyled/emotion";
+
 import basic from "./basic";
 import colors from "./colors";
-import styles from "./styles";
 import alerts from "./variants/alerts";
 import { borderWidths } from "./variants/borders";
+import boxVariant from "./variants/boxVariant";
 import buttons from "./variants/buttons";
 import { getDefaultFields } from "./variants/defaultFields";
 import { getFocus } from "./variants/focus";
@@ -12,8 +14,16 @@ import layout from "./variants/layout";
 import links from "./variants/links";
 import { getRadii } from "./variants/radii";
 import { getSpace } from "./variants/space";
-import text from "./variants/text";
-import { fontWeights, getFontSizes } from "./variants/typography";
+import { getTags } from "./variants/tags";
+import {
+  fontWeights,
+  getFontSizes,
+  getLetterSpacings,
+  getLineHeights,
+  getTexts,
+  getTextsFontFamily,
+  getTextsFontWeights,
+} from "./variants/typography";
 
 export { GlobalStyle } from "./GlobalStyle";
 
@@ -29,28 +39,37 @@ const createTheme = (options: Options = {}) => {
 
   let theme: any = basic;
 
+  theme.transformers = { ...rpxTransformers };
+
   theme.toEm = (px) => `${px / defaultFontSize}em`;
   theme.toRem = (px) => `${px / defaultFontSize}rem`;
   theme.toPx = (rem) => `${rem * defaultFontSize}px`;
 
   theme.colors = colors;
-
-  theme.fontSizes = getFontSizes("rem", theme);
   theme.fontWeights = fontWeights;
+  theme.letterSpacings = getLetterSpacings(theme);
+  theme.fontSizes = getFontSizes("rem", theme);
+  theme.lineHeights = getLineHeights(theme);
+  theme.textsFontWeights = getTextsFontWeights(theme);
+  theme.textsFontFamily = getTextsFontFamily(theme);
+  theme.texts = getTexts(theme);
+
+  theme.variants = boxVariant;
+
+  theme.radii = getRadii(theme);
 
   theme.borderWidths = borderWidths;
   theme.focus = getFocus(theme);
   theme.spaceV2 = getSpace(theme);
+  theme.space = getSpace(theme);
   theme.buttons = buttons;
   theme.forms = forms;
-  theme.text = text;
   theme.links = links;
   theme.layout = layout;
   theme.alerts = alerts;
-  theme.styles = styles;
-  // theme.tags = getTags(theme);
+  // theme.styles = styles;
+  theme.tags = getTags(theme);
   theme.icons = getIcons(theme);
-  theme.radii = getRadii(theme);
   // theme.tables = getTables(theme);
   theme.defaultFields = getDefaultFields(theme);
 
@@ -58,15 +77,3 @@ const createTheme = (options: Options = {}) => {
 };
 
 export const theme = createTheme();
-
-// export const theme = {
-//   ...basic,
-//   colors,
-//   buttons,
-//   forms,
-//   text,
-//   links,
-//   layout,
-//   alerts,
-//   styles,
-// };
