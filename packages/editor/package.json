@@ -18,7 +18,7 @@
     "dist/**"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup --minify --clean",
     "dev": "tsup --watch",
     "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

@@ -102,6 +102,11 @@ module.exports = {
                 position: 'after',
               },
               {
+                pattern: 'schemas/**',
+                group: 'internal',
+                position: 'after',
+              },
+              {
                 pattern: 'utils',
                 group: 'internal',
                 position: 'after',

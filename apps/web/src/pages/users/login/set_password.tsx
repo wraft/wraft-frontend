@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import { z } from 'zod';
+import { BrandLogoIcon } from '@wraft/icon';
 
 import PasswordCreated from 'components/PasswordCreated';
-import { BrandLogo } from 'components/Icons';
 import Field from 'common/Field';
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
@@ -70,7 +70,7 @@ const Index = () => {
             <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
               <Link href="/">
                 <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
-                  <BrandLogo width="7rem" height="3rem" />
+                  <BrandLogoIcon width="7rem" height="3rem" />
                 </Box>
               </Link>
             </Box>

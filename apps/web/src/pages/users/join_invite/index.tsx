@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation';
 import Router from 'next/router';
 import cookie from 'js-cookie';
 
-import RegistrationForm from 'components/RegistrationForm';
+import RegistrationForm from 'components/Auth/RegistrationForm';
 import { useAuth } from 'contexts/AuthContext';
 
 const Index = () => {
