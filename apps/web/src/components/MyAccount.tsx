@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text } from 'theme-ui';
+import { UserCircle } from '@phosphor-icons/react';
 
-import { UserIcon } from 'components/Icons';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
@@ -15,7 +15,7 @@ const Form = () => {
       </Text> */}
       <Flex pb={6}>
         <Box pt={0}>
-          <UserIcon />
+          <UserCircle />
           {/* <Avatar
             variant="profile"
             src="https://randomuser.me/api/portraits/men/32.jpg"

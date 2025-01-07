@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Button } from 'theme-ui';
-
+import { Plus } from '@phosphor-icons/react';
 // import { modalStyle } from 'utils';
 
-import { PlusAlt as Plus } from 'components/Icons';
 import Modal from 'common/Modal';
 
 import ImagesForm from './AssetForm';

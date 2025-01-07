@@ -6,8 +6,8 @@ import {
 } from '@ariakit/react';
 import { Controller, useForm } from 'react-hook-form';
 import { Container, Label, Select, Box, Flex, Button, Text } from 'theme-ui';
+import { DownIcon } from '@wraft/icon';
 
-import { ArrowDropdown } from 'components/Icons';
 import { Drawer } from 'common/Drawer';
 import Field from 'common/Field';
 import { fetchAPI } from 'utils/models';
@@ -298,7 +298,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                           <Text variant="pM" mr={2}>
                             Advanced
                           </Text>
-                          <ArrowDropdown />
+                          <DownIcon />
                         </Flex>
                       </Disclosure>
                       <DisclosureContent>

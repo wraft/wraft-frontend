@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import { Box, Flex, Text, Container } from 'theme-ui';
 import { Avatar } from 'theme-ui';
+import { BrandLogoIcon } from '@wraft/icon';
+import { UserCircle } from '@phosphor-icons/react';
 
-import { UserIcon, BrandLogo } from 'components/Icons';
 import Link, { NextLinkText } from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
@@ -23,7 +24,7 @@ const UserNav = () => {
           <Box sx={{ a: { p: 0, letterSpacing: 0 } }}>
             <Link href={accessToken ? '/user-profile' : '/'}>
               <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
-                <BrandLogo width="6rem" height="2rem" />
+                <BrandLogoIcon width="6rem" height="2rem" />
               </Box>
             </Link>
           </Box>
@@ -61,7 +62,7 @@ const UserNav = () => {
                     />
                   )}
                   {userProfile && userProfile?.profile_pic === null && (
-                    <UserIcon />
+                    <UserCircle size={32} />
                   )}
                 </Flex>
               )}

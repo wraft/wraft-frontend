@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
-
-import { DotsVerticalRounded } from 'components/Icons';
+import { EllipsisVIcon } from '@wraft/icon';
 
 import { Drawer } from './common/Drawer';
 import LayoutForm from './LayoutForm';
@@ -77,7 +76,7 @@ const LayoutCard = ({
                     // pb: 1,
                     mt: 2,
                   }}>
-                  <DotsVerticalRounded width={24} height={16} />
+                  <EllipsisVIcon width={24} height={16} />
                 </MenuButton>
                 <Menu
                   as={Box}

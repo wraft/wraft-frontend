@@ -118,12 +118,10 @@ const Sidebar = (props: any) => {
           ))}
         </Flex>
 
-        <Box mt="auto" mb="md">
-          <Box className="first-step" p="md">
-            <Button variant="primary" size="full" onClick={toggleSearch}>
-              <Plus size={16} /> New Document
-            </Button>
-          </Box>
+        <Box mt="auto" className="first-step" mb="xxl" px="md">
+          <Button variant="primary" fullWidth={true} onClick={toggleSearch}>
+            <Plus size={14} /> New Document
+          </Button>
         </Box>
       </Flex>
       <Drawer

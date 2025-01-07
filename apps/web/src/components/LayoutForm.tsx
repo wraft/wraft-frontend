@@ -19,8 +19,8 @@ import {
   Image,
 } from 'theme-ui';
 import * as z from 'zod';
+import { ArrowDownIcon } from '@wraft/icon';
 
-import { ArrowDropdown } from 'components/Icons';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import Field from 'common/Field';
 import { API_HOST, fetchAPI, deleteAPI, postAPI, putAPI } from 'utils/models';
@@ -427,7 +427,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                         <Text variant="pM" mr={2}>
                           Advanced
                         </Text>
-                        <ArrowDropdown />
+                        <ArrowDownIcon />
                       </Flex>
                     </Disclosure>
                     <DisclosureContent>

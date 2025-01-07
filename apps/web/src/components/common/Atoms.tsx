@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { format, formatDistanceStrict } from 'date-fns';
-import { Box, Text, Flex } from 'theme-ui';
+import { Box, Text, Flex } from '@wraft/ui';
 import { Triangle } from '@phosphor-icons/react';
 
 import MenuItem from 'common/NavLink';
@@ -31,9 +31,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
       : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
 
   return (
-    <Text
-      variant="pM"
-      sx={{ fontSize: '13px', color: 'gray.1000', mt: props?.short ? 0 : 0 }}>
+    <Text fontSize="13px" color="gray.1000" mt={props?.short ? 0 : 0}>
       {timed}
     </Text>
   );
@@ -49,21 +47,17 @@ export const ColorBlock = (props: any) => {
   return (
     <Box
       {...props}
-      sx={{
-        width: '16px',
-        height: '16px',
-        bg: props?.bg,
-        // border: "solid 1px #ddd",
-        position: 'absolute',
-        top: '45%',
-        right: 3,
-        padding: '5px',
-        // background: "#fff",
-        borderRadius: '1px',
-        boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-        display: 'inline-block',
-        cursor: 'pointer',
-      }}
+      width="16px"
+      height="16px"
+      bg={props?.bg}
+      position="absolute"
+      top="45%"
+      right={3}
+      padding="5px"
+      borderRadius="1px"
+      boxShadow="0 0 0 1px rgba(0,0,0,.1)"
+      display="inline-block"
+      cursor="pointer"
     />
   );
 };
@@ -97,36 +91,24 @@ export const FilterBlock: FC<FilterBlockProps> = ({
   return (
     <Flex
       onClick={() => setSelected(title)}
-      sx={{
-        bg: active ? active : 'backgroundWhite',
-        cursor: 'pointer',
-        ':hover': {
-          bg: 'neutral.200',
-          fontWeight: 400,
-          color: 'text',
-        },
-        p: 1,
-        borderBottom: 'solid 1px',
-        borderColor: 'border',
-        alignItems: 'flex-start',
-        pl: 2,
-      }}>
+      bg={active ? active : 'backgroundWhite'}
+      cursor="pointer"
+      px="xs"
+      py="xs"
+      borderBottom="solid 1px"
+      borderColor="border"
+      alignItems="flex-start">
       <Box
-        sx={{
-          borderRadius: '3rem',
-          height: '12px',
-          width: '12px',
-          border: 'solid 1px',
-          borderColor: 'border',
-          bg: color,
-          mr: 2,
-          // ml: 2,
-          mt: 2,
-        }}
+        borderRadius="3rem"
+        h="12px"
+        w="12px"
+        border="solid 1px"
+        borderColor="border"
+        bg={color}
+        mr={2}
+        mt={2}
       />
-      <Text as="h4" sx={{ fontSize: 'sm', mt: 1, fontWeight: 500 }}>
-        {title}
-      </Text>
+      <Text mt={1}>{title}</Text>
     </Flex>
   );
 };
@@ -144,27 +126,19 @@ interface BoxWrapProps {
 
 export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
   return (
-    <Box sx={{ pt: 1, pb: 2 }}>
+    <Box pt={1} pb={2}>
       <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
-        <Text
-          sx={{
-            fontSize: 'xs',
-            color: 'text',
-            fontWeight: 300,
-            cursor: 'pointer',
-          }}>
+        <Text fontSize="xs" color="text" fontWeight="300" cursor="pointer">
           {id}
         </Text>
         <Text
           as="h4"
           p={0}
-          sx={{
-            color: 'text',
-            m: 0,
-            fontSize: 'sm',
-            fontWeight: 500,
-            cursor: 'pointer',
-          }}>
+          color="text"
+          m={0}
+          fontSize="sm"
+          fontWeight="500"
+          cursor="pointer">
           {name}
         </Text>
       </MenuItem>
@@ -202,44 +176,38 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
   };
 
   return (
-    <Flex sx={{ pt: 2 }}>
+    <Flex pt={2}>
       {name && (
         <Text
-          pt={0}
-          variant="labelSmall"
-          sx={{
-            bg: getColor(),
-            color: 'text',
-            borderRadius: '3rem',
-            pl: '8px',
-            pt: '2px',
-            pb: '2px',
-            fontWeight: '600',
-          }}>
+          // variant="labelSmall"
+          bg={getColor()}
+          color="text"
+          borderRadius="3rem"
+          pl="8px"
+          pt="2px"
+          pb="2px"
+          fontWeight="600">
           {name}
         </Text>
       )}
       {!name && (
         <Flex
-          sx={{
-            alignItems: 'center',
-            gap: '2px',
-            bg: 'orange.50',
-            borderRadius: '3rem',
-            py: '2px',
-            px: 2,
-            svg: {
-              fill: 'orange.600',
-            },
-          }}>
+          alignItems="center"
+          gap="2px"
+          bg="orange.50"
+          borderRadius="3rem"
+          py="2px"
+          px={2}
+          // svg: {
+          //   fill: 'orange.600',
+          // }
+        >
           <Text
-            variant="labelSmall"
-            sx={{
-              color: 'orange.600',
-              mr: '0px',
-              p: 0,
-              fontWeight: '600',
-            }}>
+            // variant="labelSmall"
+            color="orange.600"
+            mr="0px"
+            p={0}
+            fontWeight="600">
             Draft
           </Text>
 
@@ -271,23 +239,22 @@ export const IconWrapper = ({
   return (
     <Box
       {...props}
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        svg: {
-          cursor: 'pointer',
-          width: `${size}px`,
-          height: `${size}px`,
-          p: p === 'out' ? 0 : '8px',
-          borderRadius: '9rem',
-          bg: 'transparent',
-          color: 'gray.400',
-          ':hover': {
-            bg: 'gray.100',
-            color: 'gray.900',
-          },
-        },
-      }}>
+      display="flex"
+      alignItems="center"
+      // svg: {
+      //   cursor: 'pointer',
+      //   width: `${size}px`,
+      //   height: `${size}px`,
+      //   p: p === 'out' ? 0 : '8px',
+      //   borderRadius: '9rem',
+      //   bg: 'transparent',
+      //   color: 'gray.400',
+      //   ':hover': {
+      //     bg: 'gray.100',
+      //     color: 'gray.900',
+      //   },
+      // },
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1rem"

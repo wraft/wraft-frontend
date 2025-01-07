@@ -251,7 +251,7 @@ const ContentList = () => {
                   variant="blockTitle"
                   sx={{
                     fontWeight: 'body',
-                    fontSize: 'sm',
+                    fontSize: 'base',
                     color: 'text',
                   }}>
                   Filter by Variant

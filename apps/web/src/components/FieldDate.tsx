@@ -3,8 +3,8 @@ import { format, parse } from 'date-fns';
 import { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import { Label, Input, Text, Box } from 'theme-ui';
+import { CalendarDots } from '@phosphor-icons/react';
 
-import { Calendar } from 'components/Icons';
 import 'react-day-picker/lib/style.css';
 
 interface Props {
@@ -118,7 +118,7 @@ const Field: React.FC<Props> = ({
                 <Text
                   color="gray.4"
                   sx={{ position: 'absolute', right: 2, top: 2 }}>
-                  <Calendar width={20} height={20} />
+                  <CalendarDots width={20} height={20} />
                 </Text>
               )}
             </Box>

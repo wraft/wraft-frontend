@@ -1,6 +1,5 @@
 import { Box, Flex, useColorMode } from 'theme-ui';
-
-import { BrandLogo } from 'components/Icons';
+import { BrandLogoIcon } from '@wraft/icon';
 
 import Container from './Container';
 import ModeToggle from './ModeToggle';
@@ -44,7 +43,7 @@ const Footer = () => {
               fill: 'gray.1200',
             },
           }}>
-          <BrandLogo width="6rem" height="2rem" fill="gray.1200" />
+          <BrandLogoIcon width="6rem" height="2rem" fill="gray.1200" />
           <Flex sx={{ gap: '32px', ml: 'auto' }}>
             {footerMenu.map((item, i) => (
               <LinkCompontent key={i} {...item} />

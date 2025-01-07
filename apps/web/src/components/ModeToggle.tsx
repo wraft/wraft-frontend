@@ -1,4 +1,3 @@
-// import { Moon, Sun } from 'components/Icons';
 import { Moon, Sun } from '@phosphor-icons/react';
 import { Button, useColorMode } from 'theme-ui';
 
