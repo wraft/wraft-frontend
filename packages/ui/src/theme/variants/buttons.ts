@@ -1,373 +1,192 @@
-import { opacity } from "@xstyled/emotion";
+import { CSSObject } from "@xstyled/emotion";
 
-const buttons = {
-  none: {
-    padding: "0px",
-    margin: "0px",
-    border: "none",
-    background: "transparent",
-  },
-  btnBig: {
-    cursor: "pointer",
-  },
-  primaryLarge: {
-    backgroundColor: "green.1000",
-    fontSize: "1.15rem",
-    fontWeight: 600,
-    color: "green.100",
-    padding: "0.75rem 1rem",
-    borderRadius: "0.85rem",
-    ":hover": {
-      backgroundColor: "green.1100",
-      borderColor: "green.1200",
-    },
-  },
-  secondaryLarge: {
-    backgroundColor: "gray.100",
-    fontSize: "1.15rem",
-    fontWeight: 600,
-    color: "green.1200",
-    padding: "0.75rem 1rem",
-    borderRadius: "0.75rem",
-    border: "solid 1px",
-    borderColor: "green.900",
-    "&:hover": {
-      backgroundColor: "green.200",
-      borderColor: "green.a500",
-      color: "green.700 !important",
-    },
-  },
-  tertiaryLarge: {
-    backgroundColor: "gray.100",
-    fontSize: "1.15rem",
-    fontWeight: 600,
-    color: "gray.1200",
-    padding: "0.75rem 1rem",
-    borderRadius: "0.75rem",
-    "&:hover": {
-      color: "green.800 !important",
-    },
-  },
-  primary: {
-    backgroundColor: "primary",
-    color: "#fff",
-    border: "1px solid",
-    borderColor: "primary",
-    borderRadius: "4px",
-    padding: "8px 16px",
-    fontWeight: "heading",
-    fontSize: "sm",
-    fontFamily: "body",
-    ":hover": {
-      backgroundColor: "green.1000",
-      borderColor: "#197231",
-    },
-    ":disabled": {
-      backgroundColor: "#E4E9EF",
-      borderColor: "#E4E9EF",
-      color: "gray.200",
-    },
-  },
+import { WuiTheme } from "../types";
 
-  secondary: {
-    cursor: "pointer",
-    backgroundColor: "gray.200",
-    color: "gray.1200",
-    border: "1px solid",
-    borderColor: "gray.500",
-    borderRadius: "6px",
-    padding: "8px 12px",
-    fontWeight: 600,
-    fontSize: "sm",
-    fontFamily: "body",
-    svg: {
-      opacity: 0.5,
-    },
-    ":disabled": {
-      color: "gray.600",
-      cursor: "not-allowed",
-      pointerEvents: "auto !important",
-    },
-    ":hover": {
-      backgroundColor: "gray.400",
-      borderColor: "gray.500",
-    },
-  },
-  ghostinline: {
-    display: "flex",
-    bg: "gray.200",
-    border: "solid 1px",
-    borderColor: "gray.700",
-    padding: "6px 9px",
-    fontWeight: "heading",
-    svg: {
-      opacity: "0.6",
-    },
-    fontSize: "sm",
-    fontFamily: "body",
-    borderRadius: "6px",
-    color: "gray.1100",
-    ":hover": {
-      bg: "green.300",
-      color: "gray.200",
-    },
-    ":disabled": {
-      color: "gray.900",
-      bg: "neutral.300",
-    },
-  },
-  ghost: {
-    background: "transparent",
-    border: "none",
-    padding: "8px 16px",
-    fontWeight: "heading",
-    fontSize: "sm",
-    fontFamily: "body",
+import { ThemeFocus } from "./focus";
+
+import { hexToRGBA } from "@/utils";
+
+type CommonAttributesButton = CSSObject;
+
+type SizeAttributesButton = CSSObject;
+
+type Variant = "primary" | "secondary" | "tertiary" | "ghost";
+type Size = "xs" | "sm" | "md" | "lg";
+type Icon = "only" | "default";
+
+export type ThemeButtons = Record<Variant | "danger", CommonAttributesButton> &
+  Record<"hover", Record<Variant | "danger", CommonAttributesButton>> &
+  Record<"focus", Record<Variant | "danger", unknown>> &
+  Record<"active", Record<Variant | "danger", CommonAttributesButton>> &
+  Record<
+    "disabled",
+    CommonAttributesButton & { "&:focus": ReturnType<ThemeFocus> }
+  > &
+  Record<"sizes", Record<Size, SizeAttributesButton>> &
+  Record<"icon", Record<Icon, Record<Size, string>>>;
+
+export const getButtons = (theme: WuiTheme): ThemeButtons => {
+  const { colors, focus, fontWeights, radii, space, texts, toRem } = theme;
+  const defaults = {
+    ...texts.xs,
     color: "text",
-    ":hover": {
-      backgroundColor: "#F0F2F5",
+    fontWeight: fontWeights.bold,
+    letterSpacing: 0,
+    borderRadius: radii.md,
+  };
+
+  return {
+    primary: {
+      ...defaults,
+      color: "#fff",
+      backgroundColor: "primary",
+      borderColor: "primary",
     },
-    ":disabled": {
-      color: "gray.900",
-      bg: "neutral.300",
-    },
-  },
-  buttonPrimary: {
-    cursor: "pointer",
-    borderRadius: "4px",
-    p: "8px 16px",
-    ":disabled": {
-      cursor: "default",
-      color: "gray.200",
-      bg: "neutral.200",
-    },
-    color: "#fff",
-    backgroundColor: "primary.9",
-  },
-  buttonSecondary: {
-    variant: "buttons.buttonPrimary",
-    color: "text",
-    bg: "neutral.200",
-  },
-  buttonPrimarySmall: {
-    variant: "buttons.buttonPrimary",
-    fontSize: "sm",
-  },
-  delete: {
-    variant: "buttons.buttonPrimary",
-    bg: "red.700",
-  },
-  cancel: {
-    variant: "buttons.buttonPrimary",
-    bg: "neutral.300",
-    color: "gray.900",
-  },
-  googleLogin: {
-    fontWeight: "bold",
-    color: "gray.800",
-    background: "none",
-    border: "1px solid",
-    borderColor: "border",
-    borderRadius: "4px",
-    py: "9px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: "16px",
-    cursor: "pointer",
-    width: "100%",
-    ":hover": {
-      bg: "transparent",
-    },
-    ":focus": {
-      bg: "transparent",
-    },
-  },
-  download: {
-    bg: "gray.200",
-    textTransform: "capitalize",
-  },
-  btnPrimary: {
-    variant: "buttons.btnBig",
-    bg: "primary.9",
-    color: "primary.2",
-    fontSize: "sm",
-    borderRadius: 6,
-    cursor: "pointer",
-    px: 3,
-    py: 2,
-    ":hover": {
-      bg: "green.800",
+    secondary: {
+      ...defaults,
+      backgroundColor: "background",
       borderColor: "border",
     },
-  },
-  iconButton: {
-    bg: "red.100",
-  },
-  btnMenu: {
-    mr: 2,
-    a: {
-      textDecoration: "none",
+    tertiary: {
+      ...defaults,
+      color: "primary",
+      backgroundColor: "transparent",
+      borderColor: "primary",
+    },
+    ghost: {
+      ...defaults,
       color: "text",
-      py: 2,
-      px: 1,
-      width: "100%",
-      "&.active": {
-        background: "green.a200",
-        // background: '#E2F7EA',
-        color: "green.800",
-        svg: {
-          fill: "green.300",
+      backgroundColor: "transparent",
+      borderColor: "transparent",
+    },
+    danger: {
+      primary: {
+        color: "yellow",
+        background: "#b0b04c",
+        // color: colors["neutral-10"],
+        // backgroundColor: colors["red-70"],
+        borderColor: colors["red-70"],
+      },
+      tertiary: {
+        backgroundColor: "transparent",
+        color: colors["red-80"],
+        borderColor: colors["red-80"],
+      },
+      ghost: {
+        color: colors["red-80"],
+        backgroundColor: "transparent",
+        borderColor: "transparent",
+      },
+    },
+    hover: {
+      primary: {
+        backgroundColor: "green.500",
+        borderColor: "green.500",
+      },
+      secondary: {
+        backgroundColor: colors["neutral-70"],
+        borderColor: "transparent",
+      },
+      tertiary: {
+        backgroundColor: hexToRGBA(colors["neutral-90"], 0.1),
+      },
+      ghost: {
+        backgroundColor: hexToRGBA(colors["neutral-90"], 0.1),
+      },
+      danger: {
+        primary: {
+          backgroundColor: colors["red-60"],
+          borderColor: colors["red-60"],
+        },
+        tertiary: {
+          backgroundColor: colors["red-10"],
+        },
+        ghost: {
+          backgroundColor: colors["red-10"],
         },
       },
-      ":hover": {
-        background: "green.a500",
-        // background: '#E2F7EA',
+    },
+    focus: {
+      primary: { ...focus(colors["primary-20"]) },
+      secondary: { ...focus(colors["neutral-40"]) },
+      tertiary: { ...focus(colors["neutral-40"]) },
+      ghost: { ...focus(colors["neutral-40"]) },
+      danger: {
+        primary: { ...focus(colors["red-40"]) },
+        tertiary: { ...focus(colors["red-40"]) },
+        ghost: { ...focus(colors["red-40"]) },
       },
     },
-  },
-  btnSecondary: {
-    variant: "buttons.btnPrimary",
-    bg: "gray.100",
-    cursor: "pointer",
-    color: "gray.1200",
-    fontSize: "sm",
-    borderRadius: 6,
-    border: "solid 1px",
-    borderColor: "border",
-    ":hover": {
-      bg: "gray.200",
-      color: "gray.900",
+    active: {
+      primary: {
+        backgroundColor: colors["primary-10"],
+        borderColor: colors["primary-10"],
+      },
+      secondary: {
+        backgroundColor: colors["neutral-50"],
+        borderColor: colors["neutral-50"],
+      },
+      tertiary: {
+        backgroundColor: hexToRGBA(colors["neutral-90"], 0.4),
+      },
+      ghost: {
+        backgroundColor: hexToRGBA(colors["neutral-90"], 0.4),
+      },
+      danger: {
+        primary: {
+          backgroundColor: colors["red-50"],
+          borderColor: colors["red-50"],
+        },
+        tertiary: {
+          backgroundColor: colors["red-20"],
+        },
+        ghost: {
+          backgroundColor: colors["red-20"],
+        },
+      },
     },
-  },
-  btnSecondaryInline: {
-    variant: "buttons.btnPrimary",
-    bg: "white",
-    cursor: "pointer",
-    color: "gray.1200",
-    fontSize: "sm",
-    borderRadius: 6,
-    display: "flex",
-    paddingTop: "6px",
-    paddingBottom: "6px",
-    alignItems: "center",
-    paddingLeft: "12px",
-    paddingRight: "12px",
-    marginTop: "4px",
-    marginBottom: "4px",
-    border: "solid 1px",
-    borderColor: "border",
-    ":hover": {
-      bg: "gray.200",
-      color: "gray.1200",
+    disabled: {
+      ...defaults,
+      color: colors["beige-70"],
+      backgroundColor: colors["beige-40"],
+      borderColor: colors["beige-40"],
+      "&:focus": { ...focus(colors["beige-10"]) },
     },
-  },
-  btnPrimaryInline: {
-    variant: "buttons.btnPrimary",
-    bg: "green.1100",
-    cursor: "pointer",
-    color: "green.100",
-    fontSize: "sm",
-    borderRadius: 6,
-    display: "flex",
-    paddingTop: "4px",
-    paddingBottom: "4px",
-    alignItems: "center",
-    paddingLeft: "12px",
-    paddingRight: "12px",
-    marginTop: "4px",
-    marginBottom: "4px",
-    py: 1,
-    border: "solid 1px",
-    borderColor: "border",
-    ":hover": {
-      bg: "gray.200",
-      color: "gray.900",
+    sizes: {
+      xs: {
+        height: toRem(24),
+        padding: `${space.xs} ${space.sm}`,
+      },
+      sm: {
+        height: toRem(32),
+        padding: `${space.sm} ${space.md}`,
+      },
+      md: {
+        ...texts.base,
+        fontWeight: fontWeights.bold,
+        height: toRem(40),
+        padding: `${space.sm} ${space.lg}`,
+      },
+      lg: {
+        ...texts.base,
+        fontWeight: fontWeights.bold,
+        height: toRem(48),
+        padding: `${space.md} ${space.xl}`,
+      },
     },
-  },
-  btnAction: {
-    variant: "buttons.btnBig",
-    bg: "gray.900",
-    color: "gray.200",
-    borderColor: "border",
-    ":hover": {
-      bg: "gray.1000",
-      color: "gray.100",
+    icon: {
+      only: {
+        xs: toRem(16),
+        sm: toRem(16),
+        md: toRem(16),
+        lg: toRem(24),
+      },
+      default: {
+        xs: toRem(12),
+        sm: toRem(16),
+        md: toRem(16),
+        lg: toRem(16),
+      },
     },
-  },
-  btnSmall: {
-    cursor: "pointer",
-    variant: "buttons.btnSecondary",
-    fontSize: "xxs",
-    p: 1,
-    px: 2,
-  },
-  btnIcon: {
-    variant: "buttons.btnSecondary",
-    bg: "gray.100",
-    color: "gray.1100",
-    borderColor: "gray.300",
-    ":hover": {
-      bg: "gray.300",
-      color: "gray.1200",
-    },
-    px: 2,
-    py: "3px",
-    pt: "6px",
-  },
-  btnPrimaryLarge: {
-    variant: "buttons.btnBig",
-    fontSize: "xs",
-    p: 2,
-    px: 3,
-    border: 0,
-  },
-  base: {
-    cursor: "pointer",
-    bg: "transparent",
-    color: "gray.1000",
-  },
-  button: {
-    border: "solid 1px",
-    borderColor: "border",
-    p: 1,
-    mt: 3,
-    lineHeight: 0,
-    svg: { fill: "text" },
-    bg: "gray.200",
-    cursor: "pointer",
-  },
-  buttonApproval: {
-    ml: 3,
-    bg: "neutral.100",
-    fontSize: "xxs",
-    fontWeight: 600,
-    color: "gray.800",
-    border: "solid 1px ",
-    borderRadius: "6px",
-    borderColor: "gray.100",
-    fontFamily: "heading",
-    textTransform: "uppercase",
-    cursor: "pointer",
-    "&:hover": {
-      color: "gray.900",
-      bg: "neutral.200",
-    },
-  },
-  btnDelete: {
-    background: "none",
-    cursor: "pointer",
-    pr: "0px",
-    pl: "28px",
-    display: "flex",
-  },
-  btnLarge: {
-    // variant: 'buttons.btnBig',
-    fontSize: "base",
-    p: 2,
-    px: 3,
-    border: 0,
-  },
+  };
 };
-
-export default buttons;

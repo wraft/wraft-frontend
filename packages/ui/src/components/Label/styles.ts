@@ -31,9 +31,9 @@ export const requiredStyles: any = css`
     /* It prevents the element to shift the layout and it allows us to put it properly on top with super */
     line-height: 0;
     vertical-align: super;
-    font-size: subtitle-sm;
+    font-size: xs;
     font-weight: bold;
-    color: primary-500;
+    color: red.300;
   }
 `;
 

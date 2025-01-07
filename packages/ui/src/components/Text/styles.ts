@@ -11,7 +11,7 @@ const getBlockHeight = (lines: number) => css`
   word-break: ${lines === 1 ? "break-all" : null};
 `;
 
-export const Text = styled.p<TextOptions>`
+export const Text = styled.div<TextOptions>`
   ${({ lines, theme, variant, withDash }) => {
     const isHeading = variant?.startsWith("h");
 

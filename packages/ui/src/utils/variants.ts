@@ -3,9 +3,9 @@ import { th } from "@xstyled/emotion";
 export type Variant = "error" | "focused" | "info" | "success" | "warning";
 
 export const VARIANTS: Record<Variant, string> = {
-  error: "red-400",
+  error: "red.400",
   focused: "gray.400",
-  info: "info-500",
+  info: "gray.500",
   success: "green.400",
   warning: "yellow.400",
 };

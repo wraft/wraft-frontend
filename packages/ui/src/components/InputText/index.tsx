@@ -69,6 +69,7 @@ export const InputText = forwardRef<"input", InputTextProps>(
           onKeyDown={onKeyDown}
           placeholder={placeholder}
           ref={ref}
+          size={size}
           transparent={transparent}
           type={type}
           value={value}

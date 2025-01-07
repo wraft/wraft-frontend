@@ -62,7 +62,7 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
       fontSize: fontSizes.base,
       lineHeight: "1rem",
       fontWeight: fontWeights.body,
-      borderColor: colors.border,
+      borderColor: "border",
       borderWidth: borderWidths.sm,
       borderStyle: "solid",
       outline: "none",
@@ -134,8 +134,8 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
     },
     focused: {
       default: {
-        ...focus(colors["gray"]["300"]),
-        // borderColor: "transparent",
+        ...focus(colors["green"]["400"]),
+        borderColor: "transparent",
       },
       error: { ...focus(colors["red"]["300"]) },
       warning: { ...focus(colors["orange"]["300"]) },

@@ -9,15 +9,15 @@ export const Field = styled.div<any>`
 `;
 
 export const VARIANTS: Record<Variant, string> = {
-  error: "danger-500",
-  info: "info-500",
-  success: "success-500",
-  warning: "warning-500",
+  error: "red.400",
+  info: "gray.500",
+  success: "green.400",
+  warning: "yellow.400",
 };
 
 export const Hint = styled.div<{ variant: Variant }>`
   display: flex;
-  ${({ variant }) => css`
+  ${({ variant }) => `
     color: ${VARIANTS[variant] || undefined};
   `}
   display: flex;

@@ -25,9 +25,9 @@ export interface TextOptions {
   withDash?: boolean;
 }
 
-export type TextProps = CreateWuiProps<"p", TextOptions>;
+export type TextProps = CreateWuiProps<"div", TextOptions>;
 
-export const Text = forwardRef<"p", TextProps>(
+export const Text = forwardRef<"div", TextProps>(
   (
     { children, dataTestId, lines, variant = "base", withDash, ...rest },
     ref,
