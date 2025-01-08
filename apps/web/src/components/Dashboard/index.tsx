@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Button } from '@wraft/ui';
 import { format } from 'date-fns';
-import { Text, Box, Flex, Container, Grid } from 'theme-ui';
+import { Text, Box, Flex, Grid, Button } from '@wraft/ui';
 import { File } from '@phosphor-icons/react';
 
 import { ApproveTick } from 'components/Icons';
@@ -21,40 +20,21 @@ interface DashboardStatsProps {
   total_documents: number;
 }
 const BlockCard = ({ title, desc }: BlockCardProps) => (
-  <Flex
-    sx={{
-      maxWidth: '100%', // max-width: 33%;
-      border: '1px solid',
-      bg: 'gray.100',
-      borderRadius: '4px',
-      borderColor: 'gray.400',
-      py: '22px',
-      px: '18px',
-      svg: {
-        fill: 'gray.900',
-      },
-    }}>
+  <Box
+    bg="background-primary"
+    border="1px solid"
+    borderColor="border"
+    borderRadius="sm"
+    px="lg"
+    py="xl">
     <File width={32} height={20} />
-    <Flex ml={2} sx={{ flex: 1 }}>
-      <Box
-        sx={{
-          fontSize: 'sm',
-          fontWeight: 500,
-          mb: 1,
-          color: 'gray.1100',
-        }}>
+    <Flex ml={2} flex={1}>
+      <Text fontWeight={500} mb={1} color="gray.1100">
         {title}
-      </Box>
-      <Box
-        sx={{
-          ml: 'auto',
-          fontSize: 'base',
-          fontWeight: 300,
-        }}>
-        {desc}
-      </Box>
+      </Text>
+      <Text ml="auto">{desc}</Text>
     </Flex>
-  </Flex>
+  </Box>
 );
 
 const finishSetup = [
@@ -115,45 +95,31 @@ const Dashboard = () => {
   };
 
   return (
-    <Container
-      variant="layout.pageFrame"
-      sx={{ height: '100vh', bg: 'gray.200' }}>
-      <Box sx={{ fontSize: 'sm', color: 'gray.900' }}>
+    <Box maxHeight="100vh" bg="background-secondary" p="lg">
+      <Text color="text-secondary" fontSize="sm">
         {format(currentTime, 'EEEE, MMMM dd')}
-      </Box>
-      <Box
-        sx={{
-          fontSize: 'sm',
-          fontWeight: 'heading',
-          fontFamily: 'body',
-          mb: 3,
-          color: 'gray.1200',
-        }}>
+      </Text>
+      <Text fontWeight="heading" mb="xl" color="text-primary">
         {getGreeting()}, {userProfile?.name}
-      </Box>
-      <Flex
-        mt={4}
-        mb="32px"
-        sx={{ display: 'none', border: '1px solid', borderColor: 'border' }}>
-        <Flex sx={{ width: '70%', alignItems: 'center' }}>
+      </Text>
+      <Flex my="lg" display="none" border="1px solid" borderColor="border">
+        <Flex w="70%" alignItems="center">
           <Image
-            src="/static/images/dashboardone.png" // Adjust the path accordingly
+            src="/static/images/dashboardone.png"
             alt="Description of your image"
             width={0}
-            height={0} // Set the desired height
+            height={0}
             style={{ width: 'auto', height: '180px' }}
           />
           <Box>
             <Box
-              sx={{
-                fontSize: 'base',
-                fontWeight: 'heading',
-                lineHeight: '19.2px',
-                mb: 3,
-              }}>
+              fontSize="base"
+              fontWeight="heading"
+              lineHeight="19.2px"
+              mb={3}>
               Personalise your experience
             </Box>
-            <Text as="p" sx={{ fontSize: 'xs', mb: 3 }}>
+            <Text as="p" fontSize="xs" mb={3}>
               Customise Wraft to suit to your experience. Lorem ipsum dolor sit
               amet, consectetur adipiscing elit
             </Text>
@@ -161,31 +127,20 @@ const Dashboard = () => {
           </Box>
         </Flex>
         <Flex
-          sx={{
-            width: '30%',
-            // justifyContent: 'center',
-            borderLeft: '1px solid',
-            borderColor: 'border',
-            py: 3,
-            px: 4,
-          }}>
+          w="30%"
+          // justifyContent: 'center',
+          borderLeft="1px solid"
+          borderColor="border"
+          py={3}
+          px={4}>
           <Box>
-            <Box
-              sx={{
-                fontSize: 'sm',
-                fontWeight: 'heading',
-                mb: '18px',
-              }}>
+            <Box fontSize="sm" fontWeight="heading" mb="18px">
               Finish setup
             </Box>
             {finishSetup.map((data, i) => (
-              <Flex sx={{ alignItems: 'center', mb: '18px' }} key={i}>
+              <Flex alignItems="center" mb="18px" key={i}>
                 <ApproveTick />
-                <Box
-                  px={2}
-                  sx={{
-                    fontSize: 'xs',
-                  }}>
+                <Box px={2} fontSize="xs">
                   {data.title}
                 </Box>
               </Flex>
@@ -194,7 +149,7 @@ const Dashboard = () => {
         </Flex>
       </Flex>
 
-      <Grid gap={3} columns={4}>
+      <Grid gap="md" templateColumns="repeat(4, 1fr)">
         <BlockCard
           title="Daily Total"
           desc={dashboardStatus?.daily_documents}
@@ -210,7 +165,7 @@ const Dashboard = () => {
       </Grid>
 
       <PendingDocumentBlock />
-    </Container>
+    </Box>
   );
 };
 

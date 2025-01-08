@@ -121,7 +121,7 @@ const layout = {
     alignItems: "center",
   },
   frameHeading: {
-    bg: "backgroundWhite",
+    bg: "background-primary",
     pb: 4,
     px: 4,
     py: 2,
@@ -167,7 +167,7 @@ const layout = {
   },
   contentFrame: {
     width: "100%",
-    // bg: 'backgroundWhite',
+    // bg: 'background-primary',
     // border: '1px solid',
     // borderColor: 'border',
     // borderRadius: 4,

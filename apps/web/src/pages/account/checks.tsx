@@ -46,7 +46,9 @@ const Contents: FC = () => {
               checkBoxes.map((cb: any) => (
                 <Flex sx={{ p: 3, border: 'solid 1px #ddd' }} key={cb?.name}>
                   {/* <CheckCircle width="24" height="24px" color="green.2" /> */}
-                  <Text as="h3" sx={{ fontWeight: 400, color: 'text', ml: 3 }}>
+                  <Text
+                    as="h3"
+                    sx={{ fontWeight: 400, color: 'text-primary', ml: 3 }}>
                     {cb?.name}
                   </Text>
                 </Flex>

@@ -81,7 +81,7 @@ export const StepBlock = ({
           sx={{
             fontFamily: 'body',
             fontSize: 'xs',
-            color: 'text',
+            color: 'text-primary',
             mb: 0,
           }}>
           {title}
@@ -213,14 +213,14 @@ export const DocumentContentBlock = () => {
               maxWidth: '100%',
               px: 4,
               '.remirror-theme .ProseMirror': {
-                bg: 'gray.200',
+                bg: 'background-secondary',
                 pl: '9rem !important',
                 pr: '9rem !important',
                 pt: '7rem !important',
                 p: 'gray.1200',
                 'p mark': {
                   background: 'transparent !important',
-                  color: 'gray.1200',
+                  color: 'text-primary',
                 },
               },
             }}>
@@ -258,7 +258,7 @@ export const DocumentContentBlock = () => {
             },
             '.tabPanel button[aria-selected=true]': {
               border: 0,
-              bg: 'gray.200',
+              bg: 'background-secondary',
               px: 3,
               py: 2,
             },
@@ -318,14 +318,14 @@ export const DocumentContentBlock = () => {
                     maxWidth: '100%',
                     px: 4,
                     '.remirror-theme .ProseMirror': {
-                      bg: 'gray.200',
+                      bg: 'background-secondary',
                       pl: '9rem !important',
                       pr: '9rem !important',
                       pt: '7rem !important',
                       p: 'gray.1200',
                       'p mark': {
                         background: 'transparent !important',
-                        color: 'gray.1200',
+                        color: 'text-primary',
                       },
                     },
                   }}>

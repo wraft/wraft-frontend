@@ -1,43 +1,4 @@
-// {
-//   "100": "#0f1211",
-//   "200": "#181a19",
-//   "300": "#202322",
-//   "400": "#272b2a",
-//   "500": "#2d3231",
-//   "600": "#363c3a",
-//   "700": "#434a48",
-//   "800": "#586260",
-//   "900": "#66716e",
-//   "1000": "#747e7b",
-//   "1100": "#adb7b4",
-//   "1200": "#edeeee",
-//   "a100": "#00911102",
-//   "a200": "#c4f7de0a",
-//   "a300": "#d1f7ea14",
-//   "a400": "#dafef51c",
-//   "a500": "#d8fbf424",
-//   "a600": "#dafbf02f",
-//   "a700": "#dffcf43e",
-//   "a800": "#e2fff957",
-//   "a900": "#e4fff867",
-//   "a1000": "#e9fff975",
-//   "a1100": "#f1fffbb2",
-//   "a1200": "#feffffed",
-//   "contrast": "#FFFFFF",
-//   "surface": "rgba(0, 0, 0, 0.05)",
-//   "indicator": "#66716e",
-//   "track": "#66716e"
-// }
-
-const dark: any = {
-  text: "#fff",
-  base: "#000",
-  border: "#2C3641",
-  background: "#111111",
-  backgroundGray: "#f5f7fa0f",
-  backgroundWhite: "#111111",
-  white: "#000",
-
+const colors = {
   neutral: {
     100: "#1D252F",
     200: "#2C3641",
@@ -108,5 +69,35 @@ const dark: any = {
     indicator: "#127d5d",
     track: "#127d5d",
   },
+};
+const dark = {
+  primary: "#127D5D",
+  secondary: "gray.900",
+  white: "#000",
+
+  border: colors.gray["500"],
+
+  error: "#111111",
+  info: "#111111",
+  success: "#111111",
+  warning: "#111111",
+
+  "background-primary": "#111111",
+  "background-secondary": colors.gray["200"],
+
+  "input-background": "gray.200",
+  "input-border": "gray.200",
+  "input-focus-background": "gray.200",
+  "input-focus-border-color": "gray.200",
+  "input-focus-color": "gray.200",
+  "input-placeholder": "gray.200",
+  "input-text": "gray.200",
+
+  "text-primary": colors.gray["1200"],
+  "text-secondary": colors.gray["1000"],
+  "text-disabled": "#111111",
+  "text-error": "#111111",
+  "text-success": "#111111",
+  ...colors,
 };
 export default dark;

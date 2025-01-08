@@ -202,7 +202,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
       as={'form'}
       onSubmit={handleSubmit(onSubmit)}
       sx={{
-        bg: 'backgroundWhite',
+        bg: 'background-primary',
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100dvh',
@@ -243,7 +243,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
               type="search"
               placeholder="Search by"
               onChange={(e: any) => setSearchTerm(e.target.value)}
-              sx={{ bg: 'background' }}
+              sx={{ bg: 'background-primary' }}
             />
           </Box>
           <Flex
@@ -269,7 +269,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                         }}
                         sx={{
                           width: '100%',
-                          bg: 'backgroundWhite',
+                          bg: 'background-primary',
                           py: '12px',
                           px: '16px',
                           border: 'none',
@@ -311,7 +311,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                               sx={{
                                 pl: 1,
                                 textTransform: 'capitalize',
-                                color: 'text',
+                                color: 'text-primary',
                               }}>
                               {permissions[key].name}
                             </Text>
@@ -339,7 +339,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                                   alignItems: 'center',
                                   borderBottom: '1px solid',
                                   borderColor: 'border',
-                                  bg: 'background',
+                                  bg: 'background-primary',
                                   py: '12px',
                                   px: '16px',
                                   mb: 0,

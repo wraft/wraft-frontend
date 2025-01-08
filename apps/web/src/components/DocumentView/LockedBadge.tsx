@@ -12,7 +12,7 @@ export const LockedBadge = () => {
         verticalAlign: 'center',
         borderRadius: '6px',
         fontSize: 'xs',
-        color: 'text',
+        color: 'text-primary',
         bg: 'green.a400',
       }}>
       <LockSimple size={10} />

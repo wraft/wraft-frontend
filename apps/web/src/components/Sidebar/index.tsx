@@ -29,7 +29,7 @@ const Sidebar = (props: any) => {
   const pathname: string = router.pathname as any;
 
   const checkActive = (currentPath: string, path: any) => {
-    if (currentPath === '/content/[id]' && path.path === '/contents') {
+    if (currentPath === '/documents/[id]' && path.path === '/contents') {
       return true;
     }
 
@@ -74,7 +74,7 @@ const Sidebar = (props: any) => {
           {/* <SearchBlock /> */}
 
           {Menulist.map((m, i) => (
-            <Box key={i} mb={4}>
+            <Box key={i} mb="lg">
               <Text
                 as="h6"
                 variant="sm"

@@ -39,7 +39,7 @@ export const Page = (props: any) => {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
       </Head>
-      <Container width={100} bg="backgroundWhite">
+      <Container width={100} bg="background-primary">
         {!accessToken && (
           <Box>
             <Nav />

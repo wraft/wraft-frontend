@@ -135,7 +135,7 @@ export const ContentSidebar = ({
                 fontWeight: 500,
                 bg: 'gray.500',
                 ml: 2,
-                color: 'text',
+                color: 'text-primary',
                 px: 1,
                 py: 0,
                 borderRadius: '3px',

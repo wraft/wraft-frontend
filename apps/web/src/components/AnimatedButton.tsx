@@ -22,7 +22,7 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
           minHeight: '36px',
           width: 'max-content',
           border: '1px solid',
-          borderColor: 'gray.600',
+          borderColor: 'border',
           borderRadius: '4px',
           transition: 'all 0.3s ease',
           '& .text': {
@@ -38,7 +38,7 @@ const AnimatedButton = ({ onClick, text, children, disabled }: Props) => {
               position: 'relative',
               left: 0,
               right: 0,
-              color: 'text',
+              color: 'text-primary',
               // clipPath: 'inset(0 100% 0 0)',
               // transition: 'clip-path 0.3s ease-out ',
             },

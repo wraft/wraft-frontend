@@ -1,6 +1,5 @@
 import type { ButtonProps as AkButtonProps } from "@ariakit/react";
-import { Button as AriakitButton } from "@ariakit/react";
-import styled, { th, x } from "@xstyled/emotion";
+import { x } from "@xstyled/emotion";
 import { forwardRef } from "react";
 
 import { Spinner } from "../Spinner";
@@ -12,10 +11,10 @@ export type Size = "xxs" | "xs" | "sm" | "md" | "lg" | "full";
 export type Variant =
   | "primary"
   | "secondary"
-  | "outlined"
+  | "tertiary"
+  | "ghost"
   | "disabled"
   | "googleLogin"
-  | "ghost"
   | "none"
   | "delete";
 

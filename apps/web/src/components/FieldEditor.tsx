@@ -94,7 +94,9 @@ const FieldForm = (props: FieldFormProps) => {
               <Text as="h3" sx={{ mb: 0 }}>
                 Empty State
               </Text>
-              <Text as="p" sx={{ fontSize: 'xs', color: 'text', mb: 3, pr: 3 }}>
+              <Text
+                as="p"
+                sx={{ fontSize: 'xs', color: 'text-primary', mb: 3, pr: 3 }}>
                 You have no fields added, start adding fields to `field` up your
                 Variant
               </Text>

@@ -156,7 +156,7 @@ const OrgMemberForm = () => {
                           fontSize: 'xs',
                           // pl: 3,
                           py: 2,
-                          color: 'primary',
+                          color: 'text-primary',
                           textTransform: 'uppercase',
                         }}>
                         {organ?.name}

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import NavLink from 'next/link';
-import { Button, DropdownMenu } from '@wraft/ui';
+import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { Box, Flex, Image, Text, useColorMode } from 'theme-ui';
+import { useColorMode, Image } from 'theme-ui';
 import { Gear, Plus } from '@phosphor-icons/react';
 
 import DefaultAvatar from 'components/DefaultAvatar';
 import Link from 'common/NavLink';
-import Modal from 'common/Modal';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, postAPI } from 'utils/models';
 
@@ -67,39 +66,29 @@ const Header = () => {
   return (
     <>
       <Flex
-        sx={{
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          borderBottom: 'solid 1px',
-          borderColor: 'border',
-          height: '72px',
-          // p: 3,
-          mb: 3,
-        }}>
+        justify="space-between"
+        align="center"
+        borderBottom="solid 1px"
+        borderColor="border"
+        h="72px"
+        mb={3}>
         <Box>
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
-              <Flex color="primary" sx={{ fill: 'text', cursor: 'pointer' }}>
+              <Flex cursor="pointer">
                 {userProfile?.currentOrganisation && (
                   <Flex>
                     <DefaultAvatar
                       url={userProfile?.currentOrganisation?.logo}
                       value={userProfile?.currentOrganisation?.name}
-                      size={24}
+                      size={32}
                     />
 
-                    <Box ml={2}>
-                      <Text
-                        as="p"
-                        sx={{
-                          fontWeight: `bold`,
-                          color: 'gray.1200',
-                          lineHeight: 1,
-                          fontSize: 'sm',
-                        }}>
+                    <Box ml="sm">
+                      <Text fontWeight="bold" color="text-primary">
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 'xs', color: 'gray.1000' }}>
+                      <Text fontSize="sm" color="text-secondary">
                         {userProfile?.currentOrganisation?.members_count}{' '}
                         members
                       </Text>
@@ -113,32 +102,22 @@ const Header = () => {
                 color="primary"
                 py="12px"
                 px="8px"
-                sx={{
-                  fill: 'text',
-                  cursor: 'pointer',
-                  minWidth: '200px',
-                  justifyContent: 'space-between',
-                }}>
+                cursor="pointer"
+                minWidth="200px"
+                justifyContent="space-between">
                 {userProfile?.currentOrganisation && (
                   <>
                     <Flex>
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
-                        size={24}
+                        size={28}
                       />
-                      <Box ml={2}>
-                        <Text
-                          as="p"
-                          sx={{
-                            fontWeight: `bold`,
-                            color: 'gray.1000',
-                            lineHeight: 1,
-                            fontSize: 'xs',
-                          }}>
+                      <Box ml="sm">
+                        <Text fontWeight="bold" color="text-primary">
                           {userProfile?.currentOrganisation?.name}
                         </Text>
-                        <Text as="p" sx={{ fontSize: 'xs', color: 'gray.800' }}>
+                        <Text fontSize="sm" color="text-secondary">
                           {userProfile?.currentOrganisation?.members_count}{' '}
                           members
                         </Text>
@@ -152,11 +131,7 @@ const Header = () => {
               </Flex>
 
               <DropdownMenu.Separator />
-              <Box
-                variant="styles.scrollbarY"
-                sx={{
-                  height: '400px',
-                }}>
+              <Box overflowY="scroll" maxHeight="400px">
                 {organisations &&
                   organisations
                     .filter(
@@ -204,19 +179,17 @@ const Header = () => {
               </Box>
             </DropdownMenu.Trigger>
             <DropdownMenu aria-label="Preferences">
-              <Box p={2} sx={{ minWidth: '200px' }}>
+              <Box p={2} minWidth="200px">
                 <Box
                   py="12px"
                   px="8px"
-                  sx={{
-                    borderBottom: '1px solid',
-                    borderColor: 'border',
-                    marginBottom: '8px',
-                  }}>
+                  borderBottom="1px solid"
+                  borderColor="border"
+                  marginBottom="8px">
                   <Text as="h4">{userProfile?.name}</Text>
 
                   {userProfile?.roles?.size > 0 && (
-                    <Text as="p" sx={{ fontSize: 'xs', color: 'text' }}>
+                    <Text as="p" fontSize="xs" color="text">
                       {userProfile?.roles[0]?.name}
                     </Text>
                   )}
@@ -224,17 +197,13 @@ const Header = () => {
 
                 <DropdownMenu.Item>
                   <Flex
-                    sx={{ flex: 1 }}
+                    flex={1}
                     onClick={() => {
                       const next = mode === 'dark' ? 'light' : 'dark';
                       setMode(next);
                     }}>
                     <Text as="span">Theme</Text>
-                    <Box
-                      sx={{
-                        // mb: 0,
-                        ml: 'auto',
-                      }}>
+                    <Box ml="auto">
                       <ModeToggle sx={{ pt: 0, m: 0 }} variant="button" />
                     </Box>
                   </Flex>
@@ -242,20 +211,22 @@ const Header = () => {
                 <DropdownMenu.Item>
                   <Link href="/notifications">
                     <Flex>
-                      <Box sx={{ width: '180px' }}>Notifications</Box>
+                      <Box minWidth="180px">Notifications</Box>
                       {count && count > 0 && (
-                        <Box sx={{ width: '20px', pl: '4px' }}>{count}</Box>
+                        <Box minWidth="20px" pl="4px">
+                          {count}
+                        </Box>
                       )}
                     </Flex>
                   </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
                   <Link href="/account" path="/account">
-                    <Box sx={{ width: '200px' }}>Settings</Box>
+                    <Box minWidth="200px">Settings</Box>
                   </Link>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item>
-                  <Box sx={{ display: 'flex', flex: 1 }} onClick={onUserLogout}>
+                  <Box display="flex" flex={1} onClick={onUserLogout}>
                     Signout
                   </Box>
                 </DropdownMenu.Item>
@@ -264,7 +235,10 @@ const Header = () => {
           </DropdownMenu.Provider>
         )}
       </Flex>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        ariaLabel="create workspace">
         <WorkspaceCreate setOpen={setIsOpen} setCreatedId={setCreatedId} />
       </Modal>
     </>

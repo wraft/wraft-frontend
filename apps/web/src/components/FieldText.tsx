@@ -40,7 +40,7 @@ const FieldText: React.FC<Props> = ({
         sx={{
           fontFamily: 'body',
           ':disabled': {
-            [view ? 'color' : '']: 'text',
+            [view ? 'color' : '']: 'text-primary',
           },
         }}
       />

@@ -123,7 +123,7 @@ const FormEntry = () => {
   }
 
   return (
-    <Box sx={{ background: 'background' }}>
+    <Box sx={{ background: 'background-primary' }}>
       <Box sx={{ position: 'absolute', top: 4, left: 4 }}>
         <Logo />
       </Box>
@@ -179,7 +179,7 @@ const FormEntry = () => {
                   {item.name}
                   <Text sx={{ color: 'red.700' }}>{item.required && '*'}</Text>
                 </Label>
-                {item.type === 'Text' && (
+                {item.type === 'text-primary' && (
                   <Textarea
                     value={item.value}
                     onChange={(e) => onValueChange(e, item)}

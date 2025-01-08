@@ -50,7 +50,7 @@ const CommentCard = (comment: Comment) => {
               as="p"
               sx={{
                 mt: 0,
-                color: 'text',
+                color: 'text-primary',
                 fontSize: 'sm',
                 pt: 0,
                 lineHeight: 1.35,

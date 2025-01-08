@@ -4,24 +4,9 @@ import { Image } from 'theme-ui';
 
 import { IconWrapper } from 'common/Atoms';
 
-import abstract from './icon/abstract.svg';
-import del from './icon/bin.svg';
-import flow from './icon/bolt.svg';
-import field from './icon/box.svg';
-import edit from './icon/edit.svg';
-import layout from './icon/extension.svg';
-import file from './icon/file.svg';
-import food from './icon/food.svg';
-import grid from './icon/grid-alt.svg';
-import templates from './icon/grid-small.svg';
 import logo from './icon/logo-white.svg';
-import plus from './icon/plus.svg';
-import content from './icon/sticker.svg';
-import user from './icon/user.svg';
-import userno from './icon/userno.svg';
 
 // import { Box } from 'theme-ui';
-// import book from './icon/book-opened.svg';
 
 const IconBox = styled.div`
   img {
@@ -63,36 +48,12 @@ export const IconBoxWrapper = ({ Icon }: IconBoxWrapperProps) => (
   </IconBox>
 );
 
-export const Book = () => <IconBoxWrapper Icon={content} />;
-export const Layout = () => <IconBoxWrapper Icon={grid} />;
-export const ContentType = () => <IconBoxWrapper Icon={layout} />;
-export const Template = () => <IconBoxWrapper Icon={templates} />;
-export const Flow = () => <IconBoxWrapper Icon={flow} />;
-export const Del = () => <IconBoxWrapper Icon={del} />;
-export const Edit = () => <IconBoxWrapper Icon={edit} />;
-export const File = () => <IconBoxWrapper Icon={file} />;
-export const FieldIcon = () => <IconBoxWrapper Icon={field} />;
-export const User = () => <IconBoxWrapper Icon={user} />;
-export const Plus = () => <IconBoxWrapper Icon={plus} />;
-
 export const Logo = () => (
   <IconBox>
     <Image alt="" className="y" src={logo} width="50px" ml={2} />
   </IconBox>
 );
 
-export const FoodIcon = () => (
-  <IconBox>
-    <Image alt="" className="ico" src={food} width="24px" height="24px" />
-  </IconBox>
-);
-export const Abstract = () => (
-  <Image alt="" className="x" src={abstract} width="100" />
-);
-
-export const UserIcon = () => (
-  <Image alt="" className="x" src={userno} width="32" />
-);
 // #363E49
 
 export const EyeIcon = (props: React.SVGProps<SVGSVGElement>) => {

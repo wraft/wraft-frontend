@@ -146,7 +146,7 @@ export const Index: any = () => {
           }}>
           <Box
             sx={{
-              color: 'gray.1200',
+              color: 'text-primary',
             }}>
             <Flex sx={{ alignItems: 'center', gap: 3 }}>
               <ArrowLeft cursor="pointer" onClick={goBack} size={18} />

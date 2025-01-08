@@ -21,7 +21,7 @@ export const FlowProgressBar = ({
     }
 
     if (!checked && !activeState) {
-      return 'gray.200';
+      return 'background-secondary';
     }
     return 'green.400';
   };

@@ -45,7 +45,7 @@ const Index: FC = () => {
                 sx={{
                   width: '347px',
                   display: 'flex',
-                  background: 'backgroundWhite',
+                  background: 'background-primary',
                   alignItems: 'center',
                   border: '1px solid',
                   borderColor: 'border',

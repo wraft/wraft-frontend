@@ -4,7 +4,7 @@ const boxVariant = {
     border: "1px solid",
     borderColor: "border",
     borderRadius: "lg",
-    backgroundColor: "backgroundWhite",
+    backgroundColor: "background-primary",
   },
   boxone: {
     width: "100%",

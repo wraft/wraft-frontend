@@ -33,7 +33,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         duration: 1000,
         position: 'top-right',
       });
-      Router.push('/contents');
+      Router.push('/documents');
     });
   };
   return (
@@ -58,7 +58,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
           {nextState && nextState.is_user_eligible && (
             <MenuItem
               as={Box}
-              onClick={() => Router.push(`/content/edit/${id}`)}
+              onClick={() => Router.push(`/documents/edit/${id}`)}
               sx={{ px: 3, py: 2, cursor: 'pointer' }}>
               Edit
             </MenuItem>
@@ -135,7 +135,7 @@ export const ContentInfoBlock = ({
                 fontWeight: 500,
                 bg: 'gray.500',
                 ml: 2,
-                color: 'text',
+                color: 'text-primary',
                 px: 1,
                 py: 0,
                 borderRadius: '3px',

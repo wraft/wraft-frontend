@@ -86,14 +86,14 @@ interface ImportedListProps {
 
 const pathMapping = {
   data_template: 'templates/edit',
-  variant: 'content-types',
+  variant: 'variants',
   flows: 'manage/flows',
   theme: 'manage/themes',
   layout: 'manage/layouts',
 };
 
 const ImportedList = ({ items }: ImportedListProps) => (
-  <ListParent borderColor="gray.400">
+  <ListParent borderColor="border">
     {Array.isArray(items) &&
       items.map((item, _i) => (
         <List
@@ -102,10 +102,10 @@ const ImportedList = ({ items }: ImportedListProps) => (
           py={2}
           display="flex"
           borderWidth={0}
-          borderColor="gray.400"
+          borderColor="border"
           borderBottomWidth={1}>
           {/* <x.div>
-            <Check size={12} color="gray.400" />
+            <Check size={12} color="border" />
           </x.div> */}
           <Box pl={1} flex={1} display="flex">
             <Link

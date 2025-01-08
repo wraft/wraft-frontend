@@ -147,7 +147,8 @@ const LoginForm = () => {
           <>
             <Box
               as="hr"
-              borderBottom="1px solid"
+              border="0"
+              borderTop="1px solid"
               borderColor="border"
               my="3xl"
               w="100%"

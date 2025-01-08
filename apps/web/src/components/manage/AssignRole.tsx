@@ -106,7 +106,7 @@ const AssignRole = ({
           borderColor: 'neutral.200',
           width: '100%',
         }}>
-        <Text variant="subB" sx={{ color: 'text' }}>
+        <Text variant="subB" sx={{ color: 'text-primary' }}>
           Choose roles
         </Text>
       </Box>
@@ -139,7 +139,7 @@ const AssignRole = ({
                     sx={{
                       pl: 1,
                       textTransform: 'capitalize',
-                      color: 'text',
+                      color: 'text-primary',
                     }}>
                     {role.roleName}
                   </Text>

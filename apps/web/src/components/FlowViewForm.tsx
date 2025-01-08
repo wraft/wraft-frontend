@@ -140,7 +140,7 @@ const FlowViewForm = () => {
                               <Text
                                 as="p"
                                 variant="capM"
-                                sx={{ color: 'text' }}>
+                                sx={{ color: 'text-primary' }}>
                                 {index + 1}
                               </Text>
                             </Box>

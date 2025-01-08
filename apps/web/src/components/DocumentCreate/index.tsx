@@ -109,7 +109,7 @@ const CreateDocument = () => {
     }
     if (formStep === 1) {
       setNewContent(data);
-      router.push(`/content/new`);
+      router.push(`/documents/new`);
     }
   };
 
@@ -155,7 +155,7 @@ const CreateDocument = () => {
                 sx={{
                   fontSize: 'xs',
                   py: 2,
-                  color: 'text',
+                  color: 'text-primary',
                 }}>
                 <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
                   Select a template
@@ -168,7 +168,9 @@ const CreateDocument = () => {
                     <EmptyForm />
                   </Box>
                   <Box sx={{ m: 2, pb: 0 }}>
-                    <Text as="h3" sx={{ fontWeight: 200, color: 'text' }}>
+                    <Text
+                      as="h3"
+                      sx={{ fontWeight: 200, color: 'text-primary' }}>
                       No template has been created yet.
                     </Text>
                   </Box>
@@ -332,7 +334,7 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
           fontSize: 'xs',
           m: 0,
           ml: 'auto',
-          color: 'text',
+          color: 'text-primary',
           fontWeight: 300,
         }}>
         {content_type.prefix}

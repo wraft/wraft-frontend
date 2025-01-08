@@ -1,4 +1,4 @@
-import styled from '@xstyled/emotion';
+import styled from "@xstyled/emotion";
 
 export const Pagination: any = styled.div`
   margin: auto;
@@ -11,7 +11,7 @@ export const Pagination: any = styled.div`
     padding-left: 0px;
     padding-right: 0px;
     margin: 0px;
-    background-color: backgroundWhite;
+    background-color: background-primary;
     border: 1px solid;
     border-color: border;
     padding: 10px 0px;

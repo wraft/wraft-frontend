@@ -80,7 +80,7 @@ const SortableItem = ({ item }: SortableItemProps) => {
         transform: CSS.Transform.toString(transform),
         transition: transition,
         alignItems: 'center',
-        bg: 'background',
+        bg: 'background-primary',
         py: 2,
       }}>
       <Box

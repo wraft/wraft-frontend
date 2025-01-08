@@ -56,7 +56,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
         }}>
         <Box
           sx={{
-            color: 'gray.1200',
+            color: 'text-primary',
           }}>
           <Flex sx={{ alignItems: 'center', gap: 3 }}>
             <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
@@ -136,7 +136,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
                             {userProfile?.roles?.size > 0 && (
                               <Text
                                 as="p"
-                                sx={{ fontSize: 'xs', color: 'text' }}>
+                                sx={{ fontSize: 'xs', color: 'text-primary' }}>
                                 {userProfile?.roles[0]?.name}
                               </Text>
                             )}

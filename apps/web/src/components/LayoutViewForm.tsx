@@ -191,7 +191,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        bg: 'background',
+                        bg: 'background-primary',
                         py: '24px',
                       }}>
                       <PdfViewer

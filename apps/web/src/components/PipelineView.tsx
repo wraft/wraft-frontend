@@ -242,7 +242,7 @@ const PipelineView = () => {
                 {activePipeline.name}
               </Text>
               {/* <Box>
-                <Text sx={{ fontSize: 'xs', color: 'text', mb: 2 }}>
+                <Text sx={{ fontSize: 'xs', color: 'text-primary', mb: 2 }}>
                   Pipelines › {activePipeline.name}
                 </Text>
                 <Text sx={{ fontSize: 4 }}>{activePipeline.name}</Text>
@@ -290,7 +290,7 @@ const PipelineView = () => {
                 sx={{
                   // p: 2,
                   fontSize: 'xs',
-                  color: 'text',
+                  color: 'text-primary',
                   letterSpacing: '-0.2',
                   fontWeight: 100,
                   // bg: 'white',
@@ -367,7 +367,7 @@ const PipelineView = () => {
                     sx={{
                       borderRadius: 3,
                       // borderColor: 'red',
-                      bg: 'gray.200',
+                      bg: 'background-secondary',
                       border: 'solid 1px',
                       borderColor: 'border',
                       width: '100%',
@@ -412,7 +412,7 @@ const PipelineView = () => {
                               sx={{
                                 fontSize: 'sm',
                                 fontWeight: 600,
-                                color: 'text',
+                                color: 'text-primary',
                               }}
                               mt={0}
                               // color="#111"
@@ -446,7 +446,7 @@ const PipelineView = () => {
                             key={m?.id}
                             sx={{
                               p: 4,
-                              bg: 'gray.200',
+                              bg: 'background-secondary',
                               borderBottom: 'solid 1px #ddd',
                             }}>
                             <Box

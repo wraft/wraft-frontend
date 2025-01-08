@@ -30,11 +30,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
       ? format(local_time, 'MMM dd, yyyy')
       : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
 
-  return (
-    <Text fontSize="13px" color="gray.1000" mt={props?.short ? 0 : 0}>
-      {timed}
-    </Text>
-  );
+  return <Text mt={props?.short ? 0 : 0}>{timed}</Text>;
 };
 
 /**
@@ -91,13 +87,14 @@ export const FilterBlock: FC<FilterBlockProps> = ({
   return (
     <Flex
       onClick={() => setSelected(title)}
-      bg={active ? active : 'backgroundWhite'}
+      bg={active ? active : 'background-primary'}
       cursor="pointer"
-      px="xs"
+      px="sm"
       py="xs"
+      gap="sm"
       borderBottom="solid 1px"
       borderColor="border"
-      alignItems="flex-start">
+      align="center">
       <Box
         borderRadius="3rem"
         h="12px"
@@ -105,8 +102,6 @@ export const FilterBlock: FC<FilterBlockProps> = ({
         border="solid 1px"
         borderColor="border"
         bg={color}
-        mr={2}
-        mt={2}
       />
       <Text mt={1}>{title}</Text>
     </Flex>
@@ -127,7 +122,7 @@ interface BoxWrapProps {
 export const BoxWrap: FC<BoxWrapProps> = ({ id, xid, name }) => {
   return (
     <Box pt={1} pb={2}>
-      <MenuItem variant="rel" href={`/content/[id]`} path={`content/${xid}`}>
+      <MenuItem variant="rel" href={`/documents/[id]`} path={`content/${xid}`}>
         <Text fontSize="xs" color="text" fontWeight="300" cursor="pointer">
           {id}
         </Text>
@@ -178,40 +173,23 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
   return (
     <Flex pt={2}>
       {name && (
-        <Text
-          // variant="labelSmall"
-          bg={getColor()}
-          color="text"
-          borderRadius="3rem"
-          pl="8px"
-          pt="2px"
-          pb="2px"
-          fontWeight="600">
+        <Text bg={getColor()} fontSize="sm" borderRadius="xxl" px="md" py="sx">
           {name}
         </Text>
       )}
       {!name && (
         <Flex
           alignItems="center"
-          gap="2px"
+          gap="xs"
           bg="orange.50"
           borderRadius="3rem"
-          py="2px"
-          px={2}
-          // svg: {
-          //   fill: 'orange.600',
-          // }
-        >
-          <Text
-            // variant="labelSmall"
-            color="orange.600"
-            mr="0px"
-            p={0}
-            fontWeight="600">
+          py="sx"
+          px="md">
+          <Text color="orange.600" fontSize="sm" mr="0px">
             Draft
           </Text>
 
-          <Triangle size={8} weight="bold" color="#FF8C02" />
+          <Triangle size={10} weight="bold" color="#FF8C02" />
         </Flex>
       )}
     </Flex>

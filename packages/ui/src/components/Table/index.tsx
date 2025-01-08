@@ -55,14 +55,13 @@ const Table = ({
               {headerGroup.headers.map((header: any) => (
                 <x.th
                   key={header.id}
-                  py="12px"
-                  px="24px"
+                  py="md"
+                  px="md"
                   borderBottom="1px solid"
                   borderColor="border"
-                  fontFamily="body"
                   fontWeight="heading"
-                  fontSize="12px"
-                  color="#A5ABB2"
+                  fontSize="base"
+                  color="text-secondary"
                   minWidth={header.getSize()}
                 >
                   {header.isPlaceholder ? null : (
@@ -140,8 +139,8 @@ const Table = ({
                   {row.getVisibleCells().map((cell) => (
                     <x.td
                       key={cell.id}
-                      py="14px"
-                      px="24px"
+                      py="md"
+                      px="md"
                       borderBottom="1px solid"
                       borderColor="border"
                       minWidth={`${cell.column.getSize()}`}
@@ -159,7 +158,7 @@ const Table = ({
       </S.Table>
       {!isLoading && data && data.length === 0 && (
         <x.div
-          backgroundColor="backgroundWhite"
+          backgroundColor="background-primary"
           minHeight="300px"
           display="flex"
           alignItems="center"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { Lightning } from '@phosphor-icons/react';
 
 type Props = {
@@ -9,37 +9,14 @@ type Props = {
 
 const ContentTitleList = ({ content, contentType }: Props) => {
   return (
-    <Flex
-      sx={{
-        ml: '-16px',
-        fontSize: 'sm',
-        ':hover': {
-          '.title': {
-            color: 'green.900',
-          },
-        },
-      }}>
-      <Box
-        sx={{
-          width: '3px',
-          bg: contentType?.color ? contentType?.color : 'blue',
-        }}
-      />
-      <Box ml={3}>
-        <Box sx={{ color: 'gray.1000' }}>{content?.instance_id}</Box>
-        <Flex sx={{ alignItems: 'center', gap: '4px' }}>
-          <Box
-            as="h5"
-            className="title"
-            sx={{
-              fontSize: 'base',
-              color: 'gray.1200',
-              letterSpacing: '-0.15px',
-              fontWeight: 500,
-              lineHeight: 1.25,
-            }}>
-            {content?.serialized?.title}
-          </Box>
+    <Flex fontSize="sm">
+      <Box w="2px" bg={contentType?.color ? contentType?.color : 'blue'} />
+      <Box ml="sm">
+        <Text color="text-secondary" fontSize="sm">
+          {content?.instance_id}
+        </Text>
+        <Flex alignItems="center" gap="xs">
+          <Text fontWeight="heading">{content?.serialized?.title}</Text>
           {content?.type === 3 && (
             <Lightning size={12} weight="bold" color="#62b997" />
           )}

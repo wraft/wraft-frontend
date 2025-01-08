@@ -1,15 +1,15 @@
 const alerts = {
   primary: {
-    color: 'text',
-    bg: 'gray.200',
+    color: "text",
+    bg: "background-secondary",
   },
   alert: {
-    color: 'red.900',
-    bg: 'red.200',
+    color: "red.900",
+    bg: "red.200",
   },
   muted: {
-    color: 'text',
-    bg: 'muted',
+    color: "text",
+    bg: "muted",
   },
 };
 

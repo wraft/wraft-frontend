@@ -5,12 +5,12 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Input } from 'theme-ui';
 
+import { FieldType, FieldTypeList } from 'components/Variants/VariantForm';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
 import { isNumeric } from 'utils';
 import { postAPI, fetchAPI, putAPI } from 'utils/models';
 
-import { FieldType, FieldTypeList } from './ContentTypeForm';
 import FieldEditor from './FieldEditor';
 
 export interface FieldTypeItem {

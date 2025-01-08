@@ -590,7 +590,7 @@ const SortableItem = ({
         border: '1px solid',
         borderColor: 'border',
         borderRadius: '4px',
-        bg: 'background',
+        bg: 'background-primary',
       }}>
       <Box
         ref={setNodeRef}
@@ -629,7 +629,7 @@ const SortableItem = ({
           />
           <Input
             className={`${isDragging ? 'z-10' : ''}`}
-            sx={{ bg: 'background', border: 'none' }}
+            sx={{ bg: 'background-primary', border: 'none' }}
             placeholder="Option Name"
             defaultValue={value.name}
             onChange={(e) => {

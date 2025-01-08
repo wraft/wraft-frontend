@@ -1,17 +1,13 @@
 import {
   ThumbsUp,
-  Files,
-  HouseSimple,
   Table,
   GitBranch,
   TextColumns,
   UserFocus,
   Article,
   Blueprint,
-  Wrench,
   FileText,
   House,
-  Lego,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 18;
@@ -28,7 +24,7 @@ const Menulist = [
       {
         name: 'Documents',
         icon: <FileText size={defaultIcon} />,
-        path: '/contents',
+        path: '/documents',
       },
       {
         name: 'Approvals',
@@ -53,7 +49,7 @@ const Menulist = [
       {
         name: 'Variants',
         icon: <Blueprint size={defaultIcon} />,
-        path: '/content-types',
+        path: '/variants',
       },
       {
         name: 'Forms',

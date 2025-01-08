@@ -36,7 +36,7 @@ const Accordion = ({ header, children }: AccordionProps) => (
         <CaretDown size={16} />
       </Box>
     </Header>
-    <Box border="solid 1px" borderColor="gray.400" borderBottom={0}>
+    <Box border="solid 1px" borderColor="border" borderBottom={0}>
       {children}
     </Box>
   </Frame>

@@ -1,14 +1,13 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import { Box, Container, Flex, Text } from 'theme-ui';
-import { Button, Drawer, useDrawer } from '@wraft/ui';
+import { Button, Drawer, useDrawer, Box, Flex, Text } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { Plus, X } from '@phosphor-icons/react';
 
-import FormList from 'components/FormList';
 import Page from 'components/PageFrame';
 import FormsFrom from 'components/FormsFrom';
 import FieldText from 'components/FieldText';
+import FormList from 'components/Form/FormList';
 import PageHeader from 'common/PageHeader';
 import Field from 'common/Field';
 import Modal from 'common/Modal';
@@ -63,33 +62,22 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Forms">
-          <Box sx={{ ml: 'auto', pt: 2 }}>
-            <Button variant="secondary" onClick={onOpenDrawer}>
-              <Plus size={12} weight="bold" />
-              Create From
-            </Button>
-          </Box>
+          <Button variant="tertiary" onClick={onOpenDrawer}>
+            <Plus size={12} weight="bold" />
+            Create From
+          </Button>
         </PageHeader>
-        <Container variant="layout.pageFrame">
+        <Box p="lg" minHeight="100%" bg="background-secondary">
           <FormList rerender={rerender} setRerender={setRerender} />
-        </Container>
+        </Box>
       </Page>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         {isOpen && (
-          <Box
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '518px' }}>
-            <Box
-              sx={{
-                py: 3,
-                px: 4,
-                borderBottom: 'solid 1px',
-                borderColor: 'gray.400',
-              }}>
-              <Text sx={{ fontWeight: 600 }}>Create Form</Text>
+          <Box as="form" minWidth="518px" onSubmit={handleSubmit(onSubmit)}>
+            <Box py={3} px={4} borderBottom="solid 1px" borderColor="gray.400">
+              <Text fontWeight="600">Create Form</Text>
             </Box>
-            <Box sx={{ p: 4 }}>
+            <Box p={4}>
               <Field
                 name="name"
                 label="Name"
@@ -113,12 +101,12 @@ const Index: FC = () => {
                 register={register}
               />
               {errors.description && errors.description.message && (
-                <Text variant="error">
+                <Text color="error">
                   {errors.description.message as string}
                 </Text>
               )}
             </Box>
-            <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
+            <Flex p={4} pt={0} gap={3}>
               <Button
                 type="submit"
                 variant="primary"

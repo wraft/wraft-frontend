@@ -103,9 +103,9 @@ const ImageEdit = ({ image, onUpdate, onSavable }: IImageCopperProps) => {
         <Flex
           sx={{
             position: 'relative',
-            color: 'text',
+            color: 'text-primary',
             p: 3,
-            bg: 'gray.200',
+            bg: 'background-secondary',
             width: '100%',
             borderTop: 'solid 1px',
             borderBottom: 'solid 1px',

@@ -39,7 +39,7 @@ export default function Toolbar() {
   return (
     <ToolbarContainer
       display="flex"
-      bg="gray.200"
+      bg="background-secondary"
       color="gray.1100"
       px={2}
       py={1}

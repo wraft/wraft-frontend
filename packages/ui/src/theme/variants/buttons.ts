@@ -38,7 +38,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
   return {
     primary: {
       ...defaults,
-      color: "#fff",
+      color: "#fff !important",
       backgroundColor: "primary",
       borderColor: "primary",
     },
@@ -158,6 +158,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
         padding: `${space.xs} ${space.sm}`,
       },
       sm: {
+        ...texts.sm,
         height: toRem(32),
         padding: `${space.sm} ${space.md}`,
       },

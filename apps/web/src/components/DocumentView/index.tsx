@@ -101,7 +101,7 @@ const DocumentView = () => {
               duration: 1000,
               position: 'top-right',
             });
-            router.replace(`/content/${response.content.id}`);
+            router.replace(`/documents/${response.content.id}`);
             setSaving(false);
           }
         })
@@ -124,7 +124,7 @@ const DocumentView = () => {
         duration: 1000,
         position: 'top-right',
       });
-      router.replace(`/content/${data.content.id}`);
+      router.replace(`/documents/${data.content.id}`);
     }
   };
 
@@ -156,7 +156,7 @@ const DocumentView = () => {
                       py: 2,
                       borderBottom: 'solid 1px',
                       borderColor: 'border',
-                      bg: 'gray.200',
+                      bg: 'background-secondary',
                     }}>
                     <Flex
                       variant="styles.scrollbarX"

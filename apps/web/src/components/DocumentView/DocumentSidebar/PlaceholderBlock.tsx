@@ -121,7 +121,7 @@ const PlaceholderBlock = ({
                   }}>
                   <Text
                     sx={{
-                      color: 'text',
+                      color: 'text-primary',
                       fontSize: 'sm',
                       fontWeight: 300,
                       flex: '0 0 40%',
@@ -133,7 +133,7 @@ const PlaceholderBlock = ({
                       fontSize: 'sm',
                       fontWeight: 'bold',
                       ml: 'auto',
-                      color: 'text',
+                      color: 'text-primary',
                     }}>
                     {x.value}
                   </Text>
@@ -153,7 +153,7 @@ const PlaceholderBlock = ({
         <Box
           as="form"
           onSubmit={handleSubmit(onSubmit)}
-          sx={{ bg: 'backgroundWhite', px: 4 }}>
+          sx={{ bg: 'background-primary', px: 4 }}>
           <Drawer.Title>Placeholder</Drawer.Title>
           <Box sx={{ pb: 4 }}>
             {mappedFields && mappedFields.length > 0 && (

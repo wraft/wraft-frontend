@@ -167,7 +167,7 @@ const TemplatePreview = ({
       bg="gray.100"
       borderRadius="6px"
       border="solid 1px"
-      borderColor="gray.400"
+      borderColor="border"
       overflow="hidden">
       <Box
         px={3}

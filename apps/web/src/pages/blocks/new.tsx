@@ -2,9 +2,9 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Container } from 'theme-ui';
 
-import Page from 'components/BlankFrame';
-import BlockTemplateForm from 'components/BlockTemplateForm';
 import NavEdit from 'components/NavEdit';
+import BlockTemplateForm from 'components/Block/BlockTemplateForm';
+import Page from 'components/Block/BlankFrame';
 
 export const Index: FC = () => {
   return (

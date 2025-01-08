@@ -40,7 +40,7 @@ const DefaultAvatar = ({ url, value, size }: DefaultAvatarProps) => {
           height: `${size + (size * 25) / 100}px`,
           width: `${size + (size * 25) / 100}px`,
           border: '1px solid',
-          borderColor: 'gray.200',
+          borderColor: 'background-secondary',
           p: '3px',
           bg: 'gray.600',
         }}

@@ -202,7 +202,7 @@ const PermissionsList = () => {
                 style: { cursor: 'pointer', width: '100%' },
               }}>
               <Flex sx={{ gap: '8px' }}>
-                <Text variant="pM" sx={{ color: 'text' }}>
+                <Text variant="pM" sx={{ color: 'text-primary' }}>
                   {getValue()}
                 </Text>
                 <Box
@@ -225,7 +225,7 @@ const PermissionsList = () => {
                 px: 3,
                 py: 2,
               }}>
-              <Text variant="pM" sx={{ color: 'text' }}>
+              <Text variant="pM" sx={{ color: 'text-primary' }}>
                 {getValue()}
               </Text>
             </Box>

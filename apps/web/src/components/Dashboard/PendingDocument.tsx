@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
-import { Avatar, Box, Flex } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Avatar } from 'theme-ui';
+import { Table, Box, Flex, Text } from '@wraft/ui';
 
 import { StateBadge, TimeAgo } from 'common/Atoms';
 import { ContentTitleList } from 'common/content';
@@ -11,10 +11,10 @@ import { fetchAPI } from 'utils/models';
 const columns = [
   {
     id: 'content.id',
-    header: 'NAME',
+    header: 'Name',
     accessorKey: 'content.id',
     cell: ({ row }: any) => (
-      <NextLink href={`/content/${row.original?.content?.id}`}>
+      <NextLink href={`/documents/${row.original?.content?.id}`}>
         <ContentTitleList
           contentType={row.original?.content_type}
           content={row.original?.content}
@@ -25,37 +25,33 @@ const columns = [
   },
   {
     id: 'content.updated_at',
-    header: 'TIME',
-    accessorKey: 'TIME',
+    header: 'Date',
+    accessorKey: 'date',
     cell: ({ row }: any) => (
-      <Box>
-        <TimeAgo time={row.original?.content?.updated_at} />
-      </Box>
+      <TimeAgo time={row.original?.content?.updated_at} />
     ),
     enableSorting: false,
   },
   {
     id: 'creator.profile_pic',
-    header: 'EDITORS',
+    header: 'Editors',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+      <Flex alignItems="center" gap="8px">
         <Avatar
           sx={{ width: '16px', height: '16px' }}
           src={row.original?.creator?.profile_pic}
         />
-        <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
+        <Text>{row.original?.creator?.name}</Text>
       </Flex>
     ),
     enableSorting: false,
   },
   {
-    header: 'STATUS',
+    header: 'Status',
     accessorKey: 'age',
     cell: ({ row }: any) => (
-      <Box>
-        <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
-      </Box>
+      <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
     ),
     enableSorting: false,
     textAlign: 'right',
@@ -87,15 +83,9 @@ const PendingDocumentBlock = () => {
   };
   return (
     <>
-      <Box
-        sx={{
-          fontSize: 'base',
-          fontWeight: 500,
-          mb: '18px',
-          mt: '36px',
-        }}>
+      <Text fontSize="lg" fontWeight="heading" mb="lg" mt="xl">
         Recent Documents
-      </Box>
+      </Text>
 
       <Table
         data={contents}

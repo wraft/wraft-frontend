@@ -36,7 +36,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
   register,
   defaultValue,
   sub,
-  ftype = 'text',
+  ftype = 'text-primary',
   onChangeColor,
   required = true,
   variant = 'outside',
@@ -121,7 +121,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
                 textAlign: `${isInside ? 'right' : 'left'}`,
                 border: border,
                 ':disabled': {
-                  [view ? 'color' : '']: 'text',
+                  [view ? 'color' : '']: 'text-primary',
                 },
               }}
               {...register(name, { required: required })}

@@ -232,6 +232,7 @@ export const getTexts = (theme: WuiTheme): ThemeTexts => {
     return {
       ...acc,
       [key]: {
+        color: "text-primary",
         fontFamily:
           textsFontFamily[key as keyof ThemeTextsFontFamily] || undefined,
         fontWeight: textsFontWeights[key as keyof ThemeTextsFontFamily],

@@ -127,7 +127,9 @@ const OrgMembersList = ({ id, members, onInitInvite }: OrgMembersListProps) => {
                       <Text as="h4" sx={{ fontWeight: 600 }}>
                         {_m.name}
                       </Text>
-                      <Text as="p" sx={{ fontSize: 'xs', color: 'text' }}>
+                      <Text
+                        as="p"
+                        sx={{ fontSize: 'xs', color: 'text-primary' }}>
                         {_m.email}
                       </Text>
                     </Box>

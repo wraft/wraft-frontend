@@ -78,7 +78,7 @@ const Dropzone = ({
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            bg: 'background',
+            bg: 'background-primary',
             py: '24px',
           }}>
           <Box

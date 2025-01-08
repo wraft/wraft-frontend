@@ -102,7 +102,7 @@ export const InfoSection = () => {
             <Text
               as="h3"
               variant="sectionheading"
-              sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+              sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
               Editors
             </Text>
             <AvatarCard
@@ -122,7 +122,7 @@ export const InfoSection = () => {
                     <Text
                       as="h3"
                       variant="sectionheading"
-                      sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+                      sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
                       Waiting for approval
                     </Text>
                     {nextState &&
@@ -156,7 +156,7 @@ export const InfoSection = () => {
         <Text
           as="h3"
           variant="sectionheading"
-          sx={{ mb: 0, pb: 0, color: 'gray.1000' }}>
+          sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
           Document
         </Text>
         <Box>
@@ -169,7 +169,7 @@ export const InfoSection = () => {
                     sx={{
                       fontSize: 'sm',
                       mb: 0,
-                      color: 'text',
+                      color: 'text-primary',
                     }}>
                     {contents.content.instance_id}
                     <Text as="span" sx={{ ml: 2, fontWeight: 400 }}>

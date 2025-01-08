@@ -79,13 +79,13 @@ const ContentCardBase = (props: IField) => {
         }}
       />
       <Box sx={{ p: 3 }}>
-        <Text sx={{ fontSize: 'xs', color: 'text' }}>
+        <Text sx={{ fontSize: 'xs', color: 'text-primary' }}>
           {props.content.instance_id}
         </Text>
         <MenuItem
           variant="rel"
-          href={`/content/[id]`}
-          path={`content/${props.content.id}`}>
+          href={`/documents/[id]`}
+          path={`documents/${props.content.id}`}>
           <Text>{props.content.serialized.title}</Text>
         </MenuItem>
       </Box>
@@ -103,7 +103,7 @@ const ContentCardBase = (props: IField) => {
           pt={1}
           sx={{
             pl: 1,
-            color: 'text',
+            color: 'text-primary',
             display: 'inline-block',
             textTransform: 'uppercase',
             fontSize: '11px',
@@ -145,7 +145,7 @@ const ContentCardBase = (props: IField) => {
 //             pt={1}
 //             sx={{
 //               pl: 1,
-//               color: 'text',
+//               color: 'text-primary',
 //               display: 'inline-block',
 //               textTransform: 'uppercase',
 //               fontSize: '11px',

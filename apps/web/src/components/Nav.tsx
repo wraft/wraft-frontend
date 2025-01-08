@@ -71,7 +71,7 @@ const Nav = ({ navtitle }: INav) => {
               pl: 3,
               borderRight: 'solid 1px',
               borderColor: 'border',
-              color: 'text',
+              color: 'text-primary',
               pb: 1,
             }}>
             <Flex sx={{ minWidth: '80ch' }}>
@@ -119,7 +119,7 @@ const Nav = ({ navtitle }: INav) => {
         <Box ml="auto" mr={3}>
           {navtitle && <Text variant="navtitle">{navtitle}</Text>}
           <Flex>
-            <Flex sx={{ ':hover': { bg: 'gray.200' } }}>
+            <Flex sx={{ ':hover': { bg: 'background-secondary' } }}>
               <Box as="span" sx={{ mt: 2 }}></Box>
 
               <Box
@@ -167,7 +167,7 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.200',
+                                bg: 'background-secondary',
                               },
                             }}>
                             <Box>
@@ -178,7 +178,7 @@ const Nav = ({ navtitle }: INav) => {
                                   as="p"
                                   sx={{
                                     fontSize: 'xs',
-                                    color: 'text',
+                                    color: 'text-primary',
                                   }}>
                                   {userProfile?.roles[0]?.name}
                                 </Text>
@@ -193,7 +193,7 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.200',
+                                bg: 'background-secondary',
                               },
                             }}>
                             Settings
@@ -206,7 +206,7 @@ const Nav = ({ navtitle }: INav) => {
                               bg: 'gray.100',
                               borderBottom: 'solid 1px #eee',
                               '&:hover': {
-                                bg: 'gray.200',
+                                bg: 'background-secondary',
                               },
                             }}>
                             Profile

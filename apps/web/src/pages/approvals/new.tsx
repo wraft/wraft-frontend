@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Flex } from 'theme-ui';
 
-import ApprovalForm from 'components/ApprovalForm';
 import Page from 'components/PageFrame';
+import ApprovalForm from 'components/Approval/ApprovalForm';
 
 const Index: FC = () => {
   return (

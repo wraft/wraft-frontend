@@ -1,51 +1,4 @@
-// {
-//   "100": "#fafdfc",
-//   "200": "#f6f9f9",
-//   "300": "#edf1f0",
-//   "400": "#e5e9e8",
-//   "500": "#dee2e1",
-//   "600": "#d6dad9",
-//   "700": "#cacfce",
-//   "800": "#b7bdbb",
-//   "900": "#848f8c",
-//   "1000": "#7a8481",
-//   "1100": "#5e6563",
-//   "1200": "#17221f",
-//   "a100": "#00996605",
-//   "a200": "#00555509",
-//   "a300": "#00392b12",
-//   "a400": "#00281e1a",
-//   "a500": "#001f1821",
-//   "a600": "#00191329",
-//   "a700": "#00191435",
-//   "a800": "#00160f48",
-//   "a900": "#0117117b",
-//   "a1000": "#00140e85",
-//   "a1100": "#000b08a1",
-//   "a1200": "#000c09e8",
-//   "contrast": "#FFFFFF",
-//   "surface": "#ffffffcc",
-//   "indicator": "#848f8c",
-//   "track": "#848f8c"
-// }
-
-const light = {
-  primary: "#127D5D",
-  secondary: "gray.900",
-  text: "gray.900",
-  highlight: "no-color",
-  success: "no-color",
-  error: "no-color",
-  disabled: "no-color",
-  placeholder: "no-color",
-  muted: "#f6f6f6",
-  background: "#FAFBFC",
-  backgroundGray: "#F5F7FA",
-  backgroundWhite: "#FFFFFF",
-  border: "#E4E9EF",
-  white: "#fff",
-  grayA35: "#d4d7da59",
-
+const colors = {
   neutral: {
     100: "#FAFBFD",
     200: "#E4E9EF",
@@ -81,7 +34,30 @@ const light = {
     indicator: "#848f8c",
     track: "#848f8c",
   },
-
+  blue: {
+    100: "#BAD9FF",
+    200: "#94C3FF",
+    300: "#72ADFF",
+    400: "#5095FF",
+    500: "#307CFF",
+    600: "#0D60FC",
+    700: "#004BDF",
+    800: "#0038BB",
+    900: "#002997",
+    1000: "#001A71",
+  },
+  red: {
+    100: "#FFC9C0",
+    200: "#FCAC9F",
+    300: "#F68E7F",
+    400: "#ED705F",
+    500: "#E15142",
+    600: "#D02F23",
+    700: "#BA0000",
+    800: "#950000",
+    900: "#750000",
+    1000: "#550000",
+  },
   green: {
     "100": "#fafefc",
     "200": "#f4fbf8",
@@ -111,30 +87,6 @@ const light = {
     surface: "#f1faf6cc",
     indicator: "#127d5d",
     track: "#127d5d",
-  },
-  blue: {
-    100: "#BAD9FF",
-    200: "#94C3FF",
-    300: "#72ADFF",
-    400: "#5095FF",
-    500: "#307CFF",
-    600: "#0D60FC",
-    700: "#004BDF",
-    800: "#0038BB",
-    900: "#002997",
-    1000: "#001A71",
-  },
-  red: {
-    100: "#FFC9C0",
-    200: "#FCAC9F",
-    300: "#F68E7F",
-    400: "#ED705F",
-    500: "#E15142",
-    600: "#D02F23",
-    700: "#BA0000",
-    800: "#950000",
-    900: "#750000",
-    1000: "#550000",
   },
   orange: {
     50: "#ffce9352",
@@ -173,6 +125,27 @@ const light = {
     900: "#003604",
     1000: "#002D02",
   },
+};
+
+const light = {
+  primary: "#127D5D",
+  secondary: "gray.900",
+  white: "#fff",
+  grayA35: "#d4d7da59",
+
+  error: "#111111",
+  info: "#111111",
+  success: "#111111",
+  warning: "#111111",
+
+  border: colors.gray["400"],
+
+  "text-primary": colors.gray["1200"],
+  "text-secondary": colors.gray["1000"],
+
+  "background-primary": "#fff",
+  "background-secondary": colors.gray["200"],
+  ...colors,
 };
 
 export default light;

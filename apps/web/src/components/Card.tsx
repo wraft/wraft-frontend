@@ -69,7 +69,7 @@ const LayoutCard = ({
                   as={Button}
                   sx={{
                     border: 'solid 1px',
-                    color: 'text',
+                    color: 'text-primary',
                     borderColor: 'border',
                     p: 1,
                     bg: 'neutral.200',
@@ -88,7 +88,7 @@ const LayoutCard = ({
                     borderColor: 'border',
                     borderRadius: 4,
                     bg: 'white',
-                    color: 'text',
+                    color: 'text-primary',
                     zIndex: 20,
                   }}>
                   <MenuItem
@@ -114,7 +114,7 @@ const LayoutCard = ({
                         sx={{
                           fontSize: 'base',
                           fontWeight: 500,
-                          color: 'text',
+                          color: 'text-primary',
                         }}>
                         Edit
                       </Text>
@@ -129,7 +129,11 @@ const LayoutCard = ({
           </Box>
           <Box sx={{ p: 3 }}>
             <Text
-              sx={{ fontSize: 'base', fontWeight: 500, color: 'gray.1000' }}>
+              sx={{
+                fontSize: 'base',
+                fontWeight: 500,
+                color: 'text-secondary',
+              }}>
               {name}
             </Text>
           </Box>

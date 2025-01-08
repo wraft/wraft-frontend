@@ -101,7 +101,7 @@ const InviteTeam = ({ setOpen }: Props) => {
       as={'form'}
       onSubmit={handleSubmit(onSubmit)}
       sx={{
-        bg: 'backgroundWhite',
+        bg: 'background-primary',
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100vh',
@@ -188,7 +188,7 @@ const InviteTeam = ({ setOpen }: Props) => {
               type="search"
               placeholder="Search by"
               onChange={(e: any) => setSearchTerm(e.target.value)}
-              sx={{ bg: 'background' }}
+              sx={{ bg: 'background-primary' }}
             />
           </Box>
           <Flex
@@ -229,7 +229,11 @@ const InviteTeam = ({ setOpen }: Props) => {
                   />
                   <Text
                     variant="pR"
-                    sx={{ ml: 2, textTransform: 'capitalize', color: 'text' }}>
+                    sx={{
+                      ml: 2,
+                      textTransform: 'capitalize',
+                      color: 'text-primary',
+                    }}>
                     {role.name}
                   </Text>
                 </Label>

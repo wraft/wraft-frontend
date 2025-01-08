@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import ApprovalList from 'components/ApprovalList';
 import Page from 'components/PageFrame';
+import ApprovalList from 'components/Approval/ApprovalList';
 
 const Index: FC = () => {
   return (

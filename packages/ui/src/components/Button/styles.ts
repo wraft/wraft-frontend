@@ -1,5 +1,6 @@
 import { Button as AriakitButton } from "@ariakit/react";
 import styled, { css, system, th } from "@xstyled/emotion";
+// import { StyledConfig } from "styled-components";
 
 import { ButtonOptions } from "./index";
 
@@ -24,7 +25,7 @@ export const Button = styled(AriakitButton)<ButtonOptions>`
   ${({ size }) => th(`buttons.sizes.${size}`)};
   text-decoration: none;
   text-align: center;
-  borderRadius: sm,
+  border-radius: sm,
   white-space: nowrap;
   cursor: pointer;
   outline: none !important; /* important for firefox */

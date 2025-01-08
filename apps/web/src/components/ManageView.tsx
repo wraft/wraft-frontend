@@ -1,7 +1,7 @@
 import React from 'react';
 import NavLink from 'next/link';
 import styled from '@emotion/styled';
-import { Flex, Box, Text } from 'theme-ui';
+import { Flex, Box, Text, Grid } from '@wraft/ui';
 import {
   Layout,
   BuildingOffice,
@@ -52,84 +52,30 @@ const listMenu = [
 
 const ManageHomePage = () => {
   return (
-    <Box sx={{ pl: 0, minHeight: '100%', bg: 'gray.100' }}>
-      <PageHeader title="Manage" desc="Manage Variants">
-        <Box
-          sx={{
-            flexGrow: 1,
-            ml: 'auto',
-            textAlign: 'right',
-            mr: 0,
-            pt: 2,
-            mt: 1,
-          }}></Box>
-      </PageHeader>
+    <Box minHeight="100%" bg="background-secondary">
+      <PageHeader title="Manage" desc="Manage Variants" />
 
-      <Flex
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '24px',
-          width: '70%',
-          pt: 4,
-          px: 4,
-        }}>
+      <Grid templateColumns="repeat(2, 1fr)" p="lg" gap="md" w="70%">
         {listMenu &&
-          listMenu.map((l: any, index: any) => (
-            <NavLink href={l.path} key={index}>
-              <Box
-                sx={{
-                  border: 'solid 1px',
-                  borderColor: 'gray.400',
-                  bg: 'gray.100',
-                  borderRadius: 4,
-                  ':hover': { bg: 'gray.300', borderColor: 'gray.200' },
-                  color: 'teal.1000',
-                  svg: {
-                    fill: 'green.900',
-                  },
-                }}>
-                <Flex sx={{ py: 4, px: 4, alignItems: 'center' }}>
-                  <Box
-                    sx={{
-                      width: '4rem',
-                      height: '4rem',
-                      mb: 1,
-                      mr: 1,
-                      color: 'gray.800',
-                      display: 'contents',
-                      svg: {
-                        fill: 'green.700',
-                      },
-                    }}>
-                    {l.logo}
-                  </Box>
-                  <Box sx={{ pl: 3, pr: 2 }}>
-                    <Text
-                      as="h5"
-                      sx={{
-                        fontSize: 'sm',
-                        color: 'gray.1200',
-                        fontWeight: 'bold',
-                        mb: 0,
-                      }}>
-                      {l.name}
-                    </Text>
-                    <Text
-                      sx={{
-                        fontSize: 'sm',
-                        fontWeight: 'body',
-                        color: 'gray.1000',
-                        mb: 1,
-                      }}>
-                      {l.desc}
-                    </Text>
-                  </Box>
-                </Flex>
-              </Box>
+          listMenu.map((menu: any, index: any) => (
+            <NavLink href={menu.path} key={index}>
+              <Flex
+                alignItems="center"
+                bg="background-primary"
+                border="solid 1px"
+                borderColor="border"
+                borderRadius="sm"
+                gap="md"
+                p="md">
+                <Box>{menu.logo}</Box>
+                <Box pl={3} pr={2}>
+                  <Text fontWeight="heading">{menu.name}</Text>
+                  <Text color="text-secondary">{menu.desc}</Text>
+                </Box>
+              </Flex>
             </NavLink>
           ))}
-      </Flex>
+      </Grid>
     </Box>
   );
 };

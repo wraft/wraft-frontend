@@ -31,7 +31,12 @@ const Footer = () => {
   const [mode, setMode] = useColorMode();
   return (
     <Box
-      sx={{ bg: 'backgroundWhite', color: '#94969C', pt: '64px', pb: '48px' }}>
+      sx={{
+        bg: 'background-primary',
+        color: '#94969C',
+        pt: '64px',
+        pb: '48px',
+      }}>
       <Container width={70} bg="">
         <Flex
           sx={{

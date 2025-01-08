@@ -201,7 +201,7 @@ const TeamList = () => {
                 <Flex sx={{ flexDirection: 'column' }}>
                   <Text
                     sx={{
-                      color: 'text',
+                      color: 'text-primary',
                       fontSize: 'sm',
                       fontWeight: '500',
                       lineHeight: 1,

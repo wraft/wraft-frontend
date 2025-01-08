@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 
 import Page from 'components/PageFrameInner';
-import TemplateForm from 'components/TemplateForm';
+import TemplateForm from 'components/Template/TemplateForm';
 
 const Index: FC = () => {
   return (

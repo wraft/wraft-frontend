@@ -26,7 +26,7 @@ const theme: any = {
       border: "1px solid",
       borderColor: "border",
       borderRadius: "4px",
-      backgroundColor: "backgroundWhite",
+      backgroundColor: "background-primary",
       width: "574px",
       // minHeight: '600px',
       height: "fit-content",

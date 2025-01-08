@@ -77,7 +77,7 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
               px: 1,
               py: 1,
               svg: {
-                color: 'gray.1000',
+                color: 'text-secondary',
               },
             }}>
             <Check size={12} weight="bold" />
@@ -93,7 +93,7 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
         <Box
           sx={{
             // fontWeight: 'bold',
-            color: 'gray.1200',
+            color: 'text-primary',
             fontSize: '13px',
             mb: 2,
             width: '100%',

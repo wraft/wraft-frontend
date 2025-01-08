@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
@@ -96,51 +96,32 @@ const Form = () => {
   const columns = [
     {
       id: 'pipeline.name',
-      header: 'NAME',
+      header: 'Name',
       accessorKey: 'pipeline.name',
       cell: ({ row }: any) => (
-        <Box
-          sx={{ display: 'flex', justifyContent: 'flex-start' }}
-          key={row.index}>
-          <Link href={`/pipelines/run/${row.original.id}`}>
-            <Text as="h4" variant="pM">
-              {row.original.name}
-            </Text>
-          </Link>
-        </Box>
+        <Link href={`/pipelines/run/${row.original.id}`}>
+          <Text fontWeight="heading">{row.original.name}</Text>
+        </Link>
       ),
       enableSorting: false,
     },
     {
       id: 'pipeline.run',
-      header: 'LAST RUN',
+      header: 'Last Run',
       accessorKey: 'pipeline.run',
-      cell: ({ row }: any) => (
-        <Box
-          sx={{ display: 'flex', justifyContent: 'flex-start' }}
-          key={row.index}>
-          <Text as="p" variant="pM">
-            {row.original.inserted_at}
-          </Text>
-        </Box>
-      ),
+      cell: ({ row }: any) => <Text>{row.original.inserted_at}</Text>,
       enableSorting: false,
     },
     {
       id: 'content.name',
-      header: (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Text as="p" variant="pS">
-            ACTIONS
-          </Text>
-        </Box>
-      ),
+      header: 'Action',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+        <Flex gap="sm">
           <Button
             onClick={() => router.push(`/workflow/${row.original.id}`)}
-            variant="secondary"
+            variant="tertiary"
+            size="sm"
             disabled={row.original.stages_count == 0}>
             WorkFlow
           </Button>
@@ -148,45 +129,44 @@ const Form = () => {
             onClick={() => {
               onRunClick(row.original.source_id, row.original.id);
             }}
-            variant="secondary"
+            variant="tertiary"
+            size="sm"
             disabled={row.original.stages_count == 0}>
             Run
           </Button>
-        </Box>
+        </Flex>
       ),
       enableSorting: false,
     },
   ];
 
   return (
-    <Box>
+    <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="All Pipelines">
-        <Flex sx={{ flexGrow: 1, ml: 'auto', mr: 0, pt: 1, mt: 0 }}>
-          <Button variant="secondary" onClick={() => setShowSearch(true)}>
-            New Pipeline
-          </Button>
-        </Flex>
+        <Button variant="tertiary" onClick={() => setShowSearch(true)}>
+          New Pipeline
+        </Button>
       </PageHeader>
-      <Box variant="layout.pageFrame" sx={{ py: 4 }}>
-        <Box mt={0}>
-          <Table
-            data={contents}
-            columns={columns}
-            isLoading={loading}
-            emptyMessage="No pipelines has been created yet."
-          />
-          {pageMeta && pageMeta?.total_pages > 1 && (
-            <Box mx={0} mt={3}>
-              <Pagination
-                totalPage={pageMeta?.total_pages}
-                initialPage={currentPage}
-                onPageChange={changePage}
-                totalEntries={pageMeta?.total_entries}
-              />
-            </Box>
-          )}
-        </Box>
+
+      <Box px="lg" py="lg" w="80%">
+        <Table
+          data={contents}
+          columns={columns}
+          isLoading={loading}
+          emptyMessage="No pipelines has been created yet."
+        />
+        {pageMeta && pageMeta?.total_pages > 1 && (
+          <Box mx={0} mt={3}>
+            <Pagination
+              totalPage={pageMeta?.total_pages}
+              initialPage={currentPage}
+              onPageChange={changePage}
+              totalEntries={pageMeta?.total_entries}
+            />
+          </Box>
+        )}
       </Box>
+
       <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
         {showSearch && (
           <PipelineTypeForm

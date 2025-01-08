@@ -48,10 +48,17 @@ export const Secondary: Story = {
   },
 };
 
-export const Outlined: Story = {
+export const Tertiary: Story = {
   render: (args) => <Button {...args}>{args.children}</Button>,
   args: {
     children: "Outlined Button",
-    variant: "outlined",
+    variant: "tertiary",
+  },
+};
+export const Ghost: Story = {
+  render: (args) => <Button {...args}>{args.children}</Button>,
+  args: {
+    children: "Ghost Button",
+    variant: "ghost",
   },
 };
