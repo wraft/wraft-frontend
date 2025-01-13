@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text, Image } from 'theme-ui';
+import { PhoneIcon, MailSendIcon } from '@wraft/icon';
 
-import { Phone, MailSend } from 'components/Icons';
 import { API_HOST } from 'utils/models';
 
 /**
@@ -65,13 +65,15 @@ const ProfileCard = ({
             {/* <Text variant="personPlace">{organisation_id}</Text> */}
           </Box>
           <Flex pl={3}>
-            <IconBlock val={''} icon={<MailSend width={24} height={24} />} />
-            <IconBlock val={''} icon={<Phone width={24} height={24} />} />
+            <IconBlock
+              val={''}
+              icon={<MailSendIcon width={24} height={24} />}
+            />
+            <IconBlock val={''} icon={<PhoneIcon width={24} height={24} />} />
           </Flex>
         </Box>
       </Flex>
     </Box>
   );
 };
-
 export default ProfileCard;

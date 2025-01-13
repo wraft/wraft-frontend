@@ -4,7 +4,7 @@ import { AxiosRequestConfig, AxiosError } from 'axios';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import cookie from 'js-cookie';
 
-import { Layout, Style, FlowBranch } from 'components/Icons';
+import { Style, FlowBranch } from 'components/Icons';
 
 /**
  *  @TODO Icons: Convert to local files
@@ -340,7 +340,7 @@ export interface pipelineLinksProps {
 export const menuLinks: menuLinksProps[] = [
   {
     name: 'Layouts',
-    logo: <Layout width="20px" />,
+    logo: <FlowBranch width="20px" />,
     path: '/manage/layouts',
   },
   {
@@ -356,23 +356,6 @@ export const menuLinks: menuLinksProps[] = [
   },
 ];
 
-{
-  /* <NavLink href={'/account'} variant="btnNavLink">
-        My Profile
-      </NavLink>
-      <NavLink href={'/account/company'} variant="btnSecondary">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Manage Company</Text>
-      </NavLink>
-      <NavLink href={'/account/roles'} variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Roles</Text>
-      </NavLink>
-      <NavLink href={'/account/members'} variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Members</Text>
-      </NavLink>
-      <NavLink href={'/account/checks'} variant="btnNavLink">
-        <Text sx={{ fontWeight: 'body', mb: 1 }}>Checks</Text>
-      </NavLink> */
-}
 export const PersonalWorkspaceLinks: menuLinksProps[] = [
   {
     name: 'General',

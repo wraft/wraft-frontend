@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { Flex, Container, Box, Input, Spinner } from 'theme-ui';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
+import { SearchIcon } from '@wraft/icon';
 
-import { SearchIcon } from 'components/Icons';
 import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';

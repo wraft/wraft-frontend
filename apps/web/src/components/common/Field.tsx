@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Text, Box } from 'theme-ui';
 import { Label, Input } from 'theme-ui';
-
-import { EyeIcon } from 'components/Icons';
+import { AddIcon } from '@wraft/icon';
 
 interface Props {
   onChange?: any;
@@ -99,7 +98,7 @@ const Field: React.FC<Props> = ({
                 prev === 'password' ? 'text' : 'password',
               );
             }}>
-            <EyeIcon />
+            <AddIcon />
           </Box>
         )}
       </Box>

@@ -5,8 +5,8 @@ import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { Box, Flex, Text } from 'theme-ui';
 import { Table } from '@wraft/ui';
+import { DownIcon } from '@wraft/icon';
 
-import { ArrowDropdown } from 'components/Icons';
 import Checkbox from 'common/Checkbox';
 import { putAPI, fetchAPI } from 'utils/models';
 
@@ -213,7 +213,7 @@ const PermissionsList = () => {
                       ? 'rotate(180deg)'
                       : 'rotate(0deg)',
                   }}>
-                  <ArrowDropdown />
+                  <DownIcon />
                 </Box>
               </Flex>
             </Box>

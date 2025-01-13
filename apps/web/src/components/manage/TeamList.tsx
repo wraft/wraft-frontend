@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { Flex, Box, Text, Image } from 'theme-ui';
-import { ThreeDotIcon } from '@wraft/icon';
+import { ThreeDotIcon, AddIcon, CloseIcon } from '@wraft/icon';
 import { Button, Table, Modal, DropdownMenu } from '@wraft/ui';
 
-import { AddIcon, Close } from 'components/Icons';
 import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
@@ -261,7 +260,7 @@ const TeamList = () => {
                             alignItems: 'center',
                             objectFit: 'contain',
                           }}>
-                          <Close width={30} color="black" />
+                          <CloseIcon width={30} color="black" />
                         </Box>
                       </Flex>
                     </Box>

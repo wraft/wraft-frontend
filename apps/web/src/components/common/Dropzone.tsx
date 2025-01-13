@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
-import { TickIcon } from '@wraft/icon';
+import {
+  TickIcon,
+  ApproveTickIcon,
+  CloudUploadIcon,
+  CloseIcon,
+} from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
 
-import { ApproveTick, Close, CloudUploadIcon } from 'components/Icons';
 import PdfViewer from 'components/PdfViewer';
 import { Asset } from 'utils/types';
 
@@ -93,7 +97,7 @@ const Dropzone = ({
               right: 3,
               cursor: 'pointer',
             }}>
-            <Close width={24} height={24} />
+            <CloseIcon width={24} height={24} />
           </Box>
           <PdfViewer
             height={350}
@@ -204,7 +208,7 @@ const Dropzone = ({
                       alignItems: 'center',
                       display: 'flex',
                     }}>
-                    <ApproveTick />
+                    <ApproveTickIcon />
                   </Box>
                 )}
               </Flex>

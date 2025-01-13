@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
-import { TickIcon } from '@wraft/icon';
+import { TickIcon, ApproveTickIcon, CloudUploadIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Button, Flex, Input, useThemeUI } from 'theme-ui';
 import { SystemProps, x } from '@xstyled/emotion';
 
-import { ApproveTick, CloudUploadIcon } from 'components/Icons';
 import ProgressBar from 'components/common/ProgressBar';
 import { Box } from 'common/Box';
 import { Text } from 'common/Text';
@@ -170,7 +169,7 @@ const Dropzone = ({
                     justifyContent="center"
                     alignItems="center"
                     display="flex">
-                    <ApproveTick />
+                    <ApproveTickIcon />
                   </Box>
                 )}
               </Flex>

@@ -42,7 +42,12 @@ const ForgetPasswordForm = () => {
   };
 
   return (
-    <Flex justify="center" p="5xl">
+    <Flex
+      justify="center"
+      p="5xl"
+      bg="background-secondary"
+      h="100vh"
+      align="baseline">
       <Box position="absolute" top="80px" left="80px">
         <Link href="/">
           <Box color="gray.0" fill="gray.1200">

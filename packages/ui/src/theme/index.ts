@@ -75,8 +75,6 @@ const createTheme = (options: Options = {}) => {
   // theme.tables = getTables(theme);
   theme.defaultFields = getDefaultFields(theme);
 
-  console.log("theme", theme);
-
   return theme;
 };
 

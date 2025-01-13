@@ -8,8 +8,8 @@ import {
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
+import { DownIcon } from '@wraft/icon';
 
-import { ArrowDropdown } from 'components/Icons';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import Checkbox from 'common/Checkbox';
 import Field from 'common/Field';
@@ -325,7 +325,7 @@ const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
                               transform: dropped && 'rotate(180deg)',
                               color: 'gray.300',
                             }}>
-                            <ArrowDropdown />
+                            <DownIcon />
                           </Flex>
                         </Flex>
                       </Disclosure>

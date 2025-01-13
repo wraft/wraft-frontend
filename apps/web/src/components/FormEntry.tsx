@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Input, Label, Spinner, Text, Textarea } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { LogoIcon } from '@wraft/icon';
 
-import { Logo } from 'components/Icons';
 import { fetchAPI, postAPI } from 'utils/models';
 
 const FormEntry = () => {
@@ -125,7 +125,7 @@ const FormEntry = () => {
   return (
     <Box sx={{ background: 'background-primary' }}>
       <Box sx={{ position: 'absolute', top: 4, left: 4 }}>
-        <Logo />
+        <LogoIcon />
       </Box>
       <Flex
         sx={{

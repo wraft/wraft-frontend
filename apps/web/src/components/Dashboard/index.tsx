@@ -3,8 +3,8 @@ import Image from 'next/image';
 import { format } from 'date-fns';
 import { Text, Box, Flex, Grid, Button } from '@wraft/ui';
 import { File } from '@phosphor-icons/react';
+import { ApproveTickIcon } from '@wraft/icon';
 
-import { ApproveTick } from 'components/Icons';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
@@ -20,13 +20,13 @@ interface DashboardStatsProps {
   total_documents: number;
 }
 const BlockCard = ({ title, desc }: BlockCardProps) => (
-  <Box
+  <Flex
     bg="background-primary"
     border="1px solid"
     borderColor="border"
     borderRadius="sm"
     px="lg"
-    py="xl">
+    py="xxl">
     <File width={32} height={20} />
     <Flex ml={2} flex={1}>
       <Text fontWeight={500} mb={1} color="gray.1100">
@@ -34,7 +34,7 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
       </Text>
       <Text ml="auto">{desc}</Text>
     </Flex>
-  </Box>
+  </Flex>
 );
 
 const finishSetup = [
@@ -139,7 +139,7 @@ const Dashboard = () => {
             </Box>
             {finishSetup.map((data, i) => (
               <Flex alignItems="center" mb="18px" key={i}>
-                <ApproveTick />
+                <ApproveTickIcon />
                 <Box px={2} fontSize="xs">
                   {data.title}
                 </Box>

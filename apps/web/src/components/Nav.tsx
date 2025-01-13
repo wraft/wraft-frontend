@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
+import { BellIcon, SearchIcon } from '@wraft/icon';
 
-import { Bell, Search } from 'components/Icons';
 import Modal from 'common/Modal';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
@@ -109,7 +109,7 @@ const Nav = ({ navtitle }: INav) => {
                         pr: 2,
                       },
                     }}>
-                    <Search width={28} height={28} />
+                    <SearchIcon width={28} height={28} />
                   </Box>
                 </Flex>
               </Flex>
@@ -126,7 +126,7 @@ const Nav = ({ navtitle }: INav) => {
                 variant="button"
                 sx={{ mt: 1, pt: 1, px: 3, svg: { fill: 'gray.700' } }}>
                 <Link href="/activities">
-                  <Bell width={20} height={20} />
+                  <BellIcon width={20} height={20} />
                 </Link>
               </Box>
             </Flex>

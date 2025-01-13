@@ -15,9 +15,9 @@ import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
 import styled from '@emotion/styled';
 // import { steps } from 'framer-motion';
+import { EmptyFormIcon } from '@wraft/icon';
 
 import FieldDate from 'components/FieldDate';
-import { EmptyForm } from 'components/Icons';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { capitalizeFirst, convertToVariableName } from 'utils/index';
 import { fetchAPI } from 'utils/models';
@@ -163,7 +163,7 @@ const CreateDocument = () => {
               {!loading && contents.length < 1 && (
                 <Flex alignItems="center">
                   <Box color="gray.500">
-                    <EmptyForm />
+                    <EmptyFormIcon />
                   </Box>
                   <Box m={2} pb={0}>
                     <Text as="h3">No template has been created yet.</Text>

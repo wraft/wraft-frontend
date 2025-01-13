@@ -1,13 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Text, Container } from 'theme-ui';
-
 import {
-  Collection,
-  LayoutAlt,
-  Style,
-  FlowBranch,
-  UserAlt,
-} from 'components/Icons';
+  CollectionIcon,
+  LayoutAltIcon,
+  StyleIcon,
+  UserAltIcon,
+} from '@wraft/icon';
+
 import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
 
@@ -23,33 +22,33 @@ interface menuLinksProps {
 const menuLinks: menuLinksProps[] = [
   {
     name: 'Role Groups',
-    logo: <LayoutAlt width={20} height={20} />,
+    logo: <LayoutAltIcon width={20} height={20} />,
     path: '/super/roles',
   },
   {
     name: 'Resources',
-    logo: <FlowBranch width={20} height={20} />,
+    logo: <StyleIcon width={20} height={20} />,
     path: '/super/resources',
   },
 
   {
     name: 'Oranganization Fields',
-    logo: <Style width={20} height={20} />,
+    logo: <StyleIcon width={20} height={20} />,
     path: '/super/fields',
   },
   {
     name: 'Permissions',
-    logo: <UserAlt width={20} height={20} />,
+    logo: <UserAltIcon width={20} height={20} />,
     path: '/super/roles',
   },
   {
     name: 'Fields',
-    logo: <UserAlt width={20} height={20} />,
+    logo: <UserAltIcon width={20} height={20} />,
     path: '/super/fields',
   },
   {
     name: 'Pipelines',
-    logo: <Collection width={20} height={20} />,
+    logo: <CollectionIcon width={20} height={20} />,
     path: '/super/pipelines',
   },
 ];

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Text, Button } from 'theme-ui';
+import { PlayCircleIcon } from '@wraft/icon';
 
-import { PlayCircle } from 'components/Icons';
 import Modal from 'common/Modal';
 import Field from 'common/Field';
 import Link from 'common/NavLink';
@@ -262,7 +262,7 @@ const PipelineView = () => {
                     }}>
                     <Flex>
                       <Box sx={{ mr: 2 }}>
-                        <PlayCircle width={16} />
+                        <PlayCircleIcon width={16} />
                       </Box>
                       <Text>Run</Text>
                     </Flex>
@@ -278,7 +278,7 @@ const PipelineView = () => {
                     }}
                     onClick={() => pipelineCollect()}>
                     <Flex>
-                      <PlayCircle width={16} />
+                      <PlayCircleIcon width={16} />
                       <Text ml={2}>Collect</Text>
                     </Flex>
                   </Button>

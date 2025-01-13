@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Flex, Text } from 'theme-ui';
+import { RightIcon } from '@wraft/icon';
 
-import { GraterThanIcon } from 'components/Icons';
 import NextLinkText from 'common/NavLink';
 
 type Data = {
@@ -29,7 +29,7 @@ const DescriptionLinker = ({ data }: Props) => {
                   {item.name}
                 </Text>
               )}
-              {index !== data.length - 1 && <GraterThanIcon />}
+              {index !== data.length - 1 && <RightIcon />}
             </Flex>
           ))}
       </Flex>

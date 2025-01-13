@@ -2,8 +2,8 @@ import { Text, Flex } from '@wraft/ui';
 import { Focusable } from '@ariakit/react';
 import { Check, Circle } from '@phosphor-icons/react';
 import styled from '@emotion/styled';
+import { BackArrowIcon } from '@wraft/icon';
 
-import { BackArrowIcon } from 'components/Icons';
 import { FlowStateBlockProps } from 'utils/types/content';
 
 const FlowProgressContainer = styled(Flex)`

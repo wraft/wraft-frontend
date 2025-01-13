@@ -1,8 +1,8 @@
 import React from 'react';
 import { Flex, Box, Text } from '@wraft/ui';
 import { Link } from 'theme-ui';
+import { ArrowBackIcon } from '@wraft/icon';
 
-import { ArrowBack } from 'components/Icons';
 import Back from 'common/Back';
 
 interface PageHeaderProps {
@@ -38,7 +38,7 @@ const BreadLinks = (props: any) => {
             key={link.name}
             sx={{ color: 'text-primary', fontSize: 'xs', mr: 2 }}>
             <Text pr={1}>{link.name}</Text>
-            <ArrowBack width={10} />
+            <ArrowBackIcon width={10} />
           </Link>
         ))}
     </Flex>
