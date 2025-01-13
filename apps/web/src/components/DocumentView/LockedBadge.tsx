@@ -1,28 +1,11 @@
-import { Text, Flex } from 'theme-ui';
+import { Text, Flex } from '@wraft/ui';
 import { LockSimple } from '@phosphor-icons/react';
 
 export const LockedBadge = () => {
   return (
-    <Flex
-      sx={{
-        px: 1,
-        py: '2px',
-        gap: 1,
-        alignItems: 'center',
-        verticalAlign: 'center',
-        borderRadius: '6px',
-        fontSize: 'xs',
-        color: 'text-primary',
-        bg: 'green.a400',
-      }}>
-      <LockSimple size={10} />
-      <Text
-        sx={{
-          textTransform: 'uppercase',
-          letterSpacing: '-0.01rem',
-        }}>
-        Locked
-      </Text>
+    <Flex align="center" gap="xs" bg="green.a400" px="sm" borderRadius="md">
+      <LockSimple size={12} />
+      <Text fontSize="sm">Locked</Text>
     </Flex>
   );
 };

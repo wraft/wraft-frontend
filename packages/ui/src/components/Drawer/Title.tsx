@@ -25,6 +25,7 @@ export const Header: React.FC<any> = ({ children, zIndex = "1", ...props }) => {
       display="flex"
       justifyContent="space-between"
       position={{ xs: "sticky", md: "static" }}
+      px="xl"
       top={{ xs: 0, md: "auto" }}
       zIndex={zIndex}
       {...props}

@@ -1,26 +1,19 @@
-import { Text, Flex } from 'theme-ui';
+import { Text, Flex } from '@wraft/ui';
 import { Triangle } from '@phosphor-icons/react';
 
 export const ApprovalAwaitingLabel = () => {
   return (
     <Flex
-      sx={{
-        px: 1,
-        py: '2px',
-        gap: 1,
-        alignItems: 'center',
-        verticalAlign: 'center',
-        borderRadius: '6px',
-        fontSize: 'xs',
-        color: 'orange.800',
-        bg: 'orange.100',
-      }}>
-      <Triangle size={10} />
-      <Text
-        sx={{
-          textTransform: 'uppercase',
-          letterSpacing: '-0.01rem',
-        }}>
+      px="md"
+      py="xxs"
+      gap="xs"
+      alignItems="center"
+      justify="center"
+      borderRadius="xl"
+      color="orange.800"
+      bg="orange.100">
+      <Triangle size={12} />
+      <Text fontSize="sm" fontWeight="heading">
         Waiting for approval
       </Text>
     </Flex>

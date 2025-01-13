@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Box } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Button, InputText, Select } from '@wraft/ui';
+import { Button, InputText, Select, Text, Box, Flex } from '@wraft/ui';
 
 import { postAPI, fetchAPI, patchAPI } from 'utils/models';
 
@@ -94,8 +93,10 @@ export default function InviteBlock({ docId }: any) {
   return (
     <S.Container>
       <S.Header>
-        <S.Title>Invite Member</S.Title>
-        <S.Subtitle>Invite and manage your team members.</S.Subtitle>
+        <Text fontSize="2xl" fontWeight="heading" mb="sm">
+          Invite Member
+        </Text>
+        <Text color="text-secondary">Invite and manage your team members.</Text>
       </S.Header>
 
       <Box as="form" onSubmit={handleSubmit(handleInvite)}>
@@ -142,18 +143,17 @@ export default function InviteBlock({ docId }: any) {
       <S.MemberList>
         {collaborators.map((collaborator: Collaborator) => (
           <S.MemberItem key={collaborator.id}>
-            <S.MemberInfo>
-              <div>
-                <S.MemberName href="#">{collaborator.user.name}</S.MemberName>
-                <S.MemberEmail>{collaborator.user.email}</S.MemberEmail>
-                <S.MemberEmail>{collaborator.status}</S.MemberEmail>
-              </div>
-            </S.MemberInfo>
-            <div style={{ position: 'relative' }}>
-              <S.MoreButton onClick={() => removeCollaborator(collaborator.id)}>
-                <div>Remove</div>
-              </S.MoreButton>
-            </div>
+            <Flex gap="sm">
+              <Text>{collaborator.user.name}</Text>
+              <Text color="text-secondary">{collaborator.user.email}</Text>
+              <Text>{collaborator.status}</Text>
+            </Flex>
+
+            <Button
+              variant="ghost"
+              onClick={() => removeCollaborator(collaborator.id)}>
+              Remove
+            </Button>
           </S.MemberItem>
         ))}
       </S.MemberList>

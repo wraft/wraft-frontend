@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Drawer, useDrawer } from '@wraft/ui';
+import {
+  Drawer,
+  useDrawer,
+  Box,
+  Flex,
+  Button,
+  Text,
+  InputText,
+  Field,
+} from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import { Box, Flex, Button, Text } from 'theme-ui';
 import { EditIcon } from '@wraft/icon';
 
 import FieldDate from 'components/FieldDate';
-import Field from 'common/Field';
 import { convertToVariableName } from 'utils';
 import { FieldInstance } from 'utils/types';
 
@@ -86,57 +93,30 @@ const PlaceholderBlock = ({
   const closeDrawer = () => setDrawerOpen(false);
 
   return (
-    <Box sx={{ p: 3, borderColor: 'border', bg: 'gray.100' }}>
+    <Box mt="xl">
       {fieldValues && (
         <>
-          <Flex sx={{ justifyContent: 'space-between' }}>
-            <Text as="h6" variant="labelcaps" sx={{ mb: 2 }}>
-              Fields
-            </Text>
+          <Flex justify="space-between">
+            <Text as="h6">Placeholders</Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
-                <EditIcon width={18} />
+                <EditIcon width={14} />
               </Box>
             )}
           </Flex>
 
-          <Box
-            p={0}
-            sx={{
-              bg: 'white',
-              mt: 1,
-              mb: 3,
-              border: 'solid 1px',
-              borderColor: 'border',
-            }}>
+          <Box border="1px solid" borderColor="border" mt="sm">
             {mappedFields &&
               mappedFields.map((x: any) => (
                 <Flex
                   key={x.id}
-                  sx={{
-                    py: 2,
-                    px: 3,
-                    borderBottom: 'solid 0.5px',
-                    borderColor: 'border',
-                  }}>
-                  <Text
-                    sx={{
-                      color: 'text-primary',
-                      fontSize: 'sm',
-                      fontWeight: 300,
-                      flex: '0 0 40%',
-                    }}>
+                  borderBottom="1px solid"
+                  borderColor="border"
+                  p="sm">
+                  <Text flex="0 0 40%" as="h5" fontWeight="heading">
                     {x.name}
                   </Text>
-                  <Text
-                    sx={{
-                      fontSize: 'sm',
-                      fontWeight: 'bold',
-                      ml: 'auto',
-                      color: 'text-primary',
-                    }}>
-                    {x.value}
-                  </Text>
+                  <Text>{x.value}</Text>
                   <Text>{x.type}</Text>
                 </Flex>
               ))}
@@ -152,14 +132,17 @@ const PlaceholderBlock = ({
         onClose={closeDrawer}>
         <Box
           as="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ bg: 'background-primary', px: 4 }}>
-          <Drawer.Title>Placeholder</Drawer.Title>
-          <Box sx={{ pb: 4 }}>
+          bg="background-primary"
+          p="md"
+          onSubmit={handleSubmit(onSubmit)}>
+          <Drawer.Header>
+            <Drawer.Title>Placeholder</Drawer.Title>
+          </Drawer.Header>
+          <Box p="md">
             {mappedFields && mappedFields.length > 0 && (
               <Box>
                 {mappedFields.map((f: IFieldType) => (
-                  <Box key={f.id} sx={{ pb: 2 }}>
+                  <Box key={f.id} pb="sm">
                     {f.field_type?.name === 'date' && (
                       <FieldDate
                         name={f.id}
@@ -171,18 +154,19 @@ const PlaceholderBlock = ({
                     )}
 
                     {f.field_type?.name !== 'date' && (
-                      <Field
-                        name={convertToVariableName(f.name)}
-                        label={f.name}
-                        defaultValue={f.value}
-                        register={register}
-                      />
+                      <Field label={f.name} required>
+                        <InputText
+                          placeholder=""
+                          defaultValue={f.value}
+                          {...register(convertToVariableName(f.name))}
+                        />
+                      </Field>
                     )}
                   </Box>
                 ))}
               </Box>
             )}
-            <Flex sx={{ pt: 3 }}>
+            <Flex pt="md">
               <Button type="submit" disabled={submitting}>
                 Update
               </Button>

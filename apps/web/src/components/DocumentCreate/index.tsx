@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Pagination, Skeleton } from '@wraft/ui';
+import {
+  Button,
+  Pagination,
+  Skeleton,
+  Box,
+  Text,
+  Flex,
+  InputText,
+  Field,
+} from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
-import { Box, Text, Flex } from 'theme-ui';
 import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
+import styled from '@emotion/styled';
 // import { steps } from 'framer-motion';
 
 import FieldDate from 'components/FieldDate';
 import { EmptyForm } from 'components/Icons';
-import Field from 'common/Field';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { capitalizeFirst, convertToVariableName } from 'utils/index';
 import { fetchAPI } from 'utils/models';
@@ -141,38 +149,24 @@ const CreateDocument = () => {
       />
       <Box as="form" onSubmit={handleSubmit(onSubmit)}>
         <Box
-          sx={{
-            p: '32px',
-            borderTop: 'solid 1px',
-            borderColor: 'border',
-            height: 'calc(100vh - 220px)',
-            overflowY: 'scroll',
-          }}>
+          p="xl"
+          borderTop="solid 1px"
+          borderColor="border"
+          h="calc(100vh - 220px)"
+          overflowY="scroll">
           {formStep === 0 && (
             <>
-              <Box
-                variant="caps"
-                sx={{
-                  fontSize: 'xs',
-                  py: 2,
-                  color: 'text-primary',
-                }}>
-                <Text as="h4" sx={{ fontSize: 'sm', fontWeight: 'heading' }}>
-                  Select a template
-                </Text>
+              <Box mb="sm">
+                <Text as="h4">Select a template</Text>
               </Box>
 
               {!loading && contents.length < 1 && (
-                <Flex sx={{ alignItems: 'center' }}>
-                  <Box sx={{ color: 'gray.500' }}>
+                <Flex alignItems="center">
+                  <Box color="gray.500">
                     <EmptyForm />
                   </Box>
-                  <Box sx={{ m: 2, pb: 0 }}>
-                    <Text
-                      as="h3"
-                      sx={{ fontWeight: 200, color: 'text-primary' }}>
-                      No template has been created yet.
-                    </Text>
+                  <Box m={2} pb={0}>
+                    <Text as="h3">No template has been created yet.</Text>
                   </Box>
                 </Flex>
               )}
@@ -181,17 +175,15 @@ const CreateDocument = () => {
                 Array.from({ length: 10 }, (_, index) => (
                   <Flex
                     key={index}
-                    sx={{
-                      px: 3,
-                      py: 2,
-                      border: 'solid 1px',
-                      borderBottom: 'none',
-                      borderColor: 'border',
-                    }}>
+                    px="md"
+                    py="md"
+                    border="solid 1px"
+                    borderBottom="none"
+                    borderColor="border">
                     <Box>
                       <Skeleton width="20px" height="22px" />
                     </Box>
-                    <Box mx={3} sx={{ width: '100%' }}>
+                    <Box mx={3} w="100%">
                       <Skeleton height="22px" />
                     </Box>
                     <Skeleton width="20px" height="22px" />
@@ -234,9 +226,9 @@ const CreateDocument = () => {
           {formStep === 1 && (
             <>
               {fields && fields.length > 0 && (
-                <Box sx={{ pt: 4 }}>
+                <Box pt="sm">
                   {fields.map((f: FieldT) => (
-                    <Box key={f.id} sx={{ pb: 2 }}>
+                    <Box key={f.id} pb="sm">
                       {f.field_type.name === 'date' && (
                         <FieldDate
                           name={`contentFields[${convertToVariableName(f.name)}]`}
@@ -248,12 +240,15 @@ const CreateDocument = () => {
                       )}
 
                       {f.field_type.name !== 'date' && (
-                        <Field
-                          name={`contentFields[${convertToVariableName(f.name)}]`}
-                          label={capitalizeFirst(f.name)}
-                          defaultValue=""
-                          register={register}
-                        />
+                        <Field label={capitalizeFirst(f.name)} required>
+                          <InputText
+                            placeholder={`Enter your ${f.name} `}
+                            defaultValue=""
+                            {...register(
+                              `contentFields[${convertToVariableName(f.name)}]`,
+                            )}
+                          />
+                        </Field>
                       )}
                     </Box>
                   ))}
@@ -262,7 +257,7 @@ const CreateDocument = () => {
             </>
           )}
         </Box>
-        <Flex p="32px" sx={{ gap: 2 }}>
+        <Flex p="32px" gap="sm">
           <Button
             variant="ghost"
             disabled={formStep === 0}
@@ -293,53 +288,43 @@ interface BlockItemProps {
   id: string;
 }
 
+const BlockItemWrapper = styled(Flex)`
+  &:last-child {
+    border-bottom: solid 1px;
+    border-color: border;
+  }
+
+  &:hover {
+    background: ${({ theme }: any) => theme.colors.green['200']};
+  }
+`;
+
 export const BlockItem = ({ template, onChange, selected }: any) => {
   const { id, title, content_type }: BlockItemProps = template;
 
   return (
-    // <Link href={`/new?template=${id}&cid=${content_type.id}`}>
-    <Flex
+    <BlockItemWrapper
       onClick={() => onChange(template)}
-      sx={{
-        px: 3,
-        py: 2,
-        border: 'solid 1px',
-        borderBottom: 'none',
-        borderColor: 'border',
-        cursor: 'pointer',
-        bg: selected.id === id && 'green.300',
-
-        '&:last-child': {
-          borderBottom: 'solid 1px',
-          borderColor: 'border',
-        },
-
-        '&:hover': { bg: 'green.200' },
-      }}>
+      px="sm"
+      py="sm"
+      gap="sm"
+      border="solid 1px"
+      borderBottom="none"
+      borderColor="border"
+      cursor="pointer"
+      align="center"
+      bg={selected.id === id && 'green.300'}>
       <Box
-        sx={{
-          width: '16px',
-          borderRadius: 4,
-          mr: 2,
-          mt: 1,
-          borderColor: 'border',
-          height: '16px',
-          bg: content_type.color,
-        }}
+        w="12px"
+        h="12px"
+        borderRadius="sm"
+        borderColor="border"
+        bg={content_type.color}
       />
-      <Box>{title}</Box>
-      <Text
-        as="h4"
-        sx={{
-          fontSize: 'xs',
-          m: 0,
-          ml: 'auto',
-          color: 'text-primary',
-          fontWeight: 300,
-        }}>
+      <Text>{title}</Text>
+      <Text fontSize="sm" fontWeight="heading">
         {content_type.prefix}
       </Text>
-    </Flex>
-    // </Link>
+    </BlockItemWrapper>
   );
 };

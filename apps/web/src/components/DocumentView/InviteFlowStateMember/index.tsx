@@ -12,7 +12,7 @@ const InviteFlowStateMember = () => {
   };
   return (
     <>
-      <Button variant="secondary" onClick={onInvite}>
+      <Button variant="tertiary" onClick={onInvite} size="sm">
         Add Member
       </Button>
       <Modal

@@ -1,9 +1,24 @@
-import { Text, Box, Flex } from 'theme-ui';
+import { Text, Flex } from '@wraft/ui';
 import { Focusable } from '@ariakit/react';
 import { Check, Circle } from '@phosphor-icons/react';
+import styled from '@emotion/styled';
 
 import { BackArrowIcon } from 'components/Icons';
 import { FlowStateBlockProps } from 'utils/types/content';
+
+const FlowProgressContainer = styled(Flex)`
+  min-width: fit-content;
+
+  &:last-child {
+    .arrowicon {
+      display: none;
+    }
+  }
+
+  .circlced {
+    color: ${({ theme }: any) => theme?.colors.orange['300']};
+  }
+`;
 
 export const FlowProgressBar = ({
   state,
@@ -27,58 +42,33 @@ export const FlowProgressBar = ({
   };
 
   return (
-    <Flex
-      as={Focusable}
-      sx={{
-        alignItems: 'center',
-        ':last-child': {
-          '.arrowicon': {
-            display: 'none',
-          },
-          minWidth: 'fit-content',
-        },
-      }}>
-      <Box
-        sx={{
-          fontSize: 'xs',
-          width: '18px',
-          height: '18px',
-          borderRadius: '9rem',
-          bg: getBgColor(),
-          border: '1px solid',
-          borderColor: activeState ? 'gray.300' : 'gray.500',
-          color: activeState
-            ? checked
-              ? 'green.1200'
-              : 'green.400'
-            : 'green.1200',
-          textAlign: 'center',
-          mr: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          '.circlced': {
-            color: 'orange.300',
-          },
-          p: 1,
-        }}>
-        {/* {nextState?.order} */}
-        {!checked && !activeState && <>{num}</>}
-        {activeState && <Circle size={16} weight="fill" className="circlced" />}
-        {checked && <Check size={16} weight="bold" />}
-      </Box>
-      <Text
-        sx={{ fontSize: '13px', textTransform: 'capitalize', fontWeight: 500 }}>
+    <FlowProgressContainer as={Focusable} align="center" gap="sm">
+      <Flex
+        alignItems="center"
+        justify="center"
+        color={
+          activeState ? (checked ? 'green.1200' : 'green.400') : 'green.1200'
+        }
+        border="1px solid"
+        borderRadius="full"
+        w="16px"
+        h="16px"
+        borderColor={activeState ? 'gray.300' : 'gray.500'}
+        p="xxs"
+        bg={getBgColor()}>
+        {!checked && !activeState && (
+          <Text fontSize="xs" fontWeight="heading">
+            {num}
+          </Text>
+        )}
+        {activeState && <Circle size={12} weight="fill" className="circlced" />}
+        {checked && <Check size={12} weight="bold" />}
+      </Flex>
+      <Text fontWeight="heading" fontSize="sm" textTransform="capitalize">
         {state}
       </Text>
-      <Box
-        sx={{
-          paddingLeft: 1,
-          paddingRight: 0,
-        }}>
-        <BackArrowIcon className="arrowicon" width={20} size={20} stroke={1} />
-      </Box>
-    </Flex>
+
+      <BackArrowIcon className="arrowicon" width={20} size={20} stroke={1} />
+    </FlowProgressContainer>
   );
 };

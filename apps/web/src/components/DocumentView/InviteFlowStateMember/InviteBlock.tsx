@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { Avatar, Box, Text } from 'theme-ui';
+import { useForm } from 'react-hook-form';
+import { Avatar } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Search } from '@wraft/ui';
+import { Search, Box, Text, Flex } from '@wraft/ui';
 import { ArrowRight, MagnifyingGlass } from '@phosphor-icons/react';
 
 import { postAPI, fetchAPI, patchAPI } from 'utils/models';
@@ -100,8 +100,10 @@ export default function InviteBlock({ docId }: any) {
   return (
     <S.Container>
       <S.Header>
-        <S.Title>Invite Member</S.Title>
-        <S.Subtitle>Invite and manage your team members.</S.Subtitle>
+        <Text fontSize="2xl" fontWeight="heading" mb="sm">
+          Invite Member
+        </Text>
+        <Text color="text-secondary">Invite and manage your team members.</Text>
       </S.Header>
       <Box>
         <Search
@@ -109,29 +111,24 @@ export default function InviteBlock({ docId }: any) {
           name="member"
           value={selectValue}
           icon={
-            <Box sx={{ display: 'contents' }}>
+            <Box display="contents">
               <MagnifyingGlass size={18} />
             </Box>
           }
           onChange={onUserSelect}
           placeholder="Add Members by name"
           renderItem={(item: any) => (
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                py: 2,
-              }}>
+            <Flex align="center">
               <Avatar
                 src={item.profile_pic}
                 alt="profile"
                 width={18}
                 height={18}
               />
-              <Text as={'p'} ml={3} variant="subM" sx={{ color: 'gray.900' }}>
+              <Text as={'p'} ml={3} color="gray.900">
                 {item.name}
               </Text>
-            </Box>
+            </Flex>
           )}
           search={searchFunction}
         />

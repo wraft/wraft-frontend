@@ -1,4 +1,5 @@
-import { Text, Flex, Box, Avatar } from 'theme-ui';
+import { Text, Flex, Box } from '@wraft/ui';
+import { Avatar } from 'theme-ui';
 
 interface ProfileCard {
   name: string;
@@ -17,23 +18,14 @@ export const AvatarCard = ({
       : image;
 
   return (
-    <Flex
-      sx={{
-        fontSize: 'xs',
-        color: 'text-primary',
-        my: 1,
-        alignItems: 'center',
-      }}>
+    <Flex gap="xs" mb="xs">
       <Avatar
         width={16}
         height={16}
         sx={{ mr: 2, borderColor: 'border', border: 0 }}
         src={finalImage}
       />
-      <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
-        {name}
-      </Text>
-      {/* <Box>{time}</Box> */}
+      <Text>{name}</Text>
     </Flex>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Text } from 'theme-ui';
+import { Box, Button, Text } from '@wraft/ui';
 import { ChatCircle } from '@phosphor-icons/react';
 
 import Field from 'common/Field';
@@ -105,22 +105,13 @@ const CommentForm = ({ master, master_id }: CommentFormProps) => {
         </Box>
       )}
       <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
-        <Box mx={0} mb={0}>
+        <Box mb="sm">
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button
-          variant="btnSecondary"
-          ml={0}
-          sx={{
-            mt: 2,
-            display: 'flex',
-            gap: '4px',
-            fontSize: 'sm',
-            alignItems: 'center',
-          }}>
-          <ChatCircle size={16} weight="bold" color="#777" />
-          {submiting ? 'Saving ... ' : 'Add Comment'}
+        <Button variant="primary" size="sm">
+          <ChatCircle size={16} weight="bold" color="#fff" />
+          <Box>{submiting ? 'Saving ... ' : 'Add Comment'}</Box>
         </Button>
       </Box>
     </>

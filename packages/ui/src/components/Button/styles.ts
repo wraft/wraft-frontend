@@ -44,7 +44,7 @@ export const Button = styled(AriakitButton)<ButtonOptions>`
 
   & > svg {
     font-weight: initial;
-    margin-right: sm;
+    margin-left: sm;
 
     &:only-child {
       width: ${({ size }) => size && th(`buttons.icon.only.${size}`)};

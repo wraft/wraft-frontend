@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { Box, Flex } from 'theme-ui';
-import { ErrorBoundary, Button, Modal } from '@wraft/ui';
+import { ErrorBoundary, Button, Modal, Box, Flex } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
 import Nav from 'components/NavEdit';
@@ -135,126 +134,104 @@ const DocumentView = () => {
 
   return (
     <>
-      <Box py={0} sx={{ minHeight: '100vh' }}>
-        {!loading && pageTitle && (
-          <Nav
-            navtitle={pageTitle}
-            isEdit={editorMode !== 'view'}
-            onToggleEdit={() => setOpenTitleModal(true)}
-          />
-        )}
-        <Box>
-          <ErrorBoundary>
-            <Flex sx={{ bg: 'gray.400' }}>
-              <Box sx={{ width: '70%', m: 0 }}>
-                {userMode === 'default' && (
-                  <Flex
-                    sx={{
-                      alignItems: 'center',
-                      flex: 1,
-                      px: 3,
-                      py: 2,
-                      borderBottom: 'solid 1px',
-                      borderColor: 'border',
-                      bg: 'background-secondary',
-                    }}>
-                    <Flex
-                      variant="styles.scrollbarX"
-                      sx={{
-                        pt: 1,
-                        alignItems: 'center',
-                        bg: 'white',
-                        border: 'solid 1px',
-                        borderColor: 'gray.300',
-                        px: 2,
-                        borderRadius: '9px',
-                      }}>
-                      {states &&
-                        states.map((state: any, i: number) => (
-                          <FlowProgressBar
-                            key={state?.id}
-                            num={i + 1}
-                            state={state?.state}
-                            order={state?.order}
-                            currentActiveIndex={currentActiveIndex}
-                            nextState={nextState}
-                            id={state?.id}
-                          />
-                        ))}
-
-                      {contents &&
-                        !nextState?.is_user_eligible &&
-                        !isMakeCompete &&
-                        !isEditable && <ApprovalAwaitingLabel />}
-                    </Flex>
-
-                    <Flex sx={{ ml: 'auto', alignItems: 'center' }}>
-                      {editorMode === 'view' &&
-                        !contents?.content?.approval_status && (
-                          <Flex
-                            sx={{
-                              p: 0,
-                              gap: 2,
-                              ml: 'auto',
-                              alignItems: 'center',
-                            }}>
-                            {nextState && nextState.is_user_eligible && (
-                              <ApprovalHandler
-                                name={nextState?.state}
-                                onClick={() => {
-                                  setModalAction('next');
-                                  setOpen(true);
-                                }}
-                              />
-                            )}
-                            {isMakeCompete && (
-                              <ApprovalHandler
-                                name="Mark Complete"
-                                onClick={() => {
-                                  setModalAction('next');
-                                  setOpen(true);
-                                }}
-                              />
-                            )}
-                          </Flex>
-                        )}
-                      {isEditable && <LockedBadge />}
-                    </Flex>
-                    {(editorMode === 'edit' || editorMode === 'new') && (
-                      <Box sx={{ ml: 'auto' }}>
-                        <Button
-                          onClick={onSubmit}
-                          variant="primary"
-                          loading={saving}>
-                          Save
-                        </Button>
-                      </Box>
-                    )}
-                  </Flex>
-                )}
-
-                <DocumentContentBlock />
-              </Box>
-              <DocumentSidebar />
-            </Flex>
-          </ErrorBoundary>
-        </Box>
-        <ApprovalUpdateModal
-          state={modalAction}
-          success={() => fetchContentDetails(cId)}
-          open={open}
-          setOpen={setOpen}
+      {!loading && pageTitle && (
+        <Nav
+          navtitle={pageTitle}
+          isEdit={editorMode !== 'view'}
+          onToggleEdit={() => setOpenTitleModal(true)}
         />
-      </Box>
+      )}
+      <>
+        <ErrorBoundary>
+          <Flex bg="background-secondary" flexGrow="1">
+            <Box w="100%">
+              {userMode === 'default' && (
+                <Flex
+                  alignItems="center"
+                  flex={1}
+                  px="sm"
+                  py="sm"
+                  borderBottom="solid 1px"
+                  borderColor="border"
+                  bg="background-primary">
+                  <Flex gap="sm">
+                    {states &&
+                      states.map((state: any, i: number) => (
+                        <FlowProgressBar
+                          key={state?.id}
+                          num={i + 1}
+                          state={state?.state}
+                          order={state?.order}
+                          currentActiveIndex={currentActiveIndex}
+                          nextState={nextState}
+                          id={state?.id}
+                        />
+                      ))}
+
+                    {contents &&
+                      !nextState?.is_user_eligible &&
+                      !isMakeCompete &&
+                      !isEditable && <ApprovalAwaitingLabel />}
+                  </Flex>
+
+                  <Flex ml="auto" alignItems="center">
+                    {editorMode === 'view' &&
+                      !contents?.content?.approval_status && (
+                        <Flex p={0} gap={2} ml="auto" alignItems="center">
+                          {nextState && nextState.is_user_eligible && (
+                            <ApprovalHandler
+                              name={nextState?.state}
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}
+                            />
+                          )}
+                          {isMakeCompete && (
+                            <ApprovalHandler
+                              name="Mark Complete"
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}
+                            />
+                          )}
+                        </Flex>
+                      )}
+                    {isEditable && <LockedBadge />}
+                  </Flex>
+                  {(editorMode === 'edit' || editorMode === 'new') && (
+                    <Box ml="auto">
+                      <Button
+                        onClick={onSubmit}
+                        variant="primary"
+                        size="sm"
+                        loading={saving}>
+                        Save
+                      </Button>
+                    </Box>
+                  )}
+                </Flex>
+              )}
+
+              <DocumentContentBlock />
+            </Box>
+            <DocumentSidebar />
+          </Flex>
+        </ErrorBoundary>
+      </>
+      <ApprovalUpdateModal
+        state={modalAction}
+        success={() => fetchContentDetails(cId)}
+        open={open}
+        setOpen={setOpen}
+      />
 
       <Modal
         open={openTitleModal}
         ariaLabel="confirm model"
         onClose={() => setOpenTitleModal(false)}>
-        <Box
-          as="form"
-          onSubmit={handleSubmit(onUpdateTitle)}
-          sx={{ width: '450px' }}>
+        <Box as="form" onSubmit={handleSubmit(onUpdateTitle)} w="450px">
           <Modal.Header>Title</Modal.Header>
           <Box my={3}>
             <Field
@@ -265,7 +242,7 @@ const DocumentView = () => {
               defaultValue={pageTitle}
             />
           </Box>
-          <Flex sx={{ gap: '8px' }}>
+          <Flex gap="8px">
             <Button
               variant="secondary"
               onClick={() => setOpenTitleModal(false)}>

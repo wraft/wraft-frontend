@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Button, Alert, Close, Spinner, Box, Text } from 'theme-ui';
+import { Alert, Close, Spinner } from 'theme-ui';
+import { Button, Box, Text } from '@wraft/ui';
 
 import Modal from 'common/Modal';
 import Field from 'common/Field';
@@ -141,9 +142,9 @@ const OrgMemberForm = () => {
                 // contentLabel="SearchWraft"
               >
                 <Box p={4}>
-                  <Text variant="blockTitle">Invite Members</Text>
+                  <Text>Invite Members</Text>
                   <Box as="form" onSubmit={handleSubmit(onInviteSubmit)}>
-                    <Box sx={{ display: 'none' }}>
+                    <Box>
                       <Field
                         name="organisation_id"
                         label="Org ID"
@@ -151,14 +152,14 @@ const OrgMemberForm = () => {
                         register={register}
                       />
                       <Text
-                        variant="blocktitle"
-                        sx={{
-                          fontSize: 'xs',
-                          // pl: 3,
-                          py: 2,
-                          color: 'text-primary',
-                          textTransform: 'uppercase',
-                        }}>
+                      // sx={{
+                      //   fontSize: 'xs',
+                      //   // pl: 3,
+                      //   py: 2,
+                      //   color: 'text-primary',
+                      //   textTransform: 'uppercase',
+                      // }}
+                      >
                         {organ?.name}
                       </Text>
                     </Box>
@@ -168,7 +169,7 @@ const OrgMemberForm = () => {
                       defaultValue="anand@aurut.com"
                       register={register}
                     />
-                    <Button variant="secondary" type="submit" ml={0} mt={3}>
+                    <Button variant="secondary" type="submit">
                       Invite
                     </Button>
                   </Box>

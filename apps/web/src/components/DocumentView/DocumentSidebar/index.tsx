@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
 
 import ApprovalFlowHistory from 'components/Content/ApprovalFlowHistory';
@@ -23,17 +23,11 @@ export const DocumentSidebar = () => {
 
   return (
     <Box
-      variant="plateRightBar"
-      sx={{
-        right: 0,
-        bg: 'gray.100',
-        py: 0,
-        width: '30%',
-        borderLeft: 'solid 1px',
-        borderColor: 'border',
-        minHeight: '100vh',
-        pt: 2,
-      }}>
+      bg="background-primary"
+      w="30%"
+      maxWidth="400px"
+      borderLeft="solid 1px"
+      borderColor="border">
       <ContentInfoBlock
         content={contents}
         nextState={nextState}
@@ -65,38 +59,29 @@ export const DocumentSidebar = () => {
             <InfoSection />
           </TabPanel>
           <TabPanel>
-            <Box sx={{ bg: 'gray.100' }}>
-              <Box sx={{ pb: 3 }}>
-                <Box
-                  variant="layout.boxHeading"
-                  sx={{ pb: 1, borderBottom: 0 }}>
-                  <Text as="h3" sx={{ fontSize: 'sm', fontWeight: 600 }}>
-                    Discussions
-                  </Text>
+            <Box mt="md" px="md">
+              <Box>
+                <Box mb="sm">
+                  <Text as="h3">Discussions</Text>
                 </Box>
-                <Box sx={{ pt: 2, px: 3, bg: 'gray.100' }}>
-                  {/* {contents && contents.content && (
-                    <Box mt={0}>
-                      <CommentForm
-                        master={contents.content_type.id}
-                        master_id={contents.content.id}
-                      />
-                    </Box>
-                  )} */}
-                </Box>
+
+                {contents && contents.content && (
+                  <CommentForm
+                    master={contents.content_type.id}
+                    master_id={contents.content.id}
+                  />
+                )}
               </Box>
             </Box>
           </TabPanel>
           <TabPanel>
-            <Box variant="layout.boxHeading">
+            <Box mt="md" px="md">
               {contents?.versions && contents?.versions.length > 0 && (
                 <Box>
                   {contents.versions.map((v: any) => (
-                    <Flex key={v?.id} sx={{ py: 2 }}>
-                      <Text sx={{ fontSize: 'xs', fontWeight: 500 }}>
-                        Version {v?.version_number}
-                      </Text>
-                      <Box sx={{ ml: 'auto', mr: 3, pb: 2 }}>
+                    <Flex key={v?.id} justify="space-between" py="sm">
+                      <Text>Version {v?.version_number}</Text>
+                      <Box>
                         <TimeAgo time={v?.updated_at} />
                       </Box>
                     </Flex>
@@ -106,13 +91,13 @@ export const DocumentSidebar = () => {
             </Box>
           </TabPanel>
           <TabPanel>
-            <Box variant="layout.boxHeading" sx={{ pb: 2 }}>
-              <Text sx={{ fontSize: 'xs', color: 'gray.900' }}>
+            <Box mt="md" px="md">
+              <Text as="h5" mb="sm">
                 Approval Log
               </Text>
-            </Box>
-            <Box>
-              {tabActiveId === 'approval' && <ApprovalFlowHistory id={cId} />}
+              <Box>
+                {tabActiveId === 'approval' && <ApprovalFlowHistory id={cId} />}
+              </Box>
             </Box>
           </TabPanel>
         </TabProvider>

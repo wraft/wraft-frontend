@@ -20,25 +20,6 @@ const theme: any = {
       bg: "background",
     },
   },
-  variants: {
-    onboardingForms: {
-      padding: "32px",
-      border: "1px solid",
-      borderColor: "border",
-      borderRadius: "4px",
-      backgroundColor: "background-primary",
-      width: "574px",
-      // minHeight: '600px',
-      height: "fit-content",
-      flexDirection: "column",
-    },
-    onboardingFormPage: {
-      height: "100vh",
-      padding: "80px",
-      backgroundColor: "background",
-      justifyContent: "center",
-    },
-  },
 };
 
 export default theme;

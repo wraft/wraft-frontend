@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text, Link } from 'theme-ui';
+import Router from 'next/router';
+import { Box, Flex, Text, Button } from '@wraft/ui';
 import { DownloadSimple } from '@phosphor-icons/react';
 
+import NavLink from 'common/NavLink';
 import { TimeAgo } from 'common/Atoms';
 import { AvatarCard } from 'common/AvatarCard';
 import { updateVars } from 'utils/index';
@@ -95,14 +97,11 @@ export const InfoSection = () => {
   };
 
   return (
-    <Box sx={{ bg: 'gray.100', mb: 6, pb: 0 }}>
+    <Box px="md" py="md">
       {editorMode !== 'new' && (
         <>
-          <Box variant="layout.boxHeading" sx={{ pb: 3 }}>
-            <Text
-              as="h3"
-              variant="sectionheading"
-              sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
+          <Box>
+            <Text as="h3" mb="xs">
               Editors
             </Text>
             <AvatarCard
@@ -113,18 +112,13 @@ export const InfoSection = () => {
           </Box>
 
           {contents?.state?.id && (
-            <Box variant="layout.boxHeading" sx={{ pb: 3, borderTop: 'none' }}>
+            <Box>
               {contents &&
                 !nextState?.is_user_eligible &&
                 !isMakeCompete &&
                 !isEditable && (
                   <>
-                    <Text
-                      as="h3"
-                      variant="sectionheading"
-                      sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
-                      Waiting for approval
-                    </Text>
+                    <Text as="h3">Waiting for approval</Text>
                     {nextState &&
                       nextState.approvers &&
                       nextState.approvers.map((approver: any) => (
@@ -152,70 +146,29 @@ export const InfoSection = () => {
         </>
       )}
 
-      <Box sx={{ pt: 2, px: 3, border: 0 }}>
-        <Text
-          as="h3"
-          variant="sectionheading"
-          sx={{ mb: 0, pb: 0, color: 'text-secondary' }}>
-          Document
-        </Text>
-        <Box>
-          {contents?.content?.build && (
-            <Flex pt={0} pb={3}>
-              <Box>
-                <Box>
-                  <Text
-                    as="h3"
-                    sx={{
-                      fontSize: 'sm',
-                      mb: 0,
-                      color: 'text-primary',
-                    }}>
-                    {contents.content.instance_id}
-                    <Text as="span" sx={{ ml: 2, fontWeight: 400 }}>
-                      v{contents.versions[0]?.version_number ?? ''}
-                    </Text>
-                  </Text>
-                  <Text
-                    as="h4"
-                    sx={{
-                      fontSize: '14px',
-                      mb: 0,
-                      pb: 0,
-                      mt: 1,
-                      color: 'gray.700',
-                      fontWeight: 500,
-                      ml: 0,
-                    }}>
-                    <Flex as="span">
-                      {/* <Text sx={{ mr: 2 }}>Updated </Text> */}
-                      {contents.versions.length && (
-                        <TimeAgo time={contents?.versions[0]?.updated_at} />
-                      )}
-                    </Flex>
-                  </Text>
-                </Box>
-              </Box>
-              <Box sx={{ ml: 'auto' }}>
-                <Link
-                  // variant="download"
-                  sx={{
-                    bg: 'gray.000',
-                    borderRadius: '6px',
-                    border: 'solid 1px',
-                    borderColor: 'border',
-                    px: 3,
-                    py: 2,
-                  }}
-                  href={`${contents.content.build}`}
-                  target="_blank">
-                  <DownloadSimple width={20} />
-                </Link>
-              </Box>
-            </Flex>
-          )}
+      {contents?.content?.build && (
+        <Box mt="xl">
+          <Text as="h3">Document</Text>
+
+          <Flex mt="xs" pb={3} justify="space-between">
+            <Box>
+              <Text>{`${contents.content.instance_id} v${contents.versions[0]?.version_number ?? ''}`}</Text>
+
+              {contents.versions.length && (
+                <Text fontSize="xs">
+                  <TimeAgo time={contents?.versions[0]?.updated_at} />
+                </Text>
+              )}
+            </Box>
+            <Box>
+              <NavLink href={`${contents.content.build}`} target="_blank">
+                <DownloadSimple width={16} />
+              </NavLink>
+            </Box>
+          </Flex>
         </Box>
-      </Box>
+      )}
+
       <PlaceholderBlock
         fields={fieldMaps}
         fieldValues={fieldValues}

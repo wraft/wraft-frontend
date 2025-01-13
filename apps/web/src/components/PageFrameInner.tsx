@@ -1,8 +1,5 @@
 import React from 'react';
-// import Head from 'next/head';
-import { Flex } from 'theme-ui';
-// import Container from './Container';
-// import { Close } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
 export interface IPage {
   showFull?: boolean;
@@ -16,22 +13,10 @@ export interface IAlert {
   children: any;
 }
 
-export const PageFrameInner = ({
-  children,
-}: // showFull = true,
-// noSide = true,
-IPage) => {
-  // const shouldShow: boolean = showFull ? true : false;
-  // const fontName = 'Poppins';
-  // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
-
+export const PageFrameInner = ({ children }: IPage) => {
   return (
     <>
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          minHeight: '100%',
-        }}>
+      <Flex direction="column" h="100vh">
         {children}
       </Flex>
     </>

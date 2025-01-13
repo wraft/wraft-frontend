@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { ErrorBoundary, Button } from '@wraft/ui';
 import styled from '@emotion/styled';
 import {
@@ -62,13 +62,12 @@ export const StepBlock = ({
 }: StepBlockProps) => {
   return (
     <Flex
-      sx={{
-        flex: 1,
-        borderRight: `solid 1px`,
-        borderColor: 'border',
-        p: 0,
-        '&:last-child': { borderRight: 0 },
-      }}>
+    // flex: 1,
+    // borderRight: `solid 1px`,
+    // borderColor: 'border',
+    // p: 0,
+    // '&:last-child': { borderRight: 0 },
+    >
       {no && (
         <NumberBlock
           no={no}
@@ -78,12 +77,11 @@ export const StepBlock = ({
       <Box>
         <Text
           as="h5"
-          sx={{
-            fontFamily: 'body',
-            fontSize: 'xs',
-            color: 'text-primary',
-            mb: 0,
-          }}>
+          // fontFamily: 'body',
+
+          //   color: 'text-primary',
+          //   mb: 0,
+        >
           {title}
         </Text>
       </Box>
@@ -107,30 +105,28 @@ const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
 
   return (
     <Box
-      sx={{
-        bg: 'neutral.200',
-        textAlign: 'center',
-        mr: 2,
-        // mt: `-7px`,
-        pb: `3px`,
-        pt: `2px`,
-        color: `text`,
-        display: `block`,
-        verticalAlign: 'middle',
-        borderRadius: '99rem',
-        border: 'solid 1px',
-        borderColor: activeBorder,
-        width: size?.wh,
-        height: size?.wh,
-      }}>
+    // bg: 'neutral.200',
+    //     textAlign: 'center',
+    //     mr: 2,
+    //     // mt: `-7px`,
+    //     pb: `3px`,
+    //     pt: `2px`,
+    //     color: `text`,
+    //     display: `block`,
+    //     verticalAlign: 'middle',
+    //     borderRadius: '99rem',
+    //     border: 'solid 1px',
+    //     borderColor: activeBorder,
+    //     width: size?.wh,
+    //     height: size?.wh,
+    >
       <Text
         as="span"
-        sx={{
-          lineHeight: 'auto',
-          m: 0,
-          p: 0,
-          fontSize: size?.fontSize,
-        }}>
+        // lineHeight: 'auto',
+        // m: 0,
+        // p: 0,
+        // fontSize: size?.fontSize,
+      >
         {no}
       </Text>
     </Box>
@@ -143,6 +139,41 @@ const PreTag = styled(Box)`
   white-space: -pre-wrap; /* Opera 4-6 */
   white-space: -o-pre-wrap; /* Opera 7 */
   word-wrap: break-word;
+`;
+
+const TabWrapper = styled(Box)`
+  margin-bottom: 0;
+  // padding: ${({ theme }: any) => theme.space.sm};
+
+  [role='tabpanel'] {
+    padding: 0px;
+  }
+
+  .tabPanel {
+    border: 0;
+    border: 1px solid;
+    border-color: ${({ theme }: any) => theme?.colors.border};
+    background-color: ${({ theme }: any) => theme?.colors.gray['400']};
+
+    button {
+      border: 0;
+      background-color: transparent;
+      padding: ${({ theme }: any) => theme.space.xs};
+      border-radius: 6px;
+    }
+
+    button[aria-selected='true'] {
+      border: 0;
+      background-color: ${({ theme }: any) =>
+        theme?.colors['background-secondary']};
+    }
+  }
+
+  .tabGroup {
+    background-color: ${({ theme }: any) => theme.colors.gray['600']};
+    display: flex;
+    border-radius: 6px;
+  }
 `;
 
 export const DocumentContentBlock = () => {
@@ -206,65 +237,29 @@ export const DocumentContentBlock = () => {
     <>
       {editorMode === 'new' ? (
         <ErrorBoundary>
-          <Box
-            sx={{
-              mt: 4,
-              borderRadius: '6px',
-              maxWidth: '100%',
-              px: 4,
-              '.remirror-theme .ProseMirror': {
-                bg: 'background-secondary',
-                pl: '9rem !important',
-                pr: '9rem !important',
-                pt: '7rem !important',
-                p: 'gray.1200',
-                'p mark': {
-                  background: 'transparent !important',
-                  color: 'text-primary',
-                },
-              },
-            }}>
-            <PreTag pt={0} pb={6}>
-              {contentBody && (
-                <Editor
-                  defaultContent={contentBody}
-                  isReadonly={false}
-                  ref={editorRef}
-                />
-              )}
-            </PreTag>
-          </Box>
+          <Flex
+            mt="lg"
+            flexGrow={1}
+            justify="center"
+            overflowY="scroll"
+            maxHeight="calc(100vh - 500px)">
+            <Box minWidth="794px" maxWidth="920px">
+              <PreTag pt={0} pb={6}>
+                {contentBody && (
+                  <Editor
+                    defaultContent={contentBody}
+                    isReadonly={false}
+                    ref={editorRef}
+                  />
+                )}
+              </PreTag>
+            </Box>
+          </Flex>
         </ErrorBoundary>
       ) : (
-        <Box
-          sx={{
-            mb: 0,
-            px: 2,
-            py: 2,
-            '.tabPanel': { border: 0, bg: 'gray.400' },
-            '.tabPanel button': {
-              border: 0,
-              bg: 'transparent',
-              px: 3,
-              py: 2,
-              borderRadius: '6px',
-            },
-            '.tabGroup': {
-              bg: 'gray.a300',
-              px: 2,
-              py: '6px',
-              display: 'flex',
-              borderRadius: '6px',
-            },
-            '.tabPanel button[aria-selected=true]': {
-              border: 0,
-              bg: 'background-secondary',
-              px: 3,
-              py: 2,
-            },
-          }}>
+        <TabWrapper>
           <TabProvider defaultSelectedId={defaultSelectedId}>
-            <Flex sx={{ pt: '6px', pl: '6px' }}>
+            <Flex justify="space-between" p="md">
               <TabList
                 store={tabView}
                 aria-label="Content Stages"
@@ -278,21 +273,18 @@ export const DocumentContentBlock = () => {
                 </Tab>
               </TabList>
               {!isEditable && (
-                <Flex
-                  sx={{
-                    ml: 'auto',
-                    gap: 2,
-                    alignItems: 'center',
-                    mr: 3,
-                  }}>
+                <Flex gap="xs">
                   <Button
                     variant="secondary"
                     loading={isBuilding}
+                    size="sm"
                     onClick={() => doBuild()}>
-                    <Play size={14} className="action" /> Generate
+                    <Play size={14} className="action" />
+                    <Box>Generate</Box>
                   </Button>
                   <Button
                     variant="secondary"
+                    size="sm"
                     onClick={() => onSwitchEditorMode(editorMode)}>
                     {' '}
                     {editorMode === 'edit' ? (
@@ -300,7 +292,7 @@ export const DocumentContentBlock = () => {
                     ) : (
                       <PencilSimple size={14} className="icon" />
                     )}
-                    {editorMode === 'edit' ? 'View' : 'Edit'}
+                    <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
                   </Button>
                 </Flex>
               )}
@@ -311,26 +303,14 @@ export const DocumentContentBlock = () => {
               store={tabView}
               className={styles.tablist}>
               <ErrorBoundary>
-                <Box
-                  sx={{
-                    mt: 0,
-                    borderRadius: '6px',
-                    maxWidth: '100%',
-                    px: 4,
-                    '.remirror-theme .ProseMirror': {
-                      bg: 'background-secondary',
-                      pl: '9rem !important',
-                      pr: '9rem !important',
-                      pt: '7rem !important',
-                      p: 'gray.1200',
-                      'p mark': {
-                        background: 'transparent !important',
-                        color: 'text-primary',
-                      },
-                    },
-                  }}>
-                  <PreTag pt={0} pb={6}>
-                    {/* {contentBody && (
+                <Flex
+                  flexGrow={1}
+                  justify="center"
+                  overflowY="scroll"
+                  maxHeight="100vh">
+                  <Box minWidth="794px" maxWidth="920px">
+                    <PreTag pt={0} pb={6}>
+                      {/* {contentBody && (
                       <LiveEditor
                         defaultContent={contentBody}
                         isReadonly={editorMode === 'view'}
@@ -341,56 +321,55 @@ export const DocumentContentBlock = () => {
                       />
                     )} */}
 
-                    {contentBody && (
-                      <Editor
-                        defaultContent={contentBody}
-                        isReadonly={editorMode === 'view'}
-                        ref={editorRef}
-                        tokens={fieldTokens}
-                        isCollaborative={true}
-                        collabData={collabData}
-                      />
-                    )}
-                  </PreTag>
-                </Box>
+                      {contentBody && (
+                        <Editor
+                          defaultContent={contentBody}
+                          isReadonly={editorMode === 'view'}
+                          ref={editorRef}
+                          tokens={fieldTokens}
+                          isCollaborative={true}
+                          collabData={collabData}
+                        />
+                      )}
+                    </PreTag>
+                  </Box>
+                </Flex>
               </ErrorBoundary>
             </TabPanel>
             <TabPanel store={tabView}>
               <Box
-                sx={{
-                  bg: 'gray.400',
-                  mt: 4,
-                  // minHeight: '100vh',
-                  border: 'solid 1px',
-                  borderColor: 'gray.400',
-                  '.react-pdf__Page': {
-                    backgroundColor: 'transparent !important',
-                    marginBottom: '8px',
-                  },
-                  '.react-pdf__Document': {
-                    mx: 2,
-                  },
-                  '.pdf__Page__textContent': {
-                    border: 'solid 1px',
-                    borderColor: 'grey.500',
-                  },
-                  pb: 5,
-                }}>
+              // bg: 'gray.400',
+              // mt: 4,
+              // // minHeight: '100vh',
+              // border: 'solid 1px',
+              // borderColor: 'gray.400',
+              // '.react-pdf__Page': {
+              //   backgroundColor: 'transparent !important',
+              //   marginBottom: '8px',
+              // },
+              // '.react-pdf__Document': {
+              //   mx: 2,
+              // },
+              // '.pdf__Page__textContent': {
+              //   border: 'solid 1px',
+              //   borderColor: 'grey.500',
+              // },
+              // pb: 5,
+              >
                 {!contents?.content?.build && (
-                  <Box sx={{ px: 6, minHeight: '80vh' }}>
+                  <Box
+                  // px: 6, minHeight: '80vh'
+                  >
                     <Box
-                      sx={{
-                        px: 4,
-                        py: 3,
-                        border: 'solid 1px',
-                        borderColor: 'gray.500',
-                        bg: 'gray.300',
-                        borderRadius: '6px',
-                      }}>
+                    //  px: 4,
+                    //  py: 3,
+                    //  border: 'solid 1px',
+                    //  borderColor: 'gray.500',
+                    //  bg: 'gray.300',
+                    //  borderRadius: '6px',
+                    >
                       <Text as="h4">Document not generated</Text>
-                      <Text as="p" sx={{ color: 'gray.900' }}>
-                        Documents need to be generated
-                      </Text>
+                      <Text as="p">Documents need to be generated</Text>
                       <Button
                         variant="secondary"
                         loading={isBuilding}
@@ -408,7 +387,7 @@ export const DocumentContentBlock = () => {
               </Box>
             </TabPanel>
           </TabProvider>
-        </Box>
+        </TabWrapper>
       )}
     </>
   );

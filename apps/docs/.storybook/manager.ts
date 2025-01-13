@@ -5,7 +5,7 @@ const theme = create({
   base: "dark",
   brandTitle: "Wraft UI Kit",
   brandUrl: "/",
-  brandImage: "/assets/logo.svg",
+  brandImage: "/assets/plate-ui.svg",
   colorPrimary: "#00471A",
   colorSecondary: "#00471A",
   appBorderColor: "rgb(0 0 0 / 10%)",

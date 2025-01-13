@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
 export const Container = styled.div`
-  max-width: 48rem;
+  width: 24rem;
   margin: 0 auto;
   padding: 1rem;
 `;
