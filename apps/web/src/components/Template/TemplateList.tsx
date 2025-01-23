@@ -97,80 +97,70 @@ const columns = ({ onCloneTemplete }: any) => [
 ];
 
 const TemplateList = () => {
-  const [contents, setContents] = useState<Array<IField>>([]);
+  const [templates, setTemplates] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
 
   useEffect(() => {
-    loadData(currentPage);
+    loadTemplates(currentPage);
   }, []);
 
   useEffect(() => {
     if (page) {
-      loadData(page);
+      loadTemplates(page);
     }
   }, [page]);
 
-  const loadData = (pageNo: number) => {
-    setLoading(true);
-
-    const query = `?page=${pageNo}`;
-    fetchAPI(`data_templates${query}&sort=updated_at_desc`)
-      .then((data: any) => {
-        setLoading(false);
-        const res: IField[] = data.data_templates;
-        setContents(res);
-
-        setPageMeta(data);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+  const loadTemplates = async (pageNo: number) => {
+    try {
+      setIsLoading(true);
+      const query = `?page=${pageNo}&sort=updated_at_desc`;
+      const data: any = await fetchAPI(`data_templates${query}`);
+      setTemplates(data.data_templates || []);
+      setPageMeta(data);
+    } catch (error) {
+      console.error('Error fetching templates:', error);
+      toast.error('Failed to load templates.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const changePage = (newPage: any) => {
+  const onPageChange = (newPage: any) => {
     setPage(newPage);
-    const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: newPage };
     router.push(
       {
-        pathname: currentPath,
-        query: currentQuery,
+        pathname: router.pathname,
+        query: { ...router.query, page: newPage },
       },
       undefined,
       { shallow: true },
     );
   };
 
-  const onCloneTemplete = (content: any) => {
-    const convertedData = {
-      title_template: content.title_template,
-      title: `${content.title} duplicate`,
-      data: content.data,
-      serialized: content.serialized,
+  const onCloneTemplete = async (template: any) => {
+    const cloneData = {
+      title_template: template.title_template,
+      title: `${template.title} duplicate`,
+      data: template.data,
+      serialized: template.serialized,
     };
 
-    postAPI(
-      `content_types/${content.content_type.id}/data_templates`,
-      convertedData,
-    )
-      .then((data: any) => {
-        router.push(`/templates/edit/${data.id}`);
-        toast.success('Created Successfully', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      })
-      .catch(() => {
-        toast.error('Failed', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      });
+    try {
+      const clonedTemplate: any = await postAPI(
+        `content_types/${template.content_type.id}/data_templates`,
+        cloneData,
+      );
+      router.push(`/templates/edit/${clonedTemplate.id}`);
+      toast.success('Template cloned successfully!');
+    } catch (error) {
+      console.error('Error cloning template:', error);
+      toast.error('Failed to clone template.');
+    }
   };
 
   return (
@@ -186,8 +176,8 @@ const TemplateList = () => {
       <Box p="lg">
         <Box mx={0} mb={3}>
           <Table
-            data={contents}
-            isLoading={loading}
+            data={templates}
+            isLoading={isLoading}
             columns={columns({ onCloneTemplete })}
             skeletonRows={10}
             emptyMessage="No template has been created yet."
@@ -197,7 +187,7 @@ const TemplateList = () => {
               <Pagination
                 totalPage={pageMeta?.total_pages}
                 initialPage={currentPage}
-                onPageChange={changePage}
+                onPageChange={onPageChange}
                 totalEntries={pageMeta?.total_entries}
               />
             )}
