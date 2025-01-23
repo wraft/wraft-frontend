@@ -48,18 +48,25 @@ export interface IFieldItem {
   type: string;
 }
 
+type FormValues = {
+  contentFields: any;
+  id?: string;
+  template?: any;
+};
+
 const CreateDocument = () => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<any>();
 
   const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
   const [fields, setField] = useState([]);
   const [formStep, setFormStep] = useState(0);
 
   const router = useRouter();
 
   const {
-    // formState: { errors },
+    formState: { errors },
     register,
     control,
     handleSubmit,
@@ -67,7 +74,7 @@ const CreateDocument = () => {
     resetField,
     watch,
     getValues,
-  } = useForm<any>({
+  } = useForm<FormValues>({
     mode: 'onSubmit',
   });
 
@@ -116,6 +123,7 @@ const CreateDocument = () => {
       setFormStep(1);
     }
     if (formStep === 1) {
+      setIsSubmiting(true);
       setNewContent(data);
       router.push(`/documents/new`);
     }
@@ -240,12 +248,25 @@ const CreateDocument = () => {
                       )}
 
                       {f.field_type.name !== 'date' && (
-                        <Field label={capitalizeFirst(f.name)} required>
+                        <Field
+                          label={capitalizeFirst(f.name)}
+                          required
+                          error={
+                            //@ts-expect-error Dynamic key access
+                            errors?.contentFields?.[
+                              convertToVariableName(f.name)
+                            ]?.message || ''
+                          }>
                           <InputText
                             placeholder={`Enter your ${f.name} `}
-                            defaultValue=""
                             {...register(
-                              `contentFields[${convertToVariableName(f.name)}]`,
+                              `contentFields.${convertToVariableName(f.name)}`,
+                              {
+                                required: {
+                                  value: true,
+                                  message: `${capitalizeFirst(f.name)} is required`,
+                                },
+                              },
                             )}
                           />
                         </Field>
@@ -266,6 +287,7 @@ const CreateDocument = () => {
           </Button>
           <Button
             onClick={handleSubmit(onSubmit)}
+            loading={isSubmiting}
             disabled={
               vals === undefined ||
               vals === null ||
