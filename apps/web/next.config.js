@@ -9,9 +9,12 @@ module.exports = withImages({
     homePageUrl: process.env.NEXT_PUBLIC_HOME_PAGE_URL || '/',
     API_HOST: process.env.NEXT_PUBLIC_API_HOST,
     SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     NEXT_PUBLIC_WEBSOCKET_URL: process.env.NEXT_PUBLIC_WEBSOCKET_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || '',
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+    NEXT_PUBLIC_NEXT_AUTH_ENABLED:
+      process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED || 'false',
   },
   async rewrites() {
     return [
@@ -37,6 +40,7 @@ module.exports = withImages({
       },
     },
   },
+  transpilePackages: ['prosemirror-view', 'prosemirror-state'],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
     return config;

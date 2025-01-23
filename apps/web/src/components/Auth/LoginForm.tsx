@@ -21,12 +21,38 @@ import { useAuth } from 'contexts/AuthContext';
 import { LoginSchema, Login } from 'schemas/auth';
 import { userLogin } from 'utils/models';
 
+const GoogleAuthHandler = ({
+  isGoogleAuthEnabled,
+}: {
+  isGoogleAuthEnabled: any;
+}) => {
+  const { login } = useAuth();
+  const { data: nextAuthSession, status } = useSession();
+
+  useEffect(() => {
+    if (
+      isGoogleAuthEnabled &&
+      status === 'authenticated' &&
+      nextAuthSession?.user
+    ) {
+      login(nextAuthSession.user);
+    }
+  }, [isGoogleAuthEnabled, status, nextAuthSession, login]);
+
+  return null;
+};
+
 const LoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const { login, accessToken } = useAuth();
-  const { data, status } = useSession();
+
+  const isGoogleAuthEnabled =
+    process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED === 'true' &&
+    process.env.GOOGLE_CLIENT_SECRET &&
+    process.env.GOOGLE_CLIENT_ID;
+
   const {
     register,
     handleSubmit,
@@ -67,12 +93,6 @@ const LoginForm = () => {
     }
   }, [error]);
 
-  useEffect(() => {
-    if (status === 'authenticated' && data?.user && !session) {
-      login(data?.user);
-    }
-  }, [data, status]);
-
   const onSubmit = async (formData: any): Promise<void> => {
     setLoading(true);
     setLoginError(null);
@@ -96,84 +116,81 @@ const LoginForm = () => {
   }, [accessToken]);
 
   return (
-    <Flex justify="center" p="5xl">
-      <Box position="absolute" top="80px" left="80px">
-        <Link href={homePageUrl}>
-          <Box color="gray.0" fill="gray.1200">
-            <BrandLogoIcon width="7rem" height="3rem" />
-          </Box>
-        </Link>
-      </Box>
-      <Flex variant="card" w="500px" justifySelf="center" direction="column">
-        <Text as="h3" mb="48px" color="gray.1200" fontSize="3xl">
-          Sign in
-        </Text>
+    <>
+      {isGoogleAuthEnabled && (
+        <GoogleAuthHandler isGoogleAuthEnabled={isGoogleAuthEnabled} />
+      )}
+      <Flex
+        justify="center"
+        p="5xl"
+        bg="background-secondary"
+        h="100vh"
+        align="baseline">
+        <Box position="absolute" top="80px" left="80px">
+          <Link href={homePageUrl}>
+            <Box color="gray.0" fill="gray.1200">
+              <BrandLogoIcon width="7rem" height="3rem" />
+            </Box>
+          </Link>
+        </Box>
+        <Flex variant="card" w="500px" justifySelf="center" direction="column">
+          <Text as="h3" mb="48px" color="gray.1200" fontSize="3xl">
+            Sign in
+          </Text>
 
-        <Flex
-          as="form"
-          onSubmit={handleSubmit(onSubmit)}
-          gap="lg"
-          direction="column">
-          <Field label="Email" required error={errors?.email?.message}>
-            <InputText
-              {...register('email')}
-              placeholder="Enter your email address"
-            />
-          </Field>
+          <Flex
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}
+            gap="lg"
+            direction="column">
+            <Field label="Email" required error={errors?.email?.message}>
+              <InputText
+                {...register('email')}
+                placeholder="Enter your email address"
+              />
+            </Field>
 
-          <Field label="Password" required error={errors?.password?.message}>
-            <PasswordInput
-              placeholder="Enter your password"
-              {...register('password')}
-            />
-          </Field>
+            <Field label="Password" required error={errors?.password?.message}>
+              <PasswordInput
+                placeholder="Enter your password"
+                {...register('password')}
+              />
+            </Field>
 
-          <Flex mb="md" justify="space-between">
-            <Button type="submit" loading={loading}>
-              Sign in
-            </Button>
+            <Flex mb="md" justify="space-between">
+              <Button type="submit" loading={loading}>
+                Sign in
+              </Button>
 
-            <Link href="/forgetpassword">
-              <Text cursor="pointer" color="gray.800">
-                Forgot Password?
-              </Text>
-            </Link>
+              <Link href="/forgetpassword">
+                <Text cursor="pointer" color="gray.800">
+                  Forgot Password?
+                </Text>
+              </Link>
+            </Flex>
           </Flex>
+          <Box>{loginError && <Text color="red.400">{loginError}</Text>}</Box>
+
+          {isGoogleAuthEnabled && (
+            <Flex mt="xl" w="100%" justifySelf="center" direction="column">
+              <Button variant="secondary" onClick={() => signIn('gmail')}>
+                <GoogleIcon width={18} />
+                Login in with Google
+              </Button>
+            </Flex>
+          )}
+
+          {!isSelfHost && (
+            <Box mt="24px" color="gray.1000" gap="8px" mb="xxl">
+              Not a user yet?{' '}
+              <Link href="/signup" variant="none">
+                <Text cursor="pointer">Request invite</Text>
+              </Link>
+            </Box>
+          )}
         </Flex>
-        <Box>{loginError && <Text color="red.400">{loginError}</Text>}</Box>
-
-        {((process.env.GOOGLE_CLIENT_SECRET && process.env.GOOGLE_CLIENT_ID) ||
-          !isSelfHost) && (
-          <>
-            <Box
-              as="hr"
-              border="0"
-              borderTop="1px solid"
-              borderColor="border"
-              my="3xl"
-              w="100%"
-            />
-
-            {process.env.GOOGLE_CLIENT_SECRET &&
-              process.env.GOOGLE_CLIENT_ID && (
-                <Button variant="secondary" onClick={() => signIn('gmail')}>
-                  <GoogleIcon width={18} />
-                  Login in with Google
-                </Button>
-              )}
-
-            {!isSelfHost && (
-              <Text as="div" mt="24px" color="gray.1000" gap="8px" mb="xxl">
-                Not a user yet?{' '}
-                <Link href="/signup" variant="none">
-                  <Text cursor="pointer">Request invite</Text>
-                </Link>
-              </Text>
-            )}
-          </>
-        )}
       </Flex>
-    </Flex>
+    </>
   );
 };
 export default LoginForm;
