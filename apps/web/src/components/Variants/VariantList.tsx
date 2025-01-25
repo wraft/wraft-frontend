@@ -31,10 +31,6 @@ export interface IFieldItem {
   type: string;
 }
 
-interface ContentTypeList {
-  isEdit?: boolean;
-}
-
 const VariantList = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);

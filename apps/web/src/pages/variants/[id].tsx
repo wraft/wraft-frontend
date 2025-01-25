@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Container } from 'theme-ui';
 
 import Page from 'components/PageFrame';
-import VariantViewForm from 'components/Variants/VariantViewForm';
+import VariantDetailForm from 'components/Variants/VariantDetailForm';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';
@@ -38,9 +37,8 @@ const Index: FC = () => {
             />
           }
         />
-        <Container variant="layout.pageFrame">
-          <VariantViewForm />
-        </Container>
+
+        <VariantDetailForm />
       </Page>
     </>
   );

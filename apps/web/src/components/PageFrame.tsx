@@ -47,7 +47,7 @@ export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
         <Box
           sx={{
             flex: 1,
-            bg: 'background-primary',
+            bg: 'background-secondary',
             minWidth: 0,
           }}>
           {children}
