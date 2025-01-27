@@ -11,3 +11,4 @@ out
 .env.local
 .env.production
 .env
+.vercel
