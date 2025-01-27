@@ -207,7 +207,7 @@ const PermissionsList = () => {
                   transform={
                     row.getIsExpanded() ? 'rotate(180deg)' : 'rotate(0deg)'
                   }>
-                  <DownIcon />
+                  <DownIcon width={14} />
                 </Flex>
               </Flex>
             </Box>
