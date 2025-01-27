@@ -25,7 +25,10 @@ import { defineHardBreak } from "@extensions/hard-break";
 import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
 import { defineReadonly } from "prosekit/extensions/readonly";
+import type { SignatureExtension } from "@extensions/signature";
+import { defineSignature } from "@extensions/signature";
 import ImageView from "./image-view";
+import SignatureView from "./signature-view";
 
 // import { defineImageFileHandlers } from "./upload-file";
 export interface ExtensionProps {
@@ -41,7 +44,13 @@ export interface DefaultExtensionProps {
 }
 
 export type BasicsExtension = Union<
-  [BasicExtension, PlainExtension, HolderExtension, BlockExtension]
+  [
+    BasicExtension,
+    PlainExtension,
+    HolderExtension,
+    BlockExtension,
+    SignatureExtension,
+  ]
 >;
 
 export function defineDefaultExtension({
@@ -50,7 +59,7 @@ export function defineDefaultExtension({
 }: DefaultExtensionProps): BasicsExtension {
   const extensions = [
     defineBasicExtension(),
-    definePlaceholder({ placeholder }),
+    isReadonly ? undefined : definePlaceholder({ placeholder }),
     defineMention(),
     defineHorizontalRule(),
     defineFancyParagraph(),
@@ -61,10 +70,15 @@ export function defineDefaultExtension({
     defineBulletList(),
     defineHardBreak(),
     defineBlock(),
+    defineSignature(),
     isReadonly ? defineReadonly() : undefined,
     defineReactNodeView({
       name: "image",
       component: ImageView satisfies ReactNodeViewComponent,
+    }),
+    defineReactNodeView({
+      name: "signature",
+      component: SignatureView satisfies ReactNodeViewComponent,
     }),
   ].filter(Boolean) as Extension[];
 

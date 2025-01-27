@@ -1,4 +1,4 @@
-import { Text, Flex, Box } from '@wraft/ui';
+import { Text, Flex } from '@wraft/ui';
 import { Avatar } from 'theme-ui';
 
 interface ProfileCard {

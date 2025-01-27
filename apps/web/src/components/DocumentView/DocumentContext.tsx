@@ -41,6 +41,7 @@ type EditorMode = 'view' | 'edit' | 'new' | 'sign';
 type UserMode = 'default' | 'guest';
 
 interface DocumentContextProps {
+  additionalCollaborator: any;
   cId: string;
   contentBody: any;
   contents: ContentInstance | any;
@@ -54,6 +55,7 @@ interface DocumentContextProps {
   flow: any;
   isEditable: any;
   isMakeCompete: any;
+  lastSavedContent: any;
   loading: boolean;
   nextState: StateState | undefined;
   pageTitle: string;
@@ -62,7 +64,6 @@ interface DocumentContextProps {
   states: any;
   tabActiveId: string;
   userMode: string;
-  additionalCollaborator: any;
   setAdditionalCollaborator: (data: any) => void;
   setUserMode: (state: UserMode) => void;
   fetchContentDetails: (cid: string) => void;
@@ -94,7 +95,7 @@ export const DocumentProvider = ({
   const [contentBody, setContentBody] = useState<NodeJSON>();
   const [contents, setContents] = useState<ContentInstance>();
   const [contentType, setContentType] = useState<any>();
-  const [editorMode, setEditorMode] = useState<EditorMode>('view');
+  const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
   const [userMode, setUserMode] = useState<UserMode>('default');
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
@@ -112,6 +113,7 @@ export const DocumentProvider = ({
 
   const newContent = contentStore((state: any) => state.newContents);
   const editorRef = useRef<any>();
+  const lastSavedContent = useRef<string>('\n');
   const router = useRouter();
   const { userProfile } = useAuth();
   const api = createAxiosInstance();
@@ -120,6 +122,7 @@ export const DocumentProvider = ({
 
   console.log('token', token);
   console.log('token', type);
+
   const cId: string = router.query.id as string;
 
   useEffect(() => {
@@ -253,9 +256,11 @@ export const DocumentProvider = ({
   };
   const fetchContentDetails = (id: string) => {
     fetchAPI(`contents/${id}`).then((data: any) => {
+      console.log('fetchContentDetails', data);
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
         setContentBody(serialized);
+        lastSavedContent.current = data?.content?.serialized?.serialized;
 
         const holders = findHolders(serialized);
         setFieldValues(holders);
@@ -428,6 +433,7 @@ export const DocumentProvider = ({
         tabActiveId,
         userMode,
         additionalCollaborator,
+        lastSavedContent,
         setAdditionalCollaborator,
         setUserMode,
         fetchContentDetails,

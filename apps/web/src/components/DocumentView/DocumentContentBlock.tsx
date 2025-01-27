@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 import { ErrorBoundary, Button } from '@wraft/ui';
 import styled from '@emotion/styled';
@@ -9,9 +9,9 @@ import {
   TabProvider,
   useTabStore,
 } from '@ariakit/react';
-import { Play, PencilSimple, Eyes, Eye } from '@phosphor-icons/react';
+import { Play, PencilSimple, Eye } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
-// import { LiveEditor } from '@wraft/editor';
+import { LiveEditor } from '@wraft/editor';
 import { EditorView } from 'prosemirror-view';
 
 import PdfViewer from 'components/PdfViewer';
@@ -21,6 +21,7 @@ import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
 import { useDocument } from './DocumentContext';
+import AwarenessUsers from './AwarenessUsers';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -190,6 +191,7 @@ export const DocumentContentBlock = () => {
     fetchContentDetails,
   } = useDocument();
 
+  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
   const { userProfile } = useAuth();
   const tabView = useTabStore();
   const { activeId } = tabView.useState();
@@ -201,7 +203,8 @@ export const DocumentContentBlock = () => {
       id: userProfile?.id || null,
       name: userProfile?.name || null,
     },
-    roomId: `editor-${cId}`,
+    roomId: cId,
+    // roomId: `editor-${cId}`,
     documentId: cId,
   };
 
@@ -242,7 +245,7 @@ export const DocumentContentBlock = () => {
             flexGrow={1}
             justify="center"
             overflowY="scroll"
-            maxHeight="calc(100vh - 500px)">
+            maxHeight="calc(100vh - 180px)">
             <Box minWidth="794px" maxWidth="920px">
               <PreTag pt={0} pb={6}>
                 {contentBody && (
@@ -272,30 +275,33 @@ export const DocumentContentBlock = () => {
                   <StepBlock title="Document" desc="Sign and Manage" />
                 </Tab>
               </TabList>
-              {!isEditable && (
-                <Flex gap="xs">
-                  <Button
-                    variant="secondary"
-                    loading={isBuilding}
-                    size="sm"
-                    onClick={() => doBuild()}>
-                    <Play size={14} className="action" />
-                    <Box>Generate</Box>
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => onSwitchEditorMode(editorMode)}>
-                    {' '}
-                    {editorMode === 'edit' ? (
-                      <Eye size={14} className="icon" />
-                    ) : (
-                      <PencilSimple size={14} className="icon" />
-                    )}
-                    <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
-                  </Button>
-                </Flex>
-              )}
+              <Flex align="center" gap="sm">
+                <AwarenessUsers />
+                {!isEditable && (
+                  <Flex gap="xs">
+                    <Button
+                      variant="secondary"
+                      loading={isBuilding}
+                      size="sm"
+                      onClick={() => doBuild()}>
+                      <Play size={14} className="action" />
+                      <Box>Generate</Box>
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => onSwitchEditorMode(editorMode)}>
+                      {' '}
+                      {editorMode === 'edit' ? (
+                        <Eye size={14} className="icon" />
+                      ) : (
+                        <PencilSimple size={14} className="icon" />
+                      )}
+                      <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
+                    </Button>
+                  </Flex>
+                )}
+              </Flex>
             </Flex>
 
             <TabPanel
@@ -310,18 +316,19 @@ export const DocumentContentBlock = () => {
                   maxHeight="100vh">
                   <Box minWidth="794px" maxWidth="920px">
                     <PreTag pt={0} pb={6}>
-                      {/* {contentBody && (
-                      <LiveEditor
-                        defaultContent={contentBody}
-                        isReadonly={editorMode === 'view'}
-                        ref={editorRef}
-                        tokens={fieldTokens}
-                        isCollaborative={true}
-                        collabData={collabData}
-                      />
-                    )} */}
-
                       {contentBody && (
+                        <LiveEditor
+                          defaultContent={contentBody}
+                          isReadonly={editorMode === 'view'}
+                          ref={editorRef}
+                          tokens={fieldTokens}
+                          isCollaborative={true}
+                          collabData={collabData}
+                          socketUrl={socketUrl}
+                        />
+                      )}
+
+                      {/* {contentBody && (
                         <Editor
                           defaultContent={contentBody}
                           isReadonly={editorMode === 'view'}
@@ -330,7 +337,7 @@ export const DocumentContentBlock = () => {
                           isCollaborative={true}
                           collabData={collabData}
                         />
-                      )}
+                      )} */}
                     </PreTag>
                   </Box>
                 </Flex>

@@ -1,4 +1,4 @@
-import { Box, Flex, Avatar, Text } from 'theme-ui';
+import { Flex, Avatar, Text } from 'theme-ui';
 
 import { TimeAgo } from './Atoms';
 /**

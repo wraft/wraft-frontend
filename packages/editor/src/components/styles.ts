@@ -15,6 +15,10 @@ export const EditorContainer = styled.divBox`
   flex-direction: column;
   background-color: white;
   color: black;
+
+  .ProseMirror [data-node-view-root="true"] {
+    display: inline-block;
+  }
 `;
 
 export const EditorContent = styled.divBox`
@@ -24,7 +28,6 @@ export const EditorContent = styled.divBox`
   box-sizing: border-box;
   overflow-y: scroll;
   .ProseMirror {
-    background-color: var(--theme-ui-colors-gray-100);
     color: var(--theme-ui-colors-gray-1200);
   }
   .ProseMirror .ProseMirror-yjs-cursor {

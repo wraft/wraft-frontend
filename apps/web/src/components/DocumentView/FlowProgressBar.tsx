@@ -68,7 +68,7 @@ export const FlowProgressBar = ({
         {state}
       </Text>
 
-      <BackArrowIcon className="arrowicon" width={20} size={20} stroke={1} />
+      <BackArrowIcon className="arrowicon" width={20} />
     </FlowProgressContainer>
   );
 };

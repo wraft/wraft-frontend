@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Box } from '@wraft/ui';
+import { Flex } from '@wraft/ui';
 
 import PermissionsList from 'components/manage/PermissionsList';
 import ManageSidebar from 'components/ManageSidebar';

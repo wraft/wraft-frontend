@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Flex, Box } from '@wraft/ui';
+import { Flex } from '@wraft/ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { UserPlus } from '@phosphor-icons/react';
 

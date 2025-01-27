@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { ErrorBoundary, Button, Modal, Box, Flex } from '@wraft/ui';
@@ -17,6 +17,8 @@ import { useDocument } from './DocumentContext';
 import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
 
+export const SAVE_INTERVAL = 15000;
+
 const DocumentView = () => {
   const {
     contents,
@@ -32,6 +34,7 @@ const DocumentView = () => {
     contentType,
     fieldValues,
     userMode,
+    lastSavedContent,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
@@ -48,9 +51,53 @@ const DocumentView = () => {
   const cId: string = router.query.id as string;
 
   useEffect(() => {
+    // let autosaveInterval: any;
+
+    // if (editorMode !== 'edit' && autosaveInterval) {
+    //   clearInterval(autosaveInterval);
+    // }
+
+    if (editorRef.current == null && editorMode !== 'edit') {
+      return;
+    }
+
+    // Autosave interval
+    const autosaveInterval = setInterval(() => {
+      // checkContentChange();
+    }, SAVE_INTERVAL);
+
+    return () => {
+      clearInterval(autosaveInterval);
+    };
+  }, [editorRef.current, editorMode]);
+
+  const checkContentChange = () => {
+    const content = JSON.stringify(editorRef.current?.helpers?.getJSON());
+    console.log('auto save reched');
+
+    if (content.length === 0) {
+      return;
+    }
+
+    if (content !== lastSavedContent.current) {
+      console.log('auto save started[changed]');
+      onSubmit();
+    }
+  };
+
+  console.log('editorMode', editorMode);
+
+  useEffect(() => {
     if (pageTitle) {
       setValue('title', pageTitle);
     }
+
+    // return () => {
+    //   console.log('its working');
+    //   if (editorMode === 'edit') {
+    //     checkContentChange();
+    //   }
+    // };
   }, [pageTitle]);
 
   const onSubmit = () => {
@@ -58,6 +105,8 @@ const DocumentView = () => {
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
     const jsonContent = editorRef.current?.helpers?.getJSON();
+
+    // return;
 
     // setUnsavedChanges(false);
 
@@ -78,6 +127,7 @@ const DocumentView = () => {
 
     if (editorMode === 'edit') {
       putAPI(`contents/${cId}`, template).then((response: any) => {
+        lastSavedContent.current = serials.serialized;
         onCreateSuccess(response);
         setSaving(false);
         setContentBody(jsonContent);

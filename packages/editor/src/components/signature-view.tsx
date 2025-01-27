@@ -1,11 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { UploadTask } from "prosekit/extensions/file";
-import type { ImageAttrs } from "prosekit/extensions/image";
 import type { ReactNodeViewProps } from "prosekit/react";
 import { ResizableHandle, ResizableRoot } from "prosekit/react/resizable";
 import { useEffect, useState, type SyntheticEvent } from "react";
 import styled from "@emotion/styled";
 import { ArrowDownRight, ImageBroken, SpinnerGap } from "@phosphor-icons/react";
+import {
+  PopoverContent,
+  PopoverRoot,
+  PopoverTrigger,
+} from "prosekit/react/popover";
+import type { SignatureAttrs } from "../extensions/signature";
 
 const StyledResizableRoot = styled(ResizableRoot)`
   position: relative;
@@ -20,6 +25,10 @@ const StyledResizableRoot = styled(ResizableRoot)`
   min-height: 64px;
   min-width: 64px;
   outline: 2px solid transparent;
+
+  background: #ccc;
+  border: 1px solid #000;
+  border-radius: 8px;
   &[data-selected] {
     outline-color: blue;
   }
@@ -87,12 +96,23 @@ const StyledResizableHandle = styled(ResizableHandle)`
     opacity: 1;
   }
 `;
-export default function ImageView(props: ReactNodeViewProps) {
+export default function SignatureView(props: ReactNodeViewProps) {
   const { setAttrs, node } = props;
 
-  const attrs = node.attrs as ImageAttrs;
-  const url = attrs.src || "";
+  const attrs = node.attrs as SignatureAttrs;
+  const [webUrl, setWebUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+
+  console.log("signature", attrs);
+  console.log("signature[props]", props);
+  const url = webUrl || attrs.src || "";
+  const placeholder = attrs.placeholder;
   const uploading = url.startsWith("blob:");
+
+  const [open, setOpen] = useState<boolean>(false);
+
+  const [objectUrl, setObjectUrl] = useState("");
+  // const url = webUrl || objectUrl;
 
   const [aspectRatio, setAspectRatio] = useState<number | undefined>();
   const [error, setError] = useState<string | undefined>();
@@ -157,32 +177,99 @@ export default function ImageView(props: ReactNodeViewProps) {
     }
   };
 
+  const handleWebUrlChange: React.ChangeEventHandler<HTMLInputElement> = (
+    event,
+  ) => {
+    const url = event.target.value;
+
+    if (url) {
+      setImageUrl(url);
+    } else {
+      setImageUrl("");
+    }
+  };
+
+  const handleSubmit = () => {
+    setAttrs({
+      src: "https://cdn.prod.website-files.com/6595b9ed81e7ba70fc7919bb/6762b1a4cd83eaa2cf6363b0_Artistic.png",
+      // src: "https://placehold.co/200x100/8bd450/ffffff/png",
+      placeholder: false,
+    });
+    // if (imageUrl) {
+    //   setAttrs({ src: imageUrl, placeholder: false });
+    //   // setAttrs({ src: imageUrl, placeholder: false });
+    //   // setWebUrl(imageUrl);
+    // }
+  };
+
   return (
-    <StyledResizableRoot
-      width={attrs.width ?? undefined}
-      height={attrs.height ?? undefined}
-      aspectRatio={aspectRatio}
-      onResizeEnd={(event) => setAttrs(event.detail)}
-      data-selected={props.selected ? "" : undefined}
-    >
-      {url && !error && <Image src={url} onLoad={handleImageLoad} />}
-      {uploading && !error && (
-        <UploadingOverlay>
-          <SpinnerGap size={8} />
-          <div>{Math.round(progress * 100)}%</div>
-        </UploadingOverlay>
-      )}
-      {error && (
-        <ErrorOverlay>
-          <ImageBroken size={8} />
-          <div className="hidden opacity-80 @xs:block">
-            Failed to upload image
+    <>
+      <PopoverRoot>
+        <PopoverTrigger>
+          <StyledResizableRoot
+            width={attrs.width ?? undefined}
+            height={attrs.height ?? undefined}
+            aspectRatio={aspectRatio}
+            onResizeEnd={(event) => setAttrs(event.detail)}
+            data-selected={props.selected ? "" : undefined}
+          >
+            {placeholder && <div>Signature</div>}
+            {!placeholder && url && !error && (
+              <Image src={url} onLoad={handleImageLoad} />
+            )}
+
+            {/* <div>Signature</div> */}
+            {/* {url && !error && (
+          <Image
+            src={url}
+            onLoad={handleImageLoad}
+            onClick={() => console.log("signature[setAttrs]", props)}
+          />
+        )} */}
+            {/* {uploading && !error && (
+          <UploadingOverlay>
+            <SpinnerGap size={8} />
+            <div>{Math.round(progress * 100)}%</div>
+          </UploadingOverlay>
+        )} */}
+            {error && (
+              <ErrorOverlay>
+                <ImageBroken size={8} />
+                <div className="hidden opacity-80 @xs:block">
+                  Failed to upload image
+                </div>
+              </ErrorOverlay>
+            )}
+            <StyledResizableHandle position="bottom-right">
+              <ArrowDownRight size={8} />
+            </StyledResizableHandle>
+            {/* <div>
+          <input
+            placeholder="Paste the image link..."
+            type="url"
+            value={webUrl}
+            onChange={handleWebUrlChange}
+          />
+          <button
+          // onClick={handleSubmit}
+          >
+            Insert Image
+          </button>
+        </div> */}
+          </StyledResizableRoot>
+        </PopoverTrigger>
+        <PopoverContent>
+          <div>
+            <input
+              placeholder="Paste the image link..."
+              // type="url"
+              // value={webUrl}
+              // onChange={handleWebUrlChange}
+            />
+            <button onClick={handleSubmit}>Insert Sign</button>
           </div>
-        </ErrorOverlay>
-      )}
-      <StyledResizableHandle position="bottom-right">
-        <ArrowDownRight size={8} />
-      </StyledResizableHandle>
-    </StyledResizableRoot>
+        </PopoverContent>
+      </PopoverRoot>
+    </>
   );
 }

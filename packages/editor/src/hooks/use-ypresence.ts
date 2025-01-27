@@ -27,7 +27,7 @@ export default function useSharedPresence({
   useEffect(() => {
     console.log("Setting up IndexeddbPersistence, WebsocketProvider observer");
 
-    // const _localProvider = new IndexeddbPersistence(roomId, ydoc);
+    const _localProvider = new IndexeddbPersistence(roomId, ydoc);
 
     const provider = new WebsocketProvider(
       process.env.NEXT_PUBLIC_YJS_WEBSOCKET_URL || "ws://localhost:3000",

@@ -64,11 +64,25 @@ const StyledItem = styled(AutocompleteItem)`
 export default function SlashMenu() {
   const editor = useEditor<EditorExtension>();
 
+  // console.log("commands", editor.commands.insertSignature());
+
   return (
     <StyledPopover regex={/\/.*$/iu}>
       <StyledList>
         <StyledEmpty>No results</StyledEmpty>
 
+        <StyledItem
+          onSelect={() =>
+            editor.commands.insertSignature({
+              placeholder: true,
+              // src: "https://placehold.co/200x100/8bd450/ffffff/png",
+              width: 200,
+              height: 100,
+            })
+          }
+        >
+          Signature
+        </StyledItem>
         <StyledItem onSelect={() => editor.commands.setHeading({ level: 1 })}>
           Heading 1
         </StyledItem>

@@ -8,7 +8,6 @@ import { GlobalStyle } from './style';
 
 const MentionsWrapper = styled.div`
   .rc-mentions {
-    font-size: 20px;
     border: 1px solid #999;
     border-radius: 3px;
     overflow: hidden;
@@ -19,6 +18,9 @@ const MentionsWrapper = styled.div`
     color: ${({ theme }: any) => theme.rawColors.gray[1200]};
     background-color: ${({ theme }: any) => theme.rawColors.white} !important;
     border-color: var(--theme-ui-colors-border);
+  }
+  .rc-textarea {
+    font-size: 1rem;
   }
   textarea {
     color: ${({ theme }: any) => theme.colors.text};
