@@ -61,19 +61,17 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
     },
     danger: {
       primary: {
-        color: "yellow",
-        background: "#b0b04c",
-        // color: colors["neutral-10"],
-        // backgroundColor: colors["red-70"],
-        borderColor: colors["red-70"],
+        color: "#fff",
+        background: colors["red"]["500"],
+        borderColor: colors["red"]["600"],
       },
       tertiary: {
         backgroundColor: "transparent",
-        color: colors["red-80"],
-        borderColor: colors["red-80"],
+        color: colors["red"]["800"],
+        borderColor: colors["red"]["800"],
       },
       ghost: {
-        color: colors["red-80"],
+        color: colors["red"]["800"],
         backgroundColor: "transparent",
         borderColor: "transparent",
       },
@@ -95,8 +93,8 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
       },
       danger: {
         primary: {
-          backgroundColor: colors["red-60"],
-          borderColor: colors["red-60"],
+          backgroundColor: colors["red"]["200"],
+          borderColor: colors["red"]["300"],
         },
         tertiary: {
           backgroundColor: colors["red-10"],

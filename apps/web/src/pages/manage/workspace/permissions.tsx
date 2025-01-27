@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Box } from 'theme-ui';
+import { Flex, Box } from '@wraft/ui';
 
 import PermissionsList from 'components/manage/PermissionsList';
 import ManageSidebar from 'components/ManageSidebar';
@@ -31,14 +31,11 @@ const Index: FC = () => {
               />
             }
           />
-          <Container variant="layout.pageFrame">
-            <Flex>
-              <ManageSidebar items={workspaceLinks} />
-              <Box variant="layout.contentFrame">
-                <PermissionsList />
-              </Box>
-            </Flex>
-          </Container>
+
+          <Flex gap="md" my="md" px="md">
+            <ManageSidebar items={workspaceLinks} />
+            <PermissionsList />
+          </Flex>
         </Page>
       </>
     )

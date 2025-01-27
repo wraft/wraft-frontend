@@ -61,37 +61,26 @@ export const Button = styled(AriakitButton)<ButtonOptions>`
   & > *:not(:only-child):not(:last-child) {
     margin-right: sm;
   }
+
+  &:hover {
+    ${({ variant }) => th(`buttons.focus.${variant}`)};
+    ${({ variant, danger }) => danger && th(`buttons.focus.danger.${variant}`)};      
+  }
+
+  &:hover {
+    ${({ variant }) => th(`buttons.hover.${variant}`)};
+    ${({ variant, danger }) => danger && th(`buttons.hover.danger.${variant}`)};      
+  }
+
+  &:active {
+    ${({ variant }) => th(`buttons.active.${variant}`)};
+    ${({ variant, danger }) => danger && th(`buttons.active.danger.${variant}`)};      
+  }
+
+  [${hideFocusRingsDataAttribute}] &:focus {
+    box-shadow: none;
+  }
     
-
-  ${({ disabled, variant, danger }) =>
-    !disabled &&
-    css`
-      [${hideFocusRingsDataAttribute}] &:focus {
-        box-shadow: none;
-      }
-      &:focus {
-        ${th(`buttons.focus.${variant}`) as any};
-        ${danger &&
-        `
-          ${th(`buttons.focus.danger.${variant}`) as any};
-        `}
-      }
-      &:hover {
-        ${th(`buttons.hover.${variant}`) as any};
-        ${danger &&
-        `
-          ${th(`buttons.hover.danger.${variant}`) as any};
-        `}
-      }
-      &:active {
-        ${th(`buttons.active.${variant}`) as any};
-        ${danger &&
-        `
-          ${th(`buttons.active.danger.${variant}`) as any};
-        `}
-      }
-    `};
-
   &[disabled] {
     cursor: not-allowed;
   }

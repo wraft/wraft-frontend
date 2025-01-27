@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Box, Input, Spinner } from 'theme-ui';
+import { Spinner } from 'theme-ui';
 import { Plus } from '@phosphor-icons/react';
-import { Button } from '@wraft/ui';
 import { SearchIcon } from '@wraft/icon';
+import { Button, Flex, Box, InputText } from '@wraft/ui';
 
 import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'components/ManageSidebar';
@@ -40,45 +40,24 @@ const Index: FC = () => {
                 ]}
               />
             }>
-            <Flex sx={{ alignItems: 'center' }}>
-              <Box
-                sx={{
-                  width: '347px',
-                  display: 'flex',
-                  background: 'background-primary',
-                  alignItems: 'center',
-                  border: '1px solid',
-                  borderColor: 'border',
-                  borderRadius: '6px',
-                  mr: 2,
-                }}>
-                <Input
+            <Flex alignItems="center" gap="md">
+              <Box w="340px" display="block">
+                <InputText
+                  icon={
+                    filterLoading ? (
+                      <Spinner width={14} />
+                    ) : (
+                      <SearchIcon className="searchIcon" />
+                    )
+                  }
+                  iconPlacement="right"
                   placeholder="Search by role names"
+                  width="100%"
                   onChange={(e: any) => {
                     setFilterLoading(true);
                     setTimeout(() => setSearchTerm(e.target.value), 1000);
                   }}
-                  sx={{
-                    bg: 'transparent',
-                    mb: 0,
-                    border: 'none',
-                    ':focus': {
-                      outline: 'none',
-                    },
-                  }}></Input>
-                <Box
-                  sx={{
-                    color: 'gray.300',
-                    pr: 3,
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}>
-                  {filterLoading ? (
-                    <Spinner width={14} />
-                  ) : (
-                    <SearchIcon className="searchIcon" />
-                  )}
-                </Box>
+                />
               </Box>
 
               <Button variant="primary" onClick={() => setIsOpen(true)}>
@@ -87,23 +66,22 @@ const Index: FC = () => {
               </Button>
             </Flex>
           </PageHeader>
-          <Drawer open={isOpen} setOpen={setIsOpen}>
-            <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
-          </Drawer>
-          <Container variant="layout.pageFrame">
-            <Flex>
-              <ManageSidebar items={workspaceLinks} />
-              <Box variant="layout.contentFrame">
-                <RolesList
-                  render={render}
-                  setRender={setRender}
-                  searchTerm={searchTerm}
-                  setFilterLoading={setFilterLoading}
-                />
-              </Box>
-            </Flex>
-          </Container>
+
+          <Flex gap="md" my="md" px="md">
+            <ManageSidebar items={workspaceLinks} />
+
+            <RolesList
+              render={render}
+              setRender={setRender}
+              searchTerm={searchTerm}
+              setFilterLoading={setFilterLoading}
+            />
+          </Flex>
         </Page>
+
+        <Drawer open={isOpen} setOpen={setIsOpen}>
+          <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
+        </Drawer>
       </>
     )
   );

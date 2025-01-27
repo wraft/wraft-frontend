@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Flex } from 'theme-ui';
 import {
   Table,
   Drawer,
@@ -7,6 +6,9 @@ import {
   DropdownMenu,
   Modal,
   Button,
+  Box,
+  Text,
+  Flex,
 } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
@@ -35,11 +37,7 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     accessorKey: 'content.name',
     isPlaceholder: true,
     cell: ({ row }: any) => (
-      <Box
-        sx={{ cursor: 'pointer', fontSize: 'sm', fontWeight: '500' }}
-        onClick={() => openDrawer(row.original.id)}>
-        {row.original.name}
-      </Box>
+      <Box onClick={() => openDrawer(row.original.id)}>{row.original.name}</Box>
     ),
     width: '100%',
     enableSorting: false,
@@ -49,16 +47,14 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     header: 'USER',
     accessorKey: 'content.user_count',
     isPlaceholder: true,
-    cell: ({ row }: any) => (
-      <Box sx={{ fontSize: 'sm' }}>{row.original.user_count}</Box>
-    ),
+    cell: ({ row }: any) => <Box>{row.original.user_count}</Box>,
     enableSorting: false,
   },
   {
     id: 'editor',
     header: '',
     cell: ({ row }: any) => (
-      <Flex sx={{ justifyContent: 'right' }}>
+      <Flex justify="right">
         {row.original?.name !== 'superadmin' && (
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
@@ -66,15 +62,7 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
             </DropdownMenu.Trigger>
             <DropdownMenu aria-label="dropdown role">
               <DropdownMenu.Item onClick={() => onDeleteRole(row.original.id)}>
-                <Text
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'red.600',
-                    textAlign: 'left',
-                    width: '200px',
-                  }}>
-                  Delete
-                </Text>
+                <Text cursor="pointer">Delete</Text>
               </DropdownMenu.Item>
             </DropdownMenu>
           </DropdownMenu.Provider>
@@ -142,7 +130,7 @@ const RolesList = ({
   };
 
   return (
-    <Flex sx={{ width: '100%' }}>
+    <Flex w="100%">
       <Table
         data={contents}
         isLoading={loading}
@@ -171,7 +159,7 @@ const RolesList = ({
             <Box>
               <Modal.Header>Are you sure</Modal.Header>
               <Box my={3}>You cannot remove a role that is in use</Box>
-              <Flex sx={{ gap: '8px' }}>
+              <Flex gap="sm">
                 <Button
                   variant="secondary"
                   onClick={() => setOpenDeleteModal(false)}>
@@ -184,7 +172,7 @@ const RolesList = ({
             <Box>
               <Modal.Header>Are you sure</Modal.Header>
               <Box my={3}>Are you sure you want to delete?</Box>
-              <Flex sx={{ gap: '8px' }}>
+              <Flex gap="sm">
                 <Button
                   variant="secondary"
                   onClick={() => setOpenDeleteModal(false)}>

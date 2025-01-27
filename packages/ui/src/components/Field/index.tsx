@@ -84,8 +84,6 @@ export const Field = forwardRef<"div", FieldOptions>(
       });
     }, [children.props, children.type.displayName, htmlFor]);
 
-    console.log("variant", variant);
-
     return (
       <S.Field ref={ref} withHintText={withHintText} {...rest}>
         <S.Label>

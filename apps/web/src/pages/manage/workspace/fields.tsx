@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box, Container, Flex } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
 import ManageSidebar from 'components/ManageSidebar';
-import OrgForm from 'components/OrgForm';
 import Page from 'components/PageFrame';
+import OrganisationInfo from 'components/manage/OrganisationInfo';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { workspaceLinks } from 'utils/index';
@@ -26,16 +26,16 @@ const CompanyForm: FC = () => {
           }
         />
 
-        <Container variant="layout.pageFrame">
-          <Flex>
-            <ManageSidebar items={workspaceLinks} />
-            <Box sx={{ bg: 'white', width: '100%' }} p={4}>
-              <Box sx={{ width: '526px' }}>
-                <OrgForm />
-              </Box>
-            </Box>
+        <Flex gap="md" my="md" px="md">
+          <ManageSidebar items={workspaceLinks} />
+          <Flex
+            bg="background-primary"
+            direction="column"
+            minWidth="556px"
+            p="xl">
+            <OrganisationInfo />
           </Flex>
-        </Container>
+        </Flex>
       </Page>
     </>
   );

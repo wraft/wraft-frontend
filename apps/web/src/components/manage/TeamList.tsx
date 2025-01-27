@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { Flex, Box, Text, Image } from 'theme-ui';
+import { Image } from 'theme-ui';
 import { ThreeDotIcon, AddIcon, CloseIcon } from '@wraft/icon';
-import { Button, Table, Modal, DropdownMenu } from '@wraft/ui';
+import { Button, Table, Modal, DropdownMenu, Flex, Box, Text } from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -166,7 +166,7 @@ const TeamList = () => {
   };
 
   return (
-    <Flex>
+    <Flex flex="1">
       <Table
         data={data}
         isLoading={loading}
@@ -177,11 +177,7 @@ const TeamList = () => {
             accessorKey: 'content.name',
             isPlaceholder: true,
             cell: ({ row }: any) => (
-              <Flex
-                sx={{
-                  gap: '18px',
-                  alignItems: 'center',
-                }}>
+              <Flex gap="sm" align="center">
                 <Image
                   src={row.original.members.profilePic}
                   alt="memberImg"
@@ -197,18 +193,12 @@ const TeamList = () => {
                     flexShrink: 0,
                   }}
                 />
-                <Flex sx={{ flexDirection: 'column' }}>
-                  <Text
-                    sx={{
-                      color: 'text-primary',
-                      fontSize: 'sm',
-                      fontWeight: '500',
-                      lineHeight: 1,
-                    }}>
+                <Flex direction="column">
+                  <Text>
                     {row.original.members.name}{' '}
                     {row.original.members.is_current ? `(You)` : ''}
                   </Text>
-                  <Text sx={{ color: 'text', fontSize: 'xs' }}>
+                  <Text color="text-secondary">
                     {row.original.members.email}
                   </Text>
                 </Flex>
@@ -224,57 +214,31 @@ const TeamList = () => {
             accessorKey: 'content.user_count',
             isPlaceholder: true,
             cell: ({ row }: any) => (
-              <Flex
-                sx={{
-                  color: 'gray.500',
-                  gap: '12px',
-                  alignItems: 'center',
-                }}>
+              <Flex gap="sm" align="center">
                 {row.original.roles.map(
                   (role: { roleName: string; roleId: string }) => (
-                    <Box
-                      sx={{ display: 'flex', alignItems: 'center' }}
-                      key={role.roleId}>
-                      <Flex
-                        sx={{
-                          fontWeight: 'body',
-                          px: '16px',
-                          py: '6px',
-                          backgroundColor: 'green.400',
-                          fontSize: 'xs',
-                          borderRadius: '60px',
-                          gap: '6px',
-                          alignItems: 'center',
-                          my: 'auto',
-                          color: 'black',
-                        }}>
-                        {role.roleName}
-
-                        <Box
-                          onClick={() =>
-                            onUnassignRole(role, row.original.members)
-                          }
-                          sx={{
-                            color: 'black',
-                            display: 'flex',
-                            alignItems: 'center',
-                            objectFit: 'contain',
-                          }}>
-                          <CloseIcon width={30} color="black" />
-                        </Box>
-                      </Flex>
-                    </Box>
+                    <Flex
+                      key={role.roleId}
+                      color="text-secondary"
+                      align="center"
+                      bg="green.400"
+                      borderRadius="md"
+                      justify="center"
+                      gap="sm"
+                      px="sm"
+                      py="xs"
+                      fontSize="sm">
+                      <Text>{role.roleName}</Text>
+                      <Box
+                        onClick={() =>
+                          onUnassignRole(role, row.original.members)
+                        }>
+                        <CloseIcon width={16} color="black" />
+                      </Box>
+                    </Flex>
                   ),
                 )}
-                <Box
-                  sx={{
-                    margin: '0px',
-                    padding: '3px',
-                    borderRadius: '4px',
-                    border: '1px solid #E4E9EF',
-                    lineHeight: '0px',
-                    height: 'fit-content',
-                  }}>
+                <Box>
                   <DropdownMenu.Provider>
                     <DropdownMenu.Trigger>
                       <AddIcon />
@@ -327,15 +291,7 @@ const TeamList = () => {
                 <DropdownMenu aria-label="dropdown role">
                   <DropdownMenu.Item
                     onClick={() => onUnassignUserConfirm(row.original.members)}>
-                    <Text
-                      sx={{
-                        cursor: 'pointer',
-                        color: 'red.600',
-                        textAlign: 'left',
-                        width: '200px',
-                      }}>
-                      Remove
-                    </Text>
+                    <Text>Remove</Text>
                   </DropdownMenu.Item>
                 </DropdownMenu>
               </DropdownMenu.Provider>
@@ -353,7 +309,9 @@ const TeamList = () => {
           <Box my={3}>
             {`Are you sure you want to delete ${currentRole?.role?.roleName} ?`}
           </Box>
-          <Flex sx={{ gap: '8px' }}>
+          <Flex
+          // sx={{ gap: '8px' }}
+          >
             <Button
               variant="secondary"
               onClick={() => setUnassignModalOpen(false)}>
@@ -378,10 +336,10 @@ const TeamList = () => {
         onClose={() => setOpenUnassignUserModal(false)}>
         <Box>
           <Modal.Header>Are you sure</Modal.Header>
-          <Box my={3}>
+          <Box my={3} color="text-secondary">
             {`Are you sure you want to delete ${currentRole?.member?.name} ?`}
           </Box>
-          <Flex sx={{ gap: '8px' }}>
+          <Flex gap="sm" mt="md">
             <Button
               variant="secondary"
               onClick={() => setOpenUnassignUserModal(false)}>

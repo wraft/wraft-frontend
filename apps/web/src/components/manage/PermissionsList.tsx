@@ -3,9 +3,8 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import _ from 'lodash';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text } from 'theme-ui';
-import { Table } from '@wraft/ui';
 import { DownIcon } from '@wraft/icon';
+import { Table, Box, Flex, Text } from '@wraft/ui';
 
 import Checkbox from 'common/Checkbox';
 import { putAPI, fetchAPI } from 'utils/models';
@@ -202,19 +201,14 @@ const PermissionsList = () => {
                 style: { cursor: 'pointer', width: '100%' },
               }}>
               <Flex sx={{ gap: '8px' }}>
-                <Text variant="pM" sx={{ color: 'text-primary' }}>
-                  {getValue()}
-                </Text>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    transform: row.getIsExpanded()
-                      ? 'rotate(180deg)'
-                      : 'rotate(0deg)',
-                  }}>
+                <Text color="text-primary">{getValue()}</Text>
+                <Flex
+                  align="center"
+                  transform={
+                    row.getIsExpanded() ? 'rotate(180deg)' : 'rotate(0deg)'
+                  }>
                   <DownIcon />
-                </Box>
+                </Flex>
               </Flex>
             </Box>
           ) : (
@@ -225,9 +219,7 @@ const PermissionsList = () => {
                 px: 3,
                 py: 2,
               }}>
-              <Text variant="pM" sx={{ color: 'text-primary' }}>
-                {getValue()}
-              </Text>
+              <Text color="text-primary">{getValue()}</Text>
             </Box>
           )}
         </Box>
@@ -237,7 +229,7 @@ const PermissionsList = () => {
   ];
 
   return (
-    <Flex sx={{ width: '100%' }} ref={render}>
+    <Flex w="100%" ref={render}>
       <Table data={data} columns={columns} isLoading={isLoading} />
     </Flex>
   );

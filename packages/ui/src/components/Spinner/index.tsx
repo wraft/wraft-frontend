@@ -2,13 +2,14 @@ import styled from "@xstyled/emotion";
 
 export interface SpinnerOptions {
   size?: number;
+  color?: string;
 }
 
-export const Spinner = ({ size = 12 }: SpinnerOptions) => {
-  return <StyledSpinner size={size} />;
+export const Spinner = ({ size = 12, color = "#fff" }: SpinnerOptions) => {
+  return <StyledSpinner size={size} color={color} />;
 };
 
-const StyledSpinner = styled.div<{ size: number }>`
+const StyledSpinner = styled.div<{ size: number; color?: string }>`
   height: ${(props) => `${props.size + 2}px`};
   width: ${(props) => `${props.size + 2}px`};
   position: relative;
@@ -24,7 +25,7 @@ const StyledSpinner = styled.div<{ size: number }>`
     bottom: 0;
     margin: auto;
     border: 3px solid #ffffff52;
-    border-top-color: #fff;
+    border-top-color: ${(props) => props.color};
     border-radius: 50%;
     animation: load3 1s infinite linear;
   }

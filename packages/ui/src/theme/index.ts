@@ -16,6 +16,7 @@ import links from "./variants/links";
 import { getRadii } from "./variants/radii";
 import { getSpace } from "./variants/space";
 import { getTags } from "./variants/tags";
+import { getTextareas } from "./variants/textareas";
 import {
   fontWeights,
   getFontSizes,
@@ -73,7 +74,10 @@ const createTheme = (options: Options = {}) => {
   theme.tags = getTags(theme);
   theme.icons = getIcons(theme);
   // theme.tables = getTables(theme);
+
+  // fields
   theme.defaultFields = getDefaultFields(theme);
+  theme.textareas = getTextareas(theme);
 
   return theme;
 };

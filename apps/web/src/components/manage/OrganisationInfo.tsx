@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Spinner, Box } from 'theme-ui';
+import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Button } from '@wraft/ui';
+import { Button, Box, Flex, Field, InputText } from '@wraft/ui';
 
-import Field from 'common/Field';
 import { useAuth } from 'contexts/AuthContext';
 import { putAPI, fetchAPI } from 'utils/models';
 
@@ -84,8 +82,8 @@ const formList = [
   },
 ];
 
-const OrgForm = () => {
-  const { register, handleSubmit, setValue } = useForm();
+const OrganisationInfo = () => {
+  const { handleSubmit, setValue, control } = useForm();
   const [ready, setReady] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const { userProfile } = useAuth();
@@ -123,35 +121,35 @@ const OrgForm = () => {
   };
 
   return (
-    <Box>
-      {!ready && <Spinner />}
-      <Box>
-        {ready && (
-          <Box
-            mx={0}
-            mb={3}
-            variant="w100"
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}>
-            {formList.map((fl: any) => (
-              <Box key={fl?.id} sx={{ mb: 3 }}>
-                <Field
-                  name={fl.id}
-                  label={fl.label}
-                  defaultValue={fl.defaultValue}
-                  register={register}
-                />
-              </Box>
-            ))}
-            <Box mt={4}>
-              <Button type="submit" loading={isLoading}>
-                Update Profile
-              </Button>
+    <>
+      {ready && (
+        <Flex
+          direction="column"
+          gap="md"
+          as="form"
+          onSubmit={handleSubmit(onSubmit)}>
+          {formList.map((customField: any) => (
+            <Box key={customField?.id}>
+              <Controller
+                control={control}
+                name={customField.id}
+                defaultValue={customField.defaultValue}
+                render={({ field }) => (
+                  <Field label={customField.label}>
+                    <InputText {...field} />
+                  </Field>
+                )}
+              />
             </Box>
+          ))}
+          <Box mt={4}>
+            <Button type="submit" loading={isLoading}>
+              Update Profile
+            </Button>
           </Box>
-        )}
-      </Box>
-    </Box>
+        </Flex>
+      )}
+    </>
   );
 };
-export default OrgForm;
+export default OrganisationInfo;

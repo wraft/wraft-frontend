@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Flex, Container, Box } from 'theme-ui';
+import { Flex, Box } from '@wraft/ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { UserPlus } from '@phosphor-icons/react';
 
@@ -49,14 +49,11 @@ const Index: FC = () => {
             onClose={() => setIsOpen(false)}>
             {isOpen && <InviteTeam setOpen={setIsOpen} />}
           </Drawer>
-          <Container variant="layout.pageFrame">
-            <Flex>
-              <ManageSidebar items={workspaceLinks} />
-              <Box variant="layout.contentFrame">
-                <TeamList />
-              </Box>
-            </Flex>
-          </Container>
+
+          <Flex gap="md" my="md" px="md">
+            <ManageSidebar items={workspaceLinks} />
+            <TeamList />
+          </Flex>
         </Page>
       </>
     )
