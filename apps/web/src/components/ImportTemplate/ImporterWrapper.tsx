@@ -2,14 +2,12 @@
 import { useState } from 'react';
 import { Check, Checks } from '@phosphor-icons/react';
 import * as Tab from '@ariakit/react/tab';
-// import { Box, Flex, Text, Box as BoxBase } from 'theme-ui';
-// import { Button } from '@wraft/ui';
+// import { Box, Flex, Text, Box as BoxBase } from 'theme-ui';;
 import toast from 'react-hot-toast';
 import styled, { th, x } from '@xstyled/emotion';
-import { Button } from '@wraft/ui';
+import { Button, Box, Text } from '@wraft/ui';
 
-import { Box } from 'common/Box';
-import { Text } from 'common/Text';
+// import { Text } from 'common/Text';
 import { fetchAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -244,7 +242,7 @@ function ImporterApp() {
   return (
     <Container>
       <Box>
-        <Box py={4} px={5}>
+        <Box py="md" px="xl">
           <Box>
             <Box display="flex">
               {steps.map((step) => (
@@ -280,13 +278,9 @@ function ImporterApp() {
             {currentStep === 3 && (
               <Box>
                 <Alert>
-                  <Box px={0} py={0}>
-                    <x.h4 m={0} fontSize="sm">
-                      Succesfully Imported!
-                    </x.h4>
-                    <Text m={0} fontSize="sm" color="green.1200">
-                      {imported?.message}
-                    </Text>
+                  <Box>
+                    <Text>Succesfully Imported!</Text>
+                    <Text color="green.1200">{imported?.message}</Text>
                     {/* <Box display="flex" px={0} py={2} gap={2}>
                       <Button variant="secondary">Create Document</Button>
                       <Button variant="secondary">View Imported</Button>

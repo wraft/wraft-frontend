@@ -1,8 +1,6 @@
 import { motion } from 'framer-motion';
 import { Check } from '@phosphor-icons/react';
-
-import { Box } from 'common/Box';
-import { Text } from 'common/Text';
+import { Text, Box, Flex } from '@wraft/ui';
 
 import { Circle } from './Styled';
 
@@ -14,7 +12,7 @@ interface StepSectionProps {
 
 const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
   return (
-    <Box display="flex" flex={1} key={step.id} px={0} py={3}>
+    <Flex flex={1} key={step.id} py="md">
       <motion.div
         style={{
           display: 'flex',
@@ -36,16 +34,13 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
         )}
       </motion.div>
       <Box flex={1}>
-        <Box pl={3} pt={0}>
-          <Box pr={1} className="rest-line" mt={2}>
+        <Box pl="sm">
+          <Box pr="sm" className="rest-line" mt="sm">
             <Text
               lineHeight={1}
-              fontSize="sm"
-              m={0}
               fontWeight="bold"
               cursor="pointer"
               color={{ _: 'gray.400', ':hover': 'green.1200' }}
-              mb={0}
               onClick={() => onSelect && onSelect(step)}>
               {step.title}
             </Text>
@@ -56,7 +51,7 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
           </Text>
         </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

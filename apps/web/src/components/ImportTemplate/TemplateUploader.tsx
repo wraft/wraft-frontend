@@ -3,10 +3,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-// import { Alert, Box } from 'theme-ui';
-import { x } from '@xstyled/emotion';
+import { Box } from '@wraft/ui';
 
-import { Box } from 'common/Box';
 import { postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -151,8 +149,8 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <x.div>
+      <Box as="form" onSubmit={methods.handleSubmit(onSubmit)}>
+        <Box>
           <FileDropzone
             accept={{
               'application/zip': ['.zip'],
@@ -167,11 +165,11 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
             multiple={false}
             noChange={false}
           />
-        </x.div>
+        </Box>
         {assets && assets.length > 0 && (
           <ErrorComponent fileError={fileError} />
         )}
-      </form>
+      </Box>
     </FormProvider>
   );
 };

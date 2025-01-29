@@ -116,8 +116,6 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
    */
 
   const onDropped = (files: File[]) => {
-    console.log('files', files);
-
     const formData = new FormData();
     const f: File = files[0];
     formData.append('zip_file', files[0]);
