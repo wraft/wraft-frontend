@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
-import ThemeViewForm from 'components/ThemeViewForm';
+import ThemeViewForm from 'components/Theme/ThemeViewForm';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';
@@ -40,16 +40,11 @@ const Index: FC = () => {
             />
           }
         />
-        <Container variant="layout.pageFrame">
-          <Flex>
-            <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
-              <Box p={4}>
-                <ThemeViewForm />
-              </Box>
-            </Box>
-          </Flex>
-        </Container>
+
+        <Flex gap="md" my="md" px="md">
+          <ManageSidebar items={menuLinks} />
+          <ThemeViewForm />
+        </Flex>
       </Page>
     </>
   );

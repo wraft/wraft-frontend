@@ -1,9 +1,14 @@
 import { FC } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
 import Page from 'components/PageFrameInner';
 import DocumentView from 'components/DocumentView';
 import { DocumentProvider } from 'components/DocumentView/DocumentContext';
+
+// const DocumentView = dynamic(() => import('components/DocumentView'), {
+//   ssr: false,
+// });
 
 const Index: FC = () => {
   return (
@@ -12,6 +17,7 @@ const Index: FC = () => {
         <title>Document - Wraft</title>
         <meta name="description" content="a nextjs starter boilerplate" />
       </Head>
+
       <Page>
         <DocumentProvider mode="view">
           <DocumentView />

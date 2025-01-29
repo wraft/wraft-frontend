@@ -3,11 +3,10 @@ import { TickIcon, ApproveTickIcon, CloudUploadIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Button, Flex, Input, useThemeUI } from 'theme-ui';
-import { SystemProps, x } from '@xstyled/emotion';
+import { Text } from '@wraft/ui';
 
 import ProgressBar from 'components/common/ProgressBar';
 import { Box } from 'common/Box';
-import { Text } from 'common/Text';
 import { Asset } from 'utils/types';
 
 type DropzoneProps = {
@@ -150,10 +149,10 @@ const Dropzone = ({
                   alignItems: 'center',
                   mt: '12px',
                 }}>
-                <Text fontSize="sm" fontWeight="bold" mb={0} color="gray.1100">
+                <Text fontWeight="bold">
                   Drag & drop or upload valid <a href="#">Wraft</a> files
                 </Text>
-                <Text fontSize="xs" mt={1} color="gray.900">
+                <Text fontSize="sm" color="text-secondary">
                   A valid structure file is a zip contains a valid wraft.json
                   {/* {types || 'All'} - Max file size 1MB */}
                 </Text>

@@ -7,7 +7,8 @@ import {
 } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { Box, Button, Flex, Input, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Input, Text, useThemeUI } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import PdfViewer from 'components/PdfViewer';
 import { Asset } from 'utils/types';
@@ -172,7 +173,7 @@ const Dropzone = ({
               </Box>
             </Flex>
             <Button
-              variant="buttonSmall"
+              variant="tertiary"
               onClick={(e) => {
                 e.preventDefault();
               }}>
