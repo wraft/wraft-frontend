@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Container, Button, Text, Flex } from 'theme-ui';
 import { AddIcon } from '@wraft/icon';
+import { Flex, Box, Drawer, InputText, Field, Button, Text } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
-import Field from 'common/Field';
 import { postAPI, deleteAPI, fetchAPI, putAPI } from 'utils/models';
 
 import { Droppable } from './Droppable';
@@ -64,7 +64,7 @@ export interface StateFormProps {
 
 const StatesForm = ({ states, setStates, highestOrder }: StateFormProps) => {
   return (
-    <Box>
+    <Box marginLeft="-md">
       {states && (
         <Droppable
           states={states}
@@ -82,6 +82,15 @@ interface Props {
 }
 
 const FlowForm = ({ setOpen, setRerender }: Props) => {
+  const [cId, setCId] = useState<string>('');
+  const [edit, setEdit] = useState<boolean>(false);
+  const [flow, setFlow] = useState<Flow>();
+  const [formStep, setFormStep] = useState(0);
+  const [highestOrder, setHighestOrder] = useState<number>(0);
+  const [initialStates, setInitialStates] = useState<StateState[]>();
+  const [states, setStates] = useState<StateState[]>();
+  const errorRef = React.useRef<HTMLDivElement | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -89,16 +98,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     formState: { errors, isValid },
     trigger,
   } = useForm();
-  const [edit, setEdit] = useState<boolean>(false);
-  const [highestOrder, setHighestOrder] = useState<number>(0);
-  const [states, setStates] = useState<StateState[]>();
-  const [initialStates, setInitialStates] = useState<StateState[]>();
-  const [flow, setFlow] = useState<Flow>();
-  const errorRef = React.useRef<HTMLDivElement | null>(null);
-  const [formStep, setFormStep] = useState(0);
-  const [cId, setCId] = useState<string>('');
 
-  // determine edit state based on URL
   const router = useRouter();
   const flowId: string = router.query.id as string;
 
@@ -106,11 +106,14 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     setCId(flowId);
   }, [flowId]);
 
-  /**
-   * Load all states for a particular Flow
-   * @param id flow id
-   * @param t  token
-   */
+  useEffect(() => {
+    if (cId && cId.length > 0) {
+      setEdit(true);
+      loadStates(cId);
+      loadFlow(cId);
+    }
+  }, [cId]);
+
   const loadStates = (id: string) => {
     fetchAPI(`flows/${id}/states`).then((data: any) => {
       const res: StateElement[] = data;
@@ -143,8 +146,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
       setValue('name', res?.name);
     });
   };
-
-  useEffect(() => {}, [states]);
 
   const onSubmit = async (data: any) => {
     const itemsAreEqual = (item1: StateState, item2: StateState) => {
@@ -332,14 +333,6 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
     }
   };
 
-  useEffect(() => {
-    if (cId && cId.length > 0) {
-      setEdit(true);
-      loadStates(cId);
-      loadFlow(cId);
-    }
-  }, [cId]);
-
   const AddState = () => {
     const newState: StateState = {
       id: Math.random().toString(),
@@ -371,58 +364,41 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
   return (
     <>
       <Flex
-        as={'form'}
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{
-          height: '100dvh',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          overflow: 'auto',
-        }}>
-        <Text
-          variant="pB"
-          sx={{
-            p: 4,
-          }}>
-          {edit ? 'Edit Flow' : 'Create new Flow'}
-        </Text>
-        <StepsIndicator
-          titles={['Basic details', 'Flow states']}
-          formStep={formStep}
-          goTo={goTo}
-        />
-        <Container
-          sx={{ p: 4, height: '100%', overflowY: 'hidden' }}
-          data-flow={flow?.id}>
-          <Flex sx={{ display: formStep === 0 ? 'block' : 'none' }}>
-            <Box sx={{ width: '492px' }}>
-              <Field
-                name="name"
-                label="Name"
-                defaultValue=""
-                register={register}
+        as="form"
+        h="100vh"
+        direction="column"
+        onSubmit={handleSubmit(onSubmit)}>
+        <Box flexShrink="0">
+          <Drawer.Header>
+            <Drawer.Title>
+              {edit ? 'Edit Flow' : 'Create new Flow'}
+            </Drawer.Title>
+            <X
+              size={20}
+              weight="bold"
+              cursor="pointer"
+              onClick={() => setOpen(false)}
+            />
+          </Drawer.Header>
+          <StepsIndicator
+            titles={['Basic details', 'Flow states']}
+            formStep={formStep}
+            goTo={goTo}
+          />
+        </Box>
+        <Box flex={1} overflowY="auto" px="xl" py="md" data-flow={flow?.id}>
+          <Flex display={formStep === 0 ? 'block' : 'none'}>
+            <Field
+              label="Name"
+              required
+              error={errors?.name?.message as string}>
+              <InputText
+                {...register('name')}
+                placeholder="Enter a Layout Name"
               />
-              <Text variant="error" ref={errorRef} />
-            </Box>
+            </Field>
           </Flex>
-          <Box
-            sx={{
-              display: formStep === 1 ? 'block' : 'none',
-              height: 'calc( 100vh - 250px )',
-              overflowY: 'scroll',
-              overflowX: 'hidden',
-              pr: 3,
-              ':-webkit-scrollbar': {
-                width: '5px',
-                '&-track': {
-                  background: 'red.500',
-                },
-                '&-thumb': {
-                  borderColor: 'gray.900',
-                  borderRadius: '6px',
-                },
-              },
-            }}>
+          <Box display={formStep === 1 ? 'block' : 'none'}>
             {edit && states && (
               <StatesForm
                 states={states}
@@ -431,34 +407,17 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
               />
             )}
 
-            <Box
-              sx={{
-                p: '18px 0px 37px',
-              }}>
-              <Button
-                type="button"
-                variant="buttonSmall"
-                onClick={() => AddState()}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2,
-                  border: '1px solid',
-                  borderColor: 'border',
-                  bg: 'white',
-                  color: 'green.700',
-                  cursor: 'pointer',
-                }}>
-                <AddIcon width={14} height={14} />
-                <Text as="p" variant="pM" color="green.700">
-                  Add Flow Step
-                </Text>
-              </Button>
-            </Box>
+            <Button
+              variant="secondary"
+              type="button"
+              onClick={() => AddState()}>
+              <AddIcon width={14} height={14} />
+              <Text>Add Flow Step</Text>
+            </Button>
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}
-        </Container>
-        <Flex sx={{ p: 4 }}>
+        </Box>
+        <Flex flexShrink="0" px="xl" py="md" gap="sm">
           {formStep === 0 && (
             <Button
               type="button"
@@ -469,24 +428,19 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
                 } else {
                   next();
                 }
-              }}
-              variant="buttonPrimary">
+              }}>
               Next
             </Button>
           )}
           {formStep === 1 && (
-            <Box>
-              <Button variant="buttonSecondary" type="button" onClick={prev}>
+            <Flex>
+              <Button variant="secondary" type="button" onClick={prev}>
                 Prev
               </Button>
-              <Button
-                disabled={!isValid}
-                variant="buttonPrimary"
-                type="submit"
-                ml={2}>
+              <Button disabled={!isValid} type="submit">
                 {edit ? 'Update' : 'Create'}
               </Button>
-            </Box>
+            </Flex>
           )}
         </Flex>
       </Flex>

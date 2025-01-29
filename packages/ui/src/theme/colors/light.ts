@@ -133,7 +133,7 @@ const light = {
   white: "#fff",
   grayA35: "#d4d7da59",
 
-  error: "#111111",
+  error: colors.red["600"],
   info: "#111111",
   success: "#111111",
   warning: "#111111",

@@ -80,7 +80,7 @@ export function Droppable({ states, setStates, highestOrder }: Props) {
       <SortableContext items={items} strategy={rectSortingStrategy}>
         {items.map((state: StateState, index: number) => {
           return (
-            <Box key={state.id}>
+            <Box key={state.id} mb="xxl">
               <SortableItem
                 state={state}
                 states={items}
@@ -279,6 +279,7 @@ const SortableItem = ({
         <Label>Default State</Label>
         <Flex
           sx={{
+            mb: 'md',
             position: 'relative',
             button: {
               display: 'none',
@@ -336,6 +337,7 @@ const SortableItem = ({
 
           <Box mt={3}>
             <Box>
+              <Label mt={2}>Select Assignee</Label>
               <Input
                 ref={sourceRef}
                 onChange={(e) => {

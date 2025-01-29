@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Container, Flex } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
-import FlowViewForm from 'components/FlowViewForm';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
+import FlowViewForm from 'components/Flow/FlowViewForm';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils';
@@ -15,6 +15,7 @@ const Index: FC = () => {
   const [flow, setFlow] = useState<any>();
   const router = useRouter();
   const id: string = router.query.id as string;
+
   useEffect(() => {
     fetchAPI(`flows/${id}`).then((data: any) => {
       setFlow(data);
@@ -37,12 +38,11 @@ const Index: FC = () => {
               ]}
             />
           }></PageHeader>
-        <Container variant="layout.pageFrame">
-          <Flex>
-            <ManageSidebar items={menuLinks} />
-            <FlowViewForm />
-          </Flex>
-        </Container>
+
+        <Flex gap="md" my="md" px="md">
+          <ManageSidebar items={menuLinks} />
+          <FlowViewForm />
+        </Flex>
       </Page>
     </>
   );

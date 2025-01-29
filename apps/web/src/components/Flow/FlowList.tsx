@@ -1,17 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { EllipsisHIcon } from '@wraft/icon';
+import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, useThemeUI, Avatar } from 'theme-ui';
-import { Button, Table, Pagination } from '@wraft/ui';
+import { Avatar } from 'theme-ui';
+import { Table, Pagination, DropdownMenu, Text, Box, Flex } from '@wraft/ui';
 
-import FlowForm from 'components/FlowForm';
 import ConfirmDelete from 'common/ConfirmDelete';
 import Modal from 'common/Modal';
 import { TimeAgo } from 'common/Atoms';
-import { Drawer } from 'common/Drawer';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -62,10 +59,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const [pageMeta, setPageMeta] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteFlow, setDeleteFlow] = useState<number | null>(null);
-
-  const { theme } = useThemeUI();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -106,7 +100,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
 
   const onDelete = (index: number) => {
     setDeleteFlow(null);
-    setIsOpen(null);
+
     deleteAPI(`flows/${contents[index].flow.id}`).then(() => {
       setRerender((prev: boolean) => !prev);
       toast.success('Deleted a flow', {
@@ -127,11 +121,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
         return (
           <>
             <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
-              <Box sx={{ fontSize: 'sm' }}>{row.original?.flow?.name}</Box>
+              <Text>{row.original?.flow?.name}</Text>
             </NextLink>
-            <Drawer open={false} setOpen={() => {}}>
+            {/* <Drawer open={false} setOpen={() => {}}>
               <FlowForm setOpen={() => {}} />
-            </Drawer>
+            </Drawer> */}
           </>
         );
       },
@@ -154,12 +148,12 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       header: 'CREATED BY',
       accessorKey: 'created',
       cell: ({ row }: any) => (
-        <Flex sx={{ alignItems: 'center', gap: '8px' }}>
+        <Flex align="center" gap="sm">
           <Avatar
             sx={{ width: '16px', height: '16px' }}
             src={row.original?.creator?.profile_pic}
           />
-          <Box sx={{ fontSize: 'sm' }}>{row.original?.creator?.name}</Box>
+          <Text>{row.original?.creator?.name}</Text>
         </Flex>
       ),
       enableSorting: false,
@@ -172,65 +166,20 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       cell: ({ row }: any) => {
         return (
           <>
-            <Flex sx={{ justifyContent: 'space-between' }}>
-              <Box />
-              <MenuProvider>
-                <MenuButton
-                  as={Box}
-                  variant="none"
-                  sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      margin: '0px',
-                      padding: '0px',
-                      bg: 'transparent',
-                      ':disabled': {
-                        display: 'none',
-                      },
-                    }}
+            <Flex justify="space-between">
+              <DropdownMenu.Provider>
+                <DropdownMenu.Trigger>
+                  <ThreeDotIcon />
+                </DropdownMenu.Trigger>
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item
                     onClick={() => {
-                      setIsOpen(row.index);
-                    }}>
-                    <EllipsisHIcon
-                      color={
-                        (theme.colors &&
-                          theme.colors.gray &&
-                          theme.colors.gray[200]) ||
-                        'black'
-                      }
-                    />
-                  </Box>
-                </MenuButton>
-                <Menu
-                  as={Box}
-                  variant="layout.menu"
-                  sx={{ p: 0 }}
-                  open={isOpen == row.index}
-                  onClose={() => setIsOpen(null)}>
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setIsOpen(null);
                       setDeleteFlow(row.index);
-                    }}
-                    style={{ justifyContent: 'flex-start' }}>
-                    <MenuItem as={Box}>
-                      <Text
-                        variant="pR"
-                        sx={{
-                          cursor: 'pointer',
-                          color: 'red.600',
-                        }}>
-                        Delete
-                      </Text>
-                    </MenuItem>
-                  </Button>
-                </Menu>
-              </MenuProvider>
+                    }}>
+                    Delete
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              </DropdownMenu.Provider>
             </Flex>
             <Modal
               isOpen={deleteFlow === row.index}
@@ -253,22 +202,16 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   ];
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ width: '100%' }}>
-        <Box mx={0} mb={3} sx={{ width: '100%' }}>
-          <Table data={contents} columns={columns} isLoading={loading} />
-        </Box>
-        <Box mx={2}>
-          {pageMeta && pageMeta?.total_pages > 1 && (
-            <Pagination
-              totalPage={pageMeta?.total_pages}
-              initialPage={currentPage}
-              onPageChange={changePage}
-              totalEntries={pageMeta?.total_entries}
-            />
-          )}
-        </Box>
-      </Box>
+    <Box w="100%">
+      <Table data={contents} columns={columns} isLoading={loading} />
+      {pageMeta && pageMeta?.total_pages > 1 && (
+        <Pagination
+          totalPage={pageMeta?.total_pages}
+          initialPage={currentPage}
+          onPageChange={changePage}
+          totalEntries={pageMeta?.total_entries}
+        />
+      )}
     </Box>
   );
 };

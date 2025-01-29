@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Container, Flex } from 'theme-ui';
 
-import FlowForm from 'components/FlowForm';
+import FlowForm from 'components/Flow/FlowForm';
 import ManageSidebar from 'components/ManageSidebar';
 import Page from 'components/PageFrame';
 import PageHeader from 'common/PageHeader';
