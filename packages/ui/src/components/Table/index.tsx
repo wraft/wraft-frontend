@@ -135,7 +135,7 @@ const Table = ({
           {!isLoading &&
             getRowModel().rows.map((row) => {
               return (
-                <x.tr key={row.id}>
+                <x.tr key={row.id} bg={row?.parentId && "background-secondary"}>
                   {row.getVisibleCells().map((cell) => (
                     <x.td
                       key={cell.id}

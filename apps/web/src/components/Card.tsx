@@ -4,7 +4,7 @@ import { Box, Flex, Text, Button } from 'theme-ui';
 import { EllipsisVIcon } from '@wraft/icon';
 
 import { Drawer } from './common/Drawer';
-import LayoutForm from './LayoutForm';
+import LayoutForm from './Layout/LayoutForm';
 
 /**
  * Page Heading Section

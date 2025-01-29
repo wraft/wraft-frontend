@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Container } from 'theme-ui';
 
-import LayoutViewForm from 'components/LayoutViewForm';
 import Page from 'components/PageFrame';
+import LayoutViewForm from 'components/Layout/LayoutViewForm';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';
@@ -27,7 +26,7 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Themes"
+          title="Layout"
           desc={
             <DescriptionLinker
               data={[
@@ -38,9 +37,8 @@ const Index: FC = () => {
             />
           }
         />
-        <Container variant="layout.pageFrame">
-          <LayoutViewForm cId={id} />
-        </Container>
+
+        <LayoutViewForm cId={id} />
       </Page>
     </>
   );

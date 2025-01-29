@@ -10,7 +10,7 @@ export interface INav {
   items: menuLinksProps[];
 }
 
-const ManageSidebar = ({ items, showFull = true }: INav) => {
+const ManageSidebar = ({ items }: INav) => {
   const router = useRouter();
 
   const checkActive = (route: string) => {

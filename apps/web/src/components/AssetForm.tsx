@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Box, Button, Text } from 'theme-ui';
+import { Box, Text } from 'theme-ui';
 
 import Dropzone from 'common/Dropzone';
 import { postAPI } from 'utils/models';
@@ -137,7 +137,6 @@ const AssetForm = ({
           )}
         </Box>
         {filetype === 'theme' && <FontList assets={filesList} />}
-        <Button type="submit" sx={{ display: 'none' }} />
       </Box>
     </FormProvider>
   );

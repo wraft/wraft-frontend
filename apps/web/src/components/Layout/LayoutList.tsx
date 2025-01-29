@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text } from 'theme-ui';
-import { Button, Table } from '@wraft/ui';
+import { Table, Box, Flex, Text, DropdownMenu } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
@@ -44,15 +42,14 @@ interface Props {
 
 const LayoutList = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<IField>>([]);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
   const [loading, setIslLoading] = useState<number | boolean>(false);
 
-  /**
-   * Delete a Layout
-   * @param _id  layout_id
-   */
+  useEffect(() => {
+    loadLayout();
+  }, [rerender]);
+
   const onDelete = (_id: string) => {
     deleteAPI(`layouts/${_id}`)
       .then(() => {
@@ -87,10 +84,6 @@ const LayoutList = ({ rerender }: Props) => {
       });
   };
 
-  useEffect(() => {
-    loadLayout();
-  }, [rerender]);
-
   const columns = [
     {
       id: 'content.name',
@@ -99,7 +92,7 @@ const LayoutList = ({ rerender }: Props) => {
       cell: ({ row }: any) => (
         <>
           <NextLink href={`/manage/layouts/${row.original.id}`}>
-            <Box sx={{ fontSize: 'sm' }}>{row.original?.name}</Box>
+            <Text>{row.original?.name}</Text>
           </NextLink>
           <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
             <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
@@ -112,18 +105,14 @@ const LayoutList = ({ rerender }: Props) => {
       id: 'content.description',
       header: 'DESCRIPTION',
       accessorKey: 'description',
-      cell: ({ row }: any) => (
-        <Box sx={{ fontSize: 'sm' }}>{row.original?.description}</Box>
-      ),
+      cell: ({ row }: any) => <Text>{row.original?.description}</Text>,
       enableSorting: false,
     },
     {
       id: 'content.slug',
       header: 'SLUG',
       accessorKey: 'slug',
-      cell: ({ row }: any) => (
-        <Box sx={{ fontSize: 'sm' }}>{row.original?.slug}</Box>
-      ),
+      cell: ({ row }: any) => <Text>{row.original?.slug}</Text>,
       enableSorting: false,
     },
     {
@@ -131,10 +120,7 @@ const LayoutList = ({ rerender }: Props) => {
       header: 'SIZE',
       accessorKey: 'size',
       cell: ({ row }: any) => (
-        <Box
-          sx={{
-            fontSize: 'sm',
-          }}>{`${row.original?.width} X ${row.original?.height} ${row.original?.unit}`}</Box>
+        <Text>{`${row.original?.width} X ${row.original?.height} ${row.original?.unit}`}</Text>
       ),
       enableSorting: false,
     },
@@ -142,9 +128,7 @@ const LayoutList = ({ rerender }: Props) => {
       id: 'content.engine.name',
       header: 'ENGINE',
       accessorKey: 'name',
-      cell: ({ row }: any) => (
-        <Box sx={{ fontSize: 'sm' }}>{row.original?.engine?.name}</Box>
-      ),
+      cell: ({ row }: any) => <Text>{row.original?.engine?.name}</Text>,
       enableSorting: false,
     },
     {
@@ -164,70 +148,34 @@ const LayoutList = ({ rerender }: Props) => {
       accessor: 'content.id',
       cell: ({ row }: any) => {
         return (
-          <Flex sx={{ justifyContent: 'flex-end' }}>
-            <Box>
-              <MenuProvider>
-                <MenuButton
-                  as={Box}
-                  variant="none"
-                  sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      margin: '0px',
-                      padding: '0px',
-                      bg: 'transparent',
-                      ':disabled': {
-                        display: 'none',
-                      },
-                    }}
-                    onClick={() => {
-                      setIsOpen(row.index);
-                    }}>
-                    <ThreeDotIcon />
-                  </Box>
-                </MenuButton>
-                <Menu
-                  as={Box}
-                  variant="layout.menu"
-                  p={0}
-                  open={isOpen == row.index}
-                  onClose={() => setIsOpen(null)}>
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setIsOpen(null);
-                      setDeleteLayout(row.index);
-                    }}
-                    style={{ justifyContent: 'flex-start' }}>
-                    <MenuItem>
-                      <Text
-                        variant=""
-                        sx={{ cursor: 'pointer', color: 'red.600' }}>
-                        Delete
-                      </Text>
-                    </MenuItem>
-                  </Button>
-                </Menu>
-                <Modal
-                  isOpen={deleteLayout === row.index}
-                  onClose={() => setDeleteLayout(null)}>
-                  {
-                    <ConfirmDelete
-                      title="Delete Layout"
-                      text={`Are you sure you want to delete ‘${row.original.name}’?`}
-                      setOpen={setDeleteLayout}
-                      onConfirmDelete={async () => {
-                        onDelete(row.original.id);
-                      }}
-                    />
-                  }
-                </Modal>
-              </MenuProvider>
-            </Box>
+          <Flex justifyContent="flex-end">
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <ThreeDotIcon />
+              </DropdownMenu.Trigger>
+              <DropdownMenu aria-label="dropdown role">
+                <DropdownMenu.Item
+                  onClick={() => {
+                    setDeleteLayout(row.index);
+                  }}>
+                  Delete
+                </DropdownMenu.Item>
+              </DropdownMenu>
+            </DropdownMenu.Provider>
+            <Modal
+              isOpen={deleteLayout === row.index}
+              onClose={() => setDeleteLayout(null)}>
+              {
+                <ConfirmDelete
+                  title="Delete Layout"
+                  text={`Are you sure you want to delete ‘${row.original.name}’?`}
+                  setOpen={setDeleteLayout}
+                  onConfirmDelete={async () => {
+                    onDelete(row.original.id);
+                  }}
+                />
+              }
+            </Modal>
           </Flex>
         );
       },
@@ -235,7 +183,7 @@ const LayoutList = ({ rerender }: Props) => {
   ];
 
   return (
-    <Box>
+    <Box w="100%">
       <Table data={contents} columns={columns} isLoading={loading} />
     </Box>
   );

@@ -17,7 +17,7 @@ const DescriptionLinker = ({ data }: Props) => {
       <Flex alignItems="center" gap="xs">
         {data &&
           data.map((item, index) => (
-            <Flex key={index} gap="xs">
+            <Flex key={index} gap="xs" align="center">
               {item.path ? (
                 <NextLinkText href={item.path}>
                   <Text color="text-secondary" fontSize="sm">
