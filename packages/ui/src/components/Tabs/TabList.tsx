@@ -1,4 +1,3 @@
-import { useForkRef } from "@/utils";
 import React, { cloneElement, useRef, useState } from "react";
 import reactFlattenChildren from "react-flatten-children";
 
@@ -8,6 +7,7 @@ import * as S from "./styles";
 import { UseTab, UseTabState } from ".";
 
 import { CreateWuiProps, forwardRef } from "@/system";
+import { useForkRef } from "@/utils";
 
 // because of the compatibility of esm standard. Since this lib is no longer maintained, no issue was created
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -16,7 +16,7 @@ const flattenChildren = reactFlattenChildren.default || reactFlattenChildren;
 
 function useTrackActiveTabs(
   selectedId: UseTabState["selectedId"],
-  children: React.ReactNode
+  children: React.ReactNode,
 ): [ReturnType<typeof flattenChildren>, HTMLElement] {
   const [activeTab, setActiveTab] = useState<HTMLElement>(null);
 
@@ -66,7 +66,7 @@ export const TabList = forwardRef<"div", TabListProps>(
         )}
       </S.TabList>
     );
-  }
+  },
 );
 
 TabList.displayName = "TabList";

@@ -1,9 +1,10 @@
 import * as Ariakit from "@ariakit/react";
-import { CreateWuiProps, forwardRef } from "@/system";
 
 import { TabList } from "./TabList";
 import { TabPanel } from "./TabPanel";
 import * as S from "./styles";
+
+import { CreateWuiProps, forwardRef } from "@/system";
 
 export type TabOptions = { store: UseTab };
 export type TabProps = CreateWuiProps<"button", TabOptions>;
@@ -23,7 +24,7 @@ export const TabComponent = forwardRef<"button", TabProps>(
         {children}
       </Ariakit.Tab>
     );
-  }
+  },
 );
 
 TabComponent.displayName = "Tab";

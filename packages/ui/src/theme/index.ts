@@ -15,6 +15,7 @@ import layout from "./variants/layout";
 import links from "./variants/links";
 import { getRadii } from "./variants/radii";
 import { getSpace } from "./variants/space";
+import { getTabs } from "./variants/tab";
 import { getTags } from "./variants/tags";
 import { getTextareas } from "./variants/textareas";
 import {
@@ -71,6 +72,7 @@ const createTheme = (options: Options = {}) => {
   theme.layout = layout;
   theme.alerts = alerts;
   // theme.styles = styles;
+  theme.tabs = getTabs(theme);
   theme.tags = getTags(theme);
   theme.icons = getIcons(theme);
   // theme.tables = getTables(theme);
