@@ -3,8 +3,8 @@ import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { Box, Flex, Text, Button } from 'theme-ui';
 import { EllipsisVIcon } from '@wraft/icon';
 
-import { Drawer } from './common/Drawer';
-import LayoutForm from './Layout/LayoutForm';
+import LayoutForm from 'components/Layout/LayoutForm';
+import { Drawer } from 'common/Drawer';
 
 /**
  * Page Heading Section

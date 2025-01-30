@@ -16,8 +16,8 @@ import {
 } from '@wraft/ui';
 import { TextT, X } from '@phosphor-icons/react';
 
-import FieldColor from 'components/FieldColor';
-import MenuStepsIndicator from 'components/MenuStepsIndicator';
+import MenuStepsIndicator from 'common/MenuStepsIndicator';
+import FieldColor from 'common/FieldColor';
 import { ContentType } from 'utils/types';
 import { fetchAPI } from 'utils/models';
 

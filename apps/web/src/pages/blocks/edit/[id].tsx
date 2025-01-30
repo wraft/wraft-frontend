@@ -3,9 +3,9 @@ import Head from 'next/head';
 import { Container } from 'theme-ui';
 import { ErrorBoundary } from '@wraft/ui';
 
-import NavEdit from 'components/NavEdit';
 import BlockTemplateForm from 'components/Block/BlockTemplateForm';
 import { Page } from 'components/Block/BlankFrame';
+import NavEdit from 'common/NavEdit';
 
 export const Index: FC = () => {
   return (

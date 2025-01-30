@@ -10,7 +10,7 @@ import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
 
 import PipelineTypeForm from './PipelineTypeForm';
-import PipelineFormEntry from '../PipelineFormEntry';
+import PipelineFormEntry from './PipelineFormEntry';
 
 export interface Pipelines {
   total_pages: number;

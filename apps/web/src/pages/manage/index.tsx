@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import ManageSidebar from 'components/ManageView';
-import Page from 'components/PageFrame';
+import ManageSidebar from 'common/ManageView';
+import Page from 'common/PageFrame';
 
 const Index: FC = () => {
   return (

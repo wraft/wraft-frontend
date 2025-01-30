@@ -12,7 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
 
-import FieldDate from 'components/FieldDate';
+import FieldDate from 'common/FieldDate';
 import { convertToVariableName } from 'utils';
 import { FieldInstance } from 'utils/types';
 

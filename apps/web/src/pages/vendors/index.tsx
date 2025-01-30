@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
-import VendorList from 'components/VendorList';
+import VendorList from 'components/Vendor/VendorList';
+import Page from 'common/PageFrame';
 
 const VenderPage: FC = () => {
   return (

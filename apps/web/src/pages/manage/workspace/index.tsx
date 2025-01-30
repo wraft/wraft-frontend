@@ -6,9 +6,9 @@ import toast from 'react-hot-toast';
 import { Input, Label } from 'theme-ui';
 import { Box, Field, Flex, InputText, Text, Button, Modal } from '@wraft/ui';
 
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
-import DefaultAvatar from 'components/DefaultAvatar';
+import ManageSidebar from 'common/ManageSidebar';
+import DefaultAvatar from 'common/DefaultAvatar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import Checkbox from 'common/Checkbox';

@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Button, Drawer, useDrawer } from '@wraft/ui';
 
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
 import FlowList from 'components/Flow/FlowList';
 import FlowForm from 'components/Flow/FlowForm';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';

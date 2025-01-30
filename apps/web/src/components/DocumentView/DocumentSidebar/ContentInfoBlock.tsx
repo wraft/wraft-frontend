@@ -4,11 +4,12 @@ import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu } from '@wraft/ui';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
-import EmailComposer from 'components/EmailComposer';
 import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
+
+import EmailComposer from '../EmailComposer';
 
 interface EditMenuProps {
   id: string;

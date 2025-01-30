@@ -4,10 +4,10 @@ import { Button, Drawer, useDrawer, Box, Flex, Text } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { Plus, X } from '@phosphor-icons/react';
 
-import Page from 'components/PageFrame';
-import FormsFrom from 'components/FormsFrom';
-import FieldText from 'components/FieldText';
+import FormsFrom from 'components/Form/FormsFrom';
 import FormList from 'components/Form/FormList';
+import Page from 'common/PageFrame';
+import FieldText from 'common/FieldText';
 import PageHeader from 'common/PageHeader';
 import Field from 'common/Field';
 import Modal from 'common/Modal';

@@ -6,8 +6,8 @@ import { SearchIcon } from '@wraft/icon';
 import { Button, Flex, Box, InputText } from '@wraft/ui';
 
 import { RolesForm, RolesList } from 'components/manage';
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import { Drawer } from 'common/Drawer';
 import DescriptionLinker from 'common/DescriptionLinker';

@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import { LiveEditor } from '@wraft/editor';
 import { EditorView } from 'prosemirror-view';
 
-import PdfViewer from 'components/PdfViewer';
+import PdfViewer from 'common/PdfViewer';
 import Editor from 'common/Editor';
 import styles from 'common/Tab/tab.module.css';
 import { useAuth } from 'contexts/AuthContext';

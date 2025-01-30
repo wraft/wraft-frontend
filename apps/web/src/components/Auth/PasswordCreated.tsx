@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Flex, Box, Button, Text } from '@wraft/ui';
 import { Link } from 'theme-ui';
 
-import CheckSuccess from '../../public/check-success.svg';
+import CheckSuccess from '../../../public/check-success.svg';
 
 const PasswordCreated = () => {
   return (

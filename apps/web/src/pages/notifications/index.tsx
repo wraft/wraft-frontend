@@ -2,8 +2,8 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Container } from 'theme-ui';
 
-import Page from 'components/PageFrame';
-import NotificationList from 'components/NotificationList';
+import NotificationList from 'components/Notification/NotificationList';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 
 const Notification: FC = () => {

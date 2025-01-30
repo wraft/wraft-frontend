@@ -8,8 +8,8 @@ import { useForm } from 'react-hook-form';
 import { DownIcon } from '@wraft/icon';
 import { Box, Field, Flex, InputText, Textarea, Button, Text } from '@wraft/ui';
 
-import MenuStepsIndicator from 'components/MenuStepsIndicator';
-import PdfViewer from 'components/PdfViewer';
+import MenuStepsIndicator from 'common/MenuStepsIndicator';
+import PdfViewer from 'common/PdfViewer';
 import { Drawer } from 'common/Drawer';
 import { fetchAPI } from 'utils/models';
 import { Asset } from 'utils/types';

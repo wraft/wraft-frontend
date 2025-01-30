@@ -16,12 +16,12 @@ import { X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
+import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
 import PipelineSteps from './PipelineSteps';
-import MenuStepsIndicator from '../MenuStepsIndicator';
 import PipelineLogs from './PipelineLogs';
-import PipelineFormEntry from '../PipelineFormEntry';
+import PipelineFormEntry from './PipelineFormEntry';
 
 const PipelineView = () => {
   const [rerender, setRerender] = useState<boolean>(false);

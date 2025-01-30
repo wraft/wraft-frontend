@@ -5,10 +5,11 @@ import toast from 'react-hot-toast';
 import { Flex, Box, Button, Text, Field, InputText } from '@wraft/ui';
 import { BrandLogoIcon } from '@wraft/icon';
 
-import WaitlistPrompt from 'components/WaitlistPrompt';
 import Link from 'common/NavLink';
 import { SignUpSchema, SignUp } from 'schemas/auth';
 import { postAPI } from 'utils/models';
+
+import WaitlistPrompt from './WaitlistPrompt';
 
 const SignupForm = () => {
   const {

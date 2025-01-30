@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { Avatar } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Search, Box, Text, Flex } from '@wraft/ui';
-import { ArrowRight, MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 
 import { postAPI, fetchAPI, patchAPI } from 'utils/models';
 

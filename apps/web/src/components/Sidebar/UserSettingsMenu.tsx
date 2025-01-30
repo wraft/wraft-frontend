@@ -4,10 +4,9 @@ import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
 import { useColorMode, Image } from 'theme-ui';
 
 import Link from 'common/NavLink';
+import ModeToggle from 'common/ModeToggle';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
-
-import ModeToggle from '../ModeToggle';
 
 type UserSettingsMenuProps = {
   size?: 'sm' | 'md';

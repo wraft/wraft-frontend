@@ -15,8 +15,8 @@ import {
 } from '@wraft/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import NavEdit from 'components/NavEdit';
 import MentionField from 'components/MentionsField';
+import NavEdit from 'common/NavEdit';
 import { TimeAgo } from 'common/Atoms';
 import Editor from 'common/Editor';
 import { Template, TemplateSchema } from 'schemas/template';

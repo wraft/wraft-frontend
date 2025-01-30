@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
 import { ImporterWrapper } from 'components/ImportTemplate';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 
 const Contents: FC = () => {

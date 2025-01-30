@@ -3,9 +3,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Flex } from '@wraft/ui';
 
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
 import ThemeViewForm from 'components/Theme/ThemeViewForm';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { menuLinks } from 'utils/index';

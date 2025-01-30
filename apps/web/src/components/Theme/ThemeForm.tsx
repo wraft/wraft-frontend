@@ -16,9 +16,9 @@ import {
 } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
-import FieldColor from 'components/FieldColor';
-import FontList from 'components/FontList';
-import AssetForm from 'components/AssetForm';
+import FontList from 'components/Theme/FontList';
+import AssetForm from 'components/Theme/AssetForm';
+import FieldColor from 'common/FieldColor';
 import { putAPI, fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 

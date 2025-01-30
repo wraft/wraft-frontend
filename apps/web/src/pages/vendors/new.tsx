@@ -3,8 +3,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Flex } from 'theme-ui';
 
-import Page from 'components/PageFrame';
-import VendorForm from 'components/VendorForm';
+import VendorForm from 'components/Vendor/VendorForm';
+import Page from 'common/PageFrame';
 
 const Index: FC = () => {
   return (

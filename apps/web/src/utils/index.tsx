@@ -3,8 +3,7 @@
 import { AxiosRequestConfig, AxiosError } from 'axios';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import cookie from 'js-cookie';
-
-import { Style, FlowBranch } from 'components/Icons';
+import { Box } from '@wraft/ui';
 
 /**
  *  @TODO Icons: Convert to local files
@@ -340,18 +339,18 @@ export interface pipelineLinksProps {
 export const menuLinks: menuLinksProps[] = [
   {
     name: 'Layouts',
-    logo: <FlowBranch width="20px" />,
+    logo: <Box w="20px" />,
     path: '/manage/layouts',
   },
   {
     name: 'Flows',
-    logo: <FlowBranch width="20px" />,
+    logo: <Box w="20px" />,
     path: '/manage/flows',
   },
 
   {
     name: 'Themes',
-    logo: <Style width="20px" />,
+    logo: <Box w="20px" />,
     path: '/manage/themes',
   },
 ];

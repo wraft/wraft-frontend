@@ -2,9 +2,9 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Box, Container } from 'theme-ui';
 
-import OrgSidebar from 'components/OrgSidebar';
-import Page from 'components/PageFrame';
-import ProfileForm from 'components/ProfileForm';
+import ProfileForm from 'components/User/ProfileForm';
+import OrgSidebar from 'common/OrgSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 
 const Contents: FC = () => {

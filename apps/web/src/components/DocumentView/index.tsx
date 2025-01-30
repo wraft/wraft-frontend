@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
 import { ErrorBoundary, Button, Modal, Box, Flex } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
-import Nav from 'components/NavEdit';
 import Field from 'common/Field';
+import Nav from 'common/NavEdit';
 import { postAPI, putAPI } from 'utils/models';
 
 import { FlowProgressBar } from './FlowProgressBar';

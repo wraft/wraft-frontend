@@ -17,7 +17,7 @@ import styled from '@emotion/styled';
 // import { steps } from 'framer-motion';
 import { EmptyFormIcon } from '@wraft/icon';
 
-import FieldDate from 'components/FieldDate';
+import FieldDate from 'common/FieldDate';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { capitalizeFirst, convertToVariableName } from 'utils/index';
 import { fetchAPI } from 'utils/models';

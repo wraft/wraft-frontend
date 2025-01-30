@@ -2,9 +2,9 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Box, Container, Flex } from 'theme-ui';
 
-import FieldList from 'components/FieldList';
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
+import FieldList from 'common/FieldList';
 import PageHeader from 'common/PageHeader';
 import NextLinkText from 'common/NavLink';
 import { menuLinks } from 'utils/index';

@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Page from 'components/PageFrame';
 import VariantDetailForm from 'components/Variants/VariantDetailForm';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { fetchAPI } from 'utils/models';

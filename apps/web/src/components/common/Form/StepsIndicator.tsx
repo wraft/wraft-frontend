@@ -2,7 +2,6 @@ import React from 'react';
 // eslint-disable-next-line import/order
 import { Flex, Text } from '@wraft/ui';
 
-// import { GraterThanIcon } from 'components/Icons';
 import { CaretRight } from '@phosphor-icons/react';
 
 type Props = {

@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form';
 import { Box, Flex, Input, Text, useThemeUI } from 'theme-ui';
 import { Button } from '@wraft/ui';
 
-import PdfViewer from 'components/PdfViewer';
+import PdfViewer from 'common/PdfViewer';
 import { Asset } from 'utils/types';
 
 import ProgressBar from './ProgressBar';

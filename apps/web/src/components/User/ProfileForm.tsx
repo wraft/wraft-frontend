@@ -4,12 +4,11 @@ import toast from 'react-hot-toast';
 import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
 
+import ImageUploader from 'common/ImageUploader';
 import Field from 'common/Field';
 import { useAuth } from 'contexts/AuthContext';
 import { base64ToFile } from 'utils/imgCrop';
 import { loadEntity, updateEntityFile } from 'utils/models';
-
-import ImageUploader from './ImageUploader';
 
 export interface Profile {
   uuid: null;

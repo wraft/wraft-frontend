@@ -15,8 +15,8 @@ import {
   useDrawer,
 } from '@wraft/ui';
 
-import FieldColor from 'components/FieldColor';
 import ThemeAddForm from 'components/Theme/ThemeForm';
+import FieldColor from 'common/FieldColor';
 import { fetchAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 

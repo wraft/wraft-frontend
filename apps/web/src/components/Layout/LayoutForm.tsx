@@ -22,7 +22,7 @@ import {
 } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
-import AssetForm from 'components/AssetForm';
+import AssetForm from 'components/Theme/AssetForm';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { Layoutschema, Layout } from 'schemas/layout';
 import { fetchAPI, deleteAPI, postAPI, putAPI } from 'utils/models';

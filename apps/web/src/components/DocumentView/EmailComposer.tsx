@@ -8,9 +8,8 @@ import * as yup from 'yup';
 import toast from 'react-hot-toast';
 
 import Field from 'common/Field';
+import FieldText from 'common/FieldText';
 import { postAPI } from 'utils/models';
-
-import FieldText from './FieldText';
 
 const validationSchema: any = yup.object().shape({
   email: yup.string().email('Invalid email').required('Required'),

@@ -3,12 +3,11 @@ import { useRouter } from 'next/router';
 import { Flex, Text } from '@wraft/ui';
 import { ArrowLeft, Bell, Pencil } from '@phosphor-icons/react';
 
+import InviteCollaborators from 'components/DocumentView/InviteCollaborators';
+import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
+import { useDocument } from 'components/DocumentView/DocumentContext';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
-
-import InviteCollaborators from './DocumentView/InviteCollaborators';
-import { useDocument } from './DocumentView/DocumentContext';
-import UserSettingsMenu from './Sidebar/UserSettingsMenu';
 
 export interface IUser {
   name: string;

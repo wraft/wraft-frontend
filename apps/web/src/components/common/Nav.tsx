@@ -5,11 +5,10 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 import { BellIcon, SearchIcon } from '@wraft/icon';
 
+import CreateDocument from 'components/DocumentCreate';
 import Modal from 'common/Modal';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
-
-import CreateDocument from './DocumentCreate';
 
 export interface IUser {
   name: string;

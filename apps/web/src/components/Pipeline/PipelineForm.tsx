@@ -11,7 +11,7 @@ import PageHeader from 'common/PageHeader';
 import { postAPI, fetchAPI, putAPI } from 'utils/models';
 import { IContentType, Template } from 'utils/types';
 
-import { Pipeline } from './Pipeline/PipelineList';
+import { Pipeline } from './PipelineList';
 
 export interface IStage {
   name: string;

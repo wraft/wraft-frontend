@@ -7,7 +7,7 @@ import { Flex, Box, Heading, Button, Text } from 'theme-ui';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
 
-import PasswordCreated from 'components/PasswordCreated';
+import PasswordCreated from 'components/Auth/PasswordCreated';
 import Field from 'common/Field';
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';

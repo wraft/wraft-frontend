@@ -6,8 +6,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
 import { Plus, X } from '@phosphor-icons/react';
 
-import DefaultMenuItem from 'components/MenuItem';
 import CreateDocument from 'components/DocumentCreate';
+import DefaultMenuItem from 'common/MenuItem';
 
 import Header from './Header';
 import Menulist from './Menulist';

@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Text } from 'theme-ui';
 
+import FontList from 'components/Theme/FontList';
 import Dropzone from 'common/Dropzone';
 import { postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
-
-import FontList from './FontList';
 
 interface AssetFormProps {
   onUpload?: any;

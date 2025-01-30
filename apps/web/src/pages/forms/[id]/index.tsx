@@ -5,12 +5,12 @@ import { Box, Container, Flex, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
-import Page from 'components/PageFrame';
-import FormsFrom from 'components/FormsFrom';
-import MenuStepsIndicator from 'components/MenuStepsIndicator';
-import FieldText from 'components/FieldText';
-import FormViewForm from 'components/FormViewForm';
+import FormsFrom from 'components/Form/FormsFrom';
+import FormViewForm from 'components/Form/FormViewForm';
 import { FormResponseList } from 'components/WraftForm';
+import MenuStepsIndicator from 'common/MenuStepsIndicator';
+import Page from 'common/PageFrame';
+import FieldText from 'common/FieldText';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
 import Modal from 'common/Modal';

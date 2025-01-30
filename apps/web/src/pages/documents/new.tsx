@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrameInner';
 import { DocumentProvider } from 'components/DocumentView/DocumentContext';
 import DocumentView from 'components/DocumentView';
+import Page from 'common/PageFrameInner';
 
 const Index: FC = () => {
   return (

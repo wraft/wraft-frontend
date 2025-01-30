@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import FormEntry from 'components/FormEntry';
+import FormEntry from 'components/Form/FormEntry';
 
 const Index: FC = () => {
   return (

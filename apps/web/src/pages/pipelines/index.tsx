@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
 import PipelineList from 'components/Pipeline/PipelineList';
+import Page from 'common/PageFrame';
 
 const PipelineIndex: FC = () => {
   return (

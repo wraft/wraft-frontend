@@ -2,12 +2,13 @@ import React from 'react';
 import Head from 'next/head';
 import { Box, Flex } from 'theme-ui';
 
+import Sidebar from 'components/Sidebar';
 import { useAuth } from 'contexts/AuthContext';
 
 import Container from './Container';
-// import Sidebar from './Sidebar';
 import Nav from './Nav';
-import NavEdit from './NavEdit';
+
+// import { Close } from 'theme-ui';
 
 export interface IPage {
   showFull?: boolean;
@@ -20,9 +21,9 @@ export interface IAlert {
   children: any;
 }
 
-export const PageFull = (props: any) => {
+export const Page = (props: any) => {
+  const showFull: boolean = props && props.showFull ? true : false;
   const { accessToken } = useAuth();
-
   return (
     <>
       <Head>
@@ -35,8 +36,10 @@ export const PageFull = (props: any) => {
           name="description"
           content="Wraft help busines move steady and fast with Document Automation System"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
       </Head>
-      <Container width={100} bg={''}>
+      <Container width={100} bg="background-primary">
         {!accessToken && (
           <Box>
             <Nav />
@@ -45,15 +48,14 @@ export const PageFull = (props: any) => {
         )}
         {accessToken && (
           <Flex>
-            {/* <Sidebar showFull={showFull} /> */}
-            <Box sx={{ width: '100%' }}>
-              <NavEdit navtitle="" />
+            <Sidebar showFull={showFull} />
+            <Box sx={{ width: '100%', minHeight: '100vh' }}>
+              <Nav />
               <Box
                 sx={{ minHeight: '100vh' }}
-                bg="gray.0"
-                // p={4}
-                // pt={3}
-                pl={4}>
+                // color="#333"
+                p={4}
+                pt={3}>
                 {props.children}
               </Box>
             </Box>
@@ -64,4 +66,4 @@ export const PageFull = (props: any) => {
   );
 };
 
-export default PageFull;
+export default Page;

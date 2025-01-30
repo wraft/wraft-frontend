@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
 import DocumentList from 'components/DocumentList';
+import Page from 'common/PageFrame';
 
 const Documents: FC = () => {
   return (

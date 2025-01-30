@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 import { Button } from '@wraft/ui';
 import { Text } from 'theme-ui';
 
-import OrgSidebar from 'components/OrgSidebar';
-import Page from 'components/PageFrame';
+import OrgSidebar from 'common/OrgSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import Field from 'common/Field';
 import { putAPI } from 'utils/models';

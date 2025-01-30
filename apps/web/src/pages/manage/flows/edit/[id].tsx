@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { Container, Flex } from 'theme-ui';
 
 import FlowForm from 'components/Flow/FlowForm';
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import { menuLinks } from 'utils';
 

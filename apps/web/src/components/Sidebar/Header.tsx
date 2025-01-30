@@ -5,7 +5,7 @@ import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { Gear, Plus } from '@phosphor-icons/react';
 
-import DefaultAvatar from 'components/DefaultAvatar';
+import DefaultAvatar from 'common/DefaultAvatar';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 

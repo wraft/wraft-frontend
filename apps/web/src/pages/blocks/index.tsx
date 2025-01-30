@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import Page from 'components/PageFrame';
 import BlockTemplateList from 'components/Block/BlockTemplateList';
+import Page from 'common/PageFrame';
 
 const Index: FC = () => {
   return (

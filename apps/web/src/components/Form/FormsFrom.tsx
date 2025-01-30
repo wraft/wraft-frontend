@@ -21,10 +21,9 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
+import AnimatedButton from 'common/AnimatedButton';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 import { uuidRegex } from 'utils/regex';
-
-import AnimatedButton from './AnimatedButton';
 
 type Props = {
   formdata: any;

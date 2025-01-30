@@ -14,7 +14,7 @@ import {
 } from '@wraft/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import FieldColor from 'components/FieldColor';
+import FieldColor from 'common/FieldColor';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { VariantSchema } from 'schemas/variant';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';

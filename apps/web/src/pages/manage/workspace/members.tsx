@@ -6,8 +6,8 @@ import { UserPlus } from '@phosphor-icons/react';
 
 import { InviteTeam } from 'components/manage';
 import TeamList from 'components/manage/TeamList';
-import ManageSidebar from 'components/ManageSidebar';
-import Page from 'components/PageFrame';
+import ManageSidebar from 'common/ManageSidebar';
+import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';

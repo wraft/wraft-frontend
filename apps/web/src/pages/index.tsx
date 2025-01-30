@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Text, Flex, Button } from 'theme-ui';
 
 import Dashboard from 'components/Dashboard';
-import Page from 'components/PageFrame';
+import Page from 'common/PageFrame';
 import Modal from 'common/Modal';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
