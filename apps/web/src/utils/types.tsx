@@ -66,6 +66,7 @@ export interface ContentType {
 export interface ContentTypeClass {
   updated_at: string;
   prefix: string;
+  type: 'contract' | 'document';
   name: string;
   layout: Layout;
   theme: Theme;

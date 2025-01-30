@@ -78,17 +78,16 @@ const FieldForm = ({ fieldtypes, trigger, control, register, errors }: any) => {
             </Flex>
           </Flex>
         ))}
-        {fields?.length > 0 && (
-          <Box mt="sm">
-            <Button
-              variant="tertiary"
-              type="button"
-              size="sm"
-              onClick={onAddField}>
-              Add Field
-            </Button>
-          </Box>
-        )}
+
+        <Box mt="sm">
+          <Button
+            variant="tertiary"
+            type="button"
+            size="sm"
+            onClick={onAddField}>
+            Add Field
+          </Button>
+        </Box>
       </Flex>
     </Box>
   );

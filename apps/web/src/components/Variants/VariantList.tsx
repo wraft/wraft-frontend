@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, useDrawer, Button, Box } from '@wraft/ui';
-import { Plus, X } from '@phosphor-icons/react';
+import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
 
@@ -61,15 +61,6 @@ const VariantList = () => {
         onClose={() => setIsOpen(false)}>
         {isOpen && (
           <>
-            <Drawer.Header>
-              <Drawer.Title>Create Variant</Drawer.Title>
-              <X
-                size={20}
-                weight="bold"
-                cursor="pointer"
-                onClick={() => setIsOpen(false)}
-              />
-            </Drawer.Header>
             <VariantForm setIsOpen={setIsOpen} setRerender={setRerender} />
           </>
         )}

@@ -72,6 +72,7 @@ const ContentTypeViewForm = () => {
       setValue('name', res.content_type.name);
       setValue('description', res.content_type?.description);
       setValue('prefix', res.content_type.prefix);
+      setValue('type', res.content_type.type);
       setValue('layout', res.content_type.layout?.name || undefined);
       setValue('flow', res.content_type.flow?.flow?.name || undefined);
       setValue('theme', res.content_type?.theme?.name || undefined);
@@ -118,6 +119,12 @@ const ContentTypeViewForm = () => {
                 <Textarea
                   {...register('description')}
                   placeholder="Enter a description"
+                />
+              </Field>
+              <Field label="Document Type" disabled required>
+                <InputText
+                  {...register('type')}
+                  placeholder="Select a Document Type"
                 />
               </Field>
               <Field label="Prefix" disabled required>
@@ -212,24 +219,7 @@ const ContentTypeViewForm = () => {
         aria-label="Menu backdrop"
         withBackdrop={true}
         onClose={() => setIsOpen(false)}>
-        {isOpen && (
-          <>
-            <Drawer.Header>
-              <Drawer.Title>Update Variant</Drawer.Title>
-              <X
-                size={20}
-                weight="bold"
-                cursor="pointer"
-                onClick={() => setIsOpen(false)}
-              />
-            </Drawer.Header>
-            <Form
-              step={formStep}
-              setIsOpen={setIsOpen}
-              setRerender={setRerender}
-            />
-          </>
-        )}
+        <Form step={formStep} setIsOpen={setIsOpen} setRerender={setRerender} />
       </Drawer>
     </>
   );

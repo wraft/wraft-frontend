@@ -177,6 +177,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       ),
       enableSorting: false,
     },
+
     {
       id: 'content.flow',
       header: 'Flow',
@@ -190,6 +191,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
       enableSorting: false,
     },
+
     {
       id: 'content.layout',
       header: 'Layout',
@@ -197,7 +199,12 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
       enableSorting: false,
     },
-
+    {
+      id: 'content.type',
+      header: 'Type',
+      cell: ({ row }: any) => <Text>{row.original?.type}</Text>,
+      enableSorting: false,
+    },
     {
       id: 'content.creator',
       header: 'Created By',
