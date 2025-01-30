@@ -244,6 +244,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       fields: formatFields(data.fields),
       description: data.description?.trim(),
       prefix: data.prefix?.trim(),
+      type: data.type,
       flow_id: data.flow.id,
       color: data.color?.trim(),
       theme_id: data.theme.id,
