@@ -1,28 +1,31 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import { Button, Drawer, useDrawer, Box, Flex, Text } from '@wraft/ui';
+import {
+  Box,
+  Button,
+  Drawer,
+  Field,
+  Flex,
+  InputText,
+  Modal,
+  useDrawer,
+} from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { Plus, X } from '@phosphor-icons/react';
+import { CloseIcon } from '@wraft/icon';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import FormsFrom from 'components/Form/FormsFrom';
 import FormList from 'components/Form/FormList';
 import Page from 'common/PageFrame';
-import FieldText from 'common/FieldText';
 import PageHeader from 'common/PageHeader';
-import Field from 'common/Field';
-import Modal from 'common/Modal';
-
-type FormValues = {
-  name: string;
-  prefix: string;
-  description: string;
-};
+import { FormSchema, Form } from 'schemas/form';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [items, setItems] = useState<any>([]);
-  const [data, setData] = useState<FormValues | null>();
+  const [data, setData] = useState<Form | null>();
   const [trigger, _setTrigger] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
   const [_loading, setLoading] = useState<boolean>(false);
@@ -34,7 +37,7 @@ const Index: FC = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm<Form>({ resolver: zodResolver(FormSchema) });
 
   const onSubmit = (formData: any) => {
     setData(formData);
@@ -71,42 +74,45 @@ const Index: FC = () => {
           <FormList rerender={rerender} setRerender={setRerender} />
         </Box>
       </Page>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        {isOpen && (
-          <Box as="form" minWidth="518px" onSubmit={handleSubmit(onSubmit)}>
-            <Box py={3} px={4} borderBottom="solid 1px" borderColor="gray.400">
-              <Text fontWeight="600">Create Form</Text>
+      <Modal
+        ariaLabel="Create Form"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}>
+        <>
+          <Flex justify="space-between">
+            <Modal.Header>Create Form</Modal.Header>
+            <Box onClick={() => setIsOpen(false)}>
+              <CloseIcon color="#2C3641" />
             </Box>
-            <Box p={4}>
-              <Field
-                name="name"
-                label="Name"
-                placeholder="Name"
-                register={register}
-                error={errors.name}
-                mb={3}
+          </Flex>
+          <Flex
+            borderTop="1px solid"
+            color="border"
+            as="form"
+            minWidth="518px"
+            direction="column"
+            gap="md"
+            py="sm"
+            onSubmit={handleSubmit(onSubmit)}>
+            <Field label="Name" required error={errors?.name?.message}>
+              <InputText
+                {...register('name')}
+                placeholder="Enter a From Name"
               />
-              <Field
-                name="prefix"
-                label="Prefix"
-                placeholder="PREFIX"
-                register={register}
-                error={errors.prefix}
-                mb={3}
+            </Field>
+            <Field
+              label="Description"
+              required
+              error={errors?.description?.message}>
+              <InputText
+                {...register('description')}
+                placeholder="Enter a Description"
               />
-              <FieldText
-                name="description"
-                label="Description"
-                defaultValue=""
-                register={register}
-              />
-              {errors.description && errors.description.message && (
-                <Text color="error">
-                  {errors.description.message as string}
-                </Text>
-              )}
-            </Box>
-            <Flex p={4} pt={0} gap={3}>
+            </Field>
+            <Field label="Prefix" required error={errors?.description?.message}>
+              <InputText {...register('prefix')} placeholder="Enter a prefix" />
+            </Field>
+            <Flex mt="sm" gap="sm">
               <Button
                 type="submit"
                 variant="primary"
@@ -123,8 +129,8 @@ const Index: FC = () => {
                 Cancel
               </Button>
             </Flex>
-          </Box>
-        )}
+          </Flex>
+        </>
       </Modal>
       <Drawer
         open={drawerOpen}

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Container, Flex, Text } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import { Button, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
 import FormsFrom from 'components/Form/FormsFrom';
@@ -13,7 +13,6 @@ import Page from 'common/PageFrame';
 import FieldText from 'common/FieldText';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
-import Modal from 'common/Modal';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -152,66 +151,67 @@ const Index: FC = () => {
             </Flex>
           </Container>
         </Flex>
-        <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          {isOpen && (
+        <Modal
+          ariaLabel="edit form"
+          open={isOpen}
+          onClose={() => setIsOpen(false)}>
+          <Box
+            as="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ minWidth: '518px' }}>
             <Box
-              as="form"
-              onSubmit={handleSubmit(onSubmit)}
-              sx={{ minWidth: '518px' }}>
-              <Box
-                sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
-                <Text as="p" variant="h4Medium">
-                  Edit form
-                </Text>
-              </Box>
-              <Box sx={{ p: 4 }}>
-                <Field
-                  name="name"
-                  label="Name"
-                  placeholder="Name"
-                  defaultValue={formdata.name}
-                  register={register}
-                  error={errors.name}
-                  mb={3}
-                />
-                <Field
-                  name="prefix"
-                  label="Prefix"
-                  placeholder="PREFIX"
-                  defaultValue={formdata.prefix}
-                  register={register}
-                  error={errors.prefix}
-                  mb={3}
-                />
-                <FieldText
-                  name="description"
-                  label="Description"
-                  defaultValue={formdata.description}
-                  register={register}
-                  error={errors.description}
-                />
-              </Box>
-              <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  onClick={() => {
-                    handleSubmit(onSubmit)();
-                    setIsOpen(false);
-                  }}>
-                  Save
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsOpen(false);
-                  }}>
-                  Cancel
-                </Button>
-              </Flex>
+              sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
+              <Text as="p" variant="h4Medium">
+                Edit form
+              </Text>
             </Box>
-          )}
+            <Box sx={{ p: 4 }}>
+              <Field
+                name="name"
+                label="Name"
+                placeholder="Name"
+                defaultValue={formdata.name}
+                register={register}
+                error={errors.name}
+                mb={3}
+              />
+              <Field
+                name="prefix"
+                label="Prefix"
+                placeholder="PREFIX"
+                defaultValue={formdata.prefix}
+                register={register}
+                error={errors.prefix}
+                mb={3}
+              />
+              <FieldText
+                name="description"
+                label="Description"
+                defaultValue={formdata.description}
+                register={register}
+                error={errors.description}
+              />
+            </Box>
+            <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
+              <Button
+                type="submit"
+                variant="primary"
+                onClick={() => {
+                  handleSubmit(onSubmit)();
+                  setIsOpen(false);
+                }}>
+                Save
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsOpen(false);
+                }}>
+                Cancel
+              </Button>
+            </Flex>
+          </Box>
         </Modal>
       </Page>
     </>
