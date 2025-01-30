@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Box, Text, Button, InputText, Field } from '@wraft/ui';
+import { Flex, Box, Text, InputText, Field, Button } from '@wraft/ui';
 import { BrandLogoIcon, MailIcon } from '@wraft/icon';
 import { zodResolver } from '@hookform/resolvers/zod';
 

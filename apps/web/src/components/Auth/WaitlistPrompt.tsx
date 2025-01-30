@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { Flex, Box, Heading, Button, Text } from 'theme-ui';
+import { Flex, Box, Heading, Text } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import Link from 'common/NavLink';
 

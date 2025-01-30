@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
 import { Box, Flex, Text } from 'theme-ui';
-import { Button, Table, Drawer, useDrawer } from '@wraft/ui';
+import { Button, Table, Drawer, useDrawer, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { StateBadge } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
-import Modal from 'common/Modal';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
 import PipelineTypeForm from './PipelineTypeForm';
@@ -196,7 +195,7 @@ const Form = ({ rerender, setRerender }: Props) => {
           />
         )}
       </Drawer>
-      <Modal isOpen={isOpenDelete}>
+      <Modal ariaLabel="Delete Stage" open={isOpenDelete}>
         {
           <ConfirmDelete
             title="Delete Stage"

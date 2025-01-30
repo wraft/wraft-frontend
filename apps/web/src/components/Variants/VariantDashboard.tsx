@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Avatar } from 'theme-ui';
-import { Pagination, Table, DropdownMenu, Box, Flex, Text } from '@wraft/ui';
+import {
+  Pagination,
+  Table,
+  DropdownMenu,
+  Box,
+  Flex,
+  Text,
+  Modal,
+} from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 
@@ -246,7 +253,8 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                 </DropdownMenu.Item>
               </DropdownMenu>
               <Modal
-                isOpen={deleteVariant === row.index}
+                ariaLabel="Delete Variant"
+                open={deleteVariant === row.index}
                 onClose={() => setDeleteVariant(null)}>
                 {
                   <ConfirmDelete

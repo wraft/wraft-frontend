@@ -4,9 +4,9 @@ import toast from 'react-hot-toast';
 import { useThemeUI } from 'theme-ui';
 import {
   Box,
-  Button,
   DropdownMenu,
   Flex,
+  Modal,
   Pagination,
   Table,
   Text,
@@ -14,7 +14,6 @@ import {
 import { EllipsisHIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { NextLinkText } from 'common/NavLink';
 import { fetchAPI, deleteAPI } from 'utils/models';
@@ -161,7 +160,8 @@ const FormList = ({ rerender, setRerender }: Props) => {
               </DropdownMenu.Provider>
             </Flex>
             <Modal
-              isOpen={deleteOpen === row.index}
+              ariaLabel="Delete form"
+              open={deleteOpen === row.index}
               onClose={() => setDeleteOpen(null)}>
               {
                 <ConfirmDelete

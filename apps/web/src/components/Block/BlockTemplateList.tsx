@@ -1,14 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import NavLink from 'next/link';
 import Router, { useRouter } from 'next/router';
-import { Table, DropdownMenu, Box, Text, Flex, Button } from '@wraft/ui';
+import { Table, DropdownMenu, Box, Text, Flex, Button, Modal } from '@wraft/ui';
 import { Avatar } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
 import { TimeAgo } from 'common/Atoms';
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
@@ -121,7 +120,8 @@ const BlockTemplateListFrame: FC = () => {
                   <Text>Delete</Text>
                 </DropdownMenu.Item>
                 <Modal
-                  isOpen={deleteBlock === row.index}
+                  ariaLabel="Delete Variant"
+                  open={deleteBlock === row.index}
                   onClose={() => setDeleteBlock(null)}>
                   {
                     <ConfirmDelete

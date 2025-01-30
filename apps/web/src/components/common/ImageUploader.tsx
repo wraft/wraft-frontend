@@ -2,9 +2,8 @@
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import Cropper from 'react-easy-crop';
-import { Box, Input, Label, Slider, Button } from 'theme-ui';
-
-import Modal from 'common/Modal';
+import { Box, Input, Label, Slider } from 'theme-ui';
+import { Button, Modal } from '@wraft/ui';
 
 type ReadAsMethod =
   | 'readAsText'
@@ -174,7 +173,7 @@ export default function ImageUploader({
   );
 
   return (
-    <Modal isOpen={showModal} label="Change Avatar">
+    <Modal ariaLabel="Change Avatar" open={showModal}>
       <Box>
         {!result && (
           <Box
@@ -274,8 +273,6 @@ export default function ImageUploader({
 
           <Button
             type="submit"
-            variant="btnPrimary"
-            sx={{ width: '100%' }}
             onClick={() => showCroppedImage(croppedAreaPixels)}>
             Save
           </Button>

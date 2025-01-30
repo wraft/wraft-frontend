@@ -3,9 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import cookie from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Button, Heading } from 'theme-ui';
+import { Box, Flex, Text, Heading } from 'theme-ui';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
+import { Button } from '@wraft/ui';
 
 import Field from 'common/Field';
 import Link from 'common/NavLink';
@@ -133,7 +134,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ inviteToken }) => {
                 error={errors}
               />
               <Flex sx={{ width: '100%', gap: '39px', mb: '24px' }}>
-                <Button type="submit" variant="buttonPrimary">
+                <Button type="submit">
                   <Flex sx={{ alignItems: 'center', gap: '4px' }}>
                     Accept Invitation
                   </Flex>

@@ -4,8 +4,8 @@ import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { Box, Flex, Button, Text } from 'theme-ui';
 import { Label, Select } from 'theme-ui';
+import { Modal } from '@wraft/ui';
 
-import Modal from 'common/Modal';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
 import { postAPI, fetchAPI, putAPI } from 'utils/models';
@@ -262,7 +262,10 @@ const PipelineForm = () => {
               </Box>
             </ListGroup>
 
-            <Modal isOpen={showModal} onClose={() => setShowModal(!showModal)}>
+            <Modal
+              ariaLabel="Add Stages"
+              open={showModal}
+              onClose={() => setShowModal(!showModal)}>
               <Box sx={{ p: 4, width: '60ch' }}>
                 <Text mb={3}>Add Stages</Text>
                 <Label htmlFor="parent" mb={1}>

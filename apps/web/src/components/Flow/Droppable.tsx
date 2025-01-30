@@ -28,10 +28,9 @@ import {
   useThemeUI,
 } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Button } from '@wraft/ui';
+import { Button, Modal } from '@wraft/ui';
 import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI } from 'utils/models';
 
@@ -478,7 +477,10 @@ const SortableItem = ({
           <CloseIcon width={18} height={18} />
         </Button>
       </Box>
-      <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)}>
+      <Modal
+        ariaLabel="Delete State"
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}>
         <ConfirmDelete
           setOpen={() => setDeleteOpen(false)}
           onConfirmDelete={() => onDeleteState()}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Box, Button, Text, Input, Label, Flex, Select } from 'theme-ui';
+import { Box, Text, Input, Label, Flex, Select } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import Field from 'common/Field';
 import { postAPI, fetchAPI } from 'utils/models';
@@ -155,10 +156,9 @@ const ApprovalFormBase = ({
             </Box>
           ))}
       </Box>
-      <Flex>
+      <Flex mt="md">
         <Button
           type="submit"
-          mt={3}
           onClick={(e) => {
             e.preventDefault();
             handleSubmit(onSubmit);
@@ -170,10 +170,8 @@ const ApprovalFormBase = ({
             e.preventDefault();
             closeModal();
           }}
-          variant="btnSecondary"
-          type="submit"
-          ml={2}
-          mt={3}>
+          variant="tertiary"
+          type="submit">
           Cancel
         </Button>
       </Flex>

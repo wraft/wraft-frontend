@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Text, Flex, useThemeUI } from 'theme-ui';
-import { Button } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
-import { Menu, MenuButton, MenuItem, MenuProvider } from '@ariakit/react';
-import { EllipsisHIcon } from '@wraft/icon';
+import { Box, Text, Flex } from 'theme-ui';
+import { DropdownMenu, Pagination, Table } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
 
 import { NextLinkText } from 'common/NavLink';
 import { TimeAgo, StateBadge } from 'common/Atoms';
@@ -36,14 +34,11 @@ const FormResponseList = () => {
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [_deleteOpen, setDeleteOpen] = useState<number | null>(null);
 
   const router = useRouter();
   const fId: string = router.query.id as string;
   const currentPage: any = parseInt(router.query.page as string) || 1;
-
-  const { theme } = useThemeUI();
 
   const loadData = (pageNo: number) => {
     setLoading(true);
@@ -115,63 +110,16 @@ const FormResponseList = () => {
           <>
             <Flex sx={{ justifyContent: 'space-between' }}>
               <Box />
-              <MenuProvider>
-                <MenuButton
-                  as={Box}
-                  variant="none"
-                  sx={{ display: 'flex', alignItems: 'center' }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      position: 'relative',
-                      cursor: 'pointer',
-                      margin: '0px',
-                      padding: '0px',
-                      bg: 'transparent',
-                      ':disabled': {
-                        display: 'none',
-                      },
-                    }}
-                    onClick={() => {
-                      setIsOpen(row.index);
-                    }}>
-                    <EllipsisHIcon
-                      color={
-                        (theme.colors &&
-                          theme.colors.gray &&
-                          theme.colors.gray[200]) ||
-                        'black'
-                      }
-                    />
-                  </Box>
-                </MenuButton>
-                <Menu
-                  as={Box}
-                  variant="layout.menu"
-                  sx={{ p: 0 }}
-                  open={isOpen == row.index}
-                  onClose={() => setIsOpen(null)}>
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setIsOpen(null);
-                      setDeleteOpen(row.index);
-                    }}
-                    style={{ justifyContent: 'flex-start' }}>
-                    <MenuItem as={Box}>
-                      <Text
-                        variant="pR"
-                        sx={{
-                          cursor: 'pointer',
-                          color: 'red.600',
-                        }}>
-                        Delete
-                      </Text>
-                    </MenuItem>
-                  </Button>
-                </Menu>
-              </MenuProvider>
+              <DropdownMenu.Provider>
+                <DropdownMenu.Trigger>
+                  <ThreeDotIcon />
+                </DropdownMenu.Trigger>
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item onClick={() => setDeleteOpen(row.index)}>
+                    <Text>Delete</Text>
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              </DropdownMenu.Provider>
             </Flex>
           </>
         );

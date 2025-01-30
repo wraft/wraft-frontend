@@ -4,10 +4,17 @@ import { useRouter } from 'next/router';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { Avatar } from 'theme-ui';
-import { Table, Pagination, DropdownMenu, Text, Box, Flex } from '@wraft/ui';
+import {
+  Table,
+  Pagination,
+  DropdownMenu,
+  Text,
+  Box,
+  Flex,
+  Modal,
+} from '@wraft/ui';
 
 import ConfirmDelete from 'common/ConfirmDelete';
-import Modal from 'common/Modal';
 import { TimeAgo } from 'common/Atoms';
 import { deleteAPI, fetchAPI } from 'utils/models';
 
@@ -182,7 +189,8 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
               </DropdownMenu.Provider>
             </Flex>
             <Modal
-              isOpen={deleteFlow === row.index}
+              ariaLabel="Delete Flow"
+              open={deleteFlow === row.index}
               onClose={() => setDeleteFlow(null)}>
               {
                 <ConfirmDelete

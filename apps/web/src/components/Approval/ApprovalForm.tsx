@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Container, Button, Text, Divider, Flex, Select } from 'theme-ui';
+import { Box, Container, Text, Divider, Flex, Select } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import Field from 'common/Field';
 import { fetchAPI, postAPI, deleteAPI } from 'utils/models';
@@ -127,7 +128,7 @@ const StatesForm = (props: StateFormProps) => {
           ))}
         </Box>
       )}
-      <Button variant="btnSecondary" onClick={toggleModal}>
+      <Button variant="tertiary" onClick={toggleModal}>
         Add New
       </Button>
     </Box>
@@ -240,9 +241,7 @@ const ApprovalForm = () => {
                 defaultValue="Muneef Hameed (U01)"
                 register={register}
               />
-              <Button variant="btnPrimary" type="submit" mt={3}>
-                Save
-              </Button>
+              <Button type="submit">Save</Button>
             </Box>
             <Divider sx={{ color: 'border', my: 4 }} />
             <Box mt={2}>

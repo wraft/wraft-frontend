@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import toast from 'react-hot-toast';
-import { Table, Box, Flex, Text, DropdownMenu } from '@wraft/ui';
+import { Table, Box, Flex, Text, DropdownMenu, Modal } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { Drawer } from 'common/Drawer';
 import { fetchAPI, deleteAPI } from 'utils/models';
@@ -163,7 +162,8 @@ const LayoutList = ({ rerender }: Props) => {
               </DropdownMenu>
             </DropdownMenu.Provider>
             <Modal
-              isOpen={deleteLayout === row.index}
+              ariaLabel="Delete Layout"
+              open={deleteLayout === row.index}
               onClose={() => setDeleteLayout(null)}>
               {
                 <ConfirmDelete

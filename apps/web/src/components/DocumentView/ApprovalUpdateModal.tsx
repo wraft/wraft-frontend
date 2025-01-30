@@ -1,9 +1,9 @@
-import { Text, Flex, Box, Button } from 'theme-ui';
+import { Text, Flex, Box } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
+import { Button, Modal } from '@wraft/ui';
 
 import Field from 'common/Field';
-import Modal from 'common/Modal';
 import { putAPI } from 'utils/models';
 
 import { useDocument } from './DocumentContext';
@@ -39,7 +39,7 @@ export const ApprovalUpdateModal = ({ state, success, open, setOpen }: any) => {
     }
   };
   return (
-    <Modal isOpen={open}>
+    <Modal ariaLabel="Approval" open={open}>
       <Flex
         sx={{
           flexDirection: 'column',
@@ -95,13 +95,8 @@ export const ApprovalUpdateModal = ({ state, success, open, setOpen }: any) => {
             borderTop: 'solid 1px #ddd',
             width: '100%',
           }}>
-          <Button onClick={handleModalAction} sx={{}}>
-            Confirm
-          </Button>
-          <Button
-            variant="btnSecondary"
-            onClick={() => setOpen(false)}
-            sx={{ bg: 'red', color: 'gray.1100', fontWeight: 'bold' }}>
+          <Button onClick={handleModalAction}>Confirm</Button>
+          <Button danger variant="tertiary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </Flex>

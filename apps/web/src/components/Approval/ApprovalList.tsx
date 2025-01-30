@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Avatar } from 'theme-ui';
-import { Box, Flex, Table, Pagination, Button, Text } from '@wraft/ui';
+import { Box, Flex, Table, Pagination, Text, Button } from '@wraft/ui';
 
 import PageHeader from 'common/PageHeader';
 import { StateBadge, TimeAgo } from 'common/Atoms';

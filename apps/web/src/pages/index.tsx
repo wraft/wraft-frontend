@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import toast from 'react-hot-toast';
 import { Text, Flex, Button } from 'theme-ui';
+import { Modal } from '@wraft/ui';
 
 import Dashboard from 'components/Dashboard';
 import Page from 'common/PageFrame';
-import Modal from 'common/Modal';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
@@ -76,7 +76,8 @@ const Index: FC = () => {
         </Page>
       )}
       <Modal
-        isOpen={isTeamInvite}
+        ariaLabel="Invite"
+        open={isTeamInvite}
         onClose={() => {
           setIsTeamInvite(false);
         }}>

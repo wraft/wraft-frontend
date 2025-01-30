@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { Flex, Box, Heading, Button } from 'theme-ui';
+import { Flex, Box, Heading } from 'theme-ui';
+import { Button } from '@wraft/ui';
 
 import Verified from '../../public/Social 01 1.svg';
 

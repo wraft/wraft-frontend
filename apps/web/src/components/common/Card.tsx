@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
-import { Box, Flex, Text, Button } from 'theme-ui';
-import { EllipsisVIcon } from '@wraft/icon';
+import { Box, Flex, Text } from 'theme-ui';
+import { ThreeDotIcon } from '@wraft/icon';
+import { DropdownMenu } from '@wraft/ui';
 
 import LayoutForm from 'components/Layout/LayoutForm';
 import { Drawer } from 'common/Drawer';
 
 /**
+ *
  * Page Heading Section
  */
 
@@ -64,64 +65,20 @@ const LayoutCard = ({
                 right: 2,
                 top: 0,
               }}>
-              <MenuProvider>
-                <MenuButton
-                  as={Button}
-                  sx={{
-                    border: 'solid 1px',
-                    color: 'text-primary',
-                    borderColor: 'border',
-                    p: 1,
-                    bg: 'neutral.200',
-                    // pb: 1,
-                    mt: 2,
-                  }}>
-                  <EllipsisVIcon width={24} height={16} />
-                </MenuButton>
-                <Menu
-                  as={Box}
-                  aria-label="Example"
-                  sx={{
-                    top: '-36px',
-                    left: '0px',
-                    border: 'solid 1px',
-                    borderColor: 'border',
-                    borderRadius: 4,
-                    bg: 'white',
-                    color: 'text-primary',
-                    zIndex: 20,
-                  }}>
-                  <MenuItem
-                    as={Button}
-                    variant="buttons.base"
-                    sx={{
-                      py: 1,
-                      color: 'red.800',
-                      px: 3,
-                    }}
-                    onClick={() => {
-                      onDelete(id);
-                    }}>
-                    Delete
-                  </MenuItem>
-                  <MenuItem as={Box} sx={{ width: '100%', px: 3, py: 1 }}>
-                    <Button
-                      variant="base"
-                      onClick={() => {
-                        setIsOpen(true);
-                      }}>
-                      <Text
-                        sx={{
-                          fontSize: 'base',
-                          fontWeight: 500,
-                          color: 'text-primary',
-                        }}>
-                        Edit
-                      </Text>
-                    </Button>
-                  </MenuItem>
-                </Menu>
-              </MenuProvider>
+              <DropdownMenu.Provider>
+                <DropdownMenu.Trigger>
+                  <ThreeDotIcon />
+                </DropdownMenu.Trigger>
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item onClick={() => setIsOpen(true)}>
+                    <Text>Edit</Text>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item onClick={() => onDelete(id)}>
+                    <Text>Delete</Text>
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              </DropdownMenu.Provider>
+
               <Drawer open={isOpen} setOpen={setIsOpen}>
                 <LayoutForm setOpen={setIsOpen} cId={id} />
               </Drawer>

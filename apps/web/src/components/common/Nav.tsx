@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Box, Flex, Image, Text, Input } from 'theme-ui';
 import { BellIcon, SearchIcon } from '@wraft/icon';
+import { Modal, DropdownMenu } from '@wraft/ui';
 
 import CreateDocument from 'components/DocumentCreate';
-import Modal from 'common/Modal';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
@@ -144,8 +143,8 @@ const Nav = ({ navtitle }: INav) => {
                       // mt: 2,
                     }}>
                     <Box>
-                      <MenuProvider>
-                        <MenuButton as={Box}>
+                      <DropdownMenu.Provider>
+                        <DropdownMenu.Trigger>
                           <Image
                             alt=""
                             sx={{ borderRadius: '3rem' }}
@@ -153,22 +152,9 @@ const Nav = ({ navtitle }: INav) => {
                             // src={API_HOST + '/' + userProfile?.profile_pic}
                             src={`https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`} // image
                           />
-                        </MenuButton>
-                        <Menu
-                          as={Box}
-                          sx={{ border: 'solid 1px #eee', minWidth: '20ch' }}
-                          aria-label="Preferences">
-                          <MenuItem
-                            as={Box}
-                            sx={{
-                              p: 3,
-                              py: 2,
-                              bg: 'gray.100',
-                              borderBottom: 'solid 1px #eee',
-                              '&:hover': {
-                                bg: 'background-secondary',
-                              },
-                            }}>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu aria-label="dropdown role">
+                          <DropdownMenu.Item>
                             <Box>
                               <Text as="h4">{userProfile?.name}</Text>
 
@@ -183,41 +169,18 @@ const Nav = ({ navtitle }: INav) => {
                                 </Text>
                               )}
                             </Box>
-                          </MenuItem>
-                          <MenuItem
-                            as={Box}
-                            sx={{
-                              p: 3,
-                              py: 2,
-                              bg: 'gray.100',
-                              borderBottom: 'solid 1px #eee',
-                              '&:hover': {
-                                bg: 'background-secondary',
-                              },
-                            }}>
-                            Settings
-                          </MenuItem>
-                          <MenuItem
-                            as={Box}
-                            sx={{
-                              p: 3,
-                              py: 2,
-                              bg: 'gray.100',
-                              borderBottom: 'solid 1px #eee',
-                              '&:hover': {
-                                bg: 'background-secondary',
-                              },
-                            }}>
-                            Profile
-                          </MenuItem>
-                          <MenuItem
-                            as={Box}
-                            onClick={userLogout}
-                            sx={{ p: 3, bg: 'gray.100', borderBottom: 0 }}>
-                            Signout
-                          </MenuItem>
-                        </Menu>
-                      </MenuProvider>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item>
+                            <Text>Settings</Text>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item>
+                            <Text>Profile</Text>
+                          </DropdownMenu.Item>
+                          <DropdownMenu.Item onClick={userLogout}>
+                            <Text>Signout</Text>
+                          </DropdownMenu.Item>
+                        </DropdownMenu>
+                      </DropdownMenu.Provider>
                     </Box>
                   </Flex>
                 )}
@@ -226,7 +189,10 @@ const Nav = ({ navtitle }: INav) => {
           </Flex>
         </Box>
       </Flex>
-      <Modal isOpen={showSearch} onClose={closeSearch}>
+      <Modal
+        ariaLabel="Create Document"
+        open={showSearch}
+        onClose={closeSearch}>
         <CreateDocument />
       </Modal>
     </Box>

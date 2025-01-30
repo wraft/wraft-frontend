@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
-import { Text, Box, Flex, DropdownMenu } from '@wraft/ui';
+import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
-import Modal from 'common/Modal';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
@@ -60,7 +59,10 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         </DropdownMenu>
       </DropdownMenu.Provider>
 
-      <Modal isOpen={isDelete} onClose={() => setIsDelete(false)}>
+      <Modal
+        ariaLabel="Delete Document"
+        open={isDelete}
+        onClose={() => setIsDelete(false)}>
         <ConfirmDelete
           onConfirmDelete={() => deleteContent(id)}
           setOpen={setIsDelete}
@@ -69,7 +71,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         />
       </Modal>
 
-      <Modal isOpen={isMailPopupOpen}>
+      <Modal ariaLabel="Confirm Block" open={isMailPopupOpen}>
         <EmailComposer id={id} setOpen={setMailPopupOpen} />
       </Modal>
     </>

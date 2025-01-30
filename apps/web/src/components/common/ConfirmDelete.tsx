@@ -1,4 +1,5 @@
-import { Box, Button, Flex, Text } from 'theme-ui';
+import { CloseIcon } from '@wraft/icon';
+import { Box, Button, Flex, Modal, Text } from '@wraft/ui';
 
 interface props {
   inputValue?: any;
@@ -18,45 +19,36 @@ const ConfirmDelete = ({
   text,
 }: props) => {
   return (
-    <Box sx={{ maxWidth: '342px' }}>
-      <Text variant="pB" sx={{ display: 'inline-block', py: 3, px: 4 }}>
-        {title}
-      </Text>
-      <Box sx={{ borderTop: '1px solid', borderColor: 'border' }}>
-        <Box sx={{ px: 4 }}>
-          <Text variant="pM" sx={{ display: 'inline-block', pt: 3 }}>
-            {text}
-          </Text>
-          <Flex sx={{ gap: 3, py: 4 }}>
-            <Button
-              onClick={
-                inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
-              }
-              variant="delete"
-              sx={{
-                fontSize: 'sm',
-                flexGrow: 1,
-              }}>
-              Confirm
-            </Button>
-            <Button
-              onClick={() => {
-                setOpen(false);
-                if (setRender) {
-                  setRender((prev: boolean) => prev);
-                }
-              }}
-              variant="cancel"
-              sx={{
-                fontSize: 'sm',
-                flexGrow: 1,
-              }}>
-              Cancel
-            </Button>
-          </Flex>
+    <>
+      <Flex justify="space-between">
+        <Modal.Header>{title}</Modal.Header>
+        <Box onClick={() => setOpen(false)}>
+          <CloseIcon color="#2C3641" />
         </Box>
+      </Flex>
+      <Box maxWidth="342px" borderTop="1px solid" borderColor="border" py="sm">
+        <Text>{text}</Text>
       </Box>
-    </Box>
+      <Flex gap="sm" py="sm">
+        <Button
+          danger
+          onClick={
+            inputValue ? () => onConfirmDelete(inputValue) : onConfirmDelete
+          }>
+          Confirm
+        </Button>
+        <Button
+          onClick={() => {
+            setOpen(false);
+            if (setRender) {
+              setRender((prev: boolean) => prev);
+            }
+          }}
+          variant="tertiary">
+          Cancel
+        </Button>
+      </Flex>
+    </>
   );
 };
 
