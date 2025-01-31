@@ -35,6 +35,7 @@ const DocumentView = () => {
     fieldValues,
     userMode,
     lastSavedContent,
+    meta,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
@@ -123,6 +124,7 @@ const DocumentView = () => {
     const template = {
       serialized: serials,
       raw: markdownContent,
+      meta: meta || null,
     };
 
     if (editorMode === 'edit') {

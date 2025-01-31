@@ -62,6 +62,7 @@ interface DocumentContextProps {
   prevState: StateState | undefined;
   selectedTemplate: any;
   states: any;
+  meta: any;
   tabActiveId: string;
   userMode: string;
   setAdditionalCollaborator: (data: any) => void;
@@ -100,6 +101,7 @@ export const DocumentProvider = ({
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
+  const [meta, setMeta] = useState<any>([]);
   const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
   const [flow, setFlow] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -178,6 +180,9 @@ export const DocumentProvider = ({
     if (editorMode === 'new' && newContent?.template?.title_template) {
       createDefaultTitle(newContent.template.title_template);
     }
+    if (editorMode === 'new' && newContent?.meta) {
+      setMeta(newContent?.meta);
+    }
   }, [fieldTokens, newContent]);
 
   useEffect(() => {
@@ -248,7 +253,6 @@ export const DocumentProvider = ({
           setContents(data);
           setLoading(false);
         }
-        console.log(response.data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -256,7 +260,6 @@ export const DocumentProvider = ({
   };
   const fetchContentDetails = (id: string) => {
     fetchAPI(`contents/${id}`).then((data: any) => {
-      console.log('fetchContentDetails', data);
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
         setContentBody(serialized);
@@ -434,6 +437,7 @@ export const DocumentProvider = ({
         userMode,
         additionalCollaborator,
         lastSavedContent,
+        meta,
         setAdditionalCollaborator,
         setUserMode,
         fetchContentDetails,

@@ -378,7 +378,6 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
             <Controller
               control={control}
               name="type"
-              defaultValue="document"
               render={({ field }) => (
                 <Field
                   label="Document Type"

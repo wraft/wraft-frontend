@@ -193,7 +193,7 @@ const Nav = ({ navtitle }: INav) => {
         ariaLabel="Create Document"
         open={showSearch}
         onClose={closeSearch}>
-        <CreateDocument />
+        <CreateDocument setIsOpen={closeSearch} />
       </Modal>
     </Box>
   );

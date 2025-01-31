@@ -1,5 +1,5 @@
 import * as Ariakit from "@ariakit/react";
-import styled, { css, system, th } from "@xstyled/emotion";
+import styled, { system, th } from "@xstyled/emotion";
 
 import { ActiveBarReturn } from "./ActiveBar";
 import { SizeOptions } from "./TabList";

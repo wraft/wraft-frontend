@@ -44,8 +44,10 @@
     "@xstyled/emotion": "^3.8.0",
     "downshift": "^9.0.8",
     "framer-motion": "^10.17.0",
+    "lodash.range": "^3.2.0",
     "match-sorter": "^8.0.0",
     "react": "^18.2.0",
+    "react-datepicker": "^7.6.0",
     "react-dom": "^18.2.0",
     "react-flatten-children": "^1.1.2"
   }
