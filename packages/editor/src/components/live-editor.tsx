@@ -234,7 +234,7 @@ export const LiveEditor = forwardRef(
               {/* {!isReadonly && <InlineMenu />} */}
               <SlashMenu />
               {tokens && <TokenMenu tokens={tokens} />}
-              <TagMenu />
+              {/* <TagMenu /> */}
               {/* <BlockHandle /> */}
               <TableHandle />
             </S.EditorContent>

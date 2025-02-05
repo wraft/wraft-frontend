@@ -20,6 +20,9 @@ import { Field as FieldT } from 'utils/types';
 import { findHolders } from 'utils/index';
 import contentStore from 'store/content.store';
 
+import apiService from './APIModel';
+import { DocRole, EditorMode, UserType } from './usePermissions';
+
 interface Approver {
   id: string;
   name: string;
@@ -37,9 +40,6 @@ interface StateState {
   updated_at: string;
 }
 
-type EditorMode = 'view' | 'edit' | 'new' | 'sign';
-type UserMode = 'default' | 'guest';
-
 interface DocumentContextProps {
   additionalCollaborator: any;
   cId: string;
@@ -47,6 +47,7 @@ interface DocumentContextProps {
   contents: ContentInstance | any;
   contentType: any;
   currentActiveIndex: any;
+  docRole: DocRole;
   editorMode: EditorMode;
   editorRef: any;
   fields: any;
@@ -54,19 +55,21 @@ interface DocumentContextProps {
   fieldValues: any;
   flow: any;
   isEditable: any;
+  isInvite: boolean;
   isMakeCompete: any;
   lastSavedContent: any;
   loading: boolean;
+  meta: any;
   nextState: StateState | undefined;
   pageTitle: string;
   prevState: StateState | undefined;
   selectedTemplate: any;
   states: any;
-  meta: any;
   tabActiveId: string;
-  userMode: string;
+  token: string | null;
+  userType: UserType;
   setAdditionalCollaborator: (data: any) => void;
-  setUserMode: (state: UserMode) => void;
+  setUserType: (state: UserType) => void;
   fetchContentDetails: (cid: string) => void;
   setContentBody: (contetn: any) => void;
   setEditorMode: (state: EditorMode) => void;
@@ -92,12 +95,13 @@ export const DocumentProvider = ({
   children: ReactElement;
   mode: EditorMode;
 }) => {
-  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [contentBody, setContentBody] = useState<NodeJSON>();
   const [contents, setContents] = useState<ContentInstance>();
   const [contentType, setContentType] = useState<any>();
   const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
-  const [userMode, setUserMode] = useState<UserMode>('default');
+  const [userType, setUserType] = useState<UserType>('default');
+  const [docRole, setDocRole] = useState<DocRole>('viewer');
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
@@ -117,15 +121,16 @@ export const DocumentProvider = ({
   const editorRef = useRef<any>();
   const lastSavedContent = useRef<string>('\n');
   const router = useRouter();
-  const { userProfile } = useAuth();
+  const { userProfile, accessToken } = useAuth();
   const api = createAxiosInstance();
 
-  const { token, type } = router.query;
-
-  console.log('token', token);
-  console.log('token', type);
-
   const cId: string = router.query.id as string;
+  const type: string = router.query.type as string;
+  const guestToken: string = router.query.token as string;
+
+  const isInvite = type === 'invite' ? true : false;
+
+  console.log('editormode', editorMode);
 
   useEffect(() => {
     if (mode) {
@@ -134,41 +139,34 @@ export const DocumentProvider = ({
   }, [mode]);
 
   useEffect(() => {
-    if (type === 'invite' && token) {
-      setUserMode('guest');
+    if (!type) {
+      setToken(accessToken);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (type === 'invite' && guestToken) {
+      setUserType('guest');
       verifyInvitezUserAccess();
     }
-  }, [type, token]);
+  }, [type, guestToken]);
 
   useEffect(() => {
-    if (type === 'invite' && token && accessToken) {
-      fetchGuestContentDetails(cId);
-    }
-  }, [accessToken]);
-
-  const verifyInvitezUserAccess = async () => {
-    try {
-      const response = await fetch(
-        `${API_HOST}/api/v1/guest/contents/${cId}/verify_access/${token}`,
-      );
-      if (!response.ok) {
-        throw new Error('Failed to verify access');
-      }
-      const data = await response.json();
-      if (data?.token) {
-        setAccessToken(data.token);
-      }
-      // setAccessStatus(data); // Set the access status
-    } catch (err) {
-      // setError(err.message);
-    }
-  };
-
-  useEffect(() => {
-    if (type !== 'invite' && cId) {
+    // fetchGuestContentDetails(cId);
+    if (token) {
       fetchContentDetails(cId);
     }
-  }, [type, cId]);
+
+    // if (type === 'invite' && guestToken && token) {
+    //   fetchGuestContentDetails(cId);
+    // }
+  }, [token]);
+
+  // useEffect(() => {
+  //   if (type !== 'invite' && cId) {
+  //     fetchContentDetails(cId);
+  //   }
+  // }, [type, cId]);
 
   useEffect(() => {
     if (flow && flow.flow) {
@@ -223,43 +221,32 @@ export const DocumentProvider = ({
     }
   }, [newContent]);
 
-  const fetchGuestContentDetails = (id: string) => {
-    api
-      .get(`/guest/contents/${id}?type=guest`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json', // Optional, if you want to specify content type
-        },
-      })
-      .then((response) => {
-        const data = response.data;
-        if (data?.content?.serialized?.serialized) {
-          const serialized = JSON.parse(data.content.serialized.serialized);
-          setContentBody(serialized);
-
-          const holders = findHolders(serialized);
-          setFieldValues(holders);
-        }
-
-        if (data?.content?.serialized) {
-          const { content_type, content } = data;
-          const cTypeId = content_type.id;
-
-          if (cTypeId) {
-            setContentType(content_type);
-          }
-
-          setPageTitle(content.serialized?.title);
-          setContents(data);
-          setLoading(false);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
+  const verifyInvitezUserAccess = async () => {
+    try {
+      const data = await apiService.get(
+        `/contents/${cId}/verify_access/${guestToken}`,
+        guestToken,
+        isInvite,
+      );
+      if (data?.token) {
+        setToken(data.token);
+      }
+      if (data?.role !== 'suggestor') {
+        setDocRole(data.role);
+      }
+      if (data?.role === 'suggestor') {
+        setDocRole('viewer');
+      }
+      // setAccessStatus(data); // Set the access status
+    } catch (err) {
+      // setError(err.message);
+    }
   };
-  const fetchContentDetails = (id: string) => {
-    fetchAPI(`contents/${id}`).then((data: any) => {
+
+  const fetchContentDetails = async (id: string) => {
+    try {
+      const data = await apiService.get(`contents/${id}`, token, isInvite);
+
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
         setContentBody(serialized);
@@ -273,15 +260,25 @@ export const DocumentProvider = ({
         const { content_type, content } = data;
         const cTypeId = content_type.id;
 
-        if (cTypeId) {
+        if (isInvite && cTypeId) {
+          setContentType(content_type);
+        }
+
+        if (!isInvite && cTypeId) {
           fetchContentTypeDetails(cTypeId);
         }
+
+        isInvite;
 
         setPageTitle(content.serialized?.title);
         setContents(data);
         setLoading(false);
       }
-    });
+
+      console.log('data', data);
+    } catch {
+      console.error('content  error');
+    }
   };
 
   const fetchContentTypeDetails = (id: any) => {
@@ -434,12 +431,15 @@ export const DocumentProvider = ({
         selectedTemplate,
         states,
         tabActiveId,
-        userMode,
+        token,
+        docRole,
+        userType,
         additionalCollaborator,
         lastSavedContent,
         meta,
+        isInvite,
         setAdditionalCollaborator,
-        setUserMode,
+        setUserType,
         fetchContentDetails,
         setContentBody,
         setEditorMode,

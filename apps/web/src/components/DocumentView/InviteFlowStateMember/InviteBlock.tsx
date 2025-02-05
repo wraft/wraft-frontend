@@ -9,6 +9,7 @@ import { postAPI, fetchAPI, patchAPI } from 'utils/models';
 
 import * as S from './styles';
 import { useDocument } from '../DocumentContext';
+import { usePermissions } from '../usePermissions';
 
 interface User {
   id: string;
@@ -21,8 +22,16 @@ interface User {
 export default function InviteBlock({ docId }: any) {
   const [collaborators, setCollaborators] = useState<any>([]);
   const [selectValue, setSelectValue] = useState<any>([]);
-  const { cId, contents, additionalCollaborator, setAdditionalCollaborator } =
-    useDocument();
+  const {
+    cId,
+    contents,
+    additionalCollaborator,
+    userType,
+    docRole,
+    setAdditionalCollaborator,
+  } = useDocument();
+
+  const { canAccess } = usePermissions(userType, docRole);
 
   const {
     handleSubmit,

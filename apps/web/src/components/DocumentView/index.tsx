@@ -16,10 +16,17 @@ import { DocumentSidebar } from './DocumentSidebar';
 import { useDocument } from './DocumentContext';
 import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
+import { usePermissions } from './usePermissions';
+import apiService from './APIModel';
 
 export const SAVE_INTERVAL = 15000;
 
 const DocumentView = () => {
+  const [open, setOpen] = useState<boolean>(false);
+  const [openTitleModal, setOpenTitleModal] = useState<boolean>(false);
+  const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
+  const [saving, setSaving] = useState<boolean>(false);
+
   const {
     contents,
     loading,
@@ -29,22 +36,22 @@ const DocumentView = () => {
     currentActiveIndex,
     isMakeCompete,
     editorMode,
+    docRole,
     editorRef,
     pageTitle,
     contentType,
     fieldValues,
-    userMode,
+    userType,
     lastSavedContent,
     meta,
+    isInvite,
+    token,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
   } = useDocument();
 
-  const [open, setOpen] = useState<boolean>(false);
-  const [openTitleModal, setOpenTitleModal] = useState<boolean>(false);
-  const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
-  const [saving, setSaving] = useState<boolean>(false);
+  const { canAccess } = usePermissions(userType, docRole);
 
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm();
@@ -54,7 +61,7 @@ const DocumentView = () => {
   useEffect(() => {
     // let autosaveInterval: any;
 
-    // if (editorMode !== 'edit' && autosaveInterval) {
+    // if (editorMode !== 'editor' && autosaveInterval) {
     //   clearInterval(autosaveInterval);
     // }
 
@@ -86,7 +93,9 @@ const DocumentView = () => {
     }
   };
 
-  console.log('editorMode', editorMode);
+  console.log('editorMode[mode]', editorMode);
+  console.log('editorMode[type]', userType);
+  console.log('editorMode[doc]', docRole);
 
   useEffect(() => {
     if (pageTitle) {
@@ -95,13 +104,13 @@ const DocumentView = () => {
 
     // return () => {
     //   console.log('its working');
-    //   if (editorMode === 'edit') {
+    //   if (editorMode === 'editor') {
     //     checkContentChange();
     //   }
     // };
   }, [pageTitle]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
@@ -128,12 +137,21 @@ const DocumentView = () => {
     };
 
     if (editorMode === 'edit') {
-      putAPI(`contents/${cId}`, template).then((response: any) => {
-        lastSavedContent.current = serials.serialized;
-        onCreateSuccess(response);
-        setSaving(false);
-        setContentBody(jsonContent);
-      });
+      apiService
+        .put(`contents/${cId}`, template, token, isInvite)
+        .then((response: any) => {
+          lastSavedContent.current = serials.serialized;
+          onCreateSuccess(response);
+          setSaving(false);
+          setContentBody(jsonContent);
+        });
+      // apiService;
+      // putAPI(`contents/${cId}`, template).then((response: any) => {
+      //   lastSavedContent.current = serials.serialized;
+      //   onCreateSuccess(response);
+      //   setSaving(false);
+      //   setContentBody(jsonContent);
+      // });
     }
     if (editorMode === 'new') {
       postAPI(`content_types/${contentType?.id}/contents`, template)
@@ -197,74 +215,73 @@ const DocumentView = () => {
         <ErrorBoundary>
           <Flex bg="background-secondary" flexGrow="1">
             <Box w="100%">
-              {userMode === 'default' && (
-                <Flex
-                  alignItems="center"
-                  flex={1}
-                  px="sm"
-                  py="sm"
-                  borderBottom="solid 1px"
-                  borderColor="border"
-                  bg="background-primary">
-                  <Flex gap="sm">
-                    {states &&
-                      states.map((state: any, i: number) => (
-                        <FlowProgressBar
-                          key={state?.id}
-                          num={i + 1}
-                          state={state?.state}
-                          order={state?.order}
-                          currentActiveIndex={currentActiveIndex}
-                          nextState={nextState}
-                          id={state?.id}
-                        />
-                      ))}
+              <Flex
+                alignItems="center"
+                flex={1}
+                px="sm"
+                py="sm"
+                borderBottom="solid 1px"
+                borderColor="border"
+                bg="background-primary">
+                <Flex gap="sm">
+                  {states &&
+                    states.map((state: any, i: number) => (
+                      <FlowProgressBar
+                        key={state?.id}
+                        num={i + 1}
+                        state={state?.state}
+                        order={state?.order}
+                        currentActiveIndex={currentActiveIndex}
+                        nextState={nextState}
+                        id={state?.id}
+                      />
+                    ))}
 
-                    {contents &&
-                      !nextState?.is_user_eligible &&
-                      !isMakeCompete &&
-                      !isEditable && <ApprovalAwaitingLabel />}
-                  </Flex>
-
-                  <Flex ml="auto" alignItems="center">
-                    {editorMode === 'view' &&
-                      !contents?.content?.approval_status && (
-                        <Flex p={0} gap={2} ml="auto" alignItems="center">
-                          {nextState && nextState.is_user_eligible && (
-                            <ApprovalHandler
-                              name={nextState?.state}
-                              onClick={() => {
-                                setModalAction('next');
-                                setOpen(true);
-                              }}
-                            />
-                          )}
-                          {isMakeCompete && (
-                            <ApprovalHandler
-                              name="Mark Complete"
-                              onClick={() => {
-                                setModalAction('next');
-                                setOpen(true);
-                              }}
-                            />
-                          )}
-                        </Flex>
-                      )}
-                    {isEditable && <LockedBadge />}
-                  </Flex>
-                  {(editorMode === 'edit' || editorMode === 'new') && (
-                    <Box ml="auto">
-                      <Button
-                        onClick={onSubmit}
-                        variant="primary"
-                        size="sm"
-                        loading={saving}>
-                        Save
-                      </Button>
-                    </Box>
-                  )}
+                  {contents &&
+                    !nextState?.is_user_eligible &&
+                    !isMakeCompete &&
+                    !isEditable && <ApprovalAwaitingLabel />}
                 </Flex>
-              )}
+
+                <Flex ml="auto" alignItems="center">
+                  {editorMode === 'view' &&
+                    !contents?.content?.approval_status && (
+                      <Flex p={0} gap={2} ml="auto" alignItems="center">
+                        {nextState && nextState.is_user_eligible && (
+                          <ApprovalHandler
+                            name={nextState?.state}
+                            onClick={() => {
+                              setModalAction('next');
+                              setOpen(true);
+                            }}
+                          />
+                        )}
+                        {isMakeCompete && (
+                          <ApprovalHandler
+                            name="Mark Complete"
+                            onClick={() => {
+                              setModalAction('next');
+                              setOpen(true);
+                            }}
+                          />
+                        )}
+                      </Flex>
+                    )}
+                  {isEditable && <LockedBadge />}
+                </Flex>
+                {/* {canAccess('docEdit') && ( */}
+                {(editorMode === 'edit' || editorMode === 'new') && (
+                  <Box ml="auto">
+                    <Button
+                      onClick={onSubmit}
+                      variant="primary"
+                      size="sm"
+                      loading={saving}>
+                      Save
+                    </Button>
+                  </Box>
+                )}
+              </Flex>
 
               <DocumentContentBlock />
             </Box>

@@ -20,8 +20,10 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
   const { userProfile, accessToken, logout } = useAuth();
 
   useEffect(() => {
-    notificationCount();
-  }, []);
+    if (accessToken) {
+      notificationCount();
+    }
+  }, [accessToken]);
 
   const notificationCount = () => {
     fetchAPI('notifications/count').then((data: any) => {

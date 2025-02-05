@@ -46,7 +46,6 @@ export default function InviteBlock({ docId }: any) {
   const handleInvite = (data: any) => {
     postAPI(`contents/${docId}/invite`, {
       ...data,
-      role: 'suggestor',
     })
       .then(() => {
         getCollaborators();
@@ -91,16 +90,18 @@ export default function InviteBlock({ docId }: any) {
   };
 
   return (
-    <S.Container>
-      <S.Header>
-        <Text fontSize="2xl" fontWeight="heading" mb="sm">
+    <Box w="42rem">
+      <Box>
+        <Text fontSize="3xl" fontWeight="heading" mb="sm">
           Invite Member
         </Text>
-        <Text color="text-secondary">Invite and manage your team members.</Text>
-      </S.Header>
+        <Text color="text-secondary">
+          Invite your team to collaborate on this document
+        </Text>
+      </Box>
 
-      <Box as="form" onSubmit={handleSubmit(handleInvite)}>
-        <S.InputContainer>
+      <Box as="form" onSubmit={handleSubmit(handleInvite)} my="xl">
+        <Flex gap="md">
           <Controller
             control={control}
             name="name"
@@ -137,26 +138,45 @@ export default function InviteBlock({ docId }: any) {
           />
 
           <Button type="submit">Invite</Button>
-        </S.InputContainer>
+        </Flex>
       </Box>
 
-      <S.MemberList>
-        {collaborators.map((collaborator: Collaborator) => (
-          <S.MemberItem key={collaborator.id}>
-            <Flex gap="sm">
-              <Text>{collaborator.user.name}</Text>
-              <Text color="text-secondary">{collaborator.user.email}</Text>
-              <Text>{collaborator.status}</Text>
-            </Flex>
+      {collaborators.length > 0 && (
+        <Box borderTop="1px solid" color="border">
+          {collaborators
+            .filter(
+              (collaborator: any) =>
+                collaborator.status === 'accepted' ||
+                collaborator.status === 'pending',
+            )
+            .map((collaborator: Collaborator) => (
+              <S.MemberItem key={collaborator.id}>
+                <Flex gap="sm" w="100%" align="center" justify="center">
+                  <Box w="45%">
+                    <Text>{collaborator.user.name}</Text>
+                    <Text color="text-secondary">
+                      {collaborator.user.email}
+                    </Text>
+                  </Box>
 
-            <Button
-              variant="ghost"
-              onClick={() => removeCollaborator(collaborator.id)}>
-              Remove
-            </Button>
-          </S.MemberItem>
-        ))}
-      </S.MemberList>
-    </S.Container>
+                  <Text w="40%">{collaborator?.role}</Text>
+                  <Box w="15%">
+                    {collaborator.status === 'pending' && (
+                      <Text color="green.800">{collaborator.status}</Text>
+                    )}
+                  </Box>
+                  <Text color="green.800">{collaborator.status}</Text>
+                </Flex>
+
+                <Button
+                  variant="ghost"
+                  onClick={() => removeCollaborator(collaborator.id)}>
+                  Remove
+                </Button>
+              </S.MemberItem>
+            ))}
+        </Box>
+      )}
+    </Box>
   );
 }

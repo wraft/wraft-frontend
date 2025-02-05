@@ -9,6 +9,7 @@ import { useDocument } from '../DocumentContext';
 import { InfoSection } from './InfoSection';
 import { ContentInfoBlock } from './ContentInfoBlock';
 import CommentForm from './Comment/CommentForm';
+import { usePermissions } from '../usePermissions';
 
 export const DocumentSidebar = () => {
   const {
@@ -18,8 +19,11 @@ export const DocumentSidebar = () => {
     tabActiveId,
     setTabActiveId,
     contentType,
-    editorMode,
+    userType,
+    docRole,
   } = useDocument();
+
+  const { canAccess } = usePermissions(userType, docRole);
 
   return (
     <Box
@@ -40,66 +44,77 @@ export const DocumentSidebar = () => {
             <Tab id="edit" className={styles.tabInline}>
               Info
             </Tab>
-            {editorMode !== 'new' && (
-              <>
-                <Tab className={styles.tabInline} id="view">
-                  Comments
-                </Tab>
-                <Tab className={styles.tabInline} id="history">
-                  History
-                </Tab>
-                <Tab className={styles.tabInline} id="approval">
-                  Log
-                </Tab>
-              </>
+
+            {canAccess('comment') && (
+              <Tab className={styles.tabInline} id="view">
+                Comments
+              </Tab>
+            )}
+            {canAccess('history') && (
+              <Tab className={styles.tabInline} id="history">
+                History
+              </Tab>
+            )}
+            {canAccess('log') && (
+              <Tab className={styles.tabInline} id="approval">
+                Log
+              </Tab>
             )}
           </TabList>
 
           <TabPanel className="tabPanel">
             <InfoSection />
           </TabPanel>
-          <TabPanel>
-            <Box mt="md" px="md">
-              <Box>
-                <Box mb="sm">
-                  <Text as="h3">Discussions</Text>
-                </Box>
+          {canAccess('comment') && (
+            <TabPanel>
+              <Box mt="md" px="md">
+                <Box>
+                  <Box mb="sm">
+                    <Text as="h3">Discussions</Text>
+                  </Box>
 
-                {contents && contents.content && (
-                  <CommentForm
-                    master={contents.content_type.id}
-                    master_id={contents.content.id}
-                  />
+                  {contents && contents.content && (
+                    <CommentForm
+                      master={contents.content_type.id}
+                      master_id={contents.content.id}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </TabPanel>
+          )}
+          {canAccess('history') && (
+            <TabPanel>
+              <Box mt="md" px="md">
+                {contents?.versions && contents?.versions.length > 0 && (
+                  <Box>
+                    {contents.versions.map((v: any) => (
+                      <Flex key={v?.id} justify="space-between" py="sm">
+                        <Text>Version {v?.version_number}</Text>
+                        <Box>
+                          <TimeAgo time={v?.updated_at} />
+                        </Box>
+                      </Flex>
+                    ))}
+                  </Box>
                 )}
               </Box>
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <Box mt="md" px="md">
-              {contents?.versions && contents?.versions.length > 0 && (
+            </TabPanel>
+          )}
+          {canAccess('log') && (
+            <TabPanel>
+              <Box mt="md" px="md">
+                <Text as="h5" mb="sm">
+                  Approval Log
+                </Text>
                 <Box>
-                  {contents.versions.map((v: any) => (
-                    <Flex key={v?.id} justify="space-between" py="sm">
-                      <Text>Version {v?.version_number}</Text>
-                      <Box>
-                        <TimeAgo time={v?.updated_at} />
-                      </Box>
-                    </Flex>
-                  ))}
+                  {tabActiveId === 'approval' && (
+                    <ApprovalFlowHistory id={cId} />
+                  )}
                 </Box>
-              )}
-            </Box>
-          </TabPanel>
-          <TabPanel>
-            <Box mt="md" px="md">
-              <Text as="h5" mb="sm">
-                Approval Log
-              </Text>
-              <Box>
-                {tabActiveId === 'approval' && <ApprovalFlowHistory id={cId} />}
               </Box>
-            </Box>
-          </TabPanel>
+            </TabPanel>
+          )}
         </TabProvider>
       </Box>
     </Box>

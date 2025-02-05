@@ -13,6 +13,7 @@ import { ContentState } from 'utils/types';
 import { useDocument } from '../DocumentContext';
 import PlaceholderBlock from './PlaceholderBlock';
 import InviteFlowStateMember from '../InviteFlowStateMember';
+import { usePermissions } from '../usePermissions';
 
 export const InfoSection = () => {
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -28,9 +29,13 @@ export const InfoSection = () => {
     fieldValues,
     selectedTemplate,
     additionalCollaborator,
+    userType,
+    docRole,
     setFieldTokens,
     setContentBody,
   } = useDocument();
+
+  const { canAccess } = usePermissions(userType, docRole);
 
   useEffect(() => {
     if (fields) {
@@ -112,7 +117,28 @@ export const InfoSection = () => {
           </Box>
 
           {contents?.state?.id && (
-            <Box>
+            <Box mt="md">
+              {additionalCollaborator.length > 0 && (
+                <Text as="h3" mb="xs">
+                  Flow Members
+                </Text>
+              )}
+              {additionalCollaborator &&
+                additionalCollaborator.map((approver: any) => (
+                  <AvatarCard
+                    key={approver.id}
+                    // time={contents.content?.inserted_at}
+                    name={approver.name}
+                    image={approver.profile_pic}
+                  />
+                ))}
+
+              {canAccess('flow') && <InviteFlowStateMember />}
+            </Box>
+          )}
+
+          {contents?.state?.id && (
+            <Box mt="md">
               {contents &&
                 !nextState?.is_user_eligible &&
                 !isMakeCompete &&
@@ -131,16 +157,6 @@ export const InfoSection = () => {
                       ))}
                   </>
                 )}
-              {additionalCollaborator &&
-                additionalCollaborator.map((approver: any) => (
-                  <AvatarCard
-                    key={approver.id}
-                    // time={contents.content?.inserted_at}
-                    name={approver.name}
-                    image={approver.profile_pic}
-                  />
-                ))}
-              <InviteFlowStateMember />
             </Box>
           )}
         </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 import { ErrorBoundary, Button } from '@wraft/ui';
 import styled from '@emotion/styled';
@@ -22,6 +22,7 @@ import { postAPI } from 'utils/models';
 
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
+import { EditorMode, usePermissions } from './usePermissions';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -184,12 +185,16 @@ export const DocumentContentBlock = () => {
     contents,
     isEditable,
     editorMode,
+    docRole,
+    userType,
     editorRef,
     contentBody,
     fieldTokens,
     setEditorMode,
     fetchContentDetails,
   } = useDocument();
+
+  const { canAccess } = usePermissions(userType, docRole);
 
   const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
   const { userProfile } = useAuth();
@@ -208,7 +213,7 @@ export const DocumentContentBlock = () => {
     documentId: cId,
   };
 
-  const onSwitchEditorMode = (mode: string) => {
+  const onSwitchEditorMode = (mode: EditorMode) => {
     if (mode === 'view') {
       setEditorMode('edit');
     }
@@ -279,26 +284,30 @@ export const DocumentContentBlock = () => {
                 <AwarenessUsers />
                 {!isEditable && (
                   <Flex gap="xs">
-                    <Button
-                      variant="secondary"
-                      loading={isBuilding}
-                      size="sm"
-                      onClick={() => doBuild()}>
-                      <Play size={14} className="action" />
-                      <Box>Generate</Box>
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => onSwitchEditorMode(editorMode)}>
-                      {' '}
-                      {editorMode === 'edit' ? (
-                        <Eye size={14} className="icon" />
-                      ) : (
-                        <PencilSimple size={14} className="icon" />
-                      )}
-                      <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
-                    </Button>
+                    {canAccess('docGenerator') && (
+                      <Button
+                        variant="secondary"
+                        loading={isBuilding}
+                        size="sm"
+                        onClick={() => doBuild()}>
+                        <Play size={14} className="action" />
+                        <Box>Generate</Box>
+                      </Button>
+                    )}
+                    {canAccess('docEdit') && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => onSwitchEditorMode(editorMode)}>
+                        {editorMode === 'edit' ? (
+                          <Eye size={14} className="icon" />
+                        ) : (
+                          <PencilSimple size={14} className="icon" />
+                        )}
+
+                        <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
+                      </Button>
+                    )}
                   </Flex>
                 )}
               </Flex>
