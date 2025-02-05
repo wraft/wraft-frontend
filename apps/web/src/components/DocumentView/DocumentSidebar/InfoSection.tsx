@@ -37,6 +37,8 @@ export const InfoSection = () => {
 
   const { canAccess } = usePermissions(userType, docRole);
 
+  console.log('additionalCollaborator', additionalCollaborator);
+
   useEffect(() => {
     if (fields) {
       setFieldMap(fields);
@@ -107,7 +109,7 @@ export const InfoSection = () => {
         <>
           <Box>
             <Text as="h3" mb="xs">
-              Editors
+              Creator
             </Text>
             <AvatarCard
               time={contents?.content?.inserted_at}

@@ -5,33 +5,23 @@ import toast from 'react-hot-toast';
 import { Search, Box, Text, Flex } from '@wraft/ui';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 
-import { postAPI, fetchAPI, patchAPI } from 'utils/models';
+import { postAPI, fetchAPI, deleteAPI } from 'utils/models';
 
 import * as S from './styles';
 import { useDocument } from '../DocumentContext';
-import { usePermissions } from '../usePermissions';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  is_guest: boolean;
-  email_verify: boolean;
+  profile_pic: string;
+  removable: boolean;
 }
 
 export default function InviteBlock({ docId }: any) {
-  const [collaborators, setCollaborators] = useState<any>([]);
   const [selectValue, setSelectValue] = useState<any>([]);
-  const {
-    cId,
-    contents,
-    additionalCollaborator,
-    userType,
-    docRole,
-    setAdditionalCollaborator,
-  } = useDocument();
-
-  const { canAccess } = usePermissions(userType, docRole);
+  const { cId, contents, additionalCollaborator, setAdditionalCollaborator } =
+    useDocument();
 
   const {
     handleSubmit,
@@ -54,7 +44,9 @@ export default function InviteBlock({ docId }: any) {
   };
 
   const removeCollaborator = (id: string) => {
-    patchAPI(`contents/${docId}/revoke_access/${id}`)
+    deleteAPI(`states/${contents?.state?.id}/users/${id}`, {
+      content_id: docId,
+    })
       .then(() => {
         getCollaborators();
         setSelectValue(null);
@@ -70,8 +62,6 @@ export default function InviteBlock({ docId }: any) {
         });
       });
   };
-
-  console.log('collaborators', collaborators);
 
   const onUserSelect = (user: any) => {
     setSelectValue(user);
@@ -110,11 +100,11 @@ export default function InviteBlock({ docId }: any) {
     <S.Container>
       <S.Header>
         <Text fontSize="2xl" fontWeight="heading" mb="sm">
-          Invite Member
+          Invite To Editor Flow
         </Text>
         <Text color="text-secondary">Invite and manage your team members.</Text>
       </S.Header>
-      <Box>
+      <Box pb="xl">
         <Search
           itemToString={(item: any) => item && item.name}
           name="member"
@@ -143,22 +133,27 @@ export default function InviteBlock({ docId }: any) {
         />
       </Box>
 
-      <S.MemberList>
-        {additionalCollaborator.map((collaborator: User, i: any) => (
-          <S.MemberItem key={i}>
-            <S.MemberInfo>
-              <div>
-                <S.MemberName>{collaborator.name}</S.MemberName>
-              </div>
-            </S.MemberInfo>
-            <div style={{ position: 'relative' }}>
-              <S.MoreButton onClick={() => removeCollaborator(collaborator.id)}>
-                <div>Remove</div>
-              </S.MoreButton>
-            </div>
-          </S.MemberItem>
-        ))}
-      </S.MemberList>
+      {additionalCollaborator.length > 0 && (
+        <Box borderTop="1px solid" borderColor="border">
+          {additionalCollaborator.map((collaborator: User, i: any) => (
+            <S.MemberItem key={i}>
+              <S.MemberInfo>
+                <div>
+                  <S.MemberName>{collaborator.name}</S.MemberName>
+                </div>
+              </S.MemberInfo>
+              <Box>
+                {collaborator.removable && (
+                  <S.MoreButton
+                    onClick={() => removeCollaborator(collaborator.id)}>
+                    <Box>Remove</Box>
+                  </S.MoreButton>
+                )}
+              </Box>
+            </S.MemberItem>
+          ))}
+        </Box>
+      )}
     </S.Container>
   );
 }
