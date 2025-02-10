@@ -81,21 +81,15 @@ const DocumentView = () => {
 
   const checkContentChange = () => {
     const content = JSON.stringify(editorRef.current?.helpers?.getJSON());
-    console.log('auto save reched');
 
     if (content.length === 0) {
       return;
     }
 
     if (content !== lastSavedContent.current) {
-      console.log('auto save started[changed]');
       onSubmit();
     }
   };
-
-  console.log('editorMode[mode]', editorMode);
-  console.log('editorMode[type]', userType);
-  console.log('editorMode[doc]', docRole);
 
   useEffect(() => {
     if (pageTitle) {

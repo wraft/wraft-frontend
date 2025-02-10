@@ -186,7 +186,6 @@ function ImporterApp() {
 
     fetchAPI(`template_assets/${id}/pre_import`)
       .then((res: validateResp) => {
-        console.log('res', res);
         if (!res?.missing_items?.length) {
           toast.success('Validated, importing now...');
 

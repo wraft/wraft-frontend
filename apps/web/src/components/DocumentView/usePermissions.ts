@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 export type EditorMode = 'view' | 'edit' | 'new' | 'sign';
-export type DocRole = 'viewer' | 'editor' | 'new' | 'signer';
+export type DocRole = 'viewer' | 'editor' | 'signer';
 export type UserType = 'default' | 'guest';
 export type SectionId =
   | 'comment'
@@ -17,7 +17,6 @@ interface SectionPermission {
   modes: {
     viewer: boolean;
     editor: boolean;
-    new: boolean;
     signer: boolean;
   };
 }
@@ -30,7 +29,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: true,
-        new: true,
         signer: true,
       },
     },
@@ -38,7 +36,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: true,
-        new: false,
         signer: false,
       },
     },
@@ -46,7 +43,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: true,
-        new: false,
         signer: false,
       },
     },
@@ -54,7 +50,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: true,
-        new: false,
         signer: false,
       },
     },
@@ -62,7 +57,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -70,7 +64,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: true,
-        new: false,
         signer: false,
       },
     },
@@ -78,7 +71,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -86,7 +78,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: true,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -96,7 +87,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -104,7 +94,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -112,7 +101,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -120,7 +108,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -128,7 +115,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -136,7 +122,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: true,
-        new: false,
         signer: false,
       },
     },
@@ -144,7 +129,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },
@@ -152,7 +136,6 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
-        new: false,
         signer: false,
       },
     },

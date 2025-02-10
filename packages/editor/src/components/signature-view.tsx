@@ -103,8 +103,6 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const [webUrl, setWebUrl] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  console.log("signature", attrs);
-  console.log("signature[props]", props);
   const url = webUrl || attrs.src || "";
   const placeholder = attrs.placeholder;
   const uploading = url.startsWith("blob:");

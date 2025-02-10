@@ -22,7 +22,7 @@ export default function useSharedPresence({
   const [users, setUsers] = useState<any[]>([]);
   const [awareness, setAwareness] = useState<any>(null);
 
-  console.log("roomId pp", roomId);
+  // console.log("roomId pp", roomId);
 
   useEffect(() => {
     console.log("Setting up IndexeddbPersistence, WebsocketProvider observer");
