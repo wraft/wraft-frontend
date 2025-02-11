@@ -37,22 +37,16 @@ const VariantList = () => {
   const mobileMenuDrawer = useDrawer();
 
   return (
-    <Box pl={0} minHeight="100%" bg="neutral.100">
+    <>
       <PageHeader title="Variants" desc="Manage Variants">
         <Button variant="tertiary" onClick={() => setIsOpen(true)}>
           <Plus size={12} weight="bold" />
           Create Variant
         </Button>
       </PageHeader>
-      <Box
-        py={1}
-        pb={4}
-        borderBottom="solid 1px"
-        borderColor="border"
-        mb={3}
-        mt={3}>
-        <VariantDashboard rerender={rerender} setRerender={setRerender} />
-      </Box>
+
+      <VariantDashboard rerender={rerender} setRerender={setRerender} />
+
       <Drawer
         open={isOpen}
         store={mobileMenuDrawer}
@@ -65,7 +59,7 @@ const VariantList = () => {
           </>
         )}
       </Drawer>
-    </Box>
+    </>
   );
 };
 export default VariantList;

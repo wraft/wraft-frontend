@@ -26,9 +26,12 @@ export const EditorContent = styled.divBox`
   width: 100%;
   flex: 1;
   box-sizing: border-box;
-  overflow-y: scroll;
+  overflow-y: auto;
   .ProseMirror {
     color: var(--theme-ui-colors-gray-1200);
+  }
+  .ProseMirror p {
+    line-height: 1.5;
   }
   .ProseMirror .ProseMirror-yjs-cursor {
     position: absolute;

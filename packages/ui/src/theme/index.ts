@@ -37,7 +37,7 @@ export type Options = {
   defaultFontSize?: number;
 };
 
-const createTheme = (options: Options = {}) => {
+export const createTheme = (options: Options = {}) => {
   const { defaultFontSize = DEFAULT_FONT_SIZE } = options;
 
   let theme: any = basic;
@@ -63,9 +63,7 @@ const createTheme = (options: Options = {}) => {
 
   theme.borderWidths = borderWidths;
   theme.focus = getFocus(theme);
-  theme.spaceV2 = getSpace(theme);
   theme.space = getSpace(theme);
-  // theme.buttons = buttons;
   theme.buttons = getButtons(theme);
   theme.forms = forms;
   theme.links = links;

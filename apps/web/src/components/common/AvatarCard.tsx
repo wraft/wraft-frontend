@@ -18,13 +18,10 @@ export const AvatarCard = ({
       : image;
 
   return (
-    <Flex gap="xs" mb="xs">
-      <Avatar
-        width={16}
-        height={16}
-        sx={{ mr: 2, borderColor: 'border', border: 0 }}
-        src={finalImage}
-      />
+    <Flex gap="sm" mb="md" align="center">
+      <Flex w={16} h={16}>
+        <Avatar width={16} height={16} src={finalImage} />
+      </Flex>
       <Text>{name}</Text>
     </Flex>
   );

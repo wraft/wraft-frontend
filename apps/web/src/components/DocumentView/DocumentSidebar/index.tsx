@@ -1,9 +1,8 @@
-import { Box, Flex, Text } from '@wraft/ui';
-import { Tab, TabList, TabPanel, TabProvider } from '@ariakit/react';
+import { useEffect } from 'react';
+import { Box, Flex, Text, Tab, useTab } from '@wraft/ui';
 
 import ApprovalFlowHistory from 'components/Content/ApprovalFlowHistory';
 import { TimeAgo } from 'common/Atoms';
-import styles from 'common/Tab/tab.module.css';
 
 import { useDocument } from '../DocumentContext';
 import { InfoSection } from './InfoSection';
@@ -25,48 +24,59 @@ export const DocumentSidebar = () => {
 
   const { canAccess } = usePermissions(userType, docRole);
 
+  const tab = useTab({ defaultSelectedId: 'overview' });
+  const selectedId = tab.useState('selectedId');
+
+  useEffect(() => {
+    if (selectedId) {
+      setTabActiveId(selectedId);
+    }
+  }, [selectedId]);
   return (
-    <Box
+    <Flex
+      direction="column"
       bg="background-primary"
       w="30%"
       maxWidth="400px"
       borderLeft="solid 1px"
       borderColor="border">
-      <ContentInfoBlock
-        content={contents}
-        nextState={nextState}
-        contentType={contentType}
-      />
+      <Box flexShrink="0">
+        <ContentInfoBlock
+          content={contents}
+          nextState={nextState}
+          contentType={contentType}
+        />
+      </Box>
 
       <Box>
-        <TabProvider setSelectedId={setTabActiveId} defaultSelectedId="edit">
-          <TabList aria-label="Content Stages" className={styles.tablist}>
-            <Tab id="edit" className={styles.tabInline}>
-              Info
-            </Tab>
+        <Tab.List aria-label="Content Tab" store={tab}>
+          <Tab id="overview" as="a" store={tab}>
+            Overview
+          </Tab>
 
-            {canAccess('comment') && (
-              <Tab className={styles.tabInline} id="view">
-                Comments
-              </Tab>
-            )}
-            {canAccess('history') && (
-              <Tab className={styles.tabInline} id="history">
-                History
-              </Tab>
-            )}
-            {canAccess('log') && (
-              <Tab className={styles.tabInline} id="approval">
-                Log
-              </Tab>
-            )}
-          </TabList>
-
-          <TabPanel className="tabPanel">
-            <InfoSection />
-          </TabPanel>
           {canAccess('comment') && (
-            <TabPanel>
+            <Tab id="discussions" as="a" store={tab}>
+              Discussions
+            </Tab>
+          )}
+          {canAccess('history') && (
+            <Tab id="versions" as="a" store={tab}>
+              Versions
+            </Tab>
+          )}
+          {canAccess('log') && (
+            <Tab id="log" as="a" store={tab}>
+              Log
+            </Tab>
+          )}
+        </Tab.List>
+
+        <Box h="calc(100vh - 142px)" overflowY="auto">
+          <Tab.Panel tabId="overview" store={tab}>
+            <InfoSection />
+          </Tab.Panel>
+          {canAccess('comment') && (
+            <Tab.Panel tabId="discussions" store={tab}>
               <Box mt="md" px="md">
                 <Box>
                   <Box mb="sm">
@@ -81,10 +91,10 @@ export const DocumentSidebar = () => {
                   )}
                 </Box>
               </Box>
-            </TabPanel>
+            </Tab.Panel>
           )}
           {canAccess('history') && (
-            <TabPanel>
+            <Tab.Panel tabId="versions" store={tab}>
               <Box mt="md" px="md">
                 {contents?.versions && contents?.versions.length > 0 && (
                   <Box>
@@ -99,24 +109,22 @@ export const DocumentSidebar = () => {
                   </Box>
                 )}
               </Box>
-            </TabPanel>
+            </Tab.Panel>
           )}
           {canAccess('log') && (
-            <TabPanel>
+            <Tab.Panel tabId="log" store={tab}>
               <Box mt="md" px="md">
                 <Text as="h5" mb="sm">
                   Approval Log
                 </Text>
                 <Box>
-                  {tabActiveId === 'approval' && (
-                    <ApprovalFlowHistory id={cId} />
-                  )}
+                  {tabActiveId === 'log' && <ApprovalFlowHistory id={cId} />}
                 </Box>
               </Box>
-            </TabPanel>
+            </Tab.Panel>
           )}
-        </TabProvider>
+        </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };

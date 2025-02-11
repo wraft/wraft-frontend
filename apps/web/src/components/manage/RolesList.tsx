@@ -37,7 +37,9 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     accessorKey: 'content.name',
     isPlaceholder: true,
     cell: ({ row }: any) => (
-      <Box onClick={() => openDrawer(row.original.id)}>{row.original.name}</Box>
+      <Text onClick={() => openDrawer(row.original.id)}>
+        {row.original.name}
+      </Text>
     ),
     width: '100%',
     enableSorting: false,
@@ -47,7 +49,7 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
     header: 'USER',
     accessorKey: 'content.user_count',
     isPlaceholder: true,
-    cell: ({ row }: any) => <Box>{row.original.user_count}</Box>,
+    cell: ({ row }: any) => <Text>{row.original.user_count}</Text>,
     enableSorting: false,
   },
   {

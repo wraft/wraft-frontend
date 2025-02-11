@@ -169,7 +169,9 @@ const Table = ({
         >
           <x.div textAlign="center">
             <EmptyImage />
-            <x.p m="0">{emptyMessage}</x.p>
+            <x.p m="0" color="text-primary">
+              {emptyMessage}
+            </x.p>
           </x.div>
         </x.div>
       )}

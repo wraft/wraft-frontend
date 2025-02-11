@@ -1,4 +1,4 @@
-import { CSSObject } from "@xstyled/emotion";
+import { CSSObject, gap } from "@xstyled/emotion";
 
 import { WuiTheme } from "../types";
 
@@ -33,6 +33,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
     fontWeight: fontWeights.bold,
     letterSpacing: 0,
     borderRadius: radii.md,
+    gap: space.sm,
   };
 
   return {
@@ -44,7 +45,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
     },
     secondary: {
       ...defaults,
-      backgroundColor: "background",
+      backgroundColor: "button-secondary-bg",
       borderColor: "border",
     },
     tertiary: {

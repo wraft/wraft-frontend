@@ -93,11 +93,17 @@ const dark = {
   "input-placeholder": "gray.200",
   "input-text": "gray.200",
 
-  "text-primary": colors.gray["1200"],
+  "text-primary": "#fff",
   "text-secondary": colors.gray["1000"],
   "text-disabled": "#111111",
   "text-error": "#111111",
   "text-success": "#111111",
+
+  "background-scrollbar-track": colors.gray["300"],
+  "background-scrollbar-thumb": colors.gray["600"],
+  "background-scrollbar-thumb-hover": colors.gray["600"],
+
+  "button-secondary-bg": "#111111",
   ...colors,
 };
 export default dark;

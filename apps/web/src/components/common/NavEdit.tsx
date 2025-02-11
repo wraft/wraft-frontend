@@ -23,7 +23,6 @@ interface INav {
 const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
   const router = useRouter();
   const { accessToken } = useAuth();
-  const { userType, editorMode } = useDocument();
 
   const goBack = () => {
     if (window.history.length > 1) {
@@ -62,10 +61,6 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       </Flex>
 
       <Flex ml="auto" alignItems="center" gap="md">
-        {userType === 'default' && editorMode !== 'new' && (
-          <InviteCollaborators />
-        )}
-
         <Flex
           borderLeft="solid 1px"
           borderColor="border"

@@ -23,9 +23,10 @@ export const Pagination: any = styled.div`
         font-size: 12px;
         padding: 6px 12px;
         cursor: pointer;
+        color: text-primary;
 
         a{
-            color:black;
+            color: text-primary;
             text-decoration: none;
             font-size: 12px;
             padding: 12px 12px;
@@ -38,9 +39,9 @@ export const Pagination: any = styled.div`
 
         &.selected{
             background-color: #E2F7EA;
-            ;
+            color: primary;
             a{
-                color: #004A0F;
+                color: primary;
             }
         }
 

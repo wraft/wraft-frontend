@@ -145,6 +145,12 @@ const light = {
 
   "background-primary": "#fff",
   "background-secondary": colors.gray["200"],
+
+  "background-scrollbar-track": colors.gray["200"],
+  "background-scrollbar-thumb": colors.gray["500"],
+  "background-scrollbar-thumb-hover": colors.gray["500"],
+
+  "button-secondary-bg": "#fff",
   ...colors,
 };
 

@@ -90,7 +90,7 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
               <DropdownMenu.Item>
                 <Link href="/notifications">
                   <Flex>
-                    <Box minWidth="180px">Notifications</Box>
+                    <Text minWidth="180px">Notifications</Text>
                     {count && count > 0 && (
                       <Box minWidth="20px" pl="4px">
                         {count}
@@ -101,13 +101,13 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
               </DropdownMenu.Item>
               <DropdownMenu.Item>
                 <Link href="/account" path="/account">
-                  <Box minWidth="200px">Settings</Box>
+                  <Text minWidth="200px">Settings</Text>
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item>
-                <Box display="flex" flex={1} onClick={onUserLogout}>
+                <Text display="flex" flex={1} onClick={onUserLogout}>
                   Signout
-                </Box>
+                </Text>
               </DropdownMenu.Item>
             </Box>
           </DropdownMenu>

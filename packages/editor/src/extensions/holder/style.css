@@ -1,9 +1,10 @@
 .holder {
   background-color: var(--theme-ui-colors-green-300);
   color: var(--theme-ui-colors-green-1100);
-  padding: 2px;
+  padding: 0px 4px;
   border-radius: 3px;
-  font-weight: inherit;
+  font-weight: 400;
+  font-size: 14px;
   border: solid 1px var(--theme-ui-colors-green-400);
 }
 

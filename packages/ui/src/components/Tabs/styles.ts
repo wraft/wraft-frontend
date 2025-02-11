@@ -13,6 +13,7 @@ export const TabList = styled(Ariakit.TabList)<{ size: SizeOptions }>`
   display: flex;
   border: 0;
   gap: xl;
+  padding: 0px 10px;
 
   &[aria-orientation="vertical"] {
     flex-direction: column;
@@ -41,6 +42,7 @@ export const Tab = styled.button`
   text-transform: none;
   cursor: pointer;
   gap: sm;
+  font-size: 14px;
 
   &:focus {
     outline: none !important; /* important for firefox */

@@ -217,7 +217,7 @@ const DocumentList = () => {
   };
 
   return (
-    <Box pl={0} minHeight="100%" bg="background-secondary">
+    <>
       <PageHeader title="Documents" desc="Manage all documents" />
       <Box px="lg" py="xl">
         <Flex>
@@ -270,7 +270,7 @@ const DocumentList = () => {
           </Box>
         </Flex>
       </Box>
-    </Box>
+    </>
   );
 };
 export default DocumentList;

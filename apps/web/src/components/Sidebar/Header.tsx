@@ -54,14 +54,16 @@ const Header = () => {
               <Flex cursor="pointer">
                 {userProfile?.currentOrganisation && (
                   <Flex>
-                    <DefaultAvatar
-                      url={userProfile?.currentOrganisation?.logo}
-                      value={userProfile?.currentOrganisation?.name}
-                      size={32}
-                    />
+                    <Box>
+                      <DefaultAvatar
+                        url={userProfile?.currentOrganisation?.logo}
+                        value={userProfile?.currentOrganisation?.name}
+                        size={32}
+                      />
+                    </Box>
 
                     <Box ml="sm">
-                      <Text fontWeight="bold" color="text-primary">
+                      <Text fontWeight="bold" color="text-primary" lines={1}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
                       <Text fontSize="sm" color="text-secondary">
@@ -83,14 +85,14 @@ const Header = () => {
                 justifyContent="space-between">
                 {userProfile?.currentOrganisation && (
                   <>
-                    <Flex>
+                    <Flex align="center">
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
                         size={28}
                       />
                       <Box ml="sm">
-                        <Text fontWeight="bold" color="text-primary">
+                        <Text fontWeight="bold" color="text-primary" lines={1}>
                           {userProfile?.currentOrganisation?.name}
                         </Text>
                         <Text fontSize="sm" color="text-secondary">
@@ -107,7 +109,7 @@ const Header = () => {
               </Flex>
 
               <DropdownMenu.Separator />
-              <Box overflowY="scroll" maxHeight="400px">
+              <Box overflowY="auto" maxHeight="400px">
                 {organisations &&
                   organisations
                     .filter(
@@ -117,12 +119,16 @@ const Header = () => {
                       <DropdownMenu.Item
                         key={org.id}
                         onClick={() => onSwitchOrganization(org?.id)}>
-                        <DefaultAvatar
-                          url={org?.logo}
-                          value={org.name}
-                          size={20}
-                        />
-                        <Box ml={2}>{org.name}</Box>
+                        <Flex gap="sm" align="center">
+                          <DefaultAvatar
+                            url={org?.logo}
+                            value={org.name}
+                            size={20}
+                          />
+                          <Text ml={2} lines={1}>
+                            {org.name}
+                          </Text>
+                        </Flex>
                       </DropdownMenu.Item>
                     ))}
               </Box>

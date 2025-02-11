@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex } from 'theme-ui';
+import { Box, Grid } from '@wraft/ui';
 
 import Sidebar from 'components/Sidebar';
 
@@ -17,43 +17,15 @@ export interface IAlert {
 
 export const Page = ({ children, showFull = true, noSide = true }: IPage) => {
   const shouldShow: boolean = showFull ? true : false;
-  // const fontName = 'Poppins';
-  // const url = `https://fonts.googleapis.com/css2?family=${fontName}:wght@100;300;400;500&display=swap`;
 
   return (
-    <Flex
-      sx={{
-        flexDirection: 'column',
-        minHeight: '100vh',
-        // overflowY: 'scroll',
-      }}>
-      <Flex
-        sx={{
-          flex: 1,
-          flexDirection: ['column', 'row'],
-        }}>
-        {noSide && (
-          <Box
-            sx={{
-              flexBasis: ['auto', 245],
-              minHeight: '100vh',
-              borderRight: 'solid 1px',
-              borderColor: 'border',
-              bg: 'background-primary',
-            }}>
-            <Sidebar showFull={shouldShow} />
-          </Box>
-        )}
-        <Box
-          sx={{
-            flex: 1,
-            bg: 'background-secondary',
-            minWidth: 0,
-          }}>
-          {children}
-        </Box>
-      </Flex>
-    </Flex>
+    <Grid
+      templateColumns="minmax(200px, 245px) 1fr"
+      h="100vh"
+      bg="background-secondary">
+      {noSide && <Sidebar showFull={shouldShow} />}
+      <Box overflow="auto">{children}</Box>
+    </Grid>
   );
 };
 

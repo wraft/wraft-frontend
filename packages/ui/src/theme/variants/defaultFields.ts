@@ -51,14 +51,14 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
     fontSizes,
     fontWeights,
     radii,
-    spaceV2: space,
+    space,
     toRem,
   } = theme;
 
   return {
     default: {
       backgroundColor: "transparent",
-      color: colors["text"],
+      color: "text-primary",
       fontSize: fontSizes.base,
       lineHeight: "1rem",
       fontWeight: fontWeights.body,
@@ -125,7 +125,7 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
       },
     },
     disabled: {
-      backgroundColor: colors["nude-400"],
+      backgroundColor: "gray.500",
       color: "#474543",
       cursor: "not-allowed",
     },

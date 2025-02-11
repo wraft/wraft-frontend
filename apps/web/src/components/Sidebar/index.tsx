@@ -68,11 +68,16 @@ const Sidebar = (props: any) => {
 
   return (
     <>
-      <Flex direction="column" h="100vh" maxHeight="100%" justify="stretch">
+      <Flex
+        direction="column"
+        h="100vh"
+        maxHeight="100%"
+        justify="stretch"
+        borderRight="solid 1px"
+        borderColor="border"
+        bg="background-primary">
         <Header />
         <Flex flex={1} direction="column">
-          {/* <SearchBlock /> */}
-
           {Menulist.map((m, i) => (
             <Box key={i} mb="lg">
               <Text

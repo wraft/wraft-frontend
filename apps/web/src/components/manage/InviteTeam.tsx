@@ -199,7 +199,7 @@ const InviteTeam = ({ setOpen }: Props) => {
               borderColor: 'border',
               borderRadius: 4,
               height: '100%',
-              overflowY: 'scroll',
+              overflowY: 'auto',
               maxHeight: '400px',
             }}>
             {filteredRoles.map((role: any, index: number) => {

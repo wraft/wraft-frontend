@@ -95,7 +95,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Box maxHeight="100vh" bg="background-secondary" p="lg">
+    <Box p="lg">
       <Text color="text-secondary" fontSize="sm">
         {format(currentTime, 'EEEE, MMMM dd')}
       </Text>

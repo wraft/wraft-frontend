@@ -97,7 +97,7 @@ const PlaceholderBlock = ({
       {fieldValues && (
         <>
           <Flex justify="space-between">
-            <Text as="h6">Placeholders</Text>
+            <Text as="h6">Data Fields</Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
                 <EditIcon width={14} />
@@ -113,11 +113,19 @@ const PlaceholderBlock = ({
                   borderBottom="1px solid"
                   borderColor="border"
                   p="sm">
-                  <Text flex="0 0 40%" as="h5" fontWeight="heading">
+                  <Text flex="0 0 60%" fontWeight="heading">
+                    {x.value}
+                  </Text>
+                  <Text
+                    flex="0 0 40%"
+                    color="text-secondary"
+                    fontWeight="heading"
+                    textTransform="capitalize"
+                    textAlign="right">
                     {x.name}
                   </Text>
-                  <Text>{x.value}</Text>
-                  <Text>{x.type}</Text>
+
+                  {/* <Text>{x.type}</Text> */}
                 </Flex>
               ))}
           </Box>

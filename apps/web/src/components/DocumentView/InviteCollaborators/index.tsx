@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from '@wraft/ui';
+import { Box, Modal } from '@wraft/ui';
 import { Share } from '@phosphor-icons/react';
 
 import InviteBlock from './InviteBlock';
@@ -13,7 +13,9 @@ const InviteCollaborators = () => {
   };
   return (
     <>
-      <Share size={22} cursor="pointer" onClick={onInvite} />
+      <Box>
+        <Share size={18} cursor="pointer" onClick={onInvite} />
+      </Box>
       <Modal
         open={isDialogOpen}
         ariaLabel="confirm model"

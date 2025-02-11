@@ -50,18 +50,18 @@ export const defaultFieldStyles: DefaultFieldStyles = ({
     /* left icon or both */
     ${(iconPlacement === "left" || iconPlacement === "both") &&
     `padding-left: 
-      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["spaceV2"]["sm"]})`};
+      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]})`};
 
     /* is clearable or right icon */
     ${(isClearable || iconPlacement === "right" || iconPlacement === "both") &&
     `padding-right: 
-      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["spaceV2"]["sm"]})`};
+      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]})`};
 
     /* is clearable and got a right/both icon */
     ${isClearable &&
     (iconPlacement === "right" || iconPlacement === "both") &&
     `padding-right: 
-      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["icons"][iconSize]} + ${theme["spaceV2"]["sm"]} + ${theme["spaceV2"]["sm"]})`};
+      calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]} + ${theme["space"]["sm"]})`};
 
     &::placeholder {
       ${theme["defaultFields"]["placeholder"]};

@@ -12,6 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
+    background-color: var(--theme-ui-colors-background-primary);
   }
 
   details > summary {
@@ -39,5 +40,22 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
+  ::-webkit-scrollbar-track {
+    background-color: var(--theme-ui-colors-background-scrollbar-track);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--theme-ui-colors-background-scrollbar-thumb);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--theme-ui-colors-background-scrollbar-thumb-hover);
+  }
 `;

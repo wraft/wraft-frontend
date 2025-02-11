@@ -9,6 +9,8 @@ import { deleteAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
 
 import EmailComposer from '../EmailComposer';
+import InviteCollaborators from '../InviteCollaborators';
+import { useDocument } from '../DocumentContext';
 
 interface EditMenuProps {
   id: string;
@@ -92,36 +94,43 @@ export const ContentInfoBlock = ({
   content,
   nextState,
   contentType,
-}: ContentInfoBlockProps) => (
-  <Flex justify="space-between" px="md" py="sm">
-    <Box>
-      <Text fontSize="sm" color="text-secondary">
-        {contentType?.layout?.name} / {contentType?.name}
-      </Text>
-      <Flex gap="sm">
-        <Text as="h4">
-          {content?.content?.instance_id || contentType?.prefix}
+}: ContentInfoBlockProps) => {
+  const { editorMode, userType, currentActiveIndex } = useDocument();
+  return (
+    <Flex justify="space-between" px="md" py="sm">
+      <Box>
+        <Text fontSize="sm" color="text-secondary">
+          {contentType?.layout?.name} / {contentType?.name}
         </Text>
-        {content?.state?.state && (
-          <Text
-            as="span"
-            bg="gray.500"
-            fontSize="sm"
-            fontWeight="heading"
-            p="xxs"
-            px="xs"
-            lineHeight="1rem">
-            {content?.state?.state}
+        <Flex gap="sm">
+          <Text as="h4">
+            {content?.content?.instance_id || contentType?.prefix}
           </Text>
-        )}
+          {content?.state?.state && (
+            <Text
+              as="span"
+              bg="gray.500"
+              fontSize="sm"
+              fontWeight="heading"
+              p="xxs"
+              px="xs"
+              lineHeight="1rem">
+              {content?.state?.state}
+            </Text>
+          )}
+        </Flex>
+      </Box>
+      <Flex
+        //  ml: 'auto',
+        align="center"
+        //  gap: 1,
+      >
+        {currentActiveIndex > 0 &&
+          userType === 'default' &&
+          editorMode !== 'new' && <InviteCollaborators />}
+
+        <EditMenus id={content?.content?.id} nextState={nextState} />
       </Flex>
-    </Box>
-    <Flex
-    //  ml: 'auto',
-    //  alignItems: 'baseline',
-    //  gap: 1,
-    >
-      <EditMenus id={content?.content?.id} nextState={nextState} />
     </Flex>
-  </Flex>
-);
+  );
+};

@@ -307,7 +307,7 @@ const TemplateEditor = () => {
             mt="lg"
             flexGrow={1}
             justify="center"
-            overflowY="scroll"
+            overflowY="auto"
             maxHeight="calc(100vh - 150px)">
             <Box minWidth="794px" maxWidth="920px">
               <Editor

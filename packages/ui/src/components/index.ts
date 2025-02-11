@@ -9,6 +9,7 @@ export * from "./Modal";
 export * from "./Modal";
 export * from "./Select";
 export * from "./Text";
+export * from "./Tabs";
 export * from "./PasswordInput";
 export * from "./Textarea";
 export * from "./Label";

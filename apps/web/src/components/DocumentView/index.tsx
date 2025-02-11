@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
-import { postAPI, putAPI } from 'utils/models';
+import { postAPI } from 'utils/models';
 
 import { FlowProgressBar } from './FlowProgressBar';
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';

@@ -145,7 +145,6 @@ const PreTag = styled(Box)`
 
 const TabWrapper = styled(Box)`
   margin-bottom: 0;
-  // padding: ${({ theme }: any) => theme.space.sm};
 
   [role='tabpanel'] {
     padding: 0px;
@@ -175,6 +174,28 @@ const TabWrapper = styled(Box)`
     background-color: ${({ theme }: any) => theme.colors.gray['600']};
     display: flex;
     border-radius: 6px;
+  }
+  .main-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
+  }
+`;
+
+const PdfWrapper = styled(Box)`
+  .react-pdf__Page {
+    background-color: transparent !important;
+    margin-bottom: 8px;
+  }
+
+  .react-pdf__Document {
+    margin-inline: 2px;
+  }
+  .pdf__Page__textContent {
+    border: solid 1px;
+    border-color: border;
   }
 `;
 
@@ -249,7 +270,7 @@ export const DocumentContentBlock = () => {
             mt="lg"
             flexGrow={1}
             justify="center"
-            overflowY="scroll"
+            overflowY="auto"
             maxHeight="calc(100vh - 180px)">
             <Box minWidth="794px" maxWidth="920px">
               <PreTag pt={0} pb={6}>
@@ -316,13 +337,9 @@ export const DocumentContentBlock = () => {
             <TabPanel
               tabId={defaultSelectedId}
               store={tabView}
-              className={styles.tablist}>
+              className="main-content">
               <ErrorBoundary>
-                <Flex
-                  flexGrow={1}
-                  justify="center"
-                  overflowY="scroll"
-                  maxHeight="100vh">
+                <Flex>
                   <Box minWidth="794px" maxWidth="920px">
                     <PreTag pt={0} pb={6}>
                       {contentBody && (
@@ -352,26 +369,8 @@ export const DocumentContentBlock = () => {
                 </Flex>
               </ErrorBoundary>
             </TabPanel>
-            <TabPanel store={tabView}>
-              <Box
-              // bg: 'gray.400',
-              // mt: 4,
-              // // minHeight: '100vh',
-              // border: 'solid 1px',
-              // borderColor: 'gray.400',
-              // '.react-pdf__Page': {
-              //   backgroundColor: 'transparent !important',
-              //   marginBottom: '8px',
-              // },
-              // '.react-pdf__Document': {
-              //   mx: 2,
-              // },
-              // '.pdf__Page__textContent': {
-              //   border: 'solid 1px',
-              //   borderColor: 'grey.500',
-              // },
-              // pb: 5,
-              >
+            <TabPanel store={tabView} className="main-content">
+              <PdfWrapper>
                 {!contents?.content?.build && (
                   <Box
                   // px: 6, minHeight: '80vh'
@@ -400,7 +399,7 @@ export const DocumentContentBlock = () => {
                 {contents?.content?.build && (
                   <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
                 )}
-              </Box>
+              </PdfWrapper>
             </TabPanel>
           </TabProvider>
         </TabWrapper>
