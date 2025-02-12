@@ -3,12 +3,19 @@ import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Box, Heading, Button, Text } from 'theme-ui';
+import {
+  Flex,
+  Box,
+  Button,
+  Text,
+  Field,
+  InputText,
+  PasswordInput,
+} from '@wraft/ui';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
 
 import PasswordCreated from 'components/Auth/PasswordCreated';
-import Field from 'common/Field';
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
@@ -39,6 +46,8 @@ const Index = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
+  const homePageUrl = process.env.homePageUrl || '/';
+
   const onSubmit = (data: FormValues) => {
     if (data.newPassword === data.confirmPassword) {
       const setPasswordRequest = postAPI('users/set_password', {
@@ -66,42 +75,62 @@ const Index = () => {
         verified ? (
           <PasswordCreated />
         ) : (
-          <Flex variant="onboardingFormPage">
-            <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-              <Link href="/">
-                <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+          <Flex
+            justify="center"
+            p="5xl"
+            bg="background-secondary"
+            h="100vh"
+            align="baseline">
+            <Box position="absolute" top="80px" left="80px">
+              <Link href={homePageUrl}>
+                <Box color="gray.0" fill="gray.1200">
                   <BrandLogoIcon width="7rem" height="3rem" />
                 </Box>
               </Link>
             </Box>
-            <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-              <Heading as="h3" variant="styles.h3Medium" sx={{ mb: '48px' }}>
-                New Password
-              </Heading>
 
-              <Text sx={{ mb: '28px' }}>
+            <Flex
+              variant="card"
+              w="500px"
+              justifySelf="center"
+              direction="column">
+              <Text as="h3" mb="md" fontSize="3xl">
+                New Password
+              </Text>
+
+              <Text as="p" color="text-secondary" mb="xxl">
                 Create a password for your Wraft account
               </Text>
 
-              <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+              <Flex
+                direction="column"
+                as="form"
+                gap="md"
+                onSubmit={handleSubmit(onSubmit)}>
                 <Field
-                  name="newPassword"
-                  label="Enter Password"
-                  register={register}
-                  type="password"
-                  error={errors.newPassword}
-                  mb={'24px'}
-                />
+                  label="New Password"
+                  required
+                  error={errors?.newPassword?.message}>
+                  <InputText
+                    autoComplete="off"
+                    {...register('newPassword')}
+                    placeholder="Enter your New Password"
+                  />
+                </Field>
                 <Field
-                  register={register}
-                  error={errors.confirmPassword}
-                  name="confirmPassword"
                   label="Confirm Password"
-                  type="password"
-                  mb={'12px'}
-                />
-                <Button type="submit">Create Password</Button>
-              </Box>
+                  required
+                  error={errors?.confirmPassword?.message}>
+                  <PasswordInput
+                    autoComplete="off"
+                    placeholder="Enter your Confirm Password"
+                    {...register('confirmPassword')}
+                  />
+                </Field>
+                <Box>
+                  <Button type="submit">Create Password</Button>
+                </Box>
+              </Flex>
             </Flex>
           </Flex>
         )

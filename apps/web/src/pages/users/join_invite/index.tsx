@@ -1,56 +1,75 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import Router from 'next/router';
-import cookie from 'js-cookie';
+import { useRouter } from 'next/router';
 
 import RegistrationForm from 'components/Auth/RegistrationForm';
+import InviteAcceptBlock from 'components/InviteBlock/InviteAcceptBlock';
+import InviteUnauthorizedBlock from 'components/InviteBlock/InviteUnauthorizedBlock';
 import { useAuth } from 'contexts/AuthContext';
+import { verifyInvite } from 'utils/models';
 
 const Index = () => {
   const searchParams = useSearchParams();
   const inviteToken = searchParams.get('token');
-  const inviteOrganisation = searchParams.get('organisation');
+  const email = searchParams.get('email');
 
-  const { accessToken } = useAuth();
+  const { accessToken, userProfile } = useAuth();
+  const [isAuthorised, setIsAuthorised] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean | undefined>(undefined);
+  const [verifyData, setVerifyData] = useState<any>();
+  const [error, setError] = useState<any>();
 
-  const myObject = {
-    inviteToken: inviteToken,
-    inviteOrganisation: inviteOrganisation,
+  const router = useRouter();
+
+  useEffect(() => {
+    if (inviteToken) {
+      verifyInviteToken(inviteToken);
+    }
+  }, [inviteToken]);
+
+  const verifyInviteToken = async (token: any) => {
+    try {
+      setLoading(true);
+      const response = await verifyInvite(token);
+
+      setVerifyData(response);
+      setLoading(false);
+    } catch (err) {
+      if (err.errors) {
+        setError(err.errors);
+      }
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    // Serialize the object to a JSON string
-    const objectString = JSON.stringify(myObject);
-
-    // Set the cookie with the object string
-    cookie.set('inviteCookie', objectString);
-  }, []);
-
-  useEffect(() => {
-    if (accessToken) {
-      Router.push('/');
+    if (accessToken && email) {
+      const checkAuthorised = userProfile?.email === email || false;
+      setIsAuthorised(checkAuthorised);
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (isAuthenticated()) {
-  //     // User is already logged in
-  //     // const user = getUser(); // Replace with your user retrieval logic
-  //     if (user.hasJoinedTeam) {
-  //       sendNotification('You are already a member of the team.');
-  //     } else {
-  //       sendNotification('Join the team now!');
-  //     }
-  //   }
-  // }, []);
+  if (loading === false && !accessToken && verifyData?.is_wraft_member) {
+    const redirectUrl = encodeURIComponent(router.asPath);
+    router.replace(`/login?redirect=${redirectUrl}`);
+
+    return;
+  }
+
+  if (error) {
+    return <InviteUnauthorizedBlock error={error} />;
+  }
 
   return (
     <>
-      {!accessToken ? (
-        // Display a registration form for users to sign up
+      {loading === false && !accessToken && !verifyData?.is_wraft_member && (
         <RegistrationForm inviteToken={inviteToken} />
-      ) : (
-        <div>Redirecting to Dashboard</div>
+      )}
+      {loading === false && accessToken && (
+        <InviteAcceptBlock
+          isAuthorised={isAuthorised}
+          inviteToken={inviteToken}
+        />
       )}
     </>
   );

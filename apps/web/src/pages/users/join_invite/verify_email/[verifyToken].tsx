@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Router from 'next/router';
 import { useRouter } from 'next/router';
-import { Flex, Box, Heading, Button } from 'theme-ui';
+import { Flex, Text, Button } from '@wraft/ui';
 
 import { fetchAPI } from 'utils/models';
 
@@ -27,16 +27,14 @@ const EmailVerified: React.FC = () => {
     }
   }, [emailToken]);
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', mt: '80px' }}>
+    <Flex direction="column" justifyContent="center" mt="80px">
       {show && (
         <Flex
           variant="onboardingForms"
-          sx={{
-            alignItems: 'center',
-            p: '0px',
-            pt: '103px',
-            px: '140px',
-          }}>
+          alignItems="center"
+          p="0px"
+          pt="103px"
+          px="140px">
           <Image
             src={Verified}
             alt=""
@@ -45,12 +43,7 @@ const EmailVerified: React.FC = () => {
             className=""
             priority
           />
-          <Heading
-            as="h3"
-            variant="styles.h3Medium"
-            sx={{ mt: '88px', mb: '32px', color: '#363E49' }}>
-            Your email is verified
-          </Heading>
+          <Text as="h3">Your email is verified</Text>
           <Button
             onClick={() => {
               Router.push('/login');
@@ -59,7 +52,7 @@ const EmailVerified: React.FC = () => {
           </Button>
         </Flex>
       )}
-    </Box>
+    </Flex>
   );
 };
 

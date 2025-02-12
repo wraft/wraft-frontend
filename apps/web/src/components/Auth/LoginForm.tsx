@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Router from 'next/router';
 import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -47,6 +47,9 @@ const LoginForm = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const { login, accessToken } = useAuth();
+
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
 
   const isGoogleAuthEnabled =
     process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED === 'true' &&
@@ -101,6 +104,7 @@ const LoginForm = () => {
       if (res) {
         login(res);
       }
+
       setLoading(false);
     } catch (err) {
       console.error('Login error: vb', err);
@@ -111,7 +115,7 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (accessToken) {
-      Router.push('/');
+      router.push(redirectUrl || '/');
     }
   }, [accessToken]);
 
