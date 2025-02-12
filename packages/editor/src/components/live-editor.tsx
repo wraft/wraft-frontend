@@ -225,22 +225,28 @@ export const LiveEditor = forwardRef(
     );
 
     return (
-      <div className={`wraft-editor ${className}`}>
-        <ProseKit editor={editor}>
-          <S.EditorContainer>
-            {!isReadonly && <Toolbar />}
-            <S.EditorContent>
-              <S.EditorContentInput ref={editor.mount} />
-              {/* {!isReadonly && <InlineMenu />} */}
-              <SlashMenu />
-              {tokens && <TokenMenu tokens={tokens} />}
-              {/* <TagMenu /> */}
-              {/* <BlockHandle /> */}
-              <TableHandle />
-            </S.EditorContent>
-          </S.EditorContainer>
-        </ProseKit>
-      </div>
+      <>
+        <S.EditorWrapper className={`wraft-editor ${className}`}>
+          <ProseKit editor={editor}>
+            {!isReadonly && (
+              <div className="toolbar">
+                <Toolbar />
+              </div>
+            )}
+            <S.EditorContainer>
+              <S.EditorContent>
+                <S.EditorContentInput ref={editor.mount} />
+                {/* {!isReadonly && <InlineMenu />} */}
+                <SlashMenu />
+                {tokens && <TokenMenu tokens={tokens} />}
+                {/* <TagMenu /> */}
+                {/* <BlockHandle /> */}
+                <TableHandle />
+              </S.EditorContent>
+            </S.EditorContainer>
+          </ProseKit>
+        </S.EditorWrapper>
+      </>
     );
   },
 );

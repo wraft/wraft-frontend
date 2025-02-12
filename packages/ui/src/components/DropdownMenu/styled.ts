@@ -10,6 +10,8 @@ export const Item: any = styled.div`
   padding: sm sm;
   display: flex;
   align-items: center;
+  color: var(--theme-ui-colors-text-primary);
+  min-width: 120px;
   &[data-active-item] {
     background-color: green.a300;
     color: green.800;

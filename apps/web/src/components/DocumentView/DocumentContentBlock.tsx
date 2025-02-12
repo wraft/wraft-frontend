@@ -309,9 +309,10 @@ export const DocumentContentBlock = () => {
                       <Button
                         variant="secondary"
                         loading={isBuilding}
+                        disabled={isBuilding}
                         size="sm"
                         onClick={() => doBuild()}>
-                        <Play size={14} className="action" />
+                        {!isBuilding && <Play size={12} className="action" />}
                         <Box>Generate</Box>
                       </Button>
                     )}
@@ -343,15 +344,18 @@ export const DocumentContentBlock = () => {
                   <Box minWidth="794px" maxWidth="920px">
                     <PreTag pt={0} pb={6}>
                       {contentBody && (
-                        <LiveEditor
-                          defaultContent={contentBody}
-                          isReadonly={editorMode === 'view'}
-                          ref={editorRef}
-                          tokens={fieldTokens}
-                          isCollaborative={true}
-                          collabData={collabData}
-                          socketUrl={socketUrl}
-                        />
+                        <>
+                          {/* <Toolbar /> */}
+                          <LiveEditor
+                            defaultContent={contentBody}
+                            isReadonly={editorMode === 'view'}
+                            ref={editorRef}
+                            tokens={fieldTokens}
+                            isCollaborative={true}
+                            collabData={collabData}
+                            socketUrl={socketUrl}
+                          />
+                        </>
                       )}
 
                       {/* {contentBody && (
@@ -370,36 +374,35 @@ export const DocumentContentBlock = () => {
               </ErrorBoundary>
             </TabPanel>
             <TabPanel store={tabView} className="main-content">
-              <PdfWrapper>
-                {!contents?.content?.build && (
-                  <Box
-                  // px: 6, minHeight: '80vh'
-                  >
-                    <Box
-                    //  px: 4,
-                    //  py: 3,
-                    //  border: 'solid 1px',
-                    //  borderColor: 'gray.500',
-                    //  bg: 'gray.300',
-                    //  borderRadius: '6px',
-                    >
-                      <Text as="h4">Document not generated</Text>
-                      <Text as="p">Documents need to be generated</Text>
-                      <Button
-                        variant="secondary"
-                        loading={isBuilding}
-                        onClick={() => doBuild()}>
-                        <Play size={14} className="action" />
-                        Generate
-                      </Button>
-                    </Box>
-                  </Box>
-                )}
+              {!contents?.content?.build && (
+                <Box
+                  w="100%"
+                  mx="md"
+                  p="xl"
+                  border="solid 1px"
+                  borderColor="border">
+                  <Text fontSize="xl" fontWeight="heading" mb="xs">
+                    Document not generated
+                  </Text>
+                  <Text color="text-secondary" mb="md">
+                    Documents need to be generated
+                  </Text>
+                  <Button
+                    variant="secondary"
+                    loading={isBuilding}
+                    disabled={isBuilding}
+                    onClick={() => doBuild()}>
+                    <Play size={14} className="action" />
+                    Generate
+                  </Button>
+                </Box>
+              )}
 
-                {contents?.content?.build && (
+              {contents?.content?.build && (
+                <PdfWrapper>
                   <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
-                )}
-              </PdfWrapper>
+                </PdfWrapper>
+              )}
             </TabPanel>
           </TabProvider>
         </TabWrapper>

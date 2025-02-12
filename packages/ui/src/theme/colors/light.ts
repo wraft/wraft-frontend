@@ -151,6 +151,7 @@ const light = {
   "background-scrollbar-thumb-hover": colors.gray["500"],
 
   "button-secondary-bg": "#fff",
+  icon: colors.gray["1200"],
   ...colors,
 };
 

@@ -61,14 +61,16 @@ export const FlowProgressBar = ({
             {num}
           </Text>
         )}
-        {activeState && <Circle size={12} weight="fill" className="circlced" />}
-        {checked && <Check size={12} weight="bold" />}
+        {activeState && (
+          <Circle size={12} weight="fill" className="main-icon" />
+        )}
+        {checked && <Check size={12} weight="bold" className="main-icon" />}
       </Flex>
       <Text fontWeight="heading" fontSize="sm" textTransform="capitalize">
         {state}
       </Text>
 
-      <BackArrowIcon className="arrowicon" width={20} />
+      <BackArrowIcon className="main-icon" width={20} />
     </FlowProgressContainer>
   );
 };

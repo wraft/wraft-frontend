@@ -24,8 +24,8 @@ const StyledSpinner = styled.div<{ size: number; color?: string }>`
     right: 0;
     bottom: 0;
     margin: auto;
-    border: 3px solid #ffffff52;
-    border-top-color: ${(props) => props.color};
+    border: 3px solid #bdb8b87d;
+    border-top-color: primary;
     border-radius: 50%;
     animation: load3 1s infinite linear;
   }

@@ -180,7 +180,7 @@ export const InfoSection = () => {
             </Box>
             <Box>
               <NavLink href={`${contents.content.build}`} target="_blank">
-                <DownloadSimple width={16} />
+                <DownloadSimple width={16} className="main-icon" />
               </NavLink>
             </Box>
           </Flex>

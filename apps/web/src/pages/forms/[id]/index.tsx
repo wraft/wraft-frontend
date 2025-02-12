@@ -170,7 +170,7 @@ const Index: FC = () => {
                 name="name"
                 label="Name"
                 placeholder="Name"
-                defaultValue={formdata.name}
+                defaultValue={formdata?.name}
                 register={register}
                 error={errors.name}
                 mb={3}
@@ -179,7 +179,7 @@ const Index: FC = () => {
                 name="prefix"
                 label="Prefix"
                 placeholder="PREFIX"
-                defaultValue={formdata.prefix}
+                defaultValue={formdata?.prefix}
                 register={register}
                 error={errors.prefix}
                 mb={3}
@@ -187,7 +187,7 @@ const Index: FC = () => {
               <FieldText
                 name="description"
                 label="Description"
-                defaultValue={formdata.description}
+                defaultValue={formdata?.description}
                 register={register}
                 error={errors.description}
               />

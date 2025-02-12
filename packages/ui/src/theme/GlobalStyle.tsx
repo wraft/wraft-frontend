@@ -58,4 +58,8 @@ export const GlobalStyle = createGlobalStyle`
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--theme-ui-colors-background-scrollbar-thumb-hover);
   }
+
+  .main-icon {
+    color: var(--theme-ui-colors-icon);
+  }
 `;

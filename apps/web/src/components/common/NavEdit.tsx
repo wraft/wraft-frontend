@@ -3,9 +3,7 @@ import { useRouter } from 'next/router';
 import { Flex, Text } from '@wraft/ui';
 import { ArrowLeft, Bell, Pencil } from '@phosphor-icons/react';
 
-import InviteCollaborators from 'components/DocumentView/InviteCollaborators';
 import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
-import { useDocument } from 'components/DocumentView/DocumentContext';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
@@ -45,7 +43,12 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       px="sm"
       py="xs">
       <Flex align="center" gap="sm">
-        <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
+        <ArrowLeft
+          cursor="pointer"
+          className="main-icon"
+          onClick={goBack}
+          size={18}
+        />
 
         {navtitle && (
           <Flex variant="navtitle" align="center" gap="sm">
@@ -54,7 +57,12 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
             </Text>
 
             {isEdit && (
-              <Pencil cursor="pointer" size={16} onClick={onToggleEdit} />
+              <Pencil
+                cursor="pointer"
+                className="main-icon"
+                size={16}
+                onClick={onToggleEdit}
+              />
             )}
           </Flex>
         )}
@@ -66,7 +74,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
           borderColor="border"
           alignItems="center"
           pl="sm">
-          <Bell size={22} />
+          <Bell size={22} className="main-icon" />
 
           {!accessToken && (
             <Link href="/login">

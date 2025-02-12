@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { ErrorBoundary, Button, Modal, Box, Flex } from '@wraft/ui';
+import { ErrorBoundary, Button, Modal, Box, Flex, Grid } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
 import Field from 'common/Field';
@@ -138,6 +138,9 @@ const DocumentView = () => {
           onCreateSuccess(response);
           setSaving(false);
           setContentBody(jsonContent);
+        })
+        .catch(() => {
+          setSaving(false);
         });
       // apiService;
       // putAPI(`contents/${cId}`, template).then((response: any) => {
@@ -207,7 +210,9 @@ const DocumentView = () => {
       )}
       <>
         <ErrorBoundary>
-          <Flex bg="background-secondary" flexGrow="1">
+          <Grid
+            bg="background-secondary"
+            templateColumns="1fr minmax(380px, 400px)">
             <Box w="100%">
               <Flex
                 alignItems="center"
@@ -280,7 +285,7 @@ const DocumentView = () => {
               <DocumentContentBlock />
             </Box>
             <DocumentSidebar />
-          </Flex>
+          </Grid>
         </ErrorBoundary>
       </>
       <ApprovalUpdateModal

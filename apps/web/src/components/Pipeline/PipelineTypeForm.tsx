@@ -434,7 +434,7 @@ const Form = ({
         />
       </Drawer.Header>
       <StepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
-      <Box sx={{ height: '100%' }} p={4} as="form">
+      <Box sx={{ height: '100%' }} p="lg" as="form">
         <Flex
           sx={{
             flexDirection: 'column',

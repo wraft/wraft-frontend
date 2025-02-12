@@ -100,7 +100,7 @@ const PlaceholderBlock = ({
             <Text as="h6">Data Fields</Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
-                <EditIcon width={14} />
+                <EditIcon width={14} className="main-icon" />
               </Box>
             )}
           </Flex>

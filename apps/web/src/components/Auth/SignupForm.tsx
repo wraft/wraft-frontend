@@ -6,6 +6,7 @@ import { Flex, Box, Button, Text, Field, InputText } from '@wraft/ui';
 import { BrandLogoIcon } from '@wraft/icon';
 
 import Link from 'common/NavLink';
+import ErrorMessages from 'common/ErrorMessages';
 import { SignUpSchema, SignUp } from 'schemas/auth';
 import { postAPI } from 'utils/models';
 
@@ -25,14 +26,21 @@ const SignupForm = () => {
 
   const onSubmit = (data: SignUp) => {
     const waitingListRequest = postAPI('waiting_list', data);
-    toast.promise(waitingListRequest, {
-      loading: 'Loading...',
-      success: () => {
-        setShowSuccess(true);
-        return 'Successfully added to waiting list';
+    toast.promise(
+      waitingListRequest,
+      {
+        loading: 'Loading...',
+        success: () => {
+          setShowSuccess(true);
+          return 'Successfully added to waiting list';
+        },
+        error: (err) => <ErrorMessages errors={err?.errors} />,
       },
-      error: (error) => error.errors,
-    });
+      {
+        duration: 6000,
+        position: 'top-right',
+      },
+    );
   };
 
   return (

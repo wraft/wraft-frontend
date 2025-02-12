@@ -73,9 +73,6 @@ export const fetchAPI = (path: any, query = '') =>
       });
   });
 
-/**
- * Load postAPI
- */
 export const postAPI = (
   path: string,
   body: any,
@@ -96,9 +93,6 @@ export const postAPI = (
       .catch((err) => reject(handleApiError(err)));
   });
 
-/**
- * Load putAPI
- */
 export const putAPI = (path: string, body: any = {}) =>
   new Promise((resolve, reject) => {
     api
@@ -107,9 +101,6 @@ export const putAPI = (path: string, body: any = {}) =>
       .catch((err) => reject(handleApiError(err)));
   });
 
-/**
- * Load putAPI
- */
 export const patchAPI = (path: string, body: any = {}) =>
   new Promise((resolve, reject) => {
     api
@@ -118,38 +109,11 @@ export const patchAPI = (path: string, body: any = {}) =>
       .catch((err) => reject(handleApiError(err)));
   });
 
-export const postEntityFile = (path: string, formData: any, token: string) =>
-  new Promise((resolve, reject) => {
-    api
-      .post(path, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          token: token,
-        },
-      })
-      .then((response: any) => resolve(response.data))
-      .catch((err) => reject(handleApiError(err)));
-  });
-
-/**
- * delete API
- */
 export const deleteAPI = (path: any, body?: any) =>
   new Promise((resolve, reject) => {
     const config = body ? { data: body } : {};
     api
       .delete(`/${path}`, config)
-      .then((response: any) => resolve(response.data))
-      .catch((err) => reject(handleApiError(err)));
-  });
-
-/**
- * delete API
- */
-export const fetchUserInfo = () =>
-  new Promise((resolve, reject) => {
-    api
-      .get(`${API_HOST}/api/v1/users/me`)
       .then((response: any) => resolve(response.data))
       .catch((err) => reject(handleApiError(err)));
   });
@@ -173,158 +137,6 @@ export const loadEntity = (token: string, path: string, onSuccess: any) => {
     })
     .then(function (data) {
       onSuccess(data);
-    });
-};
-
-/**
- * Load Entity Detail
- * @param token
- */
-export const loadEntityDetail = (
-  token: string,
-  model: string,
-  id: string,
-  onSuccess: any,
-) => {
-  fetch(`${API_HOST}/api/v1/${model}/${id}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      onSuccess(data);
-    });
-};
-
-/**
- * Create a Entity
- * @param data
- * @param path
- * @param token
- */
-
-export const createEntity = async (
-  data: any,
-  path: string,
-  token: string,
-  onSuccess?: any,
-  onFailed?: any,
-) => {
-  try {
-    const response = await axios.post(`${API_HOST}/api/v1/${path}`, data, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (onSuccess) {
-      onSuccess(response.data);
-    }
-  } catch (error) {
-    if (onFailed) onFailed(error);
-    console.error('🐞Error', error);
-  }
-};
-
-/**
- * Delete an Entity
- * @param path
- * @param token
- * @param data
- */
-
-export const deleteEntity = async (
-  path: string,
-  token: string,
-  onSuccess?: any,
-  onFailed?: any,
-  data?: any,
-) => {
-  try {
-    const response = await axios.delete(`${API_HOST}/api/v1/${path}`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      data: data,
-    });
-
-    if (onSuccess) {
-      onSuccess(response.data);
-    }
-  } catch (error) {
-    if (onFailed) onFailed(error);
-    console.error('🐞Error', error);
-  }
-};
-
-/**
- * Update an Entity
- * @param path
- * @param token
- */
-
-export const updateEntity = async (
-  path: string,
-  data: any,
-  token: string,
-  onSuccess?: any,
-  onFailed?: any,
-) => {
-  try {
-    const response = await axios.put(`${API_HOST}/api/v1/${path}`, data, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (onSuccess) {
-      onSuccess(response.data);
-    }
-  } catch (error) {
-    if (onFailed) onFailed(error);
-    console.error('🐞Error', error);
-  }
-};
-
-/**
- * Update an Entity
- * @param path
- * @param token
- */
-export const createEntityFile = (
-  data: any,
-  token: string,
-  path: string,
-  onSuccess?: any,
-) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      // 'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: data,
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((res) => {
-      if (onSuccess) {
-        onSuccess(res);
-      }
     });
 };
 
@@ -358,50 +170,6 @@ export const updateEntityFile = (
     });
 };
 
-export const registerUser = (data: any, onSuccess?: any) => {
-  fetch(`${API_HOST}/api/v1/users/signup`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (res) {
-      onSuccess(res);
-    });
-};
-export const checkUser = (token: any, onSuccess?: any, onError?: any) => {
-  fetch(`${API_HOST}/api/v1/users/me`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      onSuccess(data);
-    })
-    .catch(function (error) {
-      if (onError) {
-        onError(error);
-      }
-    });
-};
-
-/**
- * Login a user
- * @param data
- * @param onSucces ref to handle
- */
-
 export const userLogin = async (body: any) =>
   new Promise((resolve, reject) => {
     axios
@@ -420,35 +188,42 @@ export const userLogin = async (body: any) =>
       });
   });
 
-/**
- * Login a user
- * @param data
- * @param onSucces ref to handle
- */
-export const userOtpLogin = (data: any, onSuccess?: any) => {
-  fetch(`${API_HOST}/api/v1/users/otp_signin`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (response) {
-      const { token } = response;
-      cookie.set('token', token);
-      onSuccess(token);
-    });
-};
+export const registerUser = (payload: any, token: string | null = null) =>
+  new Promise((resolve, reject) => {
+    axios
+      .post(`${API_HOST}/api/v1/users/signup?token=${token}`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (!err.response) {
+          reject('Unable to process request. Please try again later');
+        }
+        if (err?.response?.data) {
+          reject(err.response.data);
+        }
+        reject(err);
+      });
+  });
 
-/**
- * Set User , Switch Workpace for tokens
- */
-
-export const switchProfile = (data: any) => {
-  const { access_token } = data;
-  cookie.set('token', access_token);
-};
+export const verifyInvite = (token: string | null = null) =>
+  new Promise((resolve, reject) => {
+    axios
+      .get(`${API_HOST}/api/v1/organisations/verify_invite_token/${token}`)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        if (!err.response) {
+          reject('Unable to process request. Please try again later');
+        }
+        if (err?.response?.data) {
+          reject(err.response.data);
+        }
+        reject(err);
+      });
+  });

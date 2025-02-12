@@ -104,6 +104,7 @@ const dark = {
   "background-scrollbar-thumb-hover": colors.gray["600"],
 
   "button-secondary-bg": "#111111",
+  icon: "#fff",
   ...colors,
 };
 export default dark;

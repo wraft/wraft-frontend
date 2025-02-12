@@ -21,6 +21,14 @@ export const EditorContainer = styled.divBox`
   }
 `;
 
+export const EditorWrapper = styled.divBox`
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+`;
+
 export const EditorContent = styled.divBox`
   position: relative;
   width: 100%;
@@ -33,6 +41,7 @@ export const EditorContent = styled.divBox`
   .ProseMirror p {
     line-height: 1.5;
   }
+
   .ProseMirror .ProseMirror-yjs-cursor {
     position: absolute;
     border-left: black;

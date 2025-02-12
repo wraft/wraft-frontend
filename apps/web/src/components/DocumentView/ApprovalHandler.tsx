@@ -1,4 +1,4 @@
-import { Text, Button } from '@wraft/ui';
+import { Button } from '@wraft/ui';
 import { ArrowRight } from '@phosphor-icons/react';
 
 export const ApprovalHandler = ({ name, onClick }: any) => {

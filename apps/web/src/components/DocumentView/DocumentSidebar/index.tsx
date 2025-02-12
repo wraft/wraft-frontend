@@ -36,8 +36,8 @@ export const DocumentSidebar = () => {
     <Flex
       direction="column"
       bg="background-primary"
-      w="30%"
-      maxWidth="400px"
+      // w="30%"
+      // maxWidth="400px"
       borderLeft="solid 1px"
       borderColor="border">
       <Box flexShrink="0">
