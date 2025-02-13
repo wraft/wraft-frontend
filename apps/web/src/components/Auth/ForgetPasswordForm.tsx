@@ -63,11 +63,13 @@ const ForgetPasswordForm = () => {
           p="0px"
           pt="103px"
           px="140px">
-          <MailIcon width={224} height={80} />
-          <Text as="h3" mt="12px" mb="32px" color="#363E49">
+          <MailIcon width={224} height={80} className="main-icon" />
+          <Text as="h3" fontSize="2xl">
             Check your Mail
           </Text>
-          <Text mb={3}>Password reset link has been sent to your email.</Text>
+          <Text mb="md" color="text-secondary">
+            Password reset link has been sent to your email.
+          </Text>
           <Button
             onClick={() => {
               Router.push('/');

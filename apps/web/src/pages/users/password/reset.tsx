@@ -1,12 +1,20 @@
 import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Box, Heading, Button } from 'theme-ui';
 import { z } from 'zod';
 import { BrandLogoIcon } from '@wraft/icon';
+import {
+  Flex,
+  Box,
+  Text,
+  Button,
+  Field,
+  InputText,
+  PasswordInput,
+} from '@wraft/ui';
 
-import Field from 'common/Field';
 import Link from 'common/NavLink';
 import { postAPI } from 'utils/models';
 import { addFieldIssue, passwordPattern } from 'utils/zodPatterns';
@@ -34,8 +42,12 @@ const Index = () => {
     formState: { errors },
   } = useForm<FormValues>({ mode: 'onSubmit', resolver: zodResolver(schema) });
 
+  const router = useRouter();
+
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+
+  const homePageUrl = process.env.homePageUrl || '/';
 
   const onSubmit = (data: FormValues) => {
     if (data.newPassword == data.confirmPassword) {
@@ -44,49 +56,74 @@ const Index = () => {
         password: data.newPassword,
       };
       const resetPasswordRequest = postAPI('user/password/reset', body);
-      toast.promise(resetPasswordRequest, {
-        loading: 'Loading...',
-        success: 'Password reset successful',
-        error: 'Failed to reset password',
-      });
+      router.push('/login');
+      toast.promise(
+        resetPasswordRequest,
+        {
+          loading: 'Loading...',
+          success: 'Password reset successful',
+          error: 'Failed to reset password',
+        },
+        {},
+      );
     }
   };
 
   return (
     <>
       {token ? (
-        <Flex variant="onboardingFormPage">
-          <Box sx={{ position: 'absolute', top: '80px', left: '80px' }}>
-            <Link href="/">
-              <Box sx={{ color: `gray.0`, fill: 'gray.1200' }}>
+        <Flex
+          justify="center"
+          p="5xl"
+          bg="background-secondary"
+          h="100vh"
+          align="baseline">
+          <Box position="absolute" top="80px" left="80px">
+            <Link href={homePageUrl}>
+              <Box color="gray.0" fill="gray.1200">
                 <BrandLogoIcon width="7rem" height="3rem" />
               </Box>
             </Link>
           </Box>
-          <Flex variant="onboardingForms" sx={{ justifySelf: 'center' }}>
-            <Heading as="h3" variant="styles.h3" sx={{ mb: '64px' }}>
-              Reset password
-            </Heading>
+          <Flex
+            variant="card"
+            w="500px"
+            justifySelf="center"
+            direction="column">
+            <Text as="h3" mb="lg" fontSize="3xl">
+              New Password
+            </Text>
 
-            <Box as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Flex
+              direction="column"
+              as="form"
+              gap="md"
+              onSubmit={handleSubmit(onSubmit)}>
               <Field
                 label="New Password"
-                name="newPassword"
-                type="password"
-                register={register}
-                error={errors.newPassword}
-                mb={'24px'}
-              />
+                required
+                error={errors?.newPassword?.message}>
+                <InputText
+                  autoComplete="off"
+                  {...register('newPassword')}
+                  placeholder="Enter your New Password"
+                />
+              </Field>
               <Field
                 label="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                register={register}
-                error={errors.confirmPassword}
-                mb={'24px'}
-              />
-              <Button type="submit">Reset password </Button>
-            </Box>
+                required
+                error={errors?.confirmPassword?.message}>
+                <PasswordInput
+                  autoComplete="off"
+                  placeholder="Enter your Confirm Password"
+                  {...register('confirmPassword')}
+                />
+              </Field>
+
+              <Box mt="md">
+                <Button type="submit">Reset password </Button>
+              </Box>
+            </Flex>
           </Flex>
         </Flex>
       ) : (
