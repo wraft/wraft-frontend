@@ -39,8 +39,10 @@ export const Dialog: any = styled.div`
   flex-direction: column;
   gap: 1rem;
   // overflow: auto;
-  border-radius: 0.65rem;
-  background-color: hsl(204 20% 100%);
+  border-radius: sm;
+  background-color: modal-background;
+  border: 1px solid;
+  border-color: border;
   padding: 1rem;
   color: hsl(204 10% 10%);
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
@@ -66,7 +68,7 @@ export const Dialog: any = styled.div`
     max-height: 80vh;
     width: fit-content;
     max-width: 80%;
-    border-radius: 1rem;
+    border-radius: sm;
     padding: 1.5rem;
   }
 
@@ -75,6 +77,7 @@ export const Dialog: any = styled.div`
     font-size: 1.25rem;
     line-height: 1.75rem;
     font-weight: 600;
+    color: text-primary;
   }
 
   // position: fixed;

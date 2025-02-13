@@ -1,7 +1,6 @@
-import { Text, Flex, Box } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
-import { Button, Modal } from '@wraft/ui';
+import { Button, Modal, Text, Flex, Box } from '@wraft/ui';
 
 import Field from 'common/Field';
 import { putAPI } from 'utils/models';
@@ -40,63 +39,28 @@ export const ApprovalUpdateModal = ({ state, success, open, setOpen }: any) => {
   };
   return (
     <Modal ariaLabel="Approval" open={open}>
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          width: '372px',
-          height: '225px',
-          border: '1px solid #E4E9EF',
-          background: '#FFF',
-          alignItems: 'flex-start',
-          justifyContent: 'space-evenly',
-        }}>
-        <Box
-          sx={{
-            px: 3,
-            py: 2,
-            borderColor: 'border',
-            width: '100%',
-            borderBottom: 'solid 1px #ddd',
-            mb: 2,
-          }}>
-          <Text
-            as="p"
-            variant="h5Medium"
-            sx={{ textAlign: 'left', fontSize: '15px' }}>
-            Confirm action
-          </Text>
-        </Box>
+      <Flex direction="column" w="372px">
+        <Modal.Header>Confirm Action</Modal.Header>
+
         <Text
-          sx={{
-            px: 4,
-            mb: 2,
-            marginTop: '5px',
-            // mb: '5px',
-            textAlign: 'left',
-            fontWeight: 'heading',
-            color: 'gray.900',
-          }}>
-          {state === 'next'
-            ? `Confirm to send current content to ${nextState?.state} stage ?`
-            : `Are you sure you want to send back to ${prevState?.state}?`}{' '}
-        </Text>
-        <Box as="form" py={1} mt={0} sx={{ display: 'none' }}>
-          <Box mx={0} mb={2} sx={{ width: '350px' }}>
+          color="text-secondary"
+          mt="xs"
+          dangerouslySetInnerHTML={{
+            __html:
+              state === 'next'
+                ? `Confirm to send current content to <strong>${nextState?.state} stage</strong> ?`
+                : `Are you sure you want to send back to <strong>${prevState?.state} stage</strong>?`,
+          }}
+        />
+
+        <Box as="form" py="sm" mt="sm" display="none">
+          <Box>
             <Field name="body" label="" defaultValue="" register={register} />
           </Box>
         </Box>
-        <Flex
-          sx={{
-            gap: '12px',
-            px: 3,
-            py: 3,
-            mt: 3,
-            // borderColor: '#eee',
-            borderTop: 'solid 1px #ddd',
-            width: '100%',
-          }}>
+        <Flex mt="xxl" gap="md">
           <Button onClick={handleModalAction}>Confirm</Button>
-          <Button danger variant="tertiary" onClick={() => setOpen(false)}>
+          <Button variant="tertiary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </Flex>

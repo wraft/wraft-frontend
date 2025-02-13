@@ -103,6 +103,8 @@ const dark = {
   "background-scrollbar-thumb": colors.gray["600"],
   "background-scrollbar-thumb-hover": colors.gray["600"],
 
+  "modal-background": "#111111",
+
   "button-secondary-bg": "#111111",
   icon: "#fff",
   ...colors,
