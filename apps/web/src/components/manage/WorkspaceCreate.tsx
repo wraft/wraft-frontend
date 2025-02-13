@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Button, Text, Spinner } from 'theme-ui';
+import { Box, Button, Text, Flex, Field, InputText } from '@wraft/ui';
 
-import Field from 'common/Field';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
@@ -52,48 +51,23 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
   };
 
   return (
-    <Box
-      as={'form'}
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{ minWidth: '556px' }}>
-      <Text variant="pB" sx={{ display: 'inline-block', py: 3, px: 4 }}>
+    <Box as={'form'} onSubmit={handleSubmit(onSubmit)} minWidth="556px">
+      <Text fontSize="2xl" as="h3" mb="lg">
         Create workspace
       </Text>
-      <Box sx={{ borderTop: '1px solid', borderColor: 'border' }}>
-        <Box sx={{ px: 4, pt: 3 }}>
-          <Field
-            name="name"
-            register={register}
-            placeholder="Enter Workspace Name"
-            label="Workspace Name"
-            error={errors.name}
-          />
-          <Box sx={{ gap: 3, py: 4 }}>
-            <Button
-              type="submit"
-              variant="buttonPrimary"
-              sx={{
-                fontSize: 'sm',
-                flexGrow: 1,
-                mr: 3,
-              }}>
-              {creating && <Spinner width={16} height={16} color="white" />}
-              {!creating && <Text>Create Workspace</Text>}
-            </Button>
-            <Button
-              onClick={() => {
-                setOpen(false);
-              }}
-              variant="cancel"
-              sx={{
-                fontSize: 'sm',
-                flexGrow: 1,
-              }}>
-              Cancel
-            </Button>
-          </Box>
-        </Box>
-      </Box>
+
+      <Field label="Workspace Name" required error={errors?.name?.message}>
+        <InputText {...register('name')} placeholder="Enter Workspace Name" />
+      </Field>
+
+      <Flex gap="md" mt="md">
+        <Button loading={creating} type="submit">
+          <Text>Create Workspace</Text>
+        </Button>
+        <Button variant="tertiary" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+      </Flex>
     </Box>
   );
 };

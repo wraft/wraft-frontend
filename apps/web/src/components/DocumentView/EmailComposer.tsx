@@ -72,6 +72,7 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
           size={20}
           weight="bold"
           cursor="pointer"
+          className="main-icon"
           onClick={() => setOpen(false)}
         />
       </Flex>
