@@ -41,7 +41,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     <>
       <DropdownMenu.Provider>
         <DropdownMenu.Trigger>
-          <DotsThreeVertical weight="bold" size={18} />
+          <DotsThreeVertical weight="bold" size={18} className="main-icon" />
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
@@ -74,7 +74,11 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
       </Modal>
 
       <Modal ariaLabel="Confirm Block" open={isMailPopupOpen}>
-        <EmailComposer id={id} setOpen={setMailPopupOpen} />
+        <>
+          {isMailPopupOpen && (
+            <EmailComposer id={id} setOpen={setMailPopupOpen} />
+          )}
+        </>
       </Modal>
     </>
   );

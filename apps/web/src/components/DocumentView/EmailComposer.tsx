@@ -1,28 +1,25 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Flex } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import { Button, Box, Flex, Text, Field, InputText, Textarea } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import toast from 'react-hot-toast';
 
-import Field from 'common/Field';
-import FieldText from 'common/FieldText';
 import { postAPI } from 'utils/models';
 
-const validationSchema: any = yup.object().shape({
-  email: yup.string().email('Invalid email').required('Required'),
-  subject: yup
+const validationSchema = z.object({
+  email: z.string().email('Invalid email').nonempty('Required'),
+  subject: z
     .string()
     .min(4, 'Minimum 4 characters required')
     .transform((value) => value.trim())
     .optional(),
-  message: yup
+  message: z
     .string()
-    .trim()
     .min(5, 'Minimum 5 characters required')
-    .optional(),
+    .optional()
+    .transform((value) => (value ? value.replace(/\n/g, '<br>') : value)),
 });
 
 const formDefaultValues = {
@@ -44,12 +41,13 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
     formState: { errors },
   } = useForm({
     defaultValues: formDefaultValues,
-    resolver: yupResolver(validationSchema),
-    mode: 'onBlur',
+    resolver: zodResolver(validationSchema),
   });
 
   const onSubmit = (data: any) => {
     setLoading(true);
+    console.log('data', data);
+
     postAPI(`contents/${id}/email`, data)
       .then(() => {
         setLoading(false);
@@ -65,15 +63,11 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
       });
   };
   return (
-    <Box
-      sx={{ width: '100ch', height: '100%' }}
-      p={4}
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}>
-      <Flex
-        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
-        mb={3}>
-        <Box as="h3">New Mail</Box>
+    <Box w="80ch" h="100%" p={4} as="form" onSubmit={handleSubmit(onSubmit)}>
+      <Flex justifyContent="space-between" alignItems="center" mb={3}>
+        <Text as="h3" fontSize="2xl" mb="md">
+          New Mail
+        </Text>
         <X
           size={20}
           weight="bold"
@@ -81,39 +75,29 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
           onClick={() => setOpen(false)}
         />
       </Flex>
-      <Box py={2}>
-        <Field
-          register={register}
-          error={errors.email}
-          label="To"
-          name="email"
-          defaultValue=""
-          placeholder="Enter from Email"
-        />
-      </Box>
-      <Box py={2}>
-        <Field
-          register={register}
-          error={errors.subject}
-          label="Subject"
-          name="subject"
-          defaultValue=""
-          placeholder="Enter Subject"
-        />
-      </Box>
-      <Box py={2} mb={3}>
-        <FieldText
-          register={register}
-          label="Message"
-          name="message"
-          placeholder="Message"
-          defaultValue=""
-          rows={8}
-        />
-      </Box>
-      <Button variant="primary" loading={loading} type="submit">
-        Send Now
-      </Button>
+      <Flex direction="column" gap="md">
+        <Field label="To" required error={errors?.email?.message}>
+          <InputText
+            type="email"
+            {...register('email')}
+            placeholder="Enter To email address"
+          />
+        </Field>
+
+        <Field label="Subject" required error={errors?.subject?.message}>
+          <InputText {...register('subject')} placeholder="Enter Subject" />
+        </Field>
+
+        <Field label="Message" required error={errors?.message?.message}>
+          <Textarea {...register('message')} placeholder="Enter a Message" />
+        </Field>
+
+        <Box>
+          <Button variant="primary" loading={loading} type="submit">
+            Send Now
+          </Button>
+        </Box>
+      </Flex>
     </Box>
   );
 };
