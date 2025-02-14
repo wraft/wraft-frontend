@@ -20,7 +20,7 @@ import { X } from '@phosphor-icons/react';
 import FieldColor from 'common/FieldColor';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { VariantSchema, Variant } from 'schemas/variant';
-import { fetchAPI, postAPI, putAPI } from 'utils/models';
+import { deleteAPI, fetchAPI, postAPI, putAPI } from 'utils/models';
 import { ContentType } from 'utils/types';
 
 import FieldEditor from './FieldEditor';
@@ -237,7 +237,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }, []);
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const payload = {
       name: data?.name?.trim(),
       layout_id: data.layout.id,
@@ -251,6 +251,10 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     };
 
     if (contentId) {
+      //TODO: Improve this later
+      const fieldsToRemove = getFieldsToRemove(data?.fields);
+      await deleteFieldsOneByOne(fieldsToRemove);
+
       putAPI(`content_types/${contentId}`, payload)
         .then(() => {
           setIsOpen && setIsOpen(false);
@@ -286,6 +290,29 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
           );
         });
     }
+  };
+
+  const getFieldsToRemove = (currentFields: any) => {
+    return content?.content_type?.fields
+      .filter(
+        (existingField: any) =>
+          !currentFields.some(
+            (currentField: any) => currentField.name === existingField.name,
+          ),
+      )
+      .map((field: any) => field.id);
+  };
+
+  const deleteFieldsOneByOne = async (fieldIds: string[]) => {
+    await Promise.all(
+      fieldIds.map(async (fieldId) => {
+        try {
+          await deleteAPI(`content_type/${contentId}/field/${fieldId}`);
+        } catch (error) {
+          console.error(`Error deleting ID: ${fieldId}`, error);
+        }
+      }),
+    );
   };
 
   const onChangeFields = (e: any, name: any) => {
