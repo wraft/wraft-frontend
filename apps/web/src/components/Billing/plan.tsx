@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { promise } from 'zod';
 import { Flex, Box } from 'theme-ui';
 import { Button } from '@wraft/ui';
-import { promise } from 'zod';
 import { TickIcon } from '@wraft/icon';
 
 import { Text } from 'common/Text';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 
+import { Subscription, Plan, PlansApiResponse } from './types';
 import { usePaddleIntegration } from './paddle';
 import { fetchSubscription } from './subscription';
-import { Subscription, Plan, PlansApiResponse } from './types';
 import TransactionList from './transaction';
 
 type ApiResponse = {
@@ -22,15 +22,13 @@ type InvoiceResponse = {
   invoice_url: string;
 };
 
-const AllPlansUI = () => {
+const PlanTemplateList = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [activePlanId, setActivePlanId] = useState<string | null>(null);
   const [isYearly, setIsYearly] = useState(false);
   const [currentSubscription, setCurrentSubscription] =
     useState<Subscription | null>(null);
   const { userProfile } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
-  const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
   const [showTransactionHistory, setShowTransactionHistory] = useState(false);
 
   const toggleDetails = () => setShowDetails(!showDetails);
@@ -57,7 +55,6 @@ const AllPlansUI = () => {
         fetchPlans(),
         fetchSubscription().then((subscriptionData) => {
           setCurrentSubscription(subscriptionData);
-          setActivePlanId(subscriptionData.plan.id);
         }),
       ]);
     } catch (error) {
@@ -73,7 +70,6 @@ const AllPlansUI = () => {
       console.log('API Response:', response);
       if (response.success) {
         setCurrentSubscription(null);
-        setActivePlanId(null);
       }
     } catch (error) {
       console.error('Error canceling subscription:', error);
@@ -87,11 +83,9 @@ const AllPlansUI = () => {
         {},
       )) as ApiResponse;
       console.log('Change Plan Response:', response);
-      setApiResponse(response);
       if (response.success) {
         const subscriptionData = await fetchSubscription();
         setCurrentSubscription(subscriptionData);
-        setActivePlanId(subscriptionData.plan.id);
       }
     } catch (error) {
       console.error('Error changing plan:', error);
@@ -143,7 +137,6 @@ const AllPlansUI = () => {
 
       const subscriptionData = await fetchSubscription();
       setCurrentSubscription(subscriptionData);
-      setActivePlanId(subscriptionData.plan.id);
     } catch (error) {
       console.error('Checkout failed:', error);
     }
@@ -352,7 +345,6 @@ const AllPlansUI = () => {
                     }}
                     onClick={() => {
                       if (!isCurrentPlan) {
-                        setActivePlanId(plan.id);
                         processPaddleCheckout(plan);
                       }
                     }}>
@@ -376,4 +368,4 @@ const AllPlansUI = () => {
   );
 };
 
-export default AllPlansUI;
+export default PlanTemplateList;

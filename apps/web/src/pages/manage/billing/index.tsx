@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { backOut } from 'framer-motion';
-import PlanTemplateList from 'pages/manage/billing/plan';
 
-import Page from 'components/PageFrame';
+import PlanTemplateList from 'components/Billing/plan';
+import { Page } from 'common/PageFrame';
 
 const Index: FC = () => {
   return (
