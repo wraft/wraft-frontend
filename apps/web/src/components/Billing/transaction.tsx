@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from 'theme-ui';
+import { Box } from '@wraft/ui';
 import { Table, Button } from '@wraft/ui';
 
 import { fetchAPI } from 'utils/models';
@@ -72,10 +72,13 @@ type TransactionListProps = {
   onDownloadInvoice: (transactionId: string) => Promise<void>;
 };
 
-const TransactionList = ({ organisationId, onDownloadInvoice }: TransactionListProps) => {
+const TransactionList = ({
+  organisationId,
+  onDownloadInvoice,
+}: TransactionListProps) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -162,7 +165,8 @@ const TransactionList = ({ organisationId, onDownloadInvoice }: TransactionListP
       header: 'Invoice',
       accessorKey: '',
       cell: (info: any) => (
-        <Button onClick={() => onDownloadInvoice(info.row.original.transaction_id)}>
+        <Button
+          onClick={() => onDownloadInvoice(info.row.original.transaction_id)}>
           Download
         </Button>
       ),
@@ -171,7 +175,7 @@ const TransactionList = ({ organisationId, onDownloadInvoice }: TransactionListP
   ];
 
   return (
-    <Box sx={{ width: '100%', mt: 4, overflowX: 'auto' }}>
+    <Box as="div" maxWidth="100%" mt="4" overflowX="auto">
       <Table
         data={transactions}
         columns={columns}
