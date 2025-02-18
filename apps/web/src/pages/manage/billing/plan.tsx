@@ -26,7 +26,8 @@ const AllPlansUI = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [activePlanId, setActivePlanId] = useState<string | null>(null);
   const [isYearly, setIsYearly] = useState(false);
-  const [currentSubscription, setCurrentSubscription] = useState<Subscription | null>(null);
+  const [currentSubscription, setCurrentSubscription] =
+    useState<Subscription | null>(null);
   const { userProfile } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
   const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
@@ -41,7 +42,9 @@ const AllPlansUI = () => {
 
   const fetchPlans = async () => {
     try {
-      const PlansData = (await fetchAPI('plans/active_standard_plans')) as PlansApiResponse;
+      const PlansData = (await fetchAPI(
+        'plans/active_plans ',
+      )) as PlansApiResponse;
       setPlans(PlansData.plans || []);
     } catch (error) {
       console.log('Error fetching plans:', error);
@@ -64,7 +67,9 @@ const AllPlansUI = () => {
 
   const cancelSubscription = async () => {
     try {
-      const response = (await deleteAPI('billing/subscription/cancel')) as ApiResponse;
+      const response = (await deleteAPI(
+        'billing/subscription/cancel',
+      )) as ApiResponse;
       console.log('API Response:', response);
       if (response.success) {
         setCurrentSubscription(null);
@@ -77,7 +82,10 @@ const AllPlansUI = () => {
 
   const changePlan = async (plan: Plan) => {
     try {
-      const response = (await postAPI(`billing/subscription/${plan.id}/change`, {})) as ApiResponse;
+      const response = (await postAPI(
+        `billing/subscription/${plan.id}/change`,
+        {},
+      )) as ApiResponse;
       console.log('Change Plan Response:', response);
       setApiResponse(response);
       if (response.success) {
@@ -182,7 +190,8 @@ const AllPlansUI = () => {
                 Plan: <strong>{currentSubscription.plan.name}</strong>
               </Text>
               <Text>
-                Billing interval: <strong>{currentSubscription.plan.billing_interval}</strong>
+                Billing interval:{' '}
+                <strong>{currentSubscription.plan.billing_interval}</strong>
               </Text>
               <Text>
                 Status: <strong>{currentSubscription.status}</strong>
@@ -222,10 +231,12 @@ const AllPlansUI = () => {
                 boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
               }}>
               <Text>
-                <strong>Next Bill Date:</strong> {currentSubscription.next_bill_date}
+                <strong>Next Bill Date:</strong>{' '}
+                {currentSubscription.next_bill_date}
               </Text>
               <Text>
-                <strong>Next Bill Amount:</strong> ${currentSubscription.next_bill_amount}
+                <strong>Next Bill Amount:</strong> $
+                {currentSubscription.next_bill_amount}
               </Text>
               <Box sx={{ mt: 2 }}>
                 <Text fontWeight="bold">Features:</Text>
@@ -238,8 +249,12 @@ const AllPlansUI = () => {
               <Flex sx={{ gap: 2, mt: 3 }}>
                 <Button
                   variant="secondary"
-                  onClick={() => setShowTransactionHistory(!showTransactionHistory)}>
-                  {showTransactionHistory ? 'Hide Transaction History' : 'View Transaction History'}
+                  onClick={() =>
+                    setShowTransactionHistory(!showTransactionHistory)
+                  }>
+                  {showTransactionHistory
+                    ? 'Hide Transaction History'
+                    : 'View Transaction History'}
                 </Button>
               </Flex>
 
@@ -263,7 +278,8 @@ const AllPlansUI = () => {
           borderRadius: 'lg',
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         }}>
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Flex
+          sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Text fontSize={40}>All Plans</Text>
           <Flex sx={{ alignItems: 'center', gap: 3 }}>
             <Text>Monthly</Text>
@@ -298,7 +314,8 @@ const AllPlansUI = () => {
         </Flex>
         <Box></Box>
 
-        <Flex sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'space-between' }}>
+        <Flex
+          sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'space-between' }}>
           {paidPlans.map((plan) => {
             const isCurrentPlan = currentSubscription?.plan.id === plan.id;
 
@@ -320,7 +337,8 @@ const AllPlansUI = () => {
                 <Box>
                   {plan.features.map((feature, index) => (
                     <Flex key={index} sx={{ alignItems: 'center', gap: 2 }}>
-                      <TickIcon color="green" /> {/* Adjust size and color as needed */}
+                      <TickIcon color="green" />{' '}
+                      {/* Adjust size and color as needed */}
                       <Text>{feature}</Text>
                     </Flex>
                   ))}
