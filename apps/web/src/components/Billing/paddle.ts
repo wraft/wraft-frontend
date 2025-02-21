@@ -11,6 +11,7 @@ interface CheckoutOptions {
     quantity: number;
   }>;
   customData?: Record<string, string | number>;
+  discountId: string | undefined;
 }
 
 export const usePaddleIntegration = (initOptions: PaddleInitOptions) => {

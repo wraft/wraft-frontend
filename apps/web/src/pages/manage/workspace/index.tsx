@@ -266,6 +266,12 @@ const Index: FC = () => {
                   placeholder="Enter a custom url wraft.co/example"
                 />
               </Field> */}
+              <Box>
+                <img
+                  src="https://dev-cdn.poetbin.com/wraft-dev/public/templates/contract-template-final/thumbnail.png"
+                  alt=""
+                />
+              </Box>
 
               <Box mt="md">
                 {isEdit ? (

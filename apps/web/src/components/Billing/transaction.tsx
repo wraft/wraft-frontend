@@ -1,71 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@wraft/ui';
-import { Table, Button } from '@wraft/ui';
+import { Table, Button, Box } from '@wraft/ui';
 
 import { fetchAPI } from 'utils/models';
 
-type Transaction = {
-  id: string;
-  invoice_number: string;
-  billing_period_start: string;
-  billing_period_end: string;
-  currency: string;
-  date: string;
-  payment_method_details: {
-    card: {
-      cardholder_name: string;
-      expiry_month: number;
-      expiry_year: number;
-      last4: string;
-      type: string;
-    };
-    type: string;
-  };
-  plan: {
-    billing_interval: string;
-    currency: string;
-    description: string;
-    features: string[];
-    id: string;
-    inserted_at: string;
-    limits: {
-      instance_create: number;
-      content_type_create: number;
-      organisation_create: number;
-      organisation_invite: number;
-    };
-    name: string;
-    plan_amount: string;
-    plan_id: string;
-    product_id: string;
-    updated_at: string;
-  };
-  plan_id: string;
-  provider_plan_id: string;
-  provider_subscription_id: string;
-  subscriber: {
-    email: string;
-    email_verify: boolean;
-    id: string;
-    inserted_at: string;
-    name: string;
-    updated_at: string;
-  };
-  subscriber_id: string;
-  subtotal_amount: string;
-  tax: string;
-  total_amount: string;
-  transaction_id: string;
-};
-
-type ApiResponse = {
-  success: boolean;
-  message?: string;
-};
-
-type TransactionApiResponse = ApiResponse & {
-  transactions: Transaction[];
-};
+import { Transaction, TransactionApiResponse } from './types';
 
 type TransactionListProps = {
   organisationId: string;

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { promise } from 'zod';
-import { Flex, Box } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import { Button, Box, Flex } from '@wraft/ui';
 import { TickIcon } from '@wraft/icon';
 
 import { Text } from 'common/Text';
@@ -10,7 +9,6 @@ import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 
 import { Subscription, Plan, PlansApiResponse } from './types';
 import { usePaddleIntegration } from './paddle';
-import { fetchSubscription } from './subscription';
 import TransactionList from './transaction';
 
 type ApiResponse = {
@@ -107,6 +105,18 @@ const PlanTemplateList = () => {
     }
   };
 
+  const fetchSubscription = async (): Promise<Subscription> => {
+    try {
+      const subscriptionData = (await fetchAPI(
+        'billing/subscription/',
+      )) as Subscription;
+      return subscriptionData;
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
     loadPlansAndSubscription();
   }, []);
@@ -122,6 +132,7 @@ const PlanTemplateList = () => {
 
     try {
       await handleCheckout({
+        discountId: plan.coupon?.coupon_id,
         items: [
           {
             priceId: priceId,
@@ -134,12 +145,27 @@ const PlanTemplateList = () => {
           organisation_id: userProfile.currentOrganisation.id,
         },
       });
-
       const subscriptionData = await fetchSubscription();
       setCurrentSubscription(subscriptionData);
     } catch (error) {
       console.error('Checkout failed:', error);
     }
+  };
+
+  const offerPrice = (plan: Plan) => {
+    if (plan.coupon) {
+      const orgPrice = parseFloat(plan.plan_amount);
+
+      if (plan.coupon.type === 'percentage' && plan.coupon.amount) {
+        const discPer = parseFloat(plan.coupon.amount);
+        const discAmount = (orgPrice * discPer) / 100;
+        return Math.round(orgPrice - discAmount);
+      } else if (plan.coupon.type === 'flat' && plan.coupon.amount) {
+        const discAmount = parseFloat(plan.coupon.amount);
+        return Math.round(orgPrice - discAmount);
+      }
+    }
+    return null;
   };
 
   const filterPlans = plans.filter(
@@ -150,31 +176,31 @@ const PlanTemplateList = () => {
 
   return (
     <Flex
-      sx={{
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+      direction="column"
+      align="center"
+      justify="center"
+      style={{
         minHeight: 'auto',
-        padding: 4,
+        padding: 'xl',
       }}>
-      {paddleError && <Box sx={{ color: 'red', mb: 3 }}>{paddleError}</Box>}
+      {paddleError && (
+        <Box p="lg" color="red">
+          {paddleError}
+        </Box>
+      )}
 
       {currentSubscription && (
         <Box
-          sx={{
-            width: '100%',
-            maxWidth: 960,
-            bg: 'green.100',
-            p: 3,
-            mb: 4,
-            borderRadius: 'md',
+          w="100%"
+          maxWidth="960px"
+          bg="green.100"
+          p="lg"
+          mb="xl"
+          borderRadius="md"
+          style={{
             boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
           }}>
-          <Flex
-            sx={{
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+          <Flex justify="space-between" align="center">
             <Box>
               <Text fontSize={18} fontWeight="bold">
                 Current Subscription
@@ -190,7 +216,7 @@ const PlanTemplateList = () => {
                 Status: <strong>{currentSubscription.status}</strong>
               </Text>
             </Box>
-            <Flex sx={{ gap: 2 }}>
+            <Flex gap="sm">
               <Button
                 variant="secondary"
                 onClick={toggleDetails}
@@ -214,13 +240,14 @@ const PlanTemplateList = () => {
               </Button>
             </Flex>
           </Flex>
+
           {showDetails && (
             <Box
-              sx={{
-                mt: 3,
-                p: 3,
-                bg: 'white',
-                borderRadius: 'md',
+              mt="lg"
+              p="lg"
+              bg="white"
+              borderRadius="md"
+              style={{
                 boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
               }}>
               <Text>
@@ -231,7 +258,7 @@ const PlanTemplateList = () => {
                 <strong>Next Bill Amount:</strong> $
                 {currentSubscription.next_bill_amount}
               </Text>
-              <Box sx={{ mt: 2 }}>
+              <Box style={{ marginTop: '8px' }}>
                 <Text fontWeight="bold">Features:</Text>
                 <ul>
                   {currentSubscription.plan.features.map((feature, index) => (
@@ -239,7 +266,7 @@ const PlanTemplateList = () => {
                   ))}
                 </ul>
               </Box>
-              <Flex sx={{ gap: 2, mt: 3 }}>
+              <Flex style={{ gap: '8px', marginTop: '16px' }}>
                 <Button
                   variant="secondary"
                   onClick={() =>
@@ -263,18 +290,17 @@ const PlanTemplateList = () => {
       )}
 
       <Box
-        sx={{
-          width: '100%',
-          maxWidth: 960,
-          bg: 'background',
-          p: 4,
-          borderRadius: 'lg',
+        w="100%"
+        maxWidth="960px"
+        bg="background"
+        p="xl"
+        borderRadius="lg"
+        style={{
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
         }}>
-        <Flex
-          sx={{ justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Flex justify="space-between" align="center" mb="xl">
           <Text fontSize={40}>All Plans</Text>
-          <Flex sx={{ alignItems: 'center', gap: 3 }}>
+          <Flex align="center" gap="lg">
             <Text>Monthly</Text>
             <Button
               variant="secondary"
@@ -290,14 +316,14 @@ const PlanTemplateList = () => {
                 border: 'none',
               }}>
               <Box
-                sx={{
+                style={{
                   position: 'absolute',
                   left: isYearly ? '32px' : '4px',
                   top: '4px',
                   width: '24px',
                   height: '24px',
                   borderRadius: '12px',
-                  bg: 'white',
+                  background: 'white',
                   transition: 'left 0.2s',
                 }}
               />
@@ -305,43 +331,75 @@ const PlanTemplateList = () => {
             <Text>Yearly</Text>
           </Flex>
         </Flex>
-        <Box></Box>
 
-        <Flex
-          sx={{ flexWrap: 'wrap', gap: 4, justifyContent: 'space-between' }}>
+        <Flex wrap="wrap" gap="xl" justify="space-between">
           {paidPlans.map((plan) => {
             const isCurrentPlan = currentSubscription?.plan.id === plan.id;
+            const discountedPrice = offerPrice(plan);
 
             return (
               <Box
                 key={plan.id}
-                sx={{
+                p="lg"
+                style={{
                   flex: '1 1 calc(50% - 16px)',
-                  bg: 'white',
-                  p: 3,
-                  borderRadius: 'md',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                   textAlign: 'left',
+                  position: 'relative',
                 }}>
-                <Text>{plan.name}</Text>
-                <Text fontSize={24} my={2}>
-                  ${plan.plan_amount}
-                </Text>
+                {plan.coupon && (
+                  <Text
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      right: 0,
+                      borderRadius: '0 0 0 8px',
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      color: 'green',
+                    }}>
+                    {plan.coupon.type === 'percentage'
+                      ? `Up to ${plan.coupon.amount}% OFF`
+                      : `$${plan.coupon.amount} OFF`}
+                  </Text>
+                )}
+
+                <Text fontSize={30}>{plan.name}</Text>
+                <Flex align="baseline" gap="md" mt="sm">
+                  {discountedPrice ? (
+                    <>
+                      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                        ${discountedPrice}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          textDecoration: 'line-through',
+                          color: 'gray',
+                        }}>
+                        ${Math.round(parseFloat(plan.plan_amount))}
+                      </Text>
+                    </>
+                  ) : (
+                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                      ${Math.round(parseFloat(plan.plan_amount))}
+                    </Text>
+                  )}
+                </Flex>
+
                 <Box>
                   {plan.features.map((feature, index) => (
-                    <Flex key={index} sx={{ alignItems: 'center', gap: 2 }}>
-                      <TickIcon color="green" />{' '}
-                      {/* Adjust size and color as needed */}
-                      <Text>{feature}</Text>
+                    <Flex key={index} align="center" gap="sm">
+                      <TickIcon color="green" /> <Text>{feature}</Text>
                     </Flex>
                   ))}
                 </Box>
+
                 {plan.name !== 'Free trial' && (
                   <Button
                     variant={isCurrentPlan ? 'primary' : 'secondary'}
                     style={{
                       width: '100%',
-                      marginTop: '10px',
                     }}
                     onClick={() => {
                       if (!isCurrentPlan) {
@@ -354,8 +412,9 @@ const PlanTemplateList = () => {
                 <Button
                   variant="secondary"
                   onClick={() => changePlan(plan)}
+                  size="md"
                   style={{
-                    marginTop: '10px',
+                    marginTop: '6px',
                   }}>
                   Change Plan
                 </Button>
