@@ -6,7 +6,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
 import { Plus, X } from '@phosphor-icons/react';
 
-import SearchComponent from 'components/GlobalSearch/Search';
+import GlobalSearch from 'components/GlobalSearch/GlobalSearch';
 import CreateDocument from 'components/DocumentCreate';
 import DefaultMenuItem from 'common/MenuItem';
 
@@ -80,7 +80,7 @@ const Sidebar = (props: any) => {
         <Header />
         <Flex flex={1} direction="column">
           {/* <SearchBlock /> */}
-          <SearchComponent />
+          <GlobalSearch />
 
           {Menulist.map((m, i) => (
             <Box key={i} mb="lg">
