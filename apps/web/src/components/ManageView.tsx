@@ -48,12 +48,6 @@ const listMenu = [
     path: '/manage/import',
     desc: 'Import Structs',
   },
-  {
-    name: 'Billing',
-    logo: <FileArrowUp size={50} weight="thin" />,
-    path: '/manage/billing',
-    desc: 'Manage Billing',
-  },
 ];
 
 const ManageHomePage = () => {
