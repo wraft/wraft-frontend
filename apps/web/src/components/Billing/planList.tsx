@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { promise } from 'zod';
 import { Button, Box, Flex } from '@wraft/ui';
 import { TickIcon } from '@wraft/icon';
+import toast from 'react-hot-toast';
 
 import { Text } from 'common/Text';
 import { useAuth } from 'contexts/AuthContext';
@@ -43,7 +44,10 @@ const PlanList = () => {
       )) as PlansApiResponse;
       setPlans(PlansData.plans || []);
     } catch (error) {
-      console.log('Error fetching plans:', error);
+      toast.error('Error fetching plans.', {
+        duration: 3000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -56,7 +60,10 @@ const PlanList = () => {
         }),
       ]);
     } catch (error) {
-      console.error('Error loading plans and subscription:', error);
+      toast.error('Error loading data.', {
+        duration: 3000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -68,9 +75,16 @@ const PlanList = () => {
       console.log('API Response:', response);
       if (response.success) {
         setCurrentSubscription(null);
+        toast.success('Subscription canceled successfully.', {
+          duration: 3000,
+          position: 'top-right',
+        });
       }
     } catch (error) {
-      console.error('Error canceling subscription:', error);
+      toast.error('Error canceling subscription.', {
+        duration: 3000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -84,9 +98,16 @@ const PlanList = () => {
       if (response.success) {
         const subscriptionData = await fetchSubscription();
         setCurrentSubscription(subscriptionData);
+        toast.success('Plan changed successfully.', {
+          duration: 3000,
+          position: 'top-right',
+        });
       }
     } catch (error) {
-      console.error('Error changing plan:', error);
+      toast.error('Error changing plan.', {
+        duration: 3000,
+        position: 'top-right',
+      });
     }
   };
 
@@ -112,7 +133,13 @@ const PlanList = () => {
       )) as Subscription;
       return subscriptionData;
     } catch (error) {
+      toast.error('Error fetching subscription.', {
+        duration: 3000,
+        position: 'top-right',
+      });
+
       console.error('Error fetching subscription:', error);
+
       throw error;
     }
   };

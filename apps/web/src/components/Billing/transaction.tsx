@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Box } from '@wraft/ui';
+import toast from 'react-hot-toast';
 
 import { fetchAPI } from 'utils/models';
 
@@ -16,7 +17,6 @@ const TransactionList = ({
 }: TransactionListProps) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [_, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -26,8 +26,10 @@ const TransactionList = ({
         )) as TransactionApiResponse;
         setTransactions(response.transactions || []);
       } catch (err) {
-        setError('Failed to load transactions');
-        console.error('Error fetching transactions:', err);
+        toast.error('Failed to load transactions', {
+          duration: 3000,
+          position: 'top-right',
+        });
       } finally {
         setIsLoading(false);
       }
