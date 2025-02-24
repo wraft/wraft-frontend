@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-interface PaddleInitOptions {
+interface InitOptions {
   token: string;
   environment?: 'sandbox' | 'production';
 }
@@ -14,7 +14,7 @@ interface CheckoutOptions {
   discountId: string | undefined;
 }
 
-export const usePaddleIntegration = (initOptions: PaddleInitOptions) => {
+export const usePaddle = (Paddle: InitOptions) => {
   const [paddleError, setPaddleError] = useState<string | null>(null);
   const [isPaddleReady, setIsPaddleReady] = useState(false);
 
@@ -25,9 +25,9 @@ export const usePaddleIntegration = (initOptions: PaddleInitOptions) => {
 
     script.onload = () => {
       try {
-        window.Paddle.Environment.set(initOptions.environment || 'sandbox');
+        window.Paddle.Environment.set(Paddle.environment || 'sandbox');
         window.Paddle.Initialize({
-          token: initOptions.token,
+          token: Paddle.token,
         });
         setIsPaddleReady(true);
       } catch (err) {
@@ -36,16 +36,12 @@ export const usePaddleIntegration = (initOptions: PaddleInitOptions) => {
       }
     };
 
-    script.onerror = () => {
-      setPaddleError('Failed to load Paddle script');
-    };
-
     document.body.appendChild(script);
 
     return () => {
       document.body.removeChild(script);
     };
-  }, [initOptions.token, initOptions.environment]);
+  }, [Paddle.token, Paddle.environment]);
 
   const handleCheckout = async (options: CheckoutOptions) => {
     if (!isPaddleReady) {

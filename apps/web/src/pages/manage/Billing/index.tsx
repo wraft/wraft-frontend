@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import PlanTemplateList from 'components/Billing/plan';
+import PlanList from 'components/Billing/planList';
 import { Page } from 'common/PageFrame';
 
 const Index: FC = () => {
@@ -12,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="wraft blocks" />
       </Head>
       <Page>
-        <PlanTemplateList />
+        <PlanList />
       </Page>
     </>
   );

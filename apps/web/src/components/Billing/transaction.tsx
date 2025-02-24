@@ -113,7 +113,7 @@ const TransactionList = ({
   ];
 
   return (
-    <Box as="div" maxWidth="100%" mt="4" overflowX="auto">
+    <Box w="100%" mt="md" overflowX="auto">
       <Table
         data={transactions}
         columns={columns}
