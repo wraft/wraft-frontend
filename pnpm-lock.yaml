@@ -433,6 +433,9 @@ importers:
       '@xstyled/emotion':
         specifier: ^3.8.0
         version: 3.8.1(@emotion/react@11.14.0)(@emotion/styled@11.14.0)
+      js-cookie:
+        specifier: ^3.0.5
+        version: 3.0.5
       lib0:
         specifier: ^0.2.99
         version: 0.2.99

@@ -6,6 +6,7 @@ import {
 } from "prosekit/react/popover";
 import { useState, type FC, type ReactNode } from "react";
 import styled from "@emotion/styled";
+import cookie from "js-cookie";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 
@@ -226,50 +227,89 @@ export const ImageUploadPopover: FC<{
   children: ReactNode;
 }> = ({ tooltip, disabled, children }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [webUrl, setWebUrl] = useState("");
-  const [objectUrl, setObjectUrl] = useState("");
-  const url = webUrl || objectUrl;
+  const [file, setFile] = useState("");
 
   const editor = useEditor<EditorExtension>();
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    const file = event.target.files?.[0];
+    const uploadfile: any = event.target.files?.[0];
 
-    if (file) {
-      setObjectUrl(URL.createObjectURL(file));
-      setWebUrl("");
-    } else {
-      setObjectUrl("");
+    if (uploadfile) {
+      setFile(uploadfile);
     }
   };
 
-  const handleWebUrlChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event,
-  ) => {
-    const url = event.target.value;
+  // const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
+  //   event
+  // ) => {
+  //   const file = event.target.files?.[0];
 
-    if (url) {
-      setWebUrl(url);
-      setObjectUrl("");
-    } else {
-      setWebUrl("");
+  //   if (file) {
+  //     console.log("file", file);
+  //     // setObjectUrl(URL.createObjectURL(file));
+  //     setWebUrl("");
+  //   } else {
+  //     setObjectUrl("");
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    if (!file) {
+      // setMessage("No file selected!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("name", "Document Asset");
+    formData.append("type", "document");
+
+    console.log("formData", formData);
+
+    // setUploading(true);
+    // setMessage("");
+    const token = cookie.get("token");
+
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/assets", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      editor.commands.insertImage({
+        src: `/asset/image/${data.id}`,
+        width: 400,
+      });
+      deferResetState();
+      setOpen(false);
+    } catch (error) {
+      // setMessage("Upload failed. Please try again.");
+    } finally {
+      // setUploading(false);
     }
   };
 
   const deferResetState = () => {
     setTimeout(() => {
-      setWebUrl("");
-      setObjectUrl("");
+      setFile("");
     }, 300);
   };
 
-  const handleSubmit = () => {
-    editor.commands.insertImage({ src: url });
-    deferResetState();
-    setOpen(false);
-  };
+  // const handleSubmit = () => {
+  //   editor.commands.insertImage({ src: url });
+  //   deferResetState();
+  //   setOpen(false);
+  // };
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
@@ -287,30 +327,16 @@ export const ImageUploadPopover: FC<{
       </PopoverTrigger>
 
       <StyledPopoverContent>
-        {objectUrl ? null : (
-          <>
-            <label>Embed Link</label>
-            <StyledInput
-              placeholder="Paste the image link..."
-              type="url"
-              value={webUrl}
-              onChange={handleWebUrlChange}
-            />
-          </>
-        )}
+        <>
+          <label>Upload</label>
+          <StyledInput
+            accept="image/*"
+            type="file"
+            onChange={handleFileChange}
+          />
+        </>
 
-        {webUrl ? null : (
-          <>
-            <label>Upload</label>
-            <StyledInput
-              accept="image/*"
-              type="file"
-              onChange={handleFileChange}
-            />
-          </>
-        )}
-
-        {url ? (
+        {file ? (
           <StyledButton onClick={handleSubmit}>Insert Image</StyledButton>
         ) : null}
       </StyledPopoverContent>

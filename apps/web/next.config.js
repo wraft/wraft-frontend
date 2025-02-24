@@ -16,11 +16,40 @@ module.exports = withImages({
     NEXT_PUBLIC_NEXT_AUTH_ENABLED:
       process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED || 'false',
   },
+  async headers() {
+    return [
+      {
+        source: '/image/contents/',
+        headers: [
+          {
+            key: 'X-App-Version',
+            value: 'v.10',
+          },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
         source: '/uploads/:path*',
         destination: `${HOST}/uploads/:path*`, // Proxy to Backend
+      },
+      {
+        source: '/assets',
+        destination: `${HOST}/api/v1/assets`,
+      },
+      {
+        source: '/api/auth/:path*', // Exclude authentication routes
+        destination: '/api/auth/:path*', // Keep it in Next.js
+      },
+      {
+        source: '/api/:path*',
+        destination: `${HOST}/api/v1/:path*`,
+      },
+      {
+        source: '/asset/image/:path*/:filename',
+        destination: `${HOST}/asset/image/:path*/:filename`,
       },
     ];
   },
