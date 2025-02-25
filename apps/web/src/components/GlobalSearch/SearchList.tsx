@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import NextLink from 'next/link';
 import {
   Modal,
   Tab,
@@ -14,7 +13,6 @@ import {
 import { SearchIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 
-import { ContentTitleList } from 'common/content';
 import { fetchAPI } from 'utils/models';
 
 interface SearchableDocument {
@@ -25,26 +23,8 @@ interface SearchableDocument {
   organisation_id: string;
 }
 
-interface ContentDetails {
-  id: string;
-  name?: string;
-}
-
-interface ContentTypeDetails {
-  name: string;
-}
-
-interface SearchResultDocument {
-  content: ContentDetails;
-  content_type: ContentTypeDetails;
-}
-
 interface SearchResponse {
   documents: SearchableDocument[];
-}
-
-interface ContentsResponse {
-  contents: SearchResultDocument[];
 }
 
 const COLLECTION_TITLES = {
@@ -53,7 +33,7 @@ const COLLECTION_TITLES = {
   theme: 'Theme',
   layout: 'Layout',
   flow: 'Flow',
-  document: 'Document',
+  content: 'Document',
 } as const;
 
 type CollectionType = keyof typeof COLLECTION_TITLES;
@@ -64,7 +44,7 @@ const SEARCHABLE_COLLECTIONS = [
   'layout',
   'flow',
   'data_template',
-  'document',
+  'content',
 ] as const;
 
 const SearchList: React.FC = () => {
@@ -72,15 +52,9 @@ const SearchList: React.FC = () => {
   const [searchResults, setSearchResults] = useState<SearchableDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filteredDocuments, setFilteredDocuments] = useState<
-    SearchResultDocument[]
-  >([]);
   const [filteredResults, setFilteredResults] = useState<SearchableDocument[]>(
     [],
   );
-  const [documentResults, setDocumentResults] = useState<
-    SearchResultDocument[]
-  >([]);
 
   const tabStore = useTab();
   const selectedTabId = tabStore.useState('selectedId');
@@ -111,29 +85,7 @@ const SearchList: React.FC = () => {
       )) as SearchResponse;
       return response.documents || [];
     } catch (error) {
-      toast.error(`Failed to search ${collection}`);
-      return [];
-    }
-  };
-
-  const searchDocumentCollection = async (
-    searchTerm: string,
-  ): Promise<SearchResultDocument[]> => {
-    try {
-      const response = (await fetchAPI('contents')) as ContentsResponse;
-      const allContents = response.contents || [];
-      const searchTermLower = searchTerm.toLowerCase();
-
-      return allContents.filter((doc: SearchResultDocument) => {
-        const contentName = (doc.content.name || '').toLowerCase();
-        const typeName = (doc.content_type.name || '').toLowerCase();
-        return (
-          contentName.includes(searchTermLower) ||
-          typeName.includes(searchTermLower)
-        );
-      });
-    } catch (error) {
-      toast.error('Failed to search documents');
+      toast.error('Please try again later.');
       return [];
     }
   };
@@ -145,14 +97,8 @@ const SearchList: React.FC = () => {
       const collectionSearchPromises = SEARCHABLE_COLLECTIONS.map(
         (collection) => searchCollection(searchTerm, collection),
       );
-      const documentsPromise = searchDocumentCollection(searchTerm);
 
-      const [documentsResult, ...collectionResults] = await Promise.all([
-        documentsPromise,
-        ...collectionSearchPromises,
-      ]);
-
-      setDocumentResults(documentsResult);
+      const collectionResults = await Promise.all(collectionSearchPromises);
 
       const uniqueResults = collectionResults
         .flat()
@@ -163,18 +109,9 @@ const SearchList: React.FC = () => {
         }, []);
 
       setSearchResults(uniqueResults);
-
-      if (uniqueResults.length === 0 && documentsResult.length === 0) {
-        toast('No results found');
-      } else {
-        toast.success('Search completed successfully', {
-          duration: 3000,
-          position: 'top-right',
-        });
-      }
+      uniqueResults.length === 0;
     } catch (error: any) {
-      const errorMessage = error.message || 'Search operation failed';
-      toast.error(errorMessage);
+      console.error('Error performing search:', error);
     } finally {
       setIsLoading(false);
     }
@@ -188,26 +125,18 @@ const SearchList: React.FC = () => {
     const activeTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
     const activeCollection = SEARCHABLE_COLLECTIONS[activeTabIndex];
 
-    if (activeCollection === 'document') {
-      setFilteredDocuments(documentResults);
-      setFilteredResults([]);
-    } else if (!activeCollection) {
-      setFilteredResults(searchResults);
-      setFilteredDocuments(documentResults);
-    } else {
+    if (activeCollection) {
       setFilteredResults(
         searchResults.filter(
           (item) => item.collection_name === activeCollection,
         ),
       );
-      setFilteredDocuments([]);
+    } else {
+      setFilteredResults(searchResults);
     }
-  }, [selectedTabId, searchResults, documentResults]);
+  }, [selectedTabId, searchResults]);
 
   const getCollectionResultCount = (collection: CollectionType) => {
-    if (collection === 'document') {
-      return documentResults.length;
-    }
     return searchResults.filter((item) => item.collection_name === collection)
       .length;
   };
@@ -217,23 +146,6 @@ const SearchList: React.FC = () => {
       <Text mt="md">{item.name}</Text>
       <Text mt="md">{item.description}</Text>
     </Box>
-  );
-
-  const DocumentResultItem = ({
-    document,
-  }: {
-    document: SearchResultDocument;
-  }) => (
-    <NextLink href={`/documents/${document.content.id}`}>
-      <Box p="md" borderBottom="1px solid" borderColor="gray.500">
-        <Flex alignItems="center" gap="md">
-          <ContentTitleList
-            content={document.content}
-            contentType={document.content_type}
-          />
-        </Flex>
-      </Box>
-    </NextLink>
   );
 
   const CollectionTabs = () => (
@@ -266,15 +178,6 @@ const SearchList: React.FC = () => {
   );
 
   const renderSearchResults = () => {
-    const activeTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
-    const activeCollection = SEARCHABLE_COLLECTIONS[activeTabIndex];
-
-    if (activeCollection === 'document') {
-      return documentResults.map((doc) => (
-        <DocumentResultItem key={doc.content.id} document={doc} />
-      ));
-    }
-
     return filteredResults.map((result) => (
       <SearchResultItem key={result.id} item={result} />
     ));
@@ -300,7 +203,7 @@ const SearchList: React.FC = () => {
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}>
         <Box p="xl" mx="-5.4vh" my="-3vh">
-          <Box px="2">
+          <Box px="xs">
             <InputText
               value={searchQuery}
               onChange={(e) => {
