@@ -5,13 +5,13 @@ import cookie from 'js-cookie';
 
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({
-    baseURL: `/api`,
+    baseURL: `${API_HOST}/api/v1`,
   });
 
   instance.interceptors.request.use(
     async (config) => {
       const token = (await cookie.get('token')) || false;
-      config.headers['X-App-Version'] = 'v.5.0';
+      // config.headers['X-App-Version'] = 'v.5.0';
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;

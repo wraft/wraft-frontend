@@ -152,9 +152,11 @@ export default function ImageView(props: ReactNodeViewProps) {
     if (ratio && Number.isFinite(ratio)) {
       setAspectRatio(ratio);
     }
-    // if (naturalWidth && naturalHeight && (!attrs.width || !attrs.height)) {
-    //   setAttrs({ width: naturalWidth, height: naturalHeight });
-    // }
+    if (naturalWidth && naturalHeight && (!attrs.width || !attrs.height)) {
+      const width = Math.min(naturalWidth, 400);
+      const height = (naturalHeight / naturalWidth) * width;
+      setAttrs({ width, height });
+    }
   };
 
   return (

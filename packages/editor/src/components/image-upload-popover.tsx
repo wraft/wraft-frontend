@@ -273,7 +273,7 @@ export const ImageUploadPopover: FC<{
     const token = cookie.get("token");
 
     try {
-      const response = await fetch("http://localhost:4000/api/v1/assets", {
+      const response = await fetch("/assets", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -288,7 +288,6 @@ export const ImageUploadPopover: FC<{
       const data = await response.json();
       editor.commands.insertImage({
         src: `/asset/image/${data.id}`,
-        width: 400,
       });
       deferResetState();
       setOpen(false);

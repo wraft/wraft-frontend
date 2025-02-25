@@ -202,7 +202,9 @@ export const LiveEditor = forwardRef(
           const html = htmlFromNode(editor.view.state.doc, {
             DOMSerializer: ListDOMSerializer,
           });
+          console.log("html[html]", html);
           const record = markdownFromHTML(html);
+          console.log("html[record]", record);
           return record;
         },
         insterBlock: (block: Node) => {
