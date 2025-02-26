@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Modal,
   Tab,
@@ -49,35 +49,76 @@ const SEARCHABLE_COLLECTIONS = [
 
 const SearchList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchableDocument[]>([]);
+  const [allResults, setAllResults] = useState<SearchableDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [filteredResults, setFilteredResults] = useState<SearchableDocument[]>(
-    [],
-  );
 
   const tabStore = useTab();
   const selectedTabId = tabStore.useState('selectedId');
+  const selectedTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
 
   useEffect(() => {
-    const handleSearchShortcut = (event: KeyboardEvent) => {
-      const isSearchHotkey =
-        (event.ctrlKey || event.metaKey) && event.key === 'k';
+    if (isModalOpen) {
+      fetchAllResults();
+    }
+  }, [isModalOpen]);
 
-      if (isSearchHotkey) {
-        event.preventDefault();
-        setIsModalOpen((prev) => !prev);
-      }
-    };
+  const fetchAllResults = async () => {
+    setIsLoading(true);
+    try {
+      const collectionSearchPromises = SEARCHABLE_COLLECTIONS.map(
+        (collection) => searchCollection('', collection),
+      );
+      const collectionResults = await Promise.all(collectionSearchPromises);
 
-    window.addEventListener('keydown', handleSearchShortcut);
-    return () => window.removeEventListener('keydown', handleSearchShortcut);
+      const uniqueResults = collectionResults
+        .flat()
+        .reduce((unique: SearchableDocument[], item) => {
+          if (!unique.some((doc) => doc.id === item.id)) unique.push(item);
+          return unique;
+        }, []);
+
+      setAllResults(uniqueResults);
+    } catch (error) {
+      toast.error(' Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredResults = useMemo(() => {
+    if (!searchQuery) return allResults;
+
+    const lowerCaseQuery = searchQuery.toLowerCase();
+    return allResults.filter(
+      (item) =>
+        item.name.toLowerCase().includes(lowerCaseQuery) ||
+        item.description?.toLowerCase().includes(lowerCaseQuery),
+    );
+  }, [allResults, searchQuery]);
+
+  const getCollectionResultCount = (collection: CollectionType) => {
+    return filteredResults.filter((item) => item.collection_name === collection)
+      .length;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchShortcut = useCallback((event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      event.preventDefault();
+      setIsModalOpen((prev) => !prev);
+    }
   }, []);
 
-  const searchCollection = async (
-    query: string | number,
-    collection: string | number,
-  ): Promise<SearchableDocument[]> => {
+  useEffect(() => {
+    window.addEventListener('keydown', handleSearchShortcut);
+    return () => window.removeEventListener('keydown', handleSearchShortcut);
+  }, [handleSearchShortcut]);
+
+  const searchCollection = async (query: string, collection: string) => {
     try {
       const queryParams = `?query=${query}&collection_name=${collection}`;
       const response = (await fetchAPI(
@@ -85,61 +126,28 @@ const SearchList: React.FC = () => {
       )) as SearchResponse;
       return response.documents || [];
     } catch (error) {
-      toast.error('Please try again later.');
+      toast.error('Failed to fetch results. Please try again later.');
       return [];
     }
   };
 
-  const performSearch = async (searchTerm: string) => {
-    setIsLoading(true);
-
-    try {
-      const collectionSearchPromises = SEARCHABLE_COLLECTIONS.map(
-        (collection) => searchCollection(searchTerm, collection),
-      );
-
-      const collectionResults = await Promise.all(collectionSearchPromises);
-
-      const uniqueResults = collectionResults
-        .flat()
-        .reduce((unique: SearchableDocument[], item) => {
-          const isDuplicate = unique.some((doc) => doc.id === item.id);
-          if (!isDuplicate) unique.push(item);
-          return unique;
-        }, []);
-
-      setSearchResults(uniqueResults);
-      uniqueResults.length === 0;
-    } catch (error: any) {
-      console.error('Error performing search:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (isModalOpen) performSearch('');
-  }, [isModalOpen]);
-
-  useEffect(() => {
-    const activeTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
-    const activeCollection = SEARCHABLE_COLLECTIONS[activeTabIndex];
-
-    if (activeCollection) {
-      setFilteredResults(
-        searchResults.filter(
-          (item) => item.collection_name === activeCollection,
-        ),
-      );
-    } else {
-      setFilteredResults(searchResults);
-    }
-  }, [selectedTabId, searchResults]);
-
-  const getCollectionResultCount = (collection: CollectionType) => {
-    return searchResults.filter((item) => item.collection_name === collection)
-      .length;
-  };
+  const CountBadge = ({ count }: { count: number }) => (
+    <Flex
+      alignItems="center"
+      justify="center"
+      color="green.1200"
+      border="1px solid"
+      borderRadius="full"
+      w="20px"
+      h="20px"
+      borderColor="gray.500"
+      p="xxs"
+      bg="background-secondary">
+      <Text fontSize="xs" fontWeight="heading">
+        {count}
+      </Text>
+    </Flex>
+  );
 
   const SearchResultItem = ({ item }: { item: SearchableDocument }) => (
     <Box p="md" maxWidth="69vh" borderBottom="1px solid" borderColor="gray.500">
@@ -156,32 +164,12 @@ const SearchList: React.FC = () => {
             <Text variant="lg" fontWeight="semibold">
               {COLLECTION_TITLES[collection]}
             </Text>
-            <Flex
-              alignItems="center"
-              justify="center"
-              color="green.1200"
-              border="1px solid"
-              borderRadius="full"
-              w="20px"
-              h="20px"
-              borderColor="gray.500"
-              p="xxs"
-              bg="background-secondary">
-              <Text fontSize="xs" fontWeight="heading">
-                {getCollectionResultCount(collection)}
-              </Text>
-            </Flex>
+            <CountBadge count={getCollectionResultCount(collection)} />
           </Flex>
         </Tab>
       ))}
     </Tab.List>
   );
-
-  const renderSearchResults = () => {
-    return filteredResults.map((result) => (
-      <SearchResultItem key={result.id} item={result} />
-    ));
-  };
 
   return (
     <Box>
@@ -206,10 +194,7 @@ const SearchList: React.FC = () => {
           <Box px="xs">
             <InputText
               value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.currentTarget.value);
-                performSearch(e.currentTarget.value);
-              }}
+              onChange={handleInputChange}
               icon={<SearchIcon />}
               iconPlacement="left"
               placeholder="Search..."
@@ -225,18 +210,24 @@ const SearchList: React.FC = () => {
             </Box>
           ) : (
             <Box maxH="55vh" overflowY="auto">
-              {searchResults.length > 0 ? (
-                <Box>{renderSearchResults()}</Box>
+              {filteredResults.length > 0 ? (
+                <Box>
+                  {filteredResults
+                    .filter(
+                      (item) =>
+                        item.collection_name ===
+                        SEARCHABLE_COLLECTIONS[selectedTabIndex],
+                    )
+                    .map((result) => (
+                      <SearchResultItem key={result.id} item={result} />
+                    ))}
+                </Box>
               ) : (
-                searchQuery && (
-                  <Text
-                    textAlign="center"
-                    py="xl"
-                    variant="lg"
-                    color="gray.500">
-                    No results found for &quot;{searchQuery}&quot;
-                  </Text>
-                )
+                <Text textAlign="center" py="xl" variant="lg" color="gray.500">
+                  {searchQuery
+                    ? `No results found for "${searchQuery}"`
+                    : 'No items available.'}
+                </Text>
               )}
             </Box>
           )}
