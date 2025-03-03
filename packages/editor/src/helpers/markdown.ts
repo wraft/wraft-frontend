@@ -1,19 +1,12 @@
 import rehypeParse from "rehype-parse";
 import rehypeRemark from "rehype-remark";
-import rehypeStringify from "rehype-stringify";
-// import remarkRehype from "remark-rehype";
 import remarkHtml from "remark-html";
 import remarkParse from "remark-parse";
 import remarkStringify from "remark-stringify";
 import remarkGfm from "remark-gfm"; // Add this for table support
 import rehypeRaw from "rehype-raw";
 import { unified } from "unified";
-import { visit } from "unist-util-visit";
-import { toMarkdown } from "mdast-util-to-markdown";
-// import { Handler } from "@types/hast-util-to-mdast";
 import { u } from "unist-builder";
-// import type { Handler } from "mdast-util-to-hast";
-// import _TurndownService from "turndown";
 
 export function markdownFromHTML(html: string): string {
   return (

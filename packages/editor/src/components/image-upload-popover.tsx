@@ -221,6 +221,10 @@ const StyledInput = styled.input`
   }
 `;
 
+const ErrorWrapper = styled.div`
+  color: var(--theme-ui-colors-error);
+`;
+
 export const ImageUploadPopover: FC<{
   tooltip: string;
   disabled: boolean;
@@ -228,6 +232,7 @@ export const ImageUploadPopover: FC<{
 }> = ({ tooltip, disabled, children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [file, setFile] = useState("");
+  const [uploadError, setUploadError] = useState("");
 
   const editor = useEditor<EditorExtension>();
 
@@ -241,32 +246,20 @@ export const ImageUploadPopover: FC<{
     }
   };
 
-  // const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
-  //   event
-  // ) => {
-  //   const file = event.target.files?.[0];
-
-  //   if (file) {
-  //     console.log("file", file);
-  //     // setObjectUrl(URL.createObjectURL(file));
-  //     setWebUrl("");
-  //   } else {
-  //     setObjectUrl("");
-  //   }
-  // };
-
   const handleSubmit = async () => {
     if (!file) {
-      // setMessage("No file selected!");
+      setUploadError("No file selected!");
       return;
     }
 
+    const randomFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("name", "Document Asset");
     formData.append("type", "document");
+    formData.append("name", randomFileName);
 
-    console.log("formData", formData);
+    // console.log("formData", formData);
 
     // setUploading(true);
     // setMessage("");
@@ -290,9 +283,10 @@ export const ImageUploadPopover: FC<{
         src: `/asset/image/${data.id}`,
       });
       deferResetState();
+      setFile("");
       setOpen(false);
     } catch (error) {
-      // setMessage("Upload failed. Please try again.");
+      setUploadError("Upload failed. Please try again.");
     } finally {
       // setUploading(false);
     }
@@ -327,7 +321,7 @@ export const ImageUploadPopover: FC<{
 
       <StyledPopoverContent>
         <>
-          <label>Upload</label>
+          <label>Image Upload</label>
           <StyledInput
             accept="image/*"
             type="file"
@@ -338,6 +332,7 @@ export const ImageUploadPopover: FC<{
         {file ? (
           <StyledButton onClick={handleSubmit}>Insert Image</StyledButton>
         ) : null}
+        <ErrorWrapper>{uploadError}</ErrorWrapper>
       </StyledPopoverContent>
     </PopoverRoot>
   );
