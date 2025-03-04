@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Drawer, useDrawer, Button, Box } from '@wraft/ui';
+import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';

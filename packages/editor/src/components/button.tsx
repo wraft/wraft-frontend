@@ -55,7 +55,7 @@ const StyledButton = styled.button<{ pressed?: boolean; disabled?: boolean }>`
   }
 
   &[data-state="on"] {
-    background-color: #4a5568; /* Dark mode */
+    background-color: #c2c2c2; /* Dark mode */
   }
 
   @media (prefers-color-scheme: dark) {

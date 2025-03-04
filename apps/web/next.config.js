@@ -22,6 +22,10 @@ module.exports = withImages({
         source: '/uploads/:path*',
         destination: `${HOST}/uploads/:path*`, // Proxy to Backend
       },
+      {
+        source: '/asset/image/:path*/:filename',
+        destination: `${HOST}/asset/image/:path*/:filename`,
+      },
     ];
   },
   compiler: {

@@ -11,6 +11,7 @@ const createAxiosInstance = (): AxiosInstance => {
   instance.interceptors.request.use(
     async (config) => {
       const token = (await cookie.get('token')) || false;
+      // config.headers['X-App-Version'] = 'v.5.0';
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;

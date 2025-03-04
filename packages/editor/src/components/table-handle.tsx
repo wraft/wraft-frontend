@@ -21,8 +21,8 @@ const StyledTableHandleColumnRoot = styled(TableHandleColumnRoot)`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.2em;
-  width: 1.5em;
+  // height: 1.2em;
+  // width: 1.5em;
   background-color: white;
   border: solid 1px;
   border-color: #d1d5db;
@@ -46,6 +46,7 @@ const StyledTableHandleColumnRoot = styled(TableHandleColumnRoot)`
 
 const StyledTableHandleColumnTrigger = styled(TableHandleColumnTrigger)`
   border: none;
+  display: flex;
 `;
 
 const StyledTableHandlePopoverContent = styled(TableHandlePopoverContent)`
@@ -73,8 +74,8 @@ const StyledTableHandleRowRoot = styled(TableHandleRowRoot)`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 1.5em;
-  width: 1.2em;
+  // height: 1.5em;
+  // width: 1.2em;
   background-color: white;
   border: solid 1px;
   border-color: #d1d5db; /* zinc-200 */
@@ -82,7 +83,10 @@ const StyledTableHandleRowRoot = styled(TableHandleRowRoot)`
   transform: translateX(14px);
 `;
 
-const StyledTableHandleRowTrigger = styled(TableHandleRowTrigger)``;
+const StyledTableHandleRowTrigger = styled(TableHandleRowTrigger)`
+  justify-content: flex-end;
+  display: flex;
+`;
 
 export function TableHandle() {
   const editor = useEditor<EditorExtension>({ update: true });

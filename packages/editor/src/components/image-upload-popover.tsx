@@ -6,6 +6,7 @@ import {
 } from "prosekit/react/popover";
 import { useState, type FC, type ReactNode } from "react";
 import styled from "@emotion/styled";
+import cookie from "js-cookie";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 
@@ -220,99 +221,117 @@ const StyledInput = styled.input`
   }
 `;
 
+const ErrorWrapper = styled.div`
+  color: var(--theme-ui-colors-error);
+`;
+
 export const ImageUploadPopover: FC<{
   tooltip: string;
   disabled: boolean;
   children: ReactNode;
 }> = ({ tooltip, disabled, children }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [webUrl, setWebUrl] = useState("");
-  const [objectUrl, setObjectUrl] = useState("");
-  const url = webUrl || objectUrl;
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState("");
 
   const editor = useEditor<EditorExtension>();
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    const file = event.target.files?.[0];
+    const uploadfile = event.target.files?.[0] ?? null;
 
-    if (file) {
-      setObjectUrl(URL.createObjectURL(file));
-      setWebUrl("");
-    } else {
-      setObjectUrl("");
+    if (uploadfile) {
+      setFile(uploadfile);
     }
   };
 
-  const handleWebUrlChange: React.ChangeEventHandler<HTMLInputElement> = (
-    event,
-  ) => {
-    const url = event.target.value;
+  const handleSubmit = async () => {
+    if (!file) {
+      setUploadError("No file selected!");
+      return;
+    }
 
-    if (url) {
-      setWebUrl(url);
-      setObjectUrl("");
-    } else {
-      setWebUrl("");
+    const timestamp = Date.now();
+    const originalName = file.name.replace(/\.[^/.]+$/, "");
+    const randomFileName = `${originalName}-${timestamp}`;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", "document");
+    formData.append("name", randomFileName);
+
+    const token = cookie.get("token");
+
+    try {
+      const apiHost = process.env.NEXT_PUBLIC_API_HOST
+        ? `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`
+        : "http://localhost:4000";
+      const response = await fetch(`${apiHost}/assets`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      editor.commands.insertImage({
+        src: `/asset/image/${data.id}`,
+      });
+      // deferResetState();
+      setFile(null);
+      setOpen(false);
+    } catch (error) {
+      setUploadError("Upload failed. Please try again.");
+    } finally {
+      // setUploading(false);
     }
   };
 
   const deferResetState = () => {
     setTimeout(() => {
-      setWebUrl("");
-      setObjectUrl("");
+      setFile(null);
     }, 300);
   };
 
-  const handleSubmit = () => {
-    editor.commands.insertImage({ src: url });
-    deferResetState();
-    setOpen(false);
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
+  const handleOpenChange = () => {
+    if (open) {
+      setUploadError("");
       deferResetState();
     }
-    setOpen(open);
+    setOpen(!open);
   };
 
   return (
-    <PopoverRoot open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger>
+    // @ts-expect-error - PopoverRoot from prosekit accepts open prop but types are not updated
+    <PopoverRoot open={open}>
+      <PopoverTrigger onClick={handleOpenChange}>
         <Button pressed={open} disabled={disabled} tooltip={tooltip}>
           {children}
         </Button>
       </PopoverTrigger>
 
       <StyledPopoverContent>
-        {objectUrl ? null : (
-          <>
-            <label>Embed Link</label>
-            <StyledInput
-              placeholder="Paste the image link..."
-              type="url"
-              value={webUrl}
-              onChange={handleWebUrlChange}
-            />
-          </>
-        )}
+        <>
+          <label>Image Upload</label>
+          <StyledInput
+            accept="image/*"
+            type="file"
+            onChange={handleFileChange}
+          />
+        </>
 
-        {webUrl ? null : (
-          <>
-            <label>Upload</label>
-            <StyledInput
-              accept="image/*"
-              type="file"
-              onChange={handleFileChange}
-            />
-          </>
-        )}
-
-        {url ? (
-          <StyledButton onClick={handleSubmit}>Insert Image</StyledButton>
+        {file ? (
+          <StyledButton onClick={() => void handleSubmit()}>
+            Insert Image
+          </StyledButton>
         ) : null}
+        <ErrorWrapper>{uploadError}</ErrorWrapper>
       </StyledPopoverContent>
     </PopoverRoot>
   );

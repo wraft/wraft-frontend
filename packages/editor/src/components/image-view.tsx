@@ -87,6 +87,9 @@ const StyledResizableHandle = styled(ResizableHandle)`
     opacity: 1;
   }
 `;
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:4000";
+
 export default function ImageView(props: ReactNodeViewProps) {
   const { setAttrs, node } = props;
 
@@ -153,7 +156,9 @@ export default function ImageView(props: ReactNodeViewProps) {
       setAspectRatio(ratio);
     }
     if (naturalWidth && naturalHeight && (!attrs.width || !attrs.height)) {
-      setAttrs({ width: naturalWidth, height: naturalHeight });
+      const width = Math.min(naturalWidth, 400);
+      const height = (naturalHeight / naturalWidth) * width;
+      setAttrs({ width, height });
     }
   };
 
@@ -165,7 +170,15 @@ export default function ImageView(props: ReactNodeViewProps) {
       onResizeEnd={(event) => setAttrs(event.detail)}
       data-selected={props.selected ? "" : undefined}
     >
-      {url && !error && <Image src={url} onLoad={handleImageLoad} />}
+      {url && !error && (
+        <Image
+          src={`${BASE_URL}${url}`}
+          onLoad={handleImageLoad}
+          width={attrs.width ?? undefined}
+          height={attrs.height ?? undefined}
+          // style={{ width: "300px", height: "200px" }}
+        />
+      )}
       {uploading && !error && (
         <UploadingOverlay>
           <SpinnerGap size={8} />

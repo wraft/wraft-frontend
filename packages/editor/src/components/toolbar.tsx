@@ -13,13 +13,14 @@ import {
   ListBullets,
   Minus,
   List,
-  Image,
   TextStrikethrough,
   TextUnderline,
   Table,
+  Image as ImageIcon,
 } from "@phosphor-icons/react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
+import { ImageUploadPopover } from "./image-upload-popover";
 // import { ImageUploadPopover } from "./image-upload-popover";
 
 const ToolbarContainer = styled.divBox`
@@ -153,12 +154,6 @@ export default function Toolbar() {
         <List size={18} />
       </Button>
 
-      {/* <ImageUploadPopover
-        disabled={!editor.commands.insertImage.canExec()}
-        tooltip="Insert Image"
-      >
-        <Image size={18} />
-      </ImageUploadPopover> */}
       <Button
         pressed={editor.nodes.table.isActive()}
         disabled={!editor.commands.insertTable.canExec}
@@ -169,6 +164,12 @@ export default function Toolbar() {
       >
         <Table size={18} />
       </Button>
+      <ImageUploadPopover
+        disabled={!editor.commands.insertImage.canExec()}
+        tooltip="Insert Image"
+      >
+        <ImageIcon size={18} />
+      </ImageUploadPopover>
     </ToolbarContainer>
   );
 }
