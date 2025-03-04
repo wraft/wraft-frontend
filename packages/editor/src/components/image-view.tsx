@@ -87,6 +87,9 @@ const StyledResizableHandle = styled(ResizableHandle)`
     opacity: 1;
   }
 `;
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:4000";
+
 export default function ImageView(props: ReactNodeViewProps) {
   const { setAttrs, node } = props;
 
@@ -169,7 +172,7 @@ export default function ImageView(props: ReactNodeViewProps) {
     >
       {url && !error && (
         <Image
-          src={url}
+          src={`${BASE_URL}${url}`}
           onLoad={handleImageLoad}
           width={attrs.width ?? undefined}
           height={attrs.height ?? undefined}

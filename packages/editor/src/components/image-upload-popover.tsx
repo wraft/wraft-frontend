@@ -231,7 +231,7 @@ export const ImageUploadPopover: FC<{
   children: ReactNode;
 }> = ({ tooltip, disabled, children }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const [file, setFile] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState("");
 
   const editor = useEditor<EditorExtension>();
@@ -239,7 +239,7 @@ export const ImageUploadPopover: FC<{
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
     event,
   ) => {
-    const uploadfile: any = event.target.files?.[0];
+    const uploadfile = event.target.files?.[0] ?? null;
 
     if (uploadfile) {
       setFile(uploadfile);
@@ -252,21 +252,22 @@ export const ImageUploadPopover: FC<{
       return;
     }
 
-    const randomFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const timestamp = Date.now();
+    const originalName = file.name.replace(/\.[^/.]+$/, "");
+    const randomFileName = `${originalName}-${timestamp}`;
 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", "document");
     formData.append("name", randomFileName);
 
-    // console.log("formData", formData);
-
-    // setUploading(true);
-    // setMessage("");
     const token = cookie.get("token");
 
     try {
-      const response = await fetch("/assets", {
+      const apiHost = process.env.NEXT_PUBLIC_API_HOST
+        ? `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`
+        : "http://localhost:4000";
+      const response = await fetch(`${apiHost}/assets`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -282,8 +283,8 @@ export const ImageUploadPopover: FC<{
       editor.commands.insertImage({
         src: `/asset/image/${data.id}`,
       });
-      deferResetState();
-      setFile("");
+      // deferResetState();
+      setFile(null);
       setOpen(false);
     } catch (error) {
       setUploadError("Upload failed. Please try again.");
@@ -294,26 +295,22 @@ export const ImageUploadPopover: FC<{
 
   const deferResetState = () => {
     setTimeout(() => {
-      setFile("");
+      setFile(null);
     }, 300);
   };
 
-  // const handleSubmit = () => {
-  //   editor.commands.insertImage({ src: url });
-  //   deferResetState();
-  //   setOpen(false);
-  // };
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
+  const handleOpenChange = () => {
+    if (open) {
+      setUploadError("");
       deferResetState();
     }
-    setOpen(open);
+    setOpen(!open);
   };
 
   return (
-    <PopoverRoot open={open} onOpenChange={handleOpenChange}>
-      <PopoverTrigger>
+    // @ts-expect-error - PopoverRoot from prosekit accepts open prop but types are not updated
+    <PopoverRoot open={open}>
+      <PopoverTrigger onClick={handleOpenChange}>
         <Button pressed={open} disabled={disabled} tooltip={tooltip}>
           {children}
         </Button>
@@ -330,7 +327,9 @@ export const ImageUploadPopover: FC<{
         </>
 
         {file ? (
-          <StyledButton onClick={handleSubmit}>Insert Image</StyledButton>
+          <StyledButton onClick={() => void handleSubmit()}>
+            Insert Image
+          </StyledButton>
         ) : null}
         <ErrorWrapper>{uploadError}</ErrorWrapper>
       </StyledPopoverContent>
