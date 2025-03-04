@@ -4,12 +4,12 @@ import { Button, Drawer, useDrawer, Text, Box, Flex } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
-import { Plus, X } from '@phosphor-icons/react';
+import { Plus } from '@phosphor-icons/react';
 
-import SearchList from 'components/GlobalSearch/SearchList';
 import CreateDocument from 'components/DocumentCreate';
 import DefaultMenuItem from 'common/MenuItem';
 
+import SearchBlock from './SearchBlock';
 import Header from './Header';
 import Menulist from './Menulist';
 
@@ -79,8 +79,7 @@ const Sidebar = (props: any) => {
         bg="background-primary">
         <Header />
         <Flex flex={1} direction="column">
-          {/* <SearchBlock /> */}
-          <SearchList />
+          <SearchBlock />
 
           {Menulist.map((m, i) => (
             <Box key={i} mb="lg">

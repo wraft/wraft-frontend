@@ -20,7 +20,7 @@ export const Backdrop: any = styled.divBox<
     opacity: 0;
     background-color: rgba(0, 0, 0, 0.5);
     cursor: pointer;
-    transition: opacity 150ms ease-in-out;
+    transition: opacity 250ms cubic-bezier(0.16, 1, 0.3, 1);
 
     &[data-enter] {
       opacity: 1;
@@ -46,6 +46,11 @@ export const Dialog: any = styled.div`
   padding: 1rem;
   color: hsl(204 10% 10%);
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  opacity: 0;
+  transform: scale(0.95);
+  transition:
+    opacity 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
 
   @media (min-width: 640px) {
     .button {
@@ -98,7 +103,7 @@ export const Dialog: any = styled.div`
 
   &[data-enter] {
     opacity: 1;
-    margin-top: 0;
+    transform: scale(1);
   }
 
   ${up(

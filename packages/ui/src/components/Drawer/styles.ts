@@ -42,7 +42,9 @@ export const Drawer: any = styled.div`
   flex-direction: column;
   overflow: auto;
   opacity: 0;
-  transition: medium;
+  transition:
+    transform 300ms ease-in-out,
+    opacity 250ms ease;
   max-width: 100%;
   background-color: white;
   min-width: 500px;
@@ -89,7 +91,7 @@ export const Backdrop: any = styled.div<any>`
   left: 0;
   bottom: 0;
   opacity: 0;
-  transition: opacity 150ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
   background-color: rgba(0, 0, 0, 0.35);
   ${({ hideOnInteractOutside }) =>
     hideOnInteractOutside &&
