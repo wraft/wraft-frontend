@@ -67,7 +67,7 @@ const Index: FC = () => {
         <PageHeader title="Forms">
           <Button variant="tertiary" onClick={onOpenDrawer}>
             <Plus size={12} weight="bold" />
-            Create From
+            Create Form
           </Button>
         </PageHeader>
         <Box p="lg" minHeight="100%" bg="background-secondary">
