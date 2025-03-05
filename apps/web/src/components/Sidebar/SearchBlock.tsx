@@ -12,6 +12,7 @@ import {
 } from '@wraft/ui';
 import { SearchIcon } from '@wraft/icon';
 import styled from '@emotion/styled';
+import { debounce } from 'lodash';
 
 import { fetchAPI } from 'utils/models';
 
@@ -73,11 +74,31 @@ const SearchBlock: React.FC = () => {
   const selectedTabId = tabStore.useState('selectedId');
   const selectedTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
 
+  // Reset search data function
+  const resetSearch = useCallback(() => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setSearchError(null);
+  }, []);
+
   useEffect(() => {
     if (isModalOpen) {
       fetchAllResults();
     }
   }, [isModalOpen]);
+
+  const searchCollection = async (query: string, collection: string) => {
+    try {
+      const queryParams = `?query=${query}&collection_name=${collection}`;
+      const response = (await fetchAPI(
+        `search${queryParams}`,
+      )) as SearchResponse;
+      return response.documents || [];
+    } catch (error) {
+      console.error('Failed to fetch results. Please try again later.');
+      return [];
+    }
+  };
 
   const fetchAllResults = async () => {
     setIsLoading(true);
@@ -89,7 +110,7 @@ const SearchBlock: React.FC = () => {
 
       const uniqueResults = collectionResults
         .flat()
-        .reduce((unique: SearchableDocument[], item) => {
+        .reduce((unique: SearchableDocument[], item: SearchableDocument) => {
           if (!unique.some((doc) => doc.id === item.id)) unique.push(item);
           return unique;
         }, []);
@@ -101,6 +122,61 @@ const SearchBlock: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const debouncedSearchAllCollections = useMemo(
+    () =>
+      debounce((query: string) => {
+        if (query.trim() === '') {
+          fetchAllResults();
+          return;
+        }
+
+        setIsLoading(true);
+        const searchPromises = SEARCHABLE_COLLECTIONS.map((collection) =>
+          searchCollection(query, collection),
+        );
+
+        Promise.all(searchPromises)
+          .then((collectionResults) => {
+            const uniqueResults = collectionResults
+              .flat()
+              .reduce(
+                (unique: SearchableDocument[], item: SearchableDocument) => {
+                  if (!unique.some((doc) => doc.id === item.id))
+                    unique.push(item);
+                  return unique;
+                },
+                [],
+              );
+
+            setSearchResults(uniqueResults);
+          })
+          .catch((error) => {
+            console.error(
+              'Failed to fetch search results. Please try again later.',
+            );
+            setSearchError(
+              'Unable to load search results. Please try again later.',
+            );
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }, 300), // 300ms debounce delay
+    [
+      fetchAllResults,
+      searchCollection,
+      setIsLoading,
+      setSearchResults,
+      setSearchError,
+    ],
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    debouncedSearchAllCollections(query);
   };
 
   const filteredResults = useMemo(() => {
@@ -119,10 +195,6 @@ const SearchBlock: React.FC = () => {
       .length;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
   const handleSearchShortcut = useCallback((event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
       event.preventDefault();
@@ -134,19 +206,6 @@ const SearchBlock: React.FC = () => {
     window.addEventListener('keydown', handleSearchShortcut);
     return () => window.removeEventListener('keydown', handleSearchShortcut);
   }, [handleSearchShortcut]);
-
-  const searchCollection = async (query: string, collection: string) => {
-    try {
-      const queryParams = `?query=${query}&collection_name=${collection}`;
-      const response = (await fetchAPI(
-        `search${queryParams}`,
-      )) as SearchResponse;
-      return response.documents || [];
-    } catch (error) {
-      console.error('Failed to fetch results. Please try again later.');
-      return [];
-    }
-  };
 
   const getItemRoute = (document: SearchableDocument) => {
     const collectionType = document.collection_name as CollectionType;
@@ -172,6 +231,7 @@ const SearchBlock: React.FC = () => {
   const handleItemClick = (document: SearchableDocument) => {
     const route = getItemRoute(document);
     setIsModalOpen(false); // Close modal after selection
+    resetSearch(); // Reset search data after selection
     router.push(route);
   };
 
@@ -222,9 +282,11 @@ const SearchBlock: React.FC = () => {
         <Tab key={collection} id={`tab-${index}`} store={tabStore}>
           <Flex align="center" gap="sm">
             <Text variant="lg" fontWeight="semibold">
-              {COLLECTION_TITLES[collection]}
+              {COLLECTION_TITLES[collection as CollectionType]}
             </Text>
-            <CountBadge count={getCollectionResultCount(collection)} />
+            <CountBadge
+              count={getCollectionResultCount(collection as CollectionType)}
+            />
           </Flex>
         </Tab>
       ))}
@@ -261,9 +323,12 @@ const SearchBlock: React.FC = () => {
       <ModalWrapper
         ariaLabel="Search Modal"
         open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}>
+        onClose={() => {
+          setIsModalOpen(false);
+          resetSearch();
+        }}>
         <Box>
-          <Box borderBottom="1px solid" color="border">
+          <Box borderBottom="1px solid" color="border" position="relative">
             <InputText
               value={searchQuery}
               onChange={handleInputChange}
@@ -273,51 +338,57 @@ const SearchBlock: React.FC = () => {
               px="3xl"
               py="xl"
             />
+            {isLoading && (
+              <Flex
+                position="absolute"
+                right="16px"
+                top="0"
+                bottom="0"
+                alignItems="center"
+                pointerEvents="none">
+                <Spinner color="green.500" size={12} />
+              </Flex>
+            )}
           </Box>
 
           <CollectionTabs />
 
-          {isLoading ? (
-            <Box alignItems="center" display="flex" justifyContent="center">
-              <Spinner color="green.500" size={10} />
-            </Box>
-          ) : (
-            <Box maxHeight="55vh" minHeight="200px" w="630px" overflowY="auto">
-              {filteredResults.length > 0 ? (
-                <Box>
-                  {filteredResults.filter(
-                    (item) =>
-                      item.collection_name ===
-                      SEARCHABLE_COLLECTIONS[selectedTabIndex],
-                  ).length > 0 ? (
-                    filteredResults
-                      .filter(
-                        (item) =>
-                          item.collection_name ===
-                          SEARCHABLE_COLLECTIONS[selectedTabIndex],
-                      )
-                      .map((result) => (
-                        <SearchResultItem key={result.id} item={result} />
-                      ))
-                  ) : (
-                    <Text
-                      textAlign="center"
-                      py="xl"
-                      variant="lg"
-                      color="text-secondary">
-                      No results found.
-                    </Text>
-                  )}
-                </Box>
-              ) : (
-                <Text textAlign="center" py="xl" variant="lg" color="gray.500">
-                  {searchQuery
-                    ? `No results found for "${searchQuery}"`
-                    : 'No items available.'}
-                </Text>
-              )}
-            </Box>
-          )}
+          <Box maxHeight="55vh" minHeight="200px" w="630px" overflowY="auto">
+            {filteredResults.length > 0 ? (
+              <Box>
+                {filteredResults.filter(
+                  (item) =>
+                    item.collection_name ===
+                    SEARCHABLE_COLLECTIONS[selectedTabIndex],
+                ).length > 0 ? (
+                  filteredResults
+                    .filter(
+                      (item) =>
+                        item.collection_name ===
+                        SEARCHABLE_COLLECTIONS[selectedTabIndex],
+                    )
+                    .map((result) => (
+                      <SearchResultItem key={result.id} item={result} />
+                    ))
+                ) : (
+                  <Text
+                    textAlign="center"
+                    py="xl"
+                    variant="lg"
+                    color="text-secondary">
+                    No results found.
+                  </Text>
+                )}
+              </Box>
+            ) : (
+              <Text textAlign="center" py="xl" variant="lg" color="gray.500">
+                {searchQuery
+                  ? `No results found for "${searchQuery}"`
+                  : 'No items available.'}
+              </Text>
+            )}
+          </Box>
+
           <Flex
             px="sm"
             py="xs"
@@ -328,9 +399,9 @@ const SearchBlock: React.FC = () => {
             <Text color="text-secondary" fontSize="sm">
               ⌘K
             </Text>
-            <Text color="text-secondary" fontSize="sm">
+            {/* <Text color="text-secondary" fontSize="sm">
               ⌘K
-            </Text>
+            </Text> */}
           </Flex>
         </Box>
       </ModalWrapper>
