@@ -103,10 +103,14 @@ const ThemeForm = () => {
                           }
                         />
                       </Box>
-                      <Text>{m.name.match(/(.+?)(?=-|$)/)?.[1]}</Text>
+                      <Text>{m?.name.match(/(.+?)(?=-|$)/)?.[1]}</Text>
                     </Flex>
                     <Flex align="center" gap="xs">
-                      <Text>{m.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]} </Text>
+                      <Text>
+                        {m?.name
+                          ? m.name.match(/-(.+?)(?=\.[^.]*$|$)/)?.[1] ?? 'N/A'
+                          : 'N/A'}{' '}
+                      </Text>
                       <Flex
                         align="center"
                         bg="green.700"

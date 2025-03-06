@@ -64,7 +64,7 @@ const FontList = ({ assets, onDelete }: Props) => {
                 <>
                   <Text variant="capM" sx={{ color: 'gray.400' }}>
                     {item.name
-                      ? item.name.match(/-(.+?)(?=\.[^.]*$|$)/)[1]
+                      ? item.name.match(/-(.+?)(?=\.[^.]*$|$)/)?.[1] ?? 'N/A'
                       : 'Weight'}
                   </Text>
                   {item.success === true ? (

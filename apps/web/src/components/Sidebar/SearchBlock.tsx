@@ -54,8 +54,8 @@ const COLLECTION_TITLES = {
 type CollectionType = keyof typeof COLLECTION_TITLES;
 
 const SEARCHABLE_COLLECTIONS = [
-  'content_type',
   'content',
+  'content_type',
   'theme',
   'layout',
   'flow',
