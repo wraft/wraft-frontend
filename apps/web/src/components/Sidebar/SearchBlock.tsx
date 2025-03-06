@@ -152,7 +152,7 @@ const SearchBlock: React.FC = () => {
 
             setSearchResults(uniqueResults);
           })
-          .catch((error) => {
+          .catch(() => {
             console.error(
               'Failed to fetch search results. Please try again later.',
             );
