@@ -1,7 +1,11 @@
 import type { BasicExtension } from "prosekit/basic";
 import { defineBasicExtension } from "prosekit/basic";
-import type { Extension, PlainExtension, Union } from "prosekit/core";
-import { union } from "prosekit/core";
+import {
+  union,
+  type Extension,
+  type PlainExtension,
+  type Union,
+} from "prosekit/core";
 import { defineHorizontalRule } from "prosekit/extensions/horizontal-rule";
 import { defineMention } from "prosekit/extensions/mention";
 import { definePlaceholder } from "prosekit/extensions/placeholder";
@@ -21,12 +25,14 @@ import {
   defineOrderedList,
   defineBulletList,
 } from "@extensions/list-item";
-import { defineHardBreak } from "@extensions/hard-break";
+import { defineShiftEnterHardBreak } from "@extensions/hard-break";
 import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
 import { defineReadonly } from "prosekit/extensions/readonly";
 import type { SignatureExtension } from "@extensions/signature";
 import { defineSignature } from "@extensions/signature";
+import type { PageBreakExtension } from "@extensions/page-break";
+import { definePageBreak } from "@extensions/page-break";
 import ImageView from "./image-view";
 import SignatureView from "./signature-view";
 
@@ -50,6 +56,7 @@ export type BasicsExtension = Union<
     HolderExtension,
     BlockExtension,
     SignatureExtension,
+    PageBreakExtension,
   ]
 >;
 
@@ -68,9 +75,10 @@ export function defineDefaultExtension({
     defineListItem(),
     defineOrderedList(),
     defineBulletList(),
-    defineHardBreak(),
+    defineShiftEnterHardBreak(),
     defineBlock(),
     defineSignature(),
+    definePageBreak(),
     isReadonly ? defineReadonly() : undefined,
     defineReactNodeView({
       name: "image",

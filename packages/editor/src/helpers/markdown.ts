@@ -7,6 +7,8 @@ import remarkGfm from "remark-gfm"; // Add this for table support
 import rehypeRaw from "rehype-raw";
 import { unified } from "unified";
 import { u } from "unist-builder";
+import type { Element } from "hast";
+import type { Transformer } from "unified";
 
 export function markdownFromHTML(html: string): string {
   return (
@@ -24,6 +26,15 @@ export function markdownFromHTML(html: string): string {
 
             return u("image", { url, alt, width, height });
           },
+          div(h, node: Element) {
+            if (
+              Array.isArray(node.properties.className) &&
+              node.properties.className.includes("prosekit-page-break")
+            ) {
+              return u("text", "\\newpage");
+            }
+            return h.all(node);
+          },
         },
       })
       .use(remarkGfm)
@@ -39,10 +50,27 @@ export function markdownFromHTML(html: string): string {
   );
 }
 
+const pageBreakTransformer = (): Transformer => {
+  return (tree: any) => {
+    const visit = (node: any) => {
+      if (node.type === "text" && node.value === "\\newpage") {
+        node.type = "html";
+        node.value = '<div style="page-break-after: always;"></div>';
+      }
+      if (node.children) {
+        node.children.forEach(visit);
+      }
+      return node;
+    };
+    return visit(tree);
+  };
+};
+
 export function htmlFromMarkdown(markdown: string): string {
-  return unified()
+  const processor = unified()
     .use(remarkParse)
-    .use(remarkHtml)
-    .processSync(markdown)
-    .toString();
+    .use(pageBreakTransformer)
+    .use(remarkHtml, { sanitize: false });
+
+  return processor.processSync(markdown).toString();
 }
