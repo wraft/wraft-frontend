@@ -17,6 +17,7 @@ import {
   TextUnderline,
   Table,
   Image as ImageIcon,
+  ArrowsInLineVertical,
 } from "@phosphor-icons/react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
@@ -164,6 +165,15 @@ export default function Toolbar() {
       >
         <Table size={18} />
       </Button>
+      <Button
+        pressed={editor.nodes.pageBreak.isActive()}
+        disabled={!editor.commands.insertPageBreak.canExec()}
+        onClick={() => editor.commands.insertPageBreak()}
+        tooltip="Page Break"
+      >
+        <ArrowsInLineVertical size={18} />
+      </Button>
+
       <ImageUploadPopover
         disabled={!editor.commands.insertImage.canExec()}
         tooltip="Insert Image"
