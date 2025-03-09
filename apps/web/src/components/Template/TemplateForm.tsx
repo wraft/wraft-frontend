@@ -48,6 +48,7 @@ const TemplateEditor = () => {
   const [isSetupVisible, setIsSetupVisible] = useState<boolean>(false);
   const [fieldTokens, setFieldTokens] = useState<any>('');
   const [selectedVariant, setSelectedVariant] = useState<IContentType>();
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const editorRef = useRef<any>();
 
@@ -226,6 +227,43 @@ const TemplateEditor = () => {
     editorRef.current.helpers.insterBlock(blockContent);
   };
 
+  const handleDocxUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response: any = await postAPI(
+        'import_docx',
+        formData,
+        (progress) => {
+          setUploadProgress(progress);
+        },
+      );
+
+      toast.success('Document uploaded successfully', {
+        duration: 3000,
+        position: 'top-right',
+      });
+
+      if (response?.prosemirror) {
+        const prosemirrorJson = response?.prosemirror;
+        editorRef.current?.helpers?.insterBlock(prosemirrorJson);
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to upload document', {
+        duration: 6000,
+        position: 'top-right',
+      });
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleDocxUpload(file);
+    }
+  };
+
   const onSaveTemplate = async () => {
     const isValid = await trigger(['title', 'variant']);
 
@@ -303,6 +341,7 @@ const TemplateEditor = () => {
               {templateId ? 'Update' : 'Create'}
             </Button>
           </Flex>
+
           <Flex
             mt="lg"
             flexGrow={1}
@@ -324,7 +363,7 @@ const TemplateEditor = () => {
           <Flex w="480px" direction="column">
             <Box py="md" borderBottom="solid 1px" borderColor="border">
               <Text fontSize="xl" fontWeight="heading">
-                {templateId ? `EditTemplate` : 'Create Template'}
+                {templateId ? `Edit Template` : 'Create Template'}
               </Text>
             </Box>
             <Flex pt="md" pb="xl" direction="column" gap="sm">
@@ -368,6 +407,26 @@ const TemplateEditor = () => {
                   )}
                 />
               )}
+              <Box borderTop="solid 1px" borderColor="border" my="lg" />
+              <Box>
+                <Field
+                  label="Upload Your DOCX Template (Optional)"
+                  hint="Use an existing template by uploading a .docx file.">
+                  <>
+                    <InputText
+                      type="file"
+                      accept=".docx"
+                      placeholder="Upload your document"
+                      onChange={handleFileChange}
+                    />
+                    {uploadProgress > 0 && uploadProgress < 100 && (
+                      <Box mt="xs">
+                        <Text>Uploading: {uploadProgress}%</Text>
+                      </Box>
+                    )}
+                  </>
+                </Field>
+              </Box>
             </Flex>
             <Flex borderTop="solid 1px" borderColor="border" py="md" gap="sm">
               <Button variant="primary" onClick={() => onSaveTemplate()}>

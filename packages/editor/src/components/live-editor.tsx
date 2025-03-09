@@ -202,12 +202,14 @@ export const LiveEditor = forwardRef(
           const html = htmlFromNode(editor.view.state.doc, {
             DOMSerializer: ListDOMSerializer,
           });
-          console.log("html[html]", html);
           const record = markdownFromHTML(html);
-          console.log("html[record]", record);
           return record;
         },
-        insterBlock: (block: Node) => {
+        markdownFromHTML: (html: string | null | undefined) => {
+          if (!html) return "";
+          return markdownFromHTML(html);
+        },
+        insertBlock: (block: Node) => {
           const { selection, schema } = editor.state;
           const blockContent = schema.nodeFromJSON(block);
           return editor.commands.insertBlock(blockContent, selection);
