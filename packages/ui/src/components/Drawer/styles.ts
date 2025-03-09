@@ -93,8 +93,8 @@ export const Backdrop: any = styled.div<any>`
   opacity: 0;
   transition: opacity 300ms ease-in-out;
   background-color: rgba(0, 0, 0, 0.35);
-  ${({ hideOnInteractOutside }) =>
-    hideOnInteractOutside &&
+  ${({ $hideOnInteractOutside }) =>
+    $hideOnInteractOutside &&
     `
       cursor: pointer;
 

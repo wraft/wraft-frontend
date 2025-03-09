@@ -32,10 +32,7 @@ const ModalComponent = forwardRef<HTMLDivElement, ModalOptions>(
         aria-label={ariaLabel}
         backdrop={
           backdrop && (
-            <S.Backdrop
-              backdrop={backdrop}
-              hideOnInteractOutside={hideOnInteractOutside}
-            />
+            <S.Backdrop $hideOnInteractOutside={hideOnInteractOutside} />
           )
         }
         store={dialog}

@@ -9,6 +9,7 @@ import { createEvent, DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
 
 export interface InputTextOptions extends DefaultFieldStylesProps {
   autoFocus?: boolean;
+  autocomplete?: string;
   disabled?: boolean;
   icon?: JSX.Element;
   iconPlacement?: "left" | "right";
@@ -30,6 +31,7 @@ export const InputText = forwardRef<"input", InputTextProps>(
   (
     {
       autoFocus,
+      autocomplete,
       dataTestId,
       disabled,
       icon,
@@ -58,6 +60,7 @@ export const InputText = forwardRef<"input", InputTextProps>(
       <S.Wrapper>
         <S.InputText
           autoFocus={autoFocus}
+          autoComplete={autocomplete}
           data-testid={dataTestId}
           disabled={disabled}
           id={name}

@@ -27,6 +27,8 @@
     "@changesets/cli": "^2.27.8",
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
+    "cookie": "^1.0.2",
+    "esbuild": "^0.25.0",
     "eslint": "^8.57.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",

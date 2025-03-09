@@ -1,16 +1,14 @@
 import type * as Ariakit from "@ariakit/react";
 import styled, { css, up } from "@xstyled/emotion";
 
-export type BackdropProps = Pick<
-  Ariakit.DialogOptions,
-  "hideOnInteractOutside"
->;
+export type BackdropProps = {
+  $hideOnInteractOutside?: boolean;
+  backdrop?: boolean | React.ReactElement;
+};
 
-export const Backdrop: any = styled.divBox<
-  Pick<BackdropProps, "hideOnInteractOutside">
->`
-  ${({ hideOnInteractOutside }) =>
-    hideOnInteractOutside &&
+export const Backdrop: any = styled.divBox<BackdropProps>`
+  ${({ $hideOnInteractOutside }) =>
+    $hideOnInteractOutside &&
     `
     position: fixed;
     top: 0;

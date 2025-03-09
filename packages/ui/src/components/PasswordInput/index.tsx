@@ -10,7 +10,7 @@ export type PasswordInputOptions = InputTextOptions;
 export type PasswordInputProps = CreateWuiProps<"input", InputTextOptions>;
 
 export const PasswordInput = forwardRef<"input", PasswordInputProps>(
-  ({ dataTestId, title, ...rest }, ref) => {
+  ({ dataTestId, title, autocomplete = "current-password", ...rest }, ref) => {
     const [type, setType] = useState<"password" | "text">("password");
     const isHidden = type === "password";
 
@@ -23,6 +23,7 @@ export const PasswordInput = forwardRef<"input", PasswordInputProps>(
     return (
       <InputText
         {...rest}
+        autocomplete={autocomplete}
         dataTestId={dataTestId}
         icon={
           <ToggleButton

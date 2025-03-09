@@ -17,7 +17,7 @@ export const TabComponent = forwardRef<"button", TabProps>(
     return (
       <Ariakit.Tab
         id={id}
-        render={(props) => <S.Tab as={as} {...props} ref={ref} />}
+        render={(props) => <S.Tab {...props} ref={ref} />}
         store={store}
         {...(rest as Ariakit.TabProps)}
       >

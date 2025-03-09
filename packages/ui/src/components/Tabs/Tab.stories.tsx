@@ -10,13 +10,13 @@ const TabsExample = () => {
   return (
     <>
       <Tab.List aria-label="Tabs" store={tab}>
-        <Tab as="a" id="tab1" store={tab}>
+        <Tab id="tab1" store={tab}>
           Tab 1
         </Tab>
-        <Tab as="a" id="tab2" store={tab}>
+        <Tab id="tab2" store={tab}>
           Tab 2
         </Tab>
-        <Tab as="a" id="tab3" store={tab}>
+        <Tab id="tab3" store={tab}>
           Tab 3
         </Tab>
       </Tab.List>
@@ -62,13 +62,13 @@ export const WithSelectedTab: Story = {
     return (
       <>
         <Tab.List aria-label="Tabs" store={tab}>
-          <Tab as="a" id="tab1" store={tab}>
+          <Tab id="tab1" store={tab}>
             Tab 1
           </Tab>
-          <Tab as="a" id="tab2" store={tab}>
+          <Tab id="tab2" store={tab}>
             Tab 2
           </Tab>
-          <Tab as="a" id="tab3" store={tab}>
+          <Tab id="tab3" store={tab}>
             Tab 3
           </Tab>
         </Tab.List>

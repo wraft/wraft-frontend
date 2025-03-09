@@ -38,19 +38,29 @@ export const Button = forwardRef<HTMLButtonElement, ButtonOptions>(
       loading = false,
       disabled = false,
       fullWidth = false,
+      size = "md",
+      shape,
       ...rest
     },
     ref,
   ) => {
     const isDisabled = disabled || loading;
+
+    // Create custom attributes that will be passed to the DOM
+    // Use data attributes to prevent React warnings
+    const domAttributes = {
+      ...(loading ? { "data-loading": "true" } : {}),
+      ...(danger ? { "data-danger": "true" } : {}),
+      ...(fullWidth ? { "data-fullwidth": "true" } : {}),
+    };
+
     return (
       <S.Button
         variant={variant}
-        danger={danger}
-        loading={loading}
-        fullWidth={fullWidth}
         disabled={isDisabled}
-        size="md"
+        size={size}
+        shape={shape}
+        {...domAttributes}
         {...rest}
         ref={ref}
       >

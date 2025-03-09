@@ -14,9 +14,19 @@ const shapeStyles = (
   padding: 0;
 `;
 
-export const Button = styled(AriakitButton)<ButtonOptions>`
+// Create a type with the data attributes to use in styled components
+type StyledButtonProps = Omit<
+  ButtonOptions,
+  "loading" | "fullWidth" | "danger"
+> & {
+  "data-loading"?: string;
+  "data-fullwidth"?: string;
+  "data-danger"?: string;
+};
+
+export const Button = styled(AriakitButton)<StyledButtonProps>`
   ${({ variant }) => th(`buttons.${variant}`)};
-  ${({ variant, danger }) => danger && th(`buttons.danger.${variant}`)};
+  ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.danger.${variant}`)};
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -36,11 +46,10 @@ export const Button = styled(AriakitButton)<ButtonOptions>`
   transition: medium;
   ${system};
 
-   ${({ fullWidth }) =>
-     fullWidth &&
-     `
+  // Apply styles using data attributes instead of props
+  &[data-fullwidth="true"] {
     width: 100%;
-   `};
+  }
 
   & > svg {
     font-weight: initial;
@@ -64,17 +73,17 @@ export const Button = styled(AriakitButton)<ButtonOptions>`
 
   &:hover {
     ${({ variant }) => th(`buttons.focus.${variant}`)};
-    ${({ variant, danger }) => danger && th(`buttons.focus.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.focus.danger.${variant}`)};      
   }
 
   &:hover {
     ${({ variant }) => th(`buttons.hover.${variant}`)};
-    ${({ variant, danger }) => danger && th(`buttons.hover.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.hover.danger.${variant}`)};      
   }
 
   &:active {
     ${({ variant }) => th(`buttons.active.${variant}`)};
-    ${({ variant, danger }) => danger && th(`buttons.active.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.active.danger.${variant}`)};      
   }
 
   [${hideFocusRingsDataAttribute}] &:focus {

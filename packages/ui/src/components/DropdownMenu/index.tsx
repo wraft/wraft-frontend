@@ -7,14 +7,14 @@ export interface DropdownMenuOptions extends Omit<Ariakit.MenuProps, "gutter"> {
   innerProps?: any;
 }
 
-const DropdownMenuComponent = forwardRef<any, DropdownMenuOptions>(
+const DropdownMenuComponent = forwardRef<HTMLDivElement, DropdownMenuOptions>(
   ({ children, ...rest }, ref) => {
     return (
       <Ariakit.Menu
         aria-label="dropdown-menu"
         ref={ref}
         tabIndex={0}
-        render={<S.Inner />}
+        render={(props) => <S.Inner {...props} />}
         {...rest}
       >
         {children}
@@ -23,14 +23,15 @@ const DropdownMenuComponent = forwardRef<any, DropdownMenuOptions>(
   },
 );
 
+DropdownMenuComponent.displayName = "DropdownMenu";
+
 export const Provider = Ariakit.MenuProvider;
 
-export const Trigger = forwardRef<"button", any>(
-  ({ as, store, ...rest }, ref) => {
+export const Trigger = forwardRef<HTMLDivElement, Ariakit.MenuButtonProps>(
+  ({ store, ...rest }, ref) => {
     return (
       <Ariakit.MenuButton
-        as={as}
-        render={<S.Trigger />}
+        render={(props) => <S.Trigger {...props} />}
         ref={ref}
         store={store}
         {...rest}
@@ -39,24 +40,30 @@ export const Trigger = forwardRef<"button", any>(
   },
 );
 
-export const Item = forwardRef<
-  HTMLButtonElement,
-  Omit<Ariakit.MenuItemProps, "as">
->(({ as, ...rest }: any, ref) => {
+Trigger.displayName = "DropdownMenu.Trigger";
+
+export const Item = forwardRef<HTMLDivElement, any>(({ as, ...rest }, ref) => {
   return (
     <Ariakit.MenuItem
-      as={as}
       ref={ref}
-      type="button"
-      render={<S.Item as={as} />}
+      render={(props) => <S.Item {...props} />}
       {...rest}
     />
   );
 });
 
-export const Separator = forwardRef<"div", any>((props, ref) => {
-  return <Ariakit.MenuSeparator ref={ref} as={S.Separator} {...props} />;
+Item.displayName = "DropdownMenu.Item";
+
+export const Separator = forwardRef<HTMLHRElement, any>((props, ref) => {
+  return (
+    <Ariakit.MenuSeparator
+      ref={ref}
+      render={(menuProps) => <S.Separator {...menuProps} {...props} />}
+    />
+  );
 });
+
+Separator.displayName = "DropdownMenu.Separator";
 
 export const DropdownMenu = Object.assign(DropdownMenuComponent, {
   Provider,

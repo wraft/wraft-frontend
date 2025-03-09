@@ -29,7 +29,7 @@ const DrawerComponent = forwardRef<HTMLDivElement, DrawerOptions>(
       <Ariakit.Dialog
         backdrop={
           withBackdrop ? (
-            <S.Backdrop hideOnInteractOutside={hideOnInteractOutside} />
+            <S.Backdrop $hideOnInteractOutside={hideOnInteractOutside} />
           ) : (
             false
           )

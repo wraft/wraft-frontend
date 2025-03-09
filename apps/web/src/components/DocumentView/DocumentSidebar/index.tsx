@@ -50,22 +50,22 @@ export const DocumentSidebar = () => {
 
       <Box>
         <Tab.List aria-label="Content Tab" store={tab}>
-          <Tab id="overview" as="a" store={tab}>
+          <Tab id="overview" store={tab}>
             Overview
           </Tab>
 
           {canAccess('comment') && (
-            <Tab id="discussions" as="a" store={tab}>
+            <Tab id="discussions" store={tab}>
               Discussions
             </Tab>
           )}
           {canAccess('history') && (
-            <Tab id="versions" as="a" store={tab}>
+            <Tab id="versions" store={tab}>
               Versions
             </Tab>
           )}
           {canAccess('log') && (
-            <Tab id="log" as="a" store={tab}>
+            <Tab id="log" store={tab}>
               Log
             </Tab>
           )}
