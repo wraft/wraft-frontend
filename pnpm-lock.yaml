@@ -250,8 +250,8 @@ importers:
         specifier: ^6.2.0
         version: 6.2.1(react@18.3.1)
       react-day-picker:
-        specifier: 7.4.8
-        version: 7.4.8(react@18.3.1)
+        specifier: ^9.6.1
+        version: 9.6.1(react@18.3.1)
       react-dom:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
@@ -2407,6 +2407,10 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
+
+  /@date-fns/tz@1.2.0:
+    resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
+    dev: false
 
   /@datepicker-react/hooks@2.8.4(react@18.3.1):
     resolution: {integrity: sha512-qaYJKK5sOSdqcL/OnCtyv3/Q6fRRljfeAyl5ISTPgEO0CM5xZzkGmTx40+6wvqjH5lEZH4ysS95nPyLwZS2tlw==}
@@ -8129,6 +8133,10 @@ packages:
       is-data-view: 1.0.2
     dev: true
 
+  /date-fns-jalali@4.1.0-0:
+    resolution: {integrity: sha512-hTIP/z+t+qKwBDcmmsnmjWTduxCg+5KfdqWQvb2X/8C9+knYY6epN/pfxdDuyVlSVeFz0sM5eEfwIUQ70U4ckg==}
+    dev: false
+
   /date-fns@2.30.0:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
     engines: {node: '>=0.11'}
@@ -8138,6 +8146,10 @@ packages:
 
   /date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+    dev: false
+
+  /date-fns@4.1.0:
+    resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
     dev: false
 
   /debug@2.6.9:
@@ -14512,12 +14524,15 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /react-day-picker@7.4.8(react@18.3.1):
-    resolution: {integrity: sha512-pp0hnxFVoRuBQcRdR1Hofw4CQtOCGVmzCNrscyvS0Q8NEc+UiYLEDqE5dk37bf0leSnBW4lheIt0CKKhuKzDVw==}
+  /react-day-picker@9.6.1(react@18.3.1):
+    resolution: {integrity: sha512-PiRT/l6yk+fLpSmyMFUHIep8dbKAlilJGfDB0N2krXFhnxbitZf/t+ePDLk8kou/lYUVWAfIIxBJjFuvrNy7Hw==}
+    engines: {node: '>=18'}
     peerDependencies:
-      react: ~0.13.x || ~0.14.x || ^15.0.0 || ^16.0.0
+      react: '>=16.8.0'
     dependencies:
-      prop-types: 15.8.1
+      '@date-fns/tz': 1.2.0
+      date-fns: 4.1.0
+      date-fns-jalali: 4.1.0-0
       react: 18.3.1
     dev: false
 
