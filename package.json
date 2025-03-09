@@ -27,10 +27,12 @@
     "@changesets/cli": "^2.27.8",
     "@wraft/eslint-config": "*",
     "@wraft/typescript-config": "*",
+    "eslint": "^8.57.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
-    "turbo": "latest"
+    "turbo": "latest",
+    "typescript": "5.3.3"
   },
   "packageManager": "pnpm@8.15.4",
   "engines": {

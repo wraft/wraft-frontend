@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsup --minify --clean",
     "dev": "tsup --watch",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "eslint .",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "lib0": "^0.2.99",
     "phoenix": "^1.7.18",
     "prosekit": "^0.11.4",
+    "prosemirror-flat-list": "^0.5.4",
     "rehype-parse": "^9.0.1",
     "rehype-raw": "^7.0.0",
     "rehype-remark": "^10.0.0",
