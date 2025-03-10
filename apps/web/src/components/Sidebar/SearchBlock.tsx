@@ -43,12 +43,12 @@ interface SearchResponse {
 }
 
 const COLLECTION_TITLES = {
-  content: 'Document',
-  content_type: 'Variant',
-  data_template: 'Template',
-  theme: 'Theme',
-  layout: 'Layout',
-  flow: 'Flow',
+  content: 'Documents',
+  content_type: 'Variants',
+  data_template: 'Templates',
+  theme: 'Themes',
+  layout: 'Layouts',
+  flow: 'Flows',
 } as const;
 
 type CollectionType = keyof typeof COLLECTION_TITLES;
@@ -56,9 +56,9 @@ type CollectionType = keyof typeof COLLECTION_TITLES;
 const SEARCHABLE_COLLECTIONS = [
   'content',
   'content_type',
-  'theme',
-  'layout',
-  'flow',
+  // 'theme',
+  // 'layout',
+  // 'flow',
   'data_template',
 ] as const;
 
