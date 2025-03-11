@@ -19,5 +19,6 @@ export { DropdownMenu } from "./DropdownMenu";
 export { Link } from "./Link";
 export { Spinner } from "./Spinner";
 export { Button } from "./Button";
+export { Toggle } from "./Toggle";
 export { default as Pagination } from "./Paginate";
 export { default as ErrorBoundary } from "./ErrorBoundary";

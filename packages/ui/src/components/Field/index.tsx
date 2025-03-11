@@ -20,6 +20,7 @@ export interface FieldOptions {
   error?: string | JSX.Element;
   label?: string | JSX.Element;
   hint?: string | JSX.Element;
+  flexDirection?: string | JSX.Element;
   required?: boolean;
   warning?: string | JSX.Element;
   success?: string | JSX.Element;
@@ -29,12 +30,13 @@ export interface FieldOptions {
 
 // export type FieldProps = CreateWuiProps<'div', FieldOptions>
 
-export const Field = forwardRef<"div", FieldOptions>(
+export const Field = forwardRef<HTMLDivElement, FieldOptions>(
   (
     {
       children,
       disabled,
       disabledIcon,
+      flexDirection,
       error,
       hint,
       info,
@@ -50,12 +52,15 @@ export const Field = forwardRef<"div", FieldOptions>(
     const baseType = getBaseType(
       children.props.type || children.type.displayName,
     );
+
     const isRadio = baseType === "radio";
     const isRadioGroup = baseType === "RadioGroup";
     const isFieldGroup = baseType === "FieldGroup";
     const isCheckbox = baseType === "checkbox";
     const isToggle = children.type.displayName === "Toggle";
     const isCheckable = isRadio || isCheckbox || isToggle;
+    const layout = flexDirection || (isCheckable ? "row" : "column");
+    const isGroup = isFieldGroup || isRadioGroup;
     const variant = getVariant({ error, warning, success, info });
     const hintText = variant ? error || warning || success || info : hint;
     const withHintText = !!hintText;
@@ -68,7 +73,7 @@ export const Field = forwardRef<"div", FieldOptions>(
       required,
       variant,
       transparent,
-      // ...(isGroup ? { flexDirection: layout } : {}),
+      ...(isGroup ? { flexDirection: layout } : {}),
     });
 
     useIsomorphicLayoutEffect(() => {
@@ -85,8 +90,15 @@ export const Field = forwardRef<"div", FieldOptions>(
     }, [children.props, children.type.displayName, htmlFor]);
 
     return (
-      <S.Field ref={ref} withHintText={withHintText} {...rest}>
+      <S.Field
+        ref={ref}
+        withHintText={withHintText}
+        isRadioGroup={isRadioGroup}
+        isCheckable={isCheckable}
+        {...rest}
+      >
         <S.Label>
+          {isCheckable && child}
           <S.LabelWithHint>
             {label && (
               <Label
