@@ -1,5 +1,7 @@
 import { rpxTransformers } from "@xstyled/emotion";
 
+import { getToggles } from "../components/Toggle/theme";
+
 import basic from "./basic";
 import colors from "./colors";
 import alerts from "./variants/alerts";
@@ -73,6 +75,7 @@ export const createTheme = (options: Options = {}) => {
   theme.tabs = getTabs(theme);
   theme.tags = getTags(theme);
   theme.icons = getIcons(theme);
+  theme.toggles = getToggles(theme);
   // theme.tables = getTables(theme);
 
   // fields
