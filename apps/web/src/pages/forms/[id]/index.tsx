@@ -1,9 +1,10 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Box, Container, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { Button, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import FormsFrom from 'components/Form/FormsFrom';
 import FormViewForm from 'components/Form/FormViewForm';
@@ -13,7 +14,7 @@ import Page from 'common/PageFrame';
 import FieldText from 'common/FieldText';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
-import { fetchAPI } from 'utils/models';
+import { fetchAPI, postAPI } from 'utils/models';
 
 const Index: FC = () => {
   const {
@@ -27,6 +28,7 @@ const Index: FC = () => {
   const [rerender, setRerender] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -68,11 +70,16 @@ const Index: FC = () => {
     }));
   };
 
+  const saveForm = () => {
+    setIsSaving(true);
+    setRerender((prev) => !prev);
+  };
+
   useEffect(() => {
     if (cId && cId.length > 0) {
       loadData(cId);
     }
-  }, [cId, rerender]);
+  }, [cId]);
 
   return (
     <>
@@ -80,18 +87,15 @@ const Index: FC = () => {
         <title>Form Details | Wraft</title>
         <meta name="description" content="form questions and responses" />
       </Head>
-      <Page id="Modal" showFull={true}>
-        {' '}
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <PageHeader
-            title={`${formdata?.name || 'name loading...'}`}
-            desc={`${formdata?.description || 'detatils loading...'}`}
-          />
-          <Flex sx={{ alignItems: 'center', gap: '8px', pr: 4 }}>
+      <Page showFull={true}>
+        <PageHeader
+          title={`${formdata?.name || 'name loading...'}`}
+          desc={`${formdata?.description || 'detatils loading...'}`}>
+          <Flex alignItems="center" gap="8px" pr={4}>
             <Button
               variant="secondary"
               onClick={() => setIsView((prev) => !prev)}>
-              {isView ? 'Edit' : 'View'}
+              {isView ? 'Edit' : 'Preview'}
             </Button>
             <Box>
               <Button variant="secondary">
@@ -103,33 +107,32 @@ const Index: FC = () => {
                 </a>
               </Button>
             </Box>
-            {/* <Button variant="secondary">Save</Button> */}
+            <Button onClick={saveForm} loading={isSaving}>
+              Save
+            </Button>
           </Flex>
-        </Flex>
-        <Box sx={{ display: isView ? 'block' : 'none' }}>
-          <Container variant="layout.pageFrame">
-            <Flex sx={{ justifyContent: 'center', width: '100%' }}>
-              <Box
-                sx={{
-                  bg: 'white',
-                  width: '100%',
-                  maxHeight: 'calc(100vh - 72px - 72px)',
-                  maxWidth: '80ch',
-                  overflowY: 'auto',
-                }}>
-                <FormViewForm items={items} />
-              </Box>
-            </Flex>
-          </Container>
+        </PageHeader>
+
+        <Box display={isView ? 'block' : 'none'}>
+          <Flex justifyContent="center">
+            <Box
+              w="100%"
+              mt="lg"
+              maxHeight="calc(100vh - 72px - 72px)"
+              maxWidth="80ch"
+              overflowY="auto">
+              <FormViewForm items={items} />
+            </Box>
+          </Flex>
         </Box>
-        <Flex sx={{ display: isView ? 'none' : 'flex' }}>
-          <Container variant="layout.pageFrame">
-            <Flex>
-              <MenuStepsIndicator
-                formStep={formStep}
-                goTo={goTo}
-                titles={['Questions', 'Responses']}
-              />
+        <Flex display={isView ? 'none' : 'flex'}>
+          <Flex flex={1} px="md" py="md" gap="md">
+            <MenuStepsIndicator
+              formStep={formStep}
+              goTo={goTo}
+              titles={['Questions', 'Responses', 'Settings']}
+            />
+            <Box w="100%">
               {formStep === 0 && (
                 <FormsFrom
                   formdata={formdata}
@@ -138,34 +141,25 @@ const Index: FC = () => {
                   setRerender={setRerender}
                   isEdit
                   setIsOpen={setIsOpen}
+                  trigger={isSaving}
+                  setLoading={setIsSaving}
                 />
               )}
-              {formStep === 1 && (
-                <Box
-                  sx={{
-                    width: '100%',
-                  }}>
-                  <FormResponseList />
-                </Box>
-              )}
-            </Flex>
-          </Container>
+              {formStep === 1 && <FormResponseList />}
+            </Box>
+          </Flex>
         </Flex>
         <Modal
           ariaLabel="edit form"
           open={isOpen}
           onClose={() => setIsOpen(false)}>
-          <Box
-            as="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{ minWidth: '518px' }}>
-            <Box
-              sx={{ p: 4, borderBottom: '1px solid', borderColor: 'border' }}>
-              <Text as="p" variant="h4Medium">
+          <Box as="form" onSubmit={handleSubmit(onSubmit)} minWidth="518px">
+            <Box p={4} borderBottom="1px solid" borderColor="border">
+              <Text as="p" variant="xl">
                 Edit form
               </Text>
             </Box>
-            <Box sx={{ p: 4 }}>
+            <Box p={4}>
               <Field
                 name="name"
                 label="Name"
@@ -192,22 +186,14 @@ const Index: FC = () => {
                 error={errors.description}
               />
             </Box>
-            <Flex sx={{ p: 4, pt: 0, gap: 3 }}>
+            <Flex p={4} pt={0} gap={3}>
               <Button
                 type="submit"
                 variant="primary"
-                onClick={() => {
-                  handleSubmit(onSubmit)();
-                  setIsOpen(false);
-                }}>
+                onClick={() => handleSubmit(onSubmit)}>
                 Save
               </Button>
-              <Button
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpen(false);
-                }}>
+              <Button variant="secondary" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
             </Flex>

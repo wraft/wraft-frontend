@@ -1,12 +1,24 @@
 import styled, { css, th } from "@xstyled/emotion";
 
+import { StyledLabel } from "../Label";
+
 import { Variant } from "./index";
 
 import { FieldIconSize } from "@/utils";
 
-export const Field = styled.div<any>`
-  position: relative;
+// Define the checkableFieldStyles
+const checkableFieldStyles = css`
+  align-items: flex-start;
+  overflow-wrap: break-word;
 `;
+
+// Define the StyledFieldProps interface
+interface StyledFieldProps {
+  checked?: boolean;
+  isCheckable?: boolean;
+  isRadioGroup?: boolean;
+  withHintText?: boolean;
+}
 
 export const VARIANTS: Record<Variant, string> = {
   error: "red.400",
@@ -14,6 +26,33 @@ export const VARIANTS: Record<Variant, string> = {
   success: "green.400",
   warning: "yellow.400",
 };
+
+export const Field = styled.div<StyledFieldProps>(
+  ({ checked, isCheckable, isRadioGroup, withHintText, ...rest }) => {
+    const checkableInputStyles = isCheckable
+      ? `
+      input {
+        margin-top: xs;
+      }
+    `
+      : "";
+
+    const labelStyles = `
+      ${StyledLabel} {
+        ${isCheckable && checkableFieldStyles};
+        ${isCheckable && withHintText ? th("defaultFields.checkablelabel.default") : ""}
+        ${checked ? th("defaultFields.checkablelabel.checked") : ""}
+        ${!isCheckable ? "margin-bottom: sm;" : ""}
+        ${isRadioGroup ? "margin-bottom: md;" : ""}
+      }
+    `;
+
+    return css`
+      ${checkableInputStyles}
+      ${labelStyles}
+    `;
+  },
+);
 
 export const Hint = styled.div<{ variant: Variant }>`
   display: flex;

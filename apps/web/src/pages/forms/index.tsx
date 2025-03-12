@@ -1,36 +1,25 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import {
-  Box,
-  Button,
-  Drawer,
-  Field,
-  Flex,
-  InputText,
-  Modal,
-  useDrawer,
-} from '@wraft/ui';
+import { useRouter } from 'next/router';
+import { Box, Button, Field, Flex, InputText, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { Plus, X } from '@phosphor-icons/react';
 import { CloseIcon } from '@wraft/icon';
 import { zodResolver } from '@hookform/resolvers/zod';
+import toast from 'react-hot-toast';
 
-import FormsFrom from 'components/Form/FormsFrom';
 import FormList from 'components/Form/FormList';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import { FormSchema, Form } from 'schemas/form';
+import { postAPI } from 'utils/models';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [items, setItems] = useState<any>([]);
-  const [data, setData] = useState<Form | null>();
-  const [trigger, _setTrigger] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
-  const [_loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const mobileMenuDrawer = useDrawer();
+  const router = useRouter();
 
   const {
     register,
@@ -40,20 +29,25 @@ const Index: FC = () => {
   } = useForm<Form>({ resolver: zodResolver(FormSchema) });
 
   const onSubmit = (formData: any) => {
-    setData(formData);
-    setDrawerOpen(true);
-    setIsOpen(false);
-  };
-
-  const onCloseDrawer = () => {
-    setDrawerOpen(false);
-    setData(null);
-    reset();
+    setLoading(true);
+    const payload = { ...formData, fields: [], status: 'active' };
+    postAPI(`forms`, payload)
+      .then((response: any) => {
+        setLoading(true);
+        toast.success('Created Form Successfully');
+        router.push(`/forms/${response?.id}`);
+      })
+      .catch((err) => {
+        toast.error(err?.errors && JSON.stringify(err?.errors), {
+          duration: 3000,
+          position: 'top-right',
+        });
+        setLoading(false);
+      });
   };
 
   const onOpenDrawer = () => {
     reset();
-    setData(null);
     setIsOpen(true);
   };
 
@@ -116,43 +110,17 @@ const Index: FC = () => {
               <Button
                 type="submit"
                 variant="primary"
+                loading={loading}
                 onClick={handleSubmit(onSubmit)}>
                 Create
               </Button>
-              <Button
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpen(false);
-                  setData(null);
-                }}>
+              <Button variant="secondary" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
             </Flex>
           </Flex>
         </>
       </Modal>
-      <Drawer
-        open={drawerOpen}
-        store={mobileMenuDrawer}
-        aria-label="Menu backdrop"
-        withBackdrop={true}
-        onClose={onCloseDrawer}>
-        <Drawer.Header>
-          <Drawer.Title>Create Form</Drawer.Title>
-          <X size={20} weight="bold" cursor="pointer" onClick={onCloseDrawer} />
-        </Drawer.Header>
-
-        <FormsFrom
-          items={items}
-          setItems={setItems}
-          formdata={data}
-          trigger={trigger}
-          setRerender={setRerender}
-          setOpen={onCloseDrawer}
-          setLoading={setLoading}
-        />
-      </Drawer>
     </>
   );
 };

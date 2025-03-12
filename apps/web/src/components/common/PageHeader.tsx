@@ -58,6 +58,7 @@ const PageHeader = ({
       borderColor="border"
       py="lg"
       px="lg"
+      w="100%"
       bg="background-primary">
       <Flex alignItems="center">
         {hasBack && <Back />}

@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Input, Label, Spinner, Text, Textarea } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import {
+  Box,
+  Flex,
+  Text,
+  Spinner,
+  Label,
+  InputText,
+  Textarea,
+  Button,
+  Field,
+} from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { LogoIcon } from '@wraft/icon';
 
@@ -111,118 +120,96 @@ const FormEntry = () => {
 
   if (loading) {
     return (
-      <Flex
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}>
-        <Spinner width={32} />
+      <Flex align="center" justify="center" h="100vh">
+        <Spinner />
       </Flex>
     );
   }
 
   return (
-    <Box sx={{ background: 'background-primary' }}>
-      <Box sx={{ position: 'absolute', top: 4, left: 4 }}>
-        <LogoIcon />
+    <Box bg="background-secondary" minH="100vh">
+      <Box position="absolute" top="1rem" left="1rem">
+        <LogoIcon width="120px" height="30px" />
       </Box>
-      <Flex
-        sx={{
-          px: 4,
-          py: 4,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Box
-          sx={{
-            maxWidth: '80ch',
-            width: '100%',
-          }}>
+      <Flex p="md" align="center" justify="center" pt="md">
+        <Box maxW="80ch" w="100%">
           <>
-            <Box sx={{ width: '100%', height: '4px', bg: 'green.700' }}></Box>
+            <Box w="100%" h="4px" bg="green.700" />
             <Box
-              sx={{
-                bg: 'white',
-                p: 4,
-                border: '1px solid',
-                borderTop: 'none',
-                borderColor: 'border',
-              }}>
-              <Text as="p" variant="h4Medium">
+              bg="white"
+              p="md"
+              border="1px solid"
+              borderTop="none"
+              borderColor="border">
+              <Text variant="xl" fontWeight="medium">
                 {formdata?.name || 'name'}
               </Text>
-              <Text
-                as="p"
-                variant="h6Regular"
-                sx={{ mt: 3, color: 'gray.600' }}>
+              <Text variant="base" mt="3" color="gray.600">
                 {formdata?.description || 'description'}
               </Text>
             </Box>
           </>
-          <Box
-            sx={{
-              mt: 4,
-              bg: 'white',
-              border: '1px solid',
-              borderColor: 'border',
-            }}>
+          <Box mt="md" bg="white" border="1px solid" borderColor="border">
+            {console.log('items', items)}
             {items.map((item: any) => (
               <Box
                 key={item.id}
-                sx={{
-                  p: 4,
-                  borderBottom: '1px solid',
-                  borderColor: 'border',
-                }}>
-                <Label>
-                  {item.name}
-                  <Text sx={{ color: 'red.700' }}>{item.required && '*'}</Text>
-                </Label>
-                {item.type === 'text-primary' && (
-                  <Textarea
-                    value={item.value}
-                    onChange={(e) => onValueChange(e, item)}
-                  />
-                )}
-                {item.type === 'String' && (
-                  <Input
-                    value={item.value}
-                    onChange={(e) => onValueChange(e, item)}
-                  />
-                )}
-                {item.type === 'File Input' && (
-                  <Input
-                    type="file"
-                    value={item.value}
-                    onChange={(e) => onValueChange(e, item)}
-                  />
-                )}
-                {item.type === 'Date' && (
-                  <Input
-                    type="date"
-                    value={item.value}
-                    onChange={(e) => onValueChange(e, item)}
-                  />
-                )}
-                {item.error && <Text variant="error">{item.error}</Text>}
+                p="md"
+                borderBottom="1px solid"
+                borderColor="border">
+                <Field
+                  label={item.name}
+                  required={item.required}
+                  error={item.error}>
+                  <>
+                    {item.type === 'Text' && (
+                      <Textarea
+                        value={item.value}
+                        onChange={(e) => onValueChange(e, item)}
+                      />
+                    )}
+                    {item.type === 'String' && (
+                      <InputText
+                        value={item.value}
+                        onChange={(e) => onValueChange(e, item)}
+                      />
+                    )}
+                    {item.type === 'File Input' && (
+                      <InputText
+                        type="file"
+                        value={item.value}
+                        onChange={(e) => onValueChange(e, item)}
+                      />
+                    )}
+                    {item.type === 'Date' && (
+                      <InputText
+                        type="date"
+                        value={item.value}
+                        onChange={(e) => onValueChange(e, item)}
+                      />
+                    )}
+                  </>
+                </Field>
               </Box>
             ))}
           </Box>
-          <Flex sx={{ p: 4, pl: 0, gap: '16px' }}>
+          <Flex p="md" pl="0" gap="md">
             <Button onClick={onSave}>Save</Button>
             <Button variant="secondary" onClick={onClear}>
               Clear
             </Button>
           </Flex>
-          <Text as="p" variant="pR" mt={4}>
+          <Text variant="base" mt="md">
             This content is created by the owner of the form. The data you
             submit will be sent to the form owner. Wraft is not responsible for
             the privacy or security practices of its customers, including those
             of this form owner. Never give out your password.
           </Text>
-          <Text as="p" variant="pR" mt={4}>
-            Powered by <Text variant="pB">Wraft Forms</Text>
+          <Text variant="base" mt="md">
+            Powered by{' '}
+            <Text as="span" fontWeight="bold">
+              Wraft Forms
+            </Text>
           </Text>
         </Box>
       </Flex>

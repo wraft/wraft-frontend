@@ -1,28 +1,50 @@
 import React from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 
-type Props = {
+interface MenuStepsIndicatorProps {
   formStep: number;
-  goTo: (arg: any) => void;
+  goTo: (stepIndex: number) => void;
   titles: string[];
-};
+}
 
-const MenuStepsIndicator = ({ goTo, formStep, titles }: Props) => {
+const MenuStepsIndicator: React.FC<MenuStepsIndicatorProps> = ({
+  goTo,
+  formStep,
+  titles,
+}) => {
+  if (!titles || titles.length === 0) {
+    return null;
+  }
+
   return (
-    <Flex direction="column" flexShrink={0} w="180px" pl="md" py="md">
-      {titles &&
-        titles.map((title: any, index: number) => (
+    <Flex
+      direction="column"
+      flexShrink={0}
+      w="180px"
+      role="navigation"
+      aria-label="Form steps">
+      {titles.map((title: string, index: number) => {
+        const isActive = formStep === index;
+
+        return (
           <Box
             cursor="pointer"
             px="md"
             py="sm"
-            bg={formStep === index ? 'gray.400' : 'transparent'}
+            bg={isActive ? 'gray.400' : 'transparent'}
             borderRadius="sm"
-            key={index}
-            onClick={() => goTo(index)}>
-            <Text fontWeight="heading">{title}</Text>
+            key={`step-${index}`}
+            onClick={() => goTo(index)}
+            role="button"
+            aria-current={isActive ? 'step' : undefined}>
+            <Text
+              fontWeight={isActive ? 'bold' : 'normal'}
+              color={isActive ? 'text.primary' : 'text.secondary'}>
+              {title}
+            </Text>
           </Box>
-        ))}
+        );
+      })}
     </Flex>
   );
 };
