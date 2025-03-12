@@ -15,7 +15,8 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DragIcon } from '@wraft/icon';
-import { Box, Flex, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
+import { useThemeUI } from 'theme-ui';
 
 type Props = { items: any; handleDragEnd: any };
 
@@ -48,14 +49,12 @@ const Draggable = ({ items, handleDragEnd }: DraggableValuesProps) => {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}>
       <SortableContext items={items} strategy={rectSortingStrategy}>
-        <Flex sx={{ flexDirection: 'column' }}>
+        <Flex flexDirection="column">
           {items.map((item: any, index: number) => (
             <Box
               key={index}
-              sx={{
-                borderTop: index === 0 ? 'none' : '1px solid',
-                borderColor: 'border',
-              }}>
+              borderTop={index === 0 ? 'none' : '1px solid'}
+              borderColor="border">
               <SortableItem item={item} />
             </Box>
           ))}
@@ -76,27 +75,20 @@ const SortableItem = ({ item }: SortableItemProps) => {
   const { theme } = useThemeUI();
   return (
     <Flex
-      sx={{
+      style={{
         transform: CSS.Transform.toString(transform),
         transition: transition,
-        alignItems: 'center',
-        bg: 'background-primary',
-        py: 2,
-      }}>
+      }}
+      alignItems="center"
+      bg="background-primary"
+      py={2}>
       <Box
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        sx={{
-          cursor: 'pointer',
-          flexShrink: 0,
-        }}>
-        <Box
-          as="div"
-          style={{
-            display: 'flex',
-            padding: '16px',
-          }}>
+        cursor="pointer"
+        flexShrink={0}>
+        <Box as="div" display="flex" p="16px">
           <DragIcon
             color={theme?.colors?.gray?.[200] || ''}
             width={20}
@@ -105,16 +97,11 @@ const SortableItem = ({ item }: SortableItemProps) => {
           />
         </Box>
       </Box>
-      <Box
-        sx={{
-          width: '100%',
-        }}>
-        <Text as="p" variant="capM" sx={{ textTransform: 'capitalize', mb: 0 }}>
+      <Box w="100%">
+        <Text textTransform="capitalize" mb={0}>
           {item.type === 'options' ? 'Multiple Choice' : item.type}
         </Text>
-        <Text as="p" variant="subB" sx={{ color: 'green.700' }}>
-          {item.name}
-        </Text>
+        <Text color="green.700">{item.name}</Text>
       </Box>
     </Flex>
   );

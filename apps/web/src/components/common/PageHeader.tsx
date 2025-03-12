@@ -59,6 +59,9 @@ const PageHeader = ({
       py="lg"
       px="lg"
       w="100%"
+      position="sticky"
+      top={0}
+      zIndex={111}
       bg="background-primary">
       <Flex alignItems="center">
         {hasBack && <Back />}

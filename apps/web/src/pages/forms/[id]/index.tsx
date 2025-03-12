@@ -113,42 +113,39 @@ const Index: FC = () => {
           </Flex>
         </PageHeader>
 
-        <Box display={isView ? 'block' : 'none'}>
-          <Flex justifyContent="center">
-            <Box
-              w="100%"
-              mt="lg"
-              maxHeight="calc(100vh - 72px - 72px)"
-              maxWidth="80ch"
-              overflowY="auto">
-              <FormViewForm items={items} />
-            </Box>
-          </Flex>
-        </Box>
-        <Flex display={isView ? 'none' : 'flex'}>
-          <Flex flex={1} px="md" py="md" gap="md">
-            <MenuStepsIndicator
-              formStep={formStep}
-              goTo={goTo}
-              titles={['Questions', 'Responses', 'Settings']}
-            />
-            <Box w="100%">
-              {formStep === 0 && (
-                <FormsFrom
-                  formdata={formdata}
-                  items={items}
-                  setItems={setItems}
-                  setRerender={setRerender}
-                  isEdit
-                  setIsOpen={setIsOpen}
-                  trigger={isSaving}
-                  setLoading={setIsSaving}
-                />
-              )}
-              {formStep === 1 && <FormResponseList />}
-            </Box>
-          </Flex>
+        <Flex flex={1} px="md" py="md" gap="md">
+          <MenuStepsIndicator
+            formStep={formStep}
+            goTo={goTo}
+            titles={['Questions', 'Responses']}
+          />
+          <Box w="100%">
+            {!isView && formStep === 0 && (
+              <FormsFrom
+                formdata={formdata}
+                items={items}
+                setItems={setItems}
+                setRerender={setRerender}
+                isEdit
+                setIsOpen={setIsOpen}
+                trigger={isSaving}
+                setLoading={setIsSaving}
+              />
+            )}
+            {isView && formStep === 0 && (
+              <Box
+                w="100%"
+                maxHeight="calc(100vh - 72px - 72px)"
+                maxWidth="80ch"
+                overflowY="auto">
+                <FormViewForm items={items} />
+              </Box>
+            )}
+
+            {formStep === 1 && <FormResponseList />}
+          </Box>
         </Flex>
+
         <Modal
           ariaLabel="edit form"
           open={isOpen}

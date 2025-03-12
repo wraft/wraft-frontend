@@ -701,9 +701,32 @@ const FormsFrom: React.FC<FormsFromProps> = ({
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}>
-          <SortableContext items={items} strategy={rectSortingStrategy}>
-            {items &&
-              items.map((item, index) => (
+          {!items || items.length === 0 ? (
+            <Flex
+              direction="column"
+              align="center"
+              justify="center"
+              p="xl"
+              bg="background-primary"
+              border="1px solid"
+              borderColor="border"
+              borderRadius="sm"
+              h="200px">
+              <Text
+                fontSize="lg"
+                fontWeight="heading"
+                mb="sm"
+                textAlign="center">
+                No form fields added yet
+              </Text>
+              <Text color="text-secondary" fontSize="sm" textAlign="center">
+                Click on any form element from the panel on the right to add it
+                to your form
+              </Text>
+            </Flex>
+          ) : (
+            <SortableContext items={items} strategy={rectSortingStrategy}>
+              {items.map((item, index) => (
                 <SortableFormField
                   key={item.id}
                   item={item}
@@ -723,7 +746,8 @@ const FormsFrom: React.FC<FormsFromProps> = ({
                   onReorderOptions={onReorderOptions}
                 />
               ))}
-          </SortableContext>
+            </SortableContext>
+          )}
         </DndContext>
       </Box>
 
@@ -1030,6 +1054,7 @@ const FormElementsPanel: React.FC<FormElementsPanelProps> = ({
       bg="background-primary"
       border="1px solid"
       borderColor="border"
+      w="300px"
       mr="md"
       py="lg"
       px="lg">
@@ -1037,7 +1062,7 @@ const FormElementsPanel: React.FC<FormElementsPanelProps> = ({
         Form Elements
       </Text>
       <Text color="text-secondary" mb="md" mt="xs" fontSize="sm">
-        Drag elements to your form or click to add
+        Click to add elements to your form
       </Text>
       <Flex direction="column" gap="md" mt="sm">
         {FormElementTypes.map((fieldType) => (

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Text, Flex } from 'theme-ui';
+import { Box, Text, Flex } from '@wraft/ui';
 import { DropdownMenu, Pagination, Table } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
@@ -8,14 +8,14 @@ import { NextLinkText } from 'common/NavLink';
 import { TimeAgo, StateBadge } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
-export interface Theme {
+export interface FormResponseMeta {
   total_pages: number;
   total_entries: number;
-  form_collections: FormElement[];
   page_number: number;
+  entries: FormResponseEntry[];
 }
 
-export interface FormElement {
+export interface FormResponseEntry {
   updated_at: string;
   title: string;
   inserted_at: string;
@@ -23,137 +23,132 @@ export interface FormElement {
   description: string;
 }
 
-interface Meta {
-  total_pages: number;
-  total_entries: number;
-  page_number: number;
-}
-
-const FormResponseList = () => {
-  const [contents, setContents] = useState<Array<FormElement>>([]);
-  const [pageMeta, setPageMeta] = useState<Meta>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
-  const [_deleteOpen, setDeleteOpen] = useState<number | null>(null);
+const FormResponseList: React.FC = () => {
+  const [entries, setEntries] = useState<Array<FormResponseEntry>>([]);
+  const [pageMeta, setPageMeta] = useState<FormResponseMeta>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [deleteEntryIndex, setDeleteEntryIndex] = useState<number | null>(null);
 
   const router = useRouter();
-  const fId: string = router.query.id as string;
-  const currentPage: any = parseInt(router.query.page as string) || 1;
+  const formId: string = router.query.id as string;
+  const initialPage: number = parseInt(router.query.page as string) || 1;
 
-  const loadData = (pageNo: number) => {
-    setLoading(true);
-    const query = pageNo > 0 ? `?page=${pageNo}&sort=inserted_at_desc` : '';
-    fetchAPI(`forms/${fId}/entries${query}`)
-      .then((data: any) => {
-        setLoading(false);
-        const res: FormElement[] = data.entries;
-        setContents(res);
-        setPageMeta(data);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+  const fetchFormEntries = useCallback(
+    (pageNumber: number) => {
+      setIsLoading(true);
+      const query =
+        pageNumber > 0 ? `?page=${pageNumber}&sort=inserted_at_desc` : '';
+
+      fetchAPI(`forms/${formId}/entries${query}`)
+        .then((response: any) => {
+          setIsLoading(false);
+          const responseEntries: FormResponseEntry[] = response.entries || [];
+          setEntries(responseEntries);
+          setPageMeta(response as FormResponseMeta);
+        })
+        .catch((error) => {
+          console.error('Error fetching form entries:', error);
+          setIsLoading(false);
+        });
+    },
+    [formId],
+  );
 
   useEffect(() => {
-    loadData(page);
-  }, [page]);
+    fetchFormEntries(currentPage);
+  }, [currentPage, fetchFormEntries]);
 
-  const columns = [
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setCurrentPage(newPage);
+      const currentPath = router.pathname;
+      const currentQuery = { ...router.query, page: newPage };
+
+      router.push(
+        {
+          pathname: currentPath,
+          query: currentQuery,
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [router],
+  );
+
+  const handleDeleteClick = useCallback((index: number) => {
+    setDeleteEntryIndex(index);
+  }, []);
+
+  const tableColumns = [
     {
       id: 'content.id',
       header: 'NAME',
       accessorKey: 'content.name',
       enableSorting: false,
       size: 250,
-      cell: ({ row }: any) => {
-        return (
-          <>
-            <NextLinkText href={`/forms/${fId}/entries/${row.original?.id}`}>
-              <Box sx={{ fontSize: 'sm' }}>{row.original?.id}</Box>
-            </NextLinkText>
-          </>
-        );
-      },
+      cell: ({ row }: any) => (
+        <NextLinkText href={`/forms/${formId}/entries/${row.original?.id}`}>
+          <Box>{row.original?.id}</Box>
+        </NextLinkText>
+      ),
     },
     {
       id: 'content.updated_at',
       header: 'CREATED',
       accessorKey: 'content.updated_at',
       enableSorting: false,
-      cell: ({ row }: any) => {
-        return (
-          row.original.updated_at && <TimeAgo time={row.original?.updated_at} />
-        );
-      },
+      cell: ({ row }: any) =>
+        row.original.updated_at && <TimeAgo time={row.original?.updated_at} />,
     },
     {
       id: 'content.status',
       header: 'STATUS',
       accessorKey: 'content.status',
       enableSorting: false,
-      cell: ({ row }: any) => {
-        return (
-          <Box>
-            <StateBadge name={row.original?.status} color="#E2F7EA" />
-          </Box>
-        );
-      },
+      cell: ({ row }: any) => <Text>{row.original?.status}</Text>,
     },
     {
-      id: 'content.id',
+      id: 'content.actions',
       header: '',
-      accessor: 'content.id',
       enableSorting: false,
-      cell: ({ row }: any) => {
-        return (
-          <>
-            <Flex sx={{ justifyContent: 'space-between' }}>
-              <Box />
-              <DropdownMenu.Provider>
-                <DropdownMenu.Trigger>
-                  <ThreeDotIcon />
-                </DropdownMenu.Trigger>
-                <DropdownMenu aria-label="dropdown role">
-                  <DropdownMenu.Item onClick={() => setDeleteOpen(row.index)}>
-                    <Text>Delete</Text>
-                  </DropdownMenu.Item>
-                </DropdownMenu>
-              </DropdownMenu.Provider>
-            </Flex>
-          </>
-        );
-      },
+      cell: ({ row }: any) => (
+        <Flex justifyContent="space-between">
+          <Box />
+          <DropdownMenu.Provider>
+            <DropdownMenu.Trigger>
+              <ThreeDotIcon />
+            </DropdownMenu.Trigger>
+            <DropdownMenu aria-label="Entry actions">
+              <DropdownMenu.Item onClick={() => handleDeleteClick(row.index)}>
+                <Text>Delete</Text>
+              </DropdownMenu.Item>
+            </DropdownMenu>
+          </DropdownMenu.Provider>
+        </Flex>
+      ),
     },
   ];
 
-  const changePage = (newPage: any) => {
-    setPage(newPage);
-    const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: newPage };
-    router.push(
-      {
-        pathname: currentPath,
-        query: currentQuery,
-      },
-      undefined,
-      { shallow: true },
-    );
-  };
   return (
     <Box py={3} mb={4}>
       <Box mx={0} mb={3}>
         <Box>
-          <Box sx={{ width: '100%' }}>
-            <Box mx={0} mb={3} sx={{ width: '100%' }}>
-              <Table data={contents} columns={columns} isLoading={loading} />
+          <Box w="100%">
+            <Box mx={0} mb={3} w="100%">
+              <Table
+                data={entries}
+                columns={tableColumns}
+                isLoading={isLoading}
+              />
             </Box>
             <Box mx={2}>
-              {pageMeta && pageMeta?.total_pages > 1 && (
+              {pageMeta && pageMeta.total_pages > 1 && (
                 <Pagination
                   totalPage={pageMeta.total_pages}
-                  initialPage={currentPage}
-                  onPageChange={changePage}
+                  initialPage={initialPage}
+                  onPageChange={handlePageChange}
                   totalEntries={pageMeta.total_entries}
                 />
               )}
