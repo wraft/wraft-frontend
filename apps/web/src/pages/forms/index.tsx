@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Button, Field, Flex, InputText, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import { Plus, X } from '@phosphor-icons/react';
+import { Plus, X as _X } from '@phosphor-icons/react';
 import { CloseIcon } from '@wraft/icon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';

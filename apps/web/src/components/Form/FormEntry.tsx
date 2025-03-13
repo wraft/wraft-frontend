@@ -5,7 +5,6 @@ import {
   Flex,
   Text,
   Spinner,
-  Label,
   InputText,
   Textarea,
   Button,

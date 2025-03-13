@@ -1,5 +1,3 @@
-import { x } from "@xstyled/emotion";
-
 import * as S from "./styles";
 
 import { CreateWuiProps, forwardRef } from "@/system";

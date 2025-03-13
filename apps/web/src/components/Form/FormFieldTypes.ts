@@ -7,7 +7,6 @@ import {
   ListDashes,
   Clock,
   EnvelopeSimple,
-  UploadSimple,
 } from '@phosphor-icons/react';
 import { IconProps } from '@phosphor-icons/react';
 

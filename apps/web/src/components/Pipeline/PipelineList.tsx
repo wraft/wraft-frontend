@@ -3,13 +3,12 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
-import { X } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
 
-import PipelineTypeForm from './PipelineTypeForm';
+import PipelineCreateForm from './PipelineCreateForm';
 import PipelineFormEntry from './PipelineFormEntry';
 
 export interface Pipelines {
@@ -37,7 +36,6 @@ export interface IPageMeta {
 
 const Form = () => {
   const [contents, setContents] = useState<Array<Pipeline>>([]);
-  const [formName, setFormName] = useState<any>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -169,7 +167,7 @@ const Form = () => {
 
       <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
         {showSearch && (
-          <PipelineTypeForm
+          <PipelineCreateForm
             setIsOpen={setShowSearch}
             setRerender={setRerender}
           />
@@ -178,20 +176,10 @@ const Form = () => {
       <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
         {isOpen && (
           <>
-            <Drawer.Header>
-              <Drawer.Title>{formName}</Drawer.Title>
-              <X
-                size={20}
-                weight="bold"
-                cursor="pointer"
-                onClick={() => setIsOpen(false)}
-              />
-            </Drawer.Header>
             <PipelineFormEntry
               formId={sourceId}
               pipelineId={pipelineId}
               setIsOpen={setIsOpen}
-              setFormName={setFormName}
             />
           </>
         )}

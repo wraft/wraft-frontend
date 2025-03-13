@@ -1,5 +1,3 @@
-import { th } from "@xstyled/emotion";
-
 export type Variant = "error" | "focused" | "info" | "success" | "warning";
 
 export const VARIANTS: Record<Variant, string> = {

@@ -48,7 +48,7 @@ export const Drawer: any = styled.div`
   max-width: 100%;
   background-color: white;
   min-width: 500px;
-  z-index: 1;
+  z-index: 100;
 
   &[data-enter] {
     opacity: 1;

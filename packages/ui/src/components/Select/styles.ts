@@ -142,6 +142,7 @@ export const DropDownIndicator = styled.button<{
   cursor: pointer;
   border: none;
   background: transparent;
+  right: 12px;
   ${centerContent};
 
   svg {

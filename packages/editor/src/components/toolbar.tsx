@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { useEditor } from "prosekit/react";
-import styled, { x } from "@xstyled/emotion";
+import styled from "@xstyled/emotion";
 import {
   ArrowCounterClockwise,
   ArrowClockwise,

@@ -4,15 +4,12 @@ import {
   Box,
   Flex,
   Button,
-  Container,
-  Field,
   Text,
   Label,
-  Input,
-} from 'theme-ui';
-import { Modal } from '@wraft/ui';
-import { Drawer, useDrawer } from '@wraft/ui';
-import { X } from '@phosphor-icons/react';
+  InputText as Input,
+  Field,
+} from '@wraft/ui';
+import { Modal, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
@@ -33,7 +30,6 @@ const PipelineView = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
-  const [formName, setFormName] = useState<any>();
 
   const router = useRouter();
 
@@ -93,7 +89,7 @@ const PipelineView = () => {
   return (
     <Box>
       <PageHeader title={pipelineData.name}>
-        <Flex mt={'auto'} sx={{ justifyContent: 'space-between' }}>
+        <Flex marginTop="auto" justify="space-between">
           <Flex>
             <Button
               variant="secondary"
@@ -108,94 +104,63 @@ const PipelineView = () => {
           </Flex>
         </Flex>
       </PageHeader>
-      <Container variant="layout.pageFrame">
-        <Flex>
-          <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
-          <Box sx={{ width: '100%' }}>
-            <Box
-              sx={{
-                display: formStep === 0 ? 'block' : 'none',
-              }}>
-              <PipelineSteps rerender={rerender} setRerender={setRerender} />
+
+      <Flex px="md" py="md" gap="md">
+        <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
+
+        <Box w="80%" display={formStep === 0 ? 'block' : 'none'}>
+          <PipelineSteps rerender={rerender} setRerender={setRerender} />
+        </Box>
+
+        <Box w="50%" display={formStep === 1 ? 'block' : 'none'}>
+          <Flex direction="column" gap="md" background="#fff" px="lg" py="lg">
+            <Field label="Name" disabled>
+              <Input name="name" disabled value={pipelineData.name} />
+            </Field>
+
+            <Field label="Source" disabled>
+              <Input name="source" disabled value={pipelineData.source} />
+            </Field>
+
+            <Field label="Form" disabled>
+              <Input
+                name="form"
+                disabled
+                value={formData ? formData.name : ''}
+              />
+            </Field>
+
+            <Box alignSelf="flex-end" mt="sm">
+              <Box marginTop={2}>
+                <Button danger onClick={onConfirm}>
+                  Delete Pipeline
+                </Button>
+              </Box>
             </Box>
-            <Box
-              sx={{
-                display: formStep === 1 ? 'block' : 'none',
-                width: '60ch',
-              }}>
-              <Flex
-                sx={{
-                  flexDirection: 'column',
-                  gap: '28px',
-                }}>
-                <Box>
-                  <Field
-                    name="name"
-                    label="Name"
-                    disabled
-                    defaultValue={pipelineData.name}
-                  />
-                </Box>
-                <Box>
-                  <Field
-                    name="source"
-                    label="Source"
-                    color="gray.1200"
-                    disabled
-                    defaultValue={pipelineData.source}
-                  />
-                </Box>
-                <Box>
-                  <Field
-                    name="form"
-                    label="Form"
-                    disabled
-                    defaultValue={formData ? formData.name : ''}
-                  />
-                </Box>
-                <Box sx={{ alignSelf: 'end' }}>
-                  <Box mt={2}>
-                    <Button variant="delete" onClick={onConfirm}>
-                      Delete Pipeline
-                    </Button>
-                  </Box>
-                </Box>
-              </Flex>
-            </Box>
-            <Box
-              sx={{
-                display: formStep === 2 ? 'block' : 'none',
-              }}>
-              <PipelineLogs rerender={rerender} setRerender={setRerender} />
-            </Box>
-          </Box>
-        </Flex>
-      </Container>
+          </Flex>
+        </Box>
+
+        <Box w="80%" display={formStep === 2 ? 'block' : 'none'}>
+          <PipelineLogs rerender={rerender} setRerender={setRerender} />
+        </Box>
+      </Flex>
+
       <Modal
         size="md"
         ariaLabel="pipelinedelte"
         open={isDelete}
         onClose={() => setDelete(false)}>
         <>
-          <Text
-            variant="pB"
-            sx={{
-              py: 3,
-              px: 4,
-              display: 'inline-block',
-            }}>
+          <Text padding="12px 16px" display="inline-block">
             Verify pipeline delete request
           </Text>
           <Box
-            sx={{
-              pt: 3,
-              pb: 4,
-              borderTop: '1px solid',
-              borderColor: 'border',
-            }}>
-            <Box sx={{ px: 4 }}>
-              <Box sx={{ mt: '24px' }}>
-                <Label variant="text.pR" sx={{ color: 'black.800' }}>
+            padding="12px 0 16px 0"
+            borderTop="1px solid"
+            borderColor="border">
+            <Box padding="0 16px">
+              <Box marginTop="24px">
+                <Label as="label" color="black.800">
                   <span>
                     {`To confirm, type "${pipelineData.name}" in the box below`}
                   </span>
@@ -203,13 +168,14 @@ const PipelineView = () => {
                 <Input
                   ref={inputRef}
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}></Input>
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
               </Box>
-              <Flex sx={{ gap: 3, pt: 4 }}>
+              <Flex gap={3} padding="16px 0 0 0">
                 <Button onClick={onDelete} variant="delete">
                   Delete Pipeline
                 </Button>
-                <Button onClick={() => setDelete(false)} variant="cancel">
+                <Button onClick={() => setDelete(false)} variant="secondary">
                   Cancel
                 </Button>
               </Flex>
@@ -220,20 +186,10 @@ const PipelineView = () => {
       <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
         {isOpen && (
           <>
-            <Drawer.Header>
-              <Drawer.Title>{formName}</Drawer.Title>
-              <X
-                size={20}
-                weight="bold"
-                cursor="pointer"
-                onClick={() => setIsOpen(false)}
-              />
-            </Drawer.Header>
             <PipelineFormEntry
               formId={sourceId}
               pipelineId={cId}
               setIsOpen={setIsOpen}
-              setFormName={setFormName}
             />
           </>
         )}

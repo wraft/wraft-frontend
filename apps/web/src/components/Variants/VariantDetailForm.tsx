@@ -14,7 +14,7 @@ import {
   Textarea,
   Label,
 } from '@wraft/ui';
-import { TextT, X } from '@phosphor-icons/react';
+import { TextT, X as _X } from '@phosphor-icons/react';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import FieldColor from 'common/FieldColor';

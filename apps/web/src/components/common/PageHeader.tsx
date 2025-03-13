@@ -61,7 +61,7 @@ const PageHeader = ({
       w="100%"
       position="sticky"
       top={0}
-      zIndex={111}
+      zIndex={10}
       bg="background-primary">
       <Flex alignItems="center">
         {hasBack && <Back />}

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
+import _dynamic from 'next/dynamic';
 
 import DocumentView from 'components/DocumentView';
 import { DocumentProvider } from 'components/DocumentView/DocumentContext';

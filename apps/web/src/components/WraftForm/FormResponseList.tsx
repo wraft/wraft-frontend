@@ -4,8 +4,9 @@ import { Box, Text, Flex } from '@wraft/ui';
 import { DropdownMenu, Pagination, Table } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
+import { TimeAgo } from 'components/common/Atoms';
+import { StateBadge as _StateBadge } from 'components/common/Atoms';
 import { NextLinkText } from 'common/NavLink';
-import { TimeAgo, StateBadge } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export interface FormResponseMeta {
@@ -28,7 +29,9 @@ const FormResponseList: React.FC = () => {
   const [pageMeta, setPageMeta] = useState<FormResponseMeta>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [deleteEntryIndex, setDeleteEntryIndex] = useState<number | null>(null);
+  const [_deleteEntryIndex, setDeleteEntryIndex] = useState<number | null>(
+    null,
+  );
 
   const router = useRouter();
   const formId: string = router.query.id as string;

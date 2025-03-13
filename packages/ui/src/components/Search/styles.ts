@@ -87,6 +87,7 @@ export const DropDownIndicator = styled.button<{
   cursor: pointer;
   border: none;
   background: transparent;
+  top: 7px;
 
   &:not(:last-child) {
     width: auto;

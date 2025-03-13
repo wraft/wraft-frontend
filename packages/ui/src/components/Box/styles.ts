@@ -1,4 +1,4 @@
-import styled, { css, up, th, system } from "@xstyled/emotion";
+import styled, { css, th } from "@xstyled/emotion";
 
 import { BoxProps } from ".";
 

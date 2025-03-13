@@ -1,184 +1,319 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Input, Label, Spinner, Text, Textarea } from 'theme-ui';
+import {
+  Box,
+  Drawer,
+  Field,
+  Flex,
+  InputText,
+  Spinner,
+  Textarea,
+  Text,
+} from '@wraft/ui';
 import { Button } from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { X } from '@phosphor-icons/react';
 
+import {
+  FormFieldEntry,
+  validateFormEntries,
+  prepareFormEntrySubmission,
+} from 'schemas/pipelineFormEntry';
 import { fetchAPI, postAPI } from 'utils/models';
 
-const PipelineFormEntry = ({
+interface PipelineFormEntryProps {
+  formId: string;
+  pipelineId?: string;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+/**
+ * Creates a dynamic Zod schema based on form field definitions
+ * @param fields - Array of form field entries
+ * @returns Zod schema object
+ */
+const createFormSchema = (fields: FormFieldEntry[]) => {
+  const schemaFields: Record<string, z.ZodType<any>> = {};
+
+  fields.forEach((field) => {
+    const fieldSchema = field.required
+      ? z.string().min(1, { message: 'This field is required' })
+      : z.string().optional();
+
+    schemaFields[field.id] = fieldSchema;
+  });
+
+  return z.object(schemaFields);
+};
+
+const PipelineFormEntry: React.FC<PipelineFormEntryProps> = ({
   formId,
   pipelineId,
   setIsOpen,
-  setFormName,
-}: any) => {
-  const [items, setItems] = useState<any>([]);
-  const [initial, setInitial] = useState<any>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+}) => {
+  const [fields, setFields] = useState<FormFieldEntry[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isFieldsLoading, setIsFieldsLoading] = useState<boolean>(false);
+  const [formName, setFormName] = useState<string>('');
 
-  const loadData = (id: string) => {
-    setLoading(true);
-    fetchAPI(`forms/${id}`)
-      .then((data: any) => {
-        formId && setFormName(data.name);
-        const fields = data.fields.map((i: any) => {
-          return {
-            id: i.id,
-            name: i.name,
-            type: i.field_type.name,
-            fieldTypeId: i.field_type.id,
-            order: i.order,
-            required: i.validations.some(
-              (val: any) =>
-                val.validation.rule === 'required' &&
-                val.validation.value === true,
-            ),
-            value: '',
-          };
-        });
-        setInitial(fields);
-        setItems(fields);
-        setLoading(false);
-      })
-      .catch((_err) => {
-        setLoading(false);
-      });
-  };
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(createFormSchema(fields)),
+  });
 
-  const onClear = () => {
-    setItems(initial);
-  };
+  /**
+   * Fetches form data and initializes the form
+   * @param id - Form ID to fetch
+   */
+  const fetchFormData = async (id: string) => {
+    setIsLoading(true);
+    setIsFieldsLoading(true);
+    try {
+      const data = (await fetchAPI(`forms/${id}`)) as any;
 
-  const onValueChange = (e: any, item: any) => {
-    const newVal = e.target.value;
-    const newItem = {
-      ...item,
-      value: newVal,
-      error: newVal === '' ? 'This field is required' : undefined,
-    };
-    const newArr = items.map((s: any) => {
-      if (s.id === item.id) {
-        return newItem;
-      } else {
-        return s;
+      if (formId) {
+        setFormName(data.name);
       }
-    });
-    setItems(newArr);
+
+      const formFields = data.fields.map((field: any) => ({
+        id: field.id,
+        name: field.name,
+        type: field.field_type.name,
+        fieldTypeId: field.field_type.id,
+        order: field.order,
+        required: field.validations.some(
+          (val: any) =>
+            val.validation.rule === 'required' && val.validation.value === true,
+        ),
+        value: '',
+      }));
+
+      setFields(formFields);
+
+      // Initialize form with empty values
+      const defaultValues: Record<string, string> = {};
+      formFields.forEach((field: FormFieldEntry) => {
+        defaultValues[field.id] = '';
+      });
+
+      reset(defaultValues);
+    } catch (error) {
+      console.error('Error loading form data:', error);
+      toast.error('Failed to load form data');
+    } finally {
+      setIsLoading(false);
+      setIsFieldsLoading(false);
+    }
   };
 
-  const onSave = () => {
-    if (items.some((i: any) => !i.value && i.required == true)) {
-      const errorsAdded = items.map((i: any) => {
-        if (!i.value && i.required == true) {
-          return { ...i, error: 'This field is required' };
-        } else {
-          return i;
-        }
-      });
-      setItems(errorsAdded);
+  /**
+   * Resets the form to empty values
+   */
+  const handleClearForm = () => {
+    // Reset form to empty values
+    const defaultValues: Record<string, string> = {};
+    fields.forEach((field) => {
+      defaultValues[field.id] = '';
+    });
+
+    reset(defaultValues);
+  };
+
+  const handleFormSubmit: SubmitHandler<Record<string, string>> = async (
+    formData,
+  ) => {
+    setIsSubmitting(true);
+
+    // Convert form data to the format expected by the API
+    const formattedFields = fields.map((field) => ({
+      ...field,
+      value: formData[field.id] || '',
+    }));
+
+    if (!validateFormEntries(formattedFields)) {
+      toast.error('Please fill in all required fields');
+      setIsSubmitting(false);
       return;
     }
-    const fields = items.map((i: any) => {
-      return {
-        value: i.value,
-        field_id: i.id,
-      };
-    });
-    const data = {
-      ...(pipelineId && { pipeline_id: pipelineId }),
-      data: fields,
-    };
 
-    postAPI(`forms/${formId}/entries`, data)
-      .then(() => {
-        toast.success('Submitted Successfully');
-        setIsOpen(false);
-        onClear();
-      })
-      .catch((err) => {
-        if (err.errors == 'No mappings found') {
-          toast.error('Pipeline configuration incompleted');
-          return;
-        }
+    const payload = prepareFormEntrySubmission(formattedFields);
 
-        toast.error(JSON.stringify(err), {
-          duration: 3000,
-          position: 'top-right',
-        });
+    if (pipelineId) {
+      payload.pipeline_id = pipelineId;
+    }
+
+    try {
+      await postAPI(`forms/${formId}/entries`, payload);
+      toast.success('Submitted Successfully');
+      setIsOpen(false);
+      handleClearForm();
+    } catch (error: any) {
+      if (error.errors === 'No mappings found') {
+        toast.error('Pipeline configuration incomplete');
+        return;
+      }
+
+      toast.error(error.message || 'An error occurred', {
+        duration: 3000,
+        position: 'top-right',
       });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
-    if (formId) loadData(formId);
+    if (formId) {
+      fetchFormData(formId);
+    }
   }, [formId]);
 
-  useEffect(() => {
-    console.table(items);
-  }, [items]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <Flex
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '100vh',
-        }}>
-        <Spinner width={32} />
+        alignItems="center"
+        justifyContent="center"
+        style={{ height: '100vh' }}>
+        <Spinner size={32} />
       </Flex>
     );
   }
 
+  /**
+   * Renders the form fields or a message if no fields are available
+   */
+  const renderFormContent = () => {
+    if (isFieldsLoading) {
+      return (
+        <Flex alignItems="center" justifyContent="center" py="xl">
+          <Spinner size={24} />
+          <Text ml="md">Loading form fields...</Text>
+        </Flex>
+      );
+    }
+
+    if (fields.length === 0) {
+      return (
+        <Flex
+          alignItems="center"
+          justifyContent="center"
+          py="xl"
+          direction="column"
+          gap="md">
+          <Text fontSize="lg">No form fields available</Text>
+          <Text color="text-secondary">
+            This form has no fields configured.
+          </Text>
+        </Flex>
+      );
+    }
+
+    return fields
+      .sort((a, b) => a.order - b.order)
+      .map((field: FormFieldEntry) => (
+        <Box key={field.id} style={{ marginBottom: '16px' }}>
+          <Field
+            label={field.name}
+            required={field.required}
+            error={errors[field.id]?.message as string}>
+            <>
+              {field.type === 'Text' && (
+                <Controller
+                  name={field.id}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <Textarea
+                      value={controllerField.value || ''}
+                      onChange={controllerField.onChange}
+                    />
+                  )}
+                />
+              )}
+              {field.type === 'String' && (
+                <Controller
+                  name={field.id}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <InputText
+                      value={controllerField.value || ''}
+                      onChange={controllerField.onChange}
+                    />
+                  )}
+                />
+              )}
+              {field.type === 'File Input' && (
+                <Controller
+                  name={field.id}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <InputText
+                      type="file"
+                      value={controllerField.value || ''}
+                      onChange={controllerField.onChange}
+                    />
+                  )}
+                />
+              )}
+              {field.type === 'Date' && (
+                <Controller
+                  name={field.id}
+                  control={control}
+                  render={({ field: controllerField }) => (
+                    <InputText
+                      type="date"
+                      value={controllerField.value || ''}
+                      onChange={controllerField.onChange}
+                    />
+                  )}
+                />
+              )}
+            </>
+          </Field>
+        </Box>
+      ));
+  };
+
   return (
-    <Box>
-      <Box
-        variant="styles.scrollbarY"
-        sx={{
-          p: '32px',
-          height: 'calc(100vh - 170px)',
-        }}>
-        {items
-          .sort((a: any, b: any) => a.order - b.order)
-          .map((item: any) => (
-            <Box key={item.id} sx={{ pb: 2 }}>
-              <Label sx={{ color: '#000b08a1' }}>{item.name}</Label>
-              {item.type === 'Text' && (
-                <Textarea
-                  value={item.value}
-                  onChange={(e) => onValueChange(e, item)}
-                />
-              )}
-              {item.type === 'String' && (
-                <Input
-                  sx={{ bg: 'transparent' }}
-                  name={`contentFields[${item.id}]`}
-                  onChange={(e) => onValueChange(e, item)}
-                />
-              )}
-              {item.type === 'File Input' && (
-                <Input
-                  type="file"
-                  value={item.value}
-                  onChange={(e) => onValueChange(e, item)}
-                />
-              )}
-              {item.type === 'Date' && (
-                <Input
-                  type="date"
-                  value={item.value}
-                  onChange={(e) => onValueChange(e, item)}
-                />
-              )}
-              {item.error && <Text variant="error">{item.error}</Text>}
-            </Box>
-          ))}
+    <Flex
+      as="form"
+      h="100vh"
+      direction="column"
+      onSubmit={handleSubmit(handleFormSubmit)}>
+      <Drawer.Header>
+        <Drawer.Title>{formName}</Drawer.Title>
+        <X
+          size={20}
+          weight="bold"
+          cursor="pointer"
+          onClick={() => setIsOpen(false)}
+        />
+      </Drawer.Header>
+      <Box flex={1} overflowY="auto" px="xl" py="md">
+        {renderFormContent()}
       </Box>
-      <Flex p="32px" sx={{ gap: 2 }}>
-        <Button onClick={onSave}>Run</Button>
-        <Button variant="secondary" onClick={onClear}>
+
+      <Flex gap="md" p="lg">
+        <Button
+          onClick={handleSubmit(handleFormSubmit)}
+          loading={isSubmitting}
+          disabled={isFieldsLoading || fields.length === 0}>
+          Run
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={handleClearForm}
+          disabled={isSubmitting || isFieldsLoading || fields.length === 0}>
           Clear
         </Button>
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 

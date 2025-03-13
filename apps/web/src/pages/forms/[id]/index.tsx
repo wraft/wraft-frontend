@@ -1,10 +1,9 @@
-import { FC, useEffect, useState, useRef } from 'react';
+import { FC, useEffect, useState, useRef as _useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Button, Modal } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
 
 import FormsFrom from 'components/Form/FormsFrom';
 import FormViewForm from 'components/Form/FormViewForm';
@@ -14,7 +13,7 @@ import Page from 'common/PageFrame';
 import FieldText from 'common/FieldText';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
-import { fetchAPI, postAPI } from 'utils/models';
+import { fetchAPI, postAPI as _postAPI } from 'utils/models';
 
 const Index: FC = () => {
   const {
@@ -25,7 +24,7 @@ const Index: FC = () => {
   const [items, setItems] = useState<any>([]);
   const [formdata, setFormdata] = useState<any>();
   const [formStep, setFormStep] = useState<number>(0);
-  const [rerender, setRerender] = useState<boolean>(false);
+  const [_rerender, setRerender] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);

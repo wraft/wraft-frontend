@@ -1,5 +1,3 @@
-import { opacity } from "@xstyled/emotion";
-
 const buttons = {
   none: {
     padding: "0px",

@@ -1,4 +1,4 @@
-import styled, { css, system, th } from "@xstyled/emotion";
+import styled, { css } from "@xstyled/emotion";
 
 export const Label = styled("label")<{ required: boolean }>`
   ${({ required }) => css`

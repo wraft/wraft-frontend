@@ -67,7 +67,7 @@ const SearchBlock: React.FC = () => {
   const [searchResults, setSearchResults] = useState<SearchableDocument[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchError, setSearchError] = useState<string | null>(null);
+  const [_searchError, setSearchError] = useState<string | null>(null);
 
   const tabStore = useTab();
   const router = useRouter();

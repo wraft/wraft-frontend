@@ -78,6 +78,10 @@ export const defaultFieldStyles: DefaultFieldStyles = ({
       ${theme["defaultFields"]["disabled"]};
     }
 
+    &[readonly] {
+      ${theme["defaultFields"]["disabled"]};
+    }
+
     &:focus {
       ${theme["defaultFields"]["focused"]["default"]};
       ${variant === "error" && theme["defaultFields"]["focused"]["error"]};

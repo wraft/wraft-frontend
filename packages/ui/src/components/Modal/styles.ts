@@ -1,4 +1,3 @@
-import type * as Ariakit from "@ariakit/react";
 import styled, { css, up } from "@xstyled/emotion";
 
 export type BackdropProps = {

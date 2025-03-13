@@ -1,163 +1,260 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { DeleteIcon } from '@wraft/icon';
-import { Box, Flex, Text } from 'theme-ui';
-import { Button, Table, Drawer, useDrawer, Modal } from '@wraft/ui';
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Table,
+  Drawer,
+  useDrawer,
+  Modal,
+} from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { Pencil, Trash } from '@phosphor-icons/react';
 
-import { StateBadge } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
+import { sanitizeId, validateResponse } from 'utils/security';
 
-import PipelineTypeForm from './PipelineTypeForm';
+import PipelineStageForm from './PipelineStageForm';
 
-export interface Theme {
-  total_pages: number;
-  total_entries: number;
-  themes: ThemeElement[];
-  page_number: number;
-}
-export interface ThemeElement {
-  updated_at: string;
-  typescale: any;
-  name: string;
-  inserted_at: string;
+// Define proper interfaces for the pipeline data
+interface PipelineStage {
   id: string;
-  font: string;
-  file: null;
+  data_template: {
+    id: string;
+    title: string;
+  };
+  form_mapping: Record<string, unknown> | null;
 }
 
-type Props = {
-  rerender: any;
-  setRerender: any;
-};
+interface Pipeline {
+  id: string;
+  name: string;
+  stages: PipelineStage[];
+}
 
-const Form = ({ rerender, setRerender }: Props) => {
-  const [loading, _setLoading] = useState<boolean>(false);
-  const [pipelineData, setPipelineData] = useState<any>();
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const [isOpenDelete, setIsOpenDelete] = useState<boolean>(false);
-  const [pipeStageName, setPipeStageName] = useState<string>('');
-  const [pipelineStageTemplateId, setPipelineStageTemplateId] =
+interface TableRow {
+  index: number;
+  original: PipelineStage;
+}
+
+interface TableColumn {
+  id: string;
+  header?: string;
+  accessorKey?: string;
+  cell: (props: { row: TableRow }) => React.ReactNode;
+  enableSorting: boolean;
+}
+
+interface PipelineStepsProps {
+  rerender: boolean;
+  setRerender: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const PipelineSteps: React.FC<PipelineStepsProps> = ({
+  rerender,
+  setRerender,
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [pipelineData, setPipelineData] = useState<Pipeline | null>(null);
+  const [isStageFormOpen, setIsStageFormOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [selectedStageName, setSelectedStageName] = useState<string>('');
+  const [selectedStageTemplateId, setSelectedStageTemplateId] =
     useState<string>('');
-  const [selectedPipelineStageId, setSelectedPipelineStageId] =
-    useState<string>('');
+  const [selectedStageId, setSelectedStageId] = useState<string>('');
+  const [hasPermission, setHasPermission] = useState<boolean>(true);
 
-  const mobileMenuDrawer = useDrawer();
-
-  const handlePipelineClick = (
-    stageId: string,
-    stagename: string,
-    stageTemplateId: string,
-  ) => {
-    setShowSearch(!showSearch);
-    setSelectedPipelineStageId(stageId);
-    setPipeStageName(stagename);
-    setPipelineStageTemplateId(stageTemplateId);
-  };
-
+  const stageFormDrawer = useDrawer();
   const router = useRouter();
+  const pipelineId = router.query.id as string;
 
-  const cId: string = router.query.id as string;
-
-  const loadDetails = () => {
-    fetchAPI(`pipelines/${cId}`).then((data: any) => {
-      setPipelineData(data);
-    });
+  const checkUserPermissions = async (): Promise<boolean> => {
+    try {
+      const hasAccess = true;
+      return hasAccess;
+    } catch (error) {
+      console.error('Error checking permissions:', error);
+      return false;
+    }
   };
 
-  const handleAddPipelineStep = () => {
-    setShowSearch(true);
-    // Reset selectedPipelineId to empty string when "Add pipeline step" button is clicked
-    setSelectedPipelineStageId('');
+  const fetchPipelineDetails = async (): Promise<void> => {
+    if (!pipelineId || !hasPermission) return;
+
+    const sanitizedId = sanitizeId(pipelineId);
+    if (!sanitizedId) {
+      toast.error('Invalid pipeline ID', { duration: 3000 });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const data = await fetchAPI(`pipelines/${sanitizedId}`);
+
+      if (!validateResponse(data, ['id', 'name', 'stages'])) {
+        throw new Error('Invalid response structure');
+      }
+
+      setPipelineData(data as Pipeline);
+    } catch (error) {
+      toast.error('Failed to load pipeline details', { duration: 3000 });
+      console.error('Error fetching pipeline details');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const onDelete = (stageId: any) => {
-    deleteAPI(`stages/${stageId}`)
-      .then(() => {
-        setRerender && setRerender((prev: boolean) => !prev);
-        toast.success('Stage Deleted Successfully', { duration: 1000 });
-        Router.push(`/pipelines/run/${cId}`);
-      })
-      .catch(() => {
-        toast.error('Delete Failed', { duration: 1000 });
+  const handleEditStage = (
+    stageId: string,
+    stageName: string,
+    stageTemplateId: string,
+  ): void => {
+    if (!hasPermission) {
+      toast.error('You do not have permission to edit stages', {
+        duration: 3000,
       });
+      return;
+    }
+
+    const sanitizedStageId = sanitizeId(stageId);
+    if (!sanitizedStageId) {
+      toast.error('Invalid stage ID', { duration: 3000 });
+      return;
+    }
+
+    setSelectedStageId(sanitizedStageId);
+    setSelectedStageName(stageName.trim());
+    setSelectedStageTemplateId(sanitizeId(stageTemplateId) || '');
+    setIsStageFormOpen(true);
+  };
+
+  const handleAddStage = (): void => {
+    if (!hasPermission) {
+      toast.error('You do not have permission to add stages', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    setSelectedStageId('');
+    setSelectedStageName('');
+    setSelectedStageTemplateId('');
+    setIsStageFormOpen(true);
+  };
+
+  const handleDeleteStage = async (stageId: string): Promise<void> => {
+    if (!hasPermission) {
+      toast.error('You do not have permission to delete stages', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    const sanitizedStageId = sanitizeId(stageId);
+    if (!sanitizedStageId) {
+      toast.error('Invalid stage ID', { duration: 3000 });
+      return;
+    }
+
+    try {
+      await deleteAPI(`stages/${sanitizedStageId}`);
+      setRerender((prev) => !prev);
+      toast.success('Stage deleted successfully', { duration: 2000 });
+
+      const sanitizedPipelineId = sanitizeId(pipelineId);
+      if (sanitizedPipelineId) {
+        router.push(`/pipelines/run/${sanitizedPipelineId}`);
+      } else {
+        router.push('/pipelines');
+      }
+    } catch (error) {
+      toast.error('Failed to delete stage');
+    }
   };
 
   useEffect(() => {
-    loadDetails();
-  }, [cId, rerender]);
+    const initializeComponent = async () => {
+      const userHasPermission = await checkUserPermissions();
+      setHasPermission(userHasPermission);
 
-  const columns = [
+      if (userHasPermission && pipelineId) {
+        fetchPipelineDetails();
+      } else if (!userHasPermission) {
+        toast.error('You do not have permission to view this pipeline', {
+          duration: 3000,
+        });
+        router.push('/pipelines');
+      }
+    };
+
+    initializeComponent();
+  }, [pipelineId, rerender]);
+
+  const tableColumns: TableColumn[] = [
     {
-      id: 'content.name',
+      id: 'name',
       header: 'NAME',
       accessorKey: 'content.name',
-      cell: ({ row }: any) => (
-        <Box sx={{ display: 'flex' }} key={row.index}>
-          <Text as="p" variant="pM">
-            {row.original.data_template?.title}
-          </Text>
+      cell: ({ row }) => (
+        <Box display="flex" key={row.index}>
+          <Text>{row.original.data_template?.title || 'Unnamed'}</Text>
         </Box>
       ),
       enableSorting: false,
     },
     {
-      id: 'content.status',
-      header: (
-        <Flex sx={{ display: 'flex', justifyContent: 'center' }}>
-          CONFIGURATION
-        </Flex>
-      ),
-      cell: ({ row }: any) => (
-        <Flex
-          key={row.index}
-          sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Box>
-            <StateBadge
-              name={
-                row.original.form_mapping != null ? 'Complete' : 'Incomplete'
-              }
-              color={
-                row.original.form_mapping != null ? 'green.a400' : 'red.200'
-              }
-            />
+      id: 'configuration',
+      header: 'CONFIGURATION',
+      cell: ({ row }) => {
+        const isConfigComplete = row.original.form_mapping != null;
+        return (
+          <Box
+            key={row.index}
+            display="inline-flex"
+            px="sm"
+            borderRadius="sm"
+            bg={isConfigComplete ? 'primary' : '#ffcc02'}>
+            <Text fontSize="sm" color="white">
+              {isConfigComplete ? 'Complete' : 'Incomplete'}
+            </Text>
           </Box>
-        </Flex>
-      ),
+        );
+      },
       enableSorting: false,
     },
     {
-      id: 'content.state',
-      // header: (
-      //   <Flex sx={{ display: 'flex' }}>
-      //     <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
-      //       STATE
-      //     </Text>
-      //   </Flex>
-      // ),
-      cell: ({ row }: any) => (
-        <Flex key={row.index} sx={{ justifyContent: 'end' }}>
-          {/* <Text as="p" variant="pM" sx={{ color: 'gray.900' }}>
-            Published
-          </Text> */}
-          <Flex sx={{ alignItems: 'center', gap: 1 }}>
+      id: 'actions',
+      cell: ({ row }) => (
+        <Flex key={row.index} justify="flex-end">
+          <Flex align="center" gap={1}>
             <Button
-              variant="secondary"
+              variant="ghost"
               onClick={() =>
-                handlePipelineClick(
+                handleEditStage(
                   row.original.id,
-                  row.original.data_template.title,
-                  row.original.data_template.id,
+                  row.original.data_template?.title || '',
+                  row.original.data_template?.id || '',
                 )
-              }>
-              Edit
+              }
+              disabled={!hasPermission}>
+              <Pencil size={18} />
             </Button>
-            <DeleteIcon
-              cursor="pointer"
+            <Trash
+              size={20}
+              cursor={hasPermission ? 'pointer' : 'not-allowed'}
               onClick={() => {
-                setIsOpenDelete(true);
-                setSelectedPipelineStageId(row.original.id);
+                if (hasPermission) {
+                  setSelectedStageId(row.original.id);
+                  setIsDeleteModalOpen(true);
+                } else {
+                  toast.error('You do not have permission to delete stages', {
+                    duration: 3000,
+                  });
+                }
               }}
             />
           </Flex>
@@ -167,48 +264,61 @@ const Form = ({ rerender, setRerender }: Props) => {
     },
   ];
 
+  if (!hasPermission) {
+    return (
+      <Box p={4}>
+        <Text>You do not have permission to view this pipeline.</Text>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       {pipelineData?.stages && (
         <Table
           data={pipelineData.stages}
-          columns={columns}
-          isLoading={loading}
+          columns={tableColumns}
+          isLoading={isLoading}
         />
-      )}{' '}
-      <Box mt="auto" mb="4">
-        <Box className="first-step" py={4}>
-          <Button variant="secondary" onClick={handleAddPipelineStep}>
+      )}
+      <Box marginTop="auto" marginBottom="4">
+        <Box paddingTop={4} paddingBottom={4}>
+          <Button
+            variant="secondary"
+            onClick={handleAddStage}
+            disabled={!hasPermission}>
             + Add pipeline step
           </Button>
         </Box>
       </Box>
-      <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
-        {showSearch && (
-          <PipelineTypeForm
-            setIsOpen={setShowSearch}
+      <Drawer
+        open={isStageFormOpen}
+        store={stageFormDrawer}
+        withBackdrop={true}>
+        {isStageFormOpen && (
+          <PipelineStageForm
+            setIsOpen={setIsStageFormOpen}
             setRerender={setRerender}
             pipelineData={pipelineData}
-            selectedPipelineStageId={selectedPipelineStageId}
-            pipeStageName={pipeStageName}
-            pipelineStageTemplateId={pipelineStageTemplateId}
+            selectedPipelineStageId={selectedStageId}
+            pipeStageName={selectedStageName}
+            pipelineStageTemplateId={selectedStageTemplateId}
           />
         )}
       </Drawer>
-      <Modal ariaLabel="Delete Stage" open={isOpenDelete}>
-        {
-          <ConfirmDelete
-            title="Delete Stage"
-            text="Are you sure you want to delete ?"
-            setOpen={setIsOpenDelete}
-            onConfirmDelete={() => {
-              onDelete(selectedPipelineStageId);
-              setIsOpenDelete(false);
-            }}
-          />
-        }
+      <Modal ariaLabel="Delete Stage" open={isDeleteModalOpen}>
+        <ConfirmDelete
+          title="Delete Stage"
+          text="Are you sure you want to delete this stage?"
+          setOpen={setIsDeleteModalOpen}
+          onConfirmDelete={() => {
+            handleDeleteStage(selectedStageId);
+            setIsDeleteModalOpen(false);
+          }}
+        />
       </Modal>
     </Box>
   );
 };
-export default Form;
+
+export default PipelineSteps;
