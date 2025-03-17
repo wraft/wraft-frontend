@@ -52,7 +52,7 @@ const listMenu = [
   {
     name: 'Billing',
     logo: <Money size={50} weight="thin" />,
-    path: '/manage/Billing',
+    path: '/manage/billing',
     desc: 'Manage Billing',
   },
 ];

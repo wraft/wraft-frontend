@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Box } from '@wraft/ui';
+import { Table, Button, Box, Text } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { fetchAPI } from 'utils/models';
@@ -57,6 +57,7 @@ const TransactionList = ({
       header: 'Invoice Number',
       accessorKey: 'invoice_number',
       width: '150px',
+      cell: ({ row }: any) => <Text>{row.original.invoice_number}</Text>,
     },
     {
       header: 'Plan',
@@ -116,6 +117,9 @@ const TransactionList = ({
 
   return (
     <Box w="100%" mt="md" overflowX="auto">
+      <Text fontSize="xl" fontWeight="bold" mb="lg">
+        Billing History
+      </Text>
       <Table
         data={transactions}
         columns={columns}
