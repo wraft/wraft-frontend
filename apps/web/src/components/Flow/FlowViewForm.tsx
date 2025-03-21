@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Field, Flex, InputText, Label, Text } from '@wraft/ui';
+import {
+  Box,
+  Button,
+  Field,
+  Flex,
+  InputText,
+  Label,
+  Text,
+  Drawer,
+  useDrawer,
+} from '@wraft/ui';
 import { Avatar } from 'theme-ui';
 
-import { Drawer } from 'common/Drawer';
 import { fetchAPI } from 'utils/models';
 
 import FlowForm from './FlowForm';
@@ -63,6 +72,7 @@ const FlowViewForm = () => {
   const [states, setStates] = useState<any>();
 
   const { register, setValue } = useForm();
+  const stateDrawer = useDrawer();
   const router = useRouter();
   const flowId: string = router.query.id as string;
 
@@ -142,7 +152,12 @@ const FlowViewForm = () => {
           </Box>
         </Box>
       </Box>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        store={stateDrawer}
+        aria-label="field drawer"
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
       </Drawer>
     </>

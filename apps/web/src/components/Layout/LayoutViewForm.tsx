@@ -6,11 +6,20 @@ import {
 } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
 import { DownIcon } from '@wraft/icon';
-import { Box, Field, Flex, InputText, Textarea, Button, Text } from '@wraft/ui';
+import {
+  Box,
+  Field,
+  Flex,
+  InputText,
+  Textarea,
+  Button,
+  Text,
+  Drawer,
+  useDrawer,
+} from '@wraft/ui';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import PdfViewer from 'common/PdfViewer';
-import { Drawer } from 'common/Drawer';
 import { fetchAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -76,6 +85,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [layout, setLayout] = useState<Layout>();
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const stateDrawer = useDrawer();
 
   useEffect(() => {
     if (layout) {
@@ -230,7 +241,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
           )}
         </Box>
       </Flex>
-      <Drawer open={isOpen} setOpen={() => setIsOpen(false)}>
+      <Drawer
+        open={isOpen}
+        store={stateDrawer}
+        aria-label="field drawer"
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && <LayoutForm setOpen={setIsOpen} cId={cId} step={formStep} />}
       </Drawer>
     </>

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import toast from 'react-hot-toast';
-import { Table, Box, Flex, Text, DropdownMenu, Modal } from '@wraft/ui';
+import {
+  Table,
+  Box,
+  Flex,
+  Text,
+  DropdownMenu,
+  Modal,
+  useDrawer,
+  Drawer,
+} from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
-import { Drawer } from 'common/Drawer';
 import { fetchAPI, deleteAPI } from 'utils/models';
 
 import LayoutForm from './LayoutForm';
@@ -44,6 +52,8 @@ const LayoutList = ({ rerender }: Props) => {
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
   const [loading, setIslLoading] = useState<number | boolean>(false);
+
+  const stateDrawer = useDrawer();
 
   useEffect(() => {
     loadLayout();
@@ -93,7 +103,12 @@ const LayoutList = ({ rerender }: Props) => {
           <NextLink href={`/manage/layouts/${row.original.id}`}>
             <Text>{row.original?.name}</Text>
           </NextLink>
-          <Drawer open={isEdit === row.index} setOpen={setIsEdit}>
+          <Drawer
+            open={isEdit === row.index}
+            store={stateDrawer}
+            aria-label="field drawer"
+            withBackdrop={true}
+            onClose={() => setIsEdit(false)}>
             <LayoutForm setOpen={setIsEdit} cId={row.original.id} />
           </Drawer>
         </>
