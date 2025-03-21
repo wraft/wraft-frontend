@@ -50,10 +50,10 @@ const listMenu = [
     desc: 'Import Structs',
   },
   {
-    name: 'Billing',
+    name: 'Billing & Subscription',
     logo: <Money size={50} weight="thin" />,
     path: '/manage/billing',
-    desc: 'Manage Billing',
+    desc: 'Manage Billing and Subscription',
   },
 ];
 

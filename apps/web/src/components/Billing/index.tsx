@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { promise } from 'zod';
-import { Button, Box, Flex, Text } from '@wraft/ui';
+import { Button, Box, Flex, Text, Label, Grid } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { useAuth } from 'contexts/AuthContext';
@@ -129,54 +129,57 @@ const Billing = () => {
             border="1px solid"
             borderColor="border"
             borderRadius="md">
-            <Flex justifyContent="space-between">
-              <Text fontSize="xl" fontWeight="bold">
-                Active Subscription
-              </Text>
-              {isPaidPlan && (
-                <Button onClick={cancelSubscription}>
-                  Cancel Subscription
-                </Button>
-              )}
-            </Flex>
-            <Box mt="md" spaceY="sm">
-              <Flex>
-                <Text fontWeight="bold">Current Plan:</Text>
-                <Text mx="xs">{currentSubscription.plan.name}</Text>
-              </Flex>
+            <Text fontSize="xl" fontWeight="bold" mb="lg">
+              Active Subscription
+            </Text>
+
+            <Grid gap="md" templateColumns="repeat(2, 1fr)" mb="lg">
+              <Box>
+                <Label>Current Plan</Label>
+                <Text fontWeight="bold">{currentSubscription.plan.name}</Text>
+              </Box>
 
               {isPaidPlan && (
-                <Flex>
-                  <Text fontWeight="bold"> Billing Period:</Text>
-                  <Text mx="xs">
+                <Box>
+                  <Label>Billing Period</Label>
+                  <Text fontWeight="bold">
                     {currentSubscription.plan.billing_interval}
                   </Text>
-                </Flex>
+                </Box>
               )}
 
-              <Flex>
-                <Text fontWeight="bold">Status:</Text>
-                <Text mx="xs">{currentSubscription.status}</Text>
-              </Flex>
+              <Box>
+                <Label>Status</Label>
+                <Text fontWeight="bold" textTransform="capitalize">
+                  {currentSubscription.status}
+                </Text>
+              </Box>
 
               {isPaidPlan && (
-                <Flex>
-                  <Text fontWeight="bold">Next Renewal:</Text>
-                  <Text mx="xs">{currentSubscription.next_bill_date}</Text>
-                </Flex>
+                <Box>
+                  <Label>Next Renewal</Label>
+                  <Text fontWeight="bold">
+                    {currentSubscription.next_bill_date}
+                  </Text>
+                </Box>
               )}
 
-              <Flex>
-                <Text fontWeight="bold">Next Renewal Amount:</Text>
-                <Text mx="xs">${currentSubscription.next_bill_amount}</Text>
-              </Flex>
-            </Box>
+              <Box>
+                <Label>Next Renewal Amount</Label>
+                <Text fontWeight="bold">
+                  ${currentSubscription.next_bill_amount}
+                </Text>
+              </Box>
+            </Grid>
+            {isPaidPlan && (
+              <Button onClick={cancelSubscription}>Cancel Subscription</Button>
+            )}
           </Box>
 
           <PlanList />
 
           <TransactionList
-            organisationId={userProfile.currentOrganisation.id}
+            organisationId={userProfile?.currentOrganisation?.id}
             onDownloadInvoice={downloadInvoice}
           />
         </>

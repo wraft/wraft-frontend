@@ -24,8 +24,6 @@ export const PlanCard = styled(Box)<{ isHighlighted?: boolean }>`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
   min-width: 260px;
   min-height: 480px;
   background-color: var(--theme-ui-colors-background-primary);
@@ -73,10 +71,11 @@ const PlanList: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
     'monthly',
   );
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [loading, setLoading] = useState(false);
   const [currentSubscription, setCurrentSubscription] =
     useState<Subscription | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [plans, setPlans] = useState<Plan[]>([]);
+
   const { userProfile } = useAuth();
 
   const { handleCheckout, paddleError, isPaddleReady } = usePaddle({
@@ -192,7 +191,7 @@ const PlanList: React.FC = () => {
           customData: {
             plan_id: plan.id,
             user_id: userProfile.id,
-            organisation_id: userProfile.currentOrganisation.id,
+            organisation_id: userProfile?.currentOrganisation?.id,
           },
         });
 
@@ -209,7 +208,7 @@ const PlanList: React.FC = () => {
     return currentSubscription?.plan.id === planId;
   };
 
-  const offerPrice = (plan: Plan) => {
+  const calculateDiscountedPrice = (plan: Plan) => {
     if (plan.coupon) {
       const orgPrice = parseFloat(plan.plan_amount);
 
@@ -230,13 +229,13 @@ const PlanList: React.FC = () => {
   }
 
   return (
-    <Box textAlign="left" py="3xl">
+    <Box textAlign="left" py="4xl">
       <Flex justify="space-between" align="center" mb="3xl">
         <Box>
-          <Text fontSize="4xl" fontWeight="heading" mb="sm" lineHeight="3xl">
+          <Text fontSize="2xl" fontWeight="heading" mb="sm">
             Need More Control Over Your Documents?
           </Text>
-          <Text fontSize="xl">
+          <Text fontSize="" color="text-secondary">
             The Silver plan gives you the basics, but upgrading unlocks more
             possibilities.
           </Text>
@@ -264,83 +263,80 @@ const PlanList: React.FC = () => {
         </Flex>
       </Flex>
 
-      <Flex wrap="wrap" justify="center" gap="md">
-        {filteredPlans.map((plan) => {
-          const isActive = isPlanActive(plan.id);
-          const discountedPrice = offerPrice(plan);
+      <Flex wrap="wrap" gap="md">
+        {filteredPlans
+          .sort((a, b) => parseFloat(a.plan_amount) - parseFloat(b.plan_amount))
+          .map((plan) => {
+            const isActive = isPlanActive(plan.id);
+            const discountedPrice = calculateDiscountedPrice(plan);
 
-          return (
-            <PlanCard key={plan.id} isHighlighted={isActive}>
-              <CardContent>
-                <Box mb="md">{getPlanIcon(plan.name)}</Box>
+            return (
+              <PlanCard key={plan.id} isHighlighted={isActive}>
+                <CardContent>
+                  <Box mb="md">{getPlanIcon(plan.name)}</Box>
 
-                <Text as="h3" fontSize="2xl" fontWeight="semibold" mb="sm">
-                  {plan.name}
-                </Text>
-                <Text
-                  mb="xl"
-                  fontWeight="semi-bold"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  textOverflow="ellipsis">
-                  {plan.description}
-                </Text>
+                  <Text as="h3" fontSize="2xl" mb="sm">
+                    {plan.name}
+                  </Text>
+                  <Text mb="xl" w="90%" h="40px">
+                    {plan.description}
+                  </Text>
 
-                <Flex align="baseline" justify="center" gap="xs" mb="xl">
-                  {discountedPrice ? (
-                    <>
+                  <Flex align="baseline" gap="xs" mb="xl">
+                    {discountedPrice ? (
+                      <>
+                        <Text fontSize="3xl" fontWeight="bold">
+                          {discountedPrice}
+                        </Text>
+                        <Text
+                          fontSize="md"
+                          color="gray.900"
+                          textDecoration="line-through">
+                          {Math.round(parseFloat(plan?.plan_amount))}
+                        </Text>
+                      </>
+                    ) : (
                       <Text fontSize="3xl" fontWeight="bold">
-                        ${discountedPrice}
+                        {plan.plan_amount}
                       </Text>
-                      <Text
-                        fontSize="md"
-                        color="var(--theme-ui-colors-gray-900)"
-                        textDecoration="line-through">
-                        ${Math.round(parseFloat(plan.plan_amount))}
-                      </Text>
-                    </>
-                  ) : (
-                    <Text fontSize="3xl" fontWeight="bold">
-                      ${plan.plan_amount}
+                    )}
+                    <Text fontSize="lg" fontWeight="heading">
+                      / {billingCycle === 'monthly' ? 'month' : 'year'}
+                    </Text>
+                  </Flex>
+
+                  {plan.coupon && (
+                    <Text fontSize="sm" fontWeight="bold" mb="sm">
+                      {plan.coupon.type === 'percentage'
+                        ? `${plan.coupon.amount}% OFF`
+                        : `$${plan.coupon.amount} OFF`}
                     </Text>
                   )}
-                  <Text fontSize="lg" fontWeight="heading">
-                    / {billingCycle === 'monthly' ? 'month' : 'year'}
-                  </Text>
-                </Flex>
 
-                {plan.coupon && (
-                  <Text fontSize="sm" fontWeight="bold" mb="sm">
-                    {plan.coupon.type === 'percentage'
-                      ? `${plan.coupon.amount}% OFF`
-                      : `$${plan.coupon.amount} OFF`}
-                  </Text>
-                )}
+                  <HoverableButton
+                    variant={isActive ? 'primary' : 'secondary'}
+                    fullWidth
+                    disabled={isActive || loading}
+                    onClick={() => processPaddleCheckout(plan)}>
+                    {isActive ? 'Current Plan' : 'Upgrade'}
+                  </HoverableButton>
 
-                <HoverableButton
-                  variant={isActive ? 'primary' : 'secondary'}
-                  fullWidth
-                  disabled={isActive || loading}
-                  onClick={() => processPaddleCheckout(plan)}>
-                  {isActive ? 'Current Plan' : 'Upgrade'}
-                </HoverableButton>
-
-                <Box mt="xxl">
-                  {plan.features.map((feature, id) => (
-                    <CheckItem key={id}>
-                      <TickIcon
-                        height={18}
-                        width={18}
-                        color="var(--theme-ui-colors-gray-900)"
-                      />
-                      <Text fontSize="md">{feature}</Text>
-                    </CheckItem>
-                  ))}
-                </Box>
-              </CardContent>
-            </PlanCard>
-          );
-        })}
+                  <Box mt="xxl">
+                    {plan.features.map((feature, id) => (
+                      <CheckItem key={id}>
+                        <TickIcon
+                          height={18}
+                          width={18}
+                          color="var(--theme-ui-colors-gray-900)"
+                        />
+                        <Text fontSize="md">{feature}</Text>
+                      </CheckItem>
+                    ))}
+                  </Box>
+                </CardContent>
+              </PlanCard>
+            );
+          })}
       </Flex>
     </Box>
   );
