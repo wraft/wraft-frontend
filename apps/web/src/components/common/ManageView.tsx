@@ -8,6 +8,7 @@ import {
   IntersectSquare,
   PaintRoller,
   FileArrowUp,
+  Money,
 } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
@@ -47,6 +48,12 @@ const listMenu = [
     logo: <FileArrowUp size={50} weight="thin" />,
     path: '/manage/import',
     desc: 'Import Structs',
+  },
+  {
+    name: 'Billing & Subscription',
+    logo: <Money size={50} weight="thin" />,
+    path: '/manage/billing',
+    desc: 'Manage Billing and Subscription',
   },
 ];
 
