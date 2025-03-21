@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { Input, Label } from 'theme-ui';
 import { Box, Field, Flex, InputText, Text, Button, Modal } from '@wraft/ui';
 
+import { PersonalWorkspaceLinks, workspaceLinks } from '@constants/menuLinks';
 import ManageSidebar from 'common/ManageSidebar';
 import DefaultAvatar from 'common/DefaultAvatar';
 import Page from 'common/PageFrame';
@@ -13,7 +14,6 @@ import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import Checkbox from 'common/Checkbox';
 import { useAuth } from 'contexts/AuthContext';
-import { PersonalWorkspaceLinks, workspaceLinks } from 'utils/index';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
 
 export interface Organisation {

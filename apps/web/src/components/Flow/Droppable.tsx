@@ -345,76 +345,78 @@ const SortableItem = ({
                 }}
                 placeholder="Add assignee"></Input>
               <MenuProvider>
-                <MenuButton
-                  as={Box}
+                <Box
                   variant="none"
-                  sx={{ display: 'hidden', alignItems: 'center' }}></MenuButton>
+                  sx={{ display: 'hidden', alignItems: 'center' }}>
+                  <MenuButton></MenuButton>
+                </Box>
                 <Menu
-                  ref={targetRef}
-                  as={Box}
                   id={'targetElement'}
-                  variant="layout.menu"
-                  sx={{ p: 0, minWidth: '100%' }}
                   open={isOpen}
                   onClose={() => setIsOpen(false)}>
-                  {users && users.length > 0 && !loading ? (
-                    <Box
-                      sx={{
-                        mt: 1,
-                        border: '1px solid',
-                        borderColor: 'border',
-                        borderRadius: '4px',
-                        minWidth: '100%',
-                      }}>
-                      {users.map((x: any) => (
-                        <MenuItem
-                          as={Flex}
-                          key={x.id}
-                          onClick={() => onUserSelect(x)}
+                  <Box
+                    ref={targetRef}
+                    variant="layout.menu"
+                    sx={{ p: 0, minWidth: '100%' }}>
+                    {users && users.length > 0 && !loading ? (
+                      <Box
+                        sx={{
+                          mt: 1,
+                          border: '1px solid',
+                          borderColor: 'border',
+                          borderRadius: '4px',
+                          minWidth: '100%',
+                        }}>
+                        {users.map((x: any) => (
+                          <MenuItem key={x.id} onClick={() => onUserSelect(x)}>
+                            <Flex
+                              sx={{
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                px: 3,
+                                py: 2,
+                                cursor: 'pointer',
+                              }}>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  py: 2,
+                                }}>
+                                <Avatar
+                                  src={x.profile_pic}
+                                  alt="profile"
+                                  width={18}
+                                  height={18}
+                                />
+                                <Text
+                                  as={'p'}
+                                  ml={3}
+                                  variant="subM"
+                                  sx={{ color: 'gray.900' }}>
+                                  {x.name}
+                                </Text>
+                              </Box>
+                            </Flex>
+                          </MenuItem>
+                        ))}
+                      </Box>
+                    ) : (
+                      <MenuItem>
+                        <Box
                           sx={{
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
                             px: 3,
                             py: 2,
-                            cursor: 'pointer',
                           }}>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              py: 2,
-                            }}>
-                            <Avatar
-                              src={x.profile_pic}
-                              alt="profile"
-                              width={18}
-                              height={18}
-                            />
-                            <Text
-                              as={'p'}
-                              ml={3}
-                              variant="subM"
-                              sx={{ color: 'gray.900' }}>
-                              {x.name}
-                            </Text>
-                          </Box>
-                        </MenuItem>
-                      ))}
-                    </Box>
-                  ) : (
-                    <MenuItem
-                      as={Box}
-                      sx={{
-                        px: 3,
-                        py: 2,
-                      }}>
-                      {loading ? (
-                        <Spinner color={'gree.500'} size={10} />
-                      ) : (
-                        <Text variant="subM">No user found</Text>
-                      )}
-                    </MenuItem>
-                  )}
+                          {loading ? (
+                            <Spinner color={'gree.500'} size={10} />
+                          ) : (
+                            <Text variant="subM">No user found</Text>
+                          )}
+                        </Box>
+                      </MenuItem>
+                    )}
+                  </Box>
                 </Menu>
               </MenuProvider>
             </Box>

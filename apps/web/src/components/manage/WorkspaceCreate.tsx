@@ -62,7 +62,7 @@ const WorkspaceCreate = ({ setOpen, setCreatedId }: props) => {
 
       <Flex gap="md" mt="md">
         <Button loading={creating} type="submit">
-          <Text>Create Workspace</Text>
+          Create Workspace
         </Button>
         <Button variant="tertiary" onClick={() => setOpen(false)}>
           Cancel

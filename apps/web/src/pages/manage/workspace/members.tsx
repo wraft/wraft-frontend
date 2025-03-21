@@ -4,6 +4,7 @@ import { Flex } from '@wraft/ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { UserPlus } from '@phosphor-icons/react';
 
+import { workspaceLinks } from '@constants/menuLinks';
 import { InviteTeam } from 'components/manage';
 import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'common/ManageSidebar';
@@ -11,7 +12,7 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
-import { workspaceLinks } from 'utils/index';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,13 @@ const Index: FC = () => {
 
   const { userProfile } = useAuth();
   const currentOrg = userProfile?.currentOrganisation?.name;
+
+  const { hasPermission, canAccess, hasOneOfActions } = usePermission();
+
+  console.log('membership', hasPermission('membership', 'manage'));
+  console.log('membership[dd]', hasPermission('membership', 'shows'));
+  console.log('membership[dd]', hasOneOfActions('membership', ['shows']));
+  console.log('membership[can]', canAccess('membership', 'show'));
 
   return (
     (currentOrg !== 'Personal' || '') && (

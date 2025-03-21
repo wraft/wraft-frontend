@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from '@wraft/ui';
 
+import { workspaceLinks } from '@constants/menuLinks';
 import PermissionsList from 'components/manage/PermissionsList';
+import DescriptionLinker from 'common/DescriptionLinker';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
-import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {
   const { userProfile } = useAuth();

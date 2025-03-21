@@ -2,12 +2,12 @@ import { FC } from 'react';
 import Head from 'next/head';
 import { Flex } from '@wraft/ui';
 
+import { workspaceLinks } from '@constants/menuLinks';
 import OrganisationInfo from 'components/manage/OrganisationInfo';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
-import { workspaceLinks } from 'utils/index';
 
 const CompanyForm: FC = () => {
   return (

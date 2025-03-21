@@ -1,22 +1,23 @@
-/** @jsxImportSource theme-ui */
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import Cropper from 'react-easy-crop';
-import { Box, Input, Label, Slider } from 'theme-ui';
-import { Button, Modal } from '@wraft/ui';
+import styled from '@emotion/styled';
+import { Box, InputText, Label, Flex, Text, Button, Modal } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
 
-type ReadAsMethod =
+type FileReaderMethod =
   | 'readAsText'
   | 'readAsDataURL'
   | 'readAsArrayBuffer'
   | 'readAsBinaryString';
 
-type UseFileReaderProps = {
-  method: ReadAsMethod;
+type FileReaderHookProps = {
+  method: FileReaderMethod;
   onLoad?: (result: unknown) => void;
 };
 
-type Area = {
+type CropArea = {
   width: number;
   height: number;
   x: number;
@@ -25,102 +26,176 @@ type Area = {
 
 const MAX_IMAGE_SIZE = 512;
 
-const useFileReader = (options: UseFileReaderProps) => {
-  const { method = 'readAsText', onLoad } = options;
+const useFileReader = ({
+  method = 'readAsText',
+  onLoad,
+}: FileReaderHookProps) => {
   const [file, setFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<DOMException | null>(null);
   const [result, setResult] = useState<string | ArrayBuffer | null>(null);
 
   useEffect(() => {
-    if (!file && result) {
-      setResult(null);
-    }
-  }, [file, result]);
-
-  useEffect(() => {
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     const reader = new FileReader();
-    reader.onloadstart = () => setLoading(true);
-    reader.onloadend = () => setLoading(false);
-    reader.onerror = () => setError(reader.error);
 
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      setResult(e.target?.result ?? null);
-      if (onLoad) {
-        onLoad(e.target?.result ?? null);
-      }
+    reader.onloadstart = () => setIsLoading(true);
+    reader.onloadend = () => setIsLoading(false);
+    reader.onerror = () => setError(reader.error);
+    reader.onload = (e) => {
+      const data = e.target?.result ?? null;
+      setResult(data);
+      if (onLoad) onLoad(data);
     };
+
     reader[method](file);
+
+    return () => {
+      reader.abort();
+    };
   }, [file, method, onLoad]);
 
-  return [{ result, error, file, loading }, setFile] as const;
+  return [{ result, error, file, isLoading }, setFile] as const;
 };
 
 type ImageUploaderProps = {
   id: string;
-  buttonMsg: string;
-  handleAvatarChange: (imageSrc: string) => void;
-  imageSrc?: string;
-  target: string;
+  buttonLabel: string;
+  onImageChange: (imageSrc: string) => void;
+  currentImageSrc?: string;
+  targetAlt: string;
   triggerButtonColor?: string;
-  uploadInstruction?: string;
-  disabled?: boolean;
-  showModal: boolean;
-  onClose: (e: any) => void;
+  uploadInstructions?: string;
+  isDisabled?: boolean;
+  isModalOpen: boolean;
+  onModalClose: () => void;
 };
 
-interface FileEvent<T = Element> extends FormEvent<T> {
+interface FileInputEvent<T = Element> extends FormEvent<T> {
   target: EventTarget & T;
 }
 
-// This is separate to prevent loading the component until file upload
-function CropContainer({
+const RangeInput = styled(InputText)`
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background-color: ${(props: any) => props.theme.colors.primary};
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    // background-color: ${(props: any) => props.theme.colors.primary};
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    background-color: ${(props: any) => props.theme.colors.gray[200]};
+    border-radius: 4px;
+    border: none;
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background-color: ${(props: any) => props.theme.colors.gray[200]};
+    border-radius: 4px;
+    border: none;
+  }
+`;
+
+const FileUploadBox = styled(Box)`
+  border: 2px dashed ${(props: any) => props.theme.colors.gray[500]};
+  padding: ${(props: any) => props.theme.space.md};
+  margin-bottom: ${(props: any) => props.theme.space.md};
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: ${(props: any) => props.theme.fontSizes.sm};
+  font-weight: 500;
+  position: relative;
+  #avatar-upload {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+`;
+
+function ImageCropper({
   onCropComplete,
   imageSrc,
 }: {
   imageSrc: string;
-  onCropComplete: (croppedAreaPixels: Area) => void;
+  onCropComplete: (croppedAreaPixels: CropArea) => void;
 }) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
+  const [cropPosition, setCropPosition] = useState({ x: 0, y: 0 });
+  const [zoomLevel, setZoomLevel] = useState(1);
 
-  const changeZoom = (_e: any) => {
-    setZoom(_e.target.value);
+  const handleZoomChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setZoomLevel(Number(event.target.value));
   };
 
   return (
     <Box>
-      <Box sx={{ position: 'relative', width: '300px', height: '300px' }}>
-        {/* @ts-expect-error overload  */}
+      <Box position="relative" w="300px" h="300px">
         <Cropper
           image={imageSrc}
-          crop={crop}
-          zoom={zoom}
+          crop={cropPosition}
+          zoom={zoomLevel}
           aspect={1}
           showGrid={true}
           cropShape="round"
-          onCropChange={setCrop}
-          // @ts-expect-error unused vars
-          onCropComplete={(croppedArea, croppedAreaPixels) =>
+          onCropChange={setCropPosition}
+          onCropComplete={(_, croppedAreaPixels) =>
             onCropComplete(croppedAreaPixels)
           }
-          onZoomChange={setZoom}
+          onZoomChange={setZoomLevel}
+          rotation={0}
+          minZoom={1}
+          maxZoom={10}
+          zoomSpeed={1}
+          objectFit="contain"
+          style={{ containerStyle: { width: '100%', height: '100%' } }}
+          classes={{}}
+          restrictPosition={true}
+          mediaProps={{}}
+          cropperProps={{}}
+          keyboardStep={1}
         />
       </Box>
-      <Box sx={{ pb: 4, pl: 4, pr: 4 }}>
-        <Slider
-          value={zoom}
-          min={1}
-          color="primary"
-          max={10}
-          step={1}
-          sx={{ bg: 'green.100' }}
-          aria-labelledby="Zoom"
-          onChange={changeZoom}
+      <Box mt="md">
+        <Label>Zoom Level</Label>
+        <RangeInput
+          type="range"
+          value={zoomLevel.toString()}
+          min="1"
+          max="10"
+          step="1"
+          onChange={handleZoomChange}
+          aria-label="Zoom"
         />
       </Box>
     </Box>
@@ -128,172 +203,125 @@ function CropContainer({
 }
 
 export default function ImageUploader({
-  target,
+  targetAlt,
   id,
-  handleAvatarChange,
-  imageSrc,
-  showModal,
-  //   onClose,
+  onImageChange,
+  currentImageSrc,
+  isModalOpen,
+  onModalClose,
 }: ImageUploaderProps) {
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropArea | null>(
+    null,
+  );
 
   const [{ result }, setFile] = useFileReader({
     method: 'readAsDataURL',
   });
 
-  const onInputFile = (e: FileEvent<HTMLInputElement>) => {
+  const handleFileInput = (e: FileInputEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) {
       return;
     }
 
-    const limit = 5 * 1000000; // max limit 5mb
+    const maxFileSize = 5 * 1024 * 1024; // 5MB limit
     const file = e.target.files[0];
 
-    if (file.size > limit) {
-      // showToast(t("image_size_limit_exceed"), "error");
+    if (file.size > maxFileSize) {
+      // TODO: Add proper error handling
+      console.error('File size exceeds 5MB limit');
     } else {
       setFile(file);
     }
   };
 
-  const showCroppedImage = useCallback(
-    async (areaPixels: Area | null) => {
+  const handleCroppedImage = useCallback(
+    async (areaPixels: CropArea | null) => {
       try {
         if (!areaPixels) return;
-        const croppedImage = await getCroppedImg(
-          result as string /* result is always string when using readAsDataUrl */,
-          areaPixels,
-        );
-        handleAvatarChange(croppedImage);
-      } catch (e) {
-        console.error(e);
+        const croppedImage = await getCroppedImg(result as string, areaPixels);
+        onImageChange(croppedImage);
+      } catch (error) {
+        console.error('Error cropping image:', error);
       }
     },
-    [result, handleAvatarChange],
+    [result, onImageChange],
   );
 
   return (
-    <Modal ariaLabel="Change Avatar" open={showModal}>
-      <Box>
-        {!result && (
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              borderRadius: '99rem',
-              overflow: 'hidden',
-              width: '240px',
-              height: '240px',
-              img: {
-                width: '100%',
-                height: '100%',
-                padding: '1.5rem',
-                borderRadius: '99rem',
-              },
-              '.x': {
-                pb: 1,
-                pl: 1,
-                pr: 1,
-                pt: 2,
-              },
-              // width: '5rem',
-              // height: '5rem',
-              // maxHeight: '5rem',
-            }}>
-            {!imageSrc ? (
-              <Box
-                as="p"
-                sx={{
-                  width: '100%',
-                  fontSize: '0.875rem',
-                  lineHeight: '1.25rem',
-                  textAlign: 'center',
-                  '@media (min-width: 640px)': {
-                    fontSize: '0.75rem',
-                    lineHeight: '1rem',
-                  },
-                }}></Box>
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                // sx={{ borderRadius: '9999px', width: '5rem', height: '5rem' }}
-                src={imageSrc}
-                alt={target}
-              />
-            )}
-          </Box>
-        )}
-        {result && (
-          <Box>
-            <CropContainer
+    <Modal ariaLabel="Change Avatar" open={isModalOpen} onClose={onModalClose}>
+      <>
+        <Flex justify="end">
+          <X size={20} weight="bold" cursor="pointer" onClick={onModalClose} />
+        </Flex>
+        <Box>
+          {!result && (
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              borderRadius="99rem"
+              overflow="hidden"
+              w="240px"
+              h="240px">
+              {currentImageSrc ? (
+                <Image
+                  src={currentImageSrc}
+                  alt={targetAlt}
+                  width={240}
+                  height={240}
+                  style={{
+                    padding: '1.5rem',
+                    borderRadius: '99rem',
+                    objectFit: 'cover',
+                  }}
+                />
+              ) : (
+                <Text variant="sm">No image selected</Text>
+              )}
+            </Flex>
+          )}
+
+          {result && (
+            <ImageCropper
               imageSrc={result as string}
               onCropComplete={setCroppedAreaPixels}
             />
+          )}
+
+          <Box py="md">
+            <FileUploadBox data-testid="open-upload-image-filechooser">
+              <InputText
+                type="file"
+                name={id}
+                onChange={handleFileInput}
+                accept="image/*"
+              />
+              Click and choose an Image
+            </FileUploadBox>
+
+            <Button
+              variant="primary"
+              onClick={() => handleCroppedImage(croppedAreaPixels)}>
+              Save
+            </Button>
           </Box>
-        )}
-
-        <Box sx={{ pb: 4, pl: 4, pr: 4 }}>
-          <Label
-            data-testid="open-upload-image-filechooser"
-            sx={{
-              px: 3,
-              py: 2,
-              marginTop: 2,
-              //   borderRadius: '0.125rem',
-              borderWidth: '1px',
-              fontSize: 'sm',
-              lineHeight: ['1rem', '1rem'],
-              fontWeight: 500,
-              border: 'dotted 2px #eee',
-              borderColor: 'gray.500',
-              borderRadius: '6px',
-              mb: 2,
-              bg: 'green.100',
-              cursor: 'pointer',
-              ':hover': {},
-            }}>
-            <Input
-              onInput={onInputFile}
-              type="file"
-              name={id}
-              placeholder="Upload Image"
-              sx={{
-                position: 'absolute',
-                marginTop: '1rem',
-                pointerEvents: 'none',
-                opacity: 0,
-                l: 0,
-                r: 0,
-              }}
-              accept="image/*"
-            />
-            Choose a Image
-          </Label>
-
-          <Button
-            type="submit"
-            onClick={() => showCroppedImage(croppedAreaPixels)}>
-            Save
-          </Button>
         </Box>
-      </Box>
+      </>
     </Modal>
   );
 }
 
 const createImage = (url: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
-    const image = new Image();
+    const image = new window.Image();
     image.addEventListener('load', () => resolve(image));
     image.addEventListener('error', (error: any) => reject(error));
-    image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues on CodeSandbox
+    image.setAttribute('crossOrigin', 'anonymous');
     image.src = url;
   });
 
 async function getCroppedImg(
   imageSrc: string,
-  pixelCrop: Area,
+  pixelCrop: CropArea,
 ): Promise<string> {
   const image = await createImage(imageSrc);
   const canvas = document.createElement('canvas');

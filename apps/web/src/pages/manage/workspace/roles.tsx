@@ -3,16 +3,15 @@ import Head from 'next/head';
 import { Spinner } from 'theme-ui';
 import { Plus } from '@phosphor-icons/react';
 import { SearchIcon } from '@wraft/icon';
-import { Button, Flex, Box, InputText } from '@wraft/ui';
+import { Button, Flex, Box, InputText, Drawer, useDrawer } from '@wraft/ui';
 
+import { workspaceLinks } from '@constants/menuLinks';
 import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import { Drawer } from 'common/Drawer';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
-import { workspaceLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +20,7 @@ const Index: FC = () => {
   const [filterLoading, setFilterLoading] = useState<boolean>(false);
 
   const { userProfile } = useAuth();
+  const roleDrawer = useDrawer();
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
@@ -79,7 +79,11 @@ const Index: FC = () => {
           </Flex>
         </Page>
 
-        <Drawer open={isOpen} setOpen={setIsOpen}>
+        <Drawer
+          open={isOpen}
+          store={roleDrawer}
+          withBackdrop={true}
+          onClose={() => setIsOpen(false)}>
           <RolesForm key={1} setOpen={setIsOpen} setRender={setRender} />
         </Drawer>
       </>

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import { userSettingsLinks } from '@constants/menuLinks';
 import { useAuth } from 'contexts/AuthContext';
-import { checkSubRoutePermission } from 'utils';
+import { checkSubRoutePermission } from 'utils/permissions';
 
 import ManageSidebar from './ManageSidebar';
 
@@ -15,28 +16,9 @@ export interface INav {
   showFull?: boolean;
 }
 
-export interface menuLinksProps {
-  name: string;
-  path: string;
-  permissionName?: string;
-  logo?: any;
-  permissions?: any;
-}
-
-const profileLinks: menuLinksProps[] = [
-  {
-    name: 'My Account',
-    path: '/account/profile',
-  },
-  {
-    name: 'Change Password',
-    path: '/account/change-password',
-  },
-];
-
 const OrgSidebar = () => {
   const { permissions } = useAuth();
-  const routers = checkSubRoutePermission(profileLinks, permissions);
+  const routers = checkSubRoutePermission(userSettingsLinks, permissions);
 
   return <ManageSidebar items={routers} />;
 };
