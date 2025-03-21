@@ -8,8 +8,8 @@ import { Lightning, Stack, StackSimple } from '@phosphor-icons/react';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, postAPI } from 'utils/models';
 
-import type { Plan, PlansApiResponse, Subscription } from '../types';
-import { usePaddle } from '../usePaddle';
+import type { Plan, PlansApiResponse, Subscription } from './types';
+import { usePaddle } from './usePaddle';
 
 type ApiResponse = {
   success: boolean;
@@ -150,10 +150,12 @@ const PlanList: React.FC = () => {
   const getPlanIcon = (planName: string) => {
     const name = planName.toLowerCase();
 
-    if (name.includes('starter')) return <Lightning size={32} color="gray" />;
-    if (name.includes('pro')) return <Stack size={32} color="gray" />;
+    if (name.includes('starter'))
+      return <Lightning size={32} color="var(--theme-ui-colors-gray-900)" />;
+    if (name.includes('pro'))
+      return <Stack size={32} color="var(--theme-ui-colors-gray-900)" />;
     if (name.includes('business'))
-      return <StackSimple size={32} color="gray" />;
+      return <StackSimple size={32} color="var(--theme-ui-colors-gray-900)" />;
     return null;
   };
 
@@ -228,36 +230,38 @@ const PlanList: React.FC = () => {
   }
 
   return (
-    <Box textAlign="center" py="4rem">
-      <Text fontSize="4xl" fontWeight="heading" mb="xl">
-        Need More Control Over Your Documents?
-      </Text>
-      <Text fontSize="xl" mb="xl">
-        The Silver plan gives you the basics, but upgrading unlocks more
-        possibilities.
-      </Text>
+    <Box textAlign="left" py="3xl">
+      <Flex justify="space-between" align="center" mb="3xl">
+        <Box>
+          <Text fontSize="4xl" fontWeight="heading" mb="sm" lineHeight="3xl">
+            Need More Control Over Your Documents?
+          </Text>
+          <Text fontSize="xl">
+            The Silver plan gives you the basics, but upgrading unlocks more
+            possibilities.
+          </Text>
+        </Box>
 
-      <Flex
-        justify="center"
-        mb="3xl"
-        mx="auto"
-        spaceX="xs"
-        w="400px"
-        border="1px solid"
-        borderColor="border"
-        borderRadius="md">
-        <Button
-          fullWidth
-          variant={billingCycle === 'monthly' ? 'secondary' : 'ghost'}
-          onClick={() => setBillingCycle('monthly')}>
-          Monthly
-        </Button>
-        <Button
-          fullWidth
-          variant={billingCycle === 'yearly' ? 'secondary' : 'ghost'}
-          onClick={() => setBillingCycle('yearly')}>
-          Yearly (save 20%)
-        </Button>
+        <Flex
+          justify="center"
+          spaceX="xs"
+          w="400px"
+          border="1px solid"
+          borderColor="border"
+          borderRadius="md">
+          <Button
+            fullWidth
+            variant={billingCycle === 'monthly' ? 'secondary' : 'ghost'}
+            onClick={() => setBillingCycle('monthly')}>
+            Monthly
+          </Button>
+          <Button
+            fullWidth
+            variant={billingCycle === 'yearly' ? 'secondary' : 'ghost'}
+            onClick={() => setBillingCycle('yearly')}>
+            Yearly (save 20%)
+          </Button>
+        </Flex>
       </Flex>
 
       <Flex wrap="wrap" justify="center" gap="md">
@@ -290,7 +294,7 @@ const PlanList: React.FC = () => {
                       </Text>
                       <Text
                         fontSize="md"
-                        color="gray.900"
+                        color="var(--theme-ui-colors-gray-900)"
                         textDecoration="line-through">
                         ${Math.round(parseFloat(plan.plan_amount))}
                       </Text>
@@ -306,7 +310,7 @@ const PlanList: React.FC = () => {
                 </Flex>
 
                 {plan.coupon && (
-                  <Text fontSize="sm" fontWeight="bold" color="green" mb="sm">
+                  <Text fontSize="sm" fontWeight="bold" mb="sm">
                     {plan.coupon.type === 'percentage'
                       ? `${plan.coupon.amount}% OFF`
                       : `$${plan.coupon.amount} OFF`}
@@ -324,7 +328,11 @@ const PlanList: React.FC = () => {
                 <Box mt="xxl">
                   {plan.features.map((feature, id) => (
                     <CheckItem key={id}>
-                      <TickIcon color="#7a8481" />
+                      <TickIcon
+                        height={18}
+                        width={18}
+                        color="var(--theme-ui-colors-gray-900)"
+                      />
                       <Text fontSize="md">{feature}</Text>
                     </CheckItem>
                   ))}

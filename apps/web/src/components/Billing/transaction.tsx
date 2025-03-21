@@ -63,32 +63,38 @@ const TransactionList = ({
       header: 'Plan',
       accessorKey: 'plan.name',
       width: '200px',
+      cell: ({ row }: any) => <Text>{row.original.plan.name}</Text>,
     },
     {
       header: 'Amount',
       accessorKey: 'total_amount',
-      cell: (info: any) => `$${info.getValue()}`,
+      cell: (info: any) => <Text>${info.getValue()}</Text>,
       width: '100px',
     },
     {
       header: 'Date',
       accessorKey: 'date',
-      cell: (info: any) => formatDate(info.getValue()),
+      cell: (info: any) => <Text>{formatDate(info.getValue())}</Text>,
       width: '150px',
     },
     {
       header: 'Holder Name',
       accessorKey: 'payment_method_details.card.cardholder_name',
       width: '200px',
+      cell: ({ row }: any) => (
+        <Text>{row.original.payment_method_details.card.cardholder_name}</Text>
+      ),
     },
     {
       header: 'Billing Period',
-      accessorKey: '',
-      cell: (info: any) =>
-        formatBillingPeriod(
-          info.row.original.billing_period_start,
-          info.row.original.billing_period_end,
-        ),
+      cell: (info: any) => (
+        <Text>
+          {formatBillingPeriod(
+            info.row.original.billing_period_start,
+            info.row.original.billing_period_end,
+          )}
+        </Text>
+      ),
       width: '250px',
     },
     {
@@ -97,8 +103,14 @@ const TransactionList = ({
       cell: (info: any) => {
         const paymentMethod = info.row.original.payment_method_details;
         const card = paymentMethod && paymentMethod.card;
-        if (!card) return 'N/A';
-        return `${card.type} •••• ${card.last4} (Exp: ${card.expiry_month}/${card.expiry_year})`;
+
+        return (
+          <Text>
+            {card
+              ? `${card.type} •••• ${card.last4} (Exp: ${card.expiry_month}/${card.expiry_year})`
+              : 'N/A'}
+          </Text>
+        );
       },
       width: '200px',
     },

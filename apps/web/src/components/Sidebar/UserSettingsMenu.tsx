@@ -100,6 +100,11 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item>
+                <Link href="/manage/billing">
+                  <Text minWidth="200px">Upgrade</Text>
+                </Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item>
                 <Link href="/account" path="/account">
                   <Text minWidth="200px">Settings</Text>
                 </Link>

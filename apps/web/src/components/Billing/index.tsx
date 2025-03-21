@@ -8,7 +8,7 @@ import { fetchAPI, deleteAPI } from 'utils/models';
 
 import { Subscription, Plan, PlansApiResponse } from './types';
 import TransactionList from './transaction';
-import PlanPrice from './upgradePlan/planPrice';
+import PlanList from './planList';
 
 type ApiResponse = {
   success: boolean;
@@ -114,6 +114,10 @@ const Billing = () => {
     loadPlansAndSubscription();
   }, []);
 
+  const isPaidPlan =
+    currentSubscription &&
+    parseFloat(currentSubscription.plan.plan_amount || '0') > 0;
+
   return (
     <Flex direction="column" justify="center" p="lg">
       {currentSubscription && (
@@ -127,48 +131,49 @@ const Billing = () => {
             borderRadius="md">
             <Flex justifyContent="space-between">
               <Text fontSize="xl" fontWeight="bold">
-                Current Subscription
+                Active Subscription
               </Text>
-              <Button onClick={cancelSubscription}>Cancel Subscription</Button>
+              {isPaidPlan && (
+                <Button onClick={cancelSubscription}>
+                  Cancel Subscription
+                </Button>
+              )}
             </Flex>
-            <Box mt="md">
-              <Text>
-                Plan: <strong>{currentSubscription.plan.name}</strong>
-              </Text>
-              <Text>
-                Billing interval:{' '}
-                <strong>{currentSubscription.plan.billing_interval}</strong>
-              </Text>
-              <Text>
-                Status: <strong>{currentSubscription.status}</strong>
-              </Text>
+            <Box mt="md" spaceY="sm">
+              <Flex>
+                <Text fontWeight="bold">Current Plan:</Text>
+                <Text mx="xs">{currentSubscription.plan.name}</Text>
+              </Flex>
+
+              {isPaidPlan && (
+                <Flex>
+                  <Text fontWeight="bold"> Billing Period:</Text>
+                  <Text mx="xs">
+                    {currentSubscription.plan.billing_interval}
+                  </Text>
+                </Flex>
+              )}
+
+              <Flex>
+                <Text fontWeight="bold">Status:</Text>
+                <Text mx="xs">{currentSubscription.status}</Text>
+              </Flex>
+
+              {isPaidPlan && (
+                <Flex>
+                  <Text fontWeight="bold">Next Renewal:</Text>
+                  <Text mx="xs">{currentSubscription.next_bill_date}</Text>
+                </Flex>
+              )}
+
+              <Flex>
+                <Text fontWeight="bold">Next Renewal Amount:</Text>
+                <Text mx="xs">${currentSubscription.next_bill_amount}</Text>
+              </Flex>
             </Box>
-            <Flex justify="flex-end" mt="md"></Flex>
           </Box>
 
-          <PlanPrice />
-          <Box bg="background-primary" py="md" px="xxl" borderRadius="md">
-            <Text fontWeight="bold">Next Bill Details</Text>
-            <Box mt="md">
-              <Text>
-                <strong>Next Bill Date:</strong>{' '}
-                {currentSubscription.next_bill_date}
-              </Text>
-              <Text fontWeight="bold">
-                Next Bill Amount: ${currentSubscription.next_bill_amount}
-              </Text>
-              <Text fontWeight="bold">Features:</Text>
-              <Text>
-                <Box as="ul">
-                  {currentSubscription.plan.features.map((feature, index) => (
-                    <Box as="li" key={index}>
-                      {feature}
-                    </Box>
-                  ))}
-                </Box>
-              </Text>
-            </Box>
-          </Box>
+          <PlanList />
 
           <TransactionList
             organisationId={userProfile.currentOrganisation.id}
