@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { backOut } from 'framer-motion';
-import PlanTemplateList from 'pages/manage/billing/plan';
 
-import Page from 'components/PageFrame';
+import PlanList from 'components/Billing/planList';
+import { Page } from 'common/PageFrame';
 
 const Index: FC = () => {
   return (
@@ -13,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="wraft blocks" />
       </Head>
       <Page>
-        <PlanTemplateList />
+        <PlanList />
       </Page>
     </>
   );
