@@ -1,19 +1,21 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Button, Flex } from '@wraft/ui';
+import { Button, Drawer, Flex, useDrawer } from '@wraft/ui';
 
+import { menuLinks } from '@constants/menuLinks';
 import LayoutList from 'components/Layout/LayoutList';
 import LayoutForm from 'components/Layout/LayoutForm';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import { Drawer } from 'common/Drawer';
 import DescriptionLinker from 'common/DescriptionLinker';
-import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+
+  const stateDrawer = useDrawer();
+
   return (
     <>
       <Head>
@@ -32,7 +34,12 @@ const Index: FC = () => {
             + Add Layout
           </Button>
         </PageHeader>
-        <Drawer open={isOpen} setOpen={setIsOpen}>
+        <Drawer
+          open={isOpen}
+          store={stateDrawer}
+          aria-label="field drawer"
+          withBackdrop={true}
+          onClose={() => setIsOpen(false)}>
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </Drawer>
 

@@ -273,33 +273,37 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   };
 
   return (
-    <Box h="100vh">
-      <Drawer.Header>
-        <Drawer.Title>
-          {isEdit ? 'Edit layout' : 'Create new layout'}
-        </Drawer.Title>
-        <X
-          size={20}
-          weight="bold"
-          cursor="pointer"
-          onClick={() => setOpen(false)}
+    <Flex
+      as="form"
+      h="100vh"
+      direction="column"
+      onSubmit={handleSubmit(onSubmit)}>
+      <Box flexShrink="0">
+        <Drawer.Header>
+          <Drawer.Title>
+            {isEdit ? 'Edit layout' : 'Create new layout'}
+          </Drawer.Title>
+          <X
+            size={20}
+            weight="bold"
+            cursor="pointer"
+            onClick={() => setOpen(false)}
+          />
+        </Drawer.Header>
+        <StepsIndicator
+          titles={['Basic Details', 'Set Background']}
+          formStep={formStep}
+          goTo={goTo}
         />
-      </Drawer.Header>
-      <StepsIndicator
-        titles={['Basic Details', 'Set Background']}
-        formStep={formStep}
-        goTo={goTo}
-      />
+      </Box>
 
       <Flex
-        h="calc(100vh - 190px)"
-        py="sm"
-        as="form"
-        overflow="scroll"
-        direction="column"
+        flex={1}
+        overflowY="auto"
         px="xl"
-        gap="md"
-        onSubmit={handleSubmit(onSubmit)}>
+        py="md"
+        direction="column"
+        gap="md">
         {formStep === 0 && (
           <>
             <Field label="Name" required error={errors?.name?.message}>
@@ -428,7 +432,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
           />
         )}
       </Flex>
-      <Flex px="xl" py="xl" gap="sm">
+      <Flex flexShrink="0" px="xl" py="md" gap="sm">
         {formStep > 0 && (
           <Button
             type="button"
@@ -448,7 +452,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
           </Button>
         )}
       </Flex>
-    </Box>
+    </Flex>
   );
 };
 export default LayoutForm;

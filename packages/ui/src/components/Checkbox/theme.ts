@@ -1,5 +1,7 @@
 import { CSSObject } from "@xstyled/emotion";
 
+import { Primary } from "../Button/Button.stories";
+
 export type ThemeCheckboxes = {
   checked: CSSObject;
   default: CSSObject;
@@ -16,12 +18,12 @@ export const getCheckboxes = (theme: any): ThemeCheckboxes => {
       borderRadius: radii.sm,
     },
     disabled: {
-      borderColor: colors["beige-60"],
+      borderColor: colors["gray"]["400"],
     },
     checked: {
-      color: colors["neutral-90"],
-      backgroundColor: colors["primary-40"],
-      borderColor: colors["primary-40"],
+      color: "white",
+      backgroundColor: "primary",
+      borderColor: colors["green"]["400"],
     },
   };
 };

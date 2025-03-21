@@ -1,15 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { AxiosRequestConfig, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import cookie from 'js-cookie';
-import { Box } from '@wraft/ui';
 
-/**
- *  @TODO Icons: Convert to local files
- */
-
-// util fns here!
 export interface IField {
   name: string;
   value: string;
@@ -229,221 +223,13 @@ export interface IFieldField {
   value: string;
 }
 
-export const getInits = (field_maps: any) => {
-  const initials: IFieldField[] = [];
-  field_maps &&
-    field_maps.forEach((i: any) => {
-      const item: IFieldField = { name: i.name, value: i.value };
-      initials.push(item);
-    });
-  return initials;
-};
-
-export const modalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    // width: '50%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    overflow: 'scroll',
-    height: '60%', // <-- This sets the height
-    overlfow: 'scroll', // <-- This tells the modal to scrol
-  },
-};
-
-export const defaultModalStyle = {
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgb(5 6 8 / 78%)',
-  },
-  content: {
-    position: 'relative',
-    transform: 'translateY(-50%, -50%)',
-    top: '15%',
-    width: '50%',
-    maxWidth: '910px',
-    margin: '0 auto',
-    backgroundColor: '#fff',
-    boxShadow: '0px 3px 6px #00000029',
-    borderRadius: '9px',
-    outline: 'none',
-    overflow: 'auto',
-    padding: 0,
-    marginBottom: 0,
-    WebkitOverflowScrolling: 'touch',
-  },
-};
-
-export const modalStyle2 = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    width: '80%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    overflow: 'scroll',
-    height: '60%', // <-- This sets the height
-    overlfow: 'scroll', // <-- This tells the modal to scrol
-  },
-};
-
-export const modalStyle3 = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    width: '50%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    height: '70%', // <-- This sets the height
-    overlfow: 'scroll', // <-- This tells the modal to scrol
-  },
-};
-
 export const capitalizeFirst = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-export const isNumeric = (str: any) => {
-  if (typeof str != 'string') return false; // we only process strings!
-  return (
-    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-    !isNaN(parseFloat(str))
-  ); // ...and ensure strings of whitespace fail
-};
-// const ICON_COLOR = '#999';
-export interface menuLinksProps {
-  name: string;
-  path: string;
-  logo?: any;
-  role?: any;
-}
-
-export interface pipelineLinksProps {
-  name: string;
-  path: string;
-  logo?: any;
-  role?: any;
-}
-
-export const menuLinks: menuLinksProps[] = [
-  {
-    name: 'Layouts',
-    logo: <Box w="20px" />,
-    path: '/manage/layouts',
-  },
-  {
-    name: 'Flows',
-    logo: <Box w="20px" />,
-    path: '/manage/flows',
-  },
-
-  {
-    name: 'Themes',
-    logo: <Box w="20px" />,
-    path: '/manage/themes',
-  },
-];
-
-export const PersonalWorkspaceLinks: menuLinksProps[] = [
-  {
-    name: 'General',
-    path: '/manage/workspace',
-  },
-  {
-    name: 'Fields',
-    path: '/manage/fields',
-  },
-];
-
-export const workspaceLinks: menuLinksProps[] = [
-  {
-    name: 'General',
-    path: '/manage/workspace',
-  },
-  {
-    name: 'Fields',
-    path: '/manage/workspace/fields',
-  },
-  {
-    name: 'Members',
-    path: '/manage/workspace/members',
-  },
-
-  {
-    name: 'Roles',
-    path: '/manage/workspace/roles',
-  },
-  {
-    name: 'Permissions',
-    path: '/manage/workspace/permissions',
-  },
-];
-
-export const profileLinks: menuLinksProps[] = [
-  {
-    name: 'My Account',
-    path: '/account',
-  },
-  {
-    name: 'Manage Workspace',
-    path: '/account/company',
-  },
-  // {
-  //   name: 'Checks',
-  //   path: '/account/checks',
-  // },
-];
-
-export const removeProtocol = (link: string) =>
-  link.replace(/^https?:\/\//, '');
-
-export const withComma = (num: number) =>
-  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-export const getAxiosConfig = (
-  options: AxiosRequestConfig = {},
-): AxiosRequestConfig => ({
-  ...options,
-  headers: {
-    ...options.headers,
-    Authorization: cookie.get('token'),
-  },
-});
-
 export const errorMessage = (err: AxiosError, defaultMessage?: string) => {
   const data = err?.response?.data;
   return data?.message || data?.error || defaultMessage || '';
-};
-
-export const checkSubRoutePermission = (routes: any, permissions: any) => {
-  const routeList = routes.filter((data: any) => {
-    if (!data.permissionName) {
-      return data;
-    }
-    if (permissions && permissions[data.permissionName]) {
-      const permissionList = permissions[data.permissionName];
-      if (
-        data.permissions.some((permission: any) =>
-          permissionList.includes(permission),
-        )
-      ) {
-        return data;
-      }
-    }
-  });
-
-  return routeList;
 };
 
 export const convertToVariableName = (name) => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
-import { useForm, Controller } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { TextT } from '@phosphor-icons/react';
 import {
   Button,
@@ -13,12 +12,13 @@ import {
   Search,
   Modal,
 } from '@wraft/ui';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, Controller } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 import MentionField from 'components/MentionsField';
-import NavEdit from 'common/NavEdit';
 import { TimeAgo } from 'common/Atoms';
 import Editor from 'common/Editor';
+import NavEdit from 'common/NavEdit';
 import { Template, TemplateSchema } from 'schemas/template';
 import { putAPI, postAPI, fetchAPI } from 'utils/models';
 import {

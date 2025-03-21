@@ -119,58 +119,6 @@ export const deleteAPI = (path: any, body?: any) =>
       .catch((err) => reject(handleApiError(err)));
   });
 
-/**
- * Load Entity ----temp---
- * @param token
- */
-
-export const loadEntity = (token: string, path: string, onSuccess: any) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      onSuccess(data);
-    });
-};
-
-/**
- * Update an Entity
- * @param path
- * @param token
- */
-export const updateEntityFile = (
-  path: string,
-  data: any,
-  token: string,
-  onSuccess?: any,
-) => {
-  fetch(`${API_HOST}/api/v1/${path}`, {
-    method: 'PUT',
-    headers: {
-      Accept: 'application/json',
-      // 'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: data,
-  })
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (res) {
-      if (onSuccess) {
-        onSuccess(res);
-      }
-    });
-};
-
 export const userLogin = async (body: any) =>
   new Promise((resolve, reject) => {
     axios

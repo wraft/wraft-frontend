@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Container } from 'theme-ui';
 
 import NotificationList from 'components/Notification/NotificationList';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import DescriptionLinker from 'common/DescriptionLinker';
 
 const Notification: FC = () => {
   return (
@@ -14,10 +14,19 @@ const Notification: FC = () => {
         <meta name="description" content="Manage Notification" />
       </Head>
       <Page>
-        <PageHeader title="Notification" />
-        <Container variant="layout.pageFrame">
-          <NotificationList />
-        </Container>
+        <PageHeader
+          title="Notification"
+          desc={
+            <DescriptionLinker
+              data={[
+                { name: 'User', path: '' },
+                { name: 'Notification', path: '' },
+              ]}
+            />
+          }
+        />
+
+        <NotificationList />
       </Page>
     </>
   );

@@ -1,5 +1,6 @@
 import { rpxTransformers } from "@xstyled/emotion";
 
+import { getCheckboxes, ThemeCheckboxes } from "../components/Checkbox/theme";
 import { getToggles } from "../components/Toggle/theme";
 
 import basic from "./basic";
@@ -67,6 +68,7 @@ export const createTheme = (options: Options = {}) => {
   theme.focus = getFocus(theme);
   theme.space = getSpace(theme);
   theme.buttons = getButtons(theme);
+  theme.checkboxes = getCheckboxes(theme);
   theme.forms = forms;
   theme.links = links;
   theme.layout = layout;

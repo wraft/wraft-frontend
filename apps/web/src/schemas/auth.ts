@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { emailPattern } from 'utils/zodPatterns';
+import { emailPattern, passwordPattern } from 'utils/zodPatterns';
 
 export const LoginSchema = z.object({
   email: emailPattern,
@@ -22,3 +22,16 @@ export const ForgetPasswordSchema = z.object({
 });
 
 export type ForgetPassword = z.infer<typeof ForgetPasswordSchema>;
+
+export const PasswordUpdateSchema = z
+  .object({
+    current_password: z.string().min(1, 'Current password is required'),
+    new_password: passwordPattern,
+    confirm_new_password: passwordPattern,
+  })
+  .refine((data) => data.new_password === data.confirm_new_password, {
+    path: ['confirm_new_password'],
+    message: 'Passwords must match',
+  });
+
+export type PasswordUpdate = z.infer<typeof PasswordUpdateSchema>;

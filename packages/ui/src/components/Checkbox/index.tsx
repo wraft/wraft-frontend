@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import { DefaultFieldStylesProps } from "../../utils/field-styles";
 
@@ -32,9 +32,40 @@ export const Checkbox = forwardRef<"input", CheckboxProps>(
     },
     ref,
   ) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      e.target.checked = !e.target.checked;
-      onChange && onChange(e);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Set indeterminate state when it changes (can't be set via props)
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.indeterminate = indeterminate;
+      }
+    }, [indeterminate]);
+
+    // Merge refs
+    const mergedRef = (node: HTMLInputElement) => {
+      // Set input ref
+      if (inputRef.current !== node) {
+        inputRef.current = node;
+      }
+
+      // Forward ref
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    };
+
+    // Handle checkbox change
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      console.log("Checkbox component handleChange:", {
+        checked: event.target.checked,
+        name,
+        componentChecked: checked,
+      });
+
+      // Pass the event to the parent's onChange handler
+      onChange && onChange(event);
     };
 
     return (
@@ -46,7 +77,7 @@ export const Checkbox = forwardRef<"input", CheckboxProps>(
         indeterminate={indeterminate}
         name={name}
         onChange={handleChange}
-        ref={ref}
+        ref={mergedRef}
         size={size}
         {...rest}
       />

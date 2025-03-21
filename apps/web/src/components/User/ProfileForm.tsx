@@ -1,254 +1,249 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Button, Text, Image, Spinner } from 'theme-ui';
-import { Label, Select } from 'theme-ui';
+import styled from '@emotion/styled';
+import {
+  Box,
+  Flex,
+  Button,
+  Select,
+  SeletOption,
+  OptionValue,
+  Field,
+  InputText,
+} from '@wraft/ui';
 
 import ImageUploader from 'common/ImageUploader';
-import Field from 'common/Field';
 import { useAuth } from 'contexts/AuthContext';
 import { base64ToFile } from 'utils/imgCrop';
-import { loadEntity, updateEntityFile } from 'utils/models';
-
-export interface Profile {
-  uuid: null;
-  user: User;
-  profile_pic: null;
-  name: string;
-  gender: null;
-  dob: string;
-}
+import { fetchAPI, putAPI } from 'utils/models';
 
 export interface User {
   id: string;
   email: string;
 }
-
-export interface IAccount {
-  updated_at: string;
-  role: string;
-  profile_pic: string;
-  dob?: string;
+export interface Profile {
+  uuid: string | null;
+  user: User;
+  profile_pic: string | null;
   name: string;
-  inserted_at: string;
-  id: string;
-  email_verify: boolean;
-  email: string;
+  gender: string | null;
+  dob: string;
 }
 
+interface FormData {
+  name: string;
+  dob: string;
+  gender: string | null;
+}
+
+const genderOptions: SeletOption[] = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+];
+
+const AvatarContainer = styled(Box)`
+  cursor: pointer;
+`;
+
+const AvatarImage = styled(Image)`
+  border-radius: 99px;
+  border: solid 1px;
+  border-color: ${(props: any) => props.theme.colors.border};
+`;
+
+const AvatarOverlay = styled(Box)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border-radius: 99px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+    .edit-text {
+      opacity: 1;
+    }
+  }
+`;
+
+const EditText = styled(Box)`
+  opacity: 0.6;
+  transition: opacity 0.2s;
+`;
+
 const Form = () => {
+  const { accessToken } = useAuth();
+  const [profile, setProfile] = useState<Profile>();
+  const [saving, setSaving] = useState<boolean>(false);
+  const [showAvatarUploader, setShowAvatarUploader] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm();
+  } = useForm<FormData>();
 
-  const { accessToken } = useAuth();
-  const [profile, setProfile] = useState<Profile>();
-  // const [image, setImage] = useState<any>();
-  // const [imagePreview, setImagePreview] = useState<string>();
-  const [saving, setSaving] = useState<boolean>(false);
-
-  // const [showModal, setModal] = useState<boolean>(false);
-  const [showAvatarUploader, setShowAvatarUploader] = useState<boolean>(false);
-
-  // function closeModal() {
-  //   setModal(false);
-  //   setProfileImageModal(false);
-  // }
-
-  // function toggleModal() {
-  //   setModal(!showModal);
-  //   const m: IAccount = {
-  //     updated_at: '',
-  //     role: '',
-  //     profile_pic: '',
-  //     dob: '',
-  //     name: '',
-  //     inserted_at: '',
-  //     id: '',
-  //     email_verify: false,
-  //     email: '',
-  //   };
-  //   setMe(m);
-  // }
-
-  // const [cropImage, setCroppedImage] = useState<File>(); // for file submit
-  // const [editing, setEditing] = useState<boolean>(false);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onUpdate = () => {
-    setSaving(false);
-
-    toast.success('Saved Successfully', {
-      duration: 1000,
-      position: 'top-right',
-    });
-  };
-
-  /**
-   * Submit Form
-   * @param data Form Data
-   */
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: FormData) => {
     setSaving(true);
 
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('dob', data.dob);
-    formData.append('gender', data.gender);
+    formData.append('gender', data.gender || '');
 
-    updateEntityFile(`profiles`, formData, accessToken as string, onUpdate);
+    try {
+      await putAPI('profiles', formData);
+      toast.success('Profile updated successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      setSaving(false);
+    } catch (error) {
+      toast.error('Failed to update profile');
+      setSaving(false);
+    }
   };
 
-  const onOrg = (data: Profile) => {
-    setProfile(data);
+  const onLoadProfile = useCallback(async () => {
+    if (!accessToken) return;
 
-    if (data) {
-      setValue('name', data.name);
-      if (data.dob) {
-        setValue('dob', data.dob);
+    try {
+      const data: any = await fetchAPI('profiles');
+      setProfile(data);
+
+      if (data) {
+        setValue('name', data.name);
+        setValue('dob', data.dob || '');
+        setValue('gender', data.gender || null);
       }
-      setValue('gender', data.gender);
+    } catch (error) {
+      toast.error('Failed to load profile');
     }
-  };
+  }, [accessToken, setValue]);
 
-  /**
-   * Catch update response
-   * @param respo
-   */
-  const onUpdated = (_respo: any) => {
-    toast.success('Image Updated', {
-      duration: 1000,
-      position: 'top-right',
-    });
-  };
+  const onAvatarUpload = async (base64String: string) => {
+    const file = base64ToFile(base64String, 'avatar.jpg');
+    if (!file) return;
 
-  /**
-   * Upload Cropped Image
-   * @param f blob string
-   */
-  const onBlobReady = (f: string) => {
-    const file: File = base64ToFile(f, 'file.jpg');
     const formData = new FormData();
+    formData.append('profile_pic', file);
 
-    if (file) {
-      formData.append('profile_pic', file);
+    try {
+      await putAPI('profiles', formData);
+      toast.success('Avatar updated successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      onLoadProfile();
+    } catch (error) {
+      toast.error('Failed to update avatar');
     }
-
-    updateEntityFile(`profiles`, formData, accessToken as string, onUpdated);
   };
 
   useEffect(() => {
-    if (accessToken) {
-      loadEntity(accessToken as string, `profiles`, onOrg);
-    }
-  }, [accessToken]);
+    onLoadProfile();
+  }, [onLoadProfile]);
 
-  const toggleEditor = () => {
+  const onToggleAvatarUploader = () => {
     setShowAvatarUploader(!showAvatarUploader);
   };
 
   return (
-    <Box sx={{ width: '50%' }}>
-      <Box variant="w100">
-        <Flex variant="w100">
-          <Box variant="w100">
-            <Box>
-              <Box sx={{ pl: 4 }}>
-                <Box>
-                  {profile && (
-                    <Flex
-                      sx={{
-                        borderRadius: 99,
-                        flexWrap: 'wrap',
-                        button: {
-                          display: 'block',
-                          ':hover': { display: 'block', zIndex: 9000 },
-                        },
-                      }}
-                      pr={4}
-                      pb={4}>
-                      <Box sx={{ position: 'relative' }}>
-                        <Image
-                          onClick={() =>
-                            setShowAvatarUploader(!showAvatarUploader)
-                          }
-                          alt=""
-                          sx={{
-                            width: '80px',
-                            maxWidth: 'auto',
-                            height: '80px',
-                            borderRadius: 99,
-                            border: 'solid 1px',
-                            borderColor: 'border',
-                          }}
-                          src={`${profile?.profile_pic}`}
-                        />
+    <Flex
+      direction="column"
+      w="50%"
+      maxWidth="600px"
+      bg="background-primary"
+      p="xl">
+      <Box>
+        {profile && (
+          <Flex direction="row" wrap="wrap">
+            <Box position="relative">
+              <AvatarContainer
+                position="relative"
+                onClick={() => setShowAvatarUploader(!showAvatarUploader)}>
+                <AvatarImage
+                  alt=""
+                  width={120}
+                  height={120}
+                  src={`${profile?.profile_pic}`}
+                />
+                <AvatarOverlay
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  right="0"
+                  bottom="0"
+                  className="hover-overlay">
+                  <EditText as="div" className="edit-text">
+                    Edit
+                  </EditText>
+                </AvatarOverlay>
+              </AvatarContainer>
 
-                        <ImageUploader
-                          showModal={showAvatarUploader}
-                          target="avatar"
-                          id="avatar-upload"
-                          buttonMsg="Change avatar"
-                          onClose={toggleEditor}
-                          handleAvatarChange={(newAvatar) => {
-                            setShowAvatarUploader(false);
-                            onBlobReady(newAvatar);
-                          }}
-                          imageSrc={`${profile?.profile_pic}` || undefined}
-                        />
-                      </Box>
-                    </Flex>
-                  )}
-                </Box>
-              </Box>
-              <Box sx={{ pl: 3 }}>
-                <Box mx={0} mb={3} as="form" onSubmit={handleSubmit(onSubmit)}>
-                  <Box sx={{ py: 2 }}>
-                    <Field
-                      name="name"
-                      label="Name"
-                      variant="baseInput"
-                      placeholder="Your Full Name"
-                      register={register}
-                      error={errors.name}
-                    />
-                  </Box>
-                  <Box sx={{ py: 2 }}>
-                    <Field
-                      name="dob"
-                      label="Birthday"
-                      variant="baseInput"
-                      type="date"
-                      register={register}
-                      error={errors.dob}
-                    />
-                  </Box>
-                  <Box sx={{ py: 2 }}>
-                    <Label>Gender</Label>
-                    <Select {...register('gender', { required: true })}>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                    </Select>
-                  </Box>
-                  {errors.gender && <Text>This field is required</Text>}
-                  <Button
-                    type="submit"
-                    ml={0}
-                    mt={3}
-                    sx={{ borderRadius: '6px' }}>
-                    {saving && <Spinner width={16} height={16} color="white" />}
-                    {!saving && <Text>Save</Text>}
-                  </Button>
-                </Box>
-              </Box>
+              <ImageUploader
+                isModalOpen={showAvatarUploader}
+                targetAlt="avatar"
+                id="avatar-upload"
+                buttonLabel="Change avatar"
+                onModalClose={onToggleAvatarUploader}
+                onImageChange={(newAvatar: string) => {
+                  setShowAvatarUploader(false);
+                  onAvatarUpload(newAvatar);
+                }}
+                currentImageSrc={`${profile?.profile_pic}` || undefined}
+              />
             </Box>
-          </Box>
-        </Flex>
+          </Flex>
+        )}
       </Box>
-    </Box>
+
+      <Flex
+        direction="column"
+        gap="md"
+        mb="md"
+        mt="xl"
+        as="form"
+        onSubmit={handleSubmit(onSubmit)}>
+        <Field label="Name" required error={errors?.name?.message}>
+          <InputText {...register('name')} placeholder="Enter your full name" />
+        </Field>
+
+        <Field label="Date of Birth" required error={errors?.dob?.message}>
+          <InputText {...register('dob')} type="date" />
+        </Field>
+
+        <Field label="Gender" required error={errors?.gender?.message}>
+          <Select
+            name="gender"
+            options={genderOptions}
+            onChange={(value: OptionValue) => {
+              const option = genderOptions.find((opt) => opt.value === value);
+              setValue('gender', option?.value?.toString() || null);
+            }}
+            value={
+              profile?.gender
+                ? {
+                    value: profile.gender.toLowerCase(),
+                    label: profile.gender,
+                  }
+                : undefined
+            }
+          />
+        </Field>
+
+        <Box>
+          <Button type="submit" loading={saving} disabled={saving}>
+            Save
+          </Button>
+        </Box>
+      </Flex>
+    </Flex>
   );
 };
 export default Form;

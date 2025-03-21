@@ -5,9 +5,18 @@ import _ from 'lodash';
 import toast from 'react-hot-toast';
 import { DownIcon } from '@wraft/icon';
 import { Table, Box, Flex, Text } from '@wraft/ui';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 import Checkbox from 'common/Checkbox';
 import { putAPI, fetchAPI } from 'utils/models';
+
+const IconWrapper = styled(Flex)<{ isExpanded: boolean }>`
+  align-items: center;
+  ${(props) => css`
+    transform: ${props.isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
+  `}
+`;
 
 const PermissionsList = () => {
   const [roles, setRoles] = useState<any>([]);
@@ -202,13 +211,9 @@ const PermissionsList = () => {
               }}>
               <Flex sx={{ gap: '8px' }}>
                 <Text color="text-primary">{getValue()}</Text>
-                <Flex
-                  align="center"
-                  transform={
-                    row.getIsExpanded() ? 'rotate(180deg)' : 'rotate(0deg)'
-                  }>
+                <IconWrapper isExpanded={row.getIsExpanded()}>
                   <DownIcon width={14} />
-                </Flex>
+                </IconWrapper>
               </Flex>
             </Box>
           ) : (

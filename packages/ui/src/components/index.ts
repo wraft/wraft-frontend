@@ -13,6 +13,7 @@ export * from "./Tabs";
 export * from "./PasswordInput";
 export * from "./Textarea";
 export * from "./Label";
+export * from "./Checkbox";
 export { default as Table } from "./Table";
 export { Drawer, useDrawer } from "./Drawer";
 export { DropdownMenu } from "./DropdownMenu";

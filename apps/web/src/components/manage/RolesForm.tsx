@@ -1,413 +1,469 @@
-/** @jsxImportSource theme-ui */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Disclosure,
   DisclosureProvider,
   DisclosureContent,
 } from '@ariakit/react';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { Label, Input, Box, Flex, Button, Text } from 'theme-ui';
+import { Label, InputText, Box, Flex, Button, Text, Checkbox } from '@wraft/ui';
 import { DownIcon } from '@wraft/icon';
+import { Drawer, Field } from '@wraft/ui';
+import { X } from '@phosphor-icons/react';
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
-import Checkbox from 'common/Checkbox';
-import Field from 'common/Field';
 import { putAPI, fetchAPI, postAPI } from 'utils/models';
 
-interface Props {
+const StyledDisclosure = styled(Disclosure)`
+  width: 100%;
+  background-color: var(--theme-ui-colors-background-primary);
+  padding: 12px 16px;
+  border: none;
+  border-bottom: 1px solid var(--theme-ui-colors-neutral-200);
+  display: flex;
+  align-items: center;
+`;
+
+const StyledLabel = styled(Label)`
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--theme-ui-colors-border);
+  background-color: var(--theme-ui-colors-background-primary);
+  padding: 12px 16px;
+  margin-bottom: 0;
+
+  &:last-of-type {
+    border-bottom: none;
+  }
+`;
+
+const iconStyle = (props: { dropped: boolean }) => css`
+  transform: ${props.dropped ? 'rotate(180deg)' : 'none'};
+  color: gray.800;
+`;
+
+const IconWrapper = styled(Flex)<{ dropped: boolean }>`
+  justify-content: center;
+  align-items: center;
+  ${(props: any) => iconStyle(props)}
+`;
+
+interface RolesFormProps {
   setOpen: any;
   setRender: any;
   roleId?: any;
 }
 
-interface FormInputs {
-  name: string;
-  permissions: string[];
-}
+const roleFormSchema = z.object({
+  name: z.string().min(1, { message: 'Role name is required' }),
+  permissions: z
+    .array(z.string())
+    .min(1, { message: 'At least one permission is required' }),
+});
 
-const RolesForm = ({ setOpen, setRender, roleId }: Props) => {
-  const isEdit =
-    roleId && roleId !== null && roleId !== undefined && roleId !== '';
+type FormInputs = z.infer<typeof roleFormSchema>;
+
+const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
+  const [formStep, setFormStep] = useState(0);
+  const [initialPermissions, setInitialPermissions] = useState<any>({});
+  const [isExpanded, setExpanded] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [permissions, setPermissions] = useState<any>({});
+  const [role, setRole] = useState<any>({});
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const isEditMode = Boolean(roleId);
+
   const {
     register,
     trigger,
-    formState: { isValid },
+    setValue,
+    watch,
+    formState: { errors, isValid },
     handleSubmit,
   } = useForm<FormInputs>({
     mode: 'onChange',
+    resolver: zodResolver(roleFormSchema),
+    defaultValues: {
+      name: '',
+      permissions: [],
+    },
   });
 
-  const [initialPermissions, setInitialPermissions] = useState<any>({});
-  const [role, setRole] = useState<any>({});
-  const [permissions, setPermissions] = useState<any>([]);
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [isExpanded, setExpanded] = useState<number | null>(null);
-  const [formStep, setFormStep] = useState(0);
-
-  const loadPermissions = () => {
+  const fetchPermissions = () => {
     fetchAPI('permissions').then((data: any) => {
       setInitialPermissions(data);
     });
   };
 
-  const loadRole = () => {
-    if (isEdit) {
+  const fetchRoleDetails = () => {
+    if (isEditMode) {
       fetchAPI(`roles/${roleId}`).then((data: any) => {
         setRole(data);
+        if (data.name) setValue('name', data.name);
+        if (data.permissions) setValue('permissions', data.permissions);
       });
     }
   };
 
   useEffect(() => {
-    loadPermissions();
-    loadRole();
+    fetchPermissions();
+    fetchRoleDetails();
   }, []);
 
-  const newPermissoinsFormat = Object.fromEntries(
-    Object.entries(initialPermissions).map(
-      ([category, datas]: [any, any[]]) => [
-        category,
-        {
-          name: category,
-          isChecked: false,
-          children: datas.map((data: any) => ({ ...data, isChecked: false })),
-        },
-      ],
-    ),
-  );
-
   useEffect(() => {
-    setPermissions(newPermissoinsFormat);
+    register('permissions');
+  }, [register]);
+
+  const formatPermissions = useCallback(() => {
+    return Object.fromEntries(
+      Object.entries(initialPermissions).map(
+        ([category, items]: [string, any[]]) => [
+          category,
+          {
+            name: category,
+            isChecked: false,
+            children: items.map((item: any) => ({ ...item, isChecked: false })),
+          },
+        ],
+      ),
+    );
   }, [initialPermissions]);
 
   useEffect(() => {
-    if (role) {
+    setPermissions(formatPermissions);
+  }, [initialPermissions]);
+
+  useEffect(() => {
+    if (role.permissions && Object.keys(permissions).length > 0) {
+      console.log('Setting permissions from role', role.permissions);
+
+      setValue('permissions', role.permissions);
+
       const data = { ...permissions };
-      filteredPermissionKeys.map((key) => {
-        data[key].children.map((sub: any) => {
-          if (role.permissions && role.permissions.includes(sub.name))
-            sub.isChecked = true;
+      const selectedPermissions = role.permissions || [];
+
+      Object.keys(data).forEach((category) => {
+        let categoryHasChecked = false;
+
+        data[category].children.forEach((sub: any) => {
+          sub.isChecked = selectedPermissions.includes(sub.name);
+          if (sub.isChecked) categoryHasChecked = true;
         });
-        const isAllSelected = data[key].children.every(
+
+        const isAllSelected = data[category].children.every(
           (child: any) => child.isChecked === true,
         );
-        if (isAllSelected) {
-          data[key].isChecked = true;
-        } else {
-          data[key].isChecked = false;
-        }
+        data[category].isChecked = isAllSelected;
       });
-      setPermissions({ ...data });
-      trigger(['name', 'permissions'], { shouldFocus: true });
+
+      setPermissions(data);
     }
-  }, [role]);
+  }, [role, setValue]);
 
   const filteredPermissionKeys = Object.keys(permissions).filter((e: any) =>
     e.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const checkParent = (e: any, name: any) => {
-    const { checked } = e.target;
+  const handleParentCheckboxChange = (e: any, name: any) => {
+    e.persist();
+
+    const checked = e.target.checked;
     const data = { ...permissions };
     data[name].isChecked = checked;
 
-    if (data[name].isChecked) {
-      data[name].children.map((child: any) => (child.isChecked = checked));
-    } else {
-      data[name].children.map((child: any) => (child.isChecked = false));
-    }
-    setPermissions({ ...data });
-    trigger('permissions', { shouldFocus: true });
-    trigger();
+    const currentPermissions = watch('permissions') || [];
+    let newPermissions: string[] = [...currentPermissions];
+
+    data[name].children.forEach((child: any) => {
+      child.isChecked = checked;
+
+      if (checked) {
+        if (!newPermissions.includes(child.name)) {
+          newPermissions.push(child.name);
+        }
+      } else {
+        newPermissions = newPermissions.filter((perm) => perm !== child.name);
+      }
+    });
+
+    setValue('permissions', newPermissions);
+    setPermissions(data);
+
+    trigger('permissions').then((valid) => {
+      if (!valid && newPermissions.length === 0) {
+        toast.error('At least one permission is required', {
+          duration: 2000,
+          position: 'top-right',
+        });
+      }
+    });
   };
 
-  const checkChild = (e: any, name: any, id: any) => {
-    const { checked } = e.target;
-    const data = { ...permissions };
+  const handleChildCheckboxChange = (e: any, name: any, id: any) => {
+    e.persist();
 
-    data[name].children.map((sub: any) => {
+    const checked = e.target.checked;
+    const data = JSON.parse(JSON.stringify(permissions));
+
+    const currentPermissions = watch('permissions') || [];
+    let newPermissions: string[] = [...currentPermissions];
+
+    let childToUpdate: any = null;
+    data[name].children.forEach((sub: any) => {
       if (sub.id === id) {
         sub.isChecked = checked;
-      }
-      const isAllSelected = data[name].children.every(
-        (child: any) => child.isChecked === true,
-      );
-      if (isAllSelected) {
-        data[name].isChecked = checked;
-      } else {
-        data[name].isChecked = false;
+        childToUpdate = sub;
       }
     });
-    setPermissions({ ...data });
-  };
 
-  const checkedValuesFunc = (permissionsList: string[]) => {
-    filteredPermissionKeys.forEach((key) => {
-      permissions[key].children.forEach((e: any) => {
-        if (e.isChecked === true) {
-          permissionsList.push(e.name);
+    if (childToUpdate) {
+      if (checked) {
+        if (!newPermissions.includes(childToUpdate.name)) {
+          newPermissions.push(childToUpdate.name);
         }
-      });
+      } else {
+        newPermissions = newPermissions.filter(
+          (perm) => perm !== childToUpdate.name,
+        );
+      }
+    }
+
+    const isAllSelected = data[name].children.every(
+      (child: any) => child.isChecked === true,
+    );
+    data[name].isChecked = isAllSelected;
+
+    setValue('permissions', newPermissions);
+    setPermissions(data);
+
+    trigger('permissions').then((valid) => {
+      if (!valid && newPermissions.length === 0) {
+        toast.error('At least one permission is required', {
+          duration: 2000,
+          position: 'top-right',
+        });
+      }
     });
   };
 
-  function next() {
-    setFormStep((i) => i + 1);
-  }
-  function prev() {
-    setFormStep((i) => i - 1);
-  }
-
-  const goTo = (step: number) => {
-    setFormStep(step);
+  const handleNextStep = async () => {
+    const isStepValid = await trigger(formStep === 0 ? 'name' : 'permissions');
+    if (isStepValid) {
+      setFormStep((prev) => prev + 1);
+    } else if (formStep === 1) {
+      const permissionsArray = watch('permissions') || [];
+      if (permissionsArray.length === 0) {
+        toast.error('At least one permission is required', {
+          duration: 2000,
+          position: 'top-right',
+        });
+      }
+    }
   };
 
-  function onSubmit(data: any) {
-    const permissionsList: string[] = [];
-    checkedValuesFunc(permissionsList);
+  const handlePreviousStep = () => setFormStep((prev) => prev - 1);
+  const handleStepChange = async (step: number) => {
+    if (step > formStep) {
+      const fieldsToValidate = formStep === 0 ? 'name' : 'permissions';
+      const isStepValid = await trigger(fieldsToValidate);
+      if (isStepValid) {
+        setFormStep(step);
+      } else if (formStep === 1) {
+        const permissionsArray = watch('permissions') || [];
+        if (permissionsArray.length === 0) {
+          toast.error('At least one permission is required', {
+            duration: 2000,
+            position: 'top-right',
+          });
+        }
+      }
+    } else {
+      setFormStep(step);
+    }
+  };
 
-    const body = {
+  const onSubmit = async (data: any) => {
+    setIsLoading(true);
+    const payload = {
       name: data.name,
-      permissions: permissionsList,
+      permissions: data.permissions,
     };
-    const text = isEdit ? 'Edit' : 'Create';
-    const Request = isEdit
-      ? putAPI(`roles/${role.id}`, body)
-      : postAPI('roles', body);
 
-    toast.promise(
-      Request,
-      {
-        loading: 'Loading...',
-        success: () => {
-          setFormStep(0);
-          setOpen(null);
-          setRender((previous: boolean) => !previous);
-          return `Role ${text}ed`;
-        },
-        error: (error) => {
-          return error.errors.name[0] || `Failed to ${text} role`;
-        },
-      },
-      {
+    const action = isEditMode ? 'Edit' : 'Create';
+
+    try {
+      isEditMode
+        ? await putAPI(`roles/${role.id}`, payload)
+        : await postAPI('roles', payload);
+
+      toast.success(`Role successfully ${action.toLowerCase()}ed`, {
         duration: 1000,
         position: 'top-right',
-      },
-    );
-  }
+      });
+
+      setFormStep(0);
+      setOpen(null);
+      setIsLoading(false);
+      setRender((previous: boolean) => !previous);
+    } catch (error: any) {
+      const errorMessage =
+        error.errors?.name?.[0] ||
+        error.errors?.permissions?.[0] ||
+        `Failed to ${action.toLowerCase()} role`;
+
+      toast.error(errorMessage, {
+        duration: 1000,
+        position: 'top-right',
+      });
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Flex
-      as={'form'}
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        bg: 'background-primary',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '100dvh',
-      }}>
-      <Box
-        sx={{
-          px: 4,
-          py: 3,
-          borderBottom: '1px solid',
-          borderColor: 'border',
-        }}>
-        <Text variant="pB">{isEdit ? 'Edit Role' : 'Create new role'}</Text>
+      as="form"
+      h="100vh"
+      direction="column"
+      onSubmit={handleSubmit(onSubmit)}>
+      <Box flexShrink="0">
+        <Drawer.Header>
+          <Drawer.Title>
+            {isEditMode ? 'Edit Role' : 'Create new role'}
+          </Drawer.Title>
+          <X
+            size={20}
+            weight="bold"
+            cursor="pointer"
+            onClick={() => setOpen(false)}
+          />
+        </Drawer.Header>
+        <StepsIndicator
+          titles={['Details', 'Permissions']}
+          formStep={formStep}
+          goTo={handleStepChange}
+        />
       </Box>
-      <StepsIndicator
-        titles={['Details', 'Permissions']}
-        formStep={formStep}
-        goTo={goTo}
-      />
-      <Box sx={{ p: 4, pt: 3, height: '100%', overflowY: 'hidden' }}>
-        <Box sx={{ display: formStep === 0 ? 'block' : 'none' }}>
+      <Box flex={1} overflowY="auto" px="xl" py="md">
+        <Box display={formStep === 0 ? 'block' : 'none'}>
           <Field
             label="Role Name"
-            name="name"
-            placeholder="Role Name"
-            defaultValue={role.name}
-            register={register}
-          />
+            required
+            error={errors?.name?.message as string}>
+            <InputText
+              {...register('name', { required: true })}
+              placeholder="Enter a Role Name"
+            />
+          </Field>
         </Box>
-        <Box
-          sx={{
-            display: formStep === 1 ? 'block' : 'none',
-            height: '100%',
-            overflowY: 'hidden',
-          }}>
+        <Box display={formStep === 1 ? 'block' : 'none'}>
           <Box>
             <Label htmlFor="search">Permissions</Label>
-            <Input
+            <InputText
               type="search"
               placeholder="Search by"
               onChange={(e: any) => setSearchTerm(e.target.value)}
-              sx={{ bg: 'background-primary' }}
             />
           </Box>
           <Flex
-            sx={{
-              flexDirection: 'column',
-              my: '18px',
-              border: '1px solid',
-              borderColor: 'border',
-              borderRadius: 4,
-              height: '100%',
-              overflowY: 'auto',
-            }}>
-            <Box sx={{ mb: '82px' }}>
-              {filteredPermissionKeys.map((key, index) => {
-                const dropped = isExpanded === index;
-                return (
-                  <DisclosureProvider key={index}>
-                    <Box>
-                      <Disclosure
-                        onClick={() => {
-                          if (isExpanded === index) setExpanded(null);
-                          else setExpanded(index);
-                        }}
-                        sx={{
-                          width: '100%',
-                          bg: 'background-primary',
-                          py: '12px',
-                          px: '16px',
-                          border: 'none',
-                          borderBottom: '1px solid',
-                          borderColor: 'neutral.200',
-                          display: 'flex',
-                          alignItems: 'center',
-                        }}>
-                        <Flex
-                          sx={{
-                            width: '100%',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                          }}>
-                          <Label
-                            sx={{
-                              display: 'flex',
-                              maxWidth: 'max-content',
-                              alignItems: 'center',
-                              mb: 0,
-                            }}>
-                            <Checkbox
-                              size={'small'}
-                              {...{
-                                checked: permissions[key].isChecked,
-                                indeterminate:
-                                  !permissions[key].children.every(
-                                    (child: any) => child.isChecked,
-                                  ) &&
-                                  permissions[key].children.some(
-                                    (child: any) => child.isChecked,
-                                  ),
-                                onChange: (e: any) =>
-                                  checkParent(e, permissions[key].name),
-                              }}
-                            />
-                            <Text
-                              variant="pR"
-                              sx={{
-                                pl: 1,
-                                textTransform: 'capitalize',
-                                color: 'text-primary',
-                              }}>
-                              {permissions[key].name}
-                            </Text>
-                          </Label>
-                          <Flex
-                            as={'div'}
-                            className="icon"
-                            sx={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              transform: dropped && 'rotate(180deg)',
-                              color: 'gray.300',
-                            }}>
-                            <DownIcon />
-                          </Flex>
-                        </Flex>
-                      </Disclosure>
-                      <DisclosureContent>
-                        <Box>
-                          {permissions[key].children.map((sub: any) => (
-                            <Box key={sub.id}>
-                              <Label
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  borderBottom: '1px solid',
-                                  borderColor: 'border',
-                                  bg: 'background-primary',
-                                  py: '12px',
-                                  px: '16px',
-                                  mb: 0,
-                                  ':last-of-type': {
-                                    borderBottom: 'none',
-                                  },
-                                }}>
-                                <Checkbox
-                                  size={'small'}
-                                  checked={sub.isChecked}
-                                  onChange={(e) => {
-                                    checkChild(
-                                      e,
-                                      permissions[key].name,
-                                      sub.id,
-                                    );
-                                  }}
-                                  variant="white"
-                                />
-                                <Text
-                                  variant="subR"
-                                  sx={{
-                                    pl: 1,
-                                    textTransform: 'capitalize',
-                                    color: 'gray.500',
-                                  }}>
-                                  {sub.action}
-                                </Text>
-                              </Label>
-                            </Box>
-                          ))}
-                        </Box>
-                      </DisclosureContent>
-                    </Box>
-                  </DisclosureProvider>
-                );
-              })}
-            </Box>
+            direction="column"
+            my="lg"
+            border="1px solid"
+            borderColor="border"
+            borderRadius="sm">
+            {filteredPermissionKeys.map((key, index) => {
+              const dropped = isExpanded === index;
+              return (
+                <DisclosureProvider key={index}>
+                  <Box>
+                    <StyledDisclosure
+                      onClick={() => {
+                        if (isExpanded === index) setExpanded(null);
+                        else setExpanded(index);
+                      }}>
+                      <Flex w="100%" justify="space-between" align="center">
+                        <Label
+                          display="flex"
+                          maxWidth="max-content"
+                          alignItems="center"
+                          mb="0">
+                          <Checkbox
+                            checked={permissions[key]?.isChecked || false}
+                            indeterminate={
+                              !permissions[key]?.children.every(
+                                (child: any) => child.isChecked,
+                              ) &&
+                              permissions[key]?.children.some(
+                                (child: any) => child.isChecked,
+                              )
+                            }
+                            onChange={(e: any) =>
+                              handleParentCheckboxChange(
+                                e,
+                                permissions[key].name,
+                              )
+                            }
+                          />
+                          <Text textTransform="capitalize" variant="base">
+                            {permissions[key].name}
+                          </Text>
+                        </Label>
+                        <IconWrapper dropped={dropped} className="icon">
+                          <DownIcon width="18px" />
+                        </IconWrapper>
+                      </Flex>
+                    </StyledDisclosure>
+                    <DisclosureContent>
+                      <Box>
+                        {permissions[key].children.map((sub: any) => (
+                          <Box key={sub.id}>
+                            <StyledLabel>
+                              <Checkbox
+                                checked={sub.isChecked}
+                                onChange={(e: any) => {
+                                  handleChildCheckboxChange(
+                                    e,
+                                    permissions[key].name,
+                                    sub.id,
+                                  );
+                                }}
+                              />
+                              <Text textTransform="capitalize" color="gray.800">
+                                {sub.action}
+                              </Text>
+                            </StyledLabel>
+                          </Box>
+                        ))}
+                      </Box>
+                    </DisclosureContent>
+                  </Box>
+                </DisclosureProvider>
+              );
+            })}
           </Flex>
+          {errors?.permissions?.message && (
+            <Text color="danger" fontSize="sm" mt="2">
+              {errors.permissions.message as string}
+            </Text>
+          )}
         </Box>
       </Box>
-      <Flex sx={{ p: 4, pt: 2, gap: 2 }}>
-        <Button
-          sx={{ display: formStep === 0 ? 'block' : 'none' }}
-          variant="buttonPrimary"
-          onClick={(e) => {
-            e.preventDefault();
-            next();
-          }}>
-          Next
-        </Button>
-        <Button
-          sx={{ display: formStep === 1 ? 'block' : 'none' }}
-          variant="buttonSecondary"
-          onClick={(e) => {
-            e.preventDefault();
-            prev();
-          }}>
-          Prev
-        </Button>
-        <Button
-          sx={{ display: formStep === 0 ? 'none' : 'block' }}
-          disabled={!isValid}
-          onMouseOver={() => trigger()}
-          type="submit"
-          variant="buttonPrimarySmall">
-          {isEdit ? 'Update' : 'Create'}
-        </Button>
+      <Flex flexShrink="0" px="xl" py="md" gap="sm">
+        {formStep === 0 && <Button onClick={handleNextStep}>Next</Button>}
+        {formStep === 1 && (
+          <Button variant="secondary" onClick={handlePreviousStep}>
+            Prev
+          </Button>
+        )}
+        {formStep !== 0 && (
+          <Button disabled={!isValid} loading={isLoading} type="submit">
+            {isEditMode ? 'Update' : 'Create'}
+          </Button>
+        )}
       </Flex>
     </Flex>
   );

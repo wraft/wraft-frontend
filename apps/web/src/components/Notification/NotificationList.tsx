@@ -1,58 +1,58 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box } from 'theme-ui';
-import { Pagination, Table } from '@wraft/ui';
+import { Pagination, Table, Box, Text } from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export interface IPageMeta {
-  page_number: number;
-  total_entries: number;
-  total_pages: number;
-  contents?: any;
+  pageNumber: number;
+  totalEntries: number;
+  totalPages: number;
+}
+
+export interface Notification {
+  message: string;
+  type: string;
+  updatedAt: string;
 }
 
 const NotificationList = () => {
-  const [contents, setContents] = useState([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [pageMeta, setPageMeta] = useState<IPageMeta>();
-  const [page, setPage] = useState<number>(1);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [paginationMeta, setPaginationMeta] = useState<IPageMeta | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const router: any = useRouter();
-  const currentPage: any = parseInt(router.query.page) || 1;
+  const router = useRouter();
 
   useEffect(() => {
-    if (page) {
-      loadData();
-    }
-  }, []);
+    fetchNotifications(currentPage);
+  }, [currentPage]);
 
-  const loadData = () => {
-    setLoading(true);
-    const pageNo = currentPage ? `&page=${currentPage}` : '';
-
-    const query = `sort=inserted_at_desc${pageNo}`;
-    fetchAPI(`notifications?${query}`)
-      .then((data: any) => {
-        setLoading(false);
-        const res = data.notifications;
-        setContents(res);
-        setPageMeta(data);
-      })
-      .catch(() => {
-        setLoading(false);
+  const fetchNotifications = async (page: number) => {
+    setIsLoading(true);
+    try {
+      const query = `sort=inserted_at_desc&page=${page}`;
+      const data: any = await fetchAPI(`notifications?${query}`);
+      setNotifications(data.notifications);
+      setPaginationMeta({
+        pageNumber: data.page_number,
+        totalEntries: data.total_entries,
+        totalPages: data.total_pages,
       });
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const changePage = (newPage: any) => {
-    setPage(newPage);
-    const currentPath = router.pathname;
-    const currentQuery = { ...router.query, page: newPage };
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
     router.push(
       {
-        pathname: currentPath,
-        query: currentQuery,
+        pathname: router.pathname,
+        query: { ...router.query, page: newPage },
       },
       undefined,
       { shallow: true },
@@ -61,70 +61,51 @@ const NotificationList = () => {
 
   const columns = [
     {
-      id: 'content.message',
-      header: 'MESSAGE',
-      accessorKey: 'content.message',
+      id: 'message',
+      header: 'Message',
+      accessorKey: 'message',
       enableSorting: false,
       size: 250,
-      cell: ({ row }: any) => {
-        return (
-          <Box sx={{ fontSize: 'sm', fontWeight: '600' }}>
-            {row.original?.notification?.message}
-          </Box>
-        );
-      },
+      cell: ({ row }: any) => (
+        <Text>{row.original?.notification?.message}</Text>
+      ),
     },
     {
-      id: 'content.type',
-      header: 'TYPE',
-      accessorKey: 'content.type',
+      id: 'type',
+      header: 'Type',
+      accessorKey: 'type',
       enableSorting: false,
       size: 250,
-      cell: ({ row }: any) => {
-        return (
-          <Box sx={{ fontSize: 'sm' }}>{row.original?.notification?.type}</Box>
-        );
-      },
+      cell: ({ row }: any) => <Text>{row.original?.notification?.type}</Text>,
     },
     {
-      id: 'content.updated_at',
-      header: 'LAST UPDATED',
-      accessorKey: 'content.updated_at',
+      id: 'updatedAt',
+      header: 'Last Updated',
+      accessorKey: 'updatedAt',
       enableSorting: false,
-      cell: ({ row }: any) => {
-        return (
-          row.original.updated_at && <TimeAgo time={row.original?.updated_at} />
-        );
-      },
+      cell: ({ row }: any) =>
+        row.original.updated_at && <TimeAgo time={row.original?.updated_at} />,
     },
   ];
 
   return (
-    <Box py={3} mb={4}>
-      <Box mx={0} mb={3}>
-        <Box>
-          <Box sx={{ width: '100%' }}>
-            <Box mx={0} mb={3} sx={{ width: '100%' }}>
-              <Table
-                data={contents}
-                columns={columns}
-                isLoading={loading}
-                emptyMessage="No Notifications yet."
-              />
-              {pageMeta && pageMeta?.total_pages > 1 && (
-                <Box mx={0} mt={3}>
-                  <Pagination
-                    totalPage={pageMeta?.total_pages}
-                    initialPage={currentPage}
-                    onPageChange={changePage}
-                    totalEntries={pageMeta?.total_entries}
-                  />
-                </Box>
-              )}
-            </Box>
-          </Box>
+    <Box py="lg" px="lg" w="100%">
+      <Table
+        data={notifications}
+        columns={columns}
+        isLoading={isLoading}
+        emptyMessage="No Notifications yet."
+      />
+      {paginationMeta && paginationMeta.totalPages > 1 && (
+        <Box mx={0} mt={3}>
+          <Pagination
+            totalPage={paginationMeta.totalPages}
+            initialPage={currentPage}
+            onPageChange={handlePageChange}
+            totalEntries={paginationMeta.totalEntries}
+          />
         </Box>
-      </Box>
+      )}
     </Box>
   );
 };

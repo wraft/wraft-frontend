@@ -3,7 +3,7 @@ import styled from "@xstyled/emotion";
 export const Inner: any = styled("div")`
   background-color: white;
   box-shadow: 2px 3px 14px 0px #00000029;
-  z-index: 1;
+  z-index: 20;
 `;
 export const Item: any = styled.div`
   cursor: pointer;

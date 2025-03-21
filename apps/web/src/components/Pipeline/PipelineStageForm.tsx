@@ -88,7 +88,6 @@ const PipelineStageForm = ({
 
   const {
     register,
-    handleSubmit,
     watch,
     control,
     setValue,

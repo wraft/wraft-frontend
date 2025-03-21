@@ -1,3 +1,5 @@
+import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 import type { ExpandedState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -22,6 +24,23 @@ interface TableProps {
   emptyMessage?: string;
   "aria-label"?: string;
 }
+
+const ResizableHeaderSpan = styled(x.span)<{
+  isResizing: boolean;
+  deltaOffset?: number;
+  direction?: string;
+}>`
+  ${(props) => {
+    if (props.isResizing && props.deltaOffset !== undefined) {
+      const translateX =
+        (props.direction === "rtl" ? -1 : 1) * props.deltaOffset;
+      return css`
+        transform: translateX(${translateX}px);
+      `;
+    }
+    return "";
+  }}
+`;
 
 const Table = ({
   data,
@@ -81,23 +100,18 @@ const Table = ({
                       // }}
                       onClick={header.column.getToggleSortingHandler()}
                     >
-                      <x.span
-                        transform={
-                          header.column.getIsResizing()
-                            ? `translateX(${
-                                (options.columnResizeDirection === "rtl"
-                                  ? -1
-                                  : 1) *
-                                (getState().columnSizingInfo.deltaOffset ?? 0)
-                              }px)`
-                            : ""
+                      <ResizableHeaderSpan
+                        isResizing={header.column.getIsResizing()}
+                        deltaOffset={
+                          getState().columnSizingInfo.deltaOffset ?? 0
                         }
+                        direction={options.columnResizeDirection}
                       >
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext(),
                         )}
-                      </x.span>
+                      </ResizableHeaderSpan>
                       {header.column.getCanSort() && (
                         <x.span>
                           {header.column.getIsSorted() === "asc" && " 🔼"}

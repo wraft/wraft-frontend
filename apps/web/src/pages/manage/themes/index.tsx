@@ -2,13 +2,13 @@ import { FC, useState } from 'react';
 import Head from 'next/head';
 import { Button, Flex, Drawer, useDrawer } from '@wraft/ui';
 
+import { menuLinks } from '@constants/menuLinks';
 import ThemeAddForm from 'components/Theme/ThemeForm';
 import ThemeList from 'components/Theme/ThemeList';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
-import { menuLinks } from 'utils/index';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

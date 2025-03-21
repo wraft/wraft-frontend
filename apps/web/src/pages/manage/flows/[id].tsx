@@ -3,12 +3,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Flex } from '@wraft/ui';
 
+import { menuLinks } from '@constants/menuLinks';
 import FlowViewForm from 'components/Flow/FlowViewForm';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
-import { menuLinks } from 'utils';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
