@@ -69,7 +69,7 @@ module.exports = {
         'import/order': [
           'error',
           {
-            groups: ['builtin', 'external', 'internal'],
+            groups: ['builtin', 'external','internal'],
             // "alphabetize": { "order": "asc", "caseInsensitive": true },
             pathGroups: [
               {
@@ -86,10 +86,16 @@ module.exports = {
                 pattern: '@wraft-ui/**',
                 group: 'external',
               },
+          
               {
                 pattern: 'components/**',
                 group: 'internal',
                 position: 'after',
+              },
+              {
+                pattern: '@constants/**',
+                group: 'internal',
+                position: 'before',
               },
               {
                 pattern: 'common/**',

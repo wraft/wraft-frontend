@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "esModuleInterop": true,
     "paths": {
-      "common/*": ["components/common/*"]
+      "common/*": ["components/common/*"],
+      "@constants/*": ["constants/*"]
     },
 
     "lib": ["dom", "es2017"],
