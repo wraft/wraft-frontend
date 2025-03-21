@@ -30,8 +30,8 @@ Wraft focuses on efficiency, security, and flexibility, making it ideal for busi
 
 To run **wraft.co**, you’ll need:
 
-- **Node.js** (Version: >=18.x)
-- **pnpm** (Version: >=8.x)
+- **Node.js** (Version: >=20.x)
+- **pnpm** (Version: >=9.x)
 
 ---
 

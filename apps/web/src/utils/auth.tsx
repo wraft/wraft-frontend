@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import Router from 'next/router';
-import nextCookie from 'next-cookies';
+import { getCookie } from 'cookies-next';
 
 export const auth = (ctx: any) => {
-  const { token } = nextCookie(ctx);
+  const token = getCookie('token', { req: ctx.req, res: ctx.res });
 
   if (ctx.req && !token) {
     ctx.res.writeHead(302, { Location: '/login' });

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box, Flex } from '@wraft/ui';
+import { Flex } from '@wraft/ui';
 
 import ProfileForm from 'components/User/ProfileForm';
 import OrgSidebar from 'common/OrgSidebar';

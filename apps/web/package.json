@@ -45,7 +45,7 @@
     "lodash": "^4.17.21",
     "next": "^14.2.21",
     "next-auth": "^4.24.11",
-    "next-cookies": "^2.0.3",
+    "cookies-next": "^4.3.0",
     "next-images": "^1.8.5",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.38.1",
