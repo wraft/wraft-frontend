@@ -131,51 +131,50 @@ const FieldColor: React.FC<FieldColorProps> = ({
               disabled={disable || view}
             />
             <Box sx={{ width: 0, bg: 'transparent' }}>
-              <PopoverDisclosure
-                aria-disabled={disable || view}
-                as={Box}
-                sx={{ bg: 'transparent', border: 'none' }}>
-                <Box
-                  id="colorBox"
-                  bg={valx}
-                  sx={{
-                    width: '18px',
-                    height: '18px',
-                    border: 'solid 1px',
-                    borderColor: 'border',
-                    position: 'absolute',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    [isInside ? 'right' : 'left']:
-                      `${isInside ? '50px' : '16px'}`,
-                    padding: '5px',
-                    borderRadius: '99px',
-                    display: 'inline-block',
-                    cursor: 'pointer',
-                  }}
-                />
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    right: '12px',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    cursor: 'pointer',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <InkIcon
-                    width={18}
-                    height={18}
-                    viewBox="0 0 24 24"
-                    color={
-                      useThemeUI().theme?.colors?.gray?.[
-                        disable || view ? 200 : 600
-                      ]
-                    }
+              <PopoverDisclosure aria-disabled={disable || view}>
+                <Box sx={{ bg: 'transparent', border: 'none' }}>
+                  <Box
+                    id="colorBox"
+                    bg={valx}
+                    sx={{
+                      width: '18px',
+                      height: '18px',
+                      border: 'solid 1px',
+                      borderColor: 'border',
+                      position: 'absolute',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      [isInside ? 'right' : 'left']:
+                        `${isInside ? '50px' : '16px'}`,
+                      padding: '5px',
+                      borderRadius: '99px',
+                      display: 'inline-block',
+                      cursor: 'pointer',
+                    }}
                   />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      right: '12px',
+                      borderRadius: '4px',
+                      display: 'flex',
+                      cursor: 'pointer',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <InkIcon
+                      width={18}
+                      height={18}
+                      viewBox="0 0 24 24"
+                      color={
+                        useThemeUI().theme?.colors?.gray?.[
+                          disable || view ? 200 : 600
+                        ]
+                      }
+                    />
+                  </Box>
                 </Box>
               </PopoverDisclosure>
               <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
