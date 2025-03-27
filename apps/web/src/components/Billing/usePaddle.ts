@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 interface InitOptions {
   token: string;
   environment?: 'sandbox' | 'production';
+  onCheckoutSuccess?: (data: any) => void;
 }
 
 interface CheckoutOptions {
@@ -14,7 +15,11 @@ interface CheckoutOptions {
   discountId: string | undefined;
 }
 
-export const usePaddle = (Paddle: InitOptions) => {
+export const usePaddle = ({
+  token,
+  environment = 'sandbox',
+  onCheckoutSuccess,
+}: InitOptions) => {
   const [paddleError, setPaddleError] = useState<string | null>(null);
   const [isPaddleReady, setIsPaddleReady] = useState(false);
 
@@ -25,14 +30,26 @@ export const usePaddle = (Paddle: InitOptions) => {
 
     script.onload = () => {
       try {
-        window.Paddle.Environment.set(Paddle.environment || 'sandbox');
-        window.Paddle.Initialize({
-          token: Paddle.token,
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        const Paddle = (window as any).Paddle;
+        if (!Paddle) throw new Error('Paddle SDK not available');
+
+        Paddle.Environment.set(environment || 'sandbox');
+        Paddle.Initialize({
+          token,
+          eventCallback: function (data: any) {
+            if (data.name === 'checkout.completed') {
+              setTimeout(() => {
+                if (onCheckoutSuccess) onCheckoutSuccess(data);
+                Paddle.Checkout.close();
+              }, 2000);
+            }
+          },
         });
         setIsPaddleReady(true);
       } catch (err) {
+        console.error('Paddle Initialization Error:', err);
         setPaddleError('Failed to initialize Paddle');
-        console.error(err);
       }
     };
 
@@ -41,7 +58,7 @@ export const usePaddle = (Paddle: InitOptions) => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [Paddle.token, Paddle.environment]);
+  }, [token, environment]);
 
   const handleCheckout = async (options: CheckoutOptions) => {
     if (!isPaddleReady) {

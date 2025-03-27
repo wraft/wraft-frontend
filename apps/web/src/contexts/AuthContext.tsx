@@ -10,6 +10,7 @@ import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
+import { Subscription } from 'components/Billing/types';
 import { fetchAPI } from 'utils/models';
 
 interface IUserContextProps {
@@ -19,10 +20,11 @@ interface IUserContextProps {
   permissions: string | null;
   userProfile: any;
   organisations: any;
-  subscription: any;
+  subscription: Subscription | null;
   plan: any;
   login: (data: any) => void;
   logout: () => void;
+  setSubscription: (data: Subscription | null) => void;
   updateOrganisations: any;
 }
 
@@ -36,7 +38,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [userProfile, setUserProfile] = useState<any | null>(null);
   const [organisations, setOrganisations] = useState<any | null>(null);
   const [permissions, setPermissions] = useState<any>(null);
-  const [subscription, setSubscription] = useState<any>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [plan, setPlan] = useState<any>(null);
 
   const router = useRouter();
@@ -86,7 +88,6 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
           fetchAPI('billing/subscription'),
         ]);
 
-      console.log('currentSubscription', currentSubscription);
       setOrganisations(userOrg.organisations);
       setPermissions(permissionOrg.permissions);
       updateUserData(userinfo);
@@ -168,6 +169,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         login,
         logout,
         updateOrganisations,
+        setSubscription,
       }}>
       {children}
     </UserContext.Provider>

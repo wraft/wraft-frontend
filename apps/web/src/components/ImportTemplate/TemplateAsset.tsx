@@ -172,7 +172,6 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
           />
         </Box>
 
-        {/* {console.log(fileError)} */}
         {assets && assets.length > 0 && (
           <ErrorComponent fileError={fileError} />
         )}
