@@ -8,7 +8,7 @@ module.exports = withImages({
     api: process.env.NEXT_PUBLIC_API_HOST,
     homePageUrl: process.env.NEXT_PUBLIC_HOME_PAGE_URL || '/',
     API_HOST: process.env.NEXT_PUBLIC_API_HOST,
-    SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST,
+    SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST || true,
     NEXT_PUBLIC_WEBSOCKET_URL: process.env.NEXT_PUBLIC_WEBSOCKET_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || '',
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',

@@ -127,6 +127,18 @@ const Sidebar = (props: any) => {
         </Flex>
 
         <Box mt="auto" className="first-step" mb="xxl" px="md">
+          {/* <Flex
+            alignItems="center"
+            mb="lg"
+            p="md"
+            border="1px solid"
+            borderColor="green.600"
+            gap="sm"
+            justify="center"
+            borderRadius="md">
+            <Lightning size={18} color="#127D5D" />
+            <Text textAlign="center">Upgrade Plan</Text>
+          </Flex> */}
           <Button variant="primary" fullWidth={true} onClick={toggleSearch}>
             <Plus size={14} /> New Document
           </Button>

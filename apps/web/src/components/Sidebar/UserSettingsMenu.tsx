@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
 import { useColorMode, Image } from 'theme-ui';
+import { Lightning } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import ModeToggle from 'common/ModeToggle';
@@ -17,7 +18,7 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
   const [count, setCount] = useState<number | undefined>();
 
   const router = useRouter();
-  const { userProfile, accessToken, logout } = useAuth();
+  const { userProfile, accessToken, plan, logout } = useAuth();
 
   useEffect(() => {
     if (accessToken) {
@@ -99,11 +100,21 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
                   </Flex>
                 </Link>
               </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <Link href="/manage/billing">
-                  <Text minWidth="200px">Upgrade</Text>
-                </Link>
-              </DropdownMenu.Item>
+
+              {plan && plan.plan_amount === '0' && (
+                <DropdownMenu.Item>
+                  <Flex
+                    bg="green.200"
+                    w="100%"
+                    py="xs"
+                    px="xs"
+                    justifyContent="space-between"
+                    onClick={() => router.push('/manage/billing')}>
+                    <Text w="100%">Upgrade Plan</Text>
+                    <Lightning size={16} color="#127D5D" />
+                  </Flex>
+                </DropdownMenu.Item>
+              )}
               <DropdownMenu.Item>
                 <Link href="/account" path="/account">
                   <Text minWidth="200px">Settings</Text>
