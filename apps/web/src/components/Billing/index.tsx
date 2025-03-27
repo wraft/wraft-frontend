@@ -1,69 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { promise } from 'zod';
 import { Button, Box, Flex, Text, Label, Grid } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI } from 'utils/models';
 
-import { Subscription, Plan, PlansApiResponse } from './types';
 import TransactionList from './transaction';
 import PlanList from './planList';
-
-type ApiResponse = {
-  success: boolean;
-  message?: string;
-};
+import { Subscription } from './types';
 
 type InvoiceResponse = {
   invoice_url: string;
 };
 
 const Billing = () => {
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [currentSubscription, setCurrentSubscription] =
-    useState<Subscription | null>(null);
-
-  const { userProfile } = useAuth();
-
-  const fetchPlans = async () => {
-    try {
-      const PlansData = (await fetchAPI(
-        'plans/active_plans',
-      )) as PlansApiResponse;
-      setPlans(PlansData.plans || []);
-    } catch (error) {
-      toast.error('Error fetching plans.', {
-        duration: 3000,
-        position: 'top-right',
-      });
-    }
-  };
-
-  const loadPlansAndSubscription = async () => {
-    try {
-      await promise.call([
-        fetchPlans(),
-        fetchSubscription().then((subscriptionData) => {
-          setCurrentSubscription(subscriptionData);
-        }),
-      ]);
-    } catch (error) {
-      toast.error('Error loading data.', {
-        duration: 3000,
-        position: 'top-right',
-      });
-    }
-  };
+  const { userProfile, plan, subscription, setSubscription } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const cancelSubscription = async () => {
+    setIsLoading(true);
     try {
-      const response = (await deleteAPI(
-        'billing/subscription/cancel',
-      )) as ApiResponse;
-      console.log('API Response:', response);
-      if (response.success) {
-        setCurrentSubscription(null);
+      const response: any = await deleteAPI('billing/subscription/cancel');
+      if (response) {
+        setTimeout(() => {
+          fetchSubscription();
+        }, 3000);
+
         toast.success('Subscription canceled successfully.', {
           duration: 3000,
           position: 'top-right',
@@ -74,6 +36,8 @@ const Billing = () => {
         duration: 3000,
         position: 'top-right',
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -92,12 +56,12 @@ const Billing = () => {
     }
   };
 
-  const fetchSubscription = async (): Promise<Subscription> => {
+  const fetchSubscription = async () => {
     try {
       const subscriptionData = (await fetchAPI(
-        'billing/subscription/',
+        'billing/subscription',
       )) as Subscription;
-      return subscriptionData;
+      setSubscription(subscriptionData);
     } catch (error) {
       toast.error('Error fetching subscription.', {
         duration: 3000,
@@ -111,16 +75,14 @@ const Billing = () => {
   };
 
   useEffect(() => {
-    loadPlansAndSubscription();
+    fetchSubscription();
   }, []);
 
-  const isPaidPlan =
-    currentSubscription &&
-    parseFloat(currentSubscription.plan.plan_amount || '0') > 0;
+  const isPaidPlan = plan && parseFloat(plan.plan_amount || '0') > 0;
 
   return (
     <Flex direction="column" justify="center" p="lg">
-      {currentSubscription && (
+      {plan && (
         <>
           <Box
             w="100%"
@@ -136,50 +98,46 @@ const Billing = () => {
             <Grid gap="md" templateColumns="repeat(2, 1fr)" mb="lg">
               <Box>
                 <Label>Current Plan</Label>
-                <Text fontWeight="bold">{currentSubscription.plan.name}</Text>
+                <Text fontWeight="bold">{plan.name}</Text>
               </Box>
 
               {isPaidPlan && (
                 <Box>
                   <Label>Billing Period</Label>
-                  <Text fontWeight="bold">
-                    {currentSubscription.plan.billing_interval}
-                  </Text>
+                  <Text fontWeight="bold">{plan?.billing_interval}</Text>
                 </Box>
               )}
 
               <Box>
                 <Label>Status</Label>
                 <Text fontWeight="bold" textTransform="capitalize">
-                  {currentSubscription.status}
+                  {subscription?.status}
                 </Text>
               </Box>
 
               {isPaidPlan && (
                 <Box>
                   <Label>Next Renewal</Label>
-                  <Text fontWeight="bold">
-                    {currentSubscription.next_bill_date}
-                  </Text>
+                  <Text fontWeight="bold">{subscription?.next_bill_date}</Text>
                 </Box>
               )}
 
               <Box>
                 <Label>Next Renewal Amount</Label>
-                <Text fontWeight="bold">
-                  ${currentSubscription.next_bill_amount}
-                </Text>
+                <Text fontWeight="bold">${subscription?.next_bill_amount}</Text>
               </Box>
             </Grid>
             {isPaidPlan && (
-              <Button onClick={cancelSubscription}>Cancel Subscription</Button>
+              <Button onClick={cancelSubscription} loading={isLoading}>
+                Cancel Subscription
+              </Button>
             )}
           </Box>
 
           <PlanList />
 
           <TransactionList
-            organisationId={userProfile?.currentOrganisation?.id}
+            organisationId={userProfile?.organisation_id}
             onDownloadInvoice={downloadInvoice}
           />
         </>

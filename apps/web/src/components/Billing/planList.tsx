@@ -71,12 +71,22 @@ const PlanList: React.FC = () => {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>(
     'monthly',
   );
-  const [currentSubscription, setCurrentSubscription] =
-    useState<Subscription | null>(null);
+
   const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState<Plan[]>([]);
 
-  const { userProfile } = useAuth();
+  const { userProfile, subscription, setSubscription } = useAuth();
+
+  const fetchSubscription = async () => {
+    try {
+      const subscriptionData = (await fetchAPI(
+        'billing/subscription/',
+      )) as Subscription;
+      setSubscription(subscriptionData);
+    } catch (error) {
+      console.error('Error fetching subscription:', error);
+    }
+  };
 
   const { handleCheckout, paddleError, isPaddleReady } = usePaddle({
     token: process.env.NEXT_PUBLIC_PADDLE_TOKEN || '',
@@ -85,6 +95,7 @@ const PlanList: React.FC = () => {
       process.env.NEXT_PUBLIC_PADDLE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_PADDLE_ENV
         : 'sandbox',
+    onCheckoutSuccess: fetchSubscription,
   });
   const fetchPlans = async () => {
     try {
@@ -100,17 +111,6 @@ const PlanList: React.FC = () => {
       });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchSubscription = async () => {
-    try {
-      const subscriptionData = (await fetchAPI(
-        'billing/subscription/',
-      )) as Subscription;
-      setCurrentSubscription(subscriptionData);
-    } catch (error) {
-      console.error('Error fetching subscription:', error);
     }
   };
 
@@ -138,7 +138,6 @@ const PlanList: React.FC = () => {
 
   useEffect(() => {
     fetchPlans();
-    fetchSubscription();
   }, []);
 
   const filteredPlans = plans.filter(
@@ -174,10 +173,10 @@ const PlanList: React.FC = () => {
 
     try {
       const isFreePlan =
-        currentSubscription?.plan.plan_amount === '0' ||
-        parseFloat(currentSubscription?.plan.plan_amount || '1') === 0;
+        subscription?.plan.plan_amount === '0' ||
+        parseFloat(subscription?.plan.plan_amount || '1') === 0;
 
-      if (currentSubscription && !isFreePlan) {
+      if (subscription && !isFreePlan) {
         await changePlan(plan);
       } else {
         await handleCheckout({
@@ -196,7 +195,6 @@ const PlanList: React.FC = () => {
         });
 
         await fetchSubscription();
-        toast.success('Checkout successful!');
       }
     } catch (error) {
       console.error('Checkout failed:', error);
@@ -205,7 +203,7 @@ const PlanList: React.FC = () => {
   };
 
   const isPlanActive = (planId: string) => {
-    return currentSubscription?.plan.id === planId;
+    return subscription?.plan.id === planId;
   };
 
   const calculateDiscountedPrice = (plan: Plan) => {

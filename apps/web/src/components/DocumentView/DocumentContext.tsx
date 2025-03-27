@@ -130,8 +130,6 @@ export const DocumentProvider = ({
 
   const isInvite = type === 'invite' ? true : false;
 
-  console.log('editormode', editorMode);
-
   useEffect(() => {
     if (mode) {
       setEditorMode(mode);
@@ -274,8 +272,6 @@ export const DocumentProvider = ({
         setContents(data);
         setLoading(false);
       }
-
-      console.log('data', data);
     } catch {
       console.error('content  error');
     }

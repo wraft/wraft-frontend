@@ -149,7 +149,6 @@ const FormEntry = () => {
             </Box>
           </>
           <Box mt="md" bg="white" border="1px solid" borderColor="border">
-            {console.log('items', items)}
             {items.map((item: any) => (
               <Box
                 key={item.id}
