@@ -158,7 +158,6 @@ const PipelineCreateForm = ({
                     placeholder="Select a Form"
                     minChars={0}
                     onChange={(item: any) => {
-                      console.log('item', item);
                       if (!item) {
                         onChange('');
                         return;

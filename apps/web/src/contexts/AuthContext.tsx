@@ -10,6 +10,7 @@ import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
 import { Flex, Spinner } from 'theme-ui';
 
+import { Subscription } from 'components/Billing/types';
 import { fetchAPI } from 'utils/models';
 
 interface IUserContextProps {
@@ -19,8 +20,11 @@ interface IUserContextProps {
   permissions: string | null;
   userProfile: any;
   organisations: any;
+  subscription: Subscription | null;
+  plan: any;
   login: (data: any) => void;
   logout: () => void;
+  setSubscription: (data: Subscription | null) => void;
   updateOrganisations: any;
 }
 
@@ -34,6 +38,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   const [userProfile, setUserProfile] = useState<any | null>(null);
   const [organisations, setOrganisations] = useState<any | null>(null);
   const [permissions, setPermissions] = useState<any>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
+  const [plan, setPlan] = useState<any>(null);
 
   const router = useRouter();
 
@@ -55,6 +61,12 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
   }, []);
 
   useEffect(() => {
+    if (subscription?.plan) {
+      setPlan(subscription.plan);
+    }
+  }, [subscription]);
+
+  useEffect(() => {
     if (userProfile?.organisation_id) {
       fetchAPI(`organisations/${userProfile.organisation_id}`).then((res) => {
         const body = {
@@ -68,15 +80,18 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
   const fetchUserBasicInfo = async () => {
     try {
-      const [userinfo, userOrg, permissionOrg]: any = await Promise.all([
-        fetchAPI('users/me'),
-        fetchAPI('users/organisations'),
-        fetchAPI('organisations/users/permissions'),
-      ]);
+      const [userinfo, userOrg, permissionOrg, currentSubscription]: any =
+        await Promise.all([
+          fetchAPI('users/me'),
+          fetchAPI('users/organisations'),
+          fetchAPI('organisations/users/permissions'),
+          fetchAPI('billing/subscription'),
+        ]);
 
       setOrganisations(userOrg.organisations);
       setPermissions(permissionOrg.permissions);
       updateUserData(userinfo);
+      setSubscription(currentSubscription);
       setIsUserLoading(false);
     } catch {
       setIsUserLoading(false);
@@ -149,9 +164,12 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
         userProfile,
         organisations,
         permissions,
+        subscription,
+        plan,
         login,
         logout,
         updateOrganisations,
+        setSubscription,
       }}>
       {children}
     </UserContext.Provider>

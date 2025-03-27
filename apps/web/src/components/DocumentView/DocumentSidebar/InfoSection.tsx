@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
-import { Box, Flex, Text, Button } from '@wraft/ui';
+import { Box, Flex, Text } from '@wraft/ui';
 import { DownloadSimple } from '@phosphor-icons/react';
 
 import NavLink from 'common/NavLink';
@@ -36,8 +35,6 @@ export const InfoSection = () => {
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
-
-  console.log('additionalCollaborator', additionalCollaborator);
 
   useEffect(() => {
     if (fields) {

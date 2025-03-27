@@ -154,7 +154,6 @@ function ImporterApp() {
     });
     postAPI(`template_assets/${id}/import`, {})
       .then((res: ImportedItems) => {
-        console.log('res', res);
         toast.success('Importing ...' + id);
         setImported(res);
         setNextIsActive(true);
@@ -234,7 +233,6 @@ function ImporterApp() {
   };
 
   const onChangeStep = (step: any) => {
-    console.log('onChangeStep', step);
     setCurrentStep(step.id);
   };
 

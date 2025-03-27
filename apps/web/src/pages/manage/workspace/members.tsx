@@ -12,7 +12,6 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
-import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,13 +19,6 @@ const Index: FC = () => {
 
   const { userProfile } = useAuth();
   const currentOrg = userProfile?.currentOrganisation?.name;
-
-  const { hasPermission, canAccess, hasOneOfActions } = usePermission();
-
-  console.log('membership', hasPermission('membership', 'manage'));
-  console.log('membership[dd]', hasPermission('membership', 'shows'));
-  console.log('membership[dd]', hasOneOfActions('membership', ['shows']));
-  console.log('membership[can]', canAccess('membership', 'show'));
 
   return (
     (currentOrg !== 'Personal' || '') && (

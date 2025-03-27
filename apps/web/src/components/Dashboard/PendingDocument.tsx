@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { Avatar } from 'theme-ui';
-import { Table, Box, Flex, Text } from '@wraft/ui';
+import { Table, Flex, Text } from '@wraft/ui';
 
 import { StateBadge, TimeAgo } from 'common/Atoms';
 import { ContentTitleList } from 'common/content';

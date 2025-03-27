@@ -140,8 +140,6 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
 
   useEffect(() => {
     if (role.permissions && Object.keys(permissions).length > 0) {
-      console.log('Setting permissions from role', role.permissions);
-
       setValue('permissions', role.permissions);
 
       const data = { ...permissions };

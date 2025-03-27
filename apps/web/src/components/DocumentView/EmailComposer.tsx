@@ -46,7 +46,6 @@ const EmailComposer = ({ id, setOpen }: EmailComposerProps) => {
 
   const onSubmit = (data: any) => {
     setLoading(true);
-    console.log('data', data);
 
     postAPI(`contents/${id}/email`, data)
       .then(() => {
