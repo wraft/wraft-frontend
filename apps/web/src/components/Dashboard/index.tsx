@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { Text, Box, Flex, Grid, Button } from '@wraft/ui';
+import { Text, Box, Flex, Grid, Button, Tab, useTab } from '@wraft/ui';
 import { File } from '@phosphor-icons/react';
 import { ApproveTickIcon } from '@wraft/icon';
 
@@ -9,6 +9,7 @@ import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
 import PendingDocumentBlock from './PendingDocument';
+import UpcomingExpiryContracts from './UpcomingExpiryContracts';
 
 interface BlockCardProps {
   title: string;
@@ -59,6 +60,7 @@ const Dashboard = () => {
     pending_approvals: 0,
     total_documents: 0,
   });
+  const tab = useTab({ defaultSelectedId: 'recent_documents' });
   // const [dashboardLoading, setDashboardLoading] = useState();
   const { userProfile } = useAuth();
 
@@ -126,13 +128,7 @@ const Dashboard = () => {
             <Button variant="primary">Watch demo</Button>
           </Box>
         </Flex>
-        <Flex
-          w="30%"
-          // justifyContent: 'center',
-          borderLeft="1px solid"
-          borderColor="border"
-          py={3}
-          px={4}>
+        <Flex w="30%" borderLeft="1px solid" borderColor="border" py={3} px={4}>
           <Box>
             <Box fontSize="sm" fontWeight="heading" mb="18px">
               Finish setup
@@ -164,7 +160,30 @@ const Dashboard = () => {
         />
       </Grid>
 
-      <PendingDocumentBlock />
+      <Box mt="xl">
+        <Tab.List aria-label="Content Tab" store={tab}>
+          <Tab id="recent_documents" store={tab}>
+            Recent Documents
+          </Tab>
+          <Tab id="upcoming" store={tab}>
+            Upcoming Expiring Contracts
+          </Tab>
+          <Tab id="expired" store={tab}>
+            Expired Contracts
+          </Tab>
+        </Tab.List>
+        <Box mt="lg">
+          <Tab.Panel tabId="recent_documents" store={tab}>
+            <PendingDocumentBlock />
+          </Tab.Panel>
+          <Tab.Panel tabId="upcoming" store={tab}>
+            <UpcomingExpiryContracts status="upcoming" />
+          </Tab.Panel>
+          <Tab.Panel tabId="expired" store={tab}>
+            <UpcomingExpiryContracts status="expired" />
+          </Tab.Panel>
+        </Box>
+      </Box>
     </Box>
   );
 };

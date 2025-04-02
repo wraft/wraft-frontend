@@ -13,6 +13,7 @@ import { useDocument } from '../DocumentContext';
 import PlaceholderBlock from './PlaceholderBlock';
 import InviteFlowStateMember from '../InviteFlowStateMember';
 import { usePermissions } from '../usePermissions';
+import MetaBlock from './MetaBlock';
 
 export const InfoSection = () => {
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -189,6 +190,8 @@ export const InfoSection = () => {
         fieldValues={fieldValues}
         onSaved={handleSaved}
       />
+
+      <MetaBlock />
     </Box>
   );
 };

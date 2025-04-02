@@ -65,7 +65,7 @@ const LoginForm = () => {
   const router = useRouter();
   const homePageUrl = process.env.homePageUrl || '/';
   const isSelfHost =
-    process.env.SELF_HOST?.toLowerCase() === 'false' ? false : true;
+    String(process.env.SELF_HOST || '').toLowerCase() === 'true';
 
   const { session, error } = router.query;
 

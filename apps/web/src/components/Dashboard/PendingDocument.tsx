@@ -83,9 +83,9 @@ const PendingDocumentBlock = () => {
   };
   return (
     <>
-      <Text fontSize="lg" fontWeight="heading" mb="lg" mt="xl">
+      {/* <Text fontSize="lg" fontWeight="heading" mb="lg" mt="xl">
         Recent Documents
-      </Text>
+      </Text> */}
 
       <Table
         data={contents}

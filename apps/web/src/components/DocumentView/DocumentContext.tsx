@@ -75,6 +75,7 @@ interface DocumentContextProps {
   setEditorMode: (state: EditorMode) => void;
   setFieldTokens: (data: any) => void;
   setPageTitle: (data: any) => void;
+  setMeta: (data: any) => void;
   setTabActiveId: (state: string) => void;
 }
 
@@ -105,7 +106,7 @@ export const DocumentProvider = ({
   const [fields, setField] = useState<Array<FieldT>>([]);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
-  const [meta, setMeta] = useState<any>([]);
+  const [meta, setMeta] = useState<any>({});
   const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
   const [flow, setFlow] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -252,6 +253,21 @@ export const DocumentProvider = ({
 
         const holders = findHolders(serialized);
         setFieldValues(holders);
+      }
+
+      if (data?.content?.meta) {
+        const {
+          contract_value = '',
+          start_date = '',
+          expiry_date = '',
+        } = data.content.meta;
+
+        setMeta(() => ({
+          ...data.content.meta,
+          contract_value,
+          start_date,
+          expiry_date,
+        }));
       }
 
       if (data?.content?.serialized) {
@@ -442,6 +458,7 @@ export const DocumentProvider = ({
         setFieldTokens,
         setPageTitle,
         setTabActiveId,
+        setMeta,
       }}>
       {children}
     </DocumentContext.Provider>

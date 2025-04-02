@@ -2,7 +2,7 @@
 // const withCSS = require('@zeit/next-css');
 const withImages = require('next-images');
 
-const HOST = process.env.NEXT_PUBLIC_API_HOST;
+const HOST = process.env.NEXT_PUBLIC_API_HOST || true;
 module.exports = withImages({
   env: {
     api: process.env.NEXT_PUBLIC_API_HOST,
