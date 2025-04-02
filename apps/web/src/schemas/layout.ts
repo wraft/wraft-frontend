@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
-import { uuidRegex } from 'utils/regex';
+import { safeTextRegex, uuidRegex } from 'utils/regex';
 
 export const Layoutschema = z.object({
   name: z
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
-    .max(20, { message: 'Maximum 20 characters allowed' }),
+    .max(120, { message: 'Maximum 120 characters allowed' })
+    .trim()
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed'),
   slug: z
     .string()
     .refine((value) => value === 'pletter' || value === 'contract', {
@@ -17,6 +19,7 @@ export const Layoutschema = z.object({
     .min(5, 'Minimum 5 characters required')
     .max(255, { message: 'Maximum 255 characters allowed' })
     .trim()
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed')
     .optional(),
   engine: z.object({
     id: z.string().regex(uuidRegex, 'Invalid Engine'),

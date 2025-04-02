@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { emailPattern, passwordPattern } from 'utils/zodPatterns';
+import { nameRegex } from 'utils/regex';
 
 export const LoginSchema = z.object({
   email: emailPattern,
@@ -10,8 +11,14 @@ export const LoginSchema = z.object({
 export type Login = z.infer<typeof LoginSchema>;
 
 export const SignUpSchema = z.object({
-  first_name: z.string().min(3, { message: 'Please enter your first name' }),
-  last_name: z.string().min(1, { message: 'Please enter your last name' }),
+  first_name: z
+    .string()
+    .min(3, { message: 'Please enter your first name' })
+    .regex(nameRegex, 'Allows only letters and spaces'),
+  last_name: z
+    .string()
+    .min(1, { message: 'Please enter your last name' })
+    .regex(nameRegex, 'Allows only letters and spaces'),
   email: emailPattern,
 });
 

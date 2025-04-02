@@ -7,6 +7,7 @@ export const Title: React.FC<any> = ({ children, zIndex = "1", ...props }) => {
     <S.Title
       alignItems="center"
       display="flex"
+      color="text-primary"
       justifyContent="space-between"
       position={{ xs: "sticky", md: "static" }}
       top={{ xs: 0, md: "auto" }}

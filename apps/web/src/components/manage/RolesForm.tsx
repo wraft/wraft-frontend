@@ -17,6 +17,7 @@ import { css } from '@emotion/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { putAPI, fetchAPI, postAPI } from 'utils/models';
+import { safeTextRegex } from 'utils/regex';
 
 const StyledDisclosure = styled(Disclosure)`
   width: 100%;
@@ -59,7 +60,10 @@ interface RolesFormProps {
 }
 
 const roleFormSchema = z.object({
-  name: z.string().min(1, { message: 'Role name is required' }),
+  name: z
+    .string()
+    .min(1, { message: 'Role name is required' })
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed'),
   permissions: z
     .array(z.string())
     .min(1, { message: 'At least one permission is required' }),

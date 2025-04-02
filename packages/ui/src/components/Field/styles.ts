@@ -56,6 +56,7 @@ export const Field = styled.div<StyledFieldProps>(
 
 export const Hint = styled.div<{ variant: Variant }>`
   display: flex;
+  color: gray.800;
   ${({ variant }) => `
     color: ${VARIANTS[variant] || undefined};
   `}

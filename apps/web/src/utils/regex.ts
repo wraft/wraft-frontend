@@ -6,3 +6,5 @@ export const lowercaseRegex = /[a-z]/;
 export const uppercaseRegex = /[A-Z]/;
 export const numberRegex = /.*[0-9].*/;
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const safeTextRegex = /^[a-zA-Z0-9\s\-_]+$/;
+export const nameRegex = /^[a-zA-Z\s-]+$/;

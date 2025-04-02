@@ -1,24 +1,30 @@
 import { z } from 'zod';
 
-import { hexColorRegex, uuidRegex } from 'utils/regex';
+import { hexColorRegex, safeTextRegex, uuidRegex } from 'utils/regex';
 
 export const VariantSchema = z.object({
   name: z
     .string()
     .min(4, 'Minimum 4 characters required')
-    .max(20, 'Maximum 20 characters allowed')
+    .max(120, 'Maximum 120 characters allowed')
     .trim()
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed')
     .optional(),
   description: z
     .string()
     .min(5, 'Minimum 5 characters required')
     .trim()
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed')
     .optional(),
   prefix: z
     .string()
     .min(2, 'Minimum 2 characters required')
-    .max(6, 'Maximum 6 characters allowed')
-    .regex(/^\D*$/, 'Prefix cannot contain numbers')
+    .max(18, 'Maximum 18 characters allowed')
+    .regex(
+      /^[A-Za-z0-9]+$/,
+      'Prefix can only contain letters and numbers, and no spaces or special characters.',
+    )
+    .transform((val) => val.toUpperCase())
     .optional(),
   type: z
     .string()

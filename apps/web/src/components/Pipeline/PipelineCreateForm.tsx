@@ -16,7 +16,7 @@ import { Button, Drawer } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
-import { uuidRegex } from 'utils/regex';
+import { safeTextRegex, uuidRegex } from 'utils/regex';
 import { fetchAPI, postAPI } from 'utils/models';
 
 interface PipelineCreateFormProps {
@@ -28,7 +28,8 @@ const pipelineSchema = z.object({
   pipelinename: z
     .string()
     .min(4, { message: 'Minimum 4 characters required' })
-    .max(20, { message: 'Maximum 20 characters allowed' }),
+    .max(120, { message: 'Maximum 120 characters allowed' })
+    .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed'),
   pipeline_source: z.string().min(1, { message: 'Select a Source' }),
   pipeline_form: z.string().refine((value) => uuidRegex.test(value), {
     message: 'Select a Option',
