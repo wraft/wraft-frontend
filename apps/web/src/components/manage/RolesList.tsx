@@ -13,6 +13,7 @@ import {
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import RolesForm from './RolesForm';
 
@@ -30,51 +31,6 @@ interface Props {
   setFilterLoading: (e: boolean) => void;
 }
 
-const columns = ({ openDrawer, onDeleteRole }: any) => [
-  {
-    id: 'content.name',
-    header: 'ROLE NAME',
-    accessorKey: 'content.name',
-    isPlaceholder: true,
-    cell: ({ row }: any) => (
-      <Text onClick={() => openDrawer(row.original.id)}>
-        {row.original.name}
-      </Text>
-    ),
-    width: '100%',
-    enableSorting: false,
-  },
-  {
-    id: 'content.user_count',
-    header: 'USER',
-    accessorKey: 'content.user_count',
-    isPlaceholder: true,
-    cell: ({ row }: any) => <Text>{row.original.user_count}</Text>,
-    enableSorting: false,
-  },
-  {
-    id: 'editor',
-    header: '',
-    cell: ({ row }: any) => (
-      <Flex justify="right">
-        {row.original?.name !== 'superadmin' && (
-          <DropdownMenu.Provider>
-            <DropdownMenu.Trigger>
-              <ThreeDotIcon />
-            </DropdownMenu.Trigger>
-            <DropdownMenu aria-label="dropdown role">
-              <DropdownMenu.Item onClick={() => onDeleteRole(row.original.id)}>
-                <Text cursor="pointer">Delete</Text>
-              </DropdownMenu.Item>
-            </DropdownMenu>
-          </DropdownMenu.Provider>
-        )}
-      </Flex>
-    ),
-    enableSorting: false,
-  },
-];
-
 const RolesList = ({
   render,
   setRender,
@@ -87,6 +43,11 @@ const RolesList = ({
   const [currentContent, setCurrentContent] = useState<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [sort, _setSort] = useState('');
+  const { hasAllPermissions } = usePermission();
+  const canDeleteRole = hasAllPermissions([
+    { router: 'role', action: 'show' },
+    { router: 'role', action: 'delete' },
+  ]);
 
   const mobileMenuDrawer = useDrawer();
 
@@ -130,6 +91,53 @@ const RolesList = ({
     const content = contents.find((x) => x.id === id);
     setCurrentContent(content);
   };
+
+  const columns = ({ openDrawer, onDeleteRole }: any) => [
+    {
+      id: 'content.name',
+      header: 'ROLE NAME',
+      accessorKey: 'content.name',
+      isPlaceholder: true,
+      cell: ({ row }: any) => (
+        <Text onClick={() => openDrawer(row.original.id)}>
+          {row.original.name}
+        </Text>
+      ),
+      width: '100%',
+      enableSorting: false,
+    },
+    {
+      id: 'content.user_count',
+      header: 'USER',
+      accessorKey: 'content.user_count',
+      isPlaceholder: true,
+      cell: ({ row }: any) => <Text>{row.original.user_count}</Text>,
+      enableSorting: false,
+    },
+    {
+      id: 'editor',
+      header: '',
+      cell: ({ row }: any) => (
+        <Flex justify="right">
+          {row.original?.name !== 'superadmin' && canDeleteRole && (
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <ThreeDotIcon />
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu aria-label="dropdown role">
+                <DropdownMenu.Item
+                  onClick={() => onDeleteRole(row.original.id)}>
+                  <Text cursor="pointer">Delete</Text>
+                </DropdownMenu.Item>
+              </DropdownMenu>
+            </DropdownMenu.Provider>
+          )}
+        </Flex>
+      ),
+      enableSorting: false,
+    },
+  ];
 
   return (
     <Flex w="100%">

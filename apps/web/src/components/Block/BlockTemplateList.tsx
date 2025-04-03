@@ -10,6 +10,7 @@ import PageHeader from 'common/PageHeader';
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface IField {
   id: string;
@@ -28,6 +29,17 @@ const BlockTemplateListFrame: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [render, setRender] = useState(false);
   const [deleteBlock, setDeleteBlock] = useState<number | null>(null);
+  const { hasAllPermissions, hasPermission } = usePermission();
+
+  const canDeleteBlock = hasAllPermissions([
+    { router: 'block_template', action: 'show' },
+    { router: 'block_template', action: 'delete' },
+  ]);
+
+  const canEditBlock = hasAllPermissions([
+    { router: 'block_template', action: 'show' },
+    { router: 'block_template', action: 'manage' },
+  ]);
 
   const router = useRouter();
 
@@ -108,17 +120,21 @@ const BlockTemplateListFrame: FC = () => {
                 <ThreeDotIcon />
               </DropdownMenu.Trigger>
               <DropdownMenu aria-label="dropdown role">
-                <DropdownMenu.Item>
-                  <NavLink href={`/blocks/edit/${row?.original?.id}`}>
-                    <Text>Edit</Text>
-                  </NavLink>
-                </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  onClick={() => {
-                    setDeleteBlock(row.index);
-                  }}>
-                  <Text>Delete</Text>
-                </DropdownMenu.Item>
+                {canEditBlock && (
+                  <DropdownMenu.Item>
+                    <NavLink href={`/blocks/edit/${row?.original?.id}`}>
+                      <Text>Edit</Text>
+                    </NavLink>
+                  </DropdownMenu.Item>
+                )}
+                {canDeleteBlock && (
+                  <DropdownMenu.Item
+                    onClick={() => {
+                      setDeleteBlock(row.index);
+                    }}>
+                    <Text>Delete</Text>
+                  </DropdownMenu.Item>
+                )}
                 <Modal
                   ariaLabel="Delete Variant"
                   open={deleteBlock === row.index}
@@ -126,7 +142,7 @@ const BlockTemplateListFrame: FC = () => {
                   {
                     <ConfirmDelete
                       title="Delete Variant"
-                      text={`Are you sure you want to delete ‘${row?.original?.title}’?`}
+                      text={`Are you sure you want to deletes ‘${row?.original?.title}’?`}
                       setOpen={setDeleteBlock}
                       onConfirmDelete={async () => {
                         blockDelete(row.original.id);
@@ -147,9 +163,11 @@ const BlockTemplateListFrame: FC = () => {
   return (
     <>
       <PageHeader title="Blocks" desc="Re-usable Content blocks">
-        <Button onClick={() => Router.push(`/blocks/new`)} variant="tertiary">
-          + New Block
-        </Button>
+        {hasPermission('block_template', 'manage') && (
+          <Button onClick={() => Router.push(`/blocks/new`)} variant="tertiary">
+            + New Block
+          </Button>
+        )}
       </PageHeader>
       <Box p="lg" minHeight="100%" bg="background-secondary">
         <Table

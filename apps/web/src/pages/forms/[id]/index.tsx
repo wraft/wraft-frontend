@@ -14,6 +14,7 @@ import FieldText from 'common/FieldText';
 import Field from 'common/Field';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI as _postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const {
@@ -28,6 +29,7 @@ const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isView, setIsView] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
   const cId: string = router.query.id as string;
@@ -90,26 +92,28 @@ const Index: FC = () => {
         <PageHeader
           title={`${formdata?.name || 'name loading...'}`}
           desc={`${formdata?.description || 'detatils loading...'}`}>
-          <Flex alignItems="center" gap="8px" pr={4}>
-            <Button
-              variant="secondary"
-              onClick={() => setIsView((prev) => !prev)}>
-              {isView ? 'Edit' : 'Preview'}
-            </Button>
-            <Box>
-              <Button variant="secondary">
-                <a
-                  href={`/forms/entry/new/${cId}`}
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  Share
-                </a>
+          {hasPermission('form', 'manage') && (
+            <Flex alignItems="center" gap="8px" pr={4}>
+              <Button
+                variant="secondary"
+                onClick={() => setIsView((prev) => !prev)}>
+                {isView ? 'Edit' : 'Preview'}
               </Button>
-            </Box>
-            <Button onClick={saveForm} loading={isSaving}>
-              Save
-            </Button>
-          </Flex>
+              <Box>
+                <Button variant="secondary">
+                  <a
+                    href={`/forms/entry/new/${cId}`}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    Share
+                  </a>
+                </Button>
+              </Box>
+              <Button onClick={saveForm} loading={isSaving}>
+                Save
+              </Button>
+            </Flex>
+          )}
         </PageHeader>
 
         <Flex flex={1} px="md" py="md" gap="md">
@@ -119,7 +123,7 @@ const Index: FC = () => {
             titles={['Questions', 'Responses']}
           />
           <Box w="100%">
-            {!isView && formStep === 0 && (
+            {!isView && formStep === 0 && hasPermission('form', 'manage') && (
               <FormsFrom
                 formdata={formdata}
                 items={items}

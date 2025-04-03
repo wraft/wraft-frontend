@@ -1,4 +1,11 @@
 import { Box } from '@wraft/ui';
+import {
+  Layout,
+  BuildingOffice,
+  IntersectSquare,
+  PaintRoller,
+  FileArrowUp,
+} from '@phosphor-icons/react';
 
 export interface menuLinksProps {
   name: string;
@@ -6,6 +13,7 @@ export interface menuLinksProps {
   icon?: any;
   role?: any;
   permissions?: string[];
+  desc?: string;
 }
 
 export const menuLinks: menuLinksProps[] = [
@@ -83,5 +91,42 @@ export const userSettingsLinks: menuLinksProps[] = [
   {
     name: 'Change Password',
     path: '/account/change-password',
+  },
+];
+
+export const workspaceMenu: menuLinksProps[] = [
+  {
+    name: 'Workspace',
+    icon: <BuildingOffice size={50} weight="thin" />,
+    path: '/manage/workspace',
+    desc: 'Manage RBAC',
+  },
+  {
+    name: 'Layouts',
+    icon: <Layout size={50} weight="thin" />,
+    path: '/manage/layouts',
+    desc: 'Manage Document Structures',
+    permissions: ['layout.show', 'layout.manage'],
+  },
+  {
+    name: 'Flows',
+    icon: <IntersectSquare size={50} weight="thin" />,
+    path: '/manage/flows',
+    desc: 'Manage Document Flows',
+    permissions: ['flow.show', 'flow.manage'],
+  },
+
+  {
+    name: 'Themes',
+    icon: <PaintRoller size={50} weight="thin" />,
+    path: '/manage/themes',
+    desc: 'Manage Themes',
+    permissions: ['theme.show', 'theme.manage'],
+  },
+  {
+    name: 'Import',
+    icon: <FileArrowUp size={50} weight="thin" />,
+    path: '/manage/import',
+    desc: 'Import Structs',
   },
 ];

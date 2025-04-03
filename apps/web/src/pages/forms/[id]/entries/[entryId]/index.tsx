@@ -3,6 +3,7 @@ import Head from 'next/head';
 
 import FormEntryDetails from 'components/Form/FormEntryDetails';
 import Page from 'common/PageFrame';
+import { authorizeRoute } from 'middleware/authorize';
 
 const Index: FC = () => {
   return (
@@ -18,4 +19,5 @@ const Index: FC = () => {
   );
 };
 
-export default Index;
+const BlockEditPage = authorizeRoute(Index, 'form_entry', 'manage');
+export default BlockEditPage;

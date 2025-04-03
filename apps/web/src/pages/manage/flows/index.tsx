@@ -9,11 +9,13 @@ import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [rerender, setRerender] = React.useState(false);
   const drawer = useDrawer();
+  const { hasPermission } = usePermission();
 
   return (
     <>
@@ -29,9 +31,11 @@ const Index: FC = () => {
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Flows' }]}
             />
           }>
-          <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-            Add Flow
-          </Button>
+          {hasPermission('flow', 'manage') && (
+            <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+              Add Flow
+            </Button>
+          )}
         </PageHeader>
         <Drawer
           open={isOpen}
