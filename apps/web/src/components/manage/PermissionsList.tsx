@@ -23,7 +23,6 @@ const PermissionsList = () => {
   const [permissions, setPermissions] = useState<any>([]);
   const [isLoading, setLoading] = useState<boolean>(true);
   const render = React.useRef<any>();
-
   useEffect(() => {
     Promise.all([fetchAPI('permissions'), fetchAPI('roles')])
       .then(([permissionsData, rolesData]) => {
@@ -37,7 +36,11 @@ const PermissionsList = () => {
   }, []);
 
   const reStructurePermission = (permissionList: any, roleData: any) => {
-    const data = Object.entries(permissionList).map(([key, value], index) => ({
+    const sortedPermissionEntries = Object.entries(permissionList).sort(
+      (a, b) => a[0].localeCompare(b[0]),
+    );
+
+    const data = sortedPermissionEntries.map(([key, value], index) => ({
       id: index,
       name: key,
       children: value,

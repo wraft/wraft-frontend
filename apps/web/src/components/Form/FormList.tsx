@@ -17,6 +17,7 @@ import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { NextLinkText } from 'common/NavLink';
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface Theme {
   total_pages: number;
@@ -51,7 +52,12 @@ const FormList = ({ rerender, setRerender }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<number | null>(null);
+  const { hasAllPermissions } = usePermission();
 
+  const canDeleteForm = hasAllPermissions([
+    { router: 'form', action: 'show' },
+    { router: 'form', action: 'delete' },
+  ]);
   const { theme } = useThemeUI();
 
   const loadData = (pageNumber: number) => {
@@ -149,16 +155,19 @@ const FormList = ({ rerender, setRerender }: Props) => {
                   </Box>
                 </DropdownMenu.Trigger>
                 <DropdownMenu aria-label="action-dropdown">
-                  <DropdownMenu.Item
-                    onClick={() => {
-                      setIsOpen(null);
-                      setDeleteOpen(row.index);
-                    }}>
-                    Delete
-                  </DropdownMenu.Item>
+                  {canDeleteForm && (
+                    <DropdownMenu.Item
+                      onClick={() => {
+                        setIsOpen(null);
+                        setDeleteOpen(row.index);
+                      }}>
+                      Delete
+                    </DropdownMenu.Item>
+                  )}
                 </DropdownMenu>
               </DropdownMenu.Provider>
             </Flex>
+
             <Modal
               ariaLabel="Delete form"
               open={deleteOpen === row.index}

@@ -20,6 +20,7 @@ import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import FieldColor from 'common/FieldColor';
 import { ContentType } from 'utils/types';
 import { fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import Form from './VariantForm';
 
@@ -31,6 +32,7 @@ const ContentTypeViewForm = () => {
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const mobileMenuDrawer = useDrawer();
 
@@ -201,14 +203,16 @@ const ContentTypeViewForm = () => {
             </Box>
 
             <Box mt="md">
-              <Button
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpen(true);
-                }}>
-                Edit
-              </Button>
+              {hasPermission('content_type', 'manage') && (
+                <Button
+                  variant="secondary"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpen(true);
+                  }}>
+                  Edit
+                </Button>
+              )}
             </Box>
           </Box>
         </Box>

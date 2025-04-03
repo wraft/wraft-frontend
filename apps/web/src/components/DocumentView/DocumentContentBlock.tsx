@@ -19,6 +19,7 @@ import Editor from 'common/Editor';
 import styles from 'common/Tab/tab.module.css';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
+import { authorizeRoute } from 'middleware/authorize';
 
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
@@ -410,3 +411,10 @@ export const DocumentContentBlock = () => {
     </>
   );
 };
+
+const documentEditPage = authorizeRoute(
+  DocumentContentBlock,
+  'instance',
+  'manage',
+);
+export default documentEditPage;

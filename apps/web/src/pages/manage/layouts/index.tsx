@@ -9,10 +9,12 @@ import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const stateDrawer = useDrawer();
 
@@ -30,9 +32,11 @@ const Index: FC = () => {
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
             />
           }>
-          <Button variant="secondary" onClick={() => setIsOpen(true)}>
-            + Add Layout
-          </Button>
+          {hasPermission('layout', 'manage') && (
+            <Button variant="secondary" onClick={() => setIsOpen(true)}>
+              + Add Layout
+            </Button>
+          )}
         </PageHeader>
         <Drawer
           open={isOpen}

@@ -13,11 +13,13 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import { FormSchema, Form } from 'schemas/form';
 import { postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
 
@@ -59,10 +61,12 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Forms">
-          <Button variant="tertiary" onClick={onOpenDrawer}>
-            <Plus size={12} weight="bold" />
-            Create Form
-          </Button>
+          {hasPermission('form', 'manage') && (
+            <Button variant="tertiary" onClick={onOpenDrawer}>
+              <Plus size={12} weight="bold" />
+              Create Form
+            </Button>
+          )}
         </PageHeader>
         <Box p="lg" minHeight="100%" bg="background-secondary">
           <FormList rerender={rerender} setRerender={setRerender} />

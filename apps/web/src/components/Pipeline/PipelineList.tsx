@@ -7,6 +7,7 @@ import { Table } from '@wraft/ui';
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import PipelineCreateForm from './PipelineCreateForm';
 import PipelineFormEntry from './PipelineFormEntry';
@@ -50,6 +51,13 @@ const Form = () => {
 
   const mobileMenuDrawer = useDrawer();
   const formMenuDrawer = useDrawer();
+
+  const { hasPermission, hasAllPermissions } = usePermission();
+
+  const canWorkflowAndRun = hasAllPermissions([
+    { router: 'pipeline', action: 'show' },
+    { router: 'pipeline', action: 'manage' },
+  ]);
 
   const loadData = () => {
     setLoading(true);
@@ -110,40 +118,46 @@ const Form = () => {
       cell: ({ row }: any) => <Text>{row.original.inserted_at}</Text>,
       enableSorting: false,
     },
-    {
-      id: 'content.name',
-      header: 'Action',
-      accessorKey: 'content.name',
-      cell: ({ row }: any) => (
-        <Flex gap="sm">
-          <Button
-            onClick={() => router.push(`/workflow/${row.original.id}`)}
-            variant="tertiary"
-            size="sm"
-            disabled={row.original.stages_count == 0}>
-            WorkFlow
-          </Button>
-          <Button
-            onClick={() => {
-              onRunClick(row.original.source_id, row.original.id);
-            }}
-            variant="tertiary"
-            size="sm"
-            disabled={row.original.stages_count == 0}>
-            Run
-          </Button>
-        </Flex>
-      ),
-      enableSorting: false,
-    },
+    ...(canWorkflowAndRun
+      ? [
+          {
+            id: 'content.name',
+            header: 'Action',
+            accessorKey: 'content.name',
+            cell: ({ row }: any) => (
+              <Flex gap="sm">
+                <Button
+                  onClick={() => router.push(`/workflow/${row.original.id}`)}
+                  variant="tertiary"
+                  size="sm"
+                  disabled={row.original.stages_count == 0}>
+                  WorkFlow
+                </Button>
+                <Button
+                  onClick={() => {
+                    onRunClick(row.original.source_id, row.original.id);
+                  }}
+                  variant="tertiary"
+                  size="sm"
+                  disabled={row.original.stages_count == 0}>
+                  Run
+                </Button>
+              </Flex>
+            ),
+            enableSorting: false,
+          },
+        ]
+      : []),
   ];
 
   return (
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="All Pipelines">
-        <Button variant="tertiary" onClick={() => setShowSearch(true)}>
-          New Pipeline
-        </Button>
+        {hasPermission('pipeline', 'manage') && (
+          <Button variant="tertiary" onClick={() => setShowSearch(true)}>
+            New Pipeline
+          </Button>
+        )}
       </PageHeader>
 
       <Box px="lg" py="lg" w="80%">
