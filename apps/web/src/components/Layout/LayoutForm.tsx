@@ -84,6 +84,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const [isDeleteAssets, setDeleteAssets] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [layout, setLayout] = useState<LayoutContent>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     control,
@@ -232,6 +233,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
 
   const onSubmit = async (data: any) => {
     try {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append('name', data.name);
       formData.append('description', data.description);
@@ -260,6 +262,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       if (!isEdit) {
         setRerender((previous: boolean) => !previous);
       }
+      setIsLoading(false);
     } catch (error) {
       toast.error(
         `Failed to ${isEdit ? 'update' : 'create'} layout ${data.name}: ${error.message}`,
@@ -268,6 +271,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
           position: 'top-right',
         },
       );
+      setIsLoading(false);
       console.error(`Error ${isEdit ? 'updating' : 'creating'} layout:`, error);
     }
   };
@@ -442,12 +446,14 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
             Previous
           </Button>
         )}
-        {formStep < 1 ? (
-          <Button type="button" onClick={nextStep}>
-            Next
-          </Button>
-        ) : (
-          <Button type="submit" onClick={handleSubmit(onSubmit)}>
+
+        {formStep === 0 && <Button onClick={nextStep}>Next</Button>}
+        {formStep === 1 && (
+          <Button
+            type="submit"
+            variant="primary"
+            loading={isLoading}
+            onClick={() => handleSubmit(onSubmit)}>
             {isEdit ? 'Update' : 'Create'}
           </Button>
         )}
