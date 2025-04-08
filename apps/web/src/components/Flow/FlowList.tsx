@@ -17,6 +17,7 @@ import {
 import ConfirmDelete from 'common/ConfirmDelete';
 import { TimeAgo } from 'common/Atoms';
 import { deleteAPI, fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface ILayout {
   width: number;
@@ -70,6 +71,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
+  const { hasPermission } = usePermission();
 
   const loadData = (pageNumber: number) => {
     setLoading(true);
@@ -178,14 +180,16 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                 <DropdownMenu.Trigger>
                   <ThreeDotIcon />
                 </DropdownMenu.Trigger>
-                <DropdownMenu aria-label="dropdown role">
-                  <DropdownMenu.Item
-                    onClick={() => {
-                      setDeleteFlow(row.index);
-                    }}>
-                    Delete
-                  </DropdownMenu.Item>
-                </DropdownMenu>
+                {hasPermission('flow', 'delete') && (
+                  <DropdownMenu aria-label="dropdown role">
+                    <DropdownMenu.Item
+                      onClick={() => {
+                        setDeleteFlow(row.index);
+                      }}>
+                      Delete
+                    </DropdownMenu.Item>
+                  </DropdownMenu>
+                )}
               </DropdownMenu.Provider>
             </Flex>
             <Modal

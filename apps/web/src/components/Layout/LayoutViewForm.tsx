@@ -22,6 +22,7 @@ import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import PdfViewer from 'common/PdfViewer';
 import { fetchAPI } from 'utils/models';
 import { Asset } from 'utils/types';
+import { usePermission } from 'utils/permissions';
 
 import LayoutForm from './LayoutForm';
 
@@ -85,6 +86,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const [layout, setLayout] = useState<Layout>();
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const stateDrawer = useDrawer();
 
@@ -233,9 +235,11 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                 </Text>
               )}
               <Box mt="md">
-                <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-                  {formStep === 1 ? 'Add' : 'Edit'}
-                </Button>
+                {hasPermission('layout', 'manage') && (
+                  <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+                    {formStep === 1 ? 'Add' : 'Edit'}
+                  </Button>
+                )}
               </Box>
             </>
           )}

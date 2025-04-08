@@ -120,7 +120,6 @@ const PlanList: React.FC = () => {
         `billing/subscription/${plan.id}/change`,
         {},
       )) as ApiResponse;
-      console.log('Change Plan Response:', response);
       if (response.success) {
         await fetchSubscription();
         toast.success('Plan changed successfully.', {

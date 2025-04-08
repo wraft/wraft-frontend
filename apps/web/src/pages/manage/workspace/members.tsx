@@ -12,6 +12,7 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,8 @@ const Index: FC = () => {
 
   const { userProfile } = useAuth();
   const currentOrg = userProfile?.currentOrganisation?.name;
+
+  const { hasPermission } = usePermission();
 
   return (
     (currentOrg !== 'Personal' || '') && (
@@ -38,10 +41,12 @@ const Index: FC = () => {
                 ]}
               />
             }>
-            <Button variant="primary" onClick={() => setIsOpen(true)}>
-              <UserPlus size={16} />
-              Invite people
-            </Button>
+            {hasPermission('members', 'manage') && (
+              <Button variant="primary" onClick={() => setIsOpen(true)}>
+                <UserPlus size={16} />
+                Invite people
+              </Button>
+            )}
           </PageHeader>
           <Drawer
             open={isOpen}

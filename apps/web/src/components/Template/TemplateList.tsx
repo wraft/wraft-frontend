@@ -11,8 +11,9 @@ import { TimeAgo } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
+import { usePermission } from 'utils/permissions';
 
-const columns = ({ onCloneTemplete }: any) => [
+const columns = ({ onCloneTemplete, hasPermission }: any) => [
   {
     id: 'title',
     header: 'Name',
@@ -78,16 +79,18 @@ const columns = ({ onCloneTemplete }: any) => [
           <DropdownMenu.Trigger>
             <ThreeDotIcon />
           </DropdownMenu.Trigger>
-          <DropdownMenu aria-label="dropdown role">
-            <DropdownMenu.Item>
-              <NavLink href={`/templates/edit/${row?.original?.id}`}>
-                Edit
-              </NavLink>
-            </DropdownMenu.Item>
-            <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
-              Clone
-            </DropdownMenu.Item>
-          </DropdownMenu>
+          {hasPermission('template', 'manage') && (
+            <DropdownMenu aria-label="dropdown role">
+              <DropdownMenu.Item>
+                <NavLink href={`/templates/edit/${row?.original?.id}`}>
+                  Edit
+                </NavLink>
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
+                Clone
+              </DropdownMenu.Item>
+            </DropdownMenu>
+          )}
         </DropdownMenu.Provider>
       </Flex>
     ),
@@ -101,6 +104,7 @@ const TemplateList = () => {
   const [pageMeta, setPageMeta] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
+  const { hasPermission } = usePermission();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -166,19 +170,21 @@ const TemplateList = () => {
   return (
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Templates" desc="Content Templates for Variants">
-        <Button
-          onClick={() => router.push(`/templates/new`)}
-          variant="tertiary">
-          <Plus size={12} weight="bold" />
-          New Template
-        </Button>
+        {hasPermission('template', 'manage') && (
+          <Button
+            onClick={() => router.push(`/templates/new`)}
+            variant="tertiary">
+            <Plus size={12} weight="bold" />
+            New Template
+          </Button>
+        )}
       </PageHeader>
       <Box p="lg">
         <Box mx={0} mb={3}>
           <Table
             data={templates}
             isLoading={isLoading}
-            columns={columns({ onCloneTemplete })}
+            columns={columns({ onCloneTemplete, hasPermission })}
             skeletonRows={10}
             emptyMessage="No template has been created yet."
           />

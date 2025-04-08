@@ -16,6 +16,7 @@ import { ThreeDotIcon } from '@wraft/icon';
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import LayoutForm from './LayoutForm';
 
@@ -52,6 +53,7 @@ const LayoutList = ({ rerender }: Props) => {
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
   const [loading, setIslLoading] = useState<number | boolean>(false);
+  const { hasPermission } = usePermission();
 
   const stateDrawer = useDrawer();
 
@@ -167,15 +169,18 @@ const LayoutList = ({ rerender }: Props) => {
               <DropdownMenu.Trigger>
                 <ThreeDotIcon />
               </DropdownMenu.Trigger>
-              <DropdownMenu aria-label="dropdown role">
-                <DropdownMenu.Item
-                  onClick={() => {
-                    setDeleteLayout(row.index);
-                  }}>
-                  Delete
-                </DropdownMenu.Item>
-              </DropdownMenu>
+              {hasPermission('layout', 'delete') && (
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item
+                    onClick={() => {
+                      setDeleteLayout(row.index);
+                    }}>
+                    Delete
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              )}
             </DropdownMenu.Provider>
+
             <Modal
               ariaLabel="Delete Layout"
               open={deleteLayout === row.index}

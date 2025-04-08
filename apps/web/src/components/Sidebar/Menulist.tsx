@@ -12,7 +12,7 @@ import {
 
 const defaultIcon = 18;
 
-const Menulist = [
+export const Menulist = [
   {
     section: 'content',
     menus: [
@@ -35,11 +35,13 @@ const Menulist = [
         name: 'Pipelines',
         icon: <GitBranch size={defaultIcon} />,
         path: '/pipelines',
+        permissions: ['pipeline.show', 'pipeline.manage'],
       },
       {
         name: 'Templates',
         icon: <Article size={defaultIcon} />,
         path: '/templates',
+        permissions: ['template.show', 'template.manage'],
       },
     ],
   },
@@ -50,16 +52,19 @@ const Menulist = [
         name: 'Variants',
         icon: <Blueprint size={defaultIcon} />,
         path: '/variants',
+        permissions: ['variant.show', 'variant.manage'],
       },
       {
         name: 'Forms',
         icon: <Table size={defaultIcon} />,
         path: '/forms',
+        permissions: ['form.show', 'form.manage'],
       },
       {
         name: 'Blocks',
         icon: <TextColumns size={defaultIcon} />,
         path: '/blocks',
+        permissions: ['block_template.show', 'block_template.manage'],
       },
       {
         name: 'Manage',
@@ -69,5 +74,3 @@ const Menulist = [
     ],
   },
 ];
-
-export default Menulist;

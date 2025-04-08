@@ -8,6 +8,7 @@ import { TimeAgo } from 'components/common/Atoms';
 import { StateBadge as _StateBadge } from 'components/common/Atoms';
 import { NextLinkText } from 'common/NavLink';
 import { fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface FormResponseMeta {
   total_pages: number;
@@ -32,6 +33,7 @@ const FormResponseList: React.FC = () => {
   const [_deleteEntryIndex, setDeleteEntryIndex] = useState<number | null>(
     null,
   );
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
   const formId: string = router.query.id as string;
@@ -119,16 +121,19 @@ const FormResponseList: React.FC = () => {
       cell: ({ row }: any) => (
         <Flex justifyContent="space-between">
           <Box />
-          <DropdownMenu.Provider>
-            <DropdownMenu.Trigger>
-              <ThreeDotIcon />
-            </DropdownMenu.Trigger>
-            <DropdownMenu aria-label="Entry actions">
-              <DropdownMenu.Item onClick={() => handleDeleteClick(row.index)}>
-                <Text>Delete</Text>
-              </DropdownMenu.Item>
-            </DropdownMenu>
-          </DropdownMenu.Provider>
+
+          {hasPermission('form_entry', 'delete') && (
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <ThreeDotIcon />
+              </DropdownMenu.Trigger>
+              <DropdownMenu aria-label="Entry actions">
+                <DropdownMenu.Item onClick={() => handleDeleteClick(row.index)}>
+                  <Text>Delete</Text>
+                </DropdownMenu.Item>
+              </DropdownMenu>
+            </DropdownMenu.Provider>
+          )}
         </Flex>
       ),
     },

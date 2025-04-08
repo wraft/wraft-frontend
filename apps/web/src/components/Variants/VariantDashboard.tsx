@@ -17,6 +17,7 @@ import { ThreeDotIcon } from '@wraft/icon';
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface ILayout {
   width: number;
@@ -53,6 +54,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [pageMeta, setPageMeta] = useState<any>();
+  const { hasPermission } = usePermission();
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
@@ -138,7 +140,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       theme_id: originalData.theme.id,
     };
 
-    postAPI('content_types', convertedData)
+    postAPI('variant', convertedData)
       .then((content: any) => {
         router.push(`/variants/${content.id}`);
         toast.success('Created Successfully', {
@@ -246,18 +248,21 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                 </Box>
               </DropdownMenu.Trigger>
               <DropdownMenu aria-label="dropdown role">
-                <DropdownMenu.Item onClick={() => onCloneContentType(row)}>
-                  Clone
-                </DropdownMenu.Item>
-
-                <DropdownMenu.Item
-                  onClick={() => {
-                    setDeleteVariant(row.index);
-                  }}>
-                  <Text cursor="pointer" color="red.600">
-                    Delete
-                  </Text>
-                </DropdownMenu.Item>
+                {hasPermission('variant', 'manage') && (
+                  <DropdownMenu.Item onClick={() => onCloneContentType(row)}>
+                    Clone
+                  </DropdownMenu.Item>
+                )}
+                {hasPermission('variant', 'delete') && (
+                  <DropdownMenu.Item
+                    onClick={() => {
+                      setDeleteVariant(row.index);
+                    }}>
+                    <Text cursor="pointer" color="red.600">
+                      Delete
+                    </Text>
+                  </DropdownMenu.Item>
+                )}
               </DropdownMenu>
               <Modal
                 ariaLabel="Delete Variant"

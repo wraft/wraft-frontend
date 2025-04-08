@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import PageHeader from 'common/PageHeader';
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import { deleteAPI, fetchAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import PipelineSteps from './PipelineSteps';
 import PipelineLogs from './PipelineLogs';
@@ -30,6 +31,7 @@ const PipelineView = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
 
@@ -91,13 +93,15 @@ const PipelineView = () => {
       <PageHeader title={pipelineData.name}>
         <Flex marginTop="auto" justify="space-between">
           <Flex>
-            <Button
-              variant="secondary"
-              onClick={() => onRunClick(pipelineData?.source_id)}
-              type="button"
-              disabled={pipelineData.stages?.length == 0}>
-              Run
-            </Button>
+            {hasPermission('pipeline', 'manage') && (
+              <Button
+                variant="secondary"
+                onClick={() => onRunClick(pipelineData?.source_id)}
+                type="button"
+                disabled={pipelineData.stages?.length == 0}>
+                Run
+              </Button>
+            )}
             {/* <Button ml={2} variant="buttonPrimary" type="button">
               Save
             </Button> */}
@@ -132,9 +136,11 @@ const PipelineView = () => {
 
             <Box alignSelf="flex-end" mt="sm">
               <Box marginTop={2}>
-                <Button danger onClick={onConfirm}>
-                  Delete Pipeline
-                </Button>
+                {hasPermission('pipeline', 'delete') && (
+                  <Button danger onClick={onConfirm}>
+                    Delete Pipeline
+                  </Button>
+                )}
               </Box>
             </Box>
           </Flex>

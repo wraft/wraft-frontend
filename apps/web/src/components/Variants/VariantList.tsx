@@ -3,6 +3,7 @@ import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
+import { usePermission } from 'utils/permissions';
 
 import VariantForm from './VariantForm';
 import VariantDashboard from './VariantDashboard';
@@ -35,14 +36,17 @@ const VariantList = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [rerender, setRerender] = useState<boolean>(false);
   const mobileMenuDrawer = useDrawer();
+  const { hasPermission } = usePermission();
 
   return (
     <>
       <PageHeader title="Variants" desc="Manage Variants">
-        <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-          <Plus size={12} weight="bold" />
-          Create Variant
-        </Button>
+        {hasPermission('variant', 'manage') && (
+          <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+            <Plus size={12} weight="bold" />
+            Create Variant
+          </Button>
+        )}
       </PageHeader>
 
       <VariantDashboard rerender={rerender} setRerender={setRerender} />

@@ -18,10 +18,10 @@ export const getCheckboxes = (theme: any): ThemeCheckboxes => {
       borderRadius: radii.sm,
     },
     disabled: {
-      borderColor: colors["gray"]["400"],
+      borderColor: colors["gray"]["600"],
     },
     checked: {
-      color: "white",
+      color: "#fff",
       backgroundColor: "primary",
       borderColor: colors["green"]["400"],
     },

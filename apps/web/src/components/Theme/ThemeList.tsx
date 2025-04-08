@@ -7,6 +7,7 @@ import { Table } from '@wraft/ui';
 import ConfirmDelete from 'common/ConfirmDelete';
 import Link from 'common/NavLink';
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface Theme {
   total_pages: number;
@@ -32,6 +33,7 @@ const ThemeList = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   useEffect(() => {
     loadData();
@@ -125,11 +127,13 @@ const ThemeList = ({ rerender }: Props) => {
               <DropdownMenu.Trigger>
                 <ThreeDotIcon />
               </DropdownMenu.Trigger>
-              <DropdownMenu aria-label="dropdown role">
-                <DropdownMenu.Item onClick={() => setDeleteTheme(row.index)}>
-                  Delete
-                </DropdownMenu.Item>
-              </DropdownMenu>
+              {hasPermission('theme', 'delete') && (
+                <DropdownMenu aria-label="dropdown role">
+                  <DropdownMenu.Item onClick={() => setDeleteTheme(row.index)}>
+                    Delete
+                  </DropdownMenu.Item>
+                </DropdownMenu>
+              )}
             </DropdownMenu.Provider>
             <Modal
               ariaLabel="delete theme"

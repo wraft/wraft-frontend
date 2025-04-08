@@ -12,6 +12,7 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
+import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const Index: FC = () => {
 
   const { userProfile } = useAuth();
   const roleDrawer = useDrawer();
+  const { hasPermission } = usePermission();
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
@@ -41,29 +43,33 @@ const Index: FC = () => {
               />
             }>
             <Flex alignItems="center" gap="md">
-              <Box w="340px" display="block">
-                <InputText
-                  icon={
-                    filterLoading ? (
-                      <Spinner width={14} />
-                    ) : (
-                      <SearchIcon className="searchIcon" />
-                    )
-                  }
-                  iconPlacement="right"
-                  placeholder="Search by role names"
-                  width="100%"
-                  onChange={(e: any) => {
-                    setFilterLoading(true);
-                    setTimeout(() => setSearchTerm(e.target.value), 1000);
-                  }}
-                />
-              </Box>
+              {hasPermission('role', 'manage') && (
+                <Box w="340px" display="block">
+                  <InputText
+                    icon={
+                      filterLoading ? (
+                        <Spinner width={14} />
+                      ) : (
+                        <SearchIcon className="searchIcon" />
+                      )
+                    }
+                    iconPlacement="right"
+                    placeholder="Search by role names"
+                    width="100%"
+                    onChange={(e: any) => {
+                      setFilterLoading(true);
+                      setTimeout(() => setSearchTerm(e.target.value), 1000);
+                    }}
+                  />
+                </Box>
+              )}
 
-              <Button variant="primary" onClick={() => setIsOpen(true)}>
-                <Plus size={14} weight="bold" />
-                Create Role
-              </Button>
+              {hasPermission('role', 'manage') && (
+                <Button variant="primary" onClick={() => setIsOpen(true)}>
+                  <Plus size={14} weight="bold" />
+                  Create Role
+                </Button>
+              )}
             </Flex>
           </PageHeader>
 

@@ -17,6 +17,7 @@ import { Pencil, Trash } from '@phosphor-icons/react';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
 import { sanitizeId, validateResponse } from 'utils/security';
+import { usePermission } from 'utils/permissions';
 
 import PipelineStageForm from './PipelineStageForm';
 
@@ -66,24 +67,14 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
   const [selectedStageTemplateId, setSelectedStageTemplateId] =
     useState<string>('');
   const [selectedStageId, setSelectedStageId] = useState<string>('');
-  const [hasPermission, setHasPermission] = useState<boolean>(true);
 
   const stageFormDrawer = useDrawer();
   const router = useRouter();
   const pipelineId = router.query.id as string;
-
-  const checkUserPermissions = async (): Promise<boolean> => {
-    try {
-      const hasAccess = true;
-      return hasAccess;
-    } catch (error) {
-      console.error('Error checking permissions:', error);
-      return false;
-    }
-  };
+  const { hasPermission } = usePermission();
 
   const fetchPipelineDetails = async (): Promise<void> => {
-    if (!pipelineId || !hasPermission) return;
+    if (!pipelineId) return;
 
     const sanitizedId = sanitizeId(pipelineId);
     if (!sanitizedId) {
@@ -133,7 +124,7 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
   };
 
   const handleAddStage = (): void => {
-    if (!hasPermission) {
+    if (!hasPermission('pipeline', 'manage')) {
       toast.error('You do not have permission to add stages', {
         duration: 3000,
       });
@@ -147,7 +138,7 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
   };
 
   const handleDeleteStage = async (stageId: string): Promise<void> => {
-    if (!hasPermission) {
+    if (!hasPermission('pipeline', 'manage')) {
       toast.error('You do not have permission to delete stages', {
         duration: 3000,
       });
@@ -175,23 +166,10 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
       toast.error('Failed to delete stage');
     }
   };
-
   useEffect(() => {
-    const initializeComponent = async () => {
-      const userHasPermission = await checkUserPermissions();
-      setHasPermission(userHasPermission);
-
-      if (userHasPermission && pipelineId) {
-        fetchPipelineDetails();
-      } else if (!userHasPermission) {
-        toast.error('You do not have permission to view this pipeline', {
-          duration: 3000,
-        });
-        router.push('/pipelines');
-      }
-    };
-
-    initializeComponent();
+    if (pipelineId) {
+      fetchPipelineDetails();
+    }
   }, [pipelineId, rerender]);
 
   const tableColumns: TableColumn[] = [
@@ -226,9 +204,10 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
       },
       enableSorting: false,
     },
+
     {
       id: 'actions',
-      cell: ({ row }) => (
+      cell: ({ row }: any) => (
         <Flex key={row.index} justify="flex-end">
           <Flex align="center" gap={1}>
             <Button
@@ -239,38 +218,25 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
                   row.original.data_template?.title || '',
                   row.original.data_template?.id || '',
                 )
-              }
-              disabled={!hasPermission}>
-              <Pencil size={18} />
+              }>
+              {hasPermission('pipeline', 'manage') && <Pencil size={18} />}
             </Button>
-            <Trash
-              size={20}
-              cursor={hasPermission ? 'pointer' : 'not-allowed'}
-              onClick={() => {
-                if (hasPermission) {
+            {hasPermission('pipeline', 'delete') && (
+              <Trash
+                size={20}
+                cursor="pointer"
+                onClick={() => {
                   setSelectedStageId(row.original.id);
                   setIsDeleteModalOpen(true);
-                } else {
-                  toast.error('You do not have permission to delete stages', {
-                    duration: 3000,
-                  });
-                }
-              }}
-            />
+                }}
+              />
+            )}
           </Flex>
         </Flex>
       ),
       enableSorting: false,
     },
   ];
-
-  if (!hasPermission) {
-    return (
-      <Box p={4}>
-        <Text>You do not have permission to view this pipeline.</Text>
-      </Box>
-    );
-  }
 
   return (
     <Box>
@@ -283,12 +249,11 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
       )}
       <Box marginTop="auto" marginBottom="4">
         <Box paddingTop={4} paddingBottom={4}>
-          <Button
-            variant="secondary"
-            onClick={handleAddStage}
-            disabled={!hasPermission}>
-            + Add pipeline step
-          </Button>
+          {hasPermission('pipeline', 'manage') && (
+            <Button variant="secondary" onClick={handleAddStage}>
+              + Add pipeline step
+            </Button>
+          )}
         </Box>
       </Box>
       <Drawer

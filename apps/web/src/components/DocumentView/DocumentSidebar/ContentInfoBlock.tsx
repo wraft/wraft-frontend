@@ -7,6 +7,7 @@ import { DotsThreeVertical } from '@phosphor-icons/react';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
+import { usePermission } from 'utils/permissions';
 
 import EmailComposer from '../EmailComposer';
 import InviteCollaborators from '../InviteCollaborators';
@@ -24,6 +25,9 @@ interface EditMenuProps {
 export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
+
+  const { hasPermission } = usePermission();
+
   /**
    * Delete content
    * @param id
@@ -37,6 +41,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
       Router.push('/documents');
     });
   };
+
   return (
     <>
       <DropdownMenu.Provider>
@@ -45,19 +50,25 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
-          {nextState && nextState.is_user_eligible && (
-            <DropdownMenu.Item
-              onClick={() => Router.push(`/documents/edit/${id}`)}>
-              {' '}
-              Edit
+          {nextState &&
+            nextState.is_user_eligible &&
+            hasPermission('document', 'manage') && (
+              <DropdownMenu.Item
+                onClick={() => Router.push(`/documents/edit/${id}`)}>
+                {' '}
+                Edit
+              </DropdownMenu.Item>
+            )}
+          {hasPermission('document', 'delete') && (
+            <DropdownMenu.Item onClick={() => setIsDelete(true)}>
+              Delete
             </DropdownMenu.Item>
           )}
-          <DropdownMenu.Item onClick={() => setIsDelete(true)}>
-            Delete
-          </DropdownMenu.Item>
-          <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
-            Send Mail
-          </DropdownMenu.Item>
+          {hasPermission('document', 'manage') && (
+            <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
+              Send Mail
+            </DropdownMenu.Item>
+          )}
         </DropdownMenu>
       </DropdownMenu.Provider>
 

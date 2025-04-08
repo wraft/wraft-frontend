@@ -9,6 +9,7 @@ import Field from 'common/Field';
 import Editor from 'common/Editor';
 import { BlockTemplates } from 'utils/types';
 import { postAPI, putAPI, fetchAPI } from 'utils/models';
+import { authorizeRoute } from 'middleware/authorize';
 
 const Form = () => {
   const [addAsset, setAddAsset] = useState<boolean>(false);
@@ -168,4 +169,4 @@ const Form = () => {
     </Box>
   );
 };
-export default Form;
+export default authorizeRoute(Form, 'block_template', 'manage');

@@ -58,12 +58,6 @@ export const Checkbox = forwardRef<"input", CheckboxProps>(
 
     // Handle checkbox change
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      console.log("Checkbox component handleChange:", {
-        checked: event.target.checked,
-        name,
-        componentChecked: checked,
-      });
-
       // Pass the event to the parent's onChange handler
       onChange && onChange(event);
     };

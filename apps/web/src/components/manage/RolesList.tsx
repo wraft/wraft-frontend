@@ -13,6 +13,7 @@ import {
 import { ThreeDotIcon } from '@wraft/icon';
 
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import RolesForm from './RolesForm';
 
@@ -30,17 +31,13 @@ interface Props {
   setFilterLoading: (e: boolean) => void;
 }
 
-const columns = ({ openDrawer, onDeleteRole }: any) => [
+const columns = ({ openDrawer, onDeleteRole, hasPermission }: any) => [
   {
     id: 'content.name',
     header: 'ROLE NAME',
     accessorKey: 'content.name',
     isPlaceholder: true,
-    cell: ({ row }: any) => (
-      <Text onClick={() => openDrawer(row.original.id)}>
-        {row.original.name}
-      </Text>
-    ),
+    cell: ({ row }: any) => <Text>{row.original.name}</Text>,
     width: '100%',
     enableSorting: false,
   },
@@ -62,11 +59,17 @@ const columns = ({ openDrawer, onDeleteRole }: any) => [
             <DropdownMenu.Trigger>
               <ThreeDotIcon />
             </DropdownMenu.Trigger>
-            <DropdownMenu aria-label="dropdown role">
-              <DropdownMenu.Item onClick={() => onDeleteRole(row.original.id)}>
-                <Text cursor="pointer">Delete</Text>
-              </DropdownMenu.Item>
-            </DropdownMenu>
+            {hasPermission('role', 'delete') && (
+              <DropdownMenu aria-label="dropdown role">
+                <DropdownMenu.Item
+                  onClick={() => onDeleteRole(row.original.id)}>
+                  <Text cursor="pointer">Delete</Text>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => openDrawer(row.original.id)}>
+                  <Text cursor="pointer">Edit</Text>
+                </DropdownMenu.Item>
+              </DropdownMenu>
+            )}
           </DropdownMenu.Provider>
         )}
       </Flex>
@@ -87,6 +90,7 @@ const RolesList = ({
   const [currentContent, setCurrentContent] = useState<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
   const [sort, _setSort] = useState('');
+  const { hasPermission } = usePermission();
 
   const mobileMenuDrawer = useDrawer();
 
@@ -136,7 +140,7 @@ const RolesList = ({
       <Table
         data={contents}
         isLoading={loading}
-        columns={columns({ openDrawer, onDeleteRole })}
+        columns={columns({ openDrawer, onDeleteRole, hasPermission })}
         skeletonRows={12}
       />
       <Drawer

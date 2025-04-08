@@ -8,10 +8,12 @@ import { Plus } from '@phosphor-icons/react';
 
 import CreateDocument from 'components/DocumentCreate';
 import DefaultMenuItem from 'common/MenuItem';
+import { useAuth } from 'contexts/AuthContext';
+import { checkSubRoutePermission } from 'utils/permissions';
 
 import SearchBlock from './SearchBlock';
 import Header from './Header';
-import Menulist from './Menulist';
+import { Menulist } from './Menulist';
 
 export interface INav {
   showFull: boolean;
@@ -21,6 +23,11 @@ const Sidebar = (props: any) => {
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const router = useRouter();
   const mobileMenuDrawer = useDrawer();
+  const { permissions } = useAuth();
+
+  const mainMenuList = permissions
+    ? checkSubRoutePermission(Menulist, permissions)
+    : Menulist;
 
   const {
     theme: { rawColors },
@@ -81,7 +88,7 @@ const Sidebar = (props: any) => {
         <Flex flex={1} direction="column">
           <SearchBlock />
 
-          {Menulist.map((m, i) => (
+          {mainMenuList.map((m: any, i: any) => (
             <Box key={i} mb="lg">
               <Text
                 as="h6"
