@@ -31,7 +31,6 @@ const MetaBlock = () => {
   const onSubmit = async (data: Record<string, any>) => {
     try {
       setSubmitting(true);
-      console.log('Submitting data:', data);
 
       const response = await apiService.put(
         `contents/${cId}/meta`,

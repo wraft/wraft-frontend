@@ -203,7 +203,7 @@ const ContentTypeViewForm = () => {
             </Box>
 
             <Box mt="md">
-              {hasPermission('content_type', 'manage') && (
+              {hasPermission('variant', 'manage') && (
                 <Button
                   variant="secondary"
                   onClick={(e) => {

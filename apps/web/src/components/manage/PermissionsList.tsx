@@ -2,13 +2,11 @@
 
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import _ from 'lodash';
-import toast from 'react-hot-toast';
 import { DownIcon } from '@wraft/icon';
-import { Table, Box, Flex, Text } from '@wraft/ui';
+import { Table, Box, Flex, Text, Checkbox } from '@wraft/ui';
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 
-import Checkbox from 'common/Checkbox';
 import { putAPI, fetchAPI } from 'utils/models';
 
 const IconWrapper = styled(Flex)<{ isExpanded: boolean }>`
@@ -99,12 +97,7 @@ const PermissionsList = () => {
         name: role.name,
         permissions: permissionsList,
       };
-      putAPI(`roles/${role.id}`, body).then(() => {
-        toast.success('Updated Permissions', {
-          duration: 1000,
-          position: 'top-right',
-        });
-      });
+      putAPI(`roles/${role.id}`, body);
     },
     [checkedValuesFunc],
   );
@@ -179,7 +172,7 @@ const PermissionsList = () => {
                 onChange: (e: any) => onChangeParent(e, role, row.index),
                 disabled: role.name === 'superadmin',
               }}
-              variant={row.getCanExpand() ? 'dark' : 'white'}
+              size="sm"
             />
           ) : (
             <Checkbox
@@ -190,7 +183,7 @@ const PermissionsList = () => {
               onChange={(e: any) =>
                 onChangeChild(e, role, row.index, row.parentId)
               }
-              variant="white"
+              size="sm"
             />
           )}
         </Box>
@@ -212,7 +205,7 @@ const PermissionsList = () => {
                 onClick: row.getToggleExpandedHandler(),
                 style: { cursor: 'pointer', width: '100%' },
               }}>
-              <Flex sx={{ gap: '8px' }}>
+              <Flex gap="sm">
                 <Text color="text-primary">{getValue()}</Text>
                 <IconWrapper isExpanded={row.getIsExpanded()}>
                   <DownIcon width={14} />
@@ -220,15 +213,9 @@ const PermissionsList = () => {
               </Flex>
             </Box>
           ) : (
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                px: 3,
-                py: 2,
-              }}>
+            <Flex alignItems="center" px="sm" py="sm">
               <Text color="text-primary">{getValue()}</Text>
-            </Box>
+            </Flex>
           )}
         </Box>
       ),

@@ -41,7 +41,7 @@ export const Menulist = [
         name: 'Templates',
         icon: <Article size={defaultIcon} />,
         path: '/templates',
-        permissions: ['data_template.show', 'data_template.manage'],
+        permissions: ['template.show', 'template.manage'],
       },
     ],
   },
@@ -52,7 +52,7 @@ export const Menulist = [
         name: 'Variants',
         icon: <Blueprint size={defaultIcon} />,
         path: '/variants',
-        permissions: ['content_type.show', 'content_type.manage'],
+        permissions: ['variant.show', 'variant.manage'],
       },
       {
         name: 'Forms',

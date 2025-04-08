@@ -132,7 +132,7 @@ const BlockTemplateListFrame: FC = () => {
                   {
                     <ConfirmDelete
                       title="Delete Variant"
-                      text={`Are you sure you want to deletes ‘${row?.original?.title}’?`}
+                      text={`Are you sure you want to delete ‘${row?.original?.title}’?`}
                       setOpen={setDeleteBlock}
                       onConfirmDelete={async () => {
                         blockDelete(row.original.id);

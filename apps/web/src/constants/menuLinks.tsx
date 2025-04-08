@@ -42,20 +42,12 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
-    permissions: [
-      'organisation.update',
-      'organisation.delete',
-      'organisation.invite',
-    ],
+    permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
   },
   {
     name: 'Fields',
     path: '/manage/fields',
-    permissions: [
-      'organisation.update',
-      'organisation.delete',
-      'organisation.invite',
-    ],
+    permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
   },
 ];
 
@@ -63,20 +55,12 @@ export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
-    permissions: [
-      'organisation.update',
-      'organisation.delete',
-      'organisation.invite',
-    ],
+    permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
   },
   {
     name: 'Fields',
     path: '/manage/workspace/fields',
-    permissions: [
-      'organisation.update',
-      'organisation.delete',
-      'organisation.invite',
-    ],
+    permissions: ['workspace.update', 'workspace.delete', 'workspace.invite'],
   },
   {
     name: 'Members',

@@ -37,11 +37,7 @@ const columns = ({ openDrawer, onDeleteRole, hasPermission }: any) => [
     header: 'ROLE NAME',
     accessorKey: 'content.name',
     isPlaceholder: true,
-    cell: ({ row }: any) => (
-      <Text onClick={() => openDrawer(row.original.id)}>
-        {row.original.name}
-      </Text>
-    ),
+    cell: ({ row }: any) => <Text>{row.original.name}</Text>,
     width: '100%',
     enableSorting: false,
   },
@@ -68,6 +64,9 @@ const columns = ({ openDrawer, onDeleteRole, hasPermission }: any) => [
                 <DropdownMenu.Item
                   onClick={() => onDeleteRole(row.original.id)}>
                   <Text cursor="pointer">Delete</Text>
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => openDrawer(row.original.id)}>
+                  <Text cursor="pointer">Edit</Text>
                 </DropdownMenu.Item>
               </DropdownMenu>
             )}
