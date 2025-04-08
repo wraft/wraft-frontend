@@ -22,12 +22,7 @@ const Index: FC = () => {
 
   const { userProfile } = useAuth();
   const roleDrawer = useDrawer();
-  const { hasPermission, hasAllPermissions } = usePermission();
-
-  const canSearchRole = hasAllPermissions([
-    { router: 'role', action: 'show' },
-    { router: 'role', action: 'manage' },
-  ]);
+  const { hasPermission } = usePermission();
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
@@ -48,7 +43,7 @@ const Index: FC = () => {
               />
             }>
             <Flex alignItems="center" gap="md">
-              {canSearchRole && (
+              {hasPermission('role', 'manage') && (
                 <Box w="340px" display="block">
                   <InputText
                     icon={

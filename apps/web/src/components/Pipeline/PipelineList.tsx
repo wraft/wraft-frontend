@@ -52,12 +52,7 @@ const Form = () => {
   const mobileMenuDrawer = useDrawer();
   const formMenuDrawer = useDrawer();
 
-  const { hasPermission, hasAllPermissions } = usePermission();
-
-  const canWorkflowAndRun = hasAllPermissions([
-    { router: 'pipeline', action: 'show' },
-    { router: 'pipeline', action: 'manage' },
-  ]);
+  const { hasPermission } = usePermission();
 
   const loadData = () => {
     setLoading(true);
@@ -118,7 +113,7 @@ const Form = () => {
       cell: ({ row }: any) => <Text>{row.original.inserted_at}</Text>,
       enableSorting: false,
     },
-    ...(canWorkflowAndRun
+    ...(hasPermission('pipeline', 'manage')
       ? [
           {
             id: 'content.name',

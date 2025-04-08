@@ -169,5 +169,4 @@ const Form = () => {
     </Box>
   );
 };
-const BlockEditPage = authorizeRoute(Form, 'block_template', 'manage');
-export default BlockEditPage;
+export default authorizeRoute(Form, 'block_template', 'manage');

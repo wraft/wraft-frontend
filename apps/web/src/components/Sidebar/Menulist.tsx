@@ -10,18 +10,6 @@ import {
   House,
 } from '@phosphor-icons/react';
 
-// export interface MenuItem {
-//   name: string;
-//   icon?: any;
-//   path: string;
-//   permissions?: string[];
-// }
-
-// export interface MenuSection {
-//   section: string;
-//   menus: MenuItem[];
-// }
-
 const defaultIcon = 18;
 
 export const Menulist = [

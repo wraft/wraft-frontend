@@ -53,12 +53,7 @@ const LayoutList = ({ rerender }: Props) => {
   const [deleteLayout, setDeleteLayout] = useState<number | null>(null);
   const [isEdit, setIsEdit] = useState<number | boolean>(false);
   const [loading, setIslLoading] = useState<number | boolean>(false);
-  const { hasAllPermissions } = usePermission();
-
-  const canDeleteLayout = hasAllPermissions([
-    { router: 'form', action: 'show' },
-    { router: 'form', action: 'delete' },
-  ]);
+  const { hasPermission } = usePermission();
 
   const stateDrawer = useDrawer();
 
@@ -170,11 +165,11 @@ const LayoutList = ({ rerender }: Props) => {
       cell: ({ row }: any) => {
         return (
           <Flex justifyContent="flex-end">
-            {canDeleteLayout && (
-              <DropdownMenu.Provider>
-                <DropdownMenu.Trigger>
-                  <ThreeDotIcon />
-                </DropdownMenu.Trigger>
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <ThreeDotIcon />
+              </DropdownMenu.Trigger>
+              {hasPermission('layout', 'delete') && (
                 <DropdownMenu aria-label="dropdown role">
                   <DropdownMenu.Item
                     onClick={() => {
@@ -183,8 +178,8 @@ const LayoutList = ({ rerender }: Props) => {
                     Delete
                   </DropdownMenu.Item>
                 </DropdownMenu>
-              </DropdownMenu.Provider>
-            )}
+              )}
+            </DropdownMenu.Provider>
 
             <Modal
               ariaLabel="Delete Layout"

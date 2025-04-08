@@ -33,16 +33,11 @@ const FormResponseList: React.FC = () => {
   const [_deleteEntryIndex, setDeleteEntryIndex] = useState<number | null>(
     null,
   );
-  const { hasAllPermissions } = usePermission();
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
   const formId: string = router.query.id as string;
   const initialPage: number = parseInt(router.query.page as string) || 1;
-
-  const canDeleteFormEntry = hasAllPermissions([
-    { router: 'form_entry', action: 'show' },
-    { router: 'form_entry', action: 'delete' },
-  ]);
 
   const fetchFormEntries = useCallback(
     (pageNumber: number) => {
@@ -127,7 +122,7 @@ const FormResponseList: React.FC = () => {
         <Flex justifyContent="space-between">
           <Box />
 
-          {canDeleteFormEntry && (
+          {hasPermission('form_entry', 'delete') && (
             <DropdownMenu.Provider>
               <DropdownMenu.Trigger>
                 <ThreeDotIcon />

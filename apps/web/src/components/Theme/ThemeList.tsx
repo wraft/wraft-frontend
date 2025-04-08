@@ -33,12 +33,7 @@ const ThemeList = ({ rerender }: Props) => {
   const [contents, setContents] = useState<Array<ThemeElement>>([]);
   const [deleteTheme, setDeleteTheme] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { hasAllPermissions, hasPermission } = usePermission();
-
-  const canDeleteTheme = hasAllPermissions([
-    { router: 'theme', action: 'show' },
-    { router: 'theme', action: 'delete' },
-  ]);
+  const { hasPermission } = usePermission();
 
   useEffect(() => {
     loadData();
@@ -128,18 +123,18 @@ const ThemeList = ({ rerender }: Props) => {
       cell: ({ row }: any) => {
         return (
           <Flex justify="space-between">
-            {canDeleteTheme && (
-              <DropdownMenu.Provider>
-                <DropdownMenu.Trigger>
-                  <ThreeDotIcon />
-                </DropdownMenu.Trigger>
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <ThreeDotIcon />
+              </DropdownMenu.Trigger>
+              {hasPermission('theme', 'delete') && (
                 <DropdownMenu aria-label="dropdown role">
                   <DropdownMenu.Item onClick={() => setDeleteTheme(row.index)}>
                     Delete
                   </DropdownMenu.Item>
                 </DropdownMenu>
-              </DropdownMenu.Provider>
-            )}
+              )}
+            </DropdownMenu.Provider>
             <Modal
               ariaLabel="delete theme"
               open={deleteTheme === row.index}

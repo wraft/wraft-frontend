@@ -200,7 +200,7 @@ const PdfWrapper = styled(Box)`
   }
 `;
 
-export const DocumentContentBlock = () => {
+const DocumentContentBlock = () => {
   const [isBuilding, setIsBuilding] = useState<boolean>(false);
   const {
     cId,
@@ -412,9 +412,4 @@ export const DocumentContentBlock = () => {
   );
 };
 
-const documentEditPage = authorizeRoute(
-  DocumentContentBlock,
-  'instance',
-  'manage',
-);
-export default documentEditPage;
+export default authorizeRoute(DocumentContentBlock, 'instance', 'manage');

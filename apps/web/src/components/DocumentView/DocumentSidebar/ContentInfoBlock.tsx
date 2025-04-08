@@ -50,22 +50,25 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
-          {nextState && nextState.is_user_eligible && (
-            <DropdownMenu.Item
-              onClick={() => Router.push(`/documents/edit/${id}`)}>
-              {' '}
-              Edit
-            </DropdownMenu.Item>
-          )}
+          {nextState &&
+            nextState.is_user_eligible &&
+            hasPermission('instance', 'manage') && (
+              <DropdownMenu.Item
+                onClick={() => Router.push(`/documents/edit/${id}`)}>
+                {' '}
+                Edit
+              </DropdownMenu.Item>
+            )}
           {hasPermission('instance', 'delete') && (
             <DropdownMenu.Item onClick={() => setIsDelete(true)}>
               Delete
             </DropdownMenu.Item>
           )}
-
-          <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
-            Send Mail
-          </DropdownMenu.Item>
+          {hasPermission('instance', 'manage') && (
+            <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
+              Send Mail
+            </DropdownMenu.Item>
+          )}
         </DropdownMenu>
       </DropdownMenu.Provider>
 

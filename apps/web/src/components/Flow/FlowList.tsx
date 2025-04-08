@@ -71,12 +71,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
-  const { hasAllPermissions } = usePermission();
-
-  const canDeleteFlow = hasAllPermissions([
-    { router: 'flow', action: 'show' },
-    { router: 'flow', action: 'delete' },
-  ]);
+  const { hasPermission } = usePermission();
 
   const loadData = (pageNumber: number) => {
     setLoading(true);
@@ -181,11 +176,11 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
         return (
           <>
             <Flex justify="space-between">
-              {canDeleteFlow && (
-                <DropdownMenu.Provider>
-                  <DropdownMenu.Trigger>
-                    <ThreeDotIcon />
-                  </DropdownMenu.Trigger>
+              <DropdownMenu.Provider>
+                <DropdownMenu.Trigger>
+                  <ThreeDotIcon />
+                </DropdownMenu.Trigger>
+                {hasPermission('flow', 'delete') && (
                   <DropdownMenu aria-label="dropdown role">
                     <DropdownMenu.Item
                       onClick={() => {
@@ -194,8 +189,8 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
                       Delete
                     </DropdownMenu.Item>
                   </DropdownMenu>
-                </DropdownMenu.Provider>
-              )}
+                )}
+              </DropdownMenu.Provider>
             </Flex>
             <Modal
               ariaLabel="Delete Flow"

@@ -29,17 +29,7 @@ const BlockTemplateListFrame: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [render, setRender] = useState(false);
   const [deleteBlock, setDeleteBlock] = useState<number | null>(null);
-  const { hasAllPermissions, hasPermission } = usePermission();
-
-  const canDeleteBlock = hasAllPermissions([
-    { router: 'block_template', action: 'show' },
-    { router: 'block_template', action: 'delete' },
-  ]);
-
-  const canEditBlock = hasAllPermissions([
-    { router: 'block_template', action: 'show' },
-    { router: 'block_template', action: 'manage' },
-  ]);
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
 
@@ -120,14 +110,14 @@ const BlockTemplateListFrame: FC = () => {
                 <ThreeDotIcon />
               </DropdownMenu.Trigger>
               <DropdownMenu aria-label="dropdown role">
-                {canEditBlock && (
+                {hasPermission('block_template', 'manage') && (
                   <DropdownMenu.Item>
                     <NavLink href={`/blocks/edit/${row?.original?.id}`}>
                       <Text>Edit</Text>
                     </NavLink>
                   </DropdownMenu.Item>
                 )}
-                {canDeleteBlock && (
+                {hasPermission('block_template', 'delete') && (
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteBlock(row.index);

@@ -52,12 +52,8 @@ const FormList = ({ rerender, setRerender }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<number | null>(null);
-  const { hasAllPermissions } = usePermission();
+  const { hasPermission } = usePermission();
 
-  const canDeleteForm = hasAllPermissions([
-    { router: 'form', action: 'show' },
-    { router: 'form', action: 'delete' },
-  ]);
   const { theme } = useThemeUI();
 
   const loadData = (pageNumber: number) => {
@@ -155,7 +151,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
                   </Box>
                 </DropdownMenu.Trigger>
                 <DropdownMenu aria-label="action-dropdown">
-                  {canDeleteForm && (
+                  {hasPermission('form', 'delete') && (
                     <DropdownMenu.Item
                       onClick={() => {
                         setIsOpen(null);

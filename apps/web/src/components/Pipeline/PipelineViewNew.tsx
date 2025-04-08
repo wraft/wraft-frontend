@@ -31,6 +31,7 @@ const PipelineView = () => {
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
+  const { hasPermission } = usePermission();
 
   const router = useRouter();
 
@@ -85,8 +86,6 @@ const PipelineView = () => {
     setSourceId(formId);
   };
 
-  const { hasPermission } = usePermission();
-
   const titles = ['Steps', 'Configure', 'Logs'];
 
   return (
@@ -137,7 +136,7 @@ const PipelineView = () => {
 
             <Box alignSelf="flex-end" mt="sm">
               <Box marginTop={2}>
-                {hasPermission('pipeline', 'manage') && (
+                {hasPermission('pipeline', 'delete') && (
                   <Button danger onClick={onConfirm}>
                     Delete Pipeline
                   </Button>
