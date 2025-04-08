@@ -38,10 +38,12 @@ const Index: FC = () => {
                 ]}
               />
             }>
-            <Button variant="primary" onClick={() => setIsOpen(true)}>
-              <UserPlus size={16} />
-              Invite people
-            </Button>
+            {hasPermission('members', 'manage') && (
+              <Button variant="primary" onClick={() => setIsOpen(true)}>
+                <UserPlus size={16} />
+                Invite people
+              </Button>
+            )}
           </PageHeader>
           <Drawer
             open={isOpen}

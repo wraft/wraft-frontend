@@ -7,6 +7,7 @@ import { Button, Table, Modal, DropdownMenu, Flex, Box, Text } from '@wraft/ui';
 import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 import AssignRole from './AssignRole';
 
@@ -69,6 +70,7 @@ const TeamList = () => {
   const { userProfile } = useAuth();
 
   const organisationId = userProfile?.organisation_id;
+  const { hasPermission } = usePermission();
 
   useEffect(() => {
     fetchAPI('roles').then((data: any) => {
@@ -229,20 +231,24 @@ const TeamList = () => {
                       py="xs"
                       fontSize="sm">
                       <Text>{role.roleName}</Text>
-                      <Box
-                        onClick={() =>
-                          onUnassignRole(role, row.original.members)
-                        }>
-                        <CloseIcon width={16} color="black" />
-                      </Box>
+                      {hasPermission('members', 'manage') && (
+                        <Box
+                          onClick={() =>
+                            onUnassignRole(role, row.original.members)
+                          }>
+                          <CloseIcon width={16} color="black" />
+                        </Box>
+                      )}
                     </Flex>
                   ),
                 )}
                 <Box>
                   <DropdownMenu.Provider>
-                    <DropdownMenu.Trigger>
-                      <AddIcon />
-                    </DropdownMenu.Trigger>
+                    {hasPermission('members', 'manage') && (
+                      <DropdownMenu.Trigger>
+                        <AddIcon />
+                      </DropdownMenu.Trigger>
+                    )}
                     <DropdownMenu aria-label="dropdown role">
                       <AssignRole
                         setIsAssignRole={setIsAssignRole}
@@ -288,12 +294,16 @@ const TeamList = () => {
                 <DropdownMenu.Trigger>
                   <ThreeDotIcon />
                 </DropdownMenu.Trigger>
-                <DropdownMenu aria-label="dropdown role">
-                  <DropdownMenu.Item
-                    onClick={() => onUnassignUserConfirm(row.original.members)}>
-                    <Text>Remove</Text>
-                  </DropdownMenu.Item>
-                </DropdownMenu>
+                {hasPermission('members', 'manage') && (
+                  <DropdownMenu aria-label="dropdown role">
+                    <DropdownMenu.Item
+                      onClick={() =>
+                        onUnassignUserConfirm(row.original.members)
+                      }>
+                      <Text>Remove</Text>
+                    </DropdownMenu.Item>
+                  </DropdownMenu>
+                )}
               </DropdownMenu.Provider>
             ),
             enableSorting: false,

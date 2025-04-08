@@ -41,7 +41,7 @@ const VariantList = () => {
   return (
     <>
       <PageHeader title="Variants" desc="Manage Variants">
-        {hasPermission('content_type', 'manage') && (
+        {hasPermission('variant', 'manage') && (
           <Button variant="tertiary" onClick={() => setIsOpen(true)}>
             <Plus size={12} weight="bold" />
             Create Variant

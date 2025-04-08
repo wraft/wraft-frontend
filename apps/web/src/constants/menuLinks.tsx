@@ -43,15 +43,19 @@ export const PersonalWorkspaceLinks: menuLinksProps[] = [
     name: 'General',
     path: '/manage/workspace',
     permissions: [
-      'organisation.show',
       'organisation.update',
       'organisation.delete',
+      'organisation.invite',
     ],
   },
   {
     name: 'Fields',
     path: '/manage/fields',
-    permissions: ['organisation.show', 'organisation.update'],
+    permissions: [
+      'organisation.update',
+      'organisation.delete',
+      'organisation.invite',
+    ],
   },
 ];
 
@@ -59,27 +63,35 @@ export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'General',
     path: '/manage/workspace',
-    permissions: ['organisation.show', 'organisation.manage'],
+    permissions: [
+      'organisation.update',
+      'organisation.delete',
+      'organisation.invite',
+    ],
   },
   {
     name: 'Fields',
     path: '/manage/workspace/fields',
-    permissions: ['organisation.show', 'organisation.update'],
+    permissions: [
+      'organisation.update',
+      'organisation.delete',
+      'organisation.invite',
+    ],
   },
   {
     name: 'Members',
     path: '/manage/workspace/members',
-    permissions: ['members.manage'],
+    permissions: ['members.manage', 'members.show'],
   },
   {
     name: 'Roles',
     path: '/manage/workspace/roles',
-    permissions: ['role.show', 'role.manage', 'role.assign'],
+    permissions: ['role.show', 'role.manage', 'role.delete'],
   },
   {
     name: 'Permissions',
     path: '/manage/workspace/permissions',
-    permissions: ['role_group.show', 'role_group.manage'],
+    permissions: ['role.show', 'role.manage'],
   },
 ];
 

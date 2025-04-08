@@ -52,19 +52,19 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         <DropdownMenu aria-label="Editor Option">
           {nextState &&
             nextState.is_user_eligible &&
-            hasPermission('instance', 'manage') && (
+            hasPermission('document', 'manage') && (
               <DropdownMenu.Item
                 onClick={() => Router.push(`/documents/edit/${id}`)}>
                 {' '}
                 Edit
               </DropdownMenu.Item>
             )}
-          {hasPermission('instance', 'delete') && (
+          {hasPermission('document', 'delete') && (
             <DropdownMenu.Item onClick={() => setIsDelete(true)}>
               Delete
             </DropdownMenu.Item>
           )}
-          {hasPermission('instance', 'manage') && (
+          {hasPermission('document', 'manage') && (
             <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
               Send Mail
             </DropdownMenu.Item>

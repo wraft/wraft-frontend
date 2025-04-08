@@ -79,7 +79,7 @@ const columns = ({ onCloneTemplete, hasPermission }: any) => [
           <DropdownMenu.Trigger>
             <ThreeDotIcon />
           </DropdownMenu.Trigger>
-          {hasPermission('data_template', 'manage') && (
+          {hasPermission('template', 'manage') && (
             <DropdownMenu aria-label="dropdown role">
               <DropdownMenu.Item>
                 <NavLink href={`/templates/edit/${row?.original?.id}`}>
@@ -170,7 +170,7 @@ const TemplateList = () => {
   return (
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Templates" desc="Content Templates for Variants">
-        {hasPermission('data_template', 'manage') && (
+        {hasPermission('template', 'manage') && (
           <Button
             onClick={() => router.push(`/templates/new`)}
             variant="tertiary">

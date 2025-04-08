@@ -140,7 +140,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       theme_id: originalData.theme.id,
     };
 
-    postAPI('content_types', convertedData)
+    postAPI('variant', convertedData)
       .then((content: any) => {
         router.push(`/variants/${content.id}`);
         toast.success('Created Successfully', {
@@ -248,12 +248,12 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                 </Box>
               </DropdownMenu.Trigger>
               <DropdownMenu aria-label="dropdown role">
-                {hasPermission('content_type', 'manage') && (
+                {hasPermission('variant', 'manage') && (
                   <DropdownMenu.Item onClick={() => onCloneContentType(row)}>
                     Clone
                   </DropdownMenu.Item>
                 )}
-                {hasPermission('content_type', 'delete') && (
+                {hasPermission('variant', 'delete') && (
                   <DropdownMenu.Item
                     onClick={() => {
                       setDeleteVariant(row.index);
