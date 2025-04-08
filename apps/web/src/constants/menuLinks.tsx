@@ -5,6 +5,7 @@ import {
   IntersectSquare,
   PaintRoller,
   FileArrowUp,
+  Money,
 } from '@phosphor-icons/react';
 
 export interface menuLinksProps {
@@ -21,20 +22,20 @@ export const menuLinks: menuLinksProps[] = [
     name: 'Layouts',
     icon: <Box w="20px" />,
     path: '/manage/layouts',
-    permissions: ['layouts.read', 'layouts.write'],
+    permissions: ['layout.show', 'layout.manage'],
   },
   {
     name: 'Flows',
     icon: <Box w="20px" />,
     path: '/manage/flows',
-    permissions: ['flows.read', 'flows.write'],
+    permissions: ['flow.show', 'flow.manage'],
   },
 
   {
     name: 'Themes',
     icon: <Box w="20px" />,
     path: '/manage/themes',
-    permissions: ['themes.read', 'themes.write'],
+    permissions: ['theme.show', 'theme.manage'],
   },
 ];
 
@@ -124,5 +125,12 @@ export const workspaceMenu: menuLinksProps[] = [
     icon: <FileArrowUp size={50} weight="thin" />,
     path: '/manage/import',
     desc: 'Import Structs',
+  },
+  {
+    name: 'Billing & Subscription',
+    icon: <Money size={50} weight="thin" />,
+    path: '/manage/billing',
+    desc: 'Manage Billing and Subscription',
+    permissions: ['payment.show'],
   },
 ];
