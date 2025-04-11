@@ -80,18 +80,30 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
   const fetchUserBasicInfo = async () => {
     try {
-      const [userinfo, userOrg, permissionOrg, currentSubscription]: any =
-        await Promise.all([
-          fetchAPI('users/me'),
-          fetchAPI('users/organisations'),
-          fetchAPI('organisations/users/permissions'),
-          fetchAPI('billing/subscription'),
-        ]);
+      const isSelfHost = process.env.NEXT_PUBLIC_SELF_HOST === 'true';
+
+      const basePromises = [
+        fetchAPI('users/me'),
+        fetchAPI('users/organisations'),
+        fetchAPI('organisations/users/permissions'),
+      ];
+
+      if (isSelfHost) {
+        basePromises.push(fetchAPI('billing/subscription'));
+      }
+
+      const responses: any = await Promise.all(basePromises);
+
+      const [userinfo, userOrg, permissionOrg, currentSubscription] = responses;
 
       setOrganisations(userOrg.organisations);
       setPermissions(permissionOrg.permissions);
       updateUserData(userinfo);
-      setSubscription(currentSubscription);
+
+      if (isSelfHost && currentSubscription) {
+        setSubscription(currentSubscription);
+      }
+
       setIsUserLoading(false);
     } catch {
       setIsUserLoading(false);
