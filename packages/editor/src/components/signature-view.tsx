@@ -34,8 +34,49 @@ import {
   Box,
   Text,
 } from "@wraft/ui";
-import SignatureCanvas from "react-signature-canvas";
 import type { SignatureAttrs } from "../extensions/signature";
+import { SignatureCanvas } from "./signature-canvas";
+
+const Toolbar = styled.div`
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #212121;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  width: 100%;
+`;
+
+const ToolbarButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+`;
+
+const ModalWrapper = styled(Modal)`
+  &[data-enter] {
+    border-radius: 6px;
+    padding: 0;
+    max-width: 600px;
+    width: 100%;
+  }
+`;
 
 type ExtendedSignatureCanvas = SignatureCanvas & {
   getCanvas: () => HTMLCanvasElement;
@@ -173,18 +214,18 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const attrs = node.attrs as SignatureAttrs;
   const url = attrs.src || "";
   const placeholder = attrs.placeholder;
+  const uploading = url.startsWith("blob:");
 
   const [aspectRatio, setAspectRatio] = useState<number | undefined>();
   const [error, setError] = useState<string | undefined>();
   const [progress, setProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const uploading = progress > 0 && progress < 1;
 
   const tabStore = useTab();
   const selectedTabId = tabStore.useState("selectedId");
   const [showToolbar, setShowToolbar] = useState(false);
   const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-  const sigCanvasRef = useRef<ExtendedSignatureCanvas | null>(null);
+  const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
   const [hasSignature, setHasSignature] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -234,43 +275,40 @@ export default function SignatureView(props: ReactNodeViewProps) {
   };
 
   const handleSaveSignature = () => {
-    if (!sigCanvasRef.current) return;
+    const canvas = signatureCanvasRef.current;
+    if (!canvas) return;
 
+    const tempCanvas = document.createElement("canvas");
     const targetWidth = attrs.width || 400;
     const targetHeight = attrs.height || 200;
 
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = targetWidth;
-    tempCanvas.height = targetHeight;
+    tempCanvas.width = targetWidth * 2;
+    tempCanvas.height = targetHeight * 2;
 
     const tempCtx = tempCanvas.getContext("2d");
     if (!tempCtx) return;
 
-    const signatureDataUrl = sigCanvasRef.current.toDataURL();
+    tempCtx.imageSmoothingEnabled = true;
+    tempCtx.imageSmoothingQuality = "high";
 
-    const signatureImg = document.createElement("img");
+    tempCtx.drawImage(
+      canvas,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+      0,
+      0,
+      tempCanvas.width,
+      tempCanvas.height,
+    );
 
-    signatureImg.onload = () => {
-      tempCtx.clearRect(0, 0, targetWidth, targetHeight);
+    const dataUrl = tempCanvas.toDataURL("image/png", 1.0);
 
-      tempCtx.drawImage(signatureImg, 0, 0, targetWidth, targetHeight);
-
-      const dataUrl = tempCanvas.toDataURL("image/png");
-      handleCanvasSave(dataUrl);
-    };
-
-    signatureImg.src = signatureDataUrl;
+    handleCanvasSave(dataUrl);
   };
-
   const handleCanvasCancel = () => {
     setIsModalOpen(false);
-  };
-
-  const clearSignature = () => {
-    if (sigCanvasRef.current) {
-      sigCanvasRef.current.clear();
-      setHasSignature(false);
-    }
   };
 
   useEffect(() => {
@@ -534,47 +572,14 @@ export default function SignatureView(props: ReactNodeViewProps) {
             <Box p="xl" minH="md">
               {selectedTabId === "tab-0" && (
                 <>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    gap="lg"
-                    padding="lg"
-                    background="white"
-                    borderRadius="sm"
-                    boxShadow="0 2px 10px rgba(0, 0, 0, 0.1)"
-                  >
-                    <SignatureCanvas
-                      ref={sigCanvasRef}
-                      penColor="black"
-                      velocityFilterWeight={0.7}
-                      minWidth={1.5}
-                      maxWidth={2.5}
-                      canvasProps={{
-                        width: 500,
-                        height: 200,
-                        style: {
-                          border: "1px solid #ddd",
-                          background: "white",
-                          touchAction: "none",
-                          cursor: "crosshair",
-                          display: "block",
-                          width: "500px",
-                          height: "200px",
-                        },
-                      }}
-                      onEnd={() => setHasSignature(true)}
-                    />
-                    <Flex justifyContent="space-between" mx="sm">
-                      <Button
-                        size="sm"
-                        variant="secondary"
-                        onClick={clearSignature}
-                      >
-                        Clear
-                      </Button>
-                    </Flex>
-                  </Box>
-
+                  <SignatureCanvas
+                    onSave={handleCanvasSave}
+                    onCancel={handleCanvasCancel}
+                    targetWidth={attrs.width || 400}
+                    targetHeight={attrs.height || 200}
+                    canvasRef={signatureCanvasRef}
+                    setHasSignature={setHasSignature}
+                  />
                   <Box py="xl">
                     <Text color="text-secondary">
                       Draw your signature above. You can clear and redraw if
