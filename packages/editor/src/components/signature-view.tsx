@@ -34,8 +34,12 @@ import {
   Box,
   Text,
 } from "@wraft/ui";
+import SignatureCanvas from "react-signature-canvas";
 import type { SignatureAttrs } from "../extensions/signature";
-import { SignatureCanvas } from "./signature-canvas";
+
+type ExtendedSignatureCanvas = SignatureCanvas & {
+  getCanvas: () => HTMLCanvasElement;
+};
 
 const Toolbar = styled.div`
   position: absolute;
@@ -225,7 +229,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const selectedTabId = tabStore.useState("selectedId");
   const [showToolbar, setShowToolbar] = useState(false);
   const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-  const signatureCanvasRef = useRef<HTMLCanvasElement>(null);
+  const sigCanvasRef = useRef<ExtendedSignatureCanvas | null>(null);
   const [hasSignature, setHasSignature] = useState(false);
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -275,40 +279,43 @@ export default function SignatureView(props: ReactNodeViewProps) {
   };
 
   const handleSaveSignature = () => {
-    const canvas = signatureCanvasRef.current;
-    if (!canvas) return;
+    if (!sigCanvasRef.current) return;
 
-    const tempCanvas = document.createElement("canvas");
     const targetWidth = attrs.width || 400;
     const targetHeight = attrs.height || 200;
 
-    tempCanvas.width = targetWidth * 2;
-    tempCanvas.height = targetHeight * 2;
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = targetWidth;
+    tempCanvas.height = targetHeight;
 
     const tempCtx = tempCanvas.getContext("2d");
     if (!tempCtx) return;
 
-    tempCtx.imageSmoothingEnabled = true;
-    tempCtx.imageSmoothingQuality = "high";
+    const signatureDataUrl = sigCanvasRef.current.toDataURL();
 
-    tempCtx.drawImage(
-      canvas,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-      0,
-      0,
-      tempCanvas.width,
-      tempCanvas.height,
-    );
+    const signatureImg = document.createElement("img");
 
-    const dataUrl = tempCanvas.toDataURL("image/png", 1.0);
+    signatureImg.onload = () => {
+      tempCtx.clearRect(0, 0, targetWidth, targetHeight);
 
-    handleCanvasSave(dataUrl);
+      tempCtx.drawImage(signatureImg, 0, 0, targetWidth, targetHeight);
+
+      const dataUrl = tempCanvas.toDataURL("image/png");
+      handleCanvasSave(dataUrl);
+    };
+
+    signatureImg.src = signatureDataUrl;
   };
+
   const handleCanvasCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const clearSignature = () => {
+    if (sigCanvasRef.current) {
+      sigCanvasRef.current.clear();
+      setHasSignature(false);
+    }
   };
 
   useEffect(() => {
@@ -572,14 +579,47 @@ export default function SignatureView(props: ReactNodeViewProps) {
             <Box p="xl" minH="md">
               {selectedTabId === "tab-0" && (
                 <>
-                  <SignatureCanvas
-                    onSave={handleCanvasSave}
-                    onCancel={handleCanvasCancel}
-                    targetWidth={attrs.width || 400}
-                    targetHeight={attrs.height || 200}
-                    canvasRef={signatureCanvasRef}
-                    setHasSignature={setHasSignature}
-                  />
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    gap="lg"
+                    padding="lg"
+                    background="white"
+                    borderRadius="sm"
+                    boxShadow="0 2px 10px rgba(0, 0, 0, 0.1)"
+                  >
+                    <SignatureCanvas
+                      ref={sigCanvasRef}
+                      penColor="black"
+                      velocityFilterWeight={0.7}
+                      minWidth={1.5}
+                      maxWidth={2.5}
+                      canvasProps={{
+                        width: 500,
+                        height: 200,
+                        style: {
+                          border: "1px solid #ddd",
+                          background: "white",
+                          touchAction: "none",
+                          cursor: "crosshair",
+                          display: "block",
+                          width: "500px",
+                          height: "200px",
+                        },
+                      }}
+                      onEnd={() => setHasSignature(true)}
+                    />
+                    <Flex justifyContent="space-between" mx="sm">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={clearSignature}
+                      >
+                        Clear
+                      </Button>
+                    </Flex>
+                  </Box>
+
                   <Box py="xl">
                     <Text color="text-secondary">
                       Draw your signature above. You can clear and redraw if
