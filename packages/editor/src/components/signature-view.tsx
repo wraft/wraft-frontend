@@ -147,6 +147,11 @@ const StyledResizableRoot = styled(ResizableRoot)`
   &[data-selected] {
     outline-color: blue;
   }
+
+  img {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
 `;
 
 const Image = styled.img`
@@ -155,6 +160,8 @@ const Image = styled.img`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
 `;
 
 const UploadingOverlay = styled.div`
@@ -239,6 +246,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const [file, setFile] = useState<File | null>(null);
   const [isSubmit, setIsSubmit] = useState(false);
   const [objectUrl, setObjectUrl] = useState("");
+  const componentRef = useRef<HTMLDivElement>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles && acceptedFiles.length > 0) {
@@ -300,7 +308,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
 
       tempCtx.drawImage(signatureImg, 0, 0, targetWidth, targetHeight);
 
-      const dataUrl = tempCanvas.toDataURL("image/png");
+      const dataUrl = tempCanvas.toDataURL("image/png", 1.0);
       handleCanvasSave(dataUrl);
     };
 
@@ -441,9 +449,26 @@ export default function SignatureView(props: ReactNodeViewProps) {
     }
   }, [isModalOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        componentRef.current &&
+        !componentRef.current.contains(event.target as Node)
+      ) {
+        setShowToolbar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative" }} ref={componentRef}>
         {showToolbar && (
           <Toolbar>
             <Flex align="center" onClick={handleAssignClick}>
@@ -457,10 +482,17 @@ export default function SignatureView(props: ReactNodeViewProps) {
               <ToolbarButton onClick={handleAddClick}>
                 <Plus size={24} />
               </ToolbarButton>
+
               <ToolbarButton onClick={handleDeleteClick}>
                 <Trash size={24} />
               </ToolbarButton>
-              <ToolbarButton>
+
+              <ToolbarButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
                 <FadersHorizontal size={24} />
               </ToolbarButton>
             </Flex>
@@ -559,7 +591,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
                     fontWeight="semibold"
                     color={selectedTabId === "tab-0" ? "" : "text-secondary"}
                   >
-                    Draw
+                    Upload
                   </Text>
                 </Flex>
               </Tab>
@@ -570,13 +602,14 @@ export default function SignatureView(props: ReactNodeViewProps) {
                     fontWeight="semibold"
                     color={selectedTabId === "tab-1" ? "" : "text-secondary"}
                   >
-                    File Upload
+                    Signature Upload
                   </Text>
                 </Flex>
               </Tab>
             </Tab.List>
 
             <Box p="xl" minH="md">
+              <Text mb="sm">Draw Signature</Text>
               {selectedTabId === "tab-0" && (
                 <>
                   <Box
@@ -593,7 +626,8 @@ export default function SignatureView(props: ReactNodeViewProps) {
                       penColor="black"
                       velocityFilterWeight={0.7}
                       minWidth={1.5}
-                      maxWidth={2.5}
+                      maxWidth={3}
+                      dotSize={2}
                       canvasProps={{
                         width: 500,
                         height: 200,
@@ -603,8 +637,9 @@ export default function SignatureView(props: ReactNodeViewProps) {
                           touchAction: "none",
                           cursor: "crosshair",
                           display: "block",
-                          width: "500px",
-                          height: "200px",
+                          width: "100%",
+                          height: "auto",
+                          aspectRatio: "800/300",
                         },
                       }}
                       onEnd={() => setHasSignature(true)}
@@ -692,7 +727,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
                             <Text mb="sm">
                               Drag & drop or upload signature file
                             </Text>
-                            <Text>PNG, JPG, GIF - Max file size 1MB</Text>
+                            <Text>PNG, JPG - Max file size 1MB</Text>
                           </Flex>
                         </>
                       )}
