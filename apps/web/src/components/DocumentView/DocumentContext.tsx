@@ -130,7 +130,7 @@ export const DocumentProvider = ({
   const type: string = router.query.type as string;
   const guestToken: string = router.query.token as string;
 
-  const isInvite = type === 'invite' ? true : false;
+  const isInvite = type === 'invite' || type === 'sign';
 
   useEffect(() => {
     if (mode) {
@@ -152,6 +152,13 @@ export const DocumentProvider = ({
       setUserType('guest');
       verifyInvitezUserAccess();
     }
+    if (type === 'sign' && guestToken) {
+      setUserType('guest');
+      verifyInvitezUserAccess();
+      // verifySignerAccess();
+    }
+    console.log('type', type);
+    console.log('guestToken', type);
   }, [type, guestToken]);
 
   useEffect(() => {
@@ -241,7 +248,7 @@ export const DocumentProvider = ({
       const data = await apiService.get(
         `/contents/${cId}/verify_access/${guestToken}`,
         guestToken,
-        isInvite,
+        type === 'invite',
       );
       if (data?.token) {
         setToken(data.token);

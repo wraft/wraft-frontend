@@ -35,6 +35,7 @@ import type { PageBreakExtension } from "@extensions/page-break";
 import { definePageBreak } from "@extensions/page-break";
 import ImageView from "./image-view";
 import SignatureView from "./signature-view";
+import type { SignersConfig } from "./live-editor";
 
 // import { defineImageFileHandlers } from "./upload-file";
 export interface ExtensionProps {
@@ -42,11 +43,13 @@ export interface ExtensionProps {
   doc: Y.Doc;
   awareness: Awareness;
   isReadonly: boolean;
+  signersConfig?: SignersConfig;
 }
 
 export interface DefaultExtensionProps {
   placeholder: string;
   isReadonly: boolean;
+  signersConfig?: SignersConfig;
 }
 
 export type BasicsExtension = Union<
@@ -63,6 +66,7 @@ export type BasicsExtension = Union<
 export function defineDefaultExtension({
   placeholder = "",
   isReadonly = false,
+  signersConfig,
 }: DefaultExtensionProps): BasicsExtension {
   const extensions = [
     defineBasicExtension(),
@@ -98,9 +102,10 @@ export function defineCollaborativeExtension({
   doc,
   awareness,
   isReadonly,
+  signersConfig,
 }: ExtensionProps): BasicsExtension {
   return union(
-    defineDefaultExtension({ placeholder, isReadonly }),
+    defineDefaultExtension({ placeholder, isReadonly, signersConfig }),
     defineYjs({ doc, awareness }),
   );
 }
