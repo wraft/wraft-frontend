@@ -56,13 +56,18 @@ const apiRequest = async <T = any>({
 };
 
 const buildResolvedUrl = (url: string, isGuest: boolean): string => {
-  const separator = url.includes('?') ? '&' : '?';
-  if (isGuest) {
-    return url.startsWith('/')
-      ? `/guest${url}${separator}type=guest`
-      : `/guest/${url}${separator}type=guest`;
+  const normalizedUrl = url.startsWith('/') ? url : `/${url}`;
+  const [path, query = ''] = normalizedUrl.split('?');
+  const params = new URLSearchParams(query);
+
+  if (!params.has('type') && isGuest) {
+    params.set('type', 'guest');
   }
-  return url.startsWith('/') ? url : `/${url}`;
+
+  const queryString = params.toString();
+  const fullPath = queryString ? `${path}?${queryString}` : path;
+
+  return isGuest ? `/guest${fullPath}` : fullPath;
 };
 
 /**

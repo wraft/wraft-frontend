@@ -8,6 +8,11 @@ export interface SignatureAttrs {
   width?: number | null;
   height?: number | null;
   placeholder?: boolean | null;
+  counterparty?: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
 }
 
 /**
@@ -30,6 +35,7 @@ export function defineSignatureSpec(): SignatureSpecExtension {
       width: { default: null },
       height: { default: null },
       placeholder: { default: null },
+      counterparty: { default: null },
     },
     group: "block",
     defining: true,

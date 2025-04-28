@@ -9,6 +9,7 @@ import { InfoSection } from './InfoSection';
 import { ContentInfoBlock } from './ContentInfoBlock';
 import CommentForm from './Comment/CommentForm';
 import { usePermissions } from '../usePermissions';
+import SignerBlock from './Signers';
 
 export const DocumentSidebar = () => {
   const {
@@ -69,6 +70,11 @@ export const DocumentSidebar = () => {
               Log
             </Tab>
           )}
+          {canAccess('log') && (
+            <Tab id="signers" store={tab}>
+              Signers
+            </Tab>
+          )}
         </Tab.List>
 
         <Box h="calc(100vh - 142px)" overflowY="auto">
@@ -120,6 +126,13 @@ export const DocumentSidebar = () => {
                 <Box>
                   {tabActiveId === 'log' && <ApprovalFlowHistory id={cId} />}
                 </Box>
+              </Box>
+            </Tab.Panel>
+          )}
+          {canAccess('log') && (
+            <Tab.Panel tabId="signers" store={tab}>
+              <Box mt="md" px="md">
+                {tabActiveId === 'signers' && <SignerBlock />}
               </Box>
             </Tab.Panel>
           )}
