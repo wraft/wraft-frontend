@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 import { hexColorRegex, safeTextRegex, uuidRegex } from 'utils/regex';
 
+// First, update the VariantSchema
+
 export const VariantSchema = z.object({
   name: z
     .string()
@@ -32,12 +34,38 @@ export const VariantSchema = z.object({
       message: 'Value must be either "document" or "contract"',
     }),
 
+  mappings: z
+    .array(
+      z.object({
+        variantField: z.string(),
+        frameField: z.string(),
+      }),
+    )
+    .optional(),
+
   //next
   layout: z.union([
     z.string().regex(uuidRegex, 'Layout is required'),
     z.object({
       id: z.string().regex(uuidRegex, 'Invalid ObjectId'),
       name: z.string().min(1, 'Layout is required'),
+      frame: z.union([
+        z.undefined(),
+        z.null(),
+        z.object({
+          id: z.string().regex(uuidRegex, 'Invalid Frame'),
+          name: z.string().min(1, 'Frame name is required'),
+          fields: z
+            .array(
+              z.object({
+                id: z.string().regex(uuidRegex, 'Invalid Field ID'),
+                name: z.string().min(1, 'Field name is required'),
+              }),
+            )
+            .optional()
+            .nullable(),
+        }),
+      ]),
     }),
   ]),
   flow: z.union([
@@ -83,6 +111,28 @@ export const VariantSchema = z.object({
         }
       });
     }),
+
+  frameMapping: z
+    .array(
+      z.object({
+        source: z.object({
+          id: z.string().regex(uuidRegex),
+          name: z.string(),
+        }),
+        destination: z.object({
+          id: z.string().regex(uuidRegex),
+          name: z.string(),
+        }),
+      }),
+    )
+    .optional(),
+
+  frame: z
+    .object({
+      id: z.string().regex(uuidRegex),
+      name: z.string(),
+    })
+    .optional(),
 });
 
 export type Variant = z.infer<typeof VariantSchema>;
