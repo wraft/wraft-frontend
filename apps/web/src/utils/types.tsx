@@ -77,7 +77,7 @@ export interface ContentTypeClass {
   fields: any;
   description: string;
   color: string;
-  fields_mappings?: FieldMapping[];
+  frame_mapping?: FieldMapping[];
   frame: {
     id: string;
     name: string;

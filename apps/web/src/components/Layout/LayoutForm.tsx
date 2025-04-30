@@ -355,14 +355,50 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                 </Field>
               )}
             />
+
+            <Field
+              label="Description"
+              required
+              error={errors?.description?.message}>
+              <Textarea
+                {...register('description')}
+                placeholder="Enter a description"
+              />
+            </Field>
+
+            <Controller
+              control={control}
+              name="engine"
+              render={({ field: { onChange, name, value } }) => (
+                <Field label="Engine" required error={errors?.engine?.message}>
+                  <Search
+                    itemToString={(item: any) => item && item.name}
+                    name={name}
+                    placeholder="Search and Select a Engine"
+                    minChars={0}
+                    value={value}
+                    onChange={(item: any) => {
+                      if (!item) {
+                        onChange('');
+                        return;
+                      }
+                      onChange(item);
+                    }}
+                    renderItem={(item: any) => (
+                      <Box>
+                        <Text>{item?.name}</Text>
+                      </Box>
+                    )}
+                    search={onSearchEngine}
+                  />
+                </Field>
+              )}
+            />
             <Controller
               control={control}
               name="frame"
               render={({ field: { onChange, name, value } }) => (
-                <Field
-                  label="Frame"
-                  required={false} // Change to required={true} if it should be mandatory
-                  error={errors?.frame?.message}>
+                <Field label="Frame" error={errors?.frame?.message}>
                   <Search
                     itemToString={(item: any) => item && item.name}
                     name={name}
@@ -386,89 +422,6 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                 </Field>
               )}
             />
-
-            <Field
-              label="Description"
-              required
-              error={errors?.description?.message}>
-              <Textarea
-                {...register('description')}
-                placeholder="Enter a description"
-              />
-            </Field>
-
-            <Box pb="sm" display="none">
-              {/* {layout && layout.screenshot && (
-                <div>
-                  <Image alt="" src={API_HOST + layout.screenshot} />
-                </div>
-              )} */}
-              {/* <Label htmlFor="screenshot">Screenshot</Label> */}
-              {/* <Input id="screenshot" type="file" {...register('screenshot')} /> */}
-            </Box>
-
-            <DisclosureProvider>
-              <Disclosure
-              // as={dev}
-              // sx={{
-              //   border: 'none',
-              //   bg: 'none',
-              //   cursor: 'pointer',
-              //   width: 'fit-content',
-              //   color: 'green.700',
-              //   '&[aria-expanded="true"]': {
-              //     '& svg': {
-              //       transform: 'rotate(-180deg)',
-              //       transition: 'transform 0.3s ease',
-              //     },
-              //   },
-              //   '&[aria-expanded="false"]': {
-              //     '& svg': {
-              //       transform: 'rotate(0deg)',
-              //       transition: 'transform 0.3s ease',
-              //     },
-              //   },
-              // }}
-              >
-                <Flex align="center">
-                  <Text>Advanced</Text>
-                  <ArrowDownIcon />
-                </Flex>
-              </Disclosure>
-              <DisclosureContent>
-                <Controller
-                  control={control}
-                  name="engine"
-                  render={({ field: { onChange, name, value } }) => (
-                    <Field
-                      label="Engine"
-                      required
-                      error={errors?.engine?.message}>
-                      <Search
-                        itemToString={(item: any) => item && item.name}
-                        name={name}
-                        placeholder="Search and Select a Engine"
-                        minChars={0}
-                        value={value}
-                        onChange={(item: any) => {
-                          if (!item) {
-                            onChange('');
-                            return;
-                          }
-                          onChange(item);
-                        }}
-                        renderItem={(item: any) => (
-                          <Box>
-                            <Text>{item?.name}</Text>
-                          </Box>
-                        )}
-                        search={onSearchEngine}
-                      />
-                    </Field>
-                  )}
-                />
-              </DisclosureContent>
-            </DisclosureProvider>
             <Box mt={3}>
               <Flex display="none">
                 <Field label="Width" required error={errors?.width?.message}>

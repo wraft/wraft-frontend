@@ -34,11 +34,11 @@ export const VariantSchema = z.object({
       message: 'Value must be either "document" or "contract"',
     }),
 
-  mappings: z
+  frame_mapping: z
     .array(
       z.object({
-        variantField: z.string(),
-        frameField: z.string(),
+        variantField: z.string().min(1, 'Content field is required'),
+        frameField: z.string().min(1, 'Frame field is required'),
       }),
     )
     .optional(),
@@ -58,7 +58,6 @@ export const VariantSchema = z.object({
           fields: z
             .array(
               z.object({
-                id: z.string().regex(uuidRegex, 'Invalid Field ID'),
                 name: z.string().min(1, 'Field name is required'),
               }),
             )
@@ -93,6 +92,7 @@ export const VariantSchema = z.object({
       z.object({
         type: z.string().regex(uuidRegex, 'Invalid field type'),
         name: z.string().min(1, 'Name is required'),
+        fromFrame: z.boolean().optional(),
       }),
     )
     .superRefine((fields, ctx) => {
@@ -111,21 +111,6 @@ export const VariantSchema = z.object({
         }
       });
     }),
-
-  frameMapping: z
-    .array(
-      z.object({
-        source: z.object({
-          id: z.string().regex(uuidRegex),
-          name: z.string(),
-        }),
-        destination: z.object({
-          id: z.string().regex(uuidRegex),
-          name: z.string(),
-        }),
-      }),
-    )
-    .optional(),
 
   frame: z
     .object({
