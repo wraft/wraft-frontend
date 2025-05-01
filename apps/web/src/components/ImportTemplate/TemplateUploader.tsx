@@ -66,7 +66,7 @@ const HandleTemplate = ({
   /**
    * Create Template Asset
    */
-  const createTemplateAsset = (f: File, idx: number) => {
+  const createTemplateAsset = (f: File) => {
     const formData = new FormData();
     formData.append('file', f);
     formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
@@ -97,10 +97,10 @@ const HandleTemplate = ({
     }
 
     const formData = new FormData();
-    const f: File = files[0];
+    const file: File = files[0];
     formData.append('zip_file', files[0]);
     formData.append('name', 'Bol');
-    createTemplateAsset(f, 0);
+    createTemplateAsset(file);
   };
 
   const onSubmit = async (data: FormValues) => {
@@ -115,8 +115,8 @@ const HandleTemplate = ({
     }
     const files = Array.from(data.zip_file);
 
-    files.map((f: File, index: number) => {
-      createTemplateAsset(f, index);
+    files.map((f: File) => {
+      createTemplateAsset(f);
     });
   };
 
