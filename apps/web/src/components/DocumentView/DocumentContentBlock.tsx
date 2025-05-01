@@ -16,7 +16,6 @@ import { EditorView } from 'prosemirror-view';
 
 import PdfViewer from 'common/PdfViewer';
 import Editor from 'common/Editor';
-import styles from 'common/Tab/tab.module.css';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 import { authorizeRoute } from 'middleware/authorize';

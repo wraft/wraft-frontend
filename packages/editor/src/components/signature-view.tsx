@@ -173,7 +173,6 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const attrs = node.attrs as SignatureAttrs;
   const url = attrs.src || "";
   const placeholder = attrs.placeholder;
-  const uploading = url.startsWith("blob:");
 
   const [aspectRatio, setAspectRatio] = useState<number | undefined>();
   const [error, setError] = useState<string | undefined>();

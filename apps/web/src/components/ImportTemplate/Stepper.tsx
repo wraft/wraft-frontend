@@ -46,7 +46,7 @@ const Stepper = ({ currentStep, step, onSelect }: StepSectionProps) => {
             </Text>
             <Box className="line" bg="gray.400" />
           </Box>
-          <Text fontSize="xs" lineHeight={1} mt={2} color="gray.900">
+          <Text fontSize="sm" lineHeight={1} mt="xs" color="text-secondary">
             {step.description}
           </Text>
         </Box>

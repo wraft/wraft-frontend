@@ -84,23 +84,6 @@ interface FieldTypeOption {
   label: string;
 }
 
-interface ApiResponse {
-  id: string;
-}
-
-interface MappingPayload {
-  mapping: {
-    source: {
-      id: string;
-      name: string;
-    };
-    destination: {
-      id: string;
-      name: string;
-    };
-  }[];
-}
-
 interface FieldMapping {
   variantField: string;
   frameField: string;
@@ -261,15 +244,9 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       setFieldMappings([]);
       setIsFrameSelected(false);
     }
-
-    // Memory cleanup: return a cleanup function
-    return () => {
-      // No resources to explicitly clean up
-    };
   }, [
-    // Only include essential dependencies to prevent excessive re-renders
-    typeof watchLayout === 'object' ? watchLayout?.id : watchLayout, // Only depend on layout ID, not the entire object
-    watchFields ? watchFields.length : 0, // Only check if fields length changes
+    typeof watchLayout === 'object' ? watchLayout?.id : watchLayout,
+    watchFields ? watchFields.length : 0,
     fieldtypes.length > 0 ? fieldtypes[0].value : '',
     setValue,
   ]);
@@ -439,33 +416,6 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }, []);
   };
 
-  const submitFieldMappings = async (
-    contentTypeId: string,
-    frameId: string,
-  ) => {
-    const mappingPayload = fieldMappings
-      .filter((mapping) => mapping.frameField && mapping.variantField)
-      .map((mapping) => ({
-        source: mapping.variantField,
-        destination: mapping.frameFieldName,
-      }));
-
-    try {
-      await postAPI(
-        `content_types/${contentTypeId}/frames/${frameId}/mapping`,
-        mappingPayload,
-      );
-      return true;
-    } catch (error) {
-      console.error('Error submitting field mappings:', error);
-      toast.error('Failed to save field mappings', {
-        duration: 2000,
-        position: 'top-right',
-      });
-      return false;
-    }
-  };
-
   const onSubmit = async (data: any) => {
     // Format frame-to-variant field mappings if we have them
     const mappingsPayload = fieldMappings
@@ -496,7 +446,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     };
 
     try {
-      let contentTypeId = contentId;
+      const contentTypeId = contentId;
 
       if (contentId) {
         const fieldsToRemove = getFieldsToRemove(data?.fields);
@@ -513,15 +463,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
         await putAPI(`content_types/${contentId}`, payload);
       } else {
-        const response = (await postAPI(
-          'content_types',
-          payload,
-        )) as ApiResponse;
-        contentTypeId = response.id;
-      }
-
-      if (frameFields.length > 0 && data.layout?.id) {
-        await submitFieldMappings(contentTypeId, data.layout.id);
+        await postAPI('content_types', payload);
       }
 
       setIsOpen && setIsOpen(false);
@@ -935,7 +877,10 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
         {formStep === 3 && showMappingStep && (
           <Box>
-            <Box mb="md">
+            <Text mb="md" color="text-secondary">
+              Ensure proper mapping of variant fields to the frame field
+            </Text>
+            {/* <Box mb="md">
               <Flex gap="md" alignItems="center">
                 <Box flex={1}>
                   <Text fontWeight="bold" color="grey">
@@ -948,7 +893,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
                   </Text>
                 </Box>
               </Flex>
-            </Box>
+            </Box> */}
 
             {errors.frame_mapping && (
               <Box

@@ -1,4 +1,4 @@
-import { CSSObject, gap } from "@xstyled/emotion";
+import { CSSObject } from "@xstyled/emotion";
 
 import { WuiTheme } from "../types";
 

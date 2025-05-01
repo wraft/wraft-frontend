@@ -44,10 +44,6 @@ const FieldForm = ({ fieldtypes, trigger, control, register, errors }: any) => {
     <Box>
       <Flex direction="column" gap="sm">
         {fields.map((field, index) => {
-          // Convert field to TypeScript-friendly format
-          const fieldData = field as any;
-          const isFrameField = fieldData.fromFrame;
-
           return (
             <Flex align="flex-start" gap="md" key={field.id}>
               <Field
