@@ -199,7 +199,6 @@ export function TableHandle() {
               <span>Insert Below</span>
             </StyledTableHandlePopoverItem>
           )}
-
           {editor.commands.mergeTableCells.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.mergeTableCells}
