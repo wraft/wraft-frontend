@@ -19,10 +19,11 @@ import {
   Image as ImageIcon,
   ArrowsInLineVertical,
 } from "@phosphor-icons/react";
+import { useState, useEffect } from "react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 import { ImageUploadPopover } from "./image-upload-popover";
-// import { ImageUploadPopover } from "./image-upload-popover";
+import { TableMenu } from "./tableMenu";
 
 const ToolbarContainer = styled.divBox`
   z-index: 2;
@@ -36,8 +37,55 @@ const ToolbarContainer = styled.divBox`
   align-items: center;
 `;
 
+const Separator = styled.divBox`
+  width: 1px;
+  height: 24px;
+  background-color: gray.600;
+  margin: 0 4px;
+`;
+
 export default function Toolbar() {
   const editor = useEditor<EditorExtension>({ update: true });
+  const [isTableActive, setIsTableActive] = useState(false);
+
+  // Check if a table is in the current selection path
+  useEffect(() => {
+    if (!editor.view) return;
+
+    const checkTableActive = () => {
+      const { $from } = editor.view.state.selection;
+
+      // Check if any parent node is a table
+      for (let i = $from.depth; i >= 0; i--) {
+        if ($from.node(i).type.name === "table") {
+          setIsTableActive(true);
+          return;
+        }
+      }
+      setIsTableActive(false);
+    };
+
+    // Add event listeners
+    const handleDocumentClick = (e: any) => {
+      if (editor.view.dom.contains(e.target)) {
+        // Only check table state for clicks inside the editor
+        setTimeout(checkTableActive, 10);
+      }
+    };
+
+    // Set up event listeners
+    checkTableActive(); // Initial check
+    const view = editor.view;
+    view.dom.addEventListener("update", checkTableActive);
+    document.addEventListener("click", handleDocumentClick);
+
+    // Clean up
+    return () => {
+      view.dom.removeEventListener("update", checkTableActive);
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [editor]);
+
   return (
     <ToolbarContainer
       display="flex"
@@ -55,7 +103,6 @@ export default function Toolbar() {
       >
         <ArrowCounterClockwise size={18} />
       </Button>
-
       <Button
         pressed={false}
         disabled={!editor.commands.redo.canExec()}
@@ -64,7 +111,6 @@ export default function Toolbar() {
       >
         <ArrowClockwise size={18} />
       </Button>
-
       <Button
         pressed={editor.marks.bold.isActive()}
         disabled={!editor.commands.toggleBold.canExec()}
@@ -73,7 +119,6 @@ export default function Toolbar() {
       >
         <TextB size={18} />
       </Button>
-
       <Button
         pressed={editor.marks.italic.isActive()}
         disabled={!editor.commands.toggleItalic.canExec()}
@@ -82,7 +127,6 @@ export default function Toolbar() {
       >
         <TextItalic size={18} />
       </Button>
-
       <Button
         pressed={editor.marks.underline.isActive()}
         disabled={!editor.commands.toggleUnderline.canExec()}
@@ -91,7 +135,6 @@ export default function Toolbar() {
       >
         <TextUnderline size={18} />
       </Button>
-
       <Button
         pressed={editor.marks.strike.isActive()}
         disabled={!editor.commands.toggleStrike.canExec()}
@@ -100,7 +143,6 @@ export default function Toolbar() {
       >
         <TextStrikethrough size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.heading.isActive({ level: 1 })}
         disabled={!editor.commands.toggleHeading.canExec({ level: 1 })}
@@ -109,7 +151,6 @@ export default function Toolbar() {
       >
         <TextHOne size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.heading.isActive({ level: 2 })}
         disabled={!editor.commands.toggleHeading.canExec({ level: 2 })}
@@ -118,7 +159,6 @@ export default function Toolbar() {
       >
         <TextHTwo size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.heading.isActive({ level: 3 })}
         disabled={!editor.commands.toggleHeading.canExec({ level: 3 })}
@@ -127,7 +167,6 @@ export default function Toolbar() {
       >
         <TextHThree size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.horizontalRule.isActive()}
         disabled={!editor.commands.insertHorizontalRule.canExec()}
@@ -136,7 +175,6 @@ export default function Toolbar() {
       >
         <Minus size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.list.isActive({ kind: "bullet" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
@@ -145,7 +183,6 @@ export default function Toolbar() {
       >
         <ListBullets size={18} />
       </Button>
-
       <Button
         pressed={editor.nodes.list.isActive({ kind: "ordered" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "ordered" })}
@@ -154,17 +191,22 @@ export default function Toolbar() {
       >
         <List size={18} />
       </Button>
-
       <Button
-        pressed={editor.nodes.table.isActive()}
+        pressed={isTableActive} // Use isTableActive state instead of editor.nodes.table.isActive()
         disabled={!editor.commands.insertTable.canExec}
-        onClick={() =>
-          editor.commands.insertTable({ row: 3, col: 2, header: true })
-        }
+        onClick={() => {
+          if (!isTableActive) {
+            editor.commands.insertTable({ row: 3, col: 2, header: true });
+          }
+        }}
         tooltip="Table"
       >
         <Table size={18} />
       </Button>
+
+      <TableMenu isActive={isTableActive} />
+      <Separator />
+
       <Button
         pressed={editor.nodes.pageBreak.isActive()}
         disabled={!editor.commands.insertPageBreak.canExec()}
@@ -173,7 +215,6 @@ export default function Toolbar() {
       >
         <ArrowsInLineVertical size={18} />
       </Button>
-
       <ImageUploadPopover
         disabled={!editor.commands.insertImage.canExec()}
         tooltip="Insert Image"

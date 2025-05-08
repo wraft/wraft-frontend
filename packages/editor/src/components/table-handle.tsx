@@ -11,7 +11,26 @@ import {
   TableHandleRowTrigger,
 } from "prosekit/react/table-handle";
 import { DotsSix, DotsSixVertical } from "@phosphor-icons/react";
+import type { Editor } from "prosekit/core";
 import type { EditorExtension } from "./extension";
+
+function getTableDimensions(editor: Editor): {
+  rowCount: number;
+  columnCount: number;
+} {
+  const { $from } = editor.view.state.selection;
+
+  for (let i = $from.depth; i >= 0; i--) {
+    const node = $from.node(i);
+    if (node.type.name === "table") {
+      const rowCount = node.childCount;
+      const columnCount = node.firstChild?.childCount ?? 0;
+      return { rowCount, columnCount };
+    }
+  }
+
+  return { rowCount: 0, columnCount: 0 };
+}
 
 const StyledTableHandleRoot = styled(TableHandleRoot)`
   display: contents;
@@ -124,9 +143,24 @@ export function TableHandle() {
           )}
           {editor.commands.deleteTableColumn.canExec() && (
             <StyledTableHandlePopoverItem
-              onSelect={editor.commands.deleteTableColumn}
+              onSelect={() => {
+                const { columnCount } = getTableDimensions(editor);
+
+                columnCount > 1
+                  ? editor.commands.deleteTableColumn()
+                  : editor.commands.deleteTable.canExec() &&
+                    editor.commands.deleteTable();
+              }}
             >
               <span>Delete Column</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
+          {editor.commands.deleteTable.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.deleteTable}
+            >
+              <span>Delete Table</span>
             </StyledTableHandlePopoverItem>
           )}
         </StyledTableHandlePopoverContent>
@@ -143,6 +177,7 @@ export function TableHandle() {
               <span>Insert Above</span>
             </StyledTableHandlePopoverItem>
           )}
+
           {editor.commands.addTableRowBelow.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.addTableRowBelow}
@@ -150,6 +185,15 @@ export function TableHandle() {
               <span>Insert Below</span>
             </StyledTableHandlePopoverItem>
           )}
+
+          {editor.commands.mergeTableCells.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.mergeTableCells}
+            >
+              <span>Merge Cells</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
           {editor.commands.deleteCellSelection.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.deleteCellSelection}
@@ -160,11 +204,27 @@ export function TableHandle() {
               </span>
             </StyledTableHandlePopoverItem>
           )}
+
           {editor.commands.deleteTableRow.canExec() && (
             <StyledTableHandlePopoverItem
-              onSelect={editor.commands.deleteTableRow}
+              onSelect={() => {
+                const { rowCount } = getTableDimensions(editor);
+
+                rowCount > 1
+                  ? editor.commands.deleteTableRow()
+                  : editor.commands.deleteTable.canExec() &&
+                    editor.commands.deleteTable();
+              }}
             >
               <span>Delete Row</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
+          {editor.commands.deleteTable.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.deleteTable}
+            >
+              <span>Delete Table</span>
             </StyledTableHandlePopoverItem>
           )}
         </StyledTableHandlePopoverContent>
