@@ -215,53 +215,106 @@ const TeamList = () => {
             header: 'ROLE',
             accessorKey: 'content.user_count',
             isPlaceholder: true,
-            cell: ({ row }: any) => (
-              <Flex gap="sm" align="center">
-                {row.original.roles.map(
-                  (role: { roleName: string; roleId: string }) => (
-                    <Flex
-                      key={role.roleId}
-                      color="text-secondary"
-                      align="center"
-                      bg="green.400"
-                      borderRadius="md"
-                      justify="center"
-                      gap="sm"
-                      px="sm"
-                      py="xs"
-                      fontSize="sm">
-                      <Text>{role.roleName}</Text>
-                      {hasPermission('members', 'manage') && (
-                        <Box
-                          onClick={() =>
-                            onUnassignRole(role, row.original.members)
-                          }>
-                          <CloseIcon width={16} color="black" />
-                        </Box>
-                      )}
-                    </Flex>
-                  ),
-                )}
-                <Box>
-                  <DropdownMenu.Provider>
-                    {hasPermission('members', 'manage') && (
+            cell: ({ row }: any) => {
+              const totalRoles = row.original.roles.length;
+              const displayedRoles = row.original.roles.slice(0, 3);
+              const hasMoreRoles = totalRoles > 3;
+
+              return (
+                <Flex gap="sm" align="center">
+                  {displayedRoles.map(
+                    (role: { roleName: string; roleId: string }) => (
+                      <Flex
+                        key={role.roleId}
+                        color="text-secondary"
+                        align="center"
+                        bg="green.400"
+                        borderRadius="md"
+                        justify="space-between"
+                        px="sm"
+                        py="xs"
+                        fontSize="sm"
+                        w="auto">
+                        <Text flex="1" mr="sm">
+                          {role.roleName}
+                        </Text>
+                        {hasPermission('members', 'manage') && (
+                          <Box
+                            onClick={() =>
+                              onUnassignRole(role, row.original.members)
+                            }>
+                            <CloseIcon
+                              width={16}
+                              color="var(--theme-ui-colors-gray-1200)"
+                            />
+                          </Box>
+                        )}
+                      </Flex>
+                    ),
+                  )}
+
+                  {hasMoreRoles && (
+                    <DropdownMenu.Provider>
                       <DropdownMenu.Trigger>
-                        <AddIcon />
+                        <Flex
+                          color="text-secondary"
+                          align="center"
+                          bg="gray.200"
+                          borderRadius="md"
+                          justify="center"
+                          gap="sm"
+                          px="sm"
+                          py="xs"
+                          fontSize="sm">
+                          <Text>+ {totalRoles - 3} more</Text>
+                        </Flex>
                       </DropdownMenu.Trigger>
-                    )}
-                    <DropdownMenu aria-label="dropdown role">
-                      <AssignRole
-                        setIsAssignRole={setIsAssignRole}
-                        roles={roles}
-                        setRerender={setRerender}
-                        currentRoleList={currentRoleList}
-                        userId={row.original?.members?.memberId}
-                      />
-                    </DropdownMenu>
-                  </DropdownMenu.Provider>
-                </Box>
-              </Flex>
-            ),
+                      <DropdownMenu aria-label="more roles">
+                        {row.original.roles
+                          .slice(3)
+                          .map((role: { roleName: string; roleId: string }) => (
+                            <DropdownMenu.Item key={role.roleId}>
+                              <Flex align="center" w="100%">
+                                <Text flex="1">{role.roleName}</Text>
+                                {hasPermission('members', 'manage') && (
+                                  <Box
+                                    onClick={() =>
+                                      onUnassignRole(role, row.original.members)
+                                    }
+                                    ml="auto"
+                                    px="sm"
+                                    pt="xs">
+                                    <CloseIcon width={16} />
+                                  </Box>
+                                )}
+                              </Flex>
+                            </DropdownMenu.Item>
+                          ))}
+                      </DropdownMenu>
+                    </DropdownMenu.Provider>
+                  )}
+
+                  <Box>
+                    <DropdownMenu.Provider>
+                      {hasPermission('members', 'manage') && (
+                        <DropdownMenu.Trigger>
+                          <AddIcon color="var(--theme-ui-colors-gray-1200)" />
+                        </DropdownMenu.Trigger>
+                      )}
+                      <DropdownMenu aria-label="dropdown role">
+                        <AssignRole
+                          setIsAssignRole={setIsAssignRole}
+                          roles={roles}
+                          setRerender={setRerender}
+                          currentRoleList={currentRoleList}
+                          userId={row.original?.members?.memberId}
+                        />
+                      </DropdownMenu>
+                    </DropdownMenu.Provider>
+                  </Box>
+                </Flex>
+              );
+            },
             enableSorting: false,
           },
           {
@@ -319,9 +372,7 @@ const TeamList = () => {
           <Box my={3}>
             {`Are you sure you want to delete ${currentRole?.role?.roleName} ?`}
           </Box>
-          <Flex
-          // sx={{ gap: '8px' }}
-          >
+          <Flex gap="sm" mt="md">
             <Button
               variant="secondary"
               onClick={() => setUnassignModalOpen(false)}>
