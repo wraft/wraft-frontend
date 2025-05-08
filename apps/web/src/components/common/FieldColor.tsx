@@ -131,7 +131,9 @@ const FieldColor: React.FC<FieldColorProps> = ({
               disabled={disable || view}
             />
             <Box sx={{ width: 0, bg: 'transparent' }}>
-              <PopoverDisclosure aria-disabled={disable || view}>
+              <PopoverDisclosure
+                aria-disabled={disable || view}
+                style={{ all: 'unset' }}>
                 <Box sx={{ bg: 'transparent', border: 'none' }}>
                   <Box
                     id="colorBox"
