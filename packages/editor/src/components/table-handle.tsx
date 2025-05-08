@@ -155,6 +155,14 @@ export function TableHandle() {
               <span>Delete Column</span>
             </StyledTableHandlePopoverItem>
           )}
+
+          {editor.commands.deleteTable.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.deleteTable}
+            >
+              <span>Delete Table</span>
+            </StyledTableHandlePopoverItem>
+          )}
         </StyledTableHandlePopoverContent>
       </StyledTableHandleColumnRoot>
       <StyledTableHandleRowRoot>
@@ -169,6 +177,7 @@ export function TableHandle() {
               <span>Insert Above</span>
             </StyledTableHandlePopoverItem>
           )}
+
           {editor.commands.addTableRowBelow.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.addTableRowBelow}
@@ -176,6 +185,15 @@ export function TableHandle() {
               <span>Insert Below</span>
             </StyledTableHandlePopoverItem>
           )}
+
+          {editor.commands.mergeTableCells.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.mergeTableCells}
+            >
+              <span>Merge Cells</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
           {editor.commands.deleteCellSelection.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.deleteCellSelection}
@@ -186,6 +204,7 @@ export function TableHandle() {
               </span>
             </StyledTableHandlePopoverItem>
           )}
+
           {editor.commands.deleteTableRow.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={() => {
@@ -198,6 +217,14 @@ export function TableHandle() {
               }}
             >
               <span>Delete Row</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
+          {editor.commands.deleteTable.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.deleteTable}
+            >
+              <span>Delete Table</span>
             </StyledTableHandlePopoverItem>
           )}
         </StyledTableHandlePopoverContent>
