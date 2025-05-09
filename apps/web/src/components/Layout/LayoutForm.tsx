@@ -28,11 +28,6 @@ import { Layoutschema, Layout } from 'schemas/layout';
 import { fetchAPI, deleteAPI, postAPI, putAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
-export interface Layouts {
-  layout: Layout;
-  creator: Creator;
-}
-
 export interface Creator {
   updated_at: string;
   name: string;
@@ -56,8 +51,16 @@ export interface LayoutContent {
   engine: IEngine;
   description: string;
   assets: any[];
+  frame: IFrame | null;
 }
 
+export interface IFrame {
+  updated_at: string;
+  name: string;
+  inserted_at: string;
+  id: string;
+  description: string;
+}
 export interface IEngine {
   updated_at: string;
   name: string;
@@ -96,6 +99,9 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   } = useForm<Layout>({
     mode: 'onBlur',
     resolver: zodResolver(Layoutschema),
+    defaultValues: {
+      frame: '', // Initialize frame with empty string
+    },
   });
 
   useEffect(() => {
@@ -113,6 +119,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     if (layout) {
       setEdit(true);
       const assetsList: Asset[] = layout.assets;
+      console.log('datalayout', layout);
 
       assetsList.forEach((a: Asset) => {
         addUploads(a);
@@ -125,6 +132,11 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       setValue('description', layout?.description);
       setValue('engine', layout?.engine);
       setValue('unit', layout?.unit || '');
+      if (layout?.frame) {
+        setValue('frame', layout.frame);
+      } else {
+        setValue('frame', '');
+      }
     }
   }, [layout]);
 
@@ -191,6 +203,21 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     setAssets((prev) => [...prev, data]);
   };
 
+  const onSearchFrames = async () => {
+    try {
+      const response: any = await fetchAPI('frames');
+
+      if (!response || !response.frames) {
+        throw new Error('Invalid response structure');
+      }
+
+      return response.frames;
+    } catch (error) {
+      console.error('Error fetching frames:', error);
+      return [];
+    }
+  };
+
   const deleteAllAsset = () => {
     if (layout && layout.assets && layout.assets.length > 0) {
       const deletePromises = layout.assets.map((asset) => {
@@ -232,6 +259,8 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const goTo = (currentStep: number) => setFormStep(currentStep);
 
   const onSubmit = async (data: any) => {
+    console.log('log', data);
+
     try {
       setIsLoading(true);
       const formData = new FormData();
@@ -244,6 +273,10 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       formData.append('engine_id', data.engine.id);
       formData.append('assets', data.assets);
       // formData.append('screenshot', data.screenshot[0] || null);
+      formData.append(
+        'frame_id',
+        data.frame && data.frame.id ? data.frame.id : '',
+      );
 
       const apiUrl = isEdit ? `layouts/${cId}` : 'layouts';
       const apiMethod = isEdit ? putAPI : postAPI;
@@ -328,6 +361,37 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                   hint="Slugs are layout templates used for rendering documents"
                   error={errors?.slug?.message}>
                   <Select {...field} options={SLUGITEMS} />
+                </Field>
+              )}
+            />
+            <Controller
+              control={control}
+              name="frame"
+              render={({ field: { onChange, name, value } }) => (
+                <Field
+                  label="Frame"
+                  required={false} // Change to required={true} if it should be mandatory
+                  error={errors?.frame?.message}>
+                  <Search
+                    itemToString={(item: any) => item && item.name}
+                    name={name}
+                    placeholder="Search and Select a Frame"
+                    minChars={0}
+                    value={value}
+                    onChange={(item: any) => {
+                      if (!item) {
+                        onChange('');
+                        return;
+                      }
+                      onChange(item);
+                    }}
+                    renderItem={(item: any) => (
+                      <Box>
+                        <Text>{item?.name}</Text>
+                      </Box>
+                    )}
+                    search={onSearchFrames}
+                  />
                 </Field>
               )}
             />

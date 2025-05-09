@@ -1,22 +1,17 @@
 'use client';
 import { useState } from 'react';
-import { Check, Checks } from '@phosphor-icons/react';
 import * as Tab from '@ariakit/react/tab';
-// import { Box, Flex, Text, Box as BoxBase } from 'theme-ui';;
 import toast from 'react-hot-toast';
-import styled, { th, x } from '@xstyled/emotion';
-import { Button, Box, Text } from '@wraft/ui';
+import { Box, Text } from '@wraft/ui';
 
-// import { Text } from 'common/Text';
 import { fetchAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
 import TemplateUploader from './TemplateUploader';
 import TemplatePreview from './TemplatePreview';
 import { ImportedItems } from './ImportedItems';
-import { Circle, Container } from './Styled';
+import { Container } from './Styled';
 import { Alert } from './Alert';
-import { ImportedList } from './Block';
 import Stepper from './Stepper';
 
 type Step = {
@@ -76,69 +71,20 @@ interface validateResp {
 
 function ImporterApp() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedSource, setSelectedSource] = useState<any>(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploaded, setUploaded] = useState<any>();
-  const tab = Tab.useTabStore();
   const [assets, setAssets] = useState<Array<Asset>>([]);
-  const [nextIsActive, setNextIsActive] = useState(false);
+  const [formData, setformData] = useState();
 
   const [actionState, setActionState] =
     useState<ActionStateConfig>(defaultActionState);
 
   const [imported, setImported] = useState<ImportedItems>();
-  const [brokenImports, setBrokenImports] = useState<validateResp>();
 
   const [errors, setErrors] = useState<any>([]);
-
-  const handleSourceSelect = (source: string) => {
-    setSelectedSource(source);
-    simulateProgress();
-  };
-
-  const simulateProgress = () => {
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          setActionState({
-            state: ActionState.IMPORTING,
-            progress: prev + 10,
-            message: 'Upoading structs',
-            metadata: {},
-          });
-          clearInterval(interval);
-          setIsUploading(false);
-          setCurrentStep(2);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 300);
-  };
 
   const handleNext = () => {
     if (currentStep < steps.length) {
       setCurrentStep((prev) => prev + 1);
     }
-  };
-
-  const handlePrevious = () => {
-    if (currentStep > 1) {
-      setCurrentStep((prev) => prev - 1);
-    }
-  };
-
-  /**
-   * when upload is done
-   */
-
-  const onUploadDone = (end: any) => {
-    setUploaded(end);
-    handleSourceSelect(end?.id);
   };
 
   /*
@@ -152,11 +98,10 @@ function ImporterApp() {
     setActionState({
       state: ActionState.IMPORTING,
     });
-    postAPI(`template_assets/${id}/import`, {})
+    postAPI(`global_asset/import`, formData)
       .then((res: ImportedItems) => {
         toast.success('Importing ...' + id);
         setImported(res);
-        setNextIsActive(true);
         handleNext();
         setActionState({
           state: ActionState.COMPLETED,
@@ -165,7 +110,7 @@ function ImporterApp() {
       })
       .catch((error: any) => {
         setErrors(error);
-        toast.success('something wrong');
+        toast.error('something wrong');
         setActionState({
           state: ActionState.ERROR,
         });
@@ -194,13 +139,12 @@ function ImporterApp() {
           setActionState({
             state: ActionState.COMPLETED,
           });
-          setBrokenImports(res);
         }
         _onDone && _onDone(res);
       })
       .catch((error: any) => {
         setErrors(error);
-        toast.success('something wrong');
+        toast.error('something wrong');
         setActionState({
           state: ActionState.ERROR,
         });
@@ -228,7 +172,6 @@ function ImporterApp() {
    */
   const addUploads = (data: Asset) => {
     setAssets((prevArray) => [...prevArray, data]);
-    setSelectedSource(data);
     handleNext();
   };
 
@@ -240,23 +183,25 @@ function ImporterApp() {
     <Container>
       <Box>
         <Box py="md" px="xl">
-          <Box>
-            <Box display="flex">
-              {steps.map((step) => (
-                <Stepper
-                  key={step.id}
-                  step={step}
-                  currentStep={currentStep}
-                  onSelect={onChangeStep}
-                />
-              ))}
-            </Box>
+          <Box display="flex" mb="md">
+            {steps.map((step) => (
+              <Stepper
+                key={step.id}
+                step={step}
+                currentStep={currentStep}
+                onSelect={onChangeStep}
+              />
+            ))}
           </Box>
 
           <Box>
             {currentStep === 1 && (
               <Box>
-                <TemplateUploader onUpload={addUploads} assets={assets} />
+                <TemplateUploader
+                  onUpload={addUploads}
+                  assets={assets}
+                  formDate={setformData}
+                />
               </Box>
             )}
 
@@ -278,33 +223,12 @@ function ImporterApp() {
                   <Box>
                     <Text>Succesfully Imported!</Text>
                     <Text color="green.1200">{imported?.message}</Text>
-                    {/* <Box display="flex" px={0} py={2} gap={2}>
-                      <Button variant="secondary">Create Document</Button>
-                      <Button variant="secondary">View Imported</Button>
-                    </Box> */}
                   </Box>
                 </Alert>
               </Box>
             )}
           </Box>
         </Box>
-
-        {/* <Flex sx={{ gap: 2, py: 3 }}>
-          {currentStep > 1 && (
-            <Button
-              variant="secondary"
-              onClick={handlePrevious}
-              disabled={currentStep === 1}>
-              Back
-            </Button>
-          )}
-          <Button
-            variant="primary"
-            onClick={handleNext}
-            disabled={currentStep === 1 && !selectedSource && nextIsActive}>
-            {currentStep === steps.length ? 'Finish' : 'Continue'}
-          </Button>
-        </Flex> */}
       </Box>
     </Container>
   );

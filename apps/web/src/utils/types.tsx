@@ -77,6 +77,16 @@ export interface ContentTypeClass {
   fields: any;
   description: string;
   color: string;
+  frame_mapping?: FieldMapping[];
+  frame: {
+    id: string;
+    name: string;
+  } | null;
+}
+
+interface FieldMapping {
+  variantField: string;
+  frameField: string;
 }
 
 export interface ContentTypeFlow {

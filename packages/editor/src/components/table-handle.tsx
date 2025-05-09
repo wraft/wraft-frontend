@@ -131,6 +131,20 @@ export function TableHandle() {
               <span>Insert Right</span>
             </StyledTableHandlePopoverItem>
           )}
+          {editor.commands.deleteTable.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.deleteTable}
+            >
+              <span>Delete Table</span>
+            </StyledTableHandlePopoverItem>
+          )}
+          {editor.commands.mergeTableCells.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.mergeTableCells}
+            >
+              <span>Merge Cells</span>
+            </StyledTableHandlePopoverItem>
+          )}
           {editor.commands.deleteCellSelection.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.deleteCellSelection}
@@ -185,7 +199,6 @@ export function TableHandle() {
               <span>Insert Below</span>
             </StyledTableHandlePopoverItem>
           )}
-
           {editor.commands.mergeTableCells.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.mergeTableCells}

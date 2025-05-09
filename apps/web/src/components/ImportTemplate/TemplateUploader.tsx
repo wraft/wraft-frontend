@@ -23,6 +23,7 @@ interface HandleTemplateProps {
   setPdfPreview?: any;
   setDeleteAssets?: any;
   onDrop?: any;
+  formDate?: any;
 }
 ///
 interface ErrorComponentProps {
@@ -40,15 +41,17 @@ const ErrorComponent = ({ fileError }: ErrorComponentProps) => {
   return <Alert variant="error">Uploaded file is not a valid zip file.</Alert>;
 };
 
-// const HandleTemplate = () => {
-const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
+const HandleTemplate = ({
+  onUpload,
+  assets,
+  formDate,
+}: HandleTemplateProps) => {
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const setDeleteAssets = () => {};
   const methods = useForm<FormValues>({ mode: 'onBlur' });
 
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [filesList, setFilesList] = useState<any>();
 
   /**
    * When upload is completed
@@ -56,52 +59,29 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
    */
   const onAssetUploaded = (data: any) => {
     const mData: Asset = data;
+
     onUpload(mData);
   };
 
   /**
    * Create Template Asset
    */
-  const createTemplateAsset = (f: File, idx: number) => {
-    const updatedFiles = [
-      {
-        ...f,
-        name: f.name,
-        progress: null,
-        success: null,
-      },
-    ];
-    setFilesList(updatedFiles);
-
+  const createTemplateAsset = (f: File) => {
     const formData = new FormData();
-    formData.append('zip_file', f);
+    formData.append('file', f);
     formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
 
-    postAPI(`template_assets`, formData, (progress) => {
+    formDate(formData);
+    postAPI(`global_asset/pre_import`, formData, (progress) => {
       setUploadProgress(progress);
-      setFilesList((prev: any) => [
-        ...prev.slice(0, idx),
-        { ...prev[idx], progress: progress },
-        ...prev.slice(idx + 1),
-      ]);
     })
       .then((res) => {
         onAssetUploaded(res);
         setUploadProgress(0);
-        setFilesList((prev: any) => [
-          ...prev.slice(0, idx),
-          { ...prev[idx], success: true, progress: null },
-          ...prev.slice(idx + 1),
-        ]);
       })
       .catch((error: any) => {
         setUploadProgress(0);
         setFileError(error.errors || error.message || 'There is an error');
-        setFilesList((prev: any) => [
-          ...prev.slice(0, idx),
-          { ...prev[idx], success: false, progress: null },
-          ...prev.slice(idx + 1),
-        ]);
       });
   };
   /**
@@ -111,11 +91,16 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
    */
 
   const onDropped = (files: File[]) => {
+    if (files.length === 0) {
+      setFileError('There is an error');
+      return;
+    }
+
     const formData = new FormData();
-    const f: File = files[0];
+    const file: File = files[0];
     formData.append('zip_file', files[0]);
     formData.append('name', 'Bol');
-    createTemplateAsset(f, 0);
+    createTemplateAsset(file);
   };
 
   const onSubmit = async (data: FormValues) => {
@@ -130,16 +115,8 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
     }
     const files = Array.from(data.zip_file);
 
-    const updatedFiles = files.map((f: any) => ({
-      ...f,
-      name: f.name,
-      progress: null,
-      success: null,
-    }));
-
-    setFilesList(updatedFiles);
-    files.map((f: File, index: number) => {
-      createTemplateAsset(f, index);
+    files.map((f: File) => {
+      createTemplateAsset(f);
     });
   };
 
@@ -156,6 +133,7 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
               'application/zip': ['.zip'],
               'application/x-zip': ['.zip'],
               'application/x-zip-compressed': ['.zip'],
+              'application/octet-stream': ['.zip'],
             }}
             onDropped={onDropped}
             progress={uploadProgress}

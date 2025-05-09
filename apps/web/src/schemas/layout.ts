@@ -30,6 +30,15 @@ export const Layoutschema = z.object({
   width: z.coerce.number(),
   unit: z.string(),
   assets: z.any(),
+  frame: z
+    .union([
+      z.object({
+        id: z.string().regex(uuidRegex, 'Invalid Frame'),
+        name: z.string().min(1, 'Frame name is required'),
+      }),
+      z.string().optional(),
+    ])
+    .optional(),
 });
 
 export type Layout = z.infer<typeof Layoutschema>;
