@@ -15,7 +15,7 @@ import {
   Drawer,
 } from '@wraft/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { X } from '@phosphor-icons/react';
+import { X, ArrowLeft } from '@phosphor-icons/react';
 
 import FieldColor from 'common/FieldColor';
 import StepsIndicator from 'common/Form/StepsIndicator';
@@ -54,6 +54,8 @@ export interface ILayout {
 export interface IFieldItem {
   name: string;
   type: string;
+  id?: string;
+  fromFrame?: boolean;
 }
 
 export interface FieldTypeItem {
@@ -63,13 +65,31 @@ export interface FieldTypeItem {
 }
 
 const formDefaultValue = {
-  fields: [{ name: '', type: '' }],
+  fields: [{ name: '', type: '', fromFrame: false }],
 };
 
 interface Props {
   step?: number;
   setIsOpen?: (e: any) => void;
   setRerender?: (e: any) => void;
+}
+
+interface FieldMapping {
+  variantField: string;
+  frameField: string;
+}
+
+interface FieldTypeOption {
+  value: string;
+  label: string;
+}
+
+interface FieldMapping {
+  variantField: string;
+  frameField: string;
+  variantFieldId?: string;
+  variantFieldName?: string;
+  frameFieldName?: string;
 }
 
 const TYPES = [
@@ -79,8 +99,16 @@ const TYPES = [
 
 const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const [content, setContent] = useState<ContentType | undefined>(undefined);
-  const [fieldtypes, setFieldtypes] = useState([]);
   const [formStep, setFormStep] = useState(step);
+  const [frameFields, setFrameFields] = useState<any[]>([]);
+  const [fieldMappings, setFieldMappings] = useState<FieldMapping[]>([]);
+  const [fieldtypes, setFieldtypes] = useState<FieldTypeOption[]>([]);
+  const [variantFields, setVariantFields] = useState<any[]>([]);
+  const [isFrameSelected, setIsFrameSelected] = useState(false);
+  // Store the current frame ID to detect changes
+  const prevFrameIdRef = React.useRef<string | null>(null);
+  const frameFieldsRef = React.useRef<any[]>([]);
+  const mappingsRef = React.useRef<FieldMapping[]>([]);
 
   const {
     register,
@@ -89,8 +117,14 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     formState: { errors },
     setValue,
     trigger,
+    watch,
+    unregister,
+    getValues,
   } = useForm<Variant>({
-    defaultValues: formDefaultValue,
+    defaultValues: {
+      ...formDefaultValue,
+      frame_mapping: [],
+    },
     shouldUnregister: false,
     resolver: zodResolver(VariantSchema),
     mode: 'onBlur',
@@ -98,6 +132,31 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   const router = useRouter();
 
   const contentId: string = router.query.id as string;
+  const watchLayout = watch('layout');
+  const watchFields = watch('fields') as Array<IFieldItem>;
+
+  function isLayoutWithFrameFields(
+    layout: any,
+  ): layout is { frame: { fields: any[] } } {
+    return (
+      typeof layout === 'object' &&
+      layout !== null &&
+      layout.frame?.fields !== undefined
+    );
+  }
+  const updateFormMappings = (mappings: FieldMapping[]) => {
+    // Clear existing form mappings
+    const currentMappings = getValues('frame_mapping') || [];
+    currentMappings.forEach((_, index) => {
+      unregister(`frame_mapping.${index}`);
+    });
+
+    // Set new mappings
+    mappings.forEach((mapping, index) => {
+      setValue(`frame_mapping.${index}.frameField`, mapping.frameField);
+      setValue(`frame_mapping.${index}.variantField`, mapping.variantField);
+    });
+  };
 
   useEffect(() => {
     if (contentId) {
@@ -108,6 +167,133 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   useEffect(() => {
     loadFieldTypes();
   }, []);
+
+  useEffect(() => {
+    if (typeof watchLayout === 'object' && watchLayout?.frame?.fields) {
+      // Check if frame changed
+      const newFrameId = watchLayout.id;
+
+      const frameChanged =
+        prevFrameIdRef.current && prevFrameIdRef.current !== newFrameId;
+      prevFrameIdRef.current = newFrameId;
+
+      // Store frame fields in ref to avoid recreating objects
+      frameFieldsRef.current = watchLayout.frame.fields;
+      setFrameFields(frameFieldsRef.current);
+      setIsFrameSelected(true);
+
+      // If frame changed, remove fields from previous frame
+      if (frameChanged && watchFields) {
+        const updatedFields = watchFields.filter(
+          (field) => !(field as any).fromFrame,
+        );
+        setValue('fields', updatedFields);
+
+        // Clear mappings when frame changes
+        setFieldMappings([]);
+        mappingsRef.current = [];
+        updateFormMappings([]);
+      }
+      // Create default mappings for frame fields
+      const defaultMappings = frameFieldsRef.current.map((frameField: any) => {
+        // Try to find a matching variant field by name
+        const matchingVariantField = watchFields?.find(
+          (field: any) =>
+            field.name.toLowerCase() === frameField.name.toLowerCase(),
+        );
+
+        return {
+          frameField: frameField.name,
+          frameFieldName: frameField.name,
+          variantField: matchingVariantField?.name || '',
+          variantFieldId: matchingVariantField?.id || '',
+          variantFieldName: matchingVariantField?.name || '',
+        };
+      });
+
+      // Only update mappings if they're empty (new frame) or if the frame changed
+      if (fieldMappings.length === 0 || frameChanged) {
+        setFieldMappings(defaultMappings);
+        mappingsRef.current = defaultMappings;
+        updateFormMappings(defaultMappings);
+      }
+
+      // Register the mappings with react-hook-form
+      defaultMappings.forEach((mapping, index) => {
+        setValue(`frame_mapping.${index}.frameField`, mapping.frameField);
+        setValue(`frame_mapping.${index}.variantField`, mapping.variantField);
+      });
+
+      // Add frame fields to content fields if they don't exist
+      const existingFieldNames = new Set(
+        watchFields.map((field) => field.name.toLowerCase()),
+      );
+      const frameFieldsToAdd = frameFieldsRef.current
+        .filter(
+          (frameField: any) =>
+            !existingFieldNames.has(frameField.name.toLowerCase()),
+        )
+        .map((frameField: any) => ({
+          name: frameField.name,
+          type: fieldtypes.length > 0 ? fieldtypes[0].value : '', // Default to first field type
+          fromFrame: true, // Mark this field as coming from the frame
+        }));
+
+      if (frameFieldsToAdd.length > 0) {
+        // If the frame changed, replace all fields with just the frame fields
+        // Otherwise, add the new frame fields to existing ones
+        const updatedFields = frameChanged
+          ? frameFieldsToAdd
+          : [...watchFields, ...frameFieldsToAdd];
+        setValue('fields', updatedFields);
+      }
+    } else {
+      // No frame selected, remove all fields that came from frame
+      if (watchFields) {
+        const updatedFields = watchFields.filter(
+          (field) => !(field as any).fromFrame,
+        );
+        setValue(
+          'fields',
+          updatedFields.length
+            ? updatedFields
+            : [{ name: '', type: '', fromFrame: false }],
+        );
+      }
+
+      setFrameFields([]);
+      setFieldMappings([]);
+      updateFormMappings([]);
+      setIsFrameSelected(false);
+    }
+  }, [
+    typeof watchLayout === 'object' ? watchLayout?.id : watchLayout,
+    watchFields ? watchFields.length : 0,
+    fieldtypes.length > 0 ? fieldtypes[0].value : '',
+    setValue,
+  ]);
+
+  useEffect(() => {
+    if (watchFields) {
+      const updatedVariantFields = watchFields.map((field: any) => ({
+        id: field.id,
+        name: field.name,
+      }));
+      setVariantFields(updatedVariantFields);
+
+      // Update existing mappings with new field IDs
+      const updatedMappings = fieldMappings.map((mapping) => {
+        const matchingField = updatedVariantFields.find(
+          (field) => field.name === mapping.variantField,
+        );
+        return {
+          ...mapping,
+          variantFieldId: matchingField?.id || mapping.variantFieldId,
+        };
+      });
+      setFieldMappings(updatedMappings);
+    }
+  }, [watchFields]);
 
   const setContentDetails = (data: any) => {
     const res: ContentType = data;
@@ -127,11 +313,34 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
         const fields = res.content_type.fields.map((item: any) => ({
           ...item,
           type: item.field_type.id,
+          fromFrame: false, // Existing fields are not from frame by default
         }));
         setValue('fields', fields);
+
+        const variantFieldList = fields.map((field: any) => ({
+          id: field.id,
+          name: field.name,
+        }));
+        setVariantFields(variantFieldList);
       }
+      if (res.content_type?.frame_mapping) {
+        const initialMappings = res.content_type.frame_mapping.map(
+          (mapping: any) => ({
+            frameField: mapping.destination,
+            frameFieldName: mapping.destination,
+            variantField: mapping.source,
+            variantFieldName: mapping.source,
+            variantFieldId: '',
+          }),
+        );
+
+        setFieldMappings(initialMappings);
+        mappingsRef.current = initialMappings;
+        updateFormMappings(initialMappings);
+      }
+
       if (res.content_type?.fields.length === 0) {
-        setValue('fields', [{ name: '', type: '' }]);
+        setValue('fields', [{ name: '', type: '', fromFrame: false }]);
       }
 
       trigger();
@@ -197,10 +406,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   const loadFieldTypes = () => {
     fetchAPI('field_types?page_size=200').then((data: any) => {
-      const fieldTypesRemap = data?.field_types.map((field: any) => ({
-        label: field.name,
-        value: field.id,
-      }));
+      const fieldTypesRemap: FieldTypeOption[] = data?.field_types.map(
+        (field: any) => ({
+          label: field.name,
+          value: field.id,
+        }),
+      );
       setFieldtypes(fieldTypesRemap);
     });
   };
@@ -209,7 +420,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     if (!formFields || formFields.length === 0) return [];
 
     return formFields.reduce((formattedFields: any, field: any) => {
-      const { name, type } = field;
+      const { name, type, fromFrame } = field;
 
       const isFieldNotInContent = content?.content_type?.fields
         ? content.content_type.fields.every(
@@ -230,6 +441,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
           name,
           key: name,
           field_type_id: type,
+          fromFrame: fromFrame || false,
         });
       }
 
@@ -238,57 +450,69 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   };
 
   const onSubmit = async (data: any) => {
+    // Format frame-to-variant field mappings if we have them
+    const mappingsPayload = fieldMappings
+      .filter((mapping) => mapping.frameField && mapping.variantField)
+      .map((mapping) => ({
+        source: mapping.variantField,
+        destination: mapping.frameFieldName,
+      }));
+
+    // Format the fields
+    const formattedFields = formatFields(data.fields).map((field: any) => {
+      // Strip the fromFrame property before sending to API
+      const { fromFrame, ...fieldWithoutFromFrame } = field;
+      return fieldWithoutFromFrame;
+    });
+
     const payload = {
       name: data?.name?.trim(),
       layout_id: data.layout.id,
-      fields: formatFields(data.fields),
+      fields: formattedFields,
       description: data.description?.trim(),
       prefix: data.prefix?.trim(),
       type: data.type,
       flow_id: data.flow.id,
       color: data.color?.trim(),
       theme_id: data.theme.id,
+      frame_mapping: mappingsPayload,
     };
 
-    if (contentId) {
-      //TODO: Improve this later
-      const fieldsToRemove = getFieldsToRemove(data?.fields);
-      await deleteFieldsOneByOne(fieldsToRemove);
+    try {
+      const contentTypeId = contentId;
 
-      putAPI(`content_types/${contentId}`, payload)
-        .then(() => {
-          setIsOpen && setIsOpen(false);
-          setRerender && setRerender((prev: boolean) => !prev);
-          toast.success('Saved Successfully', {
-            duration: 1000,
-            position: 'top-right',
-          });
-        })
-        .catch(() => {
-          toast.error('Save Failed', {
-            duration: 1000,
-            position: 'top-right',
-          });
-        });
-    } else {
-      postAPI('content_types', payload)
-        .then(() => {
-          setIsOpen && setIsOpen(false);
-          setRerender && setRerender((prev: boolean) => !prev);
-          toast.success('Saved Successfully', {
-            duration: 1000,
-            position: 'top-right',
-          });
-        })
-        .catch((err) => {
-          toast.error(
-            (err?.errors && JSON.stringify(err?.errors)) || 'Save Failed',
-            {
-              duration: 3000,
-              position: 'top-right',
-            },
-          );
-        });
+      if (contentId) {
+        const fieldsToRemove = getFieldsToRemove(data?.fields);
+        await deleteFieldsOneByOne(fieldsToRemove);
+
+        const filteredMappings = fieldMappings.filter(
+          (mapping) =>
+            !fieldsToRemove.includes(mapping.variantFieldId) &&
+            data.fields.some(
+              (field: any) => field.name === mapping.variantField,
+            ),
+        );
+        setFieldMappings(filteredMappings);
+
+        await putAPI(`content_types/${contentId}`, payload);
+      } else {
+        await postAPI('content_types', payload);
+      }
+
+      setIsOpen && setIsOpen(false);
+      setRerender && setRerender((prev: boolean) => !prev);
+      toast.success('Saved Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+    } catch (err: any) {
+      toast.error(
+        (err?.errors && JSON.stringify(err?.errors)) || 'Save Failed',
+        {
+          duration: 3000,
+          position: 'top-right',
+        },
+      );
     }
   };
 
@@ -319,10 +543,90 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     setValue(name, e);
   };
 
-  const goTo = (formStepNumber: number) => {
+  const goTo = async (formStepNumber: number) => {
+    if (formStep === 3) {
+      const currentMappings = fieldMappings.filter(
+        (mapping) => mapping.frameField && mapping.variantField,
+      );
+      setFieldMappings(currentMappings);
+      mappingsRef.current = currentMappings;
+      updateFormMappings(currentMappings);
+    }
+
+    if (formStepNumber === 3) {
+      const isFieldsValid = await trigger(['fields']);
+
+      if (isFieldsValid) {
+        const layout = watch('layout');
+        if (isLayoutWithFrameFields(layout) && layout.frame.fields.length > 0) {
+          const frameFieldNames = new Set(
+            layout.frame.fields.map((field: any) => field.name.toLowerCase()),
+          );
+
+          const fieldsWithSource = watch('fields').map((field: any) => ({
+            ...field,
+            fromFrame: frameFieldNames.has(field.name.toLowerCase()),
+          }));
+
+          setValue('fields', fieldsWithSource);
+
+          const updatedVariantFields = fieldsWithSource.map((field: any) => ({
+            id: field.id,
+            name: field.name,
+          }));
+          setVariantFields(updatedVariantFields);
+
+          const currentFieldNames = new Set(
+            fieldsWithSource.map((f: any) => f.name),
+          );
+
+          const updatedMappings = mappingsRef.current
+            .filter((m) => currentFieldNames.has(m.variantField))
+            .map((mapping) => {
+              const matchingField = fieldsWithSource.find(
+                (f: any) => f.name === mapping.variantField,
+              );
+              return {
+                ...mapping,
+                variantFieldId: matchingField?.id || mapping.variantFieldId,
+              };
+            });
+
+          const mappedFrameFields = new Set(
+            updatedMappings.map((m) => m.frameField),
+          );
+
+          layout.frame.fields.forEach((frameField: any) => {
+            if (!mappedFrameFields.has(frameField.name)) {
+              const matchingField = fieldsWithSource.find(
+                (f: any) =>
+                  f.name.toLowerCase() === frameField.name.toLowerCase(),
+              );
+
+              updatedMappings.push({
+                frameField: frameField.name,
+                frameFieldName: frameField.name,
+                variantField: matchingField?.name || '',
+                variantFieldId: matchingField?.id || '',
+                variantFieldName: matchingField?.name || '',
+              });
+            }
+          });
+
+          setFieldMappings(updatedMappings);
+          mappingsRef.current = updatedMappings;
+          updateFormMappings(updatedMappings);
+        }
+      }
+    }
+
     setFormStep(formStepNumber);
   };
-  const titles = ['Details', 'Configure', 'Fields'];
+
+  const showMappingStep = isFrameSelected && frameFields.length > 0;
+  const titles = showMappingStep
+    ? ['Details', 'Configure', 'Fields', 'Map Properties']
+    : ['Details', 'Configure', 'Fields'];
 
   const generateRandomColor = (): string => {
     const randomValue = () =>
@@ -337,10 +641,19 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
   }, []);
 
   const prevStep = () => {
+    if (formStep === 3) {
+      const currentMappings = fieldMappings.filter(
+        (mapping) => mapping.frameField && mapping.variantField,
+      );
+      setFieldMappings(currentMappings);
+      mappingsRef.current = currentMappings;
+      updateFormMappings(currentMappings);
+    }
     setFormStep(formStep - 1);
   };
 
-  const nextStep = async () => {
+  const nextStep = async (event: any) => {
+    event.preventDefault();
     let isValid = false;
 
     if (formStep === 0) {
@@ -349,6 +662,74 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       isValid = await trigger(['layout', 'flow', 'theme', 'color']);
     } else if (formStep === 2) {
       isValid = await trigger(['fields']);
+
+      if (isValid) {
+        const layout = watch('layout');
+        if (isLayoutWithFrameFields(layout) && layout.frame.fields.length > 0) {
+          const frameFieldNames = new Set(
+            layout.frame.fields.map((field: any) => field.name.toLowerCase()),
+          );
+
+          const fieldsWithSource = watch('fields').map((field: any) => ({
+            ...field,
+            fromFrame: frameFieldNames.has(field.name.toLowerCase()),
+          }));
+
+          setValue('fields', fieldsWithSource);
+
+          const updatedVariantFields = fieldsWithSource.map((field: any) => ({
+            id: field.id,
+            name: field.name,
+          }));
+          setVariantFields(updatedVariantFields);
+
+          const currentFieldNames = new Set(
+            fieldsWithSource.map((f: any) => f.name),
+          );
+
+          const updatedMappings = mappingsRef.current
+            .filter((m) => currentFieldNames.has(m.variantField))
+            .map((mapping) => {
+              const matchingField = fieldsWithSource.find(
+                (f: any) => f.name === mapping.variantField,
+              );
+              return {
+                ...mapping,
+                variantFieldId: matchingField?.id || mapping.variantFieldId,
+              };
+            });
+
+          const mappedFrameFields = new Set(
+            updatedMappings.map((m) => m.frameField),
+          );
+
+          layout.frame.fields.forEach((frameField: any) => {
+            if (!mappedFrameFields.has(frameField.name)) {
+              const matchingField = fieldsWithSource.find(
+                (f: any) =>
+                  f.name.toLowerCase() === frameField.name.toLowerCase(),
+              );
+
+              updatedMappings.push({
+                frameField: frameField.name,
+                frameFieldName: frameField.name,
+                variantField: matchingField?.name || '',
+                variantFieldId: matchingField?.id || '',
+                variantFieldName: matchingField?.name || '',
+              });
+            }
+          });
+
+          setFieldMappings(updatedMappings);
+          mappingsRef.current = updatedMappings;
+          updateFormMappings(updatedMappings);
+
+          setFormStep(3);
+          return;
+        }
+      }
+    } else if (formStep === 3) {
+      isValid = await validateMappings();
     }
 
     if (isValid) {
@@ -356,11 +737,75 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     }
   };
 
+  const validateMappings = async () => {
+    frameFields.forEach((frameField, index) => {
+      setValue(`frame_mapping.${index}.frameField`, frameField.name);
+
+      const mapping = fieldMappings.find(
+        (m) => m.frameField === frameField.name,
+      );
+      setValue(
+        `frame_mapping.${index}.variantField`,
+        mapping?.variantField || '',
+      );
+    });
+
+    // Validate all mappings
+    const isValid = await trigger('frame_mapping');
+
+    if (!isValid) {
+      toast.error('Please map all frame fields to content fields', {
+        duration: 2000,
+        position: 'top-right',
+      });
+      return false;
+    }
+
+    const layout = watch('layout');
+    if (isLayoutWithFrameFields(layout)) {
+      const allMapped = layout.frame.fields.every((frameField) =>
+        fieldMappings.some(
+          (m) => m.frameField === frameField.name && m.variantField,
+        ),
+      );
+
+      if (!allMapped) {
+        toast.error('Please map all frame fields to content fields', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        return false;
+      }
+
+      const variantFieldSet = new Set();
+      const hasDuplicateMappings = fieldMappings.some((mapping) => {
+        if (!mapping.variantField) return false;
+
+        if (variantFieldSet.has(mapping.variantField)) {
+          return true;
+        }
+        variantFieldSet.add(mapping.variantField);
+        return false;
+      });
+
+      if (hasDuplicateMappings) {
+        toast.error('Each content field can only be mapped once', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
     <Flex
       as="form"
       h="100vh"
       direction="column"
+      w="630px"
       onSubmit={handleSubmit(onSubmit)}>
       <Box flexShrink="0">
         <Drawer.Header>
@@ -462,9 +907,14 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
                       onChange(item);
                     }}
                     renderItem={(item: any) => (
-                      <Box>
+                      <Flex justify="space-between">
                         <Text>{item.name}</Text>
-                      </Box>
+                        {item.frame && (
+                          <Text bg="green.400" fontSize="xs" px="sm">
+                            Frame
+                          </Text>
+                        )}
+                      </Flex>
                     )}
                     search={onSearchLayouts}
                   />
@@ -541,6 +991,132 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
             />
           </Box>
         )}
+
+        {formStep === 3 && showMappingStep && (
+          <Box>
+            <Text mb="md" color="text-secondary">
+              Ensure proper mapping of variant fields to the frame field
+            </Text>
+            {/* <Box mb="md">
+              <Flex gap="md" alignItems="center">
+                <Box flex={1}>
+                  <Text fontWeight="bold" color="grey">
+                    Frame Fields
+                  </Text>
+                </Box>
+                <Box flex={1} ml="xl">
+                  <Text fontWeight="bold" color="grey">
+                    Content Fields
+                  </Text>
+                </Box>
+              </Flex>
+            </Box> */}
+
+            {errors.frame_mapping && (
+              <Box
+                mb="md"
+                p="sm"
+                bg="red.100"
+                color="red.700"
+                borderRadius="md">
+                <Text>Please select a content field for each frame field</Text>
+              </Box>
+            )}
+
+            {frameFields.map((frameField, index) => {
+              const contentFieldValue =
+                fieldMappings.find((m) => m.frameField === frameField.name)
+                  ?.variantField || '';
+
+              return (
+                <Box key={frameField.name} mb="md">
+                  <Flex alignItems="center" gap="sm">
+                    <Box
+                      flex={1}
+                      bg="gray.400"
+                      px="md"
+                      py="sm"
+                      borderRadius="sm">
+                      <Text>{frameField.name}</Text>
+                    </Box>
+
+                    <ArrowLeft size={20} />
+
+                    <Box flex={1}>
+                      <Field
+                        error={
+                          errors?.frame_mapping?.[index]?.variantField?.message
+                        }>
+                        <Search
+                          itemToString={(item: any) => item && item}
+                          name={`frame_mapping.${index}.variantField`}
+                          placeholder="Search content field"
+                          minChars={0}
+                          value={contentFieldValue}
+                          onChange={(selectedValue: string) => {
+                            // Update the mappings state
+                            const newMappings = [...fieldMappings];
+                            const existingIndex = newMappings.findIndex(
+                              (m) => m.frameField === frameField.name,
+                            );
+
+                            if (existingIndex >= 0) {
+                              newMappings[existingIndex] = {
+                                frameField: frameField.name,
+                                frameFieldName: frameField.name,
+                                variantField: selectedValue,
+                                variantFieldId: variantFields.find(
+                                  (f) => f.name === selectedValue,
+                                )?.id,
+                                variantFieldName: selectedValue,
+                              };
+                            } else {
+                              newMappings.push({
+                                frameField: frameField.name,
+                                frameFieldName: frameField.name,
+                                variantField: selectedValue,
+                                variantFieldId: variantFields.find(
+                                  (f) => f.name === selectedValue,
+                                )?.id,
+                                variantFieldName: selectedValue,
+                              });
+                            }
+
+                            setFieldMappings(newMappings);
+                            setValue(
+                              `frame_mapping.${index}.frameField`,
+                              frameField.name,
+                            );
+                            setValue(
+                              `frame_mapping.${index}.variantField`,
+                              selectedValue,
+                            );
+                          }}
+                          renderItem={(item: string) => (
+                            <Box>
+                              <Text>{item}</Text>
+                            </Box>
+                          )}
+                          search={() => {
+                            return Promise.resolve(
+                              watch('fields')?.map((field) => field.name) || [],
+                            );
+                          }}
+                        />
+                      </Field>
+                    </Box>
+                  </Flex>
+                </Box>
+              );
+            })}
+
+            {frameFields.length === 0 && (
+              <Text color="text-secondary">
+                No frame fields available for mapping
+              </Text>
+            )}
+          </Box>
+        )}
       </Flex>
 
       <Flex px="xl" py="xl" gap="sm" flexShrink="0">
@@ -553,7 +1129,8 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
             Previous
           </Button>
         )}
-        {formStep < 2 ? (
+
+        {formStep < (showMappingStep ? 3 : 2) ? (
           <Button type="button" onClick={nextStep}>
             Next
           </Button>

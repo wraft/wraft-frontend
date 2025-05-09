@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TickIcon, ApproveTickIcon, CloudUploadIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
-import { Button, Flex, Input, useThemeUI } from 'theme-ui';
-import { Text } from '@wraft/ui';
+import { Box, Flex, Text } from '@wraft/ui';
 
 import ProgressBar from 'components/common/ProgressBar';
-import { Box } from 'common/Box';
 import { Asset } from 'utils/types';
 
 type DropzoneProps = {
@@ -31,9 +29,9 @@ const Dropzone = ({
   onDropped,
 }: DropzoneProps) => {
   const { setValue, watch, register } = useFormContext();
+  const [error, setError] = useState<string | null>(null);
 
   const files = watch('file');
-  const themeui = useThemeUI();
 
   useEffect(() => {
     if (files && files.length > 0) {
@@ -42,28 +40,43 @@ const Dropzone = ({
   }, [files]);
 
   const onDrop = useCallback(
-    (droppedFiles: any) => {
+    (droppedFiles: any, fileRejections: any) => {
+      if (fileRejections && fileRejections.length > 0) {
+        const rejection = fileRejections[0];
+        if (rejection.errors[0].code === 'file-too-large') {
+          setError('File size exceeds 2MB limit');
+        } else if (rejection.errors[0].code === 'file-invalid-type') {
+          const types = Object.keys(accept || {})
+            .map((type) => type.split('/')[1].toUpperCase())
+            .join(', ');
+          setError(`Invalid file type. Please upload a ${types} file`);
+        } else {
+          setError('Error uploading file. Please try again.');
+        }
+        return;
+      }
+      setError(null);
       onDropped && onDropped(droppedFiles);
       setValue('file', droppedFiles, { shouldValidate: true });
     },
-    [setValue, onDropped],
+    [setValue, onDropped, accept],
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    maxSize: 1 * 1024 * 1024, //1MB in bytes
-    multiple: multiple,
-    accept: accept || { '*': [] },
-  });
-
-  const types = Object.keys(accept || {})
-    .map((type) => type.split('/')[1].toUpperCase())
-    .join(', ');
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      onDrop,
+      maxSize: 2 * 1024 * 1024, //2MB in bytes
+      multiple: multiple,
+      accept: accept || { '*': [] },
+    });
 
   register('file');
 
   return (
-    <Box border="1px dashed" borderColor="neutral.200" borderRadius="4px">
+    <Box
+      border="1px dashed"
+      borderColor={isDragReject ? 'error' : 'neutral.200'}
+      borderRadius="4px">
       <Box
         {...getRootProps()}
         w="100%"
@@ -75,11 +88,11 @@ const Dropzone = ({
         borderRadius="4px"
         h="100%"
         py="18px"
-        px={3}>
-        <Input
+        px="md">
+        <input
           type="file"
           name="file"
-          sx={{ display: 'none' }}
+          style={{ display: 'none' }}
           {...getInputProps({})}
         />
         {!assets && (
@@ -100,11 +113,7 @@ const Dropzone = ({
             alignItems="center"
             borderRadius="6px"
             justifyContent="space-between">
-            <Flex
-              sx={{
-                alignItems: 'center',
-                pl: 2,
-              }}>
+            <Flex as="div" alignItems="center" pl={2}>
               <Text>{assets[assets.length - 1].name}</Text>
               <Box
                 bg="green.700"
@@ -116,50 +125,46 @@ const Dropzone = ({
                 borderRadius="44px"
                 ml={2}>
                 <TickIcon
-                  color={themeui?.theme?.colors?.white as string}
+                  color="white"
                   height={12}
                   width={12}
                   viewBox="0 0 24 24"
                 />
               </Box>
             </Flex>
-            <Flex sx={{ gap: 3, pr: 1 }}>
-              <Button
-                variant="secondary"
+            <Flex as="div" gap={3} pr={1}>
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                 }}>
                 Change File
-              </Button>
-              <Button
-                variant="secondary"
+              </button>
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                 }}>
                 Remove
-              </Button>
+              </button>
             </Flex>
           </Box>
         ) : (
           <>
             {(!files || noChange) && (
               <Flex
-                sx={{
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  mt: '12px',
-                }}>
+                as="div"
+                flexDirection="column"
+                alignItems="center"
+                mt="12px">
                 <Text fontWeight="bold">
                   Drag & drop or upload valid <a href="#">Wraft</a> files
                 </Text>
                 <Text fontSize="sm" color="text-secondary">
                   A valid structure file is a zip contains a valid wraft.json
-                  {/* {types || 'All'} - Max file size 1MB */}
                 </Text>
               </Flex>
             )}
             {files && files[0] && !noChange && (
-              <Flex sx={{ alignItems: 'center' }}>
+              <Flex as="div" alignItems="center">
                 <Text flexShrink={0}>{files[0].name}</Text>
                 {assets && assets.length > 0 && (
                   <Box
@@ -174,6 +179,11 @@ const Dropzone = ({
               </Flex>
             )}
           </>
+        )}
+        {error && (
+          <Text color="error" mt={2} fontSize="sm">
+            {error}
+          </Text>
         )}
         {progress && progress > 0 && !noChange ? (
           <Box mt={3}>

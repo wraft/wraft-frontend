@@ -1,26 +1,12 @@
 import styled, { x } from '@xstyled/emotion';
-import { CaretCircleDown, CaretDown } from '@phosphor-icons/react';
-
-import { Box } from 'common/Box';
-
-import Block from './Block';
+import { CaretDown } from '@phosphor-icons/react';
+import { Box } from '@wraft/ui';
 
 interface AccordionProps {
   header: React.ReactNode;
   children?: any;
+  error?: boolean;
 }
-
-const Frame = styled.divBox`
-  background-color: gray.100;
-  border: solid 1px;
-  align-item: 'center';
-  border-color: gray.400;
-  border-width: 0;
-  & summary {
-    cursor: pointer;
-    liststyle: none;
-  }
-`;
 
 const Header = styled.divBox`
   padding: 0;
@@ -28,18 +14,21 @@ const Header = styled.divBox`
   border-color: gray.400;
 `;
 
-const Accordion = ({ header, children }: AccordionProps) => (
-  <Frame as="details">
-    <Header display="flex" as="summary" borderBottom={0}>
+const Accordion = ({ header, children, error = false }: AccordionProps) => (
+  <Box
+    as="details"
+    alignItems="center"
+    bg={error === true ? 'red.100' : 'gray.100'}>
+    <Header display="flex" as="summary" borderBottom={0} cursor="pointer">
       {header}
-      <Box mr={2} mt={2}>
+      <Box mr="md" mt="sm">
         <CaretDown size={16} />
       </Box>
     </Header>
     <Box border="solid 1px" borderColor="border" borderBottom={0}>
       {children}
     </Box>
-  </Frame>
+  </Box>
 );
 
 export default Accordion;

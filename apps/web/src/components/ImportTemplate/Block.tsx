@@ -1,9 +1,6 @@
 import Link from 'next/link';
-// import { Check } from '@phosphor-icons/react';
 import styled, { th, x } from '@xstyled/emotion';
-
-import { Box } from 'common/Box';
-import { Text } from 'common/Text';
+import { Box, Flex, Text } from '@wraft/ui';
 
 interface BlockProps {
   title: string;
@@ -36,19 +33,21 @@ const List = styled.liBox`
 `;
 
 const FlexStyled = styled('div')<StyledFlexProps>`
-  padding: ${th.space(2)};
+  padding: xs;
   align-items: center;
-  gap: ${th.space(2)};
+  gap: sm;
   flex: 1;
   border: solid 1px;
   border-color: ${({ isClean }) =>
     isClean ? 'transparent' : th.color('gray.400')};
-  border-bottom: ${({ isClean }) => (isClean ? 0 : 'transparent')};
+  // border-bottom: ${({ isClean }) => (isClean ? 0 : 'transparent')};
   border-right: ${({ isClean }) => (isClean ? 0 : 'transparent')};
   display: flex;
+  align-items: center;
 `;
 
 const Pane = styled.divBox`
+  margin-top: 3px;
   svg: {
     fill: green.400;
   }
@@ -56,17 +55,76 @@ const Pane = styled.divBox`
 
 const Block = ({ title, icon, desc, clean }: BlockProps) => (
   <FlexStyled isClean={clean}>
-    <Pane color="">{icon}</Pane>
-    <Text fontSize="sm" lineHeight={1} m={0}>
-      {title}
-    </Text>
+    <Flex alignItems="center" gap="xs">
+      <Pane color="">{icon}</Pane>
+      <Text lineHeight={1} m={0}>
+        {title}
+      </Text>
+    </Flex>
     {desc && (
-      <Text fontSize="xs" lineHeight={1} m={0} color="gray.800">
+      <Text fontSize="sm" lineHeight={1} m={0} color="gray.800">
         {desc}
       </Text>
     )}
   </FlexStyled>
 );
+
+const BlockSection = ({ data }: any) => {
+  const formatKey = (key: string) =>
+    key.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+  if (data === null || data === undefined) return null;
+
+  const renderValue = (value: any, keyPrefix = '') => {
+    if (
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
+    ) {
+      return (
+        <Text key={keyPrefix} m="0" fontSize="sm" color="text-secondary">
+          {String(value)}
+        </Text>
+      );
+    }
+
+    if (Array.isArray(value)) {
+      return value.map((item, idx) => (
+        <Box key={`${keyPrefix}-${idx}`} ml="md">
+          {renderValue(item, `${keyPrefix}-${idx}`)}
+        </Box>
+      ));
+    }
+
+    if (typeof value === 'object') {
+      return Object.entries(value).map(([subKey, subVal]) => (
+        <Flex key={`${keyPrefix}-${subKey}`} gap="sm" mb="sm">
+          <Text fontWeight="heading" fontSize="sm" m="0">
+            {formatKey(subKey)}:
+          </Text>
+          <Box>{renderValue(subVal, `${keyPrefix}-${subKey}`)}</Box>
+        </Flex>
+      ));
+    }
+
+    return null;
+  };
+
+  const root = typeof data === 'object' ? data : { Value: data };
+
+  return (
+    <Box px="sm" py="sm">
+      {Object.entries(root).map(([key, value]) => (
+        <Flex key={key} gap="sm" mb="sm">
+          <Text fontWeight="heading" fontSize="sm" m="0">
+            {formatKey(key)}:
+          </Text>
+          <Box>{renderValue(value, key)}</Box>
+        </Flex>
+      ))}
+    </Box>
+  );
+};
 
 /**
  * For listing imported Structs
@@ -104,9 +162,6 @@ const ImportedList = ({ items }: ImportedListProps) => (
           borderWidth={0}
           borderColor="border"
           borderBottomWidth={1}>
-          {/* <x.div>
-            <Check size={12} color="border" />
-          </x.div> */}
           <Box pl={1} flex={1} display="flex">
             <Link
               href={`/${pathMapping[item.item_type as keyof typeof pathMapping]}/${item.id}`}>
@@ -129,4 +184,4 @@ const ImportedList = ({ items }: ImportedListProps) => (
   </ListParent>
 );
 
-export { Block as default, ImportedList, ListParent, List };
+export { Block as default, ImportedList, ListParent, List, BlockSection };

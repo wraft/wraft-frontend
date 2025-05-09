@@ -31,8 +31,6 @@ const BlockTemplateListFrame: FC = () => {
   const [deleteBlock, setDeleteBlock] = useState<number | null>(null);
   const { hasPermission } = usePermission();
 
-  const router = useRouter();
-
   const loadData = () => {
     setLoading(true);
     fetchAPI('block_templates')
