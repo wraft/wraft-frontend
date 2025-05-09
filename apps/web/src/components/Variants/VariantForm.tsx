@@ -119,6 +119,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     trigger,
     watch,
     unregister,
+    getValues,
   } = useForm<Variant>({
     defaultValues: {
       ...formDefaultValue,
@@ -143,6 +144,19 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       layout.frame?.fields !== undefined
     );
   }
+  const updateFormMappings = (mappings: FieldMapping[]) => {
+    // Clear existing form mappings
+    const currentMappings = getValues('frame_mapping') || [];
+    currentMappings.forEach((_, index) => {
+      unregister(`frame_mapping.${index}`);
+    });
+
+    // Set new mappings
+    mappings.forEach((mapping, index) => {
+      setValue(`frame_mapping.${index}.frameField`, mapping.frameField);
+      setValue(`frame_mapping.${index}.variantField`, mapping.variantField);
+    });
+  };
 
   useEffect(() => {
     if (contentId) {
@@ -174,8 +188,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
           (field) => !(field as any).fromFrame,
         );
         setValue('fields', updatedFields);
-      }
 
+        // Clear mappings when frame changes
+        setFieldMappings([]);
+        mappingsRef.current = [];
+        updateFormMappings([]);
+      }
       // Create default mappings for frame fields
       const defaultMappings = frameFieldsRef.current.map((frameField: any) => {
         // Try to find a matching variant field by name
@@ -193,9 +211,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
         };
       });
 
-      // Save mappings to state and register them with the form
-      setFieldMappings(defaultMappings);
-      mappingsRef.current = defaultMappings;
+      // Only update mappings if they're empty (new frame) or if the frame changed
+      if (fieldMappings.length === 0 || frameChanged) {
+        setFieldMappings(defaultMappings);
+        mappingsRef.current = defaultMappings;
+        updateFormMappings(defaultMappings);
+      }
 
       // Register the mappings with react-hook-form
       defaultMappings.forEach((mapping, index) => {
@@ -242,6 +263,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
       setFrameFields([]);
       setFieldMappings([]);
+      updateFormMappings([]);
       setIsFrameSelected(false);
     }
   }, [
@@ -301,9 +323,20 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
         }));
         setVariantFields(variantFieldList);
       }
-
       if (res.content_type?.frame_mapping) {
-        setFieldMappings(res.content_type.frame_mapping);
+        const initialMappings = res.content_type.frame_mapping.map(
+          (mapping: any) => ({
+            frameField: mapping.destination,
+            frameFieldName: mapping.destination,
+            variantField: mapping.source,
+            variantFieldName: mapping.source,
+            variantFieldId: '',
+          }),
+        );
+
+        setFieldMappings(initialMappings);
+        mappingsRef.current = initialMappings;
+        updateFormMappings(initialMappings);
       }
 
       if (res.content_type?.fields.length === 0) {
@@ -510,7 +543,83 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     setValue(name, e);
   };
 
-  const goTo = (formStepNumber: number) => {
+  const goTo = async (formStepNumber: number) => {
+    if (formStep === 3) {
+      const currentMappings = fieldMappings.filter(
+        (mapping) => mapping.frameField && mapping.variantField,
+      );
+      setFieldMappings(currentMappings);
+      mappingsRef.current = currentMappings;
+      updateFormMappings(currentMappings);
+    }
+
+    if (formStepNumber === 3) {
+      const isFieldsValid = await trigger(['fields']);
+
+      if (isFieldsValid) {
+        const layout = watch('layout');
+        if (isLayoutWithFrameFields(layout) && layout.frame.fields.length > 0) {
+          const frameFieldNames = new Set(
+            layout.frame.fields.map((field: any) => field.name.toLowerCase()),
+          );
+
+          const fieldsWithSource = watch('fields').map((field: any) => ({
+            ...field,
+            fromFrame: frameFieldNames.has(field.name.toLowerCase()),
+          }));
+
+          setValue('fields', fieldsWithSource);
+
+          const updatedVariantFields = fieldsWithSource.map((field: any) => ({
+            id: field.id,
+            name: field.name,
+          }));
+          setVariantFields(updatedVariantFields);
+
+          const currentFieldNames = new Set(
+            fieldsWithSource.map((f: any) => f.name),
+          );
+
+          const updatedMappings = mappingsRef.current
+            .filter((m) => currentFieldNames.has(m.variantField))
+            .map((mapping) => {
+              const matchingField = fieldsWithSource.find(
+                (f: any) => f.name === mapping.variantField,
+              );
+              return {
+                ...mapping,
+                variantFieldId: matchingField?.id || mapping.variantFieldId,
+              };
+            });
+
+          const mappedFrameFields = new Set(
+            updatedMappings.map((m) => m.frameField),
+          );
+
+          layout.frame.fields.forEach((frameField: any) => {
+            if (!mappedFrameFields.has(frameField.name)) {
+              const matchingField = fieldsWithSource.find(
+                (f: any) =>
+                  f.name.toLowerCase() === frameField.name.toLowerCase(),
+              );
+
+              updatedMappings.push({
+                frameField: frameField.name,
+                frameFieldName: frameField.name,
+                variantField: matchingField?.name || '',
+                variantFieldId: matchingField?.id || '',
+                variantFieldName: matchingField?.name || '',
+              });
+            }
+          });
+
+          setFieldMappings(updatedMappings);
+          mappingsRef.current = updatedMappings;
+          updateFormMappings(updatedMappings);
+        }
+      }
+    }
+
     setFormStep(formStepNumber);
   };
 
@@ -533,13 +642,12 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
 
   const prevStep = () => {
     if (formStep === 3) {
-      const layout = watch('layout');
-      if (isLayoutWithFrameFields(layout)) {
-        const currentMappings = fieldMappings.filter(
-          (mapping) => mapping.frameField && mapping.variantField,
-        );
-        setFieldMappings(currentMappings);
-      }
+      const currentMappings = fieldMappings.filter(
+        (mapping) => mapping.frameField && mapping.variantField,
+      );
+      setFieldMappings(currentMappings);
+      mappingsRef.current = currentMappings;
+      updateFormMappings(currentMappings);
     }
     setFormStep(formStep - 1);
   };
@@ -558,78 +666,110 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       if (isValid) {
         const layout = watch('layout');
         if (isLayoutWithFrameFields(layout) && layout.frame.fields.length > 0) {
-          // Mark fields that originated from the frame template
           const frameFieldNames = new Set(
             layout.frame.fields.map((field: any) => field.name.toLowerCase()),
           );
 
-          const fieldsWithSource = watch('fields').map((field: any) => {
-            return {
-              ...field,
-              fromFrame: frameFieldNames.has(field.name.toLowerCase()),
-            };
-          });
+          const fieldsWithSource = watch('fields').map((field: any) => ({
+            ...field,
+            fromFrame: frameFieldNames.has(field.name.toLowerCase()),
+          }));
 
           setValue('fields', fieldsWithSource);
 
-          // First, properly unregister any existing mappings fields
-          const mappingsCount = fieldMappings.length;
-          for (let i = 0; i < mappingsCount; i++) {
-            unregister(`frame_mapping.${i}.frameField`);
-            unregister(`frame_mapping.${i}.variantField`);
-          }
+          const updatedVariantFields = fieldsWithSource.map((field: any) => ({
+            id: field.id,
+            name: field.name,
+          }));
+          setVariantFields(updatedVariantFields);
 
-          // Create initial mappings when moving to mapping step
-          const initialMappings = layout.frame.fields.map((frameField: any) => {
-            const matchingVariantField = fieldsWithSource.find(
-              (field: any) =>
-                field.name.toLowerCase() === frameField.name.toLowerCase(),
-            );
+          const currentFieldNames = new Set(
+            fieldsWithSource.map((f: any) => f.name),
+          );
 
-            return {
-              frameField: frameField.name,
-              frameFieldName: frameField.name,
-              variantField: matchingVariantField?.name || '',
-              variantFieldId: matchingVariantField?.id || '',
-              variantFieldName: matchingVariantField?.name || '',
-            };
+          const updatedMappings = mappingsRef.current
+            .filter((m) => currentFieldNames.has(m.variantField))
+            .map((mapping) => {
+              const matchingField = fieldsWithSource.find(
+                (f: any) => f.name === mapping.variantField,
+              );
+              return {
+                ...mapping,
+                variantFieldId: matchingField?.id || mapping.variantFieldId,
+              };
+            });
+
+          const mappedFrameFields = new Set(
+            updatedMappings.map((m) => m.frameField),
+          );
+
+          layout.frame.fields.forEach((frameField: any) => {
+            if (!mappedFrameFields.has(frameField.name)) {
+              const matchingField = fieldsWithSource.find(
+                (f: any) =>
+                  f.name.toLowerCase() === frameField.name.toLowerCase(),
+              );
+
+              updatedMappings.push({
+                frameField: frameField.name,
+                frameFieldName: frameField.name,
+                variantField: matchingField?.name || '',
+                variantFieldId: matchingField?.id || '',
+                variantFieldName: matchingField?.name || '',
+              });
+            }
           });
 
-          // Register and set values for each mapping
-          setFieldMappings(initialMappings);
-          mappingsRef.current = initialMappings;
-
-          // Initialize all mapping fields in the form
-          initialMappings.forEach((mapping, index) => {
-            setValue(`frame_mapping.${index}.frameField`, mapping.frameField);
-            setValue(
-              `frame_mapping.${index}.variantField`,
-              mapping.variantField,
-            );
-          });
+          setFieldMappings(updatedMappings);
+          mappingsRef.current = updatedMappings;
+          updateFormMappings(updatedMappings);
 
           setFormStep(3);
           return;
         }
       }
     } else if (formStep === 3) {
-      // Check that all mappings are present in the form data
-      frameFields.forEach((frameField, index) => {
-        setValue(`frame_mapping.${index}.frameField`, frameField.name);
+      isValid = await validateMappings();
+    }
 
-        const mapping = fieldMappings.find(
-          (m) => m.frameField === frameField.name,
-        );
-        setValue(
-          `frame_mapping.${index}.variantField`,
-          mapping?.variantField || '',
-        );
+    if (isValid) {
+      setFormStep((prev) => prev + 1);
+    }
+  };
+
+  const validateMappings = async () => {
+    frameFields.forEach((frameField, index) => {
+      setValue(`frame_mapping.${index}.frameField`, frameField.name);
+
+      const mapping = fieldMappings.find(
+        (m) => m.frameField === frameField.name,
+      );
+      setValue(
+        `frame_mapping.${index}.variantField`,
+        mapping?.variantField || '',
+      );
+    });
+
+    // Validate all mappings
+    const isValid = await trigger('frame_mapping');
+
+    if (!isValid) {
+      toast.error('Please map all frame fields to content fields', {
+        duration: 2000,
+        position: 'top-right',
       });
+      return false;
+    }
 
-      // Validate all mappings
-      isValid = await trigger('frame_mapping');
+    const layout = watch('layout');
+    if (isLayoutWithFrameFields(layout)) {
+      const allMapped = layout.frame.fields.every((frameField) =>
+        fieldMappings.some(
+          (m) => m.frameField === frameField.name && m.variantField,
+        ),
+      );
 
-      if (!isValid) {
+      if (!allMapped) {
         toast.error('Please map all frame fields to content fields', {
           duration: 2000,
           position: 'top-right',
@@ -637,50 +777,27 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
         return false;
       }
 
-      // Additional checks
-      const layout = watch('layout');
-      if (isLayoutWithFrameFields(layout)) {
-        // Check if all frame fields are mapped
-        const allMapped = layout.frame.fields.every((frameField) =>
-          fieldMappings.some(
-            (m) => m.frameField === frameField.name && m.variantField,
-          ),
-        );
+      const variantFieldSet = new Set();
+      const hasDuplicateMappings = fieldMappings.some((mapping) => {
+        if (!mapping.variantField) return false;
 
-        if (!allMapped) {
-          toast.error('Please map all frame fields to content fields', {
-            duration: 2000,
-            position: 'top-right',
-          });
-          return false;
+        if (variantFieldSet.has(mapping.variantField)) {
+          return true;
         }
+        variantFieldSet.add(mapping.variantField);
+        return false;
+      });
 
-        // Validate that no field is mapped multiple times
-        const variantFieldSet = new Set();
-        const hasDuplicateMappings = fieldMappings.some((mapping) => {
-          if (!mapping.variantField) return false;
-
-          if (variantFieldSet.has(mapping.variantField)) {
-            return true;
-          }
-          variantFieldSet.add(mapping.variantField);
-          return false;
+      if (hasDuplicateMappings) {
+        toast.error('Each content field can only be mapped once', {
+          duration: 2000,
+          position: 'top-right',
         });
-
-        if (hasDuplicateMappings) {
-          toast.error('Each content field can only be mapped once', {
-            duration: 2000,
-            position: 'top-right',
-          });
-          return false;
-        }
+        return false;
       }
-      isValid = true;
     }
 
-    if (isValid) {
-      setFormStep((prev) => prev + 1);
-    }
+    return true;
   };
 
   return (

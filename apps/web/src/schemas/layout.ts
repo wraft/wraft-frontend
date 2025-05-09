@@ -30,12 +30,15 @@ export const Layoutschema = z.object({
   width: z.coerce.number(),
   unit: z.string(),
   assets: z.any(),
-
   frame: z
-    .object({
-      id: z.string().regex(uuidRegex, 'Invalid Frame'),
-      name: z.string().min(1, 'Frame name is required'),
-    })
+    .union([
+      z.object({
+        id: z.string().regex(uuidRegex, 'Invalid Frame'),
+        name: z.string().min(1, 'Frame name is required'),
+      }),
+      z.null(),
+      z.string().length(0),
+    ])
     .optional(),
 });
 
