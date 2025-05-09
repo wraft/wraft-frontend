@@ -36,8 +36,7 @@ export const Layoutschema = z.object({
         id: z.string().regex(uuidRegex, 'Invalid Frame'),
         name: z.string().min(1, 'Frame name is required'),
       }),
-      z.null(),
-      z.string().length(0),
+      z.string().optional(),
     ])
     .optional(),
 });

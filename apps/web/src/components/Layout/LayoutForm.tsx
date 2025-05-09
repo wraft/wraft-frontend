@@ -51,7 +51,7 @@ export interface LayoutContent {
   engine: IEngine;
   description: string;
   assets: any[];
-  frame: IFrame;
+  frame: IFrame | null;
 }
 
 export interface IFrame {
@@ -99,6 +99,9 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   } = useForm<Layout>({
     mode: 'onBlur',
     resolver: zodResolver(Layoutschema),
+    defaultValues: {
+      frame: '', // Initialize frame with empty string
+    },
   });
 
   useEffect(() => {
@@ -129,7 +132,11 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       setValue('description', layout?.description);
       setValue('engine', layout?.engine);
       setValue('unit', layout?.unit || '');
-      setValue('frame', layout?.frame || '');
+      if (layout?.frame) {
+        setValue('frame', layout.frame);
+      } else {
+        setValue('frame', '');
+      }
     }
   }, [layout]);
 
@@ -265,8 +272,11 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       formData.append('slug', data.slug);
       formData.append('engine_id', data.engine.id);
       formData.append('assets', data.assets);
-      formData.append('frame_id', data.frame.id);
       // formData.append('screenshot', data.screenshot[0] || null);
+      formData.append(
+        'frame_id',
+        data.frame && data.frame.id ? data.frame.id : '',
+      );
 
       const apiUrl = isEdit ? `layouts/${cId}` : 'layouts';
       const apiMethod = isEdit ? putAPI : postAPI;
