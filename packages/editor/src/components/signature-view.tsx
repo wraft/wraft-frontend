@@ -178,6 +178,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
   const [error, setError] = useState<string | undefined>();
   const [progress, setProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const uploading = progress > 0 && progress < 1;
 
   const tabStore = useTab();
   const selectedTabId = tabStore.useState("selectedId");
