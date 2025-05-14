@@ -5,7 +5,7 @@ import { DownloadSimple } from '@phosphor-icons/react';
 import NavLink from 'common/NavLink';
 import { TimeAgo } from 'common/Atoms';
 import { AvatarCard } from 'common/AvatarCard';
-import { updateVars } from 'utils/index';
+import { updateVars, convertToVariableName } from 'utils/index';
 import { IFieldField, IFieldType } from 'utils/types/content';
 import { ContentState } from 'utils/types';
 
@@ -17,6 +17,9 @@ import MetaBlock from './MetaBlock';
 
 export const InfoSection = () => {
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
+  const [parsedFieldValues, setParsedFieldValues] = useState<
+    Record<string, any>
+  >({});
 
   const {
     contents,
@@ -33,6 +36,7 @@ export const InfoSection = () => {
     docRole,
     setFieldTokens,
     setContentBody,
+    setFieldValues,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -46,9 +50,16 @@ export const InfoSection = () => {
   const handleSaved = (placeholders: any) => {
     const tokens = mapPlaceholdersToFields(placeholders);
 
+    const newFieldValues = placeholders.reduce((acc: any, field: any) => {
+      acc[convertToVariableName(field.name)] = field.value;
+      return acc;
+    }, {});
+
     if (tokens?.length > 0) {
       setFieldTokens(tokens);
     }
+
+    setFieldValues(newFieldValues);
 
     if (contents?.content?.serialized?.serialized) {
       const serializedData = editorRef.current?.helpers?.getJSON();
@@ -100,6 +111,27 @@ export const InfoSection = () => {
       id: id,
     }));
   };
+
+  const effectiveFieldValues =
+    fieldValues && Object.keys(fieldValues).length > 0
+      ? fieldValues
+      : parsedFieldValues;
+
+  useEffect(() => {
+    if (contents?.content?.serialized?.fields) {
+      try {
+        const parsedFields = JSON.parse(contents.content.serialized.fields);
+        setParsedFieldValues(parsedFields);
+
+        // If we don't have fieldValues set yet, set them from parsed fields
+        if (!fieldValues || Object.keys(fieldValues).length === 0) {
+          setFieldValues(parsedFields);
+        }
+      } catch (error) {
+        console.error('Error parsing field values:', error);
+      }
+    }
+  }, [contents, fieldValues, setFieldValues]);
 
   return (
     <Box px="md" py="md">
@@ -187,7 +219,7 @@ export const InfoSection = () => {
 
       <PlaceholderBlock
         fields={fieldMaps}
-        fieldValues={fieldValues}
+        fieldValues={effectiveFieldValues}
         onSaved={handleSaved}
       />
 

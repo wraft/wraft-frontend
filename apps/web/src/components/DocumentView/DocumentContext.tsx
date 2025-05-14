@@ -77,6 +77,7 @@ interface DocumentContextProps {
   setPageTitle: (data: any) => void;
   setMeta: (data: any) => void;
   setTabActiveId: (state: string) => void;
+  setFieldValues: (data: any) => void;
 }
 
 const createAxiosInstance = (): AxiosInstance => {
@@ -459,6 +460,7 @@ export const DocumentProvider = ({
         setPageTitle,
         setTabActiveId,
         setMeta,
+        setFieldValues,
       }}>
       {children}
     </DocumentContext.Provider>

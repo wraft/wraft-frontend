@@ -39,16 +39,12 @@ interface PlaceholderBlockProps {
   fieldValues?: any;
 }
 
-const PlaceholderBlock = ({
-  fields,
-  fieldValues,
-  onSaved,
-}: PlaceholderBlockProps) => {
+const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const { editorMode } = useDocument();
+  const { editorMode, fieldValues, setFieldValues } = useDocument();
 
   const { register, handleSubmit } = useForm();
   const mobileMenuDrawer = useDrawer();
@@ -73,6 +69,7 @@ const PlaceholderBlock = ({
 
     const newMappedFields = mapFields(fields, data);
     setMappedFields(newMappedFields);
+    setFieldValues(data);
     onSaved(newMappedFields);
 
     setSubmitting(false);
