@@ -207,6 +207,14 @@ export function TableHandle() {
             </StyledTableHandlePopoverItem>
           )}
 
+          {editor.commands.splitTableCell.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.splitTableCell}
+            >
+              <span>Unmerge Cells</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
           {editor.commands.deleteCellSelection.canExec() && (
             <StyledTableHandlePopoverItem
               onSelect={editor.commands.deleteCellSelection}
