@@ -306,7 +306,7 @@ const TeamList = () => {
                           setIsAssignRole={setIsAssignRole}
                           roles={roles}
                           setRerender={setRerender}
-                          currentRoleList={currentRoleList}
+                          currentMemberRoles={row.original.roles}
                           userId={row.original?.members?.memberId}
                         />
                       </DropdownMenu>

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Flex, Text, Button, Box, Label } from 'theme-ui';
+import { Flex, Text, Button, Box, Label } from '@wraft/ui';
 
 import Checkbox from 'common/Checkbox';
 import { postAPI } from 'utils/models';
@@ -18,7 +18,7 @@ interface RoleList {
 type AssignRoleProps = {
   roles: RoleType[];
   setIsAssignRole: any;
-  currentRoleList: string[];
+  currentMemberRoles: { roleName: string; roleId: string }[];
   userId: string | null;
   setRerender: any;
 };
@@ -30,7 +30,7 @@ type FormInputs = {
 const AssignRole = ({
   roles,
   setIsAssignRole,
-  currentRoleList,
+  currentMemberRoles,
   userId,
   setRerender,
 }: AssignRoleProps) => {
@@ -41,23 +41,20 @@ const AssignRole = ({
 
   const { handleSubmit } = useForm<FormInputs>();
 
+  const currentRoleIds = currentMemberRoles.map((role) => role.roleId);
+
   useEffect(() => {
     if (roles) {
-      const roleData: (RoleList | undefined)[] = roles.map((role) => {
-        if (!currentRoleList.includes(role.id)) {
-          return {
-            roleName: role.name,
-            roleId: role.id,
-          };
-        }
-        return undefined;
-      });
+      const availableRoles = roles
+        .filter((role) => !currentRoleIds.includes(role.id))
+        .map((role) => ({
+          roleName: role.name,
+          roleId: role.id,
+        }));
 
-      const filteredRoleData = roleData.filter((role) => role !== undefined);
-
-      setRoleList(filteredRoleData as RoleList[]);
+      setRoleList(availableRoles);
     }
-  }, [roles]);
+  }, [roles, currentRoleIds]);
 
   const updateSelectedRoles = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -92,31 +89,21 @@ const AssignRole = ({
     <Flex
       as="form"
       onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        flexDirection: 'column',
-        alignItems: 'center',
-        width: '205px',
-        height: '295px',
-        overflow: 'hidden',
-      }}>
-      <Box
-        p={3}
-        sx={{
-          borderBottom: '1px solid',
-          borderColor: 'neutral.200',
-          width: '100%',
-        }}>
-        <Text variant="subB" sx={{ color: 'text-primary' }}>
-          Choose roles
-        </Text>
+      flexDirection="column"
+      alignItems="center"
+      minWidth="205px"
+      maxHeight="295px"
+      overflow="hidden">
+      <Box p="3" borderBottom="1px solid" borderColor="neutral.200" w="100%">
+        <Text fontWeight="heading">Choose roles</Text>
       </Box>
       {roleList && roleList.length < 1 && (
-        <Text variant="pR">No more roles to add.</Text>
+        <Text py="md">No more roles to add.</Text>
       )}
-      <Box sx={{ width: '100%', minHeight: '180px', overflow: 'scroll' }}>
+      <Box w="100%" maxHeight="220px" overflow="auto">
         {roleList &&
           roleList.map((role) => (
-            <Box key={role.roleId} as={Box} sx={{ width: '100%' }}>
+            <Box key={role.roleId} as={Box} w="100%">
               <Flex>
                 <Label
                   sx={{
@@ -126,21 +113,16 @@ const AssignRole = ({
                     borderColor: 'border',
                     py: '12px',
                     px: '16px',
+                    width: '100%',
                     ':last-of-type': {
                       borderBottom: 'none',
                     },
                   }}>
                   <Checkbox
-                    size={'small'}
+                    size="small"
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
-                  <Text
-                    variant="subR"
-                    sx={{
-                      pl: 1,
-                      textTransform: 'capitalize',
-                      color: 'text-primary',
-                    }}>
+                  <Text fontSize="lg" pl="1" textTransform="capitalize">
                     {role.roleName}
                   </Text>
                 </Label>
@@ -148,21 +130,8 @@ const AssignRole = ({
             </Box>
           ))}
       </Box>
-      <Button
-        type="submit"
-        variant="base"
-        sx={{
-          mt: 'auto',
-          width: '100%',
-          height: '46px',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderTop: '1px solid',
-          borderColor: 'neutral.200',
-        }}>
-        <Text variant="pB" sx={{ color: 'green.700' }}>
-          Save
-        </Text>
+      <Button type="submit" variant="primary" fullWidth>
+        Save
       </Button>
     </Flex>
   );
