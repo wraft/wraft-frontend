@@ -247,6 +247,20 @@ export function TableMenu({ isActive }: TableMenuProps) {
               <MenuLabel>Merge cells</MenuLabel>
             </MenuItem>
           )}
+
+          {editor.commands.splitTableCell.canExec() && (
+            <MenuItem
+              onClick={() => {
+                editor.commands.splitTableCell();
+                setIsOpen(false);
+              }}
+            >
+              <IconContainer>
+                <Plus size={16} weight="bold" />
+              </IconContainer>
+              <MenuLabel>Unmerge cells</MenuLabel>
+            </MenuItem>
+          )}
         </MenuContent>
       )}
     </TableMenuContainer>
