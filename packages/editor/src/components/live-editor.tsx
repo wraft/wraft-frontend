@@ -27,6 +27,15 @@ import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
 
+export interface Signer {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface SignersConfig {
+  signers: Signer[];
+}
 export interface EditorProps {
   defaultContent?: NodeJSON;
   onChange?: (content: string) => void;
@@ -37,6 +46,7 @@ export interface EditorProps {
   isReadonly?: boolean;
   tokens?: any;
   collabData?: any;
+  signersConfig?: SignersConfig;
 }
 
 export const LiveEditor = forwardRef(
@@ -49,6 +59,7 @@ export const LiveEditor = forwardRef(
       tokens,
       socketUrl = "ws://localhost:4000",
       collabData,
+      signersConfig = { signers: [] },
     }: EditorProps,
     ref,
   ) => {
@@ -106,6 +117,7 @@ export const LiveEditor = forwardRef(
         doc,
         awareness: wsProvider.awareness as unknown as Awareness,
         isReadonly,
+        signersConfig,
       });
 
       const editor = createEditor({ extension, defaultContent });
