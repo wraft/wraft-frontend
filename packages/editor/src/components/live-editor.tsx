@@ -7,6 +7,7 @@ import {
   forwardRef,
   useState,
   useEffect,
+  useRef,
 } from "react";
 import { Socket } from "phoenix";
 import * as Y from "yjs";
@@ -15,13 +16,12 @@ import { ListDOMSerializer } from "prosekit/extensions/list";
 import { markdownFromHTML } from "@helpers/markdown";
 import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
-import { IndexeddbPersistence } from "y-indexeddb";
+// import { IndexeddbPersistence } from "y-indexeddb";
 import { getRandomColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
-import InlineMenu from "./inline-menu";
+// import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
-import TagMenu from "./tag-menu";
 import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
@@ -43,7 +43,7 @@ export const LiveEditor = forwardRef(
   (
     {
       defaultContent,
-      placeholder = "Write something, or ' / ' for commands…",
+      placeholder = "Write something, or ' / ' for commands…",
       className = "",
       isReadonly = true,
       tokens,
@@ -53,6 +53,7 @@ export const LiveEditor = forwardRef(
     ref,
   ) => {
     const [provider, setProvider] = useState<any>();
+    const contentInitialized = useRef(false);
 
     const doc = useMemo(
       () =>
@@ -113,6 +114,20 @@ export const LiveEditor = forwardRef(
       const yXmlFragment = doc.getXmlFragment("prosemirror");
       const ymap = doc.getMap("doc-initial");
 
+      // Initialize content if needed
+      if (
+        defaultContent &&
+        yXmlFragment.length === 0 &&
+        !contentInitialized.current
+      ) {
+        prosemirrorJSONToYXmlFragment(
+          editor.schema,
+          defaultContent,
+          yXmlFragment,
+        );
+        contentInitialized.current = true;
+      }
+
       ymap.observe((event) => {
         event.changes.keys.forEach((change, key) => {
           if (key === "initialLoad") {
@@ -121,73 +136,24 @@ export const LiveEditor = forwardRef(
               defaultContent,
               yXmlFragment,
             );
+            contentInitialized.current = true;
           }
         });
       });
-
-      //   ymap.observe((event) => {
-      //     console.log('Observer triggered!');
-      //     event.changes.keys.forEach((change, key) => {
-      //         console.log(`Change on key: ${key}`, change);
-      //     });
-      // }
-
-      // if (yXmlFragment.length === 0 && defaultContent) {
-      // }
-
-      // setTimeout(() => {
-      //   if (yXmlFragment.length === 0 && defaultContent) {
-      //     console.log("defaultContent", defaultContent);
-      //     // prosemirrorJSONToYXmlFragment(
-      //     //   editor.schema,
-      //     //   {
-      //     //     type: "doc",
-      //     //     content: [
-      //     //       {
-      //     //         type: "paragraph",
-      //     //         content: [
-      //     //           {
-      //     //             type: "text",
-      //     //             text: "As requested, We would like",
-      //     //           },
-      //     //         ],
-      //     //       },
-      //     //     ],
-      //     //   },
-      //     //   yXmlFragment
-      //     // );
-      //   }
-      // }, 500);
-      // setTimeout(() => {
-      //   if (yXmlFragment.length === 0 && defaultContent) {
-      //     console.log("defaultContent", defaultContent);
-      //     const ff = prosemirrorJSONToYXmlFragment(
-      //       editor.schema,
-      //       defaultContent,
-      //       yXmlFragment
-      //     );
-      //     console.log("defaultContent[ff]", ff);
-      //   }
-      // }, 500);
-
       return editor;
-    }, [isReadonly]);
+    }, [isReadonly, defaultContent, socketUrl, collabData]);
 
-    // useEffect(() => {
-    //   const yXmlFragment = doc.getXmlFragment("prosemirror");
-    //   if (yXmlFragment.length !== 0 && defaultContent) {
-    //     prosemirrorJSONToYXmlFragment(
-    //       editor.schema,
-    //       defaultContent,
-    //       yXmlFragment
-    //     );
-    //   }
-    // }, [defaultContent]);
+    // Add effect to reset contentInitialized when defaultContent changes
+    useEffect(() => {
+      if (defaultContent) {
+        contentInitialized.current = false;
+      }
+    }, [defaultContent]);
 
     useEffect(() => {
       return () => {
         doc.destroy();
-        provider.destroy();
+        provider?.destroy();
       };
     }, []);
 
@@ -243,7 +209,6 @@ export const LiveEditor = forwardRef(
                 {/* {!isReadonly && <InlineMenu />} */}
                 <SlashMenu />
                 {tokens && <TokenMenu tokens={tokens} />}
-                {/* <TagMenu /> */}
                 {/* <BlockHandle /> */}
                 <TableHandle />
               </S.EditorContent>
