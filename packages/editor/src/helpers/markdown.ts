@@ -24,6 +24,19 @@ export function markdownFromHTML(html: string): string {
             const width = node.properties.width || "";
             const height = node.properties.height || "400";
 
+            if (
+              Array.isArray(node.properties.className) &&
+              node.properties.className.includes("signature-form") &&
+              !node.properties.src
+            ) {
+              const width: any = node.properties.width || "200px";
+              const height: any = node.properties.height || "100px";
+              return u(
+                "text",
+                `\n[SIGNATURE_FIELD_PLACEHOLDER width:${width} height:${height}]`,
+              );
+            }
+
             return u("image", { url, alt, width, height });
           },
           div(h, node: Element) {
@@ -33,6 +46,7 @@ export function markdownFromHTML(html: string): string {
             ) {
               return u("text", "\\newpage");
             }
+
             return h.all(node);
           },
         },
@@ -42,6 +56,14 @@ export function markdownFromHTML(html: string): string {
         handlers: {
           image(node) {
             return `![${node.alt}](${node.url}){width=${node.width} height=${node.height || ""}}`;
+          },
+          text(node) {
+            if (node.value.startsWith("SIGNATURE_FIELD_PLACEHOLDER")) {
+              const [_, width, height] =
+                node.value.match(/width:(\S+) height:(\S+)/) || [];
+              return `[SIGNATURE_FIELD_PLACEHOLDER width=${width} height=${height}]`;
+            }
+            return node.value;
           },
         },
       })
@@ -57,6 +79,7 @@ const pageBreakTransformer = (): Transformer => {
         node.type = "html";
         node.value = '<div style="page-break-after: always;"></div>';
       }
+
       if (node.children) {
         node.children.forEach(visit);
       }
