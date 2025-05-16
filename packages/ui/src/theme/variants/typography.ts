@@ -16,6 +16,7 @@ export type ThemeFontSizes = {
   [key: number]: string;
   xs: string;
   sm: string;
+  sm2: string;
   base: string;
   lg: string;
   xl: string;
@@ -36,6 +37,7 @@ export const getFontSizes = (unit: string, theme: WuiTheme): ThemeFontSizes => {
   return {
     xs: convert(10),
     sm: convert(12),
+    sm2: convert(13),
     base: convert(14),
     lg: convert(16),
     xl: convert(18),
@@ -96,12 +98,14 @@ export type ThemeFontWeights = {
   bold: number;
   heading: number;
   body: number;
+  medium: number;
 };
 
 export const fontWeights: ThemeFontWeights = {
   body: 400,
   heading: 500,
   bold: 700,
+  medium: 600,
 };
 
 export type ThemeLetterSpacings = {

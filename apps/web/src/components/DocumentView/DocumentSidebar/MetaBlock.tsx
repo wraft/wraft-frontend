@@ -53,19 +53,40 @@ const MetaBlock = () => {
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = () => setDrawerOpen(false);
 
+  const taskList = [
+    {
+      name: 'Task 1',
+      description: 'Description for Task 1',
+      dueDate: '2023-12-31',
+      status: 'pending',
+      priority: 'high',
+    },
+  ];
+
   return (
     <Box mt="xl">
       <>
         <Flex justify="space-between">
-          <Text as="h6">Meta Info</Text>
+          <Text as="h6" fontWeight={600} color="gray.1100" mb="md">
+            Tasks
+          </Text>
+          {editorMode !== 'view' && (
+            <Box onClick={openDrawer}>add new tasks</Box>
+          )}
+        </Flex>
+
+        <Flex justify="space-between">
+          <Text as="h6" fontWeight={600} color="gray.1100" mb="md">
+            Contract Fields
+          </Text>
           {editorMode !== 'view' && (
             <Box onClick={openDrawer}>
-              <EditIcon width={14} className="main-icon" />
+              <EditIcon width={14} color="gray.1100" className="main-icon" />
             </Box>
           )}
         </Flex>
 
-        <Box border="1px solid" borderColor="border" mt="sm">
+        <Box border="1px solid" borderColor="border" borderRadius="lg">
           {meta &&
             typeof meta === 'object' &&
             orderedKeys.map((key) => {
@@ -85,7 +106,7 @@ const MetaBlock = () => {
                     borderColor="border"
                     p="sm">
                     <Text flex="0 0 60%" fontWeight="heading">
-                      {String(value)}
+                      {key.replace(/_/g, ' ')}
                     </Text>
                     <Text
                       flex="0 0 40%"
@@ -93,7 +114,7 @@ const MetaBlock = () => {
                       fontWeight="heading"
                       textTransform="capitalize"
                       textAlign="right">
-                      {key.replace(/_/g, ' ')}
+                      {String(value)}
                     </Text>
                   </Flex>
                 )

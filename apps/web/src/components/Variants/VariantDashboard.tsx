@@ -187,20 +187,20 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       cell: ({ row }: any) => <Text>{row.original?.flow?.name}</Text>,
       enableSorting: false,
     },
-    {
-      id: 'content.theme',
-      header: 'Theme',
-      cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
-      enableSorting: false,
-    },
+    // {
+    //   id: 'content.theme',
+    //   header: 'Theme',
+    //   cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
+    //   enableSorting: false,
+    // },
 
-    {
-      id: 'content.layout',
-      header: 'Layout',
-      accessorKey: 'layout',
-      cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
-      enableSorting: false,
-    },
+    // {
+    //   id: 'content.layout',
+    //   header: 'Layout',
+    //   accessorKey: 'layout',
+    //   cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
+    //   enableSorting: false,
+    // },
     {
       id: 'content.type',
       header: 'Type',
@@ -290,7 +290,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
   ];
 
   return (
-    <Box p="lg">
+    <Box px="xl" py="xl">
       <Table
         data={contents}
         isLoading={loading}

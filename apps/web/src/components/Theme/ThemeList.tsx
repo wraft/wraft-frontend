@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FontIcon, ThreeDotIcon } from '@wraft/icon';
+import { FontIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { Box, DropdownMenu, Flex, Text, Modal } from '@wraft/ui';
 import { Table } from '@wraft/ui';
+import { DotsThree } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import Link from 'common/NavLink';
@@ -66,31 +67,30 @@ const ThemeList = ({ rerender }: Props) => {
   const columns = [
     {
       id: 'content.name',
-      header: 'NAME',
+      header: 'Name',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Link href={`/manage/themes/${row.original.id}`} key={row.index}>
-          <Text>{row.original.name}</Text>
+          <Text fontWeight="bold">{row.original.name}</Text>
         </Link>
       ),
       enableSorting: false,
     },
     {
       id: 'content.font',
-      header: 'FONT',
+      header: 'Font',
       accessorKey: 'content.font',
       cell: ({ row }: any) => (
-        <Flex key={row.index} align="center" gap="xs">
+        <Flex key={row.index} align="center" gap="xs" py="0">
           <FontIcon height={18} width={18} />
-
-          <Text>{row.original.font}</Text>
+          <Text fontWeight="500">{row.original.font}</Text>
         </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.color',
-      header: 'COLOR',
+      header: 'Colors',
       accessorKey: 'content.color',
       cell: ({ row }: any) => (
         <Flex key={row.index} align="center" gap="sm">
@@ -125,7 +125,7 @@ const ThemeList = ({ rerender }: Props) => {
           <Flex justify="space-between">
             <DropdownMenu.Provider>
               <DropdownMenu.Trigger>
-                <ThreeDotIcon />
+                <DotsThree size={12} color="red" />
               </DropdownMenu.Trigger>
               {hasPermission('theme', 'delete') && (
                 <DropdownMenu aria-label="dropdown role">

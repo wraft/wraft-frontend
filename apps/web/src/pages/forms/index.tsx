@@ -62,13 +62,13 @@ const Index: FC = () => {
       <Page>
         <PageHeader title="Forms">
           {hasPermission('form', 'manage') && (
-            <Button variant="tertiary" onClick={onOpenDrawer}>
-              <Plus size={12} weight="bold" />
+            <Button variant="secondary" onClick={onOpenDrawer} size="sm">
+              <Plus size={10} weight="bold" />
               Create Form
             </Button>
           )}
         </PageHeader>
-        <Box p="lg" minHeight="100%" bg="background-secondary">
+        <Box py="xl" px="3xl" minHeight="100%" bg="background-secondary">
           <FormList rerender={rerender} setRerender={setRerender} />
         </Box>
       </Page>

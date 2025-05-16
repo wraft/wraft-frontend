@@ -209,7 +209,10 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Workspace"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Workspace', path: '/manage/workspace' },
+          ]}
           desc={
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}

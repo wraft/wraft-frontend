@@ -8,7 +8,7 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Variants | Wraft</title>
+        <title>Structures | Wraft</title>
         <meta name="description" content="wraft variants" />
       </Head>
       <Page>

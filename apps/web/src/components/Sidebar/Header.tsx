@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import NavLink from 'next/link';
 import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { Gear, Plus } from '@phosphor-icons/react';
+import { CaretDown, Carrot, Gear, Plus } from '@phosphor-icons/react';
 
 import DefaultAvatar from 'common/DefaultAvatar';
 import { useAuth } from 'contexts/AuthContext';
@@ -41,36 +41,31 @@ const Header = () => {
 
   return (
     <>
-      <Flex
-        justify="space-between"
-        align="center"
-        borderBottom="solid 1px"
-        borderColor="border"
-        h="72px"
-        mb={3}>
-        <Box>
+      <Flex justify="space-between" align="center">
+        <Box py="md" px="" pr="none" minWidth="80%">
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
               <Flex cursor="pointer">
                 {userProfile?.currentOrganisation && (
-                  <Flex>
-                    <Box>
+                  <Flex alignItems="center" gap="sm">
+                    <Box mr="xxs">
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
-                        size={32}
+                        size={21}
                       />
                     </Box>
 
-                    <Box ml="sm">
-                      <Text fontWeight="bold" color="text-primary" lines={1}>
+                    <Flex color="gray.900" gap="xs">
+                      <Text
+                        fontWeight="bold"
+                        color="text-primary"
+                        fontSize="sm2"
+                        lines={1}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text fontSize="sm" color="text-secondary">
-                        {userProfile?.currentOrganisation?.members_count}{' '}
-                        members
-                      </Text>
-                    </Box>
+                      <CaretDown size={16} />
+                    </Flex>
                   </Flex>
                 )}
               </Flex>
@@ -89,7 +84,7 @@ const Header = () => {
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
-                        size={28}
+                        size={24}
                       />
                       <Box ml="sm">
                         <Text fontWeight="bold" color="text-primary" lines={1}>
@@ -143,8 +138,11 @@ const Header = () => {
             </DropdownMenu>
           </DropdownMenu.Provider>
         </Box>
-
-        <UserSettingsMenu />
+        <Flex mr="sm">
+          <Button className="x" shape="circle" variant="ghost" size="xs">
+            <Plus size={14} />
+          </Button>
+        </Flex>
       </Flex>
       <Modal
         open={isOpen}

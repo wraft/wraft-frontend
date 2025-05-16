@@ -26,7 +26,11 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Layout"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Layouts', path: '/manage/layouts' },
+            { name: `${layout?.layout?.name}`, path: '.' },
+          ]}
           desc={
             <DescriptionLinker
               data={[

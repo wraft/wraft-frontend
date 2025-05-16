@@ -130,7 +130,7 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
       cursor: "not-allowed",
     },
     placeholder: {
-      color: "gray.500",
+      color: "gray.800",
     },
     focused: {
       default: {

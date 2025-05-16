@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
-import { ErrorBoundary, Button, Modal, Box, Flex, Grid } from '@wraft/ui';
+import { ErrorBoundary, Button, Modal, Box, Flex, Grid, Text } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
+import { FloppyDisk } from '@phosphor-icons/react';
 
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
 import { postAPI } from 'utils/models';
 
-import { FlowProgressBar } from './FlowProgressBar';
+// import { FlowProgressBar, TriangleBreadcrumbs } from './FlowProgressBar';
+import { FlowProgressBar, TriangleBreadcrumbs } from './FlowStepAlternative';
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
 import { ApprovalHandler } from './ApprovalHandler';
 import { LockedBadge } from './LockedBadge';
@@ -212,17 +214,28 @@ const DocumentView = () => {
         <ErrorBoundary>
           <Grid
             bg="background-secondary"
+            // bg="gray.400"
             templateColumns="1fr minmax(380px, 400px)">
             <Box w="100%">
               <Flex
                 alignItems="center"
                 flex={1}
-                px="sm"
-                py="sm"
+                py="xs"
+                pl="lg"
+                // px="sm"
+                // py="sm"
+                // pl="md"
                 borderBottom="solid 1px"
                 borderColor="border"
                 bg="background-primary">
-                <Flex gap="sm">
+                <Flex
+                  className="step-holder"
+                  gap="0"
+                  border="solid 1px"
+                  // pl="sm"
+                  overflow="hidden"
+                  borderColor="gray.400"
+                  borderRadius="lg">
                   {states &&
                     states.map((state: any, i: number) => (
                       <FlowProgressBar
@@ -242,13 +255,31 @@ const DocumentView = () => {
                     !isEditable && <ApprovalAwaitingLabel />}
                 </Flex>
 
-                <Flex ml="auto" alignItems="center">
+                {/* <TriangleBreadcrumbs
+                  items={[
+                    { label: 'Home', href: '/', isActive: true },
+                    {
+                      label: 'Documents',
+                      href: '/documents',
+                      isActive: false,
+                    },
+                    { label: 'Flow', href: '/flow', isActive: false },
+                  ]}
+                /> */}
+
+                <Flex ml="auto" alignItems="center" mr="xxs">
                   {editorMode === 'view' &&
                     !contents?.content?.approval_status && (
-                      <Flex p={0} gap={2} ml="auto" alignItems="center">
+                      <Flex
+                        p={0}
+                        gap={0}
+                        ml="auto"
+                        alignItems="center"
+                        py="sm2"
+                        px="md">
                         {nextState && nextState.is_user_eligible && (
                           <ApprovalHandler
-                            name={nextState?.state}
+                            name={'Review'} //|| nextState?.state
                             onClick={() => {
                               setModalAction('next');
                               setOpen(true);
@@ -266,17 +297,29 @@ const DocumentView = () => {
                         )}
                       </Flex>
                     )}
-                  {isEditable && <LockedBadge />}
+                  {isEditable && (
+                    <Box py="lg" px="lg">
+                      <LockedBadge />
+                    </Box>
+                  )}
                 </Flex>
                 {/* {canAccess('docEdit') && ( */}
                 {(editorMode === 'edit' || editorMode === 'new') && (
-                  <Box ml="auto">
+                  <Box
+                    ml="auto"
+                    // ml="auto"
+                    alignItems="center"
+                    py="sm2"
+                    px="md"
+                    pr="lg">
                     <Button
                       onClick={onSubmit}
                       variant="primary"
+                      fontSize="sm2"
                       size="sm"
                       loading={saving}>
-                      Save
+                      {/* <FloppyDisk /> */}
+                      Save Changes
                     </Button>
                   </Box>
                 )}
@@ -300,7 +343,11 @@ const DocumentView = () => {
         ariaLabel="confirm model"
         onClose={() => setOpenTitleModal(false)}>
         <Box as="form" onSubmit={handleSubmit(onUpdateTitle)} w="450px">
-          <Modal.Header>Title</Modal.Header>
+          <Modal.Header>
+            <Text as="h4" mb="sm">
+              Rename Document
+            </Text>
+          </Modal.Header>
           <Box my={3}>
             <Field
               name="title"
@@ -310,13 +357,17 @@ const DocumentView = () => {
               defaultValue={pageTitle}
             />
           </Box>
-          <Flex gap="8px">
+          <Flex gap="sm">
             <Button
               variant="secondary"
+              fontSize="sm2"
+              size="sm"
               onClick={() => setOpenTitleModal(false)}>
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button size="sm" fontSize="sm2" type="submit">
+              Save
+            </Button>
           </Flex>
         </Box>
       </Modal>

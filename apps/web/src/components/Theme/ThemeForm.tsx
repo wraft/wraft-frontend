@@ -184,12 +184,12 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
         direction="column"
         onSubmit={handleSubmit(onSubmit)}>
         <Box flexShrink="0">
-          <Drawer.Header>
-            <Drawer.Title>
+          <Drawer.Header fontSize="base">
+            <Drawer.Title size="sm">
               {isEdit ? 'Edit Theme' : 'Create Theme'}
             </Drawer.Title>
             <X
-              size={20}
+              size={16}
               weight="bold"
               cursor="pointer"
               onClick={() => setIsOpen(false)}

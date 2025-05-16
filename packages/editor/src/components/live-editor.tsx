@@ -43,7 +43,7 @@ export const LiveEditor = forwardRef(
   (
     {
       defaultContent,
-      placeholder = "Write something, or ' / ' for commands…",
+      placeholder = "Write , or ' / ' for commands…",
       className = "",
       isReadonly = true,
       tokens,
@@ -232,11 +232,8 @@ export const LiveEditor = forwardRef(
       <>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           <ProseKit editor={editor}>
-            {!isReadonly && (
-              <div className="toolbar">
-                <Toolbar />
-              </div>
-            )}
+            <div className="toolbar">{!isReadonly && <Toolbar />}</div>
+
             <S.EditorContainer>
               <S.EditorContent>
                 <S.EditorContentInput ref={editor.mount} />

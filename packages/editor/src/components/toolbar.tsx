@@ -20,6 +20,7 @@ import {
   ArrowsInLineVertical,
 } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
+import { Flex } from "@wraft/ui";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 import { ImageUploadPopover } from "./image-upload-popover";
@@ -35,6 +36,7 @@ const ToolbarContainer = styled.divBox`
   gap: 1;
   px: 2;
   align-items: center;
+  border-radius: md2 md2 0 0;
 `;
 
 const Separator = styled.divBox`
@@ -89,11 +91,13 @@ export default function Toolbar() {
   return (
     <ToolbarContainer
       display="flex"
-      bg="background-secondary"
+      bg="white"
       color="gray.1100"
       px={2}
       py={1}
-      borderBottomColor="gray.500"
+      border="solid 1px"
+      borderBottom="0"
+      borderColor="gray.a400"
     >
       <Button
         pressed={false}
@@ -101,7 +105,7 @@ export default function Toolbar() {
         onClick={editor.commands.undo}
         tooltip="Undo"
       >
-        <ArrowCounterClockwise size={18} />
+        <ArrowCounterClockwise size={16} weight="bold" />
       </Button>
       <Button
         pressed={false}
@@ -109,7 +113,7 @@ export default function Toolbar() {
         onClick={editor.commands.redo}
         tooltip="Redo"
       >
-        <ArrowClockwise size={18} />
+        <ArrowClockwise size={16} weight="bold" />
       </Button>
       <Button
         pressed={editor.marks.bold.isActive()}
@@ -117,7 +121,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleBold}
         tooltip="Bold"
       >
-        <TextB size={18} />
+        <TextB size={16} weight="bold" />
       </Button>
       <Button
         pressed={editor.marks.italic.isActive()}
@@ -125,7 +129,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleItalic}
         tooltip="Italic"
       >
-        <TextItalic size={18} />
+        <TextItalic size={16} weight="bold" />
       </Button>
       <Button
         pressed={editor.marks.underline.isActive()}
@@ -133,7 +137,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleUnderline}
         tooltip="Underline"
       >
-        <TextUnderline size={18} />
+        <TextUnderline size={16} weight="bold" />
       </Button>
       <Button
         pressed={editor.marks.strike.isActive()}
@@ -141,7 +145,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleStrike}
         tooltip="Strike"
       >
-        <TextStrikethrough size={18} />
+        <TextStrikethrough size={16} weight="bold" />
       </Button>
       <Button
         pressed={editor.nodes.heading.isActive({ level: 1 })}
@@ -221,6 +225,11 @@ export default function Toolbar() {
       >
         <ImageIcon size={18} />
       </ImageUploadPopover>
+      <Flex ml="auto" px="sm" gap="sm">
+        <Button size="xs">Suggest</Button>
+        <Button size="xs">Edit</Button>
+        <Button size="xs">View</Button>
+      </Flex>
     </ToolbarContainer>
   );
 }

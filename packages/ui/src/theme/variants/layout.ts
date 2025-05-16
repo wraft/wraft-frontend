@@ -1,3 +1,5 @@
+import { borderRadius } from "@xstyled/emotion";
+
 const layout = {
   drawerBackdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.40)",
@@ -182,6 +184,7 @@ const layout = {
       "&.active": {
         background: "green.a300",
         color: "green.800",
+        borderRadius: "lg",
       },
       ":hover": {
         background: "green.100",

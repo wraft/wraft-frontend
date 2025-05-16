@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from '@wraft/ui';
 import { Triangle } from '@phosphor-icons/react';
+import styled from '@xstyled/emotion';
 
 import MenuItem from 'common/NavLink';
 
@@ -30,7 +31,11 @@ export const TimeAgo = (props: TimeAgoProps) => {
       ? format(local_time, 'MMM dd, yyyy')
       : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
 
-  return <Text mt={props?.short ? 0 : 0}>{timed}</Text>;
+  return (
+    <Text mt={props?.short ? 0 : 0} fontSize="sm">
+      {timed}
+    </Text>
+  );
 };
 
 /**
@@ -246,5 +251,30 @@ export const IconWrapper = ({
         <>{children}</>
       </svg>
     </Box>
+  );
+};
+
+/*
+*
+ Icon Wrapper for Phosphor Icons
+*/
+
+interface IconWrapperProps {
+  color?: string;
+  children?: any;
+}
+
+const IconWrapped = styled(Box)`
+  color: ${(props) => props.color};
+  svg {
+    fill: ${(props) => props.color};
+  }
+`;
+
+export const IconFrame = ({ color, children }: IconWrapperProps) => {
+  return (
+    <IconWrapped color={color} display="flex" alignItems="center">
+      {children}
+    </IconWrapped>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 import { ErrorBoundary, Button } from '@wraft/ui';
-import styled from '@emotion/styled';
+import styled, { x } from '@xstyled/emotion';
 import {
   Tab,
   TabList,
@@ -9,7 +9,7 @@ import {
   TabProvider,
   useTabStore,
 } from '@ariakit/react';
-import { Play, PencilSimple, Eye } from '@phosphor-icons/react';
+import { Play, PencilSimple, Eye, Chat, File } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 import { LiveEditor } from '@wraft/editor';
 import { EditorView } from 'prosemirror-view';
@@ -23,6 +23,9 @@ import { authorizeRoute } from 'middleware/authorize';
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
 import { EditorMode, usePermissions } from './usePermissions';
+
+export const API_HOST =
+  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -152,15 +155,20 @@ const TabWrapper = styled(Box)`
 
   .tabPanel {
     border: 0;
+    padding: 3px;
     border: 1px solid;
     border-color: ${({ theme }: any) => theme?.colors.border};
-    background-color: ${({ theme }: any) => theme?.colors.gray['400']};
+    background-color: ${({ theme }: any) => theme?.colors.gray['300']};
 
     button {
       border: 0;
       background-color: transparent;
-      padding: ${({ theme }: any) => theme.space.xs};
-      border-radius: 6px;
+      padding: ${({ theme }: any) => theme.space.xs}
+        ${({ theme }: any) => theme.space.md};
+      font-size: 13px;
+      letter-spacing: -0.15px;
+      font-weight: ${({ theme }: any) => theme?.fontWeights.body};
+      border-radius: ${({ theme }: any) => theme?.radii.md2};
     }
 
     button[aria-selected='true'] {
@@ -171,9 +179,10 @@ const TabWrapper = styled(Box)`
   }
 
   .tabGroup {
-    background-color: ${({ theme }: any) => theme.colors.gray['600']};
+    background-color: ${({ theme }: any) => theme.colors.gray['400']};
     display: flex;
     border-radius: 6px;
+    margin-left: auto;
   }
   .main-content {
     flex-grow: 1;
@@ -188,6 +197,9 @@ const PdfWrapper = styled(Box)`
   .react-pdf__Page {
     background-color: transparent !important;
     margin-bottom: 8px;
+    border: solid 1px #ddd;
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .react-pdf__Document {
@@ -217,7 +229,7 @@ export const DocumentContentBlock = () => {
 
   const { canAccess } = usePermissions(userType, docRole);
 
-  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
+  const socketUrl = API_HOST;
   const { userProfile } = useAuth();
   const tabView = useTabStore();
   const { activeId } = tabView.useState();
@@ -288,7 +300,115 @@ export const DocumentContentBlock = () => {
       ) : (
         <TabWrapper>
           <TabProvider defaultSelectedId={defaultSelectedId}>
-            <Flex justify="space-between" p="md">
+            <Flex
+              justify="space-between"
+              p="md"
+              gap="sm"
+              px="lg"
+              alignItems="center">
+              <Flex
+                px="sm"
+                gap="sm"
+                display="none"
+                border="solid 1px"
+                borderColor="gray.500"
+                borderRadius="md">
+                <Text
+                  as="span"
+                  // lineHeight="heading"
+                  fontSize="sm2"
+                  fontWeight="600"
+                  borderRight="solid 1px"
+                  borderColor="gray.500"
+                  // px="xs"
+                  py="xxs"
+                  pr="sm">
+                  Version
+                </Text>
+                <Text
+                  fontSize="sm2"
+                  fontWeight="600"
+                  // px="xxs"
+                  py="xxs"
+                  // pr="sm"
+                  // px="xs"
+                  // as="span"
+                  opacity={0.8}>
+                  {contents?.versions?.[0]?.version_number || 0}
+                </Text>
+              </Flex>
+              <Flex>
+                <Flex align="center" gap="sm">
+                  {!isEditable && (
+                    <Flex gap="2px" bg="green">
+                      {activeId === 'view' && canAccess('docGenerator') && (
+                        <Button
+                          variant="secondary"
+                          // display="none"
+                          size="sm"
+                          gap="xxs"
+                          loading={isBuilding}
+                          disabled={isBuilding}
+                          onClick={() => doBuild()}>
+                          {!isBuilding && <Play size={12} className="action" />}
+                          <Text
+                            color="gray.1100"
+                            fontWeight="medium"
+                            fontSize="sm2">
+                            Generate
+                          </Text>
+                        </Button>
+                      )}
+                      {canAccess('docEdit') && (
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          px="sm"
+                          gap={0}
+                          borderRadius="md2"
+                          ml="sm"
+                          display="flex"
+                          onClick={() => onSwitchEditorMode(editorMode)}>
+                          {editorMode === 'edit' ? (
+                            <Eye size={13} />
+                          ) : (
+                            <PencilSimple size={13} />
+                          )}
+
+                          <Text
+                            fontSize="sm2"
+                            color="gray.1100"
+                            fontWeight={600}>
+                            {editorMode === 'edit' ? 'View' : 'Edit'}
+                          </Text>
+                        </Button>
+                      )}
+                      {/* <Button
+                        variant="secondary"
+                        size="sm"
+                        px="sm"
+                        gap={0}
+                        borderRadius="md2">
+                        <Chat />
+                        <Text fontSize="sm2" color="gray.1100" fontWeight={600}>
+                          Suggest
+                        </Text>
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        px="sm"
+                        gap={0}
+                        borderRadius="md2">
+                        <File />
+                        <Text fontSize="sm2" color="gray.1100" fontWeight={600}>
+                          View
+                        </Text>
+                      </Button> */}
+                    </Flex>
+                  )}
+                </Flex>
+              </Flex>
               <TabList
                 store={tabView}
                 aria-label="Content Stages"
@@ -298,41 +418,9 @@ export const DocumentContentBlock = () => {
                 </Tab>
 
                 <Tab id="view">
-                  <StepBlock title="Document" desc="Sign and Manage" />
+                  <StepBlock title="Document" desc="View or Sign document" />
                 </Tab>
               </TabList>
-              <Flex align="center" gap="sm">
-                <AwarenessUsers />
-                {!isEditable && (
-                  <Flex gap="xs">
-                    {canAccess('docGenerator') && (
-                      <Button
-                        variant="secondary"
-                        loading={isBuilding}
-                        disabled={isBuilding}
-                        size="sm"
-                        onClick={() => doBuild()}>
-                        {!isBuilding && <Play size={12} className="action" />}
-                        <Box>Generate</Box>
-                      </Button>
-                    )}
-                    {canAccess('docEdit') && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => onSwitchEditorMode(editorMode)}>
-                        {editorMode === 'edit' ? (
-                          <Eye size={14} className="icon" />
-                        ) : (
-                          <PencilSimple size={14} className="icon" />
-                        )}
-
-                        <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
-                      </Button>
-                    )}
-                  </Flex>
-                )}
-              </Flex>
             </Flex>
 
             <TabPanel

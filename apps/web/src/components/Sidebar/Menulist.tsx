@@ -17,7 +17,7 @@ export const Menulist = [
     section: 'content',
     menus: [
       {
-        name: 'Dashboard',
+        name: 'Overview',
         icon: <House size={defaultIcon} />,
         path: '/',
       },
@@ -31,6 +31,11 @@ export const Menulist = [
         icon: <ThumbsUp size={defaultIcon} />,
         path: '/approvals',
       },
+    ],
+  },
+  {
+    section: 'structure',
+    menus: [
       {
         name: 'Pipelines',
         icon: <GitBranch size={defaultIcon} />,
@@ -49,23 +54,23 @@ export const Menulist = [
     section: 'structure',
     menus: [
       {
-        name: 'Variants',
+        name: 'Artifacts',
         icon: <Blueprint size={defaultIcon} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
       },
-      {
-        name: 'Forms',
-        icon: <Table size={defaultIcon} />,
-        path: '/forms',
-        permissions: ['form.show', 'form.manage'],
-      },
-      {
-        name: 'Blocks',
-        icon: <TextColumns size={defaultIcon} />,
-        path: '/blocks',
-        permissions: ['block_template.show', 'block_template.manage'],
-      },
+      // {
+      //   name: 'Forms',
+      //   icon: <Table size={defaultIcon} />,
+      //   path: '/forms',
+      //   permissions: ['form.show', 'form.manage'],
+      // },
+      // {
+      //   name: 'Blocks',
+      //   icon: <TextColumns size={defaultIcon} />,
+      //   path: '/blocks',
+      //   permissions: ['block_template.show', 'block_template.manage'],
+      // },
       {
         name: 'Manage',
         icon: <UserFocus size={defaultIcon} />,

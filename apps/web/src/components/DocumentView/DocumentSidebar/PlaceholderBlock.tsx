@@ -93,11 +93,13 @@ const PlaceholderBlock = ({
   const closeDrawer = () => setDrawerOpen(false);
 
   return (
-    <Box mt="xl">
+    <Box>
       {fieldValues && (
         <>
           <Flex justify="space-between">
-            <Text as="h6">Data Fields</Text>
+            <Text as="h6" fontWeight={500} color="gray.1100">
+              Fields
+            </Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
                 <EditIcon width={14} className="main-icon" />
@@ -105,7 +107,11 @@ const PlaceholderBlock = ({
             )}
           </Flex>
 
-          <Box border="1px solid" borderColor="border" mt="sm">
+          <Box
+            border="1px solid"
+            borderColor="border"
+            mt="sm"
+            borderRadius="lg">
             {mappedFields &&
               mappedFields.map((x: any) => (
                 <Flex
@@ -114,7 +120,7 @@ const PlaceholderBlock = ({
                   borderColor="border"
                   p="sm">
                   <Text flex="0 0 60%" fontWeight="heading">
-                    {x.value}
+                    {x.name}
                   </Text>
                   <Text
                     flex="0 0 40%"
@@ -122,7 +128,7 @@ const PlaceholderBlock = ({
                     fontWeight="heading"
                     textTransform="capitalize"
                     textAlign="right">
-                    {x.name}
+                    {x.value}
                   </Text>
 
                   {/* <Text>{x.type}</Text> */}

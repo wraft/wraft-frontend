@@ -29,20 +29,24 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Themes"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Themes', path: '/manage/themes' },
+            { name: `${theme?.theme?.name}`, path: '.' },
+          ]}
           desc={
             <DescriptionLinker
               data={[
                 { name: 'Manage', path: '/manage' },
                 { name: 'Themes', path: '/manage/themes' },
-                { name: `${theme?.theme?.name || ''}` },
+                { name: `${theme?.theme?.name}` },
               ]}
             />
           }
         />
 
         <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
+          {/* <ManageSidebar items={menuLinks} /> */}
           <ThemeViewForm />
         </Flex>
       </Page>

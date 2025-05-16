@@ -40,11 +40,15 @@ const VariantList = () => {
 
   return (
     <>
-      <PageHeader title="Variants" desc="Manage Variants">
+      <PageHeader title="Structures" desc="Manage Structures">
         {hasPermission('variant', 'manage') && (
-          <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-            <Plus size={12} weight="bold" />
-            Create Variant
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setIsOpen(true)}
+            fontSize="sm2">
+            <Plus size={12} weight="bold" color="gray.600" />
+            Create Structures
           </Button>
         )}
       </PageHeader>

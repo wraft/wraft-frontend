@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 
+// import { Box, Fle}
 import { ProfileCard } from 'common/ProfileCard';
 
 export interface Comment {
@@ -45,18 +46,25 @@ const CommentCard = (comment: Comment) => {
               />
             </Box>
           </Flex>
-          <Box sx={{ pl: 3, pr: 2 }}>
+          <Box
+            pl="xl"
+            py="xxs"
+            pb="xl"
+            fontSize="sm2"
+            letterSpacing="-0.15px"
+            color="gray.600">
             <Text
               as="p"
-              sx={{
-                mt: 0,
-                color: 'text-primary',
-                fontSize: 'sm',
-                pt: 0,
-                lineHeight: 1.35,
-                pl: 2,
-                m: 0,
-              }}>
+              // sx={{
+              //   mt: 0,
+              //   color: 'text-primary',
+              //   fontSize: 'sm',
+              //   pt: 0,
+              //   lineHeight: 1.35,
+              //   pl: 2,
+              //   m: 0,
+              // }}
+            >
               {comment.comment}
             </Text>
           </Box>

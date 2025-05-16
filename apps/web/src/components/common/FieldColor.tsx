@@ -4,7 +4,8 @@ import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
 // import Chrome from '@uiw/react-color-chrome';
 const Chrome = dynamic(() => import('@uiw/react-color-chrome'), { ssr: false });
 import { InkIcon } from '@wraft/icon';
-import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
+import { Label, Input, useThemeUI } from 'theme-ui';
+import { Box, Text, Flex } from '@wraft/ui';
 
 interface FieldColorProps {
   register: any;
@@ -87,23 +88,29 @@ const FieldColor: React.FC<FieldColorProps> = ({
 
   return (
     <PopoverProvider>
-      <Box sx={{ position: 'relative' }}>
-        <Box sx={{ ml: 0 }}>
-          {sub && (
-            <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
-          )}
+      <Box position="relative">
+        <Box ml="">
+          {sub && <Text>{sub}</Text>}
+          {/* // sx={{ position: 'absolute', right: 16, top: 32 }} */}
           {!isInside && <Label htmlFor="description">{label}</Label>}
-          <Flex sx={{ position: 'relative' }}>
+          <Flex position="relative">
             {isInside && (
               <Text
-                as={'p'}
-                variant="pR"
-                sx={{
-                  position: 'absolute',
-                  left: 3,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                }}>
+                as="span"
+                display="block"
+                px="md"
+                py="sm"
+                flex="100%"
+                fontWeight="medium"
+                // as={'p'}
+                // variant="pR"
+                // sx={{
+                //   position: 'absolute',
+                //   left: 3,
+                //   top: '50%',
+                //   transform: 'translateY(-50%)',
+                // }}
+              >
                 {label}
               </Text>
             )}
@@ -130,42 +137,42 @@ const FieldColor: React.FC<FieldColorProps> = ({
               }}
               disabled={disable || view}
             />
-            <Box sx={{ width: 0, bg: 'transparent' }}>
+            <Box bg="transparent">
               <PopoverDisclosure
                 aria-disabled={disable || view}
                 style={{ all: 'unset' }}>
-                <Box sx={{ bg: 'transparent', border: 'none' }}>
+                <Box bg="transparent" border="none">
                   <Box
                     id="colorBox"
-                    bg={valx}
-                    sx={{
-                      width: '18px',
-                      height: '18px',
-                      border: 'solid 1px',
-                      borderColor: 'border',
-                      position: 'absolute',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      [isInside ? 'right' : 'left']:
-                        `${isInside ? '50px' : '16px'}`,
-                      padding: '5px',
-                      borderRadius: '99px',
-                      display: 'inline-block',
-                      cursor: 'pointer',
-                    }}
+                    as="div"
+                    backgroundColor={valx}
+                    // width="25px"
+                    // height="25px"
+                    border="solid 1px"
+                    borderColor="border"
+                    position="absolute"
+                    top="50%"
+                    transform="translateY(-50%)"
+                    left={!isInside ? '16px' : undefined}
+                    right={isInside ? '50px' : undefined}
+                    padding="5px"
+                    borderRadius="99px"
+                    display="inline-block"
+                    cursor="pointer"
                   />
                   <Box
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      right: '12px',
-                      borderRadius: '4px',
-                      display: 'flex',
-                      cursor: 'pointer',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
+                  // sx={{
+                  //   position: 'absolute',
+                  //   top: '50%',
+                  //   transform: 'translateY(-50%)',
+                  //   right: '12px',
+                  //   borderRadius: '4px',
+                  //   display: 'flex',
+                  //   cursor: 'pointer',
+                  //   justifyContent: 'center',
+                  //   alignItems: 'center',
+                  // }}
+                  >
                     <InkIcon
                       width={18}
                       height={18}

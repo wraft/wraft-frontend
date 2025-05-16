@@ -16,6 +16,7 @@ export type Variant =
   | "disabled"
   | "googleLogin"
   | "none"
+  | "new"
   | "delete";
 
 export interface ButtonOptions extends AkButtonProps {

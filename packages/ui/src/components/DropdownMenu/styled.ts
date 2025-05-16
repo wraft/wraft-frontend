@@ -12,14 +12,15 @@ export const Item: any = styled.div`
   align-items: center;
   color: var(--theme-ui-colors-text-primary);
   min-width: 120px;
+
   &[data-active-item] {
     background-color: green.a300;
     color: green.800;
   }
 `;
-export const Trigger: any = styled.div`
+export const Trigger: any = styled.divBox`
   cursor: pointer;
-  padding: 6px 12px;
+  padding-left: lg;
   &[data-active-item] {
     background: #f0f2f5;
   }

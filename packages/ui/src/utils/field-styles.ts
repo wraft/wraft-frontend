@@ -46,21 +46,23 @@ export const defaultFieldStyles: DefaultFieldStyles = ({
     border-color: ${getVariantColor(variant as any) as any};
     appearance: none;
     ${size && (th(`defaultFields.sizes.${size}`) as any)};
+    padding-top: xxs;
+    padding-bottom: xxs;
 
     /* left icon or both */
     ${(iconPlacement === "left" || iconPlacement === "both") &&
-    `padding-left: 
+    `padding-left:
       calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]})`};
 
     /* is clearable or right icon */
     ${(isClearable || iconPlacement === "right" || iconPlacement === "both") &&
-    `padding-right: 
+    `padding-right:
       calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]})`};
 
     /* is clearable and got a right/both icon */
     ${isClearable &&
     (iconPlacement === "right" || iconPlacement === "both") &&
-    `padding-right: 
+    `padding-right:
       calc(${theme["defaultFields"]["sizes"][size].paddingLeft} + ${theme["icons"][iconSize]} + ${theme["icons"][iconSize]} + ${theme["space"]["sm"]} + ${theme["space"]["sm"]})`};
 
     &::placeholder {

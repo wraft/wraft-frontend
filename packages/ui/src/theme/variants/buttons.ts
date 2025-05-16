@@ -32,7 +32,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
     color: "text",
     fontWeight: fontWeights.bold,
     letterSpacing: 0,
-    borderRadius: radii.md,
+    borderRadius: radii.sm2,
     gap: space.sm,
   };
 

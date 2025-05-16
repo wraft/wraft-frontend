@@ -5,7 +5,9 @@ export const LockedBadge = () => {
   return (
     <Flex align="center" gap="xs" bg="green.a400" px="sm" borderRadius="md">
       <LockSimple size={12} />
-      <Text fontSize="sm">Locked</Text>
+      <Text fontSize="sm" fontWeight="600">
+        Archived
+      </Text>
     </Flex>
   );
 };

@@ -13,7 +13,19 @@ const Contents: FC = () => {
         <meta name="description" content="Import Document structures" />
       </Head>
       <Page>
-        <PageHeader title="Import" desc="Import Document Structures" />
+        <PageHeader
+          title={[
+            {
+              name: 'Manage',
+              path: '/manage',
+            },
+            {
+              name: 'Import',
+              path: 'import',
+            },
+          ]}
+          desc="Import Document Structures"
+        />
         <ImporterWrapper />
       </Page>
     </>

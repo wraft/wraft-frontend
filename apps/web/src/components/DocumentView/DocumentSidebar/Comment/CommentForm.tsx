@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Text } from '@wraft/ui';
-import { ChatCircle } from '@phosphor-icons/react';
+import { Box, Button, Flex, Text } from '@wraft/ui';
+import {
+  ChatCircle,
+  PaperPlaneRight,
+  PaperPlaneTilt,
+} from '@phosphor-icons/react';
 
 import Field from 'common/Field';
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI, postAPI } from 'utils/models';
 
 import CommentCard from './CommentCard';
@@ -104,16 +109,25 @@ const CommentForm = ({ master, master_id }: CommentFormProps) => {
           ))}
         </Box>
       )}
-      <Box as="form" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
-        <Box mb="sm">
-          <Field name="body" label="" defaultValue="" register={register} />
+      <Flex as="form" gap="sm" onSubmit={handleSubmit(onSubmit)} py={0} mt={0}>
+        <Box mb="sm" flex={1}>
+          <Field
+            name="body"
+            fontSize="base"
+            label=""
+            defaultValue=""
+            placeholder="Comment here"
+            register={register}
+          />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="primary" size="sm">
-          <ChatCircle size={16} weight="bold" color="#fff" />
-          <Box>{submiting ? 'Saving ... ' : 'Add Comment'}</Box>
+        <Button variant="secondary" size="sm">
+          <IconFrame color="green.900">
+            <PaperPlaneRight size={16} weight="bold" color="green.400" />
+          </IconFrame>
+          {/* <Box>{submiting ? 'Saving ... ' : 'Add Comment'}</Box> */}
         </Button>
-      </Box>
+      </Flex>
     </>
   );
 };

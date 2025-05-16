@@ -182,7 +182,7 @@ function ImporterApp() {
   return (
     <Container>
       <Box>
-        <Box py="md" px="xl">
+        <Box py="xl" px="4xl">
           <Box display="flex" mb="md">
             {steps.map((step) => (
               <Stepper

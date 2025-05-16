@@ -318,8 +318,11 @@ const TemplateEditor = () => {
             bg="background-primary"
             align="center"
             p="md"
-            gap="sm"
+            gap="md"
             as="form"
+            px="md"
+            borderBottom="solid 1px"
+            borderColor="gray.400"
             onSubmit={handleSubmit(onSubmit)}>
             <Box flex={1}>
               <Controller
@@ -442,11 +445,14 @@ const TemplateEditor = () => {
           w="30%"
           maxWidth="400px"
           borderLeft="solid 1px"
-          borderColor="border">
+          borderColor="border"
+          px="md">
           {templateId && currentTemplate && (
             <Flex align="center" justify="space-between" px="md" py="lg">
               <Box>
-                <Text fontWeight="heading">Updated </Text>
+                <Text fontWeight="heading" fontSize="xs" opacity={0.4}>
+                  Updated
+                </Text>
                 <TimeAgo
                   time={currentTemplate?.data_template?.updated_at}
                   ago={true}
@@ -460,35 +466,45 @@ const TemplateEditor = () => {
 
           {selectedVariant && selectedVariant.fields && (
             <Box px="md" py="lg">
-              <Text as="h4">Fields</Text>
-              <Text as="p" mb="sm" color="text-secondary">
-                Dynamic variables provided by Variants
+              <Text as="h4" mb="sm">
+                Fields
               </Text>
-              {selectedVariant.fields &&
-                selectedVariant.fields.map((field: FieldT) => (
-                  <Flex
-                    border="solid 1px"
-                    borderBottom={0}
-                    borderColor="border"
-                    bg="background-secondary"
-                    p="xs"
-                    key={field.id}
-                    onClick={() => insertBlock(field)}>
-                    {field.name}
-                    <Box>
-                      <TextT />
-                    </Box>
-                  </Flex>
-                ))}
+              {/* <Text as="p" mb="sm" color="text-secondary">
+                Dynamic variables provided by Variants
+              </Text> */}
+              <Box border="solid 1px #ddd" borderRadius="lg">
+                {selectedVariant.fields &&
+                  selectedVariant.fields.map((field: FieldT) => (
+                    <Flex
+                      border="solid 1px"
+                      borderBottom={0}
+                      borderColor="border"
+                      // borderRadius="lg"
+                      px="sm"
+                      bg="background-secondary"
+                      p="xs"
+                      gap="xs"
+                      key={field.id}
+                      onClick={() => insertBlock(field)}>
+                      <Text fontSize="md" fontWeight="heading">
+                        {field.name}
+                      </Text>
+
+                      <Box>
+                        <TextT />
+                      </Box>
+                    </Flex>
+                  ))}
+              </Box>
             </Box>
           )}
 
           <Box px="md" py="lg">
             <Box mb="sm">
               <Text as="h4">Blocks</Text>
-              <Text as="p" color="text-secondary">
+              {/* <Text as="p" color="text-secondary">
                 Blocks are reusable contents, click to insert
-              </Text>
+              </Text> */}
             </Box>
 
             {blocks &&

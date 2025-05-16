@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
 import { useColorMode, Image } from 'theme-ui';
-import { Lightning } from '@phosphor-icons/react';
+import { CaretCircleDown, CaretUpDown, Lightning } from '@phosphor-icons/react';
+import styled, { th, x, css } from '@xstyled/emotion';
 
 import Link from 'common/NavLink';
 import ModeToggle from 'common/ModeToggle';
@@ -11,9 +12,21 @@ import { fetchAPI } from 'utils/models';
 
 type UserSettingsMenuProps = {
   size?: 'sm' | 'md';
+  compact?: boolean;
 };
 
-const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
+const IconWrapper = styled(Flex)<{ color: string }>`
+  align-items: center;
+  color: red;
+  svg {
+    color: ${(props) => props.color};
+  }
+`;
+
+const UserSettingsMenu = ({
+  size = 'md',
+  compact = true,
+}: UserSettingsMenuProps) => {
   const [mode, setMode] = useColorMode();
   const [count, setCount] = useState<number | undefined>();
 
@@ -46,17 +59,18 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
     <>
       {accessToken && userProfile && (
         <DropdownMenu.Provider>
-          <DropdownMenu.Trigger>
+          <DropdownMenu.Trigger display="flex" gap="sm" alignItems="center">
             <Image
               sx={{
                 borderRadius: '3rem',
                 cursor: 'pointer',
               }}
               alt=""
-              width={size === 'sm' ? '18px' : ' 28px'}
-              height={size === 'sm' ? '18px' : ' 28px'}
+              width={size === 'sm' ? '18px' : ' 24px'}
+              height={size === 'sm' ? '18px' : ' 24px'}
               src={userProfile?.profile_pic}
             />
+            {!compact && <Text as="h4">{userProfile?.name}</Text>}
           </DropdownMenu.Trigger>
           <DropdownMenu aria-label="Preferences">
             <Box p={2} minWidth="200px">

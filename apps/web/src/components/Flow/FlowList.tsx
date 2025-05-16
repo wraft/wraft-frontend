@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { ThreeDotIcon } from '@wraft/icon';
+// import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 import { Avatar } from 'theme-ui';
 import {
@@ -13,6 +13,7 @@ import {
   Flex,
   Modal,
 } from '@wraft/ui';
+import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import { TimeAgo } from 'common/Atoms';
@@ -122,7 +123,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
   const columns = [
     {
       id: 'content.name',
-      header: 'NAME',
+      header: 'Name',
       accessorKey: 'content.name',
       enableSorting: false,
       size: 250,
@@ -130,7 +131,9 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
         return (
           <>
             <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
-              <Text>{row.original?.flow?.name}</Text>
+              <Text fontSize="base" fontWeight="bold">
+                {row.original?.flow?.name}
+              </Text>
             </NextLink>
             {/* <Drawer open={false} setOpen={() => {}}>
               <FlowForm setOpen={() => {}} />
@@ -178,7 +181,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
             <Flex justify="space-between">
               <DropdownMenu.Provider>
                 <DropdownMenu.Trigger>
-                  <ThreeDotIcon />
+                  <DotsThreeVertical size={12} stroke="bold" />
                 </DropdownMenu.Trigger>
                 {hasPermission('flow', 'delete') && (
                   <DropdownMenu aria-label="dropdown role">

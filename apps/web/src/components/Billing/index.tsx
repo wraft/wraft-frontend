@@ -81,7 +81,7 @@ const Billing = () => {
   const isPaidPlan = plan && parseFloat(plan.plan_amount || '0') > 0;
 
   return (
-    <Flex direction="column" justify="center" p="lg">
+    <Flex direction="column" justify="center" p="3xl">
       {plan && (
         <>
           <Box

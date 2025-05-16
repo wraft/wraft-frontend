@@ -114,7 +114,6 @@ export const TabPanel = styled(Ariakit.TabPanel)`
 
   &:focus-visible {
     border-radius: 2px;
-    box-shadow: 0 0 0 var(--wp-admin-border-width-focus) red;
     // Windows high contrast mode.
     outline: 2px solid transparent;
     outline-offset: 0;

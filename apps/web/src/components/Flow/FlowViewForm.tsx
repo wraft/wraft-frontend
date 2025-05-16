@@ -14,6 +14,7 @@ import {
 } from '@wraft/ui';
 import { Avatar } from 'theme-ui';
 
+import { Circle } from 'components/ImportTemplate/Styled';
 import { fetchAPI } from 'utils/models';
 
 import FlowForm from './FlowForm';
@@ -104,7 +105,7 @@ const FlowViewForm = () => {
               <InputText {...register('name')} />
             </Field>
 
-            <Box py="sm">
+            <Box py="sm" pb="xl">
               <Label>Flow states</Label>
               {states && (
                 <Box mt="sm">
@@ -114,19 +115,32 @@ const FlowViewForm = () => {
                         key={index}
                         border="1px solid"
                         borderColor="border"
-                        borderRadius="sm"
-                        mb="md"
+                        borderRadius="md"
+                        display="flex"
+                        mb="-1px"
                         px="md"
+                        gap="sm"
                         py="sm">
-                        <Text fontWeight="bold" mb="xs">
-                          {`${index + 1} ${item.state} ${item?.type && `- ${item?.type}`}
-                            `}
-                        </Text>
+                        <Circle bg="teal.200" color="teal.800">
+                          {index + 1}
+                        </Circle>
+                        <Flex pt="xxs" gap="sm">
+                          <Text fontWeight="bold" mb="xs">
+                            {item.state}
+                          </Text>
+                          <Text
+                            fontWeight="normal"
+                            mb="xs"
+                            fontSize="sm"
+                            color="gray.900">
+                            {item?.type}
+                          </Text>
+                        </Flex>
 
-                        <Box>
+                        <Box ml="auto">
                           {item.approvers.map((x: any) => {
                             return (
-                              <Flex key={x.id} gap="xs" py="xs">
+                              <Flex key={x.id} gap="sm" mr="xxs" py="xs">
                                 <Box>
                                   <Avatar
                                     src={x.profile_pic}
@@ -135,7 +149,12 @@ const FlowViewForm = () => {
                                     height={14}
                                   />
                                 </Box>
-                                <Text>{x.name}</Text>
+                                <Text
+                                  fontSize="base"
+                                  fontWeight="500"
+                                  color="gray.1000">
+                                  {x.name}
+                                </Text>
                               </Flex>
                             );
                           })}

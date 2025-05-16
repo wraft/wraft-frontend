@@ -109,6 +109,7 @@ export const Field = forwardRef<HTMLDivElement, FieldOptions>(
                 required={required}
                 variant={variant}
                 withDisabledIcon={!isCheckable}
+                fontSize="sm2"
               >
                 {label}
               </Label>

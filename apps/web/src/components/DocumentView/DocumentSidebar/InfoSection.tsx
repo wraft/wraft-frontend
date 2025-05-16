@@ -105,9 +105,14 @@ export const InfoSection = () => {
     <Box px="md" py="md">
       {editorMode !== 'new' && (
         <>
-          <Box>
-            <Text as="h3" mb="xs">
-              Creator
+          <Box display="none">
+            <Text
+              as="h3"
+              fontSize="sm"
+              fontWeight="normal"
+              mb="md"
+              color="gray.900">
+              Editors
             </Text>
             <AvatarCard
               time={contents?.content?.inserted_at}
@@ -117,12 +122,12 @@ export const InfoSection = () => {
           </Box>
 
           {contents?.state?.id && (
-            <Box mt="md">
-              {additionalCollaborator.length > 0 && (
+            <Box mt="xs" display="none">
+              {/* {additionalCollaborator.length > 0 && (
                 <Text as="h3" mb="xs">
                   Flow Members
                 </Text>
-              )}
+              )} */}
               {additionalCollaborator &&
                 additionalCollaborator.map((approver: any) => (
                   <AvatarCard
@@ -138,7 +143,7 @@ export const InfoSection = () => {
           )}
 
           {contents?.state?.id && (
-            <Box mt="md">
+            <Box mt="sm">
               {contents &&
                 !nextState?.is_user_eligible &&
                 !isMakeCompete &&
@@ -163,7 +168,7 @@ export const InfoSection = () => {
       )}
 
       {contents?.content?.build && (
-        <Box mt="xl">
+        <Box mt="xl" display="none">
           <Text as="h3">Document</Text>
 
           <Flex mt="xs" pb={3} justify="space-between">

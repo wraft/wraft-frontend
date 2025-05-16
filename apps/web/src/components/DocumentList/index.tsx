@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Avatar } from 'theme-ui';
 import { Button, Pagination, Table, Box, Text, Flex } from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import { ContentTitleList } from 'common/content';
 import { TimeAgo, FilterBlock, StateBadge } from 'common/Atoms';
@@ -218,8 +219,12 @@ const DocumentList = () => {
 
   return (
     <>
-      <PageHeader title="Documents" desc="Manage all documents" />
-      <Box px="lg" py="xl">
+      <PageHeader title="Documents" desc="Manage all documents">
+        <Button variant="secondary" size="sm">
+          <DotsThreeVertical stroke="bold" color="gray.700" />
+        </Button>
+      </PageHeader>
+      <Box px="xl" py="xl">
         <Flex>
           <Box flexGrow={1}>
             <Box mb="sm">

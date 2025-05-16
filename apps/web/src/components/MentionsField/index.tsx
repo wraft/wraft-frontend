@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'theme-ui';
+import { Text } from '@wraft/ui';
 import { Label } from 'theme-ui';
 import Mentions from 'rc-mentions';
 import styled from '@emotion/styled';
@@ -11,16 +11,16 @@ const MentionsWrapper = styled.div`
     border: 1px solid #999;
     border-radius: 3px;
     overflow: hidden;
-    font-size: ${({ theme }: any) => theme.fontSizes.sm} !important;
-    border-radius: 4px;
-    fontweight: fontWeight;
-    padding: 6px 16px;
-    color: ${({ theme }: any) => theme.rawColors.gray[1200]};
+    font-size: ${({ theme }: any) => theme.fontSizes.sm2} !important;
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 8px 16px;
     background-color: ${({ theme }: any) => theme.rawColors.white} !important;
     border-color: var(--theme-ui-colors-border);
   }
   .rc-textarea {
-    font-size: 1rem;
+    font-size: ${({ theme }: any) => theme.fontSizes.base} !important;
+    font-weight: 600;
   }
   textarea {
     color: ${({ theme }: any) => theme.colors.text};
@@ -45,7 +45,9 @@ const MentionField: React.FC<any> = ({
     <>
       <GlobalStyle />
       {sub && (
-        <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
+        <Text position="absolute" right="16px" top="32px">
+          {sub}
+        </Text>
       )}
       {label && (
         <Label htmlFor="description" sx={{ color: 'gray.a1100' }}>

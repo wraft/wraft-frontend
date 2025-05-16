@@ -7,7 +7,6 @@ export const EditorContainer = styled.divBox`
   width: 100%;
   min-height: 40rem;
   overflow: hidden;
-  border-radius: 0.375rem;
   border: 1px solid;
   border-color: gray.300;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -26,6 +25,7 @@ export const EditorWrapper = styled.divBox`
     position: sticky;
     top: 0;
     z-index: 1;
+    background: white;
   }
 `;
 

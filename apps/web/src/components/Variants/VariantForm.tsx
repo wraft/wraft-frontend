@@ -809,7 +809,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
       onSubmit={handleSubmit(onSubmit)}>
       <Box flexShrink="0">
         <Drawer.Header>
-          <Drawer.Title>
+          <Drawer.Title fontSize="sm">
             {contentId ? 'Update Variant' : 'Create Variant'}
           </Drawer.Title>
           <X

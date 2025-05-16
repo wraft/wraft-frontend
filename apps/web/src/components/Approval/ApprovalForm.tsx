@@ -238,7 +238,7 @@ const ApprovalForm = () => {
               <Field
                 name="name"
                 label="Approver"
-                defaultValue="Muneef Hameed (U01)"
+                defaultValue="John Doe (U01)"
                 register={register}
               />
               <Button type="submit">Save</Button>

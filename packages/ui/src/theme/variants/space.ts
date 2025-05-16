@@ -11,6 +11,7 @@ export type ThemeSpace = {
   lg: string;
   md: string;
   sm: string;
+  sm2: string;
   xl: string;
   xs: string;
   xxl: string;
@@ -22,6 +23,7 @@ export const getSpace = (theme: WuiTheme): ThemeSpace => {
     xxs: theme.toRem(2),
     xs: theme.toRem(4),
     sm: theme.toRem(8),
+    sm2: theme.toRem(9),
     md: theme.toRem(12),
     lg: theme.toRem(16),
     xl: theme.toRem(24),

@@ -40,7 +40,7 @@ export const DocumentSidebar = () => {
       // maxWidth="400px"
       borderLeft="solid 1px"
       borderColor="border">
-      <Box flexShrink="0">
+      <Box flexShrink="0" px="xs" py="sm">
         <ContentInfoBlock
           content={contents}
           nextState={nextState}
@@ -49,29 +49,31 @@ export const DocumentSidebar = () => {
       </Box>
 
       <Box>
-        <Tab.List aria-label="Content Tab" store={tab}>
-          <Tab id="overview" store={tab}>
-            Overview
-          </Tab>
+        <Box px="sm">
+          <Tab.List aria-label="Content Tab" store={tab}>
+            <Tab id="overview" store={tab} fontWeight={600}>
+              Overview
+            </Tab>
 
-          {canAccess('comment') && (
-            <Tab id="discussions" store={tab}>
-              Discussions
-            </Tab>
-          )}
-          {canAccess('history') && (
-            <Tab id="versions" store={tab}>
-              Versions
-            </Tab>
-          )}
-          {canAccess('log') && (
-            <Tab id="log" store={tab}>
-              Log
-            </Tab>
-          )}
-        </Tab.List>
+            {canAccess('comment') && (
+              <Tab id="discussions" store={tab}>
+                Discussions
+              </Tab>
+            )}
+            {canAccess('history') && (
+              <Tab id="versions" store={tab}>
+                Versions
+              </Tab>
+            )}
+            {canAccess('log') && (
+              <Tab id="log" store={tab}>
+                Log
+              </Tab>
+            )}
+          </Tab.List>
+        </Box>
 
-        <Box h="calc(100vh - 142px)" overflowY="auto">
+        <Box h="calc(100vh - 142px)" overflowY="auto" px="sm">
           <Tab.Panel tabId="overview" store={tab}>
             <InfoSection />
           </Tab.Panel>
@@ -80,7 +82,13 @@ export const DocumentSidebar = () => {
               <Box mt="md" px="md">
                 <Box>
                   <Box mb="sm">
-                    <Text as="h3">Discussions</Text>
+                    <Text
+                      as="h3"
+                      fontWeight="normal"
+                      letterSpacing="-0.3px"
+                      color="gray.900">
+                      Discussions
+                    </Text>
                   </Box>
 
                   {contents && contents.content && (

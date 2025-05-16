@@ -25,12 +25,12 @@ const BlockCard = ({ title, desc }: BlockCardProps) => (
     bg="background-primary"
     border="1px solid"
     borderColor="border"
-    borderRadius="sm"
-    px="lg"
-    py="xxl">
-    <File width={32} height={20} />
+    borderRadius="md"
+    px="md"
+    py="md">
+    {/* <File width={32} height={20} /> */}
     <Flex ml={2} flex={1}>
-      <Text fontWeight={500} mb={1} color="gray.1100">
+      <Text fontWeight={500} mb={0} color="gray.1100">
         {title}
       </Text>
       <Text ml="auto">{desc}</Text>
@@ -97,12 +97,22 @@ const Dashboard = () => {
   };
 
   return (
-    <Box p="lg">
-      <Text color="text-secondary" fontSize="sm">
-        {format(currentTime, 'EEEE, MMMM dd')}
-      </Text>
-      <Text fontWeight="heading" mb="xl" color="text-primary">
-        {getGreeting()}, {userProfile?.name}
+    <Box p="xl">
+      <Text
+        display="flex"
+        alignItems="center"
+        itemScope="center"
+        gap="sm"
+        fontWeight="heading"
+        mb="xl"
+        color="text-primary">
+        {/* {getGreeting()},  */}
+        {userProfile?.name}
+
+        <Text color="text-secondary" fontSize="sm">
+          {format(currentTime, 'hh:mm a')}{' '}
+          {Intl.DateTimeFormat().resolvedOptions().timeZone}
+        </Text>
       </Text>
       <Flex my="lg" display="none" border="1px solid" borderColor="border">
         <Flex w="70%" alignItems="center">
@@ -162,13 +172,13 @@ const Dashboard = () => {
 
       <Box mt="xl">
         <Tab.List aria-label="Content Tab" store={tab}>
-          <Tab id="recent_documents" store={tab}>
+          <Tab id="recent_documents" store={tab} fontWeight={500}>
             Recent Documents
           </Tab>
-          <Tab id="upcoming" store={tab}>
+          <Tab id="upcoming" store={tab} fontWeight={500}>
             Upcoming Expiring Contracts
           </Tab>
-          <Tab id="expired" store={tab}>
+          <Tab id="expired" store={tab} fontWeight={500}>
             Expired Contracts
           </Tab>
         </Tab.List>

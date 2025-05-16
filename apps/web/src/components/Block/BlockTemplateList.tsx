@@ -5,6 +5,7 @@ import { Table, DropdownMenu, Box, Text, Flex, Button, Modal } from '@wraft/ui';
 import { Avatar } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
+import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
 import { TimeAgo } from 'common/Atoms';
@@ -152,8 +153,15 @@ const BlockTemplateListFrame: FC = () => {
     <>
       <PageHeader title="Blocks" desc="Re-usable Content blocks">
         {hasPermission('block_template', 'manage') && (
-          <Button onClick={() => Router.push(`/blocks/new`)} variant="tertiary">
-            + New Block
+          <Button
+            onClick={() => Router.push(`/blocks/new`)}
+            variant="secondary"
+            fontSize="base"
+            borderRadius="0.5rem"
+            size="sm"
+            py="xs">
+            <Plus size={10} width={10} />
+            New Block
           </Button>
         )}
       </PageHeader>

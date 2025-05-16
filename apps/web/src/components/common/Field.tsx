@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Text, Box } from 'theme-ui';
-import { Label, Input } from 'theme-ui';
+import { Text, Box, InputText } from '@wraft/ui';
+import { Label } from 'theme-ui';
 import { AddIcon } from '@wraft/icon';
 
 interface Props {
@@ -36,38 +36,36 @@ const Field: React.FC<Props> = ({
   placeholder,
   register,
   defaultValue,
-  mr,
-  mb,
+  mr = 'sm',
+  mb = 'md',
   sub,
   variant = 'baseForm',
   p,
   color = 'gray.1200',
-  fontWeight,
+  fontWeight = 500,
   fontSize,
   view = false,
 }) => {
   const [passwordType, setPasswordType] = useState('password');
   return (
-    <Box mr={mr} mb={mb} variant={variant} sx={{ position: 'relative' }}>
-      {sub && (
-        <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
-      )}
+    <Box mr={mr} mb={mb} variant={variant} position="relative">
+      {sub && <Text>{sub}</Text>}
       {label && (
         <Label htmlFor="description" sx={{ color: 'gray.a1100' }}>
           {label}
         </Label>
       )}
-      <Box sx={{ position: 'relative' }}>
-        <Input
+      <Box position="relative">
+        <InputText
           onChange={onChange}
-          sx={{
-            bg: bg ? bg : 'transparent',
-            mb: error ? '24px' : '',
-            p: p,
-            color: color,
-            fontWeight: fontWeight,
-            WebkitTextFillColor: 'var(--theme-ui-colors-gray-a1100)',
-            fontSize: fontSize,
+          fontSize="base"
+          bg={bg ? bg : 'transparent'}
+          mb={error ? '24px' : ''}
+          p={p}
+          color={color}
+          fontWeight={fontWeight}
+          WebkitTextFillColor="var(--theme-ui-colors-gray-a1100)"
+          css={{
             ':disabled': {
               [view ? 'color' : '']: 'text',
             },
@@ -83,15 +81,15 @@ const Field: React.FC<Props> = ({
         />
         {type === 'password' && (
           <Box
-            sx={{
-              cursor: 'pointer',
-              position: 'absolute',
-              right: '4px',
-              top: '4px',
-              zIndex: 100,
-              color: 'gray.700',
-              p: 2,
-              ':hover': { color: 'gray.800' },
+            cursor="pointer"
+            position="absolute"
+            right="4px"
+            top="4px"
+            zIndex={100}
+            color="gray.700"
+            p={2}
+            css={{
+              '&:hover': { color: 'gray.800' },
             }}
             onClick={() => {
               setPasswordType((prev) =>
