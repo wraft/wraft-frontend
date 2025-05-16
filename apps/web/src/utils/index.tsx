@@ -221,6 +221,9 @@ export const findAll = (k: any, needle: string) => {
 export interface IFieldField {
   name: string;
   value: string;
+  id?: string;
+  named?: string;
+  label?: string;
 }
 
 export const capitalizeFirst = (str: string) => {
@@ -245,4 +248,29 @@ export const convertToVariableName = (name) => {
   }
 
   return varName;
+};
+
+export const mapFields = (
+  inputFields: any,
+  inputFieldValues: Record<string, any>,
+): FieldInstance[] => {
+  return inputFields.map((field: any) => {
+    const variableName = convertToVariableName(field.name);
+    const fieldValue = inputFieldValues[variableName] ?? '';
+
+    return {
+      ...field,
+      value: fieldValue,
+    } as IFieldType;
+  });
+};
+
+export const mapPlaceholdersToFields = (placeholder: any): IFieldField[] => {
+  return placeholder.map(({ name, value, id }: any) => ({
+    name,
+    value,
+    named: value,
+    label: name,
+    id: id,
+  }));
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 import { ErrorBoundary, Button } from '@wraft/ui';
 import styled from '@emotion/styled';
@@ -201,6 +201,7 @@ const PdfWrapper = styled(Box)`
 
 export const DocumentContentBlock = () => {
   const [isBuilding, setIsBuilding] = useState<boolean>(false);
+  const [isEditorMounted, setIsEditorMounted] = useState(false);
   const {
     cId,
     contents,
@@ -220,9 +221,10 @@ export const DocumentContentBlock = () => {
   const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
   const { userProfile } = useAuth();
   const tabView = useTabStore();
-  const { activeId } = tabView.useState();
 
   const defaultSelectedId = 'edit';
+
+  console.log('doc_check[content][3]', contentBody);
 
   const collabData = {
     user: {
@@ -262,6 +264,13 @@ export const DocumentContentBlock = () => {
       });
   };
 
+  useEffect(() => {
+    setIsEditorMounted(true);
+    return () => {
+      setIsEditorMounted(false);
+    };
+  }, []);
+
   return (
     <>
       {editorMode === 'new' ? (
@@ -274,7 +283,7 @@ export const DocumentContentBlock = () => {
             maxHeight="calc(100vh - 180px)">
             <Box minWidth="794px" maxWidth="920px">
               <PreTag pt={0} pb={6}>
-                {contentBody && (
+                {contentBody && isEditorMounted && (
                   <Editor
                     defaultContent={contentBody}
                     isReadonly={false}
@@ -302,7 +311,7 @@ export const DocumentContentBlock = () => {
                 </Tab>
               </TabList>
               <Flex align="center" gap="sm">
-                <AwarenessUsers />
+                {contentBody && <AwarenessUsers />}
                 {!isEditable && (
                   <Flex gap="xs">
                     {canAccess('docGenerator') && (
@@ -343,9 +352,8 @@ export const DocumentContentBlock = () => {
                 <Flex>
                   <Box minWidth="794px" maxWidth="920px">
                     <PreTag pt={0} pb={6}>
-                      {contentBody && (
+                      {contentBody && isEditorMounted && (
                         <>
-                          {/* <Toolbar /> */}
                           <LiveEditor
                             defaultContent={contentBody}
                             isReadonly={editorMode === 'view'}
@@ -357,17 +365,6 @@ export const DocumentContentBlock = () => {
                           />
                         </>
                       )}
-
-                      {/* {contentBody && (
-                        <Editor
-                          defaultContent={contentBody}
-                          isReadonly={editorMode === 'view'}
-                          ref={editorRef}
-                          tokens={fieldTokens}
-                          isCollaborative={true}
-                          collabData={collabData}
-                        />
-                      )} */}
                     </PreTag>
                   </Box>
                 </Flex>

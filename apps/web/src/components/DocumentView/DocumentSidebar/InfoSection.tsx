@@ -5,8 +5,8 @@ import { DownloadSimple } from '@phosphor-icons/react';
 import NavLink from 'common/NavLink';
 import { TimeAgo } from 'common/Atoms';
 import { AvatarCard } from 'common/AvatarCard';
-import { updateVars } from 'utils/index';
-import { IFieldField, IFieldType } from 'utils/types/content';
+import { mapPlaceholdersToFields, updateVars } from 'utils/index';
+import { IFieldType } from 'utils/types/content';
 import { ContentState } from 'utils/types';
 
 import { useDocument } from '../DocumentContext';
@@ -87,18 +87,11 @@ export const InfoSection = () => {
 
   const applyContentUpdates = async (contentData: any, mappings: any) => {
     const updatedContent = await updateVars(contentData, mappings);
-
-    setContentBody(updatedContent);
-  };
-
-  const mapPlaceholdersToFields = (placeholder: any): IFieldField[] => {
-    return placeholder.map(({ name, value, id }: any) => ({
-      name,
-      value,
-      named: value,
-      label: name,
-      id: id,
-    }));
+    if (editorMode === 'new') {
+      setContentBody(updatedContent);
+      return;
+    }
+    editorRef.current?.helpers?.updateState(updatedContent);
   };
 
   return (
