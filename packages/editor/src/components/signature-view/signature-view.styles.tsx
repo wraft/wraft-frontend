@@ -57,8 +57,8 @@ export const StyledResizableRoot = styled(ResizableRoot)`
   min-width: 64px;
   outline: 2px solid transparent;
 
-  background: #ccc;
-  border: 1px solid #000;
+  background: #f4fbf8;
+  border: 2px solid #62b997;
   border-radius: 8px;
   &[data-selected] {
     outline-color: blue;

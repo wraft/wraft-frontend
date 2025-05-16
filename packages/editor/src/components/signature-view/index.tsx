@@ -9,7 +9,6 @@ import {
   Plus,
   Trash,
   UserPlus,
-  FadersHorizontal,
   X,
 } from "@phosphor-icons/react";
 import { Box, Button, Flex, Text } from "@wraft/ui";
@@ -221,6 +220,7 @@ export default function SignatureView(props: ReactNodeViewProps) {
           width={attrs.width ?? undefined}
           height={attrs.height ?? undefined}
           aspectRatio={aspectRatio}
+          className="signature-form"
           onResizeEnd={(event) => setAttrs(event.detail)}
           data-selected={props.selected ? "" : undefined}
           onClick={handleContainerClick}
