@@ -71,7 +71,7 @@ export function defineSignatureSpec(): SignatureSpecExtension {
     ],
     toDOM(node) {
       const attrs = node.attrs as SignatureAttrs;
-      return ["img", attrs];
+      return ["img", { ...attrs, class: "signature-form" }];
     },
   });
 }
