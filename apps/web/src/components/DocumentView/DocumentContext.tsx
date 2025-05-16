@@ -17,7 +17,7 @@ import { useAuth } from 'contexts/AuthContext';
 import { ContentInstance, IVariantDetail } from 'utils/types/content';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
-import { findHolders } from 'utils/index';
+import { findHolders, mapFields, mapPlaceholdersToFields } from 'utils/index';
 import contentStore from 'store/content.store';
 
 import apiService from './APIModel';
@@ -68,15 +68,16 @@ interface DocumentContextProps {
   tabActiveId: string;
   token: string | null;
   userType: UserType;
-  setAdditionalCollaborator: (data: any) => void;
-  setUserType: (state: UserType) => void;
   fetchContentDetails: (cid: string) => void;
+  setAdditionalCollaborator: (data: any) => void;
   setContentBody: (contetn: any) => void;
   setEditorMode: (state: EditorMode) => void;
   setFieldTokens: (data: any) => void;
-  setPageTitle: (data: any) => void;
+  setFieldValues: (fieldValues: any) => void;
   setMeta: (data: any) => void;
+  setPageTitle: (data: any) => void;
   setTabActiveId: (state: string) => void;
+  setUserType: (state: UserType) => void;
 }
 
 const createAxiosInstance = (): AxiosInstance => {
@@ -134,6 +135,9 @@ export const DocumentProvider = ({
   useEffect(() => {
     if (mode) {
       setEditorMode(mode);
+    }
+    if (!cId) {
+      setEditorMode('new');
     }
   }, [mode]);
 
@@ -220,6 +224,18 @@ export const DocumentProvider = ({
     }
   }, [newContent]);
 
+  // update placeholder fields when fields or fieldValues change
+  useEffect(() => {
+    if (!fields || !fieldValues) return;
+
+    const mappedFields = mapFields(fields, fieldValues);
+    const placeholderFields = mapPlaceholdersToFields(mappedFields);
+
+    if (placeholderFields.length > 0) {
+      setFieldTokens(placeholderFields);
+    }
+  }, [fieldValues, fields]);
+
   const verifyInvitezUserAccess = async () => {
     try {
       const data = await apiService.get(
@@ -251,8 +267,14 @@ export const DocumentProvider = ({
         setContentBody(serialized);
         lastSavedContent.current = data?.content?.serialized?.serialized;
 
+        if (data.content.serialized.fields) {
+          const getFieldValues = JSON.parse(data.content.serialized.fields);
+          setFieldValues(getFieldValues);
+        }
+
+        const getFieldValues = JSON.parse(data.content.serialized.fields) || {};
         const holders = findHolders(serialized);
-        setFieldValues(holders);
+        setFieldValues({ ...getFieldValues, ...holders });
       }
 
       if (data?.content?.meta) {
@@ -450,15 +472,16 @@ export const DocumentProvider = ({
         lastSavedContent,
         meta,
         isInvite,
-        setAdditionalCollaborator,
-        setUserType,
         fetchContentDetails,
+        setAdditionalCollaborator,
         setContentBody,
         setEditorMode,
         setFieldTokens,
+        setFieldValues,
+        setMeta,
         setPageTitle,
         setTabActiveId,
-        setMeta,
+        setUserType,
       }}>
       {children}
     </DocumentContext.Provider>

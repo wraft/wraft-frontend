@@ -13,8 +13,7 @@ import { useForm } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
 
 import FieldDate from 'common/FieldDate';
-import { convertToVariableName } from 'utils';
-import { FieldInstance } from 'utils/types';
+import { convertToVariableName, mapFields } from 'utils';
 
 import { useDocument } from '../DocumentContext';
 
@@ -48,30 +47,18 @@ const PlaceholderBlock = ({
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const { editorMode } = useDocument();
+  const { editorMode, setFieldValues } = useDocument();
 
   const { register, handleSubmit } = useForm();
   const mobileMenuDrawer = useDrawer();
-
-  const mapFields = (
-    inputFields: any,
-    inputFieldValues: Record<string, any>,
-  ): FieldInstance[] => {
-    return inputFields.map((field: any) => {
-      const variableName = convertToVariableName(field.name);
-      const fieldValue = inputFieldValues[variableName] ?? '';
-
-      return {
-        ...field,
-        value: fieldValue,
-      } as IFieldType;
-    });
-  };
 
   const onSubmit = (data: Record<string, any>) => {
     setSubmitting(true);
 
     const newMappedFields = mapFields(fields, data);
+    // const tokens = mapPlaceholdersToFields(placeholders);
+    console.log('mappedFields[cc][dd]', data);
+    setFieldValues(data);
     setMappedFields(newMappedFields);
     onSaved(newMappedFields);
 
@@ -83,7 +70,9 @@ const PlaceholderBlock = ({
     if (fields) {
       if (fieldValues) {
         const newMappedFields = mapFields(fields, fieldValues);
-        onSaved(newMappedFields);
+        if (editorMode === 'new') {
+          onSaved(newMappedFields);
+        }
         setMappedFields(newMappedFields);
       }
     }

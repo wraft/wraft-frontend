@@ -8,6 +8,7 @@ import {
   useState,
   useEffect,
   useRef,
+  useLayoutEffect,
 } from "react";
 import { Socket } from "phoenix";
 import * as Y from "yjs";
@@ -53,7 +54,9 @@ export const LiveEditor = forwardRef(
     ref,
   ) => {
     const [provider, setProvider] = useState<any>();
+    const [updateContent, setUpdateContent] = useState<any>();
     const contentInitialized = useRef(false);
+    const socketRef = useRef<Socket | null>(null);
 
     const doc = useMemo(
       () =>
@@ -63,32 +66,36 @@ export const LiveEditor = forwardRef(
       [],
     );
 
+    useLayoutEffect(() => {
+      if (!socketRef.current) {
+        socketRef.current = new Socket(`${socketUrl}/socket`);
+        socketRef.current.connect();
+      }
+
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.disconnect();
+          socketRef.current = null;
+        }
+      };
+    }, [socketUrl]);
+
     const editor = useMemo(() => {
       if (provider) {
         provider?.destroy();
       }
 
-      // const socket = new Socket("wss://api.stage.wraft.co/socket");
-      const socket = new Socket(`${socketUrl}/socket`);
-      // const socket = new Socket("ws://localhost:4000/socket");
-      socket.connect();
+      if (!socketRef.current) {
+        socketRef.current = new Socket(`${socketUrl}/socket`);
+        socketRef.current.connect();
+      }
 
-      // const wsProvider = new WebsocketProvider(
-      //   process.env.NEXT_PUBLIC_WEBSOCKET_URL || "ws://localhost:3000",
-      //   collabData.roomId as string,
-      //   doc,
-      //   { connect: true, WebSocketPolyfill: WebSocket }
-      // );
       const wsProvider = new PhoenixChannelProvider(
-        socket,
+        socketRef.current,
         `doc_room:${collabData.roomId}`,
         doc,
       );
 
-      // const _localProvider = new IndexeddbPersistence(collabData?.roomId, doc);
-
-      // const { room, leave } = client.enterRoom(collabData.roomId);
-      // const wsProvider = new LiveblocksYjsProvider(room, doc);
       setProvider(wsProvider);
 
       wsProvider.awareness.on("change", () => {
@@ -109,28 +116,31 @@ export const LiveEditor = forwardRef(
         isReadonly,
       });
 
-      const editor = createEditor({ extension, defaultContent });
+      return createEditor({ extension, defaultContent });
+    }, [isReadonly]);
+
+    useEffect(() => {
+      if (!provider || !editor) return;
 
       const yXmlFragment = doc.getXmlFragment("prosemirror");
       const ymap = doc.getMap("doc-initial");
 
-      // Initialize content if needed
-      if (
-        defaultContent &&
-        yXmlFragment.length === 0 &&
-        !contentInitialized.current
-      ) {
+      // update content like placeholder update
+      if (updateContent) {
         prosemirrorJSONToYXmlFragment(
           editor.schema,
-          defaultContent,
+          updateContent,
           yXmlFragment,
         );
-        contentInitialized.current = true;
       }
 
-      ymap.observe((event) => {
-        event.changes.keys.forEach((change, key) => {
-          if (key === "initialLoad") {
+      const ymapObserver = (event: any) => {
+        event.changes.keys.forEach((change: any, key: any) => {
+          if (
+            key === "initialLoad" &&
+            defaultContent &&
+            !contentInitialized.current
+          ) {
             prosemirrorJSONToYXmlFragment(
               editor.schema,
               defaultContent,
@@ -139,11 +149,15 @@ export const LiveEditor = forwardRef(
             contentInitialized.current = true;
           }
         });
-      });
-      return editor;
-    }, [isReadonly, defaultContent, socketUrl, collabData]);
+      };
 
-    // Add effect to reset contentInitialized when defaultContent changes
+      ymap.observe(ymapObserver);
+
+      return () => {
+        ymap.unobserve(ymapObserver);
+      };
+    }, [provider, editor, defaultContent, doc, updateContent]);
+
     useEffect(() => {
       if (defaultContent) {
         contentInitialized.current = false;
@@ -179,6 +193,9 @@ export const LiveEditor = forwardRef(
           const { selection, schema } = editor.state;
           const blockContent = schema.nodeFromJSON(block);
           return editor.commands.insertBlock(blockContent, selection);
+        },
+        updateState: (state: any) => {
+          setUpdateContent(state);
         },
       }),
       [editor],

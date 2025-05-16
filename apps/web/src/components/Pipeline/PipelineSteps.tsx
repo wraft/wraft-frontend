@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { DeleteIcon } from '@wraft/icon';
 import {
   Box,
   Flex,

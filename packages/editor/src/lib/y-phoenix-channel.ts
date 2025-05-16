@@ -252,7 +252,9 @@ export class PhoenixChannelProvider extends Observable {
     emitSynced: boolean,
     messageType: number,
   ) => void)[];
-  _synced: boolean;
+  private _synced = false;
+  private updateQueue: (() => void)[] = [];
+  private isProcessingQueue = false;
   wsLastMessageReceived: number;
   shouldConnect: boolean;
   _resyncInterval: number;
@@ -304,10 +306,6 @@ export class PhoenixChannelProvider extends Observable {
     this.disableBc = disableBc;
     this.wsUnsuccessfulReconnects = 0;
     this.messageHandlers = messageHandlers.slice();
-    /**
-     * @type {boolean}
-     */
-    this._synced = false;
     this.wsLastMessageReceived = 0;
     /**
      * Whether to connect to other peers or not
@@ -395,14 +393,35 @@ export class PhoenixChannelProvider extends Observable {
     return this._synced;
   }
 
+  private processUpdateQueue() {
+    if (this.isProcessingQueue || this.updateQueue.length === 0) return;
+
+    this.isProcessingQueue = true;
+    const update = this.updateQueue.shift();
+    if (update) {
+      update();
+    }
+    this.isProcessingQueue = false;
+
+    if (this.updateQueue.length > 0) {
+      setTimeout(() => this.processUpdateQueue(), 0);
+    }
+  }
+
+  private queueUpdate(update: () => void) {
+    this.updateQueue.push(update);
+    this.processUpdateQueue();
+  }
+
   set synced(state) {
     if (this._synced !== state) {
       this._synced = state;
-
-      // @ts-expect-error emit
-      this.emit("synced", [state]);
-      // @ts-expect-error emit
-      this.emit("sync", [state]);
+      this.queueUpdate(() => {
+        // @ts-expect-error emit
+        this.emit("synced", [state]);
+        // @ts-expect-error emit
+        this.emit("sync", [state]);
+      });
     }
   }
 

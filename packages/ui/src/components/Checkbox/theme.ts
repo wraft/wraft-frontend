@@ -1,7 +1,5 @@
 import { CSSObject } from "@xstyled/emotion";
 
-import { Primary } from "../Button/Button.stories";
-
 export type ThemeCheckboxes = {
   checked: CSSObject;
   default: CSSObject;
