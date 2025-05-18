@@ -40,7 +40,7 @@ const VariantList = () => {
 
   return (
     <>
-      <PageHeader title="Structures" desc="Manage Structures">
+      <PageHeader title="Artifacts" desc="Manage Artifacts">
         {hasPermission('variant', 'manage') && (
           <Button
             variant="secondary"
@@ -48,7 +48,7 @@ const VariantList = () => {
             onClick={() => setIsOpen(true)}
             fontSize="sm2">
             <Plus size={12} weight="bold" color="gray.600" />
-            Create Structures
+            Create Artifacts
           </Button>
         )}
       </PageHeader>

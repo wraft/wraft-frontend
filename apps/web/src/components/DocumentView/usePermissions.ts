@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-export type EditorMode = 'view' | 'edit' | 'new' | 'sign';
+export type EditorMode = 'view' | 'edit' | 'new' | 'sign' | 'suggest';
 export type DocRole = 'viewer' | 'editor' | 'signer';
 export type UserType = 'default' | 'guest';
 export type SectionId =

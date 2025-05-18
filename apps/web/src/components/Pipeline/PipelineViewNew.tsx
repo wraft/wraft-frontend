@@ -96,6 +96,7 @@ const PipelineView = () => {
             {hasPermission('pipeline', 'manage') && (
               <Button
                 variant="secondary"
+                size="sm"
                 onClick={() => onRunClick(pipelineData?.source_id)}
                 type="button"
                 disabled={pipelineData.stages?.length == 0}>
@@ -109,7 +110,7 @@ const PipelineView = () => {
         </Flex>
       </PageHeader>
 
-      <Flex px="md" py="md" gap="md">
+      <Flex px="xl" py="xl" gap="md">
         <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
 
         <Box w="80%" display={formStep === 0 ? 'block' : 'none'}>

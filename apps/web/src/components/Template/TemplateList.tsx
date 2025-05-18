@@ -172,14 +172,19 @@ const TemplateList = () => {
       <PageHeader title="Templates" desc="Content Templates for Variants">
         {hasPermission('template', 'manage') && (
           <Button
-            onClick={() => router.push(`/templates/new`)}
-            variant="tertiary">
-            <Plus size={12} weight="bold" />
+            variant="secondary"
+            display="flex"
+            size="sm"
+            fontSize="sm2"
+            borderRadius="lg"
+            borderColor="gray.600"
+            onClick={() => router.push(`/templates/new`)}>
+            <Plus height={4} weight="bold" />
             New Template
           </Button>
         )}
       </PageHeader>
-      <Box p="lg">
+      <Box p="lg" px="xl">
         <Box mx={0} mb={3}>
           <Table
             data={templates}

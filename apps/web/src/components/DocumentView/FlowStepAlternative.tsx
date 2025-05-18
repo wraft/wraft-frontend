@@ -181,7 +181,7 @@ export const FlowProgressBar = ({
         {checked && <Check size={12} weight="bold" className="main-icon" />}
       </Flex>
       <Text
-        color="gray.a1100"
+        color={activeState ? 'orange.500' : 'gray.a1100'}
         fontWeight="600"
         fontSize="sm2"
         textTransform="capitalize">

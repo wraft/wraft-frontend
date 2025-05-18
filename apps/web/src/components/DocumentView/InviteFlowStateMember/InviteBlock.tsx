@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Search, Box, Text, Flex } from '@wraft/ui';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { postAPI, fetchAPI, deleteAPI } from 'utils/models';
 
 import * as S from './styles';
@@ -99,10 +100,12 @@ export default function InviteBlock({ docId }: any) {
   return (
     <S.Container>
       <S.Header>
-        <Text fontSize="2xl" fontWeight="heading" mb="sm">
+        <Text fontSize="lg" fontWeight="medium" mb="sm">
           Invite To Editor Flow
         </Text>
-        <Text color="text-secondary">Invite and manage your team members.</Text>
+        <Text color="text-secondary" fontSize="base">
+          Invite and manage your team members.
+        </Text>
       </S.Header>
       <Box pb="xl">
         <Search
@@ -111,7 +114,9 @@ export default function InviteBlock({ docId }: any) {
           value={selectValue}
           icon={
             <Box display="contents">
-              <MagnifyingGlass size={18} />
+              <IconFrame color="gray.900">
+                <MagnifyingGlass size={16} weight="bold" />
+              </IconFrame>
             </Box>
           }
           onChange={onUserSelect}
@@ -138,9 +143,9 @@ export default function InviteBlock({ docId }: any) {
           {additionalCollaborator.map((collaborator: User, i: any) => (
             <S.MemberItem key={i}>
               <S.MemberInfo>
-                <div>
+                <Box>
                   <S.MemberName>{collaborator.name}</S.MemberName>
-                </div>
+                </Box>
               </S.MemberInfo>
               <Box>
                 {collaborator.removable && (

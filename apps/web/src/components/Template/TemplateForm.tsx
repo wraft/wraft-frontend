@@ -449,30 +449,43 @@ const TemplateEditor = () => {
           px="md">
           {templateId && currentTemplate && (
             <Flex align="center" justify="space-between" px="md" py="lg">
-              <Box>
-                <Text fontWeight="heading" fontSize="xs" opacity={0.4}>
+              <Flex gap="sm">
+                <Text fontWeight="medium" fontSize="sm2">
                   Updated
                 </Text>
-                <TimeAgo
-                  time={currentTemplate?.data_template?.updated_at}
-                  ago={true}
-                />
-              </Box>
+                <Text fontWeight="heading" fontSize="sm2" opacity={0.2}>
+                  \
+                </Text>
+                <Box ml="auto">
+                  <TimeAgo
+                    fontSize="sm2"
+                    time={currentTemplate?.data_template?.updated_at}
+                    ago={true}
+                  />
+                </Box>
+              </Flex>
               <Box>
                 <EditMenus id={templateId} />
               </Box>
             </Flex>
           )}
 
+          <Box
+            width="100%"
+            height="1px"
+            borderBottom="solid 1px"
+            borderColor="gray.400"
+          />
+
           {selectedVariant && selectedVariant.fields && (
             <Box px="md" py="lg">
-              <Text as="h4" mb="sm">
+              <Text as="h4" mb="sm" fontSize="base">
                 Fields
               </Text>
               {/* <Text as="p" mb="sm" color="text-secondary">
                 Dynamic variables provided by Variants
               </Text> */}
-              <Box border="solid 1px #ddd" borderRadius="lg">
+              <Box border="solid 1px" borderRadius="lg" borderColor="gray.500">
                 {selectedVariant.fields &&
                   selectedVariant.fields.map((field: FieldT) => (
                     <Flex
@@ -481,7 +494,7 @@ const TemplateEditor = () => {
                       borderColor="border"
                       // borderRadius="lg"
                       px="sm"
-                      bg="background-secondary"
+                      bg="gray.50"
                       p="xs"
                       gap="xs"
                       key={field.id}
@@ -501,24 +514,34 @@ const TemplateEditor = () => {
 
           <Box px="md" py="lg">
             <Box mb="sm">
-              <Text as="h4">Blocks</Text>
+              <Text as="h4" fontWeight="medium">
+                Blocks
+              </Text>
               {/* <Text as="p" color="text-secondary">
                 Blocks are reusable contents, click to insert
               </Text> */}
             </Box>
 
-            {blocks &&
-              blocks.map((block: BlockTemplate) => (
-                <Box
-                  key={block.id}
-                  onClick={() => insertBlock(block)}
-                  border="solid 1px"
-                  borderColor="gray.400"
-                  p="sm"
-                  bg="background-secondary">
-                  <Text>{block.title}</Text>
-                </Box>
-              ))}
+            <Box
+              id="blocks-list"
+              borderRadius="lg"
+              border="solid 1px #ddd"
+              overflow="hidden">
+              {blocks &&
+                blocks.map((block: BlockTemplate) => (
+                  <Box
+                    key={block.id}
+                    onClick={() => insertBlock(block)}
+                    borderBottom="solid 1px"
+                    borderColor="gray.600"
+                    p="sm"
+                    bg="background-secondary">
+                    <Text fontWeight="medium" color="gray.1200">
+                      {block.title}
+                    </Text>
+                  </Box>
+                ))}
+            </Box>
           </Box>
         </Box>
         {/* {errors.exampleRequired && <Text>This field is required</Text>} */}

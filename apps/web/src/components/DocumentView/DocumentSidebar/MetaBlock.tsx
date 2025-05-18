@@ -11,7 +11,9 @@ import {
 } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
+import { Signature } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { convertToVariableName } from 'utils';
 
 import { useDocument } from '../DocumentContext';
@@ -66,15 +68,6 @@ const MetaBlock = () => {
   return (
     <Box mt="xl">
       <>
-        <Flex justify="space-between">
-          <Text as="h6" fontWeight={600} color="gray.1100" mb="md">
-            Tasks
-          </Text>
-          {editorMode !== 'view' && (
-            <Box onClick={openDrawer}>add new tasks</Box>
-          )}
-        </Flex>
-
         <Flex justify="space-between">
           <Text as="h6" fontWeight={600} color="gray.1100" mb="md">
             Contract Fields

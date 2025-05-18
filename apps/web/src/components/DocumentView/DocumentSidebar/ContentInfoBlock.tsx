@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
-import { DotsThreeVertical } from '@phosphor-icons/react';
+import {
+  DotsThreeVertical,
+  EnvelopeSimple,
+  Trash,
+  TrashSimple,
+} from '@phosphor-icons/react';
+import { PencilSlash } from '@phosphor-icons/react/dist/ssr';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI } from 'utils/models';
@@ -55,17 +61,22 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
             hasPermission('document', 'manage') && (
               <DropdownMenu.Item
                 onClick={() => Router.push(`/documents/edit/${id}`)}>
-                {' '}
+                <PencilSlash />
                 Edit
               </DropdownMenu.Item>
             )}
           {hasPermission('document', 'delete') && (
             <DropdownMenu.Item onClick={() => setIsDelete(true)}>
+              <TrashSimple />
               Delete
             </DropdownMenu.Item>
           )}
           {hasPermission('document', 'manage') && (
-            <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
+            <DropdownMenu.Item
+              onClick={() => setMailPopupOpen(true)}
+              gap="sm"
+              borderBottom="solid 1px #fff">
+              <EnvelopeSimple size={14} />
               Send Mail
             </DropdownMenu.Item>
           )}

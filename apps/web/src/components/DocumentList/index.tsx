@@ -71,6 +71,7 @@ const columns = [
     cell: ({ row }: any) => (
       <NextLink href={`/documents/${row.original?.content?.id}`}>
         <ContentTitleList
+          showId={false}
           content={row.original?.content}
           contentType={row.original?.content_type}
         />
@@ -99,7 +100,9 @@ const columns = [
           sx={{ width: '16px', height: '16px' }}
           src={row.original?.creator?.profile_pic}
         />
-        <Text>{row.original?.creator?.name}</Text>
+        <Text fontSize="sm2" fontWeight={500}>
+          {row.original?.creator?.name}
+        </Text>
       </Flex>
     ),
     enableSorting: false,
@@ -244,7 +247,7 @@ const DocumentList = () => {
               />
             )}
           </Box>
-          <Box w="25%" px="md">
+          <Box w="25%" px="lg">
             <Flex justifyContent="space-between" mb="sm">
               <Text as="h4" fontWeight="heading" color="text-primary">
                 Filter by Variant

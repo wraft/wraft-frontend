@@ -248,11 +248,6 @@ const DocumentView = () => {
                         id={state?.id}
                       />
                     ))}
-
-                  {contents &&
-                    !nextState?.is_user_eligible &&
-                    !isMakeCompete &&
-                    !isEditable && <ApprovalAwaitingLabel />}
                 </Flex>
 
                 {/* <TriangleBreadcrumbs
@@ -277,6 +272,10 @@ const DocumentView = () => {
                         alignItems="center"
                         py="sm2"
                         px="md">
+                        {contents &&
+                          !nextState?.is_user_eligible &&
+                          !isMakeCompete &&
+                          !isEditable && <ApprovalAwaitingLabel />}
                         {nextState && nextState.is_user_eligible && (
                           <ApprovalHandler
                             name={'Review'} //|| nextState?.state
@@ -344,9 +343,7 @@ const DocumentView = () => {
         onClose={() => setOpenTitleModal(false)}>
         <Box as="form" onSubmit={handleSubmit(onUpdateTitle)} w="450px">
           <Modal.Header>
-            <Text as="h4" mb="sm">
-              Rename Document
-            </Text>
+            <Text mb="sm">Rename Document</Text>
           </Modal.Header>
           <Box my={3}>
             <Field

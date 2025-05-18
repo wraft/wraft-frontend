@@ -12,6 +12,7 @@ export const Item: any = styled.div`
   align-items: center;
   color: var(--theme-ui-colors-text-primary);
   min-width: 120px;
+  font-size: sm2;
 
   &[data-active-item] {
     background-color: green.a300;

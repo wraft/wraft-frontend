@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
+import { Flower, Play } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
@@ -123,18 +124,20 @@ const Form = () => {
               <Flex gap="sm">
                 <Button
                   onClick={() => router.push(`/workflow/${row.original.id}`)}
-                  variant="tertiary"
+                  variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
+                  <Flower height={12} />
                   WorkFlow
                 </Button>
                 <Button
                   onClick={() => {
                     onRunClick(row.original.source_id, row.original.id);
                   }}
-                  variant="tertiary"
+                  variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
+                  <Play height={12} />
                   Run
                 </Button>
               </Flex>

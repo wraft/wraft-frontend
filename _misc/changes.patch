@@ -1,0 +1,2807 @@
+diff --git a/.tool-versions b/.tool-versions
+index 14aa0b56..149eeeca 100644
+--- a/.tool-versions
++++ b/.tool-versions
+@@ -1,2 +1,2 @@
+-nodejs 22.14.0
+-pnpm 9.15.9
+\ No newline at end of file
++nodejs 18.18.1
++pnpm 9.5.0
+\ No newline at end of file
+diff --git a/apps/web/src/components/Approval/ApprovalForm.tsx b/apps/web/src/components/Approval/ApprovalForm.tsx
+index 3265bbcc..3d900499 100644
+--- a/apps/web/src/components/Approval/ApprovalForm.tsx
++++ b/apps/web/src/components/Approval/ApprovalForm.tsx
+@@ -238,7 +238,7 @@ const ApprovalForm = () => {
+               <Field
+                 name="name"
+                 label="Approver"
+-                defaultValue="Muneef Hameed (U01)"
++                defaultValue="John Doe (U01)"
+                 register={register}
+               />
+               <Button type="submit">Save</Button>
+diff --git a/apps/web/src/components/Billing/index.tsx b/apps/web/src/components/Billing/index.tsx
+index 58df74e1..52e07465 100644
+--- a/apps/web/src/components/Billing/index.tsx
++++ b/apps/web/src/components/Billing/index.tsx
+@@ -81,7 +81,7 @@ const Billing = () => {
+   const isPaidPlan = plan && parseFloat(plan.plan_amount || '0') > 0;
+ 
+   return (
+-    <Flex direction="column" justify="center" p="lg">
++    <Flex direction="column" justify="center" p="3xl">
+       {plan && (
+         <>
+           <Box
+diff --git a/apps/web/src/components/Block/BlockTemplateList.tsx b/apps/web/src/components/Block/BlockTemplateList.tsx
+index 90e18405..fe366529 100644
+--- a/apps/web/src/components/Block/BlockTemplateList.tsx
++++ b/apps/web/src/components/Block/BlockTemplateList.tsx
+@@ -11,6 +11,7 @@ import { TimeAgo } from 'common/Atoms';
+ import ConfirmDelete from 'common/ConfirmDelete';
+ import { deleteAPI, fetchAPI } from 'utils/models';
+ import { usePermission } from 'utils/permissions';
++import { Plus } from '@phosphor-icons/react';
+ 
+ export interface IField {
+   id: string;
+@@ -154,8 +155,15 @@ const BlockTemplateListFrame: FC = () => {
+     <>
+       <PageHeader title="Blocks" desc="Re-usable Content blocks">
+         {hasPermission('block_template', 'manage') && (
+-          <Button onClick={() => Router.push(`/blocks/new`)} variant="tertiary">
+-            + New Block
++          <Button
++            onClick={() => Router.push(`/blocks/new`)}
++            variant="secondary"
++            fontSize="base"
++            borderRadius="0.5rem"
++            size="sm"
++            py="xs">
++            <Plus size={10} width={10} />
++            New Block
+           </Button>
+         )}
+       </PageHeader>
+diff --git a/apps/web/src/components/Dashboard/index.tsx b/apps/web/src/components/Dashboard/index.tsx
+index 09a809f8..f03563a4 100644
+--- a/apps/web/src/components/Dashboard/index.tsx
++++ b/apps/web/src/components/Dashboard/index.tsx
+@@ -97,12 +97,22 @@ const Dashboard = () => {
+   };
+ 
+   return (
+-    <Box p="lg">
+-      <Text color="text-secondary" fontSize="sm">
+-        {format(currentTime, 'EEEE, MMMM dd')}
+-      </Text>
+-      <Text fontWeight="heading" mb="xl" color="text-primary">
+-        {getGreeting()}, {userProfile?.name}
++    <Box p="xl">
++      <Text
++        display="flex"
++        alignItems="center"
++        itemScope="center"
++        gap="sm"
++        fontWeight="heading"
++        mb="xl"
++        color="text-primary">
++        {/* {getGreeting()},  */}
++        {userProfile?.name}
++
++        <Text color="text-secondary" fontSize="sm">
++          {format(currentTime, 'hh:mm a')}{' '}
++          {Intl.DateTimeFormat().resolvedOptions().timeZone}
++        </Text>
+       </Text>
+       <Flex my="lg" display="none" border="1px solid" borderColor="border">
+         <Flex w="70%" alignItems="center">
+diff --git a/apps/web/src/components/DocumentList/index.tsx b/apps/web/src/components/DocumentList/index.tsx
+index 355aa863..06d2cc3f 100644
+--- a/apps/web/src/components/DocumentList/index.tsx
++++ b/apps/web/src/components/DocumentList/index.tsx
+@@ -9,6 +9,7 @@ import { ContentTitleList } from 'common/content';
+ import { TimeAgo, FilterBlock, StateBadge } from 'common/Atoms';
+ import PageHeader from 'common/PageHeader';
+ import { fetchAPI } from 'utils/models';
++import { DotsThreeVertical } from '@phosphor-icons/react';
+ 
+ export interface ILayout {
+   width: number;
+@@ -218,8 +219,12 @@ const DocumentList = () => {
+ 
+   return (
+     <>
+-      <PageHeader title="Documents" desc="Manage all documents" />
+-      <Box px="lg" py="xl">
++      <PageHeader title="Documents" desc="Manage all documents">
++        <Button variant="secondary" size="sm">
++          <DotsThreeVertical stroke="bold" color="gray.700" />
++        </Button>
++      </PageHeader>
++      <Box px="xl" py="xl">
+         <Flex>
+           <Box flexGrow={1}>
+             <Box mb="sm">
+diff --git a/apps/web/src/components/DocumentView/ApprovalHandler.tsx b/apps/web/src/components/DocumentView/ApprovalHandler.tsx
+index 9a3fb139..656c3138 100644
+--- a/apps/web/src/components/DocumentView/ApprovalHandler.tsx
++++ b/apps/web/src/components/DocumentView/ApprovalHandler.tsx
+@@ -1,11 +1,12 @@
+ import { Button } from '@wraft/ui';
+-import { ArrowRight } from '@phosphor-icons/react';
++import { ArrowRight, Check } from '@phosphor-icons/react';
+ 
+ export const ApprovalHandler = ({ name, onClick }: any) => {
+   return (
+-    <Button variant="primary" onClick={onClick} size="sm">
++    <Button variant="primary" onClick={onClick} size="sm" fontSize="sm2">
+       {name}
+-      <ArrowRight size={14} stroke="bold" />
++      <Check size={12} weight="bold" />
++      {/* <ArrowRight size={14} stroke="bold" /> */}
+     </Button>
+   );
+ };
+diff --git a/apps/web/src/components/DocumentView/DocumentContentBlock.tsx b/apps/web/src/components/DocumentView/DocumentContentBlock.tsx
+index 8f9ac6fe..4bf95813 100644
+--- a/apps/web/src/components/DocumentView/DocumentContentBlock.tsx
++++ b/apps/web/src/components/DocumentView/DocumentContentBlock.tsx
+@@ -1,7 +1,8 @@
+ import React, { useState } from 'react';
+ import { Box, Flex, Text } from '@wraft/ui';
+ import { ErrorBoundary, Button } from '@wraft/ui';
+-import styled from '@emotion/styled';
++import styled, { x } from '@xstyled/emotion';
++
+ import {
+   Tab,
+   TabList,
+@@ -153,15 +154,21 @@ const TabWrapper = styled(Box)`
+ 
+   .tabPanel {
+     border: 0;
++    padding: 3px;
+     border: 1px solid;
+     border-color: ${({ theme }: any) => theme?.colors.border};
+-    background-color: ${({ theme }: any) => theme?.colors.gray['400']};
++    background-color: ${({ theme }: any) => theme?.colors.gray['300']};
+ 
+     button {
+       border: 0;
+       background-color: transparent;
+-      padding: ${({ theme }: any) => theme.space.xs};
+-      border-radius: 6px;
++      padding: ${({ theme }: any) => theme.space.xs}
++        ${({ theme }: any) => theme.space.md};
++      font-size: 13px;
++      letter-spacing: -0.15px;
++      color: ${({ theme }: any) => theme?.colors.text};
++      font-weight: ${({ theme }: any) => theme?.fontWeights.body};
++      border-radius: ${({ theme }: any) => theme?.radii.md2};
+     }
+ 
+     button[aria-selected='true'] {
+@@ -172,9 +179,10 @@ const TabWrapper = styled(Box)`
+   }
+ 
+   .tabGroup {
+-    background-color: ${({ theme }: any) => theme.colors.gray['600']};
++    background-color: ${({ theme }: any) => theme.colors.gray['400']};
+     display: flex;
+     border-radius: 6px;
++    margin-left: auto;
+   }
+   .main-content {
+     flex-grow: 1;
+@@ -189,6 +197,9 @@ const PdfWrapper = styled(Box)`
+   .react-pdf__Page {
+     background-color: transparent !important;
+     margin-bottom: 8px;
++    border: solid 1px #ddd;
++    border-radius: 8px;
++    overflow: hidden;
+   }
+ 
+   .react-pdf__Document {
+@@ -289,7 +300,82 @@ export const DocumentContentBlock = () => {
+       ) : (
+         <TabWrapper>
+           <TabProvider defaultSelectedId={defaultSelectedId}>
+-            <Flex justify="space-between" p="md">
++            <Flex
++              justify="space-between"
++              p="md"
++              gap="sm"
++              px="lg"
++              alignItems="center">
++              <Flex
++                px="sm"
++                gap="md"
++                border="solid 1px"
++                borderColor="gray.500"
++                borderRadius="md">
++                <Text
++                  as="span"
++                  lineHeight="heading"
++                  fontSize="sm2"
++                  fontWeight="600"
++                  borderRight="solid 1px"
++                  borderColor="gray.500"
++                  px="xs"
++                  py="xxs"
++                  pr="sm">
++                  Versions
++                </Text>
++                <Text
++                  lineHeight="heading"
++                  fontSize="sm2"
++                  // px="xs"
++                  // as="span"
++                  opacity={0.8}>
++                  v1.1
++                </Text>
++              </Flex>
++              <Flex>
++                <Flex align="center" gap="sm">
++                  {!isEditable && (
++                    <Flex gap="2px" bg="green">
++                      {/* {canAccess('docGenerator') && (
++                        <Button
++                          variant="secondary"
++                          size="sm"
++                          px="sm"
++                          loading={isBuilding}
++                          disabled={isBuilding}
++                          onClick={() => doBuild()}>
++                          {!isBuilding && (
++                            <Play size={12} weight="bold" className="action" />
++                          )}
++                          {/* <Text>Generate</Text> */}
++                      {/* </Button> */}
++                      {/* )} */}
++                      {canAccess('docEdit') && (
++                        <Button
++                          variant="secondary"
++                          size="sm"
++                          px="sm"
++                          gap={0}
++                          borderRadius="md2"
++                          ml="sm"
++                          display="flex"
++                          onClick={() => onSwitchEditorMode(editorMode)}>
++                          {editorMode === 'edit' ? (
++                            <Eye size={13} weight="bold" />
++                          ) : (
++                            <PencilSimple size={13} weight="bold" />
++                          )}
++
++                          <Text fontSize="sm2">
++                            {editorMode === 'edit' ? 'View' : 'Edit'}
++                          </Text>
++                        </Button>
++                      )}
++                    </Flex>
++                  )}
++                </Flex>
++              </Flex>
+               <TabList
+                 store={tabView}
+                 aria-label="Content Stages"
+@@ -299,41 +385,9 @@ export const DocumentContentBlock = () => {
+                 </Tab>
+ 
+                 <Tab id="view">
+-                  <StepBlock title="Document" desc="Sign and Manage" />
++                  <StepBlock title="Document" desc="View or Sign document" />
+                 </Tab>
+               </TabList>
+-              <Flex align="center" gap="sm">
+-                <AwarenessUsers />
+-                {!isEditable && (
+-                  <Flex gap="xs">
+-                    {canAccess('docGenerator') && (
+-                      <Button
+-                        variant="secondary"
+-                        loading={isBuilding}
+-                        disabled={isBuilding}
+-                        size="sm"
+-                        onClick={() => doBuild()}>
+-                        {!isBuilding && <Play size={12} className="action" />}
+-                        <Box>Generate</Box>
+-                      </Button>
+-                    )}
+-                    {canAccess('docEdit') && (
+-                      <Button
+-                        variant="secondary"
+-                        size="sm"
+-                        onClick={() => onSwitchEditorMode(editorMode)}>
+-                        {editorMode === 'edit' ? (
+-                          <Eye size={14} className="icon" />
+-                        ) : (
+-                          <PencilSimple size={14} className="icon" />
+-                        )}
+-
+-                        <Box>{editorMode === 'edit' ? 'View' : 'Edit'}</Box>
+-                      </Button>
+-                    )}
+-                  </Flex>
+-                )}
+-              </Flex>
+             </Flex>
+ 
+             <TabPanel
+diff --git a/apps/web/src/components/DocumentView/DocumentSidebar/Comment/CommentCard.tsx b/apps/web/src/components/DocumentView/DocumentSidebar/Comment/CommentCard.tsx
+index 733a32c5..f64139c1 100644
+--- a/apps/web/src/components/DocumentView/DocumentSidebar/Comment/CommentCard.tsx
++++ b/apps/web/src/components/DocumentView/DocumentSidebar/Comment/CommentCard.tsx
+@@ -1,6 +1,6 @@
+ import React from 'react';
+-import { Box, Flex, Text } from 'theme-ui';
+-
++import { Box, Flex, Text } from '@wraft/ui';
++// import { Box, Fle}
+ import { ProfileCard } from 'common/ProfileCard';
+ 
+ export interface Comment {
+@@ -45,18 +45,25 @@ const CommentCard = (comment: Comment) => {
+               />
+             </Box>
+           </Flex>
+-          <Box sx={{ pl: 3, pr: 2 }}>
++          <Box
++            pl="xl"
++            py="xxs"
++            pb="xl"
++            fontSize="sm2"
++            letterSpacing="-0.15px"
++            color="gray.600">
+             <Text
+               as="p"
+-              sx={{
+-                mt: 0,
+-                color: 'text-primary',
+-                fontSize: 'sm',
+-                pt: 0,
+-                lineHeight: 1.35,
+-                pl: 2,
+-                m: 0,
+-              }}>
++              // sx={{
++              //   mt: 0,
++              //   color: 'text-primary',
++              //   fontSize: 'sm',
++              //   pt: 0,
++              //   lineHeight: 1.35,
++              //   pl: 2,
++              //   m: 0,
++              // }}
++            >
+               {comment.comment}
+             </Text>
+           </Box>
+diff --git a/apps/web/src/components/DocumentView/DocumentSidebar/InfoSection.tsx b/apps/web/src/components/DocumentView/DocumentSidebar/InfoSection.tsx
+index bc0a6860..51bb524a 100644
+--- a/apps/web/src/components/DocumentView/DocumentSidebar/InfoSection.tsx
++++ b/apps/web/src/components/DocumentView/DocumentSidebar/InfoSection.tsx
+@@ -105,9 +105,14 @@ export const InfoSection = () => {
+     <Box px="md" py="md">
+       {editorMode !== 'new' && (
+         <>
+-          <Box>
+-            <Text as="h3" mb="xs">
+-              Creator
++          <Box display="none">
++            <Text
++              as="h3"
++              fontSize="sm"
++              fontWeight="normal"
++              mb="md"
++              color="gray.900">
++              Editors
+             </Text>
+             <AvatarCard
+               time={contents?.content?.inserted_at}
+@@ -117,12 +122,12 @@ export const InfoSection = () => {
+           </Box>
+ 
+           {contents?.state?.id && (
+-            <Box mt="md">
+-              {additionalCollaborator.length > 0 && (
++            <Box mt="xs" display="none">
++              {/* {additionalCollaborator.length > 0 && (
+                 <Text as="h3" mb="xs">
+                   Flow Members
+                 </Text>
+-              )}
++              )} */}
+               {additionalCollaborator &&
+                 additionalCollaborator.map((approver: any) => (
+                   <AvatarCard
+@@ -138,7 +143,7 @@ export const InfoSection = () => {
+           )}
+ 
+           {contents?.state?.id && (
+-            <Box mt="md">
++            <Box mt="sm">
+               {contents &&
+                 !nextState?.is_user_eligible &&
+                 !isMakeCompete &&
+@@ -163,7 +168,7 @@ export const InfoSection = () => {
+       )}
+ 
+       {contents?.content?.build && (
+-        <Box mt="xl">
++        <Box mt="xl" display="none">
+           <Text as="h3">Document</Text>
+ 
+           <Flex mt="xs" pb={3} justify="space-between">
+diff --git a/apps/web/src/components/DocumentView/DocumentSidebar/MetaBlock.tsx b/apps/web/src/components/DocumentView/DocumentSidebar/MetaBlock.tsx
+index 077b0370..f6a43a91 100644
+--- a/apps/web/src/components/DocumentView/DocumentSidebar/MetaBlock.tsx
++++ b/apps/web/src/components/DocumentView/DocumentSidebar/MetaBlock.tsx
+@@ -57,15 +57,17 @@ const MetaBlock = () => {
+     <Box mt="xl">
+       <>
+         <Flex justify="space-between">
+-          <Text as="h6">Meta Info</Text>
++          <Text as="h6" fontWeight={600} color="gray.1100" mb="md">
++            Contract Fields
++          </Text>
+           {editorMode !== 'view' && (
+             <Box onClick={openDrawer}>
+-              <EditIcon width={14} className="main-icon" />
++              <EditIcon width={14} color="gray.1100" className="main-icon" />
+             </Box>
+           )}
+         </Flex>
+ 
+-        <Box border="1px solid" borderColor="border" mt="sm">
++        <Box border="1px solid" borderColor="border" borderRadius="lg">
+           {meta &&
+             typeof meta === 'object' &&
+             orderedKeys.map((key) => {
+@@ -85,7 +87,7 @@ const MetaBlock = () => {
+                     borderColor="border"
+                     p="sm">
+                     <Text flex="0 0 60%" fontWeight="heading">
+-                      {String(value)}
++                      {key.replace(/_/g, ' ')}
+                     </Text>
+                     <Text
+                       flex="0 0 40%"
+@@ -93,7 +95,7 @@ const MetaBlock = () => {
+                       fontWeight="heading"
+                       textTransform="capitalize"
+                       textAlign="right">
+-                      {key.replace(/_/g, ' ')}
++                      {String(value)}
+                     </Text>
+                   </Flex>
+                 )
+diff --git a/apps/web/src/components/DocumentView/DocumentSidebar/PlaceholderBlock.tsx b/apps/web/src/components/DocumentView/DocumentSidebar/PlaceholderBlock.tsx
+index a5b97fe0..fd6ae428 100644
+--- a/apps/web/src/components/DocumentView/DocumentSidebar/PlaceholderBlock.tsx
++++ b/apps/web/src/components/DocumentView/DocumentSidebar/PlaceholderBlock.tsx
+@@ -93,11 +93,13 @@ const PlaceholderBlock = ({
+   const closeDrawer = () => setDrawerOpen(false);
+ 
+   return (
+-    <Box mt="xl">
++    <Box>
+       {fieldValues && (
+         <>
+           <Flex justify="space-between">
+-            <Text as="h6">Data Fields</Text>
++            <Text as="h6" fontWeight={600} color="gray.1100">
++              Data Fields
++            </Text>
+             {editorMode !== 'view' && (
+               <Box onClick={openDrawer}>
+                 <EditIcon width={14} className="main-icon" />
+@@ -105,7 +107,11 @@ const PlaceholderBlock = ({
+             )}
+           </Flex>
+ 
+-          <Box border="1px solid" borderColor="border" mt="sm">
++          <Box
++            border="1px solid"
++            borderColor="border"
++            mt="sm"
++            borderRadius="lg">
+             {mappedFields &&
+               mappedFields.map((x: any) => (
+                 <Flex
+@@ -114,7 +120,7 @@ const PlaceholderBlock = ({
+                   borderColor="border"
+                   p="sm">
+                   <Text flex="0 0 60%" fontWeight="heading">
+-                    {x.value}
++                    {x.name}
+                   </Text>
+                   <Text
+                     flex="0 0 40%"
+@@ -122,7 +128,7 @@ const PlaceholderBlock = ({
+                     fontWeight="heading"
+                     textTransform="capitalize"
+                     textAlign="right">
+-                    {x.name}
++                    {x.value}
+                   </Text>
+ 
+                   {/* <Text>{x.type}</Text> */}
+diff --git a/apps/web/src/components/DocumentView/DocumentSidebar/index.tsx b/apps/web/src/components/DocumentView/DocumentSidebar/index.tsx
+index 0e12323b..bc06f208 100644
+--- a/apps/web/src/components/DocumentView/DocumentSidebar/index.tsx
++++ b/apps/web/src/components/DocumentView/DocumentSidebar/index.tsx
+@@ -40,7 +40,7 @@ export const DocumentSidebar = () => {
+       // maxWidth="400px"
+       borderLeft="solid 1px"
+       borderColor="border">
+-      <Box flexShrink="0">
++      <Box flexShrink="0" px="xs" py="sm">
+         <ContentInfoBlock
+           content={contents}
+           nextState={nextState}
+@@ -50,7 +50,7 @@ export const DocumentSidebar = () => {
+ 
+       <Box>
+         <Tab.List aria-label="Content Tab" store={tab}>
+-          <Tab id="overview" store={tab}>
++          <Tab id="overview" store={tab} fontWeight={600}>
+             Overview
+           </Tab>
+ 
+@@ -71,7 +71,7 @@ export const DocumentSidebar = () => {
+           )}
+         </Tab.List>
+ 
+-        <Box h="calc(100vh - 142px)" overflowY="auto">
++        <Box h="calc(100vh - 142px)" overflowY="auto" px="sm">
+           <Tab.Panel tabId="overview" store={tab}>
+             <InfoSection />
+           </Tab.Panel>
+@@ -80,7 +80,13 @@ export const DocumentSidebar = () => {
+               <Box mt="md" px="md">
+                 <Box>
+                   <Box mb="sm">
+-                    <Text as="h3">Discussions</Text>
++                    <Text
++                      as="h3"
++                      fontWeight="normal"
++                      letterSpacing="-0.3px"
++                      color="gray.900">
++                      Discussions
++                    </Text>
+                   </Box>
+ 
+                   {contents && contents.content && (
+diff --git a/apps/web/src/components/DocumentView/FlowProgressBar.tsx b/apps/web/src/components/DocumentView/FlowProgressBar.tsx
+index e99cc23f..089b991d 100644
+--- a/apps/web/src/components/DocumentView/FlowProgressBar.tsx
++++ b/apps/web/src/components/DocumentView/FlowProgressBar.tsx
+@@ -8,8 +8,10 @@ import { FlowStateBlockProps } from 'utils/types/content';
+ 
+ const FlowProgressContainer = styled(Flex)`
+   min-width: fit-content;
+-
++  padding: 3px 6px;
++  padding-right: 6px;
+   &:last-child {
++    border-right: 0;
+     .arrowicon {
+       display: none;
+     }
+@@ -20,6 +22,108 @@ const FlowProgressContainer = styled(Flex)`
+   }
+ `;
+ 
++const BreadcrumbsContainer = styled.ul`
++  overflow: hidden;
++  width: 100%;
++  list-style: none;
++  padding: 0;
++  margin: 0;
++`;
++
++const BreadcrumbItem = styled.li`
++  float: left;
++  // margin: 0 0.5em 0 1em;
++`;
++
++const BreadcrumbLink = styled.a<{ isActive?: boolean }>`
++  background: ${({ isActive, theme }) =>
++    isActive ? theme?.colors.teal['500'] : theme?.colors.gray['200']};
++  padding: 4px 6px;
++  float: left;
++  text-decoration: none;
++  color: ${({ theme }) => theme?.colors.gray['900']};
++  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
++  position: relative;
++  font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
++  font-size: 14px;
++
++  &:hover {
++    background: ${({ isActive, theme }) =>
++      isActive ? 'none' : theme?.colors.green['100']};
++  }
++
++  &::before {
++    content: ${({ isActive }) => (isActive ? 'normal' : '""')};
++    position: absolute;
++    top: 50%;
++    margin-top: -1.5em;
++    border-width: 1.5em 0 1.5em 1em;
++    border-style: solid;
++    border-color: ${({ isActive, theme }) =>
++      isActive
++        ? 'transparent'
++        : `${theme?.colors.gray['200']} ${theme?.colors.gray['200']} ${theme?.colors.gray['200']} transparent`};
++    left: -1em;
++  }
++
++  &:hover::before {
++    border-color: ${({ isActive, theme }) =>
++      isActive
++        ? 'transparent'
++        : `${theme?.colors.green['100']} ${theme?.colors.green['100']} ${theme?.colors.green['100']} transparent`};
++  }
++
++  &::after {
++    content: ${({ isActive }) => (isActive ? 'normal' : '""')};
++    position: absolute;
++    top: 50%;
++    margin-top: -1.5em;
++    border-top: 1.5em solid transparent;
++    border-bottom: 1.5em solid transparent;
++    border-left: 1em solid
++      ${({ isActive, theme }) =>
++        isActive ? 'transparent' : theme?.colors.gray['200']};
++    right: -1em;
++  }
++
++  &:hover::after {
++    border-left-color: ${({ isActive, theme }) =>
++      isActive ? 'transparent' : theme?.colors.blue['100']};
++  }
++
++  &.current,
++  &.current:hover {
++    font-weight: bold;
++    background: none;
++  }
++
++  &.current::after,
++  &.current::before {
++    content: normal;
++  }
++`;
++
++export const TriangleBreadcrumbs = ({
++  items,
++}: {
++  items: { label: string; href: string; isActive?: boolean }[];
++}) => {
++  return (
++    <BreadcrumbsContainer>
++      {items.map((item, index) => (
++        <BreadcrumbItem key={index}>
++          <BreadcrumbLink
++            href={item.href}
++            isActive={item.isActive}
++            className={item.isActive ? 'current' : ''}>
++            {item.label}
++          </BreadcrumbLink>
++        </BreadcrumbItem>
++      ))}
++    </BreadcrumbsContainer>
++  );
++};
++
+ export const FlowProgressBar = ({
+   state,
+   id,
+@@ -32,17 +136,26 @@ export const FlowProgressBar = ({
+ 
+   const getBgColor = () => {
+     if (activeState) {
+-      return checked ? 'green.100' : 'orange.100';
++      return checked ? 'teal.100' : 'orange.100';
+     }
+ 
+     if (!checked && !activeState) {
+       return 'background-secondary';
+     }
+-    return 'green.400';
++    return 'teal.400';
+   };
+ 
+   return (
+-    <FlowProgressContainer as={Focusable} align="center" gap="sm">
++    <FlowProgressContainer
++      as={Focusable}
++      align="center"
++      className="step-holder-item"
++      gap="md"
++      // bg="red"
++      borderRight="solid 1px"
++      borderColor="border"
++      overflow="hidden"
++      bg={activeState ? 'orange.50' : 'gray.200'}>
+       <Flex
+         alignItems="center"
+         justify="center"
+@@ -51,10 +164,11 @@ export const FlowProgressBar = ({
+         }
+         border="1px solid"
+         borderRadius="full"
+-        w="16px"
+-        h="16px"
++        // w="16px"
++        // h="16px"
+         borderColor={activeState ? 'gray.300' : 'gray.500'}
+         p="xxs"
++        // color="green"
+         bg={getBgColor()}>
+         {!checked && !activeState && (
+           <Text fontSize="xs" fontWeight="heading">
+@@ -62,15 +176,20 @@ export const FlowProgressBar = ({
+           </Text>
+         )}
+         {activeState && (
+-          <Circle size={12} weight="fill" className="main-icon" />
++          <Circle
++            size={12}
++            weight="fill"
++            color="inherit"
++            className="main-icon"
++          />
+         )}
+         {checked && <Check size={12} weight="bold" className="main-icon" />}
+       </Flex>
+-      <Text fontWeight="heading" fontSize="sm" textTransform="capitalize">
++      <Text fontWeight="heading" fontSize="sm2" textTransform="capitalize">
+         {state}
+       </Text>
+ 
+-      <BackArrowIcon className="main-icon" width={20} />
++      {/* <BackArrowIcon className="main-icon" width={20} /> */}
+     </FlowProgressContainer>
+   );
+ };
+diff --git a/apps/web/src/components/DocumentView/LockedBadge.tsx b/apps/web/src/components/DocumentView/LockedBadge.tsx
+index 41f0edc7..23eeb8c2 100644
+--- a/apps/web/src/components/DocumentView/LockedBadge.tsx
++++ b/apps/web/src/components/DocumentView/LockedBadge.tsx
+@@ -5,7 +5,9 @@ export const LockedBadge = () => {
+   return (
+     <Flex align="center" gap="xs" bg="green.a400" px="sm" borderRadius="md">
+       <LockSimple size={12} />
+-      <Text fontSize="sm">Locked</Text>
++      <Text fontSize="sm" fontWeight="600">
++        Archived
++      </Text>
+     </Flex>
+   );
+ };
+diff --git a/apps/web/src/components/DocumentView/index.tsx b/apps/web/src/components/DocumentView/index.tsx
+index 839d3b04..37edeb54 100644
+--- a/apps/web/src/components/DocumentView/index.tsx
++++ b/apps/web/src/components/DocumentView/index.tsx
+@@ -8,7 +8,8 @@ import Field from 'common/Field';
+ import Nav from 'common/NavEdit';
+ import { postAPI } from 'utils/models';
+ 
+-import { FlowProgressBar } from './FlowProgressBar';
++// import { FlowProgressBar, TriangleBreadcrumbs } from './FlowProgressBar';
++import { FlowProgressBar, TriangleBreadcrumbs } from './FlowStepAlternative';
+ import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
+ import { ApprovalHandler } from './ApprovalHandler';
+ import { LockedBadge } from './LockedBadge';
+@@ -18,6 +19,7 @@ import { ApprovalUpdateModal } from './ApprovalUpdateModal';
+ import { DocumentContentBlock } from './DocumentContentBlock';
+ import { usePermissions } from './usePermissions';
+ import apiService from './APIModel';
++import { FloppyDisk } from '@phosphor-icons/react';
+ 
+ export const SAVE_INTERVAL = 15000;
+ 
+@@ -217,12 +219,22 @@ const DocumentView = () => {
+               <Flex
+                 alignItems="center"
+                 flex={1}
+-                px="sm"
+-                py="sm"
++                py="xs"
++                pl="lg"
++                // px="sm"
++                // py="sm"
++                // pl="md"
+                 borderBottom="solid 1px"
+                 borderColor="border"
+                 bg="background-primary">
+-                <Flex gap="sm">
++                <Flex
++                  className="step-holder"
++                  gap="0"
++                  border="solid 1px"
++                  // pl="sm"
++                  overflow="hidden"
++                  borderColor="gray.400"
++                  borderRadius="lg">
+                   {states &&
+                     states.map((state: any, i: number) => (
+                       <FlowProgressBar
+@@ -242,13 +254,31 @@ const DocumentView = () => {
+                     !isEditable && <ApprovalAwaitingLabel />}
+                 </Flex>
+ 
+-                <Flex ml="auto" alignItems="center">
++                {/* <TriangleBreadcrumbs
++                  items={[
++                    { label: 'Home', href: '/', isActive: true },
++                    {
++                      label: 'Documents',
++                      href: '/documents',
++                      isActive: false,
++                    },
++                    { label: 'Flow', href: '/flow', isActive: false },
++                  ]}
++                /> */}
++
++                <Flex ml="auto" alignItems="center" mr="xxs">
+                   {editorMode === 'view' &&
+                     !contents?.content?.approval_status && (
+-                      <Flex p={0} gap={2} ml="auto" alignItems="center">
++                      <Flex
++                        p={0}
++                        gap={0}
++                        ml="auto"
++                        alignItems="center"
++                        py="sm2"
++                        px="md">
+                         {nextState && nextState.is_user_eligible && (
+                           <ApprovalHandler
+-                            name={nextState?.state}
++                            name={'Review'} //|| nextState?.state
+                             onClick={() => {
+                               setModalAction('next');
+                               setOpen(true);
+@@ -266,17 +296,29 @@ const DocumentView = () => {
+                         )}
+                       </Flex>
+                     )}
+-                  {isEditable && <LockedBadge />}
++                  {isEditable && (
++                    <Box py="lg" px="lg">
++                      <LockedBadge />
++                    </Box>
++                  )}
+                 </Flex>
+                 {/* {canAccess('docEdit') && ( */}
+                 {(editorMode === 'edit' || editorMode === 'new') && (
+-                  <Box ml="auto">
++                  <Box
++                    ml="auto"
++                    ml="auto"
++                    alignItems="center"
++                    py="sm2"
++                    px="md"
++                    pr="lg">
+                     <Button
+                       onClick={onSubmit}
+                       variant="primary"
++                      fontSize="sm2"
+                       size="sm"
+                       loading={saving}>
+-                      Save
++                      {/* <FloppyDisk /> */}
++                      Save Changes
+                     </Button>
+                   </Box>
+                 )}
+diff --git a/apps/web/src/components/Flow/FlowList.tsx b/apps/web/src/components/Flow/FlowList.tsx
+index d7f5b38d..425d396f 100644
+--- a/apps/web/src/components/Flow/FlowList.tsx
++++ b/apps/web/src/components/Flow/FlowList.tsx
+@@ -1,7 +1,7 @@
+ import React, { FC, useEffect, useState } from 'react';
+ import NextLink from 'next/link';
+ import { useRouter } from 'next/router';
+-import { ThreeDotIcon } from '@wraft/icon';
++// import { ThreeDotIcon } from '@wraft/icon';
+ import toast from 'react-hot-toast';
+ import { Avatar } from 'theme-ui';
+ import {
+@@ -13,6 +13,7 @@ import {
+   Flex,
+   Modal,
+ } from '@wraft/ui';
++import { DotsThreeVertical } from '@phosphor-icons/react';
+ 
+ import ConfirmDelete from 'common/ConfirmDelete';
+ import { TimeAgo } from 'common/Atoms';
+@@ -122,7 +123,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
+   const columns = [
+     {
+       id: 'content.name',
+-      header: 'NAME',
++      header: 'Name',
+       accessorKey: 'content.name',
+       enableSorting: false,
+       size: 250,
+@@ -130,7 +131,9 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
+         return (
+           <>
+             <NextLink href={`/manage/flows/${row.original?.flow?.id}`}>
+-              <Text>{row.original?.flow?.name}</Text>
++              <Text fontSize="base" fontWeight="bold">
++                {row.original?.flow?.name}
++              </Text>
+             </NextLink>
+             {/* <Drawer open={false} setOpen={() => {}}>
+               <FlowForm setOpen={() => {}} />
+@@ -178,7 +181,7 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
+             <Flex justify="space-between">
+               <DropdownMenu.Provider>
+                 <DropdownMenu.Trigger>
+-                  <ThreeDotIcon />
++                  <DotsThreeVertical size={12} stroke="bold" />
+                 </DropdownMenu.Trigger>
+                 {hasPermission('flow', 'delete') && (
+                   <DropdownMenu aria-label="dropdown role">
+diff --git a/apps/web/src/components/Flow/FlowViewForm.tsx b/apps/web/src/components/Flow/FlowViewForm.tsx
+index 326266f7..f76d8bc1 100644
+--- a/apps/web/src/components/Flow/FlowViewForm.tsx
++++ b/apps/web/src/components/Flow/FlowViewForm.tsx
+@@ -16,6 +16,7 @@ import { Avatar } from 'theme-ui';
+ 
+ import { fetchAPI } from 'utils/models';
+ 
++import { Circle } from 'components/ImportTemplate/Styled';
+ import FlowForm from './FlowForm';
+ 
+ export interface States {
+@@ -104,7 +105,7 @@ const FlowViewForm = () => {
+               <InputText {...register('name')} />
+             </Field>
+ 
+-            <Box py="sm">
++            <Box py="sm" pb="xl">
+               <Label>Flow states</Label>
+               {states && (
+                 <Box mt="sm">
+@@ -114,19 +115,32 @@ const FlowViewForm = () => {
+                         key={index}
+                         border="1px solid"
+                         borderColor="border"
+-                        borderRadius="sm"
+-                        mb="md"
++                        borderRadius="md"
++                        display="flex"
++                        mb="-1px"
+                         px="md"
++                        gap="sm"
+                         py="sm">
+-                        <Text fontWeight="bold" mb="xs">
+-                          {`${index + 1} ${item.state} ${item?.type && `- ${item?.type}`}
+-                            `}
+-                        </Text>
+-
+-                        <Box>
++                        <Circle bg="teal.200" color="teal.800">
++                          {index + 1}
++                        </Circle>
++                        <Flex pt="xxs" gap="sm">
++                          <Text fontWeight="bold" mb="xs">
++                            {item.state}
++                          </Text>
++                          <Text
++                            fontWeight="normal"
++                            mb="xs"
++                            fontSize="sm"
++                            color="gray.900">
++                            {item?.type}
++                          </Text>
++                        </Flex>
++
++                        <Box ml="auto">
+                           {item.approvers.map((x: any) => {
+                             return (
+-                              <Flex key={x.id} gap="xs" py="xs">
++                              <Flex key={x.id} gap="sm" mr="xxs" py="xs">
+                                 <Box>
+                                   <Avatar
+                                     src={x.profile_pic}
+@@ -135,7 +149,12 @@ const FlowViewForm = () => {
+                                     height={14}
+                                   />
+                                 </Box>
+-                                <Text>{x.name}</Text>
++                                <Text
++                                  fontSize="base"
++                                  fontWeight="500"
++                                  color="gray.1000">
++                                  {x.name}
++                                </Text>
+                               </Flex>
+                             );
+                           })}
+diff --git a/apps/web/src/components/ImportTemplate/ImporterWrapper.tsx b/apps/web/src/components/ImportTemplate/ImporterWrapper.tsx
+index 9ac1634a..4714a939 100644
+--- a/apps/web/src/components/ImportTemplate/ImporterWrapper.tsx
++++ b/apps/web/src/components/ImportTemplate/ImporterWrapper.tsx
+@@ -239,7 +239,7 @@ function ImporterApp() {
+   return (
+     <Container>
+       <Box>
+-        <Box py="md" px="xl">
++        <Box py="xl" px="4xl">
+           <Box>
+             <Box display="flex">
+               {steps.map((step) => (
+diff --git a/apps/web/src/components/MentionsField/index.tsx b/apps/web/src/components/MentionsField/index.tsx
+index 6c9faafb..4976fad7 100644
+--- a/apps/web/src/components/MentionsField/index.tsx
++++ b/apps/web/src/components/MentionsField/index.tsx
+@@ -11,16 +11,17 @@ const MentionsWrapper = styled.div`
+     border: 1px solid #999;
+     border-radius: 3px;
+     overflow: hidden;
+-    font-size: ${({ theme }: any) => theme.fontSizes.sm} !important;
+-    border-radius: 4px;
+-    fontweight: fontWeight;
+-    padding: 6px 16px;
++    font-size: ${({ theme }: any) => theme.fontSizes.sm2} !important;
++    border-radius: 6px;
++    font-weight: 600;
++    padding: 8px 16px;
+     color: ${({ theme }: any) => theme.rawColors.gray[1200]};
+     background-color: ${({ theme }: any) => theme.rawColors.white} !important;
+     border-color: var(--theme-ui-colors-border);
+   }
+   .rc-textarea {
+-    font-size: 1rem;
++    font-size: ${({ theme }: any) => theme.fontSizes.base} !important;
++    font-weight: 600;
+   }
+   textarea {
+     color: ${({ theme }: any) => theme.colors.text};
+diff --git a/apps/web/src/components/Sidebar/Header.tsx b/apps/web/src/components/Sidebar/Header.tsx
+index 4fa2975e..0913e74f 100644
+--- a/apps/web/src/components/Sidebar/Header.tsx
++++ b/apps/web/src/components/Sidebar/Header.tsx
+@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
+ import NavLink from 'next/link';
+ import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
+ import toast from 'react-hot-toast';
+-import { Gear, Plus } from '@phosphor-icons/react';
++import { CaretDown, Carrot, Gear, Plus } from '@phosphor-icons/react';
+ 
+ import DefaultAvatar from 'common/DefaultAvatar';
+ import { useAuth } from 'contexts/AuthContext';
+@@ -41,36 +41,31 @@ const Header = () => {
+ 
+   return (
+     <>
+-      <Flex
+-        justify="space-between"
+-        align="center"
+-        borderBottom="solid 1px"
+-        borderColor="border"
+-        h="72px"
+-        mb={3}>
+-        <Box>
++      <Flex justify="space-between" align="center">
++        <Box py="md" px="" pr="none" minWidth="80%">
+           <DropdownMenu.Provider>
+             <DropdownMenu.Trigger>
+               <Flex cursor="pointer">
+                 {userProfile?.currentOrganisation && (
+-                  <Flex>
+-                    <Box>
++                  <Flex alignItems="center" gap="sm">
++                    <Box mr="xxs">
+                       <DefaultAvatar
+                         url={userProfile?.currentOrganisation?.logo}
+                         value={userProfile?.currentOrganisation?.name}
+-                        size={32}
++                        size={21}
+                       />
+                     </Box>
+ 
+-                    <Box ml="sm">
+-                      <Text fontWeight="bold" color="text-primary" lines={1}>
++                    <Flex color="gray.900" gap="xs">
++                      <Text
++                        fontWeight="bold"
++                        color="text-primary"
++                        fontSize="sm2"
++                        lines={1}>
+                         {userProfile?.currentOrganisation?.name}
+                       </Text>
+-                      <Text fontSize="sm" color="text-secondary">
+-                        {userProfile?.currentOrganisation?.members_count}{' '}
+-                        members
+-                      </Text>
+-                    </Box>
++                      <CaretDown size={16} />
++                    </Flex>
+                   </Flex>
+                 )}
+               </Flex>
+@@ -143,8 +138,11 @@ const Header = () => {
+             </DropdownMenu>
+           </DropdownMenu.Provider>
+         </Box>
+-
+-        <UserSettingsMenu />
++        <Flex mr="sm">
++          <Button className="x" shape="circle" variant="ghost" size="xs">
++            <Plus size={14} />
++          </Button>
++        </Flex>
+       </Flex>
+       <Modal
+         open={isOpen}
+diff --git a/apps/web/src/components/Sidebar/Menulist.tsx b/apps/web/src/components/Sidebar/Menulist.tsx
+index d4f2763c..aa241891 100644
+--- a/apps/web/src/components/Sidebar/Menulist.tsx
++++ b/apps/web/src/components/Sidebar/Menulist.tsx
+@@ -14,10 +14,10 @@ const defaultIcon = 18;
+ 
+ export const Menulist = [
+   {
+-    section: 'content',
++    section: 'Content',
+     menus: [
+       {
+-        name: 'Dashboard',
++        name: 'Overview',
+         icon: <House size={defaultIcon} />,
+         path: '/',
+       },
+@@ -31,25 +31,25 @@ export const Menulist = [
+         icon: <ThumbsUp size={defaultIcon} />,
+         path: '/approvals',
+       },
+-      {
+-        name: 'Pipelines',
+-        icon: <GitBranch size={defaultIcon} />,
+-        path: '/pipelines',
+-        permissions: ['pipeline.show', 'pipeline.manage'],
+-      },
+-      {
+-        name: 'Templates',
+-        icon: <Article size={defaultIcon} />,
+-        path: '/templates',
+-        permissions: ['template.show', 'template.manage'],
+-      },
++      // {
++      //   name: 'Pipelines',
++      //   icon: <GitBranch size={defaultIcon} />,
++      //   path: '/pipelines',
++      //   permissions: ['pipeline.show', 'pipeline.manage'],
++      // },
++      // {
++      //   name: 'Templates',
++      //   icon: <Article size={defaultIcon} />,
++      //   path: '/templates',
++      //   permissions: ['template.show', 'template.manage'],
++      // },
+     ],
+   },
+   {
+     section: 'structure',
+     menus: [
+       {
+-        name: 'Variants',
++        name: 'Artifacts',
+         icon: <Blueprint size={defaultIcon} />,
+         path: '/variants',
+         permissions: ['variant.show', 'variant.manage'],
+diff --git a/apps/web/src/components/Sidebar/SearchBlock.tsx b/apps/web/src/components/Sidebar/SearchBlock.tsx
+index 50fa7455..55bda395 100644
+--- a/apps/web/src/components/Sidebar/SearchBlock.tsx
++++ b/apps/web/src/components/Sidebar/SearchBlock.tsx
+@@ -294,29 +294,35 @@ const SearchBlock: React.FC = () => {
+   );
+ 
+   return (
+-    <>
++    <Flex w="100%">
+       <Flex
+-        mx="sm"
++        mx="lg"
+         my="sm"
+         px="sm"
+-        py="xs"
++        py="xxs"
+         alignItems="center"
+         gap="xs"
+         border="solid 1px"
+         borderColor="border"
+-        borderRadius="sm"
++        borderRadius="lg"
+         onClick={() => setIsModalOpen(true)}
+         role="button"
++        w="100%"
+         aria-label="Open search modal"
++        color="gray.800"
++        // fill="gray.1200"
+         tabIndex={-1}>
+         <SearchIcon width="16px" />
+-        <Text color="text-secondary">Search...</Text>
++        <Text color="text-secondary" fontSize="sm2" pl="xs">
++          Find documents..
++        </Text>
+         <Text
+           ml="auto"
+           bg="background-secondary"
+-          px="xxs"
++          px="xs"
++          fontSize="xs"
+           color="text-secondary">
+-          ⌘K
++          S
+         </Text>
+       </Flex>
+ 
+@@ -405,7 +411,7 @@ const SearchBlock: React.FC = () => {
+           </Flex>
+         </Box>
+       </ModalWrapper>
+-    </>
++    </Flex>
+   );
+ };
+ 
+diff --git a/apps/web/src/components/Sidebar/UserSettingsMenu.tsx b/apps/web/src/components/Sidebar/UserSettingsMenu.tsx
+index 8817e518..a93fc819 100644
+--- a/apps/web/src/components/Sidebar/UserSettingsMenu.tsx
++++ b/apps/web/src/components/Sidebar/UserSettingsMenu.tsx
+@@ -2,18 +2,32 @@ import React, { useState, useEffect } from 'react';
+ import { useRouter } from 'next/router';
+ import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
+ import { useColorMode, Image } from 'theme-ui';
+-import { Lightning } from '@phosphor-icons/react';
++import { CaretCircleDown, CaretUpDown, Lightning } from '@phosphor-icons/react';
+ 
+ import Link from 'common/NavLink';
+ import ModeToggle from 'common/ModeToggle';
+ import { useAuth } from 'contexts/AuthContext';
+ import { fetchAPI } from 'utils/models';
+ 
++import styled, { th, x, css } from '@xstyled/emotion';
++
+ type UserSettingsMenuProps = {
+   size?: 'sm' | 'md';
++  compact?: boolean;
+ };
+ 
+-const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
++const IconWrapper = styled(Flex)<{ color: string }>`
++  align-items: center;
++  color: red;
++  svg {
++    color: ${(props) => props.color};
++  }
++`;
++
++const UserSettingsMenu = ({
++  size = 'md',
++  compact = true,
++}: UserSettingsMenuProps) => {
+   const [mode, setMode] = useColorMode();
+   const [count, setCount] = useState<number | undefined>();
+ 
+@@ -43,20 +57,31 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
+   };
+ 
+   return (
+-    <>
++    <Box>
+       {accessToken && userProfile && (
+         <DropdownMenu.Provider>
+           <DropdownMenu.Trigger>
+-            <Image
+-              sx={{
+-                borderRadius: '3rem',
+-                cursor: 'pointer',
+-              }}
+-              alt=""
+-              width={size === 'sm' ? '18px' : ' 28px'}
+-              height={size === 'sm' ? '18px' : ' 28px'}
+-              src={userProfile?.profile_pic}
+-            />
++            <Flex display="flex" alignItems="center" gap="md">
++              <Image
++                sx={{
++                  borderRadius: '3rem',
++                  cursor: 'pointer',
++                }}
++                alt=""
++                width={size === 'sm' ? '18px' : ' 24px'}
++                height={size === 'sm' ? '18px' : ' 24px'}
++                src={userProfile?.profile_pic}
++              />
++              {!compact && <Text as="h4">{userProfile?.name}</Text>}
++
++              {!compact && (
++                <Box ml="auto">
++                  <IconWrapper color="gray.800">
++                    <CaretUpDown size="15" />
++                  </IconWrapper>
++                </Box>
++              )}
++            </Flex>
+           </DropdownMenu.Trigger>
+           <DropdownMenu aria-label="Preferences">
+             <Box p={2} minWidth="200px">
+@@ -129,7 +154,7 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
+           </DropdownMenu>
+         </DropdownMenu.Provider>
+       )}
+-    </>
++    </Box>
+   );
+ };
+ 
+diff --git a/apps/web/src/components/Sidebar/index.tsx b/apps/web/src/components/Sidebar/index.tsx
+index 71323dab..6b5d8636 100644
+--- a/apps/web/src/components/Sidebar/index.tsx
++++ b/apps/web/src/components/Sidebar/index.tsx
+@@ -4,7 +4,7 @@ import { Button, Drawer, useDrawer, Text, Box, Flex } from '@wraft/ui';
+ // import { useTour } from '@reactour/tour';
+ import { useHotkeys } from 'react-hotkeys-hook';
+ import { useThemeUI } from 'theme-ui';
+-import { Plus } from '@phosphor-icons/react';
++import { Lightning, Plus } from '@phosphor-icons/react';
+ 
+ import CreateDocument from 'components/DocumentCreate';
+ import DefaultMenuItem from 'common/MenuItem';
+@@ -14,6 +14,7 @@ import { checkSubRoutePermission } from 'utils/permissions';
+ import SearchBlock from './SearchBlock';
+ import Header from './Header';
+ import { Menulist } from './Menulist';
++import UserSettingsMenu from './UserSettingsMenu';
+ 
+ export interface INav {
+   showFull: boolean;
+@@ -89,15 +90,18 @@ const Sidebar = (props: any) => {
+           <SearchBlock />
+ 
+           {mainMenuList.map((m: any, i: any) => (
+-            <Box key={i} mb="lg">
+-              <Text
++            <Box key={i} mb="none" p="md">
++              {/* <Text
+                 as="h6"
+                 variant="sm"
++                display="hidden"
+                 p="md"
+-                textTransform="uppercase"
++                // px="lg"
++                color="gray.900"
++                // textTransform="uppercase"
+                 fontWeight="heading">
+                 {m.section}
+-              </Text>
++              </Text> */}
+               {m.menus.map(({ name, icon, path }: any) => (
+                 <DefaultMenuItem
+                   href={path}
+@@ -133,22 +137,34 @@ const Sidebar = (props: any) => {
+           ))}
+         </Flex>
+ 
+-        <Box mt="auto" className="first-step" mb="xxl" px="md">
+-          {/* <Flex
++        <Box mt="auto" className="first-step">
++          <Flex
+             alignItems="center"
+             mb="lg"
+-            p="md"
++            // p="md"
++            display="none"
+             border="1px solid"
+-            borderColor="green.600"
++            borderColor="gray.600"
+             gap="sm"
+             justify="center"
++            py="6px"
++            mx="1rem"
+             borderRadius="md">
+             <Lightning size={18} color="#127D5D" />
+-            <Text textAlign="center">Upgrade Plan</Text>
+-          </Flex> */}
+-          <Button variant="primary" fullWidth={true} onClick={toggleSearch}>
++            <Text textAlign="center" fontSize="sm2" fontWeight="bold">
++              Upgrade Plan
++            </Text>
++          </Flex>
++          <Flex px="sm" py="lg" borderTop="solid 1px" borderColor="gray.400">
++            <UserSettingsMenu compact={false} />
++          </Flex>
++          {/* <Button
++            variant="primary"
++            borderRadius="lg"
++            fullWidth={true}
++            onClick={toggleSearch}>
+             <Plus size={14} /> New Document
+-          </Button>
++          </Button> */}
+         </Box>
+       </Flex>
+       <Drawer
+diff --git a/apps/web/src/components/Template/TemplateForm.tsx b/apps/web/src/components/Template/TemplateForm.tsx
+index dd0cf3d4..8325004e 100644
+--- a/apps/web/src/components/Template/TemplateForm.tsx
++++ b/apps/web/src/components/Template/TemplateForm.tsx
+@@ -318,8 +318,11 @@ const TemplateEditor = () => {
+             bg="background-primary"
+             align="center"
+             p="md"
+-            gap="sm"
++            gap="md"
+             as="form"
++            px="md"
++            borderBottom="solid 1px"
++            borderColor="gray.400"
+             onSubmit={handleSubmit(onSubmit)}>
+             <Box flex={1}>
+               <Controller
+@@ -442,11 +445,14 @@ const TemplateEditor = () => {
+           w="30%"
+           maxWidth="400px"
+           borderLeft="solid 1px"
+-          borderColor="border">
++          borderColor="border"
++          px="md">
+           {templateId && currentTemplate && (
+             <Flex align="center" justify="space-between" px="md" py="lg">
+               <Box>
+-                <Text fontWeight="heading">Updated </Text>
++                <Text fontWeight="heading" fontSize="xs" opacity={0.4}>
++                  Updated
++                </Text>
+                 <TimeAgo
+                   time={currentTemplate?.data_template?.updated_at}
+                   ago={true}
+@@ -460,26 +466,36 @@ const TemplateEditor = () => {
+ 
+           {selectedVariant && selectedVariant.fields && (
+             <Box px="md" py="lg">
+-              <Text as="h4">Fields</Text>
+-              <Text as="p" mb="sm" color="text-secondary">
+-                Dynamic variables provided by Variants
++              <Text as="h4" mb="sm">
++                Fields
+               </Text>
+-              {selectedVariant.fields &&
+-                selectedVariant.fields.map((field: FieldT) => (
+-                  <Flex
+-                    border="solid 1px"
+-                    borderBottom={0}
+-                    borderColor="border"
+-                    bg="background-secondary"
+-                    p="xs"
+-                    key={field.id}
+-                    onClick={() => insertBlock(field)}>
+-                    {field.name}
+-                    <Box>
+-                      <TextT />
+-                    </Box>
+-                  </Flex>
+-                ))}
++              {/* <Text as="p" mb="sm" color="text-secondary">
++                Dynamic variables provided by Variants
++              </Text> */}
++              <Box border="solid 1px #ddd" borderRadius="lg">
++                {selectedVariant.fields &&
++                  selectedVariant.fields.map((field: FieldT) => (
++                    <Flex
++                      border="solid 1px"
++                      borderBottom={0}
++                      borderColor="border"
++                      // borderRadius="lg"
++                      px="sm"
++                      bg="background-secondary"
++                      p="xs"
++                      gap="xs"
++                      key={field.id}
++                      onClick={() => insertBlock(field)}>
++                      <Text fontSize="md" fontWeight="heading">
++                        {field.name}
++                      </Text>
++
++                      <Box>
++                        <TextT />
++                      </Box>
++                    </Flex>
++                  ))}
++              </Box>
+             </Box>
+           )}
+ 
+diff --git a/apps/web/src/components/Theme/ThemeList.tsx b/apps/web/src/components/Theme/ThemeList.tsx
+index 93061f2b..c85b82b9 100644
+--- a/apps/web/src/components/Theme/ThemeList.tsx
++++ b/apps/web/src/components/Theme/ThemeList.tsx
+@@ -1,5 +1,5 @@
+ import React, { useEffect, useState } from 'react';
+-import { FontIcon, ThreeDotIcon } from '@wraft/icon';
++import { FontIcon } from '@wraft/icon';
+ import toast from 'react-hot-toast';
+ import { Box, DropdownMenu, Flex, Text, Modal } from '@wraft/ui';
+ import { Table } from '@wraft/ui';
+@@ -8,6 +8,7 @@ import ConfirmDelete from 'common/ConfirmDelete';
+ import Link from 'common/NavLink';
+ import { fetchAPI, deleteAPI } from 'utils/models';
+ import { usePermission } from 'utils/permissions';
++import { DotsThree } from '@phosphor-icons/react';
+ 
+ export interface Theme {
+   total_pages: number;
+@@ -66,31 +67,30 @@ const ThemeList = ({ rerender }: Props) => {
+   const columns = [
+     {
+       id: 'content.name',
+-      header: 'NAME',
++      header: 'Name',
+       accessorKey: 'content.name',
+       cell: ({ row }: any) => (
+         <Link href={`/manage/themes/${row.original.id}`} key={row.index}>
+-          <Text>{row.original.name}</Text>
++          <Text fontWeight="bold">{row.original.name}</Text>
+         </Link>
+       ),
+       enableSorting: false,
+     },
+     {
+       id: 'content.font',
+-      header: 'FONT',
++      header: 'Font',
+       accessorKey: 'content.font',
+       cell: ({ row }: any) => (
+-        <Flex key={row.index} align="center" gap="xs">
++        <Flex key={row.index} align="center" gap="xs" py="0">
+           <FontIcon height={18} width={18} />
+-
+-          <Text>{row.original.font}</Text>
++          <Text fontWeight="500">{row.original.font}</Text>
+         </Flex>
+       ),
+       enableSorting: false,
+     },
+     {
+       id: 'content.color',
+-      header: 'COLOR',
++      header: 'Colors',
+       accessorKey: 'content.color',
+       cell: ({ row }: any) => (
+         <Flex key={row.index} align="center" gap="sm">
+@@ -125,7 +125,7 @@ const ThemeList = ({ rerender }: Props) => {
+           <Flex justify="space-between">
+             <DropdownMenu.Provider>
+               <DropdownMenu.Trigger>
+-                <ThreeDotIcon />
++                <DotsThree size={12} color="red" />
+               </DropdownMenu.Trigger>
+               {hasPermission('theme', 'delete') && (
+                 <DropdownMenu aria-label="dropdown role">
+diff --git a/apps/web/src/components/Variants/VariantDashboard.tsx b/apps/web/src/components/Variants/VariantDashboard.tsx
+index 537594cf..cb52bc7b 100644
+--- a/apps/web/src/components/Variants/VariantDashboard.tsx
++++ b/apps/web/src/components/Variants/VariantDashboard.tsx
+@@ -187,20 +187,20 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
+       cell: ({ row }: any) => <Text>{row.original?.flow?.name}</Text>,
+       enableSorting: false,
+     },
+-    {
+-      id: 'content.theme',
+-      header: 'Theme',
+-      cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
+-      enableSorting: false,
+-    },
++    // {
++    //   id: 'content.theme',
++    //   header: 'Theme',
++    //   cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
++    //   enableSorting: false,
++    // },
+ 
+-    {
+-      id: 'content.layout',
+-      header: 'Layout',
+-      accessorKey: 'layout',
+-      cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
+-      enableSorting: false,
+-    },
++    // {
++    //   id: 'content.layout',
++    //   header: 'Layout',
++    //   accessorKey: 'layout',
++    //   cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
++    //   enableSorting: false,
++    // },
+     {
+       id: 'content.type',
+       header: 'Type',
+@@ -290,7 +290,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
+   ];
+ 
+   return (
+-    <Box p="lg">
++    <Box px="xl" py="xl">
+       <Table
+         data={contents}
+         isLoading={loading}
+diff --git a/apps/web/src/components/Variants/VariantList.tsx b/apps/web/src/components/Variants/VariantList.tsx
+index 53d6fcd4..1f700dce 100644
+--- a/apps/web/src/components/Variants/VariantList.tsx
++++ b/apps/web/src/components/Variants/VariantList.tsx
+@@ -40,11 +40,15 @@ const VariantList = () => {
+ 
+   return (
+     <>
+-      <PageHeader title="Variants" desc="Manage Variants">
++      <PageHeader title="Structures" desc="Manage Structures">
+         {hasPermission('variant', 'manage') && (
+-          <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+-            <Plus size={12} weight="bold" />
+-            Create Variant
++          <Button
++            variant="secondary"
++            size="sm"
++            onClick={() => setIsOpen(true)}
++            fontSize="sm2">
++            <Plus size={12} weight="bold" color="gray.600" />
++            Create Structures
+           </Button>
+         )}
+       </PageHeader>
+diff --git a/apps/web/src/components/common/Atoms.tsx b/apps/web/src/components/common/Atoms.tsx
+index 8e5606df..e11b5cdc 100644
+--- a/apps/web/src/components/common/Atoms.tsx
++++ b/apps/web/src/components/common/Atoms.tsx
+@@ -30,7 +30,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
+       ? format(local_time, 'MMM dd, yyyy')
+       : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
+ 
+-  return <Text mt={props?.short ? 0 : 0}>{timed}</Text>;
++  return <Text mt={props?.short ? 0 : 0} fontSize="sm">{timed}</Text>;
+ };
+ 
+ /**
+diff --git a/apps/web/src/components/common/NavEdit.tsx b/apps/web/src/components/common/NavEdit.tsx
+index a5a49820..3e69aa1f 100644
+--- a/apps/web/src/components/common/NavEdit.tsx
++++ b/apps/web/src/components/common/NavEdit.tsx
+@@ -6,6 +6,14 @@ import { ArrowLeft, Bell, Pencil } from '@phosphor-icons/react';
+ import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
+ import Link from 'common/NavLink';
+ import { useAuth } from 'contexts/AuthContext';
++import styled, { x } from '@xstyled/emotion';
++
++const IconFrame = styled.divBox`
++  display: flex;
++  svg {
++    fill: gray.900;
++  }
++`;
+ 
+ export interface IUser {
+   name: string;
+@@ -41,18 +49,21 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
+       borderBottom="solid 1px"
+       borderColor="border"
+       px="sm"
+-      py="xs">
+-      <Flex align="center" gap="sm">
+-        <ArrowLeft
+-          cursor="pointer"
+-          className="main-icon"
+-          onClick={goBack}
+-          size={18}
+-        />
++      py="md">
++      <Flex align="center" gap="sm" pl="xs">
++        <IconFrame color="gray.600">
++          <ArrowLeft
++            cursor="pointer"
++            className="main-icon"
++            onClick={goBack}
++            // color="#999"
++            size={16}
++          />
++        </IconFrame>
+ 
+         {navtitle && (
+           <Flex variant="navtitle" align="center" gap="sm">
+-            <Text as="h2" fontSize="lg" fontWeight="heading">
++            <Text as="h1" fontWeight={600}>
+               {navtitle}
+             </Text>
+ 
+@@ -73,15 +84,16 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
+           borderLeft="solid 1px"
+           borderColor="border"
+           alignItems="center"
++          // color="red.400"
+           pl="sm">
+-          <Bell size={22} className="main-icon" />
++          <Bell size={20} className="main-icon" weight="bold" color="#999" />
+ 
+           {!accessToken && (
+             <Link href="/login">
+               <Text>Login</Text>
+             </Link>
+           )}
+-          <UserSettingsMenu size="sm" />
++          <UserSettingsMenu size="md" compact={true} />
+         </Flex>
+       </Flex>
+     </Flex>
+diff --git a/apps/web/src/components/common/PageHeader.tsx b/apps/web/src/components/common/PageHeader.tsx
+index fcec8a0f..adbb7df0 100644
+--- a/apps/web/src/components/common/PageHeader.tsx
++++ b/apps/web/src/components/common/PageHeader.tsx
+@@ -1,13 +1,16 @@
+ import React from 'react';
+ import { Flex, Box, Text } from '@wraft/ui';
+-import { Link } from 'theme-ui';
++// import { Link } from '@wraft/ui';
+ import { ArrowBackIcon } from '@wraft/icon';
+ 
+ import Back from 'common/Back';
++import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
++import { CaretRight, Minus } from '@phosphor-icons/react';
++import Link from 'next/link';
+ 
+ interface PageHeaderProps {
+   children?: any;
+-  title: string;
++  title: string | string[] | { name: string; path: string }[];
+   desc?: any;
+   breads?: boolean;
+   hasBack?: boolean;
+@@ -35,8 +38,10 @@ const BreadLinks = (props: any) => {
+       {props.links &&
+         props.links.map((link: any) => (
+           <Link
++            href={link.path}
+             key={link.name}
+-            sx={{ color: 'text-primary', fontSize: 'xs', mr: 2 }}>
++            type={'button'} // sx={{ color: 'text-primary', fontSize: 'xs', mr: 2 }}
++          >
+             <Text pr={1}>{link.name}</Text>
+             <ArrowBackIcon width={10} />
+           </Link>
+@@ -56,7 +61,7 @@ const PageHeader = ({
+     <Box
+       borderBottom="1px solid"
+       borderColor="border"
+-      py="lg"
++      py="md"
+       px="lg"
+       w="100%"
+       position="sticky"
+@@ -65,18 +70,54 @@ const PageHeader = ({
+       bg="background-primary">
+       <Flex alignItems="center">
+         {hasBack && <Back />}
+-        <Box>
+-          {breads && <BreadLinks links={breadLinks} />}
+-          <Text color="text-primary" fontSize="lg" fontWeight="heading">
+-            {title}
+-          </Text>
+-          {desc && (
++        <Box display="flex" alignItems="center">
++          {/* {breads && <BreadLinks links={breadLinks} />} */}
++          <Flex alignContent="center" alignItems="center">
++            {Array.isArray(title) ? (
++              title.map((t, index) => (
++                <Flex alignItems="center" pr="sm" key={index}>
++                  {typeof t === 'object' && t.name && t.path ? (
++                    <Link href={t.path} type="link">
++                      <Text fontSize="base" fontWeight={500}>
++                        {t.name}
++                        {/* variant="secondary" */}
++                      </Text>
++                    </Link>
++                  ) : (
++                    <Text
++                      color="text-primary"
++                      fontSize="md"
++                      fontWeight="heading"
++                      display="flex"
++                      pr="sm">
++                      {t}
++                    </Text>
++                  )}
++                  <Box
++                    rotate="90"
++                    transform="rotate(70deg)"
++                    opacity="0.3"
++                    fill="gray.1000"
++                    color="red.700">
++                    {index < title.length - 1 && (
++                      <Minus size={16} fill="gray.900" />
++                    )}
++                  </Box>
++                </Flex>
++              ))
++            ) : (
++              <Text color="text-primary" fontSize="md" fontWeight="heading">
++                {title}
++              </Text>
++            )}
++          </Flex>
++          {/* {desc && (
+             <Box>
+               <Text mt={0} color="text-secondary">
+                 {desc}
+               </Text>
+             </Box>
+-          )}
++          )} */}
+         </Box>
+         <Box ml="auto" pt={1}>
+           {children}
+diff --git a/apps/web/src/components/common/ProfileCard.tsx b/apps/web/src/components/common/ProfileCard.tsx
+index a1e3b3f4..66b2bdae 100644
+--- a/apps/web/src/components/common/ProfileCard.tsx
++++ b/apps/web/src/components/common/ProfileCard.tsx
+@@ -1,6 +1,7 @@
+-import { Flex, Avatar, Text } from 'theme-ui';
++import { Avatar } from 'theme-ui';
+ 
+ import { TimeAgo } from './Atoms';
++import { Flex, Text } from '@wraft/ui';
+ /**
+  * Profile Block
+  */
+@@ -22,19 +23,22 @@ export const ProfileCard = ({
+ 
+   return (
+     <Flex
+-      sx={{
+-        fontSize: 'xs',
+-        color: 'text-primary',
+-        my: 1,
+-        alignItems: 'center',
+-      }}>
++      alignItems="center"
++      gap="sm"
++      // sx={{
++      //   fontSize: 'xs',
++      //   color: 'text-primary',
++      //   my: 1,
++      //   alignItems: 'center',
++      // }}
++    >
+       <Avatar
+         width={16}
+         height={16}
+         sx={{ mr: 2, borderColor: 'border', border: 0 }}
+         src={finalImage}
+       />
+-      <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
++      <Text as="h3" sx={{ mr: 3, fontSize: 'sm2', fontWeight: 600 }}>
+         {name}
+       </Text>
+       <TimeAgo time={time} ago={true} />
+diff --git a/apps/web/src/components/common/Tab/tabStyle.ts b/apps/web/src/components/common/Tab/tabStyle.ts
+index 42a24ab4..616ecf0b 100644
+--- a/apps/web/src/components/common/Tab/tabStyle.ts
++++ b/apps/web/src/components/common/Tab/tabStyle.ts
+@@ -114,7 +114,6 @@ export const TabPanel = styled(Ariakit.TabPanel)`
+ 
+   &:focus-visible {
+     border-radius: 2px;
+-    box-shadow: 0 0 0 var(--wp-admin-border-width-focus) red;
+     // Windows high contrast mode.
+     outline: 2px solid transparent;
+     outline-offset: 0;
+diff --git a/apps/web/src/pages/forms/[id]/index.tsx b/apps/web/src/pages/forms/[id]/index.tsx
+index de7f7648..5a0f7aa7 100644
+--- a/apps/web/src/pages/forms/[id]/index.tsx
++++ b/apps/web/src/pages/forms/[id]/index.tsx
+@@ -90,17 +90,27 @@ const Index: FC = () => {
+       </Head>
+       <Page showFull={true}>
+         <PageHeader
+-          title={`${formdata?.name || 'name loading...'}`}
++          title={[
++            {
++              name: 'Forms',
++              path: '/forms',
++            },
++            {
++              name: `${formdata?.name || 'name loading...'}`,
++              path: `/forms/${formdata?.id}`,
++            },
++          ]}
+           desc={`${formdata?.description || 'detatils loading...'}`}>
+           {hasPermission('form', 'manage') && (
+             <Flex alignItems="center" gap="8px" pr={4}>
+               <Button
+                 variant="secondary"
++                size="sm"
+                 onClick={() => setIsView((prev) => !prev)}>
+                 {isView ? 'Edit' : 'Preview'}
+               </Button>
+               <Box>
+-                <Button variant="secondary">
++                <Button variant="secondary" size="sm">
+                   <a
+                     href={`/forms/entry/new/${cId}`}
+                     target="_blank"
+@@ -109,7 +119,7 @@ const Index: FC = () => {
+                   </a>
+                 </Button>
+               </Box>
+-              <Button onClick={saveForm} loading={isSaving}>
++              <Button onClick={saveForm} size="sm" loading={isSaving}>
+                 Save
+               </Button>
+             </Flex>
+diff --git a/apps/web/src/pages/forms/index.tsx b/apps/web/src/pages/forms/index.tsx
+index 82c3841f..cf40106c 100644
+--- a/apps/web/src/pages/forms/index.tsx
++++ b/apps/web/src/pages/forms/index.tsx
+@@ -62,13 +62,13 @@ const Index: FC = () => {
+       <Page>
+         <PageHeader title="Forms">
+           {hasPermission('form', 'manage') && (
+-            <Button variant="tertiary" onClick={onOpenDrawer}>
+-              <Plus size={12} weight="bold" />
++            <Button variant="secondary" onClick={onOpenDrawer} size="sm">
++              <Plus size={10} weight="bold" />
+               Create Form
+             </Button>
+           )}
+         </PageHeader>
+-        <Box p="lg" minHeight="100%" bg="background-secondary">
++        <Box py="xl" px="3xl" minHeight="100%" bg="background-secondary">
+           <FormList rerender={rerender} setRerender={setRerender} />
+         </Box>
+       </Page>
+diff --git a/apps/web/src/pages/manage/billing/index.tsx b/apps/web/src/pages/manage/billing/index.tsx
+index 4c8e6491..3d1f7810 100644
+--- a/apps/web/src/pages/manage/billing/index.tsx
++++ b/apps/web/src/pages/manage/billing/index.tsx
+@@ -15,7 +15,10 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Billing & Subscription"
++          title={[
++            { name: 'Manage', path: '/manage' },
++            { name: 'Billing & Subscription', path: '/manage/billing' },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[
+diff --git a/apps/web/src/pages/manage/flows/[id].tsx b/apps/web/src/pages/manage/flows/[id].tsx
+index 217ba713..188f3c3c 100644
+--- a/apps/web/src/pages/manage/flows/[id].tsx
++++ b/apps/web/src/pages/manage/flows/[id].tsx
+@@ -1,7 +1,7 @@
+ import { FC, useEffect, useState } from 'react';
+ import Head from 'next/head';
+ import { useRouter } from 'next/router';
+-import { Flex } from '@wraft/ui';
++import { Button, Flex } from '@wraft/ui';
+ 
+ import { menuLinks } from '@constants/menuLinks';
+ import FlowViewForm from 'components/Flow/FlowViewForm';
+@@ -10,6 +10,7 @@ import Page from 'common/PageFrame';
+ import PageHeader from 'common/PageHeader';
+ import DescriptionLinker from 'common/DescriptionLinker';
+ import { fetchAPI } from 'utils/models';
++import { DotsThreeVertical } from '@phosphor-icons/react';
+ 
+ const Index: FC = () => {
+   const [flow, setFlow] = useState<any>();
+@@ -28,7 +29,17 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Flows"
++          title={[
++            {
++              name: 'Manage',
++              path: '/manage',
++            },
++            {
++              name: 'Flows',
++              path: '/manage/flows',
++            },
++            { name: `${flow?.flow?.name}`, path: '.' },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[
+@@ -37,10 +48,19 @@ const Index: FC = () => {
+                 { name: `${flow?.flow?.name || ''}` },
+               ]}
+             />
+-          }></PageHeader>
++          }>
++          <Button
++            variant="secondary"
++            size="sm"
++            px="sm"
++            py="xs"
++            // onClick={() => setIsOpen(true)}
++          >
++            <DotsThreeVertical weight="bold" color="gray.700" />
++          </Button>
++        </PageHeader>
+ 
+         <Flex gap="md" my="md" px="md">
+-          <ManageSidebar items={menuLinks} />
+           <FlowViewForm />
+         </Flex>
+       </Page>
+diff --git a/apps/web/src/pages/manage/flows/index.tsx b/apps/web/src/pages/manage/flows/index.tsx
+index eff8fe4f..d214744e 100644
+--- a/apps/web/src/pages/manage/flows/index.tsx
++++ b/apps/web/src/pages/manage/flows/index.tsx
+@@ -10,6 +10,8 @@ import Page from 'common/PageFrame';
+ import PageHeader from 'common/PageHeader';
+ import DescriptionLinker from 'common/DescriptionLinker';
+ import { usePermission } from 'utils/permissions';
++import { ThreeDotIcon } from '@wraft/icon';
++import { DotsThreeVertical, ThreeD } from '@phosphor-icons/react';
+ 
+ const Index: FC = () => {
+   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+@@ -25,17 +27,39 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Flows"
++          title={[
++            {
++              name: 'Manage',
++              path: '/manage',
++            },
++            {
++              name: 'Flows',
++              path: '/manage/flows',
++            },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[{ name: 'Manage', path: '/manage' }, { name: 'Flows' }]}
+             />
+           }>
+-          {hasPermission('flow', 'manage') && (
+-            <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+-              Add Flow
+-            </Button>
+-          )}
++          <Flex gap="sm">
++            {hasPermission('flow', 'manage') && (
++              <Button
++                variant="secondary"
++                size="sm"
++                onClick={() => setIsOpen(true)}>
++                Add Flow
++              </Button>
++            )}
++            {hasPermission('flow', 'manage') && (
++              <Button
++                variant="secondary"
++                size="sm"
++                onClick={() => setIsOpen(true)}>
++                <DotsThreeVertical stroke="bold" color="gray.700" />
++              </Button>
++            )}
++          </Flex>
+         </PageHeader>
+         <Drawer
+           open={isOpen}
+@@ -46,8 +70,8 @@ const Index: FC = () => {
+           {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
+         </Drawer>
+ 
+-        <Flex gap="md" my="md" px="md">
+-          <ManageSidebar items={menuLinks} />
++        <Flex gap="md" my="md" px="xl">
++          {/* <ManageSidebar items={menuLinks} /> */}
+           <FlowList rerender={rerender} setRerender={setRerender} />
+         </Flex>
+       </Page>
+diff --git a/apps/web/src/pages/manage/import/index.tsx b/apps/web/src/pages/manage/import/index.tsx
+index 21b22e56..06eb3f34 100644
+--- a/apps/web/src/pages/manage/import/index.tsx
++++ b/apps/web/src/pages/manage/import/index.tsx
+@@ -13,7 +13,17 @@ const Contents: FC = () => {
+         <meta name="description" content="Import Document structures" />
+       </Head>
+       <Page>
+-        <PageHeader title="Import" desc="Import Document Structures" />
++        <PageHeader title={[
++          {
++            name: 'Manage',
++            path: '/manage'
++          },
++          {
++            name: 'Import',
++            path: 'import'
++          },
++          
++        ]} desc="Import Document Structures" />
+         <ImporterWrapper />
+       </Page>
+     </>
+diff --git a/apps/web/src/pages/manage/layouts/[id].tsx b/apps/web/src/pages/manage/layouts/[id].tsx
+index a0b43342..e30998c3 100644
+--- a/apps/web/src/pages/manage/layouts/[id].tsx
++++ b/apps/web/src/pages/manage/layouts/[id].tsx
+@@ -26,7 +26,13 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Layout"
++          title={
++            [
++              { name: 'Manage', path: '/manage' },
++              { name: 'Layouts', path: '/manage/layouts' },
++              { name: `${layout?.layout?.name}`, path: '.' },
++            ]
++          }
+           desc={
+             <DescriptionLinker
+               data={[
+diff --git a/apps/web/src/pages/manage/layouts/index.tsx b/apps/web/src/pages/manage/layouts/index.tsx
+index 5d2a0e80..e6412b30 100644
+--- a/apps/web/src/pages/manage/layouts/index.tsx
++++ b/apps/web/src/pages/manage/layouts/index.tsx
+@@ -10,6 +10,7 @@ import Page from 'common/PageFrame';
+ import PageHeader from 'common/PageHeader';
+ import DescriptionLinker from 'common/DescriptionLinker';
+ import { usePermission } from 'utils/permissions';
++import { Plus } from '@phosphor-icons/react';
+ 
+ const Index: FC = () => {
+   const [isOpen, setIsOpen] = useState<boolean>(false);
+@@ -26,15 +27,15 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Layouts"
+-          desc={
+-            <DescriptionLinker
+-              data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
+-            />
+-          }>
++          title={[
++            { name: 'Manage', path: '/manage' },
++            { name: 'Layouts', path: '/manage/layouts' },
++          ]}
++          >
+           {hasPermission('layout', 'manage') && (
+-            <Button variant="secondary" onClick={() => setIsOpen(true)}>
+-              + Add Layout
++            <Button variant="secondary"  size="sm" onClick={() => setIsOpen(true)}>
++              <Plus size={10} />
++              Add Layout
+             </Button>
+           )}
+         </PageHeader>
+@@ -47,8 +48,8 @@ const Index: FC = () => {
+           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
+         </Drawer>
+ 
+-        <Flex gap="md" my="md" px="md">
+-          <ManageSidebar items={menuLinks} />
++        <Flex gap="md" my="md" px="xl" py="sm">
++          {/* <ManageSidebar items={menuLinks} /> */}
+           <LayoutList rerender={rerender} />
+         </Flex>
+       </Page>
+diff --git a/apps/web/src/pages/manage/themes/[id].tsx b/apps/web/src/pages/manage/themes/[id].tsx
+index d61f5b1b..05b71c8d 100644
+--- a/apps/web/src/pages/manage/themes/[id].tsx
++++ b/apps/web/src/pages/manage/themes/[id].tsx
+@@ -29,20 +29,24 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Themes"
++          title={[
++            { name: 'Manage', path: '/manage' },
++            { name: 'Themes', path: '/manage/themes' },
++            { name: `${theme?.theme?.name}`, path: '.' },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[
+                 { name: 'Manage', path: '/manage' },
+                 { name: 'Themes', path: '/manage/themes' },
+-                { name: `${theme?.theme?.name || ''}` },
++                { name: `${theme?.theme?.name}` },
+               ]}
+             />
+           }
+         />
+ 
+         <Flex gap="md" my="md" px="md">
+-          <ManageSidebar items={menuLinks} />
++          {/* <ManageSidebar items={menuLinks} /> */}
+           <ThemeViewForm />
+         </Flex>
+       </Page>
+diff --git a/apps/web/src/pages/manage/themes/index.tsx b/apps/web/src/pages/manage/themes/index.tsx
+index 4b2432fa..ca45fea0 100644
+--- a/apps/web/src/pages/manage/themes/index.tsx
++++ b/apps/web/src/pages/manage/themes/index.tsx
+@@ -2,10 +2,10 @@ import { FC, useState } from 'react';
+ import Head from 'next/head';
+ import { Button, Flex, Drawer, useDrawer, Text, Box } from '@wraft/ui';
+ 
+-import { menuLinks } from '@constants/menuLinks';
++// import { menuLinks } from '@constants/menuLinks';
+ import ThemeAddForm from 'components/Theme/ThemeForm';
+ import ThemeList from 'components/Theme/ThemeList';
+-import ManageSidebar from 'common/ManageSidebar';
++// import ManageSidebar from 'common/ManageSidebar';
+ import Page from 'common/PageFrame';
+ import PageHeader from 'common/PageHeader';
+ import DescriptionLinker from 'common/DescriptionLinker';
+@@ -25,25 +25,31 @@ const ThemePage: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Themes"
++          title={[
++            { name: 'Manage', path: '/manage' },
++            { name: 'Themes', path: '/manage/themes' },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[{ name: 'Manage', path: '/manage' }, { name: 'Themes' }]}
+             />
+           }>
+           {hasPermission('theme', 'manage') && (
+-            <Button variant="tertiary" onClick={() => setIsOpen(true)}>
++            <Button
++              variant="secondary"
++              size="sm"
++              onClick={() => setIsOpen(true)}>
+               Add Theme
+             </Button>
+           )}
+         </PageHeader>
+ 
+-        <Flex gap="md" my="md" px="md">
+-          <ManageSidebar items={menuLinks} />
++        <Flex gap="md" my="md" px="3xl" py="xl">
++          {/* <ManageSidebar items={menuLinks} /> */}
+           <ThemeList rerender={rerender} />
+         </Flex>
+       </Page>
+-      {/* 
++      {/*
+       {hasPermission('the') && ( */}
+       <Drawer
+         open={isOpen}
+diff --git a/apps/web/src/pages/manage/workspace/index.tsx b/apps/web/src/pages/manage/workspace/index.tsx
+index 16d35ff1..bd6536ec 100644
+--- a/apps/web/src/pages/manage/workspace/index.tsx
++++ b/apps/web/src/pages/manage/workspace/index.tsx
+@@ -209,7 +209,10 @@ const Index: FC = () => {
+       </Head>
+       <Page>
+         <PageHeader
+-          title="Workspace"
++          title={[
++            { name: 'Manage', path: '/manage' },
++            { name: 'Workspace', path: '/manage/workspace' },
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
+diff --git a/apps/web/src/pages/variants/[id].tsx b/apps/web/src/pages/variants/[id].tsx
+index cacb3267..acc5f132 100644
+--- a/apps/web/src/pages/variants/[id].tsx
++++ b/apps/web/src/pages/variants/[id].tsx
+@@ -7,6 +7,7 @@ import Page from 'common/PageFrame';
+ import PageHeader from 'common/PageHeader';
+ import DescriptionLinker from 'common/DescriptionLinker';
+ import { fetchAPI } from 'utils/models';
++import { Box } from '@wraft/ui';
+ 
+ const Index: FC = () => {
+   const [variant, setVariant] = useState<any>();
+@@ -22,12 +23,15 @@ const Index: FC = () => {
+   return (
+     <>
+       <Head>
+-        <title>Variant | Wraft</title>
++        <title>Artifacts | Wraft</title>
+         <meta name="description" content="edit variant" />
+       </Head>
+       <Page>
+         <PageHeader
+-          title={variant?.content_type?.name || ''}
++          title={[
++            { name: 'Artifacts', path: '/variants' },
++            variant?.content_type?.name,
++          ]}
+           desc={
+             <DescriptionLinker
+               data={[
+@@ -38,7 +42,9 @@ const Index: FC = () => {
+           }
+         />
+ 
+-        <VariantDetailForm />
++        <Box p="xl">
++          <VariantDetailForm />
++        </Box>
+       </Page>
+     </>
+   );
+diff --git a/apps/web/src/pages/variants/index.tsx b/apps/web/src/pages/variants/index.tsx
+index 032984de..5bfddfcf 100644
+--- a/apps/web/src/pages/variants/index.tsx
++++ b/apps/web/src/pages/variants/index.tsx
+@@ -8,7 +8,7 @@ const Index: FC = () => {
+   return (
+     <>
+       <Head>
+-        <title>Variants | Wraft</title>
++        <title>Structures | Wraft</title>
+         <meta name="description" content="wraft variants" />
+       </Head>
+       <Page>
+diff --git a/package.json b/package.json
+index 74ae4500..3f579588 100644
+--- a/package.json
++++ b/package.json
+@@ -34,7 +34,7 @@
+     "turbo": "^2.4.4",
+     "typescript": "5.8.2"
+   },
+-  "packageManager": "pnpm@9.15.9",
++  "packageManager": "pnpm@9.5.0",
+   "engines": {
+     "node": ">=18.0.0",
+     "pnpm": ">=8.0.0",
+diff --git a/packages/editor/src/components/editor.tsx b/packages/editor/src/components/editor.tsx
+index 72591076..eeca4dde 100644
+--- a/packages/editor/src/components/editor.tsx
++++ b/packages/editor/src/components/editor.tsx
+@@ -26,7 +26,7 @@ export const Editor = forwardRef(
+   (
+     {
+       defaultContent = "",
+-      placeholder = "Write something, or ' / ' for commands…",
++      placeholder = "new line",
+       className = "",
+       isReadonly = true,
+       tokens,
+diff --git a/packages/editor/src/components/live-editor.tsx b/packages/editor/src/components/live-editor.tsx
+index 2685da1e..899c58e8 100644
+--- a/packages/editor/src/components/live-editor.tsx
++++ b/packages/editor/src/components/live-editor.tsx
+@@ -43,7 +43,7 @@ export const LiveEditor = forwardRef(
+   (
+     {
+       defaultContent,
+-      placeholder = "Write something, or ' / ' for commands…",
++      placeholder = "Write , or ' / ' for commands…",
+       className = "",
+       isReadonly = true,
+       tokens,
+diff --git a/packages/editor/src/components/styles.ts b/packages/editor/src/components/styles.ts
+index ca48f679..d4408eb2 100644
+--- a/packages/editor/src/components/styles.ts
++++ b/packages/editor/src/components/styles.ts
+@@ -7,7 +7,6 @@ export const EditorContainer = styled.divBox`
+   width: 100%;
+   min-height: 40rem;
+   overflow: hidden;
+-  border-radius: 0.375rem;
+   border: 1px solid;
+   border-color: gray.300;
+   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+@@ -26,6 +25,7 @@ export const EditorWrapper = styled.divBox`
+     position: sticky;
+     top: 0;
+     z-index: 1;
++    background: white;
+   }
+ `;
+ 
+diff --git a/packages/editor/src/components/toolbar.tsx b/packages/editor/src/components/toolbar.tsx
+index 8ec69a4c..908ed4e9 100644
+--- a/packages/editor/src/components/toolbar.tsx
++++ b/packages/editor/src/components/toolbar.tsx
+@@ -34,6 +34,7 @@ const ToolbarContainer = styled.divBox`
+   gap: 1;
+   px: 2;
+   align-items: center;
++  border-radius: md2 md2 0 0;
+ `;
+ 
+ export default function Toolbar() {
+@@ -41,11 +42,13 @@ export default function Toolbar() {
+   return (
+     <ToolbarContainer
+       display="flex"
+-      bg="background-secondary"
++      bg="white"
+       color="gray.1100"
+       px={2}
+       py={1}
+-      borderBottomColor="gray.500"
++      border="solid 1px"
++      borderBottom="0"
++      borderColor="gray.a400"
+     >
+       <Button
+         pressed={false}
+@@ -53,7 +56,7 @@ export default function Toolbar() {
+         onClick={editor.commands.undo}
+         tooltip="Undo"
+       >
+-        <ArrowCounterClockwise size={18} />
++        <ArrowCounterClockwise size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+@@ -62,7 +65,7 @@ export default function Toolbar() {
+         onClick={editor.commands.redo}
+         tooltip="Redo"
+       >
+-        <ArrowClockwise size={18} />
++        <ArrowClockwise size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+@@ -71,7 +74,7 @@ export default function Toolbar() {
+         onClick={editor.commands.toggleBold}
+         tooltip="Bold"
+       >
+-        <TextB size={18} />
++        <TextB size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+@@ -80,7 +83,7 @@ export default function Toolbar() {
+         onClick={editor.commands.toggleItalic}
+         tooltip="Italic"
+       >
+-        <TextItalic size={18} />
++        <TextItalic size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+@@ -89,7 +92,7 @@ export default function Toolbar() {
+         onClick={editor.commands.toggleUnderline}
+         tooltip="Underline"
+       >
+-        <TextUnderline size={18} />
++        <TextUnderline size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+@@ -98,7 +101,7 @@ export default function Toolbar() {
+         onClick={editor.commands.toggleStrike}
+         tooltip="Strike"
+       >
+-        <TextStrikethrough size={18} />
++        <TextStrikethrough size={16} weight="bold" />
+       </Button>
+ 
+       <Button
+diff --git a/packages/ui/src/components/Button/index.tsx b/packages/ui/src/components/Button/index.tsx
+index 369d1efe..5eb1839a 100644
+--- a/packages/ui/src/components/Button/index.tsx
++++ b/packages/ui/src/components/Button/index.tsx
+@@ -16,6 +16,7 @@ export type Variant =
+   | "disabled"
+   | "googleLogin"
+   | "none"
++  | "new"
+   | "delete";
+ 
+ export interface ButtonOptions extends AkButtonProps {
+diff --git a/packages/ui/src/components/Button/styles.ts b/packages/ui/src/components/Button/styles.ts
+index 072abc41..8779ff4e 100644
+--- a/packages/ui/src/components/Button/styles.ts
++++ b/packages/ui/src/components/Button/styles.ts
+@@ -18,7 +18,8 @@ type StyledButtonProps = Omit<
+ 
+ export const Button = styled(AriakitButton)<StyledButtonProps>`
+   ${({ variant }) => th(`buttons.${variant}`)};
+-  ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.danger.${variant}`)};
++  ${({ variant, "data-danger": dataDanger }) =>
++    dataDanger && th(`buttons.danger.${variant}`)};
+   position: relative;
+   display: inline-flex;
+   align-items: center;
+@@ -27,7 +28,7 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
+   ${({ size }) => th(`buttons.sizes.${size}`)};
+   text-decoration: none;
+   text-align: center;
+-  border-radius: sm,
++  border-radius: md2;
+   white-space: nowrap;
+   cursor: pointer;
+   outline: none !important; /* important for firefox */
+@@ -45,7 +46,7 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
+ 
+   & > svg {
+     font-weight: initial;
+-    margin-left: sm;
++    margin-left: xxs;
+ 
+     &:only-child {
+       width: ${({ size }) => size && th(`buttons.icon.only.${size}`)};
+@@ -65,23 +66,26 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
+ 
+   &:hover {
+     ${({ variant }) => th(`buttons.focus.${variant}`)};
+-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.focus.danger.${variant}`)};      
++    ${({ variant, "data-danger": dataDanger }) =>
++      dataDanger && th(`buttons.focus.danger.${variant}`)};
+   }
+ 
+   &:hover {
+     ${({ variant }) => th(`buttons.hover.${variant}`)};
+-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.hover.danger.${variant}`)};      
++    ${({ variant, "data-danger": dataDanger }) =>
++      dataDanger && th(`buttons.hover.danger.${variant}`)};
+   }
+ 
+   &:active {
+     ${({ variant }) => th(`buttons.active.${variant}`)};
+-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.active.danger.${variant}`)};      
++    ${({ variant, "data-danger": dataDanger }) =>
++      dataDanger && th(`buttons.active.danger.${variant}`)};
+   }
+ 
+   [${hideFocusRingsDataAttribute}] &:focus {
+     box-shadow: none;
+   }
+-    
++
+   &[disabled] {
+     cursor: not-allowed;
+   }
+diff --git a/packages/ui/src/components/DropdownMenu/styled.ts b/packages/ui/src/components/DropdownMenu/styled.ts
+index 6c7b046d..7c42ae3a 100644
+--- a/packages/ui/src/components/DropdownMenu/styled.ts
++++ b/packages/ui/src/components/DropdownMenu/styled.ts
+@@ -12,14 +12,15 @@ export const Item: any = styled.div`
+   align-items: center;
+   color: var(--theme-ui-colors-text-primary);
+   min-width: 120px;
++
+   &[data-active-item] {
+     background-color: green.a300;
+     color: green.800;
+   }
+ `;
+-export const Trigger: any = styled.div`
++export const Trigger: any = styled.divBox`
+   cursor: pointer;
+-  padding: 6px 12px;
++  padding-left: lg;
+   &[data-active-item] {
+     background: #f0f2f5;
+   }
+diff --git a/packages/ui/src/components/Tabs/styles.ts b/packages/ui/src/components/Tabs/styles.ts
+index a877db8c..340562dd 100644
+--- a/packages/ui/src/components/Tabs/styles.ts
++++ b/packages/ui/src/components/Tabs/styles.ts
+@@ -23,9 +23,9 @@ export const TabList = styled(Ariakit.TabList)<{ size: SizeOptions }>`
+   ${th("tabs.tabsBorder.horizontal")};
+ 
+   ${({ size }) => `
+-    
++
+       ${th(`tabs.item.size.${size}`)}
+-    
++
+   `}
+   ${system};
+ `;
+@@ -42,7 +42,8 @@ export const Tab = styled.button`
+   text-transform: none;
+   cursor: pointer;
+   gap: sm;
+-  font-size: 14px;
++  font-weight: 600;
++  font-size: base;
+ 
+   &:focus {
+     outline: none !important; /* important for firefox */
+@@ -54,6 +55,7 @@ export const Tab = styled.button`
+ 
+   &[aria-selected="true"] {
+     ${th("tabs.item.active")};
++    font-weight: 600;
+   }
+ 
+   &[aria-disabled="true"] {
+diff --git a/packages/ui/src/theme/GlobalStyle.tsx b/packages/ui/src/theme/GlobalStyle.tsx
+index 53790439..a16d8599 100644
+--- a/packages/ui/src/theme/GlobalStyle.tsx
++++ b/packages/ui/src/theme/GlobalStyle.tsx
+@@ -1,14 +1,14 @@
+ import { createGlobalStyle } from "@xstyled/emotion";
+ 
+ export const GlobalStyle = createGlobalStyle`
+-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
++  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+   html {
+-    font-size: 16px !important;
++    // font-size: 16px !important;
+   }
+ 
+   body {
+     color: var(--theme-ui-colors-text);
+-    font-family: inter;
++    font-family: 'Inter', sans-serif;
+     -webkit-font-smoothing: antialiased;
+     font-synthesis-weight: none;
+     text-rendering: optimizeLegibility;
+diff --git a/packages/ui/src/theme/basic.tsx b/packages/ui/src/theme/basic.tsx
+index caece728..b624383c 100644
+--- a/packages/ui/src/theme/basic.tsx
++++ b/packages/ui/src/theme/basic.tsx
+@@ -1,9 +1,9 @@
+ const theme: any = {
+   fonts: {
+-    body: `inter, sans-serif`,
++    body: `Inter, sans-serif`,
+     heading: "inherit",
+-    editor1: `inter, sans-serif`,
+-    editor2: `inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
++    editor1: `Inter, sans-serif`,
++    editor2: `Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
+     // font-family:
+     monospace: "Menlo, monospace",
+     satoshi:
+diff --git a/packages/ui/src/theme/variants/borders.ts b/packages/ui/src/theme/variants/borders.ts
+index bcb27ea9..d5477eb4 100644
+--- a/packages/ui/src/theme/variants/borders.ts
++++ b/packages/ui/src/theme/variants/borders.ts
+@@ -2,10 +2,12 @@ export type ThemeBorderWidths = {
+   lg: string;
+   md: string;
+   sm: string;
++  xl: string;
+ };
+ 
+ export const borderWidths: ThemeBorderWidths = {
+   sm: "1px",
+   md: "2px",
+   lg: "3px",
++  xl: "6px",
+ };
+diff --git a/packages/ui/src/theme/variants/buttons.ts b/packages/ui/src/theme/variants/buttons.ts
+index ce6b7df7..63649fd9 100644
+--- a/packages/ui/src/theme/variants/buttons.ts
++++ b/packages/ui/src/theme/variants/buttons.ts
+@@ -32,7 +32,7 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
+     color: "text",
+     fontWeight: fontWeights.bold,
+     letterSpacing: 0,
+-    borderRadius: radii.md,
++    borderRadius: radii.sm2,
+     gap: space.sm,
+   };
+ 
+diff --git a/packages/ui/src/theme/variants/layout.ts b/packages/ui/src/theme/variants/layout.ts
+index fb2674e2..08171ed9 100644
+--- a/packages/ui/src/theme/variants/layout.ts
++++ b/packages/ui/src/theme/variants/layout.ts
+@@ -1,3 +1,5 @@
++import { borderRadius } from "@xstyled/emotion";
++
+ const layout = {
+   drawerBackdrop: {
+     backgroundColor: "rgba(0, 0, 0, 0.40)",
+@@ -182,6 +184,7 @@ const layout = {
+       "&.active": {
+         background: "green.a300",
+         color: "green.800",
++        borderRadius: "lg"
+       },
+       ":hover": {
+         background: "green.100",
+diff --git a/packages/ui/src/theme/variants/radii.ts b/packages/ui/src/theme/variants/radii.ts
+index 7da88a62..9e52da38 100644
+--- a/packages/ui/src/theme/variants/radii.ts
++++ b/packages/ui/src/theme/variants/radii.ts
+@@ -4,9 +4,11 @@ export type ThemeRadii = {
+   [key: number]: string;
+   full: string;
+   lg: string;
++  md2: string;
+   md: string;
+   none: string;
+   sm: string;
++  sm2: string;
+   xl: string;
+   xxl: string;
+ };
+@@ -15,8 +17,11 @@ export const getRadii = (theme: WuiTheme): ThemeRadii => {
+   return {
+     none: "0",
+     sm: theme.toRem(2),
++    sm2: theme.toRem(3),
+     md: theme.toRem(4),
++    md2: theme.toRem(6),
+     lg: theme.toRem(8),
++
+     xl: theme.toRem(16),
+     xxl: theme.toRem(24),
+     full: "100%",
+diff --git a/packages/ui/src/theme/variants/space.ts b/packages/ui/src/theme/variants/space.ts
+index 51fd5eed..2fa527c3 100644
+--- a/packages/ui/src/theme/variants/space.ts
++++ b/packages/ui/src/theme/variants/space.ts
+@@ -11,6 +11,7 @@ export type ThemeSpace = {
+   lg: string;
+   md: string;
+   sm: string;
++  sm2: string;
+   xl: string;
+   xs: string;
+   xxl: string;
+@@ -22,6 +23,7 @@ export const getSpace = (theme: WuiTheme): ThemeSpace => {
+     xxs: theme.toRem(2),
+     xs: theme.toRem(4),
+     sm: theme.toRem(8),
++    sm2: theme.toRem(9),
+     md: theme.toRem(12),
+     lg: theme.toRem(16),
+     xl: theme.toRem(24),
+diff --git a/packages/ui/src/theme/variants/typography.ts b/packages/ui/src/theme/variants/typography.ts
+index ef39c405..2cdabe76 100644
+--- a/packages/ui/src/theme/variants/typography.ts
++++ b/packages/ui/src/theme/variants/typography.ts
+@@ -16,6 +16,7 @@ export type ThemeFontSizes = {
+   [key: number]: string;
+   xs: string;
+   sm: string;
++  sm2: string;
+   base: string;
+   lg: string;
+   xl: string;
+@@ -36,6 +37,7 @@ export const getFontSizes = (unit: string, theme: WuiTheme): ThemeFontSizes => {
+   return {
+     xs: convert(10),
+     sm: convert(12),
++    sm2: convert(13),
+     base: convert(14),
+     lg: convert(16),
+     xl: convert(18),
+@@ -96,12 +98,14 @@ export type ThemeFontWeights = {
+   bold: number;
+   heading: number;
+   body: number;
++  medium: number;
+ };
+ 
+ export const fontWeights: ThemeFontWeights = {
+   body: 400,
+   heading: 500,
+   bold: 700,
++  medium: 600,
+ };
+ 
+ export type ThemeLetterSpacings = {

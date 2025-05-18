@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text } from '@wraft/ui';
-import { DownloadSimple } from '@phosphor-icons/react';
+import { Box, Button, Flex, Text } from '@wraft/ui';
+import { DownloadSimple, Signature } from '@phosphor-icons/react';
 
 import NavLink from 'common/NavLink';
-import { TimeAgo } from 'common/Atoms';
+import { IconFrame, TimeAgo } from 'common/Atoms';
 import { AvatarCard } from 'common/AvatarCard';
 import { updateVars } from 'utils/index';
 import { IFieldField, IFieldType } from 'utils/types/content';
@@ -14,6 +14,7 @@ import PlaceholderBlock from './PlaceholderBlock';
 import InviteFlowStateMember from '../InviteFlowStateMember';
 import { usePermissions } from '../usePermissions';
 import MetaBlock from './MetaBlock';
+import { TaskBlock } from './TaskBlock';
 
 export const InfoSection = () => {
   const [fieldMaps, setFieldMap] = useState<Array<IFieldType>>();
@@ -105,7 +106,10 @@ export const InfoSection = () => {
     <Box px="md" py="md">
       {editorMode !== 'new' && (
         <>
-          <Box display="none">
+          <Box
+            display="none"
+            //
+          >
             <Text
               as="h3"
               fontSize="sm"
@@ -121,8 +125,10 @@ export const InfoSection = () => {
             />
           </Box>
 
+          {/* <TaskBlock /> */}
+
           {contents?.state?.id && (
-            <Box mt="xs" display="none">
+            <Box mt="xs">
               {/* {additionalCollaborator.length > 0 && (
                 <Text as="h3" mb="xs">
                   Flow Members
@@ -143,13 +149,13 @@ export const InfoSection = () => {
           )}
 
           {contents?.state?.id && (
-            <Box mt="sm">
+            <Box mt="sm" display="none">
               {contents &&
                 !nextState?.is_user_eligible &&
                 !isMakeCompete &&
                 !isEditable && (
                   <>
-                    <Text as="h3">Waiting for approval</Text>
+                    <Text as="h3">Waiting Approval</Text>
                     {nextState &&
                       nextState.approvers &&
                       nextState.approvers.map((approver: any) => (

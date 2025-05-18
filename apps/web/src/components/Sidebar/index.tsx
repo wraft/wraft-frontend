@@ -109,7 +109,7 @@ const Sidebar = (props: any) => {
                       key={name}
                       variant="layout.menuWrapper">
                       <Flex alignItems="center" gap="8px">
-                        <Flex>
+                        <Flex opacity="0.8">
                           {React.cloneElement(icon, {
                             color: checkActive(pathname, path)
                               ? rawColors?.green?.[900]
@@ -163,16 +163,18 @@ const Sidebar = (props: any) => {
               Upgrade Plan
             </Text>
           </Flex>
+          <Box py="lg" px="lg">
+            <Button
+              variant="secondary"
+              // borderRadius="lg"
+              fullWidth={true}
+              onClick={toggleSearch}>
+              <Plus size={14} /> New Document
+            </Button>
+          </Box>
           <Flex px="sm" py="lg" borderTop="solid 1px" borderColor="gray.400">
             <UserSettingsMenu compact={false} />
           </Flex>
-          {/* <Button
-            variant="primary"
-            borderRadius="lg"
-            fullWidth={true}
-            onClick={toggleSearch}>
-            <Plus size={14} /> New Document
-          </Button> */}
         </Box>
       </Flex>
       <Drawer

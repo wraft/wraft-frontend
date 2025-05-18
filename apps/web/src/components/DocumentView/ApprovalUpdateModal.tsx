@@ -40,7 +40,9 @@ export const ApprovalUpdateModal = ({ state, success, open, setOpen }: any) => {
   return (
     <Modal ariaLabel="Approval" open={open}>
       <Flex direction="column" w="372px">
-        <Modal.Header>Confirm Action</Modal.Header>
+        <Modal.Header>
+          <Text fontSize="lg">Confirm Action</Text>
+        </Modal.Header>
 
         <Text
           color="text-secondary"
@@ -59,8 +61,10 @@ export const ApprovalUpdateModal = ({ state, success, open, setOpen }: any) => {
           </Box>
         </Box>
         <Flex mt="xxl" gap="md">
-          <Button onClick={handleModalAction}>Confirm</Button>
-          <Button variant="tertiary" onClick={() => setOpen(false)}>
+          <Button size="sm" onClick={handleModalAction}>
+            Confirm
+          </Button>
+          <Button size="sm" variant="secondary" onClick={() => setOpen(false)}>
             Cancel
           </Button>
         </Flex>

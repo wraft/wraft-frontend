@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useEditor } from "prosekit/react";
 import { InlinePopover } from "prosekit/react/inline-popover";
 import {
+  Chat,
   TextB,
   TextItalic,
   TextStrikethrough,
@@ -14,14 +15,15 @@ import type { EditorExtension } from "./extension";
 const InlineMenuPopover = styled(InlinePopover)`
   z-index: 10;
   box-sizing: border-box;
-  border: 1px solid #fff;
-  background-color: #fff;
+  border: 1px solid var(--theme-ui-colors-gray-200);
+  background-color: var(--theme-ui-colors-gray-100);
+  color: var(--theme-ui-colors-gray-900);
   display: flex;
   min-width: 120px;
-  gap: 4px;
+  gap: 3px;
   overflow: auto;
   white-space: nowrap;
-  border-radius: 4px;
+  border-radius: 6px;
   padding: 2px;
   box-shadow:
     0px 1px 3px 1px rgba(0, 0, 0, 0.15),
@@ -70,6 +72,14 @@ export default function InlineMenu() {
           tooltip="Strikethrough"
         >
           <TextStrikethrough size={18} />
+        </Button>
+        <Button
+          pressed={editor.marks.strike.isActive()}
+          disabled={!editor.commands.toggleStrike.canExec()}
+          onClick={() => editor.commands.toggleStrike()}
+          tooltip="Strikethrough"
+        >
+          <Chat size={18} />
         </Button>
       </InlineMenuPopover>
     </>

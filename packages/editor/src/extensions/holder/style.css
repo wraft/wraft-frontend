@@ -3,14 +3,20 @@
   color: var(--theme-ui-colors-green-1100);
   padding: 0px 4px;
   border-radius: 3px;
-  font-weight: 400;
-  font-size: 14px;
-  border: solid 1px var(--theme-ui-colors-green-400);
+  font-weight: 500;
+  padding-left: 4px;
+  padding-right: 4px;
+  border-right: solid 2px var(--theme-ui-colors-green-700);
+  border-left: solid 2px var(--theme-ui-colors-green-600);
 }
 
 .no-holder {
-  background-color: rgba(243, 120, 18, 0.38);
-  color: rgba(95, 54, 20, 0.9);
+  background-color: var(--theme-ui-colors-orange-100);
+  color: var(--theme-ui-colors-orange-1000);
   padding: 1px;
-  border-bottom: 2px solid rgb(112, 212, 191);
+  border-right: solid 2px var(--theme-ui-colors-orange-400);
+  border-left: solid 2px var(--theme-ui-colors-orange-400);
+  padding-left: 4px;
+  padding-right: 4px;
+  border-radius: 3px;
 }

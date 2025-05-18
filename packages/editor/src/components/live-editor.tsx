@@ -16,6 +16,15 @@ import { markdownFromHTML } from "@helpers/markdown";
 import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
 import { IndexeddbPersistence } from "y-indexeddb";
+import { Box, Text, Flex, Button } from "@wraft/ui";
+import {
+  ArrowDown,
+  ArrowsHorizontal,
+  ArrowsOutSimple,
+  CaretDown,
+  ClockCounterClockwise,
+  Eye,
+} from "@phosphor-icons/react";
 import { getRandomColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
@@ -26,6 +35,7 @@ import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
+import EditorHeader from "./header";
 
 export interface EditorProps {
   defaultContent?: NodeJSON;
@@ -37,6 +47,7 @@ export interface EditorProps {
   isReadonly?: boolean;
   tokens?: any;
   collabData?: any;
+  onSwitchView?: (content: string) => void;
 }
 
 export const LiveEditor = forwardRef(
@@ -49,6 +60,7 @@ export const LiveEditor = forwardRef(
       tokens,
       socketUrl = "ws://localhost:4000",
       collabData,
+      onSwitchView,
     }: EditorProps,
     ref,
   ) => {
@@ -232,12 +244,11 @@ export const LiveEditor = forwardRef(
       <>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           <ProseKit editor={editor}>
-            <div className="toolbar">{!isReadonly && <Toolbar />}</div>
-
+            <EditorHeader isReadonly={isReadonly} onSwitchView={onSwitchView} />
             <S.EditorContainer>
               <S.EditorContent>
                 <S.EditorContentInput ref={editor.mount} />
-                {/* {!isReadonly && <InlineMenu />} */}
+                {!isReadonly && <InlineMenu />}
                 <SlashMenu />
                 {tokens && <TokenMenu tokens={tokens} />}
                 {/* <TagMenu /> */}

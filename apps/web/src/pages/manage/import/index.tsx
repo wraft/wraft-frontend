@@ -10,7 +10,7 @@ const Contents: FC = () => {
     <>
       <Head>
         <title>Import | Wraft </title>
-        <meta name="description" content="Import Document structures" />
+        <meta name="description" content="Import Document Artifacts" />
       </Head>
       <Page>
         <PageHeader
@@ -24,7 +24,7 @@ const Contents: FC = () => {
               path: 'import',
             },
           ]}
-          desc="Import Document Structures"
+          desc="Import Document Artifacts"
         />
         <ImporterWrapper />
       </Page>

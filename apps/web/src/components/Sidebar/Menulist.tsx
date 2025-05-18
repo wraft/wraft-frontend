@@ -10,7 +10,8 @@ import {
   House,
 } from '@phosphor-icons/react';
 
-const defaultIcon = 18;
+const defaultIcon = 16;
+const defaultWeight = 'regular';
 
 export const Menulist = [
   {
@@ -18,17 +19,17 @@ export const Menulist = [
     menus: [
       {
         name: 'Overview',
-        icon: <House size={defaultIcon} />,
+        icon: <House size={defaultIcon} weight={defaultWeight} />,
         path: '/',
       },
       {
         name: 'Documents',
-        icon: <FileText size={defaultIcon} />,
+        icon: <FileText size={defaultIcon} weight={defaultWeight} />,
         path: '/documents',
       },
       {
         name: 'Approvals',
-        icon: <ThumbsUp size={defaultIcon} />,
+        icon: <ThumbsUp size={defaultIcon} weight={defaultWeight} />,
         path: '/approvals',
       },
     ],
@@ -38,13 +39,13 @@ export const Menulist = [
     menus: [
       {
         name: 'Pipelines',
-        icon: <GitBranch size={defaultIcon} />,
+        icon: <GitBranch size={defaultIcon} weight={defaultWeight} />,
         path: '/pipelines',
         permissions: ['pipeline.show', 'pipeline.manage'],
       },
       {
         name: 'Templates',
-        icon: <Article size={defaultIcon} />,
+        icon: <Article size={defaultIcon} weight={defaultWeight} />,
         path: '/templates',
         permissions: ['template.show', 'template.manage'],
       },
@@ -55,7 +56,7 @@ export const Menulist = [
     menus: [
       {
         name: 'Artifacts',
-        icon: <Blueprint size={defaultIcon} />,
+        icon: <Blueprint size={defaultIcon} weight={defaultWeight} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
       },
@@ -73,7 +74,7 @@ export const Menulist = [
       // },
       {
         name: 'Manage',
-        icon: <UserFocus size={defaultIcon} />,
+        icon: <UserFocus size={defaultIcon} weight={defaultWeight} />,
         path: '/manage',
       },
     ],

@@ -8,6 +8,8 @@ import PageHeader from 'common/PageHeader';
 import { useAuth } from 'contexts/AuthContext';
 import { checkSubRoutePermission } from 'utils/permissions';
 
+import { IconFrame } from './Atoms';
+
 export interface INav {
   showFull?: boolean;
 }
@@ -23,7 +25,7 @@ const ManageHomePage = () => {
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Manage" desc="Manage Variants" />
 
-      <Grid templateColumns="repeat(2, 1fr)" p="lg" gap="md" w="70%">
+      <Grid templateColumns="repeat(2, 1fr)" p="xl" gap="lg" w="70%">
         {mainMenu &&
           mainMenu.map((menu: any, index: any) => (
             <NavLink href={menu.path} key={index}>
@@ -32,13 +34,19 @@ const ManageHomePage = () => {
                 bg="background-primary"
                 border="solid 1px"
                 borderColor="border"
-                borderRadius="sm"
+                borderRadius="md"
                 gap="md"
                 p="md">
-                <Box>{menu.icon}</Box>
+                <Box>
+                  <IconFrame color="gray.800">{menu.icon}</IconFrame>
+                </Box>
                 <Box pl={3} pr={2}>
-                  <Text fontWeight="heading">{menu.name}</Text>
-                  <Text color="text-secondary">{menu.desc}</Text>
+                  <Text fontSize="sm2" fontWeight="medium">
+                    {menu.name}
+                  </Text>
+                  <Text fontSize="sm2" color="text-secondary">
+                    {menu.desc}
+                  </Text>
                 </Box>
               </Flex>
             </NavLink>

@@ -21,7 +21,7 @@ import { postAPI } from 'utils/models';
 import { authorizeRoute } from 'middleware/authorize';
 
 import { useDocument } from './DocumentContext';
-import AwarenessUsers from './AwarenessUsers';
+// import AwarenessUsers from './AwarenessUsers';
 import { EditorMode, usePermissions } from './usePermissions';
 
 export const API_HOST =
@@ -80,15 +80,7 @@ export const StepBlock = ({
         />
       )}
       <Box>
-        <Text
-          as="h5"
-          // fontFamily: 'body',
-
-          //   color: 'text-primary',
-          //   mb: 0,
-        >
-          {title}
-        </Text>
+        <Text as="h5">{title}</Text>
       </Box>
     </Flex>
   );
@@ -234,6 +226,9 @@ export const DocumentContentBlock = () => {
   const tabView = useTabStore();
   const { activeId } = tabView.useState();
 
+  const [activeView, setActiveView] = useState<EditorMode>('view');
+  const [isReadonly, setIsReadonly] = useState<boolean>(true);
+
   const defaultSelectedId = 'edit';
 
   const collabData = {
@@ -244,6 +239,21 @@ export const DocumentContentBlock = () => {
     roomId: cId,
     // roomId: `editor-${cId}`,
     documentId: cId,
+  };
+
+  const onSwitched = (mode: EditorMode) => {
+    console.log('mode', mode);
+    setActiveView(mode);
+    if (mode === 'suggest') {
+      setIsReadonly(false);
+      setEditorMode('edit');
+    } else if (mode === 'edit') {
+      setIsReadonly(false);
+      setEditorMode('edit');
+    } else {
+      setIsReadonly(true);
+      setEditorMode('view');
+    }
   };
 
   const onSwitchEditorMode = (mode: EditorMode) => {
@@ -312,7 +322,8 @@ export const DocumentContentBlock = () => {
                 display="none"
                 border="solid 1px"
                 borderColor="gray.500"
-                borderRadius="md">
+                // borderRadius="md"
+              >
                 <Text
                   as="span"
                   // lineHeight="heading"
@@ -338,7 +349,7 @@ export const DocumentContentBlock = () => {
                 </Text>
               </Flex>
               <Flex>
-                <Flex align="center" gap="sm">
+                <Flex align="center" gap="sm" display="none">
                   {!isEditable && (
                     <Flex gap="2px" bg="green">
                       {activeId === 'view' && canAccess('docGenerator') && (
@@ -346,7 +357,7 @@ export const DocumentContentBlock = () => {
                           variant="secondary"
                           // display="none"
                           size="sm"
-                          gap="xxs"
+                          // gap="xxs"
                           loading={isBuilding}
                           disabled={isBuilding}
                           onClick={() => doBuild()}>
@@ -359,15 +370,15 @@ export const DocumentContentBlock = () => {
                           </Text>
                         </Button>
                       )}
-                      {canAccess('docEdit') && (
+                      {activeId === 'edit' && canAccess('docEdit') && (
                         <Button
                           variant="secondary"
                           size="sm"
-                          px="sm"
-                          gap={0}
-                          borderRadius="md2"
-                          ml="sm"
-                          display="flex"
+                          // px="sm"
+                          // gap={0}
+                          // borderRadius="md2"
+                          // ml="sm"
+                          // display="flex"
                           onClick={() => onSwitchEditorMode(editorMode)}>
                           {editorMode === 'edit' ? (
                             <Eye size={13} />
@@ -436,12 +447,13 @@ export const DocumentContentBlock = () => {
                           {/* <Toolbar /> */}
                           <LiveEditor
                             defaultContent={contentBody}
-                            isReadonly={editorMode === 'view'}
+                            isReadonly={isReadonly}
                             ref={editorRef}
                             tokens={fieldTokens}
                             isCollaborative={true}
                             collabData={collabData}
                             socketUrl={socketUrl}
+                            onSwitchView={onSwitched}
                           />
                         </>
                       )}

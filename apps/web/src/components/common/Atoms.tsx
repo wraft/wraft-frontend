@@ -13,6 +13,7 @@ interface TimeAgoProps {
   time?: any;
   ago?: boolean;
   short?: boolean;
+  fontSize?: 'sm' | 'md' | 'lg';
 }
 
 export const TimeAgo = (props: TimeAgoProps) => {
@@ -23,6 +24,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
   );
   const now = new Date();
+  const fontSize = props.fontSize || 'sm';
 
   const timeDifferenceInMs = now.getTime() - local_time.getTime();
 
@@ -32,7 +34,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
       : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
 
   return (
-    <Text mt={props?.short ? 0 : 0} fontSize="sm">
+    <Text mt={props?.short ? 0 : 0} fontSize={fontSize} opacity="0.8">
       {timed}
     </Text>
   );
@@ -103,12 +105,14 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       <Box
         borderRadius="3rem"
         h="12px"
-        w="12px"
-        border="solid 1px"
-        borderColor="border"
+        w="4px"
+        // border="solid 1px"
+        // borderColor="border"
         bg={color}
       />
-      <Text mt={1}>{title}</Text>
+      <Text fontWeight={500} mt={1}>
+        {title}
+      </Text>
     </Flex>
   );
 };
@@ -276,5 +280,38 @@ export const IconFrame = ({ color, children }: IconWrapperProps) => {
     <IconWrapped color={color} display="flex" alignItems="center">
       {children}
     </IconWrapped>
+  );
+};
+
+/**
+ *  User stack component
+ *
+ */
+
+export const UserSampleList = () => {
+  const names = ['Muneef Hameed', 'Salsabeel', 'Vasil', 'Shijith K'];
+
+  return (
+    <Flex mr="sm" align-items="center">
+      {names &&
+        names.map((name: any) => (
+          <Box
+            key={name}
+            as="img"
+            alt="Avatar 01"
+            loading="lazy"
+            borderRadius="xl"
+            width="24"
+            height="24"
+            className="shrink-0 rounded-full"
+            style={{
+              border: '2px solid var(--colors-background-primary)',
+              color: 'transparent',
+              marginLeft: '-4px',
+            }}
+            src={`https://ui-avatars.com/api/?name=${name}`}
+          />
+        ))}
+    </Flex>
   );
 };

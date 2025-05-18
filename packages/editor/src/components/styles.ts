@@ -25,7 +25,6 @@ export const EditorWrapper = styled.divBox`
     position: sticky;
     top: 0;
     z-index: 1;
-    background: white;
   }
 `;
 
@@ -40,6 +39,15 @@ export const EditorContent = styled.divBox`
   }
   .ProseMirror p {
     line-height: 1.5;
+  }
+
+  .ProseMirror table p {
+    line-height: 0.5rem;
+  }
+
+  .ProseMirror th {
+    text-align: left;
+    background-color: var(--theme-ui-colors-gray-200);
   }
 
   .ProseMirror .ProseMirror-yjs-cursor {
@@ -92,7 +100,7 @@ export const EditorContent = styled.divBox`
     border-width: 1px;
     padding-left: 0.75rem;
     padding-right: 0.75rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--theme-ui-colors-gray-700);
   }
   .ProseMirror .column-resize-handle {
     position: absolute;

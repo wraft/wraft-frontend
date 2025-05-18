@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Box, Flex, Text } from '@wraft/ui';
+import { Box, Flex, Text, Button } from '@wraft/ui';
 import {
   ArrowLeft,
   Bell,
@@ -14,6 +14,9 @@ import styled, { x } from '@xstyled/emotion';
 import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
+
+import { UserSampleList } from './Atoms';
+// import { Button } from 'components/DocumentView/InviteFlowStateMember/styles';
 
 const IconFrame = styled.divBox`
   display: flex;
@@ -92,54 +95,30 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
 
       <Flex ml="auto" alignItems="center" gap="md">
         <Flex position="relative" alignItems="center" pr="sm" cursor="pointer">
-          <Flex
-            position="relative"
-            borderRadius="full"
-            overflow="hidden"
-            boxShadow="sm"
-            _hover={{ boxShadow: 'md' }}>
-            <Box
-              position="relative"
-              width="32px"
-              height="32px"
-              bg="primary.500"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border="2px solid"
-              borderColor="background-primary"
-              zIndex="3">
-              {/* <img
-                width={14}
-                src="https://dev-cdn.poetbin.com/wraft-dev/users/4b150b8f-5c37-4bdf-b3cd-d1ee2ccea8f3/profile/profilepic_377ba31a-2a08-4cff-9b0b-1133d9aa22c6.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=wraft-dev%2F20250515%2Flocal%2Fs3%2Faws4_request&X-Amz-Date=20250515T185545Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=43c7190cb107d57a9b71cc4442b9aa8d48ade43bc84536754dfba0e9d167aea7"
-              /> */}
-              <Text color="gray.1100" fontSize="xs" fontWeight="bold">
-                L
-              </Text>
-            </Box>
-            <x.div
-              position="absolute"
-              left="15px"
-              width="32px"
-              height="32px"
-              bg="success.500"
-              borderRadius="full"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              border="2px solid"
-              borderColor="background-primary"
-              zIndex="2">
-              <Text color="gray.1100" fontSize="xs" fontWeight="bold">
-                U
-              </Text>
-            </x.div>
+          <Flex gap="sm" alignItems="center">
+            <UserSampleList />
+            <Button
+              variant="secondary"
+              // ml={3}
+              // h="8"
+              // px="3"
+              fontSize="sm2"
+              // bg="primary"
+              // color="white"
+              fontWeight="medium"
+              // borderRadius="lg"
+              // display="inline-flex"
+              // alignItems="center"
+              // justifyContent="center"
+              // gap="2"
+              size="sm"
+              // transition="all"
+              _hover={{ bg: 'primary-dark' }}>
+              Share
+            </Button>
           </Flex>
         </Flex>
         <Flex
-          borderLeft="solid 1px"
-          borderColor="border"
           alignItems="center"
           // color="red.400"
           pl="sm">

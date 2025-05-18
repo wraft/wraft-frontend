@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@xstyled/emotion';
 import { keyframes } from '@emotion/react';
 
 export const Container = styled.div`
@@ -91,7 +91,8 @@ export const MemberName = styled.div`
   font-weight: 500;
   text-decoration: none;
   padding-right: 8px;
-
+  font-size: base;
+  color: gray.1100;
   &:hover {
     text-decoration: underline;
   }

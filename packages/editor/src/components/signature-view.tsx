@@ -95,9 +95,9 @@ const StyledResizableRoot = styled(ResizableRoot)`
   min-height: 64px;
   min-width: 64px;
   outline: 2px solid transparent;
-
-  background: #ccc;
-  border: 1px solid #000;
+  background: var(--theme-ui-colors-green-200);
+  border: solid 1.5px var(--theme-ui-colors-green-700);
+  color: var(--theme-ui-colors-green-1100);
   border-radius: 8px;
   &[data-selected] {
     outline-color: blue;

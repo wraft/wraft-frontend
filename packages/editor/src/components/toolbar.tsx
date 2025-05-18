@@ -20,11 +20,12 @@ import {
   ArrowsInLineVertical,
 } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
-import { Flex } from "@wraft/ui";
+import { Flex, Button as BtnBase } from "@wraft/ui";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 import { ImageUploadPopover } from "./image-upload-popover";
 import { TableMenu } from "./tableMenu";
+import EditModeSwitch from "./mode-switch";
 
 const ToolbarContainer = styled.divBox`
   z-index: 2;
@@ -46,7 +47,12 @@ const Separator = styled.divBox`
   margin: 0 4px;
 `;
 
-export default function Toolbar() {
+interface ToolbarProps {
+  isReadonly?: boolean;
+  onSwitchView?: (mode: string) => void;
+}
+
+export default function Toolbar({ isReadonly, onSwitchView }: ToolbarProps) {
   const editor = useEditor<EditorExtension>({ update: true });
   const [isTableActive, setIsTableActive] = useState(false);
 
@@ -99,7 +105,7 @@ export default function Toolbar() {
       borderBottom="0"
       borderColor="gray.a400"
     >
-      <Button
+      {/* <Button
         pressed={false}
         disabled={!editor.commands.undo.canExec()}
         onClick={editor.commands.undo}
@@ -114,7 +120,7 @@ export default function Toolbar() {
         tooltip="Redo"
       >
         <ArrowClockwise size={16} weight="bold" />
-      </Button>
+      </Button> */}
       <Button
         pressed={editor.marks.bold.isActive()}
         disabled={!editor.commands.toggleBold.canExec()}
@@ -226,9 +232,7 @@ export default function Toolbar() {
         <ImageIcon size={18} />
       </ImageUploadPopover>
       <Flex ml="auto" px="sm" gap="sm">
-        <Button size="xs">Suggest</Button>
-        <Button size="xs">Edit</Button>
-        <Button size="xs">View</Button>
+        <EditModeSwitch isReadonly={isReadonly} onSwitchView={onSwitchView} />
       </Flex>
     </ToolbarContainer>
   );

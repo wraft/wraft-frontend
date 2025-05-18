@@ -92,7 +92,7 @@ export default function InviteBlock({ docId }: any) {
   return (
     <Box w="42rem">
       <Box>
-        <Text fontSize="3xl" fontWeight="heading" mb="sm">
+        <Text fontSize="xl" fontWeight="heading" mb="sm">
           Invite Member
         </Text>
         <Text color="text-secondary">
