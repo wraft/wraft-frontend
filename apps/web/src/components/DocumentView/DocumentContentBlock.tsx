@@ -432,8 +432,8 @@ export const DocumentContentBlock = () => {
               )}
               <PdfSignerViewer
                 signerBoxes={signerBoxes}
-                url={contents?.content?.build}
-                // url={contents?.content?.signed_doc_url}
+                // url={contents?.content?.build}
+                url={contents?.content?.signed_doc_url}
               />
             </TabPanel>
           </TabProvider>

@@ -92,6 +92,7 @@ interface DocumentContextProps {
   setTabActiveId: (state: string) => void;
   setSignerBoxes: (boxs: any) => void;
   setSigners: (signers: Counterparty[]) => void;
+  setContents: (contents: ContentInstance) => void;
 }
 
 const createAxiosInstance = (): AxiosInstance => {
@@ -509,6 +510,7 @@ export const DocumentProvider = ({
         setTabActiveId,
         setSignerBoxes,
         setSigners,
+        setContents,
       }}>
       {children}
     </DocumentContext.Provider>

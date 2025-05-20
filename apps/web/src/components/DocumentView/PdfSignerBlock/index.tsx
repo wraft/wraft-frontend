@@ -22,6 +22,7 @@ import { Signature, X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { postAPI } from 'utils/models';
+import { ContentInstance } from 'utils/types/content';
 
 import { SignatureCanvasComponent } from './SignatureCanvas';
 import { useDocument } from '../DocumentContext';
@@ -31,20 +32,10 @@ import 'react-pdf/dist/Page/TextLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
-type ExtendedSignatureCanvas = SignatureCanvas & {
-  getCanvas: () => HTMLCanvasElement;
-};
-
 interface PdfViewerProps {
   url?: string;
   signerBoxes?: any;
 }
-
-const CANVAS_DIMENSIONS = {
-  width: 500,
-  height: 200,
-  aspectRatio: '800/300',
-};
 
 interface AnnotationDetailsType {
   x: number;
@@ -142,7 +133,6 @@ const getAppearanceRefForWidget = (
 };
 
 const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
-  const signatureCanvasRef = useRef<ExtendedSignatureCanvas | null>(null);
   const [selectedCounterparty, setSelectedCounterparty] = useState<string>('');
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [numPages, setNumPages] = useState<number>();
@@ -150,8 +140,16 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
   const [currentSignBox, setCurrentSignBox] = useState<any>(null);
   const [annotationDetails, setAnnotationDetails] =
     useState<AnnotationDetailsType | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSavingSignature, setIsSavingSignature] = useState(false);
 
-  const { signers, cId: contentId, setSignerBoxes } = useDocument();
+  const {
+    signers,
+    cId: contentId,
+    contents,
+    setSignerBoxes,
+    setContents,
+  } = useDocument();
   const renderWidth = 760;
 
   useEffect(() => {
@@ -249,8 +247,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       return;
     }
 
-    // const formData = new FormData();
-    // formData.append('signature_image', signatureDataUrl);
+    setIsSavingSignature(true);
 
     const res = await fetch(signatureDataUrl);
     const blob = await res.blob();
@@ -259,18 +256,51 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     formData.append('signature_image', blob, 'signature.png');
 
     try {
-      const response = postAPI(
+      const response: any = await postAPI(
         `contents/${contentId}/signatures/${currentSignBox?.counter_party?.id}/append_signature`,
         formData,
       );
+
+      setSignerBoxes((prev: any) =>
+        prev.map((box: any) =>
+          box?.counter_party?.id === currentSignBox?.counter_party?.id
+            ? {
+                ...box,
+                counter_party: {
+                  ...box?.counter_party,
+                  signature_status: 'signed',
+                },
+              }
+            : box,
+        ),
+      );
+      if (contents) {
+        const updatedContents: ContentInstance = {
+          ...contents,
+          content: {
+            ...contents.content,
+            signed_doc_url: response?.signed_pdf_url || null,
+          },
+        };
+        setContents(updatedContents);
+      }
       console.log('response', response);
+      toast.success('Signature saved successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      setIsSignatureModalOpen(false);
     } catch (error) {
       console.error('Error uploading signature:', error);
+      toast.error('Failed to save signature');
+    } finally {
+      setIsSavingSignature(false);
     }
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     postAPI(`contents/${contentId}/signatures/${currentSignBox.id}/assign`, {
       counterparty_id: selectedCounterparty,
@@ -295,6 +325,9 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       .catch((error) => {
         console.error('Error assigning counterparty:', error);
         toast.error('Failed to save');
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -378,7 +411,12 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
                 ]}
               />
               <Box py="lg">
-                <Button type="submit">Assign</Button>
+                <Button
+                  type="submit"
+                  loading={isSubmitting}
+                  disabled={isSubmitting}>
+                  Assign
+                </Button>
               </Box>
             </Flex>
           </form>
@@ -402,6 +440,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
           <SignatureCanvasComponent
             onSave={handleSignatureSave}
             onCancel={handleSignatureCancel}
+            loading={isSavingSignature}
           />
         )}
       </Box>

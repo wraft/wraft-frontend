@@ -27,7 +27,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
 
   const { hasPermission } = usePermission();
-  const { cId, setSignerBoxes, signerBoxes } = useDocument();
+  const { cId, contents, setSignerBoxes, setContents } = useDocument();
 
   useEffect(() => {
     fetchAPI(`contents/${cId}/signatures`).then((data: any) => {
@@ -52,19 +52,31 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
 
   const onbuildforSigning = () => {
     console.log('onbuildforSigning');
-    postAPI(`contents/${cId}/generate_signature`, {})
-      .then(() => {
-        // setIsBuilding(false);
-
-        toast.success('Build done successfully', {
-          duration: 500,
-          position: 'top-right',
-        });
-      })
-      .catch(() => {
-        // setIsBuilding(false);
-        toast.error('Build Failed');
-      });
+    toast.promise(
+      postAPI(`contents/${cId}/generate_signature`, {}),
+      {
+        loading: 'Building for signing...',
+        success: (response: any) => {
+          console.log('response', response);
+          if (contents) {
+            const updatedContents: ContentInstance = {
+              ...contents,
+              content: {
+                ...contents.content,
+                signed_doc_url: response?.document_url || null,
+              },
+            };
+            setContents(updatedContents);
+          }
+          setSignerBoxes(response.signatures);
+          return `Build done successfully`;
+        },
+        error: 'Build Failed',
+      },
+      {
+        position: 'top-right',
+      },
+    );
   };
 
   return (

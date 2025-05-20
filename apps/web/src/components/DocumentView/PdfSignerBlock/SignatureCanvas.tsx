@@ -11,6 +11,7 @@ type ExtendedSignatureCanvas = SignatureCanvas & {
 interface SignatureCanvasProps {
   onSave: (dataUrl: string) => void;
   onCancel: () => void;
+  loading?: boolean;
 }
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
@@ -23,6 +24,7 @@ const CANVAS_DIMENSIONS = {
 export const SignatureCanvasComponent = ({
   onSave,
   onCancel,
+  loading = false,
 }: SignatureCanvasProps) => {
   const signatureCanvasRef = useRef<ExtendedSignatureCanvas | null>(null);
   const [hasSignature, setHasSignature] = useState(false);
@@ -158,7 +160,11 @@ export const SignatureCanvasComponent = ({
               onEnd={() => setHasSignature(true)}
             />
             <Box mt="md">
-              <Button size="sm" variant="secondary" onClick={clearSignature}>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={clearSignature}
+                disabled={loading}>
                 Clear
               </Button>
             </Box>
@@ -170,13 +176,18 @@ export const SignatureCanvasComponent = ({
             </Text>
 
             <Flex justifyContent="space-between" mt="md">
-              <Button variant="secondary" size="sm" onClick={onCancel}>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={onCancel}
+                disabled={loading}>
                 Cancel
               </Button>
               <Button
                 size="sm"
                 onClick={handleSignatureSave}
-                disabled={!hasSignature}>
+                disabled={!hasSignature || loading}
+                loading={loading}>
                 Accept and sign
               </Button>
             </Flex>
@@ -196,8 +207,9 @@ export const SignatureCanvasComponent = ({
               borderRadius="sm"
               h="100%"
               py="lg"
-              px="sm">
-              <input {...getInputProps()} />
+              px="sm"
+              style={{ pointerEvents: loading ? 'none' : 'auto' }}>
+              <input {...getInputProps()} disabled={loading} />
 
               {!uploadedFile && (
                 <>
@@ -238,7 +250,10 @@ export const SignatureCanvasComponent = ({
                       </Box>
                     )}
                   </Flex>
-                  <Button variant="tertiary" onClick={resetFileUpload}>
+                  <Button
+                    variant="tertiary"
+                    onClick={resetFileUpload}
+                    disabled={loading}>
                     Re-upload
                   </Button>
                 </Box>
@@ -247,14 +262,19 @@ export const SignatureCanvasComponent = ({
           </Box>
 
           <Flex justifyContent="space-between" mt="3xl">
-            <Button variant="secondary" size="sm" onClick={onCancel}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onCancel}
+              disabled={loading}>
               Cancel
             </Button>
             <Button
               variant="primary"
               size="sm"
               onClick={handleFileUpload}
-              disabled={!previewUrl}>
+              disabled={!previewUrl || loading}
+              loading={loading}>
               Insert Signature
             </Button>
           </Flex>
