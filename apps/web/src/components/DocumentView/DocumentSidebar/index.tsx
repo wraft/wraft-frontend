@@ -132,7 +132,7 @@ export const DocumentSidebar = () => {
           {canAccess('log') && (
             <Tab.Panel tabId="signers" store={tab}>
               <Box mt="md" px="md">
-                {tabActiveId === 'signers' && <SignerBlock />}
+                <SignerBlock />
               </Box>
             </Tab.Panel>
           )}
