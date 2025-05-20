@@ -2,6 +2,7 @@
 import { UploadTask } from "prosekit/extensions/file";
 import type { ReactNodeViewProps } from "prosekit/react";
 import { useEffect, useState, useRef, type SyntheticEvent } from "react";
+import { Box, Button, Flex, Text } from "@wraft/ui";
 import {
   ArrowDownRight,
   ImageBroken,
@@ -11,7 +12,6 @@ import {
   UserPlus,
   X,
 } from "@phosphor-icons/react";
-import { Box, Button, Flex, Text } from "@wraft/ui";
 import type { SignatureAttrs } from "../../extensions/signature";
 import {
   Toolbar,

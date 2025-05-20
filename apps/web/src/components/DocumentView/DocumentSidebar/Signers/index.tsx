@@ -115,7 +115,7 @@ const SignerAddBlock = ({
 const SignerBlock = () => {
   const { cId } = useDocument();
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const [signers, setSigners] = useState<Counterparty[]>([]);
+  const { signers, setSigners } = useDocument();
 
   const onInvite = () => {
     setDialogOpen(true);
@@ -189,9 +189,8 @@ const SignerBlock = () => {
         onClose={() => setDialogOpen(false)}>
         <SignerAddBlock
           onClose={() => setDialogOpen(false)}
-          addSigner={(data: Counterparty) =>
-            setSigners((prev) => [...prev, data])
-          }
+          //@ts-expect-error need to fix
+          addSigner={(data: any) => setSigners((prev: any) => [...prev, data])}
         />
       </Modal>
     </>
