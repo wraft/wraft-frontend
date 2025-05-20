@@ -23,6 +23,7 @@ import { authorizeRoute } from 'middleware/authorize';
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
 import { EditorMode, usePermissions } from './usePermissions';
+import PdfSignerViewer from './PdfSignerBlock';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -212,6 +213,7 @@ export const DocumentContentBlock = () => {
     editorRef,
     contentBody,
     fieldTokens,
+    signerBoxes,
     setEditorMode,
     fetchContentDetails,
   } = useDocument();
@@ -309,6 +311,9 @@ export const DocumentContentBlock = () => {
                 <Tab id="view">
                   <StepBlock title="Document" desc="Sign and Manage" />
                 </Tab>
+                <Tab id="sign">
+                  <StepBlock title="Signature" desc="Sign and Manage" />
+                </Tab>
               </TabList>
               <Flex align="center" gap="sm">
                 {contentBody && <AwarenessUsers />}
@@ -400,6 +405,36 @@ export const DocumentContentBlock = () => {
                   <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
                 </PdfWrapper>
               )}
+            </TabPanel>
+            <TabPanel store={tabView} className="main-content">
+              {!contents?.content?.build && (
+                <Box
+                  w="100%"
+                  mx="md"
+                  p="xl"
+                  border="solid 1px"
+                  borderColor="border">
+                  <Text fontSize="xl" fontWeight="heading" mb="xs">
+                    Document not generated
+                  </Text>
+                  <Text color="text-secondary" mb="md">
+                    Documents need to be generated
+                  </Text>
+                  <Button
+                    variant="secondary"
+                    loading={isBuilding}
+                    disabled={isBuilding}
+                    onClick={() => doBuild()}>
+                    <Play size={14} className="action" />
+                    Generate
+                  </Button>
+                </Box>
+              )}
+              <PdfSignerViewer
+                signerBoxes={signerBoxes}
+                url={contents?.content?.build}
+                // url={contents?.content?.signed_doc_url}
+              />
             </TabPanel>
           </TabProvider>
         </TabWrapper>

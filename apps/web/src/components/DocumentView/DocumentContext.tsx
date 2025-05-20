@@ -40,6 +40,16 @@ interface StateState {
   updated_at: string;
 }
 
+type Counterparty = {
+  id: string;
+  name: string;
+  email: string;
+  updated_at: string;
+  signature_date: string | null;
+  created_at: string;
+  signature_status: 'pending' | 'signed' | 'rejected';
+};
+
 interface DocumentContextProps {
   additionalCollaborator: any;
   cId: string;
@@ -68,8 +78,11 @@ interface DocumentContextProps {
   tabActiveId: string;
   token: string | null;
   userType: UserType;
-  fetchContentDetails: (cid: string) => void;
+  signerBoxes: any;
+  signers: Counterparty[];
   setAdditionalCollaborator: (data: any) => void;
+  setUserType: (state: UserType) => void;
+  fetchContentDetails: (cid: string) => void;
   setContentBody: (contetn: any) => void;
   setEditorMode: (state: EditorMode) => void;
   setFieldTokens: (data: any) => void;
@@ -77,7 +90,8 @@ interface DocumentContextProps {
   setMeta: (data: any) => void;
   setPageTitle: (data: any) => void;
   setTabActiveId: (state: string) => void;
-  setUserType: (state: UserType) => void;
+  setSignerBoxes: (boxs: any) => void;
+  setSigners: (signers: Counterparty[]) => void;
 }
 
 const createAxiosInstance = (): AxiosInstance => {
@@ -97,27 +111,29 @@ export const DocumentProvider = ({
   children: ReactElement;
   mode: EditorMode;
 }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
   const [contentBody, setContentBody] = useState<NodeJSON>();
-  const [contents, setContents] = useState<ContentInstance>();
   const [contentType, setContentType] = useState<any>();
-  const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
-  const [userType, setUserType] = useState<UserType>('default');
+  const [contents, setContents] = useState<ContentInstance>();
   const [docRole, setDocRole] = useState<DocRole>('viewer');
-  const [fields, setField] = useState<Array<FieldT>>([]);
+  const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
+  const [error, setError] = useState(null);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
-  const [meta, setMeta] = useState<any>({});
-  const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
+  const [fields, setField] = useState<Array<FieldT>>([]);
   const [flow, setFlow] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [meta, setMeta] = useState<any>({});
   const [nextState, setNextState] = useState<StateState>();
   const [pageTitle, setPageTitle] = useState<string>('Untitled document');
   const [prevState, setPrevState] = useState<StateState>();
   const [selectedTemplate, setSelectedTemplate] = useState<any>();
+  const [signerBoxes, setSignerBoxes] = useState<any>();
   const [states, setStates] = useState<any>();
   const [tabActiveId, setTabActiveId] = useState<any>('edit');
-  const [error, setError] = useState(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [userType, setUserType] = useState<UserType>('default');
+  const [signers, setSigners] = useState<Counterparty[]>([]);
 
   const newContent = contentStore((state: any) => state.newContents);
   const editorRef = useRef<any>();
@@ -479,8 +495,11 @@ export const DocumentProvider = ({
         lastSavedContent,
         meta,
         isInvite,
-        fetchContentDetails,
+        signerBoxes,
+        signers,
         setAdditionalCollaborator,
+        setUserType,
+        fetchContentDetails,
         setContentBody,
         setEditorMode,
         setFieldTokens,
@@ -488,7 +507,8 @@ export const DocumentProvider = ({
         setMeta,
         setPageTitle,
         setTabActiveId,
-        setUserType,
+        setSignerBoxes,
+        setSigners,
       }}>
       {children}
     </DocumentContext.Provider>
