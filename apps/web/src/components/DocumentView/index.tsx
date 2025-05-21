@@ -249,53 +249,40 @@ const DocumentView = () => {
                       />
                     ))}
                 </Flex>
-
-                {/* <TriangleBreadcrumbs
-                  items={[
-                    { label: 'Home', href: '/', isActive: true },
-                    {
-                      label: 'Documents',
-                      href: '/documents',
-                      isActive: false,
-                    },
-                    { label: 'Flow', href: '/flow', isActive: false },
-                  ]}
-                /> */}
-
                 <Flex ml="auto" alignItems="center" mr="xxs">
-                  {editorMode === 'view' &&
-                    !contents?.content?.approval_status && (
-                      <Flex
-                        p={0}
-                        gap={0}
-                        ml="auto"
-                        alignItems="center"
-                        py="sm2"
-                        px="md">
-                        {contents &&
-                          !nextState?.is_user_eligible &&
-                          !isMakeCompete &&
-                          !isEditable && <ApprovalAwaitingLabel />}
-                        {nextState && nextState.is_user_eligible && (
-                          <ApprovalHandler
-                            name={'Review'} //|| nextState?.state
-                            onClick={() => {
-                              setModalAction('next');
-                              setOpen(true);
-                            }}
-                          />
-                        )}
-                        {isMakeCompete && (
-                          <ApprovalHandler
-                            name="Mark Complete"
-                            onClick={() => {
-                              setModalAction('next');
-                              setOpen(true);
-                            }}
-                          />
-                        )}
-                      </Flex>
-                    )}
+                  {!contents?.content?.approval_status && (
+                    <Flex
+                      p={0}
+                      gap={0}
+                      ml="auto"
+                      alignItems="center"
+                      py="sm2"
+                      px="md">
+                      {contents &&
+                        !nextState?.is_user_eligible &&
+                        !isMakeCompete &&
+                        !isEditable && <ApprovalAwaitingLabel />}
+                      {nextState && nextState.is_user_eligible && (
+                        <ApprovalHandler
+                          name={'Review'} //|| nextState?.state
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}
+                        />
+                      )}
+                      {isMakeCompete && (
+                        <ApprovalHandler
+                          name="Mark Complete"
+                          variant="secondary"
+                          onClick={() => {
+                            setModalAction('next');
+                            setOpen(true);
+                          }}
+                        />
+                      )}
+                    </Flex>
+                  )}
                   {isEditable && (
                     <Box py="lg" px="lg">
                       <LockedBadge />
@@ -303,7 +290,7 @@ const DocumentView = () => {
                   )}
                 </Flex>
                 {/* {canAccess('docEdit') && ( */}
-                {(editorMode === 'edit' || editorMode === 'new') && (
+                {editorMode === 'new' && (
                   <Box
                     ml="auto"
                     // ml="auto"
@@ -314,17 +301,16 @@ const DocumentView = () => {
                     <Button
                       onClick={onSubmit}
                       variant="primary"
-                      fontSize="sm2"
                       size="sm"
                       loading={saving}>
                       {/* <FloppyDisk /> */}
-                      Save Changes
+                      Save Draft
                     </Button>
                   </Box>
                 )}
               </Flex>
 
-              <DocumentContentBlock />
+              <DocumentContentBlock onSave={onSubmit} />
             </Box>
             <DocumentSidebar />
           </Grid>
@@ -357,7 +343,6 @@ const DocumentView = () => {
           <Flex gap="sm">
             <Button
               variant="secondary"
-              fontSize="sm2"
               size="sm"
               onClick={() => setOpenTitleModal(false)}>
               Cancel

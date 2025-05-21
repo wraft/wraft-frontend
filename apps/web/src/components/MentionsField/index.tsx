@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from '@wraft/ui';
 import { Label } from 'theme-ui';
 import Mentions from 'rc-mentions';
-import styled from '@emotion/styled';
+import styled from '@xstyled/emotion';
 
 import { GlobalStyle } from './style';
 
@@ -20,10 +20,12 @@ const MentionsWrapper = styled.div`
   }
   .rc-textarea {
     font-size: ${({ theme }: any) => theme.fontSizes.base} !important;
+    color: ${({ theme }: any) => theme.colors.text};
     font-weight: 600;
   }
   textarea {
-    color: ${({ theme }: any) => theme.colors.text};
+    color: gray.1100;
+    font-weight: 600;
   }
 `;
 

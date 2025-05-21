@@ -42,11 +42,7 @@ const VariantList = () => {
     <>
       <PageHeader title="Artifacts" desc="Manage Artifacts">
         {hasPermission('variant', 'manage') && (
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setIsOpen(true)}
-            fontSize="sm2">
+          <Button variant="secondary" size="sm" onClick={() => setIsOpen(true)}>
             <Plus size={12} weight="bold" color="gray.600" />
             Create Artifacts
           </Button>

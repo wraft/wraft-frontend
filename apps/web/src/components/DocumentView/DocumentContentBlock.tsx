@@ -16,6 +16,7 @@ import { EditorView } from 'prosemirror-view';
 
 import PdfViewer from 'common/PdfViewer';
 import Editor from 'common/Editor';
+import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 import { authorizeRoute } from 'middleware/authorize';
@@ -174,7 +175,6 @@ const TabWrapper = styled(Box)`
     background-color: ${({ theme }: any) => theme.colors.gray['400']};
     display: flex;
     border-radius: 6px;
-    margin-left: auto;
   }
   .main-content {
     flex-grow: 1;
@@ -203,7 +203,11 @@ const PdfWrapper = styled(Box)`
   }
 `;
 
-export const DocumentContentBlock = () => {
+interface DocProps {
+  onSave?: () => void;
+}
+
+export const DocumentContentBlock = ({ onSave }: DocProps) => {
   const [isBuilding, setIsBuilding] = useState<boolean>(false);
   const {
     cId,
@@ -242,7 +246,6 @@ export const DocumentContentBlock = () => {
   };
 
   const onSwitched = (mode: EditorMode) => {
-    console.log('mode', mode);
     setActiveView(mode);
     if (mode === 'suggest') {
       setIsReadonly(false);
@@ -348,20 +351,34 @@ export const DocumentContentBlock = () => {
                   {contents?.versions?.[0]?.version_number || 0}
                 </Text>
               </Flex>
-              <Flex>
-                <Flex align="center" gap="sm" display="none">
+              <Flex flex={1}>
+                <TabList
+                  store={tabView}
+                  aria-label="Content Stages"
+                  className="tabPanel tabGroup">
+                  <Tab id="edit">
+                    <StepBlock title="Content" desc="Draft content" />
+                  </Tab>
+
+                  <Tab id="view">
+                    <StepBlock title="Document" desc="View or Sign document" />
+                  </Tab>
+                </TabList>
+                <Flex align="center" gap="sm" ml="auto" px="xs">
                   {!isEditable && (
-                    <Flex gap="2px" bg="green">
+                    <Flex gap="sm" bg="green">
                       {activeId === 'view' && canAccess('docGenerator') && (
                         <Button
                           variant="secondary"
-                          // display="none"
                           size="sm"
-                          // gap="xxs"
                           loading={isBuilding}
                           disabled={isBuilding}
                           onClick={() => doBuild()}>
-                          {!isBuilding && <Play size={12} className="action" />}
+                          {!isBuilding && (
+                            <IconFrame color="gray.1000">
+                              <Play size={12} className="action" />
+                            </IconFrame>
+                          )}
                           <Text
                             color="gray.1100"
                             fontWeight="medium"
@@ -370,68 +387,37 @@ export const DocumentContentBlock = () => {
                           </Text>
                         </Button>
                       )}
+
                       {activeId === 'edit' && canAccess('docEdit') && (
                         <Button
                           variant="secondary"
                           size="sm"
-                          // px="sm"
-                          // gap={0}
-                          // borderRadius="md2"
-                          // ml="sm"
-                          // display="flex"
                           onClick={() => onSwitchEditorMode(editorMode)}>
                           {editorMode === 'edit' ? (
-                            <Eye size={13} />
+                            <></>
                           ) : (
-                            <PencilSimple size={13} />
+                            <IconFrame color="gray.1000">
+                              <PencilSimple size={13} />
+                            </IconFrame>
                           )}
 
                           <Text
                             fontSize="sm2"
                             color="gray.1100"
                             fontWeight={600}>
-                            {editorMode === 'edit' ? 'View' : 'Edit'}
+                            {editorMode === 'edit' ? 'Discard' : 'Edit'}
                           </Text>
                         </Button>
                       )}
-                      {/* <Button
-                        variant="secondary"
-                        size="sm"
-                        px="sm"
-                        gap={0}
-                        borderRadius="md2">
-                        <Chat />
-                        <Text fontSize="sm2" color="gray.1100" fontWeight={600}>
-                          Suggest
-                        </Text>
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        px="sm"
-                        gap={0}
-                        borderRadius="md2">
-                        <File />
-                        <Text fontSize="sm2" color="gray.1100" fontWeight={600}>
-                          View
-                        </Text>
-                      </Button> */}
+                      {editorMode === 'edit' && canAccess('docEdit') && (
+                        <Button onClick={onSave} variant="primary" size="sm">
+                          Save
+                        </Button>
+                      )}
                     </Flex>
                   )}
                 </Flex>
               </Flex>
-              <TabList
-                store={tabView}
-                aria-label="Content Stages"
-                className="tabPanel tabGroup">
-                <Tab id="edit">
-                  <StepBlock title="Content" desc="Draft content" />
-                </Tab>
-
-                <Tab id="view">
-                  <StepBlock title="Document" desc="View or Sign document" />
-                </Tab>
-              </TabList>
             </Flex>
 
             <TabPanel

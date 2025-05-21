@@ -10,9 +10,10 @@ import { checkSubRoutePermission } from 'utils/permissions';
 export interface INav {
   showFull?: boolean;
   items: menuLinksProps[];
+  vertical?: boolean;
 }
 
-const ManageSidebar = ({ items }: INav) => {
+const ManageSidebar = ({ items, vertical = true }: INav) => {
   const router = useRouter();
   const { permissions } = useAuth();
 
@@ -25,7 +26,11 @@ const ManageSidebar = ({ items }: INav) => {
     : items;
 
   return (
-    <Flex direction="column" gap="sm" px="sm" borderColor="border">
+    <Flex
+      direction={vertical ? 'column' : 'row'}
+      gap="sm"
+      px="sm"
+      borderColor="border">
       {filteredItems &&
         filteredItems.map((item: any) => (
           <NavLink href={item.path} variant="links.base" key={item.name}>

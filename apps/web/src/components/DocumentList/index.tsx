@@ -7,8 +7,9 @@ import toast from 'react-hot-toast';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import { ContentTitleList } from 'common/content';
-import { TimeAgo, FilterBlock, StateBadge } from 'common/Atoms';
+import { TimeAgo, FilterBlock, StateBadge, PageInner } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
+import Page from 'common/PageFrame';
 import { fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -227,7 +228,7 @@ const DocumentList = () => {
           <DotsThreeVertical stroke="bold" color="gray.700" />
         </Button>
       </PageHeader>
-      <Box px="xl" py="xl">
+      <PageInner>
         <Flex>
           <Box flexGrow={1}>
             <Box mb="sm">
@@ -255,9 +256,9 @@ const DocumentList = () => {
               {currentVariant && (
                 <Button
                   size="xs"
-                  variant="tertiary"
+                  variant="secondary"
                   onClick={() => handleFilter('')}>
-                  clear
+                  Clear
                 </Button>
               )}
             </Flex>
@@ -277,7 +278,7 @@ const DocumentList = () => {
             </Box>
           </Box>
         </Flex>
-      </Box>
+      </PageInner>
     </>
   );
 };

@@ -1,12 +1,19 @@
 import { Button } from '@wraft/ui';
-import { ArrowRight, Check } from '@phosphor-icons/react';
+import { Check } from '@phosphor-icons/react';
 
-export const ApprovalHandler = ({ name, onClick }: any) => {
+import { IconFrame } from 'common/Atoms';
+
+export const ApprovalHandler = ({
+  variant = 'primary',
+  name,
+  onClick,
+}: any) => {
   return (
-    <Button variant="primary" onClick={onClick} size="sm" fontSize="sm2">
+    <Button variant={variant} onClick={onClick} size="sm">
       {name}
-      <Check size={12} weight="bold" />
-      {/* <ArrowRight size={14} stroke="bold" /> */}
+      <IconFrame color="green.900">
+        <Check size={12} weight="bold" />
+      </IconFrame>
     </Button>
   );
 };

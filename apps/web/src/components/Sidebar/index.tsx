@@ -85,11 +85,20 @@ const Sidebar = (props: any) => {
         borderRight="solid 1px"
         borderColor="border"
         bg="background-primary">
-        <Header />
+        {/* <Box py="lg" px="lg">
+            <Button
+              variant="secondary"
+              // borderRadius="lg"
+              fullWidth={true}
+              >
+              <Plus size={14} /> New Document
+            </Button>
+          </Box> */}
+        <Header toggleSearch={toggleSearch} />
         <Flex flex={1} direction="column">
           <SearchBlock />
 
-          <Box id="sidebars" px="lg" pt="sm">
+          <Box id="sidebars" px="lg" pt="lg">
             {mainMenuList.map((m: any, i: any) => (
               <Box key={i} mb="lg" borderRadius="md">
                 <Text
@@ -124,9 +133,10 @@ const Sidebar = (props: any) => {
                                 ? rawColors?.green?.[1200]
                                 : rawColors?.gray?.[1200]
                             }
+                            as="span"
                             fontWeight="500"
                             fontSize="base"
-                            lineHeight="heading"
+                            lineHeight={1}
                             letterSpacing="-0.25px">
                             {name}
                           </Text>
@@ -134,11 +144,6 @@ const Sidebar = (props: any) => {
                       </Flex>
                     </DefaultMenuItem>
                   ))}
-                  <Box
-                    mx="xs"
-                    borderBottom="solid 1px"
-                    borderColor="gray.a300"
-                    pb="sm"></Box>
                 </Box>
               </Box>
             ))}
@@ -163,15 +168,7 @@ const Sidebar = (props: any) => {
               Upgrade Plan
             </Text>
           </Flex>
-          <Box py="lg" px="lg">
-            <Button
-              variant="secondary"
-              // borderRadius="lg"
-              fullWidth={true}
-              onClick={toggleSearch}>
-              <Plus size={14} /> New Document
-            </Button>
-          </Box>
+
           <Flex px="sm" py="lg" borderTop="solid 1px" borderColor="gray.400">
             <UserSettingsMenu compact={false} />
           </Flex>

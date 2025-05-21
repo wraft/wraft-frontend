@@ -220,8 +220,9 @@ const Index: FC = () => {
           }
         />
 
-        <Flex gap="md" my="xl" px="xl">
+        <Flex gap="md" my="xl" px="xl" flex={1}>
           <ManageSidebar
+            vertical={false}
             items={
               currentOrg?.name !== 'Personal' || ''
                 ? workspaceLinks
@@ -231,6 +232,7 @@ const Index: FC = () => {
           <Flex
             bg="background-primary"
             direction="column"
+            flex={1}
             minWidth="556px"
             border="solid 1px"
             borderColor="gray.400"

@@ -5,24 +5,25 @@ interface ProfileCard {
   name: string;
   time?: string;
   image?: string;
+  short?: boolean;
+  size?: number;
 }
 
 export const AvatarCard = ({
   name,
-  image = `https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg`,
+  image = ``,
+  short = false,
+  size = 20,
   // time,
 }: ProfileCard) => {
-  const finalImage =
-    image == '/uploads/default.jpg'
-      ? 'https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg'
-      : image;
+  const finalImage = image == '/uploads/default.jpg' ? '' : image;
 
   return (
-    <Flex gap="sm" mb="md" align="center">
-      <Flex w={16} h={16}>
-        <Avatar width={16} height={16} src={finalImage} />
+    <Flex gap="sm" align="center">
+      <Flex w={size} h={size}>
+        <Avatar width={size} height={size} src={finalImage} />
       </Flex>
-      <Text>{name}</Text>
+      {short && <Text>{name}</Text>}
     </Flex>
   );
 };

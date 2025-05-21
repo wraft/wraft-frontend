@@ -12,7 +12,7 @@ import { postAPI } from 'utils/models';
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 import UserSettingsMenu from './UserSettingsMenu';
 
-const Header = () => {
+const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
 
@@ -45,7 +45,7 @@ const Header = () => {
         <Box py="md" px="" pr="none" minWidth="80%">
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
-              <Flex cursor="pointer">
+              <Flex cursor="pointer" pl="lg">
                 {userProfile?.currentOrganisation && (
                   <Flex alignItems="center" gap="sm">
                     <Box mr="xxs">
@@ -139,7 +139,12 @@ const Header = () => {
           </DropdownMenu.Provider>
         </Box>
         <Flex mr="sm">
-          <Button className="x" shape="circle" variant="ghost" size="xs">
+          <Button
+            className="x"
+            shape="circle"
+            variant="ghost"
+            size="xs"
+            onClick={() => toggleSearch()}>
             <Plus size={14} />
           </Button>
         </Flex>

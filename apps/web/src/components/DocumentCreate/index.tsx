@@ -199,7 +199,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       onSubmit={handleSubmit(onSubmit)}>
       <Box flexShrink="0">
         <Drawer.Header>
-          <Drawer.Title>Create New Document</Drawer.Title>
+          <Drawer.Title fontSize="base">Create New Document</Drawer.Title>
           <X
             size={20}
             weight="bold"
@@ -217,8 +217,10 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       <Box flex={1} overflowY="auto" px="xl" py="md" minWidth="550px">
         {formStep === 1 && (
           <>
-            <Box mb="sm">
-              <Text as="h4">Select a template</Text>
+            <Box mb="sm" py="sm">
+              <Text as="h4" fontWeight={600}>
+                Select a Template
+              </Text>
             </Box>
 
             {!loading && contents.length < 1 && (
@@ -258,7 +260,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                 name="template"
                 // rules={{ required: true }}
                 render={({ field: { onChange, value } }) => (
-                  <>
+                  <Box variant="card" overflow="hidden" p={0}>
                     {contents.map((x: any) => (
                       <BlockItem
                         key={x.id}
@@ -267,7 +269,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
                         onChange={onChange}
                       />
                     ))}
-                  </>
+                  </Box>
                 )}
               />
             )}
@@ -399,21 +401,21 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       px="sm"
       py="sm"
       gap="sm"
-      border="solid 1px"
-      borderBottom="none"
+      // border="solid 1px"
+      borderBottom="solid 1px"
       borderColor="border"
       cursor="pointer"
       align="center"
       bg={selected.id === id && 'green.300'}>
       <Box
-        w="12px"
+        w="4px"
         h="12px"
         borderRadius="sm"
         borderColor="border"
         bg={content_type.color}
       />
-      <Text>{title}</Text>
-      <Text fontSize="sm" fontWeight="heading">
+      <Text fontSize="base">{title}</Text>
+      <Text fontSize="sm" fontWeight="heading" ml="auto">
         {content_type.prefix}
       </Text>
     </BlockItemWrapper>

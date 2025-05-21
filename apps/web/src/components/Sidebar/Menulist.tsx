@@ -11,7 +11,7 @@ import {
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
-const defaultWeight = 'regular';
+const defaultWeight = 'duotone';
 
 export const Menulist = [
   {

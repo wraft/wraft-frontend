@@ -24,7 +24,7 @@ export const TimeAgo = (props: TimeAgoProps) => {
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
   );
   const now = new Date();
-  const fontSize = props.fontSize || 'sm';
+  const fontSize = props.fontSize || 'sm2';
 
   const timeDifferenceInMs = now.getTime() - local_time.getTime();
 
@@ -265,7 +265,7 @@ export const IconWrapper = ({
 
 interface IconWrapperProps {
   color?: string;
-  children?: any;
+  children: any;
 }
 
 const IconWrapped = styled(Box)`
@@ -275,7 +275,10 @@ const IconWrapped = styled(Box)`
   }
 `;
 
-export const IconFrame = ({ color, children }: IconWrapperProps) => {
+export const IconFrame = ({
+  color = 'gray.1000',
+  children,
+}: IconWrapperProps) => {
   return (
     <IconWrapped color={color} display="flex" alignItems="center">
       {children}
@@ -309,9 +312,28 @@ export const UserSampleList = () => {
               color: 'transparent',
               marginLeft: '-4px',
             }}
-            src={`https://ui-avatars.com/api/?name=${name}`}
+            src="https://muneef.in/img/muneef-designer.jpg"
           />
         ))}
+    </Flex>
+  );
+};
+
+/**
+ * Re usable page frame
+ */
+
+export const PageInner = ({ children }: { children: any }) => {
+  return (
+    <Flex
+      direction="column"
+      gap="md"
+      my="md"
+      px="xxl"
+      py="lg"
+      width="full"
+      mx="auto">
+      {children}
     </Flex>
   );
 };

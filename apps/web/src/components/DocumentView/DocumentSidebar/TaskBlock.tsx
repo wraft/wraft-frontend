@@ -131,28 +131,18 @@ export const TaskBlock = () => {
     //   assignedBy: 'Ronan Cole',
     //   buttonText: 'Sign',
     // },
-    {
-      title: 'Send Email',
-      assignedBy: 'Ronan Cole',
-      tag: '',
-      // buttonText: 'Publish',
-    },
+    // {
+    //   title: 'Send Email',
+    //   assignedBy: 'Ronan Cole',
+    //   tag: '',
+    //   // buttonText: 'Publish',
+    // },
   ];
 
   return (
     <Box px="xss" py="sm" pt={0}>
-      <Flex
-        direction="column"
-        borderBottom="solid 1px"
-        borderColor="gray.400"
-        mb="md">
-        <Text
-          as="h6"
-          fontWeight={600}
-          color="gray.1100"
-          mb="sm"
-          display="flex"
-          gap="sm">
+      <Flex direction="column">
+        <Text as="h6" fontWeight={500} mb="sm" display="flex" gap="sm">
           Jobs
           <Text
             as="span"
@@ -161,27 +151,19 @@ export const TaskBlock = () => {
             textTransform="uppercase">
             Pending
           </Text>
-          <Box
-            as="span"
-            ml="auto"
-            display="flex"
-            gap="xxs"
-            fontWeight={300}
-            color="gray.400">
-            <Text as="span" color="gray.1100">
-              {taskItems.length}
-            </Text>
-          </Box>
         </Text>
         <Flex
+          variant="block"
           direction="column"
-          mb="xl"
-          flex="1"
-          border="solid 1px"
-          borderBottom="0"
-          borderRadius="md2"
-          color="gray.600"
-          overflow="hidden">
+          bg="white"
+          p={0}
+          // flex="1"
+          // border="solid 1px"
+          // borderBottom="0"
+          // borderRadius="md2"
+          // color="gray.600"
+          // overflow="hidden"
+        >
           {taskItems &&
             taskItems.map((task: any) => (
               <TaskItem
@@ -192,23 +174,6 @@ export const TaskBlock = () => {
                 tag={task.tag}
               />
             ))}
-
-          {/* <TaskItem
-            title="ReviewBot"
-            assignedBy="Functionary Labs"
-            buttonText="Review"
-          />
-          <TaskItem
-            title="Review Changes"
-            assignedBy="Althraf Hussain"
-            buttonText="Review"
-          />
-          <TaskItem
-            title="Review Changes"
-            assignedBy="Althraf Hussain"
-            buttonText="Review"
-            icon={<Highlighter size={16} />}
-          /> */}
         </Flex>
       </Flex>
     </Box>

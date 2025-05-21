@@ -94,34 +94,14 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       </Flex>
 
       <Flex ml="auto" alignItems="center" gap="md">
-        <Flex position="relative" alignItems="center" pr="sm" cursor="pointer">
+        <Flex position="relative" alignItems="center" cursor="pointer">
           <Flex gap="sm" alignItems="center">
-            <UserSampleList />
-            <Button
-              variant="secondary"
-              // ml={3}
-              // h="8"
-              // px="3"
-              fontSize="sm2"
-              // bg="primary"
-              // color="white"
-              fontWeight="medium"
-              // borderRadius="lg"
-              // display="inline-flex"
-              // alignItems="center"
-              // justifyContent="center"
-              // gap="2"
-              size="sm"
-              // transition="all"
-              _hover={{ bg: 'primary-dark' }}>
+            <Button variant="secondary" size="md">
               Share
             </Button>
           </Flex>
         </Flex>
-        <Flex
-          alignItems="center"
-          // color="red.400"
-          pl="sm">
+        <Flex alignItems="center" gap="md">
           <IconFrame color="gray.600">
             <Bell size={20} className="main-icon" />
           </IconFrame>

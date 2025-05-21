@@ -6,6 +6,13 @@ const boxVariant = {
     borderRadius: "lg",
     backgroundColor: "background-primary",
   },
+  block: {
+    padding: "md",
+    border: "1px solid",
+    borderColor: "border",
+    // borderRadius: "md2",
+    backgroundColor: "background-primary",
+  },
   boxone: {
     width: "100%",
     borderCollapse: "separate",

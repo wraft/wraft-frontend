@@ -55,16 +55,6 @@ const MetaBlock = () => {
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = () => setDrawerOpen(false);
 
-  const taskList = [
-    {
-      name: 'Task 1',
-      description: 'Description for Task 1',
-      dueDate: '2023-12-31',
-      status: 'pending',
-      priority: 'high',
-    },
-  ];
-
   return (
     <Box mt="xl">
       <>
@@ -79,7 +69,7 @@ const MetaBlock = () => {
           )}
         </Flex>
 
-        <Box border="1px solid" borderColor="border" borderRadius="lg">
+        <Box variant="block" p={0}>
           {meta &&
             typeof meta === 'object' &&
             orderedKeys.map((key) => {

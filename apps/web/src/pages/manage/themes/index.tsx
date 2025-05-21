@@ -9,6 +9,7 @@ import ThemeList from 'components/Theme/ThemeList';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
 const ThemePage: FC = () => {
@@ -44,10 +45,9 @@ const ThemePage: FC = () => {
           )}
         </PageHeader>
 
-        <Flex gap="md" my="md" px="3xl" py="xl">
-          {/* <ManageSidebar items={menuLinks} /> */}
+        <PageInner>
           <ThemeList rerender={rerender} />
-        </Flex>
+        </PageInner>
       </Page>
       {/*
       {hasPermission('the') && ( */}

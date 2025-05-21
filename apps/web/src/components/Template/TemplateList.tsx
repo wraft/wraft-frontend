@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
-import { TimeAgo } from 'common/Atoms';
+import { PageInner, TimeAgo } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
@@ -184,7 +184,7 @@ const TemplateList = () => {
           </Button>
         )}
       </PageHeader>
-      <Box p="lg" px="xl">
+      <PageInner>
         <Box mx={0} mb={3}>
           <Table
             data={templates}
@@ -204,7 +204,7 @@ const TemplateList = () => {
             )}
           </Box>
         </Box>
-      </Box>
+      </PageInner>
     </Box>
   );
 };

@@ -47,15 +47,15 @@ const StyledButton = styled.button<{ pressed?: boolean; disabled?: boolean }>`
   }
 
   &:hover {
-    background-color: #edf1f6;
+    background-color: var(--theme-ui-colors-gray-400);
   }
 
   &[data-state="on"] {
-    background-color: #e2e8f0; /* Light mode */
+    background-color: var(--theme-ui-colors-gray-300);
   }
 
   &[data-state="on"] {
-    background-color: #c2c2c2; /* Dark mode */
+    background-color: var(--theme-ui-colors-gray-300);
   }
 
   @media (prefers-color-scheme: dark) {

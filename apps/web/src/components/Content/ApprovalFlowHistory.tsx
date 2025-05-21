@@ -5,30 +5,34 @@ import { Check } from '@phosphor-icons/react';
 import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
-const WorkflowStep = ({ title, description, createDate }: any) => (
+const WorkflowStep = ({ title, name, createDate, profile_pic }: any) => (
   <Flex
     className="progress__item--completed"
     position="relative"
     gap="sm"
     align="self-start">
-    <Box pt="xs">
+    {/* <Box pt="xs">
       <Flex
         borderRadius="full"
-        bg="gray.400"
+        bg="gray.700"
         p="xxs"
         align="center"
         justify="center">
-        <Check size={12} weight="bold" />
+        {profile_pic}
+        <img src={profile_pic} alt="Profile Picture" />
       </Flex>
-    </Box>
+    </Box> */}
     <Flex justify="space-between" flexGrow={1}>
-      <Box>
-        <Text>{description}</Text>
-        <TimeAgo time={createDate} ago={false} />
-      </Box>
-      <Box>
-        <Text>{title}</Text>
-      </Box>
+      <Flex gap="sm">
+        <Text>{name}</Text>
+        <Text as="span" fontStyle="italic" opacity="0.6">
+          changed to
+        </Text>
+        <Text as="span" fontWeight="medium">
+          {title}
+        </Text>
+      </Flex>
+      <TimeAgo time={createDate} />
     </Flex>
   </Flex>
 );
@@ -74,8 +78,9 @@ const ApprovalFlowHistory = ({ id }: any) => {
             status={item?.status}
             createDate={item?.reviewed_at}
             title={`${item?.to_state?.state}`}
+            profile_pic={item?.profile_pic}
             // description={`${item?.review_status} by ${item?.approver?.name}`}
-            description={`${item?.approver?.name}`}
+            name={`${item?.approver?.name}`}
           />
         ))}
     </Box>

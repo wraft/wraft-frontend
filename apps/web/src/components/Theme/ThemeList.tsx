@@ -71,7 +71,7 @@ const ThemeList = ({ rerender }: Props) => {
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <Link href={`/manage/themes/${row.original.id}`} key={row.index}>
-          <Text fontWeight="bold">{row.original.name}</Text>
+          <Text fontWeight={500}>{row.original.name}</Text>
         </Link>
       ),
       enableSorting: false,
@@ -83,7 +83,9 @@ const ThemeList = ({ rerender }: Props) => {
       cell: ({ row }: any) => (
         <Flex key={row.index} align="center" gap="xs" py="0">
           <FontIcon height={18} width={18} />
-          <Text fontWeight="500">{row.original.font}</Text>
+          <Text fontWeight="500" fontSize="sm2">
+            {row.original.font}
+          </Text>
         </Flex>
       ),
       enableSorting: false,

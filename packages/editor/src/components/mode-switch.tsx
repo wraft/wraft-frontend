@@ -1,7 +1,12 @@
-import type { FC} from "react";
+import type { FC } from "react";
 import { useState } from "react";
 import { Box, Flex, Text, DropdownMenu } from "@wraft/ui"; // Assuming you're using Chakra UI
-import { Eye, PencilCircle, Highlighter } from "@phosphor-icons/react"; // Assuming you're using phosphor icons
+import {
+  Eye,
+  PencilCircle,
+  Highlighter,
+  PencilSimpleLine,
+} from "@phosphor-icons/react"; // Assuming you're using phosphor icons
 
 type EditMode = "view" | "suggest" | "edit";
 
@@ -42,7 +47,7 @@ const EditModeSwitch: FC<EditModeSwitchProps> = ({
             {activeMode === "view" && <Eye size={13} />}
             {activeMode === "suggest" && <Highlighter size={13} />}
             {activeMode === "edit" && <PencilCircle size={13} />}
-            <Text ml="xs" fontSize="base" fontWeight="medium" color="gray.1100">
+            <Text ml="xs" fontSize="sm2" fontWeight="medium" color="gray.1100">
               {activeMode === "view"
                 ? "Viewing"
                 : activeMode === "suggest"
@@ -89,7 +94,7 @@ const EditModeSwitch: FC<EditModeSwitchProps> = ({
             bg={activeMode === "edit" ? "green.100" : undefined}
           >
             <Flex align="center" gap="sm">
-              <PencilCircle size={16} />
+              <PencilSimpleLine size={16} />
               <Text
                 fontSize="sm2"
                 fontWeight="medium"

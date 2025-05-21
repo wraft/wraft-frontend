@@ -28,12 +28,13 @@ export type ThemeButtons = Record<Variant | "danger", CommonAttributesButton> &
 export const getButtons = (theme: WuiTheme): ThemeButtons => {
   const { colors, focus, fontWeights, radii, space, texts, toRem } = theme;
   const defaults = {
-    ...texts.xs,
+    ...texts.sm2,
     color: "text",
     fontWeight: fontWeights.bold,
     letterSpacing: 0,
     borderRadius: radii.sm2,
     gap: space.sm,
+    display: "flex",
   };
 
   return {
@@ -42,11 +43,15 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
       color: "#fff !important",
       backgroundColor: "primary",
       borderColor: "primary",
+      fontSize: "sm2",
     },
     secondary: {
       ...defaults,
       backgroundColor: "button-secondary-bg",
       borderColor: "border",
+      fontSize: "sm2",
+      color: "gray.1000",
+      gap: space.xs,
     },
     tertiary: {
       ...defaults,
@@ -84,7 +89,8 @@ export const getButtons = (theme: WuiTheme): ThemeButtons => {
       },
       secondary: {
         backgroundColor: colors["neutral-70"],
-        borderColor: "transparent",
+        borderColor: "gray.600",
+        color: "gray.1200",
       },
       tertiary: {
         backgroundColor: hexToRGBA(colors["neutral-90"], 0.1),

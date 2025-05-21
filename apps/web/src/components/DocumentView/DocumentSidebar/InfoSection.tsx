@@ -104,52 +104,74 @@ export const InfoSection = () => {
 
   return (
     <Box px="md" py="md">
+      {contents?.content?.build && (
+        <Box variant="block" borderRadius="md2" mb="lg" py="sm">
+          <Flex mt="xs" pb={3} justify="space-between">
+            <Box>
+              {contents.versions.length && (
+                <Flex fontSize="sm2" fontWeight="medium" gap="md">
+                  <Text>v{contents.versions[0]?.version_number ?? ''}</Text>
+                  <TimeAgo
+                    fontSize="sm"
+                    time={contents?.versions[0]?.updated_at}
+                  />
+                </Flex>
+              )}
+            </Box>
+            <Box pr="sm">
+              <NavLink href={`${contents.content.build}`} target="_blank">
+                <DownloadSimple width={16} className="main-icon" />
+              </NavLink>
+            </Box>
+          </Flex>
+        </Box>
+      )}
       {editorMode !== 'new' && (
         <>
-          <Box
-            display="none"
-            //
-          >
-            <Text
-              as="h3"
-              fontSize="sm"
-              fontWeight="normal"
-              mb="md"
-              color="gray.900">
+          <Box mb="md" display="none">
+            {/* <Text as="h3" fontSize="sm2" fontWeight={500} mb="sm">
               Editors
-            </Text>
-            <AvatarCard
-              time={contents?.content?.inserted_at}
-              name={contents?.creator?.name}
-              image={contents?.profile_pic}
-            />
+            </Text> */}
+            <Box>
+              <AvatarCard
+                time={contents?.content?.inserted_at}
+                name={contents?.creator?.name}
+                image={contents?.profile_pic}
+              />
+            </Box>
           </Box>
 
           {/* <TaskBlock /> */}
 
           {contents?.state?.id && (
             <Box mt="xs">
-              {/* {additionalCollaborator.length > 0 && (
-                <Text as="h3" mb="xs">
-                  Flow Members
-                </Text>
-              )} */}
+              {additionalCollaborator.length > 0 && (
+                <Flex>
+                  <Text as="h3" mb="xs" fontWeight={500}>
+                    Collaborators
+                  </Text>
+                  <Box ml="auto">
+                    {canAccess('flow') && <InviteFlowStateMember />}
+                  </Box>
+                </Flex>
+              )}
+
               {additionalCollaborator &&
                 additionalCollaborator.map((approver: any) => (
-                  <AvatarCard
-                    key={approver.id}
-                    // time={contents.content?.inserted_at}
-                    name={approver.name}
-                    image={approver.profile_pic}
-                  />
+                  <Box p="sm" key={approver.id}>
+                    <AvatarCard
+                      key={approver.id}
+                      // time={contents.content?.inserted_at}
+                      name={approver.name}
+                      image={approver.profile_pic}
+                    />
+                  </Box>
                 ))}
-
-              {canAccess('flow') && <InviteFlowStateMember />}
             </Box>
           )}
 
           {contents?.state?.id && (
-            <Box mt="sm" display="none">
+            <Box mt="sm">
               {contents &&
                 !nextState?.is_user_eligible &&
                 !isMakeCompete &&
@@ -171,29 +193,6 @@ export const InfoSection = () => {
             </Box>
           )}
         </>
-      )}
-
-      {contents?.content?.build && (
-        <Box mt="xl" display="none">
-          <Text as="h3">Document</Text>
-
-          <Flex mt="xs" pb={3} justify="space-between">
-            <Box>
-              <Text>{`${contents.content.instance_id} v${contents.versions[0]?.version_number ?? ''}`}</Text>
-
-              {contents.versions.length && (
-                <Text fontSize="xs">
-                  <TimeAgo time={contents?.versions[0]?.updated_at} />
-                </Text>
-              )}
-            </Box>
-            <Box>
-              <NavLink href={`${contents.content.build}`} target="_blank">
-                <DownloadSimple width={16} className="main-icon" />
-              </NavLink>
-            </Box>
-          </Flex>
-        </Box>
       )}
 
       <PlaceholderBlock

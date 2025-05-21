@@ -13,8 +13,9 @@ import {
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
+import { DotsThree } from '@phosphor-icons/react';
 
-import { TimeAgo } from 'common/Atoms';
+import { PageInner, TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -158,6 +159,15 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
 
   const columns = [
     {
+      id: 'content.id',
+      header: 'Id',
+      accessorKey: 'id',
+      cell: ({ row }: any) => (
+        <Text fontSize="sm2">{row.original?.prefix}</Text>
+      ),
+      enableSorting: false,
+    },
+    {
       id: 'Name',
       header: 'Name',
       accessorKey: 'name',
@@ -169,9 +179,9 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
               bg={row.original?.color ? row.original?.color : 'blue'}
             />
             <Box ml="sm">
-              <Text fontSize="sm" color="text-secondary">
+              {/* <Text fontSize="sm" color="text-secondary">
                 {row.original?.prefix}
-              </Text>
+              </Text> */}
               <Text fontWeight="heading">{row?.original?.name}</Text>
             </Box>
           </Flex>
@@ -184,7 +194,9 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       id: 'content.flow',
       header: 'Flow',
       accessorKey: 'flow',
-      cell: ({ row }: any) => <Text>{row.original?.flow?.name}</Text>,
+      cell: ({ row }: any) => (
+        <Text fontSize="sm2">{row.original?.flow?.name}</Text>
+      ),
       enableSorting: false,
     },
     // {
@@ -216,16 +228,20 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
             sx={{ width: '16px', height: '16px' }}
             src={row.original?.creator?.profile_pic}
           />
-          <Text>{row.original?.creator?.name}</Text>
+          <Text fontSize="sm2" fontWeight={500}>
+            {row.original?.creator?.name}
+          </Text>
         </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.updated_at',
-      header: 'CREATED AT',
+      header: 'Created at',
       accessorKey: 'TIME',
-      cell: ({ row }: any) => <TimeAgo time={row.original?.updated_at} />,
+      cell: ({ row }: any) => (
+        <TimeAgo fontSize="sm2" time={row.original?.updated_at} />
+      ),
       enableSorting: false,
     },
     {
@@ -244,7 +260,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
                   cursor="pointer"
                   margin="0px"
                   padding="0px">
-                  <ThreeDotIcon />
+                  <DotsThree />
                 </Box>
               </DropdownMenu.Trigger>
               <DropdownMenu aria-label="dropdown role">
@@ -290,7 +306,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
   ];
 
   return (
-    <Box px="xl" py="xl">
+    <PageInner>
       <Table
         data={contents}
         isLoading={loading}
@@ -308,7 +324,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
           />
         )}
       </Box>
-    </Box>
+    </PageInner>
   );
 };
 export default VariantDashboard;

@@ -18,7 +18,7 @@ interface EditorHeaderProps {
 
 const EditorHeader: FC<EditorHeaderProps> = ({
   isReadonly,
-  currentDate = "Jan 20, 2024",
+  currentDate = "Versions",
   onSwitchView,
   onExpand,
 }) => (
@@ -32,26 +32,25 @@ const EditorHeader: FC<EditorHeaderProps> = ({
       <Flex
         py="0"
         alignItems="center"
-        px="md"
+        // px="md"
         border="solid 1px"
         borderColor="gray.400"
         borderBottom="0"
+        borderRadius="md2 md2 0 0"
       >
-        <Text
-          fontSize="sm"
-          color="gray.1000"
-          display="flex"
-          gap="sm"
-          // py="sm"
-          alignItems="center"
-        >
-          <ClockCounterClockwise size={15} />
-          {/* <Text as="span" opacity="0.7" color="gray.500">
-            \
-          </Text>{" "} */}
-          {currentDate}
-          <CaretDown />
-        </Text>
+        <Box pl="md">
+          <Text
+            fontSize="sm2"
+            color="gray.1000"
+            display="flex"
+            gap="sm"
+            // py="sm"
+            alignItems="center"
+          >
+            {currentDate}
+            <CaretDown />
+          </Text>
+        </Box>
         <Flex ml="auto">
           <Button
             variant="ghost"

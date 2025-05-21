@@ -9,6 +9,7 @@ import DescriptionLinker from 'common/DescriptionLinker';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -44,11 +45,9 @@ const Index: FC = () => {
             />
           }
         />
-
-        <Flex gap="md" my="md" px="md">
-          {/* <ManageSidebar items={menuLinks} /> */}
+        <PageInner>
           <ThemeViewForm />
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

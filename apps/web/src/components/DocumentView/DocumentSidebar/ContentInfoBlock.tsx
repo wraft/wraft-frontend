@@ -11,6 +11,7 @@ import {
 import { PencilSlash } from '@phosphor-icons/react/dist/ssr';
 
 import ConfirmDelete from 'common/ConfirmDelete';
+import { IconFrame } from 'common/Atoms';
 import { deleteAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
@@ -52,7 +53,9 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     <>
       <DropdownMenu.Provider>
         <DropdownMenu.Trigger>
-          <DotsThreeVertical weight="bold" size={18} className="main-icon" />
+          <IconFrame color="gray.1000">
+            <DotsThreeVertical weight="bold" size={18} />
+          </IconFrame>
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
@@ -66,17 +69,22 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
               </DropdownMenu.Item>
             )}
           {hasPermission('document', 'delete') && (
-            <DropdownMenu.Item onClick={() => setIsDelete(true)}>
-              <TrashSimple />
+            <DropdownMenu.Item onClick={() => setIsDelete(true)} gap="sm">
+              <IconFrame color="gray.1000">
+                <TrashSimple size={16} />
+              </IconFrame>
               Delete
             </DropdownMenu.Item>
           )}
           {hasPermission('document', 'manage') && (
             <DropdownMenu.Item
               onClick={() => setMailPopupOpen(true)}
-              gap="sm"
+              display="flex"
+              gap="md"
               borderBottom="solid 1px #fff">
-              <EnvelopeSimple size={14} />
+              <IconFrame color="gray.1000">
+                <EnvelopeSimple size={16} />
+              </IconFrame>
               Send Mail
             </DropdownMenu.Item>
           )}
@@ -125,13 +133,16 @@ export const ContentInfoBlock = ({
   return (
     <Flex justify="space-between" px="md" py="sm">
       <Box>
-        <Text fontSize="sm" color="text-secondary">
-          {contentType?.layout?.name} / {contentType?.name}
-        </Text>
-        <Flex gap="sm">
-          <Text as="h4">
-            {content?.content?.instance_id || contentType?.prefix}
-          </Text>
+        <Flex gap="sm" alignItems="flex-start">
+          <Box>
+            <Text as="h4">
+              {content?.content?.instance_id || contentType?.prefix}
+            </Text>
+            <Text as="span" fontSize="sm" color="text-secondary">
+              {/* {contentType?.layout?.name} /  */}
+              {contentType?.name}
+            </Text>
+          </Box>
           {content?.state?.state && (
             <Text
               as="span"

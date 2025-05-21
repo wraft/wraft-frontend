@@ -4,10 +4,9 @@ import { Box } from '@wraft/ui';
 export const CardBlockWrapper = styled(Box)<{ isHighlighted?: boolean }>`
   display: flex;
   cursor: pointer;
-  background-color: green.600;
+  background: white;
   &:last-child {
-    border-bottom: solid 1px;
-    border-color: green.600;
+    border-bottom: 0;
   }
 
   &:hover {

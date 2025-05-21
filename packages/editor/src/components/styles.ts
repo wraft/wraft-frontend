@@ -18,6 +18,11 @@ export const EditorContainer = styled.divBox`
   .ProseMirror [data-node-view-root="true"] {
     display: inline-block;
   }
+
+  .ProseMirror [data-selected] {
+    outline-color: var(--theme-ui-colors-blue-400);
+    border-radius: 4px;
+  }
 `;
 
 export const EditorWrapper = styled.divBox`
@@ -43,6 +48,18 @@ export const EditorContent = styled.divBox`
 
   .ProseMirror table p {
     line-height: 0.5rem;
+  }
+
+  .ProseMirror h1 {
+    font-size: 140%;
+  }
+
+  .ProseMirror h2 {
+    font-size: 130%;
+  }
+
+  .ProseMirror h3 {
+    font-size: 120%;
   }
 
   .ProseMirror th {

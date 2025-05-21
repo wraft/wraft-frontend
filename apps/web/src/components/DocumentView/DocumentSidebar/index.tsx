@@ -35,9 +35,7 @@ export const DocumentSidebar = () => {
   return (
     <Flex
       direction="column"
-      bg="background-primary"
-      // w="30%"
-      // maxWidth="400px"
+      bg="background-secondary"
       borderLeft="solid 1px"
       borderColor="border">
       <Box flexShrink="0" px="xs" py="sm">
@@ -122,9 +120,9 @@ export const DocumentSidebar = () => {
           {canAccess('log') && (
             <Tab.Panel tabId="log" store={tab}>
               <Box mt="md" px="md">
-                <Text as="h5" mb="sm">
+                {/* <Text as="h5" mb="sm">
                   Approval Log
-                </Text>
+                </Text> */}
                 <Box>
                   {tabActiveId === 'log' && <ApprovalFlowHistory id={cId} />}
                 </Box>

@@ -11,6 +11,7 @@ import {
 } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
+import { Pencil, PencilSimple } from '@phosphor-icons/react';
 
 import FieldDate from 'common/FieldDate';
 import { convertToVariableName } from 'utils';
@@ -97,21 +98,22 @@ const PlaceholderBlock = ({
       {fieldValues && (
         <>
           <Flex justify="space-between">
-            <Text as="h6" fontWeight={500} color="gray.1100">
+            <Text as="h6" fontWeight={500} color="gray.1100" fontSize="base">
               Fields
             </Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
-                <EditIcon width={14} className="main-icon" />
+                <PencilSimple size={14} className="main-icon" />
               </Box>
             )}
           </Flex>
-
           <Box
             border="1px solid"
             borderColor="border"
+            bg="background-primary"
             mt="sm"
-            borderRadius="lg">
+            // borderRadius="md2"
+          >
             {mappedFields &&
               mappedFields.map((x: any) => (
                 <Flex
@@ -119,19 +121,19 @@ const PlaceholderBlock = ({
                   borderBottom="1px solid"
                   borderColor="border"
                   p="sm">
-                  <Text flex="0 0 60%" fontWeight="heading">
+                  <Text as="p" flex="0 0 40%" fontSize="sm2">
                     {x.name}
                   </Text>
                   <Text
-                    flex="0 0 40%"
+                    as="p"
+                    flex="0 0 60%"
                     color="text-secondary"
-                    fontWeight="heading"
+                    fontWeight="medium"
+                    fontSize="sm2"
                     textTransform="capitalize"
                     textAlign="right">
                     {x.value}
                   </Text>
-
-                  {/* <Text>{x.type}</Text> */}
                 </Flex>
               ))}
           </Box>

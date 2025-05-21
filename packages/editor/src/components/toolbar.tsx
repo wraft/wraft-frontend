@@ -104,8 +104,11 @@ export default function Toolbar({ isReadonly, onSwitchView }: ToolbarProps) {
       border="solid 1px"
       borderBottom="0"
       borderColor="gray.a400"
+      // border-bottom: 0;
+      borderRadius="md2 md2 0 0"
     >
-      {/* <Button
+      <Flex>
+        {/* <Button
         pressed={false}
         disabled={!editor.commands.undo.canExec()}
         onClick={editor.commands.undo}
@@ -121,116 +124,117 @@ export default function Toolbar({ isReadonly, onSwitchView }: ToolbarProps) {
       >
         <ArrowClockwise size={16} weight="bold" />
       </Button> */}
-      <Button
-        pressed={editor.marks.bold.isActive()}
-        disabled={!editor.commands.toggleBold.canExec()}
-        onClick={editor.commands.toggleBold}
-        tooltip="Bold"
-      >
-        <TextB size={16} weight="bold" />
-      </Button>
-      <Button
-        pressed={editor.marks.italic.isActive()}
-        disabled={!editor.commands.toggleItalic.canExec()}
-        onClick={editor.commands.toggleItalic}
-        tooltip="Italic"
-      >
-        <TextItalic size={16} weight="bold" />
-      </Button>
-      <Button
-        pressed={editor.marks.underline.isActive()}
-        disabled={!editor.commands.toggleUnderline.canExec()}
-        onClick={editor.commands.toggleUnderline}
-        tooltip="Underline"
-      >
-        <TextUnderline size={16} weight="bold" />
-      </Button>
-      <Button
-        pressed={editor.marks.strike.isActive()}
-        disabled={!editor.commands.toggleStrike.canExec()}
-        onClick={editor.commands.toggleStrike}
-        tooltip="Strike"
-      >
-        <TextStrikethrough size={16} weight="bold" />
-      </Button>
-      <Button
-        pressed={editor.nodes.heading.isActive({ level: 1 })}
-        disabled={!editor.commands.toggleHeading.canExec({ level: 1 })}
-        onClick={() => editor.commands.toggleHeading({ level: 1 })}
-        tooltip="Heading 1"
-      >
-        <TextHOne size={18} />
-      </Button>
-      <Button
-        pressed={editor.nodes.heading.isActive({ level: 2 })}
-        disabled={!editor.commands.toggleHeading.canExec({ level: 2 })}
-        onClick={() => editor.commands.toggleHeading({ level: 2 })}
-        tooltip="Heading 2"
-      >
-        <TextHTwo size={18} />
-      </Button>
-      <Button
-        pressed={editor.nodes.heading.isActive({ level: 3 })}
-        disabled={!editor.commands.toggleHeading.canExec({ level: 3 })}
-        onClick={() => editor.commands.toggleHeading({ level: 3 })}
-        tooltip="Heading 3"
-      >
-        <TextHThree size={18} />
-      </Button>
-      <Button
-        pressed={editor.nodes.horizontalRule.isActive()}
-        disabled={!editor.commands.insertHorizontalRule.canExec()}
-        onClick={() => editor.commands.insertHorizontalRule()}
-        tooltip="Divider"
-      >
-        <Minus size={18} />
-      </Button>
-      <Button
-        pressed={editor.nodes.list.isActive({ kind: "bullet" })}
-        disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
-        onClick={() => editor.commands.toggleList({ kind: "bullet" })}
-        tooltip="Bullet List"
-      >
-        <ListBullets size={18} />
-      </Button>
-      <Button
-        pressed={editor.nodes.list.isActive({ kind: "ordered" })}
-        disabled={!editor.commands.toggleList.canExec({ kind: "ordered" })}
-        onClick={() => editor.commands.toggleList({ kind: "ordered" })}
-        tooltip="Ordered List"
-      >
-        <List size={18} />
-      </Button>
-      <Button
-        pressed={isTableActive} // Use isTableActive state instead of editor.nodes.table.isActive()
-        disabled={!editor.commands.insertTable.canExec}
-        onClick={() => {
-          if (!isTableActive) {
-            editor.commands.insertTable({ row: 3, col: 2, header: true });
-          }
-        }}
-        tooltip="Table"
-      >
-        <Table size={18} />
-      </Button>
+        <Button
+          pressed={editor.marks.bold.isActive()}
+          disabled={!editor.commands.toggleBold.canExec()}
+          onClick={editor.commands.toggleBold}
+          tooltip="Bold"
+        >
+          <TextB size={16} weight="bold" />
+        </Button>
+        <Button
+          pressed={editor.marks.italic.isActive()}
+          disabled={!editor.commands.toggleItalic.canExec()}
+          onClick={editor.commands.toggleItalic}
+          tooltip="Italic"
+        >
+          <TextItalic size={16} weight="bold" />
+        </Button>
+        <Button
+          pressed={editor.marks.underline.isActive()}
+          disabled={!editor.commands.toggleUnderline.canExec()}
+          onClick={editor.commands.toggleUnderline}
+          tooltip="Underline"
+        >
+          <TextUnderline size={16} weight="bold" />
+        </Button>
+        <Button
+          pressed={editor.marks.strike.isActive()}
+          disabled={!editor.commands.toggleStrike.canExec()}
+          onClick={editor.commands.toggleStrike}
+          tooltip="Strike"
+        >
+          <TextStrikethrough size={16} weight="bold" />
+        </Button>
+        <Button
+          pressed={editor.nodes.heading.isActive({ level: 1 })}
+          disabled={!editor.commands.toggleHeading.canExec({ level: 1 })}
+          onClick={() => editor.commands.toggleHeading({ level: 1 })}
+          tooltip="Heading 1"
+        >
+          <TextHOne size={18} />
+        </Button>
+        <Button
+          pressed={editor.nodes.heading.isActive({ level: 2 })}
+          disabled={!editor.commands.toggleHeading.canExec({ level: 2 })}
+          onClick={() => editor.commands.toggleHeading({ level: 2 })}
+          tooltip="Heading 2"
+        >
+          <TextHTwo size={18} />
+        </Button>
+        <Button
+          pressed={editor.nodes.heading.isActive({ level: 3 })}
+          disabled={!editor.commands.toggleHeading.canExec({ level: 3 })}
+          onClick={() => editor.commands.toggleHeading({ level: 3 })}
+          tooltip="Heading 3"
+        >
+          <TextHThree size={18} />
+        </Button>
+        <Button
+          pressed={editor.nodes.horizontalRule.isActive()}
+          disabled={!editor.commands.insertHorizontalRule.canExec()}
+          onClick={() => editor.commands.insertHorizontalRule()}
+          tooltip="Divider"
+        >
+          <Minus size={18} />
+        </Button>
+        <Button
+          pressed={editor.nodes.list.isActive({ kind: "bullet" })}
+          disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
+          onClick={() => editor.commands.toggleList({ kind: "bullet" })}
+          tooltip="Bullet List"
+        >
+          <ListBullets size={18} />
+        </Button>
+        <Button
+          pressed={editor.nodes.list.isActive({ kind: "ordered" })}
+          disabled={!editor.commands.toggleList.canExec({ kind: "ordered" })}
+          onClick={() => editor.commands.toggleList({ kind: "ordered" })}
+          tooltip="Ordered List"
+        >
+          <List size={18} />
+        </Button>
+        <Button
+          pressed={isTableActive} // Use isTableActive state instead of editor.nodes.table.isActive()
+          disabled={!editor.commands.insertTable.canExec}
+          onClick={() => {
+            if (!isTableActive) {
+              editor.commands.insertTable({ row: 3, col: 2, header: true });
+            }
+          }}
+          tooltip="Table"
+        >
+          <Table size={18} />
+        </Button>
 
-      <TableMenu isActive={isTableActive} />
-      <Separator />
+        <TableMenu isActive={isTableActive} />
+        <Separator />
 
-      <Button
-        pressed={editor.nodes.pageBreak.isActive()}
-        disabled={!editor.commands.insertPageBreak.canExec()}
-        onClick={() => editor.commands.insertPageBreak()}
-        tooltip="Page Break"
-      >
-        <ArrowsInLineVertical size={18} />
-      </Button>
-      <ImageUploadPopover
-        disabled={!editor.commands.insertImage.canExec()}
-        tooltip="Insert Image"
-      >
-        <ImageIcon size={18} />
-      </ImageUploadPopover>
+        <Button
+          pressed={editor.nodes.pageBreak.isActive()}
+          disabled={!editor.commands.insertPageBreak.canExec()}
+          onClick={() => editor.commands.insertPageBreak()}
+          tooltip="Page Break"
+        >
+          <ArrowsInLineVertical size={18} />
+        </Button>
+        <ImageUploadPopover
+          disabled={!editor.commands.insertImage.canExec()}
+          tooltip="Insert Image"
+        >
+          <ImageIcon size={18} />
+        </ImageUploadPopover>
+      </Flex>
       <Flex ml="auto" px="sm" gap="sm">
         <EditModeSwitch isReadonly={isReadonly} onSwitchView={onSwitchView} />
       </Flex>

@@ -74,7 +74,7 @@ const Table = ({
               {headerGroup.headers.map((header: any) => (
                 <x.th
                   key={header.id}
-                  py="md"
+                  py="sm"
                   px="md"
                   borderBottom="1px solid"
                   borderColor="border"

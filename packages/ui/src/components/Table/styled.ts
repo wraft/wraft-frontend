@@ -8,7 +8,13 @@ export const Table: any = styled("table")`
   background-color: background-primary;
 `;
 export const Thead: any = styled("thead")``;
-export const Tr: any = styled("tr")``;
+export const Tr: any = styled("tr")`
+  :hover {
+    background-color: blue;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+`;
 export const Th: any = styled("th")`
   @media (max-width: 500px) {
     min-width: auto;
