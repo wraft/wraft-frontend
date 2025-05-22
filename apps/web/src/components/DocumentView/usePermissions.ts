@@ -11,6 +11,7 @@ export type SectionId =
   | 'docGenerator'
   | 'docEdit'
   | 'docView'
+  | 'sign'
   | 'approvalAction';
 
 interface SectionPermission {
@@ -44,6 +45,13 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
         viewer: true,
         editor: true,
         signer: false,
+      },
+    },
+    sign: {
+      modes: {
+        viewer: true,
+        editor: true,
+        signer: true,
       },
     },
     flow: {
@@ -133,6 +141,13 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       },
     },
     approvalAction: {
+      modes: {
+        viewer: false,
+        editor: false,
+        signer: false,
+      },
+    },
+    sign: {
       modes: {
         viewer: false,
         editor: false,

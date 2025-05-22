@@ -22,7 +22,6 @@ export const DocumentSidebar = () => {
     userType,
     docRole,
   } = useDocument();
-
   const { canAccess } = usePermissions(userType, docRole);
 
   const tab = useTab({ defaultSelectedId: 'overview' });
@@ -70,7 +69,7 @@ export const DocumentSidebar = () => {
               Log
             </Tab>
           )}
-          {canAccess('log') && (
+          {canAccess('sign') && (
             <Tab id="signers" store={tab}>
               Signers
             </Tab>
@@ -129,7 +128,7 @@ export const DocumentSidebar = () => {
               </Box>
             </Tab.Panel>
           )}
-          {canAccess('log') && (
+          {canAccess('sign') && (
             <Tab.Panel tabId="signers" store={tab}>
               <Box mt="md" px="md">
                 <SignerBlock />

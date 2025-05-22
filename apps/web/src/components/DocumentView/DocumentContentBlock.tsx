@@ -226,8 +226,6 @@ export const DocumentContentBlock = () => {
 
   const defaultSelectedId = 'edit';
 
-  console.log('doc_check[content][3]', contentBody);
-
   const collabData = {
     user: {
       id: userProfile?.id || null,
@@ -407,7 +405,7 @@ export const DocumentContentBlock = () => {
               )}
             </TabPanel>
             <TabPanel store={tabView} className="main-content">
-              {!contents?.content?.build && (
+              {!contents?.content?.signed_doc_url && (
                 <Box
                   w="100%"
                   mx="md"
@@ -415,24 +413,15 @@ export const DocumentContentBlock = () => {
                   border="solid 1px"
                   borderColor="border">
                   <Text fontSize="xl" fontWeight="heading" mb="xs">
-                    Document not generated
+                    SignDocument not generated
                   </Text>
                   <Text color="text-secondary" mb="md">
                     Documents need to be generated
                   </Text>
-                  <Button
-                    variant="secondary"
-                    loading={isBuilding}
-                    disabled={isBuilding}
-                    onClick={() => doBuild()}>
-                    <Play size={14} className="action" />
-                    Generate
-                  </Button>
                 </Box>
               )}
               <PdfSignerViewer
                 signerBoxes={signerBoxes}
-                // url={contents?.content?.build}
                 url={contents?.content?.signed_doc_url}
               />
             </TabPanel>

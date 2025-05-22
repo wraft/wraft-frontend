@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState, CSSProperties } from 'react';
-import SignatureCanvas from 'react-signature-canvas';
+import React, { useEffect, useState, CSSProperties } from 'react';
 import {
   PDFDocument,
   PDFRef,
@@ -18,13 +17,11 @@ import {
 } from 'pdf-lib';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Flex, Text, Button, Modal, Select } from '@wraft/ui';
-import { Signature, X } from '@phosphor-icons/react';
+import { Signature } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { postAPI } from 'utils/models';
-import { ContentInstance } from 'utils/types/content';
 
-import { SignatureCanvasComponent } from './SignatureCanvas';
 import { useDocument } from '../DocumentContext';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -141,15 +138,8 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
   const [annotationDetails, setAnnotationDetails] =
     useState<AnnotationDetailsType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSavingSignature, setIsSavingSignature] = useState(false);
 
-  const {
-    signers,
-    cId: contentId,
-    contents,
-    setSignerBoxes,
-    setContents,
-  } = useDocument();
+  const { signers, cId: contentId, setSignerBoxes } = useDocument();
   const renderWidth = 760;
 
   useEffect(() => {
@@ -238,66 +228,6 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     setNumPages(nextNumPages);
   };
 
-  const handleSignatureCancel = () => {
-    setIsSignatureModalOpen(false);
-  };
-
-  const handleSignatureSave = async (signatureDataUrl: string) => {
-    if (!signatureDataUrl) {
-      return;
-    }
-
-    setIsSavingSignature(true);
-
-    const res = await fetch(signatureDataUrl);
-    const blob = await res.blob();
-
-    const formData = new FormData();
-    formData.append('signature_image', blob, 'signature.png');
-
-    try {
-      const response: any = await postAPI(
-        `contents/${contentId}/signatures/${currentSignBox?.counter_party?.id}/append_signature`,
-        formData,
-      );
-
-      setSignerBoxes((prev: any) =>
-        prev.map((box: any) =>
-          box?.counter_party?.id === currentSignBox?.counter_party?.id
-            ? {
-                ...box,
-                counter_party: {
-                  ...box?.counter_party,
-                  signature_status: 'signed',
-                },
-              }
-            : box,
-        ),
-      );
-      if (contents) {
-        const updatedContents: ContentInstance = {
-          ...contents,
-          content: {
-            ...contents.content,
-            signed_doc_url: response?.signed_pdf_url || null,
-          },
-        };
-        setContents(updatedContents);
-      }
-      console.log('response', response);
-      toast.success('Signature saved successfully', {
-        duration: 1000,
-        position: 'top-right',
-      });
-      setIsSignatureModalOpen(false);
-    } catch (error) {
-      console.error('Error uploading signature:', error);
-      toast.error('Failed to save signature');
-    } finally {
-      setIsSavingSignature(false);
-    }
-  };
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -355,7 +285,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       width: `${signerBox.signature_data.dimensions.width * scale + 2}px`,
       height: `${signerBox.signature_data.dimensions.height * scale + 2}px`,
       backgroundColor: '#e3f7ee',
-      cursor: 'pointer',
+      cursor: currentSignBox?.counter_party ? 'default' : 'pointer',
       zIndex: 10,
       border: '1px dashed #006f50',
       borderColor: '#006f50',
@@ -372,7 +302,10 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         style={boxStyle}
         onClick={() => {
           setCurrentSignBox(signerBox);
-          setIsSignatureModalOpen(true);
+          console.log('signerBox', signerBox);
+          if (signerBox.counter_party === null) {
+            setIsSignatureModalOpen(true);
+          }
         }}>
         <Box>
           <Flex alignItems="center" gap="xs">
@@ -389,15 +322,15 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     );
   };
 
-  const renderSignerModal = () => {
+  const renderSignerModal = (): React.ReactElement => {
     if (!currentSignBox?.counter_party) {
       return (
         <Box>
-          <Text variant="lg" fontWeight="heading" m="lg">
-            Add Assignee
+          <Text variant="lg" fontWeight="heading" mb="md">
+            Add Counterparty
           </Text>
           <form onSubmit={handleFormSubmit}>
-            <Flex direction="column" gap="md" mx="lg">
+            <Flex direction="column" gap="md">
               <Select
                 value={selectedCounterparty}
                 onChange={handleSelectChange}
@@ -410,12 +343,12 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
                   })),
                 ]}
               />
-              <Box py="lg">
+              <Box pt="lg">
                 <Button
                   type="submit"
                   loading={isSubmitting}
                   disabled={isSubmitting}>
-                  Assign
+                  Add Counterparty
                 </Button>
               </Box>
             </Flex>
@@ -424,27 +357,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       );
     }
 
-    return (
-      <Box>
-        <Flex justifyContent="space-between" align="center">
-          <Text variant="lg" fontWeight="heading">
-            Signature
-          </Text>
-          <Button
-            variant="ghost"
-            onClick={() => setIsSignatureModalOpen(false)}>
-            <X />
-          </Button>
-        </Flex>
-        {isSignatureModalOpen && (
-          <SignatureCanvasComponent
-            onSave={handleSignatureSave}
-            onCancel={handleSignatureCancel}
-            loading={isSavingSignature}
-          />
-        )}
-      </Box>
-    );
+    return <Box />;
   };
 
   return (

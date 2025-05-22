@@ -4,12 +4,14 @@ import toast from 'react-hot-toast';
 import { Box, Text, Flex, Button, Modal, Field, InputText } from '@wraft/ui';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from '@phosphor-icons/react';
 
-import { AvatarCard } from 'common/AvatarCard';
 import { postAPI, fetchAPI } from 'utils/models';
 import { emailPattern } from 'utils/zodPatterns';
 import { nameRegex } from 'utils/regex';
+import { ContentInstance } from 'utils/types/content';
 
+import { SignatureCanvasComponent } from './SignatureCanvas';
 import { useDocument } from '../../DocumentContext';
 
 // import * as S from './styles';
@@ -115,7 +117,18 @@ const SignerAddBlock = ({
 const SignerBlock = () => {
   const { cId } = useDocument();
   const [isDialogOpen, setDialogOpen] = useState(false);
-  const { signers, setSigners } = useDocument();
+  const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  const [isSavingSignature, setIsSavingSignature] = useState(false);
+  const [currentCounterParty, setCurrentCounterParty] = useState<any>(null);
+
+  const {
+    signers,
+    cId: contentId,
+    contents,
+    setSigners,
+    setSignerBoxes,
+    setContents,
+  } = useDocument();
 
   const onInvite = () => {
     setDialogOpen(true);
@@ -146,6 +159,65 @@ const SignerBlock = () => {
       });
     }
   };
+
+  const handleSignatureSave = async (signatureDataUrl: string) => {
+    if (!signatureDataUrl) {
+      return;
+    }
+
+    setIsSavingSignature(true);
+
+    const res = await fetch(signatureDataUrl);
+    const blob = await res.blob();
+
+    const formData = new FormData();
+    formData.append('signature_image', blob, 'signature.png');
+
+    try {
+      const response: any = await postAPI(
+        `contents/${contentId}/signatures/${currentCounterParty?.id}/append_signature`,
+        formData,
+      );
+
+      setSignerBoxes((prev: any) =>
+        prev.map((box: any) =>
+          box?.counter_party?.id === currentCounterParty?.id
+            ? {
+                ...box,
+                counter_party: {
+                  ...box?.counter_party,
+                  signature_status: 'signed',
+                },
+              }
+            : box,
+        ),
+      );
+      if (contents) {
+        const updatedContents: ContentInstance = {
+          ...contents,
+          content: {
+            ...contents.content,
+            signed_doc_url: response?.signed_pdf_url || null,
+          },
+        };
+        setContents(updatedContents);
+      }
+      toast.success('Signature saved successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      setIsSignatureModalOpen(false);
+    } catch (error) {
+      console.error('Error uploading signature:', error);
+      toast.error('Failed to save signature');
+    } finally {
+      setIsSavingSignature(false);
+    }
+  };
+
+  const handleSignatureCancel = () => {
+    setIsSignatureModalOpen(false);
+  };
   return (
     <>
       <Text as="h5" mb="sm">
@@ -154,23 +226,63 @@ const SignerBlock = () => {
       <Box mt="md">
         {signers &&
           signers.map((signer: any) => (
-            <Flex
+            <Box
               key={signer.id}
               mb="md"
-              justifyContent="space-between"
-              align={'center'}>
-              <Box>
-                <Text>{signer.name}</Text>
-                <Text fontSize="sm" mb="xs" color="text-secondary">
-                  {signer.email}
-                </Text>
-              </Box>
-              <Box>
-                <Text fontSize="sm" color="text.500" mb="xs">
-                  {signer.signature_status}
-                </Text>
-              </Box>
-            </Flex>
+              border="1px solid"
+              borderColor="border"
+              p="md">
+              <Flex
+                h="80px"
+                mb="sm"
+                justifyContent="center"
+                alignItems="center"
+                backgroundColor={
+                  signer.signature_status === 'signed'
+                    ? 'background-secondary'
+                    : 'green.300'
+                }
+                position="relative">
+                {signer.signature_status === 'signed' && (
+                  <Text
+                    fontSize="sm"
+                    mb="xs"
+                    position="absolute"
+                    right="10"
+                    top="10"
+                    color="text-secondary">
+                    {signer.id}
+                  </Text>
+                )}
+                {signer.signature_status === 'pending' && (
+                  <Text
+                    cursor="pointer"
+                    onClick={() => {
+                      setCurrentCounterParty(signer);
+                      setIsSignatureModalOpen(true);
+                    }}>
+                    Click and Sign
+                  </Text>
+                )}
+              </Flex>
+
+              <Flex justifyContent="space-between" align={'center'}>
+                <Box>
+                  <Text>{signer.name}</Text>
+                  <Text fontSize="sm" color="text-secondary">
+                    {signer.email}
+                  </Text>
+                  {signer.signature_status === 'signed' && (
+                    <Text fontSize="xs">{signer?.signature_date}</Text>
+                  )}
+                </Box>
+                <Box>
+                  <Text fontSize="sm" color="text.500" mb="xs">
+                    {signer.signature_status}
+                  </Text>
+                </Box>
+              </Flex>
+            </Box>
           ))}
       </Box>
       <Flex gap="sm" direction="row">
@@ -192,6 +304,30 @@ const SignerBlock = () => {
           //@ts-expect-error need to fix
           addSigner={(data: any) => setSigners((prev: any) => [...prev, data])}
         />
+      </Modal>
+      <Modal
+        open={isSignatureModalOpen}
+        ariaLabel="signature modal"
+        onClose={() => setDialogOpen(false)}>
+        <Box>
+          <Flex justifyContent="space-between" align="center">
+            <Text variant="lg" fontWeight="heading">
+              Signature
+            </Text>
+            <Button
+              variant="ghost"
+              onClick={() => setIsSignatureModalOpen(false)}>
+              <X />
+            </Button>
+          </Flex>
+          {isSignatureModalOpen && (
+            <SignatureCanvasComponent
+              onSave={handleSignatureSave}
+              onCancel={handleSignatureCancel}
+              loading={isSavingSignature}
+            />
+          )}
+        </Box>
       </Modal>
     </>
   );

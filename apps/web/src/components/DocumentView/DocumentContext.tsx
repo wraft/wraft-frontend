@@ -174,8 +174,6 @@ export const DocumentProvider = ({
       verifyInvitezUserAccess();
       // verifySignerAccess();
     }
-    console.log('type', type);
-    console.log('guestToken', type);
   }, [type, guestToken]);
 
   useEffect(() => {
@@ -265,16 +263,19 @@ export const DocumentProvider = ({
       const data = await apiService.get(
         `/contents/${cId}/verify_access/${guestToken}`,
         guestToken,
-        type === 'invite',
+        type as 'sign' | 'invite' | null | undefined,
       );
       if (data?.token) {
         setToken(data.token);
       }
-      if (data?.role !== 'suggestor') {
-        setDocRole(data.role);
-      }
       if (data?.role === 'suggestor') {
         setDocRole('viewer');
+      }
+      if (data?.role === 'sign') {
+        setDocRole('signer');
+      }
+      if (data?.role !== 'suggestor' && data?.role !== 'sign') {
+        setDocRole(data.role);
       }
       // setAccessStatus(data); // Set the access status
     } catch (err) {
@@ -284,7 +285,11 @@ export const DocumentProvider = ({
 
   const fetchContentDetails = async (id: string) => {
     try {
-      const data = await apiService.get(`contents/${id}`, token, isInvite);
+      const data = await apiService.get(
+        `contents/${id}`,
+        token,
+        type as 'sign' | 'invite' | null | undefined,
+      );
 
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
