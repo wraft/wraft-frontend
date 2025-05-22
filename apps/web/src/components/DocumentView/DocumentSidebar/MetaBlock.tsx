@@ -36,7 +36,6 @@ const MetaBlock = () => {
         `contents/${cId}/meta`,
         { ...data },
         token,
-        isInvite,
       );
 
       if (response?.meta) {

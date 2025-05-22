@@ -65,7 +65,7 @@ interface DocumentContextProps {
   fieldValues: any;
   flow: any;
   isEditable: any;
-  isInvite: boolean;
+  isInvite: 'invite' | 'sign' | null;
   isMakeCompete: any;
   lastSavedContent: any;
   loading: boolean;
@@ -147,7 +147,7 @@ export const DocumentProvider = ({
   const type: string = router.query.type as string;
   const guestToken: string = router.query.token as string;
 
-  const isInvite = type === 'invite' || type === 'sign';
+  const isInvite = type === 'invite' || type === 'sign' ? type : null;
 
   useEffect(() => {
     if (mode) {
