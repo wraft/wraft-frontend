@@ -106,7 +106,8 @@ const StyledResizableHandle = styled(ResizableHandle)`
 const BASE_URL = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:4000";
 
 export default function ImageView(props: ReactNodeViewProps) {
-  const { setAttrs, node } = props;
+  const { setAttrs, node, view } = props;
+  const isReadonly = !view.editable;
 
   const attrs = node.attrs as ImageAttrs;
   const url = attrs.src || "";
@@ -208,9 +209,11 @@ export default function ImageView(props: ReactNodeViewProps) {
           </div>
         </ErrorOverlay>
       )}
-      <StyledResizableHandle position="bottom-right">
-        <ArrowDownRight size={16} />
-      </StyledResizableHandle>
+      {!isReadonly && (
+        <StyledResizableHandle position="bottom-right">
+          <ArrowDownRight size={16} />
+        </StyledResizableHandle>
+      )}
     </StyledResizableRoot>
   );
 }

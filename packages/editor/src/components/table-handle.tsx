@@ -107,8 +107,11 @@ const StyledTableHandleRowTrigger = styled(TableHandleRowTrigger)`
   display: flex;
 `;
 
-export function TableHandle() {
+export function TableHandle({ isReadonly }: { isReadonly?: boolean }) {
   const editor = useEditor<EditorExtension>({ update: true });
+  if (isReadonly) {
+    return null;
+  }
 
   return (
     <StyledTableHandleRoot>
