@@ -50,21 +50,24 @@ const Index = () => {
   const homePageUrl = process.env.homePageUrl || '/';
 
   const onSubmit = (data: FormValues) => {
-    if (data.newPassword == data.confirmPassword) {
+    if (data.newPassword === data.confirmPassword) {
       const body = {
         token: token,
         password: data.newPassword,
       };
-      const resetPasswordRequest = postAPI('user/password/reset', body);
-      router.push('/login');
       toast.promise(
-        resetPasswordRequest,
+        postAPI('user/password/reset', body),
         {
           loading: 'Loading...',
-          success: 'Password reset successful',
-          error: 'Failed to reset password',
+          success: () => {
+            router.push('/login');
+            return 'Password reset successful';
+          },
+          error: (err) => err.message || 'Failed to reset password',
         },
-        {},
+        {
+          position: 'top-right',
+        },
       );
     }
   };
