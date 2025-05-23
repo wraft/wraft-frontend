@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
-import { deleteAPI } from 'utils/models';
+import { deleteAPI, postAPI, fetchAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
 
@@ -27,6 +27,14 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
 
   const { hasPermission } = usePermission();
+  const { cId, contents, setSignerBoxes, setContents } = useDocument();
+
+  useEffect(() => {
+    fetchAPI(`contents/${cId}/signatures`).then((data: any) => {
+      const signatures = data.signatures;
+      setSignerBoxes(signatures);
+    });
+  }, []);
 
   /**
    * Delete content
@@ -42,6 +50,35 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     });
   };
 
+  const onbuildforSigning = () => {
+    console.log('onbuildforSigning');
+    toast.promise(
+      postAPI(`contents/${cId}/generate_signature`, {}),
+      {
+        loading: 'Building for signing...',
+        success: (response: any) => {
+          console.log('response', response);
+          if (contents) {
+            const updatedContents: ContentInstance = {
+              ...contents,
+              content: {
+                ...contents.content,
+                signed_doc_url: response?.document_url || null,
+              },
+            };
+            setContents(updatedContents);
+          }
+          setSignerBoxes(response.signatures);
+          return `Build done successfully`;
+        },
+        error: 'Build Failed',
+      },
+      {
+        position: 'top-right',
+      },
+    );
+  };
+
   return (
     <>
       <DropdownMenu.Provider>
@@ -50,6 +87,9 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
+          <DropdownMenu.Item onClick={() => onbuildforSigning()}>
+            Build for Signing
+          </DropdownMenu.Item>
           {nextState &&
             nextState.is_user_eligible &&
             hasPermission('document', 'manage') && (
@@ -59,16 +99,16 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
                 Edit
               </DropdownMenu.Item>
             )}
-          {hasPermission('document', 'delete') && (
-            <DropdownMenu.Item onClick={() => setIsDelete(true)}>
-              Delete
-            </DropdownMenu.Item>
-          )}
-          {hasPermission('document', 'manage') && (
-            <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
-              Send Mail
-            </DropdownMenu.Item>
-          )}
+          {/* {hasPermission('document', 'delete') && ( */}
+          <DropdownMenu.Item onClick={() => setIsDelete(true)}>
+            Delete
+          </DropdownMenu.Item>
+          {/* )} */}
+          {/* {hasPermission('document', 'manage') && ( */}
+          <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
+            Send Mail
+          </DropdownMenu.Item>
+          {/* )} */}
         </DropdownMenu>
       </DropdownMenu.Provider>
 

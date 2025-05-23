@@ -23,6 +23,7 @@ import { authorizeRoute } from 'middleware/authorize';
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
 import { EditorMode, usePermissions } from './usePermissions';
+import PdfSignerViewer from './PdfSignerBlock';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -212,6 +213,7 @@ export const DocumentContentBlock = () => {
     editorRef,
     contentBody,
     fieldTokens,
+    signerBoxes,
     setEditorMode,
     fetchContentDetails,
   } = useDocument();
@@ -223,8 +225,6 @@ export const DocumentContentBlock = () => {
   const tabView = useTabStore();
 
   const defaultSelectedId = 'edit';
-
-  console.log('doc_check[content][3]', contentBody);
 
   const collabData = {
     user: {
@@ -271,6 +271,25 @@ export const DocumentContentBlock = () => {
     };
   }, []);
 
+  // it's a signer, so we need to show the signer viewer
+  if (docRole === 'signer') {
+    return (
+      <TabWrapper>
+        <Flex
+          direction="row"
+          align="center"
+          justify="center"
+          mt="lg"
+          className="main-content">
+          <PdfSignerViewer
+            signerBoxes={signerBoxes}
+            url={contents?.content?.signed_doc_url}
+          />
+        </Flex>
+      </TabWrapper>
+    );
+  }
+
   return (
     <>
       {editorMode === 'new' ? (
@@ -308,6 +327,9 @@ export const DocumentContentBlock = () => {
 
                 <Tab id="view">
                   <StepBlock title="Document" desc="Sign and Manage" />
+                </Tab>
+                <Tab id="sign">
+                  <StepBlock title="Signature" desc="Sign and Manage" />
                 </Tab>
               </TabList>
               <Flex align="center" gap="sm">
@@ -400,6 +422,27 @@ export const DocumentContentBlock = () => {
                   <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
                 </PdfWrapper>
               )}
+            </TabPanel>
+            <TabPanel store={tabView} className="main-content">
+              {!contents?.content?.signed_doc_url && (
+                <Box
+                  w="100%"
+                  mx="md"
+                  p="xl"
+                  border="solid 1px"
+                  borderColor="border">
+                  <Text fontSize="xl" fontWeight="heading" mb="xs">
+                    SignDocument not generated
+                  </Text>
+                  <Text color="text-secondary" mb="md">
+                    Documents need to be generated
+                  </Text>
+                </Box>
+              )}
+              <PdfSignerViewer
+                signerBoxes={signerBoxes}
+                url={contents?.content?.signed_doc_url}
+              />
             </TabPanel>
           </TabProvider>
         </TabWrapper>
