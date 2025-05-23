@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Box, Text, Flex, Button, Modal, Field, InputText } from '@wraft/ui';
@@ -56,11 +57,21 @@ const SignerAddBlock = ({
     formState: { errors },
   } = useForm<Signer>({ resolver: zodResolver(SignerSchema) });
 
+  const getRandomLightColor = () => {
+    const r = Math.floor(200 + Math.random() * 55);
+    const g = Math.floor(200 + Math.random() * 55);
+    const b = Math.floor(200 + Math.random() * 55);
+    return { r, g, b };
+  };
+
   const onSubmit = async (data: Signer) => {
     setLoading(true);
 
     try {
-      const response = await postAPI(`contents/${cId}/add_counterparty`, data);
+      const response = await postAPI(`contents/${cId}/add_counterparty`, {
+        ...data,
+        color_rgb: getRandomLightColor(),
+      });
       addSigner(response);
       setLoading(false);
       onClose();
@@ -253,6 +264,14 @@ const SignerBlock = () => {
                     color="text-secondary">
                     {signer.id}
                   </Text>
+                )}
+                {signer.signature_image && (
+                  <Image
+                    src={signer.signature_image}
+                    width={230}
+                    height={50}
+                    alt="signature"
+                  />
                 )}
                 {signer.signature_status === 'pending' && (
                   <Text

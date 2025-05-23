@@ -265,6 +265,10 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     setSelectedCounterparty(value);
   };
 
+  const toRgbString = ({ r, g, b }: { r: number; g: number; b: number }) => {
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   const renderSignatureBox = (
     signerBox: any,
     scale: number,
@@ -284,7 +288,9 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
       top: `${pageHeight - signerBox.signature_data.coordinates.y1 * scale - signerBox.signature_data.dimensions.height * scale}px`,
       width: `${signerBox.signature_data.dimensions.width * scale + 2}px`,
       height: `${signerBox.signature_data.dimensions.height * scale + 2}px`,
-      backgroundColor: '#e3f7ee',
+      backgroundColor: signerBox?.counter_party?.color_rgb
+        ? toRgbString(signerBox.counter_party.color_rgb)
+        : '#e3f7ee',
       cursor: currentSignBox?.counter_party ? 'default' : 'pointer',
       zIndex: 10,
       border: '1px dashed #006f50',
@@ -302,10 +308,8 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         style={boxStyle}
         onClick={() => {
           setCurrentSignBox(signerBox);
-          console.log('signerBox', signerBox);
-          if (signerBox.counter_party === null) {
-            setIsSignatureModalOpen(true);
-          }
+
+          setIsSignatureModalOpen(true);
         }}>
         <Box>
           <Flex alignItems="center" gap="xs">
@@ -323,41 +327,37 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
   };
 
   const renderSignerModal = (): React.ReactElement => {
-    if (!currentSignBox?.counter_party) {
-      return (
-        <Box>
-          <Text variant="lg" fontWeight="heading" mb="md">
-            Add Counterparty
-          </Text>
-          <form onSubmit={handleFormSubmit}>
-            <Flex direction="column" gap="md">
-              <Select
-                value={selectedCounterparty}
-                onChange={handleSelectChange}
-                required
-                options={[
-                  { value: '', label: 'Select a Signer' },
-                  ...signers.map((signer) => ({
-                    value: signer.id,
-                    label: `${signer.name} (${signer.email})`,
-                  })),
-                ]}
-              />
-              <Box pt="lg">
-                <Button
-                  type="submit"
-                  loading={isSubmitting}
-                  disabled={isSubmitting}>
-                  Add Counterparty
-                </Button>
-              </Box>
-            </Flex>
-          </form>
-        </Box>
-      );
-    }
-
-    return <Box />;
+    return (
+      <Box>
+        <Text variant="lg" fontWeight="heading" mb="md">
+          Add Counterparty
+        </Text>
+        <form onSubmit={handleFormSubmit}>
+          <Flex direction="column" gap="md">
+            <Select
+              value={selectedCounterparty}
+              onChange={handleSelectChange}
+              required
+              options={[
+                { value: '', label: 'Select a Signer' },
+                ...signers.map((signer) => ({
+                  value: signer.id,
+                  label: `${signer.name} (${signer.email})`,
+                })),
+              ]}
+            />
+            <Box pt="lg">
+              <Button
+                type="submit"
+                loading={isSubmitting}
+                disabled={isSubmitting}>
+                Add Counterparty
+              </Button>
+            </Box>
+          </Flex>
+        </form>
+      </Box>
+    );
   };
 
   return (

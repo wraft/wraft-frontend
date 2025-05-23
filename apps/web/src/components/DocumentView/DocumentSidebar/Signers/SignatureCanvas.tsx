@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import { Box, Button, Flex, Text, Tab, useTab } from '@wraft/ui';
 import { CloudArrowUp, Check } from '@phosphor-icons/react';
@@ -16,10 +16,16 @@ interface SignatureCanvasProps {
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 const CANVAS_DIMENSIONS = {
-  width: 500,
-  height: 200,
+  width: 800,
+  height: 300,
   aspectRatio: '800/300',
 };
+
+const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+const displayWidth = CANVAS_DIMENSIONS.width;
+const displayHeight = CANVAS_DIMENSIONS.height;
+const scaledWidth = displayWidth * dpr;
+const scaledHeight = displayHeight * dpr;
 
 export const SignatureCanvasComponent = ({
   onSave,
@@ -34,6 +40,19 @@ export const SignatureCanvasComponent = ({
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const tabStore = useTab({ defaultSelectedId: 'draw' });
+
+  useEffect(() => {
+    if (signatureCanvasRef.current) {
+      const canvas = signatureCanvasRef.current.getCanvas();
+      if (canvas) {
+        const context = canvas.getContext('2d');
+        if (context) {
+          context.setTransform(1, 0, 0, 1, 0, 0);
+          context.scale(dpr, dpr);
+        }
+      }
+    }
+  }, [dpr]);
 
   const handleFileDrop = (acceptedFiles: File[]) => {
     if (!acceptedFiles.length) return;
@@ -139,35 +158,26 @@ export const SignatureCanvasComponent = ({
             <SignatureCanvas
               ref={signatureCanvasRef}
               penColor="black"
-              velocityFilterWeight={0.7}
-              minWidth={1.5}
-              maxWidth={3}
-              dotSize={2}
+              velocityFilterWeight={0.3}
+              minWidth={1 * dpr}
+              maxWidth={2 * dpr}
+              dotSize={1.5 * dpr}
               canvasProps={{
-                width: CANVAS_DIMENSIONS.width,
-                height: CANVAS_DIMENSIONS.height,
+                width: scaledWidth,
+                height: scaledHeight,
                 style: {
                   border: '1px solid #ddd',
                   background: 'white',
                   touchAction: 'none',
                   cursor: 'crosshair',
                   display: 'block',
-                  width: '100%',
-                  height: 'auto',
+                  width: `${displayWidth}px`,
+                  height: `${displayHeight}px`,
                   aspectRatio: CANVAS_DIMENSIONS.aspectRatio,
                 },
               }}
               onEnd={() => setHasSignature(true)}
             />
-            <Box mt="md">
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={clearSignature}
-                disabled={loading}>
-                Clear
-              </Button>
-            </Box>
           </Box>
 
           <Box>
@@ -175,21 +185,32 @@ export const SignatureCanvasComponent = ({
               Draw your signature above. You can clear and redraw if needed.
             </Text>
 
-            <Flex justifyContent="space-between" mt="md">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={onCancel}
-                disabled={loading}>
-                Cancel
-              </Button>
-              <Button
-                size="sm"
-                onClick={handleSignatureSave}
-                disabled={!hasSignature || loading}
-                loading={loading}>
-                Accept and sign
-              </Button>
+            <Flex justifyContent="space-between" mt="xxl">
+              <Box>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={clearSignature}
+                  disabled={loading}>
+                  Clear
+                </Button>
+              </Box>
+              <Flex gap="sm" direction="row">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={onCancel}
+                  disabled={loading}>
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSignatureSave}
+                  disabled={!hasSignature || loading}
+                  loading={loading}>
+                  Accept and sign
+                </Button>
+              </Flex>
             </Flex>
           </Box>
         </Box>
