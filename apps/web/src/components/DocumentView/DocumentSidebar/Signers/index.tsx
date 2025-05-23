@@ -136,6 +136,7 @@ const SignerBlock = () => {
     signers,
     cId: contentId,
     contents,
+    docRole,
     setSigners,
     setSignerBoxes,
     setContents,
@@ -273,7 +274,7 @@ const SignerBlock = () => {
                     alt="signature"
                   />
                 )}
-                {signer.signature_status === 'pending' && (
+                {signer.signature_status !== 'signed' && (
                   <Text
                     cursor="pointer"
                     onClick={() => {
@@ -297,23 +298,27 @@ const SignerBlock = () => {
                 </Box>
                 <Box>
                   <Text fontSize="sm" color="text.500" mb="xs">
-                    {signer.signature_status}
+                    {signer.signature_status === 'signed'
+                      ? 'Signed'
+                      : 'Pending'}
                   </Text>
                 </Box>
               </Flex>
             </Box>
           ))}
       </Box>
-      <Flex gap="sm" direction="row">
-        <Button variant="tertiary" onClick={onInvite} size="sm">
-          Add Signer
-        </Button>
-        {signers.length > 0 && (
-          <Button variant="tertiary" onClick={onRequestSignature} size="sm">
-            Request Signature
+      {docRole !== 'signer' && (
+        <Flex gap="sm" direction="row">
+          <Button variant="tertiary" onClick={onInvite} size="sm">
+            Add Signer
           </Button>
-        )}
-      </Flex>
+          {signers.length > 0 && (
+            <Button variant="tertiary" onClick={onRequestSignature} size="sm">
+              Request Signature
+            </Button>
+          )}
+        </Flex>
+      )}
       <Modal
         open={isDialogOpen}
         ariaLabel="confirm model"

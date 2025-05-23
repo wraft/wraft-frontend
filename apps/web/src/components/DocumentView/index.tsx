@@ -214,73 +214,75 @@ const DocumentView = () => {
             bg="background-secondary"
             templateColumns="1fr minmax(380px, 400px)">
             <Box w="100%">
-              <Flex
-                alignItems="center"
-                flex={1}
-                px="sm"
-                py="sm"
-                borderBottom="solid 1px"
-                borderColor="border"
-                bg="background-primary">
-                <Flex gap="sm">
-                  {states &&
-                    states.map((state: any, i: number) => (
-                      <FlowProgressBar
-                        key={state?.id}
-                        num={i + 1}
-                        state={state?.state}
-                        order={state?.order}
-                        currentActiveIndex={currentActiveIndex}
-                        nextState={nextState}
-                        id={state?.id}
-                      />
-                    ))}
+              {canAccess('toolbar') && (
+                <Flex
+                  alignItems="center"
+                  flex={1}
+                  px="sm"
+                  py="sm"
+                  borderBottom="solid 1px"
+                  borderColor="border"
+                  bg="background-primary">
+                  <Flex gap="sm">
+                    {states &&
+                      states.map((state: any, i: number) => (
+                        <FlowProgressBar
+                          key={state?.id}
+                          num={i + 1}
+                          state={state?.state}
+                          order={state?.order}
+                          currentActiveIndex={currentActiveIndex}
+                          nextState={nextState}
+                          id={state?.id}
+                        />
+                      ))}
 
-                  {contents &&
-                    !nextState?.is_user_eligible &&
-                    !isMakeCompete &&
-                    !isEditable && <ApprovalAwaitingLabel />}
-                </Flex>
+                    {contents &&
+                      !nextState?.is_user_eligible &&
+                      !isMakeCompete &&
+                      !isEditable && <ApprovalAwaitingLabel />}
+                  </Flex>
 
-                <Flex ml="auto" alignItems="center">
-                  {editorMode === 'view' &&
-                    !contents?.content?.approval_status && (
-                      <Flex p={0} gap={2} ml="auto" alignItems="center">
-                        {nextState && nextState.is_user_eligible && (
-                          <ApprovalHandler
-                            name={nextState?.state}
-                            onClick={() => {
-                              setModalAction('next');
-                              setOpen(true);
-                            }}
-                          />
-                        )}
-                        {isMakeCompete && (
-                          <ApprovalHandler
-                            name="Mark Complete"
-                            onClick={() => {
-                              setModalAction('next');
-                              setOpen(true);
-                            }}
-                          />
-                        )}
-                      </Flex>
-                    )}
-                  {isEditable && <LockedBadge />}
+                  <Flex ml="auto" alignItems="center">
+                    {editorMode === 'view' &&
+                      !contents?.content?.approval_status && (
+                        <Flex p={0} gap={2} ml="auto" alignItems="center">
+                          {nextState && nextState.is_user_eligible && (
+                            <ApprovalHandler
+                              name={nextState?.state}
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}
+                            />
+                          )}
+                          {isMakeCompete && (
+                            <ApprovalHandler
+                              name="Mark Complete"
+                              onClick={() => {
+                                setModalAction('next');
+                                setOpen(true);
+                              }}
+                            />
+                          )}
+                        </Flex>
+                      )}
+                    {isEditable && <LockedBadge />}
+                  </Flex>
+                  {/* {canAccess('docEdit') && ( */}
+                  {(editorMode === 'edit' || editorMode === 'new') && (
+                    <Box ml="auto">
+                      <Button
+                        onClick={onSubmit}
+                        variant="primary"
+                        size="sm"
+                        loading={saving}>
+                        Save
+                      </Button>
+                    </Box>
+                  )}
                 </Flex>
-                {/* {canAccess('docEdit') && ( */}
-                {(editorMode === 'edit' || editorMode === 'new') && (
-                  <Box ml="auto">
-                    <Button
-                      onClick={onSubmit}
-                      variant="primary"
-                      size="sm"
-                      loading={saving}>
-                      Save
-                    </Button>
-                  </Box>
-                )}
-              </Flex>
+              )}
 
               <DocumentContentBlock />
             </Box>
