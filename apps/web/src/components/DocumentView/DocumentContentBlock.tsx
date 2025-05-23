@@ -271,6 +271,25 @@ export const DocumentContentBlock = () => {
     };
   }, []);
 
+  // it's a signer, so we need to show the signer viewer
+  if (docRole === 'signer') {
+    return (
+      <TabWrapper>
+        <Flex
+          direction="row"
+          align="center"
+          justify="center"
+          mt="lg"
+          className="main-content">
+          <PdfSignerViewer
+            signerBoxes={signerBoxes}
+            url={contents?.content?.signed_doc_url}
+          />
+        </Flex>
+      </TabWrapper>
+    );
+  }
+
   return (
     <>
       {editorMode === 'new' ? (
