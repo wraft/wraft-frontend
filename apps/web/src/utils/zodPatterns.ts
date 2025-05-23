@@ -7,7 +7,7 @@ import {
   uppercaseRegex,
 } from './regex';
 
-const MIN_LENGTH = 6;
+const MIN_LENGTH = 8;
 const FIELD_VALIDATION = {
   TEST: {
     SPECIAL_CHAR: (value: string) => specialCharacterRegex.test(value),
