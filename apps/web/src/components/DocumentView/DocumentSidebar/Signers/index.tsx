@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -7,7 +7,9 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from '@phosphor-icons/react';
 
-import { postAPI, fetchAPI } from 'utils/models';
+import apiService from 'components/DocumentView/APIModel';
+import { useAuth } from 'contexts/AuthContext';
+import { postAPI } from 'utils/models';
 import { emailPattern } from 'utils/zodPatterns';
 import { nameRegex } from 'utils/regex';
 import { ContentInstance } from 'utils/types/content';
@@ -114,9 +116,12 @@ const SignerAddBlock = ({
             />
           </Field>
 
-          <Flex justifyContent="space-between" mt="lg">
+          <Flex justifyContent="flex-end" mt="lg" gap="sm">
             <Button variant="primary" loading={isLoading} type="submit">
               Add Signer
+            </Button>
+            <Button variant="tertiary" onClick={onClose}>
+              Cancel
             </Button>
           </Flex>
         </Flex>
@@ -129,31 +134,52 @@ const SignerBlock = () => {
   const { cId } = useDocument();
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [isSignatureModalOpen, setIsSignatureModalOpen] = useState(false);
+  const [infoModalOpen, setInfoModalOpen] = useState(false);
+  const [isRequestSignatureLoading, setIsRequestSignatureLoading] =
+    useState(false);
   const [isSavingSignature, setIsSavingSignature] = useState(false);
   const [currentCounterParty, setCurrentCounterParty] = useState<any>(null);
 
   const {
-    signers,
+    activeCounterparty,
     cId: contentId,
     contents,
     docRole,
-    setSigners,
-    setSignerBoxes,
+    signerBoxes,
+    signers,
+    token,
+    inviteType,
     setContents,
+    setSignerBoxes,
+    setSigners,
   } = useDocument();
+  const { userProfile } = useAuth();
+
+  const nullCounterParties = useMemo(() => {
+    return signerBoxes?.filter((item: any) => item.counter_party === null);
+  }, [signerBoxes]);
+
+  const hasAnyPlaceHolderAssigned = useMemo(() => {
+    return signerBoxes?.some(
+      (item: any) => item?.counter_party?.email === userProfile?.email,
+    );
+  }, [signerBoxes]);
 
   const onInvite = () => {
     setDialogOpen(true);
   };
 
   useEffect(() => {
-    fetchSigners();
-  }, []);
+    if (cId && token && contents) {
+      fetchSigners();
+    }
+  }, [cId, token, contents]);
 
   const fetchSigners = async () => {
     try {
-      const response = (await fetchAPI(
-        `contents/${cId}/counterparties`,
+      const response = (await apiService.get(
+        `/contents/${cId}/counterparties`,
+        token,
       )) as CounterpartiesResponse;
       setSigners(response.counterparties);
     } catch (error) {
@@ -162,14 +188,33 @@ const SignerBlock = () => {
   };
 
   const onRequestSignature = async () => {
-    try {
-      const response = await postAPI(`contents/${cId}/request_signature`, {});
-    } catch (error) {
-      toast.error(error.response?.data || error.message || 'invailed token', {
-        duration: 3000,
-        position: 'top-right',
-      });
+    if (nullCounterParties.length > 0) {
+      setInfoModalOpen(true);
+      return;
     }
+
+    setIsRequestSignatureLoading(true);
+    const requestSignature = postAPI(`contents/${cId}/request_signature`, {});
+    toast.promise(
+      requestSignature,
+      {
+        loading: 'Sending Request...',
+        success: () => {
+          setIsRequestSignatureLoading(false);
+          return 'Request sent successfully';
+        },
+        error: (error) => {
+          setIsRequestSignatureLoading(false);
+          const errorMessage =
+            error.response?.data || error.message || 'invailed token';
+          return errorMessage;
+        },
+      },
+      {
+        duration: 4000,
+        position: 'top-right',
+      },
+    );
   };
 
   const handleSignatureSave = async (signatureDataUrl: string) => {
@@ -186,9 +231,10 @@ const SignerBlock = () => {
     formData.append('signature_image', blob, 'signature.png');
 
     try {
-      const response: any = await postAPI(
-        `contents/${contentId}/signatures/${currentCounterParty?.id}/append_signature`,
+      const response: any = await apiService.put(
+        `contents/${contentId}/append_signature`,
         formData,
+        token,
       );
 
       setSignerBoxes((prev: any) =>
@@ -230,6 +276,7 @@ const SignerBlock = () => {
   const handleSignatureCancel = () => {
     setIsSignatureModalOpen(false);
   };
+
   return (
     <>
       <Text as="h5" mb="sm">
@@ -274,16 +321,31 @@ const SignerBlock = () => {
                     alt="signature"
                   />
                 )}
-                {signer.signature_status !== 'signed' && (
-                  <Text
-                    cursor="pointer"
-                    onClick={() => {
-                      setCurrentCounterParty(signer);
-                      setIsSignatureModalOpen(true);
-                    }}>
-                    Click and Sign
-                  </Text>
-                )}
+                {hasAnyPlaceHolderAssigned > 0 &&
+                  nullCounterParties.length === 0 &&
+                  userProfile?.email === signer.email &&
+                  inviteType !== 'sign' && (
+                    <Text
+                      cursor="pointer"
+                      onClick={() => {
+                        setCurrentCounterParty(signer);
+                        setIsSignatureModalOpen(true);
+                      }}>
+                      Click and Sign
+                    </Text>
+                  )}
+                {userProfile?.email === signer.email ||
+                  (activeCounterparty?.email === signer.email &&
+                    inviteType === 'sign' && (
+                      <Text
+                        cursor="pointer"
+                        onClick={() => {
+                          setCurrentCounterParty(signer);
+                          setIsSignatureModalOpen(true);
+                        }}>
+                        Click and Sign
+                      </Text>
+                    ))}
               </Flex>
 
               <Flex justifyContent="space-between" align={'center'}>
@@ -313,22 +375,49 @@ const SignerBlock = () => {
             Add Signer
           </Button>
           {signers.length > 0 && (
-            <Button variant="tertiary" onClick={onRequestSignature} size="sm">
+            <Button
+              variant="tertiary"
+              onClick={onRequestSignature}
+              size="sm"
+              loading={isRequestSignatureLoading}>
               Request Signature
             </Button>
           )}
         </Flex>
       )}
+
       <Modal
         open={isDialogOpen}
         ariaLabel="confirm model"
         onClose={() => setDialogOpen(false)}>
-        <SignerAddBlock
-          onClose={() => setDialogOpen(false)}
-          //@ts-expect-error need to fix
-          addSigner={(data: any) => setSigners((prev: any) => [...prev, data])}
-        />
+        <>
+          {isDialogOpen && (
+            <SignerAddBlock
+              onClose={() => setDialogOpen(false)}
+              addSigner={(data: any) =>
+                //@ts-expect-error need to fix
+                setSigners((prev: any) => [...prev, data])
+              }
+            />
+          )}
+        </>
       </Modal>
+
+      <Modal
+        open={infoModalOpen}
+        ariaLabel="confirm model"
+        onClose={() => setInfoModalOpen(false)}>
+        <>
+          <Modal.Header>Info</Modal.Header>
+          <Box>Please assign a signer to the signature placeholder.</Box>
+          <Flex gap="sm">
+            <Button onClick={() => setInfoModalOpen(false)} variant="tertiary">
+              Cancel
+            </Button>
+          </Flex>
+        </>
+      </Modal>
+
       <Modal
         open={isSignatureModalOpen}
         ariaLabel="signature modal"

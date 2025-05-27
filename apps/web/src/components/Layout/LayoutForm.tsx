@@ -119,7 +119,6 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     if (layout) {
       setEdit(true);
       const assetsList: Asset[] = layout.assets;
-      console.log('datalayout', layout);
 
       assetsList.forEach((a: Asset) => {
         addUploads(a);
@@ -259,8 +258,6 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const goTo = (currentStep: number) => setFormStep(currentStep);
 
   const onSubmit = async (data: any) => {
-    console.log('log', data);
-
     try {
       setIsLoading(true);
       const formData = new FormData();

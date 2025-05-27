@@ -21,7 +21,7 @@ const MetaBlock = () => {
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const { editorMode, cId, token, isInvite, meta, setMeta } = useDocument();
+  const { editorMode, cId, token, meta, setMeta } = useDocument();
 
   const orderedKeys = ['type', 'contract_value', 'start_date', 'expiry_date'];
 

@@ -5,13 +5,14 @@ import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
-import { deleteAPI, postAPI, fetchAPI } from 'utils/models';
+import { deleteAPI, postAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
 
 import EmailComposer from '../EmailComposer';
 import InviteCollaborators from '../InviteCollaborators';
 import { useDocument } from '../DocumentContext';
+import apiService from '../APIModel';
 
 interface EditMenuProps {
   id: string;
@@ -27,14 +28,16 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
 
   const { hasPermission } = usePermission();
-  const { cId, contents, setSignerBoxes, setContents } = useDocument();
+  const { cId, contents, token, setSignerBoxes, setContents } = useDocument();
 
   useEffect(() => {
-    fetchAPI(`contents/${cId}/signatures`).then((data: any) => {
-      const signatures = data.signatures;
-      setSignerBoxes(signatures);
-    });
-  }, []);
+    if (cId && contents && token) {
+      apiService.get(`contents/${cId}/signatures`, token).then((data: any) => {
+        const signatures = data.signatures;
+        setSignerBoxes(signatures);
+      });
+    }
+  }, [cId, contents]);
 
   /**
    * Delete content
@@ -51,13 +54,11 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   };
 
   const onbuildforSigning = () => {
-    console.log('onbuildforSigning');
     toast.promise(
       postAPI(`contents/${cId}/generate_signature`, {}),
       {
         loading: 'Building for signing...',
         success: (response: any) => {
-          console.log('response', response);
           if (contents) {
             const updatedContents: ContentInstance = {
               ...contents,

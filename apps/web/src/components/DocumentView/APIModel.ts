@@ -18,16 +18,12 @@ interface ApiRequestOptions<T = any> {
 
 const api = axios.create({
   baseURL: `${API_HOST}/api/v1`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 const apiRequest = async <T = any>({
   method,
   url,
   data,
-  guestType = null,
   accessToken = null,
   customHeaders = {},
 }: ApiRequestOptions): Promise<T> => {
@@ -37,11 +33,9 @@ const apiRequest = async <T = any>({
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
     };
 
-    const resolvedUrl = buildResolvedUrl(url, guestType);
-
     const response: AxiosResponse<T> = await api({
       method,
-      url: resolvedUrl,
+      url,
       data,
       headers,
     });
@@ -55,28 +49,6 @@ const apiRequest = async <T = any>({
   }
 };
 
-const buildResolvedUrl = (
-  url: string,
-  guestType: 'invite' | 'sign' | null,
-): string => {
-  const normalizedUrl = url.startsWith('/') ? url : `/${url}`;
-  const [path, query = ''] = normalizedUrl.split('?');
-  const params = new URLSearchParams(query);
-
-  if (!params.has('type') && guestType) {
-    params.set('type', 'guest');
-  }
-
-  if (guestType === 'sign') {
-    params.set('type', 'sign');
-  }
-
-  const queryString = params.toString();
-  const fullPath = queryString ? `${path}?${queryString}` : path;
-
-  return guestType ? `/guest${fullPath}` : fullPath;
-};
-
 /**
  * API service with helper methods
  */
@@ -84,14 +56,12 @@ const apiService = {
   get: <T = any>(
     url: string,
     accessToken: string | null = null,
-    guestType?: 'invite' | 'sign' | null,
     headers?: Record<string, string>,
   ): ApiResponse<T> =>
     apiRequest<T>({
       method: 'get',
       url,
       accessToken,
-      guestType,
       customHeaders: headers,
     }),
 
@@ -99,7 +69,6 @@ const apiService = {
     url: string,
     data: D,
     accessToken: string | undefined = undefined,
-    guestType?: 'invite' | 'sign' | null,
     headers?: Record<string, string>,
   ): ApiResponse<T> =>
     apiRequest<T>({
@@ -107,7 +76,6 @@ const apiService = {
       url,
       data,
       accessToken,
-      guestType,
       customHeaders: headers,
     }),
 
@@ -115,7 +83,6 @@ const apiService = {
     url: string,
     data: D,
     accessToken: string | undefined | null = undefined,
-    guestType?: 'invite' | 'sign' | null,
     headers?: Record<string, string>,
   ): ApiResponse<T> =>
     apiRequest<T>({
@@ -123,21 +90,18 @@ const apiService = {
       url,
       data,
       accessToken,
-      guestType,
       customHeaders: headers,
     }),
 
   delete: <T = any>(
     url: string,
     accessToken: string | undefined = undefined,
-    guestType?: 'invite' | 'sign' | null,
     headers?: Record<string, string>,
   ): ApiResponse<T> =>
     apiRequest<T>({
       method: 'delete',
       url,
       accessToken,
-      guestType,
       customHeaders: headers,
     }),
 };

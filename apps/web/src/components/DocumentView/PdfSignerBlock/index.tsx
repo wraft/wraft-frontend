@@ -139,7 +139,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
     useState<AnnotationDetailsType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { signers, cId: contentId, setSignerBoxes } = useDocument();
+  const { signers, cId: contentId, inviteType, setSignerBoxes } = useDocument();
   const renderWidth = 760;
 
   useEffect(() => {
@@ -308,20 +308,26 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         style={boxStyle}
         onClick={() => {
           setCurrentSignBox(signerBox);
-
-          setIsSignatureModalOpen(true);
+          if (!inviteType) {
+            setIsSignatureModalOpen(true);
+          }
         }}>
-        <Box>
+        <Flex direction="column" gap="xs" alignItems="center">
           <Flex alignItems="center" gap="xs">
             <Signature size={20} />
             <Text variant="sm" fontWeight="heading">
               Signature
             </Text>
           </Flex>
+          {!signerBox?.counter_party?.name && (
+            <Text variant="sm" fontWeight="heading" color="text-secondary">
+              Click and Select a Signer
+            </Text>
+          )}
           <Text variant="sm" fontWeight="heading">
             {signerBox?.counter_party?.name}
           </Text>
-        </Box>
+        </Flex>
       </Box>
     );
   };

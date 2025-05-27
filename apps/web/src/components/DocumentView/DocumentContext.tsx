@@ -8,7 +8,6 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import axios, { AxiosInstance } from 'axios';
 import { NodeJSON } from '@wraft/editor';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
@@ -51,6 +50,7 @@ type Counterparty = {
 };
 
 interface DocumentContextProps {
+  activeCounterparty: Counterparty | null;
   additionalCollaborator: any;
   cId: string;
   contentBody: any;
@@ -80,6 +80,7 @@ interface DocumentContextProps {
   userType: UserType;
   signerBoxes: any;
   signers: Counterparty[];
+  inviteType: 'sign' | 'invite' | null | undefined;
   setAdditionalCollaborator: (data: any) => void;
   setUserType: (state: UserType) => void;
   fetchContentDetails: (cid: string) => void;
@@ -94,12 +95,6 @@ interface DocumentContextProps {
   setSigners: (signers: Counterparty[]) => void;
   setContents: (contents: ContentInstance) => void;
 }
-
-const createAxiosInstance = (): AxiosInstance => {
-  return axios.create({
-    baseURL: `${API_HOST}/api/v1`, // replace with your actual API host
-  });
-};
 
 export const DocumentContext = createContext<DocumentContextProps>(
   {} as DocumentContextProps,
@@ -135,19 +130,22 @@ export const DocumentProvider = ({
   const [token, setToken] = useState<string | null>(null);
   const [userType, setUserType] = useState<UserType>('default');
   const [signers, setSigners] = useState<Counterparty[]>([]);
+  const [activeCounterparty, setActiveCounterparty] = useState<Counterparty>();
 
   const newContent = contentStore((state: any) => state.newContents);
+
   const editorRef = useRef<any>();
   const lastSavedContent = useRef<string>('\n');
+
   const router = useRouter();
   const { userProfile, accessToken } = useAuth();
-  const api = createAxiosInstance();
 
   const cId: string = router.query.id as string;
-  const type: string = router.query.type as string;
+  const inviteType = router.query.type as 'sign' | 'invite' | null | undefined;
   const guestToken: string = router.query.token as string;
 
-  const isInvite = type === 'invite' || type === 'sign' ? type : null;
+  const isInvite =
+    inviteType === 'invite' || inviteType === 'sign' ? inviteType : null;
 
   useEffect(() => {
     if (mode) {
@@ -159,32 +157,26 @@ export const DocumentProvider = ({
   }, [mode]);
 
   useEffect(() => {
-    if (!type) {
+    if (!inviteType) {
       setToken(accessToken);
     }
   }, []);
 
   useEffect(() => {
-    if (type === 'invite' && guestToken) {
+    if (inviteType === 'invite' && guestToken) {
       setUserType('guest');
       verifyInvitezUserAccess();
     }
-    if (type === 'sign' && guestToken) {
+    if (inviteType === 'sign' && guestToken) {
       setUserType('guest');
       verifyInvitezUserAccess();
-      // verifySignerAccess();
     }
-  }, [type, guestToken]);
+  }, [inviteType, guestToken]);
 
   useEffect(() => {
-    // fetchGuestContentDetails(cId);
     if (token) {
       fetchContentDetails(cId);
     }
-
-    // if (type === 'invite' && guestToken && token) {
-    //   fetchGuestContentDetails(cId);
-    // }
   }, [token]);
 
   // useEffect(() => {
@@ -261,12 +253,14 @@ export const DocumentProvider = ({
   const verifyInvitezUserAccess = async () => {
     try {
       const data = await apiService.get(
-        `/contents/${cId}/verify_access/${guestToken}`,
+        `/guest/contents/${cId}/verify_access/${guestToken}?type=${inviteType === 'sign' ? 'sign' : 'guest'}`,
         guestToken,
-        type as 'sign' | 'invite' | null | undefined,
       );
       if (data?.token) {
         setToken(data.token);
+      }
+      if (data?.counterparty) {
+        setActiveCounterparty(data.counterparty);
       }
       if (data?.role === 'suggestor') {
         setDocRole('viewer');
@@ -285,11 +279,7 @@ export const DocumentProvider = ({
 
   const fetchContentDetails = async (id: string) => {
     try {
-      const data = await apiService.get(
-        `contents/${id}`,
-        token,
-        type as 'sign' | 'invite' | null | undefined,
-      );
+      const data = await apiService.get(`contents/${id}`, token);
 
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
@@ -474,6 +464,7 @@ export const DocumentProvider = ({
   return (
     <DocumentContext.Provider
       value={{
+        activeCounterparty: activeCounterparty || null,
         cId,
         contentBody,
         contents,
@@ -503,6 +494,7 @@ export const DocumentProvider = ({
         isInvite,
         signerBoxes,
         signers,
+        inviteType,
         setAdditionalCollaborator,
         setUserType,
         fetchContentDetails,

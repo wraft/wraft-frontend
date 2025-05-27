@@ -274,7 +274,7 @@ export const DocumentContentBlock = () => {
   // it's a signer, so we need to show the signer viewer
   if (docRole === 'signer') {
     return (
-      <TabWrapper>
+      <Box h="calc(100vh - 60px)" overflowY="auto">
         <Flex
           direction="row"
           align="center"
@@ -286,7 +286,7 @@ export const DocumentContentBlock = () => {
             url={contents?.content?.signed_doc_url}
           />
         </Flex>
-      </TabWrapper>
+      </Box>
     );
   }
 
@@ -424,7 +424,12 @@ export const DocumentContentBlock = () => {
               )}
             </TabPanel>
             <TabPanel store={tabView} className="main-content">
-              {!contents?.content?.signed_doc_url && (
+              {contents?.content?.signed_doc_url ? (
+                <PdfSignerViewer
+                  signerBoxes={signerBoxes}
+                  url={contents?.content?.signed_doc_url}
+                />
+              ) : (
                 <Box
                   w="100%"
                   mx="md"
@@ -439,10 +444,6 @@ export const DocumentContentBlock = () => {
                   </Text>
                 </Box>
               )}
-              <PdfSignerViewer
-                signerBoxes={signerBoxes}
-                url={contents?.content?.signed_doc_url}
-              />
             </TabPanel>
           </TabProvider>
         </TabWrapper>

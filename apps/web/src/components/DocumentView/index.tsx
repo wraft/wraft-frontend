@@ -132,7 +132,7 @@ const DocumentView = () => {
 
     if (editorMode === 'edit') {
       apiService
-        .put(`contents/${cId}`, template, token, isInvite)
+        .put(`contents/${cId}`, template, token)
         .then((response: any) => {
           lastSavedContent.current = serials.serialized;
           onCreateSuccess(response);
