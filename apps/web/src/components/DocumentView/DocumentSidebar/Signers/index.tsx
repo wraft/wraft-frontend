@@ -231,10 +231,10 @@ const SignerBlock = () => {
     formData.append('signature_image', blob, 'signature.png');
 
     try {
-      const response: any = await apiService.put(
+      const response: any = await apiService.post(
         `contents/${contentId}/append_signature`,
         formData,
-        token,
+        token || '',
       );
 
       setSignerBoxes((prev: any) =>
@@ -324,7 +324,8 @@ const SignerBlock = () => {
                 {hasAnyPlaceHolderAssigned > 0 &&
                   nullCounterParties.length === 0 &&
                   userProfile?.email === signer.email &&
-                  inviteType !== 'sign' && (
+                  inviteType !== 'sign' &&
+                  signer.signature_status !== 'signed' && (
                     <Text
                       cursor="pointer"
                       onClick={() => {
@@ -336,7 +337,8 @@ const SignerBlock = () => {
                   )}
                 {userProfile?.email === signer.email ||
                   (activeCounterparty?.email === signer.email &&
-                    inviteType === 'sign' && (
+                    inviteType === 'sign' &&
+                    signer.signature_status !== 'signed' && (
                       <Text
                         cursor="pointer"
                         onClick={() => {
