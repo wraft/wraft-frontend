@@ -22,7 +22,6 @@ const Form = () => {
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
     setValue,
   } = useForm();
@@ -116,14 +115,7 @@ const Form = () => {
   // };
 
   return (
-    <Box
-      as="form"
-      sx={{ mx: 'auto' }}
-      onSubmit={handleSubmit(onSubmit)}
-      py={3}
-      mt={4}
-      mx={4}
-      mb={3}>
+    <Box sx={{ mx: 'auto' }} py={3} mt={4} mx={4} mb={3}>
       {/* {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />} */}
       <Box>
         <Flex>
@@ -159,7 +151,7 @@ const Form = () => {
         </Flex>
       </Box>
       <Flex mt={3} ml={1}>
-        <Button type="submit" variant="primary">
+        <Button type="submit" variant="primary" onClick={onSubmit}>
           <Flex m={0}>
             {loading && <Spinner color="white" size={24} />}
             {!loading && <Text>{cId ? 'Update' : 'Create'}</Text>}
