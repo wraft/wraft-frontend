@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -15,10 +15,6 @@ export const useFormValidation = ({
   items,
   setItems,
 }: UseFormValidationProps) => {
-  const [validationErrors, setValidationErrors] = useState<
-    Record<string, string>
-  >({});
-
   // Setup React Hook Form
   const {
     control,
@@ -167,7 +163,6 @@ export const useFormValidation = ({
     validateFieldNames,
     validateOptionFields,
     clearValidationErrors,
-    validationErrors,
   };
 };
 
