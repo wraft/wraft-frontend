@@ -5,7 +5,7 @@ import { IconWrapper } from "../Field/styles";
 import * as S from "./styles";
 
 import { CreateWuiProps, forwardRef } from "@/system";
-import { createEvent, DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
+import { DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
 
 export interface InputTextOptions extends DefaultFieldStylesProps {
   autoFocus?: boolean;

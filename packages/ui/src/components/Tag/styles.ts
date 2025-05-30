@@ -1,7 +1,5 @@
 import styled, { system, th } from "@xstyled/emotion";
 
-import { StyledIcon } from "../Icon";
-
 import { Size, Variant } from "./index";
 
 import { WuiProps } from "@/system";
