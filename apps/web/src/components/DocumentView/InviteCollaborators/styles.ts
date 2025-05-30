@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 
 export const MemberItem = styled.div`
   display: flex;
