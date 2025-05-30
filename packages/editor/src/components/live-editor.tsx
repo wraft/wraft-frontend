@@ -98,11 +98,6 @@ export const LiveEditor = forwardRef(
 
       setProvider(wsProvider);
 
-      wsProvider.awareness.on("change", () => {
-        const states = Array.from(wsProvider.awareness.getStates().values());
-        // setAwarenessUsers(states);
-      });
-
       if (collabData?.user) {
         wsProvider.awareness.setLocalState({
           user: { ...collabData.user, color: getRandomColor() },

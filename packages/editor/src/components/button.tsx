@@ -1,10 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import styled from "@emotion/styled";
-import {
-  TooltipContent,
-  TooltipRoot,
-  TooltipTrigger,
-} from "prosekit/react/tooltip";
+import { TooltipRoot, TooltipTrigger } from "prosekit/react/tooltip";
 import type { ReactNode } from "react";
 
 const StyledTooltipTrigger = styled(TooltipTrigger)`
@@ -68,58 +64,10 @@ const StyledButton = styled.button<{ pressed?: boolean; disabled?: boolean }>`
   }
 `;
 
-const StyledTooltipContent = styled(TooltipContent)`
-  z-index: 50;
-  overflow: hidden;
-  border: 1px solid;
-  border-radius: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  background-color: #181818;
-  color: #f5f5f5;
-
-  &[data-state="open"] {
-    animation: fadeInZoom 150ms ease-in;
-  }
-
-  &[data-state="closed"] {
-    animation: fadeOutZoom 200ms ease-out;
-  }
-
-  @keyframes fadeInZoom {
-    0% {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes fadeOutZoom {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-  }
-
-  @media (prefers-color-scheme: dark) {
-    background-color: #f5f5f5;
-    color: #181818;
-  }
-`;
-
 export default function Button({
   pressed,
   disabled,
   onClick,
-  tooltip,
   children,
 }: {
   pressed?: boolean;

@@ -22,7 +22,7 @@ import {
   CloudArrowUp,
   Check,
 } from "@phosphor-icons/react";
-import { Accept, useDropzone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import {
   Modal,
   Tab,
