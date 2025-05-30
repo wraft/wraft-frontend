@@ -50,7 +50,6 @@ const FormList = ({ rerender, setRerender }: Props) => {
   const [pageMeta, setPageMeta] = useState<Meta>();
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
-  const [isOpen, setIsOpen] = useState<number | null>(null);
   const [deleteOpen, setDeleteOpen] = useState<number | null>(null);
   const { hasPermission } = usePermission();
 
@@ -136,10 +135,7 @@ const FormList = ({ rerender, setRerender }: Props) => {
             <Flex justifyContent="space-between">
               <DropdownMenu.Provider>
                 <DropdownMenu.Trigger>
-                  <Box
-                    onClick={() => {
-                      setIsOpen(row.index);
-                    }}>
+                  <Box>
                     <EllipsisHIcon
                       color={
                         (theme.colors &&
@@ -154,7 +150,6 @@ const FormList = ({ rerender, setRerender }: Props) => {
                   {hasPermission('form', 'delete') && (
                     <DropdownMenu.Item
                       onClick={() => {
-                        setIsOpen(null);
                         setDeleteOpen(row.index);
                       }}>
                       Delete
