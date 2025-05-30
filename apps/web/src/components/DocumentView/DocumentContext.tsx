@@ -127,10 +127,13 @@ export const DocumentProvider = ({
   const [signerBoxes, setSignerBoxes] = useState<any>();
   const [states, setStates] = useState<any>();
   const [tabActiveId, setTabActiveId] = useState<any>('edit');
+<<<<<<< HEAD
   const [token, setToken] = useState<string | null>(null);
   const [userType, setUserType] = useState<UserType>('default');
   const [signers, setSigners] = useState<Counterparty[]>([]);
   const [activeCounterparty, setActiveCounterparty] = useState<Counterparty>();
+=======
+>>>>>>> 032d6108 (refactor(web): remove unused axios instance and error state)
 
   const newContent = contentStore((state: any) => state.newContents);
 
