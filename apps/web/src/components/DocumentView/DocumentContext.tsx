@@ -8,7 +8,6 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import axios, { AxiosInstance } from 'axios';
 import { NodeJSON } from '@wraft/editor';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
@@ -80,12 +79,6 @@ interface DocumentContextProps {
   setUserType: (state: UserType) => void;
 }
 
-const createAxiosInstance = (): AxiosInstance => {
-  return axios.create({
-    baseURL: `${API_HOST}/api/v1`, // replace with your actual API host
-  });
-};
-
 export const DocumentContext = createContext<DocumentContextProps>(
   {} as DocumentContextProps,
 );
@@ -117,14 +110,12 @@ export const DocumentProvider = ({
   const [selectedTemplate, setSelectedTemplate] = useState<any>();
   const [states, setStates] = useState<any>();
   const [tabActiveId, setTabActiveId] = useState<any>('edit');
-  const [error, setError] = useState(null);
 
   const newContent = contentStore((state: any) => state.newContents);
   const editorRef = useRef<any>();
   const lastSavedContent = useRef<string>('\n');
   const router = useRouter();
   const { userProfile, accessToken } = useAuth();
-  const api = createAxiosInstance();
 
   const cId: string = router.query.id as string;
   const type: string = router.query.type as string;
