@@ -466,10 +466,22 @@ export const DocumentContentBlock = () => {
             </TabPanel>
             <TabPanel store={tabView} className="main-content">
               {contents?.content?.signed_doc_url ? (
-                <PdfSignerViewer
-                  signerBoxes={signerBoxes}
-                  url={contents?.content?.signed_doc_url}
-                />
+                <Box>
+                  <Flex justify="flex-end" mb="md">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() =>
+                        window.open(contents.content.signed_doc_url, '_blank')
+                      }>
+                      Download PDF
+                    </Button>
+                  </Flex>
+                  <PdfSignerViewer
+                    signerBoxes={signerBoxes}
+                    url={contents?.content?.signed_doc_url}
+                  />
+                </Box>
               ) : (
                 <Box
                   w="100%"
