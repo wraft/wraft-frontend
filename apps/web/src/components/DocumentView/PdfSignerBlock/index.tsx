@@ -17,7 +17,7 @@ import {
 } from 'pdf-lib';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { Box, Flex, Text, Button, Modal, Select } from '@wraft/ui';
-import { Signature } from '@phosphor-icons/react';
+import { Signature, X } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { postAPI } from 'utils/models';
@@ -184,29 +184,6 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
           return;
         }
 
-        try {
-          for (const field of form.getFields()) {
-            const fieldName = field.getName();
-            for (const widget of field.acroField.getWidgets()) {
-              const rect = widget.getRectangle();
-              const { x, y, width, height } = rect;
-
-              const pageRef = widget.P();
-              const pages = pdfDoc.getPages().find((x) => x.ref === pageRef);
-
-              flattenWidget(pdfDoc, field, widget);
-
-              try {
-                form.removeField(field);
-              } catch (err) {
-                // Field removal failed, continue
-              }
-            }
-          }
-        } catch (error) {
-          console.error('Error processing form fields:', error.message);
-        }
-
         const modifiedPdfBytes = await pdfDoc.save();
         const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
         const pdfObjectUrl = URL.createObjectURL(blob);
@@ -315,7 +292,7 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
         <Flex direction="column" gap="xs" alignItems="center">
           <Flex alignItems="center" gap="xs">
             <Signature size={20} />
-            <Text variant="sm" fontWeight="heading">
+            <Text variant="sm" color="#000" fontWeight="heading">
               Signature
             </Text>
           </Flex>
@@ -334,9 +311,22 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
 
   const renderSignerModal = (): React.ReactElement => {
     return (
-      <Box>
-        <Text variant="lg" fontWeight="heading" mb="md">
-          Add Counterparty
+      <Box w="400px">
+        <Flex justifyContent="space-between" alignItems="center" mb="lg">
+          <Text as="h3" fontSize="2xl">
+            Add Counterparty
+          </Text>
+          <X
+            size={20}
+            weight="bold"
+            cursor="pointer"
+            className="main-icon"
+            onClick={() => setIsSignatureModalOpen(false)}
+          />
+        </Flex>
+        <Text color="text-secondary" mb="md">
+          Select a signer to add as a counterparty to this document. The
+          selected person will be able to review and sign the agreement.
         </Text>
         <form onSubmit={handleFormSubmit}>
           <Flex direction="column" gap="md">
@@ -348,11 +338,20 @@ const PdfSignerViewer = ({ url, signerBoxes }: PdfViewerProps) => {
                 { value: '', label: 'Select a Signer' },
                 ...signers.map((signer) => ({
                   value: signer.id,
-                  label: `${signer.name} (${signer.email})`,
+                  label: signer.name,
+                  email: signer.email,
                 })),
               ]}
+              renderItem={(item: any) => (
+                <Box>
+                  <Text fontWeight="heading">{item.label}</Text>
+                  <Text variant="sm" color="text-secondary">
+                    {item.email}
+                  </Text>
+                </Box>
+              )}
             />
-            <Box pt="lg">
+            <Box pt="xl" ml="auto">
               <Button
                 type="submit"
                 loading={isSubmitting}

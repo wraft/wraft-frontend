@@ -18,6 +18,7 @@ import PdfViewer from 'common/PdfViewer';
 import Editor from 'common/Editor';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
+import { ContentInstance } from 'utils/types/content';
 import { authorizeRoute } from 'middleware/authorize';
 
 import { useDocument } from './DocumentContext';
@@ -216,6 +217,8 @@ export const DocumentContentBlock = () => {
     signerBoxes,
     setEditorMode,
     fetchContentDetails,
+    setSignerBoxes,
+    setContents,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -270,6 +273,44 @@ export const DocumentContentBlock = () => {
       setIsEditorMounted(false);
     };
   }, []);
+
+  const onbuildforSigning = async () => {
+    try {
+      setIsBuilding(true);
+      if (!contents?.content?.build) {
+        await postAPI(`contents/${cId}/build`, []);
+      }
+
+      await toast.promise(
+        postAPI(`contents/${cId}/generate_signature`, {}),
+        {
+          loading: 'Building for signing...',
+          success: (response: any) => {
+            if (contents) {
+              const updatedContents: ContentInstance = {
+                ...contents,
+                content: {
+                  ...contents.content,
+                  signed_doc_url: response?.document_url || null,
+                },
+              };
+              setContents(updatedContents);
+            }
+            setSignerBoxes(response.signatures);
+            return `Build done successfully`;
+          },
+          error: 'Build Failed',
+        },
+        {
+          position: 'top-right',
+        },
+      );
+    } catch (error) {
+      toast.error('Failed to generate signature document');
+    } finally {
+      setIsBuilding(false);
+    }
+  };
 
   // it's a signer, so we need to show the signer viewer
   if (docRole === 'signer') {
@@ -442,6 +483,14 @@ export const DocumentContentBlock = () => {
                   <Text color="text-secondary" mb="md">
                     Documents need to be generated
                   </Text>
+                  <Button
+                    variant="secondary"
+                    loading={isBuilding}
+                    disabled={isBuilding}
+                    onClick={() => onbuildforSigning()}>
+                    <Play size={14} className="action" />
+                    Generate for Signing
+                  </Button>
                 </Box>
               )}
             </TabPanel>
