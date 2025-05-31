@@ -64,8 +64,6 @@ const StyledItem = styled(AutocompleteItem)`
 export default function SlashMenu() {
   const editor = useEditor<EditorExtension>();
 
-  // console.log("commands", editor.commands.insertSignature());
-
   return (
     <StyledPopover regex={/\/.*$/iu}>
       <StyledList>

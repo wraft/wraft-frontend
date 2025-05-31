@@ -57,7 +57,6 @@ const PlaceholderBlock = ({
 
     const newMappedFields = mapFields(fields, data);
     // const tokens = mapPlaceholdersToFields(placeholders);
-    console.log('mappedFields[cc][dd]', data);
     setFieldValues(data);
     setMappedFields(newMappedFields);
     onSaved(newMappedFields);

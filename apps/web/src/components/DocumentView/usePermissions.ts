@@ -4,6 +4,7 @@ export type EditorMode = 'view' | 'edit' | 'new' | 'sign';
 export type DocRole = 'viewer' | 'editor' | 'signer';
 export type UserType = 'default' | 'guest';
 export type SectionId =
+  | 'overview'
   | 'comment'
   | 'history'
   | 'log'
@@ -11,6 +12,8 @@ export type SectionId =
   | 'docGenerator'
   | 'docEdit'
   | 'docView'
+  | 'sign'
+  | 'toolbar'
   | 'approvalAction';
 
 interface SectionPermission {
@@ -25,6 +28,13 @@ type PermissionsMap = Record<SectionId, SectionPermission>;
 
 export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
   default: {
+    overview: {
+      modes: {
+        viewer: true,
+        editor: true,
+        signer: false,
+      },
+    },
     comment: {
       modes: {
         viewer: true,
@@ -46,6 +56,13 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
         signer: false,
       },
     },
+    sign: {
+      modes: {
+        viewer: true,
+        editor: true,
+        signer: true,
+      },
+    },
     flow: {
       modes: {
         viewer: true,
@@ -81,8 +98,22 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
         signer: false,
       },
     },
+    toolbar: {
+      modes: {
+        viewer: true,
+        editor: true,
+        signer: true,
+      },
+    },
   },
   guest: {
+    overview: {
+      modes: {
+        viewer: true,
+        editor: true,
+        signer: false,
+      },
+    },
     comment: {
       modes: {
         viewer: false,
@@ -136,6 +167,20 @@ export const PERMISSIONS_CONFIG: Record<UserType, PermissionsMap> = {
       modes: {
         viewer: false,
         editor: false,
+        signer: false,
+      },
+    },
+    sign: {
+      modes: {
+        viewer: false,
+        editor: false,
+        signer: true,
+      },
+    },
+    toolbar: {
+      modes: {
+        viewer: true,
+        editor: true,
         signer: false,
       },
     },

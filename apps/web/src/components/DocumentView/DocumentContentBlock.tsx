@@ -18,11 +18,13 @@ import PdfViewer from 'common/PdfViewer';
 import Editor from 'common/Editor';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
+import { ContentInstance } from 'utils/types/content';
 import { authorizeRoute } from 'middleware/authorize';
 
 import { useDocument } from './DocumentContext';
 import AwarenessUsers from './AwarenessUsers';
 import { EditorMode, usePermissions } from './usePermissions';
+import PdfSignerViewer from './PdfSignerBlock';
 
 // This prevents the matchesNode error on hot reloads
 EditorView.prototype.updateState = function updateState(state) {
@@ -212,8 +214,11 @@ export const DocumentContentBlock = () => {
     editorRef,
     contentBody,
     fieldTokens,
+    signerBoxes,
     setEditorMode,
     fetchContentDetails,
+    setSignerBoxes,
+    setContents,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -223,8 +228,6 @@ export const DocumentContentBlock = () => {
   const tabView = useTabStore();
 
   const defaultSelectedId = 'edit';
-
-  console.log('doc_check[content][3]', contentBody);
 
   const collabData = {
     user: {
@@ -271,6 +274,63 @@ export const DocumentContentBlock = () => {
     };
   }, []);
 
+  const onbuildforSigning = async () => {
+    try {
+      setIsBuilding(true);
+      if (!contents?.content?.build) {
+        await postAPI(`contents/${cId}/build`, []);
+      }
+
+      await toast.promise(
+        postAPI(`contents/${cId}/generate_signature`, {}),
+        {
+          loading: 'Building for signing...',
+          success: (response: any) => {
+            if (contents) {
+              const updatedContents: ContentInstance = {
+                ...contents,
+                content: {
+                  ...contents.content,
+                  signed_doc_url: response?.document_url || null,
+                },
+              };
+              setContents(updatedContents);
+            }
+            setSignerBoxes(response.signatures);
+            return `Build done successfully`;
+          },
+          error: 'Build Failed',
+        },
+        {
+          position: 'top-right',
+        },
+      );
+    } catch (error) {
+      toast.error('Failed to generate signature document');
+    } finally {
+      setIsBuilding(false);
+    }
+  };
+
+  // it's a signer, so we need to show the signer viewer
+  if (docRole === 'signer') {
+    return (
+      <Box h="calc(100vh - 60px)" overflowY="auto">
+        <Flex
+          direction="row"
+          align="center"
+          justify="center"
+          mt="lg"
+          className="main-content">
+          <PdfSignerViewer
+            signerBoxes={signerBoxes}
+            url={contents?.content?.signed_doc_url}
+          />
+        </Flex>
+      </Box>
+    );
+  }
+
   return (
     <>
       {editorMode === 'new' ? (
@@ -308,6 +368,9 @@ export const DocumentContentBlock = () => {
 
                 <Tab id="view">
                   <StepBlock title="Document" desc="Sign and Manage" />
+                </Tab>
+                <Tab id="sign">
+                  <StepBlock title="Signature" desc="Sign and Manage" />
                 </Tab>
               </TabList>
               <Flex align="center" gap="sm">
@@ -399,6 +462,48 @@ export const DocumentContentBlock = () => {
                 <PdfWrapper>
                   <PdfViewer url={`${contents.content.build}`} pageNumber={1} />
                 </PdfWrapper>
+              )}
+            </TabPanel>
+            <TabPanel store={tabView} className="main-content">
+              {contents?.content?.signed_doc_url ? (
+                <Box>
+                  <Flex justify="flex-end" mb="md">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() =>
+                        window.open(contents.content.signed_doc_url, '_blank')
+                      }>
+                      Download PDF
+                    </Button>
+                  </Flex>
+                  <PdfSignerViewer
+                    signerBoxes={signerBoxes}
+                    url={contents?.content?.signed_doc_url}
+                  />
+                </Box>
+              ) : (
+                <Box
+                  w="100%"
+                  mx="md"
+                  p="xl"
+                  border="solid 1px"
+                  borderColor="border">
+                  <Text fontSize="xl" fontWeight="heading" mb="xs">
+                    SignDocument not generated
+                  </Text>
+                  <Text color="text-secondary" mb="md">
+                    Documents need to be generated
+                  </Text>
+                  <Button
+                    variant="secondary"
+                    loading={isBuilding}
+                    disabled={isBuilding}
+                    onClick={() => onbuildforSigning()}>
+                    <Play size={14} className="action" />
+                    Generate for Signing
+                  </Button>
+                </Box>
               )}
             </TabPanel>
           </TabProvider>

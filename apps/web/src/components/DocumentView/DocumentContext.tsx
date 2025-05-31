@@ -8,7 +8,6 @@ import React, {
   useRef,
 } from 'react';
 import { useRouter } from 'next/router';
-import axios, { AxiosInstance } from 'axios';
 import { NodeJSON } from '@wraft/editor';
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
@@ -40,7 +39,18 @@ interface StateState {
   updated_at: string;
 }
 
+type Counterparty = {
+  id: string;
+  name: string;
+  email: string;
+  updated_at: string;
+  signature_date: string | null;
+  created_at: string;
+  signature_status: 'pending' | 'signed' | 'rejected';
+};
+
 interface DocumentContextProps {
+  activeCounterparty: Counterparty | null;
   additionalCollaborator: any;
   cId: string;
   contentBody: any;
@@ -55,7 +65,7 @@ interface DocumentContextProps {
   fieldValues: any;
   flow: any;
   isEditable: any;
-  isInvite: boolean;
+  isInvite: 'invite' | 'sign' | null;
   isMakeCompete: any;
   lastSavedContent: any;
   loading: boolean;
@@ -68,8 +78,12 @@ interface DocumentContextProps {
   tabActiveId: string;
   token: string | null;
   userType: UserType;
-  fetchContentDetails: (cid: string) => void;
+  signerBoxes: any;
+  signers: Counterparty[];
+  inviteType: 'sign' | 'invite' | null | undefined;
   setAdditionalCollaborator: (data: any) => void;
+  setUserType: (state: UserType) => void;
+  fetchContentDetails: (cid: string) => void;
   setContentBody: (contetn: any) => void;
   setEditorMode: (state: EditorMode) => void;
   setFieldTokens: (data: any) => void;
@@ -77,14 +91,10 @@ interface DocumentContextProps {
   setMeta: (data: any) => void;
   setPageTitle: (data: any) => void;
   setTabActiveId: (state: string) => void;
-  setUserType: (state: UserType) => void;
+  setSignerBoxes: (boxs: any) => void;
+  setSigners: (signers: Counterparty[]) => void;
+  setContents: (contents: ContentInstance) => void;
 }
-
-const createAxiosInstance = (): AxiosInstance => {
-  return axios.create({
-    baseURL: `${API_HOST}/api/v1`, // replace with your actual API host
-  });
-};
 
 export const DocumentContext = createContext<DocumentContextProps>(
   {} as DocumentContextProps,
@@ -97,40 +107,45 @@ export const DocumentProvider = ({
   children: ReactElement;
   mode: EditorMode;
 }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
   const [contentBody, setContentBody] = useState<NodeJSON>();
-  const [contents, setContents] = useState<ContentInstance>();
   const [contentType, setContentType] = useState<any>();
-  const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
-  const [userType, setUserType] = useState<UserType>('default');
+  const [contents, setContents] = useState<ContentInstance>();
   const [docRole, setDocRole] = useState<DocRole>('viewer');
-  const [fields, setField] = useState<Array<FieldT>>([]);
+  const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
+  const [error, setError] = useState(null);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
-  const [meta, setMeta] = useState<any>({});
-  const [additionalCollaborator, setAdditionalCollaborator] = useState<any>([]);
+  const [fields, setField] = useState<Array<FieldT>>([]);
   const [flow, setFlow] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [meta, setMeta] = useState<any>({});
   const [nextState, setNextState] = useState<StateState>();
   const [pageTitle, setPageTitle] = useState<string>('Untitled document');
   const [prevState, setPrevState] = useState<StateState>();
   const [selectedTemplate, setSelectedTemplate] = useState<any>();
+  const [signerBoxes, setSignerBoxes] = useState<any>();
   const [states, setStates] = useState<any>();
   const [tabActiveId, setTabActiveId] = useState<any>('edit');
-  const [error, setError] = useState(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [userType, setUserType] = useState<UserType>('default');
+  const [signers, setSigners] = useState<Counterparty[]>([]);
+  const [activeCounterparty, setActiveCounterparty] = useState<Counterparty>();
 
   const newContent = contentStore((state: any) => state.newContents);
+
   const editorRef = useRef<any>();
   const lastSavedContent = useRef<string>('\n');
+
   const router = useRouter();
   const { userProfile, accessToken } = useAuth();
-  const api = createAxiosInstance();
 
   const cId: string = router.query.id as string;
-  const type: string = router.query.type as string;
+  const inviteType = router.query.type as 'sign' | 'invite' | null | undefined;
   const guestToken: string = router.query.token as string;
 
-  const isInvite = type === 'invite' ? true : false;
+  const isInvite =
+    inviteType === 'invite' || inviteType === 'sign' ? inviteType : null;
 
   useEffect(() => {
     if (mode) {
@@ -142,27 +157,26 @@ export const DocumentProvider = ({
   }, [mode]);
 
   useEffect(() => {
-    if (!type) {
+    if (!inviteType) {
       setToken(accessToken);
     }
   }, []);
 
   useEffect(() => {
-    if (type === 'invite' && guestToken) {
+    if (inviteType === 'invite' && guestToken) {
       setUserType('guest');
       verifyInvitezUserAccess();
     }
-  }, [type, guestToken]);
+    if (inviteType === 'sign' && guestToken) {
+      setUserType('guest');
+      verifyInvitezUserAccess();
+    }
+  }, [inviteType, guestToken]);
 
   useEffect(() => {
-    // fetchGuestContentDetails(cId);
     if (token) {
       fetchContentDetails(cId);
     }
-
-    // if (type === 'invite' && guestToken && token) {
-    //   fetchGuestContentDetails(cId);
-    // }
   }, [token]);
 
   // useEffect(() => {
@@ -239,18 +253,23 @@ export const DocumentProvider = ({
   const verifyInvitezUserAccess = async () => {
     try {
       const data = await apiService.get(
-        `/contents/${cId}/verify_access/${guestToken}`,
+        `/guest/contents/${cId}/verify_access/${guestToken}?type=${inviteType === 'sign' ? 'sign' : 'guest'}`,
         guestToken,
-        isInvite,
       );
       if (data?.token) {
         setToken(data.token);
       }
-      if (data?.role !== 'suggestor') {
-        setDocRole(data.role);
+      if (data?.counterparty) {
+        setActiveCounterparty(data.counterparty);
       }
       if (data?.role === 'suggestor') {
         setDocRole('viewer');
+      }
+      if (data?.role === 'sign') {
+        setDocRole('signer');
+      }
+      if (data?.role !== 'suggestor' && data?.role !== 'sign') {
+        setDocRole(data.role);
       }
       // setAccessStatus(data); // Set the access status
     } catch (err) {
@@ -260,7 +279,7 @@ export const DocumentProvider = ({
 
   const fetchContentDetails = async (id: string) => {
     try {
-      const data = await apiService.get(`contents/${id}`, token, isInvite);
+      const data = await apiService.get(`contents/${id}`, token);
 
       if (data?.content?.serialized?.serialized) {
         const serialized = JSON.parse(data.content.serialized.serialized);
@@ -445,6 +464,7 @@ export const DocumentProvider = ({
   return (
     <DocumentContext.Provider
       value={{
+        activeCounterparty: activeCounterparty || null,
         cId,
         contentBody,
         contents,
@@ -472,8 +492,12 @@ export const DocumentProvider = ({
         lastSavedContent,
         meta,
         isInvite,
-        fetchContentDetails,
+        signerBoxes,
+        signers,
+        inviteType,
         setAdditionalCollaborator,
+        setUserType,
+        fetchContentDetails,
         setContentBody,
         setEditorMode,
         setFieldTokens,
@@ -481,7 +505,9 @@ export const DocumentProvider = ({
         setMeta,
         setPageTitle,
         setTabActiveId,
-        setUserType,
+        setSignerBoxes,
+        setSigners,
+        setContents,
       }}>
       {children}
     </DocumentContext.Provider>
