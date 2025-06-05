@@ -1,6 +1,6 @@
 import { rpxTransformers } from "@xstyled/emotion";
 
-import { getCheckboxes, ThemeCheckboxes } from "../components/Checkbox/theme";
+import { getCheckboxes } from "../components/Checkbox/theme";
 import { getToggles } from "../components/Toggle/theme";
 
 import basic from "./basic";

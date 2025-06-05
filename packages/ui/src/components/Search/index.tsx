@@ -90,7 +90,6 @@ export const Search = forwardRef<"input", SearchProps>(
             setResults((data as SearchOption[] | OptionGroup[]) || []);
           } catch (error) {
             setResults([]);
-          } finally {
           }
         } else {
           setResults([]);
