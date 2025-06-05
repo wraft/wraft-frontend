@@ -5,7 +5,6 @@
 /* eslint-env browser */
 
 import type * as Y from "yjs";
-import * as yjs from "yjs";
 import * as bc from "lib0/broadcastchannel";
 import * as time from "lib0/time";
 import * as encoding from "lib0/encoding";

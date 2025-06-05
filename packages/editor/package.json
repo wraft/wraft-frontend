@@ -40,6 +40,7 @@
     "phoenix": "^1.7.18",
     "prosekit": "^0.13.2",
     "prosemirror-flat-list": "^0.5.4",
+    "react-dropzone": "14.3.8",
     "react-signature-canvas": "1.1.0-alpha.2",
     "rehype-parse": "^9.0.1",
     "rehype-raw": "^7.0.0",
