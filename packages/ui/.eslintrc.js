@@ -31,6 +31,13 @@ module.exports = {
           "sibling",
           "index",
         ],
+        pathGroups: [
+          {
+            pattern: "@/**",
+            group: "internal",
+            position: "before",
+          },
+        ],
         "newlines-between": "always",
         alphabetize: { order: "asc" },
       },

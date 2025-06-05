@@ -1,8 +1,8 @@
 import styled, { css, system, Theme } from "@xstyled/emotion";
 
-import { IconOptions } from "./index";
-
 import { WuiProps } from "@/system";
+
+import { IconOptions } from "./index";
 
 const iconSvgStrokedStyles = css`
   g,

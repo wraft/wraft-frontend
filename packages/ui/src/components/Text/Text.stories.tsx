@@ -1,8 +1,8 @@
 import type { Meta } from "@storybook/react";
 
-import { Text, TextVariant } from "./index";
-
 import { theme } from "@/theme";
+
+import { Text, TextVariant } from "./index";
 
 const meta: Meta<any> = {
   component: Text,

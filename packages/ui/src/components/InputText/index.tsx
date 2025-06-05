@@ -1,11 +1,11 @@
 import React from "react";
 
+import { CreateWuiProps, forwardRef } from "@/system";
+import { DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
+
 import { IconWrapper } from "../Field/styles";
 
 import * as S from "./styles";
-
-import { CreateWuiProps, forwardRef } from "@/system";
-import { DefaultFieldStylesProps, FIELD_ICON_SIZE } from "@/utils";
 
 export interface InputTextOptions extends DefaultFieldStylesProps {
   autoFocus?: boolean;

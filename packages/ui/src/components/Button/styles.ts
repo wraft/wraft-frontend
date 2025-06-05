@@ -2,9 +2,9 @@ import { Button as AriakitButton } from "@ariakit/react";
 import styled, { system, th } from "@xstyled/emotion";
 // import { StyledConfig } from "styled-components";
 
-import { ButtonOptions } from "./index";
-
 import { hideFocusRingsDataAttribute } from "@/utils";
+
+import { ButtonOptions } from "./index";
 
 // Create a type with the data attributes to use in styled components
 type StyledButtonProps = Omit<
