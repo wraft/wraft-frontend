@@ -72,7 +72,6 @@ const columns = [
     cell: ({ row }: any) => (
       <NextLink href={`/documents/${row.original?.content?.id}`}>
         <ContentTitleList
-          showId={true}
           content={row.original?.content}
           contentType={row.original?.content_type}
         />
