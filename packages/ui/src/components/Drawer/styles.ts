@@ -104,9 +104,11 @@ export const Backdrop: any = styled.div<any>`
     `};
 `;
 
-export const Title: any = styled.divBox`
-  // padding: 0px 24px;
+export const Title: any = styled.span`
   ${th("drawers.title")};
+  font-size: base !important;
+  color: gray.900;
+  font-weight: bold;
 `;
 
 export const Header: any = styled.divBox`

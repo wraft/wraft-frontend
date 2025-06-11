@@ -329,7 +329,7 @@ export const Select = forwardRef<"input", SelectProps>(
                 onClick: () => setIsOpen(!isOpen),
               })}
             >
-              <DownIcon width={18} />
+              <DownIcon width={14} />
             </S.DropDownIndicator>
           );
 

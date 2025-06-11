@@ -16,6 +16,11 @@ export const IconWrapper = styled(WUIIconWrapper)``;
 
 export const Wrapper = styled.div<{ disabled: boolean }>`
   position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-top: 9px;
+  padding-bottom: 9px;
 `;
 
 export const InputWrapper = styled.div`

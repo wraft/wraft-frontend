@@ -70,7 +70,7 @@ export const Dialog: any = styled.div`
     max-height: 80vh;
     width: fit-content;
     max-width: 80%;
-    border-radius: sm;
+    border-radius: md;
     padding: 1.5rem;
   }
 

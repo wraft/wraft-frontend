@@ -249,8 +249,8 @@ Pagination.defaultProps = {
   numberPageDisplayed: 2,
   numberMarginPagesDisplayed: 2,
   activeClassName: "selected",
-  previousLabel: "< Previous",
-  nextLabel: "Next >",
+  previousLabel: "Previous",
+  nextLabel: "Next",
   breakLabel: "...",
 };
 export default Pagination;

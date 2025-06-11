@@ -23,9 +23,9 @@ export const TabList = styled(Ariakit.TabList)<{ size: SizeOptions }>`
   ${th("tabs.tabsBorder.horizontal")};
 
   ${({ size }) => `
-    
+
       ${th(`tabs.item.size.${size}`)}
-    
+
   `}
   ${system};
 `;
@@ -42,7 +42,8 @@ export const Tab = styled.button`
   text-transform: none;
   cursor: pointer;
   gap: sm;
-  font-size: 14px;
+  font-weight: 600;
+  font-size: base;
 
   &:focus {
     outline: none !important; /* important for firefox */
@@ -54,6 +55,7 @@ export const Tab = styled.button`
 
   &[aria-selected="true"] {
     ${th("tabs.item.active")};
+    font-weight: 600;
   }
 
   &[aria-disabled="true"] {

@@ -11,6 +11,6 @@ export const Textarea = styled("textarea")<TextareaOptions>`
       variant,
     })}
   ${th("textareas")};
-  line-height: lg;
+  font-family: inherit;
   ${system};
 `;

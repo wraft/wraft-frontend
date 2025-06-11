@@ -26,6 +26,7 @@ export const Basic = () => {
 
   return (
     <Select
+      size="md"
       name="welcome"
       onChange={handleChange}
       options={ITEMS}
