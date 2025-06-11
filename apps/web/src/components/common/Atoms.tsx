@@ -2,8 +2,32 @@ import React, { FC } from 'react';
 import { format, formatDistanceStrict } from 'date-fns';
 import { Box, Text, Flex } from '@wraft/ui';
 import { Triangle } from '@phosphor-icons/react';
+import styled from '@xstyled/emotion';
+import { FormatDistanceToken, formatDistanceToNowStrict } from 'date-fns';
 
 import MenuItem from 'common/NavLink';
+
+const formatDistanceLocale: Record<
+  FormatDistanceToken,
+  (count: number) => string
+> = {
+  lessThanXSeconds: (c) => `${c}s`,
+  xSeconds: (c) => `${c}s`,
+  halfAMinute: () => '30s',
+  lessThanXMinutes: (c) => `${c}m`,
+  xMinutes: (c) => `${c}m`,
+  aboutXHours: (c) => `${c}h`,
+  xHours: (c) => `${c}h`,
+  xDays: (c) => `${c}d`,
+  aboutXWeeks: (c) => `${c}w`,
+  xWeeks: (c) => `${c}w`,
+  aboutXMonths: (c) => `${c}m`,
+  xMonths: (c) => `${c}m`,
+  aboutXYears: (c) => `${c}y`,
+  xYears: (c) => `${c}y`,
+  overXYears: (c) => `${c}y`,
+  almostXYears: (c) => `${c}y`,
+};
 
 /**
  * Convert UTC date to local date
@@ -12,6 +36,7 @@ interface TimeAgoProps {
   time?: any;
   ago?: boolean;
   short?: boolean;
+  fontSize?: 'sm' | 'md' | 'lg' | 'sm2';
 }
 
 export const TimeAgo = (props: TimeAgoProps) => {
@@ -22,15 +47,26 @@ export const TimeAgo = (props: TimeAgoProps) => {
     utc_time.getTime() - offset_time_minutes * 60 * 1000,
   );
   const now = new Date();
+  const fontSize = props.fontSize || 'sm2';
 
   const timeDifferenceInMs = now.getTime() - local_time.getTime();
 
   const timed =
     timeDifferenceInMs > 24 * 60 * 60 * 1000
       ? format(local_time, 'MMM dd, yyyy')
-      : formatDistanceStrict(local_time, now, { addSuffix: showAgo || false });
+      : formatDistanceToNowStrict(local_time, {
+          addSuffix: showAgo || false,
+          locale: {
+            formatDistance: (token, count) =>
+              formatDistanceLocale[token](count),
+          },
+        });
 
-  return <Text mt={props?.short ? 0 : 0}>{timed}</Text>;
+  return (
+    <Text mt={props?.short ? 0 : 0} fontSize={fontSize} opacity="0.8">
+      {timed}
+    </Text>
+  );
 };
 
 /**
@@ -98,19 +134,21 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       <Box
         borderRadius="3rem"
         h="12px"
-        w="12px"
-        border="solid 1px"
-        borderColor="border"
+        w="4px"
+        // border="solid 1px"
+        // borderColor="border"
         bg={color}
       />
-      <Text mt={1}>{title}</Text>
+      <Text fontWeight={500} mt={1}>
+        {title}
+      </Text>
     </Flex>
   );
 };
 
 /**
+ * @deprecated
  * Box Wrap
- * ===
  */
 
 interface BoxWrapProps {
@@ -158,7 +196,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
       case 'Draft':
         return 'gray.500';
       case 'Review':
-        return '#fff6ab';
+        return 'orange.100';
       case 'Publish':
         return 'green.400';
       case 'custom':
@@ -215,24 +253,7 @@ export const IconWrapper = ({
   ...props
 }: IconWrapperProps) => {
   return (
-    <Box
-      {...props}
-      display="flex"
-      alignItems="center"
-      // svg: {
-      //   cursor: 'pointer',
-      //   width: `${size}px`,
-      //   height: `${size}px`,
-      //   p: p === 'out' ? 0 : '8px',
-      //   borderRadius: '9rem',
-      //   bg: 'transparent',
-      //   color: 'gray.400',
-      //   ':hover': {
-      //     bg: 'gray.100',
-      //     color: 'gray.900',
-      //   },
-      // },
-    >
+    <Box {...props} display="flex" alignItems="center">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1rem"
@@ -246,5 +267,45 @@ export const IconWrapper = ({
         <>{children}</>
       </svg>
     </Box>
+  );
+};
+
+/**
+ * Icon colored wrapper
+ * @param param0
+ * @returns
+ */
+
+interface IconWrapperProps {
+  color?: string;
+  children: any;
+}
+
+const IconWrapped = styled(Box)`
+  color: ${(props) => props.color};
+  svg {
+    fill: ${(props) => props.color};
+  }
+`;
+export const IconFrame = ({
+  color = 'gray.1000',
+  children,
+}: IconWrapperProps) => {
+  return (
+    <IconWrapped as="span" color={color} display="flex" alignItems="center">
+      {children}
+    </IconWrapped>
+  );
+};
+
+/**
+ * Re usable page frame
+ */
+
+export const PageInner = ({ children }: { children: any }) => {
+  return (
+    <Flex direction="column" gap="md" my="md" px="xxl" py="lg" mx="auto">
+      {children}
+    </Flex>
   );
 };

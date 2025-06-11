@@ -3,16 +3,18 @@ import { useRouter } from 'next/router';
 import NavLink from 'next/link';
 import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { Gear, Plus } from '@phosphor-icons/react';
+import { CaretDown, Carrot, Gear, Plus } from '@phosphor-icons/react';
 
+import { Icon } from 'components/ImportTemplate/style';
 import DefaultAvatar from 'common/DefaultAvatar';
+import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 import UserSettingsMenu from './UserSettingsMenu';
 
-const Header = () => {
+const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
 
@@ -41,36 +43,31 @@ const Header = () => {
 
   return (
     <>
-      <Flex
-        justify="space-between"
-        align="center"
-        borderBottom="solid 1px"
-        borderColor="border"
-        h="72px"
-        mb={3}>
-        <Box>
+      <Flex justify="space-between" align="center">
+        <Box py="md" px="" pr="none" minWidth="80%">
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
-              <Flex cursor="pointer">
+              <Flex cursor="pointer" pl="lg">
                 {userProfile?.currentOrganisation && (
-                  <Flex>
-                    <Box>
+                  <Flex alignItems="center" gap="sm">
+                    <Box mr="xxs">
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
-                        size={32}
+                        size={21}
                       />
                     </Box>
 
-                    <Box ml="sm">
-                      <Text fontWeight="bold" color="text-primary" lines={1}>
+                    <Flex color="gray.900" gap="xs" alignItems="center">
+                      <Text
+                        fontWeight="bold"
+                        color="text-primary"
+                        fontSize="sm2"
+                        lines={1}>
                         {userProfile?.currentOrganisation?.name}
                       </Text>
-                      <Text fontSize="sm" color="text-secondary">
-                        {userProfile?.currentOrganisation?.members_count}{' '}
-                        members
-                      </Text>
-                    </Box>
+                      <CaretDown size={12} />
+                    </Flex>
                   </Flex>
                 )}
               </Flex>
@@ -89,7 +86,7 @@ const Header = () => {
                       <DefaultAvatar
                         url={userProfile?.currentOrganisation?.logo}
                         value={userProfile?.currentOrganisation?.name}
-                        size={28}
+                        size={24}
                       />
                       <Box ml="sm">
                         <Text fontWeight="bold" color="text-primary" lines={1}>
@@ -143,8 +140,18 @@ const Header = () => {
             </DropdownMenu>
           </DropdownMenu.Provider>
         </Box>
-
-        <UserSettingsMenu />
+        <Flex mr="sm">
+          <Button
+            className="x"
+            shape="circle"
+            variant="ghost"
+            size="xs"
+            onClick={() => toggleSearch()}>
+            <IconFrame>
+              <Plus size={14} />
+            </IconFrame>
+          </Button>
+        </Flex>
       </Flex>
       <Modal
         open={isOpen}

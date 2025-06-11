@@ -10,10 +10,12 @@ import {
   Spinner,
   useTab,
 } from '@wraft/ui';
-import { SearchIcon } from '@wraft/icon';
+// import { SearchIcon } from '@wraft/icon';
 import styled from '@emotion/styled';
 import { debounce } from 'lodash';
+import { MagnifyingGlass } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 export const ModalWrapper = styled(Modal)`
@@ -294,27 +296,36 @@ const SearchBlock: React.FC = () => {
   );
 
   return (
-    <>
+    <Flex w="100%">
       <Flex
-        mx="sm"
+        mx="lg"
         my="sm"
         px="sm"
-        py="xs"
+        py="xxs"
         alignItems="center"
         gap="xs"
         border="solid 1px"
         borderColor="border"
-        borderRadius="sm"
+        borderRadius="lg"
+        // borderRadius="md2"
         onClick={() => setIsModalOpen(true)}
         role="button"
+        w="100%"
         aria-label="Open search modal"
+        color="gray.800"
         tabIndex={-1}>
-        <SearchIcon width="16px" />
-        <Text color="text-secondary">Search...</Text>
+        <IconFrame color="gray.700">
+          <MagnifyingGlass size={14} weight="bold" />
+        </IconFrame>
+        <Text fontSize="sm2" color="text-secondary" pl="xs">
+          Find documents..
+        </Text>
         <Text
           ml="auto"
           bg="background-secondary"
-          px="xxs"
+          px="xs"
+          py="xs"
+          fontSize="xs"
           color="text-secondary">
           ⌘K
         </Text>
@@ -332,10 +343,10 @@ const SearchBlock: React.FC = () => {
             <InputText
               value={searchQuery}
               onChange={handleInputChange}
-              icon={<SearchIcon width="20px" />}
+              icon={<MagnifyingGlass height={18} width={18} weight="bold" />}
               iconPlacement="left"
-              placeholder="Search..."
-              px="3xl"
+              placeholder="Find docs, actions, pipelines.."
+              px="sm"
               py="xl"
             />
             {isLoading && (
@@ -405,7 +416,7 @@ const SearchBlock: React.FC = () => {
           </Flex>
         </Box>
       </ModalWrapper>
-    </>
+    </Flex>
   );
 };
 
