@@ -4,7 +4,7 @@ import { DownloadSimple } from '@phosphor-icons/react';
 
 import NavLink from 'common/NavLink';
 import { TimeAgo } from 'common/Atoms';
-import { AvatarCard } from 'common/AvatarCard';
+import UserCard from 'common/UserCard';
 import { mapPlaceholdersToFields, updateVars } from 'utils/index';
 import { IFieldType } from 'utils/types/content';
 import { ContentState } from 'utils/types';
@@ -102,10 +102,9 @@ export const InfoSection = () => {
             <Text as="h3" mb="xs">
               Creator
             </Text>
-            <AvatarCard
-              time={contents?.content?.inserted_at}
+            <UserCard
               name={contents?.creator?.name}
-              image={contents?.profile_pic}
+              profilePic={contents?.profile_pic}
             />
           </Box>
 
@@ -118,11 +117,10 @@ export const InfoSection = () => {
               )}
               {additionalCollaborator &&
                 additionalCollaborator.map((approver: any) => (
-                  <AvatarCard
+                  <UserCard
                     key={approver.id}
-                    // time={contents.content?.inserted_at}
                     name={approver.name}
-                    image={approver.profile_pic}
+                    profilePic={approver.profile_pic}
                   />
                 ))}
 
@@ -141,11 +139,10 @@ export const InfoSection = () => {
                     {nextState &&
                       nextState.approvers &&
                       nextState.approvers.map((approver: any) => (
-                        <AvatarCard
+                        <UserCard
                           key={approver.id}
-                          // time={contents.content?.inserted_at}
                           name={approver.name}
-                          image={approver.profile_pic}
+                          profilePic={approver.profile_pic}
                         />
                       ))}
                   </>

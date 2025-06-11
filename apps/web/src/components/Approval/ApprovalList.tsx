@@ -5,7 +5,7 @@ import { Avatar } from 'theme-ui';
 import { Box, Flex, Table, Pagination, Text, Button } from '@wraft/ui';
 
 import PageHeader from 'common/PageHeader';
-import { StateBadge, TimeAgo } from 'common/Atoms';
+import { PageInner, StateBadge, TimeAgo } from 'common/Atoms';
 import { ContentTitleList } from 'common/content';
 import { fetchAPI } from 'utils/models';
 
@@ -100,7 +100,7 @@ const columns = () => [
       <Flex mr={1} p={2}>
         <Flex>
           <NextLink href={`/documents/${row.original?.content?.id}`}>
-            <Button variant="tertiary" size="sm">
+            <Button variant="secondary" size="sm">
               Review
             </Button>
           </NextLink>
@@ -163,7 +163,7 @@ const Approvals = () => {
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Approvals" desc="All Approvals across your feeds" />
 
-      <Box mx="lg" my="lg" w="75%">
+      <PageInner>
         <Table
           data={contents}
           isLoading={loading}
@@ -181,7 +181,7 @@ const Approvals = () => {
             />
           </Box>
         )}
-      </Box>
+      </PageInner>
     </Box>
   );
 };

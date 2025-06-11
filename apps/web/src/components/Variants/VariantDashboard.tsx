@@ -16,6 +16,7 @@ import { ThreeDotIcon } from '@wraft/icon';
 
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
+import UserCard from 'common/UserCard';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -211,13 +212,11 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       id: 'content.creator',
       header: 'Created By',
       cell: ({ row }: any) => (
-        <Flex align="center" gap="sm">
-          <Avatar
-            sx={{ width: '16px', height: '16px' }}
-            src={row.original?.creator?.profile_pic}
-          />
-          <Text>{row.original?.creator?.name}</Text>
-        </Flex>
+        <UserCard
+          profilePic={row.original?.creator?.profile_pic}
+          name={row.original?.creator?.name}
+          size="sm"
+        />
       ),
       enableSorting: false,
     },
@@ -290,7 +289,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
   ];
 
   return (
-    <Box p="lg">
+    <Box>
       <Table
         data={contents}
         isLoading={loading}

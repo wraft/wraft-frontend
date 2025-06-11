@@ -2,13 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import NavLink from 'next/link';
 import Router, { useRouter } from 'next/router';
 import { Table, DropdownMenu, Box, Text, Flex, Button, Modal } from '@wraft/ui';
-import { Avatar } from 'theme-ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
 import { TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
+import UserCard from 'common/UserCard';
 import { deleteAPI, fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -87,13 +87,11 @@ const BlockTemplateListFrame: FC = () => {
       header: 'Created By',
       accessorKey: 'created',
       cell: ({ row }: any) => (
-        <Flex align="center" gap="sm">
-          <Avatar
-            sx={{ width: '16px', height: '16px' }}
-            src={row.original?.creator?.profile_pic}
-          />
-          <Text>{row.original?.creator?.name}</Text>
-        </Flex>
+        <UserCard
+          profilePic={row.original?.creator?.profile_pic}
+          name={row.original?.creator?.name}
+          size="sm"
+        />
       ),
       enableSorting: false,
     },

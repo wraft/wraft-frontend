@@ -19,6 +19,9 @@ export const InputText = styled("input")<
       iconPlacement,
     })}
   text-overflow: ellipsis;
+  padding-top: sm2;
+  padding-bottom: sm2;
+  height: auto;
   ${system}
 `;
 

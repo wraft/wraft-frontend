@@ -2,13 +2,14 @@ import { FC, useState } from 'react';
 import Head from 'next/head';
 import { Button, Flex, Drawer, useDrawer } from '@wraft/ui';
 
-import { menuLinks } from '@constants/menuLinks';
+// import { menuLinks } from '@constants/menuLinks';
 import ThemeAddForm from 'components/Theme/ThemeForm';
 import ThemeList from 'components/Theme/ThemeList';
-import ManageSidebar from 'common/ManageSidebar';
+// import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
 const ThemePage: FC = () => {
@@ -25,25 +26,30 @@ const ThemePage: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Themes"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Themes', path: '/manage/themes' },
+          ]}
           desc={
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Themes' }]}
             />
           }>
           {hasPermission('theme', 'manage') && (
-            <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsOpen(true)}>
               Add Theme
             </Button>
           )}
         </PageHeader>
 
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
+        <PageInner>
           <ThemeList rerender={rerender} />
-        </Flex>
+        </PageInner>
       </Page>
-      {/* 
+      {/*
       {hasPermission('the') && ( */}
       <Drawer
         open={isOpen}

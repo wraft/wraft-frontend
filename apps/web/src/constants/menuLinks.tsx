@@ -94,20 +94,20 @@ export const userSettingsLinks: menuLinksProps[] = [
 export const workspaceMenu: menuLinksProps[] = [
   {
     name: 'Workspace',
-    icon: <BuildingOffice size={50} weight="thin" />,
+    icon: <BuildingOffice size={32} weight="thin" />,
     path: '/manage/workspace',
     desc: 'Manage RBAC',
   },
   {
     name: 'Layouts',
-    icon: <Layout size={50} weight="thin" />,
+    icon: <Layout size={32} weight="thin" />,
     path: '/manage/layouts',
     desc: 'Manage Document Structures',
     permissions: ['layout.show', 'layout.manage'],
   },
   {
     name: 'Flows',
-    icon: <IntersectSquare size={50} weight="thin" />,
+    icon: <IntersectSquare size={32} weight="thin" />,
     path: '/manage/flows',
     desc: 'Manage Document Flows',
     permissions: ['flow.show', 'flow.manage'],
@@ -115,20 +115,20 @@ export const workspaceMenu: menuLinksProps[] = [
 
   {
     name: 'Themes',
-    icon: <PaintRoller size={50} weight="thin" />,
+    icon: <PaintRoller size={32} weight="thin" />,
     path: '/manage/themes',
     desc: 'Manage Themes',
     permissions: ['theme.show', 'theme.manage'],
   },
   {
     name: 'Import',
-    icon: <FileArrowUp size={50} weight="thin" />,
+    icon: <FileArrowUp size={32} weight="thin" />,
     path: '/manage/import',
     desc: 'Import Structs',
   },
   {
     name: 'Billing & Subscription',
-    icon: <Money size={50} weight="thin" />,
+    icon: <Money size={32} weight="thin" />,
     path: '/manage/billing',
     desc: 'Manage Billing and Subscription',
     permissions: ['payment.show'],

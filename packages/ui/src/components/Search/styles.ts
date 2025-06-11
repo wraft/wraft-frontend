@@ -6,6 +6,7 @@ import { defaultFieldStyles, overflowEllipsis } from "@/utils";
 
 export const Wrapper = styled.div`
   position: relative;
+  background-color: gray.200;
 `;
 
 export const InputWrapper = styled.div`
@@ -31,12 +32,12 @@ export const Input = styled("input")<SearchOptions>`
 export const Menu = styled.ul`
   ${th("defaultFields.select.default")};
   position: absolute;
-  color: neutral-90;
+  color: blue.600;
+  background-color: gray.100;
   z-index: 2;
   right: 0;
   left: 0;
   margin: 0;
-  margin-top: md;
   padding: 0;
   transition: medium;
   overflow: auto;
@@ -48,7 +49,7 @@ export const Item = styled.li<{
   isHighlighted?: boolean;
   isSelected?: boolean | undefined;
 }>`
-  color: beige-70;
+  color: gray.1200;
   ${({ isHighlighted }) =>
     isHighlighted && th("defaultFields.select.highlighted")};
   ${({ isSelected }) => isSelected && th("defaultFields.select.selected")};

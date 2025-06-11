@@ -130,7 +130,7 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
       cursor: "not-allowed",
     },
     placeholder: {
-      color: "gray.500",
+      color: "gray.800",
     },
     focused: {
       default: {
@@ -163,7 +163,8 @@ export const getDefaultFields = (theme: any): ThemeDefaultFields => {
         cursor: "not-allowed",
       },
       highlighted: {
-        backgroundColor: "#F6F3EF",
+        backgroundColor: colors["gray"]["300"],
+        color: colors["gray"]["1000"],
         cursor: "default",
       },
       selectedAndHighlighted: {

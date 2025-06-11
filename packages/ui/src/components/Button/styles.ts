@@ -18,7 +18,8 @@ type StyledButtonProps = Omit<
 
 export const Button = styled(AriakitButton)<StyledButtonProps>`
   ${({ variant }) => th(`buttons.${variant}`)};
-  ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.danger.${variant}`)};
+  ${({ variant, "data-danger": dataDanger }) =>
+    dataDanger && th(`buttons.danger.${variant}`)};
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -27,7 +28,7 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
   ${({ size }) => th(`buttons.sizes.${size}`)};
   text-decoration: none;
   text-align: center;
-  border-radius: sm,
+  border-radius: md2;
   white-space: nowrap;
   cursor: pointer;
   outline: none !important; /* important for firefox */
@@ -45,7 +46,7 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
 
   & > svg {
     font-weight: initial;
-    margin-left: sm;
+    margin-left: xxs;
 
     &:only-child {
       width: ${({ size }) => size && th(`buttons.icon.only.${size}`)};
@@ -65,23 +66,26 @@ export const Button = styled(AriakitButton)<StyledButtonProps>`
 
   &:hover {
     ${({ variant }) => th(`buttons.focus.${variant}`)};
-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.focus.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) =>
+      dataDanger && th(`buttons.focus.danger.${variant}`)};
   }
 
   &:hover {
     ${({ variant }) => th(`buttons.hover.${variant}`)};
-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.hover.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) =>
+      dataDanger && th(`buttons.hover.danger.${variant}`)};
   }
 
   &:active {
     ${({ variant }) => th(`buttons.active.${variant}`)};
-    ${({ variant, "data-danger": dataDanger }) => dataDanger && th(`buttons.active.danger.${variant}`)};      
+    ${({ variant, "data-danger": dataDanger }) =>
+      dataDanger && th(`buttons.active.danger.${variant}`)};
   }
 
   [${hideFocusRingsDataAttribute}] &:focus {
     box-shadow: none;
   }
-    
+
   &[disabled] {
     cursor: not-allowed;
   }

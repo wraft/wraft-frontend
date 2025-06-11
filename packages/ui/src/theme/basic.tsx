@@ -1,9 +1,9 @@
 const theme: any = {
   fonts: {
-    body: `inter, sans-serif`,
+    body: `Inter, sans-serif`,
     heading: "inherit",
-    editor1: `inter, sans-serif`,
-    editor2: `inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
+    editor1: `Inter, sans-serif`,
+    editor2: `Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif`, //"'IBM Plex Mono', monospace",
     // font-family:
     monospace: "Menlo, monospace",
     satoshi:

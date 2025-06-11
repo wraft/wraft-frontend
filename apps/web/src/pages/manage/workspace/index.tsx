@@ -204,12 +204,15 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Workspace | Wraft</title>
+        <title>Manage Workspace | Wraft</title>
         <meta name="description" content="wraft workspace" />
       </Head>
       <Page>
         <PageHeader
-          title="Workspace"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Workspace', path: '/manage/workspace' },
+          ]}
           desc={
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
@@ -217,7 +220,7 @@ const Index: FC = () => {
           }
         />
 
-        <Flex gap="md" my="md" px="md">
+        <Flex gap="md" my="xl" px="xl" flex={1}>
           <ManageSidebar
             items={
               currentOrg?.name !== 'Personal' || ''
@@ -228,7 +231,11 @@ const Index: FC = () => {
           <Flex
             bg="background-primary"
             direction="column"
+            flex={1}
             minWidth="556px"
+            border="solid 1px"
+            borderColor="gray.400"
+            borderRadius="lg"
             p="xl">
             <Box
               as="form"
@@ -272,7 +279,7 @@ const Index: FC = () => {
                   <Button type="submit">Update</Button>
                 ) : (
                   <Button
-                    variant="tertiary"
+                    variant="secondary"
                     onClick={(e) => {
                       e.preventDefault();
                       setIsEdit(true);

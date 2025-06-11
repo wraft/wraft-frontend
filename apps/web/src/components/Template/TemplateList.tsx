@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
-import { TimeAgo } from 'common/Atoms';
+import { PageInner, TimeAgo, VariantLine } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
@@ -27,22 +27,11 @@ const columns = ({ onCloneTemplete, hasPermission }: any) => [
   },
   {
     id: 'content.type',
-    header: 'Type',
+    header: 'Variant',
     accessorKey: 'content.type',
     cell: ({ row }: any) => (
       <Flex alignItems="center" gap="sm">
-        <Box
-          as="span"
-          display="block"
-          borderRadius="4px"
-          h="12px"
-          w="12px"
-          border="solid 1px"
-          borderColor="border"
-          alignItems="center"
-          bg={row?.original?.content_type?.color}
-        />
-
+        <VariantLine bg={row?.original?.content_type?.color} />
         <Text fontWeight="body" display="flex">
           {row?.original?.content_type?.name}
         </Text>
@@ -173,13 +162,14 @@ const TemplateList = () => {
         {hasPermission('template', 'manage') && (
           <Button
             onClick={() => router.push(`/templates/new`)}
-            variant="tertiary">
+            variant="secondary"
+            size="sm">
             <Plus size={12} weight="bold" />
             New Template
           </Button>
         )}
       </PageHeader>
-      <Box p="lg">
+      <PageInner>
         <Box mx={0} mb={3}>
           <Table
             data={templates}
@@ -199,7 +189,7 @@ const TemplateList = () => {
             )}
           </Box>
         </Box>
-      </Box>
+      </PageInner>
     </Box>
   );
 };

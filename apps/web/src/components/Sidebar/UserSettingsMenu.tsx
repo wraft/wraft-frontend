@@ -2,18 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
 import { useColorMode, Image } from 'theme-ui';
-import { Lightning } from '@phosphor-icons/react';
+import { CaretUpDown, Lightning } from '@phosphor-icons/react';
+import styled from '@xstyled/emotion';
 
 import Link from 'common/NavLink';
 import ModeToggle from 'common/ModeToggle';
+import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
+const DropdownMenuTrigger = styled(DropdownMenu.Trigger)`
+  display: flex;
+  gap: sm;
+  plx: md;
+  align-items: center;
+  flex: 1;
+`;
+
 type UserSettingsMenuProps = {
   size?: 'sm' | 'md';
+  compact?: boolean;
 };
 
-const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
+const UserSettingsMenu = ({
+  size = 'md',
+  compact = true,
+}: UserSettingsMenuProps) => {
   const [mode, setMode] = useColorMode();
   const [count, setCount] = useState<number | undefined>();
 
@@ -46,18 +60,33 @@ const UserSettingsMenu = ({ size = 'md' }: UserSettingsMenuProps) => {
     <>
       {accessToken && userProfile && (
         <DropdownMenu.Provider>
-          <DropdownMenu.Trigger>
+          <DropdownMenuTrigger>
             <Image
               sx={{
                 borderRadius: '3rem',
                 cursor: 'pointer',
               }}
               alt=""
-              width={size === 'sm' ? '18px' : ' 28px'}
-              height={size === 'sm' ? '18px' : ' 28px'}
+              width={size === 'sm' ? '18px' : ' 24px'}
+              height={size === 'sm' ? '18px' : ' 24px'}
               src={userProfile?.profile_pic}
             />
-          </DropdownMenu.Trigger>
+            {!compact && (
+              <>
+                <Flex direction="column">
+                  <Text as="h4" fontSize="sm2" mb={0}>
+                    {userProfile?.name}
+                  </Text>
+                </Flex>
+
+                <Flex alignItems="center" ml="auto">
+                  <IconFrame color="gray.1000">
+                    <CaretUpDown size={14} />
+                  </IconFrame>
+                </Flex>
+              </>
+            )}
+          </DropdownMenuTrigger>
           <DropdownMenu aria-label="Preferences">
             <Box p={2} minWidth="200px">
               <Box

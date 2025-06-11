@@ -13,7 +13,7 @@ const CompanyForm: FC = () => {
   return (
     <>
       <Head>
-        <title>Manage Organization | Wraft</title>
+        <title>Manage Organization \ Fields | Wraft</title>
         <meta name="description" content="manage organization in wraft" />
       </Head>
       <Page>
@@ -32,7 +32,11 @@ const CompanyForm: FC = () => {
             bg="background-primary"
             direction="column"
             minWidth="556px"
-            p="xl">
+            border="solid 1px"
+            borderColor="gray.400"
+            borderRadius="lg"
+            p="xl"
+            px="2xl">
             <OrganisationInfo />
           </Flex>
         </Flex>

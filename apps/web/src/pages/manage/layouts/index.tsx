@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { Button, Drawer, Flex, useDrawer } from '@wraft/ui';
+import { Plus } from '@phosphor-icons/react';
 
 import { menuLinks } from '@constants/menuLinks';
 import LayoutList from 'components/Layout/LayoutList';
@@ -9,6 +10,7 @@ import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
@@ -26,15 +28,17 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Layouts"
-          desc={
-            <DescriptionLinker
-              data={[{ name: 'Manage', path: '/manage' }, { name: 'Layouts' }]}
-            />
-          }>
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Layouts', path: '/manage/layouts' },
+          ]}>
           {hasPermission('layout', 'manage') && (
-            <Button variant="secondary" onClick={() => setIsOpen(true)}>
-              + Add Layout
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsOpen(true)}>
+              <Plus size={10} />
+              Add Layout
             </Button>
           )}
         </PageHeader>
@@ -47,10 +51,9 @@ const Index: FC = () => {
           <LayoutForm setOpen={setIsOpen} setRerender={setRerender} />
         </Drawer>
 
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
+        <PageInner>
           <LayoutList rerender={rerender} />
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

@@ -138,7 +138,7 @@ const LoginForm = () => {
           </Link>
         </Box>
         <Flex variant="card" w="500px" justifySelf="center" direction="column">
-          <Text as="h3" mb="48px" color="gray.1200" fontSize="3xl">
+          <Text as="h3" mb="lg" color="gray.1200" fontSize="lg">
             Sign in
           </Text>
 
