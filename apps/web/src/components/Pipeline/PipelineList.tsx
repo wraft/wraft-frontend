@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
+import { Flower, Play, TreeStructure } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
+import { PageInner, TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -110,7 +112,7 @@ const Form = () => {
       id: 'pipeline.run',
       header: 'Last Run',
       accessorKey: 'pipeline.run',
-      cell: ({ row }: any) => <Text>{row.original.inserted_at}</Text>,
+      cell: ({ row }: any) => <TimeAgo time={row.original.inserted_at} />,
       enableSorting: false,
     },
     ...(hasPermission('pipeline', 'manage')
@@ -123,18 +125,20 @@ const Form = () => {
               <Flex gap="sm">
                 <Button
                   onClick={() => router.push(`/workflow/${row.original.id}`)}
-                  variant="tertiary"
+                  variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
+                  <TreeStructure height={12} />
                   WorkFlow
                 </Button>
                 <Button
                   onClick={() => {
                     onRunClick(row.original.source_id, row.original.id);
                   }}
-                  variant="tertiary"
+                  variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
+                  <Play height={12} />
                   Run
                 </Button>
               </Flex>
@@ -147,15 +151,18 @@ const Form = () => {
 
   return (
     <Box minHeight="100%" bg="background-secondary">
-      <PageHeader title="All Pipelines">
+      <PageHeader title="Pipelines">
         {hasPermission('pipeline', 'manage') && (
-          <Button variant="tertiary" onClick={() => setShowSearch(true)}>
-            New Pipeline
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setShowSearch(true)}>
+            Add Pipeline
           </Button>
         )}
       </PageHeader>
 
-      <Box px="lg" py="lg" w="80%">
+      <PageInner>
         <Table
           data={contents}
           columns={columns}
@@ -172,7 +179,7 @@ const Form = () => {
             />
           </Box>
         )}
-      </Box>
+      </PageInner>
 
       <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
         {showSearch && (

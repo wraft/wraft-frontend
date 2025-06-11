@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Drawer, useDrawer, Text, Box, Flex } from '@wraft/ui';
+import { Drawer, useDrawer, Text, Box, Flex, Button } from '@wraft/ui';
 // import { useTour } from '@reactour/tour';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useThemeUI } from 'theme-ui';
@@ -24,8 +24,8 @@ const Divider = () => (
     maxHeight="1px"
     ml="sm"
     mr="sm"
-    pt="xs"
-    pb="sm"></Box>
+    mt="sm"
+  />
 );
 
 export interface INav {
@@ -97,15 +97,6 @@ const Sidebar = (props: any) => {
         borderRight="solid 1px"
         borderColor="border"
         bg="background-primary">
-        {/* <Box py="lg" px="lg">
-            <Button
-              variant="secondary"
-              // borderRadius="lg"
-              fullWidth={true}
-              >
-              <Plus size={14} /> New Document
-            </Button>
-          </Box> */}
         <Header toggleSearch={toggleSearch} />
         <Flex flex={1} direction="column">
           <SearchBlock />
@@ -136,7 +127,6 @@ const Sidebar = (props: any) => {
                               ? rawColors?.green?.[900]
                               : rawColors?.gray?.[900],
                           })}
-                          {/* {icon} */}
                         </Flex>
                         {showFull && (
                           <Text
@@ -164,32 +154,23 @@ const Sidebar = (props: any) => {
         </Flex>
 
         <Box mt="auto" className="first-step">
-          <Flex
-            alignItems="center"
-            mb="lg"
-            // p="md"
-            display="none"
-            border="1px solid"
-            borderColor="gray.600"
-            gap="sm"
-            justify="center"
-            py="6px"
-            mx="1rem"
-            borderRadius="md">
-            <Lightning size={18} color="#127D5D" />
-            <Text textAlign="center" fontSize="sm2" fontWeight="bold">
-              Upgrade Plan
-            </Text>
-          </Flex>
+          <Box py="md" mx="lg" my="sm" display="none">
+            <Button variant="secondary">
+              <Lightning size={18} color="#127D5D" />
+              <Text textAlign="center" fontSize="sm2" fontWeight="bold">
+                Upgrade Plan
+              </Text>
+            </Button>
+          </Box>
 
-          <Flex
-            px="md"
+          <Box
+            px="lg"
             py="lg"
-            borderTop="solid 1px"
-            borderColor="gray.400"
+            // borderTop="solid 1px"
+            // borderColor="gray.400"
             alignItems="center">
             <UserSettingsMenu compact={false} />
-          </Flex>
+          </Box>
         </Box>
       </Flex>
       <Drawer

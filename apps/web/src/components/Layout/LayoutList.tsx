@@ -98,7 +98,7 @@ const LayoutList = ({ rerender }: Props) => {
   const columns = [
     {
       id: 'content.name',
-      header: 'NAME',
+      header: 'Layout Name',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
         <>
@@ -119,37 +119,21 @@ const LayoutList = ({ rerender }: Props) => {
     },
     {
       id: 'content.description',
-      header: 'DESCRIPTION',
+      header: 'Desc',
       accessorKey: 'description',
       cell: ({ row }: any) => <Text>{row.original?.description}</Text>,
       enableSorting: false,
     },
     {
-      id: 'content.slug',
-      header: 'SLUG',
-      accessorKey: 'slug',
-      cell: ({ row }: any) => <Text>{row.original?.slug}</Text>,
-      enableSorting: false,
-    },
-    {
-      id: 'content.size',
-      header: 'SIZE',
-      accessorKey: 'size',
-      cell: ({ row }: any) => (
-        <Text>{`${row.original?.width} X ${row.original?.height} ${row.original?.unit}`}</Text>
-      ),
-      enableSorting: false,
-    },
-    {
       id: 'content.engine.name',
-      header: 'ENGINE',
+      header: 'Engine',
       accessorKey: 'name',
       cell: ({ row }: any) => <Text>{row.original?.engine?.name}</Text>,
       enableSorting: false,
     },
     {
       id: 'content.update_at',
-      header: 'DATE',
+      header: 'Updated',
       accessorKey: 'update_at',
       cell: ({ row }: any) => (
         <Box>

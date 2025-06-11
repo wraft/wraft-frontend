@@ -15,7 +15,10 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Billing & Subscription"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Billing & Subscription', path: '/manage/billing' },
+          ]}
           desc={
             <DescriptionLinker
               data={[

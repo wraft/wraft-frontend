@@ -42,8 +42,11 @@ const Index: FC = () => {
               />
             }>
             {hasPermission('members', 'manage') && (
-              <Button variant="primary" onClick={() => setIsOpen(true)}>
-                <UserPlus size={16} />
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsOpen(true)}>
+                <UserPlus size={14} />
                 Invite people
               </Button>
             )}

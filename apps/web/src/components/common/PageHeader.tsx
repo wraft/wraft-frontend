@@ -1,62 +1,74 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import Link from 'next/link';
 import { Flex, Box, Text } from '@wraft/ui';
-import { Link } from 'theme-ui';
-import { ArrowBackIcon } from '@wraft/icon';
+import { Minus } from '@phosphor-icons/react';
 
 import Back from 'common/Back';
 
+type TitleItem = {
+  name: string;
+  path: string;
+};
+
 interface PageHeaderProps {
-  children?: any;
-  title: string;
-  desc?: any;
+  children?: React.ReactNode;
+  title: string | string[] | TitleItem[];
+  desc?: React.ReactNode;
   breads?: boolean;
   hasBack?: boolean;
 }
 
-interface breadLinksLink {
-  name?: string;
-  link?: string;
-}
-
-const breadLinks: breadLinksLink[] = [
-  {
-    name: 'Flows',
-    link: '/links/',
-  },
-  {
-    name: 'Standard Flow',
-    link: '/f/d3dx2xI',
-  },
-];
-
-const BreadLinks = (props: any) => {
-  return (
-    <Flex py={2}>
-      {props.links &&
-        props.links.map((link: any) => (
-          <Link
-            key={link.name}
-            sx={{ color: 'text-primary', fontSize: 'xs', mr: 2 }}>
-            <Text pr={1}>{link.name}</Text>
-            <ArrowBackIcon width={10} />
-          </Link>
-        ))}
-    </Flex>
-  );
-};
-
-const PageHeader = ({
+const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   children,
-  desc,
-  breads,
   hasBack,
-}: PageHeaderProps) => {
+}) => {
+  const renderTitle = useMemo(() => {
+    if (!Array.isArray(title)) {
+      return (
+        <Text color="text-primary" fontSize="md" fontWeight="heading">
+          {title}
+        </Text>
+      );
+    }
+
+    return title.map((item, index) => (
+      <Flex alignItems="center" pr="sm" key={index}>
+        {typeof item === 'object' && 'name' in item && 'path' in item ? (
+          <Link href={item.path} passHref>
+            <Text fontSize="base" fontWeight={500}>
+              {item.name}
+            </Text>
+          </Link>
+        ) : (
+          <Text
+            color="text-primary"
+            fontSize="md"
+            fontWeight="heading"
+            display="flex"
+            pr="sm">
+            {item}
+          </Text>
+        )}
+        {index < title.length - 1 && (
+          <Box
+            rotate="90"
+            transform="rotate(70deg)"
+            opacity="0.3"
+            fill="gray.1000"
+            color="red.700">
+            <Minus size={16} fill="gray.900" />
+          </Box>
+        )}
+      </Flex>
+    ));
+  }, [title]);
+
   return (
     <Box
       borderBottom="1px solid"
       borderColor="border"
-      py="lg"
+      py="md"
       px="lg"
       w="100%"
       position="sticky"
@@ -65,18 +77,10 @@ const PageHeader = ({
       bg="background-primary">
       <Flex alignItems="center">
         {hasBack && <Back />}
-        <Box>
-          {breads && <BreadLinks links={breadLinks} />}
-          <Text color="text-primary" fontSize="lg" fontWeight="heading">
-            {title}
-          </Text>
-          {desc && (
-            <Box>
-              <Text mt={0} color="text-secondary">
-                {desc}
-              </Text>
-            </Box>
-          )}
+        <Box display="flex" alignItems="center">
+          <Flex alignContent="center" alignItems="center">
+            {renderTitle}
+          </Flex>
         </Box>
         <Box ml="auto" pt={1}>
           {children}
@@ -86,4 +90,4 @@ const PageHeader = ({
   );
 };
 
-export default PageHeader;
+export default React.memo(PageHeader);

@@ -90,17 +90,27 @@ const Index: FC = () => {
       </Head>
       <Page showFull={true}>
         <PageHeader
-          title={`${formdata?.name || 'name loading...'}`}
+          title={[
+            {
+              name: 'Forms',
+              path: '/forms',
+            },
+            {
+              name: `${formdata?.name || 'name loading...'}`,
+              path: `/forms/${formdata?.id}`,
+            },
+          ]}
           desc={`${formdata?.description || 'detatils loading...'}`}>
           {hasPermission('form', 'manage') && (
             <Flex alignItems="center" gap="8px" pr={4}>
               <Button
                 variant="secondary"
+                size="sm"
                 onClick={() => setIsView((prev) => !prev)}>
                 {isView ? 'Edit' : 'Preview'}
               </Button>
               <Box>
-                <Button variant="secondary">
+                <Button variant="secondary" size="sm">
                   <a
                     href={`/forms/entry/new/${cId}`}
                     target="_blank"
@@ -109,7 +119,7 @@ const Index: FC = () => {
                   </a>
                 </Button>
               </Box>
-              <Button onClick={saveForm} loading={isSaving}>
+              <Button onClick={saveForm} size="sm" loading={isSaving}>
                 Save
               </Button>
             </Flex>

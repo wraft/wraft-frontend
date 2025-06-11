@@ -58,4 +58,8 @@ export const GlobalStyle = createGlobalStyle`
   .main-icon {
     color: var(--theme-ui-colors-icon);
   }
+  
+  #sidebars .menu-group:last-child .line {
+    display: none; 
+  }
 `;

@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Flex } from '@wraft/ui';
+import { Button, Flex } from '@wraft/ui';
+import { DotsThreeVertical } from '@phosphor-icons/react';
 
-import { menuLinks } from '@constants/menuLinks';
+// import { menuLinks } from '@constants/menuLinks';
 import FlowViewForm from 'components/Flow/FlowViewForm';
-import ManageSidebar from 'common/ManageSidebar';
+// import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
@@ -28,7 +29,17 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Flows"
+          title={[
+            {
+              name: 'Manage',
+              path: '/manage',
+            },
+            {
+              name: 'Flows',
+              path: '/manage/flows',
+            },
+            { name: `${flow?.flow?.name}`, path: '.' },
+          ]}
           desc={
             <DescriptionLinker
               data={[
@@ -37,10 +48,19 @@ const Index: FC = () => {
                 { name: `${flow?.flow?.name || ''}` },
               ]}
             />
-          }></PageHeader>
+          }>
+          <Button
+            variant="secondary"
+            size="sm"
+            // px="sm"
+            // py="xs"
+            // onClick={() => setIsOpen(true)}
+          >
+            <DotsThreeVertical weight="bold" color="gray.700" />
+          </Button>
+        </PageHeader>
 
         <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
           <FlowViewForm />
         </Flex>
       </Page>

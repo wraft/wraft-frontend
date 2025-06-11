@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Button, Drawer, useDrawer } from '@wraft/ui';
+import { ThreeDotIcon } from '@wraft/icon';
+import { DotsThreeVertical, ThreeD } from '@phosphor-icons/react';
 
 import { menuLinks } from '@constants/menuLinks';
 import FlowList from 'components/Flow/FlowList';
@@ -25,17 +27,39 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Flows"
+          title={[
+            {
+              name: 'Manage',
+              path: '/manage',
+            },
+            {
+              name: 'Flows',
+              path: '/manage/flows',
+            },
+          ]}
           desc={
             <DescriptionLinker
               data={[{ name: 'Manage', path: '/manage' }, { name: 'Flows' }]}
             />
           }>
-          {hasPermission('flow', 'manage') && (
-            <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-              Add Flow
-            </Button>
-          )}
+          <Flex gap="sm">
+            {hasPermission('flow', 'manage') && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsOpen(true)}>
+                Add Flow
+              </Button>
+            )}
+            {hasPermission('flow', 'manage') && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsOpen(true)}>
+                <DotsThreeVertical stroke="bold" color="gray.700" />
+              </Button>
+            )}
+          </Flex>
         </PageHeader>
         <Drawer
           open={isOpen}
@@ -46,8 +70,8 @@ const Index: FC = () => {
           {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
         </Drawer>
 
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
+        <Flex gap="md" my="md" px="xl">
+          {/* <ManageSidebar items={menuLinks} /> */}
           <FlowList rerender={rerender} setRerender={setRerender} />
         </Flex>
       </Page>

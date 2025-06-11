@@ -9,6 +9,7 @@ import DescriptionLinker from 'common/DescriptionLinker';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -29,22 +30,24 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Themes"
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Themes', path: '/manage/themes' },
+            { name: `${theme?.theme?.name}`, path: '.' },
+          ]}
           desc={
             <DescriptionLinker
               data={[
                 { name: 'Manage', path: '/manage' },
                 { name: 'Themes', path: '/manage/themes' },
-                { name: `${theme?.theme?.name || ''}` },
+                { name: `${theme?.theme?.name}` },
               ]}
             />
           }
         />
-
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={menuLinks} />
+        <PageInner>
           <ThemeViewForm />
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

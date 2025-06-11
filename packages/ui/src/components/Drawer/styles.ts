@@ -95,18 +95,16 @@ export const Backdrop: any = styled.div<any>`
   background-color: rgba(0, 0, 0, 0.35);
   ${({ $hideOnInteractOutside }) =>
     $hideOnInteractOutside &&
-    `
-      cursor: pointer;
-
+    ` cursor: pointer;
       &[data-enter] {
         opacity: 1;
       }
     `};
 `;
 
-export const Title: any = styled.span`
+export const Title: any = styled.h3`
   ${th("drawers.title")};
-  font-size: base !important;
+  font-size: base;
   color: gray.900;
   font-weight: bold;
 `;

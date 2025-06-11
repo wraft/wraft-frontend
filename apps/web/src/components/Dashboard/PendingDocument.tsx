@@ -5,6 +5,7 @@ import { Table, Flex, Text } from '@wraft/ui';
 
 import { StateBadge, TimeAgo } from 'common/Atoms';
 import { ContentTitleList } from 'common/content';
+import UserCard from 'common/UserCard';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
@@ -37,13 +38,11 @@ const columns = [
     header: 'Editors',
     accessorKey: 'creator.profile_pic',
     cell: ({ row }: any) => (
-      <Flex alignItems="center" gap="8px">
-        <Avatar
-          sx={{ width: '16px', height: '16px' }}
-          src={row.original?.creator?.profile_pic}
-        />
-        <Text>{row.original?.creator?.name}</Text>
-      </Flex>
+      <UserCard
+        profilePic={row.original?.creator?.profile_pic}
+        name={row.original?.creator?.name}
+        size="sm"
+      />
     ),
     enableSorting: false,
   },

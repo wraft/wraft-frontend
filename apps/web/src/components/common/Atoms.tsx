@@ -131,14 +131,7 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       borderBottom="solid 1px"
       borderColor="border"
       align="center">
-      <Box
-        borderRadius="3rem"
-        h="12px"
-        w="4px"
-        // border="solid 1px"
-        // borderColor="border"
-        bg={color}
-      />
+      <VariantLine bg={color || '#555'} />
       <Text fontWeight={500} mt={1}>
         {title}
       </Text>
@@ -271,11 +264,20 @@ export const IconWrapper = ({
 };
 
 /**
- * Icon colored wrapper
- * @param param0
- * @returns
+ * Re usable page frame
  */
 
+export const PageInner = ({ children }: { children: any }) => {
+  return (
+    <Flex direction="column" gap="md" my="md" px="xxl" py="lg" mx="auto">
+      {children}
+    </Flex>
+  );
+};
+/*
+ *
+ * Icon Wrapper for Phosphor Icons
+ */
 interface IconWrapperProps {
   color?: string;
   children: any;
@@ -287,25 +289,35 @@ const IconWrapped = styled(Box)`
     fill: ${(props) => props.color};
   }
 `;
-export const IconFrame = ({
-  color = 'gray.1000',
-  children,
-}: IconWrapperProps) => {
+
+export const IconFrame = ({ color, children }: IconWrapperProps) => {
   return (
-    <IconWrapped as="span" color={color} display="flex" alignItems="center">
+    <IconWrapped color={color} display="flex" alignItems="center">
       {children}
     </IconWrapped>
   );
 };
 
 /**
- * Re usable page frame
+ * x
  */
 
-export const PageInner = ({ children }: { children: any }) => {
+interface VariantLineProps {
+  bg: string;
+}
+
+export const VariantLine = ({ bg }: VariantLineProps) => {
   return (
-    <Flex direction="column" gap="md" my="md" px="xxl" py="lg" mx="auto">
-      {children}
-    </Flex>
+    <Box
+      as="span"
+      display="block"
+      borderRadius="3px"
+      h="12px"
+      w="6px"
+      border="solid 1px"
+      borderColor="border"
+      alignItems="center"
+      bg={bg}
+    />
   );
 };

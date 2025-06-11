@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { Spinner } from 'theme-ui';
-import { Plus } from '@phosphor-icons/react';
-import { SearchIcon } from '@wraft/icon';
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
+// import { SearchIcon } from '@wraft/icon';
 import { Button, Flex, Box, InputText, Drawer, useDrawer } from '@wraft/ui';
 
 import { workspaceLinks } from '@constants/menuLinks';
@@ -11,6 +11,7 @@ import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -44,18 +45,22 @@ const Index: FC = () => {
             }>
             <Flex alignItems="center" gap="md">
               {hasPermission('role', 'manage') && (
-                <Box w="340px" display="block">
+                <Box display="block">
                   <InputText
+                    size="sm"
+                    borderRadius="md2"
                     icon={
                       filterLoading ? (
                         <Spinner width={14} />
                       ) : (
-                        <SearchIcon className="searchIcon" />
+                        <IconFrame color="gray.900">
+                          <MagnifyingGlass width="1.25rem" weight="bold" />
+                        </IconFrame>
                       )
                     }
                     iconPlacement="right"
                     placeholder="Search by role names"
-                    width="100%"
+                    // width="100%"
                     onChange={(e: any) => {
                       setFilterLoading(true);
                       setTimeout(() => setSearchTerm(e.target.value), 1000);
@@ -65,7 +70,11 @@ const Index: FC = () => {
               )}
 
               {hasPermission('role', 'manage') && (
-                <Button variant="primary" onClick={() => setIsOpen(true)}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  // borderRadius="md2"
+                  onClick={() => setIsOpen(true)}>
                   <Plus size={14} weight="bold" />
                   Create Role
                 </Button>

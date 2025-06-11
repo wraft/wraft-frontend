@@ -4,10 +4,12 @@ import { useRouter } from 'next/router';
 import { Avatar } from 'theme-ui';
 import { Button, Pagination, Table, Box, Text, Flex } from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import { ContentTitleList } from 'common/content';
-import { TimeAgo, FilterBlock, StateBadge } from 'common/Atoms';
+import { TimeAgo, FilterBlock, StateBadge, PageInner } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
+import Page from 'common/PageFrame';
 import { fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -70,6 +72,7 @@ const columns = [
     cell: ({ row }: any) => (
       <NextLink href={`/documents/${row.original?.content?.id}`}>
         <ContentTitleList
+          showId={true}
           content={row.original?.content}
           contentType={row.original?.content_type}
         />
@@ -98,7 +101,9 @@ const columns = [
           sx={{ width: '16px', height: '16px' }}
           src={row.original?.creator?.profile_pic}
         />
-        <Text>{row.original?.creator?.name}</Text>
+        <Text fontSize="sm2" fontWeight={500}>
+          {row.original?.creator?.name}
+        </Text>
       </Flex>
     ),
     enableSorting: false,
@@ -218,8 +223,12 @@ const DocumentList = () => {
 
   return (
     <>
-      <PageHeader title="Documents" desc="Manage all documents" />
-      <Box px="lg" py="xl">
+      <PageHeader title="Documents" desc="Manage all documents">
+        <Button variant="secondary" size="sm">
+          <DotsThreeVertical stroke="bold" color="gray.700" />
+        </Button>
+      </PageHeader>
+      <PageInner>
         <Flex>
           <Box flexGrow={1}>
             <Box mb="sm">
@@ -239,7 +248,7 @@ const DocumentList = () => {
               />
             )}
           </Box>
-          <Box w="25%" px="md">
+          <Box w="25%" px="lg">
             <Flex justifyContent="space-between" mb="sm">
               <Text as="h4" fontWeight="heading" color="text-primary">
                 Filter by Variant
@@ -247,9 +256,9 @@ const DocumentList = () => {
               {currentVariant && (
                 <Button
                   size="xs"
-                  variant="tertiary"
+                  variant="secondary"
                   onClick={() => handleFilter('')}>
-                  clear
+                  Clear
                 </Button>
               )}
             </Flex>
@@ -269,7 +278,7 @@ const DocumentList = () => {
             </Box>
           </Box>
         </Flex>
-      </Box>
+      </PageInner>
     </>
   );
 };

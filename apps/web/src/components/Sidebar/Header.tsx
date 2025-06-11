@@ -147,7 +147,7 @@ const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
             variant="ghost"
             size="xs"
             onClick={() => toggleSearch()}>
-            <IconFrame>
+            <IconFrame color="gray.1100">
               <Plus size={14} />
             </IconFrame>
           </Button>

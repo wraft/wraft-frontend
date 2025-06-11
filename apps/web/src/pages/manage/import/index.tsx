@@ -10,10 +10,22 @@ const Contents: FC = () => {
     <>
       <Head>
         <title>Import | Wraft </title>
-        <meta name="description" content="Import Document structures" />
+        <meta name="description" content="Import Document Variants" />
       </Head>
       <Page>
-        <PageHeader title="Import" desc="Import Document Structures" />
+        <PageHeader
+          title={[
+            {
+              name: 'Manage',
+              path: '/manage',
+            },
+            {
+              name: 'Import',
+              path: 'import',
+            },
+          ]}
+          desc="Import Document Variants"
+        />
         <ImporterWrapper />
       </Page>
     </>

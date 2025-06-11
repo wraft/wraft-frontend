@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { Box } from '@wraft/ui';
 
 import VariantDetailForm from 'components/Variants/VariantDetailForm';
 import Page from 'common/PageFrame';
@@ -22,12 +23,15 @@ const Index: FC = () => {
   return (
     <>
       <Head>
-        <title>Variant | Wraft</title>
+        <title>Variants | Wraft</title>
         <meta name="description" content="edit variant" />
       </Head>
       <Page>
         <PageHeader
-          title={variant?.content_type?.name || ''}
+          title={[
+            { name: 'Variants', path: '/variants' },
+            variant?.content_type?.name,
+          ]}
           desc={
             <DescriptionLinker
               data={[
@@ -38,7 +42,9 @@ const Index: FC = () => {
           }
         />
 
-        <VariantDetailForm />
+        <Box p="xl">
+          <VariantDetailForm />
+        </Box>
       </Page>
     </>
   );
