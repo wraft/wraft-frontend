@@ -33,11 +33,11 @@ export const Menulist = [
         icon: <ThumbsUp size={defaultIcon} weight={defaultWeight} />,
         path: '/approvals',
       },
-      {
-        name: 'Repository',
-        icon: <Folder size={defaultIcon} weight={defaultWeight} />,
-        path: '/repository',
-      },
+      // {
+      //   name: 'Repository',
+      //   icon: <Folder size={defaultIcon} weight={defaultWeight} />,
+      //   path: '/repository',
+      // },
     ],
   },
   {
