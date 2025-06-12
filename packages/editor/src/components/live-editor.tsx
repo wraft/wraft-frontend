@@ -125,8 +125,8 @@ export const LiveEditor = forwardRef(
 
       return createEditor({ extension, defaultContent });
     }, [isReadonly]);
-
     useEffect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Safety check for provider/editor initialization
       if (!provider || !editor) return;
 
       const yXmlFragment = doc.getXmlFragment("prosemirror");
