@@ -9,7 +9,6 @@ import { DotsThreeVertical } from '@phosphor-icons/react';
 import { ContentTitleList } from 'common/content';
 import { TimeAgo, FilterBlock, StateBadge, PageInner } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
-import Page from 'common/PageFrame';
 import { fetchAPI } from 'utils/models';
 
 export interface ILayout {
