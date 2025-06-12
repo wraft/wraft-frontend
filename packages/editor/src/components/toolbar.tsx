@@ -23,7 +23,7 @@ import { useState, useEffect } from "react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 import { ImageUploadPopover } from "./image-upload-popover";
-import { TableMenu } from "./tableMenu";
+import { TableMenu } from "./table-menu";
 
 const ToolbarContainer = styled.divBox`
   z-index: 2;
