@@ -16,6 +16,7 @@ import { DocumentSidebar } from './DocumentSidebar';
 import { useDocument } from './DocumentContext';
 import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
+import { usePermissions } from './usePermissions';
 import apiService from './APIModel';
 
 export const SAVE_INTERVAL = 15000;
@@ -35,18 +36,21 @@ const DocumentView = () => {
     currentActiveIndex,
     isMakeCompete,
     editorMode,
+    docRole,
     editorRef,
     pageTitle,
     contentType,
     fieldValues,
+    userType,
     lastSavedContent,
     meta,
-    isInvite,
     token,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
   } = useDocument();
+
+  const { canAccess } = usePermissions(userType, docRole);
 
   const router = useRouter();
   const { register, handleSubmit, setValue } = useForm();

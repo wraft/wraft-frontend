@@ -66,7 +66,6 @@ export type BasicsExtension = Union<
 export function defineDefaultExtension({
   placeholder = "",
   isReadonly = false,
-  signersConfig,
 }: DefaultExtensionProps): BasicsExtension {
   const extensions = [
     defineBasicExtension(),
