@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Text, Button, Flex } from '@wraft/ui';
-import { House } from '@phosphor-icons/react';
+import { Text, Button, Flex } from '@wraft/ui';
 
 export default function Custom404() {
   const router = useRouter();

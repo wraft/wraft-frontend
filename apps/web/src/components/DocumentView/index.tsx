@@ -44,7 +44,6 @@ const DocumentView = () => {
     userType,
     lastSavedContent,
     meta,
-    isInvite,
     token,
     setPageTitle,
     setContentBody,
@@ -78,18 +77,6 @@ const DocumentView = () => {
       clearInterval(autosaveInterval);
     };
   }, [editorRef.current, editorMode]);
-
-  const checkContentChange = () => {
-    const content = JSON.stringify(editorRef.current?.helpers?.getJSON());
-
-    if (content.length === 0) {
-      return;
-    }
-
-    if (content !== lastSavedContent.current) {
-      onSubmit();
-    }
-  };
 
   useEffect(() => {
     if (pageTitle) {

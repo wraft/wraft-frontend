@@ -169,10 +169,9 @@ const FormsFrom: React.FC<FormsFromProps> = ({
   };
 
   const onRequiredChecked = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    _e: React.ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
-    const { checked } = e.target;
     const updatedItems = [...items];
     updatedItems[index].required = !updatedItems[index].required;
     setItems(updatedItems);

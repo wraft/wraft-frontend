@@ -1,10 +1,10 @@
 import { CSSObject } from "@xstyled/emotion";
 
+import { hexToRGBA } from "@/utils";
+
 import { WuiTheme } from "../types";
 
 import { ThemeFocus } from "./focus";
-
-import { hexToRGBA } from "@/utils";
 
 type CommonAttributesButton = CSSObject;
 

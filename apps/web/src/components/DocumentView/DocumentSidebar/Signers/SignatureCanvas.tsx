@@ -37,7 +37,7 @@ export const SignatureCanvasComponent = ({
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [previewUrl, setPreviewUrl] = useState('');
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [_uploadProgress, setUploadProgress] = useState(0);
 
   const tabStore = useTab({ defaultSelectedId: 'draw' });
 

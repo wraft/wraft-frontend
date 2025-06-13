@@ -113,7 +113,6 @@ export const DocumentProvider = ({
   const [contents, setContents] = useState<ContentInstance>();
   const [docRole, setDocRole] = useState<DocRole>('viewer');
   const [editorMode, setEditorMode] = useState<EditorMode>('edit'); //temp
-  const [error, setError] = useState(null);
   const [fieldTokens, setFieldTokens] = useState<any>([]);
   const [fieldValues, setFieldValues] = useState<any>([]);
   const [fields, setField] = useState<Array<FieldT>>([]);

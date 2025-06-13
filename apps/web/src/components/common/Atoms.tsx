@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { format, formatDistanceStrict } from 'date-fns';
+import { format } from 'date-fns';
 import { Box, Text, Flex } from '@wraft/ui';
 import { Triangle } from '@phosphor-icons/react';
 import styled from '@xstyled/emotion';

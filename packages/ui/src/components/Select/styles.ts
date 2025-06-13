@@ -1,9 +1,5 @@
 import styled, { th } from "@xstyled/emotion";
 
-import { IconWrapper as WUIIconWrapper } from "../Field/styles";
-
-import { SelectOptions } from "./index";
-
 import {
   cardStyles,
   centerContent,
@@ -11,6 +7,10 @@ import {
   overflowEllipsis,
   Size,
 } from "@/utils";
+
+import { IconWrapper as WUIIconWrapper } from "../Field/styles";
+
+import { SelectOptions } from "./index";
 
 export const IconWrapper = styled(WUIIconWrapper)``;
 

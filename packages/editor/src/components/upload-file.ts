@@ -29,6 +29,7 @@ export function defineImageFileHandlers() {
         type: "image",
         attrs: { src: uploadTask.objectURL },
       });
+      // eslint-disable-next-line @typescript-eslint/unbound-method -- view.dispatch is safely bound by prosekit
       return command(view.state, view.dispatch, view);
     }),
     defineFileDropHandler(({ view, file, pos }) => {
@@ -49,6 +50,7 @@ export function defineImageFileHandlers() {
         attrs: { src: uploadTask.objectURL },
         pos,
       });
+      // eslint-disable-next-line @typescript-eslint/unbound-method -- view.dispatch is safely bound by prosekit
       return command(view.state, view.dispatch, view);
     }),
   );
@@ -71,6 +73,7 @@ const tmpfilesUploader: Uploader<string> = ({
     formData.append("file", file);
 
     xhr.upload.addEventListener("progress", (event) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- onProgress is optional parameter
       if (event.lengthComputable && onProgress) {
         onProgress({
           loaded: event.loaded,

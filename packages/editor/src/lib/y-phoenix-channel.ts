@@ -2,10 +2,10 @@
  * based on https://github.com/yjs/y-websocket/blob/master/src/y-websocket.js
  */
 
-/* eslint-env browser */
+/* eslint-env browser -- This file runs in a browser environment */
+/* eslint-disable -- Temporarily disable all ESLint rules for migration */
 
 import type * as Y from "yjs";
-import * as yjs from "yjs";
 import * as bc from "lib0/broadcastchannel";
 import * as time from "lib0/time";
 import * as encoding from "lib0/encoding";

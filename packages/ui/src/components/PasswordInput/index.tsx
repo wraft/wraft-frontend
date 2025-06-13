@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
+import { CreateWuiProps, forwardRef } from "@/system";
+
 import { InputText, InputTextOptions } from "../InputText";
 
 import { ToggleButton } from "./ToggleButton";
-
-import { CreateWuiProps, forwardRef } from "@/system";
 
 export type PasswordInputOptions = InputTextOptions;
 export type PasswordInputProps = CreateWuiProps<"input", InputTextOptions>;

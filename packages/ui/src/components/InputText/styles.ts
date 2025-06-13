@@ -1,8 +1,8 @@
 import styled, { system } from "@xstyled/emotion";
 
-import { InputTextOptions } from "./index";
-
 import { defaultFieldStyles } from "@/utils";
+
+import { InputTextOptions } from "./index";
 
 export const InputText = styled("input")<
   Pick<

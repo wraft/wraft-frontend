@@ -1,8 +1,8 @@
 import styled, { th } from "@xstyled/emotion";
 
-import { SearchOptions } from "./index";
-
 import { defaultFieldStyles, overflowEllipsis } from "@/utils";
+
+import { SearchOptions } from "./index";
 
 export const Wrapper = styled.div`
   position: relative;

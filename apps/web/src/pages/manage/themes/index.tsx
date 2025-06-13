@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import Head from 'next/head';
-import { Button, Flex, Drawer, useDrawer } from '@wraft/ui';
+import { Button, Drawer, useDrawer } from '@wraft/ui';
 
 // import { menuLinks } from '@constants/menuLinks';
 import ThemeAddForm from 'components/Theme/ThemeForm';

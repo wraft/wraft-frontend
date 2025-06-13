@@ -7,6 +7,14 @@ import DownshiftImport, {
 import { matchSorter } from "match-sorter";
 import React, { Fragment, useEffect, useMemo, useState } from "react";
 
+import { CreateWuiProps, forwardRef } from "@/system";
+import {
+  createEvent,
+  CreateEvent,
+  DefaultFieldStylesProps,
+  FIELD_ICON_SIZE,
+} from "@/utils";
+
 import { ClearButton } from "../ClearButton";
 
 import { multipleSelections } from "./multipleSelections";
@@ -22,14 +30,6 @@ import {
   itemToString,
   kebabCase,
 } from "./utils";
-
-import { CreateWuiProps, forwardRef } from "@/system";
-import {
-  createEvent,
-  CreateEvent,
-  DefaultFieldStylesProps,
-  FIELD_ICON_SIZE,
-} from "@/utils";
 
 export type OptionValue = string | number;
 export type SeletOption = {

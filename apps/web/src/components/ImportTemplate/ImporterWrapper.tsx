@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import * as Tab from '@ariakit/react/tab';
 import toast from 'react-hot-toast';
 import { Box, Text } from '@wraft/ui';
 

@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from "@storybook/react";
 import React, { useState } from "react";
 
-import { Checkbox, CheckboxProps } from "./index";
-
 import { Box, Flex, Text } from "@/components";
+
+import { Checkbox, CheckboxProps } from "./index";
 
 export default {
   title: "Forms/Checkbox",

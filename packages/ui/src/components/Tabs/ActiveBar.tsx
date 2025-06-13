@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
+import { useIsomorphicLayoutEffect } from "@/utils";
+import { useViewportSize } from "@/utils";
+
 import * as S from "./styles";
 import { getParentScale } from "./utils";
 
 import { UseTabState } from ".";
-
-import { useIsomorphicLayoutEffect } from "@/utils";
-import { useViewportSize } from "@/utils";
 
 export interface ActiveBarReturn {
   offset?: number;
@@ -17,7 +17,7 @@ export interface ActiveBarReturn {
 function useActiveBar(
   listRef: React.MutableRefObject<HTMLElement>,
   activeTab: HTMLElement,
-  orientation: UseTabState["orientation"]
+  orientation: UseTabState["orientation"],
 ): ActiveBarReturn {
   const [state, setState] = useState({});
   const { height: viewportHeight, width: viewportWidth } = useViewportSize();

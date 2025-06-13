@@ -1,10 +1,10 @@
 import styled, { css, th } from "@xstyled/emotion";
 
+import { FieldIconSize } from "@/utils";
+
 import { StyledLabel } from "../Label";
 
 import { Variant } from "./index";
-
-import { FieldIconSize } from "@/utils";
 
 // Define the checkableFieldStyles
 const checkableFieldStyles = css`

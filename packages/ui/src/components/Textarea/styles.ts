@@ -1,8 +1,8 @@
 import styled, { system, th } from "@xstyled/emotion";
 
-import { TextareaOptions } from "./index";
-
 import { defaultFieldStyles } from "@/utils";
+
+import { TextareaOptions } from "./index";
 
 export const Textarea = styled("textarea")<TextareaOptions>`
   ${({ size, variant }) =>

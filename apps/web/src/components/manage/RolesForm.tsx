@@ -150,11 +150,8 @@ const RolesForm = ({ setOpen, setRender, roleId }: RolesFormProps) => {
       const selectedPermissions = role.permissions || [];
 
       Object.keys(data).forEach((category) => {
-        let categoryHasChecked = false;
-
         data[category].children.forEach((sub: any) => {
           sub.isChecked = selectedPermissions.includes(sub.name);
-          if (sub.isChecked) categoryHasChecked = true;
         });
 
         const isAllSelected = data[category].children.every(

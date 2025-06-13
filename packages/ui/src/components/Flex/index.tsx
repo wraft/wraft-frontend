@@ -1,6 +1,6 @@
-import { Box } from "../Box";
-
 import { CreateWuiProps, forwardRef, WuiProps } from "@/system";
+
+import { Box } from "../Box";
 
 export interface FlexOptions {
   /** same as alignItems */

@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import NavLink from 'next/link';
-import Router, { useRouter } from 'next/router';
+import Router from 'next/router';
 import { Table, DropdownMenu, Box, Text, Flex, Button, Modal } from '@wraft/ui';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';

@@ -1,10 +1,10 @@
 import * as Ariakit from "@ariakit/react";
 
+import { CreateWuiProps, forwardRef } from "@/system";
+
 import * as S from "./styles";
 
 import { UseTab } from ".";
-
-import { CreateWuiProps, forwardRef } from "@/system";
 
 export type TabPanelOptions = { store: UseTab };
 export type TabPanelProps = CreateWuiProps<
@@ -30,7 +30,7 @@ export const TabPanel = forwardRef<"div", TabPanelProps>(
         {children}
       </S.TabPanel>
     );
-  }
+  },
 );
 
 TabPanel.displayName = "TabPanel";

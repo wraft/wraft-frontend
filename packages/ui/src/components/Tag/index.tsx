@@ -2,10 +2,10 @@
 import { CloseIcon } from "@wraft/icon";
 import React from "react";
 
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
 import { wrapChildren } from "@/utils";
+
+import * as S from "./styles";
 
 const enum SecondaryColors {
   "blue",

@@ -1,9 +1,9 @@
 import React from "react";
 
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
 import { Variant, wrapChildren } from "@/utils";
+
+import * as S from "./styles";
 
 export interface LabelOptions {
   checkableField?: boolean;

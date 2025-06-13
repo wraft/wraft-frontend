@@ -60,7 +60,7 @@ export function markdownFromHTML(html: string): string {
           text(node) {
             if (node.value.startsWith("SIGNATURE_FIELD_PLACEHOLDER")) {
               const [_, width, height] =
-                node.value.match(/width:(\S+) height:(\S+)/) || [];
+                node.value.match(/width:(\S+) height:(\S+)/) || []; // eslint-disable-line prefer-named-capture-group -- Using positional destructuring for simplicity
               return `[SIGNATURE_FIELD_PLACEHOLDER width=${width} height=${height}]`;
             }
             return node.value;

@@ -1,6 +1,6 @@
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
+
+import * as S from "./styles";
 
 export type BoxProps = Omit<CreateWuiProps<"div">, "dataTestId"> & {
   variant?: string;

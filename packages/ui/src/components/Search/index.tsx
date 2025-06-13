@@ -4,12 +4,6 @@ import DownshiftImport, {
 } from "downshift";
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 
-import { ClearButton } from "../ClearButton";
-import { IconWrapper } from "../Field/styles";
-import { Spinner } from "../Spinner";
-
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
 import {
   createEvent,
@@ -17,6 +11,11 @@ import {
   FIELD_ICON_SIZE,
   throttle as handleThrottle,
 } from "@/utils";
+
+import { ClearButton } from "../ClearButton";
+import { IconWrapper } from "../Field/styles";
+
+import * as S from "./styles";
 
 const EMPTY_STRING = "";
 
@@ -81,20 +80,16 @@ export const Search = forwardRef<"input", SearchProps>(
 
     // Keep results in state
     const [results, setResults] = useState<SearchOption[] | OptionGroup[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     // Update results when searching
     const searchResults = useCallback(
       async (value: string) => {
         if (minChars === 0 || value?.length >= minChars) {
           try {
-            setIsLoading(true);
             const data = await search(value);
             setResults((data as SearchOption[] | OptionGroup[]) || []);
           } catch (error) {
             setResults([]);
-          } finally {
-            setIsLoading(false);
           }
         } else {
           setResults([]);

@@ -3,16 +3,14 @@ import { useRouter } from 'next/router';
 import NavLink from 'next/link';
 import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { CaretDown, Carrot, Gear, Plus } from '@phosphor-icons/react';
+import { CaretDown, Gear, Plus } from '@phosphor-icons/react';
 
-import { Icon } from 'components/ImportTemplate/style';
 import DefaultAvatar from 'common/DefaultAvatar';
 import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
-import UserSettingsMenu from './UserSettingsMenu';
 
 const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

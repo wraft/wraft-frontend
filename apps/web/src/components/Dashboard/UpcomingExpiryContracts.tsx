@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import NextLink from 'next/link';
-import { Avatar } from 'theme-ui';
 import { Table, Flex, Text, Box, Pagination } from '@wraft/ui';
 
 import { StateBadge, TimeAgo } from 'common/Atoms';
