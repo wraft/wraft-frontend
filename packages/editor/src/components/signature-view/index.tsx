@@ -18,7 +18,7 @@ import {
   ErrorOverlay,
   StyledResizableHandle,
 } from "./signature-view.styles";
-import { SignatureCanvasComponent } from "./SignatureCanvas";
+import { SignatureCanvasComponent } from "./signature-canvas";
 
 export default function SignatureView(props: ReactNodeViewProps) {
   const { setAttrs, node } = props;
