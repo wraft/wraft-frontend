@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
-import SignatureCanvas from "react-signature-canvas";
+import ReactSignatureCanvas from "react-signature-canvas";
 import { Box, Button, Flex, Text, Tab, useTab } from "@wraft/ui";
 import { CloudArrowUp, Check } from "@phosphor-icons/react";
 import { useDropzone } from "react-dropzone";
 
-type ExtendedSignatureCanvas = SignatureCanvas & {
+type ExtendedSignatureCanvas = ReactSignatureCanvas & {
   getCanvas: () => HTMLCanvasElement;
 };
 
@@ -29,7 +29,7 @@ export const SignatureCanvasComponent = ({
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("");
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [_uploadProgress, setUploadProgress] = useState(0);
 
   const tabStore = useTab({ defaultSelectedId: "draw" });
 
@@ -134,7 +134,7 @@ export const SignatureCanvasComponent = ({
       <Tab.Panel store={tabStore} tabId="draw">
         <Box px="md" py="md">
           <Box flexDirection="column" background="white" borderRadius="sm">
-            <SignatureCanvas
+            <ReactSignatureCanvas
               ref={signatureCanvasRef}
               penColor="black"
               velocityFilterWeight={0.7}
