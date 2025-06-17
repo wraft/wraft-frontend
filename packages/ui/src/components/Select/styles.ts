@@ -19,8 +19,6 @@ export const Wrapper = styled.div<{ disabled: boolean }>`
   display: flex;
   align-items: center;
   height: 100%;
-  padding-top: 9px;
-  padding-bottom: 9px;
 `;
 
 export const InputWrapper = styled.div`
@@ -85,6 +83,7 @@ export const Menu = styled.ul`
   left: 0;
   margin: 0;
   margin-top: md;
+  top: 100%;
   padding: 0;
   transition: medium;
   overflow: auto;

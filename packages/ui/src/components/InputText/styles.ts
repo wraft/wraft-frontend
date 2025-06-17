@@ -21,7 +21,7 @@ export const InputText = styled("input")<
   text-overflow: ellipsis;
   padding-top: sm2;
   padding-bottom: sm2;
-  height: auto;
+
   ${system}
 `;
 

@@ -28,7 +28,7 @@ export const Backdrop: any = styled.divBox<BackdropProps>`
 export const Dialog: any = styled.div`
   position: fixed;
   inset: 0.75rem;
-  z-index: 50;
+  z-index: 1000;
   margin: auto;
   display: flex;
   height: fit-content;
