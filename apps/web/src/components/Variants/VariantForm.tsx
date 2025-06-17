@@ -849,17 +849,19 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
               control={control}
               name="type"
               render={({ field }) => (
-                <Field
-                  label="Document Type"
-                  required
-                  error={errors.type?.message}>
-                  <Select
-                    {...field}
-                    options={TYPES}
-                    placeholder="Select Document Type"
+                <Box mb="xs">
+                  <Field
+                    label="Document Type"
                     required
-                  />
-                </Field>
+                    error={errors.type?.message}>
+                    <Select
+                      {...field}
+                      options={TYPES}
+                      placeholder="Select Document Type"
+                      required
+                    />
+                  </Field>
+                </Box>
               )}
             />
             <Field

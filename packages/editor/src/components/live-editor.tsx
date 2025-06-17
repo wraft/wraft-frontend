@@ -14,9 +14,9 @@ import { Socket } from "phoenix";
 import * as Y from "yjs";
 import { prosemirrorJSONToYXmlFragment } from "y-prosemirror";
 import { ListDOMSerializer } from "prosekit/extensions/list";
+import { markdownFromHTML } from "@helpers/markdown";
 import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
-import { markdownFromHTML } from "@helpers/markdown";
 // import { IndexeddbPersistence } from "y-indexeddb";
 import { getRandomColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
@@ -109,6 +109,11 @@ export const LiveEditor = forwardRef(
 
       setProvider(wsProvider);
 
+      wsProvider.awareness.on("change", () => {
+        const states = Array.from(wsProvider.awareness.getStates().values());
+        // setAwarenessUsers(states);
+      });
+
       if (collabData?.user) {
         wsProvider.awareness.setLocalState({
           user: { ...collabData.user, color: getRandomColor() },
@@ -125,8 +130,8 @@ export const LiveEditor = forwardRef(
 
       return createEditor({ extension, defaultContent });
     }, [isReadonly]);
+
     useEffect(() => {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- Safety check for provider/editor initialization
       if (!provider || !editor) return;
 
       const yXmlFragment = doc.getXmlFragment("prosemirror");

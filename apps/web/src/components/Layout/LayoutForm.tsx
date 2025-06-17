@@ -352,13 +352,15 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
               name="slug"
               defaultValue="contract"
               render={({ field }) => (
-                <Field
-                  label="Slug"
-                  required
-                  hint="Slugs are layout templates used for rendering documents"
-                  error={errors?.slug?.message}>
-                  <Select {...field} options={SLUGITEMS} />
-                </Field>
+                <Box mb="xs">
+                  <Field
+                    label="Slug"
+                    required
+                    hint="Slugs are layout templates used for rendering documents"
+                    error={errors?.slug?.message}>
+                    <Select {...field} options={SLUGITEMS} />
+                  </Field>
+                </Box>
               )}
             />
             <Controller
