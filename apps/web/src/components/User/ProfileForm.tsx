@@ -102,6 +102,7 @@ const Form = () => {
         duration: 1000,
         position: 'top-right',
       });
+      await onLoadProfile();
       setSaving(false);
     } catch (error) {
       toast.error('Failed to update profile');
@@ -217,25 +218,32 @@ const Form = () => {
         <Field label="Date of Birth" required error={errors?.dob?.message}>
           <InputText {...register('dob')} type="date" />
         </Field>
+        <Box>
+          <Field label="Gender" required error={errors?.gender?.message}>
+            <Select
+              name="gender"
+              options={genderOptions}
+              onChange={(value: OptionValue) => {
+                const option = genderOptions.find((opt) => opt.value === value);
+                const selectedGender = option?.value?.toString() || null;
+                setValue('gender', selectedGender);
 
-        <Field label="Gender" required error={errors?.gender?.message}>
-          <Select
-            name="gender"
-            options={genderOptions}
-            onChange={(value: OptionValue) => {
-              const option = genderOptions.find((opt) => opt.value === value);
-              setValue('gender', option?.value?.toString() || null);
-            }}
-            value={
-              profile?.gender
-                ? {
-                    value: profile.gender.toLowerCase(),
-                    label: profile.gender,
-                  }
-                : undefined
-            }
-          />
-        </Field>
+                setProfile((prevProfile) => ({
+                  ...prevProfile!,
+                  gender: selectedGender,
+                }));
+              }}
+              value={
+                profile?.gender
+                  ? {
+                      value: profile.gender.toLowerCase(),
+                      label: profile.gender,
+                    }
+                  : undefined
+              }
+            />
+          </Field>
+        </Box>
 
         <Box>
           <Button type="submit" loading={saving} disabled={saving}>
