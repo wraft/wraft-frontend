@@ -71,18 +71,33 @@ const StyledResizableHandle = styled(ResizableHandle)`
   right: 0;
   margin: 0.375rem;
   padding: 0.25rem;
+  border-radius: 0.375rem;
   background-color: rgba(31, 41, 55, 0.3);
   color: rgba(255, 255, 255, 0.5);
   border-radius: 0.375rem;
   transition: opacity 0.2s;
-  &:hover,
-  &:active,
-  &[data-resizing] {
+  opacity: 0;
+  z-index: 10;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  cursor: nwse-resize;
+
+  &:hover {
     background-color: rgba(31, 41, 55, 0.6);
     color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
   }
-  opacity: 0;
-  group-hover &,
+  &:active {
+    background-color: rgba(31, 41, 55, 0.6);
+    color: rgba(255, 255, 255, 0.8);
+    transform: translate(0.125rem, 0.125rem);
+  }
+  .resizable-root:hover &,
+  .resizable-root[data-selected] &,
   &[data-resizing] {
     opacity: 1;
   }
@@ -91,7 +106,8 @@ const StyledResizableHandle = styled(ResizableHandle)`
 const BASE_URL = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:4000";
 
 export default function ImageView(props: ReactNodeViewProps) {
-  const { setAttrs, node } = props;
+  const { setAttrs, node, view } = props;
+  const isReadonly = !view.editable;
 
   const attrs = node.attrs as ImageAttrs;
   const url = attrs.src || "";
@@ -193,9 +209,11 @@ export default function ImageView(props: ReactNodeViewProps) {
           </div>
         </ErrorOverlay>
       )}
-      <StyledResizableHandle position="bottom-right">
-        <ArrowDownRight size={8} />
-      </StyledResizableHandle>
+      {!isReadonly && (
+        <StyledResizableHandle position="bottom-right">
+          <ArrowDownRight size={16} />
+        </StyledResizableHandle>
+      )}
     </StyledResizableRoot>
   );
 }

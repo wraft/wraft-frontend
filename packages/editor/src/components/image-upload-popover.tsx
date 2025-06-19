@@ -4,7 +4,7 @@ import {
   PopoverRoot,
   PopoverTrigger,
 } from "prosekit/react/popover";
-import { useState, type FC, type ReactNode } from "react";
+import { useRef, useState, type FC, type ReactNode } from "react";
 import styled from "@emotion/styled";
 import cookie from "js-cookie";
 import Button from "./button";
@@ -243,6 +243,7 @@ export const ImageUploadPopover: FC<{
 
     if (uploadfile) {
       setFile(uploadfile);
+      setUploadError("");
     }
   };
 
@@ -284,8 +285,7 @@ export const ImageUploadPopover: FC<{
         src: `/asset/image/${data.id}`,
       });
       // deferResetState();
-      setFile(null);
-      setOpen(false);
+      setUploadError("");
     } catch (error) {
       setUploadError("Upload failed. Please try again.");
     } finally {
@@ -295,7 +295,7 @@ export const ImageUploadPopover: FC<{
 
   const deferResetState = () => {
     setTimeout(() => {
-      setFile(null);
+      setUploadError("");
     }, 300);
   };
 

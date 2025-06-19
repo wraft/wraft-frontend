@@ -107,8 +107,11 @@ const StyledTableHandleRowTrigger = styled(TableHandleRowTrigger)`
   display: flex;
 `;
 
-export function TableHandle() {
+export function TableHandle({ isReadonly }: { isReadonly?: boolean }) {
   const editor = useEditor<EditorExtension>({ update: true });
+  if (isReadonly) {
+    return null;
+  }
 
   return (
     <StyledTableHandleRoot>
@@ -204,6 +207,14 @@ export function TableHandle() {
               onSelect={editor.commands.mergeTableCells}
             >
               <span>Merge Cells</span>
+            </StyledTableHandlePopoverItem>
+          )}
+
+          {editor.commands.splitTableCell.canExec() && (
+            <StyledTableHandlePopoverItem
+              onSelect={editor.commands.splitTableCell}
+            >
+              <span>Unmerge Cells</span>
             </StyledTableHandlePopoverItem>
           )}
 

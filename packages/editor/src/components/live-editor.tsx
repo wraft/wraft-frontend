@@ -239,7 +239,7 @@ export const LiveEditor = forwardRef(
                 <SlashMenu />
                 {tokens && <TokenMenu tokens={tokens} />}
                 {/* <BlockHandle /> */}
-                <TableHandle />
+                <TableHandle isReadonly={isReadonly} />
               </S.EditorContent>
             </S.EditorContainer>
           </ProseKit>
