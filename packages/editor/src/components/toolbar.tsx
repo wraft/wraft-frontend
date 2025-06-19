@@ -23,7 +23,7 @@ import { useState, useEffect } from "react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
 import { ImageUploadPopover } from "./image-upload-popover";
-import { TableMenu } from "./tableMenu";
+import { TableMenu } from "./table-menu";
 
 const ToolbarContainer = styled.divBox`
   z-index: 2;
@@ -50,6 +50,7 @@ export default function Toolbar() {
 
   // Check if a table is in the current selection path
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- editor.view might be undefined during initial mount
     if (!editor.view) return;
 
     const checkTableActive = () => {
@@ -66,8 +67,8 @@ export default function Toolbar() {
     };
 
     // Add event listeners
-    const handleDocumentClick = (e: any) => {
-      if (editor.view.dom.contains(e.target)) {
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (e.target instanceof Node && editor.view.dom.contains(e.target)) {
         // Only check table state for clicks inside the editor
         setTimeout(checkTableActive, 10);
       }

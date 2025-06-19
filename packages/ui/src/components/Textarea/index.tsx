@@ -1,9 +1,9 @@
 import React from "react";
 
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
 import { DefaultFieldStylesProps } from "@/utils";
+
+import * as S from "./styles";
 
 export interface TextareaOptions extends DefaultFieldStylesProps {
   autoFocus?: boolean;

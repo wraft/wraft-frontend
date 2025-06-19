@@ -33,11 +33,7 @@ const ITEMS = [
 export default function InviteBlock({ docId }: any) {
   const [collaborators, setCollaborators] = useState<any>([]);
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit, control } = useForm();
 
   useEffect(() => {
     getCollaborators();

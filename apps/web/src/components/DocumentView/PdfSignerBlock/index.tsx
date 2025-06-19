@@ -45,7 +45,7 @@ interface AnnotationDetailsType {
 }
 
 // PDF utility functions
-const flattenWidget = (
+const _flattenWidget = (
   document: PDFDocument,
   field: PDFField,
   widget: PDFWidgetAnnotation,
@@ -79,17 +79,19 @@ const getPageForWidget = (
   widget: PDFWidgetAnnotation,
 ) => {
   const pageRef = widget.P();
-  let page = document.getPages().find((page: PDFPage) => page.ref === pageRef);
+  let foundPage = document
+    .getPages()
+    .find((page: PDFPage) => page.ref === pageRef);
 
-  if (!page) {
+  if (!foundPage) {
     const widgetRef = document.context.getObjectRef(widget.dict);
     if (!widgetRef) return null;
 
-    page = document.findPageForAnnotationRef(widgetRef);
-    if (!page) return null;
+    foundPage = document.findPageForAnnotationRef(widgetRef);
+    if (!foundPage) return null;
   }
 
-  return page;
+  return foundPage;
 };
 
 const getAppearanceRefForWidget = (

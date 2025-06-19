@@ -36,19 +36,6 @@ EditorView.prototype.updateState = function updateState(state) {
  * Number Block
  */
 
-const blockTypes = [
-  {
-    name: 'medium',
-    wh: '32px',
-    fontSize: 'xs',
-  },
-  {
-    name: 'small',
-    wh: '22px',
-    fontSize: 'xs',
-  },
-];
-
 /**
  * Steps Indication Block
  */
@@ -102,11 +89,7 @@ interface NumberBlockProps {
   active?: boolean;
 }
 
-const NumberBlock = ({ no, active = false }: NumberBlockProps) => {
-  const activeBorder = active ? 'gray.200' : 'gray.300';
-  const defaultSize = 'small';
-  const size = blockTypes.find((b: any) => b.name === defaultSize);
-
+const NumberBlock = ({ no }: NumberBlockProps) => {
   return (
     <Box
     // bg: 'neutral.200',

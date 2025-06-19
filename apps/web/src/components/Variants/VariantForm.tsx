@@ -461,7 +461,7 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     // Format the fields
     const formattedFields = formatFields(data.fields).map((field: any) => {
       // Strip the fromFrame property before sending to API
-      const { fromFrame, ...fieldWithoutFromFrame } = field;
+      const { fromFrame: _, ...fieldWithoutFromFrame } = field;
       return fieldWithoutFromFrame;
     });
 
@@ -479,8 +479,6 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     };
 
     try {
-      const contentTypeId = contentId;
-
       if (contentId) {
         const fieldsToRemove = getFieldsToRemove(data?.fields);
         await deleteFieldsOneByOne(fieldsToRemove);
@@ -851,17 +849,19 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
               control={control}
               name="type"
               render={({ field }) => (
-                <Field
-                  label="Document Type"
-                  required
-                  error={errors.type?.message}>
-                  <Select
-                    {...field}
-                    options={TYPES}
-                    placeholder="Select Document Type"
+                <Box mb="xs">
+                  <Field
+                    label="Document Type"
                     required
-                  />
-                </Field>
+                    error={errors.type?.message}>
+                    <Select
+                      {...field}
+                      options={TYPES}
+                      placeholder="Select Document Type"
+                      required
+                    />
+                  </Field>
+                </Box>
               )}
             />
             <Field

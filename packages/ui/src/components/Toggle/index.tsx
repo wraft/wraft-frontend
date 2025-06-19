@@ -1,11 +1,11 @@
 import React from "react";
 
+import { Checkbox, CheckboxProps } from "@/components/Checkbox";
+import { CreateWuiProps, forwardRef } from "@/system";
+
 import * as S from "./styles";
 
 export type Size = "xs" | "sm" | "md";
-
-import { Checkbox, CheckboxProps } from "@/components/Checkbox";
-import { CreateWuiProps, forwardRef } from "@/system";
 
 export type ToggleOptions = Omit<
   CheckboxProps,

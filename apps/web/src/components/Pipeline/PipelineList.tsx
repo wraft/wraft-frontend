@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
-import { Flower, Play, TreeStructure } from '@phosphor-icons/react';
+import { Play, TreeStructure } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';

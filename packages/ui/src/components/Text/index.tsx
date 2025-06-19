@@ -1,8 +1,8 @@
 import React from "react";
 
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
+
+import * as S from "./styles";
 
 export type TextVariant =
   | "xs"

@@ -4,12 +4,6 @@ import DownshiftImport, {
 } from "downshift";
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 
-import { ClearButton } from "../ClearButton";
-import { IconWrapper } from "../Field/styles";
-import { Spinner } from "../Spinner";
-
-import * as S from "./styles";
-
 import { CreateWuiProps, forwardRef } from "@/system";
 import {
   createEvent,
@@ -17,6 +11,13 @@ import {
   FIELD_ICON_SIZE,
   throttle as handleThrottle,
 } from "@/utils";
+
+import { ClearButton } from "../ClearButton";
+import { IconWrapper } from "../Field/styles";
+import { Spinner } from "../Spinner";
+
+import * as S from "./styles";
+
 
 const EMPTY_STRING = "";
 

@@ -156,7 +156,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       color:
                         theme.colors &&
                         theme.colors.gray &&
-                        theme?.colors?.gray[200],
+                        theme?.colors?.gray[900],
                     }),
                     multiValue: (baseStyles) => ({
                       ...baseStyles,
@@ -201,7 +201,7 @@ const InviteTeam = ({ setOpen }: Props) => {
               borderRadius: 4,
               height: '100%',
               overflowY: 'auto',
-              maxHeight: '400px',
+              maxHeight: '392px',
             }}>
             {filteredRoles.map((role: any, index: number) => {
               return (

@@ -1,11 +1,9 @@
 import styled, { system, th } from "@xstyled/emotion";
 
-import { StyledIcon } from "../Icon";
-
-import { Size, Variant } from "./index";
-
 import { WuiProps } from "@/system";
 import { centerContent, getMax, overflowEllipsis } from "@/utils";
+
+import { Size, Variant } from "./index";
 
 const shapeStyles = (size: Size, w: string, h: string) => `
   ${th(`tags.shape.${size}`)};

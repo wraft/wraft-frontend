@@ -1,9 +1,9 @@
 import { HideIcon, ShowIcon } from "@wraft/icon";
 import React from "react";
 
-import { Button } from "../Button";
-
 import { CreateWuiProps } from "@/system";
+
+import { Button } from "../Button";
 
 interface ToggleButtonOptions {
   isHidden: boolean;

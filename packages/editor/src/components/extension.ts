@@ -16,6 +16,7 @@ import {
 import { defineYjs } from "prosekit/extensions/yjs";
 import type { Awareness } from "y-protocols/awareness";
 import type * as Y from "yjs";
+import { defineReadonly } from "prosekit/extensions/readonly";
 import type { HolderExtension } from "@extensions/holder";
 import { defineHolder } from "@extensions/holder";
 import { defineFancyParagraph } from "@extensions/paragraph";
@@ -28,7 +29,6 @@ import {
 import { defineShiftEnterHardBreak } from "@extensions/hard-break";
 import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
-import { defineReadonly } from "prosekit/extensions/readonly";
 import type { SignatureExtension } from "@extensions/signature";
 import { defineSignature } from "@extensions/signature";
 import type { PageBreakExtension } from "@extensions/page-break";
@@ -66,7 +66,6 @@ export type BasicsExtension = Union<
 export function defineDefaultExtension({
   placeholder = "",
   isReadonly = false,
-  signersConfig,
 }: DefaultExtensionProps): BasicsExtension {
   const extensions = [
     defineBasicExtension(),

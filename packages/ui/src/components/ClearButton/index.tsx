@@ -1,10 +1,10 @@
 import { CloseIcon } from "@wraft/icon";
 
+import { CreateWuiProps, forwardRef } from "@/system";
+
 import { ButtonOptions } from "../Button";
 
 import * as S from "./styles";
-
-import { CreateWuiProps, forwardRef } from "@/system";
 
 export type ClearButtonProps = CreateWuiProps<
   "button",

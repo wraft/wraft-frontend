@@ -53,7 +53,7 @@ const HandleTemplate = ({ onUpload, assets }: HandleTemplateProps) => {
 
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [filesList, setFilesList] = useState<any>();
+  const [_filesList, setFilesList] = useState<any>();
 
   /**
    * When upload is completed

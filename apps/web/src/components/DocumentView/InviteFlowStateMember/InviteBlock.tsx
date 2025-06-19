@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { Avatar } from 'theme-ui';
 import toast from 'react-hot-toast';
 import { Search, Box, Text, Flex } from '@wraft/ui';
@@ -22,12 +21,6 @@ export default function InviteBlock({ docId }: any) {
   const [selectValue, setSelectValue] = useState<any>([]);
   const { cId, contents, additionalCollaborator, setAdditionalCollaborator } =
     useDocument();
-
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
 
   useEffect(() => {
     getCollaborators();

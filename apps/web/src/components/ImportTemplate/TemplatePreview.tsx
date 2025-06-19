@@ -2,15 +2,12 @@ import { useState } from 'react';
 import {
   FileArchive,
   Spinner,
-  Calendar,
-  TextAlignLeft,
   TextT,
   Article,
   TreeStructure,
   Layout,
   Blueprint,
 } from '@phosphor-icons/react';
-import { x } from '@xstyled/emotion';
 import { Box, Button, Flex, Text } from '@wraft/ui';
 
 import Block, { BlockSection, List, ListParent } from './Block';
@@ -92,52 +89,6 @@ const ThemeBlock = ({ assets }: assetsProps) => {
   );
 };
 
-/** List Variants */
-const VariantBlock = ({ assets }: assetsProps) => {
-  const assetFirst: Record<string, any> | undefined =
-    assets[0]?.data?.meta?.items?.layout || undefined;
-  return (
-    <Box>
-      <Box display="flex" gap={3} px={3} py={3}>
-        <x.span fontSize="sm">{assetFirst?.name}</x.span>
-        <x.span fontSize="sm">{assetFirst?.prefix}</x.span>
-        <x.span fontSize="xs" color="gray.900">
-          {assetFirst?.description}
-        </x.span>
-      </Box>
-      <Box px={3} pb={3} maxW={'80ch'}>
-        <Box fontSize="sm">
-          <ListParent borderColor={'gray.500'}>
-            {assetFirst &&
-              assetFirst?.fields?.map((field: any) => (
-                <List key={field.name} px={3} py={0} borderColor={'gray.500'}>
-                  <Box display="flex" alignItems="center">
-                    <Text fontSize="xs" lineHeight="heading">
-                      {field.name}
-                    </Text>
-                    <Box
-                      display="flex"
-                      ml="auto"
-                      gap={2}
-                      mr={3}
-                      alignItems="center">
-                      <x.span color="gray.900" fontSize="xs">
-                        {field.type}
-                      </x.span>
-                      {field.type === 'String' && <TextT size={16} />}
-                      {field.type === 'Date' && <Calendar size={16} />}
-                      {field.type === 'Text' && <TextAlignLeft size={16} />}
-                    </Box>
-                  </Box>
-                </List>
-              ))}
-          </ListParent>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
 interface TemplatePreviewProps {
   assets?: any;
   onValidate?: any;
@@ -146,20 +97,15 @@ interface TemplatePreviewProps {
 }
 const TemplatePreview = ({
   assets,
-  onValidate,
   actionState,
   onImport,
 }: TemplatePreviewProps) => {
-  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isVerified, _setIsVerified] = useState<boolean>(false);
   const metadata = assets[0]?.data?.meta?.metadata || assets[0]?.metadata;
   const error = assets[0]?.errors || null;
   /**
    * Validate  an Import
    */
-  const checkImport = () => {
-    const assetId = assets[0]?.id;
-    onValidate(assetId);
-  };
 
   return (
     <Box

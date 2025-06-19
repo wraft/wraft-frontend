@@ -1,15 +1,12 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Button, Drawer, Flex, useDrawer } from '@wraft/ui';
+import { Button, Drawer, useDrawer } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
-import { menuLinks } from '@constants/menuLinks';
 import LayoutList from 'components/Layout/LayoutList';
 import LayoutForm from 'components/Layout/LayoutForm';
-import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
 import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 

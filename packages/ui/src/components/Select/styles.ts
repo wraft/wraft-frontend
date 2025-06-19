@@ -1,9 +1,5 @@
 import styled, { th } from "@xstyled/emotion";
 
-import { IconWrapper as WUIIconWrapper } from "../Field/styles";
-
-import { SelectOptions } from "./index";
-
 import {
   cardStyles,
   centerContent,
@@ -12,6 +8,10 @@ import {
   Size,
 } from "@/utils";
 
+import { IconWrapper as WUIIconWrapper } from "../Field/styles";
+
+import { SelectOptions } from "./index";
+
 export const IconWrapper = styled(WUIIconWrapper)``;
 
 export const Wrapper = styled.div<{ disabled: boolean }>`
@@ -19,8 +19,6 @@ export const Wrapper = styled.div<{ disabled: boolean }>`
   display: flex;
   align-items: center;
   height: 100%;
-  padding-top: 9px;
-  padding-bottom: 9px;
 `;
 
 export const InputWrapper = styled.div`
@@ -85,6 +83,7 @@ export const Menu = styled.ul`
   left: 0;
   margin: 0;
   margin-top: md;
+  top: 100%;
   padding: 0;
   transition: medium;
   overflow: auto;

@@ -1,4 +1,4 @@
-import styled, { x } from '@xstyled/emotion';
+import styled from '@xstyled/emotion';
 import { CaretDown } from '@phosphor-icons/react';
 import { Box } from '@wraft/ui';
 

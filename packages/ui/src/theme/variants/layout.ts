@@ -1,5 +1,3 @@
-import { borderRadius } from "@xstyled/emotion";
-
 const layout = {
   drawerBackdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.40)",

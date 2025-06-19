@@ -57,6 +57,8 @@ const ThemeList = ({ rerender }: Props) => {
       const request = deleteAPI(`themes/${id}`);
       await request;
       toast.success('Successfully deleted theme');
+      setDeleteTheme(null);
+      await loadData();
     } catch (err) {
       console.error('Error deleting theme:', err);
       toast.error('Failed to delete theme');

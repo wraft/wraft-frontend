@@ -1,14 +1,11 @@
 import {
   ThumbsUp,
-  Table,
   GitBranch,
-  TextColumns,
   UserFocus,
   Article,
   Blueprint,
   FileText,
   House,
-  Folder,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;

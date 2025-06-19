@@ -346,7 +346,7 @@ const SearchBlock: React.FC = () => {
               icon={<MagnifyingGlass height={18} width={18} weight="bold" />}
               iconPlacement="left"
               placeholder="Find docs, actions, pipelines.."
-              px="sm"
+              px="xxl"
               py="xl"
             />
             {isLoading && (

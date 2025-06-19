@@ -1,8 +1,8 @@
 import styled, { system } from "@xstyled/emotion";
 
-import { InputTextOptions } from "./index";
-
 import { defaultFieldStyles } from "@/utils";
+
+import { InputTextOptions } from "./index";
 
 export const InputText = styled("input")<
   Pick<
@@ -21,7 +21,7 @@ export const InputText = styled("input")<
   text-overflow: ellipsis;
   padding-top: sm2;
   padding-bottom: sm2;
-  height: auto;
+
   ${system}
 `;
 
