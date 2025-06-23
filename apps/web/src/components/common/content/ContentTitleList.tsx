@@ -16,7 +16,7 @@ const ContentTitleList = ({ content, contentType }: Props) => {
           {content?.instance_id}
         </Text>
         <Flex alignItems="center" gap="xs">
-          <Text fontWeight="heading">{content?.serialized?.title}</Text>
+          <Text fontWeight="heading">{content?.title}</Text>
           {content?.type === 3 && (
             <Lightning size={12} weight="bold" color="#62b997" />
           )}
