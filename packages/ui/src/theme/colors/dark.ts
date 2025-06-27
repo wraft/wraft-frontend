@@ -79,8 +79,8 @@ const dark = {
 
   error: "#111111",
   info: "#111111",
-  success: "#111111",
-  warning: "#111111",
+  success: "#2ecc40",
+  warning: "#ffb400",
 
   "background-primary": "#111111",
   "background-secondary": colors.gray["200"],

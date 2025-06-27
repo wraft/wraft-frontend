@@ -14,10 +14,8 @@ import {
 
 import { ClearButton } from "../ClearButton";
 import { IconWrapper } from "../Field/styles";
-import { Spinner } from "../Spinner";
 
 import * as S from "./styles";
-
 
 const EMPTY_STRING = "";
 
@@ -82,7 +80,7 @@ export const Search = forwardRef<"input", SearchProps>(
 
     // Keep results in state
     const [results, setResults] = useState<SearchOption[] | OptionGroup[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [_isLoading, setIsLoading] = useState<boolean>(false);
 
     // Update results when searching
     const searchResults = useCallback(

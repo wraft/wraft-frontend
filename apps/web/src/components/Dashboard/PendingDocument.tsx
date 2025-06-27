@@ -1,60 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import NextLink from 'next/link';
-import { Table } from '@wraft/ui';
+import router from 'next/router';
+import { Text, Box, Skeleton, Flex } from '@wraft/ui';
 
-import { StateBadge, TimeAgo } from 'common/Atoms';
-import { ContentTitleList } from 'common/content';
-import UserCard from 'common/UserCard';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
-const columns = [
-  {
-    id: 'content.id',
-    header: 'Name',
-    accessorKey: 'content.id',
-    cell: ({ row }: any) => (
-      <NextLink href={`/documents/${row.original?.content?.id}`}>
-        <ContentTitleList
-          contentType={row.original?.content_type}
-          content={row.original?.content}
-        />
-      </NextLink>
-    ),
-    enableSorting: false,
-  },
-  {
-    id: 'content.updated_at',
-    header: 'Date',
-    accessorKey: 'date',
-    cell: ({ row }: any) => (
-      <TimeAgo time={row.original?.content?.updated_at} />
-    ),
-    enableSorting: false,
-  },
-  {
-    id: 'creator.profile_pic',
-    header: 'Editors',
-    accessorKey: 'creator.profile_pic',
-    cell: ({ row }: any) => (
-      <UserCard
-        profilePic={row.original?.creator?.profile_pic}
-        name={row.original?.creator?.name}
-        size="sm"
-      />
-    ),
-    enableSorting: false,
-  },
-  {
-    header: 'Status',
-    accessorKey: 'age',
-    cell: ({ row }: any) => (
-      <StateBadge name={row.original?.state?.state} color="#E2F7EA" />
-    ),
-    enableSorting: false,
-    textAlign: 'right',
-  },
-];
+import { DocumentCard } from './DocumentCard';
 
 const PendingDocumentBlock = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -80,18 +31,48 @@ const PendingDocumentBlock = () => {
       });
   };
   return (
-    <>
-      {/* <Text fontSize="lg" fontWeight="heading" mb="lg" mt="xl">
-        Recent Documents
-      </Text> */}
-
-      <Table
-        data={contents}
-        isLoading={loading}
-        columns={columns}
-        skeletonRows={8}
-      />
-    </>
+    <Box px="lg">
+      <Flex direction="column" gap="md">
+        {loading ? (
+          // Show skeletons while loading
+          <>
+            {[...Array(5)].map((_, idx) => (
+              <Box key={idx} mb="md">
+                <Skeleton height="32px" width="100%" />
+              </Box>
+            ))}
+          </>
+        ) : contents && contents.length > 0 ? (
+          contents.map((content: any) => (
+            <DocumentCard
+              key={content.id}
+              content={content}
+              onClick={() => {
+                router.push(`/documents/${content.content.id}`);
+              }}
+            />
+          ))
+        ) : (
+          // Empty state
+          <Box
+            w="100%"
+            p="xl"
+            textAlign="center"
+            color="text-secondary"
+            borderRadius="md"
+            border="1px solid"
+            borderColor="border"
+            bg="gray.100">
+            <Text fontSize="md" fontWeight="medium">
+              No documents found.
+            </Text>
+            <Text fontSize="sm" mt="xs">
+              You have no recent documents to display.
+            </Text>
+          </Box>
+        )}
+      </Flex>
+    </Box>
   );
 };
 

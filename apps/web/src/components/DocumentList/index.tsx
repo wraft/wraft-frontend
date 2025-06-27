@@ -7,8 +7,9 @@ import toast from 'react-hot-toast';
 import { DotsThreeVertical } from '@phosphor-icons/react';
 
 import { ContentTitleList } from 'common/content';
-import { TimeAgo, FilterBlock, StateBadge, PageInner } from 'common/Atoms';
+import { TimeAgo, FilterBlock, PageInner } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
+import { StateProgress } from 'common/StateProgress';
 import { fetchAPI } from 'utils/models';
 
 export interface ILayout {
@@ -110,7 +111,31 @@ const columns = [
     header: 'Status',
     accessorKey: 'age',
     cell: ({ row }: any) => (
-      <StateBadge name={row.original?.state?.state} color="green.a400" />
+      <Box ml="auto">
+        <Box justifyContent="flex-start" alignItems="center">
+          <Text
+            as="span"
+            fontSize="xs"
+            textTransform="uppercase"
+            fontWeight="heading"
+            color="text-secondary"
+            mb="xs">
+            {row.original?.state?.state}
+          </Text>
+          <StateProgress
+            states={row.original?.flow?.states || []}
+            activeStateId={row.original?.state?.id}
+            completedStateIds={
+              row.original?.flow?.states
+                ?.filter(
+                  (s: StateClass) =>
+                    s.order < (row.original?.state?.order || 0),
+                )
+                ?.map((s: StateClass) => s.id) || []
+            }
+          />
+        </Box>
+      </Box>
     ),
     enableSorting: false,
     // maxSize: 90,
