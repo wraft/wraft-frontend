@@ -6,6 +6,7 @@ import {
   BlueprintIcon,
   FileTextIcon,
   HouseIcon,
+  FolderIcon,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
@@ -30,11 +31,11 @@ export const Menulist = [
         icon: <ThumbsUpIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/approvals',
       },
-      // {
-      //   name: 'Repository',
-      //   icon: <Folder size={defaultIcon} weight={defaultWeight} />,
-      //   path: '/repository',
-      // },
+      {
+        name: 'Repository',
+        icon: <FolderIcon size={defaultIcon} weight={defaultWeight} />,
+        path: '/repository',
+      },
     ],
   },
   {
