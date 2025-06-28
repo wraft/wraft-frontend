@@ -16,6 +16,7 @@
     "prepare": "husky install",
     "prettier": "prettier --check .",
     "release": "turbo run build --filter=docs^... && changeset publish",
+    "run:web": "turbo run build --filter=@wraft/web && turbo run start-prod --filter=@wraft/web",
     "version-packages": "changeset version"
   },
   "lint-staged": {
