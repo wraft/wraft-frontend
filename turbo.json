@@ -20,6 +20,14 @@
       "cache": false,
       "persistent": true
     },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "start-prod": {
+      "cache": false,
+      "persistent": true
+    },
     "clean": {
       "cache": false,
       "outputs": ["dist/**", "build/**"]
