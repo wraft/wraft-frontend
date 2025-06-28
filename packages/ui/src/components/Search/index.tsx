@@ -14,10 +14,9 @@ import {
 
 import { ClearButton } from "../ClearButton";
 import { IconWrapper } from "../Field/styles";
-import { Spinner } from "../Spinner";
+import { Skeleton } from "../Skeleton";
 
 import * as S from "./styles";
-
 
 const EMPTY_STRING = "";
 
@@ -82,7 +81,7 @@ export const Search = forwardRef<"input", SearchProps>(
 
     // Keep results in state
     const [results, setResults] = useState<SearchOption[] | OptionGroup[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [_isLoading, setIsLoading] = useState<boolean>(false);
 
     // Update results when searching
     const searchResults = useCallback(
@@ -213,11 +212,13 @@ export const Search = forwardRef<"input", SearchProps>(
                   </IconWrapper>
                 )}
                 <S.Indicators>{inputValue && DeleteIcon}</S.Indicators>
-                {/* {isLoading && <Spinner color="#000" />} */}
+                {_isLoading && <Skeleton width="100%" height="20px" />}
               </S.InputWrapper>
               {isShowMenu && (
                 <S.Menu {...getMenuProps()}>
-                  {
+                  {_isLoading ? (
+                    <Skeleton width="100%" height="40px" />
+                  ) : (
                     (results as OptionGroup[]).reduce(
                       (acc, result, resultIndex) => {
                         if (groupsEnabled) {
@@ -278,7 +279,7 @@ export const Search = forwardRef<"input", SearchProps>(
                       },
                       { itemsToRender: [], itemIndex: 0 },
                     ).itemsToRender
-                  }
+                  )}
                 </S.Menu>
               )}
             </S.Wrapper>
