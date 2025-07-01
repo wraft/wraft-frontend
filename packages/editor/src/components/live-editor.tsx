@@ -48,6 +48,7 @@ export interface EditorProps {
   tokens?: any;
   collabData?: any;
   signersConfig?: SignersConfig;
+  authToken?: string;
 }
 
 export const LiveEditor = forwardRef(
@@ -61,6 +62,7 @@ export const LiveEditor = forwardRef(
       socketUrl = "ws://localhost:4000",
       collabData,
       signersConfig = { signers: [] },
+      authToken,
     }: EditorProps,
     ref,
   ) => {
@@ -79,7 +81,9 @@ export const LiveEditor = forwardRef(
 
     useLayoutEffect(() => {
       if (!socketRef.current) {
-        socketRef.current = new Socket(`${socketUrl}/socket`);
+        socketRef.current = new Socket(`${socketUrl}/socket`, {
+          params: authToken ? { token: authToken } : {},
+        });
         socketRef.current.connect();
       }
 
@@ -89,7 +93,7 @@ export const LiveEditor = forwardRef(
           socketRef.current = null;
         }
       };
-    }, [socketUrl]);
+    }, [socketUrl, authToken]);
 
     const editor = useMemo(() => {
       if (provider) {
@@ -97,7 +101,9 @@ export const LiveEditor = forwardRef(
       }
 
       if (!socketRef.current) {
-        socketRef.current = new Socket(`${socketUrl}/socket`);
+        socketRef.current = new Socket(`${socketUrl}/socket`, {
+          params: authToken ? { token: authToken } : {},
+        });
         socketRef.current.connect();
       }
 
@@ -105,6 +111,9 @@ export const LiveEditor = forwardRef(
         socketRef.current,
         `doc_room:${collabData.roomId}`,
         doc,
+        {
+          params: authToken ? { token: authToken } : {},
+        },
       );
 
       setProvider(wsProvider);
@@ -129,7 +138,7 @@ export const LiveEditor = forwardRef(
       });
 
       return createEditor({ extension, defaultContent });
-    }, [isReadonly]);
+    }, [isReadonly, authToken]);
 
     useEffect(() => {
       if (!provider || !editor) return;
