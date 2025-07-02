@@ -58,7 +58,6 @@ const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
   const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
-  const [_currentRoleList, _setCurrentRoleList] = useState<string[]>([]);
   const [_isAssignRole, setIsAssignRole] = useState<number | null>(null);
   const [isUnassignModalOpen, setUnassignModalOpen] = useState<boolean>(false);
   const [isOpenUnassignUserModal, setOpenUnassignUserModal] =
@@ -298,7 +297,11 @@ const TeamList = () => {
                     <DropdownMenu.Provider>
                       {hasPermission('members', 'manage') && (
                         <DropdownMenu.Trigger>
-                          <AddIcon color="var(--theme-ui-colors-gray-1200)" />
+                          <AddIcon
+                            width={16}
+                            height={16}
+                            color="var(--theme-ui-colors-gray-1200)"
+                          />
                         </DropdownMenu.Trigger>
                       )}
                       <DropdownMenu aria-label="dropdown role">

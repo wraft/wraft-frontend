@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Text, Button, Box, Label } from '@wraft/ui';
@@ -9,11 +9,6 @@ import Checkbox from 'common/Checkbox';
 import { postAPI } from 'utils/models';
 
 import { RoleType } from './TeamList';
-
-interface RoleList {
-  roleName: string;
-  roleId: string;
-}
 
 type AssignRoleProps = {
   roles: RoleType[];
@@ -34,26 +29,23 @@ const AssignRole = ({
   userId,
   setRerender,
 }: AssignRoleProps) => {
-  const [roleList, setRoleList] = useState<Array<RoleList> | undefined>(
-    undefined,
-  );
   const [selectedRolesId, setSelectedRolesId] = useState<string[]>([]);
 
   const { handleSubmit } = useForm<FormInputs>();
 
-  const currentRoleIds = currentMemberRoles.map((role) => role.roleId);
+  const currentRoleIds = useMemo(
+    () => currentMemberRoles.map((role) => role.roleId),
+    [currentMemberRoles],
+  );
+  const roleList = useMemo(() => {
+    if (!roles || roles.length === 0) return [];
 
-  useEffect(() => {
-    if (roles) {
-      const availableRoles = roles
-        .filter((role) => !currentRoleIds.includes(role.id))
-        .map((role) => ({
-          roleName: role.name,
-          roleId: role.id,
-        }));
-
-      setRoleList(availableRoles);
-    }
+    return roles
+      .filter((role) => !currentRoleIds.includes(role.id))
+      .map((role) => ({
+        roleName: role.name,
+        roleId: role.id,
+      }));
   }, [roles, currentRoleIds]);
 
   const updateSelectedRoles = (
