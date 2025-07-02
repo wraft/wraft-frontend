@@ -151,8 +151,7 @@ export const PieChart: React.FC<PieChartProps> = ({
                   paddingAngle={5}
                   dataKey="value"
                   nameKey="name"
-                  onMouseLeave={() => setActiveIndex(null)}
-                  activeIndex={activeIndex ?? -1}>
+                  onMouseLeave={() => setActiveIndex(null)}>
                   {data.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
