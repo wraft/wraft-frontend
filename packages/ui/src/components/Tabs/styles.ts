@@ -42,8 +42,8 @@ export const Tab = styled.button`
   text-transform: none;
   cursor: pointer;
   gap: sm;
-  font-weight: 600;
-  font-size: base;
+  font-weight: 500;
+  font-size: sm2;
 
   &:focus {
     outline: none !important; /* important for firefox */
@@ -55,7 +55,7 @@ export const Tab = styled.button`
 
   &[aria-selected="true"] {
     ${th("tabs.item.active")};
-    font-weight: 600;
+    font-weight: 500;
   }
 
   &[aria-disabled="true"] {

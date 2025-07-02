@@ -58,7 +58,7 @@ const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
   const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
-  const [currentRoleList, _setCurrentRoleList] = useState<string[]>([]);
+  const [_currentRoleList, _setCurrentRoleList] = useState<string[]>([]);
   const [_isAssignRole, setIsAssignRole] = useState<number | null>(null);
   const [isUnassignModalOpen, setUnassignModalOpen] = useState<boolean>(false);
   const [isOpenUnassignUserModal, setOpenUnassignUserModal] =

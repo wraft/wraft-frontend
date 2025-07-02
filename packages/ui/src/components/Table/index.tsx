@@ -48,7 +48,7 @@ const Table = ({
   "aria-label": ariaLabel,
   isLoading = false,
   skeletonRows = 5,
-  emptyMessage = "No Data",
+  emptyMessage = "No data available",
 }: TableProps) => {
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
@@ -79,7 +79,7 @@ const Table = ({
                   borderBottom="1px solid"
                   borderColor="border"
                   fontWeight="heading"
-                  fontSize="base"
+                  fontSize="sm2"
                   color="text-secondary"
                   minWidth={header.getSize()}
                 >

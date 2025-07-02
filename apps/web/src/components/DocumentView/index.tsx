@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form';
 
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
+import { StateProgress } from 'common/StateProgress';
 import { postAPI } from 'utils/models';
 
-import { FlowProgressBar } from './FlowProgressBar';
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
 import { ApprovalHandler } from './ApprovalHandler';
 import { LockedBadge } from './LockedBadge';
@@ -31,7 +31,6 @@ const DocumentView = () => {
     contents,
     loading,
     nextState,
-    states,
     isEditable,
     currentActiveIndex,
     isMakeCompete,
@@ -211,18 +210,22 @@ const DocumentView = () => {
                   borderColor="border"
                   bg="background-primary">
                   <Flex gap="sm">
-                    {states &&
-                      states.map((state: any, i: number) => (
-                        <FlowProgressBar
-                          key={state?.id}
-                          num={i + 1}
-                          state={state?.state}
-                          order={state?.order}
-                          currentActiveIndex={currentActiveIndex}
-                          nextState={nextState}
-                          id={state?.id}
-                        />
-                      ))}
+                    {contents?.flow?.states && (
+                      <StateProgress
+                        states={contents.flow.states}
+                        activeStateId={contents.state?.id}
+                        completedStateIds={
+                          contents.flow.states
+                            ?.filter(
+                              (s: any) =>
+                                s.order < (contents.state?.order || 0),
+                            )
+                            ?.map((s: any) => s.id) || []
+                        }
+                        currentActiveIndex={currentActiveIndex}
+                        nextState={nextState}
+                      />
+                    )}
 
                     {contents &&
                       !nextState?.is_user_eligible &&

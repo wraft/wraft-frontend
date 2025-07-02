@@ -321,3 +321,122 @@ export const VariantLine = ({ bg }: VariantLineProps) => {
     />
   );
 };
+
+/**
+ * Block Title
+ */
+
+interface BlockTitleProps {
+  title?: string;
+  description?: string;
+}
+
+export const BlockTitle: React.FC<BlockTitleProps> = ({
+  title,
+  description,
+}) => {
+  if (!title && !description) return null;
+
+  return (
+    <Box p="md" borderBottom="1px solid" borderColor="border">
+      {title && (
+        <Text as="h3" fontSize="sm2" fontWeight="medium">
+          {title}
+        </Text>
+      )}
+      {description && (
+        <Text as="p" fontSize="sm" color="gray.900" opacity={1}>
+          {description}
+        </Text>
+      )}
+    </Box>
+  );
+};
+
+// import React from 'react';
+// import styled from '@xstyled/styled-components';
+
+const SvgWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: green.600;
+`;
+
+const StyledSvg = styled.svg`
+  width: 240px;
+  height: 240px;
+`;
+
+export const EmptyStateDocumentLifecycle: React.FC = () => {
+  return (
+    <SvgWrapper>
+      <StyledSvg
+        viewBox="0 0 240 240"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        {/* Background circle */}
+        <circle cx="120" cy="120" r="100" fill="#E6F4EA" />
+
+        {/* Document */}
+        <rect
+          x="80"
+          y="60"
+          width="80"
+          height="100"
+          rx="8"
+          fill="#C1E1C1"
+          stroke="#388E3C"
+          strokeWidth="2"
+        />
+
+        {/* Folded corner */}
+        <path d="M160 60V85C160 87.2091 157.761 88 156 88H135" fill="#A5D6A7" />
+
+        {/* Text lines */}
+        <rect x="90" y="75" width="60" height="6" rx="2" fill="#81C784" />
+        <rect x="90" y="90" width="50" height="6" rx="2" fill="#81C784" />
+        <rect x="90" y="105" width="55" height="6" rx="2" fill="#81C784" />
+        <rect x="90" y="120" width="40" height="6" rx="2" fill="#81C784" />
+
+        {/* Arrows (lifecycle) */}
+        <path
+          d="M70 150c-10-10-10-30 5-35"
+          stroke="#4CAF50"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M70 150l-5-10M70 150l10-2"
+          stroke="#4CAF50"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M170 150c10-10 10-30-5-35"
+          stroke="#4CAF50"
+          strokeWidth="2"
+          fill="none"
+        />
+        <path
+          d="M170 150l5-10M170 150l-10-2"
+          stroke="#4CAF50"
+          strokeWidth="2"
+          fill="none"
+        />
+      </StyledSvg>
+
+      <Text>No documents yet</Text>
+    </SvgWrapper>
+  );
+};
+
+// const Text = styled.p`
+//   mt: 3;
+//   font-size: 14;
+//   color: green.700;
+//   font-family: body;
+//   text-align: center;
+// `;
+
+// export default EmptyStateDocumentLifecycle;

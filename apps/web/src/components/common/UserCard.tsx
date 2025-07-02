@@ -7,13 +7,13 @@ import { Avatar } from 'theme-ui';
  * @interface UserCardProps
  * @property {string} [profilePic] - URL of the user's profile picture
  * @property {string} [name] - Name of the user
- * @property {'sm' | 'md' | 'lg'} [size='md'] - Size of the avatar and text
+ * @property {'xs' | 'sm' | 'md' | 'lg'} [size='md'] - Size of the avatar and text
  * @property {'xs' | 'sm' | 'md' | 'lg'} [gap='sm'] - Gap between avatar and text
  */
 interface UserCardProps {
   profilePic?: string;
   name?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   gap?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
@@ -35,6 +35,14 @@ interface UserCardProps {
  *   size="lg"
  *   gap="md"
  * />
+ *
+ * @example
+ * // Extra small size for compact layouts
+ * <UserCard
+ *   profilePic="/avatar.jpg"
+ *   name="John Doe"
+ *   size="xs"
+ * />
  */
 const UserCard: React.FC<UserCardProps> = ({
   profilePic,
@@ -43,15 +51,23 @@ const UserCard: React.FC<UserCardProps> = ({
   gap = 'sm',
 }) => {
   const avatarSizes = {
+    xs: { width: '12px', height: '12px' },
     sm: { width: '16px', height: '16px' },
     md: { width: '24px', height: '24px' },
     lg: { width: '32px', height: '32px' },
   };
 
+  const textSizes = {
+    xs: 'xs',
+    sm: 'sm',
+    md: 'sm2',
+    lg: 'md',
+  };
+
   return (
     <Flex alignItems="center" gap={gap}>
       {profilePic && <Avatar sx={avatarSizes[size]} src={profilePic} />}
-      {name && <Text fontSize="sm2">{name}</Text>}
+      {name && <Text fontSize={textSizes[size] as any}>{name}</Text>}
     </Flex>
   );
 };

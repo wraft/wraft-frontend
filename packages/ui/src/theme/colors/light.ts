@@ -135,8 +135,8 @@ const light = {
 
   error: colors.red["600"],
   info: "#111111",
-  success: "#111111",
-  warning: "#111111",
+  success: "#2ecc40",
+  warning: "#ffb400",
 
   border: colors.gray["400"],
 
