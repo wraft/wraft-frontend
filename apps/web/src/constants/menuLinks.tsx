@@ -88,7 +88,7 @@ export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'Webhooks',
     path: '/manage/workspace/webhooks',
-    permissions: ['role.show', 'role.manage'],
+    permissions: ['webhook.show', 'webhook.manage'],
   },
 ];
 
