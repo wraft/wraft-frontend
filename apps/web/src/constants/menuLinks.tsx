@@ -6,6 +6,7 @@ import {
   PaintRoller,
   FileArrowUp,
   Money,
+  Lightning,
 } from '@phosphor-icons/react';
 
 export interface menuLinksProps {
@@ -36,6 +37,12 @@ export const menuLinks: menuLinksProps[] = [
     icon: <Box w="20px" />,
     path: '/manage/themes',
     permissions: ['theme.show', 'theme.manage'],
+  },
+  {
+    name: 'Webhooks',
+    icon: <Box w="20px" />,
+    path: '/manage/webhooks',
+    permissions: ['theme.show', 'theme.show'],
   },
 ];
 
@@ -76,6 +83,11 @@ export const workspaceLinks: menuLinksProps[] = [
   {
     name: 'Permissions',
     path: '/manage/workspace/permissions',
+    permissions: ['role.show', 'role.manage'],
+  },
+  {
+    name: 'Webhooks',
+    path: '/manage/workspace/webhooks',
     permissions: ['role.show', 'role.manage'],
   },
 ];
@@ -119,6 +131,13 @@ export const workspaceMenu: menuLinksProps[] = [
     path: '/manage/themes',
     desc: 'Manage Themes',
     permissions: ['theme.show', 'theme.manage'],
+  },
+  {
+    name: 'Webhooks',
+    icon: <Lightning size={32} weight="thin" />,
+    path: '/manage/workspace/webhooks',
+    desc: 'Manage Webhooks',
+    permissions: ['webhook.show', 'webhook.manage'],
   },
   {
     name: 'Import',
