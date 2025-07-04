@@ -3,6 +3,7 @@ import { Drawer, useDrawer, Button } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
 import VariantForm from './VariantForm';
@@ -49,7 +50,9 @@ const VariantList = () => {
         )}
       </PageHeader>
 
-      <VariantDashboard rerender={rerender} setRerender={setRerender} />
+      <PageInner>
+        <VariantDashboard rerender={rerender} setRerender={setRerender} />
+      </PageInner>
 
       <Drawer
         open={isOpen}

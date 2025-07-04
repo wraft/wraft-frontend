@@ -58,7 +58,6 @@ const TeamList = () => {
   const [contents, setContents] = useState<MembersList>();
   const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
-  const [_currentRoleList, _setCurrentRoleList] = useState<string[]>([]);
   const [_isAssignRole, setIsAssignRole] = useState<number | null>(null);
   const [isUnassignModalOpen, setUnassignModalOpen] = useState<boolean>(false);
   const [isOpenUnassignUserModal, setOpenUnassignUserModal] =
@@ -232,19 +231,20 @@ const TeamList = () => {
                         borderRadius="md"
                         justify="space-between"
                         px="sm"
-                        py="xs"
+                        // py="xs"
                         fontSize="sm"
                         w="auto">
-                        <Text flex="1" mr="sm">
+                        <Text flex="1" mr="sm" fontSize="sm">
                           {role.roleName}
                         </Text>
                         {hasPermission('members', 'manage') && (
                           <Box
+                            mt="xs"
                             onClick={() =>
                               onUnassignRole(role, row.original.members)
                             }>
                             <CloseIcon
-                              width={16}
+                              width={12}
                               color="var(--theme-ui-colors-gray-1200)"
                             />
                           </Box>
@@ -298,7 +298,11 @@ const TeamList = () => {
                     <DropdownMenu.Provider>
                       {hasPermission('members', 'manage') && (
                         <DropdownMenu.Trigger>
-                          <AddIcon color="var(--theme-ui-colors-gray-1200)" />
+                          <AddIcon
+                            width={16}
+                            height={16}
+                            color="var(--theme-ui-colors-gray-1200)"
+                          />
                         </DropdownMenu.Trigger>
                       )}
                       <DropdownMenu aria-label="dropdown role">

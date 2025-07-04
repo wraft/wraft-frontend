@@ -1,6 +1,6 @@
 /** @jsxImportSource theme-ui */
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Flex, Text, Button, Box, Label } from '@wraft/ui';
@@ -9,11 +9,6 @@ import Checkbox from 'common/Checkbox';
 import { postAPI } from 'utils/models';
 
 import { RoleType } from './TeamList';
-
-interface RoleList {
-  roleName: string;
-  roleId: string;
-}
 
 type AssignRoleProps = {
   roles: RoleType[];
@@ -34,26 +29,23 @@ const AssignRole = ({
   userId,
   setRerender,
 }: AssignRoleProps) => {
-  const [roleList, setRoleList] = useState<Array<RoleList> | undefined>(
-    undefined,
-  );
   const [selectedRolesId, setSelectedRolesId] = useState<string[]>([]);
 
   const { handleSubmit } = useForm<FormInputs>();
 
-  const currentRoleIds = currentMemberRoles.map((role) => role.roleId);
+  const currentRoleIds = useMemo(
+    () => currentMemberRoles.map((role) => role.roleId),
+    [currentMemberRoles],
+  );
+  const roleList = useMemo(() => {
+    if (!roles || roles.length === 0) return [];
 
-  useEffect(() => {
-    if (roles) {
-      const availableRoles = roles
-        .filter((role) => !currentRoleIds.includes(role.id))
-        .map((role) => ({
-          roleName: role.name,
-          roleId: role.id,
-        }));
-
-      setRoleList(availableRoles);
-    }
+    return roles
+      .filter((role) => !currentRoleIds.includes(role.id))
+      .map((role) => ({
+        roleName: role.name,
+        roleId: role.id,
+      }));
   }, [roles, currentRoleIds]);
 
   const updateSelectedRoles = (
@@ -95,7 +87,9 @@ const AssignRole = ({
       maxHeight="295px"
       overflow="hidden">
       <Box p="3" borderBottom="1px solid" borderColor="neutral.200" w="100%">
-        <Text fontWeight="heading">Choose roles</Text>
+        <Text fontWeight="heading" py="sm" px="md">
+          Choose roles
+        </Text>
       </Box>
       {roleList && roleList.length < 1 && (
         <Text py="md">No more roles to add.</Text>
@@ -122,7 +116,7 @@ const AssignRole = ({
                     size="small"
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
-                  <Text fontSize="lg" pl="1" textTransform="capitalize">
+                  <Text pl="1" textTransform="capitalize">
                     {role.roleName}
                   </Text>
                 </Label>
@@ -130,9 +124,11 @@ const AssignRole = ({
             </Box>
           ))}
       </Box>
-      <Button type="submit" variant="primary" fullWidth>
-        Save
-      </Button>
+      <Box p="sm" w="100%" borderTop="1px solid" borderColor="border">
+        <Button type="submit" variant="primary" fullWidth>
+          Save
+        </Button>
+      </Box>
     </Flex>
   );
 };
