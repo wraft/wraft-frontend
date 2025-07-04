@@ -109,7 +109,7 @@ const CommentForm = ({ master, master_id }: CommentFormProps) => {
           <Field name="body" label="" defaultValue="" register={register} />
           {errors.body && <Text>This field is required</Text>}
         </Box>
-        <Button variant="primary" size="sm">
+        <Button type="submit" variant="primary" size="sm">
           <ChatCircle size={16} weight="bold" color="#fff" />
           <Box>{submiting ? 'Saving ... ' : 'Add Comment'}</Box>
         </Button>

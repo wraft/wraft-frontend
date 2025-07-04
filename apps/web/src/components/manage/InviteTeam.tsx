@@ -1,9 +1,12 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import Creatable from 'react-select/creatable';
-import { Box, Flex, Input, Label, Text, useThemeUI } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import { ReactMultiEmail } from 'react-multi-email';
+import 'react-multi-email/dist/style.css';
+import { useThemeUI } from 'theme-ui';
+import { Button, Box, Flex, InputText, Label, Text, Drawer } from '@wraft/ui';
+import { SearchIcon } from '@wraft/icon';
+import { X } from '@phosphor-icons/react';
 
 import Checkbox from 'common/Checkbox';
 import { fetchAPI, postAPI } from 'utils/models';
@@ -23,9 +26,9 @@ const InviteTeam = ({ setOpen }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [checkedValues, setCheckedValues] = useState<any>([]);
   const [invalidEmails, setInvalidEmails] = useState<any>([]);
-  const [selectedEmails, setSelectedEmails] = useState<
-    { value: string; label: string }[]
-  >([]);
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const emailErrorRef = useRef<HTMLDivElement>(null);
 
@@ -61,19 +64,20 @@ const InviteTeam = ({ setOpen }: Props) => {
     trigger();
   };
 
-  const handleChange = (selectedOptions: any) => {
-    setSelectedEmails(selectedOptions);
-    const failedEmails = selectedOptions.filter(
-      (emailOption: any) => !emailRegex.test(emailOption.value),
+  const handleChange = (emails: string[]) => {
+    setSelectedEmails(emails);
+    const failedEmails = emails.filter(
+      (email: string) => !emailRegex.test(email),
     );
     setInvalidEmails(failedEmails);
 
     if (failedEmails.length > 0) {
-      for (const email of failedEmails) {
-        if (emailErrorRef.current)
-          emailErrorRef.current.textContent = `Invalid email addresses: ${email.value}`;
+      if (emailErrorRef.current) {
+        emailErrorRef.current.textContent = `Invalid email addresses: ${failedEmails.join(', ')}`;
       }
-    } else if (emailErrorRef.current) emailErrorRef.current.textContent = '';
+    } else if (emailErrorRef.current) {
+      emailErrorRef.current.textContent = '';
+    }
     trigger();
   };
 
@@ -81,145 +85,164 @@ const InviteTeam = ({ setOpen }: Props) => {
     loadRole();
   }, []);
 
-  function onSubmit() {
-    for (const email of selectedEmails) {
-      const data = {
-        email: email.value,
-        role_ids: checkedValues,
-      };
-      postAPI('organisations/users/invite', data).then(() => {
-        toast.success('Invited', {
-          duration: 1000,
-          position: 'top-right',
-        });
-        setOpen(false);
+  const onSubmit = async () => {
+    setIsLoading(true);
+
+    try {
+      const invitePromises = selectedEmails.map((email) => {
+        const data = {
+          email: email,
+          role_ids: checkedValues,
+        };
+        return postAPI('organisations/users/invite', data);
       });
+
+      await Promise.all(invitePromises);
+
+      toast.success('All invitations sent successfully', {
+        duration: 2000,
+        position: 'top-right',
+      });
+      setOpen(false);
+    } catch (error) {
+      toast.error('Failed to send invitations', {
+        duration: 2000,
+        position: 'top-right',
+      });
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Flex
-      as={'form'}
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        bg: 'background-primary',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '100vh',
-        MaxHeight: '100vh',
-        overflow: 'none',
-      }}>
-      <Box>
-        <Box
-          sx={{
-            px: 4,
-            py: 3,
-            borderBottom: '1px solid',
-            borderColor: 'border',
-          }}>
-          <Text variant="pB">Invite people</Text>
-        </Box>
-        <Box sx={{ px: 4 }}>
-          <Box sx={{ py: '24px' }}>
-            <Controller
-              name="emails"
-              control={control}
-              rules={{
-                validate: () =>
-                  selectedEmails.length > 0 && invalidEmails.length < 1,
-              }}
-              render={({ field }) => (
-                <Creatable
+      as="form"
+      h="100vh"
+      direction="column"
+      onSubmit={handleSubmit(onSubmit)}>
+      <Box flexShrink="0" borderBottom="1px solid " borderColor="gray.600">
+        <Drawer.Header>
+          <Drawer.Title>Invite people</Drawer.Title>
+          <X
+            size={20}
+            weight="bold"
+            cursor="pointer"
+            onClick={() => setOpen(false)}
+          />
+        </Drawer.Header>
+      </Box>
+
+      <Box flex={1} overflowY="auto" px="xl">
+        <Box py="lg">
+          <Label htmlFor="emails">Email address</Label>
+          <Controller
+            name="emails"
+            control={control}
+            rules={{
+              validate: () =>
+                selectedEmails.length > 0 && invalidEmails.length < 1,
+            }}
+            render={({ field }) => (
+              <Box
+                style={{
+                  border: '1px solid',
+                  borderColor: theme.colors && (theme.colors.border as string),
+                  borderRadius: '4px',
+                  backgroundColor:
+                    theme.colors && (theme.colors.bgWhite as string),
+                  minHeight: '40px',
+                  padding: '0px 4px 0px 4px',
+                }}>
+                <ReactMultiEmail
                   {...field}
-                  isMulti
-                  placeholder="Enter all users email"
-                  options={[]}
+                  emails={selectedEmails}
                   onChange={handleChange}
-                  components={{
-                    Menu: () => null,
-                    ClearIndicator: () => null,
-                    DropdownIndicator: () => null,
+                  placeholder="Enter all users email"
+                  style={{
+                    fontSize: '14px',
+                    border: 'none',
+                    outline: 'none',
+                    backgroundColor: 'transparent',
                   }}
-                  styles={{
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      backgroundColor:
-                        theme.colors && (theme.colors.bgWhite as string),
-                      borderColor:
-                        theme.colors && (theme.colors.border as string),
-                      fontSize: theme.fontSizes ? theme.fontSizes[2] : '14px',
-                      borderRadius: '6px',
-                    }),
-                    placeholder: (baseStyles) => ({
-                      ...baseStyles,
-                      fontSize: 12,
-                      color:
-                        theme.colors &&
-                        theme.colors.gray &&
-                        theme?.colors?.gray[900],
-                    }),
-                    multiValue: (baseStyles) => ({
-                      ...baseStyles,
-                      border: '1px solid',
-                      borderColor:
-                        theme.colors && (theme.colors.border as string),
-                      backgroundColor:
-                        theme.colors && (theme.colors.background as string),
-                      padding: '0px 4px 0px 14px',
-                      borderRadius: '16px',
-                    }),
-                    multiValueRemove: (styles) => ({
-                      ...styles,
-                      color: 'gray',
-                      ':hover': {
-                        color: 'red',
-                      },
-                    }),
-                  }}
+                  getLabel={(email, index, removeEmail) => (
+                    <Box
+                      key={index}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        margin: '2px',
+                        padding: '2px 8px',
+                        backgroundColor:
+                          theme.colors && (theme.colors.background as string),
+                        border: '1px solid',
+                        borderColor:
+                          theme.colors && (theme.colors.border as string),
+                        borderRadius: '16px',
+                        fontSize: '14px',
+                      }}>
+                      <Text fontSize="sm" mr="xs">
+                        {email}
+                      </Text>
+                      <X
+                        size={14}
+                        weight="bold"
+                        cursor="pointer"
+                        onClick={() => removeEmail(index)}
+                        style={{
+                          color: 'gray',
+                          marginLeft: '4px',
+                        }}
+                      />
+                    </Box>
+                  )}
                 />
-              )}
-            />
-            <Text ref={emailErrorRef} variant="error">
-              {errors.emails?.message}
-            </Text>
-          </Box>
-          <Box>
-            <Label htmlFor="search">Choose role</Label>
-            <Input
-              type="search"
-              placeholder="Search by"
-              onChange={(e: any) => setSearchTerm(e.target.value)}
-              sx={{ bg: 'background-primary' }}
-            />
-          </Box>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              mt: '18px',
-              border: '1px solid',
-              borderColor: 'border',
-              borderRadius: 4,
-              height: '100%',
-              overflowY: 'auto',
-              maxHeight: '392px',
-            }}>
-            {filteredRoles.map((role: any, index: number) => {
-              return (
-                <Label
-                  key={index}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    borderBottom: '1px solid',
-                    borderColor: 'border',
-                    py: '12px',
-                    px: '16px',
-                    ':last-of-type': {
-                      borderBottom: 'none',
-                    },
-                  }}>
+              </Box>
+            )}
+          />
+          <Text ref={emailErrorRef} color="error" fontSize="sm" mt="2">
+            {errors.emails?.message}
+          </Text>
+        </Box>
+
+        <Box>
+          <Label htmlFor="search">Choose roles</Label>
+          <InputText
+            type="search"
+            placeholder="Search roles"
+            onChange={(e: any) => setSearchTerm(e.target.value)}
+            px="xxl"
+            icon={
+              <SearchIcon
+                height={18}
+                width={18}
+                color={theme.colors?.gray?.[900]}
+              />
+            }
+          />
+        </Box>
+
+        {/* Roles List */}
+        <Flex
+          direction="column"
+          mt="lg"
+          border="1px solid"
+          borderColor="border"
+          borderRadius="sm"
+          maxHeight="361px"
+          overflowY="auto">
+          {filteredRoles.map((role: any, index: number) => {
+            return (
+              <Label
+                key={index}
+                style={{
+                  borderBottom:
+                    index !== filteredRoles.length - 1
+                      ? '1px solid #e2e8f0'
+                      : 'none',
+                }}>
+                <Box display="flex" alignItems="center" flexShrink="0" mx="sm">
                   <Checkbox
-                    size={'small'}
+                    size="small"
                     {...register('role', {
                       validate: () => checkedValues.length > 0,
                     })}
@@ -229,25 +252,34 @@ const InviteTeam = ({ setOpen }: Props) => {
                     }}
                   />
                   <Text
-                    variant="pR"
-                    sx={{
-                      ml: 2,
-                      textTransform: 'capitalize',
-                      color: 'text-primary',
-                    }}>
+                    fontSize="lg"
+                    py="md"
+                    mx="xxs"
+                    textTransform="capitalize">
                     {role.name}
                   </Text>
-                </Label>
-              );
-            })}
-          </Flex>
-        </Box>
+                </Box>
+              </Label>
+            );
+          })}
+        </Flex>
+
+        {errors.role && (
+          <Text color="error" fontSize="sm" mt="2">
+            Please select at least one role
+          </Text>
+        )}
       </Box>
-      <Box sx={{ p: 4 }}>
-        <Button disabled={!isValid} type="submit">
+
+      {/* Footer */}
+      <Flex flexShrink="0" px="xl" py="md" gap="sm">
+        <Button
+          disabled={!isValid || isLoading}
+          loading={isLoading}
+          type="submit">
           Invite people
         </Button>
-      </Box>
+      </Flex>
     </Flex>
   );
 };
