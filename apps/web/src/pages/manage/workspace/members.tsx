@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { Flex } from '@wraft/ui';
 import { Drawer, useDrawer, Button } from '@wraft/ui';
-import { UserPlus } from '@phosphor-icons/react';
+import { Plus } from '@phosphor-icons/react';
 
 import { workspaceLinks } from '@constants/menuLinks';
 import { InviteTeam } from 'components/manage';
@@ -46,7 +46,7 @@ const Index: FC = () => {
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsOpen(true)}>
-                <UserPlus size={14} />
+                <Plus size={14} />
                 Invite people
               </Button>
             )}

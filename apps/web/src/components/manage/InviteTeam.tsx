@@ -120,7 +120,7 @@ const InviteTeam = ({ setOpen }: Props) => {
       h="100vh"
       direction="column"
       onSubmit={handleSubmit(onSubmit)}>
-      <Box flexShrink="0" borderBottom="1px solid " borderColor="gray.600">
+      <Box flexShrink="0" borderBottom="1px solid " borderColor="border">
         <Drawer.Header>
           <Drawer.Title>Invite people</Drawer.Title>
           <X
@@ -221,7 +221,6 @@ const InviteTeam = ({ setOpen }: Props) => {
           />
         </Box>
 
-        {/* Roles List */}
         <Flex
           direction="column"
           mt="lg"
@@ -251,11 +250,7 @@ const InviteTeam = ({ setOpen }: Props) => {
                       handleCheckboxChange(e);
                     }}
                   />
-                  <Text
-                    fontSize="lg"
-                    py="md"
-                    mx="xxs"
-                    textTransform="capitalize">
+                  <Text py="md" mx="xs" textTransform="capitalize">
                     {role.name}
                   </Text>
                 </Box>
@@ -271,7 +266,6 @@ const InviteTeam = ({ setOpen }: Props) => {
         )}
       </Box>
 
-      {/* Footer */}
       <Flex flexShrink="0" px="xl" py="md" gap="sm">
         <Button
           disabled={!isValid || isLoading}

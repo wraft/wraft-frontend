@@ -87,7 +87,9 @@ const AssignRole = ({
       maxHeight="295px"
       overflow="hidden">
       <Box p="3" borderBottom="1px solid" borderColor="neutral.200" w="100%">
-        <Text fontWeight="heading">Choose roles</Text>
+        <Text fontWeight="heading" py="sm" px="md">
+          Choose roles
+        </Text>
       </Box>
       {roleList && roleList.length < 1 && (
         <Text py="md">No more roles to add.</Text>
@@ -114,7 +116,7 @@ const AssignRole = ({
                     size="small"
                     onChange={(e) => updateSelectedRoles(e, role.roleId)}
                   />
-                  <Text fontSize="lg" pl="1" textTransform="capitalize">
+                  <Text pl="1" textTransform="capitalize">
                     {role.roleName}
                   </Text>
                 </Label>
@@ -122,9 +124,11 @@ const AssignRole = ({
             </Box>
           ))}
       </Box>
-      <Button type="submit" variant="primary" fullWidth>
-        Save
-      </Button>
+      <Box p="sm" w="100%" borderTop="1px solid" borderColor="border">
+        <Button type="submit" variant="primary" fullWidth>
+          Save
+        </Button>
+      </Box>
     </Flex>
   );
 };

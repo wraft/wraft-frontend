@@ -231,19 +231,20 @@ const TeamList = () => {
                         borderRadius="md"
                         justify="space-between"
                         px="sm"
-                        py="xs"
+                        // py="xs"
                         fontSize="sm"
                         w="auto">
-                        <Text flex="1" mr="sm">
+                        <Text flex="1" mr="sm" fontSize="sm">
                           {role.roleName}
                         </Text>
                         {hasPermission('members', 'manage') && (
                           <Box
+                            mt="xs"
                             onClick={() =>
                               onUnassignRole(role, row.original.members)
                             }>
                             <CloseIcon
-                              width={16}
+                              width={12}
                               color="var(--theme-ui-colors-gray-1200)"
                             />
                           </Box>
