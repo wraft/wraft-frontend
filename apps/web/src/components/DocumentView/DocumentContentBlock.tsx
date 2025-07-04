@@ -198,6 +198,7 @@ export const DocumentContentBlock = () => {
     contentBody,
     fieldTokens,
     signerBoxes,
+    token,
     setEditorMode,
     fetchContentDetails,
     setSignerBoxes,
@@ -408,6 +409,7 @@ export const DocumentContentBlock = () => {
                             isCollaborative={true}
                             collabData={collabData}
                             socketUrl={socketUrl}
+                            authToken={token || ''}
                           />
                         </>
                       )}
