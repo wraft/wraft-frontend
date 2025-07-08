@@ -47,7 +47,7 @@ type Props = {
 };
 
 const DEFAULT_FORM = {
-  body_color: '#000000',
+  body_color: '#FFFFFF',
   primary_color: '#000000',
   secondary_color: '#000000',
 };
@@ -240,7 +240,9 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   register={register}
                   name="primary_color"
                   label="Primary Color"
-                  defaultValue={theme?.primary_color || ''}
+                  defaultValue={
+                    theme?.primary_color || DEFAULT_FORM.primary_color
+                  }
                   onChangeColor={(value: string) =>
                     onChangeField('primary_color', value)
                   }
@@ -253,7 +255,9 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   register={register}
                   name="secondary_color"
                   label="Secondary Color"
-                  defaultValue={theme?.secondary_color || ''}
+                  defaultValue={
+                    theme?.secondary_color || DEFAULT_FORM.secondary_color
+                  }
                   onChangeColor={(value: string) =>
                     onChangeField('secondary_color', value)
                   }
@@ -266,7 +270,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   register={register}
                   name="body_color"
                   label="Body Color"
-                  defaultValue={theme?.body_color || ''}
+                  defaultValue={theme?.body_color || DEFAULT_FORM.body_color}
                   onChangeColor={(value: string) =>
                     onChangeField('body_color', value)
                   }
