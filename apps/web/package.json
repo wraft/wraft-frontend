@@ -48,6 +48,7 @@
     "next-auth": "^4.24.11",
     "next-images": "^1.8.5",
     "pdf-lib": "^1.17.1",
+    "phoenix": "^1.7.18",
     "prosemirror-state": "^1.4.3",
     "prosemirror-view": "^1.39.3",
     "rc-mentions": "~2.19.1",
