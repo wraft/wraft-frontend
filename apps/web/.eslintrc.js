@@ -93,6 +93,11 @@ module.exports = {
                 position: 'after',
               },
               {
+                pattern: '@hooks/**',
+                group: 'internal',
+                position: 'after',
+              },
+              {
                 pattern: '@constants/**',
                 group: 'internal',
                 position: 'before',

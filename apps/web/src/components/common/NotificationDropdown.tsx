@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text, Button, Spinner } from '@wraft/ui';
 import { Bell, Check } from '@phosphor-icons/react';
-import { useNotifications } from 'hooks/useNotifications';
 
+import { useNotifications } from '@hooks/useNotifications';
 import { IconFrame } from 'common/Atoms';
 import { TimeAgo } from 'common/Atoms';
 import { useSocket } from 'contexts/SocketContext';
