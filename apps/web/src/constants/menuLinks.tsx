@@ -6,6 +6,7 @@ import {
   PaintRoller,
   FileArrowUp,
   Money,
+  Storefront,
 } from '@phosphor-icons/react';
 
 export interface menuLinksProps {
@@ -117,7 +118,6 @@ export const workspaceMenu: menuLinksProps[] = [
     desc: 'Manage Document Flows',
     permissions: ['flow.show', 'flow.manage'],
   },
-
   {
     name: 'Themes',
     icon: <PaintRoller size={32} weight="thin" />,
@@ -130,6 +130,13 @@ export const workspaceMenu: menuLinksProps[] = [
     icon: <FileArrowUp size={32} weight="thin" />,
     path: '/manage/import',
     desc: 'Import Structs',
+  },
+  {
+    name: 'Vendors',
+    icon: <Storefront size={32} weight="thin" />,
+    path: '/vendors',
+    desc: 'Manage Vendors',
+    permissions: ['theme.show', 'theme.manage'],
   },
   {
     name: 'Billing & Subscription',

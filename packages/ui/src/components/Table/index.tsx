@@ -43,8 +43,8 @@ const ResizableHeaderSpan = styled(x.span)<{
 `;
 
 const Table = ({
-  data,
-  columns,
+  data = [],
+  columns = [],
   "aria-label": ariaLabel,
   isLoading = false,
   skeletonRows = 5,
