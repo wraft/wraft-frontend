@@ -164,7 +164,6 @@ export class SocketUtils {
   async subscribeToNotifications(userId: string): Promise<Channel> {
     const channel = await this.joinChannel(`notification:${userId}`);
 
-    // Set up common event handlers
     channel.on('new_notification', (payload: NotificationPayload) => {
       this.handleNotification(payload);
     });
@@ -253,7 +252,6 @@ export class SocketUtils {
     return channel;
   }
 
-  // Event handlers
   private handleNotification(payload: NotificationPayload): void {
     window.dispatchEvent(new CustomEvent('notification', { detail: payload }));
   }
@@ -297,7 +295,6 @@ export const createNotificationListener = (
 
   window.addEventListener(eventType, handler);
 
-  // Return cleanup function
   return () => {
     window.removeEventListener(eventType, handler);
   };

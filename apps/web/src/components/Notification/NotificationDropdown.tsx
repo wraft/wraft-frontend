@@ -12,17 +12,14 @@ const NotificationDropdown: React.FC = () => {
   const router = useRouter();
   const [isClient, setIsClient] = useState(false);
 
-  // Only render on client side to avoid SSR issues
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Use hooks normally - the error handling is now in the hook itself
   const { connected } = useSocket();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
     useNotifications();
 
-  // Don't render during SSR
   if (!isClient) {
     return (
       <Box position="relative" cursor="pointer">
@@ -33,7 +30,6 @@ const NotificationDropdown: React.FC = () => {
     );
   }
 
-  // Show only recent notifications (last 10)
   const recentNotifications = notifications.slice(0, 10);
 
   const handleNotificationClick = async (notification: any) => {
@@ -41,27 +37,31 @@ const NotificationDropdown: React.FC = () => {
       await markAsRead(notification.id);
     }
 
-    // Navigate based on notification type
     if (
-      notification.type === 'document_update' &&
+      notification.event_type === 'document_update' &&
       notification.data?.document_id
     ) {
       router.push(`/documents/${notification.data.document_id}`);
     } else if (
-      notification.type === 'approval_request' &&
+      notification.event_type === 'approval_request' &&
       notification.data?.document_id
     ) {
       router.push(`/approvals?document_id=${notification.data.document_id}`);
     } else if (
-      notification.type === 'collaboration_invite' &&
+      notification.event_type === 'collaboration_invite' &&
       notification.data?.document_id
     ) {
       router.push(`/documents/${notification.data.document_id}`);
     } else if (
-      notification.type === 'workflow_status' &&
+      notification.event_type === 'workflow_status' &&
       notification.data?.workflow_id
     ) {
       router.push(`/manage/workflows/${notification.data.workflow_id}`);
+    } else if (
+      notification.event_type === 'document.add_comment' &&
+      notification.meta?.document_id
+    ) {
+      router.push(`/documents/${notification.meta.document_id}`);
     }
   };
 
@@ -70,15 +70,18 @@ const NotificationDropdown: React.FC = () => {
   };
 
   const getNotificationIcon = (type: string) => {
+    console.log('type', type);
     switch (type) {
-      case 'document_update':
+      case 'document.update':
         return '📄';
-      case 'approval_request':
+      case 'approval.request':
         return '✅';
-      case 'collaboration_invite':
+      case 'collaboration.invite':
         return '🤝';
-      case 'workflow_status':
+      case 'workflow.status':
         return '⚡';
+      case 'document.add_comment':
+        return '💬';
       default:
         return '📢';
     }
@@ -115,7 +118,6 @@ const NotificationDropdown: React.FC = () => {
 
       <DropdownMenu aria-label="Notifications">
         <Box minWidth="380px" maxWidth="480px">
-          {/* Header */}
           <Flex
             justify="space-between"
             align="center"
@@ -157,7 +159,6 @@ const NotificationDropdown: React.FC = () => {
             )}
           </Flex>
 
-          {/* Notifications List */}
           <Box maxHeight="400px" overflowY="auto">
             {loading && (
               <Flex justify="center" p="lg">
@@ -193,51 +194,40 @@ const NotificationDropdown: React.FC = () => {
                     <Box
                       w="32px"
                       h="32px"
-                      bg="blue.500"
+                      bg="green.500"
                       borderRadius="full"
                       color="white"
                       fontSize="sm"
                       display="flex"
                       alignItems="center"
                       justifyContent="center">
-                      {getNotificationIcon(notification.type)}
+                      {getNotificationIcon(notification.event_type)}
                     </Box>
 
                     <Flex direction="column" flex="1" gap="xs">
                       <Text
-                        fontSize="sm"
-                        fontWeight={notification.read ? 'normal' : 'semibold'}
+                        dangerouslySetInnerHTML={{
+                          __html: notification.message,
+                        }}
                         color={
                           notification.read ? 'text-secondary' : 'text-primary'
-                        }>
-                        {notification.message}
-                      </Text>
-
-                      <TimeAgo time={notification.created_at} />
-                    </Flex>
-
-                    {!notification.read && (
-                      <Box
-                        w="8px"
-                        h="8px"
-                        bg="blue.500"
-                        borderRadius="full"
-                        mt="xs"
+                        }
                       />
-                    )}
+
+                      <TimeAgo time={notification.inserted_at} />
+                    </Flex>
                   </Flex>
                 </Box>
               ))}
           </Box>
 
-          {/* Footer */}
           {recentNotifications.length > 0 && (
             <Flex
               justify="center"
               p="md"
               borderTop="1px solid"
               borderColor="border">
-              <Button variant="ghost" size="sm" onClick={handleViewAll}>
+              <Button variant="ghost" onClick={handleViewAll}>
                 View all notifications
               </Button>
             </Flex>

@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Pagination, Table, Box, Text } from '@wraft/ui';
+import styled from '@xstyled/emotion';
 
 import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
+import { formatNotificationMessage } from 'utils/socketUtils';
 
 export interface IPageMeta {
   pageNumber: number;
@@ -16,6 +18,8 @@ export interface Notification {
   type: string;
   updatedAt: string;
 }
+
+export const NotificationWrapper = styled(Box)``;
 
 const NotificationList = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -67,7 +71,11 @@ const NotificationList = () => {
       enableSorting: false,
       size: 250,
       cell: ({ row }: any) => (
-        <Text>{row.original?.notification?.message}</Text>
+        <Text
+          dangerouslySetInnerHTML={{
+            __html: row.original?.message,
+          }}
+        />
       ),
     },
     {
@@ -76,20 +84,22 @@ const NotificationList = () => {
       accessorKey: 'type',
       enableSorting: false,
       size: 250,
-      cell: ({ row }: any) => <Text>{row.original?.notification?.type}</Text>,
+      cell: ({ row }: any) => <Text>{row.original?.event_type}</Text>,
     },
     {
       id: 'updatedAt',
       header: 'Last Updated',
-      accessorKey: 'updatedAt',
+      accessorKey: 'inserted_at',
       enableSorting: false,
       cell: ({ row }: any) =>
-        row.original.updated_at && <TimeAgo time={row.original?.updated_at} />,
+        row.original.inserted_at && (
+          <TimeAgo time={row.original?.inserted_at} />
+        ),
     },
   ];
 
   return (
-    <Box py="lg" px="lg" w="100%">
+    <NotificationWrapper py="lg" px="lg" w="100%">
       <Table
         data={notifications}
         columns={columns}
@@ -106,7 +116,7 @@ const NotificationList = () => {
           />
         </Box>
       )}
-    </Box>
+    </NotificationWrapper>
   );
 };
 
