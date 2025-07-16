@@ -1,90 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text, Button, Spinner } from '@wraft/ui';
 import { Bell, Check } from '@phosphor-icons/react';
+import { Avatar } from 'theme-ui';
 
 import { useNotifications } from '@hooks/useNotifications';
 import { IconFrame } from 'common/Atoms';
 import { TimeAgo } from 'common/Atoms';
 import { useSocket } from 'contexts/SocketContext';
 
+import {
+  Notification,
+  getNotificationIcon,
+  handleNotificationNavigation,
+} from './NotificationUtil';
+
 const NotificationDropdown: React.FC = () => {
   const router = useRouter();
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const { connected } = useSocket();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } =
     useNotifications();
 
-  if (!isClient) {
-    return (
-      <Box position="relative" cursor="pointer">
-        <IconFrame color="gray.1100">
-          <Bell size={18} weight="regular" />
-        </IconFrame>
-      </Box>
-    );
-  }
-
   const recentNotifications = notifications.slice(0, 10);
 
-  const handleNotificationClick = async (notification: any) => {
+  const handleNotificationClick = async (notification: Notification) => {
     if (!notification.read) {
       await markAsRead(notification.id);
     }
-
-    if (
-      notification.event_type === 'document_update' &&
-      notification.data?.document_id
-    ) {
-      router.push(`/documents/${notification.data.document_id}`);
-    } else if (
-      notification.event_type === 'approval_request' &&
-      notification.data?.document_id
-    ) {
-      router.push(`/approvals?document_id=${notification.data.document_id}`);
-    } else if (
-      notification.event_type === 'collaboration_invite' &&
-      notification.data?.document_id
-    ) {
-      router.push(`/documents/${notification.data.document_id}`);
-    } else if (
-      notification.event_type === 'workflow_status' &&
-      notification.data?.workflow_id
-    ) {
-      router.push(`/manage/workflows/${notification.data.workflow_id}`);
-    } else if (
-      notification.event_type === 'document.add_comment' &&
-      notification.meta?.document_id
-    ) {
-      router.push(`/documents/${notification.meta.document_id}`);
-    }
+    handleNotificationNavigation(notification, router);
   };
 
   const handleViewAll = () => {
     router.push('/notifications');
-  };
-
-  const getNotificationIcon = (type: string) => {
-    console.log('type', type);
-    switch (type) {
-      case 'document.update':
-        return '📄';
-      case 'approval.request':
-        return '✅';
-      case 'collaboration.invite':
-        return '🤝';
-      case 'workflow.status':
-        return '⚡';
-      case 'document.add_comment':
-        return '💬';
-      default:
-        return '📢';
-    }
   };
 
   return (
@@ -191,18 +139,37 @@ const NotificationDropdown: React.FC = () => {
                   bg={notification.read ? 'transparent' : 'blue.50'}
                   onClick={() => handleNotificationClick(notification)}>
                   <Flex gap="sm" align="start">
-                    <Box
-                      w="32px"
-                      h="32px"
-                      bg="green.500"
-                      borderRadius="full"
-                      color="white"
-                      fontSize="sm"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center">
-                      {getNotificationIcon(notification.event_type)}
-                    </Box>
+                    {notification.actor && !notification.actor.profile_pic && (
+                      <Box
+                        w="32px"
+                        h="32px"
+                        bg="green.500"
+                        borderRadius="full"
+                        color="white"
+                        fontSize="sm"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        {getNotificationIcon(notification.event_type)}
+                      </Box>
+                    )}
+                    {notification.actor && (
+                      <Box
+                        w="32px"
+                        h="32px"
+                        bg="green.500"
+                        borderRadius="full"
+                        color="white"
+                        fontSize="sm"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center">
+                        <Avatar
+                          sx={{ width: '16px', height: '16px' }}
+                          src={notification.actor?.profile_pic}
+                        />
+                      </Box>
+                    )}
 
                     <Flex direction="column" flex="1" gap="xs">
                       <Text

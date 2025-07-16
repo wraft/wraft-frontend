@@ -1,29 +1,30 @@
 import { useEffect, useState, useCallback } from 'react';
 
-import { useSocket } from '../contexts/SocketContext';
-import { fetchAPI, postAPI, putAPI } from '../utils/models';
+import { Notification } from 'components/Notification/NotificationUtil';
 
-interface Notification {
-  id: string;
-  message: string;
-  event_type: string;
-  data?: any;
-  read: boolean;
-  inserted_at: string;
-}
+import { useSocket } from '../contexts/SocketContext';
+import { fetchAPI, putAPI } from '../utils/models';
 
 interface NotificationResponse {
   notifications: Notification[];
   unread_count: number;
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
 }
 
 interface UseNotificationsReturn {
   notifications: Notification[];
   unreadCount: number;
   loading: boolean;
+  paginationMeta: {
+    pageNumber: number;
+    totalEntries: number;
+    totalPages: number;
+  } | null;
   markAsRead: (notificationId: string) => Promise<void>;
   markAllAsRead: () => Promise<void>;
-  fetchNotifications: () => Promise<void>;
+  fetchNotifications: (page?: number) => Promise<void>;
   clearNotifications: () => void;
 }
 
@@ -31,17 +32,34 @@ export const useNotifications = (): UseNotificationsReturn => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { socket, connected } = useSocket();
+  const [paginationMeta, setPaginationMeta] = useState<{
+    pageNumber: number;
+    totalEntries: number;
+    totalPages: number;
+  } | null>(null);
 
-  const fetchNotifications = useCallback(async () => {
+  const {
+    socket,
+    connected,
+    notificationsInitialized,
+    resetNotificationsState,
+  } = useSocket();
+
+  const fetchNotifications = useCallback(async (page: number = 1) => {
     setLoading(true);
     try {
+      const query = `sort=inserted_at_desc&page=${page}&limit=50`;
       const response = (await fetchAPI(
         'notifications',
-        '?limit=50',
+        `?${query}`,
       )) as NotificationResponse;
       setNotifications(response.notifications || []);
       setUnreadCount(response.unread_count || 0);
+      setPaginationMeta({
+        pageNumber: response.page_number,
+        totalEntries: response.total_entries,
+        totalPages: response.total_pages,
+      });
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
@@ -82,86 +100,87 @@ export const useNotifications = (): UseNotificationsReturn => {
   const clearNotifications = useCallback(() => {
     setNotifications([]);
     setUnreadCount(0);
+    resetNotificationsState();
+  }, [resetNotificationsState]);
+
+  const handleNewNotification = useCallback((event: Event) => {
+    const customEvent = event as CustomEvent;
+    const notification = customEvent.detail.body;
+
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  }, []);
+
+  const handleDocumentUpdate = useCallback((event: Event) => {
+    const customEvent = event as CustomEvent;
+    const { document_id, user_name, action } = customEvent.detail;
+
+    const notification: Notification = {
+      id: `doc_${Date.now()}`,
+      message: `${user_name} ${action} document`,
+      event_type: 'document_update',
+      data: { document_id },
+      read: false,
+      inserted_at: new Date().toISOString(),
+    };
+
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  }, []);
+
+  const handleApprovalRequest = useCallback((event: Event) => {
+    const customEvent = event as CustomEvent;
+    const { message, document_title, document_id } = customEvent.detail;
+
+    const notification: Notification = {
+      id: `approval_${Date.now()}`,
+      message: `Approval needed: ${document_title}`,
+      event_type: 'approval_request',
+      data: { document_id },
+      read: false,
+      inserted_at: new Date().toISOString(),
+    };
+
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  }, []);
+
+  const handleCollaborationInvite = useCallback((event: Event) => {
+    const customEvent = event as CustomEvent;
+    const { inviter_name, document_title, document_id } = customEvent.detail;
+
+    const notification: Notification = {
+      id: `collab_${Date.now()}`,
+      message: `${inviter_name} invited you to collaborate on ${document_title}`,
+      event_type: 'collaboration_invite',
+      data: { document_id },
+      read: false,
+      inserted_at: new Date().toISOString(),
+    };
+
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  }, []);
+
+  const handleWorkflowStatus = useCallback((event: Event) => {
+    const customEvent = event as CustomEvent;
+    const { status, workflow_name, workflow_id } = customEvent.detail;
+
+    const notification: Notification = {
+      id: `workflow_${Date.now()}`,
+      message: `Workflow ${workflow_name} is now ${status}`,
+      event_type: 'workflow_status',
+      data: { workflow_id },
+      read: false,
+      inserted_at: new Date().toISOString(),
+    };
+
+    setNotifications((prev) => [notification, ...prev]);
+    setUnreadCount((prev) => prev + 1);
   }, []);
 
   useEffect(() => {
     if (!connected || !socket) return;
-
-    const handleNewNotification = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const notification = customEvent.detail;
-
-      setNotifications((prev) => [notification, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    };
-
-    const handleDocumentUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { document_id, user_name, action } = customEvent.detail;
-
-      const notification: Notification = {
-        id: `doc_${Date.now()}`,
-        message: `${user_name} ${action} document`,
-        event_type: 'document_update',
-        data: { document_id },
-        read: false,
-        inserted_at: new Date().toISOString(),
-      };
-
-      setNotifications((prev) => [notification, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    };
-
-    const handleApprovalRequest = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { message, document_title, document_id } = customEvent.detail;
-
-      const notification: Notification = {
-        id: `approval_${Date.now()}`,
-        message: `Approval needed: ${document_title}`,
-        event_type: 'approval_request',
-        data: { document_id },
-        read: false,
-        inserted_at: new Date().toISOString(),
-      };
-
-      setNotifications((prev) => [notification, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    };
-
-    const handleCollaborationInvite = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { inviter_name, document_title, document_id } = customEvent.detail;
-
-      const notification: Notification = {
-        id: `collab_${Date.now()}`,
-        message: `${inviter_name} invited you to collaborate on ${document_title}`,
-        event_type: 'collaboration_invite',
-        data: { document_id },
-        read: false,
-        inserted_at: new Date().toISOString(),
-      };
-
-      setNotifications((prev) => [notification, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    };
-
-    const handleWorkflowStatus = (event: Event) => {
-      const customEvent = event as CustomEvent;
-      const { status, workflow_name, workflow_id } = customEvent.detail;
-
-      const notification: Notification = {
-        id: `workflow_${Date.now()}`,
-        message: `Workflow ${workflow_name} is now ${status}`,
-        event_type: 'workflow_status',
-        data: { workflow_id },
-        read: false,
-        inserted_at: new Date().toISOString(),
-      };
-
-      setNotifications((prev) => [notification, ...prev]);
-      setUnreadCount((prev) => prev + 1);
-    };
 
     window.addEventListener('notification', handleNewNotification);
     window.addEventListener('document_update', handleDocumentUpdate);
@@ -179,18 +198,27 @@ export const useNotifications = (): UseNotificationsReturn => {
       );
       window.removeEventListener('workflow_status', handleWorkflowStatus);
     };
-  }, [connected, socket]);
+  }, [
+    connected,
+    socket,
+    handleNewNotification,
+    handleDocumentUpdate,
+    handleApprovalRequest,
+    handleCollaborationInvite,
+    handleWorkflowStatus,
+  ]);
 
   useEffect(() => {
-    if (connected) {
+    if (connected && !notificationsInitialized) {
       fetchNotifications();
     }
-  }, [connected, fetchNotifications]);
+  }, [connected, notificationsInitialized, fetchNotifications]);
 
   return {
     notifications,
     unreadCount,
     loading,
+    paginationMeta,
     markAsRead,
     markAllAsRead,
     fetchNotifications,

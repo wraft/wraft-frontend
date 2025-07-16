@@ -14,9 +14,11 @@ import { useAuth } from './AuthContext';
 interface SocketContextType {
   socket: Socket | null;
   connected: boolean;
+  notificationsInitialized: boolean;
   joinChannel: (channelName: string, params?: any) => Channel | null;
   leaveChannel: (channelName: string) => void;
   sendMessage: (channelName: string, event: string, payload: any) => void;
+  resetNotificationsState: () => void;
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
@@ -28,22 +30,21 @@ interface SocketProviderProps {
 export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [connected, setConnected] = useState(false);
+  const [notificationsInitialized, setNotificationsInitialized] =
+    useState(false);
   const [isClient, setIsClient] = useState(false);
   const channelsRef = useRef<Map<string, Channel>>(new Map());
 
-  // Only run on client side
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  // Always call useAuth
   const authContext = useAuth();
   const { accessToken, userProfile } = authContext || {
     accessToken: null,
     userProfile: null,
   };
 
-  // Initialize socket connection
   useEffect(() => {
     if (!isClient || !accessToken || !userProfile) {
       return;
@@ -65,7 +66,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       },
     });
 
-    // Socket connection handlers
     newSocket.onOpen(() => {
       console.log('Phoenix socket connected');
       setConnected(true);
@@ -81,11 +81,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       setConnected(false);
     });
 
-    // Connect to socket
     newSocket.connect();
     setSocket(newSocket);
 
-    // Cleanup on unmount
     return () => {
       channelsRef.current.forEach((channel) => {
         channel.leave();
@@ -94,23 +92,23 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       newSocket.disconnect();
       setSocket(null);
       setConnected(false);
+      setNotificationsInitialized(false);
     };
-  }, [isClient, accessToken, userProfile]);
+  }, [accessToken, userProfile]);
 
-  // Join notifications channel when socket is connected
   useEffect(() => {
     if (!socket || !connected || !userProfile) return;
 
-    const notificationsChannelName = `notification:${userProfile.id}`;
+    const notificationsChannelName = `user_notification:${userProfile.id}`;
     const notificationsChannel = joinChannel(notificationsChannelName);
 
     if (notificationsChannel) {
-      // Handle different notification types
       notificationsChannel.on('new_notification', (payload) => {
         handleNotification(payload);
       });
 
-      notificationsChannel.on('message_created', (payload) => {
+      notificationsChannel.on('notification', (payload) => {
+        console.log('notification[payload]', payload);
         handleNotification(payload);
       });
 
@@ -134,20 +132,22 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     return () => {
       if (notificationsChannel) {
         leaveChannel(notificationsChannelName);
+        setNotificationsInitialized(false);
       }
     };
   }, [socket, connected, userProfile]);
 
-  // Notification handlers
   const handleNotification = (payload: any) => {
     const { message, body } = payload;
 
-    toast.success(message || body, {
-      duration: 4000,
-      position: 'top-right',
-    });
+    toast.success(
+      <div dangerouslySetInnerHTML={{ __html: message || body.message }} />,
+      {
+        duration: 4000,
+        position: 'top-right',
+      },
+    );
 
-    // Dispatch custom event for other components to listen to
     window.dispatchEvent(new CustomEvent('notification', { detail: payload }));
   };
 
@@ -159,7 +159,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       position: 'top-right',
     });
 
-    // Dispatch event for document components
     window.dispatchEvent(
       new CustomEvent('document_update', { detail: payload }),
     );
@@ -173,7 +172,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       position: 'top-right',
     });
 
-    // Dispatch event for approval components
     window.dispatchEvent(
       new CustomEvent('approval_request', { detail: payload }),
     );
@@ -187,7 +185,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       position: 'top-right',
     });
 
-    // Dispatch event for collaboration components
     window.dispatchEvent(
       new CustomEvent('collaboration_invite', { detail: payload }),
     );
@@ -201,17 +198,14 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       position: 'top-right',
     });
 
-    // Dispatch event for workflow components
     window.dispatchEvent(
       new CustomEvent('workflow_status', { detail: payload }),
     );
   };
 
-  // Join a channel
   const joinChannel = (channelName: string, params: any = {}) => {
     if (!socket) return null;
 
-    // Check if channel already exists
     if (channelsRef.current.has(channelName)) {
       return channelsRef.current.get(channelName)!;
     }
@@ -223,6 +217,9 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       .receive('ok', (resp) => {
         console.log(`Joined channel ${channelName}`, resp);
         channelsRef.current.set(channelName, channel);
+        if (channelName.startsWith('notification:')) {
+          setNotificationsInitialized(true);
+        }
       })
       .receive('error', (resp) => {
         console.error(`Failed to join channel ${channelName}`, resp);
@@ -231,7 +228,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     return channel;
   };
 
-  // Leave a channel
   const leaveChannel = (channelName: string) => {
     const channel = channelsRef.current.get(channelName);
     if (channel) {
@@ -240,7 +236,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
   };
 
-  // Send message to a channel
   const sendMessage = (channelName: string, event: string, payload: any) => {
     const channel = channelsRef.current.get(channelName);
     if (channel) {
@@ -248,12 +243,18 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
     }
   };
 
+  const resetNotificationsState = () => {
+    setNotificationsInitialized(false);
+  };
+
   const value: SocketContextType = {
     socket,
     connected,
+    notificationsInitialized,
     joinChannel,
     leaveChannel,
     sendMessage,
+    resetNotificationsState,
   };
 
   return (
@@ -262,30 +263,11 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
 };
 
 export const useSocket = () => {
-  try {
-    const context = useContext(SocketContext);
-    if (context === undefined) {
-      // Return safe defaults instead of throwing error during SSR or initial render
-      return {
-        socket: null,
-        connected: false,
-        joinChannel: () => null,
-        leaveChannel: () => {},
-        sendMessage: () => {},
-      };
-    }
-    return context;
-  } catch (error) {
-    console.warn('useSocket called outside of provider context:', error);
-    // Return safe defaults
-    return {
-      socket: null,
-      connected: false,
-      joinChannel: () => null,
-      leaveChannel: () => {},
-      sendMessage: () => {},
-    };
+  const context = useContext(SocketContext);
+  if (context === undefined) {
+    throw new Error('useSocket must be used within a SocketProvider');
   }
+  return context;
 };
 
 export default SocketProvider;
