@@ -1,51 +1,36 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Pagination, Table, Box, Text } from '@wraft/ui';
+import { Pagination, Box, Text, Flex } from '@wraft/ui';
+import styled from '@xstyled/emotion';
+import { Avatar } from 'theme-ui';
 
+import useNotifications from '@hooks/useNotifications';
 import { TimeAgo } from 'common/Atoms';
-import { fetchAPI } from 'utils/models';
 
-export interface IPageMeta {
-  pageNumber: number;
-  totalEntries: number;
-  totalPages: number;
-}
+import {
+  getNotificationIcon,
+  handleNotificationNavigation,
+  Notification,
+} from './NotificationUtil';
 
-export interface Notification {
-  message: string;
-  type: string;
-  updatedAt: string;
-}
+export const NotificationWrapper = styled(Box)``;
 
 const NotificationList = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [paginationMeta, setPaginationMeta] = useState<IPageMeta | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const {
+    notifications,
+    loading,
+    markAsRead,
+    fetchNotifications,
+    paginationMeta,
+  } = useNotifications();
 
   const router = useRouter();
 
   useEffect(() => {
     fetchNotifications(currentPage);
-  }, [currentPage]);
-
-  const fetchNotifications = async (page: number) => {
-    setIsLoading(true);
-    try {
-      const query = `sort=inserted_at_desc&page=${page}`;
-      const data: any = await fetchAPI(`notifications?${query}`);
-      setNotifications(data.notifications);
-      setPaginationMeta({
-        pageNumber: data.page_number,
-        totalEntries: data.total_entries,
-        totalPages: data.total_pages,
-      });
-    } catch (error) {
-      console.error('Error fetching notifications:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [currentPage, fetchNotifications]);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -59,43 +44,85 @@ const NotificationList = () => {
     );
   };
 
-  const columns = [
-    {
-      id: 'message',
-      header: 'Message',
-      accessorKey: 'message',
-      enableSorting: false,
-      size: 250,
-      cell: ({ row }: any) => (
-        <Text>{row.original?.notification?.message}</Text>
-      ),
-    },
-    {
-      id: 'type',
-      header: 'Type',
-      accessorKey: 'type',
-      enableSorting: false,
-      size: 250,
-      cell: ({ row }: any) => <Text>{row.original?.notification?.type}</Text>,
-    },
-    {
-      id: 'updatedAt',
-      header: 'Last Updated',
-      accessorKey: 'updatedAt',
-      enableSorting: false,
-      cell: ({ row }: any) =>
-        row.original.updated_at && <TimeAgo time={row.original?.updated_at} />,
-    },
-  ];
+  const handleNotificationClick = async (notification: Notification) => {
+    if (!notification.read) {
+      await markAsRead(notification.id);
+    }
+    handleNotificationNavigation(notification, router);
+  };
 
   return (
-    <Box py="lg" px="lg" w="100%">
-      <Table
-        data={notifications}
-        columns={columns}
-        isLoading={isLoading}
-        emptyMessage="No Notifications yet."
-      />
+    <NotificationWrapper py="lg" px="lg" w="100%">
+      {loading ? (
+        <Flex justify="center" py="xl">
+          <Text>Loading notifications...</Text>
+        </Flex>
+      ) : notifications.length === 0 ? (
+        <Flex justify="center" py="xl">
+          <Text>No Notifications yet.</Text>
+        </Flex>
+      ) : (
+        <Flex direction="column" bg="background-primary" w="70%">
+          {notifications.map((notification) => (
+            <Box
+              key={notification.id}
+              p="md"
+              borderBottom="1px solid"
+              borderColor="border"
+              cursor="pointer"
+              bg={notification.read ? 'background-primary' : 'green.100'}
+              onClick={() => handleNotificationClick(notification)}>
+              <Flex gap="sm" align="start">
+                {notification.actor && !notification.actor.profile_pic && (
+                  <Box
+                    w="28px"
+                    h="28px"
+                    bg="gray.500"
+                    borderRadius="full"
+                    color="white"
+                    fontSize="sm"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    {getNotificationIcon(notification.event_type)}
+                  </Box>
+                )}
+                {notification.actor && (
+                  <Box
+                    w="28px"
+                    h="28px"
+                    bg="gray.500"
+                    borderRadius="full"
+                    color="white"
+                    fontSize="sm"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    <Avatar
+                      sx={{ width: '20px', height: '20px' }}
+                      src={notification.actor?.profile_pic}
+                    />
+                  </Box>
+                )}
+
+                <Flex direction="column" flex="1" gap="xs">
+                  <Text
+                    dangerouslySetInnerHTML={{
+                      __html: notification.message,
+                    }}
+                    color={
+                      notification.read ? 'text-secondary' : 'text-primary'
+                    }
+                  />
+                  <Flex justify="space-between" align="center">
+                    <TimeAgo time={notification.inserted_at} />
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Box>
+          ))}
+        </Flex>
+      )}
       {paginationMeta && paginationMeta.totalPages > 1 && (
         <Box mx={0} mt={3}>
           <Pagination
@@ -106,7 +133,7 @@ const NotificationList = () => {
           />
         </Box>
       )}
-    </Box>
+    </NotificationWrapper>
   );
 };
 

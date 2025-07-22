@@ -38,11 +38,6 @@ const AwarenessUsers = () => {
     }
   };
 
-  console.log(
-    'awareness',
-    awarenessUsers.map((item: any) => item.user),
-  );
-
   return (
     <Flex px="xs">
       {awarenessUsers.map((item: any, index: any) => (

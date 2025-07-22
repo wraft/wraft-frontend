@@ -118,8 +118,6 @@ export const LiveEditor = forwardRef(
 
       setProvider(wsProvider);
 
-      console.log("collabData", getUserColor(collabData.user.id));
-
       if (collabData?.user) {
         wsProvider.awareness.setLocalState({
           user: { ...collabData.user, color: getUserColor(collabData.user.id) },

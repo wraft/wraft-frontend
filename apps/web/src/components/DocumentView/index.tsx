@@ -19,8 +19,6 @@ import { DocumentContentBlock } from './DocumentContentBlock';
 import { usePermissions } from './usePermissions';
 import apiService from './APIModel';
 
-export const SAVE_INTERVAL = 15000;
-
 const DocumentView = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openTitleModal, setOpenTitleModal] = useState<boolean>(false);
@@ -57,37 +55,9 @@ const DocumentView = () => {
   const cId: string = router.query.id as string;
 
   useEffect(() => {
-    // let autosaveInterval: any;
-
-    // if (editorMode !== 'editor' && autosaveInterval) {
-    //   clearInterval(autosaveInterval);
-    // }
-
-    if (editorRef.current == null && editorMode !== 'edit') {
-      return;
-    }
-
-    // Autosave interval
-    const autosaveInterval = setInterval(() => {
-      // checkContentChange();
-    }, SAVE_INTERVAL);
-
-    return () => {
-      clearInterval(autosaveInterval);
-    };
-  }, [editorRef.current, editorMode]);
-
-  useEffect(() => {
     if (pageTitle) {
       setValue('title', pageTitle);
     }
-
-    // return () => {
-    //   console.log('its working');
-    //   if (editorMode === 'editor') {
-    //     checkContentChange();
-    //   }
-    // };
   }, [pageTitle]);
 
   const onSubmit = async () => {
@@ -95,10 +65,6 @@ const DocumentView = () => {
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
     const jsonContent = editorRef.current?.helpers?.getJSON();
-
-    // return;
-
-    // setUnsavedChanges(false);
 
     setSaving(true);
 

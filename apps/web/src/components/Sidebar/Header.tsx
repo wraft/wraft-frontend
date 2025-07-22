@@ -5,6 +5,7 @@ import { Button, DropdownMenu, Box, Flex, Text, Modal } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { CaretDown, Gear, Plus } from '@phosphor-icons/react';
 
+import NotificationDropdown from 'components/Notification/NotificationDropdown';
 import DefaultAvatar from 'common/DefaultAvatar';
 import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -138,7 +139,8 @@ const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
             </DropdownMenu>
           </DropdownMenu.Provider>
         </Box>
-        <Flex mr="sm">
+        <Flex mr="sm" gap="xs" align="center">
+          <NotificationDropdown />
           <Button
             className="x"
             shape="circle"

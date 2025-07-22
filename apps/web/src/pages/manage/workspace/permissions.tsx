@@ -4,7 +4,6 @@ import { Flex } from '@wraft/ui';
 
 import { workspaceLinks } from '@constants/menuLinks';
 import PermissionsList from 'components/manage/PermissionsList';
-import DescriptionLinker from 'common/DescriptionLinker';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
@@ -21,15 +20,11 @@ const Index: FC = () => {
         </Head>
         <Page>
           <PageHeader
-            title="Workspace"
-            desc={
-              <DescriptionLinker
-                data={[
-                  { name: 'Manage', path: '/manage' },
-                  { name: 'Permissions' },
-                ]}
-              />
-            }
+            title={[
+              { name: 'Manage', path: '/manage' },
+              { name: 'Workspace', path: '/manage/workspace' },
+              { name: 'Permission', path: '' },
+            ]}
           />
 
           <Flex gap="md" my="md" px="md">

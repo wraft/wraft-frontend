@@ -10,7 +10,6 @@ import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -32,15 +31,11 @@ const Index: FC = () => {
         </Head>
         <Page>
           <PageHeader
-            title="Workspace"
-            desc={
-              <DescriptionLinker
-                data={[
-                  { name: 'Manage', path: '/manage' },
-                  { name: 'Members' },
-                ]}
-              />
-            }>
+            title={[
+              { name: 'Manage', path: '/manage' },
+              { name: 'Workspace', path: '/manage/workspace' },
+              { name: 'Members', path: '' },
+            ]}>
             {hasPermission('members', 'manage') && (
               <Button
                 variant="secondary"

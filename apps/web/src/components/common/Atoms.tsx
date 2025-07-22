@@ -37,11 +37,30 @@ interface TimeAgoProps {
   ago?: boolean;
   short?: boolean;
   fontSize?: 'sm' | 'md' | 'lg' | 'sm2';
+  showAgo?: boolean;
 }
 
 export const TimeAgo = (props: TimeAgoProps) => {
-  const utc_time = new Date(props.time);
-  const showAgo = props.ago ? true : false;
+  const { time, showAgo } = props;
+
+  if (!time) {
+    return (
+      <Text fontSize={props.fontSize || 'sm2'} opacity="0.8">
+        -
+      </Text>
+    );
+  }
+
+  const utc_time = new Date(time);
+
+  if (isNaN(utc_time.getTime())) {
+    return (
+      <Text fontSize={props.fontSize || 'sm2'} opacity="0.8">
+        Invalid date
+      </Text>
+    );
+  }
+
   const offset_time_minutes = utc_time.getTimezoneOffset();
   const local_time = new Date(
     utc_time.getTime() - offset_time_minutes * 60 * 1000,

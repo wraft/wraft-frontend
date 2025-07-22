@@ -7,7 +7,6 @@ import OrganisationInfo from 'components/manage/OrganisationInfo';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
 
 const CompanyForm: FC = () => {
   return (
@@ -18,12 +17,11 @@ const CompanyForm: FC = () => {
       </Head>
       <Page>
         <PageHeader
-          title="Workspace"
-          desc={
-            <DescriptionLinker
-              data={[{ name: 'Manage', path: '/manage' }, { name: 'General' }]}
-            />
-          }
+          title={[
+            { name: 'Manage', path: '/manage' },
+            { name: 'Workspace', path: '/manage/workspace' },
+            { name: 'Fields', path: '' },
+          ]}
         />
 
         <Flex gap="md" my="md" px="md">

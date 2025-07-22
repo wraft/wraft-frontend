@@ -9,6 +9,7 @@ import { GoogleTagManager } from '@next/third-parties/google';
 import 'core-js/full/promise/with-resolvers.js';
 
 import { UserProvider } from 'contexts/AuthContext';
+import SocketProvider from 'contexts/SocketContext';
 import ToasterNewProvider from 'contexts/ToasterProvider';
 import NextAuthProviders from 'contexts/NextAuthProviders';
 import { polyfillPromiseWithResolvers } from 'utils/PromiseWithResolvers';
@@ -48,7 +49,9 @@ const MyApp = ({
         <ToasterNewProvider />
         <ThemeUIProvider theme={theme}>
           <UserProvider>
-            <Component {...pageProps} />
+            <SocketProvider>
+              <Component {...pageProps} />
+            </SocketProvider>
           </UserProvider>
         </ThemeUIProvider>
       </NextAuthProviders>

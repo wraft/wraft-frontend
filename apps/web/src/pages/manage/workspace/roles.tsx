@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react';
 import Head from 'next/head';
 import { Spinner } from 'theme-ui';
 import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
-// import { SearchIcon } from '@wraft/icon';
 import { Button, Flex, Box, InputText, Drawer, useDrawer } from '@wraft/ui';
 
 import { workspaceLinks } from '@constants/menuLinks';
@@ -10,7 +9,6 @@ import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import DescriptionLinker from 'common/DescriptionLinker';
 import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
@@ -34,15 +32,11 @@ const Index: FC = () => {
         </Head>
         <Page>
           <PageHeader
-            title="Workspace"
-            desc={
-              <DescriptionLinker
-                data={[
-                  { name: 'Manage', path: '/manage' },
-                  { name: 'General' },
-                ]}
-              />
-            }>
+            title={[
+              { name: 'Manage', path: '/manage' },
+              { name: 'Workspace', path: '/manage/workspace' },
+              { name: 'Role', path: '' },
+            ]}>
             <Flex alignItems="center" gap="md">
               {hasPermission('role', 'manage') && (
                 <Box display="block">
