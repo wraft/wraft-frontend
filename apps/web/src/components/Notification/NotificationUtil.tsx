@@ -1,4 +1,6 @@
+import React from 'react';
 import { useRouter } from 'next/router';
+import { Bell } from '@phosphor-icons/react';
 
 export interface NotificationData {
   document_id?: string;
@@ -34,7 +36,7 @@ export const NOTIFICATION_TYPES = {
   DOCUMENT_COMMENT: 'document.add_comment',
 } as const;
 
-export const getNotificationIcon = (type: string): string => {
+export const getNotificationIcon = (type: string): string | JSX.Element => {
   switch (type) {
     case NOTIFICATION_TYPES.DOCUMENT_UPDATE:
       return '📄';
@@ -47,7 +49,7 @@ export const getNotificationIcon = (type: string): string => {
     case NOTIFICATION_TYPES.DOCUMENT_COMMENT:
       return '💬';
     default:
-      return '📢';
+      return <Bell size={24} />;
   }
 };
 

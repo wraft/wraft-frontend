@@ -4,6 +4,7 @@ import { Flex, Text } from '@wraft/ui';
 import { ArrowLeft, Bell, Pencil } from '@phosphor-icons/react';
 
 import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
+import NotificationDropdown from 'components/Notification/NotificationDropdown';
 import Link from 'common/NavLink';
 import { useAuth } from 'contexts/AuthContext';
 
@@ -73,8 +74,9 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
           borderLeft="solid 1px"
           borderColor="border"
           alignItems="center"
+          gap="sm"
           pl="sm">
-          <Bell size={22} className="main-icon" />
+          <NotificationDropdown />
 
           {!accessToken && (
             <Link href="/login">

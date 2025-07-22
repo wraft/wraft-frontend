@@ -77,7 +77,7 @@ const NotificationList = () => {
                   <Box
                     w="28px"
                     h="28px"
-                    bg="green.500"
+                    bg="gray.500"
                     borderRadius="full"
                     color="white"
                     fontSize="sm"
@@ -91,7 +91,7 @@ const NotificationList = () => {
                   <Box
                     w="28px"
                     h="28px"
-                    bg="green.500"
+                    bg="gray.500"
                     borderRadius="full"
                     color="white"
                     fontSize="sm"

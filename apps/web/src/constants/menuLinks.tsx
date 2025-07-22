@@ -78,6 +78,11 @@ export const workspaceLinks: menuLinksProps[] = [
     path: '/manage/workspace/permissions',
     permissions: ['role.show', 'role.manage'],
   },
+  {
+    name: 'Notification',
+    path: '/manage/workspace/notification-settings',
+    permissions: [],
+  },
 ];
 
 export const userSettingsLinks: menuLinksProps[] = [

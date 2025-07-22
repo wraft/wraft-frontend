@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text, Button, Spinner } from '@wraft/ui';
-import { Bell, Check } from '@phosphor-icons/react';
+import { Bell, Check, Gear } from '@phosphor-icons/react';
 import { Avatar } from 'theme-ui';
 
 import { useNotifications } from '@hooks/useNotifications';
@@ -33,6 +33,10 @@ const NotificationDropdown: React.FC = () => {
 
   const handleViewAll = () => {
     router.push('/notifications');
+  };
+
+  const handleSettingsClick = () => {
+    router.push('/manage/workspace/notification-settings');
   };
 
   return (
@@ -96,15 +100,24 @@ const NotificationDropdown: React.FC = () => {
               )}
             </Flex>
 
-            {unreadCount > 0 && (
+            <Flex gap="sm">
+              {unreadCount > 0 && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={markAllAsRead}
+                  title="Mark all as read">
+                  <Check size={16} />
+                </Button>
+              )}
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={markAllAsRead}
-                title="Mark all as read">
-                <Check size={16} />
+                onClick={handleSettingsClick}
+                title="Notification settings">
+                <Gear size={16} />
               </Button>
-            )}
+            </Flex>
           </Flex>
 
           <Box maxHeight="400px" overflowY="auto">
@@ -143,7 +156,7 @@ const NotificationDropdown: React.FC = () => {
                       <Box
                         w="28px"
                         h="28px"
-                        bg="green.500"
+                        bg="gray.500"
                         borderRadius="full"
                         color="white"
                         fontSize="sm"
@@ -157,7 +170,7 @@ const NotificationDropdown: React.FC = () => {
                       <Box
                         w="28px"
                         h="28px"
-                        bg="green.500"
+                        bg="gray.500"
                         borderRadius="full"
                         color="white"
                         fontSize="sm"
