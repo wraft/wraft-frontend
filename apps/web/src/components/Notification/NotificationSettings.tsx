@@ -58,7 +58,7 @@ const NotificationSettings: React.FC = () => {
         setEvents((prev) =>
           prev.map((event) => ({
             ...event,
-            enabled: enabledEvents.includes(event.id),
+            enabled: !enabledEvents.includes(event.id),
           })),
         );
       }
@@ -75,10 +75,11 @@ const NotificationSettings: React.FC = () => {
       const updatedEvents = events.map((event) =>
         event.id === eventId ? { ...event, enabled: !event.enabled } : event,
       );
+
       setEvents(updatedEvents);
 
       const enabledEvents = updatedEvents
-        .filter((event) => event.enabled)
+        .filter((event) => !event.enabled)
         .map((event) => event.id);
 
       await putAPI('notifications/settings', { events: enabledEvents });
