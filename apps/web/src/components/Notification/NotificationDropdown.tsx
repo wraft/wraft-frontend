@@ -136,13 +136,13 @@ const NotificationDropdown: React.FC = () => {
                   borderBottom="1px solid"
                   borderColor="border"
                   cursor="pointer"
-                  bg={notification.read ? 'transparent' : 'blue.50'}
+                  bg={notification.read ? 'transparent' : 'green.200'}
                   onClick={() => handleNotificationClick(notification)}>
                   <Flex gap="sm" align="start">
                     {notification.actor && !notification.actor.profile_pic && (
                       <Box
-                        w="32px"
-                        h="32px"
+                        w="28px"
+                        h="28px"
                         bg="green.500"
                         borderRadius="full"
                         color="white"
@@ -155,8 +155,8 @@ const NotificationDropdown: React.FC = () => {
                     )}
                     {notification.actor && (
                       <Box
-                        w="32px"
-                        h="32px"
+                        w="28px"
+                        h="28px"
                         bg="green.500"
                         borderRadius="full"
                         color="white"
@@ -165,7 +165,7 @@ const NotificationDropdown: React.FC = () => {
                         alignItems="center"
                         justifyContent="center">
                         <Avatar
-                          sx={{ width: '16px', height: '16px' }}
+                          sx={{ width: '20px', height: '20px' }}
                           src={notification.actor?.profile_pic}
                         />
                       </Box>
@@ -177,7 +177,7 @@ const NotificationDropdown: React.FC = () => {
                           __html: notification.message,
                         }}
                         color={
-                          notification.read ? 'text-secondary' : 'text-primary'
+                          notification.read ? 'text-primary' : 'text-primary'
                         }
                       />
 
@@ -191,7 +191,7 @@ const NotificationDropdown: React.FC = () => {
           {recentNotifications.length > 0 && (
             <Flex
               justify="center"
-              p="md"
+              p="sm"
               borderTop="1px solid"
               borderColor="border">
               <Button variant="ghost" onClick={handleViewAll}>

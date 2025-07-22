@@ -8,6 +8,9 @@ import React, {
 } from 'react';
 import { Socket, Channel } from 'phoenix';
 import toast from 'react-hot-toast';
+import { Bell } from '@phosphor-icons/react';
+
+import { getNotificationIcon } from 'components/Notification/NotificationUtil';
 
 import { useAuth } from './AuthContext';
 
@@ -99,108 +102,50 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   useEffect(() => {
     if (!socket || !connected || !userProfile) return;
 
-    const notificationsChannelName = `user_notification:${userProfile.id}`;
-    const notificationsChannel = joinChannel(notificationsChannelName);
+    const userNotificationsChannelName = `user_notification:${userProfile.id}`;
+    const organisationNotificationsChannelName = `organisation_notification:${userProfile.organisation_id}`;
 
-    if (notificationsChannel) {
-      notificationsChannel.on('new_notification', (payload) => {
+    const userNotificationsChannel = joinChannel(userNotificationsChannelName);
+    const organisationNotificationsChannel = joinChannel(
+      organisationNotificationsChannelName,
+    );
+
+    if (userNotificationsChannel) {
+      userNotificationsChannel.on('notification', (payload) => {
         handleNotification(payload);
       });
+    }
 
-      notificationsChannel.on('notification', (payload) => {
-        console.log('notification[payload]', payload);
+    if (organisationNotificationsChannel) {
+      organisationNotificationsChannel.on('notification', (payload) => {
         handleNotification(payload);
-      });
-
-      notificationsChannel.on('document_updated', (payload) => {
-        handleDocumentUpdate(payload);
-      });
-
-      notificationsChannel.on('approval_request', (payload) => {
-        handleApprovalRequest(payload);
-      });
-
-      notificationsChannel.on('collaboration_invite', (payload) => {
-        handleCollaborationInvite(payload);
-      });
-
-      notificationsChannel.on('workflow_status', (payload) => {
-        handleWorkflowStatus(payload);
       });
     }
 
     return () => {
-      if (notificationsChannel) {
-        leaveChannel(notificationsChannelName);
-        setNotificationsInitialized(false);
+      if (userNotificationsChannel) {
+        leaveChannel(userNotificationsChannelName);
       }
+      if (organisationNotificationsChannel) {
+        leaveChannel(organisationNotificationsChannelName);
+      }
+      setNotificationsInitialized(false);
     };
   }, [socket, connected, userProfile]);
 
   const handleNotification = (payload: any) => {
-    const { message, body } = payload;
+    const { message, body, event_type } = payload;
 
     toast.success(
       <div dangerouslySetInnerHTML={{ __html: message || body.message }} />,
       {
         duration: 4000,
         position: 'top-right',
+        icon: getNotificationIcon(event_type) || <Bell />,
       },
     );
 
     window.dispatchEvent(new CustomEvent('notification', { detail: payload }));
-  };
-
-  const handleDocumentUpdate = (payload: any) => {
-    const { user_name, action } = payload;
-
-    toast(`${user_name} ${action} document`, {
-      duration: 3000,
-      position: 'top-right',
-    });
-
-    window.dispatchEvent(
-      new CustomEvent('document_update', { detail: payload }),
-    );
-  };
-
-  const handleApprovalRequest = (payload: any) => {
-    const { document_title } = payload;
-
-    toast(`Approval needed: ${document_title}`, {
-      duration: 5000,
-      position: 'top-right',
-    });
-
-    window.dispatchEvent(
-      new CustomEvent('approval_request', { detail: payload }),
-    );
-  };
-
-  const handleCollaborationInvite = (payload: any) => {
-    const { inviter_name, document_title } = payload;
-
-    toast(`${inviter_name} invited you to collaborate on ${document_title}`, {
-      duration: 4000,
-      position: 'top-right',
-    });
-
-    window.dispatchEvent(
-      new CustomEvent('collaboration_invite', { detail: payload }),
-    );
-  };
-
-  const handleWorkflowStatus = (payload: any) => {
-    const { status, workflow_name } = payload;
-
-    toast(`Workflow ${workflow_name} is now ${status}`, {
-      duration: 3000,
-      position: 'top-right',
-    });
-
-    window.dispatchEvent(
-      new CustomEvent('workflow_status', { detail: payload }),
-    );
   };
 
   const joinChannel = (channelName: string, params: any = {}) => {

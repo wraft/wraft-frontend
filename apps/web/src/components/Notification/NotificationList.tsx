@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Pagination, Box, Text, Flex } from '@wraft/ui';
 import styled from '@xstyled/emotion';
+import { Avatar } from 'theme-ui';
 
 import useNotifications from '@hooks/useNotifications';
 import { TimeAgo } from 'common/Atoms';
@@ -72,18 +73,37 @@ const NotificationList = () => {
               bg={notification.read ? 'background-primary' : 'green.100'}
               onClick={() => handleNotificationClick(notification)}>
               <Flex gap="sm" align="start">
-                <Box
-                  w="32px"
-                  h="32px"
-                  bg="green.500"
-                  borderRadius="full"
-                  color="white"
-                  fontSize="sm"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center">
-                  {getNotificationIcon(notification.event_type)}
-                </Box>
+                {notification.actor && !notification.actor.profile_pic && (
+                  <Box
+                    w="28px"
+                    h="28px"
+                    bg="green.500"
+                    borderRadius="full"
+                    color="white"
+                    fontSize="sm"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    {getNotificationIcon(notification.event_type)}
+                  </Box>
+                )}
+                {notification.actor && (
+                  <Box
+                    w="28px"
+                    h="28px"
+                    bg="green.500"
+                    borderRadius="full"
+                    color="white"
+                    fontSize="sm"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center">
+                    <Avatar
+                      sx={{ width: '20px', height: '20px' }}
+                      src={notification.actor?.profile_pic}
+                    />
+                  </Box>
+                )}
 
                 <Flex direction="column" flex="1" gap="xs">
                   <Text

@@ -111,102 +111,15 @@ export const useNotifications = (): UseNotificationsReturn => {
     setUnreadCount((prev) => prev + 1);
   }, []);
 
-  const handleDocumentUpdate = useCallback((event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { document_id, user_name, action } = customEvent.detail;
-
-    const notification: Notification = {
-      id: `doc_${Date.now()}`,
-      message: `${user_name} ${action} document`,
-      event_type: 'document_update',
-      data: { document_id },
-      read: false,
-      inserted_at: new Date().toISOString(),
-    };
-
-    setNotifications((prev) => [notification, ...prev]);
-    setUnreadCount((prev) => prev + 1);
-  }, []);
-
-  const handleApprovalRequest = useCallback((event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { message, document_title, document_id } = customEvent.detail;
-
-    const notification: Notification = {
-      id: `approval_${Date.now()}`,
-      message: `Approval needed: ${document_title}`,
-      event_type: 'approval_request',
-      data: { document_id },
-      read: false,
-      inserted_at: new Date().toISOString(),
-    };
-
-    setNotifications((prev) => [notification, ...prev]);
-    setUnreadCount((prev) => prev + 1);
-  }, []);
-
-  const handleCollaborationInvite = useCallback((event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { inviter_name, document_title, document_id } = customEvent.detail;
-
-    const notification: Notification = {
-      id: `collab_${Date.now()}`,
-      message: `${inviter_name} invited you to collaborate on ${document_title}`,
-      event_type: 'collaboration_invite',
-      data: { document_id },
-      read: false,
-      inserted_at: new Date().toISOString(),
-    };
-
-    setNotifications((prev) => [notification, ...prev]);
-    setUnreadCount((prev) => prev + 1);
-  }, []);
-
-  const handleWorkflowStatus = useCallback((event: Event) => {
-    const customEvent = event as CustomEvent;
-    const { status, workflow_name, workflow_id } = customEvent.detail;
-
-    const notification: Notification = {
-      id: `workflow_${Date.now()}`,
-      message: `Workflow ${workflow_name} is now ${status}`,
-      event_type: 'workflow_status',
-      data: { workflow_id },
-      read: false,
-      inserted_at: new Date().toISOString(),
-    };
-
-    setNotifications((prev) => [notification, ...prev]);
-    setUnreadCount((prev) => prev + 1);
-  }, []);
-
   useEffect(() => {
     if (!connected || !socket) return;
 
     window.addEventListener('notification', handleNewNotification);
-    window.addEventListener('document_update', handleDocumentUpdate);
-    window.addEventListener('approval_request', handleApprovalRequest);
-    window.addEventListener('collaboration_invite', handleCollaborationInvite);
-    window.addEventListener('workflow_status', handleWorkflowStatus);
 
     return () => {
       window.removeEventListener('notification', handleNewNotification);
-      window.removeEventListener('document_update', handleDocumentUpdate);
-      window.removeEventListener('approval_request', handleApprovalRequest);
-      window.removeEventListener(
-        'collaboration_invite',
-        handleCollaborationInvite,
-      );
-      window.removeEventListener('workflow_status', handleWorkflowStatus);
     };
-  }, [
-    connected,
-    socket,
-    handleNewNotification,
-    handleDocumentUpdate,
-    handleApprovalRequest,
-    handleCollaborationInvite,
-    handleWorkflowStatus,
-  ]);
+  }, [connected, socket, handleNewNotification]);
 
   useEffect(() => {
     if (connected && !notificationsInitialized) {
