@@ -217,6 +217,7 @@ export const DocumentContentBlock = () => {
     user: {
       id: userProfile?.id || null,
       name: userProfile?.name || null,
+      image: userProfile?.profile_pic || null,
     },
     roomId: cId,
     // roomId: `editor-${cId}`,

@@ -18,7 +18,7 @@ import { markdownFromHTML } from "@helpers/markdown";
 import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
 // import { IndexeddbPersistence } from "y-indexeddb";
-import { getRandomColor } from "../lib/utils";
+import { getUserColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
 // import InlineMenu from "./inline-menu";
@@ -118,14 +118,11 @@ export const LiveEditor = forwardRef(
 
       setProvider(wsProvider);
 
-      wsProvider.awareness.on("change", () => {
-        const states = Array.from(wsProvider.awareness.getStates().values());
-        // setAwarenessUsers(states);
-      });
+      console.log("collabData", getUserColor(collabData.user.id));
 
       if (collabData?.user) {
         wsProvider.awareness.setLocalState({
-          user: { ...collabData.user, color: getRandomColor() },
+          user: { ...collabData.user, color: getUserColor(collabData.user.id) },
         });
       }
 
@@ -157,17 +154,15 @@ export const LiveEditor = forwardRef(
 
       const ymapObserver = (event: any) => {
         event.changes.keys.forEach((change: any, key: any) => {
-          if (
-            key === "initialLoad" &&
-            defaultContent &&
-            !contentInitialized.current
-          ) {
-            prosemirrorJSONToYXmlFragment(
-              editor.schema,
-              defaultContent,
-              yXmlFragment,
-            );
-            contentInitialized.current = true;
+          if (key === "content") {
+            const { content } = ymap.toJSON();
+            if (content) {
+              prosemirrorJSONToYXmlFragment(
+                editor.schema,
+                content,
+                yXmlFragment,
+              );
+            }
           }
         });
       };
@@ -177,7 +172,7 @@ export const LiveEditor = forwardRef(
       return () => {
         ymap.unobserve(ymapObserver);
       };
-    }, [provider, editor, defaultContent, doc, updateContent]);
+    }, [provider, editor, doc, updateContent]);
 
     useEffect(() => {
       if (defaultContent) {
