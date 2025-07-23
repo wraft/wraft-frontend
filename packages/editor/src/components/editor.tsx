@@ -22,15 +22,24 @@ export interface EditorProps {
   tokens?: any;
 }
 
-export const Editor = forwardRef(
+export interface EditorRef {
+  editor: any;
+  helpers: {
+    getJSON: () => any;
+    getMarkdown: () => any;
+    insterBlock: (block: Node) => any;
+  };
+}
+
+export const Editor = forwardRef<EditorRef, EditorProps>(
   (
     {
       defaultContent = "",
-      placeholder = "Write something, or ' / ' for commands…",
+      placeholder = "Write something, or ' / ' for commands…",
       className = "",
       isReadonly = true,
       tokens,
-    }: EditorProps,
+    },
     ref,
   ) => {
     const editor = useMemo(() => {

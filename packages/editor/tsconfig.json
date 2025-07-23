@@ -3,11 +3,12 @@
   "include": ["."],
   "exclude": ["dist", "build", "node_modules"],
   "compilerOptions": {
+    "skipLibCheck": true,
     "paths": {
       "@extensions*": ["./src/extensions*"],
       "@helpers*": ["./src/helpers*"],
-      "@hooks*": ["./src/hooks*"],
-      "typeRoots": ["./types", "../../node_modules/@types"]
-    }
+      "@hooks*": ["./src/hooks*"]
+    },
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
 }

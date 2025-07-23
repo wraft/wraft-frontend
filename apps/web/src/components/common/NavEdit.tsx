@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Flex, Text } from '@wraft/ui';
-import { ArrowLeft, Bell, Pencil } from '@phosphor-icons/react';
+import { ArrowLeftIcon, PencilIcon } from '@phosphor-icons/react';
 
 import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
 import NotificationDropdown from 'components/Notification/NotificationDropdown';
@@ -44,7 +44,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
       px="sm"
       py="xs">
       <Flex align="center" gap="sm">
-        <ArrowLeft
+        <ArrowLeftIcon
           cursor="pointer"
           className="main-icon"
           onClick={goBack}
@@ -58,7 +58,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
             </Text>
 
             {isEdit && (
-              <Pencil
+              <PencilIcon
                 cursor="pointer"
                 className="main-icon"
                 size={16}

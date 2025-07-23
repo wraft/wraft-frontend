@@ -15,6 +15,8 @@
     "strict": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": [],
     // "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": false,
@@ -28,7 +30,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": false
   },
-  "exclude": ["node_modules", "__tests__"],
+  "exclude": ["node_modules", "__tests__", "node_modules/@types/minimatch"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

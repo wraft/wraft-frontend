@@ -11,7 +11,7 @@ type EditorProps = {
   isCollaborative?: boolean;
 };
 
-const EditorWrapper = forwardRef(
+const EditorWrapper = forwardRef<any, EditorProps>(
   ({ isReadonly, defaultContent, ...rest }: EditorProps, ref) => {
     return (
       <Editor

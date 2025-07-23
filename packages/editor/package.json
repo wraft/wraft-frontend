@@ -29,8 +29,8 @@
     "@liveblocks/client": "^2.14.0",
     "@liveblocks/yjs": "^2.14.0",
     "@phosphor-icons/react": "^2.1.7",
-    "@prosekit/core": "^0.8.1",
-    "@prosekit/pm": "^0.1.10",
+    "@prosekit/core": "^0.8.3",
+    "@prosekit/pm": "^0.1.11",
     "@wraft/icon": "*",
     "@wraft/ui": "*",
     "@xstyled/emotion": "^3.8.0",
@@ -38,7 +38,7 @@
     "js-cookie": "^3.0.5",
     "lib0": "^0.2.99",
     "phoenix": "^1.7.18",
-    "prosekit": "^0.13.2",
+    "prosekit": "^0.14.1",
     "prosemirror-flat-list": "^0.5.4",
     "react-dropzone": "14.3.8",
     "react-signature-canvas": "1.1.0-alpha.2",
@@ -68,7 +68,7 @@
     "@wraft/eslint-config": "workspace:*",
     "@wraft/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.0",
     "typescript": "^5.3.3"
   },
   "peerDependencies": {
