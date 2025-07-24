@@ -103,17 +103,6 @@ export const vendorService = {
     const formData = new FormData();
     formData.append('logo', logoFile);
 
-    console.log(
-      'Uploading logo to endpoint:',
-      `${VENDOR_ENDPOINTS.vendors}/${id}/logo`,
-    );
-    console.log('FormData contents:', formData);
-    console.log('File details:', {
-      name: logoFile.name,
-      size: logoFile.size,
-      type: logoFile.type,
-    });
-
     return postAPI(
       `${VENDOR_ENDPOINTS.vendors}/${id}/logo`,
       formData,
@@ -244,7 +233,9 @@ export const vendorDashboardService = {
   /**
    * Get vendor dashboard statistics
    */
-  getDashboardStats: async (): Promise<{
+  getDashboardStats: async (
+    vendorId?: string,
+  ): Promise<{
     total_vendors: number;
     active_vendors: number;
     recent_additions: number;
@@ -269,7 +260,8 @@ export const vendorDashboardService = {
       count: number;
     }>;
   }> => {
-    return fetchAPI(`${VENDOR_ENDPOINTS.vendors}/stats`) as Promise<{
+    const endpoint = `${VENDOR_ENDPOINTS.vendors}/${vendorId}/stats`;
+    return fetchAPI(endpoint) as Promise<{
       total_vendors: number;
       active_vendors: number;
       recent_additions: number;

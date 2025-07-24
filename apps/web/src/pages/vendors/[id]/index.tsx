@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { NextPage } from 'next';
 import { Button, Flex, Drawer, useDrawer, Spinner } from '@wraft/ui';
-import { PencilSimple, ArrowLeft } from '@phosphor-icons/react';
+import { PencilSimpleIcon, ArrowLeftIcon } from '@phosphor-icons/react';
 
 import { vendorService } from 'components/Vendor/vendorService';
 import VendorDetail from 'components/Vendor/VendorDetail';
@@ -70,21 +70,17 @@ const VendorDetailPage: NextPage = () => {
       <Page>
         <PageHeader
           title={vendor ? vendor.name : 'Loading...'}
-          desc="Vendor details and contact management">
+          desc="Vendor details and contact management"
+          hasBack={true}>
           <Flex gap="md">
             {hasPermission('template', 'show') && (
               <Button
                 variant="secondary"
                 onClick={() => setIsEditDrawerOpen(true)}>
-                <PencilSimple size={16} />
+                <PencilSimpleIcon size={16} />
                 Edit Vendor
               </Button>
             )}
-
-            <Button variant="secondary" onClick={() => router.push('/vendors')}>
-              <ArrowLeft size={16} />
-              Back to Vendors
-            </Button>
           </Flex>
         </PageHeader>
         <VendorDetail vendorId={id} />

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Box,
   Flex,
@@ -17,17 +19,17 @@ import {
   InputText,
 } from '@wraft/ui';
 import {
-  Plus,
-  PencilSimple,
-  Trash,
-  Phone,
-  Envelope,
-  Globe,
-  MapPin,
-  Building,
-  User,
-  Calendar,
-  ArrowsClockwise,
+  PlusIcon,
+  PencilSimpleIcon,
+  TrashIcon,
+  PhoneIcon,
+  EnvelopeIcon,
+  GlobeIcon,
+  MapPinIcon,
+  BuildingIcon,
+  UserIcon,
+  CalendarIcon,
+  XIcon,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
@@ -36,7 +38,12 @@ import {
   vendorContactService,
 } from 'components/Vendor/vendorService';
 import { PageInner } from 'components/common/Atoms';
-import { VendorResponse, VendorContactResponse } from 'schemas/vendor';
+import {
+  VendorResponse,
+  VendorContactResponse,
+  VendorContactFormSchema,
+  VendorContactFormType,
+} from 'schemas/vendor';
 import { usePermission } from 'utils/permissions';
 
 import VendorDashboard from './VendorDashboard';
@@ -141,10 +148,6 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
     }
   };
 
-  const handleRefreshContacts = () => {
-    loadContacts(currentPage);
-  };
-
   const handleContactSubmit = async (contactData: any) => {
     try {
       if (editingContact) {
@@ -226,7 +229,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               size="sm"
               onClick={() => handleEditContact(row.original)}
               title="Edit contact">
-              <PencilSimple size={16} />
+              <PencilSimpleIcon size={16} />
             </Button>
           )}
           {hasPermission('template', 'show') && (
@@ -236,7 +239,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               onClick={() => handleDeleteContactClick(row.original)}
               title="Delete contact"
               color="red">
-              <Trash size={16} />
+              <TrashIcon size={16} />
             </Button>
           )}
         </Flex>
@@ -277,7 +280,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 </Text>
                 {vendor.contact_person && (
                   <Flex align="center" gap="sm" mb="sm">
-                    <User size={16} />
+                    <UserIcon size={16} />
                     <Text color="text-secondary">
                       Contact: {vendor.contact_person}
                     </Text>
@@ -286,26 +289,26 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 <Flex gap="lg" flexWrap="wrap">
                   {vendor.email && (
                     <Flex align="center" gap="sm">
-                      <Envelope size={16} />
+                      <EnvelopeIcon size={16} />
                       <Text color="text-secondary">{vendor.email}</Text>
                     </Flex>
                   )}
                   {vendor.phone && (
                     <Flex align="center" gap="sm">
-                      <Phone size={16} />
+                      <PhoneIcon size={16} />
                       <Text color="text-secondary">{vendor.phone}</Text>
                     </Flex>
                   )}
                   {vendor.website && (
                     <Flex align="center" gap="sm">
-                      <Globe size={16} />
+                      <GlobeIcon size={16} />
                       <Text color="text-secondary">{vendor.website}</Text>
                     </Flex>
                   )}
                 </Flex>
               </Box>
             </Flex>
-            <VendorDashboard />
+            <VendorDashboard vendorId={vendorId} />
             <Text variant="xl" fontWeight="600" mb="lg">
               Basic Information
             </Text>
@@ -325,19 +328,19 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 <Flex direction="column" gap="sm">
                   {vendor.address && (
                     <Flex align="start" gap="sm">
-                      <MapPin size={16} style={{ marginTop: '2px' }} />
+                      <MapPinIcon size={16} style={{ marginTop: '2px' }} />
                       <Text color="text-secondary">{vendor.address}</Text>
                     </Flex>
                   )}
                   {vendor.city && (
                     <Flex align="center" gap="sm">
-                      <Building size={16} />
+                      <BuildingIcon size={16} />
                       <Text color="text-secondary">{vendor.city}</Text>
                     </Flex>
                   )}
                   {vendor.country && (
                     <Flex align="center" gap="sm">
-                      <MapPin size={16} />
+                      <MapPinIcon size={16} />
                       <Text color="text-secondary">{vendor.country}</Text>
                     </Flex>
                   )}
@@ -376,14 +379,14 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 </Text>
                 <Flex direction="column" gap="sm">
                   <Flex align="center" gap="sm">
-                    <Calendar size={16} />
+                    <CalendarIcon size={16} />
                     <Text color="text-secondary">
                       Created:{' '}
                       {new Date(vendor.created_at).toLocaleDateString()}
                     </Text>
                   </Flex>
                   <Flex align="center" gap="sm">
-                    <Calendar size={16} />
+                    <CalendarIcon size={16} />
                     <Text color="text-secondary">
                       Updated:{' '}
                       {new Date(vendor.updated_at).toLocaleDateString()}
@@ -401,17 +404,10 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                 <Text variant="lg" fontWeight="600">
                   Vendor Contacts
                 </Text>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleRefreshContacts}
-                  title="Refresh contacts">
-                  <ArrowsClockwise size={16} />
-                </Button>
               </Flex>
               {hasPermission('template', 'show') && (
                 <Button variant="secondary" onClick={handleAddContact}>
-                  <Plus size={16} />
+                  <PlusIcon size={16} />
                   Add Contact
                 </Button>
               )}
@@ -445,18 +441,18 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
         }}
         ariaLabel="Delete Contact Confirmation">
         <Box p="lg">
-          <Text variant="lg" fontWeight="600" color="red.500" mb="md">
-            ⚠️ Delete Contact
+          <Text variant="xl" fontWeight="600" mb="md">
+            Delete Contact
           </Text>
-          <Text mb="md">
+          <Text mb="md" display="inline-flex">
             You are about to delete contact{' '}
             <Text as="span" fontWeight="600">
               &quot;{contactToDelete?.name}&quot;
             </Text>
           </Text>
-          <Text mb="lg" color="text-secondary">
+          <Text mb="lg">
             This action will:
-            <Box as="ul" ml="md" mt="xs">
+            <Box as="ul" mt="xs">
               <Box as="li">Remove the contact&apos;s information</Box>
               <Box as="li">Remove their association with this vendor</Box>
               <Box as="li">Cannot be undone</Box>
@@ -474,7 +470,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               }}>
               No, Keep Contact
             </Button>
-            <Button variant="delete" onClick={handleDeleteContact}>
+            <Button variant="primary" danger onClick={handleDeleteContact}>
               Yes, Delete Contact
             </Button>
           </Flex>
@@ -508,117 +504,117 @@ const ContactFormDrawer: React.FC<ContactFormModalProps> = ({
   onSubmit,
 }) => {
   const drawer = useDrawer({ open, setOpen: (v) => !v && onClose() });
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    job_title: '',
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<VendorContactFormType>({
+    resolver: zodResolver(VendorContactFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      phone: '',
+      job_title: '',
+    },
   });
 
   useEffect(() => {
-    if (contact) {
-      setFormData({
-        name: contact.name,
-        email: contact.email || '',
-        phone: contact.phone || '',
-        job_title: contact.job_title || '',
-      });
-    } else {
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        job_title: '',
-      });
+    if (open) {
+      if (contact) {
+        reset({
+          name: contact.name,
+          email: contact.email || '',
+          phone: contact.phone || '',
+          job_title: contact.job_title || '',
+        });
+      } else {
+        reset({
+          name: '',
+          email: '',
+          phone: '',
+          job_title: '',
+        });
+      }
     }
-  }, [contact]);
+  }, [open, contact, reset]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
+  const handleFormSubmit = async (data: VendorContactFormType) => {
+    try {
+      await onSubmit(data);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
     <Drawer store={drawer} placement="right" withBackdrop={true} open={open}>
-      <Drawer.Header>
-        <Drawer.Title>{contact ? 'Edit Contact' : 'Add Contact'}</Drawer.Title>
-        <button
-          onClick={onClose}
-          style={{
-            background: 'none',
-            border: 'none',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-          }}>
-          ✕
-        </button>
-      </Drawer.Header>
-      <Box p="lg">
-        <Box as="form" onSubmit={handleSubmit}>
-          <Box mb="md">
-            <Field label="Name" required>
-              <InputText
-                name="name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, name: e.target.value }))
-                }
-                placeholder="Enter contact name"
-                required
-              />
-            </Field>
-          </Box>
-          <Box mb="md">
-            <Field label="Job Title">
-              <InputText
-                name="job_title"
-                value={formData.job_title}
-                onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    job_title: e.target.value,
-                  }))
-                }
-                placeholder="Enter job title"
-              />
-            </Field>
-          </Box>
-          <Box mb="md">
-            <Field label="Email" required>
-              <InputText
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, email: e.target.value }))
-                }
-                placeholder="Enter email address"
-                required
-              />
-            </Field>
-          </Box>
-          <Box mb="lg">
-            <Field label="Phone">
-              <InputText
-                name="phone"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, phone: e.target.value }))
-                }
-                placeholder="Enter phone number"
-              />
-            </Field>
-          </Box>
-          <Flex gap="md" justify="end">
+      <Flex
+        as="form"
+        h="100vh"
+        direction="column"
+        onSubmit={handleSubmit(handleFormSubmit)}>
+        <Box flexShrink="0">
+          <Drawer.Header>
+            <Drawer.Title>
+              {contact ? 'Edit Contact' : 'Add Contact'}
+            </Drawer.Title>
+            <XIcon size={20} weight="bold" cursor="pointer" onClick={onClose} />
+          </Drawer.Header>
+        </Box>
+        <Flex
+          borderTop="1px solid"
+          borderColor="border"
+          direction="column"
+          flex={1}
+          gap="md"
+          overflowY="auto"
+          px="xl"
+          py="md">
+          <Field label="Name" required error={errors.name?.message}>
+            <InputText
+              {...register('name')}
+              placeholder="Enter contact name"
+              required
+            />
+          </Field>
+
+          <Field label="Job Title" error={errors.job_title?.message}>
+            <InputText
+              {...register('job_title')}
+              placeholder="Enter job title"
+            />
+          </Field>
+
+          <Field label="Email" required error={errors.email?.message}>
+            <InputText
+              {...register('email')}
+              type="email"
+              placeholder="Enter email address"
+              required
+            />
+          </Field>
+
+          <Field label="Phone" error={errors.phone?.message}>
+            <InputText
+              {...register('phone')}
+              placeholder="Enter phone number"
+            />
+          </Field>
+        </Flex>
+
+        <Box flexShrink="0" borderTop="1px solid" borderColor="border" p="xl">
+          <Flex gap="md" justify="flex-end">
             <Button variant="secondary" onClick={onClose} type="button">
               Cancel
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" loading={isSubmitting}>
               {contact ? 'Update Contact' : 'Add Contact'}
             </Button>
           </Flex>
         </Box>
-      </Box>
+      </Flex>
     </Drawer>
   );
 };

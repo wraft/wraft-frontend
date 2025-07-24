@@ -153,6 +153,7 @@ const VendorList: React.FC<VendorListProps> = ({
     {
       header: 'City',
       accessorKey: 'city',
+      enableSorting: false,
       cell: ({ row }: any) => (
         <Text color="text-secondary">{row.original.city || '—'}</Text>
       ),
@@ -160,6 +161,7 @@ const VendorList: React.FC<VendorListProps> = ({
     {
       header: 'Country',
       accessorKey: 'country',
+      enableSorting: false,
       cell: ({ row }: any) => (
         <Text color="text-secondary">{row.original.country || '—'}</Text>
       ),
@@ -176,6 +178,7 @@ const VendorList: React.FC<VendorListProps> = ({
     {
       header: 'Actions',
       accessorKey: 'actions',
+      enableSorting: false,
       cell: ({ row }: any) => (
         <Flex gap="sm">
           <Button
