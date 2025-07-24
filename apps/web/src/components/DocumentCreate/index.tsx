@@ -17,7 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
 import styled from '@emotion/styled';
 import { EmptyFormIcon } from '@wraft/icon';
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import { vendorService } from 'components/Vendor/vendorService';
 import FieldDate from 'common/FieldDate';
@@ -219,7 +219,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>Create New Document</Drawer.Title>
-          <X
+          <XIcon
             size={20}
             weight="bold"
             cursor="pointer"
@@ -305,23 +305,25 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
         )}
         {formStep === 2 && (
           <>
-            <Field label="Vendor" error={errors?.vendor_id?.message}>
+            <Box mb="sm">
               <Controller
                 control={control}
                 name="vendor_id"
                 render={({ field }) => (
-                  <Select
-                    {...field}
-                    placeholder="Select a vendor"
-                    isClearable
-                    options={vendors.map((vendor) => ({
-                      value: vendor.id,
-                      label: vendor.name,
-                    }))}
-                  />
+                  <Field label="Vendor" error={errors?.vendor_id?.message}>
+                    <Select
+                      {...field}
+                      placeholder="Select a vendor"
+                      isClearable
+                      options={vendors.map((vendor) => ({
+                        value: vendor.id,
+                        label: vendor.name,
+                      }))}
+                    />
+                  </Field>
                 )}
               />
-            </Field>
+            </Box>
 
             {fields && fields.length > 0 && (
               <Flex direction="column" gap="md">

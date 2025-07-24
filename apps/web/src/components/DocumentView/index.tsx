@@ -42,6 +42,7 @@ const DocumentView = () => {
     lastSavedContent,
     meta,
     token,
+    vendorId,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
@@ -80,6 +81,7 @@ const DocumentView = () => {
       serialized: serials,
       raw: markdownContent,
       meta: meta || null,
+      vendor_id: editorMode === 'new' && vendorId ? vendorId : null,
     };
 
     if (editorMode === 'edit') {
