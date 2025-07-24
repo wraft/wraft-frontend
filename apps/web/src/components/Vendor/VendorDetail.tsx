@@ -353,14 +353,6 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                   Business Information
                 </Text>
                 <Flex direction="column" gap="sm">
-                  {vendor.gstin && (
-                    <Box>
-                      <Text fontWeight="500" mb="xs">
-                        GSTIN
-                      </Text>
-                      <Text color="text-secondary">{vendor.gstin}</Text>
-                    </Box>
-                  )}
                   {vendor.registration_number && (
                     <Box>
                       <Text fontWeight="500" mb="xs">

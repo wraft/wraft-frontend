@@ -103,6 +103,17 @@ export const vendorService = {
     const formData = new FormData();
     formData.append('logo', logoFile);
 
+    console.log(
+      'Uploading logo to endpoint:',
+      `${VENDOR_ENDPOINTS.vendors}/${id}/logo`,
+    );
+    console.log('FormData contents:', formData);
+    console.log('File details:', {
+      name: logoFile.name,
+      size: logoFile.size,
+      type: logoFile.type,
+    });
+
     return postAPI(
       `${VENDOR_ENDPOINTS.vendors}/${id}/logo`,
       formData,

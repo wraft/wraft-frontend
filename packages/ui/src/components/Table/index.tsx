@@ -23,6 +23,7 @@ interface TableProps {
   skeletonRows?: number;
   emptyMessage?: string;
   "aria-label"?: string;
+  onRowClick?: (row: any) => void;
 }
 
 const ResizableHeaderSpan = styled(x.span)<{
@@ -49,6 +50,7 @@ const Table = ({
   isLoading = false,
   skeletonRows = 5,
   emptyMessage = "No data available",
+  onRowClick,
 }: TableProps) => {
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const { getHeaderGroups, getRowModel, getState, options } = useReactTable({
@@ -149,7 +151,12 @@ const Table = ({
           {!isLoading &&
             getRowModel().rows.map((row) => {
               return (
-                <x.tr key={row.id} bg={row?.parentId && "background-secondary"}>
+                <x.tr
+                  key={row.id}
+                  bg={row?.parentId && "background-secondary"}
+                  cursor={onRowClick ? "pointer" : "default"}
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <x.td
                       key={cell.id}

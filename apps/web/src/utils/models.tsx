@@ -1,6 +1,6 @@
 export const API_HOST =
   process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosProgressEvent } from 'axios';
 import cookie from 'js-cookie';
 
 const createAxiosInstance = (): AxiosInstance => {
@@ -80,16 +80,24 @@ export const postAPI = (
   onProgress?: (percentage: number) => void,
 ) =>
   new Promise((resolve, reject) => {
+    const config: any = {
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+        if (onProgress) {
+          const total = progressEvent.total || 1;
+          const percentage = Math.round((progressEvent.loaded * 100) / total);
+          onProgress(percentage);
+        }
+      },
+    };
+
+    if (body instanceof FormData) {
+      config.headers = {
+        'Content-Type': undefined,
+      };
+    }
+
     api
-      .post(`/${path}`, body, {
-        onUploadProgress: (progressEvent) => {
-          if (onProgress) {
-            const total = progressEvent.total || 1;
-            const percentage = Math.round((progressEvent.loaded * 100) / total);
-            onProgress(percentage);
-          }
-        },
-      })
+      .post(`/${path}`, body, config)
       .then((response: any) => resolve(response.data))
       .catch((err) => reject(handleApiError(err)));
   });

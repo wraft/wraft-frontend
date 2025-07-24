@@ -6,17 +6,15 @@ import {
   Text,
   Button,
   InputText,
-  Select,
   Table,
   Modal,
-  Field,
   Pagination,
 } from '@wraft/ui';
 import {
-  MagnifyingGlass,
-  Trash,
-  PencilSimple,
-  Eye,
+  MagnifyingGlassIcon,
+  TrashIcon,
+  PencilSimpleIcon,
+  EyeIcon,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
@@ -39,7 +37,6 @@ const VendorList: React.FC<VendorListProps> = ({
   const router = useRouter();
   const { hasPermission } = usePermission();
 
-  // State management
   const [vendors, setVendors] = useState<VendorResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,7 +49,6 @@ const VendorList: React.FC<VendorListProps> = ({
     null,
   );
 
-  // Load vendors
   const loadVendors = useCallback(async () => {
     try {
       setLoading(true);
@@ -71,24 +67,15 @@ const VendorList: React.FC<VendorListProps> = ({
     }
   }, [currentPage, filters, searchQuery]);
 
-  // Load vendors on mount and when dependencies change
   useEffect(() => {
     loadVendors();
   }, [loadVendors, rerender]);
 
-  // Handle search
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
   };
 
-  // Handle filter changes
-  const handleFilterChange = (key: keyof VendorSearch, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-    setCurrentPage(1);
-  };
-
-  // Handle vendor selection
   const handleVendorSelect = (vendor: VendorResponse) => {
     if (onVendorSelect) {
       onVendorSelect(vendor);
@@ -97,7 +84,6 @@ const VendorList: React.FC<VendorListProps> = ({
     }
   };
 
-  // Handle vendor edit
   const handleVendorEdit = (vendor: VendorResponse) => {
     if (onVendorEdit) {
       onVendorEdit(vendor);
@@ -106,13 +92,11 @@ const VendorList: React.FC<VendorListProps> = ({
     }
   };
 
-  // Handle vendor delete
   const handleVendorDelete = (vendor: VendorResponse) => {
     setVendorToDelete(vendor);
     setDeleteModalOpen(true);
   };
 
-  // Confirm delete
   const confirmDelete = async () => {
     if (!vendorToDelete) return;
     try {
@@ -127,7 +111,6 @@ const VendorList: React.FC<VendorListProps> = ({
     }
   };
 
-  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -182,18 +165,11 @@ const VendorList: React.FC<VendorListProps> = ({
       ),
     },
     {
-      header: 'Contacts',
-      accessorKey: 'contacts_count',
-      cell: ({ row }: any) => (
-        <Text color="text-secondary">{row.original.contacts_count || 0}</Text>
-      ),
-    },
-    {
       header: 'Created',
       accessorKey: 'created_at',
       cell: ({ row }: any) => (
         <Text color="text-secondary" fontSize="sm">
-          {new Date(row.original.created_at).toLocaleDateString()}
+          {new Date(row.original.inserted_at).toLocaleDateString()}
         </Text>
       ),
     },
@@ -205,27 +181,36 @@ const VendorList: React.FC<VendorListProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => handleVendorSelect(row.original)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleVendorSelect(row.original);
+            }}
             title="View details">
-            <Eye size={16} />
+            <EyeIcon size={16} />
           </Button>
           {hasPermission('template', 'show') && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleVendorEdit(row.original)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleVendorEdit(row.original);
+              }}
               title="Edit vendor">
-              <PencilSimple size={16} />
+              <PencilSimpleIcon size={16} />
             </Button>
           )}
           {hasPermission('template', 'show') && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => handleVendorDelete(row.original)}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleVendorDelete(row.original);
+              }}
               title="Delete vendor"
               color="red">
-              <Trash size={16} />
+              <TrashIcon size={16} />
             </Button>
           )}
         </Flex>
@@ -236,31 +221,16 @@ const VendorList: React.FC<VendorListProps> = ({
   return (
     <Box>
       <PageInner>
-        {/* Search and Filters */}
         <Box mb="lg">
-          <Flex gap="md" align="end">
-            <Box flex={1}>
-              <Field label="Search vendors">
-                <InputText
-                  placeholder="Search by name, email, or contact person..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  icon={<MagnifyingGlass size={16} />}
-                />
-              </Field>
-            </Box>
-            <Box>
-              <Field label="Country">
-                <Select
-                  placeholder="All countries"
-                  value={filters.country || ''}
-                  onChange={(value) =>
-                    handleFilterChange('country', value || undefined)
-                  }
-                  options={[]} // TODO: Get countries from API
-                  isClearable
-                />
-              </Field>
+          <Flex gap="md" align="end" justify="flex-end">
+            <Box w="360px">
+              <InputText
+                placeholder="Search by name or email..."
+                value={searchQuery}
+                onChange={(e) => handleSearch(e.target.value)}
+                icon={<Box w="18px" as={MagnifyingGlassIcon} size={12} />}
+                iconPlacement="right"
+              />
             </Box>
           </Flex>
         </Box>
@@ -272,6 +242,7 @@ const VendorList: React.FC<VendorListProps> = ({
             isLoading={loading}
             skeletonRows={10}
             emptyMessage="No vendors found. Create your first vendor to get started."
+            onRowClick={(row) => handleVendorSelect(row.original)}
           />
         </Box>
 
@@ -288,12 +259,11 @@ const VendorList: React.FC<VendorListProps> = ({
           </Flex>
         )}
       </PageInner>
-      {/* Delete Confirmation Modal */}
       <Modal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         ariaLabel="Delete Vendor Confirmation">
-        <Box p="lg">
+        <Box p="lg" w="500px">
           <Text variant="lg" fontWeight="600" mb="md">
             Delete Vendor
           </Text>
@@ -308,7 +278,7 @@ const VendorList: React.FC<VendorListProps> = ({
               onClick={() => setDeleteModalOpen(false)}>
               Cancel
             </Button>
-            <Button variant="delete" onClick={confirmDelete}>
+            <Button variant="primary" danger onClick={confirmDelete}>
               Delete Vendor
             </Button>
           </Flex>

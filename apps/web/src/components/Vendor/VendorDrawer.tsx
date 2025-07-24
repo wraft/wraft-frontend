@@ -12,7 +12,7 @@ import {
   Spinner,
   Drawer,
 } from '@wraft/ui';
-import { Upload, X, Check } from '@phosphor-icons/react';
+import { XIcon, CheckIcon } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import { vendorService } from 'components/Vendor/vendorService';
@@ -34,9 +34,6 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
   onSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string | null>(null);
-  const [logoUploading, setLogoUploading] = useState(false);
 
   const {
     register,
@@ -54,7 +51,6 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
       city: '',
       country: '',
       website: '',
-      gstin: '',
       registration_number: '',
       contact_person: '',
     },
@@ -66,8 +62,6 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
         loadVendorData();
       } else {
         reset();
-        setLogoPreview(null);
-        setLogoFile(null);
       }
     }
   }, [isOpen, isEdit, vendorId]);
@@ -94,42 +88,12 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
           );
         }
       });
-
-      if (vendor.logo_url) {
-        setLogoPreview(vendor.logo_url);
-      }
     } catch (error) {
       console.error('Error loading vendor:', error);
       toast.error('Failed to load vendor data');
       setIsOpen(false);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setLogoFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setLogoPreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const uploadLogo = async (targetVendorId: string) => {
-    if (!logoFile) return;
-
-    try {
-      setLogoUploading(true);
-      await vendorService.uploadLogo(targetVendorId, logoFile);
-    } catch (error) {
-      console.error('Error uploading logo:', error);
-      toast.error('Failed to upload logo');
-    } finally {
-      setLogoUploading(false);
     }
   };
 
@@ -140,19 +104,11 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
       if (isEdit && vendorId) {
         await vendorService.updateVendor(vendorId, data);
 
-        if (logoFile) {
-          await uploadLogo(vendorId);
-        }
-
         toast.success('Vendor updated successfully');
         onSuccess?.();
         setIsOpen(false);
       } else {
         const newVendor = await vendorService.createVendor(data);
-
-        if (logoFile) {
-          await uploadLogo(newVendor.id);
-        }
 
         toast.success('Vendor created successfully');
         onSuccess?.();
@@ -192,7 +148,12 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
           <Drawer.Title>
             {isEdit ? 'Edit Vendor' : 'Create Vendor'}
           </Drawer.Title>
-          <X size={20} weight="bold" cursor="pointer" onClick={handleCancel} />
+          <XIcon
+            size={20}
+            weight="bold"
+            cursor="pointer"
+            onClick={handleCancel}
+          />
         </Drawer.Header>
       </Box>
 
@@ -204,65 +165,7 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
         overflow="auto"
         p="xl">
         <Box mb="lg">
-          <Field label="Vendor Logo">
-            <Flex align="center" gap="md">
-              {logoPreview && (
-                <Box
-                  as="img"
-                  src={logoPreview}
-                  alt="Vendor logo"
-                  w="80px"
-                  h="80px"
-                  borderRadius="md"
-                  objectFit="cover"
-                  border="1px solid"
-                  borderColor="border"
-                />
-              )}
-              <Box>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleLogoChange}
-                  style={{ display: 'none' }}
-                  id="logo-upload"
-                />
-                <label htmlFor="logo-upload">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    disabled={logoUploading}>
-                    {logoUploading ? (
-                      <Spinner size={16} />
-                    ) : (
-                      <Upload size={16} />
-                    )}
-                    {logoPreview ? 'Change Logo' : 'Upload Logo'}
-                  </Button>
-                </label>
-                {logoPreview && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => {
-                      setLogoPreview(null);
-                      setLogoFile(null);
-                    }}>
-                    <X size={16} />
-                    Remove
-                  </Button>
-                )}
-              </Box>
-            </Flex>
-          </Field>
-        </Box>
-
-        <Box mb="lg">
-          <Text variant="lg" fontWeight="600" mb="md">
-            Basic Information
-          </Text>
-
-          <Field label="Vendor Name" error={errors.name?.message}>
+          <Field label="Vendor Name" error={errors.name?.message} required>
             <InputText {...register('name')} placeholder="Enter vendor name" />
           </Field>
 
@@ -301,7 +204,7 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
             Address Information
           </Text>
 
-          <Field label="Address" error={errors.address?.message}>
+          <Field label="Address" error={errors.address?.message} required>
             <Textarea
               {...register('address')}
               placeholder="Enter complete address"
@@ -323,13 +226,6 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
             Business Information
           </Text>
 
-          <Field label="GSTIN" error={errors.gstin?.message}>
-            <InputText
-              {...register('gstin')}
-              placeholder="Enter GSTIN number"
-            />
-          </Field>
-
           <Field
             label="Registration Number"
             error={errors.registration_number?.message}>
@@ -349,11 +245,8 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
             disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={isSubmitting || logoUploading}>
-            {isSubmitting ? <Spinner size={16} /> : <Check size={16} />}
+          <Button type="submit" variant="primary" disabled={isSubmitting}>
+            {isSubmitting ? <Spinner size={16} /> : <CheckIcon size={16} />}
             {isEdit ? 'Update Vendor' : 'Create Vendor'}
           </Button>
         </Flex>

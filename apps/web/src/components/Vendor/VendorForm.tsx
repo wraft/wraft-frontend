@@ -51,7 +51,6 @@ const VendorForm: React.FC<VendorFormProps> = ({
       city: '',
       country: '',
       website: '',
-      gstin: '',
       registration_number: '',
       contact_person: '',
     },
@@ -361,15 +360,6 @@ const VendorForm: React.FC<VendorFormProps> = ({
             </Text>
 
             <Flex gap="md">
-              <Box flex={1}>
-                <Field label="GSTIN Number" error={errors.gstin?.message}>
-                  <InputText
-                    placeholder="Enter GSTIN number"
-                    {...register('gstin')}
-                  />
-                </Field>
-              </Box>
-
               <Box flex={1}>
                 <Field
                   label="Registration Number"

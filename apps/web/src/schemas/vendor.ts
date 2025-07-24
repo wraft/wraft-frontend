@@ -9,10 +9,6 @@ const phoneRegex = /^[+]?[\d\s\-()]+$/;
 const urlRegex =
   /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&=]*)$/;
 
-// GSTIN validation (Indian GST format)
-const gstinRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-
-// Vendor schema
 export const VendorSchema = z.object({
   name: z
     .string()
@@ -49,11 +45,6 @@ export const VendorSchema = z.object({
   website: z
     .string()
     .regex(urlRegex, 'Please enter a valid website URL')
-    .optional()
-    .or(z.literal('')),
-  gstin: z
-    .string()
-    .regex(gstinRegex, 'Please enter a valid GSTIN number')
     .optional()
     .or(z.literal('')),
   registration_number: z
