@@ -382,7 +382,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                     <CalendarIcon size={16} />
                     <Text color="text-secondary">
                       Created:{' '}
-                      {new Date(vendor.created_at).toLocaleDateString()}
+                      {new Date(vendor.inserted_at).toLocaleDateString()}
                     </Text>
                   </Flex>
                   <Flex align="center" gap="sm">
