@@ -163,7 +163,7 @@ export const usePermission = () => {
       roles: 'role',
       users: 'membership',
       settings: 'organisation',
-      // Add more mappings as needed
+      vendors: 'vendor',
     };
 
     const router = componentToPermissionMap[component] || component;

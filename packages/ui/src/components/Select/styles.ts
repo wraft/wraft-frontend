@@ -17,12 +17,14 @@ export const IconWrapper = styled(WUIIconWrapper)``;
 export const Wrapper = styled.div<{ disabled: boolean }>`
   position: relative;
   display: flex;
+
   align-items: center;
   height: 100%;
 `;
 
 export const InputWrapper = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 export const Input = styled("div")<{

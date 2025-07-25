@@ -10,17 +10,19 @@ import {
   InputText,
   Field,
   Drawer,
+  Select,
 } from '@wraft/ui';
 import { useForm, Controller } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import toast from 'react-hot-toast';
 import styled from '@emotion/styled';
-// import { steps } from 'framer-motion';
 import { EmptyFormIcon } from '@wraft/icon';
-import { X } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
+import { vendorService } from 'components/Vendor/vendorService';
 import FieldDate from 'common/FieldDate';
 import StepsIndicator from 'common/Form/StepsIndicator';
+import { VendorResponse } from 'schemas/vendor';
 import { capitalizeFirst, convertToVariableName } from 'utils/index';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
@@ -55,6 +57,7 @@ type FormValues = {
   id?: string;
   template?: any;
   meta?: any;
+  vendor_id?: string;
 };
 
 const metaField = [
@@ -81,6 +84,8 @@ const metaField = [
 const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
   const [contents, setContents] = useState<Array<IField>>([]);
   const [pageMeta, setPageMeta] = useState<any>();
+  const [vendors, setVendors] = useState<VendorResponse[]>([]);
+  const [_loadingVendors, setLoadingVendors] = useState(false);
   const [stepsIndicatorTitle, setStepsIndicatorTitle] = useState<any>([
     'Choose a template',
     'Add content',
@@ -116,6 +121,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
     const uuid = uuidv4();
     setValue('id', uuid);
     loadData();
+    loadVendors();
   }, []);
 
   useEffect(() => {
@@ -146,6 +152,19 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       .catch(() => {
         setLoading(false);
       });
+  };
+
+  const loadVendors = async () => {
+    try {
+      setLoadingVendors(true);
+      const response = await vendorService.getVendors(1);
+      setVendors(response.vendors);
+    } catch (error) {
+      console.error('Error loading vendors:', error);
+      toast.error('Failed to load vendors');
+    } finally {
+      setLoadingVendors(false);
+    }
   };
 
   const goTo = (step: number) => {
@@ -200,7 +219,7 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       <Box flexShrink="0">
         <Drawer.Header>
           <Drawer.Title>Create New Document</Drawer.Title>
-          <X
+          <XIcon
             size={20}
             weight="bold"
             cursor="pointer"
@@ -286,6 +305,26 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
         )}
         {formStep === 2 && (
           <>
+            <Box mb="sm">
+              <Controller
+                control={control}
+                name="vendor_id"
+                render={({ field }) => (
+                  <Field label="Vendor" error={errors?.vendor_id?.message}>
+                    <Select
+                      {...field}
+                      placeholder="Select a vendor"
+                      isClearable
+                      options={vendors.map((vendor) => ({
+                        value: vendor.id,
+                        label: vendor.name,
+                      }))}
+                    />
+                  </Field>
+                )}
+              />
+            </Box>
+
             {fields && fields.length > 0 && (
               <Flex direction="column" gap="md">
                 {fields.map((f: FieldT) => (

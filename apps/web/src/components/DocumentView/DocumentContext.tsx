@@ -77,6 +77,7 @@ interface DocumentContextProps {
   states: any;
   tabActiveId: string;
   token: string | null;
+  vendorId: string | null;
   userType: UserType;
   signerBoxes: any;
   signers: Counterparty[];
@@ -120,6 +121,7 @@ export const DocumentProvider = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [meta, setMeta] = useState<any>({});
   const [nextState, setNextState] = useState<StateState>();
+  const [vendorId, setVendorId] = useState<string>();
   const [pageTitle, setPageTitle] = useState<string>('Untitled document');
   const [prevState, setPrevState] = useState<StateState>();
   const [selectedTemplate, setSelectedTemplate] = useState<any>();
@@ -233,6 +235,9 @@ export const DocumentProvider = ({
 
       if (newContent.contentFields) {
         setFieldValues(newContent.contentFields);
+      }
+      if (newContent.vendor_id) {
+        setVendorId(newContent.vendor_id);
       }
     }
   }, [newContent]);
@@ -494,6 +499,7 @@ export const DocumentProvider = ({
         signerBoxes,
         signers,
         inviteType,
+        vendorId: vendorId || null,
         setAdditionalCollaborator,
         setUserType,
         fetchContentDetails,

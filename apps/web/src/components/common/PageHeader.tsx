@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Flex, Box, Text } from '@wraft/ui';
-import { Minus } from '@phosphor-icons/react';
+import { MinusIcon } from '@phosphor-icons/react';
 
 import Back from 'common/Back';
 
@@ -57,7 +57,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             opacity="0.3"
             fill="gray.1000"
             color="red.700">
-            <Minus size={16} fill="gray.900" />
+            <MinusIcon size={16} fill="gray.900" />
           </Box>
         )}
       </Flex>
@@ -76,7 +76,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       zIndex={10}
       bg="background-primary">
       <Flex alignItems="center">
-        {hasBack && <Back />}
+        {hasBack && (
+          <Back
+            fallbackRoute={(isAuthenticated: boolean) =>
+              isAuthenticated ? '/' : '/login'
+            }
+          />
+        )}
         <Box display="flex" alignItems="center">
           <Flex alignContent="center" alignItems="center">
             {renderTitle}
