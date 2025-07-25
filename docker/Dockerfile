@@ -1,4 +1,4 @@
-ARG NODE_VERSION=22.14.0
+ARG NODE_VERSION=22.17.0
 # Alpine image
 FROM node:${NODE_VERSION}-alpine AS alpine
 RUN apk update
