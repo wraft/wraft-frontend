@@ -2,10 +2,8 @@ import { z } from 'zod';
 
 import { uuidRegex } from 'utils/regex';
 
-// Phone number validation (international format)
 const phoneRegex = /^[+]?[\d\s\-()]+$/;
 
-// URL validation (basic)
 const urlRegex =
   /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&=]*)$/;
 
@@ -75,7 +73,6 @@ export const VendorSchema = z.object({
     ),
 });
 
-// Vendor contact schema
 export const VendorContactSchema = z.object({
   name: z
     .string()
@@ -102,10 +99,9 @@ export const VendorContactSchema = z.object({
   vendor_id: z.string().regex(uuidRegex, 'Invalid vendor ID').optional(),
 });
 
-// For API responses - includes additional fields
 export const VendorResponseSchema = VendorSchema.extend({
   id: z.string().regex(uuidRegex, 'Invalid vendor ID'),
-  created_at: z.string().datetime(),
+  inserted_at: z.string().datetime(),
   updated_at: z.string().datetime(),
   logo_url: z.string().optional(),
   contacts_count: z.number().optional(),
@@ -113,7 +109,7 @@ export const VendorResponseSchema = VendorSchema.extend({
 
 export const VendorContactResponseSchema = VendorContactSchema.extend({
   id: z.string().regex(uuidRegex, 'Invalid contact ID'),
-  created_at: z.string().datetime(),
+  inserted_at: z.string().datetime(),
   updated_at: z.string().datetime(),
   vendor: z
     .object({
@@ -123,17 +119,14 @@ export const VendorContactResponseSchema = VendorContactSchema.extend({
     .optional(),
 });
 
-// For form submissions - excludes file uploads (handled separately)
 export const VendorFormSchema = VendorSchema.omit({ logo: true });
 
-// Type definitions
 export type Vendor = z.infer<typeof VendorSchema>;
 export type VendorContact = z.infer<typeof VendorContactSchema>;
 export type VendorResponse = z.infer<typeof VendorResponseSchema>;
 export type VendorContactResponse = z.infer<typeof VendorContactResponseSchema>;
 export type VendorForm = z.infer<typeof VendorFormSchema>;
 
-// Search and filter schemas
 export const VendorSearchSchema = z.object({
   query: z.string().optional(),
   city: z.string().optional(),
@@ -145,7 +138,6 @@ export const VendorSearchSchema = z.object({
 
 export type VendorSearch = z.infer<typeof VendorSearchSchema>;
 
-// Pagination schema for vendor lists
 export const VendorListResponseSchema = z.object({
   vendors: z.array(VendorResponseSchema),
   page: z.number(),

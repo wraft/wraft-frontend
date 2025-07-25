@@ -108,7 +108,7 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
         onSuccess?.();
         setIsOpen(false);
       } else {
-        const newVendor = await vendorService.createVendor(data);
+        await vendorService.createVendor(data);
 
         toast.success('Vendor created successfully');
         onSuccess?.();

@@ -1,12 +1,12 @@
 import { Box } from '@wraft/ui';
 import {
-  Layout,
-  BuildingOffice,
-  IntersectSquare,
-  PaintRoller,
-  FileArrowUp,
-  Money,
-  Storefront,
+  LayoutIcon,
+  BuildingOfficeIcon,
+  IntersectSquareIcon,
+  PaintRollerIcon,
+  FileArrowUpIcon,
+  MoneyIcon,
+  StorefrontIcon,
 } from '@phosphor-icons/react';
 
 export interface menuLinksProps {
@@ -100,47 +100,47 @@ export const userSettingsLinks: menuLinksProps[] = [
 export const workspaceMenu: menuLinksProps[] = [
   {
     name: 'Workspace',
-    icon: <BuildingOffice size={32} weight="thin" />,
+    icon: <BuildingOfficeIcon size={32} weight="thin" />,
     path: '/manage/workspace',
     desc: 'Manage RBAC',
   },
   {
     name: 'Layouts',
-    icon: <Layout size={32} weight="thin" />,
+    icon: <LayoutIcon size={32} weight="thin" />,
     path: '/manage/layouts',
     desc: 'Manage Document Structures',
     permissions: ['layout.show', 'layout.manage'],
   },
   {
     name: 'Flows',
-    icon: <IntersectSquare size={32} weight="thin" />,
+    icon: <IntersectSquareIcon size={32} weight="thin" />,
     path: '/manage/flows',
     desc: 'Manage Document Flows',
     permissions: ['flow.show', 'flow.manage'],
   },
   {
     name: 'Themes',
-    icon: <PaintRoller size={32} weight="thin" />,
+    icon: <PaintRollerIcon size={32} weight="thin" />,
     path: '/manage/themes',
     desc: 'Manage Themes',
     permissions: ['theme.show', 'theme.manage'],
   },
   {
     name: 'Import',
-    icon: <FileArrowUp size={32} weight="thin" />,
+    icon: <FileArrowUpIcon size={32} weight="thin" />,
     path: '/manage/import',
     desc: 'Import Structs',
   },
   {
     name: 'Vendors',
-    icon: <Storefront size={32} weight="thin" />,
+    icon: <StorefrontIcon size={32} weight="thin" />,
     path: '/vendors',
     desc: 'Manage Vendors',
-    permissions: ['theme.show', 'theme.manage'],
+    permissions: ['vendor.show', 'vendor.manage'],
   },
   {
     name: 'Billing & Subscription',
-    icon: <Money size={32} weight="thin" />,
+    icon: <MoneyIcon size={32} weight="thin" />,
     path: '/manage/billing',
     desc: 'Manage Billing and Subscription',
     permissions: ['payment.show'],

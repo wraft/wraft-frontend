@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 
 import { vendorService } from 'components/Vendor/vendorService';
 import { PageInner } from 'components/common/Atoms';
-import { VendorResponse, VendorSearch } from 'schemas/vendor';
+import { VendorResponse } from 'schemas/vendor';
 import { usePermission } from 'utils/permissions';
 
 interface VendorListProps {
@@ -43,7 +43,6 @@ const VendorList: React.FC<VendorListProps> = ({
   const [totalPages, setTotalPages] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<VendorSearch>({});
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [vendorToDelete, setVendorToDelete] = useState<VendorResponse | null>(
     null,
@@ -53,7 +52,6 @@ const VendorList: React.FC<VendorListProps> = ({
     try {
       setLoading(true);
       const response = await vendorService.getVendors(currentPage, {
-        ...filters,
         query: searchQuery || undefined,
       });
       setVendors(response.vendors);
@@ -65,7 +63,7 @@ const VendorList: React.FC<VendorListProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [currentPage, filters, searchQuery]);
+  }, [currentPage, searchQuery]);
 
   useEffect(() => {
     loadVendors();
@@ -191,7 +189,7 @@ const VendorList: React.FC<VendorListProps> = ({
             title="View details">
             <EyeIcon size={16} />
           </Button>
-          {hasPermission('template', 'show') && (
+          {hasPermission('vendor', 'manage') && (
             <Button
               variant="ghost"
               size="sm"
@@ -203,7 +201,7 @@ const VendorList: React.FC<VendorListProps> = ({
               <PencilSimpleIcon size={16} />
             </Button>
           )}
-          {hasPermission('template', 'show') && (
+          {hasPermission('vendor', 'delete') && (
             <Button
               variant="ghost"
               size="sm"

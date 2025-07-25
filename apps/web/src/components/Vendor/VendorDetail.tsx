@@ -223,7 +223,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
       accessorKey: 'actions',
       cell: ({ row }: any) => (
         <Flex gap="sm">
-          {hasPermission('template', 'show') && (
+          {hasPermission('vendor', 'manage') && (
             <Button
               variant="ghost"
               size="sm"
@@ -232,7 +232,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
               <PencilSimpleIcon size={16} />
             </Button>
           )}
-          {hasPermission('template', 'show') && (
+          {hasPermission('vendor', 'delete') && (
             <Button
               variant="ghost"
               size="sm"
@@ -405,7 +405,7 @@ const VendorDetail: React.FC<VendorDetailProps> = ({ vendorId }) => {
                   Vendor Contacts
                 </Text>
               </Flex>
-              {hasPermission('template', 'show') && (
+              {hasPermission('vendor', 'manage') && (
                 <Button variant="secondary" onClick={handleAddContact}>
                   <PlusIcon size={16} />
                   Add Contact

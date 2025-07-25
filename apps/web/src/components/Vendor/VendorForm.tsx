@@ -391,8 +391,8 @@ const VendorForm: React.FC<VendorFormProps> = ({
               loading={isSubmitting || logoUploading}
               disabled={
                 isEdit
-                  ? !hasPermission('template', 'show')
-                  : !hasPermission('template', 'show')
+                  ? !hasPermission('vendor', 'manage')
+                  : !hasPermission('vendor', 'manage')
               }>
               {isSubmitting ? (
                 <>

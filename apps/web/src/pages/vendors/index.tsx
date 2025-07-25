@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import { NextPage } from 'next';
 import { Button, Flex, Drawer, useDrawer } from '@wraft/ui';
-import { Plus } from '@phosphor-icons/react';
+import { PlusIcon } from '@phosphor-icons/react';
 
 import VendorList from 'components/Vendor/VendorList';
 import VendorDrawer from 'components/Vendor/VendorDrawer';
@@ -58,9 +58,9 @@ const VendorsPage: NextPage = () => {
             />
           }>
           <Flex gap="md">
-            {hasPermission('template', 'show') && (
+            {hasPermission('vendor', 'manage') && (
               <Button variant="secondary" onClick={handleAddVendor}>
-                <Plus size={16} />
+                <PlusIcon size={16} />
                 Add Vendor
               </Button>
             )}
