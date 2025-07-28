@@ -17,13 +17,15 @@ import {
   Drawer,
   useDrawer,
 } from '@wraft/ui';
+// import styled from '@emotion/styled';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import PdfViewer from 'common/PdfViewer';
 import { fetchAPI } from 'utils/models';
-import { Asset } from 'utils/types';
+// import { Asset } from 'utils/types';
 import { usePermission } from 'utils/permissions';
 
+import LayoutScaling from './LayoutScaling';
 import LayoutForm from './LayoutForm';
 
 export interface Layouts {
@@ -53,7 +55,33 @@ export interface Layout {
   height: number;
   engine: IEngine;
   description: string;
-  assets: any[];
+  asset: {
+    id: string;
+    asset_name: string;
+    type: string;
+    file: string;
+    inserted_at: string;
+    updated_at: string;
+  } | null;
+  margin: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  } | null;
+  // Add these properties to match what you're using
+  file?: string;
+  type?: string;
+  updated_at?: string;
+}
+
+interface LayoutAsset {
+  id: string;
+  asset_name: string;
+  file: string;
+  inserted_at: string;
+  updated_at: string;
+  type: string;
 }
 
 export interface IEngine {
@@ -80,23 +108,44 @@ type FormValues = {
   unit: string;
 };
 
+const DEFAULT_MARGINS = {
+  top: 2.54,
+  right: 2.54,
+  bottom: 2.54,
+  left: 2.54,
+};
+
 const LayoutViewForm = ({ cId = '' }: Props) => {
   const { register, setValue } = useForm<FormValues>();
-  const [assets, setAssets] = useState<Array<Asset>>([]);
+  const [assets, setAssets] = useState<LayoutAsset[]>([]);
   const [layout, setLayout] = useState<Layout>();
   const [formStep, setFormStep] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { hasPermission } = usePermission();
-
+  const [showScaling, setShowScaling] = useState<boolean>(false);
+  const [margins, setMargins] = useState(DEFAULT_MARGINS);
+  const pdfDimensions = { width: 21.0, height: 29.7 };
   const stateDrawer = useDrawer();
 
   useEffect(() => {
     if (layout) {
-      const assetsList: Asset[] = layout.assets;
+      // Handle asset if it exists
+      if (layout.asset) {
+        const assetData: LayoutAsset = {
+          id: layout.asset.id,
+          asset_name: layout.asset.asset_name,
+          file: layout.asset.file,
+          inserted_at: layout.asset.inserted_at,
+          updated_at: layout.asset.updated_at,
+          type: layout.asset.type,
+        };
+        addUploads(assetData);
+      }
 
-      assetsList.forEach((a: Asset) => {
-        addUploads(a);
-      });
+      // Set margins from layout if available
+      if (layout.margin) {
+        setMargins(layout.margin);
+      }
 
       setValue('name', layout.name);
       setValue('slug', layout.slug);
@@ -117,6 +166,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
     fetchAPI(`layouts/${cid}`).then((data: any) => {
       const res: Layout = data.layout;
       setLayout(res);
+      // Reset assets when loading new layout
+      setAssets([]);
     });
   };
 
@@ -124,7 +175,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
    * Upload Assets
    * @param data
    */
-  const addUploads = (data: Asset) => {
+  const addUploads = (data: LayoutAsset) => {
     setAssets((prevArray) => [...prevArray, data]);
   };
 
@@ -132,7 +183,19 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
     setFormStep(step);
   };
 
+  const handleMarginsChange = (newMargins: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  }) => {
+    setMargins(newMargins);
+  };
+
   const titles = ['Basic Details', 'Background'];
+  const pdfContainerWidth = 350;
+  const pdfContainerHeight = 375;
+  const pdfViewerHeight = 350;
 
   return (
     <>
@@ -163,28 +226,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
             </Field>
 
             <DisclosureProvider>
-              <Disclosure
-              // as={Box}
-              // sx={{
-              //   border: 'none',
-              //   bg: 'none',
-              //   cursor: 'pointer',
-              //   width: 'fit-content',
-              //   color: 'green.700',
-              //   '&[aria-expanded="true"]': {
-              //     '& svg': {
-              //       transform: 'rotate(-180deg)',
-              //       transition: 'transform 0.3s ease',
-              //     },
-              //   },
-              //   '&[aria-expanded="false"]': {
-              //     '& svg': {
-              //       transform: 'rotate(0deg)',
-              //       transition: 'transform 0.3s ease',
-              //     },
-              //   },
-              // }}
-              >
+              <Disclosure>
                 <Flex alignItems="center">
                   <Text mr="sm">Advanced</Text>
                   <DownIcon />
@@ -204,27 +246,69 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
           </Flex>
 
           {assets && assets.length > 0 && (
-            <Box display={formStep === 1 ? 'block' : 'none'} borderRadius="sm">
-              <Flex
+            <Box display={formStep === 1 ? 'block' : 'none'}>
+              {/* Consistent PDF Container */}
+              <Box
                 bg="background-secondary"
                 w="100%"
-                justify="center"
+                h={`${pdfContainerHeight}px`}
                 p="md"
                 borderColor="border"
                 border="1px dotted"
-                overflow="hidden">
-                <PdfViewer
-                  url={`${assets[assets.length - 1].file}`}
-                  pageNumber={1}
-                  height={350}
-                />
+                borderRadius="sm"
+                overflow="hidden"
+                position="relative">
+                {showScaling ? (
+                  <Flex w="100%" h="100%" justify="center" align="center">
+                    <LayoutScaling
+                      pdfUrl={assets[assets.length - 1].file}
+                      containerWidth={pdfContainerWidth}
+                      containerHeight={pdfViewerHeight}
+                      initialMargins={margins}
+                      onMarginsChange={handleMarginsChange}
+                      pdfDimensions={pdfDimensions}
+                      interactive={false}
+                      showControls={false}
+                    />
+                  </Flex>
+                ) : (
+                  <Flex w="100%" h="100%" justify="center" align="center">
+                    <PdfViewer
+                      url={`${assets[assets.length - 1].file}`}
+                      pageNumber={1}
+                      height={pdfViewerHeight}
+                    />
+                  </Flex>
+                )}
+              </Box>
+
+              <Text py="md">{assets[assets.length - 1].asset_name}</Text>
+
+              {/* Display margins if available */}
+              {/* {layout?.margin && (
+                <Box py="sm">
+                  <Text mb="1" fontWeight="bold">
+                    Current Margins (cm):
+                  </Text>
+                  <Flex gap="2" fontSize="12px">
+                    <Text>Top: {layout.margin.top}</Text>
+                    <Text>Right: {layout.margin.right}</Text>
+                    <Text>Bottom: {layout.margin.bottom}</Text>
+                    <Text>Left: {layout.margin.left}</Text>
+                  </Flex>
+                </Box>
+              )} */}
+
+              <Flex gap="md">
+                <Button variant="tertiary" onClick={() => setIsOpen(true)}>
+                  Edit
+                </Button>
+                <Button
+                  variant="tertiary"
+                  onClick={() => setShowScaling(!showScaling)}>
+                  {showScaling ? 'Hide Scaling' : 'Show Scaling'}
+                </Button>
               </Flex>
-
-              <Text py="md">{assets[assets.length - 1].name}</Text>
-
-              <Button variant="tertiary" onClick={() => setIsOpen(true)}>
-                Edit
-              </Button>
             </Box>
           )}
           {((assets && assets.length < 1) || formStep === 0) && (
@@ -256,4 +340,5 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
     </>
   );
 };
+
 export default LayoutViewForm;

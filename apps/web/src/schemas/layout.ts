@@ -2,6 +2,43 @@ import { z } from 'zod';
 
 import { safeTextRegex, uuidRegex } from 'utils/regex';
 
+const MarginSchema = z.object({
+  top: z
+    .number()
+    .min(0)
+    .max(10)
+    .refine((val) => Number(val.toFixed(2)) === val, {})
+    .transform((val) => parseFloat(val.toFixed(2))),
+  right: z
+    .number()
+    .min(0)
+    .max(10)
+    .refine((val) => Number(val.toFixed(2)) === val, {})
+    .transform((val) => parseFloat(val.toFixed(2))),
+  bottom: z
+    .number()
+    .min(0)
+    .max(10)
+    .refine((val) => Number(val.toFixed(2)) === val, {})
+    .transform((val) => parseFloat(val.toFixed(2))),
+  left: z
+    .number()
+    .min(0)
+    .max(10)
+    .refine((val) => Number(val.toFixed(2)) === val, {})
+    .transform((val) => parseFloat(val.toFixed(2))),
+});
+
+// Asset schema for direct upload
+const AssetSchema = z.object({
+  id: z.string().optional(),
+  asset_name: z.string().optional(),
+  type: z.string().optional(),
+  file: z.string().optional(),
+  inserted_at: z.string().optional(),
+  updated_at: z.string().optional(),
+});
+
 export const Layoutschema = z.object({
   name: z
     .string()
@@ -29,7 +66,13 @@ export const Layoutschema = z.object({
   height: z.coerce.number(),
   width: z.coerce.number(),
   unit: z.string(),
-  assets: z.any(),
+  assets: z.any().optional(),
+
+  // New direct asset field
+  asset: AssetSchema.nullable().optional(),
+  margin: MarginSchema.nullable().optional(),
+  file: z.any().optional(),
+
   frame: z
     .union([
       z.object({
@@ -42,3 +85,4 @@ export const Layoutschema = z.object({
 });
 
 export type Layout = z.infer<typeof Layoutschema>;
+export type LayoutMargins = z.infer<typeof MarginSchema>;
