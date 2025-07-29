@@ -6,6 +6,7 @@ import {
   PaintRollerIcon,
   FileArrowUpIcon,
   MoneyIcon,
+  GearIcon,
   StorefrontIcon,
 } from '@phosphor-icons/react';
 
@@ -144,5 +145,12 @@ export const workspaceMenu: menuLinksProps[] = [
     path: '/manage/billing',
     desc: 'Manage Billing and Subscription',
     permissions: ['payment.show'],
+  },
+  {
+    name: 'Integrations',
+    icon: <GearIcon size={32} weight="thin" />,
+    path: '/manage/integrations',
+    desc: 'Connect and manage integrations',
+    permissions: ['integration.show', 'integration.manage'],
   },
 ];
