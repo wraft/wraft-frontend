@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import {
-  // TickIcon,
-  ApproveTickIcon,
-  CloudUploadIcon,
-  CloseIcon,
-} from '@wraft/icon';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+} from 'react';
+import { ApproveTickIcon, CloudUploadIcon, CloseIcon } from '@wraft/icon';
 import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Box, Flex, Input, Text } from 'theme-ui';
 import { Button } from '@wraft/ui';
 
 import LayoutScaling from 'components/Layout/LayoutScaling';
-// import PdfViewer from 'common/PdfViewer';
 import { IAsset } from 'utils/types';
 
 import ProgressBar from './ProgressBar';
@@ -24,8 +24,8 @@ const DEFAULT_MARGINS = {
 };
 
 const A4_DIMENSIONS = {
-  width: 21.0, // cm
-  height: 29.7, // cm
+  width: 21.0,
+  height: 29.7,
 };
 
 type DropzoneProps = {
@@ -40,8 +40,9 @@ type DropzoneProps = {
   onMarginsChange?: (margins: any) => void;
   onPdfDimensionsChange?: (dimensions: any) => void;
   pdfPreview?: any;
-  // Add props to distinguish between layout and theme usage
   mode?: 'layout' | 'theme';
+  initialMargins?: typeof DEFAULT_MARGINS;
+  isEdit?: boolean;
 };
 
 const Dropzone = ({
@@ -55,34 +56,111 @@ const Dropzone = ({
   noChange = false,
   onMarginsChange,
   pdfPreview,
-  mode = 'layout', // Default to layout mode
+  mode = 'layout',
+  initialMargins = DEFAULT_MARGINS,
 }: DropzoneProps) => {
   const { setValue, watch, register } = useFormContext();
-  const [margins, setMargins] = useState(DEFAULT_MARGINS);
+  const [margins, setMargins] = useState(initialMargins);
   const files = watch('file');
-  // const themeui = useThemeUI();
+
+  const stablePdfUrlRef = useRef<string>('');
+  const marginsRef = useRef(initialMargins);
+  const isUpdatingMarginsRef = useRef(false);
+
+  useEffect(() => {
+    if (!isUpdatingMarginsRef.current) {
+      marginsRef.current = initialMargins;
+      setMargins(initialMargins);
+    }
+  }, [initialMargins]);
+
+  const convertFileToDataUrl = useCallback((file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }, []);
 
   useEffect(() => {
     if (files && files.length > 0) {
       setIsSubmit((prev: boolean) => !prev);
+
+      if (mode === 'layout' && files[0].type === 'application/pdf') {
+        const fileName = files[0].name;
+
+        if (!pdfPreview || pdfPreview.name !== fileName) {
+          convertFileToDataUrl(files[0])
+            .then((dataUrl) => {
+              stablePdfUrlRef.current = dataUrl;
+              setPdfPreview?.({
+                name: fileName,
+                file: dataUrl,
+                type: files[0].type,
+              });
+            })
+            .catch((error) => {
+              console.error('Error converting file to data URL:', error);
+            });
+        }
+      }
     }
-  }, [files, setIsSubmit]);
+  }, [
+    files,
+    setIsSubmit,
+    mode,
+    setPdfPreview,
+    convertFileToDataUrl,
+    pdfPreview,
+  ]);
+
+  const marginsChangeTimeoutRef = useRef<NodeJS.Timeout>();
+
+  const handleMarginsChange = useCallback(
+    (newMargins: typeof DEFAULT_MARGINS) => {
+      console.log('Dropzone: Margins changing to:', newMargins);
+
+      isUpdatingMarginsRef.current = true;
+      setMargins(newMargins);
+      marginsRef.current = newMargins;
+
+      if (marginsChangeTimeoutRef.current) {
+        clearTimeout(marginsChangeTimeoutRef.current);
+      }
+
+      marginsChangeTimeoutRef.current = setTimeout(() => {
+        if (onMarginsChange) {
+          console.log('Dropzone: Calling onMarginsChange with:', newMargins);
+          onMarginsChange(newMargins);
+        }
+        isUpdatingMarginsRef.current = false;
+      }, 150);
+    },
+    [onMarginsChange],
+  );
 
   useEffect(() => {
-    if (onMarginsChange) {
-      onMarginsChange(margins);
-    }
-  }, [margins, onMarginsChange]);
+    return () => {
+      if (marginsChangeTimeoutRef.current) {
+        clearTimeout(marginsChangeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const onDrop = useCallback(
     (droppedFiles: any) => {
       setValue('file', droppedFiles, { shouldValidate: true });
-      // Reset margins to default when a new file is dropped (only for layout mode)
       if (mode === 'layout') {
-        setMargins(DEFAULT_MARGINS);
+        const resetMargins = DEFAULT_MARGINS;
+        setMargins(resetMargins);
+        marginsRef.current = resetMargins;
+        if (onMarginsChange) {
+          onMarginsChange(resetMargins);
+        }
       }
     },
-    [setValue, setPdfPreview, mode],
+    [setValue, mode, onMarginsChange],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -98,66 +176,79 @@ const Dropzone = ({
 
   register('file');
 
-  const handleDeleteFile = () => {
+  const handleDeleteFile = useCallback(() => {
     setValue('file', undefined);
-    setPdfPreview && setPdfPreview(undefined);
-    setDeleteAssets && setDeleteAssets((prev: boolean) => !prev);
+    setPdfPreview?.(undefined);
+    setDeleteAssets?.((prev: boolean) => !prev);
+    stablePdfUrlRef.current = '';
+
     if (mode === 'layout') {
-      setMargins(DEFAULT_MARGINS); // Reset margins when file is deleted (only for layout)
-    }
-  };
-
-  const handleMarginsChange = useCallback(
-    (newMargins: typeof DEFAULT_MARGINS) => {
-      setMargins(newMargins);
+      const resetMargins = DEFAULT_MARGINS;
+      setMargins(resetMargins);
+      marginsRef.current = resetMargins;
       if (onMarginsChange) {
-        onMarginsChange(newMargins);
+        onMarginsChange(resetMargins);
       }
-    },
-    [onMarginsChange],
-  );
+    }
+  }, [setValue, setPdfPreview, setDeleteAssets, mode, onMarginsChange]);
 
-  const getCurrentPdfUrl = () => {
-    // Only handle pdfPreview for layout mode
-    if (mode === 'layout' && pdfPreview && pdfPreview.file) {
+  const getCurrentPdfUrl = useCallback(() => {
+    if (mode === 'layout' && pdfPreview?.file) {
       return pdfPreview.file;
     }
     if (assets && assets.length > 0) {
       return assets[assets.length - 1].file;
     }
-    if (files && files.length > 0) {
-      return URL.createObjectURL(files[0]);
-    }
     return null;
-  };
+  }, [mode, pdfPreview, assets]);
 
-  const currentPdfUrl = getCurrentPdfUrl();
+  const currentPdfUrl = useMemo(() => getCurrentPdfUrl(), [getCurrentPdfUrl]);
 
-  // Different logic for hasFile based on mode
-  const hasFile =
-    mode === 'layout'
+  const hasFile = useMemo(() => {
+    return mode === 'layout'
       ? pdfPreview ||
-        (assets && assets.length > 0) ||
-        (files && files.length > 0)
-      : files && files.length > 0; // For theme mode, only check files
+          (assets && assets.length > 0) ||
+          (files && files.length > 0)
+      : files && files.length > 0;
+  }, [mode, pdfPreview, assets, files]);
 
-  // Only show layout scaling for layout mode and PDF files
-  const showLayoutScaling =
-    mode === 'layout' &&
-    hasFile &&
-    (accept?.['application/pdf'] ||
-      (files && files[0] && files[0].type === 'application/pdf') ||
-      (pdfPreview && pdfPreview.type === 'application/pdf'));
+  const showLayoutScaling = useMemo(() => {
+    return (
+      mode === 'layout' &&
+      hasFile &&
+      currentPdfUrl &&
+      (accept?.['application/pdf'] ||
+        (files && files[0]?.type === 'application/pdf') ||
+        pdfPreview?.type === 'application/pdf')
+    );
+  }, [mode, hasFile, currentPdfUrl, accept, files, pdfPreview]);
+
+  const layoutScalingComponent = useMemo(() => {
+    if (!showLayoutScaling || !currentPdfUrl) return null;
+
+    return (
+      <Box paddingY="sm" mr="xxl">
+        <LayoutScaling
+          pdfUrl={currentPdfUrl}
+          containerWidth={350}
+          containerHeight={350}
+          initialMargins={margins}
+          onMarginsChange={handleMarginsChange}
+          pdfDimensions={A4_DIMENSIONS}
+          key={`layout-scaling-${currentPdfUrl}`}
+        />
+      </Box>
+    );
+  }, [showLayoutScaling, currentPdfUrl, margins, handleMarginsChange]);
 
   return (
     <Box
       sx={{
         width: '100%',
-        border: '1px dashed',
         borderColor: 'neutral.200',
         borderRadius: '4px',
       }}>
-      {hasFile && showLayoutScaling && (
+      {showLayoutScaling && (
         <Box
           sx={{
             width: '100%',
@@ -165,30 +256,8 @@ const Dropzone = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            bg: 'background-primary',
           }}>
-          <Box
-            onClick={handleDeleteFile}
-            sx={{
-              position: 'absolute',
-              top: 3,
-              right: 3,
-              cursor: 'pointer',
-              zIndex: 1000,
-            }}>
-            <CloseIcon width={24} height={24} />
-          </Box>
-
-          <Box>
-            <LayoutScaling
-              pdfUrl={currentPdfUrl || `${assets?.[assets.length - 1]?.file}`}
-              containerWidth={350}
-              containerHeight={350}
-              initialMargins={margins}
-              onMarginsChange={handleMarginsChange}
-              pdfDimensions={A4_DIMENSIONS}
-            />
-          </Box>
+          {layoutScalingComponent}
 
           <Box
             sx={{
@@ -196,7 +265,7 @@ const Dropzone = ({
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              mt: '3xl',
+              mt: 'xxl',
               gap: 'md',
             }}>
             <Text
@@ -204,15 +273,15 @@ const Dropzone = ({
               sx={{
                 fontWeight: 'heading',
                 color: '#475569',
-                fontSize: '14px',
+                fontSize: '12px',
               }}>
               Replace the Current File with New File
             </Text>
             <Button
+              size="md"
               variant="tertiary"
               onClick={(e) => {
                 e.preventDefault();
-                // Programmatically trigger file input click for re-upload
                 const inputElement =
                   document.querySelector('input[type="file"]');
                 if (inputElement) {
@@ -224,6 +293,7 @@ const Dropzone = ({
           </Box>
         </Box>
       )}
+
       <Box
         {...getRootProps()}
         sx={{
@@ -244,21 +314,20 @@ const Dropzone = ({
           sx={{ display: 'none' }}
           {...getInputProps({})}
         />
+
         {!hasFile && (
-          <Box
-            sx={{
-              height: '52px',
-              width: '52px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: '4px',
-            }}>
-            <CloudUploadIcon width={32} height={32} />
-          </Box>
-        )}
-        <>
-          {(!files || noChange) && (
+          <>
+            <Box
+              sx={{
+                height: '52px',
+                width: '52px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '4px',
+              }}>
+              <CloudUploadIcon width={32} height={32} />
+            </Box>
             <Flex
               sx={{
                 flexDirection: 'column',
@@ -270,33 +339,35 @@ const Dropzone = ({
               </Text>
               <Text variant="capM">{types || 'All'} - Max file size 10MB</Text>
             </Flex>
-          )}
-          {files && files[0] && !noChange && (
-            <Flex sx={{ alignItems: 'center' }}>
-              <Text variant="pM" sx={{ flexShrink: 0 }}>
-                {files[0].name}
-              </Text>
-              {assets && assets.length > 0 && (
-                <Box
-                  sx={{
-                    color: 'green.700',
-                    ml: '12px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                  }}>
-                  <ApproveTickIcon />
-                </Box>
-              )}
-            </Flex>
-          )}
-        </>
-        {progress && progress > 0 && !noChange ? (
+          </>
+        )}
+
+        {hasFile && !showLayoutScaling && (
+          <Flex sx={{ alignItems: 'center' }}>
+            <Text variant="pM" sx={{ flexShrink: 0 }}>
+              {pdfPreview?.name ||
+                (assets && assets.length > 0
+                  ? assets[assets.length - 1]?.asset_name
+                  : '') ||
+                (files && files[0]?.name)}
+            </Text>
+            <Box
+              sx={{
+                color: 'green.700',
+                ml: '12px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+              }}>
+              <ApproveTickIcon />
+            </Box>
+          </Flex>
+        )}
+
+        {progress && progress > 0 && !noChange && (
           <Box mt={3}>
             <ProgressBar progress={progress} />
           </Box>
-        ) : (
-          <div />
         )}
       </Box>
     </Box>

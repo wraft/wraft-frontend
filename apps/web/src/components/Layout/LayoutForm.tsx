@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Disclosure,
   DisclosureContent,
@@ -22,12 +22,10 @@ import {
 } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 
-// import AssetForm from 'components/Theme/AssetForm';
 import StepsIndicator from 'common/Form/StepsIndicator';
 import Dropzone from 'common/Dropzone';
 import { Layoutschema, Layout } from 'schemas/layout';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
-// import { Asset } from 'utils/types';
 
 export interface Creator {
   updated_at: string;
@@ -51,7 +49,6 @@ export interface LayoutContent {
   height: number;
   engine: IEngine;
   description: string;
-  // assets: any[];
   frame: IFrame | null;
   asset: {
     id: string;
@@ -67,6 +64,13 @@ export interface LayoutContent {
     bottom: number;
     left: number;
   } | null;
+  margin?: {
+    // Add this for API response compatibility
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  } | null;
 }
 
 export interface IFrame {
@@ -76,6 +80,7 @@ export interface IFrame {
   id: string;
   description: string;
 }
+
 export interface IEngine {
   updated_at: string;
   name: string;
@@ -89,6 +94,8 @@ interface Props {
   setRerender?: any;
   cId?: string;
   step?: number;
+  initialMargins?: typeof DEFAULT_MARGINS;
+  onMarginsChange?: (margins: typeof DEFAULT_MARGINS) => void;
 }
 
 const DEFAULT_MARGINS = {
@@ -103,16 +110,27 @@ export const SLUGITEMS = [
   { value: 'pletter', label: 'Pletter' },
 ];
 
-const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
-  // const [assets, setAssets] = useState<Array<Asset>>([]);
+const LayoutForm = ({
+  setOpen,
+  setRerender,
+  cId = '',
+  step = 0,
+  initialMargins = DEFAULT_MARGINS,
+  onMarginsChange,
+}: Props) => {
   const [formStep, setFormStep] = useState(step);
-  // const [isDeleteAssets, setDeleteAssets] = useState<boolean>(false);
   const [isEdit, setEdit] = useState<boolean>(false);
   const [layout, setLayout] = useState<LayoutContent>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [margins, setMargins] = useState(DEFAULT_MARGINS);
   const [_isSubmit, setIsSubmit] = useState<boolean>(false);
   const [pdfPreview, setPdfPreview] = useState<any>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+  // Key change: Initialize margins from props or default, will be updated when layout loads
+  const [margins, setMargins] = useState(initialMargins);
+
+  // Track if we're in the process of loading layout data
+  const [isLoadingLayout, setIsLoadingLayout] = useState(false);
 
   const methods = useForm<Layout>({
     mode: 'onBlur',
@@ -134,32 +152,51 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
 
   const files = watch('file');
 
-  // useEffect(() => {
-  //   deleteAllAsset();
-  // }, [isDeleteAssets]);
-
+  // Handle file changes
   useEffect(() => {
     if (files && files.length > 0) {
-      setIsSubmit((prev: boolean) => !prev);
+      if (!pdfPreview || pdfPreview.name !== files[0].name) {
+        setIsSubmit((prev: boolean) => !prev);
+      }
     }
-  }, [files]);
+  }, [files, pdfPreview]);
 
-  // useEffect(() => {
-  //   const assetsPath =
-  //     assets.length > 0 ? assets.map((asset: Asset) => asset.id).join(',') : '';
-
-  //   setValue('assets', assetsPath);
-  // }, [assets]);
-
+  // Load layout data when cId changes
   useEffect(() => {
-    if (layout) {
+    if (cId) {
+      loadLayout(cId);
+    }
+  }, [cId]);
+
+  // Load engines on mount
+  useEffect(() => {
+    loadEngine();
+  }, []);
+
+  // Handle margins change callback
+  const handleMarginsChange = useCallback(
+    (newMargins: typeof DEFAULT_MARGINS) => {
+      setMargins(newMargins);
+      if (onMarginsChange) {
+        onMarginsChange(newMargins);
+      }
+    },
+    [onMarginsChange],
+  );
+
+  // Sync margins with initialMargins when not loading layout
+  useEffect(() => {
+    if (!isLoadingLayout && !isEdit) {
+      setMargins(initialMargins);
+    }
+  }, [initialMargins, isLoadingLayout, isEdit]);
+
+  // Process layout data when loaded
+  useEffect(() => {
+    if (layout && !isLoadingLayout) {
       setEdit(true);
-      // const assetsList: Asset[] = layout.assets;
 
-      // assetsList.forEach((a: Asset) => {
-      //   addUploads(a);
-      // });
-
+      // Set form values
       setValue('name', layout.name);
       setValue('slug', layout.slug);
       setValue('height', layout.height || 40);
@@ -167,17 +204,32 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       setValue('description', layout?.description);
       setValue('engine', layout?.engine);
       setValue('unit', layout?.unit || '');
+
       if (layout?.frame) {
         setValue('frame', layout.frame);
       } else {
         setValue('frame', '');
       }
 
-      // Set margins if available
-      if (layout.margins) {
-        setMargins(layout.margins);
+      // Handle margins - check both possible property names from API
+      const layoutMargins = layout.margin || layout.margins;
+      if (layoutMargins) {
+        console.log('Setting margins from layout:', layoutMargins);
+        setMargins(layoutMargins);
+        // Also call the callback to sync with parent components
+        if (onMarginsChange) {
+          onMarginsChange(layoutMargins);
+        }
+      } else {
+        // If no margins in layout, use default
+        console.log('No margins in layout, using default');
+        setMargins(DEFAULT_MARGINS);
+        if (onMarginsChange) {
+          onMarginsChange(DEFAULT_MARGINS);
+        }
       }
 
+      // Handle PDF preview
       if (layout.asset) {
         setPdfPreview({
           id: layout.asset.id,
@@ -187,17 +239,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
         });
       }
     }
-  }, [layout]);
-
-  useEffect(() => {
-    loadEngine();
-  }, []);
-
-  useEffect(() => {
-    if (cId) {
-      loadLayout(cId);
-    }
-  }, [cId]);
+  }, [layout, isLoadingLayout, setValue, onMarginsChange]);
 
   const loadEngine = async () => {
     try {
@@ -241,16 +283,21 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
 
   const loadLayout = async (cid: string) => {
     try {
+      setIsLoadingLayout(true);
+      console.log('Loading layout for cid:', cid);
+
       const data: any = await fetchAPI(`layouts/${cid}`);
+      console.log('Layout data received:', data.layout);
+
       setLayout(data.layout);
     } catch (error) {
       console.error('Error loading layout:', error);
+      // Reset to defaults on error
+      setMargins(DEFAULT_MARGINS);
+    } finally {
+      setIsLoadingLayout(false);
     }
   };
-
-  // const addUploads = (data: Asset) => {
-  //   setAssets((prev) => [...prev, data]);
-  // };
 
   const onSearchFrames = async () => {
     try {
@@ -267,37 +314,12 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     }
   };
 
-  // const deleteAllAsset = () => {
-  //   if (layout && layout.asset) {
-  //     const deletePromises = layout.assets.map((asset) => {
-  //       return deleteAPI(`layouts/${layout.id}/assets/${asset.id}`);
-  //     });
-  //     toast.promise(Promise.all(deletePromises), {
-  //       loading: 'Loading...',
-  //       success: () => {
-  //         setAssets([]);
-  //         return `Successfully deleted all assets`;
-  //       },
-  //       error: () => {
-  //         setAssets([]);
-  //         return `Failed to delete all assets`;
-  //       },
-  //     });
-  //   }
-  //   setAssets([]);
-  // };
-
-  const handleMarginsChange = (newMargins: typeof DEFAULT_MARGINS) => {
-    setMargins(newMargins);
-  };
-
   const nextStep = async () => {
     let isValid = false;
 
-    if (step === 0) {
+    if (formStep === 0) {
       isValid = await trigger(['name', 'slug', 'description', 'engine']);
-    } else if (step === 1) {
-      // isValid = await trigger(['asset']);
+    } else if (formStep === 1) {
       isValid = isEdit || (files && files.length > 0);
     }
 
@@ -315,6 +337,8 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
   const onSubmit = async (data: any) => {
     try {
       setIsLoading(true);
+      setUploadProgress(0);
+
       const formData = new FormData();
       formData.append('name', data.name);
       formData.append('description', data.description);
@@ -323,14 +347,14 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       formData.append('unit', data.unit);
       formData.append('slug', data.slug);
       formData.append('engine_id', data.engine.id);
-      // formData.append('screenshot', data.screenshot[0] || null);
       formData.append(
         'frame_id',
         data.frame && data.frame.id ? data.frame.id : '',
       );
 
-      // Add margins data
+      // Add current margins data
       const marginsToSend = margins || DEFAULT_MARGINS;
+      console.log('Sending margins:', marginsToSend);
 
       formData.append('margin[top]', marginsToSend.top.toString());
       formData.append('margin[right]', marginsToSend.right.toString());
@@ -340,17 +364,16 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       // Add PDF file if exists
       if (files && files.length > 0) {
         formData.append('file', files[0]);
-        formData.append(
-          'asset_name',
-          files[0].name.substring(0, files[0].name.lastIndexOf('.')),
-        );
+        formData.append('asset_name', files[0].name.replace(/\.[^/.]+$/, ''));
         formData.append('type', 'layout');
       }
 
       const apiUrl = isEdit ? `layouts/${cId}` : 'layouts';
       const apiMethod = isEdit ? putAPI : postAPI;
 
-      await apiMethod(apiUrl, formData);
+      await apiMethod(apiUrl, formData, (progress: number) => {
+        setUploadProgress(progress);
+      });
 
       setOpen(false);
       toast.success(
@@ -377,6 +400,24 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
       console.error(`Error ${isEdit ? 'updating' : 'creating'} layout:`, error);
     }
   };
+
+  // Reset form when opening for new layout
+  const resetForm = useCallback(() => {
+    if (!cId) {
+      setEdit(false);
+      setLayout(undefined);
+      setPdfPreview(null);
+      setMargins(DEFAULT_MARGINS);
+      if (onMarginsChange) {
+        onMarginsChange(DEFAULT_MARGINS);
+      }
+    }
+  }, [cId, onMarginsChange]);
+
+  // Reset form when cId changes to empty (new layout)
+  useEffect(() => {
+    resetForm();
+  }, [resetForm]);
 
   return (
     <FormProvider {...methods}>
@@ -436,13 +477,14 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                   </Box>
                 )}
               />
+
               <Controller
                 control={control}
                 name="frame"
                 render={({ field: { onChange, name, value } }) => (
                   <Field
                     label="Frame"
-                    required={false} // Change to required={true} if it should be mandatory
+                    required={false}
                     error={errors?.frame?.message}>
                     <Search
                       itemToString={(item: any) => item && item.name}
@@ -478,38 +520,8 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                 />
               </Field>
 
-              <Box pb="sm" display="none">
-                {/* {layout && layout.screenshot && (
-                <div>
-                  <Image alt="" src={API_HOST + layout.screenshot} />
-                </div>
-              )} */}
-                {/* <Label htmlFor="screenshot">Screenshot</Label> */}
-                {/* <Input id="screenshot" type="file" {...register('screenshot')} /> */}
-              </Box>
               <DisclosureProvider>
-                <Disclosure
-                // as={dev}
-                // sx={{
-                //   border: 'none',
-                //   bg: 'none',
-                //   cursor: 'pointer',
-                //   width: 'fit-content',
-                //   color: 'green.700',
-                //   '&[aria-expanded="true"]': {
-                //     '& svg': {
-                //       transform: 'rotate(-180deg)',
-                //       transition: 'transform 0.3s ease',
-                //     },
-                //   },
-                //   '&[aria-expanded="false"]': {
-                //     '& svg': {
-                //       transform: 'rotate(0deg)',
-                //       transition: 'transform 0.3s ease',
-                //     },
-                //   },
-                // }}
-                >
+                <Disclosure>
                   <Flex align="center">
                     <Text>Advanced</Text>
                     <ArrowDownIcon />
@@ -549,6 +561,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                   />
                 </DisclosureContent>
               </DisclosureProvider>
+
               <Box mt={3}>
                 <Flex display="none">
                   <Field label="Width" required error={errors?.width?.message}>
@@ -567,6 +580,7 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
               </Box>
             </>
           )}
+
           {formStep === 1 && (
             <Box>
               <Dropzone
@@ -578,10 +592,13 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
                 setIsSubmit={setIsSubmit}
                 onMarginsChange={handleMarginsChange}
                 mode="layout"
+                initialMargins={margins}
+                key={`${cId}-${JSON.stringify(margins)}`} // Force re-render when margins change from API
               />
             </Box>
           )}
         </Flex>
+
         <Flex flexShrink="0" px="xl" py="md" gap="sm">
           {formStep > 0 && (
             <Button
@@ -608,4 +625,5 @@ const LayoutForm = ({ setOpen, setRerender, cId = '', step = 0 }: Props) => {
     </FormProvider>
   );
 };
+
 export default LayoutForm;
