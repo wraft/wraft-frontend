@@ -11,13 +11,13 @@ import styled from '@emotion/styled';
 import PdfViewer from 'common/PdfViewer';
 
 const MarginValue = styled(Box)`
-  background: #f8fafc;
   border-radius: 4px;
   padding: 2px;
   text-align: center;
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
-  min-width: 60px;
+  min-height: 32px; // Reduced from 38px
+  width: 60px;
 
   &:hover {
     background: #f1f5f9;
@@ -27,65 +27,74 @@ const MarginValue = styled(Box)`
 
 const MarginInput = styled(InputText)`
   width: 100%;
-  height: 30px;
+  height: 28px;
   text-align: center;
   font-weight: 600;
   font-size: 12px;
   border: none;
-  background: transparent;
+  padding: 2px 4px;
+  line-height: 1.2;
 
   &:focus {
-    outline: none;
-    background: #ffffff;
-    border: 1px solid #3b82f6;
-    border-radius: 3px;
+    outline: 2px solid #3b82f6;
+    outline-offset: -2px;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
   }
 `;
 
-const MarginHandle = styled(Box)<{
-  isActive: boolean;
-  interactive?: boolean;
-  isVertical?: boolean;
-}>`
-  background: transparent;
-  border: 1px dashed ${(props) => (props.isActive ? '#3b82f6' : '#065f46')};
+const MarginHandle = styled(Box)<{ isActive: boolean; interactive?: boolean }>`
+  background: none;
   transition: all 0.2s ease;
-  border-radius: 2px;
   user-select: none;
-  pointer-events: all;
-
-  ${(props) =>
-    props.isVertical
-      ? `
-    border-left: none;
-    border-right: none;
-  `
-      : `
-    border-top: none;
-    border-bottom: none;
-  `}
 
   ${(props) =>
     props.interactive &&
     `
     &:hover {
-      border-color: #2563eb;
-      transform: scale(1.01);
+      transform: scale(1.2);
     }
   `}
+
+  ${(props) =>
+    props.isActive &&
+    `
+    background-color: rgba(0, 98, 34, 0.3);
+  `}
+
+  &::before {
+    content: '';
+    position: absolute;
+    background-image: repeating-linear-gradient(
+      ${(props) => (props.w === '100%' ? 'to right' : 'to bottom')},
+      #0f766e,
+      #0f766e 2px,
+      transparent 2px,
+      transparent 6px
+    );
+    ${(props) =>
+      props.w === '100%'
+        ? 'width: 100%; height: 4px; top: 50%; left: 0; transform: translateY(-50%);'
+        : 'height: 100%; width: 4px; left: 50%; top: 0; transform: translateX(-50%);'}
+    pointer-events: none;
+  }
 `;
 
-const MarginOverlay = styled(Box)`
-  background: rgba(59, 130, 246, 0.08);
-  border: 2px dashed rgba(59, 130, 246, 0.4);
-  border-radius: 4px;
-  transition: all 0.3s ease;
+const EdgeValueDisplay = styled(Box)`
+  position: absolute;
+  border-bottom: 1px solid;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 200;
   pointer-events: none;
-
-  &:hover {
-    background: rgba(59, 130, 246, 0.12);
-    border-color: rgba(59, 130, 246, 0.6);
-  }
+  user-select: none;
+  min-width: 28px;
+  text-align: center;
+  line-height: 1.2;
 `;
 
 interface LayoutScalingProps {
@@ -110,28 +119,18 @@ interface LayoutScalingProps {
   };
   interactive?: boolean;
   showControls?: boolean;
-  controlsWidth?: number;
 }
-
-const GOOGLE_DOCS_MIN_MARGINS = {
-  top: 0.5,
-  right: 0.5,
-  bottom: 0.5,
-  left: 0.5,
-};
-
-const DEFAULT_MARGINS = {
-  top: 2.54,
-  right: 2.54,
-  bottom: 2.54,
-  left: 2.54,
-};
 
 export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   pdfUrl,
   containerWidth,
   containerHeight,
-  initialMargins = DEFAULT_MARGINS,
+  initialMargins = {
+    top: 2.54,
+    right: 2.54,
+    bottom: 2.54,
+    left: 2.54,
+  },
   onMarginsChange,
   pdfDimensions = {
     width: 21.0,
@@ -139,481 +138,663 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   },
   interactive = true,
   showControls = true,
-  controlsWidth = 270,
 }) => {
   const [margins, setMargins] = useState(initialMargins);
   const [activeDrag, setActiveDrag] = useState<
     keyof typeof initialMargins | null
   >(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMountedRef = useRef(true);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout>();
+  const isUpdatingFromPropsRef = useRef(false);
 
-  // Debounce timer for margin changes
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const formatToTwoDecimals = (value: number): string => {
-    return value.toFixed(2);
-  };
+  const pdfViewerRef = useRef<React.ReactElement | null>(null);
+  const lastPdfUrlRef = useRef<string>('');
+  const lastScaledHeightRef = useRef<number>(0);
 
   const [displayValues, setDisplayValues] = useState({
-    top: formatToTwoDecimals(initialMargins.top),
-    right: formatToTwoDecimals(initialMargins.right),
-    bottom: formatToTwoDecimals(initialMargins.bottom),
-    left: formatToTwoDecimals(initialMargins.left),
+    top: String(Math.round(initialMargins.top * 100) / 100),
+    right: String(Math.round(initialMargins.right * 100) / 100),
+    bottom: String(Math.round(initialMargins.bottom * 100) / 100),
+    left: String(Math.round(initialMargins.left * 100) / 100),
   });
 
-  // Memoize scale calculations to prevent unnecessary recalculations
-  const scaleData = useMemo(() => {
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log('LayoutScaling: initialMargins changed:', initialMargins);
+
+    const marginsChanged =
+      margins.top !== initialMargins.top ||
+      margins.right !== initialMargins.right ||
+      margins.bottom !== initialMargins.bottom ||
+      margins.left !== initialMargins.left;
+
+    if (
+      marginsChanged &&
+      !activeDrag &&
+      !isInputFocused &&
+      isMountedRef.current
+    ) {
+      console.log('LayoutScaling: Updating margins from props');
+      isUpdatingFromPropsRef.current = true;
+
+      setMargins(initialMargins);
+      setDisplayValues({
+        top: String(Math.round(initialMargins.top * 100) / 100),
+        right: String(Math.round(initialMargins.right * 100) / 100),
+        bottom: String(Math.round(initialMargins.bottom * 100) / 100),
+        left: String(Math.round(initialMargins.left * 100) / 100),
+      });
+
+      setTimeout(() => {
+        isUpdatingFromPropsRef.current = false;
+      }, 100);
+    }
+  }, [initialMargins, activeDrag, isInputFocused, margins]);
+
+  const scaleCalculations = useMemo(() => {
     const widthScale = containerWidth / pdfDimensions.width;
     const heightScale = containerHeight / pdfDimensions.height;
     const scale = Math.min(widthScale, heightScale);
+
     const scaledWidth = pdfDimensions.width * scale;
     const scaledHeight = pdfDimensions.height * scale;
+
     const offsetX = (containerWidth - scaledWidth) / 2;
     const offsetY = (containerHeight - scaledHeight) / 2;
 
     return { scale, scaledWidth, scaledHeight, offsetX, offsetY };
   }, [containerWidth, containerHeight, pdfDimensions]);
 
-  // Memoize content area calculations
+  useEffect(() => {
+    const needsNewViewer =
+      lastPdfUrlRef.current !== pdfUrl ||
+      lastScaledHeightRef.current !== scaleCalculations.scaledHeight;
+
+    if (needsNewViewer) {
+      console.log('Creating new PDF viewer - URL or height changed');
+      lastPdfUrlRef.current = pdfUrl;
+      lastScaledHeightRef.current = scaleCalculations.scaledHeight;
+
+      pdfViewerRef.current = (
+        <PdfViewer
+          height={scaleCalculations.scaledHeight}
+          url={pdfUrl}
+          pageNumber={1}
+        />
+      );
+    }
+  }, [pdfUrl, scaleCalculations.scaledHeight]);
+
+  useEffect(() => {
+    if (!pdfViewerRef.current) {
+      pdfViewerRef.current = (
+        <PdfViewer
+          height={scaleCalculations.scaledHeight}
+          url={pdfUrl}
+          pageNumber={1}
+        />
+      );
+    }
+  }, []);
+
+  // Debounced margin change callback with rate limiting
+  const debouncedMarginsChange = useCallback(
+    (newMargins: typeof margins) => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Increase debounce time to reduce network calls
+      debounceTimeoutRef.current = setTimeout(() => {
+        if (
+          isMountedRef.current &&
+          onMarginsChange &&
+          !isUpdatingFromPropsRef.current
+        ) {
+          console.log(
+            'LayoutScaling: Calling onMarginsChange with:',
+            newMargins,
+          );
+          onMarginsChange(newMargins);
+        }
+      }, 200); // Increased from 100ms to 200ms
+    },
+    [onMarginsChange],
+  );
+
+  // Sync display values when margins change from dragging
+  useEffect(() => {
+    if (
+      !isInputFocused &&
+      isMountedRef.current &&
+      !isUpdatingFromPropsRef.current
+    ) {
+      setDisplayValues({
+        top: String(Math.round(margins.top * 100) / 100),
+        right: String(Math.round(margins.right * 100) / 100),
+        bottom: String(Math.round(margins.bottom * 100) / 100),
+        left: String(Math.round(margins.left * 100) / 100),
+      });
+    }
+  }, [margins, isInputFocused]);
+
+  // Optimized mouse move handler with better throttling
+  const throttleRef = useRef<number>(0);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (
+        !activeDrag ||
+        !containerRef.current ||
+        !interactive ||
+        !isMountedRef.current
+      )
+        return;
+
+      const now = Date.now();
+      if (now - throttleRef.current < 32) return; // Reduced from 16ms to 32ms for better performance
+      throttleRef.current = now;
+
+      try {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const rect = containerRef.current.getBoundingClientRect();
+        const newMargins = { ...margins };
+
+        const relativeX =
+          (e.clientX - rect.left - scaleCalculations.offsetX) /
+          scaleCalculations.scale;
+        const relativeY =
+          (e.clientY - rect.top - scaleCalculations.offsetY) /
+          scaleCalculations.scale;
+
+        switch (activeDrag) {
+          case 'top':
+            newMargins.top = Math.max(
+              0,
+              Math.min(relativeY, pdfDimensions.height - margins.bottom - 1),
+            );
+            break;
+          case 'right':
+            newMargins.right = Math.max(
+              0,
+              Math.min(
+                pdfDimensions.width - relativeX,
+                pdfDimensions.width - margins.left - 1,
+              ),
+            );
+            break;
+          case 'bottom':
+            newMargins.bottom = Math.max(
+              0,
+              Math.min(
+                pdfDimensions.height - relativeY,
+                pdfDimensions.height - margins.top - 1,
+              ),
+            );
+            break;
+          case 'left':
+            newMargins.left = Math.max(
+              0,
+              Math.min(relativeX, pdfDimensions.width - margins.right - 1),
+            );
+            break;
+        }
+
+        setMargins(newMargins);
+
+        // Only call debounced change on significant moves (reduces network calls)
+        const significantChange = (
+          Object.keys(newMargins) as Array<keyof typeof newMargins>
+        ).some((key) => Math.abs(newMargins[key] - margins[key]) > 0.1);
+
+        if (significantChange) {
+          debouncedMarginsChange(newMargins);
+        }
+      } catch (error) {
+        console.error('Error during drag:', error);
+        setActiveDrag(null);
+      }
+    },
+    [
+      activeDrag,
+      margins,
+      scaleCalculations,
+      pdfDimensions,
+      interactive,
+      debouncedMarginsChange,
+    ],
+  );
+
+  const handleMouseUp = useCallback(() => {
+    if (isMountedRef.current) {
+      setActiveDrag(null);
+      // Final callback on mouse up to ensure final state is captured
+      if (onMarginsChange && !isUpdatingFromPropsRef.current) {
+        onMarginsChange(margins);
+      }
+    }
+  }, [margins, onMarginsChange]);
+
+  useEffect(() => {
+    if (activeDrag && interactive) {
+      const handleMouseMoveWrapper = (e: MouseEvent) => {
+        try {
+          handleMouseMove(e);
+        } catch (error) {
+          console.error('Mouse move error:', error);
+          setActiveDrag(null);
+        }
+      };
+
+      const handleMouseUpWrapper = () => {
+        try {
+          handleMouseUp();
+        } catch (error) {
+          console.error('Mouse up error:', error);
+          setActiveDrag(null);
+        }
+      };
+
+      document.addEventListener('mousemove', handleMouseMoveWrapper, {
+        passive: false,
+      });
+      document.addEventListener('mouseup', handleMouseUpWrapper);
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMoveWrapper);
+        document.removeEventListener('mouseup', handleMouseUpWrapper);
+      };
+    }
+  }, [activeDrag, handleMouseMove, handleMouseUp, interactive]);
+
+  const handleMouseDown = useCallback(
+    (edge: keyof typeof initialMargins) => (e: React.MouseEvent) => {
+      if (!interactive || !isMountedRef.current) return;
+      try {
+        e.preventDefault();
+        e.stopPropagation();
+        setActiveDrag(edge);
+      } catch (error) {
+        console.error('Error during mouse down:', error);
+      }
+    },
+    [interactive],
+  );
+
+  // Optimized input change handler with debouncing
+  const inputChangeTimeoutRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
+
+  const handleMarginChange = useCallback(
+    (edge: keyof typeof margins, value: string) => {
+      if (!isMountedRef.current) return;
+
+      setDisplayValues((prev) => ({ ...prev, [edge]: value }));
+
+      // Clear existing timeout for this edge
+      if (inputChangeTimeoutRef.current[edge]) {
+        clearTimeout(inputChangeTimeoutRef.current[edge]);
+      }
+
+      // Debounce the actual margin update
+      inputChangeTimeoutRef.current[edge] = setTimeout(() => {
+        const numValue = parseFloat(value);
+
+        if (value === '' || (!isNaN(numValue) && numValue >= 0)) {
+          const finalValue = value === '' ? 0 : numValue;
+          const maxMargin =
+            edge === 'top' || edge === 'bottom'
+              ? pdfDimensions.height - 1
+              : pdfDimensions.width - 1;
+
+          if (finalValue <= maxMargin) {
+            const newMargins = {
+              ...margins,
+              [edge]: finalValue,
+            };
+
+            const contentWidth =
+              pdfDimensions.width - newMargins.left - newMargins.right;
+            const contentHeight =
+              pdfDimensions.height - newMargins.top - newMargins.bottom;
+
+            if (contentWidth > 1 && contentHeight > 1) {
+              setMargins(newMargins);
+              debouncedMarginsChange(newMargins);
+            }
+          }
+        }
+      }, 300); // 300ms debounce for input changes
+    },
+    [margins, pdfDimensions, debouncedMarginsChange],
+  );
+
+  const handleInputFocus = useCallback(() => {
+    setIsInputFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(
+    (edge: keyof typeof margins, value: string) => {
+      if (!isMountedRef.current) return;
+
+      setIsInputFocused(false);
+      const numValue = parseFloat(value);
+
+      if (isNaN(numValue) || value === '') {
+        const currentValue = margins[edge];
+        setDisplayValues((prev) => ({ ...prev, [edge]: String(currentValue) }));
+      } else {
+        const roundedValue = Math.round(numValue * 100) / 100;
+        setDisplayValues((prev) => ({ ...prev, [edge]: String(roundedValue) }));
+
+        // Final update on blur
+        const newMargins = { ...margins, [edge]: roundedValue };
+        setMargins(newMargins);
+        if (onMarginsChange && !isUpdatingFromPropsRef.current) {
+          onMarginsChange(newMargins);
+        }
+      }
+    },
+    [margins, onMarginsChange],
+  );
+
   const contentArea = useMemo(
     () => ({
       width: pdfDimensions.width - margins.left - margins.right,
       height: pdfDimensions.height - margins.top - margins.bottom,
     }),
-    [margins, pdfDimensions],
+    [pdfDimensions, margins],
   );
 
-  // Debounced callback for margin changes
-  const debouncedMarginsChange = useCallback(
-    (newMargins: typeof margins) => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
-
-      debounceTimerRef.current = setTimeout(() => {
-        if (onMarginsChange) {
-          onMarginsChange(newMargins);
-        }
-      }, 150); // Only call after 150ms of no changes
-    },
-    [onMarginsChange],
-  );
-
-  // Handle margin dragging with optimized performance
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (!activeDrag || !containerRef.current || !interactive) return;
-
-      const rect = containerRef.current.getBoundingClientRect();
-      const newMargins = { ...margins };
-
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const relativeX = (x - scaleData.offsetX) / scaleData.scale;
-      const relativeY = (y - scaleData.offsetY) / scaleData.scale;
-
-      switch (activeDrag) {
-        case 'top':
-          newMargins.top = Math.max(
-            GOOGLE_DOCS_MIN_MARGINS.top,
-            Math.min(
-              relativeY,
-              pdfDimensions.height -
-                margins.bottom -
-                GOOGLE_DOCS_MIN_MARGINS.bottom,
-            ),
-          );
-          break;
-        case 'right':
-          newMargins.right = Math.max(
-            GOOGLE_DOCS_MIN_MARGINS.right,
-            Math.min(
-              pdfDimensions.width - relativeX,
-              pdfDimensions.width - margins.left - GOOGLE_DOCS_MIN_MARGINS.left,
-            ),
-          );
-          break;
-        case 'bottom':
-          newMargins.bottom = Math.max(
-            GOOGLE_DOCS_MIN_MARGINS.bottom,
-            Math.min(
-              pdfDimensions.height - relativeY,
-              pdfDimensions.height - margins.top - GOOGLE_DOCS_MIN_MARGINS.top,
-            ),
-          );
-          break;
-        case 'left':
-          newMargins.left = Math.max(
-            GOOGLE_DOCS_MIN_MARGINS.left,
-            Math.min(
-              relativeX,
-              pdfDimensions.width -
-                margins.right -
-                GOOGLE_DOCS_MIN_MARGINS.right,
-            ),
-          );
-          break;
-      }
-
-      setMargins(newMargins);
-      // Don't call the callback during dragging - wait for mouse up
-    },
-    [activeDrag, margins, scaleData, pdfDimensions, interactive],
-  );
-
-  const handleMouseUp = useCallback(() => {
-    if (activeDrag) {
-      // Call the callback immediately when dragging ends
-      if (onMarginsChange) {
-        onMarginsChange(margins);
-      }
-    }
-    setActiveDrag(null);
-  }, [activeDrag, margins, onMarginsChange]);
-
-  useEffect(() => {
-    if (activeDrag && interactive) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [activeDrag, handleMouseMove, handleMouseUp, interactive]);
-
-  // Only trigger debounced callback for non-drag margin changes (like input changes)
-  useEffect(() => {
-    if (!activeDrag) {
-      debouncedMarginsChange(margins);
-    }
-  }, [margins, debouncedMarginsChange, activeDrag]);
-
-  // Update display values when margins change
-  useEffect(() => {
-    setDisplayValues({
-      top: formatToTwoDecimals(margins.top),
-      right: formatToTwoDecimals(margins.right),
-      bottom: formatToTwoDecimals(margins.bottom),
-      left: formatToTwoDecimals(margins.left),
-    });
-  }, [margins]);
-
-  // Cleanup debounce timer
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
+  // NEW: Calculate positions and display values for edge labels
+  const edgeDisplayValues = useMemo(() => {
+    return {
+      top: String(Math.round(margins.top * 100) / 100),
+      right: String(Math.round(margins.right * 100) / 100),
+      bottom: String(Math.round(margins.bottom * 100) / 100),
+      left: String(Math.round(margins.left * 100) / 100),
     };
-  }, []);
-
-  const handleMouseDown = useCallback(
-    (edge: keyof typeof initialMargins) => (e: React.MouseEvent) => {
-      if (!interactive) return;
-      e.preventDefault();
-      e.stopPropagation();
-      setActiveDrag(edge);
-    },
-    [interactive],
-  );
-
-  const handleMarginChange = (edge: keyof typeof margins, value: string) => {
-    setDisplayValues((prev) => ({ ...prev, [edge]: value }));
-
-    const numValue = parseFloat(value);
-
-    if (value === '') {
-      setMargins((prev) => ({
-        ...prev,
-        [edge]: GOOGLE_DOCS_MIN_MARGINS[edge],
-      }));
-    } else if (!isNaN(numValue)) {
-      const maxValue =
-        edge === 'top' || edge === 'bottom'
-          ? pdfDimensions.height - GOOGLE_DOCS_MIN_MARGINS.bottom
-          : pdfDimensions.width - GOOGLE_DOCS_MIN_MARGINS.right;
-
-      const clampedValue = Math.max(
-        GOOGLE_DOCS_MIN_MARGINS[edge],
-        Math.min(numValue, maxValue),
-      );
-
-      const tempMargins = { ...margins, [edge]: clampedValue };
-      const tempContentWidth =
-        pdfDimensions.width - tempMargins.left - tempMargins.right;
-      const tempContentHeight =
-        pdfDimensions.height - tempMargins.top - tempMargins.bottom;
-
-      if (tempContentWidth >= 1 && tempContentHeight >= 1) {
-        setMargins(tempMargins);
-      }
-    }
-  };
-
-  const handleInputBlur = (edge: keyof typeof margins, value: string) => {
-    const numValue = parseFloat(value);
-    const roundedValue = Math.round(numValue * 100) / 100;
-
-    if (isNaN(numValue) || value === '') {
-      setDisplayValues((prev) => ({
-        ...prev,
-        [edge]: formatToTwoDecimals(margins[edge]),
-      }));
-    } else {
-      const maxValue =
-        edge === 'top' || edge === 'bottom'
-          ? pdfDimensions.height - GOOGLE_DOCS_MIN_MARGINS.bottom
-          : pdfDimensions.width - GOOGLE_DOCS_MIN_MARGINS.right;
-
-      const clampedValue = Math.max(
-        GOOGLE_DOCS_MIN_MARGINS[edge],
-        Math.min(roundedValue, maxValue),
-      );
-
-      setMargins((prev) => ({ ...prev, [edge]: clampedValue }));
-      setDisplayValues((prev) => ({
-        ...prev,
-        [edge]: formatToTwoDecimals(clampedValue),
-      }));
-    }
-  };
-
-  // Memoize MarginInputControl to prevent unnecessary re-renders
-  const MarginInputControl = React.memo(function MarginInputControl({
-    edge,
-  }: {
-    edge: keyof typeof margins;
-  }) {
-    const _cmValue = parseFloat(displayValues[edge]) || 0; // Prefix unused var with _
-    // const inchValue = (_cmValue / 2.54).toFixed(2);
-    return (
-      <Box>
-        <MarginValue>
-          <MarginInput
-            value={displayValues[edge]}
-            onChange={(e) => handleMarginChange(edge, e.target.value)}
-            onBlur={(e) => handleInputBlur(edge, e.target.value)}
-            type="number"
-            step="0.01"
-            min={GOOGLE_DOCS_MIN_MARGINS[edge]}
-            max={
-              edge === 'top' || edge === 'bottom'
-                ? pdfDimensions.height - GOOGLE_DOCS_MIN_MARGINS.bottom
-                : pdfDimensions.width - GOOGLE_DOCS_MIN_MARGINS.right
-            }
-          />
-        </MarginValue>
-        {/* <Text fontSize="xs" color="gray.500" textAlign="center">
-            {inchValue} in
-          </Text> */}
-      </Box>
-    );
-  });
+  }, [margins]);
 
   return (
     <Box w="100%">
+      {/* Container with padding for external value displays */}
       <Box
-        ref={containerRef}
         position="relative"
-        w={`${containerWidth}px`}
-        h={`${containerHeight}px`}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        overflow="hidden"
-        mx="auto">
-        {/* PDF Content Container - Static, no re-renders */}
+        w={`${containerWidth + 60}px`} // Extra width for left/right values
+        h={`${containerHeight + 60}px`} // Extra height for top/bottom values
+        mx="auto"
+        py="30px"
+        px="40px">
+        {/* External edge value displays */}
+
+        {showControls && (
+          <>
+            {/* Top value display - centered above container */}
+            <EdgeValueDisplay
+              position="absolute"
+              top="-8px" // Increased distance for better visibility
+              left="50%"
+              transform="translateX(-50%)"
+              borderBottom="2px solid #3b82f6" // Highlight active edge
+            >
+              {edgeDisplayValues.top}
+            </EdgeValueDisplay>
+
+            {/* Right value display - vertically centered to right */}
+            <EdgeValueDisplay
+              position="absolute"
+              top="50%"
+              right="8px" // Consistent with top/bottom positioning
+              transform="translateY(-50%)"
+              borderBottom="2px solid #3b82f6" // Highlight active edge
+            >
+              {edgeDisplayValues.right}
+            </EdgeValueDisplay>
+
+            {/* Bottom value display - centered below container */}
+            <EdgeValueDisplay
+              position="absolute"
+              bottom="-8px" // Increased distance
+              left="50%"
+              transform="translateX(-50%)"
+              borderBottom="2px solid #3b82f6" // Highlight active edge
+            >
+              {edgeDisplayValues.bottom}
+            </EdgeValueDisplay>
+
+            {/* Left value display - vertically centered to left */}
+            <EdgeValueDisplay
+              position="absolute"
+              top="50%"
+              left="34px" // Consistent with other offsets
+              transform="translateY(-50%)"
+              borderBottom="2px solid #3b82f6" // Highlight active edge
+            >
+              {edgeDisplayValues.left}
+            </EdgeValueDisplay>
+          </>
+        )}
+
+        {/* PDF Container */}
         <Box
+          ref={containerRef}
           position="relative"
-          w={`${scaleData.scaledWidth}px`}
-          h={`${scaleData.scaledHeight}px`}>
-          {/* PDF Viewer - Only renders once with the URL */}
-          <Box position="absolute" top="0" left="0" w="100%" h="100%">
-            <PdfViewer
-              key={pdfUrl} // Only re-render when URL actually changes
-              height={scaleData.scaledHeight}
-              url={pdfUrl}
-              pageNumber={1}
-            />
+          w={`${containerWidth}px`}
+          h={`${containerHeight}px`}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          overflow="hidden"
+          mx="auto">
+          <Box
+            position="relative"
+            w={`${scaleCalculations.scaledWidth}px`}
+            h={`${scaleCalculations.scaledHeight}px`}>
+            {/* PERFORMANCE FIX: Use stable PDF viewer reference */}
+            {pdfViewerRef.current}
+
+            {/* Margin handles */}
+            <>
+              {/* Top handle */}
+              <MarginHandle
+                isActive={activeDrag === 'top'}
+                interactive={interactive}
+                position="absolute"
+                left="0"
+                w="100%"
+                h="5px"
+                cursor={interactive ? 'ns-resize' : 'default'}
+                top={`${margins.top * scaleCalculations.scale - 3}px`}
+                zIndex="100"
+                onMouseDown={handleMouseDown('top')}
+              />
+
+              {/* Right handle */}
+              <MarginHandle
+                isActive={activeDrag === 'right'}
+                interactive={interactive}
+                position="absolute"
+                top="0"
+                h="100%"
+                w="5px"
+                cursor={interactive ? 'ew-resize' : 'default'}
+                left={`${(pdfDimensions.width - margins.right) * scaleCalculations.scale - 3}px`}
+                zIndex="100"
+                onMouseDown={handleMouseDown('right')}
+              />
+
+              {/* Bottom handle */}
+              <MarginHandle
+                isActive={activeDrag === 'bottom'}
+                interactive={interactive}
+                position="absolute"
+                left="0"
+                w="100%"
+                h="5px"
+                cursor={interactive ? 'ns-resize' : 'default'}
+                top={`${(pdfDimensions.height - margins.bottom) * scaleCalculations.scale - 3}px`}
+                zIndex="100"
+                onMouseDown={handleMouseDown('bottom')}
+              />
+
+              {/* Left handle */}
+              <MarginHandle
+                isActive={activeDrag === 'left'}
+                interactive={interactive}
+                position="absolute"
+                top="0"
+                h="100%"
+                w="5px"
+                cursor={interactive ? 'ew-resize' : 'default'}
+                left={`${margins.left * scaleCalculations.scale - 3}px`}
+                zIndex="100"
+                onMouseDown={handleMouseDown('left')}
+              />
+            </>
           </Box>
-
-          {/* Margin Overlay - Updates position but doesn't affect PDF */}
-          <MarginOverlay
-            position="absolute"
-            top={`${margins.top * scaleData.scale}px`}
-            left={`${margins.left * scaleData.scale}px`}
-            w={`${contentArea.width * scaleData.scale}px`}
-            h={`${contentArea.height * scaleData.scale}px`}
-          />
-
-          {/* Margin Handles */}
-          <MarginHandle
-            isActive={activeDrag === 'top'}
-            interactive={interactive}
-            position="absolute"
-            left="0"
-            w="100%"
-            h="1px"
-            cursor={interactive ? 'ns-resize' : 'default'}
-            top={`${margins.top * scaleData.scale}px`}
-            zIndex="100"
-            onMouseDown={handleMouseDown('top')}
-            isVertical={false}>
-            {interactive && (
-              <Text
-                position="absolute"
-                top="-20px"
-                left="50%"
-                transform="translateX(-50%)"
-                fontSize="12px"
-                fontWeight="bold"
-                color={activeDrag === 'top' ? '#3b82f6' : '#60a5fa'}
-                pointerEvents="none"
-                whiteSpace="nowrap">
-                {displayValues.top} cm
-              </Text>
-            )}
-          </MarginHandle>
-
-          <MarginHandle
-            isActive={activeDrag === 'right'}
-            interactive={interactive}
-            position="absolute"
-            top="0"
-            h="100%"
-            w="1px"
-            cursor={interactive ? 'ew-resize' : 'default'}
-            left={`${(pdfDimensions.width - margins.right) * scaleData.scale}px`}
-            zIndex="100"
-            onMouseDown={handleMouseDown('right')}
-            isVertical={true}>
-            {interactive && (
-              <Text
-                position="absolute"
-                top="50%"
-                right="-20px"
-                transform="translateY(-50%)"
-                fontSize="12px"
-                fontWeight="bold"
-                color={activeDrag === 'right' ? '#3b82f6' : '#60a5fa'}
-                pointerEvents="none"
-                whiteSpace="nowrap">
-                {displayValues.right} cm
-              </Text>
-            )}
-          </MarginHandle>
-
-          <MarginHandle
-            isActive={activeDrag === 'bottom'}
-            interactive={interactive}
-            position="absolute"
-            left="0"
-            w="100%"
-            h="1px"
-            cursor={interactive ? 'ns-resize' : 'default'}
-            top={`${(pdfDimensions.height - margins.bottom) * scaleData.scale}px`}
-            zIndex="100"
-            onMouseDown={handleMouseDown('bottom')}
-            isVertical={false}>
-            {interactive && (
-              <Text
-                position="absolute"
-                bottom="-20px"
-                left="50%"
-                transform="translateX(-50%)"
-                fontSize="12px"
-                fontWeight="bold"
-                color={activeDrag === 'bottom' ? '#3b82f6' : '#60a5fa'}
-                pointerEvents="none"
-                whiteSpace="nowrap">
-                {displayValues.bottom} cm
-              </Text>
-            )}
-          </MarginHandle>
-
-          <MarginHandle
-            isActive={activeDrag === 'left'}
-            interactive={interactive}
-            position="absolute"
-            top="0"
-            h="100%"
-            w="1px"
-            cursor={interactive ? 'ew-resize' : 'default'}
-            left={`${margins.left * scaleData.scale}px`}
-            zIndex="100"
-            onMouseDown={handleMouseDown('left')}
-            isVertical={true}>
-            {interactive && (
-              <Text
-                position="absolute"
-                top="50%"
-                left="-20px"
-                transform="translateY(-50%)"
-                fontSize="12px"
-                fontWeight="bold"
-                color={activeDrag === 'left' ? '#3b82f6' : '#60a5fa'}
-                pointerEvents="none"
-                whiteSpace="nowrap">
-                {displayValues.left} cm
-              </Text>
-            )}
-          </MarginHandle>
         </Box>
       </Box>
 
-      {/* Input Controls */}
       {showControls && (
-        <Box
-          borderBottom="1px solid #e2e8f0"
-          padding="16px"
-          marginTop="16px"
-          w="100%"
-          maxWidth={`${controlsWidth}px`}
-          mx="auto"
-          bg="white">
-          <Flex direction="column" gap="12px">
-            <Flex justifyContent="space-between" alignItems="center" gap="md">
-              <Box textAlign="left">
-                <Text fontSize="sm" fontWeight="500" color="#64748b">
+        <Box pl="xl">
+          <Box
+            borderBottom="1px solid #e2e8f0"
+            marginTop="xxl"
+            w="100%"
+            maxWidth="259"
+            mx="auto">
+            <Flex
+              justifyContent="space-between"
+              alignItems="center"
+              mb="md"
+              gap="sm">
+              <Flex alignItems="center">
+                <Text
+                  fontSize="sm"
+                  color="#64748b"
+                  fontWeight="500"
+                  minWidth="32px"
+                  pr="xs">
                   Top
                 </Text>
-              </Box>
-              <MarginInputControl edge="top" />
+                <MarginValue>
+                  <MarginInput
+                    value={displayValues.top}
+                    onChange={(e) => handleMarginChange('top', e.target.value)}
+                    onFocus={handleInputFocus}
+                    onBlur={(e) => handleInputBlur('top', e.target.value)}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={pdfDimensions.height - 1}
+                  />
+                </MarginValue>
+              </Flex>
 
-              <Box textAlign="right">
-                <Text fontSize="sm" fontWeight="500" color="#64748b">
+              <Flex alignItems="center">
+                <Text
+                  fontSize="sm"
+                  color="#64748b"
+                  fontWeight="500"
+                  minWidth="32px" // Reduced from 40px
+                  pr="xs">
                   Bottom
                 </Text>
-              </Box>
-              <MarginInputControl edge="bottom" />
+                <MarginValue>
+                  <MarginInput
+                    value={displayValues.bottom}
+                    onChange={(e) =>
+                      handleMarginChange('bottom', e.target.value)
+                    }
+                    onFocus={handleInputFocus}
+                    onBlur={(e) => handleInputBlur('bottom', e.target.value)}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={pdfDimensions.height - 1}
+                  />
+                </MarginValue>
+              </Flex>
             </Flex>
 
-            <Flex justifyContent="space-between" alignItems="center" gap="md">
-              <Box textAlign="left">
-                <Text fontSize="sm" fontWeight="500" color="#64748b">
+            <Flex
+              justifyContent="space-between"
+              alignItems="center"
+              mb="lg"
+              gap="sm">
+              <Flex alignItems="center">
+                <Text
+                  fontSize="sm"
+                  color="#64748b"
+                  fontWeight="500"
+                  minWidth="32px"
+                  pr="xs">
                   Left
                 </Text>
-              </Box>
-              <MarginInputControl edge="left" />
+                <MarginValue>
+                  <MarginInput
+                    value={displayValues.left}
+                    onChange={(e) => handleMarginChange('left', e.target.value)}
+                    onFocus={handleInputFocus}
+                    onBlur={(e) => handleInputBlur('left', e.target.value)}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={pdfDimensions.width - 1}
+                  />
+                </MarginValue>
+              </Flex>
 
-              <Box textAlign="right">
-                <Text fontSize="sm" fontWeight="500" color="#64748b">
+              <Flex alignItems="center">
+                <Text
+                  fontSize="sm"
+                  color="#64748b"
+                  fontWeight="500"
+                  minWidth="32px"
+                  pr="xs">
                   Right
                 </Text>
-              </Box>
-              <MarginInputControl edge="right" />
+                <MarginValue>
+                  <MarginInput
+                    value={displayValues.right}
+                    onChange={(e) =>
+                      handleMarginChange('right', e.target.value)
+                    }
+                    onFocus={handleInputFocus}
+                    onBlur={(e) => handleInputBlur('right', e.target.value)}
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    max={pdfDimensions.width - 1}
+                  />
+                </MarginValue>
+              </Flex>
             </Flex>
-          </Flex>
+          </Box>
         </Box>
       )}
-
-      <Flex justifyContent="space-between" mt="xs" mx="auto" px="3xl">
-        <Text fontSize="sm" fontWeight="500">
+      <Flex
+        justifyContent="space-between"
+        mt="xs"
+        mx="auto"
+        w="260px"
+        ml="88px">
+        <Text fontSize="sm" fontWeight="500" color=" #475569">
           Content area
         </Text>
-        <Text fontSize="sm" fontWeight="500">
+        <Text fontSize="sm" fontWeight="500" color=" #475569">
           {contentArea.width.toFixed(2)} × {contentArea.height.toFixed(2)} cm
         </Text>
       </Flex>

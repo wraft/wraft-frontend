@@ -117,7 +117,7 @@ const AssetForm = ({
             setDeleteAssets={setDeleteAssets}
             multiple={filetype === 'theme'}
             noChange={filetype === 'theme'}
-            mode={filetype} // Add this line to specify the mode
+            mode={filetype}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>
