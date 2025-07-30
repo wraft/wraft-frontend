@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
-import { StateProgress } from 'common/StateProgress';
 import { postAPI } from 'utils/models';
 
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
@@ -18,6 +17,7 @@ import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
 import { usePermissions } from './usePermissions';
 import apiService from './APIModel';
+import FlowProgressBar, { FlowContainer } from './StepTwo';
 
 const DocumentView = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -43,6 +43,7 @@ const DocumentView = () => {
     meta,
     token,
     vendorId,
+    states,
     setPageTitle,
     setContentBody,
     fetchContentDetails,
@@ -153,6 +154,8 @@ const DocumentView = () => {
     setOpenTitleModal(!openTitleModal);
   };
 
+  console.log('contents[flow]', contents);
+
   return (
     <>
       {!loading && pageTitle && (
@@ -177,29 +180,25 @@ const DocumentView = () => {
                   borderBottom="solid 1px"
                   borderColor="border"
                   bg="background-primary">
-                  <Flex gap="sm">
-                    {contents?.flow?.states && (
-                      <StateProgress
-                        states={contents.flow.states}
-                        activeStateId={contents.state?.id}
-                        completedStateIds={
-                          contents.flow.states
-                            ?.filter(
-                              (s: any) =>
-                                s.order < (contents.state?.order || 0),
-                            )
-                            ?.map((s: any) => s.id) || []
-                        }
-                        currentActiveIndex={currentActiveIndex}
-                        nextState={nextState}
-                      />
-                    )}
+                  <FlowContainer>
+                    {states &&
+                      states.map((state: any, i: number) => (
+                        <FlowProgressBar
+                          key={state?.id}
+                          num={i + 1}
+                          state={state?.state}
+                          order={state?.order}
+                          currentActiveIndex={currentActiveIndex}
+                          nextState={nextState}
+                          id={state?.id}
+                        />
+                      ))}
 
                     {contents &&
                       !nextState?.is_user_eligible &&
                       !isMakeCompete &&
                       !isEditable && <ApprovalAwaitingLabel />}
-                  </Flex>
+                  </FlowContainer>
 
                   <Flex ml="auto" alignItems="center">
                     {editorMode === 'view' &&
