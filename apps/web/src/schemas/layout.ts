@@ -66,8 +66,6 @@ export const Layoutschema = z.object({
   width: z.coerce.number(),
   unit: z.string(),
   assets: z.any().optional(),
-
-  // New direct asset field
   asset: AssetSchema.nullable().optional(),
   margin: MarginSchema.nullable().optional(),
   file: z.any().optional(),

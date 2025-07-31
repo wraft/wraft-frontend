@@ -20,7 +20,12 @@ type FormValues = {
   name?: string;
 };
 
-const AssetForm = ({ onUpload, filetype = 'layout' }: AssetFormProps) => {
+const AssetForm = ({
+  onUpload,
+  filetype = 'layout',
+  assets,
+  setDeleteAssets,
+}: AssetFormProps) => {
   const [fileError, setFileError] = React.useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -109,10 +114,11 @@ const AssetForm = ({ onUpload, filetype = 'layout' }: AssetFormProps) => {
                     }
             }
             progress={uploadProgress}
+            assets={assets}
             setIsSubmit={setIsSubmit}
+            setDeleteAssets={setDeleteAssets}
             multiple={filetype === 'theme'}
             noChange={filetype === 'theme'}
-            mode={filetype}
           />
           {fileError && (
             <Box sx={{ maxWidth: '300px' }}>

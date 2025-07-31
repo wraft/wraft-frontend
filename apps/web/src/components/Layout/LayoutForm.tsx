@@ -27,6 +27,8 @@ import Dropzone from 'common/Dropzone';
 import { Layoutschema, Layout } from 'schemas/layout';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 
+import LayoutAsset from './LayoutAsset';
+
 export interface Creator {
   updated_at: string;
   name: string;
@@ -184,15 +186,7 @@ const LayoutForm = ({
         setValue('frame', '');
       }
 
-      const layoutMargins = layout.margin;
-
-      if (layoutMargins) {
-        console.log('LayoutForm: Setting margins from layout:', layoutMargins);
-        setFormMargins(layoutMargins);
-      } else {
-        console.log('LayoutForm: No margins in layout, using default');
-        setFormMargins(DEFAULT_MARGINS);
-      }
+      setFormMargins(layout.margin || DEFAULT_MARGINS);
 
       if (layout.asset) {
         setPdfPreview({
@@ -546,7 +540,7 @@ const LayoutForm = ({
 
           {formStep === 1 && (
             <Box>
-              <Dropzone
+              <LayoutAsset
                 ref={dropzoneRef}
                 accept={{
                   'application/pdf': [],
@@ -554,7 +548,6 @@ const LayoutForm = ({
                 setPdfPreview={setPdfPreview}
                 pdfPreview={pdfPreview}
                 setIsSubmit={setIsSubmit}
-                mode="layout"
                 initialMargins={formMargins}
                 key={`${cId}-${JSON.stringify(formMargins)}`}
               />
