@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Disclosure,
   DisclosureContent,
@@ -52,20 +52,13 @@ export interface LayoutContent {
   frame: IFrame | null;
   asset: {
     id: string;
-    asset_name: string;
+    name: string;
     type: string;
     file?: string;
     inserted_at: string;
     updated_at: string;
   } | null;
-  margins: {
-    top: number;
-    right: number;
-    bottom: number;
-    left: number;
-  } | null;
-  margin?: {
-    // Add this for API response compatibility
+  margin: {
     top: number;
     right: number;
     bottom: number;
@@ -124,12 +117,9 @@ const LayoutForm = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [_isSubmit, setIsSubmit] = useState<boolean>(false);
   const [pdfPreview, setPdfPreview] = useState<any>(null);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-
-  // Key change: Initialize margins from props or default, will be updated when layout loads
-  const [margins, setMargins] = useState(initialMargins);
-
-  // Track if we're in the process of loading layout data
+  const [_uploadProgress, setUploadProgress] = useState<number>(0);
+  const [formMargins, setFormMargins] = useState(initialMargins);
+  const dropzoneRef = useRef<any>(null);
   const [isLoadingLayout, setIsLoadingLayout] = useState(false);
 
   const methods = useForm<Layout>({
@@ -152,7 +142,6 @@ const LayoutForm = ({
 
   const files = watch('file');
 
-  // Handle file changes
   useEffect(() => {
     if (files && files.length > 0) {
       if (!pdfPreview || pdfPreview.name !== files[0].name) {
@@ -161,42 +150,26 @@ const LayoutForm = ({
     }
   }, [files, pdfPreview]);
 
-  // Load layout data when cId changes
   useEffect(() => {
     if (cId) {
       loadLayout(cId);
     }
   }, [cId]);
 
-  // Load engines on mount
   useEffect(() => {
     loadEngine();
   }, []);
 
-  // Handle margins change callback
-  const handleMarginsChange = useCallback(
-    (newMargins: typeof DEFAULT_MARGINS) => {
-      setMargins(newMargins);
-      if (onMarginsChange) {
-        onMarginsChange(newMargins);
-      }
-    },
-    [onMarginsChange],
-  );
-
-  // Sync margins with initialMargins when not loading layout
   useEffect(() => {
     if (!isLoadingLayout && !isEdit) {
-      setMargins(initialMargins);
+      setFormMargins(initialMargins);
     }
   }, [initialMargins, isLoadingLayout, isEdit]);
 
-  // Process layout data when loaded
   useEffect(() => {
     if (layout && !isLoadingLayout) {
       setEdit(true);
 
-      // Set form values
       setValue('name', layout.name);
       setValue('slug', layout.slug);
       setValue('height', layout.height || 40);
@@ -211,35 +184,26 @@ const LayoutForm = ({
         setValue('frame', '');
       }
 
-      // Handle margins - check both possible property names from API
-      const layoutMargins = layout.margin || layout.margins;
+      const layoutMargins = layout.margin;
+
       if (layoutMargins) {
-        console.log('Setting margins from layout:', layoutMargins);
-        setMargins(layoutMargins);
-        // Also call the callback to sync with parent components
-        if (onMarginsChange) {
-          onMarginsChange(layoutMargins);
-        }
+        console.log('LayoutForm: Setting margins from layout:', layoutMargins);
+        setFormMargins(layoutMargins);
       } else {
-        // If no margins in layout, use default
-        console.log('No margins in layout, using default');
-        setMargins(DEFAULT_MARGINS);
-        if (onMarginsChange) {
-          onMarginsChange(DEFAULT_MARGINS);
-        }
+        console.log('LayoutForm: No margins in layout, using default');
+        setFormMargins(DEFAULT_MARGINS);
       }
 
-      // Handle PDF preview
       if (layout.asset) {
         setPdfPreview({
           id: layout.asset.id,
-          name: layout.asset.asset_name,
+          name: layout.asset.name,
           file: layout.asset.file,
           type: layout.asset.type,
         });
       }
     }
-  }, [layout, isLoadingLayout, setValue, onMarginsChange]);
+  }, [layout, isLoadingLayout, setValue]);
 
   const loadEngine = async () => {
     try {
@@ -284,16 +248,15 @@ const LayoutForm = ({
   const loadLayout = async (cid: string) => {
     try {
       setIsLoadingLayout(true);
-      console.log('Loading layout for cid:', cid);
+      console.log('LayoutForm: Loading layout for cid:', cid);
 
       const data: any = await fetchAPI(`layouts/${cid}`);
-      console.log('Layout data received:', data.layout);
+      console.log('LayoutForm: Layout data received:', data.layout);
 
       setLayout(data.layout);
     } catch (error) {
-      console.error('Error loading layout:', error);
-      // Reset to defaults on error
-      setMargins(DEFAULT_MARGINS);
+      console.error('LayoutForm: Error loading layout:', error);
+      setFormMargins(DEFAULT_MARGINS);
     } finally {
       setIsLoadingLayout(false);
     }
@@ -352,16 +315,16 @@ const LayoutForm = ({
         data.frame && data.frame.id ? data.frame.id : '',
       );
 
-      // Add current margins data
-      const marginsToSend = margins || DEFAULT_MARGINS;
-      console.log('Sending margins:', marginsToSend);
+      let marginsToSend = formMargins;
+      if (dropzoneRef.current && dropzoneRef.current.getCurrentMargins) {
+        marginsToSend = dropzoneRef.current.getCurrentMargins();
+      }
 
       formData.append('margin[top]', marginsToSend.top.toString());
       formData.append('margin[right]', marginsToSend.right.toString());
       formData.append('margin[bottom]', marginsToSend.bottom.toString());
       formData.append('margin[left]', marginsToSend.left.toString());
 
-      // Add PDF file if exists
       if (files && files.length > 0) {
         formData.append('file', files[0]);
         formData.append('asset_name', files[0].name.replace(/\.[^/.]+$/, ''));
@@ -371,11 +334,14 @@ const LayoutForm = ({
       const apiUrl = isEdit ? `layouts/${cId}` : 'layouts';
       const apiMethod = isEdit ? putAPI : postAPI;
 
+      if (onMarginsChange) {
+        onMarginsChange(marginsToSend);
+      }
+
       await apiMethod(apiUrl, formData, (progress: number) => {
         setUploadProgress(progress);
       });
 
-      setOpen(false);
       toast.success(
         `Successfully ${isEdit ? 'updated' : 'created'} layout ${data.name}`,
         {
@@ -383,6 +349,8 @@ const LayoutForm = ({
           position: 'top-right',
         },
       );
+
+      setOpen(false);
 
       if (!isEdit) {
         setRerender((previous: boolean) => !previous);
@@ -401,20 +369,15 @@ const LayoutForm = ({
     }
   };
 
-  // Reset form when opening for new layout
   const resetForm = useCallback(() => {
     if (!cId) {
       setEdit(false);
       setLayout(undefined);
       setPdfPreview(null);
-      setMargins(DEFAULT_MARGINS);
-      if (onMarginsChange) {
-        onMarginsChange(DEFAULT_MARGINS);
-      }
+      setFormMargins(DEFAULT_MARGINS);
     }
-  }, [cId, onMarginsChange]);
+  }, [cId]);
 
-  // Reset form when cId changes to empty (new layout)
   useEffect(() => {
     resetForm();
   }, [resetForm]);
@@ -584,16 +547,16 @@ const LayoutForm = ({
           {formStep === 1 && (
             <Box>
               <Dropzone
+                ref={dropzoneRef}
                 accept={{
                   'application/pdf': [],
                 }}
                 setPdfPreview={setPdfPreview}
                 pdfPreview={pdfPreview}
                 setIsSubmit={setIsSubmit}
-                onMarginsChange={handleMarginsChange}
                 mode="layout"
-                initialMargins={margins}
-                key={`${cId}-${JSON.stringify(margins)}`} // Force re-render when margins change from API
+                initialMargins={formMargins}
+                key={`${cId}-${JSON.stringify(formMargins)}`}
               />
             </Box>
           )}
