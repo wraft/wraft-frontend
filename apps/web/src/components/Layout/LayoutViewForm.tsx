@@ -47,22 +47,6 @@ const ToggleSwitch = styled(Label)`
   height: 20px;
 `;
 
-const ToggleInput = styled(Input)`
-  opacity: 0;
-  width: 0;
-  height: 0;
-
-  &:checked + .slider {
-    background-color: #fff;
-    border: 1px solid #cbd5e1;
-  }
-
-  &:checked + .slider:before {
-    background-color: #127d5d;
-    transform: translateX(16px);
-  }
-`;
-
 const ToggleSlider = styled('span')`
   position: absolute;
   cursor: pointer;
@@ -70,10 +54,10 @@ const ToggleSlider = styled('span')`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: green;
+  background-color: #e2e8f0; /* Light gray when inactive */
   transition: 0.2s;
   border-radius: 20px;
-  border: 1px solid transparent;
+  border: 1px solid #cbd5e1; /* Border color */
 
   &.slider:before {
     position: absolute;
@@ -82,9 +66,26 @@ const ToggleSlider = styled('span')`
     width: 16px;
     left: 2px;
     bottom: 1px;
-    background-color: #fff;
+    background-color: #fff; /* White knob */
     transition: 0.2s;
     border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const ToggleInput = styled(Input)`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + .slider {
+    background-color: #127d5d; /* Green when active */
+    border-color: #127d5d;
+  }
+
+  &:checked + .slider:before {
+    transform: translateX(16px);
+    background-color: #fff; /* Keep white knob */
   }
 `;
 
@@ -339,7 +340,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
               <Box
                 bg="background-secondary"
                 w="100%"
-                h="100%"
+                minHeight={`${pdfViewerHeight + 80}px`}
                 p="md"
                 borderColor="border"
                 border="1px dotted"
@@ -347,23 +348,35 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                 overflow="hidden"
                 position="relative">
                 {showScaling ? (
-                  <Flex w="100%" h="100%" justify="center" align="center">
-                    <Box>
-                      <LayoutScaling
-                        pdfUrl={assets[assets.length - 1].file}
-                        containerWidth={pdfContainerWidth}
-                        containerHeight={pdfContainerHeight}
-                        initialMargins={previewMargins}
-                        onMarginsChange={handleMarginsUpdate}
-                        pdfDimensions={pdfDimensions}
-                        interactive={false}
-                        showControls={false}
-                        key={`preview-scaling-${cId}-${JSON.stringify(previewMargins)}-${refreshTrigger}`}
-                      />
-                    </Box>
-                  </Flex>
+                  <Box w="100%" position="relative">
+                    <Flex
+                      w="100%"
+                      h={`${pdfViewerHeight}px`}
+                      justify="center"
+                      align="center"
+                      position="relative">
+                      <Box w="100%" h="100%" position="relative">
+                        <LayoutScaling
+                          pdfUrl={assets[assets.length - 1].file}
+                          containerWidth={pdfContainerWidth}
+                          containerHeight={pdfContainerHeight}
+                          initialMargins={previewMargins}
+                          onMarginsChange={handleMarginsUpdate}
+                          pdfDimensions={pdfDimensions}
+                          interactive={false}
+                          showControls={false}
+                          forceHeight={pdfViewerHeight} // New prop to match PdfViewer height
+                          key={`preview-scaling-${cId}-${JSON.stringify(previewMargins)}-${refreshTrigger}`}
+                        />
+                      </Box>
+                    </Flex>
+                  </Box>
                 ) : (
-                  <Flex w="100%" h="100%" justify="center" align="center">
+                  <Flex
+                    w="100%"
+                    h={`${pdfViewerHeight}px`}
+                    justify="center"
+                    align="center">
                     <PdfViewer
                       url={`${assets[assets.length - 1].file}`}
                       pageNumber={1}
@@ -389,7 +402,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                     />
                     <ToggleSlider className="slider" />
                   </ToggleSwitch>
-                  <ToggleLabel>Show Scaling</ToggleLabel>
+                  <ToggleLabel>Show Scale</ToggleLabel>
                 </ToggleContainer>
               </Flex>
             </Box>

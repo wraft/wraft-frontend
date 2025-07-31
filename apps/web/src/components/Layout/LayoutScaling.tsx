@@ -119,6 +119,7 @@ interface LayoutScalingProps {
   };
   interactive?: boolean;
   showControls?: boolean;
+  forceHeight?: number;
 }
 
 const roundToPrecision = (value: number, decimals: number = 2): number => {
@@ -159,6 +160,7 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   },
   interactive = true,
   showControls = true,
+  forceHeight,
 }) => {
   const [margins, setMargins] = useState(() => cleanMargins(initialMargins));
   const [activeDrag, setActiveDrag] = useState<
@@ -222,18 +224,21 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   }, [initialMargins, activeDrag, isInputFocused, margins]);
 
   const scaleCalculations = useMemo(() => {
-    const widthScale = containerWidth / pdfDimensions.width;
-    const heightScale = containerHeight / pdfDimensions.height;
+    const effectiveHeight = forceHeight || containerHeight;
+    const effectiveWidth = containerWidth;
+
+    const widthScale = effectiveWidth / pdfDimensions.width;
+    const heightScale = effectiveHeight / pdfDimensions.height;
     const scale = Math.min(widthScale, heightScale);
 
     const scaledWidth = pdfDimensions.width * scale;
     const scaledHeight = pdfDimensions.height * scale;
 
-    const offsetX = (containerWidth - scaledWidth) / 2;
-    const offsetY = (containerHeight - scaledHeight) / 2;
+    const offsetX = (effectiveWidth - scaledWidth) / 2;
+    const offsetY = (effectiveHeight - scaledHeight) / 2;
 
     return { scale, scaledWidth, scaledHeight, offsetX, offsetY };
-  }, [containerWidth, containerHeight, pdfDimensions]);
+  }, [containerWidth, containerHeight, pdfDimensions, forceHeight]);
 
   useEffect(() => {
     const needsNewViewer =
@@ -517,12 +522,12 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
     <Box w="100%">
       <Box
         position="relative"
-        w={`${containerWidth + 60}px`}
-        h={`${containerHeight + 60}px`}
+        w={forceHeight ? `${containerWidth}px` : `${containerWidth + 60}px`}
+        h={forceHeight ? `${forceHeight}px` : `${containerHeight + 60}px`}
         mx="auto"
-        py="30px"
-        px="40px">
-        {showControls && (
+        py={forceHeight ? '0' : '30px'}
+        px={forceHeight ? '0' : '40px'}>
+        {showControls && !forceHeight && (
           <>
             <EdgeValueDisplay
               position="absolute"
@@ -567,7 +572,7 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
           ref={containerRef}
           position="relative"
           w={`${containerWidth}px`}
-          h={`${containerHeight}px`}
+          h={`${forceHeight || containerHeight}px`}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -641,130 +646,119 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
         </Box>
       </Box>
 
-      {showControls && (
-        <Box pl="xl">
-          <Box
-            borderBottom="1px solid #e2e8f0"
-            marginTop="xxl"
-            w="100%"
-            maxWidth="259"
-            mx="auto">
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              mb="md"
-              gap="sm">
-              <Flex alignItems="center">
-                <Text
-                  fontSize="sm"
-                  color="#64748b"
-                  fontWeight="500"
-                  minWidth="32px"
-                  pr="xs">
-                  Top
-                </Text>
-                <MarginValue>
-                  <MarginInput
-                    value={displayValues.top}
-                    onChange={(e) => handleMarginChange('top', e.target.value)}
-                    onFocus={handleInputFocus}
-                    onBlur={(e) => handleInputBlur('top', e.target.value)}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max={pdfDimensions.height - 1}
-                  />
-                </MarginValue>
-              </Flex>
-
-              <Flex alignItems="center">
-                <Text
-                  fontSize="sm"
-                  color="#64748b"
-                  fontWeight="500"
-                  minWidth="32px"
-                  pr="xs">
-                  Bottom
-                </Text>
-                <MarginValue>
-                  <MarginInput
-                    value={displayValues.bottom}
-                    onChange={(e) =>
-                      handleMarginChange('bottom', e.target.value)
-                    }
-                    onFocus={handleInputFocus}
-                    onBlur={(e) => handleInputBlur('bottom', e.target.value)}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max={pdfDimensions.height - 1}
-                  />
-                </MarginValue>
-              </Flex>
+      {showControls && !forceHeight && (
+        <Box
+          borderBottom="1px solid #e2e8f0"
+          marginTop="xxl"
+          w="100%"
+          maxWidth="259"
+          mx="auto">
+          <Flex
+            justifyContent="space-between"
+            alignItems="center"
+            mb="md"
+            gap="sm">
+            <Flex alignItems="center">
+              <Text
+                fontSize="sm"
+                color="#64748b"
+                fontWeight="500"
+                minWidth="32px"
+                pr="xs">
+                Top
+              </Text>
+              <MarginValue>
+                <MarginInput
+                  value={displayValues.top}
+                  onChange={(e) => handleMarginChange('top', e.target.value)}
+                  onFocus={handleInputFocus}
+                  onBlur={(e) => handleInputBlur('top', e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max={pdfDimensions.height - 1}
+                />
+              </MarginValue>
             </Flex>
 
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              mb="lg"
-              gap="sm">
-              <Flex alignItems="center">
-                <Text
-                  fontSize="sm"
-                  color="#64748b"
-                  fontWeight="500"
-                  minWidth="32px"
-                  pr="xs">
-                  Left
-                </Text>
-                <MarginValue>
-                  <MarginInput
-                    value={displayValues.left}
-                    onChange={(e) => handleMarginChange('left', e.target.value)}
-                    onFocus={handleInputFocus}
-                    onBlur={(e) => handleInputBlur('left', e.target.value)}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max={pdfDimensions.width - 1}
-                  />
-                </MarginValue>
-              </Flex>
-
-              <Flex alignItems="center">
-                <Text
-                  fontSize="sm"
-                  color="#64748b"
-                  fontWeight="500"
-                  minWidth="32px"
-                  pr="xs">
-                  Right
-                </Text>
-                <MarginValue>
-                  <MarginInput
-                    value={displayValues.right}
-                    onChange={(e) =>
-                      handleMarginChange('right', e.target.value)
-                    }
-                    onFocus={handleInputFocus}
-                    onBlur={(e) => handleInputBlur('right', e.target.value)}
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max={pdfDimensions.width - 1}
-                  />
-                </MarginValue>
-              </Flex>
+            <Flex alignItems="center">
+              <Text
+                fontSize="sm"
+                color="#64748b"
+                fontWeight="500"
+                minWidth="32px"
+                pr="xs">
+                Bottom
+              </Text>
+              <MarginValue>
+                <MarginInput
+                  value={displayValues.bottom}
+                  onChange={(e) => handleMarginChange('bottom', e.target.value)}
+                  onFocus={handleInputFocus}
+                  onBlur={(e) => handleInputBlur('bottom', e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max={pdfDimensions.height - 1}
+                />
+              </MarginValue>
             </Flex>
-          </Box>
+          </Flex>
+
+          <Flex
+            justifyContent="space-between"
+            alignItems="center"
+            mb="lg"
+            gap="sm">
+            <Flex alignItems="center">
+              <Text
+                fontSize="sm"
+                color="#64748b"
+                fontWeight="500"
+                minWidth="32px"
+                pr="xs">
+                Left
+              </Text>
+              <MarginValue>
+                <MarginInput
+                  value={displayValues.left}
+                  onChange={(e) => handleMarginChange('left', e.target.value)}
+                  onFocus={handleInputFocus}
+                  onBlur={(e) => handleInputBlur('left', e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max={pdfDimensions.width - 1}
+                />
+              </MarginValue>
+            </Flex>
+
+            <Flex alignItems="center">
+              <Text
+                fontSize="sm"
+                color="#64748b"
+                fontWeight="500"
+                minWidth="32px"
+                pr="xs">
+                Right
+              </Text>
+              <MarginValue>
+                <MarginInput
+                  value={displayValues.right}
+                  onChange={(e) => handleMarginChange('right', e.target.value)}
+                  onFocus={handleInputFocus}
+                  onBlur={(e) => handleInputBlur('right', e.target.value)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max={pdfDimensions.width - 1}
+                />
+              </MarginValue>
+            </Flex>
+          </Flex>
         </Box>
       )}
-      <Flex
-        justifyContent="space-between"
-        mt="xs"
-        mx="auto"
-        w="260px"
-        ml="88px">
+      <Flex justifyContent="space-between" mt="xs" mx="auto" w="260px">
         <Text fontSize="sm" fontWeight="500" color=" #475569">
           Content area
         </Text>
