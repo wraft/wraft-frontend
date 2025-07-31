@@ -16,7 +16,7 @@ const MarginValue = styled(Box)`
   text-align: center;
   border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
-  min-height: 32px; // Reduced from 38px
+  min-height: 32px;
   width: 60px;
 
   &:hover {
@@ -121,6 +121,27 @@ interface LayoutScalingProps {
   showControls?: boolean;
 }
 
+const roundToPrecision = (value: number, decimals: number = 2): number => {
+  return (
+    Math.round((value + Number.EPSILON) * Math.pow(10, decimals)) /
+    Math.pow(10, decimals)
+  );
+};
+
+const cleanMargins = (margins: {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}) => {
+  return {
+    top: roundToPrecision(margins.top),
+    right: roundToPrecision(margins.right),
+    bottom: roundToPrecision(margins.bottom),
+    left: roundToPrecision(margins.left),
+  };
+};
+
 export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   pdfUrl,
   containerWidth,
@@ -139,7 +160,7 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   interactive = true,
   showControls = true,
 }) => {
-  const [margins, setMargins] = useState(initialMargins);
+  const [margins, setMargins] = useState(() => cleanMargins(initialMargins));
   const [activeDrag, setActiveDrag] = useState<
     keyof typeof initialMargins | null
   >(null);
@@ -154,13 +175,12 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   const lastScaledHeightRef = useRef<number>(0);
 
   const [displayValues, setDisplayValues] = useState({
-    top: String(Math.round(initialMargins.top * 100) / 100),
-    right: String(Math.round(initialMargins.right * 100) / 100),
-    bottom: String(Math.round(initialMargins.bottom * 100) / 100),
-    left: String(Math.round(initialMargins.left * 100) / 100),
+    top: String(roundToPrecision(initialMargins.top)),
+    right: String(roundToPrecision(initialMargins.right)),
+    bottom: String(roundToPrecision(initialMargins.bottom)),
+    left: String(roundToPrecision(initialMargins.left)),
   });
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       isMountedRef.current = false;
@@ -171,13 +191,13 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
   }, []);
 
   useEffect(() => {
-    console.log('LayoutScaling: initialMargins changed:', initialMargins);
+    const cleanedInitialMargins = cleanMargins(initialMargins);
 
     const marginsChanged =
-      margins.top !== initialMargins.top ||
-      margins.right !== initialMargins.right ||
-      margins.bottom !== initialMargins.bottom ||
-      margins.left !== initialMargins.left;
+      margins.top !== cleanedInitialMargins.top ||
+      margins.right !== cleanedInitialMargins.right ||
+      margins.bottom !== cleanedInitialMargins.bottom ||
+      margins.left !== cleanedInitialMargins.left;
 
     if (
       marginsChanged &&
@@ -185,15 +205,14 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
       !isInputFocused &&
       isMountedRef.current
     ) {
-      console.log('LayoutScaling: Updating margins from props');
       isUpdatingFromPropsRef.current = true;
 
-      setMargins(initialMargins);
+      setMargins(cleanedInitialMargins);
       setDisplayValues({
-        top: String(Math.round(initialMargins.top * 100) / 100),
-        right: String(Math.round(initialMargins.right * 100) / 100),
-        bottom: String(Math.round(initialMargins.bottom * 100) / 100),
-        left: String(Math.round(initialMargins.left * 100) / 100),
+        top: String(roundToPrecision(cleanedInitialMargins.top)),
+        right: String(roundToPrecision(cleanedInitialMargins.right)),
+        bottom: String(roundToPrecision(cleanedInitialMargins.bottom)),
+        left: String(roundToPrecision(cleanedInitialMargins.left)),
       });
 
       setTimeout(() => {
@@ -222,7 +241,6 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
       lastScaledHeightRef.current !== scaleCalculations.scaledHeight;
 
     if (needsNewViewer) {
-      console.log('Creating new PDF viewer - URL or height changed');
       lastPdfUrlRef.current = pdfUrl;
       lastScaledHeightRef.current = scaleCalculations.scaledHeight;
 
@@ -248,32 +266,6 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
     }
   }, []);
 
-  // Debounced margin change callback with rate limiting
-  const debouncedMarginsChange = useCallback(
-    (newMargins: typeof margins) => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
-
-      // Increase debounce time to reduce network calls
-      debounceTimeoutRef.current = setTimeout(() => {
-        if (
-          isMountedRef.current &&
-          onMarginsChange &&
-          !isUpdatingFromPropsRef.current
-        ) {
-          console.log(
-            'LayoutScaling: Calling onMarginsChange with:',
-            newMargins,
-          );
-          onMarginsChange(newMargins);
-        }
-      }, 200); // Increased from 100ms to 200ms
-    },
-    [onMarginsChange],
-  );
-
-  // Sync display values when margins change from dragging
   useEffect(() => {
     if (
       !isInputFocused &&
@@ -281,15 +273,14 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
       !isUpdatingFromPropsRef.current
     ) {
       setDisplayValues({
-        top: String(Math.round(margins.top * 100) / 100),
-        right: String(Math.round(margins.right * 100) / 100),
-        bottom: String(Math.round(margins.bottom * 100) / 100),
-        left: String(Math.round(margins.left * 100) / 100),
+        top: String(roundToPrecision(margins.top)),
+        right: String(roundToPrecision(margins.right)),
+        bottom: String(roundToPrecision(margins.bottom)),
+        left: String(roundToPrecision(margins.left)),
       });
     }
   }, [margins, isInputFocused]);
 
-  // Optimized mouse move handler with better throttling
   const throttleRef = useRef<number>(0);
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -302,7 +293,7 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
         return;
 
       const now = Date.now();
-      if (now - throttleRef.current < 32) return; // Reduced from 16ms to 32ms for better performance
+      if (now - throttleRef.current < 32) return;
       throttleRef.current = now;
 
       try {
@@ -352,37 +343,28 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
             break;
         }
 
-        setMargins(newMargins);
+        const cleanedNewMargins = cleanMargins(newMargins);
+        setMargins(cleanedNewMargins);
 
-        // Only call debounced change on significant moves (reduces network calls)
-        const significantChange = (
-          Object.keys(newMargins) as Array<keyof typeof newMargins>
-        ).some((key) => Math.abs(newMargins[key] - margins[key]) > 0.1);
-
-        if (significantChange) {
-          debouncedMarginsChange(newMargins);
-        }
+        (
+          Object.keys(cleanedNewMargins) as Array<
+            keyof typeof cleanedNewMargins
+          >
+        ).some((key) => Math.abs(cleanedNewMargins[key] - margins[key]) > 0.01);
       } catch (error) {
         console.error('Error during drag:', error);
         setActiveDrag(null);
       }
     },
-    [
-      activeDrag,
-      margins,
-      scaleCalculations,
-      pdfDimensions,
-      interactive,
-      debouncedMarginsChange,
-    ],
+    [activeDrag, margins, scaleCalculations, pdfDimensions, interactive],
   );
 
   const handleMouseUp = useCallback(() => {
     if (isMountedRef.current) {
       setActiveDrag(null);
-      // Final callback on mouse up to ensure final state is captured
       if (onMarginsChange && !isUpdatingFromPropsRef.current) {
-        onMarginsChange(margins);
+        const cleanedMargins = cleanMargins(margins);
+        onMarginsChange(cleanedMargins);
       }
     }
   }, [margins, onMarginsChange]);
@@ -433,7 +415,6 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
     [interactive],
   );
 
-  // Optimized input change handler with debouncing
   const inputChangeTimeoutRef = useRef<{ [key: string]: NodeJS.Timeout }>({});
 
   const handleMarginChange = useCallback(
@@ -442,12 +423,10 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
 
       setDisplayValues((prev) => ({ ...prev, [edge]: value }));
 
-      // Clear existing timeout for this edge
       if (inputChangeTimeoutRef.current[edge]) {
         clearTimeout(inputChangeTimeoutRef.current[edge]);
       }
 
-      // Debounce the actual margin update
       inputChangeTimeoutRef.current[edge] = setTimeout(() => {
         const numValue = parseFloat(value);
 
@@ -470,14 +449,15 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
               pdfDimensions.height - newMargins.top - newMargins.bottom;
 
             if (contentWidth > 1 && contentHeight > 1) {
-              setMargins(newMargins);
-              debouncedMarginsChange(newMargins);
+              // PRECISION FIX: Clean margins from input
+              const cleanedMargins = cleanMargins(newMargins);
+              setMargins(cleanedMargins);
             }
           }
         }
-      }, 300); // 300ms debounce for input changes
+      }, 300);
     },
-    [margins, pdfDimensions, debouncedMarginsChange],
+    [margins, pdfDimensions],
   );
 
   const handleInputFocus = useCallback(() => {
@@ -493,16 +473,19 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
 
       if (isNaN(numValue) || value === '') {
         const currentValue = margins[edge];
-        setDisplayValues((prev) => ({ ...prev, [edge]: String(currentValue) }));
+        setDisplayValues((prev) => ({
+          ...prev,
+          [edge]: String(roundToPrecision(currentValue)),
+        }));
       } else {
-        const roundedValue = Math.round(numValue * 100) / 100;
+        const roundedValue = roundToPrecision(numValue);
         setDisplayValues((prev) => ({ ...prev, [edge]: String(roundedValue) }));
 
-        // Final update on blur
         const newMargins = { ...margins, [edge]: roundedValue };
-        setMargins(newMargins);
+        const cleanedMargins = cleanMargins(newMargins);
+        setMargins(cleanedMargins);
         if (onMarginsChange && !isUpdatingFromPropsRef.current) {
-          onMarginsChange(newMargins);
+          onMarginsChange(cleanedMargins);
         }
       }
     },
@@ -511,77 +494,69 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
 
   const contentArea = useMemo(
     () => ({
-      width: pdfDimensions.width - margins.left - margins.right,
-      height: pdfDimensions.height - margins.top - margins.bottom,
+      width: roundToPrecision(
+        pdfDimensions.width - margins.left - margins.right,
+      ),
+      height: roundToPrecision(
+        pdfDimensions.height - margins.top - margins.bottom,
+      ),
     }),
     [pdfDimensions, margins],
   );
 
-  // NEW: Calculate positions and display values for edge labels
   const edgeDisplayValues = useMemo(() => {
     return {
-      top: String(Math.round(margins.top * 100) / 100),
-      right: String(Math.round(margins.right * 100) / 100),
-      bottom: String(Math.round(margins.bottom * 100) / 100),
-      left: String(Math.round(margins.left * 100) / 100),
+      top: String(roundToPrecision(margins.top)),
+      right: String(roundToPrecision(margins.right)),
+      bottom: String(roundToPrecision(margins.bottom)),
+      left: String(roundToPrecision(margins.left)),
     };
   }, [margins]);
 
   return (
     <Box w="100%">
-      {/* Container with padding for external value displays */}
       <Box
         position="relative"
-        w={`${containerWidth + 60}px`} // Extra width for left/right values
-        h={`${containerHeight + 60}px`} // Extra height for top/bottom values
+        w={`${containerWidth + 60}px`}
+        h={`${containerHeight + 60}px`}
         mx="auto"
         py="30px"
         px="40px">
-        {/* External edge value displays */}
-
         {showControls && (
           <>
-            {/* Top value display - centered above container */}
             <EdgeValueDisplay
               position="absolute"
-              top="-8px" // Increased distance for better visibility
+              top="-8px"
               left="50%"
               transform="translateX(-50%)"
-              borderBottom="2px solid #3b82f6" // Highlight active edge
-            >
+              borderBottom="2px solid #3b82f6">
               {edgeDisplayValues.top}
             </EdgeValueDisplay>
 
-            {/* Right value display - vertically centered to right */}
             <EdgeValueDisplay
               position="absolute"
               top="50%"
-              right="8px" // Consistent with top/bottom positioning
+              right="8px"
               transform="translateY(-50%)"
-              borderBottom="2px solid #3b82f6" // Highlight active edge
-            >
+              borderBottom="2px solid #3b82f6">
               {edgeDisplayValues.right}
             </EdgeValueDisplay>
 
-            {/* Bottom value display - centered below container */}
             <EdgeValueDisplay
               position="absolute"
-              bottom="-8px" // Increased distance
+              bottom="-8px"
               left="50%"
               transform="translateX(-50%)"
-              borderBottom="2px solid #3b82f6" // Highlight active edge
-            >
+              borderBottom="2px solid #3b82f6">
               {edgeDisplayValues.bottom}
             </EdgeValueDisplay>
 
-            {/* Left value display - vertically centered to left */}
             <EdgeValueDisplay
               position="absolute"
               top="50%"
-              left="34px" // Consistent with other offsets
+              left="34px"
               transform="translateY(-50%)"
-              borderBottom="2px solid #3b82f6" // Highlight active edge
-            >
+              borderBottom="2px solid #3b82f6">
               {edgeDisplayValues.left}
             </EdgeValueDisplay>
           </>
@@ -599,15 +574,14 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
           overflow="hidden"
           mx="auto">
           <Box
+            backgroundColor="white"
+            boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)"
             position="relative"
             w={`${scaleCalculations.scaledWidth}px`}
             h={`${scaleCalculations.scaledHeight}px`}>
-            {/* PERFORMANCE FIX: Use stable PDF viewer reference */}
             {pdfViewerRef.current}
 
-            {/* Margin handles */}
             <>
-              {/* Top handle */}
               <MarginHandle
                 isActive={activeDrag === 'top'}
                 interactive={interactive}
@@ -708,7 +682,7 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
                   fontSize="sm"
                   color="#64748b"
                   fontWeight="500"
-                  minWidth="32px" // Reduced from 40px
+                  minWidth="32px"
                   pr="xs">
                   Bottom
                 </Text>
