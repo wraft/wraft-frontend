@@ -35,51 +35,54 @@ const ToggleContainer = styled.div`
   gap: 8px;
 `;
 
-const ToggleLabel = styled.span`
+const ToggleLabel = styled(Box)`
   font-size: 14px;
   color: #64748b;
 `;
 
-const ToggleSwitch = styled.label`
+const ToggleSwitch = styled(Label)`
   position: relative;
   display: inline-block;
   width: 36px;
   height: 20px;
 `;
 
-const ToggleInput = styled.input`
+const ToggleInput = styled(Input)`
   opacity: 0;
   width: 0;
   height: 0;
 
   &:checked + .slider {
-    background-color: white; // Green background when active
+    background-color: #fff;
+    border: 1px solid #cbd5e1;
   }
 
   &:checked + .slider:before {
+    background-color: #127d5d;
     transform: translateX(16px);
   }
 `;
 
-const ToggleSlider = styled.span`
+const ToggleSlider = styled('span')`
   position: absolute;
   cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #cbd5e1;
+  background-color: green;
   transition: 0.2s;
   border-radius: 20px;
+  border: 1px solid transparent;
 
-  &:before {
+  &.slider:before {
     position: absolute;
     content: '';
     height: 16px;
     width: 16px;
     left: 2px;
-    bottom: 2px;
-    background-color: green; // White circle
+    bottom: 1px;
+    background-color: #fff;
     transition: 0.2s;
     border-radius: 50%;
   }
@@ -114,7 +117,7 @@ export interface Layout {
   description: string;
   asset: {
     id: string;
-    asset_name: string;
+    name: string;
     type: string;
     file: string;
     inserted_at: string;
@@ -182,36 +185,33 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const pdfDimensions = { width: 21.0, height: 29.7 };
   const stateDrawer = useDrawer();
 
-  // Key fix: Properly initialize and manage margins
-  const [margins, setMargins] = useState(DEFAULT_MARGINS);
+  const [previewMargins, setPreviewMargins] = useState(DEFAULT_MARGINS);
   const [layoutLoaded, setLayoutLoaded] = useState(false);
+
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     if (layout && !layoutLoaded) {
-      console.log('Processing layout data:', layout);
+      console.log('LayoutViewForm: Processing layout data:', layout);
 
       if (layout.asset) {
         const assetData: LayoutAsset = {
           id: layout.asset.id,
-          asset_name: layout.asset.asset_name,
+          asset_name: layout.asset.name,
           file: layout.asset.file,
           inserted_at: layout.asset.inserted_at,
           updated_at: layout.asset.updated_at,
           type: layout.asset.type,
         };
-        setAssets([assetData]); // Reset and set the single asset
+        setAssets([assetData]);
       }
 
-      // Handle margins from API response
       if (layout.margin) {
-        console.log('Setting margins from layout.margin:', layout.margin);
-        setMargins(layout.margin);
+        setPreviewMargins(layout.margin);
       } else {
-        console.log('No margins found, using defaults');
-        setMargins(DEFAULT_MARGINS);
+        setPreviewMargins(DEFAULT_MARGINS);
       }
 
-      // Set form values
       setValue('name', layout.name);
       setValue('slug', layout.slug);
       setValue('height', layout.height || 40);
@@ -225,58 +225,58 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
 
   useEffect(() => {
     if (cId) {
-      // Reset states when loading new layout
       setLayoutLoaded(false);
       setAssets([]);
-      setMargins(DEFAULT_MARGINS);
+      setPreviewMargins(DEFAULT_MARGINS);
       loadLayout(cId);
+
+      return () => {
+        if (!isOpen) {
+          setLayoutLoaded(false);
+          loadLayout(cId);
+        }
+      };
     }
-  }, [cId]);
+  }, [cId, isOpen]);
 
   const loadLayout = (cid: string) => {
-    console.log('Loading layout for cid:', cid);
+    console.log('LayoutViewForm: Loading layout for cid:', cid);
     fetchAPI(`layouts/${cid}`)
       .then((data: any) => {
-        console.log('Layout API response:', data.layout);
+        console.log('LayoutViewForm: Layout API response:', data.layout);
         const res: Layout = data.layout;
         setLayout(res);
       })
       .catch((error) => {
-        console.error('Error loading layout:', error);
-        setMargins(DEFAULT_MARGINS);
+        console.error('LayoutViewForm: Error loading layout:', error);
+        setPreviewMargins(DEFAULT_MARGINS);
       });
-  };
-
-  const addUploads = (data: LayoutAsset) => {
-    setAssets((prevArray) => [...prevArray, data]);
   };
 
   const goTo = (step: number) => {
     setFormStep(step);
   };
 
-  const handleMarginsChange = (newMargins: {
+  const handleMarginsUpdate = (newMargins: {
     top: number;
     right: number;
     bottom: number;
     left: number;
   }) => {
-    console.log('LayoutViewForm: margins changed to:', newMargins);
-    setMargins(newMargins);
+    setPreviewMargins(newMargins);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
-  // Handle form opening - pass current margins to form
   const handleEditClick = () => {
-    console.log('Opening form with current margins:', margins);
     setIsOpen(true);
   };
 
-  // Handle form closing - refresh layout data to get latest margins
   const handleFormClose = () => {
     setIsOpen(false);
-    // Reload layout to get updated margins
+
     if (cId) {
       setLayoutLoaded(false);
+      setAssets([]);
       loadLayout(cId);
     }
   };
@@ -336,7 +336,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
 
           {assets && assets.length > 0 && (
             <Box display={formStep === 1 ? 'block' : 'none'}>
-              {/* Consistent PDF Container */}
               <Box
                 bg="background-secondary"
                 w="100%"
@@ -354,12 +353,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                         pdfUrl={assets[assets.length - 1].file}
                         containerWidth={pdfContainerWidth}
                         containerHeight={pdfContainerHeight}
-                        initialMargins={margins}
-                        onMarginsChange={handleMarginsChange}
+                        initialMargins={previewMargins}
+                        onMarginsChange={handleMarginsUpdate}
                         pdfDimensions={pdfDimensions}
                         interactive={false}
                         showControls={false}
-                        key={`scaling-${cId}-${JSON.stringify(margins)}`}
+                        key={`preview-scaling-${cId}-${JSON.stringify(previewMargins)}-${refreshTrigger}`}
                       />
                     </Box>
                   </Flex>
@@ -375,24 +374,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
               </Box>
 
               <Text py="md">{assets[assets.length - 1].asset_name}</Text>
-
-              {/* {showScaling && margins && (
-                <Box py="sm" mb="md">
-                  <Text mb="1" fontWeight="bold" fontSize="sm">
-                    Current Margins (cm):
-                  </Text>
-                  <Flex gap="10" color="gray.600">
-                    <Text fontSize="12px">Top: {margins.top.toFixed(2)}</Text>
-                    <Text fontSize="12px">
-                      Right: {margins.right.toFixed(2)}
-                    </Text>
-                    <Text fontSize="12px">
-                      Bottom: {margins.bottom.toFixed(2)}
-                    </Text>
-                    <Text fontSize="12px">Left: {margins.left.toFixed(2)}</Text>
-                  </Flex>
-                </Box>
-              )} */}
 
               <Flex gap="md" alignItems="center" justifyContent="space-between">
                 <Button variant="tertiary" onClick={handleEditClick}>
@@ -441,12 +422,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
         onClose={handleFormClose}>
         {isOpen && (
           <LayoutForm
-            initialMargins={margins}
-            onMarginsChange={setMargins}
+            initialMargins={previewMargins}
+            onMarginsChange={handleMarginsUpdate}
             setOpen={handleFormClose}
             cId={cId}
             step={formStep}
-            key={`form-${cId}-${isOpen}`} // Force re-render when opening form
+            key={`form-${cId}-${isOpen}-${refreshTrigger}`}
           />
         )}
       </Drawer>
