@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { DocumentIcon, TickIcon } from '@wraft/icon';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useThemeUI } from 'theme-ui';
 import {
   Box,
@@ -198,7 +198,7 @@ const ThemeForm = () => {
           </Flex>
         </Box>
 
-        <Box>
+        <Box position="relative">
           <ThemePreview
             primaryColor={primaryColor || '#000000'}
             secondaryColor={secondaryColor || '#000000'}
