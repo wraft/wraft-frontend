@@ -580,67 +580,73 @@ export const LayoutScaling: React.FC<LayoutScalingProps> = ({
           mx="auto">
           <Box
             backgroundColor="white"
-            boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)"
+            boxShadow="0px 2px 8px rgba(0, 0, 0, 0.08), 0px 8px 24px rgba(0, 0, 0, 0.12), 0px 16px 48px rgba(0, 0, 0, 0.06), inset 0px 1px 0px rgba(255, 255, 255, 0.8), inset 0px -1px 0px rgba(0, 0, 0, 0.05)"
             position="relative"
+            overflow="hidden"
             w={`${scaleCalculations.scaledWidth}px`}
             h={`${scaleCalculations.scaledHeight}px`}>
             {pdfViewerRef.current}
 
             <>
-              <MarginHandle
-                isActive={activeDrag === 'top'}
-                interactive={interactive}
-                position="absolute"
-                left="0"
-                w="100%"
-                h="5px"
-                cursor={interactive ? 'ns-resize' : 'default'}
-                top={`${margins.top * scaleCalculations.scale - 3}px`}
-                zIndex="100"
-                onMouseDown={handleMouseDown('top')}
-              />
+              {showControls && (
+                <MarginHandle
+                  isActive={activeDrag === 'top'}
+                  interactive={interactive}
+                  position="absolute"
+                  left="0"
+                  w="100%"
+                  h="5px"
+                  cursor={interactive ? 'ns-resize' : 'default'}
+                  top={`${margins.top * scaleCalculations.scale - 3}px`}
+                  zIndex="100"
+                  onMouseDown={handleMouseDown('top')}
+                />
+              )}
 
-              {/* Right handle */}
-              <MarginHandle
-                isActive={activeDrag === 'right'}
-                interactive={interactive}
-                position="absolute"
-                top="0"
-                h="100%"
-                w="5px"
-                cursor={interactive ? 'ew-resize' : 'default'}
-                left={`${(pdfDimensions.width - margins.right) * scaleCalculations.scale - 3}px`}
-                zIndex="100"
-                onMouseDown={handleMouseDown('right')}
-              />
+              {showControls && (
+                <MarginHandle
+                  isActive={activeDrag === 'right'}
+                  interactive={interactive}
+                  position="absolute"
+                  top="0"
+                  h="100%"
+                  w="5px"
+                  cursor={interactive ? 'ew-resize' : 'default'}
+                  left={`${(pdfDimensions.width - margins.right) * scaleCalculations.scale - 3}px`}
+                  zIndex="100"
+                  onMouseDown={handleMouseDown('right')}
+                />
+              )}
 
-              {/* Bottom handle */}
-              <MarginHandle
-                isActive={activeDrag === 'bottom'}
-                interactive={interactive}
-                position="absolute"
-                left="0"
-                w="100%"
-                h="5px"
-                cursor={interactive ? 'ns-resize' : 'default'}
-                top={`${(pdfDimensions.height - margins.bottom) * scaleCalculations.scale - 3}px`}
-                zIndex="100"
-                onMouseDown={handleMouseDown('bottom')}
-              />
+              {showControls && (
+                <MarginHandle
+                  isActive={activeDrag === 'bottom'}
+                  interactive={interactive}
+                  position="absolute"
+                  left="0"
+                  w="100%"
+                  h="5px"
+                  cursor={interactive ? 'ns-resize' : 'default'}
+                  top={`${(pdfDimensions.height - margins.bottom) * scaleCalculations.scale - 3}px`}
+                  zIndex="100"
+                  onMouseDown={handleMouseDown('bottom')}
+                />
+              )}
 
-              {/* Left handle */}
-              <MarginHandle
-                isActive={activeDrag === 'left'}
-                interactive={interactive}
-                position="absolute"
-                top="0"
-                h="100%"
-                w="5px"
-                cursor={interactive ? 'ew-resize' : 'default'}
-                left={`${margins.left * scaleCalculations.scale - 3}px`}
-                zIndex="100"
-                onMouseDown={handleMouseDown('left')}
-              />
+              {showControls && (
+                <MarginHandle
+                  isActive={activeDrag === 'left'}
+                  interactive={interactive}
+                  position="absolute"
+                  top="0"
+                  h="100%"
+                  w="5px"
+                  cursor={interactive ? 'ew-resize' : 'default'}
+                  left={`${margins.left * scaleCalculations.scale - 3}px`}
+                  zIndex="100"
+                  onMouseDown={handleMouseDown('left')}
+                />
+              )}
             </>
           </Box>
         </Box>

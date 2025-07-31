@@ -343,47 +343,31 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                 minHeight={`${pdfViewerHeight + 80}px`}
                 p="md"
                 borderColor="border"
+                display="flex"
+                alignItems="center"
                 border="1px dotted"
                 borderRadius="sm"
-                overflow="hidden"
-                position="relative">
-                {showScaling ? (
-                  <Box w="100%" position="relative">
-                    <Flex
-                      w="100%"
-                      h={`${pdfViewerHeight}px`}
-                      justify="center"
-                      align="center"
-                      position="relative">
-                      <Box w="100%" h="100%" position="relative">
-                        <LayoutScaling
-                          pdfUrl={assets[assets.length - 1].file}
-                          containerWidth={pdfContainerWidth}
-                          containerHeight={pdfContainerHeight}
-                          initialMargins={previewMargins}
-                          onMarginsChange={handleMarginsUpdate}
-                          pdfDimensions={pdfDimensions}
-                          interactive={false}
-                          showControls={false}
-                          forceHeight={pdfViewerHeight} // New prop to match PdfViewer height
-                          key={`preview-scaling-${cId}-${JSON.stringify(previewMargins)}-${refreshTrigger}`}
-                        />
-                      </Box>
-                    </Flex>
-                  </Box>
-                ) : (
-                  <Flex
-                    w="100%"
-                    h={`${pdfViewerHeight}px`}
-                    justify="center"
-                    align="center">
-                    <PdfViewer
-                      url={`${assets[assets.length - 1].file}`}
-                      pageNumber={1}
-                      height={pdfViewerHeight}
+                overflow="hidden">
+                <Flex
+                  w="100%"
+                  h={`${pdfViewerHeight}px`}
+                  justify="center"
+                  align="center"
+                  position="relative">
+                  <Box w="100%" h="100%" position="relative" mt="-20px">
+                    <LayoutScaling
+                      pdfUrl={assets[assets.length - 1].file}
+                      containerWidth={pdfContainerWidth}
+                      containerHeight={pdfContainerHeight}
+                      initialMargins={previewMargins}
+                      onMarginsChange={handleMarginsUpdate}
+                      pdfDimensions={pdfDimensions}
+                      interactive={false}
+                      showControls={showScaling}
+                      forceHeight={pdfViewerHeight}
                     />
-                  </Flex>
-                )}
+                  </Box>
+                </Flex>
               </Box>
 
               <Text py="md">{assets[assets.length - 1].asset_name}</Text>
