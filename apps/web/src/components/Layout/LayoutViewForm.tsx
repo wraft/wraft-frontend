@@ -22,7 +22,6 @@ import styled from '@emotion/styled';
 import { Input } from 'theme-ui';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
-import PdfViewer from 'common/PdfViewer';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 

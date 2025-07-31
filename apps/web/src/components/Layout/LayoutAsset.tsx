@@ -62,11 +62,11 @@ const useMarginManagement = (
   }, [initialMargins]);
 
   const resetMargins = useCallback(() => {
-    const resetMargins = DEFAULT_MARGINS;
-    setEditFormMargins(resetMargins);
-    marginsRef.current = resetMargins;
+    const defaultMargins = DEFAULT_MARGINS;
+    setEditFormMargins(defaultMargins);
+    marginsRef.current = defaultMargins;
     if (onMarginsChange) {
-      onMarginsChange(resetMargins);
+      onMarginsChange(defaultMargins);
     }
   }, [onMarginsChange]);
 
@@ -355,8 +355,6 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
       multiple: false,
       accept: accept || { 'application/pdf': ['.pdf'] },
     });
-
-    const types = 'PDF';
 
     register('file');
 

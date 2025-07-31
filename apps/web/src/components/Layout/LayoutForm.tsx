@@ -23,7 +23,6 @@ import {
 import { X } from '@phosphor-icons/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
-import Dropzone from 'common/Dropzone';
 import { Layoutschema, Layout } from 'schemas/layout';
 import { fetchAPI, postAPI, putAPI } from 'utils/models';
 
