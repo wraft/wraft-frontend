@@ -29,7 +29,6 @@ const MarginSchema = z.object({
     .transform((val) => parseFloat(val.toFixed(2))),
 });
 
-// Asset schema for direct upload
 const AssetSchema = z.object({
   id: z.string().optional(),
   asset_name: z.string().optional(),

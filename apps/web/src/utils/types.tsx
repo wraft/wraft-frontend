@@ -63,15 +63,6 @@ export interface Layout {
   } | null;
 }
 
-export interface IAsset {
-  asset_name: string;
-  id: string;
-  updated_at: string;
-  inserted_at: string;
-  file: string;
-  type?: string;
-}
-
 export interface Creator {
   updated_at: string;
   name: string;
