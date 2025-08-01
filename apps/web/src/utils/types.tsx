@@ -47,6 +47,20 @@ export interface Layout {
   id: string;
   height: number;
   description: string;
+  asset: {
+    id: string;
+    asset_name: string;
+    type: string;
+    file: string;
+    inserted_at: string;
+    updated_at: string;
+  } | null;
+  margins?: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  } | null;
 }
 
 export interface Creator {

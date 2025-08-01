@@ -152,12 +152,43 @@ export const ContentInfoBlock = ({
   contentType,
 }: ContentInfoBlockProps) => {
   const { editorMode, userType, currentActiveIndex } = useDocument();
+  const navigateToLayout = () => {
+    if (contentType?.layout?.id) {
+      Router.push(`/manage/layouts/${contentType.layout.id}`);
+    }
+  };
+
+  const navigateToContentType = () => {
+    if (contentType?.id) {
+      Router.push(`/variants/${contentType.id}`);
+    }
+  };
+
   return (
     <Flex justify="space-between" px="md" py="sm">
       <Box>
-        <Text fontSize="sm" color="text-secondary">
-          {contentType?.layout?.name} / {contentType?.name}
-        </Text>
+        <Flex alignItems="center" gap="xxs">
+          {contentType?.layout?.name && (
+            <Text
+              fontSize="sm"
+              color="text-secondary"
+              cursor={contentType?.layout?.id ? 'pointer' : 'default'}
+              onClick={navigateToLayout}>
+              {contentType.layout.name}
+            </Text>
+          )}
+          <Text color="text-secondary"> / </Text>
+          {contentType?.name && (
+            <Text
+              fontSize="sm"
+              color="text-secondary"
+              as="span"
+              cursor={contentType?.id ? 'pointer' : 'default'}
+              onClick={navigateToContentType}>
+              {contentType.name}
+            </Text>
+          )}
+        </Flex>
         <Flex gap="sm">
           <Text as="h4">
             {content?.content?.instance_id || contentType?.prefix}

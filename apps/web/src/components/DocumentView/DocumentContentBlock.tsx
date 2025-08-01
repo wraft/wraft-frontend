@@ -136,6 +136,7 @@ const TabWrapper = styled(Box)`
   }
 
   .tabPanel {
+    padding: 4px 8px;
     border: 0;
     border: 1px solid;
     border-color: ${({ theme }: any) => theme?.colors.border};
@@ -146,6 +147,11 @@ const TabWrapper = styled(Box)`
       background-color: transparent;
       padding: ${({ theme }: any) => theme.space.xs};
       border-radius: 6px;
+      padding: 4px 12px;
+
+      h5 {
+        font-size: 12px;
+      }
     }
 
     button[aria-selected='true'] {
