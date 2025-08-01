@@ -85,7 +85,7 @@ const ThemeForm = () => {
 
   return (
     <>
-      <Flex direction="row">
+      <Flex direction="row" gap="xxl">
         <Box as="form" maxWidth="556px" bg="background-primary" w="40%" p="xl">
           <Flex direction="column" gap="md">
             <Box>

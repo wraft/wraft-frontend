@@ -17,13 +17,12 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   return (
     <Box
       w="100%"
-      maxWidth="530px"
+      maxWidth="620px"
       margin="0 auto"
       position="relative"
       minHeight="500px"
       maxHeight="400px"
-      mx="auto"
-      ml="xxl">
+      mx="auto">
       <Box
         bg={bodyColor}
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.1),
@@ -32,11 +31,9 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         background={`$(props) => props.bg || '#ffffff'}`}
         border-radius="4px"
         w="100%"
-        maxWidth="556px"
-        min-height=" 656px"
         position="relative"
         transition="all 0.2s ease">
-        <Box padding="40px 60px" lineHeight="1.6" fontFamily={fontFamily}>
+        <Box padding="62px 92px" lineHeight="1.6" fontFamily={fontFamily}>
           <Flex
             justifyContent="space-between"
             alignItems="flex-start"
@@ -45,7 +42,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               <Text
                 fontSize="sm"
                 fontWeight="bold"
-                color={secondaryColor}
+                color={primaryColor}
                 lineHeight="1.4"
                 mb="xs">
                 Star West International LLC
@@ -64,7 +61,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               <Text
                 fontSize="sm"
                 fontWeight="bold"
-                color={secondaryColor}
+                color={primaryColor}
                 lineHeight="1.4"
                 mb="xs">
                 Biltrix Enterprises Ltd.
@@ -113,7 +110,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               lineHeight="1.7"
               textAlign="justify"
               mb="lg">
-              <Text as="span" fontWeight="600" mb="xs">
+              <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
                 Disclaimer
               </Text>
               &quot;Licensee&quot; will provide full indemnification against any
@@ -128,7 +125,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               lineHeight="1.6"
               textAlign="justify"
               mb="md">
-              <Text as="span" fontWeight="600" mb="xs">
+              <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
                 Term &amp; copyright
               </Text>
               &quot;Licensee&quot; will provide full indemnification against any
