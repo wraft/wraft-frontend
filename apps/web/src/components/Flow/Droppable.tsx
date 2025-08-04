@@ -23,13 +23,11 @@ import {
   Input,
   Label,
   Select,
-  Spinner,
   Text,
   useThemeUI,
 } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Button, Modal } from '@wraft/ui';
-import { MenuProvider, Menu, MenuItem, MenuButton } from '@ariakit/react';
+import { Button, Modal, Search } from '@wraft/ui';
 
 import ConfirmDelete from 'common/ConfirmDelete';
 import { fetchAPI } from 'utils/models';
@@ -118,10 +116,6 @@ const SortableItem = ({
   } = useSortable({
     id: state.id,
   });
-
-  const [users, setUsers] = useState<any>();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const sourceRef = useRef<HTMLInputElement>(null);
   const targetRef = useRef<HTMLElement>(null);
@@ -220,25 +214,13 @@ const SortableItem = ({
     }
   };
 
-  const onChangeInput = (e: any) => {
-    setLoading(true);
-    fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
-      const usr = data.users;
-      const filtered = usr.filter(
-        (u: any) => !state.approvers.some((a) => a.id === u.id),
-      );
-      setUsers(filtered);
-      setLoading(false);
-    });
-  };
-
   useEffect(() => {
     if (sourceRef.current && targetRef.current) {
       const sourceStyle = window.getComputedStyle(sourceRef.current);
       const sourceWidth = sourceStyle.width;
       targetRef.current.style.minWidth = sourceWidth;
     }
-  }, [isOpen]);
+  });
 
   return (
     <Flex sx={{ mt: `${index === 1 ? 0 : 4}` }}>
@@ -257,7 +239,7 @@ const SortableItem = ({
             transition: transition,
             display: 'flex',
             padding: '16px',
-            marginTop: '28px',
+            marginTop: '24px',
           }}>
           <DragIcon
             color={themeui?.theme?.colors?.gray?.[600] || ''}
@@ -275,7 +257,7 @@ const SortableItem = ({
           bg: 'white',
           borderRadius: '4px',
         }}>
-        <Label>Default State</Label>
+        <Label mb="md">Default State</Label>
         <Flex
           sx={{
             mb: 'md',
@@ -289,6 +271,7 @@ const SortableItem = ({
             border: '1px solid',
             borderColor: 'border',
             borderRadius: '4px',
+            color: 'GrayText',
           }}>
           <Input
             className={`${isDragging ? 'z-10' : ''}`}
@@ -307,7 +290,7 @@ const SortableItem = ({
               gap: 0,
             }}></Flex>
         </Flex>
-        <Label mt={2}>State Mode</Label>
+        <Label mb="md">State Mode</Label>
         <Select
           defaultValue={state.type}
           onChange={(e) => {
@@ -318,6 +301,13 @@ const SortableItem = ({
             border: '1px solid',
             borderColor: 'border',
             borderRadius: '4px',
+
+            backgroundColor: 'background',
+            color: 'text',
+            '& option': {
+              backgroundColor: 'background',
+              color: 'text',
+            },
           }}>
           <option disabled value="">
             Select a State Mode
@@ -334,91 +324,44 @@ const SortableItem = ({
             </Text>
           )}
 
-          <Box mt={3}>
-            <Box>
-              <Label mt={2}>Select Assignee</Label>
-              <Input
-                ref={sourceRef}
-                onChange={(e) => {
-                  onChangeInput(e);
-                  setIsOpen(true);
+          <Box>
+            <Box mt="md">
+              <Label mb="md">Select Assignee</Label>
+              <Search
+                itemToString={(item: any) => item?.name || ''}
+                placeholder="Add Assignee"
+                minChars={1}
+                onChange={(user: any) => {
+                  if (user) {
+                    onUserSelect(user);
+                  }
                 }}
-                placeholder="Add assignee"></Input>
-              <MenuProvider>
-                <Box
-                  variant="none"
-                  sx={{ display: 'hidden', alignItems: 'center' }}>
-                  <MenuButton></MenuButton>
-                </Box>
-                <Menu
-                  id={'targetElement'}
-                  open={isOpen}
-                  onClose={() => setIsOpen(false)}>
-                  <Box
-                    ref={targetRef}
-                    variant="layout.menu"
-                    sx={{ p: 0, minWidth: '100%' }}>
-                    {users && users.length > 0 && !loading ? (
-                      <Box
-                        sx={{
-                          mt: 1,
-                          border: '1px solid',
-                          borderColor: 'border',
-                          borderRadius: '4px',
-                          minWidth: '100%',
-                        }}>
-                        {users.map((x: any) => (
-                          <MenuItem key={x.id} onClick={() => onUserSelect(x)}>
-                            <Flex
-                              sx={{
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                px: 3,
-                                py: 2,
-                                cursor: 'pointer',
-                              }}>
-                              <Box
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  py: 2,
-                                }}>
-                                <Avatar
-                                  src={x.profile_pic}
-                                  alt="profile"
-                                  width={18}
-                                  height={18}
-                                />
-                                <Text
-                                  as={'p'}
-                                  ml={3}
-                                  variant="subM"
-                                  sx={{ color: 'gray.900' }}>
-                                  {x.name}
-                                </Text>
-                              </Box>
-                            </Flex>
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    ) : (
-                      <MenuItem>
-                        <Box
-                          sx={{
-                            px: 3,
-                            py: 2,
-                          }}>
-                          {loading ? (
-                            <Spinner color={'gree.500'} size={10} />
-                          ) : (
-                            <Text variant="subM">No user found</Text>
-                          )}
-                        </Box>
-                      </MenuItem>
-                    )}
-                  </Box>
-                </Menu>
-              </MenuProvider>
+                renderItem={(user: any) => (
+                  <Flex sx={{ alignItems: 'center', gap: 2 }}>
+                    <Avatar
+                      src={user.profile_pic}
+                      alt="profile"
+                      width={18}
+                      height={18}
+                    />
+                    <Text variant="subM">{user.name}</Text>
+                  </Flex>
+                )}
+                search={async (query: string) => {
+                  try {
+                    const data: any = await fetchAPI(
+                      `users/search?key=${query}`,
+                    );
+                    return data.users.filter(
+                      (u: any) =>
+                        !state.approvers.some((a: any) => a.id === u.id),
+                    );
+                  } catch (error) {
+                    console.error('Error searching users:', error);
+                    return [];
+                  }
+                }}
+              />
             </Box>
             {state.approvers && state.approvers.length > 0 && (
               <Box
@@ -455,7 +398,7 @@ const SortableItem = ({
                     <Box
                       onClick={() => onRemoveUser(e)}
                       sx={{ cursor: 'pointer' }}>
-                      <DeleteIcon width={12} height={12} />
+                      <DeleteIcon width={12} height={12} color="#79828B" />
                     </Box>
                   </Flex>
                 ))}
