@@ -141,7 +141,7 @@ const ThemeForm = () => {
                   disable
                   register={register}
                   name="primary_color"
-                  label="Primary Color"
+                  label={<Text color="#background-primary">Body Color</Text>}
                   defaultValue={theme?.primary_color || ''}
                   variant="inside"
                   border="none"
@@ -152,7 +152,7 @@ const ThemeForm = () => {
                   disable
                   register={register}
                   name="secondary_color"
-                  label="Secondary Color"
+                  label={<Text color="#background-primary">Body Color</Text>}
                   defaultValue={theme?.secondary_color || ''}
                   variant="inside"
                   border="none"
@@ -163,7 +163,7 @@ const ThemeForm = () => {
                   disable
                   register={register}
                   name="body_color"
-                  label="Body Color"
+                  label={<Text color="#background-primary">Body Color</Text>}
                   defaultValue={theme?.body_color || ''}
                   variant="inside"
                   border="none"

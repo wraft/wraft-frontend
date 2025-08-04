@@ -8,7 +8,7 @@ import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
 
 interface FieldColorProps {
   register: any;
-  label: string;
+  label: React.ReactNode;
   name: string;
   defaultValue: string;
   placeholder?: string;
@@ -44,13 +44,14 @@ const FieldColor: React.FC<FieldColorProps> = ({
   view = false,
 }) => {
   const [valx, setVal] = useState<string>(defaultValue);
+  const theme = useThemeUI();
 
   /**
    * On Color selected
    * @param _e
    */
   const changeColor = (_e: any) => {
-    const colr = _e && _e.hex;
+    const colr = _e && _e.hexa;
     setVal(colr);
 
     // if (typeof onChangeColor.onChange === 'undefined') {
@@ -58,6 +59,8 @@ const FieldColor: React.FC<FieldColorProps> = ({
       onChangeColor(colr, name);
     }
   };
+
+  const isInside = variant === 'inside';
 
   const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHexColor = e.target.value;
@@ -75,8 +78,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
     }
   }, [defaultValue]);
 
-  const isInside = variant === 'inside';
-
   const generateRandomColor = (): string => {
     const randomValue = () =>
       Math.floor(Math.random() * 256)
@@ -92,20 +93,24 @@ const FieldColor: React.FC<FieldColorProps> = ({
           {sub && (
             <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
           )}
-          {!isInside && <Label htmlFor="description">{label}</Label>}
+          {!isInside && typeof label === 'string' ? (
+            <Label htmlFor="description">{label}</Label>
+          ) : null}
           <Flex sx={{ position: 'relative' }}>
             {isInside && (
-              <Text
-                as={'p'}
-                variant="pR"
+              <Box
                 sx={{
                   position: 'absolute',
                   left: 3,
                   top: '50%',
                   transform: 'translateY(-50%)',
                 }}>
-                {label}
-              </Text>
+                {typeof label === 'string' ? (
+                  <Text variant="textPrimary">{label}</Text>
+                ) : (
+                  label
+                )}
+              </Box>
             )}
             <Input
               placeholder={placeholder ? placeholder : ''}
@@ -125,9 +130,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
                 },
               }}
               {...register(name, { required: required })}
-              onChange={(e) => {
-                handleHexInputChange(e);
-              }}
+              onChange={handleHexInputChange}
               disabled={disable || view}
             />
             <Box sx={{ width: 0, bg: 'transparent' }}>
