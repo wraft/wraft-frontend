@@ -359,7 +359,10 @@ const TemplateEditor = () => {
           </Flex>
         </Box>
 
-        <Modal open={isSetupVisible} ariaLabel="Create Template">
+        <Modal
+          open={isSetupVisible}
+          ariaLabel="Create Template"
+          onClose={() => setIsSetupVisible(false)}>
           <Flex w="480px" direction="column">
             <Box py="md" borderBottom="solid 1px" borderColor="border">
               <Text fontSize="xl" fontWeight="heading">

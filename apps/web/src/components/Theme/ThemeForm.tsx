@@ -212,7 +212,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
               error={errors?.name?.message as string}>
               <InputText
                 {...register('name')}
-                placeholder="Enter a Layout Name"
+                placeholder="Enter a Theme Name"
               />
             </Field>
           </Box>
