@@ -28,9 +28,14 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
       variant="ghost"
     >
       {isHidden ? (
-        <HideIcon width="18px" height="18px" />
+        <HideIcon width="18px" height="18px" color="#79828B" />
       ) : (
-        <ShowIcon width="18px" height="18px" />
+        <ShowIcon
+          width="18px"
+          height="18px"
+          color="#79828B"
+          fill="currentColor"
+        />
       )}
     </Button>
   );
