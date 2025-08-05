@@ -385,6 +385,7 @@ const TemplateEditor = () => {
                   render={({ field: { onChange, value, name } }) => (
                     <Field
                       label="Variant"
+                      hint="The variant type cannot be modified once saved. Please select the correct one."
                       required
                       error={errors?.variant?.message}>
                       <Search
