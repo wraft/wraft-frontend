@@ -541,20 +541,43 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
     setValue(name, e);
   };
 
+  // In your VariantForm component, replace the existing goTo function with this enhanced version:
+
   const goTo = async (formStepNumber: number) => {
-    if (formStep === 3) {
-      const currentMappings = fieldMappings.filter(
-        (mapping) => mapping.frameField && mapping.variantField,
-      );
-      setFieldMappings(currentMappings);
-      mappingsRef.current = currentMappings;
-      updateFormMappings(currentMappings);
-    }
+    // Don't allow moving forward without validation
+    if (formStepNumber > formStep) {
+      // Validate current step before allowing forward movement
+      let isCurrentStepValid = false;
 
-    if (formStepNumber === 3) {
-      const isFieldsValid = await trigger(['fields']);
+      if (formStep === 0) {
+        isCurrentStepValid = await trigger([
+          'name',
+          'description',
+          'prefix',
+          'type',
+        ]);
+      } else if (formStep === 1) {
+        isCurrentStepValid = await trigger([
+          'layout',
+          'flow',
+          'theme',
+          'color',
+        ]);
+      } else if (formStep === 2) {
+        isCurrentStepValid = await trigger(['fields']);
+      } else if (formStep === 3) {
+        isCurrentStepValid = await validateMappings();
+      }
 
-      if (isFieldsValid) {
+      if (!isCurrentStepValid) {
+        toast.error('Please complete all required fields', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        return;
+      }
+
+      if (formStepNumber === 3) {
         const layout = watch('layout');
         if (isLayoutWithFrameFields(layout) && layout.frame.fields.length > 0) {
           const frameFieldNames = new Set(
@@ -616,6 +639,15 @@ const VariantForm = ({ step = 0, setIsOpen, setRerender }: Props) => {
           updateFormMappings(updatedMappings);
         }
       }
+    }
+
+    if (formStep === 3) {
+      const currentMappings = fieldMappings.filter(
+        (mapping) => mapping.frameField && mapping.variantField,
+      );
+      setFieldMappings(currentMappings);
+      mappingsRef.current = currentMappings;
+      updateFormMappings(currentMappings);
     }
 
     setFormStep(formStepNumber);
