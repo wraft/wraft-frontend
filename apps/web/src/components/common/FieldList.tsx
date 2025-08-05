@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box } from 'theme-ui';
-import { Table } from '@wraft/ui';
+// import { Box } from 'theme-ui';
+import { Table, Text, Box } from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
@@ -23,9 +23,7 @@ const columns = [
     id: 'name',
     header: 'NAME',
     accessorKey: 'name',
-    cell: ({ row }: any) => (
-      <Box sx={{ fontSize: 'sm' }}>{row.original?.name}</Box>
-    ),
+    cell: ({ row }: any) => <Text fontSize="sm">{row.original?.name}</Text>,
     // size: 200,
     enableSorting: false,
   },
@@ -34,7 +32,7 @@ const columns = [
     header: 'DESCRIPTION',
     accessorKey: 'description',
     cell: ({ row }: any) => (
-      <Box sx={{ fontSize: 'sm' }}>{row?.original?.description}</Box>
+      <Text fontSize="sm">{row?.original?.description}</Text>
     ),
     // size: 200,
     enableSorting: false,
