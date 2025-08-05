@@ -348,6 +348,20 @@ const PipelineStageForm = ({
   };
 
   const goToStep = (nextStep: number) => {
+    if (nextStep < formStep) {
+      setFormStep(nextStep);
+      return;
+    }
+
+    if (nextStep > formStep && formStep === 0) {
+      if (!selectedTemplateId || selectedTemplateId === '') {
+        toast.error('Please select a template ', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        return;
+      }
+    }
     setFormStep(nextStep);
   };
 
