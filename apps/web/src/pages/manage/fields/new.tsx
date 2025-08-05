@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box, Container } from 'theme-ui';
+// import { Box, Container } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 import Page from 'common/PageFrame';
 import FieldTypeForm from 'common/FieldTypeForm';
@@ -15,11 +16,9 @@ const Index: FC = () => {
       </Head>
       <Page>
         <PageHeader title="Create Field Type" />
-        <Container variant="layout.pageFrame">
-          <Box variant="layout.contentFrame">
-            <FieldTypeForm />
-          </Box>
-        </Container>
+        <Box variant="layout.contentFrame">
+          <FieldTypeForm />
+        </Box>
       </Page>
     </>
   );
