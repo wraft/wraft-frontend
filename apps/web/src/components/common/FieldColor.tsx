@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-// import Chrome from '@uiw/react-color-chrome';
-const Chrome = dynamic(() => import('@uiw/react-color-chrome'), { ssr: false });
-import { InkIcon } from '@wraft/icon';
 import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
+import { InkIcon } from '@wraft/icon';
+
+const Sketch = dynamic(
+  () => import('@uiw/react-color').then((mod) => ({ default: mod.Sketch })),
+  { ssr: false },
+);
 
 interface FieldColorProps {
   register: any;
@@ -174,9 +177,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
                       height={18}
                       viewBox="0 0 24 24"
                       color={
-                        useThemeUI().theme?.colors?.gray?.[
-                          disable || view ? 200 : 600
-                        ]
+                        theme.theme?.colors?.gray?.[disable || view ? 200 : 600]
                       }
                     />
                   </Box>
@@ -184,9 +185,13 @@ const FieldColor: React.FC<FieldColorProps> = ({
               </PopoverDisclosure>
               <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
                 <Box>
-                  <Chrome
+                  <Sketch
                     color={valx}
                     onChange={(color: any) => changeColor(color)}
+                    style={{
+                      boxShadow: '0 3px 12px rgba(0, 0, 0, 0.15)',
+                      borderRadius: '4px',
+                    }}
                   />
                 </Box>
               </Popover>

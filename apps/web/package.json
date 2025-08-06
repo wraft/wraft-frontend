@@ -29,6 +29,7 @@
     "@next/third-parties": "^15.2.3",
     "@phosphor-icons/react": "^2.1.10",
     "@reactour/tour": "^3.6.1",
+    "@uiw/react-color": "2.7.3",
     "@uiw/react-color-chrome": "^2.7.3",
     "@vercel/analytics": "^1.5.0",
     "@wraft/editor": "*",
