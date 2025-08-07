@@ -1,6 +1,6 @@
 import React from 'react';
-import { CloseIcon, DeleteIcon, DocumentIcon, TickIcon } from '@wraft/icon';
-import { Box, Button, Flex, Text, useThemeUI } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
+import { CheckIcon, FileIcon, TrashIcon, XIcon } from '@phosphor-icons/react';
 
 import ProgressBar from 'common/ProgressBar';
 
@@ -10,115 +10,74 @@ type Props = {
 };
 
 const FontList = ({ assets, onDelete }: Props) => {
-  const themeui = useThemeUI();
   return (
     assets &&
     assets.length > 0 && (
-      <Box
-        sx={{
-          borderRadius: '6px',
-          overflow: 'hidden',
-          border: 'solid 1px',
-          borderColor: 'neutral.200',
-        }}>
+      <Box border="solid 1px" borderColor="border" borderRadius="xs">
         {assets.map((item: any, index: number) => (
           <Flex
             key={item.id}
-            sx={{
-              py: 2,
-              px: 3,
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: index < assets.length ? '1px solid' : 'none',
-              borderColor: 'neutral.200',
-            }}>
-            <Flex sx={{ alignItems: 'center' }}>
-              <Box
-                mr={2}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <DocumentIcon
-                  viewBox="0 0 24 24"
-                  color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
-                />
-              </Box>
-              <Text as="p" variant="pM">
+            py="md"
+            px="md"
+            alignItems="center"
+            justifyContent="space-between"
+            borderBottom={index < assets.length - 1 ? '1px solid' : 'none'}
+            borderColor="border">
+            <Flex alignItems="center" justifyContent="center" gap="sm">
+              <FileIcon size="18" />
+              <Text>
                 {item.name ? item.name.match(/(.+?)(?=-|$)/)?.[1] : 'Font'}
               </Text>
             </Flex>
             <Flex
-              sx={{
-                alignItems: 'center',
-                width: '100px',
-                justifyContent: 'space-between',
-                textTransform: 'uppercase',
-              }}>
+              alignItems="center"
+              justifyContent="space-between"
+              textTransform="uppercase">
               {item.progress ? (
-                <Flex sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                <Flex justifyContent="center" alignItems="center">
                   <ProgressBar progress={item.progress} />
                 </Flex>
               ) : (
                 <>
-                  <Text variant="capM" sx={{ color: 'gray.400' }}>
+                  <Text color="text-secondary" mr="md" fontSize="sm">
                     {item.name.match(/-(.+?)(?=\.[^.]*$|$)/)?.[1] ?? 'N/A'}
                   </Text>
                   {item.success === true ? (
                     <Box
-                      sx={{
-                        height: '16px',
-                        width: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bg: 'green.700',
-                        borderRadius: '44px',
-                      }}>
-                      <TickIcon
-                        color={themeui?.theme?.colors?.white as string}
-                        height={12}
-                        width={12}
-                        viewBox="0 0 24 24"
-                      />
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      bg="green.800"
+                      borderRadius="44px"
+                      w="16px"
+                      h="16px">
+                      <CheckIcon size="12" color="#fff" />
                     </Box>
                   ) : item.success === false ? (
                     <Box
-                      sx={{
-                        height: '16px',
-                        width: '16px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        bg: 'red.700',
-                        borderRadius: '44px',
-                      }}>
-                      <CloseIcon
-                        color={themeui?.theme?.colors?.white as string}
-                        height={12}
-                        width={12}
-                        viewBox="0 0 24 24"
-                      />
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      bg="red.700"
+                      borderRadius="44px"
+                      color="#fff"
+                      w="16px"
+                      h="16px">
+                      <XIcon size="12" />
                     </Box>
                   ) : (
-                    <Box sx={{ display: 'none' }} />
+                    <Box display="none" />
                   )}
                   {onDelete && (
-                    <Button
-                      variant="base"
-                      sx={{ p: 0, m: 0 }}
+                    <TrashIcon
+                      size="16"
+                      color="#2C3641"
+                      cursor="pointer"
                       onClick={(e) => {
                         e.preventDefault();
                         onDelete(item.id);
-                      }}>
-                      <DeleteIcon
-                        width={16}
-                        height={16}
-                        viewBox="0 0 24 24"
-                        color={themeui?.theme?.colors?.gray?.[200] || '#2C3641'}
-                      />
-                    </Button>
+                      }}
+                    />
                   )}
                 </>
               )}

@@ -146,7 +146,7 @@ const ContentTypeViewForm = () => {
                   label="Color"
                   name="color"
                   defaultValue={(content && content?.content_type.color) || ''}
-                  view
+                  readOnly={true}
                 />
                 {errors.color && errors.color.message && (
                   <Text>{errors.color.message as string}</Text>
