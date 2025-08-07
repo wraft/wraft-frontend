@@ -290,9 +290,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
           )}
         </Flex>
         <Box flexShrink="0" px="xl" py="md" gap="sm">
-          <Button
-            disabled={(assets && assets.length < 2) || !isValid}
-            type="submit">
+          <Button disabled={!isValid} type="submit">
             {isEdit ? 'Update' : 'Create'}
           </Button>
         </Box>

@@ -152,7 +152,7 @@ const ThemeForm = () => {
         onClose={() => setIsOpen(false)}>
         <ThemeAddForm
           setIsOpen={setIsOpen}
-          onUpdate={(data: any) => setTheme(data)}
+          onUpdate={() => loadDataDetalis(cId)}
         />
       </Drawer>
     </>
