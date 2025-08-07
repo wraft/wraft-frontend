@@ -7,7 +7,6 @@ import { markdownFromHTML } from "@helpers/markdown";
 import { defineDefaultExtension } from "./extension";
 import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
-import TagMenu from "./tag-menu";
 import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
@@ -89,7 +88,6 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
               {!isReadonly && <InlineMenu />}
               <SlashMenu />
               {tokens && <TokenMenu tokens={tokens} />}
-              <TagMenu />
               {/* <BlockHandle /> */}
               <TableHandle />
             </S.EditorContent>
