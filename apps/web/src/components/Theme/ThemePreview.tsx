@@ -15,14 +15,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   fontFamily = 'Georgia, serif',
 }) => {
   return (
-    <Box
-      w="100%"
-      maxWidth="620px"
-      margin="0 auto"
-      position="relative"
-      minHeight="500px"
-      maxHeight="400px"
-      mx="auto">
+    <Box w="100%" maxWidth="620px" minHeight="500px" maxHeight="400px">
       <Box
         bg={bodyColor}
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.1),
@@ -93,16 +86,20 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               lineHeight="1.7"
               textAlign="justify"
               mb="md">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Earum
-              natus at neque, eos magni et nulla iste temporibus, eius est
-              nihil, amet cum placeat magnam vitae autem maiores harum impedit!
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
-              placeat similique quas hic omnis eveniet. Nobis temporibus tempora
-              minima a qui. Molestiae in id commodi labore ipsam sit praesentium
-              placeat?Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-              Cupiditate laudantium dolores expedita suscipit quis beatae
-              dolorem, cum velit tempora ab eius inventore tempore labore
-              dolorem, cum velit tempora ab eius inventore tempore labore
+              This Agreement is entered into between Star West International LLC
+              (&quot;Company&quot;) and Biltrix Enterprises Ltd.
+              (&quot;Client&quot;) for the provision of consulting services in
+              accordance with the terms and conditions set forth herein.
+            </Text>
+            <Text
+              fontSize="sm"
+              color={secondaryColor}
+              lineHeight="1.7"
+              textAlign="justify"
+              mb="lg">
+              WHEREAS, Company provides business consulting services; and
+              WHEREAS, Client desires to engage Company for such services on the
+              terms specified below.
             </Text>
             <Text
               fontSize="sm"
@@ -111,12 +108,12 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               textAlign="justify"
               mb="lg">
               <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
-                Disclaimer
+                1. Services
               </Text>
-              &quot;Licensee&quot; will provide full indemnification against any
-              copyright infringement or other claims by third parties relating
-              to the Term provided by the Licensor to &quot;Tune AM LLP&quot;
-              either directly or
+              Company shall provide business consulting services including
+              market analysis, strategic planning, and operational guidance in
+              accordance with professional standards and industry best
+              practices.
             </Text>
 
             <Text
@@ -126,13 +123,25 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               textAlign="justify"
               mb="md">
               <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
-                Term &amp; copyright
+                2. Term &amp; Payment
               </Text>
-              &quot;Licensee&quot; will provide full indemnification against any
-              copyright infringement or other claims by third parties relating
-              to the Term provided by the Licensor to &quot;Tune AM LLP&quot;
-              either directly or through any of its authorized
-              distribution/aggregation partners.
+              This Agreement shall continue for twelve (12) months from the
+              effective date. Client shall pay Company a monthly fee of $15,000,
+              payable within 30 days of invoice receipt.
+            </Text>
+
+            <Text
+              fontSize="sm"
+              color={secondaryColor}
+              lineHeight="1.6"
+              textAlign="justify"
+              mb="md">
+              <Text as="span" fontWeight="600" color={primaryColor} mb="xs">
+                3. Confidentiality
+              </Text>
+              Both parties agree to maintain the confidentiality of all
+              proprietary information shared during the course of this
+              engagement.
             </Text>
           </Box>
 

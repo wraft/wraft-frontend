@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { PopoverProvider, Popover, PopoverDisclosure } from '@ariakit/react';
-// import Chrome from '@uiw/react-color-chrome';
 const Chrome = dynamic(() => import('@uiw/react-color-chrome'), { ssr: false });
 import { InkIcon } from '@wraft/icon';
-import { Text, Box, Label, Input, Flex, useThemeUI } from 'theme-ui';
+import { Text, Box, InputText, Flex, DropdownMenu } from '@wraft/ui';
+import styled from '@emotion/styled';
+
+const ColorInput = styled(InputText)`
+  width: 100px;
+  padding: 4px 16px;
+  height: 28px;
+  font-size: 12px;
+`;
 
 interface FieldColorProps {
   register: any;
@@ -12,70 +18,54 @@ interface FieldColorProps {
   name: string;
   defaultValue: string;
   placeholder?: string;
-  sub?: string;
   required?: boolean;
-  ftype?: string;
-  onChangeColor?: any;
-  variant?: 'inside' | 'outside';
-  border?: string;
-  disable?: boolean;
-  view?: boolean;
+  onChangeColor?: (color: string, fieldName: string) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 /**
- * Basic Color Picker
- * @param param0
- * @returns
+ * Color Picker Component
+ * @param props - Component props
+ * @returns Color picker component
  */
-
 const FieldColor: React.FC<FieldColorProps> = ({
-  disable,
+  disabled,
   name,
   label,
   placeholder,
   register,
   defaultValue,
-  sub,
-  ftype = 'text-primary',
   onChangeColor,
   required = true,
-  variant = 'outside',
-  border,
-  view = false,
+  readOnly = false,
 }) => {
-  const [valx, setVal] = useState<string>(defaultValue);
+  const [selectedColor, setSelectedColor] = useState<string>(defaultValue);
 
-  /**
-   * On Color selected
-   * @param _e
-   */
-  const changeColor = (_e: any) => {
-    const colr = _e && _e.hex;
-    setVal(colr);
+  const handleColorChange = (color: any) => {
+    const hexColor = color && color.hex;
+    setSelectedColor(hexColor);
 
-    // if (typeof onChangeColor.onChange === 'undefined') {
     if (onChangeColor) {
-      onChangeColor(colr, name);
+      onChangeColor(hexColor, name);
     }
   };
 
   const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHexColor = e.target.value;
-    setVal(newHexColor);
+    setSelectedColor(newHexColor);
     if (onChangeColor) {
       onChangeColor(newHexColor, name);
     }
   };
 
   useEffect(() => {
-    const vX: string = defaultValue || generateRandomColor();
-    setVal(vX);
+    const initialColor: string = defaultValue || generateRandomColor();
+    setSelectedColor(initialColor);
     if (onChangeColor) {
-      onChangeColor(vX, name);
+      onChangeColor(initialColor, name);
     }
   }, [defaultValue]);
-
-  const isInside = variant === 'inside';
 
   const generateRandomColor = (): string => {
     const randomValue = () =>
@@ -86,112 +76,74 @@ const FieldColor: React.FC<FieldColorProps> = ({
   };
 
   return (
-    <PopoverProvider>
-      <Box sx={{ position: 'relative' }}>
-        <Box sx={{ ml: 0 }}>
-          {sub && (
-            <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
-          )}
-          {!isInside && <Label htmlFor="description">{label}</Label>}
-          <Flex sx={{ position: 'relative' }}>
-            {isInside && (
-              <Text
-                as={'p'}
-                variant="pR"
-                sx={{
-                  position: 'absolute',
-                  left: 3,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                }}>
-                {label}
-              </Text>
-            )}
-            <Input
-              placeholder={placeholder ? placeholder : ''}
-              id={name}
-              type={ftype}
-              value={valx || defaultValue || ''}
-              sx={{
-                pl: '40px',
-                pr: '80px',
-                variant: 'texts.subR',
-                textTransform: 'uppercase',
-                color: 'gray.900',
-                textAlign: `${isInside ? 'right' : 'left'}`,
-                border: border,
-                ':disabled': {
-                  [view ? 'color' : '']: 'text-primary',
-                },
-              }}
-              {...register(name, { required: required })}
-              onChange={(e) => {
-                handleHexInputChange(e);
-              }}
-              disabled={disable || view}
+    <Flex
+      alignItems="center"
+      gap="sm"
+      px="md"
+      py="md"
+      justifyContent="space-between">
+      <Text>{label}</Text>
+      <Flex gap="sm" alignItems="center">
+        {readOnly ? (
+          <Text color="text-secondary" textTransform="uppercase">
+            {defaultValue}
+          </Text>
+        ) : (
+          <ColorInput
+            placeholder={placeholder || ''}
+            id={name}
+            type="text"
+            value={selectedColor || defaultValue || ''}
+            pl="40px"
+            pr="80px"
+            textTransform="uppercase"
+            color="gray.900"
+            textAlign="left"
+            {...register(name, { required })}
+            onChange={handleHexInputChange}
+            disabled={disabled || readOnly}
+          />
+        )}
+
+        <DropdownMenu.Provider>
+          <DropdownMenu.Trigger>
+            <Box
+              bg={selectedColor}
+              w="18px"
+              h="18px"
+              border="solid 1px"
+              borderColor="border"
+              borderRadius="full"
+              cursor={readOnly ? 'default' : 'pointer'}
             />
-            <Box sx={{ width: 0, bg: 'transparent' }}>
-              <PopoverDisclosure
-                aria-disabled={disable || view}
-                style={{ all: 'unset' }}>
-                <Box sx={{ bg: 'transparent', border: 'none' }}>
-                  <Box
-                    id="colorBox"
-                    bg={valx}
-                    sx={{
-                      width: '18px',
-                      height: '18px',
-                      border: 'solid 1px',
-                      borderColor: 'border',
-                      position: 'absolute',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      [isInside ? 'right' : 'left']:
-                        `${isInside ? '50px' : '16px'}`,
-                      padding: '5px',
-                      borderRadius: '99px',
-                      display: 'inline-block',
-                      cursor: 'pointer',
-                    }}
-                  />
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      right: '12px',
-                      borderRadius: '4px',
-                      display: 'flex',
-                      cursor: 'pointer',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <InkIcon
-                      width={18}
-                      height={18}
-                      viewBox="0 0 24 24"
-                      color={
-                        useThemeUI().theme?.colors?.gray?.[
-                          disable || view ? 200 : 600
-                        ]
-                      }
-                    />
-                  </Box>
+          </DropdownMenu.Trigger>
+          {!readOnly && (
+            <DropdownMenu aria-label="color picker">
+              <Chrome color={selectedColor} onChange={handleColorChange} />
+            </DropdownMenu>
+          )}
+        </DropdownMenu.Provider>
+
+        {!readOnly && (
+          <Box right="12px">
+            <DropdownMenu.Provider>
+              <DropdownMenu.Trigger>
+                <Box
+                  borderRadius="4px"
+                  display="flex"
+                  cursor={readOnly ? 'default' : 'pointer'}>
+                  <InkIcon width={16} height={16} viewBox="0 0 24 24" />
                 </Box>
-              </PopoverDisclosure>
-              <Popover aria-label="Edit color" style={{ zIndex: 1000 }}>
-                <Box>
-                  <Chrome
-                    color={valx}
-                    onChange={(color: any) => changeColor(color)}
-                  />
-                </Box>
-              </Popover>
-            </Box>
-          </Flex>
-        </Box>
-      </Box>
-    </PopoverProvider>
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu aria-label="color picker">
+                <Chrome color={selectedColor} onChange={handleColorChange} />
+              </DropdownMenu>
+            </DropdownMenu.Provider>
+          </Box>
+        )}
+      </Flex>
+    </Flex>
   );
 };
 

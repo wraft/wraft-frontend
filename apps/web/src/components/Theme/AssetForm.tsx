@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Box, Text } from 'theme-ui';
+import { Box, Text } from '@wraft/ui';
 
 import FontList from 'components/Theme/FontList';
 import Dropzone from 'common/Dropzone';
@@ -20,75 +20,91 @@ type FormValues = {
   name?: string;
 };
 
+interface UploadingFile {
+  name: string;
+  progress: number | null;
+  success: boolean | null;
+}
+
 const AssetForm = ({
   onUpload,
   filetype = 'layout',
   assets,
   setDeleteAssets,
 }: AssetFormProps) => {
-  const [fileError, setFileError] = React.useState<string | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
-  const [filesList, setFilesList] = useState<any>();
+  const [uploadError, setUploadError] = React.useState<string | null>(null);
+  const [currentUploadProgress, setCurrentUploadProgress] = useState<number>(0);
+  const [shouldSubmit, setShouldSubmit] = useState<boolean>(false);
+  const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>();
 
   const methods = useForm<FormValues>({ mode: 'onBlur' });
 
   useEffect(() => {
-    methods.handleSubmit(onSubmit)();
-  }, [isSubmit]);
+    methods.handleSubmit(handleFormSubmit)();
+  }, [shouldSubmit]);
 
-  const onAssetUploaded = (data: any) => {
-    const mData: Asset = data;
-    onUpload(mData);
+  const handleSuccessfulUpload = (uploadedAsset: any) => {
+    const assetData: Asset = uploadedAsset;
+    onUpload(assetData);
   };
 
-  const onSubmit = async (data: FormValues) => {
-    setFileError(null);
+  console.log('uploadingFiles', uploadingFiles);
 
-    if (!data.file || data.file === undefined || data.file.length < 1) {
+  const handleFormSubmit = async (formData: FormValues) => {
+    setUploadError(null);
+
+    if (
+      !formData.file ||
+      formData.file === undefined ||
+      formData.file.length < 1
+    ) {
       return;
     }
-    const files = Array.from(data.file);
+    const selectedFiles = Array.from(formData.file);
 
-    const updatedFiles = files.map((f: any) => ({
-      ...f,
-      name: f.name,
+    const filesWithUploadState = selectedFiles.map((file: any) => ({
+      ...file,
+      name: file.name,
       progress: null,
       success: null,
     }));
-    setFilesList(updatedFiles);
-    files.map((f: any, index: number) => {
-      const formData = new FormData();
-      formData.append('file', f);
-      formData.append('name', f.name.substring(0, f.name.lastIndexOf('.')));
-      formData.append('type', filetype);
+    setUploadingFiles(filesWithUploadState);
 
-      postAPI(`assets`, formData, (progress) => {
-        setUploadProgress(progress);
-        setFilesList((prev: any) => [
-          ...prev.slice(0, index),
-          { ...prev[index], progress: progress },
-          ...prev.slice(index + 1),
+    selectedFiles.map((file: any, fileIndex: number) => {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+      uploadFormData.append(
+        'name',
+        file.name.substring(0, file.name.lastIndexOf('.')),
+      );
+      uploadFormData.append('type', filetype);
+
+      postAPI(`assets`, uploadFormData, (progress) => {
+        setCurrentUploadProgress(progress);
+        setUploadingFiles((previousFiles: any) => [
+          ...previousFiles.slice(0, fileIndex),
+          { ...previousFiles[fileIndex], progress: progress },
+          ...previousFiles.slice(fileIndex + 1),
         ]);
       })
-        .then((res) => {
-          onAssetUploaded(res);
-          setUploadProgress(0);
-          setFilesList((prev: any) => [
-            ...prev.slice(0, index),
-            { ...prev[index], success: true, progress: null },
-            ...prev.slice(index + 1),
+        .then((response) => {
+          handleSuccessfulUpload(response);
+          setCurrentUploadProgress(0);
+          setUploadingFiles((previousFiles: any) => [
+            ...previousFiles.slice(0, fileIndex),
+            { ...previousFiles[fileIndex], success: true, progress: null },
+            ...previousFiles.slice(fileIndex + 1),
           ]);
         })
         .catch((error: any) => {
-          setUploadProgress(0);
-          setFileError(
+          setCurrentUploadProgress(0);
+          setUploadError(
             error.errors.file[0] || error.message || 'There is an error',
           );
-          setFilesList((prev: any) => [
-            ...prev.slice(0, index),
-            { ...prev[index], success: false, progress: null },
-            ...prev.slice(index + 1),
+          setUploadingFiles((previousFiles: any) => [
+            ...previousFiles.slice(0, fileIndex),
+            { ...previousFiles[fileIndex], success: false, progress: null },
+            ...previousFiles.slice(fileIndex + 1),
           ]);
         });
     });
@@ -96,7 +112,7 @@ const AssetForm = ({
 
   return (
     <FormProvider {...methods}>
-      <Box as="form" onSubmit={methods.handleSubmit(onSubmit)} mt={4}>
+      <Box as="form" onSubmit={methods.handleSubmit(handleFormSubmit)} mt="md">
         <Box mb={3}>
           <Dropzone
             accept={
@@ -113,29 +129,53 @@ const AssetForm = ({
                       '*': [],
                     }
             }
-            progress={uploadProgress}
+            progress={currentUploadProgress}
             assets={assets}
-            setIsSubmit={setIsSubmit}
+            setIsSubmit={setShouldSubmit}
             setDeleteAssets={setDeleteAssets}
             multiple={filetype === 'theme'}
             noChange={filetype === 'theme'}
           />
-          {fileError && (
-            <Box sx={{ maxWidth: '300px' }}>
-              <Text variant="error">{fileError}</Text>
-              <br />
-              {filetype == 'theme' && (
-                <Text variant="subR">
-                  Your font file should follow the naming convention like
-                  filename-filetype.ttf . Currenty the supported filetypes are
-                  Bold, Regular and Italic. Other filetypes like Light, Black,
-                  etc. are not supported as of now.
-                </Text>
-              )}
+          {uploadError && <Text color="error">{uploadError}</Text>}
+          {filetype === 'theme' && (
+            <Box
+              display="flex"
+              my="md"
+              p="md"
+              backgroundColor="green.200"
+              borderWidth="1px"
+              borderStyle="solid"
+              borderRadius="sm"
+              borderColor="green.300">
+              <Text fontSize="sm" color="green.900" alignItems="center">
+                <strong>Font naming guide:</strong>
+                <br />
+                • Use lowercase letters and hyphens only
+                <br />• Format: <code>fontname-style.ttf</code>
+                <br />• Examples: <code>opensans-bold.ttf</code>,{' '}
+                <code>roboto-regular.ttf</code>
+                <br />
+                <strong>Supported styles:</strong>
+                <br />• <strong>Bold:</strong> For headings and emphasis
+                <br />• <strong>Regular:</strong> For body text and general
+                content
+                <br />• <strong>Italic:</strong> For quotes, citations, and
+                subtle emphasis
+                <br />
+                <strong>Not supported:</strong> Light, Black, Thin, and other
+                variations
+              </Text>
             </Box>
           )}
         </Box>
-        {filetype === 'theme' && <FontList assets={filesList} />}
+
+        {filetype === 'theme' &&
+          uploadingFiles &&
+          uploadingFiles.length > 0 && (
+            <Box h="300px" overflowY="scroll">
+              <FontList assets={uploadingFiles} />
+            </Box>
+          )}
       </Box>
     </FormProvider>
   );

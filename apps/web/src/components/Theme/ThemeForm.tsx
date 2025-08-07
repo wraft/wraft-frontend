@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { CloseIcon } from '@wraft/icon';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -14,7 +14,7 @@ import {
   Text,
   Modal,
 } from '@wraft/ui';
-import { X } from '@phosphor-icons/react';
+import { PlusIcon, X } from '@phosphor-icons/react';
 
 import FontList from 'components/Theme/FontList';
 import AssetForm from 'components/Theme/AssetForm';
@@ -44,6 +44,7 @@ type FormValues = {
 type Props = {
   setIsOpen: (e: any) => void;
   setRerender?: (e: any) => void;
+  onUpdate?: (e: any) => void;
 };
 
 const DEFAULT_FORM = {
@@ -52,7 +53,7 @@ const DEFAULT_FORM = {
   secondary_color: '#000000',
 };
 
-const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
+const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
   const [isEdit, setIsEdit] = useState(false);
   const [theme, setTheme] = useState<any>(null);
   const [assets, setAssets] = useState<Array<Asset>>([]);
@@ -81,10 +82,11 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
    * @param data
    */
   const addUploads = (data: Asset) => {
+    console.log('addUploads', data);
     setAssets((prevArray) => {
       if (!Array.isArray(prevArray)) {
         console.error('prevArray is not an array:', prevArray);
-        return [data]; // or handle this case appropriately
+        return [data];
       }
       return [...prevArray, data];
     });
@@ -101,7 +103,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
   };
 
   const onDone = () => {
-    Router.push(`/manage/themes`);
+    // Router.push(`/manage/themes`);
     setIsOpen(false);
     setRerender && setRerender((prev: boolean) => !prev);
   };
@@ -124,7 +126,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
       const apiUrl = isEdit ? `themes/${cId}` : 'themes';
       const apiMethod = isEdit ? putAPI : postAPI;
 
-      await apiMethod(apiUrl, themePayload);
+      const res = await apiMethod(apiUrl, themePayload);
+      onUpdate && onUpdate(res);
 
       toast.success(isEdit ? 'Theme updated!' : 'Theme created!', {
         id: 'theme-submit',
@@ -217,24 +220,25 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
             </Field>
           </Box>
           <Box>
-            <Label>Font</Label>
-            <FontList assets={assets} onDelete={deleteAsset} />
-
-            <Box mt="sm">
-              <Button
-                size="sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsFontOpen(true);
-                }}
-                variant="tertiary">
-                <Text>{assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}</Text>
-              </Button>
+            <Label mb="md">Font</Label>
+            <Box mb="sm" mt="xs">
+              <FontList assets={assets} onDelete={deleteAsset} />
             </Box>
+
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsFontOpen(true);
+              }}
+              variant="secondary">
+              <PlusIcon size="16" />
+              {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
+            </Button>
           </Box>
           <Box>
-            <Label>Colors</Label>
-            <Box border="solid 1px" borderColor="border" borderRadius="md">
+            <Label mb="sm">Colors</Label>
+            <Box border="solid 1px" borderColor="border" borderRadius="xs">
               <Box borderBottom="1px solid" borderColor="border">
                 <FieldColor
                   register={register}
@@ -246,8 +250,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   onChangeColor={(value: string) =>
                     onChangeField('primary_color', value)
                   }
-                  variant="inside"
-                  border="none"
                 />
               </Box>
               <Box borderBottom="1px solid" borderColor="border">
@@ -261,8 +263,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   onChangeColor={(value: string) =>
                     onChangeField('secondary_color', value)
                   }
-                  variant="inside"
-                  border="none"
                 />
               </Box>
               <Box>
@@ -274,8 +274,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender }: Props) => {
                   onChangeColor={(value: string) =>
                     onChangeField('body_color', value)
                   }
-                  variant="inside"
-                  border="none"
                 />
               </Box>
             </Box>
