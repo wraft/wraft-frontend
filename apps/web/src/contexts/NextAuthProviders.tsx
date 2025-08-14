@@ -1,19 +1,21 @@
 import { SessionProvider } from 'next-auth/react';
 
+import envConfig from 'utils/env';
+
 const NextAuthProviders = ({
   children,
   session,
 }: {
   children: React.ReactNode;
   session: any;
-}) => (
-  <>
-    {process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED === 'true' ? (
-      <SessionProvider session={session}>{children}</SessionProvider>
-    ) : (
-      children
-    )}
-  </>
-);
+}) => {
+  const isNextAuthEnabled = envConfig.NEXT_AUTH_ENABLED;
+
+  if (!isNextAuthEnabled) {
+    return <>{children}</>;
+  }
+
+  return <SessionProvider session={session}>{children}</SessionProvider>;
+};
 
 export default NextAuthProviders;

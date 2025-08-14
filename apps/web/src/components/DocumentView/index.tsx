@@ -154,8 +154,6 @@ const DocumentView = () => {
     setOpenTitleModal(!openTitleModal);
   };
 
-  console.log('contents[flow]', contents);
-
   return (
     <>
       {!loading && pageTitle && (

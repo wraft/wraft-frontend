@@ -35,6 +35,9 @@ RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm install
 # Copy source code of isolated subworkspace
 COPY --from=pruner /app/out/full/ .
 
+ENV NEXT_PUBLIC_WEBSOCKET_URL=BAKED_NEXT_PUBLIC_WEBSOCKET_URL
+ENV NEXT_PUBLIC_API_HOST=BAKED_NEXT_PUBLIC_API_HOST
+
 RUN turbo build --filter=@wraft/web
 RUN --mount=type=cache,id=pnpm,target=~/.pnpm-store pnpm prune --prod --no-optional
 RUN rm -rf ./services/*/src
@@ -43,6 +46,7 @@ RUN rm -rf ./libs/*/src
 # Final image
 FROM alpine AS runner
 ARG PROJECT=@wraft/web
+WORKDIR /app
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 nodejs
@@ -58,7 +62,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public ./apps/web/public
 
+COPY --chown=nextjs:nodejs docker/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
 EXPOSE 3000
+
+ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["node", "apps/web/server.js"]
 

@@ -1,7 +1,9 @@
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import axios, { AxiosInstance, AxiosProgressEvent } from 'axios';
 import cookie from 'js-cookie';
+
+import { envConfig } from 'utils/env';
+
+export const API_HOST = envConfig.API_HOST;
 
 const createAxiosInstance = (): AxiosInstance => {
   const instance = axios.create({

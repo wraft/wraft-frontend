@@ -17,8 +17,10 @@ import toast from 'react-hot-toast';
 import { BrandLogoIcon, GoogleIcon } from '@wraft/icon';
 
 import Link from 'common/NavLink';
+import ClientOnly from 'common/ClientOnly';
 import { useAuth } from 'contexts/AuthContext';
 import { LoginSchema, Login } from 'schemas/auth';
+import { envConfig as env } from 'utils/env';
 import { userLogin } from 'utils/models';
 
 const GoogleAuthHandler = ({
@@ -51,10 +53,7 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect');
 
-  const isGoogleAuthEnabled =
-    process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED === 'true' &&
-    process.env.GOOGLE_CLIENT_SECRET &&
-    process.env.GOOGLE_CLIENT_ID;
+  const isGoogleAuthEnabled = env.NEXT_AUTH_ENABLED;
 
   const {
     register,
@@ -63,9 +62,8 @@ const LoginForm = () => {
   } = useForm<Login>({ resolver: zodResolver(LoginSchema) });
 
   const router = useRouter();
-  const homePageUrl = process.env.homePageUrl || '/';
-  const isSelfHost =
-    String(process.env.SELF_HOST || '').toLowerCase() === 'true';
+  const homePageUrl = env.HOME_PAGE_URL;
+  const isSelfHost = env.SELF_HOST;
 
   const { session, error } = router.query;
 
@@ -73,9 +71,7 @@ const LoginForm = () => {
     const handleSignOut = async () => {
       if (session) {
         try {
-          if (status === 'authenticated') {
-            await signOut({ redirect: false });
-          }
+          await signOut({ redirect: false });
           router.push('/login');
         } catch (err) {
           console.error('Error during sign out:', err);
@@ -84,7 +80,7 @@ const LoginForm = () => {
     };
 
     handleSignOut();
-  }, [session]);
+  }, [session, router]);
 
   useEffect(() => {
     if (error) {
@@ -94,7 +90,7 @@ const LoginForm = () => {
       });
       router.push('/login');
     }
-  }, [error]);
+  }, [error, router]);
 
   const onSubmit = async (formData: any): Promise<void> => {
     setLoading(true);
@@ -117,13 +113,15 @@ const LoginForm = () => {
     if (accessToken) {
       router.push(redirectUrl || '/');
     }
-  }, [accessToken]);
+  }, [accessToken, redirectUrl, router]);
 
   return (
     <>
-      {isGoogleAuthEnabled && (
-        <GoogleAuthHandler isGoogleAuthEnabled={isGoogleAuthEnabled} />
-      )}
+      <ClientOnly>
+        {isGoogleAuthEnabled && (
+          <GoogleAuthHandler isGoogleAuthEnabled={isGoogleAuthEnabled} />
+        )}
+      </ClientOnly>
       <Flex
         justify="center"
         p="5xl"
@@ -175,15 +173,18 @@ const LoginForm = () => {
           </Flex>
           <Box>{loginError && <Text color="red.400">{loginError}</Text>}</Box>
 
-          {isGoogleAuthEnabled && (
-            <Flex mt="xl" w="100%" justifySelf="center" direction="column">
-              <Button variant="secondary" onClick={() => signIn('gmail')}>
-                <GoogleIcon width={18} />
-                Login in with Google
-              </Button>
-            </Flex>
-          )}
-
+          <ClientOnly>
+            {isGoogleAuthEnabled && (
+              <>
+                <Flex mt="xl" w="100%" justifySelf="center" direction="column">
+                  <Button variant="secondary" onClick={() => signIn('gmail')}>
+                    <GoogleIcon width={18} />
+                    Login in with Google
+                  </Button>
+                </Flex>
+              </>
+            )}
+          </ClientOnly>
           {!isSelfHost && (
             <Box mt="24px" color="gray.1000" gap="8px" mb="xxl">
               Not a user yet?{' '}

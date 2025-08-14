@@ -6,6 +6,7 @@ import { ResizableHandle, ResizableRoot } from "prosekit/react/resizable";
 import { useEffect, useState, type SyntheticEvent } from "react";
 import styled from "@emotion/styled";
 import { ArrowDownRight, ImageBroken, SpinnerGap } from "@phosphor-icons/react";
+import { useEditorConfig } from "./editor-config";
 
 const StyledResizableRoot = styled(ResizableRoot)`
   position: relative;
@@ -103,10 +104,9 @@ const StyledResizableHandle = styled(ResizableHandle)`
   }
 `;
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_HOST || "http://localhost:4000";
-
 export default function ImageView(props: ReactNodeViewProps) {
   const { setAttrs, node, view } = props;
+  const { apiHost } = useEditorConfig();
   const isReadonly = !view.editable;
 
   const attrs = node.attrs as ImageAttrs;
@@ -188,7 +188,7 @@ export default function ImageView(props: ReactNodeViewProps) {
     >
       {url && !error && (
         <Image
-          src={`${BASE_URL}${url}`}
+          src={`${apiHost}${url}`}
           onLoad={handleImageLoad}
           width={attrs.width ?? undefined}
           height={attrs.height ?? undefined}

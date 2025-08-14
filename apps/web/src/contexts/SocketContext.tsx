@@ -11,6 +11,8 @@ import { Socket, Channel } from 'phoenix';
 import toast from 'react-hot-toast';
 import { Bell } from '@phosphor-icons/react';
 
+import envConfig from 'utils/env';
+
 import { useAuth } from './AuthContext';
 
 interface SocketContextType {
@@ -57,8 +59,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       return null;
     }
 
-    const socketUrl =
-      process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:4000';
+    const socketUrl = envConfig.WEBSOCKET_URL || 'ws://localhost:4000';
 
     const newSocket = new Socket(`${socketUrl}/socket`, {
       params: {

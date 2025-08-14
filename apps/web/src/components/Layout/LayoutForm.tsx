@@ -241,10 +241,8 @@ const LayoutForm = ({
   const loadLayout = async (cid: string) => {
     try {
       setIsLoadingLayout(true);
-      console.log('LayoutForm: Loading layout for cid:', cid);
 
       const data: any = await fetchAPI(`layouts/${cid}`);
-      console.log('LayoutForm: Layout data received:', data.layout);
 
       setLayout(data.layout);
     } catch (error) {

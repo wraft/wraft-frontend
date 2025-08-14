@@ -82,7 +82,6 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
    * @param data
    */
   const addUploads = (data: Asset) => {
-    console.log('addUploads', data);
     setAssets((prevArray) => {
       if (!Array.isArray(prevArray)) {
         console.error('prevArray is not an array:', prevArray);

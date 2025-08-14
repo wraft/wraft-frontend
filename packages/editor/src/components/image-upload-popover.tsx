@@ -4,11 +4,12 @@ import {
   PopoverRoot,
   PopoverTrigger,
 } from "prosekit/react/popover";
-import { useRef, useState, type FC, type ReactNode } from "react";
+import { useState, type FC, type ReactNode } from "react";
 import styled from "@emotion/styled";
 import cookie from "js-cookie";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
+import { useEditorConfig } from "./editor-config";
 
 const StyledPopoverContent = styled(PopoverContent)`
   display: flex;
@@ -234,6 +235,7 @@ export const ImageUploadPopover: FC<{
   const [file, setFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState("");
 
+  const { apiHost } = useEditorConfig();
   const editor = useEditor<EditorExtension>();
 
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -265,10 +267,8 @@ export const ImageUploadPopover: FC<{
     const token = cookie.get("token");
 
     try {
-      const apiHost = process.env.NEXT_PUBLIC_API_HOST
-        ? `${process.env.NEXT_PUBLIC_API_HOST}/api/v1`
-        : "http://localhost:4000";
-      const response = await fetch(`${apiHost}/assets`, {
+      const apiUrl = `${apiHost}/api/v1`;
+      const response = await fetch(`${apiUrl}/assets`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

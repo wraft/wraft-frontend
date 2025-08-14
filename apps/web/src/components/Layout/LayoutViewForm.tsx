@@ -192,8 +192,6 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
 
   useEffect(() => {
     if (layout && !layoutLoaded) {
-      console.log('LayoutViewForm: Processing layout data:', layout);
-
       if (layout.asset) {
         const assetData: LayoutAsset = {
           id: layout.asset.id,
@@ -240,15 +238,12 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   }, [cId, isOpen]);
 
   const loadLayout = (cid: string) => {
-    console.log('LayoutViewForm: Loading layout for cid:', cid);
     fetchAPI(`layouts/${cid}`)
       .then((data: any) => {
-        console.log('LayoutViewForm: Layout API response:', data.layout);
         const res: Layout = data.layout;
         setLayout(res);
       })
-      .catch((error) => {
-        console.error('LayoutViewForm: Error loading layout:', error);
+      .catch(() => {
         setPreviewMargins(DEFAULT_MARGINS);
       });
   };
