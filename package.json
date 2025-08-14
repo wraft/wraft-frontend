@@ -7,6 +7,7 @@
     "changeset": "changeset",
     "clean": "rm -rf node_modules && rm -rf pnpm-lock.yaml && turbo run clean",
     "dev": "turbo run dev",
+    "docs": "turbo run docs --filter=@wraft/docs",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint:fix": "turbo run lint:fix",
     "lint": "turbo run lint",
