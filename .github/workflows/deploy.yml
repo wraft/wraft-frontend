@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 
 on:
   push:
-    tags: ['v*.*.*']
+    tags: ['*.*.*']
 
 env:
   REGISTRY: quay.io
@@ -27,7 +27,7 @@ jobs:
 
       - name: Extract version from tag
         id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
