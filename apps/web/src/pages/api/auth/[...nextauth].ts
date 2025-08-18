@@ -2,8 +2,9 @@ import axios from 'axios';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+import { envConfig } from 'utils/env';
+
+export const API_HOST = envConfig.API_HOST;
 
 export default NextAuth({
   secret: process.env.NEXTAUTH_SECRET,

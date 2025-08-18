@@ -1,6 +1,8 @@
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 import axios, { AxiosResponse } from 'axios';
+
+import { envConfig } from 'utils/env';
+
+export const API_HOST = envConfig.API_HOST;
 
 type ApiResponse<T> = Promise<T>;
 

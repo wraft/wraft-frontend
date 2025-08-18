@@ -20,6 +20,10 @@
       "cache": false,
       "persistent": true
     },
+    "docs": {
+      "cache": false,
+      "persistent": true
+    },
     "clean": {
       "cache": false,
       "outputs": ["dist/**", "build/**"]

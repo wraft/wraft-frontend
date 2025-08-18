@@ -48,8 +48,6 @@ const AssetForm = ({
     onUpload(assetData);
   };
 
-  console.log('uploadingFiles', uploadingFiles);
-
   const handleFormSubmit = async (formData: FormValues) => {
     setUploadError(null);
 

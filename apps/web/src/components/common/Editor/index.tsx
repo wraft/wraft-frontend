@@ -1,7 +1,9 @@
 import { forwardRef } from 'react';
 import { Editor } from '@wraft/editor';
 import type { NodeJSON } from '@wraft/editor';
+
 import '@wraft/editor/style.css';
+import { envConfig } from 'utils/env';
 
 type EditorProps = {
   defaultContent?: NodeJSON;
@@ -17,6 +19,7 @@ const EditorWrapper = forwardRef<any, EditorProps>(
       <Editor
         defaultContent={defaultContent}
         isReadonly={isReadonly}
+        apiHost={envConfig.API_HOST}
         {...rest}
         ref={ref}
       />

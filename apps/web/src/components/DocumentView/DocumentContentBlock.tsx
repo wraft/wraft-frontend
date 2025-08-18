@@ -19,6 +19,7 @@ import Editor from 'common/Editor';
 import { useAuth } from 'contexts/AuthContext';
 import { postAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
+import { envConfig } from 'utils/env';
 import { authorizeRoute } from 'middleware/authorize';
 
 import { useDocument } from './DocumentContext';
@@ -213,7 +214,7 @@ export const DocumentContentBlock = () => {
 
   const { canAccess } = usePermissions(userType, docRole);
 
-  const socketUrl = process.env.NEXT_PUBLIC_WEBSOCKET_URL;
+  const socketUrl = envConfig.WEBSOCKET_URL;
   const { userProfile } = useAuth();
   const tabView = useTabStore();
 
@@ -417,6 +418,7 @@ export const DocumentContentBlock = () => {
                             collabData={collabData}
                             socketUrl={socketUrl}
                             authToken={token || ''}
+                            apiHost={envConfig.API_HOST}
                           />
                         </>
                       )}

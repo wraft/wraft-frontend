@@ -9,10 +9,9 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 import { NodeJSON } from '@wraft/editor';
-export const API_HOST =
-  process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
 
 import { useAuth } from 'contexts/AuthContext';
+import { envConfig } from 'utils/env';
 import { ContentInstance, IVariantDetail } from 'utils/types/content';
 import { fetchAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
@@ -21,6 +20,8 @@ import contentStore from 'store/content.store';
 
 import apiService from './APIModel';
 import { DocRole, EditorMode, UserType } from './usePermissions';
+
+export const API_HOST = envConfig.API_HOST;
 
 interface Approver {
   id: string;

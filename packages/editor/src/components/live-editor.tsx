@@ -27,6 +27,7 @@ import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
+import { EditorConfigProvider } from "./editor-config";
 
 export interface Signer {
   id: string;
@@ -49,6 +50,7 @@ export interface EditorProps {
   collabData?: any;
   signersConfig?: SignersConfig;
   authToken?: string;
+  apiHost?: string;
 }
 
 export const LiveEditor = forwardRef(
@@ -63,6 +65,7 @@ export const LiveEditor = forwardRef(
       collabData,
       signersConfig = { signers: [] },
       authToken,
+      apiHost,
     }: EditorProps,
     ref,
   ) => {
@@ -226,7 +229,7 @@ export const LiveEditor = forwardRef(
     );
 
     return (
-      <>
+      <EditorConfigProvider config={{ apiHost }}>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
           <ProseKit editor={editor}>
             {!isReadonly && (
@@ -246,7 +249,7 @@ export const LiveEditor = forwardRef(
             </S.EditorContainer>
           </ProseKit>
         </S.EditorWrapper>
-      </>
+      </EditorConfigProvider>
     );
   },
 );

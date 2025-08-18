@@ -11,6 +11,7 @@ import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
+import { EditorConfigProvider } from "./editor-config";
 
 export interface EditorProps {
   defaultContent?: any;
@@ -19,6 +20,7 @@ export interface EditorProps {
   className?: string;
   isReadonly?: boolean;
   tokens?: any;
+  apiHost?: string;
 }
 
 export interface EditorRef {
@@ -38,6 +40,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       className = "",
       isReadonly = true,
       tokens,
+      apiHost,
     },
     ref,
   ) => {
@@ -79,21 +82,23 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     );
 
     return (
-      <div className={`wraft-editor ${className}`}>
-        <ProseKit editor={editor}>
-          <S.EditorContainer>
-            {!isReadonly && <Toolbar />}
-            <S.EditorContent>
-              <S.EditorContentInput ref={editor.mount} />
-              {!isReadonly && <InlineMenu />}
-              <SlashMenu />
-              {tokens && <TokenMenu tokens={tokens} />}
-              {/* <BlockHandle /> */}
-              <TableHandle />
-            </S.EditorContent>
-          </S.EditorContainer>
-        </ProseKit>
-      </div>
+      <EditorConfigProvider config={{ apiHost }}>
+        <div className={`wraft-editor ${className}`}>
+          <ProseKit editor={editor}>
+            <S.EditorContainer>
+              {!isReadonly && <Toolbar />}
+              <S.EditorContent>
+                <S.EditorContentInput ref={editor.mount} />
+                {!isReadonly && <InlineMenu />}
+                <SlashMenu />
+                {tokens && <TokenMenu tokens={tokens} />}
+                {/* <BlockHandle /> */}
+                <TableHandle />
+              </S.EditorContent>
+            </S.EditorContainer>
+          </ProseKit>
+        </div>
+      </EditorConfigProvider>
     );
   },
 );

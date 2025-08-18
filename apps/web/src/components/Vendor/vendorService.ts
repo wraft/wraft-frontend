@@ -8,6 +8,7 @@ import {
   VendorContactListResponse,
 } from 'schemas/vendor';
 import { fetchAPI, postAPI, putAPI, deleteAPI } from 'utils/models';
+import { envConfig } from 'utils/env';
 
 const VENDOR_ENDPOINTS = {
   vendors: 'vendors',
@@ -137,7 +138,7 @@ export const vendorService = {
     const query = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_HOST}/api/v1/${VENDOR_ENDPOINTS.vendors}/export${query}`,
+      `${envConfig.API_HOST}/api/v1/${VENDOR_ENDPOINTS.vendors}/export${query}`,
       {
         headers: {
           Authorization: `Bearer ${document.cookie.split('token=')[1]?.split(';')[0] || ''}`,

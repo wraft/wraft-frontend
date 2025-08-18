@@ -1,29 +1,26 @@
-// this is used to load fontawesome properly
-// const withCSS = require('@zeit/next-css');
 const withImages = require('next-images');
 
 const HOST = process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000';
+
+const apiHost = HOST.startsWith('http://') || HOST.startsWith('https://') 
+  ? HOST 
+  : `http://${HOST}`;
+
 module.exports = withImages({
   env: {
-    homePageUrl: process.env.NEXT_PUBLIC_HOME_PAGE_URL || '/',
-    API_HOST: process.env.NEXT_PUBLIC_API_HOST,
-    SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST || true,
-    NEXT_PUBLIC_WEBSOCKET_URL: process.env.NEXT_PUBLIC_WEBSOCKET_URL,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || '',
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
-    NEXT_PUBLIC_NEXT_AUTH_ENABLED:
-      process.env.NEXT_PUBLIC_NEXT_AUTH_ENABLED || 'false',
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   },
   async rewrites() {
     return [
       {
         source: '/uploads/:path*',
-        destination: `${HOST}/uploads/:path*`, // Proxy to Backend
+        destination: `${apiHost}/uploads/:path*`, // Proxy to Backend
       },
       {
         source: '/asset/image/:path*/:filename',
-        destination: `${HOST}/asset/image/:path*/:filename`,
+        destination: `${apiHost}/asset/image/:path*/:filename`,
       },
     ];
   },
