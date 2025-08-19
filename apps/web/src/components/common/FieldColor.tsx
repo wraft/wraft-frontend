@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-const Chrome = dynamic(() => import('@uiw/react-color-chrome'), { ssr: false });
+const Sketch = dynamic(
+  () => import('@uiw/react-color').then((mod) => ({ default: mod.Sketch })),
+  { ssr: false },
+);
 import { InkIcon } from '@wraft/icon';
 import { Text, Box, InputText, Flex, DropdownMenu } from '@wraft/ui';
 import styled from '@emotion/styled';
@@ -14,7 +17,7 @@ const ColorInput = styled(InputText)`
 
 interface FieldColorProps {
   register: any;
-  label: React.ReactNode;
+  label: string;
   name: string;
   defaultValue: string;
   placeholder?: string;
@@ -50,8 +53,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
       onChangeColor(hexColor, name);
     }
   };
-
-  const isInside = variant === 'inside';
 
   const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHexColor = e.target.value;
@@ -121,7 +122,7 @@ const FieldColor: React.FC<FieldColorProps> = ({
           </DropdownMenu.Trigger>
           {!readOnly && (
             <DropdownMenu aria-label="color picker">
-              <Chrome color={selectedColor} onChange={handleColorChange} />
+              <Sketch color={selectedColor} onChange={handleColorChange} />
             </DropdownMenu>
           )}
         </DropdownMenu.Provider>
@@ -134,12 +135,17 @@ const FieldColor: React.FC<FieldColorProps> = ({
                   borderRadius="4px"
                   display="flex"
                   cursor={readOnly ? 'default' : 'pointer'}>
-                  <InkIcon width={16} height={16} viewBox="0 0 24 24" />
+                  <InkIcon
+                    width={16}
+                    height={16}
+                    viewBox="0 0 24 24"
+                    color="#d6dad9"
+                  />
                 </Box>
               </DropdownMenu.Trigger>
 
               <DropdownMenu aria-label="color picker">
-                <Chrome color={selectedColor} onChange={handleColorChange} />
+                <Sketch color={selectedColor} onChange={handleColorChange} />
               </DropdownMenu>
             </DropdownMenu.Provider>
           </Box>

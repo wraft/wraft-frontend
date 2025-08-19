@@ -214,7 +214,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
               error={errors?.name?.message as string}>
               <InputText
                 {...register('name')}
-                placeholder="Enter a Theme Name"
+                placeholder="Enter a Layout Name"
               />
             </Field>
           </Box>
@@ -242,8 +242,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
                 <FieldColor
                   register={register}
                   name="primary_color"
-                  label={<Text color="#background-primary">Primary Color</Text>}
-                  defaultValue={theme?.primary_color || ''}
+                  label="Primary Color"
+                  defaultValue={
+                    theme?.primary_color || DEFAULT_FORM.primary_color
+                  }
                   onChangeColor={(value: string) =>
                     onChangeField('primary_color', value)
                   }
@@ -253,10 +255,10 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
                 <FieldColor
                   register={register}
                   name="secondary_color"
-                  label={
-                    <Text color="#background-primary">Secondary Color</Text>
+                  label="Secondary Color"
+                  defaultValue={
+                    theme?.secondary_color || DEFAULT_FORM.secondary_color
                   }
-                  defaultValue={theme?.secondary_color || ''}
                   onChangeColor={(value: string) =>
                     onChangeField('secondary_color', value)
                   }
@@ -266,8 +268,8 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
                 <FieldColor
                   register={register}
                   name="body_color"
-                  label={<Text color="#background-primary">Body Color</Text>}
-                  defaultValue={theme?.body_color || ''}
+                  label="Body Color"
+                  defaultValue={theme?.body_color || DEFAULT_FORM.body_color}
                   onChangeColor={(value: string) =>
                     onChangeField('body_color', value)
                   }
