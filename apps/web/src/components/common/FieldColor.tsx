@@ -17,7 +17,7 @@ const ColorInput = styled(InputText)`
 
 interface FieldColorProps {
   register: any;
-  label: React.ReactNode;
+  label: string;
   name: string;
   defaultValue: string;
   placeholder?: string;
@@ -53,8 +53,6 @@ const FieldColor: React.FC<FieldColorProps> = ({
       onChangeColor(hexColor, name);
     }
   };
-
-  const isInside = variant === 'inside';
 
   const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newHexColor = e.target.value;
