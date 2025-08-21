@@ -95,6 +95,7 @@ const RangeInput = styled(InputText)`
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
+    margin-top: -4px;
   }
 
   &::-moz-range-thumb {
