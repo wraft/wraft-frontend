@@ -16,10 +16,8 @@ import {
   Text,
   Drawer,
   useDrawer,
-  Label,
+  Toggle,
 } from '@wraft/ui';
-import styled from '@emotion/styled';
-import { Input } from 'theme-ui';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import { fetchAPI } from 'utils/models';
@@ -27,66 +25,6 @@ import { usePermission } from 'utils/permissions';
 
 import LayoutScaling from './LayoutScaling';
 import LayoutForm from './LayoutForm';
-
-const ToggleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const ToggleLabel = styled(Box)`
-  font-size: 14px;
-  color: #64748b;
-`;
-
-const ToggleSwitch = styled(Label)`
-  position: relative;
-  display: inline-block;
-  width: 36px;
-  height: 20px;
-`;
-
-const ToggleSlider = styled('span')`
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #e2e8f0; /* Light gray when inactive */
-  transition: 0.2s;
-  border-radius: 20px;
-  border: 1px solid #cbd5e1; /* Border color */
-
-  &.slider:before {
-    position: absolute;
-    content: '';
-    height: 16px;
-    width: 16px;
-    left: 2px;
-    bottom: 1px;
-    background-color: #fff; /* White knob */
-    transition: 0.2s;
-    border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const ToggleInput = styled(Input)`
-  opacity: 0;
-  width: 0;
-  height: 0;
-
-  &:checked + .slider {
-    background-color: #127d5d; /* Green when active */
-    border-color: #127d5d;
-  }
-
-  &:checked + .slider:before {
-    transform: translateX(16px);
-    background-color: #fff; /* Keep white knob */
-  }
-`;
 
 export interface Layouts {
   layout: Layout;
@@ -373,17 +311,16 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                   Edit layout
                 </Button>
 
-                <ToggleContainer>
-                  <ToggleSwitch>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={showScaling}
-                      onChange={() => setShowScaling(!showScaling)}
-                    />
-                    <ToggleSlider className="slider" />
-                  </ToggleSwitch>
-                  <ToggleLabel>Show Scale</ToggleLabel>
-                </ToggleContainer>
+                <Flex alignItems="center" gap="sm">
+                  <Toggle
+                    checked={showScaling}
+                    onChange={() => setShowScaling(!showScaling)}
+                    size="sm"
+                  />
+                  <Text fontSize="sm" color="text-secondary">
+                    Show Scale
+                  </Text>
+                </Flex>
               </Flex>
             </Box>
           )}
