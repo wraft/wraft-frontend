@@ -166,13 +166,18 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
         p="xl">
         <Box mb="lg">
           <Field label="Vendor Name" error={errors.name?.message} required>
-            <InputText {...register('name')} placeholder="Enter vendor name" />
+            <InputText
+              {...register('name')}
+              placeholder="Enter vendor name"
+              mb="md"
+            />
           </Field>
 
           <Field label="Contact Person" error={errors.contact_person?.message}>
             <InputText
               {...register('contact_person')}
               placeholder="Enter contact person name"
+              mb="md"
             />
           </Field>
 
@@ -181,6 +186,7 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
               {...register('email')}
               type="email"
               placeholder="Enter email address"
+              mb="md"
             />
           </Field>
 
@@ -188,6 +194,7 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
             <InputText
               {...register('phone')}
               placeholder="Enter phone number"
+              mb="md"
             />
           </Field>
 
@@ -209,11 +216,12 @@ const VendorDrawer: React.FC<VendorDrawerProps> = ({
               {...register('address')}
               placeholder="Enter complete address"
               rows={3}
+              mb="md"
             />
           </Field>
 
           <Field label="City" error={errors.city?.message}>
-            <InputText {...register('city')} placeholder="Enter city" />
+            <InputText {...register('city')} placeholder="Enter city" mb="md" />
           </Field>
 
           <Field label="Country" error={errors.country?.message}>
