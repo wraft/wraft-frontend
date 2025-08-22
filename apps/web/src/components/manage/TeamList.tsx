@@ -16,7 +16,7 @@ import {
 
 import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
-import { fetchAPI, deleteAPI, postAPI, putAPI } from 'utils/models';
+import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
 import AssignRole from './AssignRole';
@@ -111,9 +111,9 @@ const TeamList = () => {
   };
 
   const loadInvitedUsers = () => {
-    fetchAPI('organisations/users/invited')
+    fetchAPI('organisations/users/invite')
       .then((data: any) => {
-        setInvitedUsers(data);
+        setInvitedUsers({ invited_users: data });
         setInvitedLoading(false);
       })
       .catch((error) => {
@@ -123,7 +123,7 @@ const TeamList = () => {
   };
 
   const onResendInvite = (inviteId: string) => {
-    putAPI(`organisations/users/invite/${inviteId}/resend`, {})
+    postAPI(`organisations/users/invite/${inviteId}/resend`, {})
       .then((response: any) => {
         toast.success(response?.info || 'Invitation resent successfully', {
           duration: 2000,
@@ -146,7 +146,7 @@ const TeamList = () => {
   };
 
   const onCancelInvite = (inviteId: string) => {
-    deleteAPI(`organisations/users/invite/${inviteId}`)
+    deleteAPI(`organisations/users/invite/${inviteId}/revoke`)
       .then((response: any) => {
         toast.success(response?.info || 'Invitation cancelled successfully', {
           duration: 2000,
