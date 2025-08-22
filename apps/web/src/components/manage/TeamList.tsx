@@ -116,8 +116,7 @@ const TeamList = () => {
         setInvitedUsers({ invited_users: data });
         setInvitedLoading(false);
       })
-      .catch((error) => {
-        console.error('Failed to fetch invited users:', error);
+      .catch(() => {
         setInvitedLoading(false);
       });
   };
@@ -136,6 +135,7 @@ const TeamList = () => {
             duration: 2000,
             position: 'top-center',
           });
+          setRerender((prev) => !prev);
         } else {
           toast.error('Failed to resend invitation', {
             duration: 2000,
@@ -163,10 +163,17 @@ const TeamList = () => {
   };
 
   useEffect(() => {
-    if (organisationId) {
+    if (!organisationId) return;
+
+    loadData(organisationId);
+    loadInvitedUsers();
+
+    const interval = setInterval(() => {
       loadData(organisationId);
       loadInvitedUsers();
-    }
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [organisationId, rerender]);
 
   useEffect(() => {
