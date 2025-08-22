@@ -74,7 +74,11 @@ export type RoleType = {
   user_count: number;
 };
 
-const TeamList = () => {
+interface TeamListProps {
+  refresh?: number;
+}
+
+const TeamList = ({ refresh = 0 }: TeamListProps) => {
   const [contents, setContents] = useState<MembersList>();
   const [currentRole, setCurrentRole] = useState<any>();
   const [tableList, setTableList] = useState<Array<any>>([]);
@@ -135,7 +139,6 @@ const TeamList = () => {
             duration: 2000,
             position: 'top-center',
           });
-          setRerender((prev) => !prev);
         } else {
           toast.error('Failed to resend invitation', {
             duration: 2000,
@@ -163,18 +166,11 @@ const TeamList = () => {
   };
 
   useEffect(() => {
-    if (!organisationId) return;
-
-    loadData(organisationId);
-    loadInvitedUsers();
-
-    const interval = setInterval(() => {
+    if (organisationId) {
       loadData(organisationId);
       loadInvitedUsers();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [organisationId, rerender]);
+    }
+  }, [organisationId, rerender, refresh]);
 
   useEffect(() => {
     if (invitedUsers) {

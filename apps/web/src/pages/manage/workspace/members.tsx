@@ -16,12 +16,18 @@ import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [refresh, setRefresh] = useState(0);
+
   const menuDrawer = useDrawer();
 
   const { userProfile } = useAuth();
   const currentOrg = userProfile?.currentOrganisation?.name;
 
   const { hasPermission } = usePermission();
+
+  const handleInviteSuccess = () => {
+    setRefresh((prev) => prev + 1);
+  };
 
   return (
     (currentOrg !== 'Personal' || '') && (
@@ -47,13 +53,22 @@ const Index: FC = () => {
               </Button>
             )}
           </PageHeader>
+          <Drawer
+            open={isOpen}
+            store={menuDrawer}
+            onClose={() => setIsOpen(false)}>
+            {isOpen && (
+              <InviteTeam
+                setOpen={setIsOpen}
+                onInviteSuccess={handleInviteSuccess}
+              />
+            )}
+          </Drawer>
 
-          <PageInner>
-            <Flex gap="xl">
-              <ManageSidebar items={workspaceLinks} />
-              <TeamList />
-            </Flex>
-          </PageInner>
+          <Flex gap="md" my="md" px="md">
+            <ManageSidebar items={workspaceLinks} />
+            <TeamList refresh={refresh} />
+          </Flex>
         </Page>
         <Drawer
           open={isOpen}

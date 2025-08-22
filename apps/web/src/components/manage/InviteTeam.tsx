@@ -19,9 +19,10 @@ interface FormInputs {
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  onInviteSuccess?: () => void;
 }
 
-const InviteTeam = ({ setOpen }: Props) => {
+const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
   const [roles, setRoles] = useState<any>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [checkedValues, setCheckedValues] = useState<any>([]);
@@ -103,6 +104,10 @@ const InviteTeam = ({ setOpen }: Props) => {
         duration: 2000,
         position: 'top-right',
       });
+      if (onInviteSuccess) {
+        onInviteSuccess();
+      }
+
       setOpen(false);
     } catch (error) {
       toast.error('Failed to send invitations', {
