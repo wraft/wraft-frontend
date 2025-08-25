@@ -258,7 +258,8 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
       <Drawer
         open={isStageFormOpen}
         store={stageFormDrawer}
-        withBackdrop={true}>
+        withBackdrop={true}
+        onClose={() => setIsStageFormOpen(false)}>
         {isStageFormOpen && (
           <PipelineStageForm
             setIsOpen={setIsStageFormOpen}

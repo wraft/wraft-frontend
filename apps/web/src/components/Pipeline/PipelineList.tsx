@@ -181,7 +181,11 @@ const Form = () => {
         )}
       </PageInner>
 
-      <Drawer open={showSearch} store={mobileMenuDrawer} withBackdrop={true}>
+      <Drawer
+        open={showSearch}
+        store={mobileMenuDrawer}
+        withBackdrop={true}
+        onClose={() => setShowSearch(false)}>
         {showSearch && (
           <PipelineCreateForm
             setIsOpen={setShowSearch}

@@ -477,7 +477,7 @@ const LayoutForm = ({
               <DisclosureProvider>
                 <Disclosure>
                   <Flex align="center">
-                    <Text>Advanced</Text>
+                    <Text color="secondary">Advanced</Text>
                     <ArrowDownIcon />
                   </Flex>
                 </Disclosure>

@@ -99,7 +99,7 @@ function ImporterApp() {
     });
     postAPI(`global_asset/import`, formData)
       .then((res: ImportedItems) => {
-        toast.success('Importing ...' + id);
+        toast.success(`Successfully imported template: ${id}`);
         setImported(res);
         handleNext();
         setActionState({

@@ -2,8 +2,8 @@ import React from 'react';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text } from 'theme-ui';
-import { Button } from '@wraft/ui';
+// import { Box, Flex, Text } from 'theme-ui';
+import { Button, Box, Flex, Text } from '@wraft/ui';
 
 import Field from 'common/Field';
 import { postAPI } from 'utils/models';
@@ -46,8 +46,8 @@ const FieldTypeForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} p={4}>
-      <Box mx={0} mb={3}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} p="sm">
+      <Box mx={0}>
         <Flex>
           <Box>
             <Field
@@ -55,14 +55,14 @@ const FieldTypeForm = () => {
               label="Name"
               defaultValue="name"
               register={register}
-              mb={3}
+              mb="md"
             />
             <Field
               name="description"
               label="Description"
               defaultValue="desc"
               register={register}
-              mb={3}
+              mb="md"
             />
           </Box>
           {errors.exampleRequired && <Text>This field is required</Text>}

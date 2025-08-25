@@ -312,7 +312,9 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
             <DisclosureProvider>
               <Disclosure>
                 <Flex alignItems="center">
-                  <Text mr="sm">Advanced</Text>
+                  <Text mr="sm" color="secondary">
+                    Advanced
+                  </Text>
                   <DownIcon />
                 </Flex>
               </Disclosure>

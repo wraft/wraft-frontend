@@ -85,6 +85,7 @@ const PipelineStageForm = ({
   const [sourceData, setSourceData] = useState<any>([]);
   const [stageMapping, setStageMapping] = useState<any>([]);
   const [zodSchema, setZodSchema] = useState<any>(stageSchema);
+  const [mounted, setMounted] = useState(false);
 
   const {
     register,
@@ -343,11 +344,33 @@ const PipelineStageForm = ({
     handleTemplateChange(selectedTemplateId);
   }, [selectedTemplateId]);
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setMounted(true);
+    }, 50);
+
+    return () => clearTimeout(t);
+  }, []);
+
   const handlePrevStep = () => {
     setFormStep((current) => current - 1);
   };
 
   const goToStep = (nextStep: number) => {
+    if (nextStep < formStep) {
+      setFormStep(nextStep);
+      return;
+    }
+
+    if (nextStep > formStep && formStep === 0) {
+      if (!selectedTemplateId || selectedTemplateId === '') {
+        toast.error('Please select a template ', {
+          duration: 2000,
+          position: 'top-right',
+        });
+        return;
+      }
+    }
     setFormStep(nextStep);
   };
 
@@ -460,49 +483,51 @@ const PipelineStageForm = ({
             </Box>
 
             <Box mt={3}>
-              <Controller
-                control={control}
-                name="template_id"
-                render={({ field: { onChange, name, value } }) => {
-                  // Find the selected template to display in the Search component
-                  const selectedTemplate = templates.find(
-                    (t) => t.id === value,
-                  );
+              {mounted && (
+                <Controller
+                  control={control}
+                  name="template_id"
+                  render={({ field: { onChange, name, value } }) => {
+                    // Find the selected template to display in the Search component
+                    const selectedTemplate = templates.find(
+                      (t) => t.id === value,
+                    );
 
-                  return (
-                    <Field
-                      label="Choose a template"
-                      required
-                      disabled={selectedPipelineStageId ? true : false}
-                      error={errors?.template_id?.message as string}>
-                      <Search
-                        itemToString={(item: any) => item && item.title}
-                        name={name}
-                        placeholder={
-                          !selectedPipelineStageId
-                            ? 'Select a template'
-                            : pipeStageName || ''
-                        }
-                        minChars={0}
-                        value={selectedTemplate || value}
-                        onChange={(item: any) => {
-                          if (!item) {
-                            onChange('');
-                            return;
+                    return (
+                      <Field
+                        label="Choose a template"
+                        required
+                        disabled={selectedPipelineStageId ? true : false}
+                        error={errors?.template_id?.message as string}>
+                        <Search
+                          itemToString={(item: any) => item && item.title}
+                          name={name}
+                          placeholder={
+                            !selectedPipelineStageId
+                              ? 'Select a template'
+                              : pipeStageName || ''
                           }
-                          onChange(item.id);
-                        }}
-                        renderItem={(item: any) => (
-                          <Box>
-                            <Text>{item?.title}</Text>
-                          </Box>
-                        )}
-                        search={(query: string) => onSearchTemplates(query)}
-                      />
-                    </Field>
-                  );
-                }}
-              />
+                          minChars={0}
+                          value={selectedTemplate || value}
+                          onChange={(item: any) => {
+                            if (!item) {
+                              onChange('');
+                              return;
+                            }
+                            onChange(item.id);
+                          }}
+                          renderItem={(item: any) => (
+                            <Box my="1">
+                              <Text>{item?.title}</Text>
+                            </Box>
+                          )}
+                          search={(query: string) => onSearchTemplates(query)}
+                        />
+                      </Field>
+                    );
+                  }}
+                />
+              )}
             </Box>
           </Box>
           <Box display={formStep === 1 ? 'block' : 'none'}>

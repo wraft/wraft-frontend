@@ -359,7 +359,10 @@ const TemplateEditor = () => {
           </Flex>
         </Box>
 
-        <Modal open={isSetupVisible} ariaLabel="Create Template">
+        <Modal
+          open={isSetupVisible}
+          ariaLabel="Create Template"
+          onClose={() => setIsSetupVisible(false)}>
           <Flex w="480px" direction="column">
             <Box py="md" borderBottom="solid 1px" borderColor="border">
               <Text fontSize="xl" fontWeight="heading">
@@ -382,6 +385,7 @@ const TemplateEditor = () => {
                   render={({ field: { onChange, value, name } }) => (
                     <Field
                       label="Variant"
+                      hint="The variant type cannot be modified once saved. Please select the correct one."
                       required
                       error={errors?.variant?.message}>
                       <Search

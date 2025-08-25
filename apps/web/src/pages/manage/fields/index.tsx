@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Box, Container, Flex } from 'theme-ui';
+// import { Box, Container, Flex } from 'theme-ui';
+import { Box, Flex } from '@wraft/ui';
 
 import { menuLinks } from '@constants/menuLinks';
 import FieldList from 'common/FieldList';
@@ -22,14 +23,14 @@ const Index: FC = () => {
             + New Field
           </NextLinkText>
         </PageHeader>
-        <Container variant="layout.pageFrame">
+        <Box p="xl">
           <Flex>
             <ManageSidebar items={menuLinks} />
-            <Box variant="layout.contentFrame">
+            <Box w="100%">
               <FieldList />
             </Box>
           </Flex>
-        </Container>
+        </Box>
       </Page>
     </>
   );
