@@ -25,6 +25,7 @@ interface InvitedUser {
   id: string;
   email: string;
   status: string;
+  updated_at: string;
 }
 
 interface InvitedUsersList {
@@ -179,6 +180,7 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
           id: invitedUser.id,
           email: invitedUser.email,
           status: invitedUser.status,
+          updated_at: invitedUser.updated_at,
         })) || [];
 
       setInvitedTableList(invitedData);
@@ -490,13 +492,7 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                 <Flex
                   color="text-secondary"
                   align="center"
-                  bg={
-                    row.original.status === 'pending'
-                      ? 'yellow.400'
-                      : 'gray.400'
-                  }
                   borderRadius="md"
-                  justify="center"
                   px="sm"
                   py="xs"
                   fontSize="sm"
@@ -505,6 +501,17 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
                     {row.original.status}
                   </Text>
                 </Flex>
+              ),
+              enableSorting: false,
+            },
+            {
+              id: 'updated_at',
+              header: 'TIME',
+              accessorKey: 'updated_at',
+              cell: ({ row }: any) => (
+                <Box>
+                  <TimeAgo time={row.original.updated_at} />
+                </Box>
               ),
               enableSorting: false,
             },
