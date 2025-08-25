@@ -25,7 +25,7 @@ interface InvitedUser {
   id: string;
   email: string;
   status: string;
-  updated_at: string;
+  inserted_at: string;
 }
 
 interface InvitedUsersList {
@@ -180,7 +180,7 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
           id: invitedUser.id,
           email: invitedUser.email,
           status: invitedUser.status,
-          updated_at: invitedUser.updated_at,
+          inserted_at: invitedUser.inserted_at,
         })) || [];
 
       setInvitedTableList(invitedData);
@@ -505,9 +505,9 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
               enableSorting: false,
             },
             {
-              id: 'updated_at',
-              header: 'TIME',
-              accessorKey: 'updated_at',
+              id: 'inserted_at',
+              header: 'INVITED AT',
+              accessorKey: 'inserted_at',
               cell: ({ row }: any) => (
                 <Box>
                   <TimeAgo time={row.original.updated_at} />
