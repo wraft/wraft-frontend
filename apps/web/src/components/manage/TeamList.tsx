@@ -510,7 +510,7 @@ const TeamList = ({ refresh = 0 }: TeamListProps) => {
               accessorKey: 'inserted_at',
               cell: ({ row }: any) => (
                 <Box>
-                  <TimeAgo time={row.original.updated_at} />
+                  <TimeAgo time={row.original.inserted_at} />
                 </Box>
               ),
               enableSorting: false,
