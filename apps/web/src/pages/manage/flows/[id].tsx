@@ -1,15 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Button, Flex } from '@wraft/ui';
-import { DotsThreeVertical } from '@phosphor-icons/react';
 
-// import { menuLinks } from '@constants/menuLinks';
 import FlowViewForm from 'components/Flow/FlowViewForm';
-// import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 const Index: FC = () => {
@@ -48,21 +45,11 @@ const Index: FC = () => {
                 { name: `${flow?.flow?.name || ''}` },
               ]}
             />
-          }>
-          <Button
-            variant="secondary"
-            size="sm"
-            // px="sm"
-            // py="xs"
-            // onClick={() => setIsOpen(true)}
-          >
-            <DotsThreeVertical weight="bold" color="gray.700" />
-          </Button>
-        </PageHeader>
+          }></PageHeader>
 
-        <Flex gap="md" my="md" px="md">
+        <PageInner>
           <FlowViewForm />
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

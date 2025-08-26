@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Flex } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
 export interface IMenuItem {
   children: any;
@@ -10,17 +10,13 @@ export interface IMenuItem {
 }
 
 const MenuItem = (props: IMenuItem) => {
-  // const className = clsx(classNameProps, {
-  //   [activeClassName]: router.pathname === pathname && activeClassName,
-  // });
-
   const router = useRouter();
   const isActive =
     router.pathname === props.href ||
     (router.pathname.startsWith(props.href) && props.href !== '/');
 
   return (
-    <Flex variant={props?.variant || 'btnMenuBlock'}>
+    <Flex variant={props?.variant}>
       <Link
         href={props.href}
         as={props.path}

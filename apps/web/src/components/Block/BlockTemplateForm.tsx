@@ -2,10 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Box, Flex, Text, Spinner } from 'theme-ui';
-import { Button } from '@wraft/ui';
+import { Box, Flex, Text, Button, Field, InputText } from '@wraft/ui';
 
-import Field from 'common/Field';
 import Editor from 'common/Editor';
 import { BlockTemplates } from 'utils/types';
 import { postAPI, putAPI, fetchAPI } from 'utils/models';
@@ -22,6 +20,7 @@ const Form = () => {
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
     setValue,
   } = useForm();
@@ -115,47 +114,42 @@ const Form = () => {
   // };
 
   return (
-    <Box sx={{ mx: 'auto' }} py={3} mt={4} mx={4} mb={3}>
+    <Box mx="auto" mt="lg" as="form" onSubmit={handleSubmit(onSubmit)}>
       {/* {addAsset && <ImagesList hideList={true} onSuccess={imageAdded} />} */}
-      <Box>
-        <Flex>
-          <Box variant="w100" sx={{ minWidth: '70ch' }}>
-            <Box
-              sx={{
-                input: {
-                  bg: 'white',
-                },
-              }}>
-              <Box sx={{ px: 1, py: 1 }}>
-                <Field
-                  name="title"
-                  label="Name"
-                  defaultValue=""
-                  register={register}
+
+      <Flex>
+        <Box minWidth="70ch">
+          <Flex direction="column" mb="lg" gap="md">
+            <Field
+              label="Title"
+              required
+              error={errors?.title?.message?.toString()}>
+              <Box background="#fff" borderRadius="md">
+                <InputText
+                  {...register('title')}
+                  placeholder="Enter your title"
                 />
               </Box>
+            </Field>
 
-              <Editor
-                defaultContent={content}
-                isReadonly={false}
-                ref={editorRef}
-              />
-            </Box>
-          </Box>
-          <Box>
-            <Button variant="secondary" onClick={() => toggleAssetForm()}>
-              + Image
-            </Button>
-          </Box>
-          {errors.serialized && <Text>This field is required</Text>}
-        </Flex>
-      </Box>
-      <Flex mt={3} ml={1}>
-        <Button type="submit" variant="primary" onClick={onSubmit}>
-          <Flex m={0}>
-            {loading && <Spinner color="white" size={24} />}
-            {!loading && <Text>{cId ? 'Update' : 'Create'}</Text>}
+            <Editor
+              defaultContent={content}
+              isReadonly={false}
+              ref={editorRef}
+            />
           </Flex>
+        </Box>
+        <Box>
+          <Button variant="secondary" onClick={() => toggleAssetForm()}>
+            + Image
+          </Button>
+        </Box>
+        {errors.serialized && <Text>This field is required</Text>}
+      </Flex>
+
+      <Flex mt="sm">
+        <Button type="submit" loading={loading}>
+          {cId ? 'Update' : 'Create'}
         </Button>
       </Flex>
     </Box>

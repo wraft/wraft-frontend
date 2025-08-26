@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Flex } from 'theme-ui';
+import { Flex } from '@wraft/ui';
 
 import VendorForm from 'components/Vendor/VendorForm';
 import Page from 'common/PageFrame';

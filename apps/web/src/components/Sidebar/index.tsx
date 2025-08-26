@@ -120,7 +120,7 @@ const Sidebar = (props: any) => {
                     <DefaultMenuItem
                       href={path}
                       key={name}
-                      variant="layout.menuWrapper">
+                      variant="menuWrapper">
                       <Flex alignItems="center" gap="8px">
                         <Flex opacity="0.8">
                           {React.cloneElement(icon, {

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Text, Box, Flex } from 'theme-ui';
-import { Drawer, useDrawer } from '@wraft/ui';
+import { Drawer, useDrawer, Box, Flex, Text } from '@wraft/ui';
 import {
   ReactFlow,
   MiniMap,
@@ -12,7 +11,7 @@ import {
   addEdge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { ArrowLeft } from '@phosphor-icons/react';
+import { ArrowLeftIcon } from '@phosphor-icons/react';
 
 import { nodeTypes } from 'components/Workflow/Node';
 import { edgeTypes } from 'components/Workflow/Edges';
@@ -106,7 +105,7 @@ export const Index: any = () => {
     const stages = source.stages || [];
 
     return stages.map((_stage: any, index: any) => ({
-      id: `e1-${index + 2}`, // Edge ID
+      id: `e1-${index + 2}`,
       source: '1', // Always starts from the source node
       target: (index + 2).toString(), // Target node corresponds to the stage index
       type: 'condition',
@@ -125,41 +124,29 @@ export const Index: any = () => {
   };
 
   return (
-    <Box sx={{ width: '100vw', height: '100vh' }}>
+    <Box w="100vw" h="100vh">
       <Flex
-        variant="header"
-        sx={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          alignItems: 'center',
-          bg: 'gray.100',
-          borderBottom: 'solid 1px',
-          borderColor: 'border',
-          py: 2,
-          px: 3,
-        }}>
-        <Box
-          sx={{
-            flexBasis: ['auto', '100%'],
-            order: -1,
-          }}>
-          <Box
-            sx={{
-              color: 'text-primary',
-            }}>
-            <Flex sx={{ alignItems: 'center', gap: 3 }}>
-              <ArrowLeft cursor="pointer" onClick={goBack} size={18} />
+        position="sticky"
+        top={0}
+        zIndex={1}
+        alignItems="center"
+        bg="gray.100"
+        borderBottom="solid 1px"
+        borderColor="border"
+        py="sm"
+        px="md">
+        <Box flexBasis={['auto', '100%']} order={-1}>
+          <Box color="text-primary">
+            <Flex alignItems="center" gap={3}>
+              <ArrowLeftIcon cursor="pointer" onClick={goBack} size={18} />
 
               <Flex
                 variant="navtitle"
-                sx={{
-                  alignItems: 'center',
-                  fontWeight: 'heading',
-                  verticalAlign: 'middle',
-                  gap: 3,
-                }}>
-                <Text sx={{ fontSize: 'sm', fontWeight: 500 }}>
+                alignItems="center"
+                fontWeight="heading"
+                verticalAlign="middle"
+                gap={3}>
+                <Text fontSize="sm" fontWeight={500}>
                   {piplineDetails?.name}
                 </Text>
               </Flex>
@@ -185,10 +172,10 @@ export const Index: any = () => {
         store={mobileMenuDrawer}
         aria-label="Menu backdrop"
         withBackdrop={false}>
-        <Drawer.Header>
-          <Drawer.Title>{selectedNode?.data?.label}</Drawer.Title>
-        </Drawer.Header>
-        <Box sx={{ width: '300px' }}>{JSON.stringify(selectedNode)}</Box>
+        <>
+          <Drawer.Header>{selectedNode?.data?.label}</Drawer.Header>
+          <Text>{selectedNode && JSON.stringify(selectedNode)}</Text>
+        </>
       </Drawer>
     </Box>
   );

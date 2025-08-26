@@ -27,17 +27,24 @@ const ForgetPasswordForm = () => {
       first_time_setup: false,
     });
 
-    toast.promise(forgotPasswordRequest, {
-      loading: 'Loading...',
-      success: () => {
-        setIsSent(true);
-        return 'Operation completed successfully';
+    toast.promise(
+      forgotPasswordRequest,
+      {
+        loading: 'Loading...',
+
+        success: () => {
+          setIsSent(true);
+          return 'Operation completed successfully';
+        },
+        error: (err) => {
+          const errorMessage = err.errors || 'An error occurred';
+          return errorMessage;
+        },
       },
-      error: (err) => {
-        const errorMessage = err.errors || 'An error occurred';
-        return errorMessage;
+      {
+        position: 'top-right',
       },
-    });
+    );
     setLoading(false);
   };
 
@@ -98,11 +105,7 @@ const ForgetPasswordForm = () => {
             </Field>
 
             <Flex justifyContent="space-between" mt="lg">
-              <Button
-                variant="primary"
-                loading={isLoading}
-                disabled={isLoading}
-                type="submit">
+              <Button variant="primary" loading={isLoading} type="submit">
                 {isSent ? 'Resend Link' : 'Send Verification Link'}
               </Button>
               {isSent && <CountdownTimer setIsCounter={setIsSent} />}

@@ -1,6 +1,8 @@
 import { Handle, Position } from '@xyflow/react';
-import { Box, Flex } from 'theme-ui';
-import { HardDrives, X, Files } from '@phosphor-icons/react';
+import { Box, Flex, Text } from '@wraft/ui';
+import { HardDrivesIcon, XIcon, FilesIcon } from '@phosphor-icons/react';
+
+import { IconFrame } from 'common/Atoms';
 
 export const Source = ({
   type,
@@ -18,27 +20,26 @@ export const Source = ({
         aria-disabled={disabled}
         className={`NodeInnerWrapper ${additionalClassName}`}
         {...(onNodeClick && { onClick: () => onNodeClick(type, data) })}
-        sx={{
-          bg: 'white',
-          width: '230px',
-          px: 3,
-          py: 3,
-          borderRadius: '2px',
-          border: '1px solid',
-          justifyContent: 'space-between',
-          // borderLeftStyle: 'solid',
-          borderLeftWidth: '3px',
-          borderColor: 'rgb(82, 196, 26)',
-          boxShadow: '0 1px 3px 0 rgba(0, 20, 32, .12)',
-        }}>
+        bg="white"
+        w="230px"
+        px="md"
+        py="md"
+        borderRadius="2px"
+        border="1px solid"
+        borderLeftWidth="3px"
+        borderColor="rgb(82, 196, 26)"
+        boxShadow="0 1px 3px 0 rgba(0, 20, 32, .12)"
+        justifyContent="space-between">
         <Flex>
-          <HardDrives size={36} weight="thin" />
-          <Box sx={{ px: 2 }}>
-            <Box sx={{ fontSize: '10px' }}>Source</Box>
-            <Box sx={{ fontSize: '12px' }}>{data.label}</Box>
+          <IconFrame color="icon">
+            <HardDrivesIcon size={36} weight="thin" />
+          </IconFrame>
+          <Box px="sm">
+            <Text>Source</Text>
+            <Text fontSize="xs">{data.label}</Text>
           </Box>
         </Flex>
-        <X onClick={onCloseIconClick} />
+        <XIcon onClick={onCloseIconClick} />
       </Flex>
       <Handle type="source" position={Position.Bottom} id="a" />
     </>
@@ -63,27 +64,28 @@ export const Templete = ({
         aria-disabled={disabled}
         className={`NodeInnerWrapper ${additionalClassName}`}
         {...(onNodeClick && { onClick: () => onNodeClick(type, data) })}
-        sx={{
-          bg: 'white',
-          width: '230px',
-          px: 3,
-          py: 3,
-          borderRadius: '2px',
-          border: '1px solid',
-          justifyContent: 'space-between',
-          // borderLeftStyle: 'solid',
-          borderLeftWidth: '3px',
-          borderColor: 'rgb(24, 144, 255)',
-          boxShadow: '0 1px 3px 0 rgba(0, 20, 32, .12)',
-        }}>
+        as="div"
+        bg="white"
+        w="230px"
+        px="md"
+        py="md"
+        borderRadius="2px"
+        border="1px solid"
+        borderLeftWidth="3px"
+        borderColor="rgb(24, 144, 255)"
+        boxShadow="0 1px 3px 0 rgba(0, 20, 32, .12)">
         <Flex>
-          <Files size={36} weight="thin" />
-          <Box sx={{ px: 2 }}>
-            <Box sx={{ fontSize: '10px' }}>Templete</Box>
-            <Box sx={{ fontSize: '12px' }}>{data.label}</Box>
+          <IconFrame color="icon">
+            <FilesIcon size={36} weight="thin" />
+          </IconFrame>
+          <Box px="sm">
+            <Text>Templete</Text>
+            <Text fontSize="xs">{data.label}</Text>
           </Box>
         </Flex>
-        <X onClick={onCloseIconClick} />
+        <IconFrame color="icon">
+          <XIcon onClick={onCloseIconClick} />
+        </IconFrame>
       </Flex>
       <Handle
         type="source"

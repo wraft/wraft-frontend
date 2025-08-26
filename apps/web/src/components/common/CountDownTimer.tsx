@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Text } from 'theme-ui';
+import { Box, Text } from '@wraft/ui';
 
 type Props = {
   setIsCounter?: any;
@@ -15,7 +15,6 @@ const CountdownTimer = ({ setIsCounter }: Props) => {
         setSeconds(seconds - 1);
       } else {
         if (minutes === 0) {
-          // Timer has reached 0:00, you can perform any action here
           clearInterval(intervalId);
           setIsCounter(false);
         } else {
@@ -25,15 +24,12 @@ const CountdownTimer = ({ setIsCounter }: Props) => {
       }
     }, 1000);
 
-    // Clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, [minutes, seconds]);
 
   return (
     <Box>
-      <Text variant="pR">{`${String(minutes).padStart(2, '0')}:${String(
-        seconds,
-      ).padStart(2, '0')}`}</Text>
+      <Text>{`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}</Text>
     </Box>
   );
 };

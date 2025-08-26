@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Box, Text } from 'theme-ui';
-import { Table } from '@wraft/ui';
+import { Box, Text, Table, Flex } from '@wraft/ui';
 
 import { StateBadge } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
@@ -58,15 +57,13 @@ const PipelineLogsList = ({ rerender }: Props) => {
       header: 'Start Time',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Box
-          sx={{ display: 'flex', justifyContent: 'flex-start' }}
-          key={row.index}>
-          <Text as="p" variant="pM">
+        <Flex justify="flex-start" key={row.index}>
+          <Text as="p">
             {row.original.start_time
               ? row.original.start_time.replace('T', ' ').replace(/-/g, '/')
               : ''}
           </Text>
-        </Box>
+        </Flex>
       ),
       enableSorting: false,
     },
@@ -76,7 +73,7 @@ const PipelineLogsList = ({ rerender }: Props) => {
       accessorKey: 'content.id',
       enableSorting: false,
       cell: ({ row }: any) => {
-        return <Box sx={{ fontSize: 'sm' }}>{row.original?.id}</Box>;
+        return <Text>{row.original?.id}</Text>;
       },
     },
     {
@@ -84,32 +81,26 @@ const PipelineLogsList = ({ rerender }: Props) => {
       header: 'End Time',
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Box
-          sx={{ display: 'flex', justifyContent: 'flex-start' }}
-          key={row.index}>
-          <Text as="p" variant="pM">
+        <Flex justify="flex-start" key={row.index}>
+          <Text as="p">
             {row.original.end_time
               ? row.original.end_time.replace('T', ' ').replace(/-/g, '/')
               : ''}
           </Text>
-        </Box>
+        </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.status',
       header: (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Text as="p" variant="pS">
-            Status
-          </Text>
-        </Box>
+        <Flex justify="flex-start">
+          <Text as="p">Status</Text>
+        </Flex>
       ),
       accessorKey: 'content.status',
       cell: ({ row }: any) => (
-        <Box
-          sx={{ display: 'flex', justifyContent: 'flex-start' }}
-          key={row.index}>
+        <Flex justify="flex-start" key={row.index}>
           <StateBadge
             color={
               row.original.state == 'pending'
@@ -126,23 +117,21 @@ const PipelineLogsList = ({ rerender }: Props) => {
                 : 'error'
             }
           />
-        </Box>
+        </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.name',
       header: (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Text as="p" variant="pS">
-            Message
-          </Text>
-        </Box>
+        <Flex justify="flex-start">
+          <Text as="p">Message</Text>
+        </Flex>
       ),
       accessorKey: 'content.name',
       cell: ({ row }: any) => (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Text as="p" variant="pM">
+        <Flex justify="flex-start">
+          <Text as="p">
             {row.original.state == 'pending'
               ? `${row.original.error.info}`
               : row.original.state === 'partially_completed'
@@ -151,7 +140,7 @@ const PipelineLogsList = ({ rerender }: Props) => {
                   ? 'Build complete'
                   : 'failed to start build'}
           </Text>
-        </Box>
+        </Flex>
       ),
       enableSorting: false,
     },

@@ -101,13 +101,14 @@ const Index = () => {
               direction="column"
               as="form"
               gap="md"
-              onSubmit={handleSubmit(onSubmit)}>
+              onSubmit={handleSubmit(onSubmit)}
+              autoComplete="off">
               <Field
                 label="New Password"
                 required
                 error={errors?.newPassword?.message}>
-                <InputText
-                  autoComplete="off"
+                <PasswordInput
+                  autoComplete="new-password"
                   {...register('newPassword')}
                   placeholder="Enter your New Password"
                 />
@@ -116,8 +117,7 @@ const Index = () => {
                 label="Confirm Password"
                 required
                 error={errors?.confirmPassword?.message}>
-                <PasswordInput
-                  autoComplete="off"
+                <InputText
                   placeholder="Enter your Confirm Password"
                   {...register('confirmPassword')}
                 />

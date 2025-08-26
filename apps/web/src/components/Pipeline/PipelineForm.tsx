@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
-import { Box, Flex, Button, Text } from 'theme-ui';
+import { Box, Flex, Button, Text } from '@wraft/ui';
 import { Label, Select } from 'theme-ui';
 import { Modal } from '@wraft/ui';
 
@@ -229,11 +229,9 @@ const PipelineForm = () => {
                 stages.map((props: any) => (
                   <Flex
                     key={props.name}
-                    sx={{
-                      p: 3,
-                      borderBottom: 'solid 1px #eee',
-                      borderLeft: 0,
-                    }}>
+                    p="md"
+                    borderBottom="solid 1px #eee"
+                    borderLeft={0}>
                     <Box>
                       <Text mt={0} color="#111">
                         {props.name}
@@ -242,7 +240,9 @@ const PipelineForm = () => {
                         {props.content_type_id}
                       </Text>
                     </Box>
-                    <Text sx={{ color: 'blue', marginLeft: 'auto' }}>Edit</Text>
+                    <Text color="blue" marginLeft="auto">
+                      Edit
+                    </Text>
                   </Flex>
                 ))}
 
@@ -250,13 +250,11 @@ const PipelineForm = () => {
                 Create NDA
               </Box> */}
               <Box
-                sx={{
-                  p: 3,
-                  color: 'blue',
-                  borderBottom: 'solid 1px #eee',
-                  borderLeft: 0,
-                }}>
-                <Button variant="small2" onClick={toggleModal}>
+                p="md"
+                color="blue"
+                borderBottom="solid 1px #eee"
+                borderLeft={0}>
+                <Button size="sm" onClick={toggleModal}>
                   + Add Stage
                 </Button>
               </Box>
@@ -266,7 +264,7 @@ const PipelineForm = () => {
               ariaLabel="Add Stages"
               open={showModal}
               onClose={() => setShowModal(!showModal)}>
-              <Box sx={{ p: 4, width: '60ch' }}>
+              <Box p="xl" w="60ch">
                 <Text mb={3}>Add Stages</Text>
                 <Label htmlFor="parent" mb={1}>
                   Content Type
@@ -340,10 +338,8 @@ const PipelineForm = () => {
           </Flex>
         </Box>
       </Box>
-      <Box variant="layout.pageFrame" bg="gray.0">
-        <Button variant="btnPrimary" ml={2}>
-          {isEdit ? 'Update' : 'Create'}
-        </Button>
+      <Box>
+        <Button>{isEdit ? 'Update' : 'Create'}</Button>
       </Box>
     </Box>
   );

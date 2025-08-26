@@ -1,9 +1,8 @@
-import { Flex, Avatar, Text } from 'theme-ui';
+import { Flex, Text } from '@wraft/ui';
+import { Avatar } from 'theme-ui';
 
 import { TimeAgo } from './Atoms';
-/**
- * Profile Block
- */
+
 interface ProfileCardP {
   name: string;
   time?: string;
@@ -21,20 +20,14 @@ export const ProfileCard = ({
       : image;
 
   return (
-    <Flex
-      sx={{
-        fontSize: 'xs',
-        color: 'text-primary',
-        my: 1,
-        alignItems: 'center',
-      }}>
+    <Flex color="text-primary" alignItems="center" gap="xs">
       <Avatar
         width={16}
         height={16}
         sx={{ mr: 2, borderColor: 'border', border: 0 }}
         src={finalImage}
       />
-      <Text as="h3" sx={{ mr: 3, fontSize: 'sm', fontWeight: 600 }}>
+      <Text fontWeight="600" mr="xs">
         {name}
       </Text>
       <TimeAgo time={time} ago={true} />

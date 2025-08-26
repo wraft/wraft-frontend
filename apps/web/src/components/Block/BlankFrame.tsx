@@ -1,11 +1,6 @@
 import React from 'react';
-// import Head from 'next/head';
-import { Box, Flex, Text } from 'theme-ui';
-
-// import Container from './Container';
-// import Sidebar from './Sidebar';
-// import Nav from './Nav';
-// import { Close } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
+import styled from '@emotion/styled';
 
 export interface IPage {
   showFull?: boolean;
@@ -21,49 +16,28 @@ export interface IAlert {
   inner?: any;
 }
 
+export const EditorContent = styled(Box)`
+  .ProseMirror p {
+    mb: '1',
+    pb: '4',
+  }
+`;
 export const Page = ({ children, inner }: IPage) => {
   return (
     <>
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          minHeight: '100%',
-          // bg: 'red',
-        }}>
-        <Flex
-          sx={{
-            flex: 1,
-            flexDirection: ['column', 'row'],
-          }}>
-          <Box
-            sx={{
-              flex: 1,
-              bg: 'neutral.200',
-              minWidth: 0,
-              '.ProseMirror p': {
-                // bg: 'background-primary',
-                mb: 1,
-                pb: 4,
-              },
-            }}>
-            {inner && <Box sx={{ minHeight: '100vh' }}>{inner}</Box>}
+      <Flex flexDirection="column" minHeight="100vh">
+        <Flex flex="1" flexDirection={['column', 'row']}>
+          <EditorContent flex="1" bg="background-secondary" minWidth="0">
+            {inner && <Box minHeight="100vh">{inner}</Box>}
 
             {children}
-            <Flex sx={{ pt: 0 }}>
-              <Text sx={{ fontSize: 'xs', p: 4, color: 'text-primary' }}>
+            <Flex pt="sm" position="absolute" bottom="0" w="100%">
+              <Text fontSize="xs" p="4" color="text-primary">
                 Wraft v0.3.0
               </Text>
-              <Box
-                sx={{
-                  ml: 'auto',
-                  flexDirection: ['column', 'column'],
-                }}>
-                {/* <Text sx={{ fontSize: 'xs', p: 4, color: 'text-primary' }}>
-                  Support | Contact Us
-                </Text> */}
-              </Box>
+              <Box ml="auto" flexDirection={['column', 'column']}></Box>
             </Flex>
-          </Box>
+          </EditorContent>
         </Flex>
       </Flex>
     </>

@@ -239,11 +239,7 @@ const Index: FC = () => {
               borderColor="gray.400"
               borderRadius="lg"
               p="xl">
-              <Box
-                as="form"
-                onSubmit={handleSubmit(onSubmit)}
-                variant="layout.contentFrame"
-                mb="md">
+              <Box as="form" onSubmit={handleSubmit(onSubmit)} mb="md">
                 <Box mb="md">
                   {orgImage && (
                     <Box onClick={() => fileRef.current?.click()}>
