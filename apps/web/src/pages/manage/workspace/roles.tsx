@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import Head from 'next/head';
-import { Spinner } from 'theme-ui';
-import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
+import { Spinner } from '@wraft/ui';
+import { MagnifyingGlassIcon, PlusIcon } from '@phosphor-icons/react';
 import { Button, Flex, Box, InputText, Drawer, useDrawer } from '@wraft/ui';
 
 import { workspaceLinks } from '@constants/menuLinks';
@@ -9,7 +9,7 @@ import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import { IconFrame } from 'common/Atoms';
+import { IconFrame, PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -45,16 +45,15 @@ const Index: FC = () => {
                     borderRadius="md2"
                     icon={
                       filterLoading ? (
-                        <Spinner width={14} />
+                        <Spinner />
                       ) : (
-                        <IconFrame color="gray.900">
-                          <MagnifyingGlass width="1.25rem" weight="bold" />
+                        <IconFrame color="icon">
+                          <MagnifyingGlassIcon width="1.25rem" weight="bold" />
                         </IconFrame>
                       )
                     }
                     iconPlacement="right"
                     placeholder="Search by role names"
-                    // width="100%"
                     onChange={(e: any) => {
                       setFilterLoading(true);
                       setTimeout(() => setSearchTerm(e.target.value), 1000);
@@ -67,25 +66,25 @@ const Index: FC = () => {
                 <Button
                   size="sm"
                   variant="secondary"
-                  // borderRadius="md2"
                   onClick={() => setIsOpen(true)}>
-                  <Plus size={14} weight="bold" />
+                  <PlusIcon size={14} weight="bold" />
                   Create Role
                 </Button>
               )}
             </Flex>
           </PageHeader>
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
 
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-
-            <RolesList
-              render={render}
-              setRender={setRender}
-              searchTerm={searchTerm}
-              setFilterLoading={setFilterLoading}
-            />
-          </Flex>
+              <RolesList
+                render={render}
+                setRender={setRender}
+                searchTerm={searchTerm}
+                setFilterLoading={setFilterLoading}
+              />
+            </Flex>
+          </PageInner>
         </Page>
 
         <Drawer

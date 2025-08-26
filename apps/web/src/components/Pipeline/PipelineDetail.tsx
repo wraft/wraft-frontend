@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
+import { PageInner } from 'common/Atoms';
 import { deleteAPI, fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -21,7 +22,7 @@ import PipelineSteps from './PipelineSteps';
 import PipelineLogs from './PipelineLogs';
 import PipelineFormEntry from './PipelineFormEntry';
 
-const PipelineView = () => {
+const PipelineDetail = () => {
   const [rerender, setRerender] = useState<boolean>(false);
   const [formStep, setFormStep] = useState<number>(0);
   const [pipelineData, setPipelineData] = useState<any>([]);
@@ -89,7 +90,7 @@ const PipelineView = () => {
   const titles = ['Steps', 'Configure', 'Logs'];
 
   return (
-    <Box>
+    <>
       <PageHeader title={pipelineData.name}>
         <Flex marginTop="auto" justify="space-between">
           <Flex>
@@ -109,48 +110,49 @@ const PipelineView = () => {
         </Flex>
       </PageHeader>
 
-      <Flex px="md" py="md" gap="md">
-        <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
+      <PageInner>
+        <Flex gap="xl">
+          <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
 
-        <Box w="80%" display={formStep === 0 ? 'block' : 'none'}>
-          <PipelineSteps rerender={rerender} setRerender={setRerender} />
-        </Box>
+          <Box w="80%" display={formStep === 0 ? 'block' : 'none'}>
+            <PipelineSteps rerender={rerender} setRerender={setRerender} />
+          </Box>
 
-        <Box w="50%" display={formStep === 1 ? 'block' : 'none'}>
-          <Flex direction="column" gap="md" background="#fff" px="lg" py="lg">
-            <Field label="Name" disabled>
-              <Input name="name" disabled value={pipelineData.name} />
-            </Field>
+          <Box w="50%" display={formStep === 1 ? 'block' : 'none'}>
+            <Flex direction="column" gap="md" background="#fff" px="lg" py="lg">
+              <Field label="Name" disabled>
+                <Input name="name" disabled value={pipelineData.name} />
+              </Field>
 
-            <Field label="Source" disabled>
-              <Input name="source" disabled value={pipelineData.source} />
-            </Field>
+              <Field label="Source" disabled>
+                <Input name="source" disabled value={pipelineData.source} />
+              </Field>
 
-            <Field label="Form" disabled>
-              <Input
-                name="form"
-                disabled
-                value={formData ? formData.name : ''}
-              />
-            </Field>
+              <Field label="Form" disabled>
+                <Input
+                  name="form"
+                  disabled
+                  value={formData ? formData.name : ''}
+                />
+              </Field>
 
-            <Box alignSelf="flex-end" mt="sm">
-              <Box marginTop={2}>
-                {hasPermission('pipeline', 'delete') && (
-                  <Button danger onClick={onConfirm}>
-                    Delete Pipeline
-                  </Button>
-                )}
+              <Box alignSelf="flex-end" mt="sm">
+                <Box marginTop={2}>
+                  {hasPermission('pipeline', 'delete') && (
+                    <Button danger onClick={onConfirm}>
+                      Delete Pipeline
+                    </Button>
+                  )}
+                </Box>
               </Box>
-            </Box>
-          </Flex>
-        </Box>
+            </Flex>
+          </Box>
 
-        <Box w="80%" display={formStep === 2 ? 'block' : 'none'}>
-          <PipelineLogs rerender={rerender} setRerender={setRerender} />
-        </Box>
-      </Flex>
-
+          <Box w="80%" display={formStep === 2 ? 'block' : 'none'}>
+            <PipelineLogs rerender={rerender} setRerender={setRerender} />
+          </Box>
+        </Flex>
+      </PageInner>
       <Modal
         size="md"
         ariaLabel="pipelinedelte"
@@ -200,7 +202,7 @@ const PipelineView = () => {
           </>
         )}
       </Drawer>
-    </Box>
+    </>
   );
 };
-export default PipelineView;
+export default PipelineDetail;

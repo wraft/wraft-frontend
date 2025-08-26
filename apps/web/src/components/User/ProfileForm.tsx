@@ -45,6 +45,8 @@ const genderOptions: SeletOption[] = [
 
 const AvatarContainer = styled(Box)`
   cursor: pointer;
+  width: 120px;
+  height: 120px;
 `;
 
 const AvatarImage = styled(Image)`

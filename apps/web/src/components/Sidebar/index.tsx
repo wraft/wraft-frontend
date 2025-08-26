@@ -33,7 +33,8 @@ export interface INav {
 }
 
 const Sidebar = (props: any) => {
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isDocumentCreatorOpen, setIsDocumentCreatorOpen] =
+    useState<boolean>(false);
   const router = useRouter();
   const mobileMenuDrawer = useDrawer();
   const { permissions } = useAuth();
@@ -60,12 +61,12 @@ const Sidebar = (props: any) => {
     );
   };
 
-  const toggleSearch = () => {
-    setShowSearch(!showSearch);
+  const toggleCreateDocument = () => {
+    setIsDocumentCreatorOpen(!isDocumentCreatorOpen);
   };
 
   useHotkeys('/', () => {
-    toggleSearch();
+    toggleCreateDocument();
   });
 
   // const steps: StepType[] = [
@@ -97,7 +98,7 @@ const Sidebar = (props: any) => {
         borderRight="solid 1px"
         borderColor="border"
         bg="background-primary">
-        <Header toggleSearch={toggleSearch} />
+        <Header toggleCreateDocument={toggleCreateDocument} />
         <Flex flex={1} direction="column">
           <SearchBlock />
 
@@ -119,7 +120,7 @@ const Sidebar = (props: any) => {
                     <DefaultMenuItem
                       href={path}
                       key={name}
-                      variant="layout.menuWrapper">
+                      variant="menuWrapper">
                       <Flex alignItems="center" gap="8px">
                         <Flex opacity="0.8">
                           {React.cloneElement(icon, {
@@ -174,12 +175,12 @@ const Sidebar = (props: any) => {
         </Box>
       </Flex>
       <Drawer
-        open={showSearch}
+        open={isDocumentCreatorOpen}
         store={mobileMenuDrawer}
         aria-label="Menu backdrop"
         withBackdrop={true}
-        onClose={() => setShowSearch(false)}>
-        <CreateDocument setIsOpen={setShowSearch} />
+        onClose={() => setIsDocumentCreatorOpen(false)}>
+        <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
       </Drawer>
     </>
   );

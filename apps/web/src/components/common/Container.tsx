@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 interface ContainerProps {
   children: any;
@@ -9,12 +9,10 @@ interface ContainerProps {
 const Container = (props: ContainerProps) => {
   return (
     <Box
-      sx={{
-        maxWidth: (props.width || '100') + 'rem',
-        mx: 'auto',
-        px: 0,
-        bg: props.bg ? props.bg : 'transparent',
-      }}>
+      maxWidth={(props.width || '100') + 'rem'}
+      mx="auto"
+      px={0}
+      bg={props.bg ? props.bg : 'transparent'}>
       {props.children}
     </Box>
   );

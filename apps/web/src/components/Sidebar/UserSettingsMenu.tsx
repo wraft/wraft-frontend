@@ -80,7 +80,7 @@ const UserSettingsMenu = ({
                 </Flex>
 
                 <Flex alignItems="center" ml="auto">
-                  <IconFrame color="gray.1000">
+                  <IconFrame color="icon">
                     <CaretUpDown size={14} />
                   </IconFrame>
                 </Flex>

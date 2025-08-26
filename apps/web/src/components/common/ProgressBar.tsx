@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 type Props = {
   progress: number;
@@ -8,24 +8,20 @@ type Props = {
 const ProgressBar = ({ progress }: Props) => {
   return (
     <Box
-      sx={{
-        flexShrink: 0,
-        position: 'relative',
-        height: '4px',
-        width: '48px',
-        borderRadius: '50px',
-        bg: 'neutral.200',
-      }}>
+      flexShrink="0"
+      position="relative"
+      h="4px"
+      w="48px"
+      borderRadius="50px"
+      bg="neutral.200">
       <Box
-        sx={{
-          height: '100%',
-          width: `${progress}%`,
-          backgroundColor: 'green.700',
-          borderRadius: 'inherit',
-          textAlign: 'right',
-          transition: 'width 1s ease-in-out',
-          animation: `widthChange ${progress}% 1s ease-in-out`,
-        }}
+        h="100%"
+        w={`${progress}%`}
+        bg="green.700"
+        borderRadius="inherit"
+        textAlign="right"
+        transition="width 1s ease-in-out"
+        animation={`widthChange ${progress}% 1s ease-in-out`}
       />
     </Box>
   );

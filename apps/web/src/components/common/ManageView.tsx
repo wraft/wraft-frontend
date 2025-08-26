@@ -25,7 +25,7 @@ const ManageHomePage = () => {
     <Box minHeight="100%" bg="background-secondary">
       <PageHeader title="Manage" desc="Manage Variants" />
       <PageInner>
-        <Grid templateColumns="repeat(2, 1fr)" p="xl" gap="lg" w="70%">
+        <Grid templateColumns="repeat(2, 1fr)" gap="xl" w="70%">
           {mainMenu &&
             mainMenu.map((menu: any, index: any) => (
               <NavLink href={menu.path} key={index}>

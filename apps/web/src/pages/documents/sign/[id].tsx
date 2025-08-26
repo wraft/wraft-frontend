@@ -10,7 +10,7 @@ const Index: FC = () => {
     <>
       <Head>
         <title>Document - Wraft</title>
-        <meta name="description" content="a nextjs starter boilerplate" />
+        <meta name="description" content="Sign your document in Wraft." />
       </Head>
       <Page>
         <DocumentProvider mode="view">

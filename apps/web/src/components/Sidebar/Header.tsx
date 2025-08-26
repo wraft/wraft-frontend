@@ -13,7 +13,11 @@ import { postAPI } from 'utils/models';
 
 import WorkspaceCreate from '../manage/WorkspaceCreate';
 
-const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
+const Header = ({
+  toggleCreateDocument,
+}: {
+  toggleCreateDocument: () => void;
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [createdId, setCreatedId] = useState<string>();
 
@@ -43,7 +47,7 @@ const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
   return (
     <>
       <Flex justify="space-between" align="center">
-        <Box py="md" px="" pr="none" minWidth="80%">
+        <Box py="md" px="" pr="none" minWidth="75%">
           <DropdownMenu.Provider>
             <DropdownMenu.Trigger>
               <Flex cursor="pointer" pl="lg">
@@ -146,8 +150,8 @@ const Header = ({ toggleSearch }: { toggleSearch: () => void }) => {
             shape="circle"
             variant="ghost"
             size="xs"
-            onClick={() => toggleSearch()}>
-            <IconFrame color="gray.1100">
+            onClick={toggleCreateDocument}>
+            <IconFrame color="icon">
               <Plus size={14} />
             </IconFrame>
           </Button>

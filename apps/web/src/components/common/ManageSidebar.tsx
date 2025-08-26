@@ -25,7 +25,7 @@ const ManageSidebar = ({ items }: INav) => {
     : items;
 
   return (
-    <Flex direction="column" gap="sm" px="sm" borderColor="border">
+    <Flex direction="column" gap="sm" borderColor="border">
       {filteredItems &&
         filteredItems.map((item: any) => (
           <NavLink href={item.path} variant="links.base" key={item.name}>
@@ -34,8 +34,8 @@ const ManageSidebar = ({ items }: INav) => {
               w="100%"
               flex={1}
               minWidth="150px"
-              px="sm"
-              py="xs">
+              px="md"
+              py="sm">
               {item.icon && <Box color="gray.500">{item.icon}</Box>}
               <Text>{item.name}</Text>
             </Box>

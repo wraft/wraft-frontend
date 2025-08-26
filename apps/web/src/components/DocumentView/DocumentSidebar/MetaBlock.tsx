@@ -56,7 +56,9 @@ const MetaBlock = () => {
     <Box mt="xl">
       <>
         <Flex justify="space-between">
-          <Text as="h6">Meta Info</Text>
+          <Text fontWeight="500" color="text-secondary">
+            Meta Info
+          </Text>
           {editorMode !== 'view' && (
             <Box onClick={openDrawer}>
               <EditIcon width={14} className="main-icon" />
@@ -64,7 +66,7 @@ const MetaBlock = () => {
           )}
         </Flex>
 
-        <Box border="1px solid" borderColor="border" mt="sm">
+        <Box border="1px solid" borderColor="border" borderRadius="md" mt="sm">
           {meta &&
             typeof meta === 'object' &&
             orderedKeys.map((key) => {
@@ -82,7 +84,7 @@ const MetaBlock = () => {
                     key={key}
                     borderBottom="1px solid"
                     borderColor="border"
-                    p="sm">
+                    p="md">
                     <Text flex="0 0 60%" fontWeight="heading">
                       {String(value)}
                     </Text>

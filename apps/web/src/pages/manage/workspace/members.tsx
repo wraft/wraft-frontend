@@ -10,6 +10,7 @@ import TeamList from 'components/manage/TeamList';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -46,18 +47,20 @@ const Index: FC = () => {
               </Button>
             )}
           </PageHeader>
-          <Drawer
-            open={isOpen}
-            store={menuDrawer}
-            onClose={() => setIsOpen(false)}>
-            {isOpen && <InviteTeam setOpen={setIsOpen} />}
-          </Drawer>
 
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-            <TeamList />
-          </Flex>
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
+              <TeamList />
+            </Flex>
+          </PageInner>
         </Page>
+        <Drawer
+          open={isOpen}
+          store={menuDrawer}
+          onClose={() => setIsOpen(false)}>
+          {isOpen && <InviteTeam setOpen={setIsOpen} />}
+        </Drawer>
       </>
     )
   );

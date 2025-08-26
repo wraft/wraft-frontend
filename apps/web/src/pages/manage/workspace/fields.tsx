@@ -7,6 +7,7 @@ import OrganisationInfo from 'components/manage/OrganisationInfo';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 
 const CompanyForm: FC = () => {
   return (
@@ -24,20 +25,22 @@ const CompanyForm: FC = () => {
           ]}
         />
 
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={workspaceLinks} />
-          <Flex
-            bg="background-primary"
-            direction="column"
-            minWidth="556px"
-            border="solid 1px"
-            borderColor="gray.400"
-            borderRadius="lg"
-            p="xl"
-            px="2xl">
-            <OrganisationInfo />
+        <PageInner>
+          <Flex gap="xl">
+            <ManageSidebar items={workspaceLinks} />
+            <Flex
+              bg="background-primary"
+              direction="column"
+              minWidth="556px"
+              border="solid 1px"
+              borderColor="gray.400"
+              borderRadius="lg"
+              p="xl"
+              px="2xl">
+              <OrganisationInfo />
+            </Flex>
           </Flex>
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

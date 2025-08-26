@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Button, Drawer, useDrawer } from '@wraft/ui';
-import { DotsThreeVertical } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import FlowList from 'components/Flow/FlowList';
 import FlowForm from 'components/Flow/FlowForm';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
+import { PageInner } from 'common/Atoms';
 import { usePermission } from 'utils/permissions';
 
 const Index: FC = () => {
@@ -53,7 +54,7 @@ const Index: FC = () => {
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsOpen(true)}>
-                <DotsThreeVertical stroke="bold" color="gray.700" />
+                <DotsThreeVerticalIcon stroke="bold" color="gray.700" />
               </Button>
             )}
           </Flex>
@@ -67,10 +68,9 @@ const Index: FC = () => {
           {isOpen && <FlowForm setOpen={setIsOpen} setRerender={setRerender} />}
         </Drawer>
 
-        <Flex gap="md" my="md" px="xl">
-          {/* <ManageSidebar items={menuLinks} /> */}
+        <PageInner>
           <FlowList rerender={rerender} setRerender={setRerender} />
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

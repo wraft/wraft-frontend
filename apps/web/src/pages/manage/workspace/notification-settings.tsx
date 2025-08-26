@@ -7,6 +7,7 @@ import NotificationSettings from 'components/Notification/NotificationSettings';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import ManageSidebar from 'common/ManageSidebar';
+import { PageInner } from 'common/Atoms';
 
 const WorkspaceNotificationSettings: FC = () => {
   return (
@@ -26,11 +27,12 @@ const WorkspaceNotificationSettings: FC = () => {
             { name: 'Notification', path: '' },
           ]}
         />
-
-        <Flex gap="md" my="md" px="md">
-          <ManageSidebar items={workspaceLinks} />
-          <NotificationSettings />
-        </Flex>
+        <PageInner>
+          <Flex gap="xl">
+            <ManageSidebar items={workspaceLinks} />
+            <NotificationSettings />
+          </Flex>
+        </PageInner>
       </Page>
     </>
   );

@@ -186,10 +186,6 @@ const LayoutList = ({ rerender }: Props) => {
     },
   ];
 
-  return (
-    <Box w="100%">
-      <Table data={contents} columns={columns} isLoading={loading} />
-    </Box>
-  );
+  return <Table data={contents} columns={columns} isLoading={loading} />;
 };
 export default LayoutList;

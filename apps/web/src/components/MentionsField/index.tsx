@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text } from 'theme-ui';
-import { Label } from 'theme-ui';
+import { Text, Label } from '@wraft/ui';
 import Mentions from 'rc-mentions';
 import styled from '@emotion/styled';
 
@@ -15,12 +14,12 @@ const MentionsWrapper = styled.div`
     border-radius: 4px;
     fontweight: fontWeight;
     padding: 6px 16px;
-    color: ${({ theme }: any) => theme.rawColors.gray[1200]};
-    background-color: ${({ theme }: any) => theme.rawColors.white} !important;
+    background-color: var(--theme-ui-colors-background-primary);
     border-color: var(--theme-ui-colors-border);
   }
   .rc-textarea {
     font-size: 1rem;
+    color: var(--theme-ui-colors-text-primary);
   }
   textarea {
     color: ${({ theme }: any) => theme.colors.text};
@@ -45,10 +44,12 @@ const MentionField: React.FC<any> = ({
     <>
       <GlobalStyle />
       {sub && (
-        <Text sx={{ position: 'absolute', right: 16, top: 32 }}>{sub}</Text>
+        <Text as="span" position="absolute" right="16px" top="32px">
+          {sub}
+        </Text>
       )}
       {label && (
-        <Label htmlFor="description" sx={{ color: 'gray.a1100' }}>
+        <Label htmlFor="description" color="text-secondary">
           {label}
         </Label>
       )}
@@ -65,9 +66,7 @@ const MentionField: React.FC<any> = ({
           onSelect={(val) => console.log('onSelect', val)}
         />
         {error && (
-          <Text
-            sx={{ position: 'absolute', bottom: '-22px', left: '4px' }}
-            variant="error">
+          <Text as="span" position="absolute" bottom="-22px" left="4px">
             {error.message}
           </Text>
         )}

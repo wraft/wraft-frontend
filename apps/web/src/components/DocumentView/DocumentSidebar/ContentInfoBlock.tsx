@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
-import { DotsThreeVertical } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
+import { IconFrame } from 'common/Atoms';
 import { deleteAPI, postAPI } from 'utils/models';
 import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
@@ -84,7 +85,9 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     <>
       <DropdownMenu.Provider>
         <DropdownMenu.Trigger>
-          <DotsThreeVertical weight="bold" size={18} className="main-icon" />
+          <IconFrame color="icon">
+            <DotsThreeVerticalIcon weight="bold" size={18} />
+          </IconFrame>
         </DropdownMenu.Trigger>
 
         <DropdownMenu aria-label="Editor Option">
@@ -207,11 +210,7 @@ export const ContentInfoBlock = ({
           )}
         </Flex>
       </Box>
-      <Flex
-        //  ml: 'auto',
-        align="center"
-        //  gap: 1,
-      >
+      <Flex align="center" gap="sm" ml="auto">
         {currentActiveIndex > 0 &&
           userType === 'default' &&
           editorMode !== 'new' && <InviteCollaborators />}

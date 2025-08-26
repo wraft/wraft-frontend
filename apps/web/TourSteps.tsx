@@ -1,5 +1,5 @@
 import { StepType } from '@reactour/tour';
-import { Box } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 const TourSteps: { [key: string]: StepType[] } = {
   LandingPage: [

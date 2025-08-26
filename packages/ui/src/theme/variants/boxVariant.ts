@@ -1,3 +1,5 @@
+import { backgroundColor } from "@xstyled/emotion";
+
 const boxVariant = {
   card: {
     padding: "xxl",
@@ -21,6 +23,29 @@ const boxVariant = {
   boxtwo: {
     backgroundColor: "red.100",
     textAlign: "center",
+  },
+  menuWrapper: {
+    a: {
+      textDecoration: "none",
+      color: "text-primary",
+      width: "100%",
+      padding: "sm md",
+      "&.active": {
+        backgroundColor: "green.a300",
+        color: "green.800",
+        borderRadius: "md",
+      },
+      ":hover": {
+        backgroundColor: "green.200",
+      },
+    },
+
+    color: "text-primary",
+    ":hover": {
+      color: "gray.1000",
+    },
+    cursor: "pointer",
+    marginBottom: "xs",
   },
 };
 

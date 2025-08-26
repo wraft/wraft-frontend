@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Text } from 'theme-ui';
+import { Box, Flex, Text } from '@wraft/ui';
 
 import { ProfileCard } from 'common/ProfileCard';
 
@@ -25,44 +25,25 @@ export interface Profile {
 
 const CommentCard = (comment: Comment) => {
   return (
-    <>
-      <Box>
-        <Box
-          key={comment?.id}
-          sx={{
-            // bg: 'blue.100',
-            borderBottom: 'solid 1px',
-            borderColor: 'border',
-            pb: 3,
-            mb: 2,
-          }}>
-          <Flex sx={{ display: 'inline-flex' }}>
-            <Box sx={{ pl: 0 }}>
-              <ProfileCard
-                image={`${comment?.profile?.profile_pic}`}
-                name={comment?.profile?.name}
-                time={comment?.updated_at}
-              />
-            </Box>
-          </Flex>
-          <Box sx={{ pl: 3, pr: 2 }}>
-            <Text
-              as="p"
-              sx={{
-                mt: 0,
-                color: 'text-primary',
-                fontSize: 'sm',
-                pt: 0,
-                lineHeight: 1.35,
-                pl: 2,
-                m: 0,
-              }}>
-              {comment.comment}
-            </Text>
-          </Box>
-        </Box>
+    <Box
+      key={comment?.id}
+      borderBottom="solid 1px"
+      borderColor="border"
+      pb="md"
+      mb="md">
+      <Flex pl="0">
+        <ProfileCard
+          image={`${comment?.profile?.profile_pic}`}
+          name={comment?.profile?.name}
+          time={comment?.updated_at}
+        />
+      </Flex>
+      <Box pl="md" pr="sm">
+        <Text as="p" mt="xs" color="text-primary">
+          {comment.comment}
+        </Text>
       </Box>
-    </>
+    </Box>
   );
 };
 export default CommentCard;

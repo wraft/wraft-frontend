@@ -1,5 +1,5 @@
 'use client';
-import { Box } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 import ImporterWrapper from './ImporterWrapper';
 
@@ -21,9 +21,7 @@ export interface IAlert {
 export const ImporterPage = () => {
   return (
     <Box>
-      <Box variant="section">
-        <ImporterWrapper />
-      </Box>
+      <ImporterWrapper />
     </Box>
   );
 };

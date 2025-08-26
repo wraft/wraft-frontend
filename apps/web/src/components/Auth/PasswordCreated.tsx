@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Flex, Button, Text } from '@wraft/ui';
-import { Link } from 'theme-ui';
+
+import Link from 'common/NavLink';
 
 import CheckSuccess from '../../../public/check-success.svg';
 

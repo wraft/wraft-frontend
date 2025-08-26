@@ -154,7 +154,7 @@ const light = {
 
   "modal-background": "#fff",
 
-  icon: colors.gray["1200"],
+  icon: colors.gray["1100"],
   ...colors,
 };
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Search, Box, Text, Flex } from '@wraft/ui';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { Search, Box, Text, Flex, Button } from '@wraft/ui';
+import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { postAPI, fetchAPI, deleteAPI } from 'utils/models';
 
-import * as S from './styles';
 import { useDocument } from '../DocumentContext';
 
 interface User {
@@ -17,7 +17,7 @@ interface User {
   removable: boolean;
 }
 
-export default function InviteBlock({ docId }: any) {
+export default function InviteBlock({ docId, close }: any) {
   const [selectValue, setSelectValue] = useState<any>([]);
   const { cId, contents, additionalCollaborator, setAdditionalCollaborator } =
     useDocument();
@@ -90,21 +90,34 @@ export default function InviteBlock({ docId }: any) {
   };
 
   return (
-    <S.Container>
-      <S.Header>
-        <Text fontSize="2xl" fontWeight="heading" mb="sm">
+    <Box w="560px" m="-xl">
+      <Flex
+        borderBottom="1px solid"
+        borderColor="border"
+        p="md"
+        py="xl"
+        justify="space-between">
+        <Text fontSize="xl" fontWeight="heading">
           Invite To Editor Flow
         </Text>
-        <Text color="text-secondary">Invite and manage your team members.</Text>
-      </S.Header>
-      <Box pb="xl">
+        <IconFrame color="icon">
+          <XIcon size={20} weight="bold" cursor="pointer" onClick={close} />
+        </IconFrame>
+      </Flex>
+
+      <Box py="md" px="lg">
+        <Text color="text-secondary" mb="sm">
+          Invite and manage your team members.
+        </Text>
         <Search
           itemToString={(item: any) => item && item.name}
           name="member"
           value={selectValue}
           icon={
             <Box display="contents">
-              <MagnifyingGlass size={18} />
+              <IconFrame color="icon">
+                <MagnifyingGlassIcon size={18} />
+              </IconFrame>
             </Box>
           }
           onChange={onUserSelect}
@@ -127,26 +140,27 @@ export default function InviteBlock({ docId }: any) {
       </Box>
 
       {additionalCollaborator.length > 0 && (
-        <Box borderTop="1px solid" borderColor="border">
+        <Box px="md" mb="md" mt="md">
+          <Text fontSize="md" fontWeight="500" color="text-secondary" mb="xs">
+            Flow Members
+          </Text>
           {additionalCollaborator.map((collaborator: User, i: any) => (
-            <S.MemberItem key={i}>
-              <S.MemberInfo>
-                <div>
-                  <S.MemberName>{collaborator.name}</S.MemberName>
-                </div>
-              </S.MemberInfo>
+            <Flex py="sm" key={i} justify="space-between">
+              <Text>{collaborator.name}</Text>
               <Box>
                 {collaborator.removable && (
-                  <S.MoreButton
+                  <Button
+                    variant="ghost"
+                    size="xs"
                     onClick={() => removeCollaborator(collaborator.id)}>
-                    <Box>Remove</Box>
-                  </S.MoreButton>
+                    <Text>Remove</Text>
+                  </Button>
                 )}
               </Box>
-            </S.MemberItem>
+            </Flex>
           ))}
         </Box>
       )}
-    </S.Container>
+    </Box>
   );
 }

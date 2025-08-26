@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Button, InputText, Select, Text, Box, Flex } from '@wraft/ui';
+import { XIcon } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { postAPI, fetchAPI, patchAPI } from 'utils/models';
-
-import * as S from './styles';
 
 interface User {
   id: string;
@@ -30,7 +30,7 @@ const ITEMS = [
   { value: 'viewer', label: 'Viewer' },
 ];
 
-export default function InviteBlock({ docId }: any) {
+export default function InviteBlock({ docId, close }: any) {
   const [collaborators, setCollaborators] = useState<any>([]);
 
   const { handleSubmit, control } = useForm();
@@ -86,17 +86,25 @@ export default function InviteBlock({ docId }: any) {
   };
 
   return (
-    <Box w="42rem">
-      <Box>
-        <Text fontSize="3xl" fontWeight="heading" mb="sm">
-          Invite Member
+    <Box w="42rem" m="-xl">
+      <Flex
+        borderBottom="1px solid"
+        borderColor="border"
+        p="md"
+        py="xl"
+        justify="space-between">
+        <Text fontSize="xl" fontWeight="heading">
+          Invite Members
         </Text>
-        <Text color="text-secondary">
+        <IconFrame color="icon">
+          <XIcon size={20} weight="bold" cursor="pointer" onClick={close} />
+        </IconFrame>
+      </Flex>
+
+      <Box as="form" onSubmit={handleSubmit(handleInvite)} my="xl" mx="lg">
+        <Text color="text-secondary" mb="sm">
           Invite your team to collaborate on this document
         </Text>
-      </Box>
-
-      <Box as="form" onSubmit={handleSubmit(handleInvite)} my="xl">
         <Flex gap="md">
           <Controller
             control={control}
@@ -138,7 +146,10 @@ export default function InviteBlock({ docId }: any) {
       </Box>
 
       {collaborators.length > 0 && (
-        <Box borderTop="1px solid" color="border">
+        <Box px="lg" mb="md" mt="md">
+          <Text fontSize="md" fontWeight="500" color="text-secondary" mb="xs">
+            Members
+          </Text>
           {collaborators
             .filter(
               (collaborator: any) =>
@@ -146,7 +157,11 @@ export default function InviteBlock({ docId }: any) {
                 collaborator.status === 'pending',
             )
             .map((collaborator: Collaborator) => (
-              <S.MemberItem key={collaborator.id}>
+              <Flex
+                py="sm"
+                key={collaborator.id}
+                justify="space-between"
+                align="flex-start">
                 <Flex gap="sm" w="100%" align="center" justify="center">
                   <Box w="45%">
                     <Text>{collaborator.user.name}</Text>
@@ -161,7 +176,6 @@ export default function InviteBlock({ docId }: any) {
                       <Text color="green.800">{collaborator.status}</Text>
                     )}
                   </Box>
-                  <Text color="green.800">{collaborator.status}</Text>
                 </Flex>
 
                 <Button
@@ -169,7 +183,7 @@ export default function InviteBlock({ docId }: any) {
                   onClick={() => removeCollaborator(collaborator.id)}>
                   Remove
                 </Button>
-              </S.MemberItem>
+              </Flex>
             ))}
         </Box>
       )}

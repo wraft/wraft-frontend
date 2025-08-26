@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Router, { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextT } from '@phosphor-icons/react';
+import { TextTIcon } from '@phosphor-icons/react';
 import {
   Button,
   Box,
@@ -16,7 +16,7 @@ import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 
 import MentionField from 'components/MentionsField';
-import { TimeAgo } from 'common/Atoms';
+import { IconFrame, TimeAgo } from 'common/Atoms';
 import Editor from 'common/Editor';
 import NavEdit from 'common/NavEdit';
 import { Template, TemplateSchema } from 'schemas/template';
@@ -359,7 +359,10 @@ const TemplateEditor = () => {
           </Flex>
         </Box>
 
-        <Modal open={isSetupVisible} ariaLabel="Create Template">
+        <Modal
+          open={isSetupVisible}
+          ariaLabel="Create Template"
+          onClose={() => setIsSetupVisible(false)}>
           <Flex w="480px" direction="column">
             <Box py="md" borderBottom="solid 1px" borderColor="border">
               <Text fontSize="xl" fontWeight="heading">
@@ -382,6 +385,7 @@ const TemplateEditor = () => {
                   render={({ field: { onChange, value, name } }) => (
                     <Field
                       label="Variant"
+                      hint="The variant type cannot be modified once saved. Please select the correct one."
                       required
                       error={errors?.variant?.message}>
                       <Search
@@ -464,22 +468,28 @@ const TemplateEditor = () => {
               <Text as="p" mb="sm" color="text-secondary">
                 Dynamic variables provided by Variants
               </Text>
-              {selectedVariant.fields &&
-                selectedVariant.fields.map((field: FieldT) => (
-                  <Flex
-                    border="solid 1px"
-                    borderBottom={0}
-                    borderColor="border"
-                    bg="background-secondary"
-                    p="xs"
-                    key={field.id}
-                    onClick={() => insertBlock(field)}>
-                    {field.name}
-                    <Box>
-                      <TextT />
-                    </Box>
-                  </Flex>
-                ))}
+              <Box border="solid 1px" borderColor="border" borderRadius="sm">
+                {selectedVariant.fields &&
+                  selectedVariant.fields.map((field: FieldT, index: number) => (
+                    <Flex
+                      bg="background-secondary"
+                      p="sm"
+                      borderBottom={
+                        index === selectedVariant.fields.length - 1
+                          ? 'none'
+                          : 'solid 1px'
+                      }
+                      borderColor="border"
+                      justify="space-between"
+                      key={field.id}
+                      onClick={() => insertBlock(field)}>
+                      <Text>{field.name}</Text>
+                      <IconFrame color="icon">
+                        <TextTIcon />
+                      </IconFrame>
+                    </Flex>
+                  ))}
+              </Box>
             </Box>
           )}
 
@@ -491,18 +501,22 @@ const TemplateEditor = () => {
               </Text>
             </Box>
 
-            {blocks &&
-              blocks.map((block: BlockTemplate) => (
-                <Box
-                  key={block.id}
-                  onClick={() => insertBlock(block)}
-                  border="solid 1px"
-                  borderColor="gray.400"
-                  p="sm"
-                  bg="background-secondary">
-                  <Text>{block.title}</Text>
-                </Box>
-              ))}
+            <Box border="solid 1px" borderColor="border" borderRadius="sm">
+              {blocks &&
+                blocks.map((block: BlockTemplate, index: number) => (
+                  <Box
+                    key={block.id}
+                    onClick={() => insertBlock(block)}
+                    borderBottom={
+                      index === blocks.length - 1 ? 'none' : 'solid 1px'
+                    }
+                    borderColor="border"
+                    p="sm"
+                    bg="background-secondary">
+                    <Text>{block.title}</Text>
+                  </Box>
+                ))}
+            </Box>
           </Box>
         </Box>
         {/* {errors.exampleRequired && <Text>This field is required</Text>} */}

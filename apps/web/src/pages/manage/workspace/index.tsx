@@ -13,6 +13,7 @@ import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
 import DescriptionLinker from 'common/DescriptionLinker';
 import Checkbox from 'common/Checkbox';
+import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
 
@@ -220,144 +221,146 @@ const Index: FC = () => {
           }
         />
 
-        <Flex gap="md" my="xl" px="xl" flex={1}>
-          <ManageSidebar
-            items={
-              currentOrg?.name !== 'Personal' || ''
-                ? workspaceLinks
-                : PersonalWorkspaceLinks
-            }
-          />
-          <Flex
-            bg="background-primary"
-            direction="column"
-            flex={1}
-            minWidth="556px"
-            border="solid 1px"
-            borderColor="gray.400"
-            borderRadius="lg"
-            p="xl">
-            <Box
-              as="form"
-              onSubmit={handleSubmit(onSubmit)}
-              variant="layout.contentFrame"
-              mb="md">
-              <Box mb="md">
-                {orgImage && (
-                  <Box onClick={() => fileRef.current?.click()}>
-                    <DefaultAvatar
-                      url={previewSource ? previewSource : logoSrc}
-                      value={org?.name}
-                      size={120}
-                    />
-                  </Box>
-                )}
-              </Box>
-              <Input
-                sx={{ display: 'none' }}
-                type="file"
-                {...register('logo')}
-                accept=".jpg,.jpeg,.png"
-                ref={fileRef}
-                onChange={handleImageUpload}
-              />
-              <Field label="Workspace Name" disabled={!isEdit} required>
-                <InputText
-                  {...register('name')}
-                  placeholder="Enter a Workspace Name"
+        <PageInner>
+          <Flex gap="xl" flex={1}>
+            <ManageSidebar
+              items={
+                currentOrg?.name !== 'Personal' || ''
+                  ? workspaceLinks
+                  : PersonalWorkspaceLinks
+              }
+            />
+            <Flex
+              bg="background-primary"
+              direction="column"
+              flex={1}
+              minWidth="556px"
+              border="solid 1px"
+              borderColor="gray.400"
+              borderRadius="lg"
+              p="xl">
+              <Box as="form" onSubmit={handleSubmit(onSubmit)} mb="md">
+                <Box mb="md">
+                  {orgImage && (
+                    <Box onClick={() => fileRef.current?.click()}>
+                      <DefaultAvatar
+                        url={previewSource ? previewSource : logoSrc}
+                        value={org?.name}
+                        size={120}
+                      />
+                    </Box>
+                  )}
+                </Box>
+                <Input
+                  sx={{ display: 'none' }}
+                  type="file"
+                  {...register('logo')}
+                  accept=".jpg,.jpeg,.png"
+                  ref={fileRef}
+                  onChange={handleImageUpload}
                 />
-              </Field>
-              {/* <Field label="Workspace URL" disabled={!isEdit} required>
+                <Field label="Workspace Name" disabled={!isEdit} required>
+                  <InputText
+                    {...register('name')}
+                    placeholder="Enter a Workspace Name"
+                  />
+                </Field>
+                {/* <Field label="Workspace URL" disabled={!isEdit} required>
                 <InputText
                   {...register('url')}
                   placeholder="Enter a custom url wraft.co/example"
                 />
               </Field> */}
 
-              <Box mt="md">
-                {isEdit ? (
-                  <Button type="submit">Update</Button>
-                ) : (
-                  <Button
-                    variant="secondary"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setIsEdit(true);
-                    }}>
-                    Edit
-                  </Button>
+                <Box mt="md">
+                  {isEdit ? (
+                    <Button type="submit">Update</Button>
+                  ) : (
+                    <Button
+                      variant="secondary"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsEdit(true);
+                      }}>
+                      Edit
+                    </Button>
+                  )}
+                </Box>
+                {(currentOrg?.name !== 'Personal' || '') && (
+                  <Box
+                    mt="xl"
+                    borderTop="1px solid"
+                    borderColor="border"
+                    py="md">
+                    <Text as="h5">Delete workspace</Text>
+                    <Text as={'p'} color="text-secondary" mb="md">
+                      This workspace will be permanently removed from Wraft
+                    </Text>
+                    <Button
+                      onClick={onSendCode}
+                      danger
+                      type="button"
+                      variant="primary">
+                      Delete Workspace
+                    </Button>
+                    <Modal
+                      ariaLabel="delete workspace"
+                      open={isDelete}
+                      onClose={() => setDelete(false)}>
+                      <>
+                        <Modal.Header>
+                          Verify workspace delete request
+                        </Modal.Header>
+
+                        <Box>
+                          <Text color="text-secondary" as="p">
+                            If you are sure you want to proceed with deletion of
+                            the workspace{' '}
+                            <Text as="span" fontWeight="bold">
+                              {org?.name}
+                            </Text>
+                            , please enter the deletion code sent to your email.
+                          </Text>
+                          <Box mt="md">
+                            <Label>
+                              <span>Enter the deletion code to confirm</span>
+                            </Label>
+                            <Input ref={inputRef}></Input>
+                          </Box>
+                          <Label>
+                            <Checkbox
+                              checked={isChecked}
+                              onChange={handleCheckboxChange}
+                              size={'small'}
+                            />
+                            <Text>
+                              I acknowledge I understand that all of the data
+                              will be deleted and want to proceed
+                            </Text>
+                          </Label>
+                          <Flex pt="md" gap="sm">
+                            <Button
+                              danger
+                              disabled={!isChecked}
+                              onClick={onConfirmDelete}
+                              variant="primary">
+                              Delete workspace
+                            </Button>
+                            <Button
+                              onClick={() => setDelete(false)}
+                              variant="tertiary">
+                              Cancel
+                            </Button>
+                          </Flex>
+                        </Box>
+                      </>
+                    </Modal>
+                  </Box>
                 )}
               </Box>
-              {(currentOrg?.name !== 'Personal' || '') && (
-                <Box mt="xl" borderTop="1px solid" borderColor="border" py="md">
-                  <Text as="h5">Delete workspace</Text>
-                  <Text as={'p'} color="text-secondary" mb="md">
-                    This workspace will be permanently removed from Wraft
-                  </Text>
-                  <Button
-                    onClick={onSendCode}
-                    danger
-                    type="button"
-                    variant="primary">
-                    Delete Workspace
-                  </Button>
-                  <Modal
-                    ariaLabel="delete workspace"
-                    open={isDelete}
-                    onClose={() => setDelete(false)}>
-                    <>
-                      <Modal.Header>
-                        Verify workspace delete request
-                      </Modal.Header>
-
-                      <Box>
-                        <Text color="text-secondary" as="p">
-                          If you are sure you want to proceed with deletion of
-                          the workspace{' '}
-                          <Text as="span" fontWeight="bold">
-                            {org?.name}
-                          </Text>
-                          , please enter the deletion code sent to your email.
-                        </Text>
-                        <Box mt="md">
-                          <Label>
-                            <span>Enter the deletion code to confirm</span>
-                          </Label>
-                          <Input ref={inputRef}></Input>
-                        </Box>
-                        <Label>
-                          <Checkbox
-                            checked={isChecked}
-                            onChange={handleCheckboxChange}
-                            size={'small'}
-                          />
-                          <Text>
-                            I acknowledge I understand that all of the data will
-                            be deleted and want to proceed
-                          </Text>
-                        </Label>
-                        <Flex pt="md" gap="sm">
-                          <Button
-                            danger
-                            disabled={!isChecked}
-                            onClick={onConfirmDelete}
-                            variant="primary">
-                            Delete workspace
-                          </Button>
-                          <Button
-                            onClick={() => setDelete(false)}
-                            variant="tertiary">
-                            Cancel
-                          </Button>
-                        </Flex>
-                      </Box>
-                    </>
-                  </Modal>
-                </Box>
-              )}
-            </Box>
+            </Flex>
           </Flex>
-        </Flex>
+        </PageInner>
       </Page>
     </>
   );

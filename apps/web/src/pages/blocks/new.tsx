@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { Container } from 'theme-ui';
+import { Box } from '@wraft/ui';
 
 import BlockTemplateForm from 'components/Block/BlockTemplateForm';
 import Page from 'components/Block/BlankFrame';
@@ -15,9 +15,9 @@ export const Index: FC = () => {
       </Head>
       <Page>
         <NavEdit navtitle="Manage Blocks" backLink="/blocks" />
-        <Container sx={{ maxWidth: '90ch', mx: 'auto' }}>
+        <Box maxWidth="90ch" mx="auto">
           <BlockTemplateForm />
-        </Container>
+        </Box>
       </Page>
     </>
   );
