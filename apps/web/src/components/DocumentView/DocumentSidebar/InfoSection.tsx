@@ -98,8 +98,8 @@ export const InfoSection = () => {
     <Box px="md" py="md">
       {editorMode !== 'new' && (
         <>
-          <Box>
-            <Text as="h3" mb="xs">
+          <Box mb="lg">
+            <Text fontWeight="500" mb="xs" color="text-secondary">
               Creator
             </Text>
             <UserCard
@@ -111,19 +111,20 @@ export const InfoSection = () => {
           {contents?.state?.id && (
             <Box mt="md">
               {additionalCollaborator.length > 0 && (
-                <Text as="h3" mb="xs">
+                <Text mb="xs" fontWeight="500" color="text-secondary">
                   Flow Members
                 </Text>
               )}
-              {additionalCollaborator &&
-                additionalCollaborator.map((approver: any) => (
-                  <UserCard
-                    key={approver.id}
-                    name={approver.name}
-                    profilePic={approver.profile_pic}
-                  />
-                ))}
-
+              <Flex direction="column" gap="sm" mb="md">
+                {additionalCollaborator &&
+                  additionalCollaborator.map((approver: any) => (
+                    <UserCard
+                      key={approver.id}
+                      name={approver.name}
+                      profilePic={approver.profile_pic}
+                    />
+                  ))}
+              </Flex>
               {canAccess('flow') && <InviteFlowStateMember />}
             </Box>
           )}
@@ -153,10 +154,18 @@ export const InfoSection = () => {
       )}
 
       {contents?.content?.build && (
-        <Box mt="xl">
-          <Text as="h3">Document</Text>
+        <Box mt="lg">
+          <Text fontWeight="500" color="text-secondary">
+            Document
+          </Text>
 
-          <Flex mt="xs" pb={3} justify="space-between">
+          <Flex
+            mt="xs"
+            borderRadius="md"
+            justify="space-between"
+            border="1px solid"
+            p="md"
+            borderColor="border">
             <Box>
               <Text>{`${contents.content.instance_id} v${contents.versions[0]?.version_number ?? ''}`}</Text>
 

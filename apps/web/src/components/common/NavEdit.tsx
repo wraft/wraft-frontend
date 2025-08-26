@@ -33,7 +33,6 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
 
   return (
     <Flex
-      variant="header"
       position="sticky"
       top="0"
       zIndex="1"
@@ -52,8 +51,8 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
         />
 
         {navtitle && (
-          <Flex variant="navtitle" align="center" gap="sm">
-            <Text as="h2" fontSize="lg" fontWeight="heading">
+          <Flex align="center" gap="sm">
+            <Text as="h2" fontSize="lg" fontWeight="heading" p="sm">
               {navtitle}
             </Text>
 
@@ -74,9 +73,9 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
           borderLeft="solid 1px"
           borderColor="border"
           alignItems="center"
-          gap="sm"
-          pl="sm">
-          <NotificationDropdown />
+          gap="md"
+          pl="md">
+          <NotificationDropdown iconSize="18" />
 
           {!accessToken && (
             <Link href="/login">

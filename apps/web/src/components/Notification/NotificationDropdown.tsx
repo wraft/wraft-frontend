@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { DropdownMenu, Box, Flex, Text, Button, Spinner } from '@wraft/ui';
-import { Bell, Check, Gear } from '@phosphor-icons/react';
+import { BellIcon, CheckIcon, GearIcon } from '@phosphor-icons/react';
 import { Avatar } from 'theme-ui';
 
 import { useNotifications } from '@hooks/useNotifications';
@@ -15,7 +15,13 @@ import {
   handleNotificationNavigation,
 } from './NotificationUtil';
 
-const NotificationDropdown: React.FC = () => {
+interface NotificationDropdownProps {
+  iconSize?: string;
+}
+
+const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
+  iconSize = '16',
+}) => {
   const router = useRouter();
 
   const { connected } = useSocket();
@@ -43,8 +49,11 @@ const NotificationDropdown: React.FC = () => {
     <DropdownMenu.Provider>
       <DropdownMenu.Trigger>
         <Box position="relative" cursor="pointer">
-          <IconFrame color="gray.1100">
-            <Bell size={18} weight={unreadCount > 0 ? 'fill' : 'regular'} />
+          <IconFrame color="icon">
+            <BellIcon
+              size={iconSize}
+              weight={unreadCount > 0 ? 'fill' : 'regular'}
+            />
           </IconFrame>
           {unreadCount > 0 && (
             <Box
@@ -107,7 +116,7 @@ const NotificationDropdown: React.FC = () => {
                   size="sm"
                   onClick={markAllAsRead}
                   title="Mark all as read">
-                  <Check size={16} />
+                  <CheckIcon size={16} />
                 </Button>
               )}
               <Button
@@ -115,7 +124,7 @@ const NotificationDropdown: React.FC = () => {
                 size="sm"
                 onClick={handleSettingsClick}
                 title="Notification settings">
-                <Gear size={16} />
+                <GearIcon size={16} />
               </Button>
             </Flex>
           </Flex>
@@ -134,7 +143,9 @@ const NotificationDropdown: React.FC = () => {
                 justify="center"
                 p="xl"
                 color="text-secondary">
-                <Bell size={48} weight="light" />
+                <IconFrame color="icon">
+                  <BellIcon size={48} weight="light" />
+                </IconFrame>
                 <Text mt="md" fontSize="sm">
                   No notifications yet
                 </Text>

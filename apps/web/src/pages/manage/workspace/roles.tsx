@@ -9,7 +9,7 @@ import { RolesForm, RolesList } from 'components/manage';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
-import { IconFrame } from 'common/Atoms';
+import { IconFrame, PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { usePermission } from 'utils/permissions';
 
@@ -47,7 +47,7 @@ const Index: FC = () => {
                       filterLoading ? (
                         <Spinner width={14} />
                       ) : (
-                        <IconFrame color="gray.900">
+                        <IconFrame color="icon">
                           <MagnifyingGlass width="1.25rem" weight="bold" />
                         </IconFrame>
                       )
@@ -75,17 +75,18 @@ const Index: FC = () => {
               )}
             </Flex>
           </PageHeader>
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
 
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-
-            <RolesList
-              render={render}
-              setRender={setRender}
-              searchTerm={searchTerm}
-              setFilterLoading={setFilterLoading}
-            />
-          </Flex>
+              <RolesList
+                render={render}
+                setRender={setRender}
+                searchTerm={searchTerm}
+                setFilterLoading={setFilterLoading}
+              />
+            </Flex>
+          </PageInner>
         </Page>
 
         <Drawer

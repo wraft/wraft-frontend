@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { Avatar } from 'theme-ui';
-import { Button, Pagination, Table, Box, Text, Flex } from '@wraft/ui';
+import {
+  Button,
+  Pagination,
+  Table,
+  Box,
+  Text,
+  Flex,
+  Drawer,
+  useDrawer,
+} from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { DotsThreeVertical } from '@phosphor-icons/react';
 
+import CreateDocument from 'components/DocumentCreate';
 import { ContentTitleList } from 'common/content';
 import { TimeAgo, FilterBlock, PageInner } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
@@ -77,8 +86,6 @@ const columns = [
         />
       </NextLink>
     ),
-    // width: '20%',
-    // size: '100',
     enableSorting: false,
   },
   {
@@ -155,10 +162,13 @@ const DocumentList = () => {
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [contenLoading, setContenLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>();
+  const [isDocumentCreatorOpen, setIsDocumentCreatorOpen] =
+    useState<boolean>(false);
 
   const router: any = useRouter();
   const currentPage: any = parseInt(router.query.page) || 1;
   const currentVariant: any = router.query.variant;
+  const mobileMenuDrawer = useDrawer();
 
   useEffect(() => {
     loadData();
@@ -247,8 +257,11 @@ const DocumentList = () => {
   return (
     <>
       <PageHeader title="Documents" desc="Manage all documents">
-        <Button variant="secondary" size="sm">
-          <DotsThreeVertical stroke="bold" color="gray.700" />
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setIsDocumentCreatorOpen(true)}>
+          Create Document
         </Button>
       </PageHeader>
       <PageInner>
@@ -302,6 +315,14 @@ const DocumentList = () => {
           </Box>
         </Flex>
       </PageInner>
+      <Drawer
+        open={isDocumentCreatorOpen}
+        store={mobileMenuDrawer}
+        aria-label="Menu backdrop"
+        withBackdrop={true}
+        onClose={() => setIsDocumentCreatorOpen(false)}>
+        <CreateDocument setIsOpen={setIsDocumentCreatorOpen} />
+      </Drawer>
     </>
   );
 };

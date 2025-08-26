@@ -20,6 +20,7 @@ import {
 } from '@wraft/ui';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
+import { PageInner } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -220,8 +221,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
   const pdfViewerHeight = 350;
 
   return (
-    <>
-      <Flex gap="md" my="md" px="md">
+    <PageInner>
+      <Flex gap="xl">
         <MenuStepsIndicator titles={titles} formStep={formStep} goTo={goTo} />
         <Box
           bg="background-primary"
@@ -361,7 +362,7 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
           />
         )}
       </Drawer>
-    </>
+    </PageInner>
   );
 };
 

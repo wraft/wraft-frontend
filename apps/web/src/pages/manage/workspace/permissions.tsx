@@ -7,6 +7,7 @@ import PermissionsList from 'components/manage/PermissionsList';
 import ManageSidebar from 'common/ManageSidebar';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 
 const Index: FC = () => {
@@ -26,11 +27,12 @@ const Index: FC = () => {
               { name: 'Permission', path: '' },
             ]}
           />
-
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-            <PermissionsList />
-          </Flex>
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
+              <PermissionsList />
+            </Flex>
+          </PageInner>
         </Page>
       </>
     )

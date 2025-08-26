@@ -83,11 +83,9 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             }
           />
         )}
-        <Box display="flex" alignItems="center">
-          <Flex alignContent="center" alignItems="center">
-            {renderTitle}
-          </Flex>
-        </Box>
+        <Flex alignItems="center" gap="sm" py="6px">
+          {renderTitle}
+        </Flex>
         <Box ml="auto" pt={1}>
           {children}
         </Box>

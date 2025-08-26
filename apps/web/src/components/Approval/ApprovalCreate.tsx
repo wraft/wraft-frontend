@@ -39,7 +39,7 @@ const ApprovalFormBase = ({
   const { register, control, handleSubmit, setValue } = useForm();
   const [users, setUsers] = useState<any>();
   const [user, setUser] = useState<any>();
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isUserSearchOpen, setIsUserSearchOpen] = useState<boolean>(false);
 
   /**
    * Submit Form
@@ -52,7 +52,7 @@ const ApprovalFormBase = ({
   const onUserSelect = (e: User) => {
     setUser(e);
     setValue('approver_id', e.id);
-    setShowSearch(false);
+    setIsUserSearchOpen(false);
   };
 
   /**
@@ -61,7 +61,7 @@ const ApprovalFormBase = ({
    */
 
   const onChangeInput = (e: any) => {
-    setShowSearch(true);
+    setIsUserSearchOpen(true);
     fetchAPI(`users/search?key=${e.currentTarget.value}`).then((data: any) => {
       const usr = data.users;
       setUsers(usr);
@@ -75,7 +75,7 @@ const ApprovalFormBase = ({
       sx={{ p: 4, mt: 0, minWidth: '600px' }}
       as="form"
       onSubmit={handleSubmit(onSubmit)}>
-      {showSearch && <h1>Searching</h1>}
+      {isUserSearchOpen && <h1>Searching</h1>}
       {user && <h1>User</h1>}
       <Input
         defaultValue={parent}

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
 
-import PipelineViewNew from 'components/Pipeline/PipelineViewNew';
+import PipelineDetail from 'components/Pipeline/PipelineDetail';
 import Page from 'common/PageFrame';
 
 const Index: FC = () => {
@@ -12,7 +12,7 @@ const Index: FC = () => {
         <meta name="description" content="run wraft pipeline" />
       </Head>
       <Page>
-        <PipelineViewNew />
+        <PipelineDetail />
       </Page>
     </>
   );

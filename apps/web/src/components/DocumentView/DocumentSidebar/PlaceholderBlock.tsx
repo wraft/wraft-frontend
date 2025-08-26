@@ -85,7 +85,9 @@ const PlaceholderBlock = ({
       {fieldValues && (
         <>
           <Flex justify="space-between">
-            <Text as="h6">Data Fields</Text>
+            <Text fontWeight="500" color="text-secondary">
+              Data Fields
+            </Text>
             {editorMode !== 'view' && (
               <Box onClick={openDrawer}>
                 <EditIcon width={14} className="main-icon" />
@@ -93,14 +95,18 @@ const PlaceholderBlock = ({
             )}
           </Flex>
 
-          <Box border="1px solid" borderColor="border" mt="sm">
+          <Box
+            border="1px solid"
+            borderColor="border"
+            borderRadius="md"
+            mt="sm">
             {mappedFields &&
               mappedFields.map((x: any) => (
                 <Flex
                   key={x.id}
                   borderBottom="1px solid"
                   borderColor="border"
-                  p="sm">
+                  p="md">
                   <Text flex="0 0 60%" fontWeight="heading">
                     {x.value}
                   </Text>

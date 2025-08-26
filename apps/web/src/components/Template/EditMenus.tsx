@@ -1,8 +1,9 @@
 import Router from 'next/router';
 import { DropdownMenu, Flex, Text } from '@wraft/ui';
 import toast from 'react-hot-toast';
-import { DotsThreeVertical, TrashSimple } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon, TrashSimpleIcon } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import { deleteAPI } from 'utils/models';
 
 interface IconMenuItemProps {
@@ -36,12 +37,21 @@ const EditMenus = ({ id }: EditMenuProps) => {
   return (
     <DropdownMenu.Provider>
       <DropdownMenu.Trigger>
-        <DotsThreeVertical size={18} weight="bold" />
+        <IconFrame color="icon">
+          <DotsThreeVerticalIcon size={18} weight="bold" />
+        </IconFrame>
       </DropdownMenu.Trigger>
 
       <DropdownMenu aria-label="dropdown role">
         <DropdownMenu.Item onClick={() => onDeleteTemplate(id)}>
-          <IconMenuItem text="Delete" icon={<TrashSimple />} />
+          <IconMenuItem
+            text="Delete"
+            icon={
+              <IconFrame>
+                <TrashSimpleIcon />
+              </IconFrame>
+            }
+          />
         </DropdownMenu.Item>
       </DropdownMenu>
     </DropdownMenu.Provider>

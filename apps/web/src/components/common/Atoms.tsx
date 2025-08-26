@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { format } from 'date-fns';
 import { Box, Text, Flex } from '@wraft/ui';
-import { Triangle } from '@phosphor-icons/react';
+import { TriangleIcon } from '@phosphor-icons/react';
 import styled from '@xstyled/emotion';
 import { FormatDistanceToken, formatDistanceToNowStrict } from 'date-fns';
 
@@ -134,7 +134,6 @@ interface FilterBlockProps {
  */
 export const FilterBlock: FC<FilterBlockProps> = ({
   title,
-  // no,
   color,
   setSelected,
   active,
@@ -144,16 +143,14 @@ export const FilterBlock: FC<FilterBlockProps> = ({
       onClick={() => setSelected(title)}
       bg={active ? active : 'background-primary'}
       cursor="pointer"
-      px="sm"
-      py="xs"
+      px="md"
+      py="sm"
       gap="sm"
       borderBottom="solid 1px"
       borderColor="border"
       align="center">
       <VariantLine bg={color || '#555'} />
-      <Text fontWeight={500} mt={1}>
-        {title}
-      </Text>
+      <Text>{title}</Text>
     </Flex>
   );
 };
@@ -239,7 +236,7 @@ export const StateBadge: FC<StateBadgeProps> = ({ color, name }) => {
             Draft
           </Text>
 
-          <Triangle size={10} weight="bold" color="#FF8C02" />
+          <TriangleIcon size={10} weight="bold" color="#FF8C02" />
         </Flex>
       )}
     </Flex>
@@ -330,8 +327,7 @@ export const VariantLine = ({ bg }: VariantLineProps) => {
     <Box
       as="span"
       display="block"
-      borderRadius="3px"
-      h="12px"
+      h="14px"
       w="6px"
       border="solid 1px"
       borderColor="border"

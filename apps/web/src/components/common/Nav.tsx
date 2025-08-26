@@ -23,7 +23,7 @@ interface INav {
  * @returns
  */
 const Nav = ({ navtitle }: INav) => {
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const { userProfile, accessToken, logout } = useAuth();
   const router = useRouter();
 
@@ -33,11 +33,11 @@ const Nav = ({ navtitle }: INav) => {
   };
 
   const toggleSearch = () => {
-    setShowSearch(!showSearch);
+    setIsSearchOpen(!isSearchOpen);
   };
 
   const closeSearch = () => {
-    setShowSearch(false);
+    setIsSearchOpen(false);
   };
 
   useHotkeys('/', () => {

@@ -220,7 +220,7 @@ const VendorList: React.FC<VendorListProps> = ({
   ];
 
   return (
-    <Box>
+    <>
       <PageInner>
         <Box mb="lg">
           <Flex gap="md" align="end" justify="flex-end">
@@ -285,7 +285,7 @@ const VendorList: React.FC<VendorListProps> = ({
           </Flex>
         </Box>
       </Modal>
-    </Box>
+    </>
   );
 };
 

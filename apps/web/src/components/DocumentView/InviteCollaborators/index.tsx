@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Modal } from '@wraft/ui';
-import { Share } from '@phosphor-icons/react';
+import { ShareIcon } from '@phosphor-icons/react';
+
+import { IconFrame } from 'common/Atoms';
 
 import InviteBlock from './InviteBlock';
 import { useDocument } from '../DocumentContext';
@@ -14,7 +16,9 @@ const InviteCollaborators = () => {
   return (
     <>
       <Box>
-        <Share size={18} cursor="pointer" onClick={onInvite} />
+        <IconFrame color="icon">
+          <ShareIcon size={18} cursor="pointer" onClick={onInvite} />
+        </IconFrame>
       </Box>
       <Modal
         open={isDialogOpen}

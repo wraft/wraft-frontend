@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Drawer, Button, Pagination, useDrawer } from '@wraft/ui';
 import { Table } from '@wraft/ui';
-import { Play, TreeStructure } from '@phosphor-icons/react';
+import { PlayIcon, TreeStructureIcon } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
@@ -45,7 +45,8 @@ const Form = () => {
   const [pageMeta, setPageMeta] = useState<IPageMeta>();
   const [pipelineId, setPipelineId] = useState<any>();
   const [rerender, setRerender] = React.useState(false);
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isCreatePipelineDrawerOpen, setIsCreatePipelineDrawerOpen] =
+    useState<boolean>(false);
   const [sourceId, setSourceId] = useState<any>();
 
   const router: any = useRouter();
@@ -128,7 +129,7 @@ const Form = () => {
                   variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
-                  <TreeStructure height={12} />
+                  <TreeStructureIcon size={12} />
                   WorkFlow
                 </Button>
                 <Button
@@ -138,7 +139,7 @@ const Form = () => {
                   variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
-                  <Play height={12} />
+                  <PlayIcon size={12} />
                   Run
                 </Button>
               </Flex>
@@ -150,13 +151,13 @@ const Form = () => {
   ];
 
   return (
-    <Box minHeight="100%" bg="background-secondary">
+    <>
       <PageHeader title="Pipelines">
         {hasPermission('pipeline', 'manage') && (
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => setShowSearch(true)}>
+            onClick={() => setIsCreatePipelineDrawerOpen(true)}>
             Add Pipeline
           </Button>
         )}
@@ -182,13 +183,13 @@ const Form = () => {
       </PageInner>
 
       <Drawer
-        open={showSearch}
+        open={isCreatePipelineDrawerOpen}
         store={mobileMenuDrawer}
         withBackdrop={true}
-        onClose={() => setShowSearch(false)}>
-        {showSearch && (
+        onClose={() => setIsCreatePipelineDrawerOpen(false)}>
+        {isCreatePipelineDrawerOpen && (
           <PipelineCreateForm
-            setIsOpen={setShowSearch}
+            setIsOpen={setIsCreatePipelineDrawerOpen}
             setRerender={setRerender}
           />
         )}
@@ -204,7 +205,7 @@ const Form = () => {
           </>
         )}
       </Drawer>
-    </Box>
+    </>
   );
 };
 export default Form;

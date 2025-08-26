@@ -15,7 +15,7 @@ import { Check, Plus } from '@phosphor-icons/react';
 
 // import PublicTemplates from 'components/PublicTemplates';
 // import PublicTemplates from 'components/ImportTemplate/PublicTemplates';
-import { IconFrame } from 'common/Atoms';
+import { IconFrame, PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
 
@@ -262,7 +262,7 @@ const Dashboard = () => {
   );
 
   return (
-    <Box p="3xl">
+    <PageInner>
       <Text color="text-secondary" fontSize="sm">
         {format(currentTime, 'EEEE, MMMM dd')}
       </Text>
@@ -346,7 +346,7 @@ const Dashboard = () => {
           </Flex>
         </>
       )}
-    </Box>
+    </PageInner>
   );
 };
 
