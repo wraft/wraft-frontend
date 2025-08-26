@@ -1,3 +1,4 @@
+export * from "./Avatar";
 export * from "./InputText";
 export * from "./Field";
 export * from "./Skeleton";

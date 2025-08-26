@@ -6,6 +6,7 @@ import { getToggles } from "../components/Toggle/theme";
 import basic from "./basic";
 import colors from "./colors";
 import alerts from "./variants/alerts";
+import { getAvatars } from "./variants/avatar";
 import { borderWidths } from "./variants/borders";
 import boxVariant from "./variants/boxVariant";
 // import buttons from "./variants/buttons";
@@ -73,6 +74,7 @@ export const createTheme = (options: Options = {}) => {
   theme.links = links;
   theme.layout = layout;
   theme.alerts = alerts;
+  theme.avatars = getAvatars(theme);
   // theme.styles = styles;
   theme.tabs = getTabs(theme);
   theme.tags = getTags(theme);
