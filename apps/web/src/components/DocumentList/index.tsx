@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Avatar } from 'theme-ui';
 import {
+  Avatar,
   Button,
   Pagination,
   Table,
@@ -104,8 +104,9 @@ const columns = [
     cell: ({ row }: any) => (
       <Flex alignItems="center" gap="sm">
         <Avatar
-          sx={{ width: '16px', height: '16px' }}
+          size="xs"
           src={row.original?.creator?.profile_pic}
+          alt={row.original?.creator?.name}
         />
         <Text fontSize="sm2" fontWeight={500}>
           {row.original?.creator?.name}

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Pagination, Box, Text, Flex } from '@wraft/ui';
+import { Avatar, Pagination, Box, Text, Flex } from '@wraft/ui';
 import styled from '@xstyled/emotion';
-import { Avatar } from 'theme-ui';
 
 import useNotifications from '@hooks/useNotifications';
 import { TimeAgo } from 'common/Atoms';
@@ -99,8 +98,10 @@ const NotificationList = () => {
                     alignItems="center"
                     justifyContent="center">
                     <Avatar
-                      sx={{ width: '20px', height: '20px' }}
+                      size="sm"
                       src={notification.actor?.profile_pic}
+                      alt={notification.actor?.name}
+                      name={notification.actor?.name}
                     />
                   </Box>
                 )}

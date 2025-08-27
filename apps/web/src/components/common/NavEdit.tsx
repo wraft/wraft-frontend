@@ -82,7 +82,7 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
               <Text>Login</Text>
             </Link>
           )}
-          <UserSettingsMenu size="sm" />
+          <UserSettingsMenu size="xs" />
         </Flex>
       </Flex>
     </Flex>

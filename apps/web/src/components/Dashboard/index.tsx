@@ -11,7 +11,7 @@ import {
   useTab,
   Skeleton,
 } from '@wraft/ui';
-import { Check, Plus } from '@phosphor-icons/react';
+import { CheckIcon, PlusIcon } from '@phosphor-icons/react';
 
 // import PublicTemplates from 'components/PublicTemplates';
 // import PublicTemplates from 'components/ImportTemplate/PublicTemplates';
@@ -207,7 +207,7 @@ const Dashboard = () => {
                 Watch demo
               </Button>
               <Button size="sm" variant="secondary">
-                <Plus size={16} weight="bold" color="white" />
+                <PlusIcon size={16} weight="bold" color="white" />
                 <Text fontSize="sm2" fontWeight="heading" color="text-primary">
                   Create a new template
                 </Text>
@@ -244,7 +244,7 @@ const Dashboard = () => {
                     display="flex"
                     alignItems="center"
                     justifyContent="center">
-                    <Check size={14} weight="bold" color="white" />
+                    <CheckIcon size={14} weight="bold" color="white" />
                   </Box>
                   <Text fontSize="md" fontWeight="heading" color="text-primary">
                     {data.title}

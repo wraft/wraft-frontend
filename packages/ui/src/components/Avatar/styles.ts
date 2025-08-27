@@ -11,7 +11,7 @@ type StyledAvatarProps = Pick<
   WuiProps;
 
 export const Avatar = styled.div<StyledAvatarProps>`
-  ${({ size = "md", shape = "circle", backgroundColor, color }) => css`
+  ${({ size = "sm", shape = "circle", backgroundColor, color }) => css`
     position: relative;
     display: inline-flex;
     align-items: center;

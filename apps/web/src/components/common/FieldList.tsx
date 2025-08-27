@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-// import { Box } from 'theme-ui';
 import { Table, Text, Box } from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';

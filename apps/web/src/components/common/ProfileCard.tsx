@@ -1,5 +1,4 @@
-import { Flex, Text } from '@wraft/ui';
-import { Avatar } from 'theme-ui';
+import { Avatar, Flex, Text } from '@wraft/ui';
 
 import { TimeAgo } from './Atoms';
 
@@ -21,12 +20,7 @@ export const ProfileCard = ({
 
   return (
     <Flex color="text-primary" alignItems="center" gap="xs">
-      <Avatar
-        width={16}
-        height={16}
-        sx={{ mr: 2, borderColor: 'border', border: 0 }}
-        src={finalImage}
-      />
+      <Avatar size="xs" name={name} src={finalImage} alt={name} />
       <Text fontWeight="600" mr="xs">
         {name}
       </Text>

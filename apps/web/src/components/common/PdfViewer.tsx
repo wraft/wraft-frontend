@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Text } from 'theme-ui';
+import { Text } from '@wraft/ui';
 
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -47,7 +47,7 @@ const PdfViewer = ({ url, height }: PdfViewerProps) => {
           />
         ))}
       </Document>
-      <Text sx={{ display: 'none' }}>{pageNumber}</Text>
+      <Text display="none">{pageNumber}</Text>
     </React.Fragment>
   );
 };

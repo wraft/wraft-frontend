@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar } from 'theme-ui';
 import toast from 'react-hot-toast';
-import { Search, Box, Text, Flex, Button } from '@wraft/ui';
+import { Avatar, Search, Box, Text, Flex, Button } from '@wraft/ui';
 import { MagnifyingGlassIcon, XIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from 'common/Atoms';
@@ -126,9 +125,9 @@ export default function InviteBlock({ docId, close }: any) {
             <Flex align="center">
               <Avatar
                 src={item.profile_pic}
-                alt="profile"
-                width={18}
-                height={18}
+                name={item.name}
+                alt={item.name}
+                size="sm"
               />
               <Text as={'p'} ml={3} color="gray.900">
                 {item.name}
@@ -146,7 +145,16 @@ export default function InviteBlock({ docId, close }: any) {
           </Text>
           {additionalCollaborator.map((collaborator: User, i: any) => (
             <Flex py="sm" key={i} justify="space-between">
-              <Text>{collaborator.name}</Text>
+              <Flex align="center" gap="sm">
+                <Avatar
+                  src={collaborator.profile_pic}
+                  name={collaborator.name}
+                  alt={collaborator.name}
+                  size="sm"
+                />
+                <Text>{collaborator.name}</Text>
+              </Flex>
+
               <Box>
                 {collaborator.removable && (
                   <Button

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { Avatar } from 'theme-ui';
-import { Box, Flex, Table, Pagination, Text, Button } from '@wraft/ui';
+import { Box, Flex, Table, Pagination, Text, Button, Avatar } from '@wraft/ui';
 
 import PageHeader from 'common/PageHeader';
 import { PageInner, StateBadge, TimeAgo } from 'common/Atoms';
@@ -75,10 +74,7 @@ const columns = () => [
     accessorKey: 'creator.editors',
     cell: ({ row }: any) => (
       <Flex alignItems="center" gap="8px">
-        <Avatar
-          sx={{ width: '16px', height: '16px' }}
-          src={row.original?.creator?.profile_pic}
-        />
+        <Avatar src={row.original?.creator?.profile_pic} size="xs" />
         <Text>{row.original?.creator?.name}</Text>
       </Flex>
     ),

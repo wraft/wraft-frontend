@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import {
+  Avatar,
   Box,
   Button,
   Field,
@@ -12,7 +13,6 @@ import {
   Drawer,
   useDrawer,
 } from '@wraft/ui';
-import { Avatar } from 'theme-ui';
 
 import { fetchAPI } from 'utils/models';
 
@@ -124,18 +124,18 @@ const FlowViewForm = () => {
                         </Text>
 
                         <Box>
-                          {item.approvers.map((x: any) => {
+                          {item.approvers.map((approver: any) => {
                             return (
-                              <Flex key={x.id} gap="xs" py="xs">
+                              <Flex key={approver.id} gap="xs" py="xs">
                                 <Box>
                                   <Avatar
-                                    src={x.profile_pic}
-                                    alt="profile"
-                                    width={14}
-                                    height={14}
+                                    src={approver.profile_pic}
+                                    alt={approver.name}
+                                    name={approver.name}
+                                    size="xs"
                                   />
                                 </Box>
-                                <Text>{x.name}</Text>
+                                <Text>{approver.name}</Text>
                               </Flex>
                             );
                           })}

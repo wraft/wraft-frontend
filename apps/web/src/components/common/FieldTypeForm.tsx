@@ -2,7 +2,6 @@ import React from 'react';
 import Router from 'next/router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-// import { Box, Flex, Text } from 'theme-ui';
 import { Button, Box, Flex, Text } from '@wraft/ui';
 
 import Field from 'common/Field';

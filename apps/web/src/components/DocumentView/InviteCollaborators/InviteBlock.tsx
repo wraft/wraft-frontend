@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Button, InputText, Select, Text, Box, Flex } from '@wraft/ui';
+import { Button, InputText, Select, Text, Box, Flex, Avatar } from '@wraft/ui';
 import { XIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from 'common/Atoms';
@@ -163,6 +163,7 @@ export default function InviteBlock({ docId, close }: any) {
                 justify="space-between"
                 align="flex-start">
                 <Flex gap="sm" w="100%" align="center" justify="center">
+                  <Avatar name={collaborator.user.name} size="sm" />
                   <Box w="45%">
                     <Text>{collaborator.user.name}</Text>
                     <Text color="text-secondary">

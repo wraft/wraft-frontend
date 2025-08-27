@@ -8,7 +8,7 @@ import React, {
 import { useRouter } from 'next/router';
 import cookie from 'js-cookie';
 import { signOut } from 'next-auth/react';
-import { Flex, Spinner } from 'theme-ui';
+import { Flex, Spinner } from '@wraft/ui';
 
 import { Subscription } from 'components/Billing/types';
 import { fetchAPI } from 'utils/models';
@@ -157,13 +157,8 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
   if (isUserLoading) {
     return (
-      <Flex
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}>
-        <Spinner width={32} />
+      <Flex justifyContent="center" alignItems="center" h="100vh">
+        <Spinner size={24} />
       </Flex>
     );
   }

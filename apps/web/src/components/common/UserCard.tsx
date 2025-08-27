@@ -1,6 +1,5 @@
 import React from 'react';
-import { Flex, Text } from '@wraft/ui';
-import { Avatar } from 'theme-ui';
+import { Flex, Text, Avatar } from '@wraft/ui';
 
 /**
  * Props for the UserCard component
@@ -50,15 +49,8 @@ const UserCard: React.FC<UserCardProps> = ({
   size = 'md',
   gap = 'sm',
 }) => {
-  const avatarSizes = {
-    xs: { width: '12px', height: '12px' },
-    sm: { width: '16px', height: '16px' },
-    md: { width: '24px', height: '24px' },
-    lg: { width: '32px', height: '32px' },
-  };
-
   const textSizes = {
-    xs: 'xs',
+    xs: 'sm',
     sm: 'sm',
     md: 'sm2',
     lg: 'md',
@@ -66,7 +58,7 @@ const UserCard: React.FC<UserCardProps> = ({
 
   return (
     <Flex alignItems="center" gap={gap}>
-      {profilePic && <Avatar sx={avatarSizes[size]} src={profilePic} />}
+      {profilePic && <Avatar size={size} src={profilePic} alt={name} />}
       {name && <Text fontSize={textSizes[size] as any}>{name}</Text>}
     </Flex>
   );

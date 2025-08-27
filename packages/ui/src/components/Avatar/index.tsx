@@ -64,7 +64,7 @@ export const Avatar = forwardRef<"div", AvatarProps>(
       alt = "Avatar",
       src,
       name,
-      size = "md",
+      size = "sm",
       shape = "circle",
       backgroundColor,
       color,

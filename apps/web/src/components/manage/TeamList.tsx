@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import toast from 'react-hot-toast';
-import { Image } from 'theme-ui';
 import { ThreeDotIcon, AddIcon, CloseIcon } from '@wraft/icon';
-import { Button, Table, Modal, DropdownMenu, Flex, Box, Text } from '@wraft/ui';
+import {
+  Button,
+  Table,
+  Modal,
+  DropdownMenu,
+  Flex,
+  Box,
+  Text,
+  Avatar,
+} from '@wraft/ui';
 
 import { TimeAgo } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
@@ -179,21 +187,13 @@ const TeamList = () => {
             isPlaceholder: true,
             cell: ({ row }: any) => (
               <Flex gap="sm" align="center">
-                <Image
+                <Avatar
                   src={row.original.members.profilePic}
+                  name={row.original.members.name}
                   alt="memberImg"
-                  sx={{
-                    width: '28px',
-                    height: '28px',
-                    maxWidth: 'auto',
-                    borderRadius: 99,
-                    border: 'solid 1px',
-                    borderColor: 'gray.300',
-                    overflow: 'hidden',
-                    objectFit: 'cover',
-                    flexShrink: 0,
-                  }}
+                  size="sm"
                 />
+
                 <Flex direction="column">
                   <Text>
                     {row.original.members.name}{' '}

@@ -1,8 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { DropdownMenu, Box, Flex, Text, Button, Spinner } from '@wraft/ui';
+import {
+  Avatar,
+  DropdownMenu,
+  Box,
+  Flex,
+  Text,
+  Button,
+  Spinner,
+} from '@wraft/ui';
 import { BellIcon, CheckIcon, GearIcon } from '@phosphor-icons/react';
-import { Avatar } from 'theme-ui';
 
 import { useNotifications } from '@hooks/useNotifications';
 import { IconFrame } from 'common/Atoms';
@@ -189,8 +196,10 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                         alignItems="center"
                         justifyContent="center">
                         <Avatar
-                          sx={{ width: '20px', height: '20px' }}
+                          size="sm"
                           src={notification.actor?.profile_pic}
+                          alt={notification.actor?.name}
+                          name={notification.actor?.name}
                         />
                       </Box>
                     )}

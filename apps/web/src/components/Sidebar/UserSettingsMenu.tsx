@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { DropdownMenu, Box, Flex, Text } from '@wraft/ui';
-import { useColorMode, Image } from 'theme-ui';
-import { CaretUpDown, Lightning } from '@phosphor-icons/react';
+import { DropdownMenu, Box, Flex, Text, Avatar } from '@wraft/ui';
+import { useColorMode } from 'theme-ui';
+import { CaretUpDownIcon, LightningIcon } from '@phosphor-icons/react';
 import styled from '@xstyled/emotion';
 
 import Link from 'common/NavLink';
@@ -20,12 +20,12 @@ const DropdownMenuTrigger = styled(DropdownMenu.Trigger)`
 `;
 
 type UserSettingsMenuProps = {
-  size?: 'sm' | 'md';
+  size?: 'sm' | 'md' | 'xs';
   compact?: boolean;
 };
 
 const UserSettingsMenu = ({
-  size = 'md',
+  size = 'sm',
   compact = true,
 }: UserSettingsMenuProps) => {
   const [mode, setMode] = useColorMode();
@@ -61,15 +61,11 @@ const UserSettingsMenu = ({
       {accessToken && userProfile && (
         <DropdownMenu.Provider>
           <DropdownMenuTrigger>
-            <Image
-              sx={{
-                borderRadius: '3rem',
-                cursor: 'pointer',
-              }}
-              alt=""
-              width={size === 'sm' ? '18px' : ' 24px'}
-              height={size === 'sm' ? '18px' : ' 24px'}
+            <Avatar
               src={userProfile?.profile_pic}
+              name={userProfile?.name}
+              size={size}
+              alt={userProfile?.name}
             />
             {!compact && (
               <>
@@ -81,7 +77,7 @@ const UserSettingsMenu = ({
 
                 <Flex alignItems="center" ml="auto">
                   <IconFrame color="icon">
-                    <CaretUpDown size={14} />
+                    <CaretUpDownIcon size={14} />
                   </IconFrame>
                 </Flex>
               </>
@@ -140,7 +136,7 @@ const UserSettingsMenu = ({
                     justifyContent="space-between"
                     onClick={() => router.push('/manage/billing')}>
                     <Text w="100%">Upgrade Plan</Text>
-                    <Lightning size={16} color="#127D5D" />
+                    <LightningIcon size={16} color="#127D5D" />
                   </Flex>
                 </DropdownMenu.Item>
               )}

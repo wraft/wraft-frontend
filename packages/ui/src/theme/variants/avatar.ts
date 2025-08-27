@@ -2,7 +2,7 @@ import { CSSObject } from "@xstyled/emotion";
 
 import { WuiTheme } from "../types";
 
-export type Size = "sm" | "md" | "lg" | "xl" | "xxl";
+export type Size = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
 export type ThemeAvatars = {
   sizes: Record<
@@ -20,9 +20,13 @@ export const getAvatars = (theme: WuiTheme): ThemeAvatars => {
 
   return {
     sizes: {
-      sm: {
+      xs: {
         size: toRem(20),
         fontSize: toRem(10),
+      },
+      sm: {
+        size: toRem(24),
+        fontSize: toRem(12),
       },
       md: {
         size: toRem(30),

@@ -3,8 +3,8 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import { ThreeDotIcon } from '@wraft/icon';
 import toast from 'react-hot-toast';
-import { Avatar } from 'theme-ui';
 import {
+  Avatar,
   Table,
   Pagination,
   DropdownMenu,
@@ -159,8 +159,10 @@ const Form: FC<Props> = ({ rerender, setRerender }) => {
       cell: ({ row }: any) => (
         <Flex align="center" gap="sm">
           <Avatar
-            sx={{ width: '16px', height: '16px' }}
+            size="xs"
             src={row.original?.creator?.profile_pic}
+            alt={row.original?.creator?.name}
+            name={row.original?.creator?.name}
           />
           <Text>{row.original?.creator?.name}</Text>
         </Flex>

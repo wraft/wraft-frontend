@@ -105,6 +105,7 @@ export const InfoSection = () => {
             <UserCard
               name={contents?.creator?.name}
               profilePic={contents?.profile_pic}
+              size="sm"
             />
           </Box>
 
@@ -122,6 +123,7 @@ export const InfoSection = () => {
                       key={approver.id}
                       name={approver.name}
                       profilePic={approver.profile_pic}
+                      size="sm"
                     />
                   ))}
               </Flex>
