@@ -1,0 +1,63 @@
+/* Override styles for prosemirror-flat-list */
+.ProseMirror .prosemirror-flat-list[data-list-kind="upper-roman"],
+.ProseMirror .prosemirror-flat-list[data-list-kind="lower-roman"],
+.ProseMirror .prosemirror-flat-list[data-list-kind="lower-alpha"],
+.ProseMirror .prosemirror-flat-list[data-list-kind="upper-alpha"] {
+  counter-increment: prosemirror-flat-list;
+  list-style-type: none !important;
+  list-style: none !important;
+  line-height: 1.6;
+
+  /* 
+    Reset the counter for the first list node in the sequence.
+    */
+    &:first-child,
+    :not(&) + & {
+      counter-reset: prosemirror-flat-list;
+
+      /* 
+      If the first list node has a custom order number, set the counter to that value.
+      */
+      &[data-list-order] {
+        @supports (counter-set: prosemirror-flat-list-counter 1) {
+          counter-set: prosemirror-flat-list
+            var(--prosemirror-flat-list-order);
+        }
+
+        /* 
+        Safari older than version 17.2 doesn't support `counter-set` 
+        */
+        @supports not (counter-set: prosemirror-flat-list-counter 1) {
+          counter-increment: prosemirror-flat-list
+            var(--prosemirror-flat-list-order);
+        }
+      }
+    }
+}
+
+.ProseMirror .prosemirror-flat-list[data-list-kind="upper-roman"]::before,
+.ProseMirror div[data-list-kind="roman"]::before {
+  content: counter(prosemirror-flat-list, upper-roman) ". ";
+  position: absolute;
+  display: inline-block;
+}
+.ProseMirror .prosemirror-flat-list[data-list-kind="lower-roman"]::before,
+.ProseMirror div[data-list-kind="lower-roman"]::before {
+  content: counter(prosemirror-flat-list, lower-roman) ". ";
+  position: absolute;
+  display: inline-block;
+}
+
+.ProseMirror .prosemirror-flat-list[data-list-kind="lower-alpha"]::before,
+.ProseMirror div[data-list-kind="lower-alpha"]::before {
+  content: counter(prosemirror-flat-list, lower-alpha) ". ";
+  position: absolute;
+  display: inline-block;
+}
+
+.ProseMirror .prosemirror-flat-list[data-list-kind="upper-alpha"]::before,
+.ProseMirror div[data-list-kind="upper-alpha"]::before {
+  content: counter(prosemirror-flat-list, upper-alpha) ". ";
+  position: absolute;
+  display: inline-block;
+}

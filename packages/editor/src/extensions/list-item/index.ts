@@ -1,6 +1,1 @@
-export {
-  defineListItem,
-  defineOrderedList,
-  defineBulletList,
-  type ListItemExtension,
-} from "./list-item";
+export { defineList, type ListItemExtension } from "./list-item";

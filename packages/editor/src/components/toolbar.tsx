@@ -3,21 +3,25 @@
 import { useEditor } from "prosekit/react";
 import styled from "@xstyled/emotion";
 import {
-  ArrowCounterClockwise,
-  ArrowClockwise,
-  TextB,
-  TextItalic,
-  TextHTwo,
-  TextHOne,
-  TextHThree,
-  ListBullets,
-  Minus,
-  List,
-  TextStrikethrough,
-  TextUnderline,
-  Table,
-  Image as ImageIcon,
-  ArrowsInLineVertical,
+  ArrowCounterClockwiseIcon,
+  ArrowClockwiseIcon,
+  TextBIcon,
+  TextItalicIcon,
+  TextHTwoIcon,
+  TextHOneIcon,
+  TextHThreeIcon,
+  ListBulletsIcon,
+  MinusIcon,
+  TextStrikethroughIcon,
+  TextUnderlineIcon,
+  TableIcon,
+  ImageIcon,
+  ArrowsInLineVerticalIcon,
+  NumberCircleOneIcon,
+  NumberCircleTwoIcon,
+  ListNumbersIcon,
+  NumberCircleThreeIcon,
+  NumberCircleFourIcon,
 } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
 import Button from "./button";
@@ -102,7 +106,7 @@ export default function Toolbar() {
         onClick={editor.commands.undo}
         tooltip="Undo"
       >
-        <ArrowCounterClockwise size={18} />
+        <ArrowCounterClockwiseIcon size={18} />
       </Button>
       <Button
         pressed={false}
@@ -110,7 +114,7 @@ export default function Toolbar() {
         onClick={editor.commands.redo}
         tooltip="Redo"
       >
-        <ArrowClockwise size={18} />
+        <ArrowClockwiseIcon size={18} />
       </Button>
       <Button
         pressed={editor.marks.bold.isActive()}
@@ -118,7 +122,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleBold}
         tooltip="Bold"
       >
-        <TextB size={18} />
+        <TextBIcon size={18} />
       </Button>
       <Button
         pressed={editor.marks.italic.isActive()}
@@ -126,7 +130,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleItalic}
         tooltip="Italic"
       >
-        <TextItalic size={18} />
+        <TextItalicIcon size={18} />
       </Button>
       <Button
         pressed={editor.marks.underline.isActive()}
@@ -134,7 +138,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleUnderline}
         tooltip="Underline"
       >
-        <TextUnderline size={18} />
+        <TextUnderlineIcon size={18} />
       </Button>
       <Button
         pressed={editor.marks.strike.isActive()}
@@ -142,7 +146,7 @@ export default function Toolbar() {
         onClick={editor.commands.toggleStrike}
         tooltip="Strike"
       >
-        <TextStrikethrough size={18} />
+        <TextStrikethroughIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.heading.isActive({ level: 1 })}
@@ -150,7 +154,7 @@ export default function Toolbar() {
         onClick={() => editor.commands.toggleHeading({ level: 1 })}
         tooltip="Heading 1"
       >
-        <TextHOne size={18} />
+        <TextHOneIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.heading.isActive({ level: 2 })}
@@ -158,7 +162,7 @@ export default function Toolbar() {
         onClick={() => editor.commands.toggleHeading({ level: 2 })}
         tooltip="Heading 2"
       >
-        <TextHTwo size={18} />
+        <TextHTwoIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.heading.isActive({ level: 3 })}
@@ -166,7 +170,7 @@ export default function Toolbar() {
         onClick={() => editor.commands.toggleHeading({ level: 3 })}
         tooltip="Heading 3"
       >
-        <TextHThree size={18} />
+        <TextHThreeIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.horizontalRule.isActive()}
@@ -174,15 +178,15 @@ export default function Toolbar() {
         onClick={() => editor.commands.insertHorizontalRule()}
         tooltip="Divider"
       >
-        <Minus size={18} />
+        <MinusIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.list.isActive({ kind: "bullet" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
-        onClick={() => editor.commands.toggleList({ kind: "bullet" })}
+        onClick={() => editor.commands.wrapList({ kind: "bullet" })}
         tooltip="Bullet List"
       >
-        <ListBullets size={18} />
+        <ListBulletsIcon size={18} />
       </Button>
       <Button
         pressed={editor.nodes.list.isActive({ kind: "ordered" })}
@@ -190,8 +194,60 @@ export default function Toolbar() {
         onClick={() => editor.commands.toggleList({ kind: "ordered" })}
         tooltip="Ordered List"
       >
-        <List size={18} />
+        <ListNumbersIcon size={18} />
       </Button>
+      <Button
+        pressed={editor.nodes.list.isActive({ kind: "lower-alpha" })}
+        disabled={!editor.commands.toggleList.canExec({ kind: "lower-alpha" })}
+        onClick={() => editor.commands.toggleList({ kind: "lower-alpha" })}
+        tooltip="Lower Alpha List"
+      >
+        <NumberCircleOneIcon size={18} />
+      </Button>
+      <Button
+        pressed={editor.nodes.list.isActive({ kind: "upper-alpha" })}
+        disabled={!editor.commands.toggleList.canExec({ kind: "upper-alpha" })}
+        onClick={() => editor.commands.toggleList({ kind: "upper-alpha" })}
+        tooltip="Upper Alpha List"
+      >
+        <NumberCircleTwoIcon size={18} />
+      </Button>
+      <Button
+        pressed={editor.nodes.list.isActive({ kind: "lower-roman" })}
+        disabled={!editor.commands.toggleList.canExec({ kind: "lower-roman" })}
+        onClick={() => editor.commands.toggleList({ kind: "lower-roman" })}
+        tooltip="Lower Roman List"
+      >
+        <NumberCircleThreeIcon size={18} />
+      </Button>
+      <Button
+        pressed={editor.nodes.list.isActive({ kind: "upper-roman" })}
+        disabled={!editor.commands.toggleList.canExec({ kind: "upper-roman" })}
+        onClick={() => editor.commands.toggleList({ kind: "upper-roman" })}
+        tooltip="Upper Roman List"
+      >
+        <NumberCircleFourIcon size={18} />
+      </Button>
+
+      <Button
+        pressed={false}
+        disabled={false}
+        onClick={() => {
+          try {
+            if (editor.commands.toggleMultilevelList) {
+              editor.commands.toggleMultilevelList();
+            } else {
+              console.warn("toggleMultilevelList command not available");
+            }
+          } catch (error) {
+            console.error("Error toggling multilevel list:", error);
+          }
+        }}
+        tooltip="Toggle Multilevel List"
+      >
+        <ListNumbersIcon size={18} />
+      </Button>
+
       <Button
         pressed={isTableActive} // Use isTableActive state instead of editor.nodes.table.isActive()
         disabled={!editor.commands.insertTable.canExec}
@@ -202,7 +258,7 @@ export default function Toolbar() {
         }}
         tooltip="Table"
       >
-        <Table size={18} />
+        <TableIcon size={18} />
       </Button>
 
       <TableMenu isActive={isTableActive} />
@@ -214,7 +270,7 @@ export default function Toolbar() {
         onClick={() => editor.commands.insertPageBreak()}
         tooltip="Page Break"
       >
-        <ArrowsInLineVertical size={18} />
+        <ArrowsInLineVerticalIcon size={18} />
       </Button>
       <ImageUploadPopover
         disabled={!editor.commands.insertImage.canExec()}
