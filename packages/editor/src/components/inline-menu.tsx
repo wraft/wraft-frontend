@@ -3,10 +3,10 @@ import styled from "@emotion/styled";
 import { useEditor } from "prosekit/react";
 import { InlinePopover } from "prosekit/react/inline-popover";
 import {
-  TextB,
-  TextItalic,
-  TextStrikethrough,
-  TextUnderline,
+  TextBIcon,
+  TextItalicIcon,
+  TextStrikethroughIcon,
+  TextUnderlineIcon,
 } from "@phosphor-icons/react";
 import Button from "./button";
 import type { EditorExtension } from "./extension";
@@ -42,7 +42,7 @@ export default function InlineMenu() {
           onClick={() => editor.commands.toggleBold()}
           tooltip="Bold"
         >
-          <TextB size={18} />
+          <TextBIcon size={18} />
         </Button>
 
         <Button
@@ -51,7 +51,7 @@ export default function InlineMenu() {
           onClick={() => editor.commands.toggleItalic()}
           tooltip="Italic"
         >
-          <TextItalic size={18} />
+          <TextItalicIcon size={18} />
         </Button>
 
         <Button
@@ -60,7 +60,7 @@ export default function InlineMenu() {
           onClick={() => editor.commands.toggleUnderline()}
           tooltip="Underline"
         >
-          <TextUnderline size={18} />
+          <TextUnderlineIcon size={18} />
         </Button>
 
         <Button
@@ -69,7 +69,7 @@ export default function InlineMenu() {
           onClick={() => editor.commands.toggleStrike()}
           tooltip="Strikethrough"
         >
-          <TextStrikethrough size={18} />
+          <TextStrikethroughIcon size={18} />
         </Button>
       </InlineMenuPopover>
     </>

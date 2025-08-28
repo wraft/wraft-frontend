@@ -406,6 +406,9 @@ importers:
       prosemirror-flat-list:
         specifier: ^0.5.5
         version: 0.5.5
+      prosemirror-schema-list:
+        specifier: ^1.5.1
+        version: 1.5.1
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -2021,6 +2024,9 @@ packages:
   '@npmcli/name-from-folder@2.0.0':
     resolution: {integrity: sha512-pwK+BfEBZJbKdNYpHHRTNBwBoqrN/iIMO0AiGvYsp3Hoaq0WbgGSWQR6SCldZovoDpY3yje5lkFUe6gsDgJ2vg==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
+
+  '@ocavue/utils@0.7.1':
+    resolution: {integrity: sha512-gY/YWdyTPGx8YTT0q/0tQJs6kPJ2XeXRPfdzWLt+wefIOuwb1n5Nq3GwKM/AY+Wab3dbx6w+MkX8VSbrm3l6Xg==}
 
   '@ocavue/utils@0.7.1':
     resolution: {integrity: sha512-gY/YWdyTPGx8YTT0q/0tQJs6kPJ2XeXRPfdzWLt+wefIOuwb1n5Nq3GwKM/AY+Wab3dbx6w+MkX8VSbrm3l6Xg==}
@@ -7030,6 +7036,9 @@ packages:
   prosemirror-safari-ime-span@1.0.2:
     resolution: {integrity: sha512-QJqD8s1zE/CuK56kDsUhndh5hiHh/gFnAuPOA9ytva2s85/ZEt2tNWeALTJN48DtWghSKOmiBsvVn2OlnJ5H2w==}
 
+  prosemirror-schema-list@1.5.1:
+    resolution: {integrity: sha512-927lFx/uwyQaGwJxLWCZRkjXG0p48KpMj6ueoYiu4JX05GGuGcgzAy62dfiV8eFZftgyBUvLx76RsMe20fJl+Q==}
+
   prosemirror-search@1.1.0:
     resolution: {integrity: sha512-hnGINlrRs+St6scaF4hoGiR8b7V0ffddzvO/zy+ON8RwvVinfLk4rVsuSztLNthgvfE2LAOU4blsPr7yoeoLOQ==}
 
@@ -10452,6 +10461,8 @@ snapshots:
       read-package-json-fast: 3.0.2
 
   '@npmcli/name-from-folder@2.0.0': {}
+
+  '@ocavue/utils@0.7.1': {}
 
   '@ocavue/utils@0.7.1': {}
 
@@ -17097,6 +17108,12 @@ snapshots:
     dependencies:
       prosemirror-state: 1.4.3
       prosemirror-view: 1.41.0
+
+  prosemirror-schema-list@1.5.1:
+    dependencies:
+      prosemirror-model: 1.25.2
+      prosemirror-state: 1.4.3
+      prosemirror-transform: 1.10.4
 
   prosemirror-search@1.1.0:
     dependencies:

@@ -12,6 +12,7 @@ import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
 import { EditorConfigProvider } from "./editor-config";
+// import BlockHandle from "./block-handle";
 
 export interface EditorProps {
   defaultContent?: any;

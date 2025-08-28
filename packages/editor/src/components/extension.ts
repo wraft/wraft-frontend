@@ -21,11 +21,7 @@ import type { HolderExtension } from "@extensions/holder";
 import { defineHolder } from "@extensions/holder";
 import { defineFancyParagraph } from "@extensions/paragraph";
 import { defineTextHighlight } from "@extensions/text-highlight";
-import {
-  defineListItem,
-  defineOrderedList,
-  defineBulletList,
-} from "@extensions/list-item";
+import { defineList, type ListItemExtension } from "@extensions/list-item";
 import { defineShiftEnterHardBreak } from "@extensions/hard-break";
 import type { BlockExtension } from "@extensions/block";
 import { defineBlock } from "@extensions/block";
@@ -61,6 +57,7 @@ export type BasicsExtension = Union<
     BlockExtension,
     SignatureExtension,
     PageBreakExtension,
+    ListItemExtension,
   ]
 >;
 
@@ -76,9 +73,7 @@ export function defineDefaultExtension({
     defineFancyParagraph(),
     defineHolder(),
     defineTextHighlight(),
-    defineListItem(),
-    defineOrderedList(),
-    defineBulletList(),
+    defineList(),
     defineShiftEnterHardBreak(),
     defineBlock(),
     defineSignature(),
