@@ -3,14 +3,24 @@ import { Controller, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { ReactMultiEmail } from 'react-multi-email';
 import 'react-multi-email/dist/style.css';
-import { useThemeUI } from 'theme-ui';
 import { Button, Box, Flex, InputText, Label, Text, Drawer } from '@wraft/ui';
-import { SearchIcon } from '@wraft/icon';
-import { X } from '@phosphor-icons/react';
+import { XIcon, MagnifyingGlassIcon } from '@phosphor-icons/react';
+import styled from '@xstyled/emotion';
 
 import Checkbox from 'common/Checkbox';
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI, postAPI } from 'utils/models';
 import { emailRegex } from 'utils/regex';
+
+const ReactMultiEmailWrapper = styled(ReactMultiEmail)`
+  input {
+    background-color: transparent;
+    color: var(--theme-ui-colors-text-primary) !important;
+  }
+  span[data-placeholder] {
+    color: var(--theme-ui-colors-text-secondary) !important;
+  }
+`;
 
 interface FormInputs {
   emails: string[];
@@ -40,8 +50,6 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
     control,
     trigger,
   } = useForm<FormInputs>({ mode: 'all' });
-
-  const { theme } = useThemeUI();
 
   const loadRole = () => {
     fetchAPI('roles').then((data: any) => {
@@ -100,8 +108,7 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
 
       await Promise.all(invitePromises);
 
-      toast.success('All invitations sent successfully', {
-        duration: 2000,
+      toast.success('Invitations sent successfully', {
         position: 'top-right',
       });
       if (onInviteSuccess) {
@@ -111,7 +118,6 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
       setOpen(false);
     } catch (error) {
       toast.error('Failed to send invitations', {
-        duration: 2000,
         position: 'top-right',
       });
     } finally {
@@ -128,12 +134,9 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
       <Box flexShrink="0" borderBottom="1px solid " borderColor="border">
         <Drawer.Header>
           <Drawer.Title>Invite people</Drawer.Title>
-          <X
-            size={20}
-            weight="bold"
-            cursor="pointer"
-            onClick={() => setOpen(false)}
-          />
+          <IconFrame color="icon">
+            <XIcon size={18} cursor="pointer" onClick={() => setOpen(false)} />
+          </IconFrame>
         </Drawer.Header>
       </Box>
 
@@ -149,16 +152,11 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
             }}
             render={({ field }) => (
               <Box
-                style={{
-                  border: '1px solid',
-                  borderColor: theme.colors && (theme.colors.border as string),
-                  borderRadius: '4px',
-                  backgroundColor:
-                    theme.colors && (theme.colors.bgWhite as string),
-                  minHeight: '40px',
-                  padding: '0px 4px 0px 4px',
-                }}>
-                <ReactMultiEmail
+                border="1px solid"
+                borderColor="border"
+                borderRadius="md"
+                bg="transparent">
+                <ReactMultiEmailWrapper
                   {...field}
                   emails={selectedEmails}
                   onChange={handleChange}
@@ -168,37 +166,31 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
                     border: 'none',
                     outline: 'none',
                     backgroundColor: 'transparent',
+                    borderRadius: 'sm',
+                    color: 'text-primary',
                   }}
                   getLabel={(email, index, removeEmail) => (
-                    <Box
+                    <Flex
                       key={index}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        margin: '2px',
-                        padding: '2px 8px',
-                        backgroundColor:
-                          theme.colors && (theme.colors.background as string),
-                        border: '1px solid',
-                        borderColor:
-                          theme.colors && (theme.colors.border as string),
-                        borderRadius: '16px',
-                        fontSize: '14px',
-                      }}>
+                      align="center"
+                      border="1px solid"
+                      borderColor="border"
+                      borderRadius="md"
+                      mr="sm"
+                      px="sm"
+                      py="xs">
                       <Text fontSize="sm" mr="xs">
                         {email}
                       </Text>
-                      <X
-                        size={14}
-                        weight="bold"
-                        cursor="pointer"
-                        onClick={() => removeEmail(index)}
-                        style={{
-                          color: 'gray',
-                          marginLeft: '4px',
-                        }}
-                      />
-                    </Box>
+                      <IconFrame color="icon">
+                        <XIcon
+                          size={14}
+                          weight="bold"
+                          cursor="pointer"
+                          onClick={() => removeEmail(index)}
+                        />
+                      </IconFrame>
+                    </Flex>
                   )}
                 />
               </Box>
@@ -217,11 +209,9 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
             onChange={(e: any) => setSearchTerm(e.target.value)}
             px="xxl"
             icon={
-              <SearchIcon
-                height={18}
-                width={18}
-                color={theme.colors?.gray?.[900]}
-              />
+              <IconFrame color="icon">
+                <MagnifyingGlassIcon height={18} width={18} />
+              </IconFrame>
             }
           />
         </Box>
@@ -236,15 +226,19 @@ const InviteTeam = ({ setOpen, onInviteSuccess }: Props) => {
           overflowY="auto">
           {filteredRoles.map((role: any, index: number) => {
             return (
-              <Label
-                key={index}
-                style={{
-                  borderBottom:
-                    index !== filteredRoles.length - 1
-                      ? '1px solid #e2e8f0'
-                      : 'none',
-                }}>
-                <Box display="flex" alignItems="center" flexShrink="0" mx="sm">
+              <Label key={index}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  key={index}
+                  flexShrink="0"
+                  px="sm"
+                  w="100%"
+                  cursor="pointer"
+                  borderBottom={
+                    index !== filteredRoles.length - 1 ? '1px solid' : 'none'
+                  }
+                  borderColor="border">
                   <Checkbox
                     size="small"
                     {...register('role', {

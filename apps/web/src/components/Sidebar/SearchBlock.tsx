@@ -13,7 +13,7 @@ import {
 // import { SearchIcon } from '@wraft/icon';
 import styled from '@emotion/styled';
 import { debounce } from 'lodash';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlassIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
@@ -71,7 +71,7 @@ const SearchBlock: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [_searchError, setSearchError] = useState<string | null>(null);
 
-  const tabStore = useTab();
+  const tabStore = useTab({ defaultSelectedId: 'tab-0' });
   const router = useRouter();
   const selectedTabId = tabStore.useState('selectedId');
   const selectedTabIndex = parseInt(selectedTabId?.split('-')[1] || '0');
@@ -315,7 +315,7 @@ const SearchBlock: React.FC = () => {
         color="gray.800"
         tabIndex={-1}>
         <IconFrame color="gray.700">
-          <MagnifyingGlass size={14} weight="bold" />
+          <MagnifyingGlassIcon size={14} weight="bold" />
         </IconFrame>
         <Text fontSize="sm2" color="text-secondary" pl="xs">
           Find documents..
@@ -343,7 +343,9 @@ const SearchBlock: React.FC = () => {
             <InputText
               value={searchQuery}
               onChange={handleInputChange}
-              icon={<MagnifyingGlass height={18} width={18} weight="bold" />}
+              icon={
+                <MagnifyingGlassIcon height={18} width={18} weight="bold" />
+              }
               iconPlacement="left"
               placeholder="Find docs, actions, pipelines.."
               px="xxl"
@@ -364,7 +366,12 @@ const SearchBlock: React.FC = () => {
 
           <CollectionTabs />
 
-          <Box maxHeight="55vh" minHeight="200px" w="630px" overflowY="auto">
+          <Box
+            maxHeight="55vh"
+            minHeight="200px"
+            w="630px"
+            overflowY="auto"
+            bg="background-secondary">
             {filteredResults.length > 0 ? (
               <Box>
                 {filteredResults.filter(
@@ -383,6 +390,9 @@ const SearchBlock: React.FC = () => {
                     ))
                 ) : (
                   <Text
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
                     textAlign="center"
                     py="xl"
                     variant="lg"
@@ -404,7 +414,6 @@ const SearchBlock: React.FC = () => {
             px="sm"
             py="xs"
             gap="sm"
-            bg="background-secondary"
             borderTop="1px solid"
             borderColor="border">
             <Text color="text-secondary" fontSize="sm">

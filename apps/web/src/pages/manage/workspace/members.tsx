@@ -53,28 +53,24 @@ const Index: FC = () => {
               </Button>
             )}
           </PageHeader>
-          <Drawer
-            open={isOpen}
-            store={menuDrawer}
-            onClose={() => setIsOpen(false)}>
-            {isOpen && (
-              <InviteTeam
-                setOpen={setIsOpen}
-                onInviteSuccess={handleInviteSuccess}
-              />
-            )}
-          </Drawer>
 
-          <Flex gap="md" my="md" px="md">
-            <ManageSidebar items={workspaceLinks} />
-            <TeamList refresh={refresh} />
-          </Flex>
+          <PageInner>
+            <Flex gap="xl">
+              <ManageSidebar items={workspaceLinks} />
+              <TeamList refresh={refresh} />
+            </Flex>
+          </PageInner>
         </Page>
         <Drawer
           open={isOpen}
           store={menuDrawer}
           onClose={() => setIsOpen(false)}>
-          {isOpen && <InviteTeam setOpen={setIsOpen} />}
+          {isOpen && (
+            <InviteTeam
+              setOpen={setIsOpen}
+              onInviteSuccess={handleInviteSuccess}
+            />
+          )}
         </Drawer>
       </>
     )
