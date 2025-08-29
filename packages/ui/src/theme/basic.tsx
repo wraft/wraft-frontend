@@ -10,7 +10,7 @@ const theme: any = {
       '\'Satoshi\', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
   },
   initialColorModeName: "light",
-  useColorSchemeMediaQuery: true,
+  useColorSchemeMediaQuery: false,
   images: {
     profile: {
       width: "128px",

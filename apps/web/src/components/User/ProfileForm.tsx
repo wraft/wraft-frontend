@@ -122,7 +122,7 @@ const Form = () => {
       if (data) {
         setValue('name', data.name);
         setValue('dob', data.dob || '');
-        setValue('gender', data.gender || null);
+        setValue('gender', data.gender || '');
       }
     } catch (error) {
       toast.error('Failed to load profile');
@@ -175,6 +175,7 @@ const Form = () => {
                   width={120}
                   height={120}
                   src={`${profile?.profile_pic}`}
+                  priority
                 />
                 <AvatarOverlay
                   position="absolute"
@@ -227,7 +228,7 @@ const Form = () => {
               options={genderOptions}
               onChange={(value: OptionValue) => {
                 const option = genderOptions.find((opt) => opt.value === value);
-                const selectedGender = option?.value?.toString() || null;
+                const selectedGender = option?.value?.toString() || '';
                 setValue('gender', selectedGender);
 
                 setProfile((prevProfile) => ({

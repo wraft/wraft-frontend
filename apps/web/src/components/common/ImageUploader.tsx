@@ -269,6 +269,7 @@ export default function ImageUploader({
                   alt={targetAlt}
                   width={240}
                   height={240}
+                  priority
                   style={{
                     padding: '1.5rem',
                     borderRadius: '99rem',

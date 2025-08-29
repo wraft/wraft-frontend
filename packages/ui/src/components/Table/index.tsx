@@ -26,21 +26,29 @@ interface TableProps {
   onRowClick?: (row: any) => void;
 }
 
-const ResizableHeaderSpan = styled(x.span)<{
+const dynamicResizeStyle = (props: {
+  isResizing: boolean;
+  deltaOffset?: number;
+  direction?: string;
+}) => {
+  if (props.isResizing && props.deltaOffset !== undefined) {
+    const translateX = (props.direction === "rtl" ? -1 : 1) * props.deltaOffset;
+    return css`
+      transform: translateX(${translateX}px);
+    `;
+  }
+  return "";
+};
+
+const ResizableHeaderSpan = styled(x.span, {
+  shouldForwardProp: (prop) =>
+    !["isResizing", "deltaOffset", "direction"].includes(prop as string),
+})<{
   isResizing: boolean;
   deltaOffset?: number;
   direction?: string;
 }>`
-  ${(props) => {
-    if (props.isResizing && props.deltaOffset !== undefined) {
-      const translateX =
-        (props.direction === "rtl" ? -1 : 1) * props.deltaOffset;
-      return css`
-        transform: translateX(${translateX}px);
-      `;
-    }
-    return "";
-  }}
+  ${dynamicResizeStyle}
 `;
 
 const Table = ({

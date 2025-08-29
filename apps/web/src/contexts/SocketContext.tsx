@@ -67,11 +67,13 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
         user_id: userProfile.id,
         organisation_id: userProfile.organisation_id,
       },
-      logger: (kind, msg, data) => {
-        if (process.env.NODE_ENV === 'development') {
-          console.log(`Phoenix Socket ${kind}: ${msg}`, data);
-        }
-      },
+
+      // enable this to see the socket logs in the console and debug
+      // logger: (kind, msg, data) => {
+      //   if (process.env.NODE_ENV === 'development') {
+      //     console.log(`Phoenix Socket ${kind}: ${msg}`, data);
+      //   }
+      // },
     });
 
     newSocket.onOpen(() => {

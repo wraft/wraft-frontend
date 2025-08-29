@@ -1,27 +1,29 @@
 import styled, { css } from "@xstyled/emotion";
 
-export const Label = styled("label")<{ required: boolean }>`
-  ${({ required }) => css`
-    position: relative;
-    display: flex;
-    flex-shrink: 0;
-    max-width: 100%;
-    align-items: center;
-    line-height: lg;
-    user-select: none;
-    font-size: 14px;
-    color: gray.900;
+const dynamicLabelStyles = ({ required }: { required: boolean }) => css`
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  max-width: 100%;
+  align-items: center;
+  line-height: lg;
+  user-select: none;
+  font-size: 14px;
+  color: gray.900;
 
-    > * {
-      &:not(:last-child) {
-        margin-right: sm;
-      }
-
-      :last-child {
-        ${required && requiredStyles};
-      }
+  > * {
+    &:not(:last-child) {
+      margin-right: sm;
     }
-  `}
+
+    :last-child {
+      ${required && requiredStyles};
+    }
+  }
+`;
+
+export const Label = styled("label")<{ required: boolean }>`
+  ${dynamicLabelStyles}
 `;
 
 export const requiredStyles: any = css`

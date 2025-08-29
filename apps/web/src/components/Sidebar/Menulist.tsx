@@ -1,11 +1,11 @@
 import {
-  ThumbsUp,
-  GitBranch,
-  UserFocus,
-  Article,
-  Blueprint,
-  FileText,
-  House,
+  ThumbsUpIcon,
+  GitBranchIcon,
+  UserFocusIcon,
+  ArticleIcon,
+  BlueprintIcon,
+  FileTextIcon,
+  HouseIcon,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
@@ -17,17 +17,17 @@ export const Menulist = [
     menus: [
       {
         name: 'Overview',
-        icon: <House size={defaultIcon} weight={defaultWeight} />,
+        icon: <HouseIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/',
       },
       {
         name: 'Documents',
-        icon: <FileText size={defaultIcon} weight={defaultWeight} />,
+        icon: <FileTextIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/documents',
       },
       {
         name: 'Approvals',
-        icon: <ThumbsUp size={defaultIcon} weight={defaultWeight} />,
+        icon: <ThumbsUpIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/approvals',
       },
       // {
@@ -42,13 +42,13 @@ export const Menulist = [
     menus: [
       {
         name: 'Pipelines',
-        icon: <GitBranch size={defaultIcon} weight={defaultWeight} />,
+        icon: <GitBranchIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/pipelines',
         permissions: ['pipeline.show', 'pipeline.manage'],
       },
       {
         name: 'Templates',
-        icon: <Article size={defaultIcon} weight={defaultWeight} />,
+        icon: <ArticleIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/templates',
         permissions: ['template.show', 'template.manage'],
       },
@@ -59,13 +59,13 @@ export const Menulist = [
     menus: [
       {
         name: 'Variants',
-        icon: <Blueprint size={defaultIcon} weight={defaultWeight} />,
+        icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
       },
       {
         name: 'Manage',
-        icon: <UserFocus size={defaultIcon} weight={defaultWeight} />,
+        icon: <UserFocusIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/manage',
       },
     ],

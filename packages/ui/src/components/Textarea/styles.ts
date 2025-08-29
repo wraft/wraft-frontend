@@ -4,12 +4,14 @@ import { defaultFieldStyles } from "@/utils";
 
 import { TextareaOptions } from "./index";
 
+const dynamicTextareaStyles = ({ size, variant }: TextareaOptions) =>
+  defaultFieldStyles({
+    size,
+    variant,
+  });
+
 export const Textarea = styled("textarea")<TextareaOptions>`
-  ${({ size, variant }) =>
-    defaultFieldStyles({
-      size,
-      variant,
-    })}
+  ${dynamicTextareaStyles}
   ${th("textareas")};
   font-family: inherit;
   ${system};
