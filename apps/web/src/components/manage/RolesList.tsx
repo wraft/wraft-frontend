@@ -136,7 +136,7 @@ const RolesList = ({
   };
 
   return (
-    <Flex w="100%">
+    <Flex w="100%" h="100%">
       <Table
         data={contents}
         isLoading={loading}
