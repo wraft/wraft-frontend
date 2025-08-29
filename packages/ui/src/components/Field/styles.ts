@@ -27,32 +27,39 @@ export const VARIANTS: Record<Variant, string> = {
   warning: "yellow.400",
 };
 
-export const Field = styled.div<StyledFieldProps>(
-  ({ checked, isCheckable, isRadioGroup, withHintText, ...rest }) => {
-    const checkableInputStyles = isCheckable
-      ? `
-      input {
-        margin-top: xs;
-      }
-    `
-      : "";
+const dynamicFieldStyles = ({
+  checked,
+  isCheckable,
+  isRadioGroup,
+  withHintText,
+}: StyledFieldProps) => {
+  const checkableInputStyles = isCheckable
+    ? `
+    input {
+      margin-top: xs;
+    }
+  `
+    : "";
 
-    const labelStyles = `
-      ${StyledLabel} {
-        ${isCheckable && checkableFieldStyles};
-        ${isCheckable && withHintText ? th("defaultFields.checkablelabel.default") : ""}
-        ${checked ? th("defaultFields.checkablelabel.checked") : ""}
-        ${!isCheckable ? "margin-bottom: sm;" : ""}
-        ${isRadioGroup ? "margin-bottom: md;" : ""}
-      }
-    `;
+  const labelStyles = `
+    ${StyledLabel} {
+      ${isCheckable && checkableFieldStyles};
+      ${isCheckable && withHintText ? th("defaultFields.checkablelabel.default") : ""}
+      ${checked ? th("defaultFields.checkablelabel.checked") : ""}
+      ${!isCheckable ? "margin-bottom: sm;" : ""}
+      ${isRadioGroup ? "margin-bottom: md;" : ""}
+    }
+  `;
 
-    return css`
-      ${checkableInputStyles}
-      ${labelStyles}
-    `;
-  },
-);
+  return css`
+    ${checkableInputStyles}
+    ${labelStyles}
+  `;
+};
+
+export const Field = styled.div<StyledFieldProps>`
+  ${dynamicFieldStyles}
+`;
 
 export const Hint = styled.div<{ variant: Variant }>`
   display: flex;

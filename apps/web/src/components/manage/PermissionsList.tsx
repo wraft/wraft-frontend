@@ -5,15 +5,13 @@ import _ from 'lodash';
 import { DownIcon } from '@wraft/icon';
 import { Table, Box, Flex, Text, Checkbox } from '@wraft/ui';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 
 import { putAPI, fetchAPI } from 'utils/models';
 
 const IconWrapper = styled(Flex)<{ isExpanded: boolean }>`
   align-items: center;
-  ${(props) => css`
-    transform: ${props.isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
-  `}
+  transform: ${(props) =>
+    props.isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'};
 `;
 
 const PermissionsList = () => {

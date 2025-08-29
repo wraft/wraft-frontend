@@ -13,7 +13,6 @@ import { DownIcon } from '@wraft/icon';
 import { Drawer, Field } from '@wraft/ui';
 import { X } from '@phosphor-icons/react';
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
 
 import StepsIndicator from 'common/Form/StepsIndicator';
 import { putAPI, fetchAPI, postAPI } from 'utils/models';
@@ -42,15 +41,11 @@ const StyledLabel = styled(Label)`
   }
 `;
 
-const iconStyle = (props: { dropped: boolean }) => css`
-  transform: ${props.dropped ? 'rotate(180deg)' : 'none'};
-  color: gray.800;
-`;
-
 const IconWrapper = styled(Flex)<{ dropped: boolean }>`
   justify-content: center;
   align-items: center;
-  ${(props: any) => iconStyle(props)}
+  transform: ${(props) => (props.dropped ? 'rotate(180deg)' : 'none')};
+  color: gray.800;
 `;
 
 interface RolesFormProps {

@@ -45,7 +45,7 @@ const PendingDocumentBlock = () => {
         ) : contents && contents.length > 0 ? (
           contents.map((content: any) => (
             <DocumentCard
-              key={content.id}
+              key={content.content.id}
               content={content}
               onClick={() => {
                 router.push(`/documents/${content.content.id}`);
