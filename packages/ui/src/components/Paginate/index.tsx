@@ -28,25 +28,20 @@ export interface IProp {
 }
 
 const Pagination: React.FC<IProp> = ({
-  type,
+  type = "advanced",
   onPageChange,
-  showGoto,
-
+  showGoto = false,
   initialPage,
   totalPage,
-  numberPageDisplayed,
-  numberMarginPagesDisplayed,
-
+  numberPageDisplayed = 2,
+  numberMarginPagesDisplayed = 2,
   totalEntries,
-
-  previousLabel,
-  nextLabel,
-  breakLabel,
-
+  previousLabel = "Previous",
+  nextLabel = "Next",
+  breakLabel = "...",
   containerClassName,
-
   pageClassName,
-  activeClassName,
+  activeClassName = "selected",
   breakClassName,
 }) => {
   const [currentPage, setCurrentPage] = useState<number>(initialPage || 1);
@@ -243,14 +238,4 @@ const Pagination: React.FC<IProp> = ({
   );
 };
 
-Pagination.defaultProps = {
-  type: "advanced",
-  showGoto: false,
-  numberPageDisplayed: 2,
-  numberMarginPagesDisplayed: 2,
-  activeClassName: "selected",
-  previousLabel: "Previous",
-  nextLabel: "Next",
-  breakLabel: "...",
-};
 export default Pagination;

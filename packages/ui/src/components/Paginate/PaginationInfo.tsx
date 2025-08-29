@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import '../../styles/components/pagination/pagination.scss';
-import Pagination from '.';
+import "../../styles/components/pagination/pagination.scss";
+import Pagination from ".";
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -17,12 +17,12 @@ interface IProp {
 }
 const PaginationInfo: React.FC<IProp> = ({
   totalRecord,
-  initialPageSize,
+  initialPageSize = DEFAULT_PAGE_SIZE,
   onPageChange,
   onPageSizeChange,
-  pageSizeLabel,
-  showGoto,
-  showPageSize,
+  pageSizeLabel = "page Size",
+  showGoto = true,
+  showPageSize = false,
 }) => {
   const [totalPage, setTotalPage] = useState(0);
   const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE);
@@ -40,7 +40,9 @@ const PaginationInfo: React.FC<IProp> = ({
   return (
     <>
       <div className="pagination-info">
-        <div className="pagination-info--summary">Page Selection: {totalRecord}</div>
+        <div className="pagination-info--summary">
+          Page Selection: {totalRecord}
+        </div>
         <div className="flex-spacer"></div>
 
         {showPageSize && (
@@ -50,7 +52,8 @@ const PaginationInfo: React.FC<IProp> = ({
               const cPageSize = Number(e.target.value);
               setPageSize(cPageSize);
               onPageSizeChange && onPageSizeChange(cPageSize);
-            }}>
+            }}
+          >
             {pageSizes.map((ps) => (
               <option key={ps} value={ps}>
                 {pageSizeLabel} {ps}
@@ -59,17 +62,14 @@ const PaginationInfo: React.FC<IProp> = ({
           </select>
         )}
 
-        <Pagination showGoto={showGoto} totalPage={totalPage} onPageChange={onPageChange} />
+        <Pagination
+          showGoto={showGoto}
+          totalPage={totalPage}
+          onPageChange={onPageChange}
+        />
       </div>
     </>
   );
-};
-
-PaginationInfo.defaultProps = {
-  initialPageSize: DEFAULT_PAGE_SIZE,
-  pageSizeLabel: 'page Size',
-  showPageSize: false,
-  showGoto: true,
 };
 
 export default PaginationInfo;
