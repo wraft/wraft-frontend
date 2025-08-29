@@ -70,7 +70,7 @@ export const EditorContent = styled.divBox`
     padding-left: 2px;
     padding-right: 2px;
   }
-  .ProseMirror > .ProseMirror-yjs-cursor:first-child {
+  .ProseMirror > .ProseMirror-yjs-cursor:first-of-type {
     margin-top: 16px;
   }
 

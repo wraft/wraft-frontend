@@ -24,7 +24,7 @@ export const Icon = styled(Box)`
   display: flex;
   border-radius: 12;
 
-  & *:first-child {
+  & *:first-of-type {
     margin: auto;
   }
 `;
