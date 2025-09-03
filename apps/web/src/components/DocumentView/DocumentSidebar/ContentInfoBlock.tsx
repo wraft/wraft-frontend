@@ -4,16 +4,17 @@ import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal, Skeleton } from '@wraft/ui';
 import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
-import ConfirmDelete from 'common/ConfirmDelete';
+import { VersionHistoryModal } from 'components/versionHistory/versionHistory';
 import { IconFrame } from 'common/Atoms';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, postAPI } from 'utils/models';
-import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
+import { ContentInstance } from 'utils/types/content';
 
+import apiService from '../APIModel';
+import { useDocument } from '../DocumentContext';
 import EmailComposer from '../EmailComposer';
 import InviteCollaborators from '../InviteCollaborators';
-import { useDocument } from '../DocumentContext';
-import apiService from '../APIModel';
 
 interface EditMenuProps {
   id: string;
@@ -30,6 +31,8 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
 
   const { hasPermission } = usePermission();
   const { cId, contents, token, setSignerBoxes, setContents } = useDocument();
+  const [isVersionHistoryOpen, setVersionHistoryOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (cId && contents && token) {
@@ -112,6 +115,10 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
           <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
             Send Mail
           </DropdownMenu.Item>
+
+          <DropdownMenu.Item onClick={() => setVersionHistoryOpen(true)}>
+            Version History
+          </DropdownMenu.Item>
           {/* )} */}
         </DropdownMenu>
       </DropdownMenu.Provider>
@@ -135,6 +142,12 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
           )}
         </>
       </Modal>
+
+      <VersionHistoryModal
+        isOpen={isVersionHistoryOpen}
+        onClose={() => setVersionHistoryOpen(false)}
+        contentId={id}
+      />
     </>
   );
 };
