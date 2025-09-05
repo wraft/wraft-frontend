@@ -83,6 +83,9 @@ interface DocumentContextProps {
   signerBoxes: any;
   signers: Counterparty[];
   inviteType: 'sign' | 'invite' | null | undefined;
+  onSubmitRef: React.MutableRefObject<((customName?: string) => void) | null>;
+  setOnSubmit: (fn: (customName?: string) => void) => void;
+
   setAdditionalCollaborator: (data: any) => void;
   setUserType: (state: UserType) => void;
   fetchContentDetails: (cid: string) => void;
@@ -133,6 +136,10 @@ export const DocumentProvider = ({
   const [userType, setUserType] = useState<UserType>('default');
   const [signers, setSigners] = useState<Counterparty[]>([]);
   const [activeCounterparty, setActiveCounterparty] = useState<Counterparty>();
+  const onSubmitRef = useRef<((customName?: string) => void) | null>(null);
+  const setOnSubmit = (fn: (customName?: string) => void) => {
+    onSubmitRef.current = fn;
+  };
 
   const newContent = contentStore((state: any) => state.newContents);
 
@@ -499,6 +506,8 @@ export const DocumentProvider = ({
         signers,
         inviteType,
         vendorId: vendorId || null,
+        onSubmitRef,
+        setOnSubmit,
         setAdditionalCollaborator,
         setUserType,
         fetchContentDetails,
