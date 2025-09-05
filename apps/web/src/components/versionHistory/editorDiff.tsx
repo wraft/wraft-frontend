@@ -1,4 +1,3 @@
-// components/editor-diff.tsx
 import { useMemo } from 'react';
 import { defineBasicExtension } from 'prosekit/basic';
 import { createEditor, union } from 'prosekit/core';

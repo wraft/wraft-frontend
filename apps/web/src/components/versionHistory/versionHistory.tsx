@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   InputText,
   Spinner,
+  Pagination,
 } from '@wraft/ui';
 
 import { IconFrame } from 'common/Atoms';
@@ -23,11 +24,18 @@ interface Author {
   name: string;
 }
 
+interface VersionsResponse {
+  page_number: number;
+  total_entries: number;
+  total_pages: number;
+  versions: APIVersion[];
+}
+
 interface APIVersion {
   id: string;
   inserted_at: string;
   naration: string | null;
-  raw: string;
+  type: string;
   version_number: number;
   author: Author;
   current_version?: boolean;
@@ -37,7 +45,7 @@ interface UIVersion extends APIVersion {
   name: string;
   isCurrentVersion: boolean;
   hasChanges: boolean;
-  previousVersionRaw?: string;
+  previousVersionId?: string;
 }
 
 interface VersionHistoryModalProps {
@@ -46,9 +54,35 @@ interface VersionHistoryModalProps {
   contentId: string;
 }
 
-interface ContentResponse {
-  versions: APIVersion[];
+interface DiffResponse {
+  base_version: {
+    id: string;
+    serialized: {
+      body: string;
+      fields: string;
+      title: string;
+      serialized: string;
+    };
+  };
+  target_version: {
+    id: string;
+    serialized: {
+      body: string;
+      fields: string;
+      title: string;
+      serialized: string;
+    };
+  };
 }
+
+const formatDateTime = (timestamp: string): string => {
+  try {
+    const date = new Date(timestamp);
+    return `${format(date, 'MMMM d')}, ${format(date, 'h:mm a')}`;
+  } catch {
+    return 'Invalid date';
+  }
+};
 
 const transformVersions = (apiVersions: APIVersion[]): UIVersion[] => {
   if (!apiVersions?.length) return [];
@@ -66,10 +100,10 @@ const transformVersions = (apiVersions: APIVersion[]): UIVersion[] => {
         name: version.naration || `Version ${version.version_number}`,
         isCurrentVersion: !!version.current_version,
         hasChanges: !!prev,
-        previousVersionRaw: prev?.raw,
+        previousVersionId: prev?.id,
       };
     })
-    .reverse(); // newest first
+    .reverse();
 };
 
 const VersionItem: React.FC<{
@@ -90,12 +124,11 @@ const VersionItem: React.FC<{
     setIsRenaming(false);
   };
 
-  const formatDateTime = (timestamp: string): string => {
-    try {
-      const date = new Date(timestamp);
-      return `${format(date, 'MMMM d')}, ${format(date, 'h:mm a')}`;
-    } catch {
-      return 'Invalid date';
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleRename();
+    if (e.key === 'Escape') {
+      setNewName(version.name);
+      setIsRenaming(false);
     }
   };
 
@@ -114,43 +147,39 @@ const VersionItem: React.FC<{
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onBlur={handleRename}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleRename();
-                if (e.key === 'Escape') {
-                  setNewName(version.name);
-                  setIsRenaming(false);
-                }
-              }}
+              onKeyDown={handleKeyDown}
               fontSize="sm"
               fontWeight="500"
               size="sm"
             />
           ) : (
-            <Flex justify="space-between" align="center" mb="xxs">
-              <Text
-                fontSize="sm"
-                fontWeight="500"
-                color={isSelected ? 'primary.600' : 'text-primary'}>
-                {version.name}
-              </Text>
-              {version.isCurrentVersion && (
+            <>
+              <Flex justify="space-between" align="center" mb="xxs">
                 <Text
-                  fontSize="xs"
-                  color="green.800"
-                  fontWeight="medium"
-                  bg="green.50"
-                  px="xs"
-                  py="xxs"
-                  borderRadius="sm">
-                  Current
+                  fontSize="sm"
+                  fontWeight="500"
+                  color={isSelected ? 'primary.600' : 'text-primary'}>
+                  {version.name}
                 </Text>
-              )}
-            </Flex>
+                {version.isCurrentVersion && (
+                  <Text
+                    fontSize="xs"
+                    color="green.800"
+                    fontWeight="medium"
+                    bg="green.50"
+                    px="xs"
+                    py="xxs"
+                    borderRadius="sm">
+                    Current
+                  </Text>
+                )}
+              </Flex>
+              <Text fontSize="xs" color="text-secondary">
+                {formatDateTime(version.inserted_at)}
+                {version.author && ` • ${version.author.name}`}
+              </Text>
+            </>
           )}
-          <Text fontSize="xs" color="text-secondary">
-            {formatDateTime(version.inserted_at)}
-            {version.author && ` • ${version.author.name}`}
-          </Text>
         </Box>
 
         <DropdownMenu.Provider>
@@ -175,36 +204,56 @@ const VersionItem: React.FC<{
   );
 };
 
-const VersionList: React.FC<{
-  versions: UIVersion[];
-  selectedId: string | null;
+const VersionContent: React.FC<{
+  version: UIVersion;
+  diffData: DiffResponse | null;
   loading: boolean;
-  onSelect: (version: UIVersion) => void;
-  onRestore: (version: UIVersion) => void;
-  onRename: (id: string, newName: string) => void;
-}> = ({ versions, selectedId, loading, onSelect, onRestore, onRename }) => {
-  if (loading) {
+}> = ({ version, diffData, loading }) => {
+  if (loading) return <Spinner />;
+  if (!version)
+    return <Text color="text-secondary">No versions available</Text>;
+
+  const isFirstVersion = version.version_number === 1;
+  const hasContent = diffData?.base_version?.serialized?.body;
+
+  if (!diffData) {
     return (
-      <Box p="md" textAlign="center">
-        <Spinner />
+      <Text color="text-secondary">No content available for this version</Text>
+    );
+  }
+
+  if (isFirstVersion) {
+    return (
+      <Box
+        minHeight="200px"
+        maxHeight="600px"
+        w="100%"
+        overflowY="auto"
+        bg="background-primary"
+        p="lg"
+        fontSize="sm"
+        lineHeight="1.6">
+        <Text color="text-secondary" fontWeight="medium" mb="md">
+          {version.name}
+        </Text>
+        <Box
+          p="sm"
+          bg="gray.50"
+          borderRadius="sm"
+          maxHeight="400px"
+          overflowY="auto">
+          <Text fontSize="sm" color="text-secondary" whiteSpace="pre-wrap">
+            {hasContent || 'No content available'}
+          </Text>
+          <Text fontSize="xs" color="text-secondary" mt="sm">
+            Created on {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
+          </Text>
+        </Box>
       </Box>
     );
   }
 
-  return (
-    <Box maxHeight="100%" overflowY="auto">
-      {versions.map((v) => (
-        <VersionItem
-          key={v.id}
-          version={v}
-          isSelected={selectedId === v.id}
-          onSelect={() => onSelect(v)}
-          onRestore={() => onRestore(v)}
-          onRename={(name) => onRename(v.id, name)}
-        />
-      ))}
-    </Box>
-  );
+  return <DiffViewer diffData={diffData} />;
 };
 
 export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
@@ -215,27 +264,57 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   const [apiVersions, setApiVersions] = useState<APIVersion[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [diffData, setDiffData] = useState<DiffResponse | null>(null);
+  const [diffLoading, setDiffLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    pageNumber: 1,
+    totalEntries: 0,
+    totalPages: 1,
+  });
+  const [currentPage, setCurrentPage] = useState(1);
 
   const versions = useMemo(() => transformVersions(apiVersions), [apiVersions]);
   const selectedVersion =
     versions.find((v) => v.id === selectedId) || versions[0] || null;
 
-  useEffect(() => {
-    if (isOpen && contentId) loadVersions();
-  }, [isOpen, contentId]);
-
-  const loadVersions = async (versionType: string = 'save') => {
+  const loadVersions = async (page: number = 1) => {
     try {
       setLoading(true);
-      const res = (await fetchAPI(
-        `contents/${contentId}?version_type=${versionType}`,
-      )) as ContentResponse;
-      setApiVersions(res?.versions || []);
-      setSelectedId(res?.versions?.[0]?.id || null);
+      const query = `page=${page}&sort=inserted_at_desc&page_size=10`;
+      const response = (await fetchAPI(
+        `contents/${contentId}/versions?${query}`,
+      )) as VersionsResponse;
+
+      setApiVersions(response.versions || []);
+      setSelectedId(response.versions?.[0]?.id || null);
+      setPagination({
+        pageNumber: response.page_number,
+        totalEntries: response.total_entries,
+        totalPages: response.total_pages,
+      });
     } catch (err) {
       console.error('Failed to load versions', err);
+      toast.error('Failed to load versions');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadDiffData = async (
+    previousVersionId: string,
+    currentVersionId: string,
+  ) => {
+    try {
+      setDiffLoading(true);
+      const res = await fetchAPI(
+        `versions/${previousVersionId}/${currentVersionId}`,
+      );
+      setDiffData(res as DiffResponse);
+    } catch (err) {
+      console.error('Failed to load diff data', err);
+      toast.error('Failed to load version comparison');
+    } finally {
+      setDiffLoading(false);
     }
   };
 
@@ -249,7 +328,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
           error: 'Failed to restore version',
         },
       );
-      await loadVersions();
+      await loadVersions(currentPage);
     } catch (err) {
       console.error('Restore failed', err);
     }
@@ -257,16 +336,37 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
 
   const handleRename = async (id: string, newName: string) => {
     try {
-      await postAPI(`versions/${id}`, {
-        naration: newName,
-      });
-      setApiVersions((prev) =>
-        prev.map((v) => (v.id === id ? { ...v, naration: newName } : v)),
-      );
+      await postAPI(`versions/${id}`, { naration: newName });
+      await loadVersions(currentPage);
     } catch (err) {
       toast.error('Failed to rename version');
     }
   };
+
+  useEffect(() => {
+    if (isOpen && contentId) {
+      loadVersions(currentPage);
+    }
+  }, [isOpen, contentId, currentPage]);
+
+  useEffect(() => {
+    if (!selectedVersion) {
+      setDiffData(null);
+      return;
+    }
+
+    const targetId = selectedVersion.id;
+    const baseId =
+      selectedVersion.version_number === 1
+        ? selectedVersion.id
+        : selectedVersion.previousVersionId;
+
+    if (baseId) {
+      loadDiffData(baseId, targetId);
+    } else {
+      setDiffData(null);
+    }
+  }, [selectedVersion]);
 
   if (!isOpen) return null;
 
@@ -280,13 +380,11 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
           <Text as="h3" fontSize="lg" fontWeight="bold" mb="md">
             {selectedVersion?.name || 'Version History'}
           </Text>
-          {loading ? (
-            <Spinner />
-          ) : selectedVersion ? (
-            <DiffViewer version={selectedVersion} />
-          ) : (
-            <Text color="text-secondary">No versions available</Text>
-          )}
+          <VersionContent
+            version={selectedVersion}
+            diffData={diffData}
+            loading={loading || diffLoading}
+          />
         </Box>
 
         <Box
@@ -299,7 +397,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
           h="100%">
           <Flex justify="space-between" align="center" mb="sm">
             <Text fontSize="md" fontWeight="semibold">
-              All Versions ({versions.length})
+              All Versions ({pagination.totalEntries})
             </Text>
             <Button variant="ghost" onClick={onClose}>
               ×
@@ -307,15 +405,36 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
           </Flex>
 
           <Box flex="1" minHeight="0" overflow="hidden">
-            <VersionList
-              versions={versions}
-              selectedId={selectedVersion?.id || null}
-              loading={loading}
-              onSelect={(v) => setSelectedId(v.id)}
-              onRestore={handleRestore}
-              onRename={handleRename}
-            />
+            {loading ? (
+              <Box p="md" textAlign="center">
+                <Spinner />
+              </Box>
+            ) : (
+              <Box maxHeight="100%" overflowY="auto">
+                {versions.map((version) => (
+                  <VersionItem
+                    key={version.id}
+                    version={version}
+                    isSelected={selectedId === version.id}
+                    onSelect={() => setSelectedId(version.id)}
+                    onRestore={() => handleRestore(version)}
+                    onRename={(name) => handleRename(version.id, name)}
+                  />
+                ))}
+              </Box>
+            )}
           </Box>
+
+          {pagination.totalPages > 1 && (
+            <Box mt="md" p="xs" borderTop="1px solid" borderColor="gray.600">
+              <Pagination
+                totalPage={pagination.totalPages}
+                initialPage={currentPage}
+                onPageChange={setCurrentPage}
+                totalEntries={pagination.totalEntries}
+              />
+            </Box>
+          )}
         </Box>
       </Flex>
     </Modal>
