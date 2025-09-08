@@ -9,6 +9,8 @@ interface EnvConfig {
   GOOGLE_CLIENT_ID: string;
   GOOGLE_CLIENT_SECRET: string;
   NEXTAUTH_SECRET: string;
+  NEXT_PUBLIC_ANALYTICS_MODE: string | undefined;
+  NEXT_PUBLIC_GTM_ID: string | undefined;
 }
 
 export const envConfig: EnvConfig = {
@@ -21,6 +23,8 @@ export const envConfig: EnvConfig = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || '',
+  NEXT_PUBLIC_ANALYTICS_MODE: process.env.NEXT_PUBLIC_ANALYTICS_MODE,
+  NEXT_PUBLIC_GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || '',
 };
 
 export const validateEnv = (): void => {
