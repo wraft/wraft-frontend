@@ -407,7 +407,7 @@ export const DocumentContentBlock = () => {
                 <Flex>
                   <Box minWidth="794px" maxWidth="920px">
                     <PreTag pt={0} pb={6}>
-                      {contentBody && isEditorMounted && (
+                      {isEditorMounted && (
                         <>
                           <LiveEditor
                             defaultContent={contentBody}

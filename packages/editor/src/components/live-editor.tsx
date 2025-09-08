@@ -21,13 +21,13 @@ import { markdownFromHTML } from "@helpers/markdown";
 import { getUserColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
-// import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
 import Toolbar from "./toolbar";
 import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
 import { EditorConfigProvider } from "./editor-config";
+import InlineMenu from "./inline-menu";
 
 export interface Signer {
   id: string;
@@ -71,6 +71,7 @@ export const LiveEditor = forwardRef(
   ) => {
     const [provider, setProvider] = useState<any>();
     const [updateContent, setUpdateContent] = useState<any>();
+    const [isLoading, setIsLoading] = useState<any>(false);
     const contentInitialized = useRef(false);
     const socketRef = useRef<Socket | null>(null);
 
@@ -104,10 +105,7 @@ export const LiveEditor = forwardRef(
       }
 
       if (!socketRef.current) {
-        socketRef.current = new Socket(`${socketUrl}/socket`, {
-          params: authToken ? { token: authToken } : {},
-        });
-        socketRef.current.connect();
+        return null;
       }
 
       const wsProvider = new PhoenixChannelProvider(
@@ -127,6 +125,8 @@ export const LiveEditor = forwardRef(
         });
       }
 
+      setIsLoading(true);
+
       const extension = defineCollaborativeExtension({
         placeholder,
         doc,
@@ -136,7 +136,7 @@ export const LiveEditor = forwardRef(
       });
 
       return createEditor({ extension, defaultContent });
-    }, [isReadonly, authToken]);
+    }, [isReadonly, socketRef.current]);
 
     useEffect(() => {
       if (!provider || !editor) return;
@@ -191,11 +191,13 @@ export const LiveEditor = forwardRef(
     const helpers = useMemo(
       () => ({
         getJSON: () => {
+          if (!editor) return null;
           const record = jsonFromNode(editor.view.state.doc);
           return record;
         },
 
         getMarkdown: () => {
+          if (!editor) return null;
           const html = htmlFromNode(editor.view.state.doc, {
             DOMSerializer: ListDOMSerializer,
           });
@@ -207,6 +209,7 @@ export const LiveEditor = forwardRef(
           return markdownFromHTML(html);
         },
         insertBlock: (block: Node) => {
+          if (!editor) return null;
           const { selection, schema } = editor.state;
           const blockContent = schema.nodeFromJSON(block);
           return editor.commands.insertBlock(blockContent, selection);
@@ -231,23 +234,26 @@ export const LiveEditor = forwardRef(
     return (
       <EditorConfigProvider config={{ apiHost }}>
         <S.EditorWrapper className={`wraft-editor ${className}`}>
-          <ProseKit editor={editor}>
-            {!isReadonly && (
-              <div className="toolbar">
-                <Toolbar />
-              </div>
-            )}
-            <S.EditorContainer>
-              <S.EditorContent>
-                <S.EditorContentInput ref={editor.mount} />
-                {/* {!isReadonly && <InlineMenu />} */}
-                <SlashMenu />
-                {tokens && <TokenMenu tokens={tokens} />}
-                {/* <BlockHandle /> */}
-                <TableHandle isReadonly={isReadonly} />
-              </S.EditorContent>
-            </S.EditorContainer>
-          </ProseKit>
+          {isLoading && editor && (
+            <ProseKit editor={editor}>
+              {!isReadonly && (
+                <div className="toolbar">
+                  <Toolbar />
+                </div>
+              )}
+
+              <S.EditorContainer>
+                <S.EditorContent>
+                  <S.EditorContentInput ref={editor.mount} />
+                  {!isReadonly && <InlineMenu />}
+                  <SlashMenu />
+                  {tokens && <TokenMenu tokens={tokens} />}
+                  {/* <BlockHandle /> */}
+                  <TableHandle isReadonly={isReadonly} />
+                </S.EditorContent>
+              </S.EditorContainer>
+            </ProseKit>
+          )}
         </S.EditorWrapper>
       </EditorConfigProvider>
     );

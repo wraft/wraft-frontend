@@ -48,7 +48,7 @@ export const useNotifications = (): UseNotificationsReturn => {
   const fetchNotifications = useCallback(async (page: number = 1) => {
     setLoading(true);
     try {
-      const query = `sort=inserted_at_desc&page=${page}&limit=50`;
+      const query = `sort=inserted_at_desc&page=${page}&limit=20`;
       const response = (await fetchAPI(
         'notifications',
         `?${query}`,

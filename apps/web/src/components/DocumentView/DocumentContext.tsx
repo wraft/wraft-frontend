@@ -296,7 +296,7 @@ export const DocumentProvider = ({
           setFieldValues(getFieldValues);
         }
 
-        const getFieldValues = JSON.parse(data.content.serialized.fields) || {};
+        const getFieldValues = {};
         const holders = findHolders(serialized);
         setFieldValues({ ...getFieldValues, ...holders });
       }
@@ -328,14 +328,12 @@ export const DocumentProvider = ({
           fetchContentTypeDetails(cTypeId);
         }
 
-        isInvite;
-
         setPageTitle(content.serialized?.title);
         setContents(data);
         setLoading(false);
       }
-    } catch {
-      console.error('content  error');
+    } catch (error) {
+      console.error('content  error', error);
     }
   };
 

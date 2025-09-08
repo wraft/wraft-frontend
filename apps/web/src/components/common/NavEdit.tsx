@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Flex, Text } from '@wraft/ui';
+import { Flex, Text, Skeleton, Box } from '@wraft/ui';
 import { ArrowLeftIcon, PencilIcon } from '@phosphor-icons/react';
 
 import UserSettingsMenu from 'components/Sidebar/UserSettingsMenu';
@@ -17,9 +17,15 @@ interface INav {
   onToggleEdit?: any;
   backLink?: string;
   isEdit?: boolean;
+  loading?: boolean;
 }
 
-const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
+const Nav = ({
+  navtitle,
+  onToggleEdit,
+  isEdit = true,
+  loading = false,
+}: INav) => {
   const router = useRouter();
   const { accessToken } = useAuth();
 
@@ -50,13 +56,19 @@ const Nav = ({ navtitle, onToggleEdit, isEdit = true }: INav) => {
           size={18}
         />
 
-        {navtitle && (
+        {(navtitle || loading) && (
           <Flex align="center" gap="sm">
-            <Text as="h2" fontSize="lg" fontWeight="heading" p="sm">
-              {navtitle}
-            </Text>
+            {loading ? (
+              <Box p="sm">
+                <Skeleton width="600px" height="18px" />
+              </Box>
+            ) : (
+              <Text as="h2" fontSize="lg" fontWeight="heading" p="sm">
+                {navtitle}
+              </Text>
+            )}
 
-            {isEdit && (
+            {isEdit && !loading && (
               <PencilIcon
                 cursor="pointer"
                 className="main-icon"

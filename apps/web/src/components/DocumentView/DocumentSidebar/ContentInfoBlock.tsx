@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router';
 import toast from 'react-hot-toast';
-import { Text, Box, Flex, DropdownMenu, Modal } from '@wraft/ui';
+import { Text, Box, Flex, DropdownMenu, Modal, Skeleton } from '@wraft/ui';
 import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
@@ -171,6 +171,9 @@ export const ContentInfoBlock = ({
     <Flex justify="space-between" px="md" py="sm">
       <Box>
         <Flex alignItems="center" gap="xxs">
+          {(!contentType?.layout?.name || !contentType?.name) && (
+            <Skeleton width="180px" height="14px" />
+          )}
           {contentType?.layout?.name && (
             <Text
               fontSize="sm"
@@ -180,22 +183,32 @@ export const ContentInfoBlock = ({
               {contentType.layout.name}
             </Text>
           )}
-          <Text color="text-secondary"> / </Text>
+
           {contentType?.name && (
-            <Text
-              fontSize="sm"
-              color="text-secondary"
-              as="span"
-              cursor={contentType?.id ? 'pointer' : 'default'}
-              onClick={navigateToContentType}>
-              {contentType.name}
-            </Text>
+            <>
+              <Text color="text-secondary"> / </Text>
+              <Text
+                fontSize="sm"
+                color="text-secondary"
+                as="span"
+                cursor={contentType?.id ? 'pointer' : 'default'}
+                onClick={navigateToContentType}>
+                {contentType.name}
+              </Text>
+            </>
           )}
         </Flex>
         <Flex gap="sm">
-          <Text as="h4">
-            {content?.content?.instance_id || contentType?.prefix}
-          </Text>
+          {!contentType?.prefix ? (
+            <Box p="xxs">
+              <Skeleton width="100px" height="18px" />
+            </Box>
+          ) : (
+            <Text as="h4">
+              {content?.content?.instance_id || contentType?.prefix}
+            </Text>
+          )}
+
           {content?.state?.state && (
             <Text
               as="span"

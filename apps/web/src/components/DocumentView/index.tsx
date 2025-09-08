@@ -156,13 +156,12 @@ const DocumentView = () => {
 
   return (
     <>
-      {!loading && pageTitle && (
-        <Nav
-          navtitle={pageTitle}
-          isEdit={editorMode !== 'view'}
-          onToggleEdit={() => setOpenTitleModal(true)}
-        />
-      )}
+      <Nav
+        navtitle={pageTitle}
+        isEdit={editorMode !== 'view'}
+        onToggleEdit={() => setOpenTitleModal(true)}
+        loading={loading}
+      />
       <>
         <ErrorBoundary>
           <Grid
@@ -175,6 +174,7 @@ const DocumentView = () => {
                   flex={1}
                   px="sm"
                   py="sm"
+                  minH="40px"
                   borderBottom="solid 1px"
                   borderColor="border"
                   bg="background-primary">
@@ -192,7 +192,9 @@ const DocumentView = () => {
                         />
                       ))}
 
-                    {contents &&
+                    {!loading &&
+                      contents &&
+                      states &&
                       !nextState?.is_user_eligible &&
                       !isMakeCompete &&
                       !isEditable && <ApprovalAwaitingLabel />}
