@@ -45,11 +45,11 @@ export const Layoutschema = z.object({
     .max(120, { message: 'Maximum 120 characters allowed' })
     .trim()
     .regex(safeTextRegex, 'Only letters, numbers, spaces, -, _ allowed'),
-  slug: z
-    .string()
-    .refine((value) => value === 'pletter' || value === 'contract', {
+  slug: z.enum(['pletter', 'contract'], {
+    errorMap: () => ({
       message: 'Value must be either "pletter" or "contract"',
     }),
+  }),
   description: z
     .string()
     .min(5, 'Minimum 5 characters required')

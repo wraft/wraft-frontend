@@ -28,11 +28,11 @@ export const VariantSchema = z.object({
     )
     .transform((val) => val.toUpperCase())
     .optional(),
-  type: z
-    .string()
-    .refine((value) => value === 'document' || value === 'contract', {
+  type: z.enum(['document', 'contract'], {
+    errorMap: () => ({
       message: 'Value must be either "document" or "contract"',
     }),
+  }),
 
   frame_mapping: z
     .array(
