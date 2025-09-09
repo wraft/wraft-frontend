@@ -2,7 +2,7 @@
 
 interface EnvConfig {
   API_HOST: string;
-  SELF_HOST: boolean;
+  SELF_HOST_DISABLED: boolean;
   WEBSOCKET_URL: string;
   HOME_PAGE_URL: string;
   NEXT_AUTH_ENABLED: boolean;
@@ -15,7 +15,7 @@ interface EnvConfig {
 
 export const envConfig: EnvConfig = {
   API_HOST: process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:4000',
-  SELF_HOST: process.env.NEXT_PUBLIC_SELF_HOST === 'true',
+  SELF_HOST_DISABLED: process.env.NEXT_PUBLIC_SELF_HOST_DISABLED === 'true',
   WEBSOCKET_URL:
     process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:4000/socket',
   HOME_PAGE_URL: process.env.NEXT_PUBLIC_HOME_PAGE_URL || '/',

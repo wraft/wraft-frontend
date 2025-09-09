@@ -12,6 +12,7 @@ import { Flex, Spinner } from '@wraft/ui';
 
 import { Subscription } from 'components/Billing/types';
 import { fetchAPI } from 'utils/models';
+import envConfig from 'utils/env';
 
 interface IUserContextProps {
   isUserLoading: boolean;
@@ -80,15 +81,13 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
 
   const fetchUserBasicInfo = async () => {
     try {
-      const isSelfHost = process.env.NEXT_PUBLIC_SELF_HOST === 'true';
-
       const basePromises = [
         fetchAPI('users/me'),
         fetchAPI('users/organisations'),
         fetchAPI('organisations/users/permissions'),
       ];
 
-      if (isSelfHost) {
+      if (envConfig.SELF_HOST_DISABLED) {
         basePromises.push(fetchAPI('billing/subscription'));
       }
 
@@ -100,7 +99,7 @@ export const UserProvider = ({ children }: { children: ReactElement }) => {
       setPermissions(permissionOrg.permissions);
       updateUserData(userinfo);
 
-      if (isSelfHost && currentSubscription) {
+      if (envConfig.SELF_HOST_DISABLED && currentSubscription) {
         setSubscription(currentSubscription);
       }
 

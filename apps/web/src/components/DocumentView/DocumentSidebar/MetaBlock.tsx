@@ -55,52 +55,60 @@ const MetaBlock = () => {
   return (
     <Box mt="xl">
       <>
-        <Flex justify="space-between">
-          <Text fontWeight="500" color="text-secondary">
-            Meta Info
-          </Text>
-          {editorMode !== 'view' && (
-            <Box onClick={openDrawer}>
-              <EditIcon width={14} className="main-icon" />
+        {meta && meta.length > 0 && (
+          <>
+            <Flex justify="space-between">
+              <Text fontWeight="500" color="text-secondary">
+                Meta Info
+              </Text>
+              {editorMode !== 'view' && (
+                <Box onClick={openDrawer}>
+                  <EditIcon width={14} className="main-icon" />
+                </Box>
+              )}
+            </Flex>
+
+            <Box
+              border="1px solid"
+              borderColor="border"
+              borderRadius="md"
+              mt="sm">
+              {meta &&
+                typeof meta === 'object' &&
+                orderedKeys.map((key) => {
+                  let value = meta[key];
+
+                  if (key === 'contract_value' && typeof value === 'string') {
+                    value = !isNaN(parseFloat(value))
+                      ? `$${parseFloat(value).toLocaleString('en-US')}`
+                      : value;
+                  }
+
+                  return (
+                    value !== undefined && (
+                      <Flex
+                        key={key}
+                        borderBottom="1px solid"
+                        borderColor="border"
+                        p="md">
+                        <Text flex="0 0 60%" fontWeight="heading">
+                          {String(value)}
+                        </Text>
+                        <Text
+                          flex="0 0 40%"
+                          color="text-secondary"
+                          fontWeight="heading"
+                          textTransform="capitalize"
+                          textAlign="right">
+                          {key.replace(/_/g, ' ')}
+                        </Text>
+                      </Flex>
+                    )
+                  );
+                })}
             </Box>
-          )}
-        </Flex>
-
-        <Box border="1px solid" borderColor="border" borderRadius="md" mt="sm">
-          {meta &&
-            typeof meta === 'object' &&
-            orderedKeys.map((key) => {
-              let value = meta[key];
-
-              if (key === 'contract_value' && typeof value === 'string') {
-                value = !isNaN(parseFloat(value))
-                  ? `$${parseFloat(value).toLocaleString('en-US')}`
-                  : value;
-              }
-
-              return (
-                value !== undefined && (
-                  <Flex
-                    key={key}
-                    borderBottom="1px solid"
-                    borderColor="border"
-                    p="md">
-                    <Text flex="0 0 60%" fontWeight="heading">
-                      {String(value)}
-                    </Text>
-                    <Text
-                      flex="0 0 40%"
-                      color="text-secondary"
-                      fontWeight="heading"
-                      textTransform="capitalize"
-                      textAlign="right">
-                      {key.replace(/_/g, ' ')}
-                    </Text>
-                  </Flex>
-                )
-              );
-            })}
-        </Box>
+          </>
+        )}
       </>
 
       <Drawer

@@ -10,6 +10,7 @@ import ModeToggle from 'common/ModeToggle';
 import { IconFrame } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
+import { envConfig } from 'utils/env';
 
 const DropdownMenuTrigger = styled(DropdownMenu.Trigger)`
   display: flex;
@@ -126,20 +127,22 @@ const UserSettingsMenu = ({
                 </Link>
               </DropdownMenu.Item>
 
-              {plan && plan.plan_amount === '0' && (
-                <DropdownMenu.Item>
-                  <Flex
-                    bg="green.200"
-                    w="100%"
-                    py="xs"
-                    px="xs"
-                    justifyContent="space-between"
-                    onClick={() => router.push('/manage/billing')}>
-                    <Text w="100%">Upgrade Plan</Text>
-                    <LightningIcon size={16} color="#127D5D" />
-                  </Flex>
-                </DropdownMenu.Item>
-              )}
+              {plan &&
+                plan.plan_amount === '0' &&
+                envConfig.SELF_HOST_DISABLED && (
+                  <DropdownMenu.Item>
+                    <Flex
+                      bg="green.200"
+                      w="100%"
+                      py="xs"
+                      px="xs"
+                      justifyContent="space-between"
+                      onClick={() => router.push('/manage/billing')}>
+                      <Text w="100%">Upgrade Plan</Text>
+                      <LightningIcon size={16} color="#127D5D" />
+                    </Flex>
+                  </DropdownMenu.Item>
+                )}
               <DropdownMenu.Item>
                 <Link href="/account" path="/account">
                   <Text minWidth="200px">Settings</Text>

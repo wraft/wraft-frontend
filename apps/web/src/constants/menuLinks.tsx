@@ -9,6 +9,8 @@ import {
   StorefrontIcon,
 } from '@phosphor-icons/react';
 
+import { envConfig } from 'utils/env';
+
 export interface menuLinksProps {
   name: string;
   path: string;
@@ -138,11 +140,15 @@ export const workspaceMenu: menuLinksProps[] = [
     desc: 'Manage Vendors',
     permissions: ['vendor.show', 'vendor.manage'],
   },
-  {
-    name: 'Billing & Subscription',
-    icon: <MoneyIcon size={32} weight="thin" />,
-    path: '/manage/billing',
-    desc: 'Manage Billing and Subscription',
-    permissions: ['payment.show'],
-  },
+  ...(envConfig.SELF_HOST_DISABLED
+    ? [
+        {
+          name: 'Billing & Subscription',
+          icon: <MoneyIcon size={32} weight="thin" />,
+          path: '/manage/billing',
+          desc: 'Manage Billing and Subscription',
+          permissions: ['payment.show'],
+        },
+      ]
+    : []),
 ];

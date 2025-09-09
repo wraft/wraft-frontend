@@ -63,7 +63,7 @@ const LoginForm = () => {
 
   const router = useRouter();
   const homePageUrl = env.HOME_PAGE_URL;
-  const isSelfHost = env.SELF_HOST;
+  const isSelfHostDisabled = env.SELF_HOST_DISABLED;
 
   const { session, error } = router.query;
 
@@ -185,7 +185,7 @@ const LoginForm = () => {
               </>
             )}
           </ClientOnly>
-          {!isSelfHost && (
+          {isSelfHostDisabled && (
             <Box mt="24px" color="gray.1000" gap="8px" mb="xxl">
               Not a user yet?{' '}
               <Link href="/signup" variant="none">

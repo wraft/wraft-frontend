@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, deleteAPI } from 'utils/models';
+import { envConfig } from 'utils/env';
 
 import TransactionList from './transaction';
 import PlanList from './planList';
@@ -79,6 +80,29 @@ const Billing = () => {
   }, []);
 
   const isPaidPlan = plan && parseFloat(plan.plan_amount || '0') > 0;
+
+  if (!envConfig.SELF_HOST_DISABLED) {
+    return (
+      <Flex direction="column" justify="center" p="lg">
+        <Box
+          w="100%"
+          bg="background-primary"
+          p="xl"
+          border="1px solid"
+          borderColor="border"
+          borderRadius="md"
+          textAlign="center">
+          <Text fontSize="xl" fontWeight="bold" mb="lg">
+            Self-Hosted Mode
+          </Text>
+          <Text color="text" mb="lg">
+            Billing and subscription features are not available in self-hosted
+            mode. All features are included with your self-hosted installation.
+          </Text>
+        </Box>
+      </Flex>
+    );
+  }
 
   return (
     <Flex direction="column" justify="center" p="lg">

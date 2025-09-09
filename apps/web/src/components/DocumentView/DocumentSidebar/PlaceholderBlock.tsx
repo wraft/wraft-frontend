@@ -11,6 +11,7 @@ import {
 } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 import { EditIcon } from '@wraft/icon';
+import { XIcon } from '@phosphor-icons/react';
 
 import FieldDate from 'common/FieldDate';
 import { convertToVariableName, mapFields } from 'utils';
@@ -132,15 +133,23 @@ const PlaceholderBlock = ({
         aria-label="field drawer"
         withBackdrop={true}
         onClose={closeDrawer}>
-        <Box
+        <Flex
           as="form"
-          bg="background-primary"
-          p="md"
+          h="100vh"
+          direction="column"
           onSubmit={handleSubmit(onSubmit)}>
-          <Drawer.Header>
-            <Drawer.Title>Placeholder</Drawer.Title>
-          </Drawer.Header>
-          <Box p="md">
+          <Box flexShrink="0">
+            <Drawer.Header>
+              <Drawer.Title>Placeholder</Drawer.Title>
+              <XIcon
+                size={20}
+                weight="bold"
+                cursor="pointer"
+                onClick={closeDrawer}
+              />
+            </Drawer.Header>
+          </Box>
+          <Box flex={1} overflowY="auto" px="xl" py="md">
             {mappedFields && mappedFields.length > 0 && (
               <Box>
                 {mappedFields.map((f: IFieldType) => (
@@ -168,16 +177,16 @@ const PlaceholderBlock = ({
                 ))}
               </Box>
             )}
-            <Flex pt="md">
-              <Button type="submit" disabled={submitting}>
-                Update
-              </Button>
-              <Text onClick={closeDrawer} pl={2} pt={1}>
-                Close
-              </Text>
-            </Flex>
           </Box>
-        </Box>
+          <Flex flexShrink="0" px="xl" py="md" gap="sm">
+            <Button type="submit" disabled={submitting}>
+              Update
+            </Button>
+            <Button variant="secondary" onClick={closeDrawer}>
+              Close
+            </Button>
+          </Flex>
+        </Flex>
       </Drawer>
     </Box>
   );
