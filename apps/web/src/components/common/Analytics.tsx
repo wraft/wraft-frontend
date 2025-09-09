@@ -7,7 +7,7 @@ interface AnalyticsProps {
 }
 
 const Analytics = ({ mode }: AnalyticsProps) => {
-  const analyticsMode = mode || envConfig.NEXT_AUTH_ENABLED;
+  const analyticsMode = mode || envConfig.NEXT_PUBLIC_ANALYTICS_MODE;
 
   if (!analyticsMode) {
     return null;
