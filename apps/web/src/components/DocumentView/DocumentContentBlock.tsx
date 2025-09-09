@@ -338,6 +338,7 @@ export const DocumentContentBlock = () => {
                 {contentBody && isEditorMounted && (
                   <Editor
                     defaultContent={contentBody}
+                    tokens={fieldTokens}
                     isReadonly={false}
                     ref={editorRef}
                   />
