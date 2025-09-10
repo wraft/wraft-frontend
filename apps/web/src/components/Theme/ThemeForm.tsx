@@ -84,14 +84,14 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
       const hasAtLeastTwoFonts = assets.length >= 2;
 
       if (!hasAtLeastTwoFonts) {
-        return 'invalid'; // Will show "At least 2 fonts are required"
+        return 'invalid';
       }
 
       if (!hasRegular) {
-        return 'missing_regular'; // Will show "Regular font is required"
+        return 'missing_regular';
       }
 
-      return 'valid'; // Everything is good (2+ fonts with Regular)
+      return 'valid';
     };
 
     setValue('font', determineFontStatus(), { shouldValidate: true });
