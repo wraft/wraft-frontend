@@ -15,10 +15,12 @@ import {
   Modal,
 } from '@wraft/ui';
 import { PlusIcon, X } from '@phosphor-icons/react';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import FontList from 'components/Theme/FontList';
 import AssetForm from 'components/Theme/AssetForm';
 import FieldColor from 'common/FieldColor';
+import { ThemeSchema, Theme } from 'schemas/theme';
 import { putAPI, fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -31,15 +33,6 @@ interface ThemeElement {
   secondary_color: string;
   body_color: string;
 }
-
-type FormValues = {
-  edit: string;
-  name: string;
-  font: string;
-  primary_color: string;
-  secondary_color: string;
-  body_color: string;
-};
 
 type Props = {
   setIsOpen: (e: any) => void;
@@ -66,7 +59,11 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
     formState: { errors, isValid },
     setValue,
     trigger,
-  } = useForm<FormValues>({ mode: 'onSubmit', defaultValues: DEFAULT_FORM });
+  } = useForm<Theme>({
+    mode: 'onSubmit',
+    defaultValues: DEFAULT_FORM,
+    resolver: zodResolver(ThemeSchema),
+  });
   const router = useRouter();
   const cId: string = router.query.id as string;
 
@@ -76,6 +73,29 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
       loadDataDetalis(cId);
     }
   }, [cId]);
+
+  useEffect(() => {
+    const determineFontStatus = () => {
+      if (assets.length === 0) return '';
+
+      const hasRegular = assets.some((font) =>
+        font.name?.toLowerCase().includes('regular'),
+      );
+      const hasAtLeastTwoFonts = assets.length >= 2;
+
+      if (!hasAtLeastTwoFonts) {
+        return 'invalid'; // Will show "At least 2 fonts are required"
+      }
+
+      if (!hasRegular) {
+        return 'missing_regular'; // Will show "Regular font is required"
+      }
+
+      return 'valid'; // Everything is good (2+ fonts with Regular)
+    };
+
+    setValue('font', determineFontStatus(), { shouldValidate: true });
+  }, [assets, setValue]);
 
   /**
    * Upload Assets
@@ -107,7 +127,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
     setRerender && setRerender((prev: boolean) => !prev);
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: Theme) => {
     try {
       const assetsList: string = assets
         .filter(
@@ -219,21 +239,26 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
             </Field>
           </Box>
           <Box>
-            <Label mb="md">Font</Label>
-            <Box mb="sm" mt="xs">
-              <FontList assets={assets} onDelete={deleteAsset} />
-            </Box>
-
-            <Button
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsFontOpen(true);
-              }}
-              variant="secondary">
-              <PlusIcon size="16" />
-              {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
-            </Button>
+            <Field
+              label="Font"
+              required
+              error={errors?.font?.message as string}>
+              <>
+                <Box mb="sm" mt="xs">
+                  <FontList assets={assets} onDelete={deleteAsset} />
+                </Box>
+                <Button
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsFontOpen(true);
+                  }}
+                  variant="secondary">
+                  <PlusIcon size="16" />
+                  {assets.length > 0 ? 'Edit Fonts' : 'Add Fonts'}
+                </Button>
+              </>
+            </Field>
           </Box>
           <Box>
             <Label mb="sm">Colors</Label>
