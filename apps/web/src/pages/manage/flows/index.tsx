@@ -54,7 +54,7 @@ const Index: FC = () => {
                 variant="secondary"
                 size="sm"
                 onClick={() => setIsOpen(true)}>
-                <DotsThreeVerticalIcon stroke="bold" color="gray.700" />
+                <DotsThreeVerticalIcon stroke="bold" />
               </Button>
             )}
           </Flex>

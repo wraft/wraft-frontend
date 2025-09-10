@@ -13,6 +13,7 @@ import {
 import toast from 'react-hot-toast';
 import { Pencil, Trash } from '@phosphor-icons/react';
 
+import { IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, fetchAPI } from 'utils/models';
 import { sanitizeId, validateResponse } from 'utils/security';
@@ -218,17 +219,24 @@ const PipelineSteps: React.FC<PipelineStepsProps> = ({
                   row.original.data_template?.id || '',
                 )
               }>
-              {hasPermission('pipeline', 'manage') && <Pencil size={18} />}
+              {hasPermission('pipeline', 'manage') && (
+                <IconFrame color="gray.1100">
+                  <Pencil size={18} />
+                </IconFrame>
+              )}
             </Button>
             {hasPermission('pipeline', 'delete') && (
-              <Trash
-                size={20}
-                cursor="pointer"
-                onClick={() => {
-                  setSelectedStageId(row.original.id);
-                  setIsDeleteModalOpen(true);
-                }}
-              />
+              <IconFrame color="gray.1100">
+                <Trash
+                  size={20}
+                  color=""
+                  cursor="pointer"
+                  onClick={() => {
+                    setSelectedStageId(row.original.id);
+                    setIsDeleteModalOpen(true);
+                  }}
+                />
+              </IconFrame>
             )}
           </Flex>
         </Flex>

@@ -18,6 +18,7 @@ import {
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
+import { IconFrame } from 'components/common/Atoms';
 import { vendorService } from 'components/Vendor/vendorService';
 import { PageInner } from 'components/common/Atoms';
 import { VendorResponse } from 'schemas/vendor';
@@ -229,7 +230,11 @@ const VendorList: React.FC<VendorListProps> = ({
                 placeholder="Search by name or email..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                icon={<Box w="18px" as={MagnifyingGlassIcon} size={12} />}
+                icon={
+                  <IconFrame size={12} color="gray.700">
+                    <MagnifyingGlassIcon width="18px" />
+                  </IconFrame>
+                }
                 iconPlacement="right"
               />
             </Box>

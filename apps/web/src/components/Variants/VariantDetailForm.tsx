@@ -18,6 +18,7 @@ import { TextT, X as _X } from '@phosphor-icons/react';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import FieldColor from 'common/FieldColor';
+import { IconFrame } from 'common/Atoms';
 import { ContentType } from 'utils/types';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -191,7 +192,9 @@ const ContentTypeViewForm = () => {
                       px="sm"
                       py="sm">
                       <Flex alignItems="center" gap="sm">
-                        <TextT size={14} />
+                        <IconFrame color="gray.1100">
+                          <TextT size={14} />
+                        </IconFrame>
                         <Text as="p">{f.name}</Text>
                       </Flex>
                       <Text as="p" color="text-secondary">
