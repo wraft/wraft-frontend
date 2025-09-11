@@ -16,6 +16,7 @@ import Checkbox from 'common/Checkbox';
 import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface Organisation {
   id: string;
@@ -50,6 +51,7 @@ const Index: FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const { userProfile, login } = useAuth();
   const router = useRouter();
@@ -352,12 +354,14 @@ const Index: FC = () => {
                             </Box>
                           </Label>
                           <Flex pt="md" gap="sm">
-                            <Button
-                              danger
-                              onClick={onConfirmDelete}
-                              variant="primary">
-                              Delete workspace
-                            </Button>
+                            {hasPermission('Workspace', 'delete') && (
+                              <Button
+                                danger
+                                onClick={onConfirmDelete}
+                                variant="primary">
+                                Delete workspace
+                              </Button>
+                            )}
                             <Button
                               onClick={() => setDelete(false)}
                               variant="tertiary">
