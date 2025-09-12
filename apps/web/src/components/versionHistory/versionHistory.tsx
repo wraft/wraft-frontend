@@ -18,7 +18,6 @@ import { IconFrame } from 'common/Atoms';
 import { fetchAPI, postAPI } from 'utils/models';
 
 import { DiffViewer } from './diffViewer';
-
 interface Author {
   email: string;
   name: string;
@@ -214,7 +213,6 @@ const VersionContent: React.FC<{
     return <Text color="text-secondary">No versions available</Text>;
 
   const isFirstVersion = version.version_number === 1;
-  const hasContent = diffData?.base_version?.serialized?.body;
 
   if (!diffData) {
     return (
@@ -223,34 +221,58 @@ const VersionContent: React.FC<{
   }
 
   if (isFirstVersion) {
-    return (
-      <Box
-        minHeight="200px"
-        maxHeight="600px"
-        w="100%"
-        overflowY="auto"
-        bg="background-primary"
-        p="lg"
-        fontSize="sm"
-        lineHeight="1.6">
-        <Text color="text-secondary" fontWeight="medium" mb="md">
-          {version.name}
-        </Text>
+    try {
+      return (
         <Box
-          p="sm"
-          bg="gray.50"
-          borderRadius="sm"
-          maxHeight="400px"
-          overflowY="auto">
-          <Text fontSize="sm" color="text-secondary" whiteSpace="pre-wrap">
-            {hasContent || 'No content available'}
+          minHeight="200px"
+          maxHeight="600px"
+          w="100%"
+          overflowY="auto"
+          bg="background-primary"
+          p="lg"
+          fontSize="sm"
+          lineHeight="1.6">
+          <Text color="text-secondary" fontWeight="medium" mb="md">
+            {version.name} - Created on{' '}
+            {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
           </Text>
-          <Text fontSize="xs" color="text-secondary" mt="sm">
-            Created on {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
-          </Text>
+          <DiffViewer diffData={diffData} />
         </Box>
-      </Box>
-    );
+      );
+    } catch (error) {
+      console.error('Error rendering first version:', error);
+      const hasContent =
+        diffData?.base_version?.serialized?.body ||
+        diffData?.target_version?.serialized?.body;
+      return (
+        <Box
+          minHeight="200px"
+          maxHeight="600px"
+          w="100%"
+          overflowY="auto"
+          bg="background-primary"
+          p="lg"
+          fontSize="sm"
+          lineHeight="1.6">
+          <Text color="text-secondary" fontWeight="medium" mb="md">
+            {version.name}
+          </Text>
+          <Box
+            p="sm"
+            bg="gray.50"
+            borderRadius="sm"
+            maxHeight="400px"
+            overflowY="auto">
+            <Text fontSize="sm" color="text-secondary" whiteSpace="pre-wrap">
+              {hasContent || 'No content available'}
+            </Text>
+            <Text fontSize="xs" color="text-secondary" mt="sm">
+              Created on {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
+            </Text>
+          </Box>
+        </Box>
+      );
+    }
   }
 
   return <DiffViewer diffData={diffData} />;
