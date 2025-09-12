@@ -4,8 +4,6 @@ import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal, Skeleton } from '@wraft/ui';
 import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
-import { VersionHistoryModal } from 'components/versionHistory/versionHistory';
-import { NameVersionModal } from 'components/versionHistory/nameVersionModal'; // Import the new modal
 import { IconFrame } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, postAPI } from 'utils/models';
@@ -16,6 +14,8 @@ import apiService from '../APIModel';
 import { useDocument } from '../DocumentContext';
 import EmailComposer from '../EmailComposer';
 import InviteCollaborators from '../InviteCollaborators';
+import { VersionHistoryModal } from '../versionHistory/versionHistory';
+import { NameVersionModal } from '../versionHistory/nameVersionModal';
 
 interface EditMenuProps {
   id: string;
