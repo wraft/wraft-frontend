@@ -4,7 +4,9 @@ import Image from 'next/image';
 import Cropper from 'react-easy-crop';
 import styled from '@emotion/styled';
 import { Box, InputText, Label, Flex, Text, Button, Modal } from '@wraft/ui';
-import { X } from '@phosphor-icons/react';
+import { X, XIcon } from '@phosphor-icons/react';
+
+import { IconFrame } from './Atoms';
 
 type FileReaderMethod =
   | 'readAsText'
@@ -251,8 +253,18 @@ export default function ImageUploader({
   return (
     <Modal ariaLabel="Change Avatar" open={isModalOpen} onClose={onModalClose}>
       <>
-        <Flex justify="end">
-          <X size={20} weight="bold" cursor="pointer" onClick={onModalClose} />
+        <Flex justify="space-between" align="center">
+          <Text fontSize="lg" fontWeight="heading">
+            Update Profile Image
+          </Text>
+          <IconFrame color="icon">
+            <XIcon
+              size={18}
+              weight="bold"
+              cursor="pointer"
+              onClick={onModalClose}
+            />
+          </IconFrame>
         </Flex>
         <Box>
           {!result && (
@@ -261,7 +273,7 @@ export default function ImageUploader({
               alignItems="center"
               borderRadius="99rem"
               overflow="hidden"
-              w="240px"
+              w="300px"
               h="240px">
               {currentImageSrc ? (
                 <Image
@@ -297,7 +309,7 @@ export default function ImageUploader({
                 onChange={handleFileInput}
                 accept="image/*"
               />
-              Click and choose an Image
+              <Text>Click and choose an Image</Text>
             </FileUploadBox>
 
             <Button

@@ -1,5 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { Modal, Button, Text, InputText, Flex, Box } from '@wraft/ui';
+
+const versionNameSchema = z.object({
+  name: z
+    .string()
+    .min(1, 'Version name is required')
+    .max(100, 'Version name must be 100 characters or less')
+    .trim(),
+});
+
+type VersionNameFormData = z.infer<typeof versionNameSchema>;
 
 interface NameVersionModalProps {
   isOpen: boolean;
@@ -14,35 +27,52 @@ export function NameVersionModal({
   onSaveVersion,
   defaultName = 'Untitled version',
 }: NameVersionModalProps) {
-  const [name, setName] = useState(defaultName);
-  const [saving, setSaving] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isValid },
+    watch,
+  } = useForm<VersionNameFormData>({
+    resolver: zodResolver(versionNameSchema),
+    defaultValues: {
+      name: defaultName,
+    },
+    mode: 'onChange',
+  });
 
   useEffect(() => {
     if (isOpen) {
-      setName(defaultName);
+      reset({ name: defaultName });
     }
-  }, [isOpen, defaultName]);
+  }, [isOpen, defaultName, reset]);
 
-  const handleConfirm = async () => {
-    if (!name.trim()) return;
-
-    setSaving(true);
+  const onSubmit = async (data: VersionNameFormData) => {
     try {
-      await onSaveVersion(name.trim());
+      await onSaveVersion(data.name);
       onClose();
     } catch (error) {
       console.error('Failed to save version name:', error);
-    } finally {
-      setSaving(false);
     }
   };
 
   const handleClose = () => {
-    if (!saving) {
-      setName(defaultName);
+    if (!isSubmitting) {
+      reset({ name: defaultName });
       onClose();
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && isValid && !isSubmitting) {
+      handleSubmit(onSubmit)();
+    }
+    if (e.key === 'Escape') {
+      handleClose();
+    }
+  };
+
+  const nameValue = watch('name');
 
   return (
     <Modal
@@ -50,14 +80,7 @@ export function NameVersionModal({
       ariaLabel="Name current version"
       onClose={handleClose}
       size="sm">
-      <Box
-        bg="white"
-        borderRadius="lg"
-        p="lg"
-        minWidth="400px"
-        maxWidth="500px"
-        mx="auto"
-        my="auto">
+      <Box p="sm" minWidth="400px" maxWidth="500px">
         <Flex direction="column" gap="lg">
           <Box>
             <Text
@@ -75,14 +98,8 @@ export function NameVersionModal({
 
           <Box>
             <InputText
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setName(e.target.value)
-              }
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleConfirm();
-                if (e.key === 'Escape') handleClose();
-              }}
+              {...register('name')}
+              onKeyDown={handleKeyDown}
               placeholder="Enter version name"
               size="lg"
               fontSize="md"
@@ -90,23 +107,28 @@ export function NameVersionModal({
               py="sm"
               borderRadius="md"
               borderWidth="2px"
-              borderColor="primary.200"
-              disabled={saving}
+              borderColor={errors.name ? 'red.300' : 'primary.200'}
+              disabled={isSubmitting}
             />
+            {errors.name && (
+              <Text fontSize="sm" color="red.500" mt="xs">
+                {errors.name.message}
+              </Text>
+            )}
           </Box>
 
           <Flex justify="flex-end" gap="sm" mt="md">
             <Button
               variant="ghost"
               onClick={handleClose}
-              disabled={saving}
+              disabled={isSubmitting}
               size="md">
               Cancel
             </Button>
             <Button
-              onClick={handleConfirm}
-              loading={saving}
-              disabled={!name.trim() || saving}
+              onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+              disabled={!isValid || !nameValue?.trim() || isSubmitting}
               size="md">
               Save
             </Button>
