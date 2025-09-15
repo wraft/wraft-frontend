@@ -1,3 +1,4 @@
+export { default as InternalServerErrorIcon } from "./InternalServerError";
 export { default as AddPeopleIcon } from "./AddPeople";
 export { default as AddLinkIcon } from "./AddLink";
 export { default as AddIcon } from "./Add";
@@ -53,6 +54,7 @@ export { default as MailSendIcon } from "./MailSend";
 export { default as MailIcon } from "./Mail";
 export { default as ManageIcon } from "./Manage";
 export { default as MultipleChoiceIcon } from "./MultipleChoice";
+export { default as NotFoundIcon } from "./NotFound";
 export { default as NotificationOffIcon } from "./NotificationOff";
 export { default as NotificationIcon } from "./Notification";
 export { default as PasteOffIcon } from "./PasteOff";
