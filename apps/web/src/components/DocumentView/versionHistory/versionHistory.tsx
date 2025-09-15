@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
-import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
+import { DotsThreeVerticalIcon, XIcon } from '@phosphor-icons/react';
 import {
   Modal,
   Flex,
   Box,
   Text,
-  Button,
   DropdownMenu,
   InputText,
   Spinner,
@@ -18,33 +17,17 @@ import { IconFrame } from 'common/Atoms';
 import { fetchAPI, postAPI } from 'utils/models';
 
 import { DiffViewer } from './diffViewer';
-interface Author {
-  email: string;
-  name: string;
-}
-
+import {
+  APIVersion,
+  UIVersion,
+  formatDateTime,
+  transformVersions,
+} from './utils';
 interface VersionsResponse {
   page_number: number;
   total_entries: number;
   total_pages: number;
   versions: APIVersion[];
-}
-
-interface APIVersion {
-  id: string;
-  inserted_at: string;
-  naration: string | null;
-  type: string;
-  version_number: number;
-  author: Author;
-  current_version?: boolean;
-}
-
-interface UIVersion extends APIVersion {
-  name: string;
-  isCurrentVersion: boolean;
-  hasChanges: boolean;
-  previousVersionId?: string;
 }
 
 interface VersionHistoryModalProps {
@@ -53,57 +36,7 @@ interface VersionHistoryModalProps {
   contentId: string;
 }
 
-interface DiffResponse {
-  base_version: {
-    id: string;
-    serialized: {
-      body: string;
-      fields: string;
-      title: string;
-      serialized: string;
-    };
-  };
-  target_version: {
-    id: string;
-    serialized: {
-      body: string;
-      fields: string;
-      title: string;
-      serialized: string;
-    };
-  };
-}
-
-const formatDateTime = (timestamp: string): string => {
-  try {
-    const date = new Date(timestamp);
-    return `${format(date, 'MMMM d')}, ${format(date, 'h:mm a')}`;
-  } catch {
-    return 'Invalid date';
-  }
-};
-
-const transformVersions = (apiVersions: APIVersion[]): UIVersion[] => {
-  if (!apiVersions?.length) return [];
-
-  const chronological = [...apiVersions].sort(
-    (a, b) =>
-      new Date(a.inserted_at).getTime() - new Date(b.inserted_at).getTime(),
-  );
-
-  return chronological
-    .map((version, index) => {
-      const prev = index > 0 ? chronological[index - 1] : null;
-      return {
-        ...version,
-        name: version.naration || `Version ${version.version_number}`,
-        isCurrentVersion: !!version.current_version,
-        hasChanges: !!prev,
-        previousVersionId: prev?.id,
-      };
-    })
-    .reverse();
-};
+type DiffResponse = Parameters<typeof DiffViewer>[0]['diffData'];
 
 const VersionItem: React.FC<{
   version: UIVersion;
@@ -133,10 +66,10 @@ const VersionItem: React.FC<{
 
   return (
     <Box
-      py="xs"
-      px="sm"
+      py="sm"
+      px="md"
       cursor="pointer"
-      bg={isSelected ? 'rgba(66, 133, 244, 0.1)' : 'transparent'}
+      bg={isSelected ? 'green.200' : 'transparent'}
       onClick={onSelect}
       borderRadius="sm">
       <Flex justify="space-between" align="center">
@@ -153,11 +86,10 @@ const VersionItem: React.FC<{
             />
           ) : (
             <>
-              <Flex justify="space-between" align="center" mb="xxs">
+              <Flex justify="space-between" align="center">
                 <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color={isSelected ? 'primary.600' : 'text-primary'}>
+                  color={isSelected ? 'primary.800' : 'text-primary'}
+                  lines={2}>
                   {version.name}
                 </Text>
                 {version.isCurrentVersion && (
@@ -173,7 +105,7 @@ const VersionItem: React.FC<{
                   </Text>
                 )}
               </Flex>
-              <Text fontSize="xs" color="text-secondary">
+              <Text fontSize="xs" color="text-secondary" lines={1}>
                 {formatDateTime(version.inserted_at)}
                 {version.author && ` • ${version.author.name}`}
               </Text>
@@ -184,18 +116,18 @@ const VersionItem: React.FC<{
         <DropdownMenu.Provider>
           <DropdownMenu.Trigger>
             <IconFrame size="sm" color="icon">
-              <DotsThreeVerticalIcon size={14} />
+              <DotsThreeVerticalIcon size={18} />
             </IconFrame>
           </DropdownMenu.Trigger>
           <DropdownMenu>
+            <DropdownMenu.Item onClick={() => setIsRenaming(true)}>
+              Rename Version
+            </DropdownMenu.Item>
             {!version.isCurrentVersion && (
               <DropdownMenu.Item onClick={onRestore}>
                 Restore Version
               </DropdownMenu.Item>
             )}
-            <DropdownMenu.Item onClick={() => setIsRenaming(true)}>
-              Rename Version
-            </DropdownMenu.Item>
           </DropdownMenu>
         </DropdownMenu.Provider>
       </Flex>
@@ -206,76 +138,49 @@ const VersionItem: React.FC<{
 const VersionContent: React.FC<{
   version: UIVersion;
   diffData: DiffResponse | null;
-  loading: boolean;
-}> = ({ version, diffData, loading }) => {
-  if (loading) return <Spinner />;
+  isLoading: boolean;
+}> = ({ version, diffData, isLoading }) => {
+  if (isLoading)
+    return (
+      <Flex justify="center" align="center" h="100%">
+        <Spinner />
+      </Flex>
+    );
   if (!version)
-    return <Text color="text-secondary">No versions available</Text>;
-
-  const isFirstVersion = version.version_number === 1;
+    return (
+      <Flex align="center" justifyContent="space-around" h="100%">
+        <Text color="text-secondary">
+          This Document does not have any snapshots yet.
+        </Text>
+      </Flex>
+    );
 
   if (!diffData) {
     return (
-      <Text color="text-secondary">No content available for this version</Text>
+      <Flex align="center" justifyContent="space-around" h="100%">
+        <Text color="text-secondary">
+          No content available for this version
+        </Text>
+      </Flex>
     );
   }
 
-  if (isFirstVersion) {
-    try {
-      return (
-        <Box
-          minHeight="200px"
-          maxHeight="600px"
-          w="100%"
-          overflowY="auto"
-          bg="background-primary"
-          p="lg"
-          fontSize="sm"
-          lineHeight="1.6">
-          <Text color="text-secondary" fontWeight="medium" mb="md">
-            {version.name} - Created on{' '}
-            {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
-          </Text>
+  return (
+    <>
+      <Box px="md" pt="md">
+        <Text fontSize="lg" fontWeight="heading" mb="md">
+          {version.name} - Created on{' '}
+          {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
+        </Text>
+      </Box>
+
+      <Flex bg="background-secondary" py="md" direction="row" overflow="hidden">
+        <Box w="794px" mx="auto">
           <DiffViewer diffData={diffData} />
         </Box>
-      );
-    } catch (error) {
-      console.error('Error rendering first version:', error);
-      const hasContent =
-        diffData?.base_version?.serialized?.body ||
-        diffData?.target_version?.serialized?.body;
-      return (
-        <Box
-          minHeight="200px"
-          maxHeight="600px"
-          w="100%"
-          overflowY="auto"
-          bg="background-primary"
-          p="lg"
-          fontSize="sm"
-          lineHeight="1.6">
-          <Text color="text-secondary" fontWeight="medium" mb="md">
-            {version.name}
-          </Text>
-          <Box
-            p="sm"
-            bg="gray.50"
-            borderRadius="sm"
-            maxHeight="400px"
-            overflowY="auto">
-            <Text fontSize="sm" color="text-secondary" whiteSpace="pre-wrap">
-              {hasContent || 'No content available'}
-            </Text>
-            <Text fontSize="xs" color="text-secondary" mt="sm">
-              Created on {format(new Date(version.inserted_at), 'MMMM d, yyyy')}
-            </Text>
-          </Box>
-        </Box>
-      );
-    }
-  }
-
-  return <DiffViewer diffData={diffData} />;
+      </Flex>
+    </>
+  );
 };
 
 export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
@@ -284,10 +189,9 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   contentId,
 }) => {
   const [apiVersions, setApiVersions] = useState<APIVersion[]>([]);
-  const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [diffData, setDiffData] = useState<DiffResponse | null>(null);
-  const [diffLoading, setDiffLoading] = useState(false);
+  const [loading, setLoading] = useState({ versions: false, diff: false });
   const [pagination, setPagination] = useState({
     pageNumber: 1,
     totalEntries: 0,
@@ -301,7 +205,7 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
 
   const loadVersions = async (page: number = 1) => {
     try {
-      setLoading(true);
+      setLoading((prev) => ({ ...prev, versions: true }));
       const query = `page=${page}&sort=inserted_at_desc&page_size=10`;
       const response = (await fetchAPI(
         `contents/${contentId}/versions?${query}`,
@@ -314,11 +218,11 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         totalEntries: response.total_entries,
         totalPages: response.total_pages,
       });
-    } catch (err) {
-      console.error('Failed to load versions', err);
+    } catch (error) {
+      console.error('Failed to load versions:', error);
       toast.error('Failed to load versions');
     } finally {
-      setLoading(false);
+      setLoading((prev) => ({ ...prev, versions: false }));
     }
   };
 
@@ -327,16 +231,16 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
     currentVersionId: string,
   ) => {
     try {
-      setDiffLoading(true);
+      setLoading((prev) => ({ ...prev, diff: true }));
       const res = await fetchAPI(
         `versions/${previousVersionId}/${currentVersionId}`,
       );
       setDiffData(res as DiffResponse);
-    } catch (err) {
-      console.error('Failed to load diff data', err);
+    } catch (error) {
+      console.error('Failed to load diff data:', error);
       toast.error('Failed to load version comparison');
     } finally {
-      setDiffLoading(false);
+      setLoading((prev) => ({ ...prev, diff: false }));
     }
   };
 
@@ -351,8 +255,8 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
         },
       );
       await loadVersions(currentPage);
-    } catch (err) {
-      console.error('Restore failed', err);
+    } catch (error) {
+      console.error('Restore failed:', error);
     }
   };
 
@@ -360,7 +264,8 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
     try {
       await postAPI(`versions/${id}`, { naration: newName });
       await loadVersions(currentPage);
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to rename version:', error);
       toast.error('Failed to rename version');
     }
   };
@@ -395,42 +300,44 @@ export const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
   return (
     <Modal ariaLabel="Version History" open={isOpen} onClose={onClose}>
       <Flex
-        h="100vh"
-        w="60vw"
-        style={{ maxHeight: '100vh', overflow: 'hidden' }}>
-        <Box flex="3" p="lg" bg="surface">
-          <Text as="h3" fontSize="lg" fontWeight="bold" mb="md">
-            {selectedVersion?.name || 'Version History'}
-          </Text>
+        overflow="hidden"
+        position="relative"
+        gap="lg"
+        m="-xl"
+        maxH="100%"
+        w="80vw"
+        h="90vh">
+        <Flex direction="column" w="calc(100% - 340px)">
           <VersionContent
             version={selectedVersion}
             diffData={diffData}
-            loading={loading || diffLoading}
+            isLoading={loading.versions || loading.diff}
           />
-        </Box>
+        </Flex>
 
         <Box
-          flex="1"
           borderLeft="1px solid"
-          borderColor="gray.600"
-          pl="lg"
+          borderColor="border"
+          px="lg"
           display="flex"
           flexDirection="column"
+          w="340px"
           h="100%">
-          <Flex justify="space-between" align="center" mb="sm">
-            <Text fontSize="md" fontWeight="semibold">
+          <Flex justify="space-between" align="center" py="md">
+            <Text fontSize="lg" fontWeight="heading">
               All Versions ({pagination.totalEntries})
             </Text>
-            <Button variant="ghost" onClick={onClose}>
-              ×
-            </Button>
+
+            <IconFrame color="icon">
+              <XIcon size={16} cursor="pointer" onClick={onClose} />
+            </IconFrame>
           </Flex>
 
           <Box flex="1" minHeight="0" overflow="hidden">
-            {loading ? (
-              <Box p="md" textAlign="center">
+            {loading.versions ? (
+              <Flex p="md" textAlign="center">
                 <Spinner />
-              </Box>
+              </Flex>
             ) : (
               <Box maxHeight="100%" overflowY="auto">
                 {versions.map((version) => (
