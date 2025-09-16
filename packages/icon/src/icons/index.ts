@@ -1,4 +1,3 @@
-export { default as InternalServerErrorIcon } from "./InternalServerError";
 export { default as AddPeopleIcon } from "./AddPeople";
 export { default as AddLinkIcon } from "./AddLink";
 export { default as AddIcon } from "./Add";
@@ -45,6 +44,7 @@ export { default as H3Icon } from "./H3";
 export { default as HideIcon } from "./Hide";
 export { default as HomeIcon } from "./Home";
 export { default as InkIcon } from "./Ink";
+export { default as InternalServerErrorIcon } from "./InternalServerError";
 export { default as ItalicsIcon } from "./Italics";
 export { default as LayoutAltIcon } from "./LayoutAlt";
 export { default as LeftIcon } from "./Left";
