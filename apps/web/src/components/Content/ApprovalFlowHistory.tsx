@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@wraft/ui';
 import { Check } from '@phosphor-icons/react';
+import { format } from 'date-fns';
 
-import { TimeAgo } from 'common/Atoms';
+import { IconFrame } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
 const WorkflowStep = ({ title, description, createDate }: any) => (
   <Flex
-    className="progress__item--completed"
     position="relative"
     gap="sm"
-    align="self-start">
+    align="self-start"
+    py="xxs"
+    borderBottom="1px solid"
+    borderColor="gray.400">
     <Box pt="xs">
       <Flex
         borderRadius="full"
@@ -18,13 +21,17 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
         p="xxs"
         align="center"
         justify="center">
-        <Check size={12} weight="bold" />
+        <IconFrame color="primary">
+          <Check size={10} weight="bold" />
+        </IconFrame>
       </Flex>
     </Box>
     <Flex justify="space-between" flexGrow={1}>
       <Box>
         <Text>{description}</Text>
-        <TimeAgo time={createDate} ago={false} />
+        <Text fontSize="sm" opacity="0.8">
+          {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
+        </Text>
       </Box>
       <Box>
         <Text>{title}</Text>
@@ -34,7 +41,7 @@ const WorkflowStep = ({ title, description, createDate }: any) => (
 );
 
 const ApprovalFlowHistory = ({ id }: any) => {
-  const [contents, setContents] = useState<any>([]);
+  const [logs, setlogs] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -44,10 +51,9 @@ const ApprovalFlowHistory = ({ id }: any) => {
   }, [id]);
 
   const loadData = () => {
-    fetchAPI(`contents/${id}/approval_history`)
+    fetchAPI(`contents/${id}/logs`)
       .then((data: any) => {
-        const res: any = data;
-        setContents(res);
+        setlogs(data.logs || []);
         setIsLoading(false);
       })
       .catch(() => {
@@ -57,7 +63,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
-  if (!isLoading && contents && contents.length === 0) {
+  if (!isLoading && logs.length === 0) {
     return <Text> No Approval History</Text>;
   }
   return (
@@ -67,17 +73,16 @@ const ApprovalFlowHistory = ({ id }: any) => {
     // px: 3,
     // fontFamily: 'body',
     >
-      {contents &&
-        contents.map((item: any, index: any) => (
-          <WorkflowStep
-            key={index}
-            status={item?.status}
-            createDate={item?.reviewed_at}
-            title={`${item?.to_state?.state}`}
-            // description={`${item?.review_status} by ${item?.approver?.name}`}
-            description={`${item?.approver?.name}`}
-          />
-        ))}
+      {logs.map((item: any, index: number) => (
+        <WorkflowStep
+          key={index}
+          // status={item?.status}
+          createDate={item?.inserted_at}
+          title={`${item?.action}`}
+          // description={`${item?.review_status} by ${item?.approver?.name}`}
+          description={`${item?.actor?.name}`}
+        />
+      ))}
     </Box>
   );
 };
