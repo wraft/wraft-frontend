@@ -4,21 +4,24 @@ import toast from 'react-hot-toast';
 import { Text, Box, Flex, DropdownMenu, Modal, Skeleton } from '@wraft/ui';
 import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
-import ConfirmDelete from 'common/ConfirmDelete';
 import { IconFrame } from 'common/Atoms';
+import ConfirmDelete from 'common/ConfirmDelete';
 import { deleteAPI, postAPI } from 'utils/models';
-import { ContentInstance } from 'utils/types/content';
 import { usePermission } from 'utils/permissions';
+import { ContentInstance } from 'utils/types/content';
 
+import apiService from '../APIModel';
+import { useDocument } from '../DocumentContext';
 import EmailComposer from '../EmailComposer';
 import InviteCollaborators from '../InviteCollaborators';
-import { useDocument } from '../DocumentContext';
-import apiService from '../APIModel';
+import { VersionHistoryModal } from '../versionHistory/versionHistory';
+import { NameVersionModal } from '../versionHistory/nameVersionModal';
 
 interface EditMenuProps {
   id: string;
   nextState: any;
 }
+
 /**
  * Context Menu for Delete, Edit
  * @param param0
@@ -27,9 +30,13 @@ interface EditMenuProps {
 export const EditMenus = ({ id, nextState }: EditMenuProps) => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [isMailPopupOpen, setMailPopupOpen] = useState<boolean>(false);
+  const [isNamingModalOpen, setIsNamingModalOpen] = useState<boolean>(false);
+  const [isVersionHistoryOpen, setVersionHistoryOpen] =
+    useState<boolean>(false);
 
   const { hasPermission } = usePermission();
-  const { cId, contents, token, setSignerBoxes, setContents } = useDocument();
+  const { cId, contents, token, setSignerBoxes, setContents, onSubmitRef } =
+    useDocument();
 
   useEffect(() => {
     if (cId && contents && token) {
@@ -40,10 +47,6 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     }
   }, [cId, contents]);
 
-  /**
-   * Delete content
-   * @param id
-   */
   const deleteContent = (contentId: string) => {
     deleteAPI(`contents/${contentId}`).then(() => {
       toast.success('Deleted a content', {
@@ -99,20 +102,25 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
             hasPermission('document', 'manage') && (
               <DropdownMenu.Item
                 onClick={() => Router.push(`/documents/edit/${id}`)}>
-                {' '}
                 Edit
               </DropdownMenu.Item>
             )}
-          {/* {hasPermission('document', 'delete') && ( */}
+
           <DropdownMenu.Item onClick={() => setIsDelete(true)}>
             Delete
           </DropdownMenu.Item>
-          {/* )} */}
-          {/* {hasPermission('document', 'manage') && ( */}
+
           <DropdownMenu.Item onClick={() => setMailPopupOpen(true)}>
             Send Mail
           </DropdownMenu.Item>
-          {/* )} */}
+
+          <DropdownMenu.Item onClick={() => setVersionHistoryOpen(true)}>
+            Version History
+          </DropdownMenu.Item>
+
+          <DropdownMenu.Item onClick={() => setIsNamingModalOpen(true)}>
+            Name Current Version
+          </DropdownMenu.Item>
         </DropdownMenu>
       </DropdownMenu.Provider>
 
@@ -135,6 +143,22 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
           )}
         </>
       </Modal>
+
+      <VersionHistoryModal
+        isOpen={isVersionHistoryOpen}
+        onClose={() => setVersionHistoryOpen(false)}
+        contentId={id}
+      />
+      <NameVersionModal
+        isOpen={isNamingModalOpen}
+        onClose={() => setIsNamingModalOpen(false)}
+        onSaveVersion={async (customName) => {
+          if (onSubmitRef.current) {
+            await onSubmitRef.current(customName);
+          }
+          setIsNamingModalOpen(false);
+        }}
+      />
     </>
   );
 };

@@ -233,7 +233,7 @@ const PlanList: React.FC = () => {
             Need More Control Over Your Documents?
           </Text>
           <Text fontSize="" color="text-secondary">
-            The Silver plan gives you the basics, but upgrading unlocks more
+            The Starter plan gives you the basics, but upgrading unlocks more
             possibilities.
           </Text>
         </Box>

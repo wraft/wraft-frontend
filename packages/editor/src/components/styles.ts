@@ -1,7 +1,7 @@
 // import styled from "@emotion/styled";
 import styled from "@xstyled/emotion";
 
-export const EditorContainer = styled.divBox`
+export const EditorContainer = styled.divBox<{ type?: string }>`
   box-sizing: border-box;
   height: 100%;
   width: 100%;
@@ -18,6 +18,19 @@ export const EditorContainer = styled.divBox`
 
   .ProseMirror [data-node-view-root="true"] {
     display: inline-block;
+  }
+
+  &[type="editerdiffview"] {
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+
+    .prosekit-commit-addition {
+      background-color: #aadec7;
+    }
+    .prosekit-commit-deletion {
+      background-color: #fcac9f;
+    }
   }
 `;
 
@@ -132,5 +145,120 @@ export const EditorContentInput = styled.divBox`
   & pre {
     color: white;
     background-color: #27272a;
+  }
+`;
+
+const _EditorDiffContainer = styled.divBox`
+  min-height: 200px;
+  max-height: 600px;
+  width: 100%;
+  overflow-y: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+
+  /* Table styling for diff viewer */
+  .ProseMirror table {
+    border-collapse: collapse;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .ProseMirror table td,
+  .ProseMirror table th {
+    border: 1px solid #d1d5db;
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 8px;
+    position: relative;
+    vertical-align: top;
+  }
+
+  .ProseMirror table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+  }
+
+  .ProseMirror .tableWrapper {
+    margin: 1em 0;
+    overflow-x: auto;
+  }
+
+  .ProseMirror table .selectedCell:after {
+    background: rgba(200, 200, 255, 0.4);
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+  }
+
+  /* Diff-specific styling */
+  .ProseMirror .commit-addition {
+    background-color: #dcfce7;
+    border-left: 3px solid #16a34a;
+  }
+
+  .ProseMirror .commit-deletion {
+    background-color: #fef2f2;
+    border-left: 3px solid #dc2626;
+    text-decoration: line-through;
+  }
+
+  /* Table cells in diff context */
+  .ProseMirror table .commit-addition td,
+  .ProseMirror table .commit-addition th {
+    background-color: #dcfce7;
+    border-color: #16a34a;
+  }
+
+  .ProseMirror table .commit-deletion td,
+  .ProseMirror table .commit-deletion th {
+    background-color: #fef2f2;
+    border-color: #dc2626;
+    text-decoration: line-through;
+  }
+
+  /* Ensure table structure is always visible */
+  .ProseMirror table td:empty::before,
+  .ProseMirror table th:empty::before {
+    content: " ";
+    display: inline-block;
+    width: 1px;
+    height: 1px;
+  }
+
+  /* Make sure borders are visible even with commit styling */
+  .ProseMirror .commit-insertion table,
+  .ProseMirror .commit-deletion table {
+    border-collapse: separate !important;
+    border-spacing: 0;
+  }
+
+  .ProseMirror .commit-insertion table td,
+  .ProseMirror .commit-insertion table th,
+  .ProseMirror .commit-deletion table td,
+  .ProseMirror .commit-deletion table th {
+    border: 1px solid #d1d5db !important;
+  }
+
+  /* Force table visibility in diff context */
+  .ProseMirror table {
+    display: table !important;
+  }
+
+  .ProseMirror table tr {
+    display: table-row !important;
+  }
+
+  .ProseMirror table td,
+  .ProseMirror table th {
+    display: table-cell !important;
+    border-style: solid !important;
+    border-width: 1px !important;
   }
 `;

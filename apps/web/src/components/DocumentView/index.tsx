@@ -47,6 +47,7 @@ const DocumentView = () => {
     setPageTitle,
     setContentBody,
     fetchContentDetails,
+    setOnSubmit,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -62,7 +63,7 @@ const DocumentView = () => {
     }
   }, [pageTitle]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (customName?: string) => {
     const obj: any = {};
 
     const markdownContent = editorRef.current?.helpers?.getMarkdown();
@@ -83,6 +84,7 @@ const DocumentView = () => {
       raw: markdownContent,
       meta: meta || null,
       vendor_id: editorMode === 'new' && vendorId ? vendorId : null,
+      ...(customName && { naration: customName }),
     };
 
     if (editorMode === 'edit') {
@@ -94,6 +96,7 @@ const DocumentView = () => {
           setSaving(false);
           setContentBody(jsonContent);
         })
+
         .catch(() => {
           setSaving(false);
         });
@@ -138,6 +141,10 @@ const DocumentView = () => {
         });
     }
   };
+
+  useEffect(() => {
+    setOnSubmit(onSubmit);
+  }, [setOnSubmit, onSubmit]);
 
   const onCreateSuccess = (data: any) => {
     if (data?.content?.id) {
@@ -230,7 +237,7 @@ const DocumentView = () => {
                   {(editorMode === 'edit' || editorMode === 'new') && (
                     <Box ml="auto">
                       <Button
-                        onClick={onSubmit}
+                        onClick={() => onSubmit()}
                         variant="primary"
                         size="sm"
                         loading={saving}>

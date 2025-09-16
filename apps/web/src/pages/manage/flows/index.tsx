@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import Head from 'next/head';
 import { Flex, Button, Drawer, useDrawer } from '@wraft/ui';
-import { DotsThreeVerticalIcon } from '@phosphor-icons/react';
 
 import FlowList from 'components/Flow/FlowList';
 import FlowForm from 'components/Flow/FlowForm';
@@ -47,14 +46,6 @@ const Index: FC = () => {
                 size="sm"
                 onClick={() => setIsOpen(true)}>
                 Add Flow
-              </Button>
-            )}
-            {hasPermission('flow', 'manage') && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsOpen(true)}>
-                <DotsThreeVerticalIcon stroke="bold" color="gray.700" />
               </Button>
             )}
           </Flex>

@@ -33,6 +33,7 @@ import type { SignatureExtension } from "@extensions/signature";
 import { defineSignature } from "@extensions/signature";
 import type { PageBreakExtension } from "@extensions/page-break";
 import { definePageBreak } from "@extensions/page-break";
+import { defineCommitViewer } from "prosekit/extensions/commit";
 import ImageView from "./image-view";
 import SignatureView from "./signature-view";
 import type { SignersConfig } from "./live-editor";
@@ -47,7 +48,7 @@ export interface ExtensionProps {
 }
 
 export interface DefaultExtensionProps {
-  placeholder: string;
+  placeholder?: string;
   isReadonly: boolean;
   signersConfig?: SignersConfig;
 }
@@ -110,3 +111,13 @@ export function defineCollaborativeExtension({
 }
 
 export type EditorExtension = ReturnType<typeof defineDefaultExtension>;
+
+export function defineEditorDiffExtension({
+  doc,
+  isReadonly = true,
+}: {
+  doc: any;
+  isReadonly?: boolean;
+}): BasicsExtension {
+  return union(defineDefaultExtension({ isReadonly }), defineCommitViewer(doc));
+}
