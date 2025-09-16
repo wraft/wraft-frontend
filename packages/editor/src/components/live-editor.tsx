@@ -18,6 +18,7 @@ import type { Node } from "@prosekit/pm/model";
 import type { Awareness } from "y-protocols/awareness";
 import { markdownFromHTML } from "@helpers/markdown";
 // import { IndexeddbPersistence } from "y-indexeddb";
+import { migrateDocJSON } from "@helpers/migrate";
 import { getUserColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
@@ -135,7 +136,11 @@ export const LiveEditor = forwardRef(
         signersConfig,
       });
 
-      return createEditor({ extension, defaultContent });
+      // const migratedContent = migrateDocJSON(defaultContent);
+      // // con
+      console.log("migratedContent [b]", defaultContent);
+
+      return createEditor({ extension });
     }, [isReadonly, socketRef.current]);
 
     useEffect(() => {
@@ -146,6 +151,8 @@ export const LiveEditor = forwardRef(
 
       // update content like placeholder update
       if (updateContent) {
+        // const migratedContent = migrateDocJSON(updateContent);
+        // console.log('migrate [3]', migratedContent);
         prosemirrorJSONToYXmlFragment(
           editor.schema,
           updateContent,
@@ -154,9 +161,12 @@ export const LiveEditor = forwardRef(
       }
 
       const ymapObserver = (event: any) => {
+        console.log("ymap", event.changes);
         event.changes.keys.forEach((change: any, key: any) => {
           if (key === "content") {
             const { content } = ymap.toJSON();
+            // console.log('migrate [c]', content);
+            // const migratedContent = migrateDocJSON(content);
             if (content) {
               prosemirrorJSONToYXmlFragment(
                 editor.schema,

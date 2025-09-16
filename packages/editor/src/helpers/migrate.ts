@@ -43,6 +43,8 @@ function migrateNode(
   if (
     node.type === "list_item" ||
     node.type === "listItem" ||
+    node.type === "bulletList" ||
+    node.type === "orderedList" ||
     node.type === "taskListItem"
   ) {
     return [
@@ -63,4 +65,11 @@ function migrateNode(
   }
 
   return [node, false];
+}
+
+export function migrateDocJSON(
+  docJSON: ProsemirrorNodeJSON,
+): ProsemirrorNodeJSON | null {
+  const [migrated, updated] = migrateNode(docJSON, {});
+  return updated ? migrated : null;
 }

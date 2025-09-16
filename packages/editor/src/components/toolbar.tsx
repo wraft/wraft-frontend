@@ -183,7 +183,7 @@ export default function Toolbar() {
       <Button
         pressed={editor.nodes.list.isActive({ kind: "bullet" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "bullet" })}
-        onClick={() => editor.commands.wrapList({ kind: "bullet" })}
+        onClick={() => editor.commands.toggleList({ kind: "bullet" })}
         tooltip="Bullet List"
       >
         <ListBulletsIcon size={18} />
