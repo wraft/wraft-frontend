@@ -15,9 +15,15 @@ const Index: FC = () => {
   const id: string = router.query.id as string;
 
   useEffect(() => {
-    fetchAPI(`content_types/${id}`).then((data: any) => {
-      setVariant(data);
-    });
+    fetchAPI(`content_types/${id}`)
+      .then((data: any) => {
+        setVariant(data);
+      })
+      .catch((error) => {
+        if (error?.status === 400 || error?.statusCode === 400) {
+          router.push('/404');
+        }
+      });
   }, []);
 
   return (

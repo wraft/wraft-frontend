@@ -332,8 +332,12 @@ export const DocumentProvider = ({
         setContents(data);
         setLoading(false);
       }
-    } catch (error) {
-      console.error('content  error', error);
+    } catch (error: any) {
+      if (error?.status === 400 || error?.statusCode === 400) {
+        router.push('/404');
+      }
+
+      setLoading(false);
     }
   };
 

@@ -16,30 +16,20 @@ const NotFoundPage = () => {
       justifyContent="center"
       minHeight="100vh"
       bg="background-primary">
-      <NotFoundIcon width={300} height={240} />
-      <Flex
-        color="gray.1000"
-        py="sm"
-        display="flex"
-        alignItems="center"
-        spaceX="xs">
-        <Text as="span" fontWeight="bold" fontSize="3xl">
-          404
-        </Text>
-        <Text as="span" color="gray.900" fontSize="xl">
-          Page not found
-        </Text>
-      </Flex>
-      <Text fontSize="md" color="gray.900" py="sm">
-        The Page You&apos;re Looking For Isn&apos;t Here.
+      <NotFoundIcon width={260} height={160} />
+      <Text as="span" fontSize="2xl">
+        404
       </Text>
-      <Text fontSize="md" color="gray.900">
-        Let&apos;s Get You Back Home
+      <Text as="span" fontWeight="bold" color="" fontSize="2xl" mt="sm">
+        Page not found
+      </Text>
+      <Text fontSize="md" color="text-secondary" py="sm">
+        The Page you are looking for was not found.
       </Text>
 
       <Box p="lg">
         <Button size="md" variant="primary" onClick={handleGoHome}>
-          Home
+          Back to Home
         </Button>
       </Box>
     </Flex>

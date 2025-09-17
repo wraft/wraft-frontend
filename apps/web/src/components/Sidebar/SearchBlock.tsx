@@ -216,7 +216,7 @@ const SearchBlock: React.FC = () => {
       case 'content_type':
         return `/variants/${document.id}`;
       case 'data_template':
-        return `/templates/edit/${document.id}`;
+        return `/templates/${document.id}`;
       case 'theme':
         return `/manage/themes/${document.id}`;
       case 'layout':

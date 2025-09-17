@@ -13,34 +13,19 @@ const ServerErrorPage = () => {
       minHeight="100vh"
       p="lg"
       bg="background-primary">
-      <InternalServerErrorIcon width={300} height={200} />
-      <Flex py="sm" display="flex" alignItems="center" spaceX="xs">
-        <Text as="span" fontWeight="bold" fontSize="3xl">
-          500
-        </Text>
-        <Text as="span" color="gray.900" fontSize="xl">
-          Internal Server Error
-        </Text>
-      </Flex>
-      <Text fontSize="md" color="gray.1000" py="sm">
-        Oops! Something went wrong
+      <InternalServerErrorIcon width={260} height={160} />
+      <Text as="span" fontSize="2xl">
+        500
       </Text>
-      <Text fontSize="md" color="gray.900" textAlign="center" maxWidth="400px">
-        We&apos;re very sorry, however something went wrong when trying to load
-        this page. Please try again or
-        <Text
-          ml="xs"
-          as="a"
-          href="mailto:hello@functionary.co"
-          color="blue.500"
-          textDecoration="underline"
-          display="inline">
-          contact us
-        </Text>
+      <Text as="span" fontWeight="bold" color="" fontSize="2xl" mt="sm">
+        Internal Server Error
+      </Text>
+      <Text fontSize="md" color="text-secondary" py="sm">
+        Oops! Something went wrong
       </Text>
       <Box p="lg">
         <Button size="md" variant="primary" onClick={() => router.push('/')}>
-          Home
+          Back to Home
         </Button>
       </Box>
     </Flex>
