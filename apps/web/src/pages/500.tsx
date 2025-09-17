@@ -1,13 +1,9 @@
 import { useRouter } from 'next/router';
 import { Flex, Button, Box, Text } from '@wraft/ui';
-import { NotFoundIcon } from '@wraft/icon';
+import { InternalServerErrorIcon } from '@wraft/icon';
 
-const NotFoundPage = () => {
+const ServerErrorPage = () => {
   const router = useRouter();
-
-  const handleGoHome = () => {
-    router.push('/');
-  };
 
   return (
     <Flex
@@ -15,20 +11,20 @@ const NotFoundPage = () => {
       alignItems="center"
       justifyContent="center"
       minHeight="100vh"
+      p="lg"
       bg="background-primary">
-      <NotFoundIcon width={260} height={160} />
+      <InternalServerErrorIcon width={260} height={160} />
       <Text as="span" fontSize="2xl">
-        404
+        500
       </Text>
       <Text as="span" fontWeight="bold" color="" fontSize="2xl" mt="sm">
-        Page not found
+        Internal Server Error
       </Text>
       <Text fontSize="md" color="text-secondary" py="sm">
-        The Page you are looking for was not found.
+        Oops! Something went wrong
       </Text>
-
       <Box p="lg">
-        <Button size="md" variant="primary" onClick={handleGoHome}>
+        <Button size="md" variant="primary" onClick={() => router.push('/')}>
           Back to Home
         </Button>
       </Box>
@@ -36,4 +32,4 @@ const NotFoundPage = () => {
   );
 };
 
-export default NotFoundPage;
+export default ServerErrorPage;

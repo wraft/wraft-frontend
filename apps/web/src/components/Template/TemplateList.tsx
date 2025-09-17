@@ -19,7 +19,7 @@ const columns = ({ onCloneTemplete, hasPermission }: any) => [
     header: 'Name',
     accessorKey: 'title',
     cell: ({ row }: any) => (
-      <NavLink href={`/templates/edit/${row?.original?.id}`}>
+      <NavLink href={`/templates/${row?.original?.id}`}>
         <Text fontWeight="heading">{row?.original?.title}</Text>
       </NavLink>
     ),
@@ -71,9 +71,7 @@ const columns = ({ onCloneTemplete, hasPermission }: any) => [
           {hasPermission('template', 'manage') && (
             <DropdownMenu aria-label="dropdown role">
               <DropdownMenu.Item>
-                <NavLink href={`/templates/edit/${row?.original?.id}`}>
-                  Edit
-                </NavLink>
+                <NavLink href={`/templates/${row?.original?.id}`}>Edit</NavLink>
               </DropdownMenu.Item>
               <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
                 Clone
@@ -117,7 +115,6 @@ const TemplateList = () => {
       setPageMeta(data);
     } catch (error) {
       console.error('Error fetching templates:', error);
-      toast.error('Failed to load templates.');
     } finally {
       setIsLoading(false);
     }
@@ -148,7 +145,7 @@ const TemplateList = () => {
         `content_types/${template.content_type.id}/data_templates`,
         cloneData,
       );
-      router.push(`/templates/edit/${clonedTemplate.id}`);
+      router.push(`/templates/${clonedTemplate.id}`);
       toast.success('Template cloned successfully!');
     } catch (error) {
       console.error('Error cloning template:', error);

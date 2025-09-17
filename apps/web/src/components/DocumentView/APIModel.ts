@@ -45,7 +45,12 @@ const apiRequest = async <T = any>({
     return response.data;
   } catch (error: any) {
     if (error?.response?.data) {
-      return Promise.reject(error.response.data);
+      const errorWithStatus = {
+        ...error.response.data,
+        status: error.response.status,
+        statusCode: error.response.status,
+      };
+      return Promise.reject(errorWithStatus);
     }
     throw error;
   }

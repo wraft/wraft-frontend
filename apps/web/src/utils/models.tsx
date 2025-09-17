@@ -66,13 +66,13 @@ export const fetchAPI = (path: any, query = '') =>
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        if (err?.response?.data) {
-          const res = err.response.data;
-          reject(res);
-        }
-
-        reject(err);
+      .catch((error) => {
+        const errorWithStatus = {
+          message: error.response?.data || null,
+          status: error.response?.status,
+          statusCode: error.response?.status,
+        };
+        return reject(errorWithStatus);
       });
   });
 

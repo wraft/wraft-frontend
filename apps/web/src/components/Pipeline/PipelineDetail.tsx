@@ -44,9 +44,16 @@ const PipelineDetail = () => {
   };
 
   const loadDetails = () => {
-    fetchAPI(`pipelines/${cId}`).then((data: any) => {
-      setPipelineData(data);
-    });
+    fetchAPI(`pipelines/${cId}`)
+      .then((data: any) => {
+        setPipelineData(data);
+      })
+      .catch((error) => {
+        if (error?.status === 404 || error?.statusCode === 404) {
+          router.push('/404');
+        }
+        // toast.error('Failed to load pipeline details');
+      });
   };
 
   const loadForm = () => {

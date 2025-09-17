@@ -158,7 +158,7 @@ const TemplateEditor = () => {
     } else {
       postAPI(`content_types/${formData.variant.id}/data_templates`, payload)
         .then((content: any) => {
-          Router.replace(`/templates/edit/${content.id}`);
+          Router.replace(`/templates/${content.id}`);
           // onCreated();
           toast.success('Created Successfully', {
             duration: 3000,
@@ -212,10 +212,17 @@ const TemplateEditor = () => {
 
   const fetchTemplateDetails = (id: string) => {
     setLoading(true);
-    fetchAPI(`data_templates/${id}`).then((data: any) => {
-      setLoading(false);
-      setCurrentTemplate(data);
-    });
+    fetchAPI(`data_templates/${id}`)
+      .then((data: any) => {
+        setLoading(false);
+        setCurrentTemplate(data);
+      })
+      .catch((error) => {
+        if (error?.status === 400 || error?.statusCode === 400) {
+          return router.push('/404');
+        }
+        setLoading(false);
+      });
   };
 
   /**
