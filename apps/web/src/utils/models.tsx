@@ -68,7 +68,7 @@ export const fetchAPI = (path: any, query = '') =>
       })
       .catch((error) => {
         const errorWithStatus = {
-          message: error.response.data || null,
+          message: error.response?.data || null,
           status: error.response?.status,
           statusCode: error.response?.status,
         };
