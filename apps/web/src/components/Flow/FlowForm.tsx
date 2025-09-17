@@ -389,7 +389,7 @@ const FlowForm = ({ setOpen, setRerender }: Props) => {
         <Box flex={1} overflowY="auto" px="xl" py="md" data-flow={flow?.id}>
           <Flex display={formStep === 0 ? 'block' : 'none'}>
             <Field
-              label="Name"
+              label="Flow Name"
               required
               error={errors?.name?.message as string}>
               <InputText
