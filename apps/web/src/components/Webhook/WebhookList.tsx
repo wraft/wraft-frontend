@@ -73,8 +73,7 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
         page_number: data.page_number,
       });
     } catch (error: any) {
-      console.error('Error fetching webhooks:', error);
-      toast.error('Failed to load webhooks');
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -142,12 +141,12 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
       return events.map((event) => (
         <Box
           key={event}
-          px="xs"
-          py="xxs"
-          bg="blue.100"
-          color="blue.800"
+          px="sm"
+          py="xs"
+          bg="green.300"
+          color="green.800"
           borderRadius="sm"
-          fontSize="xs"
+          fontSize="sm"
           display="inline-block"
           mr="xs"
           mb="xs">
@@ -240,9 +239,7 @@ const SimpleWebhookList: React.FC<SimpleWebhookListProps> = ({
           {row.original.last_triggered_at ? (
             <TimeAgo time={row.original.last_triggered_at} />
           ) : (
-            <Text color="gray.500" fontSize="sm">
-              Never
-            </Text>
+            <Text>Never</Text>
           )}
         </Box>
       ),

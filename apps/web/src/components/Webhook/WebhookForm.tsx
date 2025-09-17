@@ -262,6 +262,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                     {...register('secret')}
                     type="password"
                     placeholder="Optional webhook secret for authentication"
+                    autocomplete="new-password"
                   />
                 </Field>
 
