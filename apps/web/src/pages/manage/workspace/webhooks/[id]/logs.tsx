@@ -56,20 +56,6 @@ const WebhookLogsPage: React.FC = () => {
   ) => {
     try {
       setIsLoading(true);
-      let successFilter: boolean | undefined;
-      let errorFilter: boolean | undefined;
-
-      if (status === 'success') {
-        successFilter = true;
-        errorFilter = false;
-      } else if (status === 'failed') {
-        successFilter = false;
-        errorFilter = true;
-      } else if (status === 'pending') {
-        successFilter = undefined;
-        errorFilter = undefined;
-      }
-
       const data = await webhookApi.getLogs(webhookId, page, 20, status);
       setLogs(data.logs);
       setPageMeta({

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Cropper from 'react-easy-crop';
 import styled from '@emotion/styled';
 import { Box, InputText, Label, Flex, Text, Button, Modal } from '@wraft/ui';
-import { X, XIcon } from '@phosphor-icons/react';
+import { XIcon } from '@phosphor-icons/react';
 
 import { IconFrame } from './Atoms';
 

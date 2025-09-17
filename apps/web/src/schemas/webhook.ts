@@ -58,20 +58,18 @@ export const WebhookSchema = z.object({
     .array(z.enum(WEBHOOK_EVENTS))
     .min(1, { message: 'At least one event must be selected' }),
   secret: z.string().optional(),
-  is_active: z.boolean().default(true),
-  headers: z.array(HeaderSchema).optional().default([]),
+  is_active: z.boolean(),
+  headers: z.array(HeaderSchema),
   retry_count: z
     .number()
     .int()
     .min(1, { message: 'Retry count must be at least 1' })
-    .max(10, { message: 'Retry count cannot exceed 10' })
-    .default(3),
+    .max(10, { message: 'Retry count cannot exceed 10' }),
   timeout_seconds: z
     .number()
     .int()
     .min(1, { message: 'Timeout must be at least 1 second' })
-    .max(300, { message: 'Timeout cannot exceed 300 seconds' })
-    .default(30),
+    .max(300, { message: 'Timeout cannot exceed 300 seconds' }),
 });
 
 export type WebhookFormData = z.infer<typeof WebhookSchema>;
