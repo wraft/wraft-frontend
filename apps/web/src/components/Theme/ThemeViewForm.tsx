@@ -80,7 +80,7 @@ const ThemeForm = () => {
         <Box as="form" maxWidth="556px" bg="background-primary" w="40%" p="xl">
           <Flex direction="column" gap="md">
             <Box>
-              <Field label="Layout Name" disabled required>
+              <Field label="Theme Name" disabled required>
                 <InputText {...register('name')} />
               </Field>
             </Box>
