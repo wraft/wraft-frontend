@@ -112,7 +112,7 @@ const ContentTypeViewForm = () => {
               direction="column"
               gap="md"
               display={formStep === 0 ? 'flex' : 'none'}>
-              <Field label="Name" disabled required>
+              <Field label="Variant Name" disabled required>
                 <InputText
                   {...register('name')}
                   placeholder="Enter a Variant Name"
@@ -153,16 +153,16 @@ const ContentTypeViewForm = () => {
                   <Text>{errors.color.message as string}</Text>
                 )}
               </Box>
-              <Field label="Layout" disabled required>
+              <Field label="Layout Name" disabled required>
                 <InputText
                   {...register('layout')}
                   placeholder="Enter a Layout"
                 />
               </Field>
-              <Field label="Flow" disabled required>
+              <Field label="Flow Name" disabled required>
                 <InputText {...register('flow')} placeholder="Enter a Flow" />
               </Field>
-              <Field label="Theme" disabled required>
+              <Field label="Theme Name" disabled required>
                 <InputText {...register('theme')} placeholder="Enter a Theme" />
               </Field>
 
