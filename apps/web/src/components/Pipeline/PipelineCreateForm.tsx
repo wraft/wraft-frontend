@@ -120,7 +120,7 @@ const PipelineCreateForm = ({
       <Box flex={1} overflowY="auto" px="xl" py="md" minWidth="550px">
         <Flex direction="column" gap="md">
           <Field
-            label="Name"
+            label="Pipeline Name"
             required
             error={errors.pipelinename?.message as string}>
             <Input {...register('pipelinename')} placeholder="Pipeline Name" />

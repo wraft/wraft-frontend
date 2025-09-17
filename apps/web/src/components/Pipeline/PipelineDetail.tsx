@@ -136,7 +136,7 @@ const PipelineDetail = () => {
             my="md"
             display={formStep === 1 ? 'block' : 'none'}>
             <Flex direction="column" gap="md">
-              <Field label="Name" disabled>
+              <Field label="Pipeline Name" disabled>
                 <Input name="name" disabled value={pipelineData.name} />
               </Field>
               <Field label="Source" disabled>
