@@ -16,6 +16,7 @@ import Checkbox from 'common/Checkbox';
 import { PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI, putAPI, deleteAPI, postAPI } from 'utils/models';
+import { usePermission } from 'utils/permissions';
 
 export interface Organisation {
   id: string;
@@ -50,6 +51,7 @@ const Index: FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isChecked, setIsChecked] = useState(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const { hasPermission } = usePermission();
 
   const { userProfile, login } = useAuth();
   const router = useRouter();
@@ -76,6 +78,16 @@ const Index: FC = () => {
   }, [org]);
 
   const onConfirmDelete = async () => {
+    if (!isChecked) {
+      toast.error(
+        'Please acknowledge that you understand all data will be deleted',
+        {
+          duration: 3000,
+          position: 'top-right',
+        },
+      );
+      return;
+    }
     const code = inputRef.current?.value;
     await deleteAPI(`organisations?code=${code}`)
       .then((res) => {
@@ -308,18 +320,19 @@ const Index: FC = () => {
                       open={isDelete}
                       onClose={() => setDelete(false)}>
                       <>
-                        <Modal.Header>
-                          Verify workspace delete request
-                        </Modal.Header>
-
-                        <Box>
-                          <Text color="text-secondary" as="p">
+                        <Box mx="md">
+                          <Modal.Header>
+                            Verify workspace delete request
+                          </Modal.Header>
+                          <Text color="text-secondary" as="p" mt="md">
                             If you are sure you want to proceed with deletion of
                             the workspace{' '}
-                            <Text as="span" fontWeight="bold">
-                              {org?.name}
+                            <span style={{ fontWeight: 'bold' }}>
+                              {org?.name},
+                            </span>
+                            <Text color="text-secondary">
+                              please enter the deletion code sent to your email.
                             </Text>
-                            , please enter the deletion code sent to your email.
                           </Text>
                           <Box mt="md">
                             <Label>
@@ -328,24 +341,27 @@ const Index: FC = () => {
                             <Input ref={inputRef}></Input>
                           </Box>
                           <Label>
-                            <Checkbox
-                              checked={isChecked}
-                              onChange={handleCheckboxChange}
-                              size={'small'}
-                            />
-                            <Text>
-                              I acknowledge I understand that all of the data
-                              will be deleted and want to proceed
-                            </Text>
+                            <Box mt="md" display="flex">
+                              <Checkbox
+                                checked={isChecked}
+                                onChange={handleCheckboxChange}
+                                size={'small'}
+                              />
+                              <Text mt="xxs">
+                                I acknowledge I understand that all of the data
+                                will be deleted and want to proceed
+                              </Text>
+                            </Box>
                           </Label>
                           <Flex pt="md" gap="sm">
-                            <Button
-                              danger
-                              disabled={!isChecked}
-                              onClick={onConfirmDelete}
-                              variant="primary">
-                              Delete workspace
-                            </Button>
+                            {hasPermission('Workspace', 'delete') && (
+                              <Button
+                                danger
+                                onClick={onConfirmDelete}
+                                variant="primary">
+                                Delete workspace
+                              </Button>
+                            )}
                             <Button
                               onClick={() => setDelete(false)}
                               variant="tertiary">

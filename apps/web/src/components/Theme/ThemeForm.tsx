@@ -209,7 +209,7 @@ const ThemeAddForm = ({ setIsOpen, setRerender, onUpdate }: Props) => {
           py="md">
           <Box>
             <Field
-              label="Name"
+              label="Theme Name"
               required
               error={errors?.name?.message as string}>
               <InputText

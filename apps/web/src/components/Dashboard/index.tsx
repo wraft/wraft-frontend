@@ -105,9 +105,6 @@ const finishSetup = [
   {
     title: 'Create a new flow',
   },
-  {
-    title: 'Create a new flow',
-  },
 ];
 
 const Dashboard = () => {

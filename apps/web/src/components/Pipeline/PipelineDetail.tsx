@@ -8,8 +8,10 @@ import {
   Label,
   InputText as Input,
   Field,
+  Modal,
+  Drawer,
+  useDrawer,
 } from '@wraft/ui';
-import { Modal, Drawer, useDrawer } from '@wraft/ui';
 import toast from 'react-hot-toast';
 
 import PageHeader from 'common/PageHeader';
@@ -125,16 +127,21 @@ const PipelineDetail = () => {
             <PipelineSteps rerender={rerender} setRerender={setRerender} />
           </Box>
 
-          <Box w="50%" display={formStep === 1 ? 'block' : 'none'}>
-            <Flex direction="column" gap="md" background="#fff" px="lg" py="lg">
-              <Field label="Name" disabled>
+          <Box
+            bg="background-primary"
+            maxWidth="556px"
+            w="40%"
+            p="xl"
+            h="100%"
+            my="md"
+            display={formStep === 1 ? 'block' : 'none'}>
+            <Flex direction="column" gap="md">
+              <Field label="Pipeline Name" disabled>
                 <Input name="name" disabled value={pipelineData.name} />
               </Field>
-
               <Field label="Source" disabled>
                 <Input name="source" disabled value={pipelineData.source} />
               </Field>
-
               <Field label="Form" disabled>
                 <Input
                   name="form"
@@ -142,7 +149,6 @@ const PipelineDetail = () => {
                   value={formData ? formData.name : ''}
                 />
               </Field>
-
               <Box alignSelf="flex-end" mt="sm">
                 <Box marginTop={2}>
                   {hasPermission('pipeline', 'delete') && (
@@ -198,7 +204,11 @@ const PipelineDetail = () => {
           </Box>
         </>
       </Modal>
-      <Drawer open={isOpen} store={formMenuDrawer} withBackdrop={true}>
+      <Drawer
+        open={isOpen}
+        store={formMenuDrawer}
+        withBackdrop={true}
+        onClose={() => setIsOpen(false)}>
         {isOpen && (
           <>
             <PipelineFormEntry

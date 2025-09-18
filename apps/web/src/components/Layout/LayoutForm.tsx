@@ -408,7 +408,7 @@ const LayoutForm = ({
           gap="md">
           {formStep === 0 && (
             <>
-              <Field label="Name" required error={errors?.name?.message}>
+              <Field label="Layout Name" required error={errors?.name?.message}>
                 <InputText
                   {...register('name')}
                   placeholder="Enter a Layout Name"

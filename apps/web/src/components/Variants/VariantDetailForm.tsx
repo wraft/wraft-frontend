@@ -18,6 +18,7 @@ import { TextT, X as _X } from '@phosphor-icons/react';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
 import FieldColor from 'common/FieldColor';
+import { IconFrame } from 'common/Atoms';
 import { ContentType } from 'utils/types';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -111,7 +112,7 @@ const ContentTypeViewForm = () => {
               direction="column"
               gap="md"
               display={formStep === 0 ? 'flex' : 'none'}>
-              <Field label="Name" disabled required>
+              <Field label="Variant Name" disabled required>
                 <InputText
                   {...register('name')}
                   placeholder="Enter a Variant Name"
@@ -152,16 +153,16 @@ const ContentTypeViewForm = () => {
                   <Text>{errors.color.message as string}</Text>
                 )}
               </Box>
-              <Field label="Layout" disabled required>
+              <Field label="Layout Name" disabled required>
                 <InputText
                   {...register('layout')}
                   placeholder="Enter a Layout"
                 />
               </Field>
-              <Field label="Flow" disabled required>
+              <Field label="Flow Name" disabled required>
                 <InputText {...register('flow')} placeholder="Enter a Flow" />
               </Field>
-              <Field label="Theme" disabled required>
+              <Field label="Theme Name" disabled required>
                 <InputText {...register('theme')} placeholder="Enter a Theme" />
               </Field>
 
@@ -191,7 +192,9 @@ const ContentTypeViewForm = () => {
                       px="sm"
                       py="sm">
                       <Flex alignItems="center" gap="sm">
-                        <TextT size={14} />
+                        <IconFrame color="gray.1100">
+                          <TextT size={14} />
+                        </IconFrame>
                         <Text as="p">{f.name}</Text>
                       </Flex>
                       <Text as="p" color="text-secondary">

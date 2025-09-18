@@ -377,7 +377,10 @@ const TemplateEditor = () => {
               </Text>
             </Box>
             <Flex pt="md" pb="xl" direction="column" gap="sm">
-              <Field label="Name" required error={errors?.title?.message}>
+              <Field
+                label="Template Name"
+                required
+                error={errors?.title?.message}>
                 <InputText
                   {...register('title')}
                   placeholder="Title for your template"
