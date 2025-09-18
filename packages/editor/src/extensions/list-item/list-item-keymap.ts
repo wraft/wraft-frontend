@@ -26,8 +26,6 @@ const listKeymap = {
   Enter: enterCommand,
   Backspace: backspaceCommand,
   Delete: deleteCommand,
-  "Mod-]": indentListCommand,
-  "Mod-[": dedentListCommand,
   Tab: indentListCommand,
   "Shift-Tab": dedentListCommand,
 };
