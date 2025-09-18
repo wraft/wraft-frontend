@@ -9,11 +9,12 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 import { NodeJSON } from '@wraft/editor';
+import toast from 'react-hot-toast';
 
 import { useAuth } from 'contexts/AuthContext';
 import { envConfig } from 'utils/env';
 import { ContentInstance, IVariantDetail } from 'utils/types/content';
-import { fetchAPI } from 'utils/models';
+import { fetchAPI, postAPI } from 'utils/models';
 import { Field as FieldT } from 'utils/types';
 import { findHolders, mapFields, mapPlaceholdersToFields } from 'utils/index';
 import contentStore from 'store/content.store';
@@ -83,8 +84,7 @@ interface DocumentContextProps {
   signerBoxes: any;
   signers: Counterparty[];
   inviteType: 'sign' | 'invite' | null | undefined;
-  onSubmitRef: React.MutableRefObject<((customName?: string) => void) | null>;
-  setOnSubmit: (fn: (customName?: string) => void) => void;
+  saving: boolean;
 
   setAdditionalCollaborator: (data: any) => void;
   setUserType: (state: UserType) => void;
@@ -99,6 +99,7 @@ interface DocumentContextProps {
   setSignerBoxes: (boxs: any) => void;
   setSigners: (signers: Counterparty[]) => void;
   setContents: (contents: ContentInstance) => void;
+  onDocumentSubmit: (versionName?: string) => void;
 }
 
 export const DocumentContext = createContext<DocumentContextProps>(
@@ -136,10 +137,7 @@ export const DocumentProvider = ({
   const [userType, setUserType] = useState<UserType>('default');
   const [signers, setSigners] = useState<Counterparty[]>([]);
   const [activeCounterparty, setActiveCounterparty] = useState<Counterparty>();
-  const onSubmitRef = useRef<((customName?: string) => void) | null>(null);
-  const setOnSubmit = (fn: (customName?: string) => void) => {
-    onSubmitRef.current = fn;
-  };
+  const [saving, setSaving] = useState<boolean>(false);
 
   const newContent = contentStore((state: any) => state.newContents);
 
@@ -303,9 +301,8 @@ export const DocumentProvider = ({
           setFieldValues(getFieldValues);
         }
 
-        const getFieldValues = {};
         const holders = findHolders(serialized);
-        setFieldValues({ ...getFieldValues, ...holders });
+        setFieldValues((prev: any) => ({ ...prev, ...holders }));
       }
 
       if (data?.content?.meta) {
@@ -411,6 +408,97 @@ export const DocumentProvider = ({
     setLoading(false);
   };
 
+  const onDocumentSubmit = (versionName?: string) => {
+    setSaving(true);
+
+    const obj: any = {};
+
+    const markdownContent = editorRef.current?.helpers?.getMarkdown();
+    const jsonContent = editorRef.current?.helpers?.getJSON();
+
+    console.log('fieldValues [b]', fieldValues);
+
+    const serials: any = {
+      ...obj,
+      title: pageTitle || 'welcome',
+      body: markdownContent,
+      serialized: JSON.stringify(jsonContent),
+      fields: fieldValues ? JSON.stringify(fieldValues) : '',
+    };
+
+    const template = {
+      serialized: serials,
+      raw: markdownContent,
+      meta: meta || null,
+      vendor_id: editorMode === 'new' && vendorId ? vendorId : null,
+      ...(versionName && { naration: versionName }),
+    };
+
+    if (editorMode === 'edit') {
+      apiService
+        .put(`contents/${cId}`, template, token)
+        .then((response: any) => {
+          lastSavedContent.current = serials.serialized;
+          onCreateSuccess(response);
+          setSaving(false);
+          setContentBody(jsonContent);
+        })
+
+        .catch(() => {
+          setSaving(false);
+        });
+      // apiService;
+      // putAPI(`contents/${cId}`, template).then((response: any) => {
+      //   lastSavedContent.current = serials.serialized;
+      //   onCreateSuccess(response);
+      //   setSaving(false);
+      //   setContentBody(jsonContent);
+      // });
+    }
+    if (editorMode === 'new') {
+      postAPI(`content_types/${contentType?.id}/contents`, template)
+        .then((response: any) => {
+          setContentBody(jsonContent);
+          if (response?.info) {
+            toast.success('Build Failed', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            setSaving(false);
+          }
+
+          if (response?.content?.id) {
+            toast.success('Saved Successfully', {
+              duration: 1000,
+              position: 'top-right',
+            });
+            router.replace(`/documents/${response.content.id}`);
+            setSaving(false);
+          }
+        })
+        .catch((error) => {
+          setSaving(false);
+          toast.error(
+            error?.message || 'Something went wrong please try again later',
+            {
+              duration: 3000,
+              position: 'top-right',
+            },
+          );
+        });
+    }
+  };
+
+  const onCreateSuccess = (data: any) => {
+    if (data?.content?.id) {
+      toast.success('Saved Successfully', {
+        duration: 1000,
+        position: 'top-right',
+      });
+      router.replace(`/documents/${data.content.id}`);
+    }
+  };
+
   const isEditable = useMemo(() => {
     if (contents) {
       const { content }: ContentInstance = contents;
@@ -510,8 +598,7 @@ export const DocumentProvider = ({
         signers,
         inviteType,
         vendorId: vendorId || null,
-        onSubmitRef,
-        setOnSubmit,
+        saving,
         setAdditionalCollaborator,
         setUserType,
         fetchContentDetails,
@@ -525,6 +612,7 @@ export const DocumentProvider = ({
         setSignerBoxes,
         setSigners,
         setContents,
+        onDocumentSubmit,
       }}>
       {children}
     </DocumentContext.Provider>

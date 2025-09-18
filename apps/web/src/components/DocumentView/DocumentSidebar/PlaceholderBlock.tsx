@@ -39,27 +39,34 @@ interface PlaceholderBlockProps {
   fieldValues?: any;
 }
 
-const PlaceholderBlock = ({
-  fields,
-  fieldValues,
-  onSaved,
-}: PlaceholderBlockProps) => {
+const PlaceholderBlock = ({ fields, onSaved }: PlaceholderBlockProps) => {
   const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [mappedFields, setMappedFields] = useState<Array<IFieldType>>();
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [pendingSubmit, setPendingSubmit] = useState<boolean>(false);
 
-  const { editorMode, setFieldValues } = useDocument();
+  const { editorMode, fieldValues, setFieldValues, onDocumentSubmit } =
+    useDocument();
 
   const { register, handleSubmit } = useForm();
   const mobileMenuDrawer = useDrawer();
 
-  const onSubmit = (data: Record<string, any>) => {
+  useEffect(() => {
+    if (pendingSubmit && fieldValues) {
+      setPendingSubmit(false);
+      onDocumentSubmit();
+    }
+  }, [fieldValues, pendingSubmit, onDocumentSubmit]);
+
+  const onSubmit = async (data: Record<string, any>) => {
     setSubmitting(true);
 
     const newMappedFields = mapFields(fields, data);
-    // const tokens = mapPlaceholdersToFields(placeholders);
-    setFieldValues(data);
-    setMappedFields(newMappedFields);
+
+    setFieldValues((prev: any) => ({ ...prev, ...data }));
+
+    setPendingSubmit(true);
+
     onSaved(newMappedFields);
 
     setSubmitting(false);

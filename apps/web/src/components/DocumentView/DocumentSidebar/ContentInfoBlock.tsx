@@ -35,8 +35,14 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
     useState<boolean>(false);
 
   const { hasPermission } = usePermission();
-  const { cId, contents, token, setSignerBoxes, setContents, onSubmitRef } =
-    useDocument();
+  const {
+    cId,
+    contents,
+    token,
+    setSignerBoxes,
+    setContents,
+    onDocumentSubmit,
+  } = useDocument();
 
   useEffect(() => {
     if (cId && contents && token) {
@@ -153,9 +159,7 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         isOpen={isNamingModalOpen}
         onClose={() => setIsNamingModalOpen(false)}
         onSaveVersion={async (customName) => {
-          if (onSubmitRef.current) {
-            await onSubmitRef.current(customName);
-          }
+          onDocumentSubmit(customName);
           setIsNamingModalOpen(false);
         }}
       />

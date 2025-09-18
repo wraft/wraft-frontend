@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import toast from 'react-hot-toast';
 import { ErrorBoundary, Button, Modal, Box, Flex, Grid } from '@wraft/ui';
 import { useForm } from 'react-hook-form';
 
 import Field from 'common/Field';
 import Nav from 'common/NavEdit';
-import { postAPI } from 'utils/models';
 
 import { ApprovalAwaitingLabel } from './ApprovalAwaitingLabel';
 import { ApprovalHandler } from './ApprovalHandler';
@@ -16,14 +14,12 @@ import { useDocument } from './DocumentContext';
 import { ApprovalUpdateModal } from './ApprovalUpdateModal';
 import { DocumentContentBlock } from './DocumentContentBlock';
 import { usePermissions } from './usePermissions';
-import apiService from './APIModel';
 import FlowProgressBar, { FlowContainer } from './StepTwo';
 
 const DocumentView = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openTitleModal, setOpenTitleModal] = useState<boolean>(false);
   const [modalAction, setModalAction] = useState<'next' | 'prev' | null>(null);
-  const [saving, setSaving] = useState<boolean>(false);
 
   const {
     contents,
@@ -34,20 +30,13 @@ const DocumentView = () => {
     isMakeCompete,
     editorMode,
     docRole,
-    editorRef,
+    saving,
     pageTitle,
-    contentType,
-    fieldValues,
     userType,
-    lastSavedContent,
-    meta,
-    token,
-    vendorId,
     states,
     setPageTitle,
-    setContentBody,
     fetchContentDetails,
-    setOnSubmit,
+    onDocumentSubmit,
   } = useDocument();
 
   const { canAccess } = usePermissions(userType, docRole);
@@ -62,99 +51,6 @@ const DocumentView = () => {
       setValue('title', pageTitle);
     }
   }, [pageTitle]);
-
-  const onSubmit = async (customName?: string) => {
-    const obj: any = {};
-
-    const markdownContent = editorRef.current?.helpers?.getMarkdown();
-    const jsonContent = editorRef.current?.helpers?.getJSON();
-
-    setSaving(true);
-
-    const serials: any = {
-      ...obj,
-      title: pageTitle || 'welcome',
-      body: markdownContent,
-      serialized: JSON.stringify(jsonContent),
-      fields: fieldValues ? JSON.stringify(fieldValues) : '',
-    };
-
-    const template = {
-      serialized: serials,
-      raw: markdownContent,
-      meta: meta || null,
-      vendor_id: editorMode === 'new' && vendorId ? vendorId : null,
-      ...(customName && { naration: customName }),
-    };
-
-    if (editorMode === 'edit') {
-      apiService
-        .put(`contents/${cId}`, template, token)
-        .then((response: any) => {
-          lastSavedContent.current = serials.serialized;
-          onCreateSuccess(response);
-          setSaving(false);
-          setContentBody(jsonContent);
-        })
-
-        .catch(() => {
-          setSaving(false);
-        });
-      // apiService;
-      // putAPI(`contents/${cId}`, template).then((response: any) => {
-      //   lastSavedContent.current = serials.serialized;
-      //   onCreateSuccess(response);
-      //   setSaving(false);
-      //   setContentBody(jsonContent);
-      // });
-    }
-    if (editorMode === 'new') {
-      postAPI(`content_types/${contentType?.id}/contents`, template)
-        .then((response: any) => {
-          setContentBody(jsonContent);
-          if (response?.info) {
-            toast.success('Build Failed', {
-              duration: 1000,
-              position: 'top-right',
-            });
-            setSaving(false);
-          }
-
-          if (response?.content?.id) {
-            toast.success('Saved Successfully', {
-              duration: 1000,
-              position: 'top-right',
-            });
-            router.replace(`/documents/${response.content.id}`);
-            setSaving(false);
-          }
-        })
-        .catch((error) => {
-          setSaving(false);
-          toast.error(
-            error?.message || 'Something went wrong please try again later',
-            {
-              duration: 3000,
-              position: 'top-right',
-            },
-          );
-        });
-    }
-  };
-
-  useEffect(() => {
-    setOnSubmit(onSubmit);
-  }, [setOnSubmit, onSubmit]);
-
-  const onCreateSuccess = (data: any) => {
-    if (data?.content?.id) {
-      toast.success('Saved Successfully', {
-        duration: 1000,
-        position: 'top-right',
-      });
-      router.replace(`/documents/${data.content.id}`);
-    }
-  };
 
   const onUpdateTitle = (data: any) => {
     setPageTitle(data.title);
@@ -237,7 +133,7 @@ const DocumentView = () => {
                   {(editorMode === 'edit' || editorMode === 'new') && (
                     <Box ml="auto">
                       <Button
-                        onClick={() => onSubmit()}
+                        onClick={() => onDocumentSubmit()}
                         variant="primary"
                         size="sm"
                         loading={saving}>
