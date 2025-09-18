@@ -183,7 +183,7 @@ export const DocumentProvider = ({
   }, [inviteType, guestToken]);
 
   useEffect(() => {
-    if (token) {
+    if (token && cId) {
       fetchContentDetails(cId);
     }
   }, [token]);
