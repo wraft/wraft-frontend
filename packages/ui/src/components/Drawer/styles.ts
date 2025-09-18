@@ -104,9 +104,9 @@ export const Backdrop: any = styled.div<any>`
 
 export const Title: any = styled.h3`
   ${th("drawers.title")};
-  font-size: base;
-  color: gray.900;
-  font-weight: bold;
+  font-size: sm2;
+  color: text-primary;
+  font-weight: heading;
 `;
 
 export const Header: any = styled.divBox`

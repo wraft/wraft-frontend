@@ -8,12 +8,12 @@ import {
   getSortedRowModel,
   getExpandedRowModel,
 } from "@tanstack/react-table";
+import { UpIcon, DownIcon } from "@wraft/icon";
 import { x } from "@xstyled/emotion";
 import { useState } from "react";
 
 import { Skeleton } from "../Skeleton";
 
-import { EmptyImage } from "./EmptyImage";
 import * as S from "./styled";
 
 interface TableProps {
@@ -21,7 +21,7 @@ interface TableProps {
   columns: any;
   isLoading?: any;
   skeletonRows?: number;
-  emptyMessage?: string;
+  emptyMessage?: string | React.ReactNode;
   "aria-label"?: string;
   onRowClick?: (row: any) => void;
 }
@@ -95,6 +95,9 @@ const Table = ({
                 >
                   {header.isPlaceholder ? null : (
                     <x.div
+                      display="flex"
+                      alignItems="center"
+                      gap="2px"
                       cursor={
                         header.column.getCanSort() ? "pointer" : "default"
                       }
@@ -123,12 +126,16 @@ const Table = ({
                         )}
                       </ResizableHeaderSpan>
                       {header.column.getCanSort() && (
-                        <x.span>
-                          {header.column.getIsSorted() === "asc" && " 🔼"}
-                          {header.column.getIsSorted() === "desc" && " 🔽"}
+                        <x.span display="inline-block">
+                          {header.column.getIsSorted() === "asc" && (
+                            <UpIcon width={10} />
+                          )}
+                          {header.column.getIsSorted() === "desc" && (
+                            <DownIcon width={10} />
+                          )}
                           {header.column.getIsSorted() !== "asc" &&
                             header.column.getIsSorted() !== "desc" &&
-                            " ⬍"}
+                            ""}
                         </x.span>
                       )}
                     </x.div>
@@ -197,7 +204,6 @@ const Table = ({
           borderTop="none"
         >
           <x.div textAlign="center">
-            <EmptyImage />
             <x.p m="0" color="text-primary">
               {emptyMessage}
             </x.p>

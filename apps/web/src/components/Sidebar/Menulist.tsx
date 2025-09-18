@@ -6,10 +6,12 @@ import {
   BlueprintIcon,
   FileTextIcon,
   HouseIcon,
+  // FolderIcon,
+  LayoutIcon,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
-const defaultWeight = 'duotone';
+const defaultWeight = 'regular';
 
 export const Menulist = [
   {
@@ -32,7 +34,8 @@ export const Menulist = [
       },
       // {
       //   name: 'Repository',
-      //   icon: <Folder size={defaultIcon} weight={defaultWeight} />,
+      //   icon: <FolderIcon size={defaultIcon} weight={defaultWeight} />,
+      //   permissions: ['repository.show', 'repository.manage'],
       //   path: '/repository',
       // },
     ],
@@ -55,13 +58,19 @@ export const Menulist = [
     ],
   },
   {
-    section: 'structure',
+    section: 'manage',
     menus: [
       {
         name: 'Variants',
         icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
+      },
+      {
+        name: 'Forms',
+        icon: <LayoutIcon size={defaultIcon} weight={defaultWeight} />,
+        path: '/forms',
+        permissions: ['layout.show', 'layout.manage'],
       },
       {
         name: 'Manage',

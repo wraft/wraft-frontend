@@ -160,23 +160,34 @@ const Approvals = () => {
       <PageHeader title="Approvals" desc="All Approvals across your feeds" />
 
       <PageInner>
-        <Table
-          data={contents}
-          isLoading={loading}
-          columns={columns()}
-          skeletonRows={10}
-          emptyMessage="Nothing to approve"
-        />
-        {pageMeta && pageMeta?.total_pages > 1 && (
-          <Box mt="sm">
-            <Pagination
-              totalPage={pageMeta?.total_pages}
-              initialPage={currentPage}
-              onPageChange={changePage}
-              totalEntries={pageMeta?.total_entries}
-            />
-          </Box>
-        )}
+        <Box>
+          <Table
+            data={contents}
+            isLoading={loading}
+            columns={columns()}
+            skeletonRows={10}
+            emptyMessage={
+              <Box mx="auto" gap="md" w="60%">
+                <Text as="h3" fontSize="md">
+                  You are all caught up!
+                </Text>
+                <Text color="text-secondary" mb="md">
+                  There are currently no items awaiting your approval.
+                </Text>
+              </Box>
+            }
+          />
+          {pageMeta && pageMeta?.total_pages > 1 && (
+            <Box mt="sm">
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={changePage}
+                totalEntries={pageMeta?.total_entries}
+              />
+            </Box>
+          )}
+        </Box>
       </PageInner>
     </Box>
   );

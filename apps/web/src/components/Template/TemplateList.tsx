@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { Plus } from '@phosphor-icons/react';
 import { Button } from '@wraft/ui';
 
-import { PageInner, TimeAgo, VariantLine } from 'common/Atoms';
+import { IconFrame, PageInner, TimeAgo, VariantLine } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { fetchAPI, postAPI } from 'utils/models';
 import { IField } from 'utils/types/content';
@@ -173,7 +173,23 @@ const TemplateList = () => {
             isLoading={isLoading}
             columns={columns({ onCloneTemplete, hasPermission })}
             skeletonRows={10}
-            emptyMessage="No template has been created yet."
+            emptyMessage={
+              <Box mx="auto" gap="md">
+                <Text as="h3">No templates found</Text>
+                <Text color="text-secondary" mb="md">
+                  Create your first template to get started.
+                </Text>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => router.push(`/templates/new`)}>
+                  <IconFrame color="gray.800" mr="xs">
+                    <Plus size={12} weight="bold" />
+                  </IconFrame>
+                  Add Template
+                </Button>
+              </Box>
+            }
           />
           <Box mt="16px">
             {pageMeta && pageMeta?.total_pages > 1 && (

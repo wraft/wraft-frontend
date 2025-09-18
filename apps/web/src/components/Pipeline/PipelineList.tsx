@@ -7,7 +7,7 @@ import { PlayIcon, TreeStructureIcon } from '@phosphor-icons/react';
 
 import Link from 'common/NavLink';
 import PageHeader from 'common/PageHeader';
-import { PageInner, TimeAgo } from 'common/Atoms';
+import { IconFrame, PageInner, TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -124,14 +124,14 @@ const Form = () => {
             accessorKey: 'content.name',
             cell: ({ row }: any) => (
               <Flex gap="sm">
-                <Button
+                {/* <Button
                   onClick={() => router.push(`/workflow/${row.original.id}`)}
                   variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
                   <TreeStructureIcon size={12} />
                   WorkFlow
-                </Button>
+                </Button> */}
                 <Button
                   onClick={() => {
                     onRunClick(row.original.source_id, row.original.id);
@@ -139,7 +139,10 @@ const Form = () => {
                   variant="secondary"
                   size="sm"
                   disabled={row.original.stages_count == 0}>
-                  <PlayIcon size={12} />
+                  <IconFrame color="gray.800" mr="xs">
+                    {' '}
+                    <PlayIcon size={12} />
+                  </IconFrame>
                   Run
                 </Button>
               </Flex>
@@ -164,22 +167,42 @@ const Form = () => {
       </PageHeader>
 
       <PageInner>
-        <Table
-          data={contents}
-          columns={columns}
-          isLoading={loading}
-          emptyMessage="No pipelines has been created yet."
-        />
-        {pageMeta && pageMeta?.total_pages > 1 && (
-          <Box mx={0} mt={3}>
-            <Pagination
-              totalPage={pageMeta?.total_pages}
-              initialPage={currentPage}
-              onPageChange={changePage}
-              totalEntries={pageMeta?.total_entries}
-            />
-          </Box>
-        )}
+        <Box>
+          <Table
+            data={contents}
+            columns={columns}
+            isLoading={loading}
+            emptyMessage={
+              <Box w="60%" mx="auto" gap="md">
+                <Text as="h3">No pipelines found</Text>
+                <Text color="text-secondary" mb="md">
+                  Create your first pipeline to automate and streamline your
+                  business processes.
+                </Text>
+                <Button
+                  onClick={() => setIsCreatePipelineDrawerOpen(true)}
+                  variant="secondary"
+                  size="sm">
+                  <IconFrame color="gray.800" mr="xs">
+                    {' '}
+                    <TreeStructureIcon size={12} />
+                  </IconFrame>
+                  Add Pipeline
+                </Button>
+              </Box>
+            }
+          />
+          {pageMeta && pageMeta?.total_pages > 1 && (
+            <Box mx={0} mt={3}>
+              <Pagination
+                totalPage={pageMeta?.total_pages}
+                initialPage={currentPage}
+                onPageChange={changePage}
+                totalEntries={pageMeta?.total_entries}
+              />
+            </Box>
+          )}
+        </Box>
       </PageInner>
 
       <Drawer

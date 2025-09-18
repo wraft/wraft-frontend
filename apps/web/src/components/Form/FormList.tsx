@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useThemeUI } from 'theme-ui';
 import {
   Box,
+  Button,
   DropdownMenu,
   Flex,
   Modal,
@@ -12,8 +13,9 @@ import {
   Text,
 } from '@wraft/ui';
 import { EllipsisHIcon } from '@wraft/icon';
+import { Plus } from '@phosphor-icons/react';
 
-import { TimeAgo } from 'common/Atoms';
+import { IconFrame, TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
 import { NextLinkText } from 'common/NavLink';
 import { fetchAPI, deleteAPI } from 'utils/models';
@@ -194,12 +196,28 @@ const FormList = ({ rerender, setRerender }: Props) => {
     );
   };
   return (
-    <Flex direction="column" gap="md">
+    <Flex direction="column">
       <Table
         data={contents}
         columns={columns}
         isLoading={loading}
-        emptyMessage="No forms has been created yet."
+        emptyMessage={
+          <Box mx="auto" gap="md">
+            <Text as="h3">No forms found</Text>
+            <Text color="text-secondary" mb="md">
+              Create your first form to get started.
+            </Text>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => router.push(`/forms/new`)}>
+              <IconFrame color="gray.800" mr="xs">
+                <Plus size={12} weight="bold" />
+              </IconFrame>
+              Add Form
+            </Button>
+          </Box>
+        }
       />
       <Box>
         {pageMeta && pageMeta?.total_pages > 1 && (

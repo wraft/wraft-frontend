@@ -236,17 +236,27 @@ const CreateDocument = ({ setIsOpen }: { setIsOpen: any }) => {
       <Box flex={1} overflowY="auto" px="xl" py="md" minWidth="550px">
         {formStep === 1 && (
           <>
-            <Box mb="sm">
-              <Text as="h4">Select a template</Text>
+            <Box mb="md">
+              <Text fontSize="sm2" as="p" color="text-secondary">
+                Choose a template to get started
+              </Text>
             </Box>
 
             {!loading && contents.length < 1 && (
-              <Flex alignItems="center">
-                <Box color="gray.500">
+              <Flex
+                alignItems="center"
+                p="md"
+                border="solid 1px"
+                borderColor="border"
+                borderRadius="lg"
+                bg="background-secondary">
+                <Box color="text-secondary">
                   <EmptyFormIcon />
                 </Box>
                 <Box m={2} pb={0}>
-                  <Text as="h3">No template has been created yet.</Text>
+                  <Text color="text-secondary">
+                    No template has been created yet.
+                  </Text>
                 </Box>
               </Flex>
             )}
@@ -445,14 +455,35 @@ export const BlockItem = ({ template, onChange, selected }: any) => {
       align="center"
       bg={selected.id === id && 'green.300'}>
       <Box
-        w="12px"
+        w="4px"
         h="12px"
         borderRadius="sm"
         borderColor="border"
         bg={content_type.color}
       />
-      <Text>{title}</Text>
-      <Text fontSize="sm" fontWeight="heading">
+      <Text
+        fontSize="sm2"
+        fontWeight="heading"
+        color="text-primary"
+        style={{
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          maxWidth: '240px',
+        }}>
+        {title}
+      </Text>
+      <Text
+        fontSize="sm"
+        fontWeight="heading"
+        color="text-secondary"
+        ml="auto"
+        style={{
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          maxWidth: '80px',
+        }}>
         {content_type.prefix}
       </Text>
     </BlockItemWrapper>

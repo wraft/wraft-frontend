@@ -4,6 +4,8 @@ import { Flex, Text } from '@wraft/ui';
 
 import { CaretRight } from '@phosphor-icons/react';
 
+import { IconWrapper } from 'common/Atoms';
+
 type Props = {
   formStep: number;
   goTo: (arg: any) => void;
@@ -17,27 +19,34 @@ const StepsIndicator = ({ goTo, formStep, titles }: Props) => {
         return (
           <Flex key={index} align="center">
             <Flex
-              w="22px"
-              h="22px"
+              w="18px"
+              h="18px"
               justify="center"
               align="center"
               color={formStep >= index ? 'green.1200' : 'gray.900'}
               bg={formStep >= index ? 'green.600' : 'gray.400'}
               borderRadius="xl">
-              <Text fontSize="sm">{index + 1}</Text>
+              <Text
+                fontSize="xs"
+                color={formStep >= index ? 'green.1000' : 'gray.900'}
+                fontWeight="heading">
+                {index + 1}
+              </Text>
             </Flex>
             <Text
               ml="sm"
               cursor="pointer"
-              color="text-secondary"
+              color={formStep >= index ? 'green.900' : 'text-secondary'}
               fontWeight="heading"
-              as="h5"
+              as="p"
               onClick={() => goTo(index)}>
               {item}
             </Text>
             {titles.length !== index + 1 && (
               <Flex mx={'12px'} align="center" px="5.25px" py="3.25px">
-                <CaretRight size={20} />
+                <IconWrapper color="text-secondary">
+                  <CaretRight size={20} weight="bold" />
+                </IconWrapper>
               </Flex>
             )}
           </Flex>

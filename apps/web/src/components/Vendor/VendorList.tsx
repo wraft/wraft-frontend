@@ -15,6 +15,7 @@ import {
   TrashIcon,
   PencilSimpleIcon,
   EyeIcon,
+  Plus,
 } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
@@ -247,7 +248,23 @@ const VendorList: React.FC<VendorListProps> = ({
             columns={columns}
             isLoading={loading}
             skeletonRows={10}
-            emptyMessage="No vendors found. Create your first vendor to get started."
+            emptyMessage={
+              <Box mx="auto" gap="md">
+                <Text as="h3">No vendors found</Text>
+                <Text color="text-secondary" mb="md">
+                  Create your first vendor to get started.
+                </Text>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => router.push(`/vendors/new`)}>
+                  <IconFrame color="gray.800" mr="xs">
+                    <Plus size={12} weight="bold" />
+                  </IconFrame>
+                  Add Vendor
+                </Button>
+              </Box>
+            }
             onRowClick={(row) => handleVendorSelect(row.original)}
           />
         </Box>

@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import FormList from 'components/Form/FormList';
 import Page from 'common/PageFrame';
 import PageHeader from 'common/PageHeader';
+import { IconFrame } from 'common/Atoms';
 import { FormSchema, Form } from 'schemas/form';
 import { postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
@@ -63,7 +64,9 @@ const Index: FC = () => {
         <PageHeader title="Forms">
           {hasPermission('form', 'manage') && (
             <Button variant="secondary" onClick={onOpenDrawer} size="sm">
-              <Plus size={10} weight="bold" />
+              <IconFrame color="gray.800" mr="xs">
+                <Plus size={12} weight="bold" />
+              </IconFrame>
               Create Form
             </Button>
           )}

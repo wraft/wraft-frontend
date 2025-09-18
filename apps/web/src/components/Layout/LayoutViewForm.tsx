@@ -1,9 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Disclosure,
-  DisclosureContent,
-  DisclosureProvider,
-} from '@ariakit/react';
 import { useForm } from 'react-hook-form';
 import { DownIcon } from '@wraft/icon';
 import {
@@ -17,6 +12,7 @@ import {
   Drawer,
   useDrawer,
   Toggle,
+  Disclosure,
 } from '@wraft/ui';
 
 import MenuStepsIndicator from 'common/MenuStepsIndicator';
@@ -248,16 +244,14 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
               />
             </Field>
 
-            <DisclosureProvider>
-              <Disclosure>
-                <Flex alignItems="center">
-                  <Text mr="sm" color="secondary">
-                    Advanced
-                  </Text>
-                  <DownIcon />
-                </Flex>
-              </Disclosure>
-              <DisclosureContent>
+            <Disclosure>
+              <Disclosure.Trigger>
+                <Text mr="sm" color="secondary">
+                  Advanced
+                </Text>
+                <DownIcon />
+              </Disclosure.Trigger>
+              <Disclosure.Content>
                 <Box>
                   <Field label="Engine" disabled required>
                     <InputText
@@ -266,8 +260,8 @@ const LayoutViewForm = ({ cId = '' }: Props) => {
                     />
                   </Field>
                 </Box>
-              </DisclosureContent>
-            </DisclosureProvider>
+              </Disclosure.Content>
+            </Disclosure>
           </Flex>
 
           {assets && assets.length > 0 && (

@@ -13,10 +13,11 @@ import {
   useDrawer,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
+import { Plus } from '@phosphor-icons/react';
 
 import CreateDocument from 'components/DocumentCreate';
 import { ContentTitleList } from 'common/content';
-import { TimeAgo, FilterBlock, PageInner } from 'common/Atoms';
+import { TimeAgo, FilterBlock, PageInner, IconFrame } from 'common/Atoms';
 import PageHeader from 'common/PageHeader';
 import { StateProgress } from 'common/StateProgress';
 import { fetchAPI } from 'utils/models';
@@ -274,6 +275,22 @@ const DocumentList = () => {
                 isLoading={contenLoading}
                 columns={columns}
                 skeletonRows={12}
+                emptyMessage={
+                  <Box mx="auto" gap="md" w="60%">
+                    <Text as="h3" fontSize="md">
+                      No documents
+                    </Text>
+                    <Text color="text-secondary" mb="md">
+                      You have no recent documents to display.
+                    </Text>
+                    <Button variant="secondary" size="sm">
+                      <IconFrame color="gray.800" mr="xs">
+                        <Plus size={12} weight="bold" />
+                      </IconFrame>
+                      Add Document
+                    </Button>
+                  </Box>
+                }
               />
             </Box>
             {pageMeta && pageMeta?.total_pages > 1 && (

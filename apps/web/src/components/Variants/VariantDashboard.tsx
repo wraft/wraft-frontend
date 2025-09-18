@@ -9,13 +9,15 @@ import {
   Flex,
   Text,
   Modal,
+  Button,
+  Avatar,
 } from '@wraft/ui';
 import toast from 'react-hot-toast';
 import { ThreeDotIcon } from '@wraft/icon';
+import { Plus } from '@phosphor-icons/react';
 
-import { TimeAgo } from 'common/Atoms';
+import { IconFrame, TimeAgo } from 'common/Atoms';
 import ConfirmDelete from 'common/ConfirmDelete';
-import UserCard from 'common/UserCard';
 import { fetchAPI, deleteAPI, postAPI } from 'utils/models';
 import { usePermission } from 'utils/permissions';
 
@@ -169,10 +171,12 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
               bg={row.original?.color ? row.original?.color : 'blue'}
             />
             <Box ml="sm">
-              <Text fontSize="sm" color="text-secondary">
+              <Text fontSize="sm2" color="text-secondary">
                 {row.original?.prefix}
               </Text>
-              <Text fontWeight="heading">{row?.original?.name}</Text>
+              <Text fontWeight="heading" fontSize="sm2">
+                {row?.original?.name}
+              </Text>
             </Box>
           </Flex>
         </NextLink>
@@ -184,44 +188,53 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
       id: 'content.flow',
       header: 'Flow',
       accessorKey: 'flow',
-      cell: ({ row }: any) => <Text>{row.original?.flow?.name}</Text>,
+      cell: ({ row }: any) => (
+        <Text fontSize="sm2">{row.original?.flow?.name}</Text>
+      ),
       enableSorting: false,
     },
-    {
-      id: 'content.theme',
-      header: 'Theme',
-      cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
-      enableSorting: false,
-    },
+    // {
+    //   id: 'content.theme',
+    //   header: 'Theme',
+    //   cell: ({ row }: any) => <Text>{row.original?.theme?.name}</Text>,
+    //   enableSorting: false,
+    // },
 
     {
       id: 'content.layout',
       header: 'Layout',
       accessorKey: 'layout',
-      cell: ({ row }: any) => <Text>{row.original?.layout?.name}</Text>,
+      cell: ({ row }: any) => (
+        <Text fontSize="sm2">{row.original?.layout?.name}</Text>
+      ),
       enableSorting: false,
     },
     {
       id: 'content.type',
       header: 'Type',
-      cell: ({ row }: any) => <Text>{row.original?.type}</Text>,
+      cell: ({ row }: any) => <Text fontSize="sm2">{row.original?.type}</Text>,
       enableSorting: false,
     },
     {
       id: 'content.creator',
-      header: 'Created By',
+      header: 'Author',
       cell: ({ row }: any) => (
-        <UserCard
-          profilePic={row.original?.creator?.profile_pic}
-          name={row.original?.creator?.name}
-          size="sm"
-        />
+        <Flex alignItems="center" gap="sm">
+          <Avatar
+            size="xs"
+            src={row.original?.creator?.profile_pic}
+            alt={row.original?.creator?.name}
+          />
+          <Text fontSize="sm2" fontWeight={500}>
+            {row.original?.creator?.name}
+          </Text>
+        </Flex>
       ),
       enableSorting: false,
     },
     {
       id: 'content.updated_at',
-      header: 'CREATED AT',
+      header: 'Created',
       accessorKey: 'TIME',
       cell: ({ row }: any) => <TimeAgo time={row.original?.updated_at} />,
       enableSorting: false,
@@ -294,7 +307,23 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
         isLoading={loading}
         columns={columns}
         skeletonRows={10}
-        emptyMessage="No blocks has been created yet."
+        emptyMessage={
+          <Box mx="auto" gap="md">
+            <Text as="h3">No variants found</Text>
+            <Text color="text-secondary" mb="md">
+              Create your first variant to get started.
+            </Text>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => router.push(`/variants/new`)}>
+              <IconFrame color="gray.800" mr="xs">
+                <Plus size={12} weight="bold" />
+              </IconFrame>
+              Add Variant
+            </Button>
+          </Box>
+        }
       />
       <Box mt="16px">
         {pageMeta && pageMeta?.total_pages > 1 && (

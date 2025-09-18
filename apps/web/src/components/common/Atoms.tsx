@@ -297,6 +297,7 @@ export const PageInner = ({ children }: { children: any }) => {
 interface IconWrapperProps {
   color?: string;
   children: any;
+  mr?: string;
 }
 
 const IconWrapped = styled(Box)`
@@ -306,9 +307,9 @@ const IconWrapped = styled(Box)`
   }
 `;
 
-export const IconFrame = ({ color, children }: IconWrapperProps) => {
+export const IconFrame = ({ color, children, mr = '0' }: IconWrapperProps) => {
   return (
-    <IconWrapped color={color} display="flex" alignItems="center">
+    <IconWrapped color={color} display="flex" alignItems="center" mr={mr}>
       {children}
     </IconWrapped>
   );
