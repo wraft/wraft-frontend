@@ -1,25 +1,29 @@
 import { defineNodeSpec, type Extension } from "@prosekit/core";
-import { createListSpec } from "prosemirror-flat-list";
+import type { DOMOutputSpec, ProseMirrorNode } from "@prosekit/pm/model";
+import type { ListAttributes } from "prosemirror-flat-list";
+import { createListSpec, listToDOM } from "prosemirror-flat-list";
 
-// [TODO] should be fix this module. it's temp
+export type ListKind =
+  | "bullet"
+  | "ordered"
+  | "lower-alpha"
+  | "upper-alpha"
+  | "lower-roman"
+  | "upper-roman";
 
 export interface ListAttrs {
   /**
    * The kind of list node.
    */
-  kind?: "bullet" | "ordered" | "task" | "toggle";
+  kind?: ListKind;
   /**
    * The optional order of the list node.
    */
   order?: number | null;
   /**
-   * Whether the list node is checked if its `kind` is `"task"`.
+   * Whether the list node is multilevel list numbering.
    */
-  checked?: boolean;
-  /**
-   * Whether the list node is collapsed if its `kind` is `"toggle"`.
-   */
-  collapsed?: boolean;
+  isMultilevel?: boolean;
 }
 
 /**
@@ -31,32 +35,36 @@ export type ListItemSpecExtension = Extension<{
   };
 }>;
 
-/**
- * @internal
- */
-export function defineListItemSpec(): ListItemSpecExtension {
-  return defineNodeSpec<"listItem", ListAttrs>({
-    ...createListSpec(),
-    name: "listItem",
-  });
+function getMarkers(node: ProseMirrorNode): DOMOutputSpec[] {
+  const attrs = node.attrs as ListAttributes;
+  switch (attrs.kind) {
+    case "task":
+      // Use a `label` element here so that the area around the checkbox is also checkable.
+      return [];
+    default:
+      // Always return an empty array so that the marker element is rendered. This
+      // is required to make the drop indicator locate the correct position.
+      return [];
+  }
 }
 
 /**
  * @internal
  */
-export type OrderedListSpecExtension = Extension<{
-  Nodes: {
-    orderedList: ListAttrs;
-  };
-}>;
+export function defineListItemSpec(): ListItemSpecExtension {
+  const spec = createListSpec();
 
-/**
- * @internal
- */
-export function defineOrderedListSpec(): OrderedListSpecExtension {
-  return defineNodeSpec<"orderedList", ListAttrs>({
-    ...createListSpec(),
-    name: "orderedList",
+  return defineNodeSpec<"listItem", ListAttrs>({
+    ...spec,
+    attrs: {
+      kind: { default: "bullet" },
+      order: { default: null },
+      isMultilevel: { default: false },
+    },
+    toDOM: (node) => {
+      return listToDOM({ node, getMarkers });
+    },
+    name: "listItem",
   });
 }
 

@@ -37,6 +37,7 @@
     "phoenix": "^1.8.1",
     "prosekit": "^0.15.5",
     "prosemirror-flat-list": "^0.5.5",
+    "prosemirror-schema-list": "^1.5.1",
     "react-dropzone": "14.3.8",
     "react-signature-canvas": "1.1.0-alpha.2",
     "rehype-parse": "^9.0.1",
