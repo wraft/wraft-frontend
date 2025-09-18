@@ -17,15 +17,17 @@ import {
   TableIcon,
   ImageIcon,
   ArrowsInLineVerticalIcon,
-  NumberCircleOneIcon,
-  NumberCircleTwoIcon,
   ListNumbersIcon,
-  NumberCircleThreeIcon,
-  NumberCircleFourIcon,
 } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
-import Button from "./button";
+import {
+  ListAlphabetLowercaseIcon,
+  ListAlphabetUppercaseIcon,
+  ListLowerRomanIcon,
+  ListUpperRomanIcon,
+} from "@wraft/icon";
 import type { EditorExtension } from "./extension";
+import Button from "./button";
 import { ImageUploadPopover } from "./image-upload-popover";
 import { TableMenu } from "./table-menu";
 
@@ -197,59 +199,45 @@ export default function Toolbar() {
         <ListNumbersIcon size={18} />
       </Button>
       <Button
+        // @ts-expect-error -- TODO: fix this -- kind: "lower-alpha" is not a valid value
         pressed={editor.nodes.list.isActive({ kind: "lower-alpha" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "lower-alpha" })}
         onClick={() => editor.commands.toggleList({ kind: "lower-alpha" })}
         tooltip="Lower Alpha List"
       >
-        <NumberCircleOneIcon size={18} />
+        <ListAlphabetLowercaseIcon width={18} />
       </Button>
       <Button
+        // @ts-expect-error -- TODO: fix this -- kind: "upper-alpha" is not a valid value
         pressed={editor.nodes.list.isActive({ kind: "upper-alpha" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "upper-alpha" })}
         onClick={() => editor.commands.toggleList({ kind: "upper-alpha" })}
         tooltip="Upper Alpha List"
       >
-        <NumberCircleTwoIcon size={18} />
+        <ListAlphabetUppercaseIcon width={18} />
       </Button>
+
       <Button
+        // @ts-expect-error -- TODO: fix this -- kind: "lower-roman" is not a valid value
         pressed={editor.nodes.list.isActive({ kind: "lower-roman" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "lower-roman" })}
         onClick={() => editor.commands.toggleList({ kind: "lower-roman" })}
         tooltip="Lower Roman List"
       >
-        <NumberCircleThreeIcon size={18} />
+        <ListLowerRomanIcon width={18} />
       </Button>
       <Button
+        // @ts-expect-error -- TODO: fix this -- kind: "upper-roman" is not a valid value
         pressed={editor.nodes.list.isActive({ kind: "upper-roman" })}
         disabled={!editor.commands.toggleList.canExec({ kind: "upper-roman" })}
         onClick={() => editor.commands.toggleList({ kind: "upper-roman" })}
         tooltip="Upper Roman List"
       >
-        <NumberCircleFourIcon size={18} />
+        <ListUpperRomanIcon width={18} />
       </Button>
 
       <Button
-        pressed={false}
-        disabled={false}
-        onClick={() => {
-          try {
-            if (editor.commands.toggleMultilevelList) {
-              editor.commands.toggleMultilevelList();
-            } else {
-              console.warn("toggleMultilevelList command not available");
-            }
-          } catch (error) {
-            console.error("Error toggling multilevel list:", error);
-          }
-        }}
-        tooltip="Toggle Multilevel List"
-      >
-        <ListNumbersIcon size={18} />
-      </Button>
-
-      <Button
-        pressed={isTableActive} // Use isTableActive state instead of editor.nodes.table.isActive()
+        pressed={isTableActive}
         disabled={!editor.commands.insertTable.canExec}
         onClick={() => {
           if (!isTableActive) {
@@ -258,7 +246,7 @@ export default function Toolbar() {
         }}
         tooltip="Table"
       >
-        <TableIcon size={18} />
+        <TableIcon width={18} />
       </Button>
 
       <TableMenu isActive={isTableActive} />

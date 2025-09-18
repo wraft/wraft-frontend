@@ -42,7 +42,6 @@ function migrateNode(
 ): [ProsemirrorNodeJSON, boolean] {
   if (
     node.type === "list_item" ||
-    node.type === "listItem" ||
     node.type === "bulletList" ||
     node.type === "orderedList" ||
     node.type === "taskListItem"
@@ -50,7 +49,7 @@ function migrateNode(
     return [
       {
         ...node,
-        type: "list",
+        type: "listItem",
         attrs: {
           ...node.attrs,
           kind: kind ?? "bullet",
@@ -71,5 +70,5 @@ export function migrateDocJSON(
   docJSON: ProsemirrorNodeJSON,
 ): ProsemirrorNodeJSON | null {
   const [migrated, updated] = migrateNode(docJSON, {});
-  return updated ? migrated : null;
+  return updated ? migrated : docJSON;
 }

@@ -3,17 +3,19 @@ import type { DOMOutputSpec, ProseMirrorNode } from "@prosekit/pm/model";
 import type { ListAttributes } from "prosemirror-flat-list";
 import { createListSpec, listToDOM } from "prosemirror-flat-list";
 
+export type ListKind =
+  | "bullet"
+  | "ordered"
+  | "lower-alpha"
+  | "upper-alpha"
+  | "lower-roman"
+  | "upper-roman";
+
 export interface ListAttrs {
   /**
    * The kind of list node.
    */
-  kind?:
-    | "bullet"
-    | "ordered"
-    | "lower-alpha"
-    | "upper-alpha"
-    | "lower-roman"
-    | "upper-roman";
+  kind?: ListKind;
   /**
    * The optional order of the list node.
    */
@@ -68,24 +70,7 @@ export function defineListItemSpec(): ListItemSpecExtension {
       isMultilevel: { default: false },
     },
     toDOM: (node) => {
-      const domOutput = listToDOM({ node, getMarkers });
-
-      // Add isMultilevel as a data attribute if it's true
-      if (node.attrs.isMultilevel) {
-        // The listToDOM function returns an array like ['div', {attrs}, ...children]
-        // We need to modify the attributes object to include our data attribute
-        if (
-          Array.isArray(domOutput) &&
-          domOutput.length > 1 &&
-          typeof domOutput[1] === "object"
-        ) {
-          const attrs = domOutput[1] as Record<string, any>;
-          attrs["data-list-isMultilevel"] = "true";
-          // attrs.style = `--list-number: counter(item)`
-        }
-      }
-
-      return domOutput;
+      return listToDOM({ node, getMarkers });
     },
     name: "listItem",
   });

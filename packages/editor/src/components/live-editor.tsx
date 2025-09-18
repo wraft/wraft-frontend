@@ -19,6 +19,7 @@ import type { Awareness } from "y-protocols/awareness";
 import { markdownFromHTML } from "@helpers/markdown";
 // import { IndexeddbPersistence } from "y-indexeddb";
 import { migrateDocJSON } from "@helpers/migrate";
+import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
 import { getUserColor } from "../lib/utils";
 import { PhoenixChannelProvider } from "../lib/y-phoenix-channel";
 import { defineCollaborativeExtension } from "./extension";
@@ -136,9 +137,7 @@ export const LiveEditor = forwardRef(
         signersConfig,
       });
 
-      // const migratedContent = migrateDocJSON(defaultContent);
-      // // con
-      console.log("migratedContent [b]", defaultContent);
+      // const migratedContent = migrateDocJSON(defaultContent as ProsemirrorNodeJSON);
 
       return createEditor({ extension });
     }, [isReadonly, socketRef.current]);
@@ -151,26 +150,19 @@ export const LiveEditor = forwardRef(
 
       // update content like placeholder update
       if (updateContent) {
-        // const migratedContent = migrateDocJSON(updateContent);
-        // console.log('migrate [3]', migratedContent);
-        prosemirrorJSONToYXmlFragment(
-          editor.schema,
-          updateContent,
-          yXmlFragment,
-        );
+        const newContent = migrateDocJSON(updateContent as ProsemirrorNodeJSON);
+        prosemirrorJSONToYXmlFragment(editor.schema, newContent, yXmlFragment);
       }
 
       const ymapObserver = (event: any) => {
-        console.log("ymap", event.changes);
         event.changes.keys.forEach((change: any, key: any) => {
           if (key === "content") {
             const { content } = ymap.toJSON();
-            // console.log('migrate [c]', content);
-            // const migratedContent = migrateDocJSON(content);
+            const newContent = migrateDocJSON(content as ProsemirrorNodeJSON);
             if (content) {
               prosemirrorJSONToYXmlFragment(
                 editor.schema,
-                content,
+                newContent,
                 yXmlFragment,
               );
             }

@@ -32,10 +32,8 @@ function toggleMultilevelList(): Command {
         break;
       }
     }
-    console.log("toggleMultilevelList[4]", listParent);
 
     if (!listParent) {
-      // If not in a list, return false to indicate the command can't be executed
       return false;
     }
 
@@ -43,7 +41,6 @@ function toggleMultilevelList(): Command {
 
     const currentIsMultilevel = listParent.attrs.isMultilevel || false;
 
-    // Create a new transaction to update the node's attributes
     const tr = state.tr.setNodeMarkup(listPos, undefined, {
       ...listParent.attrs,
       isMultilevel: !currentIsMultilevel,
