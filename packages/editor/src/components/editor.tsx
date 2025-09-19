@@ -4,6 +4,8 @@ import { useMemo, useImperativeHandle, forwardRef } from "react";
 import { ListDOMSerializer } from "prosekit/extensions/list";
 import type { Node } from "@prosekit/pm/model";
 import { markdownFromHTML } from "@helpers/markdown";
+import type { ProsemirrorNodeJSON } from "prosemirror-flat-list";
+import { migrateDocJSON } from "@helpers/migrate";
 import { defineDefaultExtension } from "./extension";
 import InlineMenu from "./inline-menu";
 import SlashMenu from "./slash-menu";
@@ -46,7 +48,9 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
   ) => {
     const editor = useMemo(() => {
       const extension = defineDefaultExtension({ placeholder, isReadonly });
-      return createEditor({ extension, defaultContent });
+      const newContent = migrateDocJSON(defaultContent);
+
+      return createEditor({ extension, defaultContent: newContent as any });
     }, [isReadonly, defaultContent]);
 
     const helpers = useMemo(

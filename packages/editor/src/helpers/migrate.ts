@@ -11,15 +11,25 @@ function migrateNodes(
     if (node.type === "bullet_list" || node.type === "bulletList") {
       updated = true;
       for (const child of node.content ?? []) {
-        content.push(migrateNode(child, { kind: "bullet" })[0]);
+        const [migratedChild, childUpdated] = migrateNode(child, {
+          kind: "bullet",
+        });
+        content.push(migratedChild);
+        if (childUpdated) updated = true;
       }
     } else if (node.type === "ordered_list" || node.type === "orderedList") {
       updated = true;
       for (const child of node.content ?? []) {
-        content.push(migrateNode(child, { kind: "ordered" })[0]);
+        const [migratedChild, childUpdated] = migrateNode(child, {
+          kind: "ordered",
+        });
+        content.push(migratedChild);
+        if (childUpdated) updated = true;
       }
     } else {
-      content.push(node);
+      const [migratedNode, nodeUpdated] = migrateNode(node, {});
+      content.push(migratedNode);
+      if (nodeUpdated) updated = true;
     }
   }
 
@@ -40,12 +50,19 @@ function migrateNode(
       | "upper-roman";
   },
 ): [ProsemirrorNodeJSON, boolean] {
+  let updated = false;
+
+  // Handle direct list item migrations
   if (
     node.type === "list_item" ||
     node.type === "bulletList" ||
     node.type === "orderedList" ||
     node.type === "taskListItem"
   ) {
+    const [migratedContent, _contentUpdated] = node.content
+      ? migrateNodes(node.content)
+      : [undefined, false];
+
     return [
       {
         ...node,
@@ -54,16 +71,22 @@ function migrateNode(
           ...node.attrs,
           kind: kind ?? "bullet",
         } satisfies ListAttrs,
-        content: node.content ? migrateNodes(node.content)[0] : undefined,
+        content: migratedContent,
       },
       true,
     ];
-  } else if (node.content) {
-    const [content, updated] = migrateNodes(node.content);
-    return [{ ...node, content }, updated];
   }
 
-  return [node, false];
+  if (node.content) {
+    const [content, contentUpdated] = migrateNodes(node.content);
+    updated = contentUpdated;
+
+    if (updated) {
+      return [{ ...node, content }, updated];
+    }
+  }
+
+  return [node, updated];
 }
 
 export function migrateDocJSON(
