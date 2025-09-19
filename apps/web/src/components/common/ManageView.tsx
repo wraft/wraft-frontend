@@ -44,9 +44,6 @@ const ManageHomePage = () => {
                     <Text fontSize="sm2" fontWeight="medium">
                       {menu.name}
                     </Text>
-                    <Text fontSize="sm2" color="text-secondary">
-                      {menu.desc}
-                    </Text>
                   </Box>
                 </Flex>
               </NavLink>

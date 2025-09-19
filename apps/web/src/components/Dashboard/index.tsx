@@ -19,9 +19,9 @@ import {
   XIcon,
   YoutubeLogoIcon,
 } from '@phosphor-icons/react';
+import { useTemplateInstallation } from 'hooks/useTemplateInstallation';
 
-// import PublicTemplates from 'components/PublicTemplates';
-// import PublicTemplates from 'components/ImportTemplate/PublicTemplates';
+import TemplateInstallModal from 'components/ImportTemplate/TemplateInstallModal';
 import { IconFrame, PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
@@ -127,6 +127,25 @@ const Dashboard = () => {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templatesLoading, setTemplatesLoading] = useState(false);
   const [templatesError, setTemplatesError] = useState<string | null>(null);
+
+  // Template installation hook
+  const {
+    isInstalling,
+    installProgress,
+    isModalOpen,
+    templateToInstall,
+    handleTemplateSelect,
+    handleInstall,
+    handleModalClose,
+  } = useTemplateInstallation({
+    onInstallSuccess: () => {
+      // Close the drawer after successful installation
+      templateDrawer.hide();
+
+      // Refresh the templates list after successful installation
+      fetchPublicTemplates();
+    },
+  });
   const tab = useTab({ defaultSelectedId: 'recent_documents' });
   const { userProfile } = useAuth();
   const templateDrawer = useDrawer();
@@ -189,22 +208,6 @@ const Dashboard = () => {
       setTemplates([]);
     } finally {
       setTemplatesLoading(false);
-    }
-  };
-
-  const handleTemplateInstall = async (template: Template) => {
-    try {
-      // For now, we'll just log the installation and show a success message
-      // In a real implementation, this would call an install API
-      console.log('Installing template:', template.name);
-
-      // You can implement the actual installation logic here
-      // For example: await fetchAPI('templates/install', { template_id: template.id });
-
-      alert(`Template "${template.name}" installation started!`);
-    } catch (error) {
-      console.error('Failed to install template:', error);
-      alert('Failed to install template. Please try again.');
     }
   };
 
@@ -511,7 +514,7 @@ const Dashboard = () => {
                     <Button
                       size="sm"
                       variant="secondary"
-                      onClick={() => handleTemplateInstall(template)}>
+                      onClick={() => handleTemplateSelect(template)}>
                       Install
                     </Button>
                   </Flex>
@@ -542,6 +545,16 @@ const Dashboard = () => {
           )}
         </Box>
       </Drawer>
+
+      {/* Template Installation Modal */}
+      <TemplateInstallModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        template={templateToInstall}
+        isInstalling={isInstalling}
+        installProgress={installProgress}
+        onInstall={handleInstall}
+      />
     </PageInner>
   );
 };
