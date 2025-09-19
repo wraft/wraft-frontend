@@ -1,10 +1,20 @@
 import { createGlobalStyle } from "@xstyled/emotion";
 
 export const GlobalStyle = createGlobalStyle`
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+  :root {
+    font-family: Inter, sans-serif;
+    font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+  }
+  
+  @supports (font-variation-settings: normal) {
+    :root { 
+      font-family: InterVariable, sans-serif; 
+    }
+  }
+  
   body {
     color: var(--theme-ui-colors-text);
-    font-family: 'Inter', sans-serif;
+    font-family: Inter, sans-serif;
     -webkit-font-smoothing: antialiased;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;

@@ -171,7 +171,7 @@ const VariantDashboard = ({ rerender, setRerender }: Props) => {
               bg={row.original?.color ? row.original?.color : 'blue'}
             />
             <Box ml="sm">
-              <Text fontSize="sm2" color="text-secondary">
+              <Text fontSize="xs" color="text-secondary" lineHeight="1">
                 {row.original?.prefix}
               </Text>
               <Text fontWeight="heading" fontSize="sm2">

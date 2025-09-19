@@ -45,7 +45,7 @@ const VariantList = () => {
         {hasPermission('variant', 'manage') && (
           <Button variant="secondary" size="sm" onClick={() => setIsOpen(true)}>
             <Plus size={12} weight="regular" />
-            Create Variant
+            Add Variant
           </Button>
         )}
       </PageHeader>

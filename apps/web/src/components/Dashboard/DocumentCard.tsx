@@ -30,6 +30,60 @@ const VariantLine = styled.div<{ color?: string }>`
   background: ${({ color }) => color || '#d1d5db'};
 `;
 
+const ExpiryBadge = styled(Box)<{
+  urgency: 'critical' | 'warning' | 'info' | 'expired';
+}>`
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background-color: ${({ urgency }) => {
+    switch (urgency) {
+      case 'critical':
+        return 'var(--colors-red-100)';
+      case 'warning':
+        return 'var(--colors-orange-100)';
+      case 'info':
+        return 'var(--colors-blue-100)';
+      case 'expired':
+        return 'var(--colors-gray-100)';
+      default:
+        return 'var(--colors-gray-100)';
+    }
+  }};
+  color: ${({ urgency }) => {
+    switch (urgency) {
+      case 'critical':
+        return 'var(--colors-red-700)';
+      case 'warning':
+        return 'var(--colors-orange-700)';
+      case 'info':
+        return 'var(--colors-blue-700)';
+      case 'expired':
+        return 'var(--colors-gray-700)';
+      default:
+        return 'red.400';
+    }
+  }};
+  border: 1px solid
+    ${({ urgency }) => {
+      switch (urgency) {
+        case 'critical':
+          return 'var(--colors-red-200)';
+        case 'warning':
+          return 'var(--colors-orange-200)';
+        case 'info':
+          return 'var(--colors-blue-200)';
+        case 'expired':
+          return 'var(--colors-gray-200)';
+        default:
+          return 'var(--colors-gray-200)';
+      }
+    }};
+`;
+
 /**
  * Represents a state in the document flow
  */
@@ -94,6 +148,8 @@ export interface DocumentCardProps {
   className?: string;
   /** Optional hideState for the card */
   hideState?: boolean;
+  /** Optional expiry date for the document */
+  expiryDate?: string;
 }
 
 /**
@@ -125,6 +181,7 @@ export interface DocumentCardProps {
  *     }
  *   }}
  *   onClick={() => console.log("Card clicked")}
+ *   expiryDate="2024-03-25T10:00:00Z"
  * />
  * ```
  */
@@ -133,6 +190,7 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
   onClick,
   hideState = false,
   className,
+  expiryDate,
 }) => {
   // Calculate currentActiveIndex similar to DocumentView logic
   const currentActiveIndex = useMemo(() => {
@@ -180,6 +238,42 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
     return null;
   }, [content]);
 
+  // Calculate expiry information with memoization for performance
+  const expiryInfo = useMemo(() => {
+    if (!expiryDate) return null;
+
+    const date = new Date(expiryDate);
+    const now = new Date();
+    const diffTime = date.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    let urgency: 'critical' | 'warning' | 'info' | 'expired';
+    let text: string;
+
+    if (diffDays < 0) {
+      urgency = 'expired';
+      text = `${Math.abs(diffDays)} day${Math.abs(diffDays) !== 1 ? 's' : ''} ago`;
+    } else if (diffDays === 0) {
+      urgency = 'critical';
+      text = 'Today';
+    } else if (diffDays === 1) {
+      urgency = 'critical';
+      text = 'Tomorrow';
+    } else if (diffDays <= 7) {
+      urgency = 'warning';
+      text = `In ${diffDays} days`;
+    } else {
+      urgency = 'info';
+      text = date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    }
+
+    return { urgency, text };
+  }, [expiryDate]);
+
   return (
     <Box
       variant="block"
@@ -212,7 +306,21 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
               <Text fontSize="sm" color="text-secondary">
                 •
               </Text>
-              <TimeAgo time={content.content.updated_at} fontSize="sm" />
+              <TimeAgo
+                time={content.content.updated_at}
+                fontSize="sm"
+                color="text-secondary"
+              />
+              {expiryInfo && (
+                <>
+                  <Text fontSize="sm" color="text-secondary">
+                    •
+                  </Text>
+                  <ExpiryBadge urgency={expiryInfo.urgency}>
+                    {expiryInfo.text}
+                  </ExpiryBadge>
+                </>
+              )}
             </Flex>
           </Flex>
         </Box>

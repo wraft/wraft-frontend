@@ -38,14 +38,18 @@ interface TimeAgoProps {
   short?: boolean;
   fontSize?: 'sm' | 'md' | 'lg' | 'sm2';
   showAgo?: boolean;
+  color?: string;
 }
 
 export const TimeAgo = (props: TimeAgoProps) => {
-  const { time, showAgo } = props;
+  const { time, showAgo, color } = props;
 
   if (!time) {
     return (
-      <Text fontSize={props.fontSize || 'sm2'} opacity="0.8">
+      <Text
+        fontSize={props.fontSize || 'sm2'}
+        opacity="0.8"
+        color={props.color || 'text-secondary'}>
         -
       </Text>
     );

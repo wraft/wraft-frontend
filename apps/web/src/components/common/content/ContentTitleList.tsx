@@ -12,7 +12,7 @@ const ContentTitleList = ({ content, contentType }: Props) => {
     <Flex fontSize="sm">
       <Box w="2px" bg={contentType?.color ? contentType?.color : 'blue'} />
       <Box ml="sm">
-        <Text color="text-secondary" fontSize="sm">
+        <Text color="text-secondary" fontSize="sm" lineHeight="1">
           {content?.instance_id}
         </Text>
         <Flex alignItems="center" gap="xs">

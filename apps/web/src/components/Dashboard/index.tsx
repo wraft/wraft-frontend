@@ -357,6 +357,7 @@ const Dashboard = () => {
               mt="0"
               w="50%"
               p="lg"
+              pt="0"
               pl="xs"
               // bg="background-primary"
             >
