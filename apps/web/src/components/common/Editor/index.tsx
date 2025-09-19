@@ -15,8 +15,6 @@ type EditorProps = {
 
 const EditorWrapper = forwardRef<any, EditorProps>(
   ({ isReadonly, defaultContent, ...rest }: EditorProps, ref) => {
-    if (!defaultContent) return null;
-
     return (
       <Editor
         defaultContent={defaultContent}
