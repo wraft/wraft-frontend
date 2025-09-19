@@ -12,7 +12,7 @@ import {
   Checkbox,
   Grid,
 } from '@wraft/ui';
-import { Plus, Trash, X } from '@phosphor-icons/react';
+import { PlusIcon, TrashIcon, XIcon } from '@phosphor-icons/react';
 
 import { webhookApi } from 'components/Webhook/webhookApi';
 import {
@@ -70,6 +70,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
   });
 
   const selectedEvents = watch('events');
+  const selectedIsActive = watch('is_active');
 
   useEffect(() => {
     if (isEditMode && webhookId) {
@@ -171,7 +172,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
           {isEditMode ? 'Edit Webhook' : 'Create New Webhook'}
         </Text>
         <Button variant="ghost" size="sm" onClick={onCancel}>
-          <X size={20} />
+          <XIcon size={20} />
         </Button>
       </Flex>
 
@@ -231,7 +232,6 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                     <Flex alignItems="flex-start" gap="sm">
                       <Checkbox
                         checked={selectedEvents?.includes(event) || false}
-                        onChange={() => handleEventToggle(event)}
                       />
                       <Box>
                         <Text fontWeight="medium" fontSize="sm">
@@ -290,8 +290,12 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                   </Field>
                 </Flex>
 
-                <Flex alignItems="center" gap="sm">
-                  <Checkbox {...register('is_active')} />
+                <Flex
+                  alignItems="center"
+                  gap="sm"
+                  cursor="pointer"
+                  onClick={() => setValue('is_active', !selectedIsActive)}>
+                  <Checkbox checked={selectedIsActive} />
                   <Box>
                     <Text>Active</Text>
                     <Text fontSize="sm" color="gray.600">
@@ -315,7 +319,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                   variant="secondary"
                   size="sm"
                   onClick={addHeader}>
-                  <Plus size={16} />
+                  <PlusIcon size={16} />
                   Add Header
                 </Button>
               </Flex>
@@ -343,7 +347,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({
                     variant="secondary"
                     size="sm"
                     onClick={() => removeHeader(index)}>
-                    <Trash size={16} />
+                    <TrashIcon size={16} />
                   </Button>
                 </Flex>
               ))}
