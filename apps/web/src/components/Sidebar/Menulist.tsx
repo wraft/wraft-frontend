@@ -6,6 +6,7 @@ import {
   BlueprintIcon,
   FileTextIcon,
   HouseIcon,
+  TextboxIcon,
 } from '@phosphor-icons/react';
 
 const defaultIcon = 16;
@@ -62,6 +63,12 @@ export const Menulist = [
         icon: <BlueprintIcon size={defaultIcon} weight={defaultWeight} />,
         path: '/variants',
         permissions: ['variant.show', 'variant.manage'],
+      },
+      {
+        name: 'Forms',
+        icon: <TextboxIcon size={defaultIcon} weight={defaultWeight} />,
+        path: '/forms',
+        permissions: ['forms.show', 'forms.manage'],
       },
       {
         name: 'Manage',
