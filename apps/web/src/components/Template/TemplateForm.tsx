@@ -297,9 +297,9 @@ const TemplateEditor = () => {
     setIsSetupVisible(!isSetupVisible);
   };
 
-  const onSearchVariants = async () => {
+  const onSearchVariants = async (query: string) => {
     try {
-      const response: any = await fetchAPI('content_types');
+      const response: any = await fetchAPI(`content_types?name=${query}`);
 
       if (!response || !response.content_types) {
         throw new Error('Invalid response structure');
