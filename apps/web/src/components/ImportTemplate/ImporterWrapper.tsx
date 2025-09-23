@@ -1,10 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { Box, Text, InputText, Field, Button, Flex } from '@wraft/ui';
+import { Box, Text } from '@wraft/ui';
 
-import ProgressBar from 'components/common/ProgressBar';
 import { fetchAPI, postAPI } from 'utils/models';
 import { Asset } from 'utils/types';
 
@@ -70,31 +69,10 @@ interface validateResp {
   missing_items: any;
 }
 
-const extractTemplateId = (url: string): string => {
-  const match = url.match(
-    /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i,
-  );
-  return match ? match[0] : '';
-};
-
-const simulateProgress = async (
-  setUploadProgress: (progress: number) => void,
-  setActionState: (state: ActionStateConfig) => void,
-) => {
-  for (let p = 20; p <= 100; p += 20) {
-    await new Promise((r) => setTimeout(r, 200));
-    setUploadProgress(p);
-    setActionState({ state: ActionState.PROCESSING, progress: p });
-  }
-};
-
 function ImporterApp() {
   const [currentStep, setCurrentStep] = useState(1);
   const [assets, setAssets] = useState<Array<Asset>>([]);
   const [formData, setformData] = useState();
-  const searchParams = useSearchParams();
-  const [importUrl, setImportUrl] = useState('');
-  const [uploadProgress, setUploadProgress] = useState(0);
 
   const [actionState, setActionState] =
     useState<ActionStateConfig>(defaultActionState);
@@ -105,46 +83,6 @@ function ImporterApp() {
   const handleNext = () => {
     if (currentStep < steps.length) {
       setCurrentStep((prev) => prev + 1);
-    }
-  };
-
-  useEffect(() => {
-    const urlParam = searchParams.get('url');
-    if (urlParam) {
-      if (urlParam.startsWith('import-')) {
-        setImportUrl(`http://app.wraft.app/manage/import?url=${urlParam}`);
-      } else {
-        setImportUrl(urlParam);
-      }
-    }
-  }, [searchParams]);
-  const handleUrlUpload = async () => {
-    if (!importUrl.trim()) return;
-
-    const templateId = extractTemplateId(importUrl);
-
-    if (!templateId) {
-      toast.error('Invalid template URL');
-      return;
-    }
-
-    try {
-      setUploadProgress(10);
-      setActionState({ state: ActionState.PROCESSING, progress: 10 });
-
-      const res = (await postAPI(
-        `template_assets/public/${templateId}/install`,
-        {},
-      )) as Asset;
-
-      await simulateProgress(setUploadProgress, setActionState);
-
-      addUploads(res);
-      setActionState({ state: ActionState.COMPLETED, progress: 100 });
-    } catch (err) {
-      setErrors(err);
-      setActionState({ state: ActionState.ERROR });
-      toast.error('Failed to upload template');
     }
   };
 
@@ -263,41 +201,6 @@ function ImporterApp() {
                   assets={assets}
                   formDate={setformData}
                 />
-                <Box my="md">
-                  <Text color="gray.600">OR install from URL</Text>
-                </Box>
-
-                <Flex gap="sm">
-                  <Box w="500px">
-                    <Field label="Template Install URL">
-                      <InputText
-                        placeholder="app.wraft.app/import-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                        value={importUrl}
-                        onChange={(e) => setImportUrl(e.target.value)}
-                      />
-                    </Field>
-                  </Box>
-                  <Box mt="28px">
-                    <Button
-                      onClick={handleUrlUpload}
-                      disabled={!importUrl.trim()}>
-                      Install
-                    </Button>
-                  </Box>
-                </Flex>
-
-                {uploadProgress > 0 && (
-                  <Box mt="md">
-                    <Text color="gray.700" mb="xs">
-                      {uploadProgress < 100
-                        ? `Uploading... ${uploadProgress}%`
-                        : 'Upload Complete! 100%'}
-                    </Text>
-                    <Box w="100%" maxW="400px">
-                      <ProgressBar progress={uploadProgress} />
-                    </Box>
-                  </Box>
-                )}
               </Box>
             )}
             {currentStep === 2 && (
