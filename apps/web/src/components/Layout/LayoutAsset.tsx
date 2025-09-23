@@ -10,10 +10,12 @@ import { Accept, useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { Box, Flex, Text, Button, InputText } from '@wraft/ui';
 import { PDFDocument } from 'pdf-lib';
+import { Trash } from '@phosphor-icons/react';
 import toast from 'react-hot-toast';
 
 import LayoutScaling from 'components/Layout/LayoutScaling';
 import ProgressBar from 'components/common/ProgressBar';
+import { deleteAPI } from 'utils/models';
 
 const DEFAULT_MARGINS = {
   top: 2.54,
@@ -28,6 +30,7 @@ const A4_DIMENSIONS = {
 };
 
 type PdfPreview = {
+  id?: string;
   name: string;
   file: string;
   type: string;
@@ -36,7 +39,7 @@ type PdfPreview = {
 type DropzoneProps = {
   accept?: Accept;
   progress?: number;
-  setPdfPreview?: (pdf: PdfPreview) => void;
+  setPdfPreview?: (pdf: PdfPreview | null) => void;
   setIsSubmit: (value: boolean | ((prev: boolean) => boolean)) => void;
   noChange?: boolean;
   onMarginsChange?: (margins: typeof DEFAULT_MARGINS) => void;
@@ -158,6 +161,31 @@ const isPdfFile = (
     pdfPreview?.type === 'application/pdf'
   );
 };
+
+const DeleteButton = ({
+  onDelete,
+}: {
+  onDelete: () => void;
+  isDeleting: boolean;
+}) => (
+  <Box
+    position="absolute"
+    top="8px"
+    left="400px"
+    mx="auto"
+    zIndex={10}
+    bg="red.500"
+    borderRadius="4px"
+    p="4px"
+    cursor="pointer"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    onClick={onDelete}
+    transition="all 0.2s ease">
+    <Trash size={16} color="white" weight="bold" />
+  </Box>
+);
 
 const ActionButtons = ({
   onReupload,
@@ -282,6 +310,7 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
     const { setValue, watch, register } = useFormContext();
     const files = watch('file');
     const [validationError, setValidationError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
     const {
       editFormMargins,
@@ -289,6 +318,30 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
       handleEditFormMarginsChange,
       propagateMarginsToParent,
     } = useMarginManagement(initialMargins, onMarginsChange);
+
+    const deleteAsset = async (id: string) => {
+      try {
+        setIsDeleting(true);
+        await deleteAPI(`assets/${id}`);
+
+        setPdfPreview?.(null);
+        setValue('file', [], { shouldValidate: true });
+
+        resetMargins();
+
+        toast.success('Asset deleted successfully', {
+          duration: 3000,
+          position: 'top-right',
+        });
+      } catch (error: any) {
+        toast.error(`Failed to delete asset: ${error.message}`, {
+          duration: 3000,
+          position: 'top-right',
+        });
+      } finally {
+        setIsDeleting(false);
+      }
+    };
 
     useEffect(() => {
       if (files && files.length > 0) {
@@ -382,7 +435,13 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
       if (!showLayoutScaling || !currentPdfUrl) return null;
 
       return (
-        <Box as="div" py="sm" mr="xxl">
+        <Box as="div" py="sm" mr="xxl" position="relative">
+          {pdfPreview?.id && (
+            <DeleteButton
+              onDelete={() => deleteAsset(pdfPreview.id!)}
+              isDeleting={isDeleting}
+            />
+          )}
           <LayoutScaling
             pdfUrl={currentPdfUrl}
             containerWidth={350}
@@ -399,6 +458,9 @@ const Dropzone = React.forwardRef<any, DropzoneProps>(
       currentPdfUrl,
       editFormMargins,
       handleEditFormMarginsChange,
+      isDeleting,
+      pdfPreview?.id,
+      deleteAsset,
     ]);
 
     const handleReupload = useCallback((e: React.MouseEvent) => {
