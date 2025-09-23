@@ -142,6 +142,7 @@ const HandleTemplate = ({
             setDeleteAssets={setDeleteAssets}
             multiple={false}
             noChange={false}
+            onUpload={onUpload}
           />
         </Box>
         {assets && assets.length > 0 && (
