@@ -25,6 +25,8 @@ interface TemplateResponse {
     item_type: string;
   }>;
   message: string;
+  data?: any;
+  meta?: any;
 }
 
 const extractTemplateId = (url: string): string => {
@@ -124,7 +126,45 @@ const UrlUploader = ({
 
       await simulateProgress();
 
-      onUpload(res);
+      const mainTemplate = res.items?.find(
+        (item) => item.item_type === 'data_template',
+      );
+      const templateName =
+        mainTemplate?.title || mainTemplate?.name || 'Imported Template';
+
+      const groupedItems = res.items?.reduce(
+        (acc: Record<string, any>, item) => {
+          if (item.item_type && item.item_type !== 'data_template') {
+            const { id, item_type, ...cleanItem } = item;
+            acc[item_type] = cleanItem;
+          }
+          return acc;
+        },
+        {} as Record<string, any>,
+      );
+
+      const metadata = {
+        name: templateName,
+        created_at: mainTemplate?.created_at,
+      };
+
+      const transformedData = {
+        data: {
+          file_details: {
+            name: templateName,
+            size: templateInfo?.fileSize || '2.4 MB',
+          },
+          meta: {
+            metadata,
+            items: groupedItems,
+          },
+        },
+        metadata,
+        name: templateName,
+        errors: null,
+      };
+
+      onUpload(transformedData);
 
       onStateChange?.({
         state: ActionState.COMPLETED,

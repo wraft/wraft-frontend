@@ -221,13 +221,8 @@ const Dropzone = ({
         </Box>
       </Box>
 
-      {/* OR Divider - Also centered with same width */}
       <Flex alignItems="center" mb="32px" justifyContent="center">
-        <Box
-          flex="1"
-          maxWidth="600px" // Same max-width as dropzone
-          display="flex"
-          alignItems="center">
+        <Box flex="1" maxWidth="600px" display="flex" alignItems="center">
           <Box flex="1" h="1px" bg="neutral.200" />
           <Text color="neutral.500" fontSize="sm" fontWeight="medium" px="16px">
             OR
@@ -236,12 +231,8 @@ const Dropzone = ({
         </Box>
       </Flex>
 
-      {/* URL Upload Section - Centered with same width */}
       <Box display="flex" justifyContent="center">
-        <Box
-          w="100%"
-          maxWidth="600px" // Same max-width as dropzone
-        >
+        <Box w="100%" maxWidth="600px">
           {onUpload && <UrlUploader onUpload={onUpload} />}
         </Box>
       </Box>
