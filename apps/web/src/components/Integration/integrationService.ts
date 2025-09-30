@@ -45,7 +45,7 @@ export interface IntegrationListResponse {
 
 const INTEGRATION_ENDPOINTS = {
   integrations: 'integrations',
-  configs: 'integration_configs',
+  configs: 'integrations/configs',
 };
 
 /**
@@ -88,7 +88,7 @@ export const integrationService = {
     config: Record<string, string>,
     selectedEvents: string[] = [],
   ): Promise<Integration> => {
-    return postAPI(INTEGRATION_ENDPOINTS.integrations, {
+    return postAPI(`${INTEGRATION_ENDPOINTS.integrations}/new`, {
       provider,
       config,
       name,
