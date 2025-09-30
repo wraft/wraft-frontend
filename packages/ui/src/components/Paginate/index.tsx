@@ -16,6 +16,7 @@ export interface IProp {
   numberMarginPagesDisplayed?: number;
 
   totalEntries?: number;
+  entriesPerPage?: number;
 
   previousLabel?: string;
   nextLabel?: string;
@@ -36,6 +37,7 @@ const Pagination: React.FC<IProp> = ({
   numberPageDisplayed = 2,
   numberMarginPagesDisplayed = 2,
   totalEntries,
+  entriesPerPage = 10,
   previousLabel = "Previous",
   nextLabel = "Next",
   breakLabel = "...",
@@ -181,6 +183,15 @@ const Pagination: React.FC<IProp> = ({
     onHandlePageSelected(page, null);
   };
 
+  const getShowingText = () => {
+    if (!totalEntries) return "";
+
+    const start = (currentPage - 1) * entriesPerPage + 1;
+    const end = Math.min(currentPage * entriesPerPage, totalEntries);
+
+    return `Showing ${start} to ${end} of ${totalEntries}`;
+  };
+
   return (
     <>
       <S.Pagination>
@@ -230,7 +241,7 @@ const Pagination: React.FC<IProp> = ({
         </x.ul>
         {totalEntries && (
           <x.div fontSize="12px" color="#656E78" fontWeight="heading">
-            {`Showing ${currentPage === 1 ? "" : currentPage - 1}0 of ${totalEntries}`}
+            {getShowingText()}
           </x.div>
         )}
       </S.Pagination>
