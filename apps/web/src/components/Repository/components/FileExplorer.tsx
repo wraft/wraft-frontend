@@ -2,16 +2,17 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Text, Flex, Button, Modal, Drawer } from '@wraft/ui';
 import {
-  FolderSimplePlus,
-  UploadSimple,
-  ArrowsIn,
-  ArrowsOut,
-  Share,
-  Link,
-  Download,
-  Eye,
-  Table,
-  FileText,
+  FolderSimplePlusIcon,
+  UploadSimpleIcon,
+  ArrowsInIcon,
+  ArrowsOutIcon,
+  ShareIcon,
+  LinkIcon,
+  DownloadIcon,
+  EyeIcon,
+  TableIcon,
+  FileTextIcon,
+  CloudArrowDownIcon,
 } from '@phosphor-icons/react';
 
 import ConfirmDelete from 'common/ConfirmDelete';
@@ -35,6 +36,7 @@ import { EmptyRepository } from './EmptyRepository';
 import { StorageItemDetails as StorageItemDetailsComponent } from './StorageItemDetails';
 import { RepositoryErrorBoundary } from './RepositoryErrorBoundary';
 import { RepositorySetupSection } from './RepositorySetupSection';
+import { GoogleDriveDrawer } from './GoogleDriveDrawer';
 
 const RepositoryComponent: React.FC = React.memo(() => {
   const router = useRouter();
@@ -44,6 +46,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
   >('preview');
   const [isRepositorySetupModalOpen, setIsRepositorySetupModalOpen] =
     useState(false);
+  const [isGoogleDriveDrawerOpen, setIsGoogleDriveDrawerOpen] = useState(false);
 
   // Custom hooks
   const { currentFolderId, navigateToFolder, navigateToRoot } =
@@ -273,14 +276,22 @@ const RepositoryComponent: React.FC = React.memo(() => {
             size="sm"
             onClick={openNewFolderModal}
             disabled={isAnyLoading}>
-            <FolderSimplePlus weight="regular" size={16} />
+            <FolderSimplePlusIcon weight="regular" size={16} />
           </Button>
           <Button
             variant="ghost"
             size="sm"
             onClick={openUploadModal}
             disabled={isAnyLoading}>
-            <UploadSimple weight="regular" size={16} />
+            <UploadSimpleIcon weight="regular" size={16} />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsGoogleDriveDrawerOpen(true)}
+            title="Google Drive Files">
+            <CloudArrowDownIcon weight="regular" size={16} />
           </Button>
         </Flex>
       </Flex>
@@ -409,7 +420,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
                   onClick={handleShare}
                   title="Share file"
                   size="sm">
-                  <Share size={16} />
+                  <ShareIcon size={16} />
                 </Button>
                 <Button
                   variant="secondary"
@@ -419,14 +430,14 @@ const RepositoryComponent: React.FC = React.memo(() => {
                   }}
                   title="Copy link"
                   size="sm">
-                  <Link size={16} />
+                  <LinkIcon size={16} />
                 </Button>
                 <Button
                   variant="secondary"
                   onClick={() => handleDownload(selectedItemDetails.id)}
                   title="Download file"
                   size="sm">
-                  <Download size={16} />
+                  <DownloadIcon size={16} />
                 </Button>
               </>
             )}
@@ -436,9 +447,9 @@ const RepositoryComponent: React.FC = React.memo(() => {
               title={isDrawerExpanded ? 'Collapse drawer' : 'Expand drawer'}
               size="sm">
               {isDrawerExpanded ? (
-                <ArrowsIn size={16} />
+                <ArrowsInIcon size={16} />
               ) : (
-                <ArrowsOut size={16} />
+                <ArrowsOutIcon size={16} />
               )}
             </Button>
             <Button
@@ -503,7 +514,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
                     }
                     size="sm"
                     onClick={() => setActiveExpandedView('preview')}>
-                    <Eye size={16} />
+                    <EyeIcon size={16} />
                     <Text as="span" ml="xs">
                       Preview
                     </Text>
@@ -514,7 +525,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
                     }
                     size="sm"
                     onClick={() => setActiveExpandedView('data')}>
-                    <Table size={16} />
+                    <TableIcon size={16} />
                     <Text as="span" ml="xs">
                       Data
                     </Text>
@@ -525,7 +536,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
                     }
                     size="sm"
                     onClick={() => setActiveExpandedView('summary')}>
-                    <FileText size={16} />
+                    <FileTextIcon size={16} />
                     <Text as="span" ml="xs">
                       Summary
                     </Text>
@@ -549,6 +560,12 @@ const RepositoryComponent: React.FC = React.memo(() => {
           </Box>
         )}
       </Drawer>
+
+      {/* Google Drive Drawer */}
+      <GoogleDriveDrawer
+        isOpen={isGoogleDriveDrawerOpen}
+        onClose={() => setIsGoogleDriveDrawerOpen(false)}
+      />
     </Box>
   );
 });

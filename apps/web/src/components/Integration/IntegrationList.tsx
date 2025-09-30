@@ -39,21 +39,28 @@ export const IntegrationList: FC = () => {
     return <Text>Loading integrations...</Text>;
   }
 
-  if (error) {
-    return <Text color="error">{error}</Text>;
-  }
+  // if (error) {
+  //   return <Text color="error">{error}</Text>;
+  // }
 
   return (
     <Box>
-      <Grid gridTemplateColumns="repeat(4, 1fr)" gap="lg">
-        {integrations.map((integration) => (
-          <IntegrationCard
-            key={integration.provider}
-            integration={integration}
-            onUpdate={handleUpdate}
-          />
-        ))}
-      </Grid>
+      {integrations.length > 0 && (
+        <Box>
+          <Text variant="lg" fontWeight="semibold" mb="md" color="gray.1200">
+            Other Integrations
+          </Text>
+          <Grid gridTemplateColumns="repeat(4, 1fr)" gap="lg">
+            {integrations.map((integration) => (
+              <IntegrationCard
+                key={integration.provider}
+                integration={integration}
+                onUpdate={handleUpdate}
+              />
+            ))}
+          </Grid>
+        </Box>
+      )}
     </Box>
   );
 };
