@@ -77,7 +77,6 @@ function ImporterApp() {
     useState<ActionStateConfig>(defaultActionState);
 
   const [imported, setImported] = useState<ImportedItems>();
-
   const [errors, setErrors] = useState<any>([]);
 
   const handleNext = () => {
@@ -88,11 +87,10 @@ function ImporterApp() {
 
   /*
    * Initiate Import process
-   * @param id string
-   * import templates from uploaded template aset
+   * import templates from uploaded template asset
    */
 
-  const importNow = (id: string, _onDone?: any) => {
+  const importNow = () => {
     if (!formData) {
       handleNext();
       setActionState({ state: ActionState.COMPLETED });
@@ -105,13 +103,18 @@ function ImporterApp() {
     });
     postAPI(`global_asset/import`, formData)
       .then((res: ImportedItems) => {
-        toast.success(`Successfully imported template: ${id}`);
+        const templateName =
+          res.items?.find((item) => item.item_type === 'data_template')
+            ?.title ||
+          res.items?.[0]?.title ||
+          res.items?.[0]?.name;
+
+        toast.success(`Successfully imported: ${templateName}`);
         setImported(res);
         handleNext();
         setActionState({
           state: ActionState.COMPLETED,
         });
-        _onDone && _onDone(res);
       })
       .catch((error: any) => {
         setErrors(error);
@@ -216,7 +219,6 @@ function ImporterApp() {
                 />
               </Box>
             )}
-
             {currentStep === 2 && (
               <Box>
                 <TemplatePreview
