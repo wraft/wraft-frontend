@@ -87,10 +87,15 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
 
     return (
       <EditorConfigProvider config={{ apiHost }}>
-        <div className={`wraft-editor ${className}`}>
+        <S.EditorWrapper className={`wraft-editor ${className}`}>
           <ProseKit editor={editor}>
+            {!isReadonly && (
+              <div className="toolbar">
+                <Toolbar />
+              </div>
+            )}
+
             <S.EditorContainer>
-              {!isReadonly && <Toolbar />}
               <S.EditorContent>
                 <S.EditorContentInput ref={editor.mount} />
                 {!isReadonly && <InlineMenu />}
@@ -101,7 +106,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
               </S.EditorContent>
             </S.EditorContainer>
           </ProseKit>
-        </div>
+        </S.EditorWrapper>{" "}
       </EditorConfigProvider>
     );
   },
