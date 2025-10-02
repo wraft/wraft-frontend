@@ -19,9 +19,9 @@ import {
   XIcon,
   YoutubeLogoIcon,
 } from '@phosphor-icons/react';
-import { useTemplateInstallation } from 'hooks/useTemplateInstallation';
 
 import TemplateInstallModal from 'components/ImportTemplate/TemplateInstallModal';
+import { useTemplateInstallation } from '@hooks/useTemplateInstallation';
 import { IconFrame, PageInner } from 'common/Atoms';
 import { useAuth } from 'contexts/AuthContext';
 import { fetchAPI } from 'utils/models';
