@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Box, Text } from '@wraft/ui';
 
@@ -78,6 +77,7 @@ function ImporterApp() {
     useState<ActionStateConfig>(defaultActionState);
 
   const [imported, setImported] = useState<ImportedItems>();
+
   const [errors, setErrors] = useState<any>([]);
 
   const handleNext = () => {
@@ -93,6 +93,12 @@ function ImporterApp() {
    */
 
   const importNow = (id: string, _onDone?: any) => {
+    if (!formData) {
+      handleNext();
+      setActionState({ state: ActionState.COMPLETED });
+      return;
+    }
+
     // setActionState(RUNNING);
     setActionState({
       state: ActionState.IMPORTING,
@@ -166,14 +172,21 @@ function ImporterApp() {
   };
 
   /**
-   * Upload Assets
-   * @param data
+   * Handle Uploads
+   * @param data Asset
+   * @param source "upload" | "url"
    */
-  const addUploads = (data: Asset) => {
+  const addUploads = (data: Asset, source: 'upload' | 'url' = 'upload') => {
     setAssets((prevArray) => [...prevArray, data]);
-    handleNext();
-  };
 
+    if (source === 'url') {
+      setImported(data as any);
+      setCurrentStep(3);
+      setActionState({ state: ActionState.COMPLETED });
+    } else {
+      handleNext();
+    }
+  };
   const onChangeStep = (step: any) => {
     setCurrentStep(step.id);
   };
@@ -203,6 +216,7 @@ function ImporterApp() {
                 />
               </Box>
             )}
+
             {currentStep === 2 && (
               <Box>
                 <TemplatePreview

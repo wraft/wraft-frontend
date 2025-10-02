@@ -11,7 +11,7 @@ import { postAPI } from 'utils/models';
 import { ActionState, ActionStateConfig } from './ImporterWrapper';
 
 interface UrlUploaderProps {
-  onUpload: (data: any) => void;
+  onUpload: (data: any, source?: 'upload' | 'url') => void;
   onStateChange?: (state: ActionStateConfig) => void;
   onError?: (error: any) => void;
 }
@@ -126,45 +126,7 @@ const UrlUploader = ({
 
       await simulateProgress();
 
-      const mainTemplate = res.items?.find(
-        (item) => item.item_type === 'data_template',
-      );
-      const templateName =
-        mainTemplate?.title || mainTemplate?.name || 'Imported Template';
-
-      const groupedItems = res.items?.reduce(
-        (acc: Record<string, any>, item) => {
-          if (item.item_type && item.item_type !== 'data_template') {
-            const { id, item_type, ...cleanItem } = item;
-            acc[item_type] = cleanItem;
-          }
-          return acc;
-        },
-        {} as Record<string, any>,
-      );
-
-      const metadata = {
-        name: templateName,
-        created_at: mainTemplate?.created_at,
-      };
-
-      const transformedData = {
-        data: {
-          file_details: {
-            name: templateName,
-            size: templateInfo?.fileSize || '2.4 MB',
-          },
-          meta: {
-            metadata,
-            items: groupedItems,
-          },
-        },
-        metadata,
-        name: templateName,
-        errors: null,
-      };
-
-      onUpload(transformedData);
+      onUpload(res, 'url');
 
       onStateChange?.({
         state: ActionState.COMPLETED,
@@ -189,18 +151,18 @@ const UrlUploader = ({
   return (
     <Box>
       {uploadProgress > 0 && uploadProgress < 100 && (
-        <Box bg="gray.400" borderRadius="8px" p="16px" mb="16px">
+        <Box bg="gray.400" borderRadius="sm" p="md" mb="md">
           <Flex justifyContent="space-between" alignItems="center" mb="xs">
-            <Flex alignItems="center" gap="8px">
+            <Flex alignItems="center" gap="sm">
               <Box
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                w="32px"
-                h="32px"
+                w="lg"
+                h="lg"
                 borderRadius="6px">
                 <IconFrame color="primary">
-                  <File size={18} />
+                  <File size={22} />
                 </IconFrame>
               </Box>
               <Box>
@@ -219,14 +181,13 @@ const UrlUploader = ({
             </Text>
           </Flex>
 
-          {/* Progress Bar */}
           <Box
             w="100%"
             h="6px"
             bg="white"
-            borderRadius="3px"
+            borderRadius="xs"
             overflow="hidden"
-            my="12px"
+            my="md"
             position="relative">
             <Box
               position="absolute"
@@ -235,27 +196,25 @@ const UrlUploader = ({
               h="100%"
               w={`${uploadProgress}%`}
               bg="primary"
-              borderRadius="3px"
+              borderRadius="sm"
               transition="width 0.3s ease"
             />
           </Box>
         </Box>
       )}
 
-      {/* URL Input Section */}
-      <Box mb="16px">
+      <Box mb="md">
         <Text fontSize="" fontWeight="medium" mb="sm">
           Import From URL
         </Text>
         <InputText
-          placeholder="app.wraft.app/import-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+          placeholder="Please add URL"
           value={importUrl}
           onChange={(e: any) => setImportUrl(e.target.value)}
           disabled={isUploading}
         />
       </Box>
 
-      {/* Import Button */}
       <Flex gap="sm" justifyContent="flex-end">
         <Button
           onClick={handleUrlUpload}
