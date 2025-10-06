@@ -96,7 +96,7 @@ const BlockSection = ({ data }: any) => {
       ));
     }
 
-    if (typeof value === 'object') {
+    if (typeof value === 'object' && value !== null) {
       return Object.entries(value).map(([subKey, subVal]) => (
         <Flex key={`${keyPrefix}-${subKey}`} gap="sm" mb="sm">
           <Text fontWeight="heading" fontSize="sm" m="0">
