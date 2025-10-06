@@ -12,7 +12,7 @@ export function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export function getUserColor(userId: string): string {
+export function getUserColor(userId: string | null | undefined): string {
   const colors = [
     "#F43F5E",
     "#22D3EE",
@@ -23,6 +23,10 @@ export function getUserColor(userId: string): string {
     "#F59E0B",
     "#8B5CF6",
   ];
+
+  if (!userId) {
+    return colors[0];
+  }
 
   let hash = 0;
   for (let i = 0; i < userId.length; i++) {
