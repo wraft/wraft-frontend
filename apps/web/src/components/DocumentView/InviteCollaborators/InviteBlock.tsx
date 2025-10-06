@@ -163,11 +163,11 @@ export default function InviteBlock({ docId, close }: any) {
                 justify="space-between"
                 align="flex-start">
                 <Flex gap="sm" w="100%" align="center" justify="center">
-                  <Avatar name={collaborator.user.name} size="sm" />
+                  <Avatar name={collaborator?.user?.name} size="sm" />
                   <Box w="45%">
-                    <Text>{collaborator.user.name}</Text>
+                    <Text>{collaborator?.user?.name}</Text>
                     <Text color="text-secondary">
-                      {collaborator.user.email}
+                      {collaborator?.user?.email}
                     </Text>
                   </Box>
 
