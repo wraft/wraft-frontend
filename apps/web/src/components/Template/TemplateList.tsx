@@ -75,9 +75,6 @@ const columns = ({
           </DropdownMenu.Trigger>
           {hasPermission('template', 'manage') && (
             <DropdownMenu aria-label="dropdown role">
-              <DropdownMenu.Item>
-                <NavLink href={`/templates/${row?.original?.id}`}>Edit</NavLink>
-              </DropdownMenu.Item>
               <DropdownMenu.Item onClick={() => onCloneTemplete(row.original)}>
                 Clone
               </DropdownMenu.Item>

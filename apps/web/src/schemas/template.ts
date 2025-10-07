@@ -10,6 +10,7 @@ export const TemplateSchema = z.object({
     .regex(nameRegex, 'Allows only letters, numbers and spaces'),
   variant: z.object({
     id: z.string().nonempty({ message: 'Variant is required' }),
+    name: z.string().optional(),
   }),
   title_template: z.string().optional(),
   serialized: z.string().optional(),
