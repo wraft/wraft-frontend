@@ -77,6 +77,15 @@ const EditText = styled(Box)`
   transition: opacity 0.2s;
 `;
 
+const StyledDateInput = styled(InputText)`
+  @media (prefers-color-scheme: dark) {
+    &[type="date"] {
+      &::-webkit-calendar-picker-indicator {
+        filter: invert(0.4);
+      }
+
+`;
+
 const Form = () => {
   const { accessToken } = useAuth();
   const [profile, setProfile] = useState<Profile>();
@@ -219,7 +228,7 @@ const Form = () => {
         </Field>
 
         <Field label="Date of Birth" required error={errors?.dob?.message}>
-          <InputText {...register('dob')} type="date" />
+          <StyledDateInput {...register('dob')} type="date" />
         </Field>
         <Box>
           <Field label="Gender" required error={errors?.gender?.message}>
