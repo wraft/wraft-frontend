@@ -132,9 +132,6 @@ export const DocumentSidebar = () => {
             {canAccess('log') && (
               <Tab.Panel tabId="log" store={tab}>
                 <Box mt="md" px="md">
-                  <Text as="h5" mb="sm">
-                    Approval Log
-                  </Text>
                   <Box>
                     {tabActiveId === 'log' && <ApprovalFlowHistory id={cId} />}
                   </Box>

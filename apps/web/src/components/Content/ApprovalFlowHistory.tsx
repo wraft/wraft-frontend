@@ -1,63 +1,112 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Flex, Text } from '@wraft/ui';
-import { Check } from '@phosphor-icons/react';
+import { Box, Button, Flex, Spinner, Text } from '@wraft/ui';
+import { format } from 'date-fns';
 
-import { TimeAgo } from 'common/Atoms';
 import { fetchAPI } from 'utils/models';
 
-const WorkflowStep = ({ title, description, createDate }: any) => (
-  <Flex
-    className="progress__item--completed"
-    position="relative"
-    gap="sm"
-    align="self-start">
-    <Box pt="xs">
-      <Flex
+const WorkflowStep = ({ username, description, createDate, isLast }: any) => (
+  <Flex position="relative" gap="sm" align="self-start" py="md">
+    {!isLast && (
+      <Box
+        position="absolute"
+        left="8px"
+        top="28px"
+        w="2px"
+        h="100%"
+        bg="gray.300"
+      />
+    )}
+
+    <Box pt="xs" position="relative" zIndex="1">
+      <Box
+        w="18px"
+        h="18px"
         borderRadius="full"
-        bg="gray.400"
-        p="xxs"
-        align="center"
-        justify="center">
-        <Check size={12} weight="bold" />
-      </Flex>
+        bg="gray.600"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"></Box>
     </Box>
+
     <Flex justify="space-between" flexGrow={1}>
       <Box>
         <Text>{description}</Text>
-        <TimeAgo time={createDate} ago={false} />
+        <Text color="gray.900" py="xs">
+          {username}
+        </Text>
       </Box>
       <Box>
-        <Text>{title}</Text>
+        <Text color="gray.900" fontSize="xs" whiteSpace="nowrap">
+          {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
+        </Text>
       </Box>
     </Flex>
   </Flex>
 );
 
 const ApprovalFlowHistory = ({ id }: any) => {
-  const [contents, setContents] = useState<any>([]);
+  const [entries, setEntries] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalEntries, setTotalEntries] = useState(0);
+  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState(false);
 
-  useEffect(() => {
-    if (id) {
-      loadData();
+  const loadData = (page: number, append: boolean = false) => {
+    if (append) {
+      setIsLoadingMore(true);
+    } else {
+      setIsLoading(true);
     }
-  }, [id]);
+    const query = `page=${page}&sort=inserted_at_desc&page_size=9`;
 
-  const loadData = () => {
-    fetchAPI(`contents/${id}/approval_history`)
+    fetchAPI(`contents/${id}/logs?${query}`)
       .then((data: any) => {
-        const res: any = data;
-        setContents(res);
+        const newEntries = data.entries || [];
+
+        if (append) {
+          setEntries((prev) => [...prev, ...newEntries]);
+        } else {
+          setEntries(newEntries);
+        }
+
+        setTotalEntries(data.total_entries || 0);
+
+        const totalLoaded = append
+          ? entries.length + newEntries.length
+          : newEntries.length;
+        setHasMore(totalLoaded < (data.total_entries || 0));
+
         setIsLoading(false);
+        setIsLoadingMore(false);
       })
       .catch(() => {
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (id) {
+      setCurrentPage(1);
+      setEntries([]);
+      loadData(1, false);
+    }
+  }, [id]);
+
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    loadData(nextPage, true);
+  };
+
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Flex align="center" justify="center" h="100vh">
+        <Spinner />
+      </Flex>
+    );
   }
-  if (!isLoading && contents && contents.length === 0) {
+  if (!isLoading && entries.length === 0) {
     return <Text> No Approval History</Text>;
   }
   return (
@@ -67,17 +116,38 @@ const ApprovalFlowHistory = ({ id }: any) => {
     // px: 3,
     // fontFamily: 'body',
     >
-      {contents &&
-        contents.map((item: any, index: any) => (
-          <WorkflowStep
-            key={index}
-            status={item?.status}
-            createDate={item?.reviewed_at}
-            title={`${item?.to_state?.state}`}
-            // description={`${item?.review_status} by ${item?.approver?.name}`}
-            description={`${item?.approver?.name}`}
-          />
-        ))}
+      {entries.map((item: any, index: number) => (
+        <WorkflowStep
+          key={index}
+          // status={item?.status}
+          createDate={item?.inserted_at}
+          username={`${item?.actor?.name}`}
+          // description={`${item?.review_status} by ${item?.approver?.name}`}
+          description={`${item?.message}`}
+          isLast={index === entries.length - 1}
+        />
+      ))}
+
+      {hasMore && (
+        <Flex justify="center" mt="xl">
+          <Button
+            variant="tertiary"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}>
+            {isLoadingMore ? (
+              <Flex align="center" gap="xs">
+                <Spinner />
+              </Flex>
+            ) : (
+              'Show More'
+            )}
+          </Button>
+        </Flex>
+      )}
+
+      <Text fontSize="sm" color="gray.600" textAlign="center" mt="xs">
+        Showing {entries.length} of {totalEntries} entries
+      </Text>
     </Box>
   );
 };
