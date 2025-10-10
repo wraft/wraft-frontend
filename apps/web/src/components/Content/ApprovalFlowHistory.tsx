@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 
 import { fetchAPI } from 'utils/models';
 
-const WorkflowStep = ({ title, description, createDate, isLast }: any) => (
+const WorkflowStep = ({ username, description, createDate, isLast }: any) => (
   <Flex position="relative" gap="sm" align="self-start" py="md">
     {!isLast && (
       <Box
@@ -25,22 +25,20 @@ const WorkflowStep = ({ title, description, createDate, isLast }: any) => (
         bg="gray.600"
         display="flex"
         alignItems="center"
-        justifyContent="center">
-        {/* <Box w="8px" h="8px" borderRadius="full" bg="white" /> */}
-      </Box>
+        justifyContent="center"></Box>
     </Box>
 
     <Flex justify="space-between" flexGrow={1}>
       <Box>
-        <Text fontWeight="bold" color="gray.1100">
-          {description}
-        </Text>
-        <Text fontSize="sm" opacity="0.8">
-          {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
+        <Text>{description}</Text>
+        <Text color="gray.900" py="xs">
+          {username}
         </Text>
       </Box>
       <Box>
-        <Text color="gray.900">{title}</Text>
+        <Text color="gray.900" fontSize="xs" whiteSpace="nowrap">
+          {format(new Date(createDate), 'MMM dd, yyyy • h:mm a')}
+        </Text>
       </Box>
     </Flex>
   </Flex>
@@ -60,7 +58,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
     } else {
       setIsLoading(true);
     }
-    const query = `page=${page}&sort=inserted_at_desc&page_size=10`;
+    const query = `page=${page}&sort=inserted_at_desc&page_size=9`;
 
     fetchAPI(`contents/${id}/logs?${query}`)
       .then((data: any) => {
@@ -123,9 +121,9 @@ const ApprovalFlowHistory = ({ id }: any) => {
           key={index}
           // status={item?.status}
           createDate={item?.inserted_at}
-          title={`${item?.action}`}
+          username={`${item?.actor?.name}`}
           // description={`${item?.review_status} by ${item?.approver?.name}`}
-          description={`${item?.actor?.name}`}
+          description={`${item?.message}`}
           isLast={index === entries.length - 1}
         />
       ))}
