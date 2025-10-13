@@ -142,7 +142,10 @@ export const EditMenus = ({ id, nextState }: EditMenuProps) => {
         />
       </Modal>
 
-      <Modal ariaLabel="Confirm Block" open={isMailPopupOpen}>
+      <Modal
+        ariaLabel="Confirm Block"
+        open={isMailPopupOpen}
+        onClose={() => setMailPopupOpen(false)}>
         <>
           {isMailPopupOpen && (
             <EmailComposer id={id} setOpen={setMailPopupOpen} />
