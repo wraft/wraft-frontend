@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Button, Drawer, useDrawer, Flex } from '@wraft/ui';
 import { Plus } from '@phosphor-icons/react';
 
@@ -23,6 +24,8 @@ const WebhooksPage = () => {
   const canCreateWebhooks = hasPermission('webhook', 'manage');
   const createDrawer = useDrawer();
   const editDrawer = useDrawer();
+  const router = useRouter();
+  const currentOrg = userProfile?.currentOrganisation?.name;
 
   const handleCreateSuccess = () => {
     setIsCreateDrawerOpen(false);
@@ -41,6 +44,14 @@ const WebhooksPage = () => {
   const handleRefresh = () => {
     setRefreshKey((prevKey) => prevKey + 1);
   };
+
+  useEffect(() => {
+    if (currentOrg === 'Personal') {
+      router.replace('/404');
+    }
+  }, [currentOrg, router]);
+
+  if (currentOrg === 'Personal') return null;
 
   return (
     (userProfile?.currentOrganisation?.name !== 'Personal' || '') && (
