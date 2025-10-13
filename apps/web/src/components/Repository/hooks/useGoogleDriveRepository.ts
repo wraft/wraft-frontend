@@ -35,7 +35,6 @@ interface GoogleDriveRepositoryActions {
   navigateToFolder: (folderId: string, folderName?: string) => void;
   navigateToRoot: () => void;
   navigateBack: () => void;
-  refreshConnection: () => Promise<void>;
 }
 
 export interface UseGoogleDriveRepositoryReturn
@@ -45,7 +44,9 @@ export interface UseGoogleDriveRepositoryReturn
 /**
  * Hook to manage Google Drive files in repository context
  */
-export const useGoogleDriveRepository = (): UseGoogleDriveRepositoryReturn => {
+export const useGoogleDriveRepository = (
+  currentFolderId: string | null,
+): UseGoogleDriveRepositoryReturn => {
   const [state, setState] = useState<GoogleDriveRepositoryState>({
     files: [],
     isLoading: false,
@@ -67,10 +68,6 @@ export const useGoogleDriveRepository = (): UseGoogleDriveRepositoryReturn => {
 
     return;
   }, []);
-
-  const refreshConnection = useCallback(async () => {
-    await checkConnection();
-  }, [checkConnection]);
 
   /**
    * Convert Google Drive file to StorageItem format
@@ -310,7 +307,7 @@ export const useGoogleDriveRepository = (): UseGoogleDriveRepositoryReturn => {
         toast.loading(`Syncing ${driveFile.name} to repository...`);
 
         // Call backend API to sync the file
-        const success = await syncFiles([driveFile.id]);
+        const success = await syncFiles([driveFile.id], currentFolderId);
 
         if (!success) {
           throw new Error('Failed to sync file');
@@ -356,7 +353,7 @@ export const useGoogleDriveRepository = (): UseGoogleDriveRepositoryReturn => {
         console.log('syncMultipleFiles[fileIds]', validFiles);
 
         // Call backend API to sync multiple files
-        const success = await syncFiles(fileIds);
+        const success = await syncFiles(fileIds, currentFolderId);
         console.log('syncMultipleFiles[success]', success);
 
         if (success) {
@@ -384,6 +381,5 @@ export const useGoogleDriveRepository = (): UseGoogleDriveRepositoryReturn => {
     navigateToFolder,
     navigateToRoot,
     navigateBack,
-    refreshConnection,
   };
 };

@@ -268,10 +268,14 @@ export async function downloadFile(
 /**
  * Sync files to repository
  */
-export async function syncFiles(fileIds: string[]): Promise<boolean> {
+export async function syncFiles(
+  fileIds: string[],
+  outputPath: string | null,
+): Promise<boolean> {
   try {
-    const response: any = await postAPI('clouds/google/sync_files', {
+    const response: any = await postAPI('clouds/google/import', {
       file_ids: fileIds,
+      output_path: outputPath,
     });
 
     return response;

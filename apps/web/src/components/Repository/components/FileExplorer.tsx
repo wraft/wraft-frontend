@@ -565,6 +565,7 @@ const RepositoryComponent: React.FC = React.memo(() => {
       <GoogleDriveDrawer
         isOpen={isGoogleDriveDrawerOpen}
         onClose={() => setIsGoogleDriveDrawerOpen(false)}
+        currentFolderId={currentFolderId}
       />
     </Box>
   );

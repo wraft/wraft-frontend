@@ -24,11 +24,13 @@ import { DriveFile } from './GoogleDrive/googleDriveClient';
 interface GoogleDriveDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  currentFolderId: string | null;
 }
 
 export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
   isOpen,
   onClose,
+  currentFolderId,
 }) => {
   const {
     files,
@@ -43,8 +45,7 @@ export const GoogleDriveDrawer: React.FC<GoogleDriveDrawerProps> = ({
     syncMultipleFiles,
     navigateToFolder,
     navigateBack,
-    refreshConnection,
-  } = useGoogleDriveRepository();
+  } = useGoogleDriveRepository(currentFolderId);
 
   const [syncingFiles, setSyncingFiles] = useState<Set<string>>(new Set());
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
