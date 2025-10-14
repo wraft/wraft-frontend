@@ -4,6 +4,11 @@ import { format } from 'date-fns';
 
 import { fetchAPI } from 'utils/models';
 
+interface Log {
+  entries: any[];
+  total_entries: number;
+}
+
 const WorkflowStep = ({ username, description, createDate, isLast }: any) => (
   <Flex position="relative" gap="sm" align="self-start" py="md">
     {!isLast && (
@@ -52,37 +57,32 @@ const ApprovalFlowHistory = ({ id }: any) => {
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState(false);
 
-  const loadData = (page: number, append: boolean = false) => {
+  const loadData = async (page: number, append = false) => {
     if (append) {
       setIsLoadingMore(true);
     } else {
       setIsLoading(true);
     }
-    const query = `page=${page}&sort=inserted_at_desc&page_size=9`;
 
-    fetchAPI(`contents/${id}/logs?${query}`)
-      .then((data: any) => {
-        const newEntries = data.entries || [];
+    try {
+      const query = `page=${page}&sort=inserted_at_desc&page_size=9`;
+      const data = (await fetchAPI(`contents/${id}/logs?${query}`)) as Log;
 
-        if (append) {
-          setEntries((prev) => [...prev, ...newEntries]);
-        } else {
-          setEntries(newEntries);
-        }
+      const newEntries = data?.entries || [];
+      const total = data?.total_entries || 0;
 
-        setTotalEntries(data.total_entries || 0);
-
-        const totalLoaded = append
-          ? entries.length + newEntries.length
-          : newEntries.length;
-        setHasMore(totalLoaded < (data.total_entries || 0));
-
-        setIsLoading(false);
-        setIsLoadingMore(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      setEntries((prev) => (append ? [...prev, ...newEntries] : newEntries));
+      setTotalEntries(total);
+      setHasMore(
+        (append ? entries.length + newEntries.length : newEntries.length) <
+          total,
+      );
+    } catch (error) {
+      console.error('Failed to load entries', error);
+    } finally {
+      setIsLoading(false);
+      setIsLoadingMore(false);
+    }
   };
 
   useEffect(() => {
@@ -90,6 +90,8 @@ const ApprovalFlowHistory = ({ id }: any) => {
       setCurrentPage(1);
       setEntries([]);
       loadData(1, false);
+    } else {
+      setIsLoading(false);
     }
   }, [id]);
 
@@ -137,10 +139,11 @@ const ApprovalFlowHistory = ({ id }: any) => {
           </Button>
         </Flex>
       )}
-
-      <Text fontSize="sm" color="gray.600" textAlign="center" mt="xs">
-        Showing {entries.length} of {totalEntries} entries
-      </Text>
+      {totalEntries > 9 && (
+        <Text fontSize="sm" color="gray.600" textAlign="center" mt="xs">
+          Showing {entries.length} of {totalEntries} entries
+        </Text>
+      )}
     </Box>
   );
 };
