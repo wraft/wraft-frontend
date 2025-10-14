@@ -101,7 +101,7 @@ const ApprovalFlowHistory = ({ id }: any) => {
 
   if (isLoading) {
     return (
-      <Flex align="center" justify="center" h="100vh">
+      <Flex align="center" justify="center">
         <Spinner />
       </Flex>
     );
@@ -110,19 +110,12 @@ const ApprovalFlowHistory = ({ id }: any) => {
     return <Text> No Approval History</Text>;
   }
   return (
-    <Box
-    // as="ul"
-    // py: 3,
-    // px: 3,
-    // fontFamily: 'body',
-    >
+    <Box>
       {entries.map((item: any, index: number) => (
         <WorkflowStep
           key={index}
-          // status={item?.status}
           createDate={item?.inserted_at}
           username={`${item?.actor?.name}`}
-          // description={`${item?.review_status} by ${item?.approver?.name}`}
           description={`${item?.message}`}
           isLast={index === entries.length - 1}
         />
