@@ -78,18 +78,15 @@ const Dropzone = ({
 
   return (
     <Box
-      bg="white"
+      bg="background-primary"
       w="100%"
-      p="32px"
-      borderRadius="8px"
+      minWidth="556px"
+      borderRadius="lg"
       border="1px solid"
-      borderColor="neutral.200">
-      {/* Dropzone Section - Centered with controlled width */}
-      <Box mb="32px" display="flex" justifyContent="center">
-        <Box
-          w="100%"
-          maxWidth="600px" // Adjust this value to control the width
-        >
+      borderColor="gray.400"
+      p="xl">
+      <Box mb="xl" display="flex" justifyContent="center">
+        <Box w="100%" maxWidth="600px">
           <Box
             border="1px dashed"
             borderColor={isDragReject ? 'error' : 'neutral.200'}
@@ -221,10 +218,10 @@ const Dropzone = ({
         </Box>
       </Box>
 
-      <Flex alignItems="center" mb="32px" justifyContent="center">
+      <Flex alignItems="center" mb="lg" justifyContent="center">
         <Box flex="1" maxWidth="600px" display="flex" alignItems="center">
-          <Box flex="1" h="1px" bg="neutral.200" />
-          <Text color="neutral.500" fontSize="sm" fontWeight="medium" px="16px">
+          <Box flex={1} h="1px" bg="neutral.200" />
+          <Text fontSize="sm" fontWeight="medium" px="md">
             OR
           </Text>
           <Box flex="1" h="1px" bg="neutral.200" />

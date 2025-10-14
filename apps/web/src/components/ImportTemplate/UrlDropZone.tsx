@@ -29,11 +29,31 @@ interface TemplateResponse {
   meta?: any;
 }
 
-const extractTemplateId = (url: string): string => {
-  const match = url.match(
-    /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i,
+interface TemplateInfo {
+  fileName: string;
+  fileSize: string;
+  itemsCount: number;
+}
+
+const PROGRESS_STEPS = [20, 40, 60, 80, 100];
+const PROGRESS_DELAY = 200;
+const UPLOAD_DURATION = 2;
+
+const extractTemplateId = (url: string) =>
+  url.match(/\b[0-9a-f-]{36}\b/i)?.[0] || '';
+
+const calculateFileSize = (itemsCount: number): string => {
+  if (itemsCount > 5) return '2.4 MB';
+  return `${Math.max(0.5, itemsCount * 0.3).toFixed(1)} MB`;
+};
+
+const calculateTimeLeft = (progress: number): string => {
+  if (progress === 100) return 'Upload complete';
+  const secondsLeft = Math.max(
+    0,
+    UPLOAD_DURATION - (progress / 100) * UPLOAD_DURATION,
   );
-  return match ? match[0] : '';
+  return `${secondsLeft.toFixed(1)} seconds left`;
 };
 
 const UrlUploader = ({
@@ -44,56 +64,46 @@ const UrlUploader = ({
   const searchParams = useSearchParams();
   const [importUrl, setImportUrl] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const [timeLeft, setTimeLeft] = useState('');
-  const [templateInfo, setTemplateInfo] = useState<{
-    fileName: string;
-    fileSize: string;
-    itemsCount: number;
-  } | null>(null);
+  const [templateInfo, setTemplateInfo] = useState<TemplateInfo | null>(null);
 
-  const simulateProgress = async () => {
-    for (let p = 20; p <= 100; p += 20) {
-      await new Promise((r) => setTimeout(r, 200));
-      setUploadProgress(p);
+  const updateProgress = async () => {
+    for (const progress of PROGRESS_STEPS) {
+      await new Promise((resolve) => setTimeout(resolve, PROGRESS_DELAY));
 
-      const secondsLeft = Math.max(0, 2 - (p / 100) * 2);
-      setTimeLeft(`${secondsLeft.toFixed(1)} seconds left`);
-
+      setUploadProgress(progress);
       onStateChange?.({
         state: ActionState.PROCESSING,
-        progress: p,
-        message: `Uploading... ${p}%`,
+        progress,
+        message: `Uploading... ${progress}%`,
       });
     }
-    setTimeLeft('Upload complete');
   };
 
-  useEffect(() => {
-    const urlParam = searchParams.get('url');
-    if (urlParam) {
-      if (urlParam.startsWith('import-')) {
-        setImportUrl(`http://app.wraft.app/manage/import?url=${urlParam}`);
-      } else {
-        setImportUrl(urlParam);
-      }
-    }
-  }, [searchParams]);
+  const extractTemplateInfo = (
+    response: TemplateResponse,
+  ): TemplateInfo | null => {
+    if (!response.items?.length) return null;
+
+    const mainItem = response.items[0];
+    const fileName = mainItem.title || mainItem.name || 'Template';
+    const itemsCount = response.items.length;
+    const fileSize = calculateFileSize(itemsCount);
+
+    return { fileName, fileSize, itemsCount };
+  };
 
   const handleUrlUpload = async () => {
-    if (!importUrl.trim()) return;
+    const trimmedUrl = importUrl.trim();
+    if (!trimmedUrl) return;
 
-    const templateId = extractTemplateId(importUrl);
-
+    const templateId = extractTemplateId(trimmedUrl);
     if (!templateId) {
       toast.error('Invalid template URL');
       return;
     }
 
     try {
-      setIsUploading(true);
       setUploadProgress(10);
-      setTimeLeft('2.0 seconds left');
       setTemplateInfo(null);
 
       onStateChange?.({
@@ -102,31 +112,17 @@ const UrlUploader = ({
         message: 'Starting upload...',
       });
 
-      const res = (await postAPI(
+      const response = (await postAPI(
         `template_assets/public/${templateId}/install`,
         {},
       )) as TemplateResponse;
 
-      if (res.items && res.items.length > 0) {
-        const mainItem = res.items[0];
-        const fileName = mainItem.title || mainItem.name;
-        const itemsCount = res.items.length;
+      const info = extractTemplateInfo(response);
+      if (info) setTemplateInfo(info);
 
-        const fileSize =
-          itemsCount > 5
-            ? '2.4 MB'
-            : `${Math.max(0.5, itemsCount * 0.3).toFixed(1)} MB`;
+      await updateProgress();
 
-        setTemplateInfo({
-          fileName: `${fileName}`,
-          fileSize,
-          itemsCount,
-        });
-      }
-
-      await simulateProgress();
-
-      onUpload(res, 'url');
+      onUpload(response, 'url');
 
       onStateChange?.({
         state: ActionState.COMPLETED,
@@ -137,21 +133,36 @@ const UrlUploader = ({
       toast.success('Template uploaded successfully!');
     } catch (err: any) {
       console.error('Upload error:', err);
+
       onError?.(err);
       onStateChange?.({
         state: ActionState.ERROR,
         message: err?.message || 'Failed to upload template',
       });
+
       toast.error('Failed to upload template');
-    } finally {
-      setIsUploading(false);
+      setUploadProgress(0);
     }
   };
+
+  useEffect(() => {
+    const urlParam = searchParams.get('url');
+    if (!urlParam) return;
+
+    const formattedUrl = urlParam.startsWith('import-')
+      ? `http://app.wraft.app/manage/import?url=${urlParam}`
+      : urlParam;
+
+    setImportUrl(formattedUrl);
+  }, [searchParams]);
+
+  const isUploading = uploadProgress > 0 && uploadProgress < 100;
+  const timeLeft = calculateTimeLeft(uploadProgress);
 
   return (
     <Box>
       {uploadProgress > 0 && uploadProgress < 100 && (
-        <Box bg="gray.400" borderRadius="sm" p="md" mb="md">
+        <Box bg="gray.400" borderRadius="lg" p="md" mb="md">
           <Flex justifyContent="space-between" alignItems="center" mb="xs">
             <Flex alignItems="center" gap="sm">
               <Box
@@ -162,7 +173,7 @@ const UrlUploader = ({
                 h="lg"
                 borderRadius="6px">
                 <IconFrame color="primary">
-                  <File size={22} />
+                  <File size={24} />
                 </IconFrame>
               </Box>
               <Box>
@@ -183,7 +194,7 @@ const UrlUploader = ({
 
           <Box
             w="100%"
-            h="6px"
+            h={6}
             bg="white"
             borderRadius="xs"
             overflow="hidden"
