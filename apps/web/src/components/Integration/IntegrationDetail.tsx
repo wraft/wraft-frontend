@@ -115,7 +115,9 @@ export const IntegrationDetail: FC<IntegrationDetailProps> = ({
             console.log('GOOGLE_DRIVE_AUTH_SUCCESS');
 
             try {
-              await fetchAPI(`googledrive/callback?code=${code}state=${state}`);
+              await fetchAPI(
+                `googledrive/callback?code=${code}&state=${state}`,
+              );
 
               toast.success('Successfully connected to Google Drive!');
               popup?.close();
