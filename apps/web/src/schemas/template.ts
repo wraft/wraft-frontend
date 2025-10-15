@@ -7,7 +7,7 @@ export const TemplateSchema = z.object({
     .string()
     .nonempty({ message: 'Name is required' })
     .trim()
-    .regex(nameRegex, 'Allows only letters and spaces'),
+    .regex(nameRegex, 'Allows only letters, numbers and spaces'),
   variant: z.object({
     id: z.string().nonempty({ message: 'Variant is required' }),
   }),
