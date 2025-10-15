@@ -220,11 +220,11 @@ const Dropzone = ({
 
       <Flex alignItems="center" mb="lg" justifyContent="center">
         <Box flex="1" maxWidth="600px" display="flex" alignItems="center">
-          <Box flex={1} h="1px" bg="neutral.200" />
+          <Box flex={1} h="1px" bg="border" />
           <Text fontSize="sm" fontWeight="medium" px="md">
             OR
           </Text>
-          <Box flex="1" h="1px" bg="neutral.200" />
+          <Box flex="1" h="1px" bg="border" />
         </Box>
       </Flex>
 
