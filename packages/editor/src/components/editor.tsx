@@ -14,6 +14,7 @@ import TokenMenu from "./token-menu";
 import * as S from "./styles";
 import { TableHandle } from "./table-handle";
 import { EditorConfigProvider } from "./editor-config";
+import { TableContextMenu } from "./context-menu";
 
 export interface EditorProps {
   defaultContent?: any;
@@ -98,6 +99,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
                 {tokens && <TokenMenu tokens={tokens} />}
                 {/* <BlockHandle /> */}
                 <TableHandle />
+                <TableContextMenu isReadonly={isReadonly} />
               </S.EditorContent>
             </S.EditorContainer>
           </ProseKit>

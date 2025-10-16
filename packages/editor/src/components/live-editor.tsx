@@ -30,6 +30,7 @@ import * as S from "./styles";
 import { TableHandle } from "./table-handle";
 import { EditorConfigProvider } from "./editor-config";
 import InlineMenu from "./inline-menu";
+import { TableContextMenu } from "./context-menu";
 
 export interface Signer {
   id: string;
@@ -252,6 +253,7 @@ export const LiveEditor = forwardRef(
                   {tokens && <TokenMenu tokens={tokens} />}
                   {/* <BlockHandle /> */}
                   <TableHandle isReadonly={isReadonly} />
+                  <TableContextMenu isReadonly={isReadonly} />
                 </S.EditorContent>
               </S.EditorContainer>
             </ProseKit>
