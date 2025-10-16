@@ -270,12 +270,12 @@ export async function downloadFile(
  */
 export async function syncFiles(
   fileIds: string[],
-  outputPath: string | null,
+  folder_id: string | null,
 ): Promise<boolean> {
   try {
     const response: any = await postAPI('clouds/google/import', {
       file_ids: fileIds,
-      output_path: outputPath,
+      folder_id: folder_id,
     });
 
     return response;
