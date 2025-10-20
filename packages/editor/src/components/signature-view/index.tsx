@@ -115,7 +115,11 @@ export default function SignatureView(props: ReactNodeViewProps) {
           onResizeEnd={(event) => setAttrs(event.detail)}
           data-selected={props.selected ? "" : undefined}
         >
-          {isPlaceholder && <div>Signature</div>}
+          {isPlaceholder && (
+            <Text variant="lg" color="text-secondary">
+              Signature
+            </Text>
+          )}
           {!isPlaceholder && signatureUrl && !error && (
             <Image src={signatureUrl} onLoad={handleImageLoad} />
           )}
