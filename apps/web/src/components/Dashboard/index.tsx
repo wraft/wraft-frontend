@@ -204,7 +204,9 @@ const Dashboard = () => {
                 Watch demo
               </Button>
               <Button size="sm" variant="secondary">
-                <PlusIcon size={16} weight="bold" color="white" />
+                <IconFrame>
+                  <PlusIcon size={16} weight="bold" />
+                </IconFrame>
                 <Text fontSize="sm2" fontWeight="heading" color="text-primary">
                   Create a new template
                 </Text>
